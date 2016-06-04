@@ -1,0 +1,48 @@
+body {}
+#form { 
+	MARGIN-RIGHT: auto;
+	MARGIN-LEFT: auto; 
+	margin-top:5px;
+	padding:5px;
+}
+#head {
+	border-style:solid;
+	border-bottom-width:1px;
+	border-color:#AAA;
+	font-size: 24px;
+}
+.field { 
+	margin:8px;
+	margin-top:15px;
+	padding-bottom: 10px;
+	background-color: #FCFCFC;
+
+}
+.field-head {
+	margin-top:2px;
+	margin-bottom:10px;
+	border-style:dotted;
+	border-bottom-width:1px;
+	border-color:#CCC;
+	background-color:#FFF;
+	font-size: 16px;
+}
+.field-con {
+	margin-top:5px;
+	margin-left:25px;
+	font-size: 14px;
+}
+.field-ccc {
+	display:inline-block;
+	vertical-align:middle;
+	text-align:center;
+	width:80px;
+	margin-right: 20px;
+}
+.cont {
+	display:inline-block;
+	vertical-align:middle;
+	text-align:left;
+	width:160px;
+	margin-right: 20px;
+}
