@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<included>
+
+	<appender name="waitmonitor_event_log"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/waitmonitor/event.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				${LOG_HOME}/waitmonitor/%d{yyyy-MM-dd}/event.log
+			</fileNamePattern>
+			<maxHistory>14</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>utf-8</charset>
+			<pattern>%m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="waitmonitor_run_log"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/waitmonitor/run.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				${LOG_HOME}/waitmonitor/%d{yyyy-MM-dd}/run.log
+			</fileNamePattern>
+			<maxHistory>14</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>utf-8</charset>
+			<pattern>%m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="waitmonitor_alarmStatistic_log"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/waitmonitor/alarmStatistic.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				${LOG_HOME}/waitmonitor/%d{yyyy-MM-dd}/alarmStatistic.log
+			</fileNamePattern>
+			<maxHistory>14</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<charset>utf-8</charset>
+			<pattern>%m%n</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="waitmonitor_cmdProc"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/waitmonitor/cmdProc.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				${BACKUP}/cmdProc%d{yyyy-MM-dd}-%i.log.zip
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<charset>${CHARSET}</charset>
+			<pattern>${PATTERN_DEF}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="waitmonitor_msgSend"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/waitmonitor/msgSend.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				${BACKUP}/msgSend%d{yyyy-MM-dd}-%i.log.zip
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<charset>${CHARSET}</charset>
+			<pattern>${PATTERN_DEF}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="waitmonitor_other"
+			class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/waitmonitor/other.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>
+				${BACKUP}/other%d{yyyy-MM-dd}-%i.log.zip
+			</fileNamePattern>
+			<maxHistory>30</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy
+				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>100MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<charset>${CHARSET}</charset>
+			<pattern>${PATTERN_DEF}</pattern>
+		</encoder>
+	</appender>
+
+	<if condition='property("os.name").toLowerCase().contains("win")'>
+		<then>
+			<!-- windows系统version文件输出 -->
+			<appender name="waitmonitor_version_windows_log"
+				class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<file>D:/interface/version/version.log</file>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>
+						D:/interface/version/%d{yyyy-MM-dd}/version.log
+					</fileNamePattern>
+					<maxHistory>7</maxHistory>
+				</rollingPolicy>
+				<encoder>
+					<charset>utf-8</charset>
+					<pattern>%m%n</pattern>
+				</encoder>
+			</appender>
+			
+			<logger name="waitmonitor.version_windows" level="info" additivity="true">
+				<appender-ref ref="waitmonitor_version_windows_log" />
+			</logger>
+		</then>
+		<else>
+			<!-- linux系统version文件输出 -->
+			<appender name="waitmonitor_version_linux_log"
+				class="ch.qos.logback.core.rolling.RollingFileAppender">
+				<file>/home/cattsoft/interface/version/version.log</file>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>
+						/home/cattsoft/interface/version/%d{yyyy-MM-dd}/version.log
+					</fileNamePattern>
+					<maxHistory>7</maxHistory>
+				</rollingPolicy>
+				<encoder>
+					<charset>utf-8</charset>
+					<pattern>%m%n</pattern>
+				</encoder>
+			</appender>
+	
+			<logger name="waitmonitor.version_linux" level="info" additivity="true">
+				<appender-ref ref="waitmonitor_version_linux_log" />
+			</logger>
+		</else>
+	</if>
+	
+	<!-- 事件日志 -->
+	<logger name="waitmonitor.event" level="info" additivity="false">
+		<appender-ref ref="waitmonitor_event_log" />
+	</logger>
+
+	<!-- 状态日志 -->
+	<logger name="waitmonitor.run" level="info" additivity="false">
+		<appender-ref ref="waitmonitor_run_log" />
+	</logger>
+
+	<!-- 统计日志 -->
+	<logger name="waitmonitor.statistic" level="info" additivity="false">
+		<appender-ref ref="waitmonitor_alarmStatistic_log" />
+	</logger>
+
+	<logger name="com.cattsoft.waitmonitor.BaseCmdProcessor" level="info" additivity="false">
+		<appender-ref ref="waitmonitor_cmdProc" />
+	</logger>
+
+	<logger name="com.cattsoft.waitmonitor.MsgSender" level="info" additivity="false">
+		<appender-ref ref="waitmonitor_msgSend" />
+	</logger>
+
+	<logger name="com.cattsoft.waitmonitor.common.Config" level="info" additivity="false">
+		<appender-ref ref="waitmonitor_other" />
+	</logger>
+
+	<logger name="com.cattsoft.waitmonitor.util.Tools" level="info" additivity="false">
+		<appender-ref ref="waitmonitor_other" />
+	</logger>
+
+</included>

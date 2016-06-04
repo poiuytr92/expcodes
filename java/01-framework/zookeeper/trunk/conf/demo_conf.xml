@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config hint="应用开发-工程配置文件">
+  <custom>custom</custom>
+  <bases>
+    <base id="base1" caption="基础配置" hint="导入">
+      <demoName>maven ktjsdp demoProject</demoName>
+      <support>ktjsdp</support>
+    </base>
+    <base id="base2" caption="基础配置" hint="导入">
+      <demoVersion>1.0.0</demoVersion>
+      <support>综合网管接口组</support>
+    </base>
+  </bases>
+
+  <datasources caption="数据源" hint="一个或多个数据源配置">
+    <datasource id="demo_ds" caption="通用安全管理" hint="数据库连接信息">
+      <pool default="proxool" caption="连接池" hint="数据库连接池，如果不配置连接池，则获取的是单连接"></pool>
+      <driver default="sybase_ase" caption="数据源类型" relenum="db_drivers"
+        hint="数据库类型枚举,请从以下常用类型之中选择:oracle/sybase_ase/sybase_iq/mysql/greenglumn/mssql">
+        mysql</driver>
+      <ip default="" caption="地址" hint="数据库IP地址">127.0.0.1</ip>
+      <port default="" caption="端口" hint="数据库端口">3306</port>
+      <dbname default="" caption="库名" hint="sybase填写数据库名、oracle填写sid">test</dbname>
+      <username caption="登录名" hint="数据库登录名">root</username>
+      <password caption="密码" hint="数据库登录密码">root</password>
+      <charset default="cp936" caption="字符集" hint="数据库字符集" />
+      <jconnectVersion default="6" caption="连接等级"
+        hint="sybase需要使用到的数据" />
+      <maxConnect default="1" caption="数据库连接数（最大）" hint="默认为15">100
+      </maxConnect>
+      <minConnect default="1" caption="数据库连接数（最小）" hint="默认为5">1
+      </minConnect>
+      <url default="" caption="数据库连接串"
+        hint="如果配置了驱动项配置了cattDriver而且使用了JDBC4的数据库驱动包,URL配置一定得加前缀“cattproxy:”,如:cattproxy:jdbc:mysql://127.0.0.1:3306/test,其他情况不加">
+        jdbc:mysql://127.0.0.1:3306/test
+      </url>
+      <maxNewConnections default="10" caption="等待的连接数"
+        hint="">10</maxNewConnections>
+      <maxActiveTime default="" caption="连接活动的时间"
+        hint="你的sql或存储过 程执行的时间,默认为5分钟">300000</maxActiveTime>
+      <maxConnectionLifetime default="" caption="连接的寿命"
+        hint="这个值理论上应该大于连接的活动时间限制,默认为1小时">3600000</maxConnectionLifetime>
+      <simultaneousBuildThrottle caption="一次建立的最大连接数"
+        hint="新增的连接请求,但还没有可供使用的连接,默认是10">40</simultaneousBuildThrottle>
+    </datasource>
+    <datasource id="fcd" relid="task" caption="通用安全管理" hint="数据库连接信息">
+    </datasource>
+  </datasources>
+
+  <sockets>
+    <socket id="nioserver" caption="NioSocket服务端配置信息" hint="NioSocket服务端配置信息">
+      <id default="" caption="标识ID" hint="此服务端配置在程序中的唯一标识">S0001</id>
+      <type default="" caption="配置类型" hint="此配置的类型:[server或client]">server</type>
+      <ip default="127.0.0.1" caption="服务IP地址" hint="提供Socket服务的IP地址">127.0.0.1</ip>
+      <port default="9998" caption="服务端口" hint="提供Socket服务的端口">9998</port>
+      <blockTime default="1000" caption="阻塞时间(ms)" hint="选择器轮询事件的阻塞等待时间">1000
+      </blockTime>
+      <sleepTime default="100" caption="休眠时间(ms)" hint="线程每次迭代的休眠时间">100
+      </sleepTime>
+      <hbTime default="30000" caption="心跳时间(ms)" hint="打印心跳日志的时间间隔">30000
+      </hbTime>
+      <overTime default="60000" caption="超时时间(ms)" hint="客户端无动作超时时间，-1不启用">-1
+      </overTime>
+      <recvCharset default="UTF-8" caption="接收消息时使用的字符集编码"
+        hint="接收到消息字节流后，会使用这个编码读取字节，默认为本地操作平台字符集">UTF-8</recvCharset>
+      <sendCharset default="UTF-8" caption="发送消息时使用的字符集编码"
+        hint="发送消息前，会把消息转换为这个编码的字节流，默认为本地操作平台字符集">UTF-8</sendCharset>
+      <readBuffSize default="1024" caption="读缓冲区大小(kb)"
+        hint="缓存接收到得消息字节流的缓冲区大小，溢出会导致数据丢失">2048</readBuffSize>
+      <writeBuffSize default="1024" caption="写缓冲区大小(kb)"
+        hint="预留配置，暂无效，目前暂不考虑远端机的接收缓冲区大小">2048</writeBuffSize>
+      <recvDelimiter default="" caption="接收消息分隔符"
+        hint="接收消息时以该分隔符判断完整消息。不配置则使用本地操作系统的默认分隔符（Windows为\r\n，Linux为\n），
+            注意配置文件不能读取转义字符，除了\r\n\0\b\t这5个常用转移字符可直接配置（程序内部已实现转换）"></recvDelimiter>
+      <sendDelimiter default="" caption="发送消息分隔符"
+        hint="发送消息时自动附加，该值应与远端机的分隔符一致。不配置则使用本地操作系统的默认分隔符（Windows为\r\n，Linux为\n），
+            注意配置文件不能读取转义字符，除了\r\n\0\b\t这5个常用转移字符可直接配置（程序内部已实现转换）"></sendDelimiter>
+      <disconCmd default="exit" caption="断开连接命令"
+        hint="远端机收到此命令后会马上断开连接，此命令需要本地机与远端机协商。若不配置此命令，则通知远端机关闭连接的方法会变为等待超时关闭">exit</disconCmd>
+      <waitDisconTime default="10000" caption="等待断开超时时间(ms)"
+        hint="当通知远端机断开连接后，等待远端机断开的超时时间，超时未断开则本地主动断开">5000</waitDisconTime>
+      <maxClientLinkNum default="50" caption="允许最多的客户端连接数"
+        hint="-1表示不限制，多线程模式的初始化参数之一">50</maxClientLinkNum>
+      <maxEachClientTaskNum default="5"
+        caption="允许单个客户端的未处理命令数" hint="-1表示不限制，超出限制的命令会被丢弃，多线程模式的初始化参数之一">5</maxEachClientTaskNum>
+      <multiThreadMode default="1" caption="多线程模式"
+        hint="此项建议在最后配置.[服务端 建议启用]">1</multiThreadMode>
+    </socket>
+
+    <socket id="nioclient" caption="NioSocket客户端配置信息" hint="NioSocket客户端配置信息">
+      <id default="" caption="标识ID" hint="此客户端配置在程序中的唯一标识">C0001</id>
+      <type default="" caption="配置类型" hint="此配置的类型:[server或client]">client</type>
+      <ip default="127.0.0.1" caption="服务IP地址" hint="连接到Socket服务的IP地址">127.0.0.1</ip>
+      <port default="9998" caption="服务端口" hint="连接到Socket服务的端口">9998</port>
+      <blockTime default="1000" caption="阻塞时间(ms)" hint="选择器轮询事件的阻塞等待时间">1000
+      </blockTime>
+      <sleepTime default="100" caption="休眠时间(ms)" hint="线程每次迭代的休眠时间">100
+      </sleepTime>
+      <hbTime default="30000" caption="心跳时间(ms)" hint="打印心跳日志的时间间隔">30000
+      </hbTime>
+      <overTime default="10000" caption="超时时间(ms)"
+        hint="获取会话的超时时间，即服务端不响应连接请求的超时时间。非正数则设为10秒">10000</overTime>
+      <recvCharset default="UTF-8" caption="接收消息使用的字符集编码"
+        hint="接收到消息字节流后，会使用这个编码读取字节，默认为本地操作平台字符集">UTF-8</recvCharset>
+      <sendCharset default="UTF-8" caption="发送消息使用的字符集编码"
+        hint="发送消息前，会把消息转换为这个编码的字节流，默认为本地操作平台字符集">UTF-8</sendCharset>
+      <readBuffSize default="1024" caption="读缓冲区大小(kb)"
+        hint="缓存接收到得消息字节流的缓冲区大小，溢出会导致数据丢失">2048</readBuffSize>
+      <writeBuffSize default="1024" caption="写缓冲区大小(kb)"
+        hint="预留配置，暂无效，目前暂不考虑远端机的接收缓冲区大小">2048</writeBuffSize>
+      <recvDelimiter default="" caption="接收消息分隔符"
+        hint="接收消息时以该分隔符判断完整消息。不配置则使用本地操作系统的默认分隔符（Windows为\r\n，Linux为\n），
+            注意配置文件不能读取转义字符，除了\r\n\0\b\t这5个常用转移字符可直接配置（程序内部已实现转换）"></recvDelimiter>
+      <sendDelimiter default="" caption="发送消息分隔符"
+        hint="发送消息时自动附加，该值应与远端机的分隔符一致。不配置则使用本地操作系统的默认分隔符（Windows为\r\n，Linux为\n），
+            注意配置文件不能读取转义字符，除了\r\n\0\b\t这5个常用转移字符可直接配置（程序内部已实现转换）"></sendDelimiter>
+      <disconCmd default="exit" caption="断开连接命令"
+        hint="远端机收到此命令后会马上断开连接，此命令需要本地机与远端机协商。若不配置此命令，则通知远端机关闭连接的方法会变为等待超时关闭">exit</disconCmd>
+      <waitDisconTime default="10000" caption="等待断开超时时间(ms)"
+        hint="当通知远端机断开连接后，等待远端机断开的超时时间，超时未断开则本地主动断开">5000</waitDisconTime>
+      <maxClientLinkNum default="50" caption="多线程模式的初始化参数之一"
+        hint="客户端无效配置">50</maxClientLinkNum>
+      <maxEachClientTaskNum default="5" caption="多线程模式的初始化参数之一"
+        hint="客户端无效配置">5</maxEachClientTaskNum>
+      <multiThreadMode default="0" caption="多线程模式"
+        hint="此项建议在最后配置.[客户端：不建议启用，会导致收发消息顺序不一致]">0</multiThreadMode>
+    </socket>
+  </sockets>
+
+  <jmss>
+    <jms id="testID3">
+      <url caption="mq所使用的url" hint="mq所使用的url">tcp://127.0.0.1:61616
+      </url>
+      <user caption="activemq用户名" hint="设置安全凭证，用户名">user</user>
+      <password caption="activemq密码" hint="密码">password
+      </password>
+      <iacknowledgementmode caption="应答模式"
+        hint=" 
+       确认模式：
+        1. AUTO_ACKNOWLEDGE:客户端自动确认
+        2. CLIENT_ACKNOWLEDGE:客户端通过调用消息的acknowledge方法来确认消息
+        3. DUPS_OK_ACKNOWLEDGE：懒惰确认消息的传递，可能会造成消息的重复传递
+       取值：1|2|3 默认值是1">
+        1</iacknowledgementmode>
+      <sendTheme caption="主题" hint="主题">jmsTest</sendTheme>
+      <getTheme caption="主题" hint="主题">jmsTest</getTheme>
+      <clientid caption="客户端ID" hint="持久性订阅时必须clientId">testID3
+      </clientid>
+      <type caption="jms类型" hint="jms 类型：1:QUEUE|2:TOPIC|3:DURABLETOPIC ">
+        3</type>
+      <selector caption="selector"
+        hint="jms selector 比如： key1=value1;key2=value2"></selector>
+    </jms>
+  </jmss>
+
+  <enums caption="枚举值" hint="一个或多个枚举配置">
+    <enum id="enum_demo" caption="模板示例" hint="">
+      <key1>value1</key1>
+      <key2>value2</key2>
+      <key3>value3</key3>
+      <key4>value4</key4>
+      <key5>value5</key5>
+    </enum>
+  </enums>
+</config>

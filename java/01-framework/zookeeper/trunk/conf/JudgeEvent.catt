@@ -1,0 +1,921 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+   <judgeEvents>
+      <!--db **********************************************************-->
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.StackJudge</dealClass>
+         <dealParam>Too many connections</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接数超限</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>ERR=12519</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接数超限</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.StackJudge</dealClass>
+         <dealParam>Tds.java:3911</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接数超限</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>End of stream was detected on a read.</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接数超限</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.StackJudge</dealClass>
+         <dealParam>Could not create connection to database server#$^Communications link failure</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接信息配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>JZ006#$^SybConnectionDeadException</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接信息配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Communications link failure</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接中断</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Connection reset by peer: socket write error</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接中断</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>No operations allowed after connection closed</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接已关闭</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>JZ006#$^SybConnectionDeadException: JZ0C0</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接中断</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>Connection reset by peer: socket write error#$^Software caused connection abort: recv failed</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>连接中断</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>com.microsoft.jdbc.sqlserver.SQLServerDriver</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>驱动配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>com.mysql.jdbc.Driver</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>驱动配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>oracle.jdbc.driver.OracleDriver</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>驱动配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>jdbc.SybDriver</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>驱动配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.StackJudge</dealClass>
+         <dealParam>Unknown database</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>数据库名称/实例名称错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>ERR=12505</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>数据库名称/实例名称错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>请求的数据库#$^can't open login the requested database</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>数据库名称/实例名称错误</desc>
+      </judgeEvent>
+      <!--<judgeEvent eventType="db" >
+         <dealClass></dealClass>
+         <dealParam></dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>数据库名称/实例名称错误</desc>
+      </judgeEvent>-->
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.StackJudge</dealClass>
+         <dealParam>Network is unreachable: connect#$^Communications link failure</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>网络连接失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>Network is unreachable: connect#$^Connection refused: connect</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>网络连接失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>The Network Adapter could not establish the connection</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>网络连接失败/连接信息配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Error establishing socket.</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>网络连接失败/连接信息配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.StackJudge</dealClass>
+         <dealParam>Could not create connection to database server#$^Access denied for user</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>用户名密码错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.StackJudge</dealClass>
+         <dealParam>Tds.java:3947</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>用户名密码错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>ORA-01017: invalid username/password; logon denied</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>用户名密码错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>.*用户.*登录失败。#$^.*Login failed for user.*</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_CONNECTION_FAILED</returnEnumClass>
+         <desc>用户名密码错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>未能找到存储过程</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>存储过程不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>PROCEDURE\s.*\sdoes not exist</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>存储过程不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>PLS-00201</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>存储过程不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>Stored procedure.*not found.*</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>存储过程不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Incorrect number of arguments for PROCEDURE</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>存储过程执入参错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>PLS-00306</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>存储过程执入参错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>Procedure.*which was not supplied.*</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>存储过程执入参错误</desc>
+      </judgeEvent>
+      <!--<judgeEvent eventType="db" >
+         <dealClass></dealClass>
+         <dealParam></dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>类型错误,int太大</desc>
+      </judgeEvent>-->
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>ORA-01438</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>类型错误,int太大</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Arithmetic overflow during implicit conversion of</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>类型错误,int太大</desc>
+      </judgeEvent>
+      <!--<judgeEvent eventType="db" >
+         <dealClass></dealClass>
+         <dealParam></dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>批处理出错</desc>
+      </judgeEvent>-->
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.ExceptionJudge</dealClass>
+         <dealParam>java.sql.BatchUpdateException</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>批处理出错</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.ExceptionJudge</dealClass>
+         <dealParam>com.sybase.jdbc3.jdbc.SybBatchUpdateException</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>批处理出错</desc>
+      </judgeEvent>
+      <!--<judgeEvent eventType="db" >
+         <dealClass></dealClass>
+         <dealParam></dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>日志空间满</desc>
+      </judgeEvent>-->
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.ExceptionJudge</dealClass>
+         <dealParam>com.microsoft.jdbc.base.BaseBatchUpdateException</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>批处理出错</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>插入错误: 列名或所提供值的数目与表定义不匹配</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>入参类型错误/值太长</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>Implicit conversion from datatype.*to.*is not allowed.*</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>入参类型错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Data truncated for column</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>入参类型错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>ORA-01722</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>入参类型错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Data too long for column</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>值太长</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>ORA-12899</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>值太长</desc>
+      </judgeEvent>
+      <!--<judgeEvent eventType="db" >
+         <dealClass></dealClass>
+         <dealParam></dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_OPERATION_FAILED</returnEnumClass>
+         <desc>值太长</desc>
+      </judgeEvent>-->
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>Table\s.*\sdoesn't exist</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_QUERY_FAILED</returnEnumClass>
+         <desc>表不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>ORA-00942</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_QUERY_FAILED</returnEnumClass>
+         <desc>表不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>.*对象名.*无效。#$^.*The object.*does not exist.*</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_QUERY_FAILED</returnEnumClass>
+         <desc>表不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>not found. Specify owner</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_QUERY_FAILED</returnEnumClass>
+         <desc>表不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Unknown column</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_QUERY_FAILED</returnEnumClass>
+         <desc>字段不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>ORA-00904</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_QUERY_FAILED</returnEnumClass>
+         <desc>字段不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Invalid column name</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_QUERY_FAILED</returnEnumClass>
+         <desc>字段不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>.*列名.*无效。</dealParam>
+         <returnEnumClass>com.catt.event.DBEventCause.DB_QUERY_FAILED</returnEnumClass>
+         <desc>字段不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="db">
+         <dealClass>com.catt.event.judge.impl.OtherJudge</dealClass>
+         <dealParam/>
+         <returnEnumClass>com.catt.event.DBEventCause.OTHER</returnEnumClass>
+         <desc>未归纳原因引起的异常，请分析异常报文</desc>
+      </judgeEvent>
+      <!--socket *********************************************************-->
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>
+            Connection timed out
+            #$^
+            Cannot assign requested address
+         </dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_NET_INVAILD</returnEnumClass>
+         <desc>无法连接服务器</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.ExceptionJudge</dealClass>
+         <dealParam>java.net.UnknownHostException</dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_NET_INVAILD</returnEnumClass>
+         <desc>无法连接服务器</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>
+            Connection refused
+            #$^
+            Address already in use
+         </dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_PORT_INVAILD</returnEnumClass>
+         <desc>无法连接服务端口</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>Verfy refused</dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_LOGIN_FAILED</returnEnumClass>
+         <desc>登陆验证失败（IP段非法、或帐密无效）</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>Connected limited number</dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_LOGIN_FAILED</returnEnumClass>
+         <desc>登陆验证失败（连接数受限）</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>HeartBeat Lost</dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_HB_LOST</returnEnumClass>
+         <desc>长时间无心跳</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>ReadBuffer OverFlow</dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_CMD_FAILED</returnEnumClass>
+         <desc>缓冲区溢出，命令丢失</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>
+            Request Connect Timeout
+            #$^
+            Request Handle Timeout
+         </dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_CMD_TIMEOUT</returnEnumClass>
+         <desc>服务器繁忙，超时无响应</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.ExceptionJudge</dealClass>
+         <dealParam>java.io.IOException</dealParam>
+         <returnEnumClass>com.catt.event.SocketEventCause.SOCKET_INTERFACE_FAILED</returnEnumClass>
+         <desc>会话IO处理异常</desc>
+      </judgeEvent>
+      <judgeEvent eventType="socket">
+         <dealClass>com.catt.event.judge.impl.OtherJudge</dealClass>
+         <dealParam/>
+         <returnEnumClass>com.catt.event.SocketEventCause.OTHER</returnEnumClass>
+         <desc>未归纳原因引起的异常，请分析异常报文</desc>
+      </judgeEvent>
+      <!--conf ******************************************************3333-->
+      <judgeEvent eventType="conf">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>系统找不到指定的文件#$^No such file or directory</dealParam>
+         <returnEnumClass>com.catt.event.ConfEventCause.XML_LOAD_FAILED</returnEnumClass>
+         <desc>请确认配置文件路径</desc>
+      </judgeEvent>
+      <judgeEvent eventType="conf">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Nested exception: The content of elements must consist of well-formed character data or markup.</dealParam>
+         <returnEnumClass>com.catt.event.ConfEventCause.XML_LOAD_FAILED</returnEnumClass>
+         <desc>请修改非法字符</desc>
+      </judgeEvent>
+      <judgeEvent eventType="conf">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>must be terminated by the matching end-tag</dealParam>
+         <returnEnumClass>com.catt.event.ConfEventCause.XML_LOAD_FAILED</returnEnumClass>
+         <desc>请修改配置文件</desc>
+      </judgeEvent>
+      <judgeEvent eventType="conf">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Nested exception: Premature end of file.</dealParam>
+         <returnEnumClass>com.catt.event.ConfEventCause.XML_LOAD_FAILED</returnEnumClass>
+         <desc>请确认配置文件路径</desc>
+      </judgeEvent>
+      <judgeEvent eventType="conf">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Nested exception: Content is not allowed in prolog.</dealParam>
+         <returnEnumClass>com.catt.event.ConfEventCause.XML_LOAD_FAILED</returnEnumClass>
+         <desc>请确认配置文件路径</desc>
+      </judgeEvent>
+      <judgeEvent eventType="conf">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Nested exception: An invalid XML character</dealParam>
+         <returnEnumClass>com.catt.event.ConfEventCause.XML_LOAD_FAILED</returnEnumClass>
+         <desc>请找出乱码并解决</desc>
+      </judgeEvent>
+      <judgeEvent eventType="conf">
+         <dealClass>com.catt.event.judge.impl.OtherJudge</dealClass>
+         <dealParam/>
+         <returnEnumClass>com.catt.event.ConfEventCause.OTHER</returnEnumClass>
+         <desc>未归纳原因引起的异常，请分析异常报文</desc>
+      </judgeEvent>
+      <!--analyse **********************************************************-->
+      <judgeEvent eventType="analyse">
+         <dealClass>com.catt.event.judge.impl.ExceptionJudge</dealClass>
+         <dealParam>java.lang.NullPointerException</dealParam>
+         <returnEnumClass>com.catt.event.AnalyseEventCause.NULL_POINTER_EXCEPTION</returnEnumClass>
+         <desc>空指针异常，请检查解析数据</desc>
+      </judgeEvent>
+      <judgeEvent eventType="analyse">
+         <dealClass>com.catt.event.judge.impl.ExceptionJudge</dealClass>
+         <dealParam>java.lang.NumberFormatException</dealParam>
+         <returnEnumClass>com.catt.event.AnalyseEventCause.NUMBER_FORAMT_EXCEPTION</returnEnumClass>
+         <desc>字符型数值中含有非法字符</desc>
+      </judgeEvent>
+      <judgeEvent eventType="analyse">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Unparseable date</dealParam>
+         <returnEnumClass>com.catt.event.AnalyseEventCause.DATE_FORMAT_EXCEPTION</returnEnumClass>
+         <desc>请确认字符串时间和转换时间格式一致</desc>
+      </judgeEvent>
+      <judgeEvent eventType="analyse">
+         <dealClass>com.catt.event.judge.impl.OtherJudge</dealClass>
+         <dealParam/>
+         <returnEnumClass>com.catt.event.AnalyseEventCause.OTHER</returnEnumClass>
+         <desc>未归纳原因引起的异常，请分析异常报文</desc>
+      </judgeEvent>
+      <!--corba *********************************************************-->
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>
+            Invalid user name or password
+            #$^
+            UserName or Password is wrong
+            #$^
+            invalid user name or password
+            #$^
+            登录失败
+         </dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_LOGIN_FAILED</returnEnumClass>
+         <desc>用户名或者密码错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.ExceptionJudge</dealClass>
+         <dealParam>org.omg.CosNaming.NamingContextPackage.NotFound</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_LOGIN_FAILED</returnEnumClass>
+         <desc>名字服务树配置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>The login address is not in the user ACL. Please consult the administrator. : exceptionType = 12</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_LOGIN_FAILED</returnEnumClass>
+         <desc>采集机IP不在厂家许可范围内</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Cannot assign requested address</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_LOGIN_FAILED</returnEnumClass>
+         <desc>采集机IP配置的不是本机IP</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Network is unreachable</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_LOGIN_FAILED</returnEnumClass>
+         <desc>Corba接口服务端IP网络不可达</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Address is invalid on local machine, or port is not valid on remote machine</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_LOGIN_FAILED</returnEnumClass>
+         <desc>Corba接口服务端IP网络不可达</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Connection refused</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_LOGIN_FAILED</returnEnumClass>
+         <desc>Corba接口服务端IP或者端口设置错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>java.net.UnknownHostException</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_LOGIN_FAILED</returnEnumClass>
+         <desc>启动脚本的Corba接口服务IP配置错误（如果是烽火Corba接口，可能是服务器主机名未配置或者配置错误，请在系统文件hosts中配置）</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>HeartBeat Lost</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_HB_LOST</returnEnumClass>
+         <desc>长时间无心跳(自定义)</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>cmd execute failed</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_CMD_FAILED</returnEnumClass>
+         <desc>命令执行失败(自定义)</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>cmd execute timeout</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_CMD_TIMEOUT</returnEnumClass>
+         <desc>命令执行超时(自定义)</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>timeout</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>Corba接口命令调用超时</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_NOT_IMPLEMENTED</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>接口不被支持或没有实现</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_INTERNAL_ERROR</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>EMS内部错误</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_INVALID_INPUT</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>输入参数非法</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_OBJECT_IN_USE</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>管理对象正在使用中</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_TP_INVALID_ENDPOINT</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>非法的终端点（如端口ID非法）</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_ENTITY_NOT_FOUND</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>没有找到管理实体（如NMS发的ID不存在）</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_TIMESLOT_IN_USE</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>时隙使用中（通道配置模块使用）</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_PROTECTION_EFFORT_NOT_MET</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>未能实现保护</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_NOT_IN_VALID_STATE</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>状态非法（如某一管理对象的状态非法）</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_UNABLE_TO_COMPLY</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>不能满足要求</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_NE_COMM_LOSS</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>网元通信中断</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_CAPACITY_EXCEEDED</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>容量越限</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_ACCESS_DENIED</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>拒绝访问（权限不够或用户非法、程序正在退出等）</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_TOO_MANY_OPEN_ITERATORS</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>打开的迭代器太多</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_UNSUPPORTED_ROUTING_CONSTRAINTS</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>不支持的路由限制</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>_EXCPT_USERLABEL_IN_USE</dealParam>
+         <returnEnumClass>com.catt.event.CorbaEventCause.CORBA_INTERFACE_FAILED</returnEnumClass>
+         <desc>用户标签使用中</desc>
+      </judgeEvent>
+      <judgeEvent eventType="corba">
+         <dealClass>com.catt.event.judge.impl.OtherJudge</dealClass>
+         <dealParam/>
+         <returnEnumClass>com.catt.event.SocketEventCause.OTHER</returnEnumClass>
+         <desc>未归纳原因引起的异常，请分析异常报文</desc>
+      </judgeEvent>
+      <!--alarm_adapter *********************************************************-->
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>cannot get new value of</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.LOAD_CONFIG_FAILED</returnEnumClass>
+         <desc>配置错误：枚举不全</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.AnyRegexJudge</dealClass>
+         <dealParam>
+            ^Invalid\s\S+\sFieldType.*$
+            #$^
+            ^Invalid FieldType$
+         </dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.LOAD_CONFIG_FAILED</returnEnumClass>
+         <desc>配置错误：字段类型转换失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>
+            XML properties file does not exist
+            #$^
+            No such file or directory
+         </dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.LOAD_CONFIG_FAILED</returnEnumClass>
+         <desc>配置文件不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>The XML declaration may only appear at the very beginning of the document.</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.LOAD_CONFIG_FAILED</returnEnumClass>
+         <desc>非法的xml格式</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>must be terminated by the matching end-tag</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.LOAD_CONFIG_FAILED</returnEnumClass>
+         <desc>非法的xml格式</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>OPTION SQL_SELECT_LIMIT</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_COLLECT_FAILED</returnEnumClass>
+         <desc>MYSQL驱动与数据库版本不兼容</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Too many connections</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_COLLECT_FAILED</returnEnumClass>
+         <desc>数据源连接数越限</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>JZ006: 捕获到 IO 例外:java.net.SocketTimeoutException: Read timed out</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_DELETE_FAILED</returnEnumClass>
+         <desc>SQL执行超时</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.AnyRegexJudge</dealClass>
+         <dealParam>
+            ^Table \S* doesn't exist$
+            #$^
+            ^.*not found. Specify owner.objectname.*$
+            #$^
+            ^ORA-00942: table or view does not exist$
+         </dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_BACKUP_FAILED</returnEnumClass>
+         <desc>备份表不存在</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.AnyRegexJudge</dealClass>
+         <dealParam>
+            ^Unknown column \S* in 'field list'$
+            #$^
+            ^Invalid column name \S*$
+            #$^
+            ^ORA-00904: \S*: invalid identifier$
+         </dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_BACKUP_FAILED</returnEnumClass>
+         <desc>备份表不存在指定字段</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.AnyRegexJudge</dealClass>
+         <dealParam>
+            ^An explicit value for the identity field in table .*$
+            #$^
+            ^Explicit value specified for identity field in table.*$
+         </dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_BACKUP_FAILED</returnEnumClass>
+         <desc>备份表字段存在约束，致插入失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.AnyKeyWordJudge</dealClass>
+         <dealParam>
+            Column count doesn't match value count
+            #$^
+            column name or number of supplied values does not match table
+            #$^
+            VALUES clause must match the number of columns
+            #$^
+            ORA-00913: too many values
+         </dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_BACKUP_FAILED</returnEnumClass>
+         <desc>备份表字段与值不匹配</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.RegexJudge</dealClass>
+         <dealParam>^The transaction log in database \S* is almost full.*$</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_BACKUP_FAILED</returnEnumClass>
+         <desc>日志空间满</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Alarm Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_ALARM_FAILED</returnEnumClass>
+         <desc>执行命令失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Alarm Timeout</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_ALARM_FAILED</returnEnumClass>
+         <desc>执行命令超时</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Alarm Warn By 0 Return</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_ALARM_FAILED</returnEnumClass>
+         <desc>返回数量为0</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Alarm Warn By Wave Exceed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_ALARM_FAILED</returnEnumClass>
+         <desc>数量波动超过门限</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Alarm Warn By Protocol Error</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_ALARM_FAILED</returnEnumClass>
+         <desc>数据与Socket协议不匹配</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Rule Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_RULE_FAILED</returnEnumClass>
+         <desc>执行命令失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Rule Timeout</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_RULE_FAILED</returnEnumClass>
+         <desc>执行命令超时</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Rule Warn By 0 Return</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_RULE_FAILED</returnEnumClass>
+         <desc>返回数量为0</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Rule Warn By Wave Exceed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_RULE_FAILED</returnEnumClass>
+         <desc>数量波动超过门限</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync Rule Warn By Protocol Error</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_RULE_FAILED</returnEnumClass>
+         <desc>数据与Socket协议不匹配</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync CurAlarm Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_CUR_ALARM_FAILED</returnEnumClass>
+         <desc>同步当前告警失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync EmsAlarm Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_EMS_ALARM_FAILED</returnEnumClass>
+         <desc>同步厂家告警失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Sync ManualCleanAlarm Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SYNC_MC_ALARM_FAILED</returnEnumClass>
+         <desc>同步手清告警失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Collect Alarm Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_COLLECT_FAILED</returnEnumClass>
+         <desc>采集告警失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Deal Alarm Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_DEAL_FAILED</returnEnumClass>
+         <desc>处理告警失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Report Alarm Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_SEND_FAILED</returnEnumClass>
+         <desc>上报告警失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Report Alarm Timeout</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_SEND_FAILED</returnEnumClass>
+         <desc>上报告警超时</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Report Alarm Failed By Backstage Error</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.ALARM_SEND_FAILED</returnEnumClass>
+         <desc>后台处理告警失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Background connection failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.BACKGROUND_CONNECTION_FAILED</returnEnumClass>
+         <desc>后台连接失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>Socket Frequent Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.SOCKET_FREQUENT_FAILED</returnEnumClass>
+         <desc>Socket接口频繁连接失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.KeyWordJudge</dealClass>
+         <dealParam>DB Frequent Failed</dealParam>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.DB_FREQUENT_FAILED</returnEnumClass>
+         <desc>DB接口频繁连接失败</desc>
+      </judgeEvent>
+      <judgeEvent eventType="alarm_adapter">
+         <dealClass>com.catt.event.judge.impl.OtherJudge</dealClass>
+         <dealParam/>
+         <returnEnumClass>com.catt.event.AlarmAdapterEventCause.OTHER</returnEnumClass>
+         <desc>未归纳原因引起的异常，请分析异常报文</desc>
+      </judgeEvent>
+   </judgeEvents>
+</config>
