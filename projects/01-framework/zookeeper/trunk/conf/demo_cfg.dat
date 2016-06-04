@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config hint="应用-开发配置文件"> 
+  <bases> 
+    <base id="base1" caption="基础配置" hint="导入"> 
+      <demoName>maven ktjsdp demoProject</demoName>
+      <support>ktjsdp</support>
+    </base>  
+    <base id="base2" caption="基础配置" hint="导入"> 
+      <demoVersion>1.0.0</demoVersion>
+      <support>综合网管接口组</support>
+    </base>      
+  </bases>  
+  
+  <datasources caption="数据源" hint="一个或多个数据源配置"> 
+   <datasource id="demo_ds" caption="通用安全管理" hint="数据库连接信息"> 
+      <pool default="proxool" caption="连接池" hint="数据库连接池，如果不配置连接池，则获取的是单连接"></pool>  
+      <driver default="sybase_ase" caption="数据源类型" 
+      relenum="db_drivers" 
+      hint="数据库类型枚举,请从以下常用类型之中选择:oracle/sybase_ase/sybase_iq/mysql/greenglumn/mssql"
+      >mysql</driver>  
+      <ip default="" caption="地址" hint="数据库IP地址">127.0.0.1</ip>  
+      <port default="" caption="端口" hint="数据库端口">3306</port>  
+      <dbname default="" caption="库名" hint="sybase填写数据库名、oracle填写sid">test</dbname>  
+      <username caption="登录名" hint="数据库登录名">root</username>  
+      <password caption="密码" hint="数据库登录密码">root</password>  
+      <charset default="cp936" caption="字符集" hint="数据库字符集"/>  
+      <jconnectVersion default="6" caption="连接等级" hint="sybase需要使用到的数据"/>  
+      <maxConnect default="1" caption="数据库连接数（最大）" hint="默认为15">100</maxConnect>  
+      <minConnect default="1" caption="数据库连接数（最小）" hint="默认为5">1</minConnect>  
+      <url default="" caption="数据库连接串" hint="如果配置了驱动项配置了cattDriver而且使用了JDBC4的数据库驱动包,URL配置一定得加前缀“cattproxy:”,如:cattproxy:jdbc:mysql://127.0.0.1:3306/test,其他情况不加">
+      jdbc:mysql://127.0.0.1:3306/test</url>  
+      <maxNewConnections default="10" caption="等待的连接数" hint="">10</maxNewConnections>  
+      <maxActiveTime default="" caption="连接活动的时间" hint="你的sql或存储过 程执行的时间,默认为5分钟">300000</maxActiveTime>  
+      <maxConnectionLifetime default="" caption="连接的寿命" hint="这个值理论上应该大于连接的活动时间限制,默认为1小时">3600000</maxConnectionLifetime> 
+      <simultaneousBuildThrottle caption="一次建立的最大连接数" hint="新增的连接请求,但还没有可供使用的连接,默认是10">40</simultaneousBuildThrottle>
+    </datasource>  
+    <datasource id="fcd" relid="task" caption="通用安全管理" hint="数据库连接信息"> 
+    </datasource>  
+  </datasources>  
+  
+</config>
