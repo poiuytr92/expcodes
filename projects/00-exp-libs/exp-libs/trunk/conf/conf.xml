@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+  <datasources caption="数据源" hint="">
+    <datasource id="TEST" caption="测试库" hint="">
+      <driver>com.mysql.jdbc.Driver</driver>
+      <ip>127.0.0.1</ip>
+      <port>3306</port>
+      <name>test</name>
+      <username>root</username>
+      <password>root</password>
+      <charset>utf-8</charset>
+      <house-keeping-test-sql>select 1</house-keeping-test-sql>
+      <house-keeping-sleep-time>300000</house-keeping-sleep-time>
+      <simultaneous-build-throttle>10</simultaneous-build-throttle>
+      <maximum-connection-count>20</maximum-connection-count> 
+      <minimum-connection-count>5</minimum-connection-count> 
+      <maximum-new-connections>5</maximum-new-connections>
+      <prototype-count>5</prototype-count>
+      <maximum-connection-lifetime>3600000</maximum-connection-lifetime>
+      <test-before-use>true</test-before-use>
+      <test-after-use>true</test-after-use>
+      <trace>true</trace>
+    </datasource>
+  </datasources>
+</config>

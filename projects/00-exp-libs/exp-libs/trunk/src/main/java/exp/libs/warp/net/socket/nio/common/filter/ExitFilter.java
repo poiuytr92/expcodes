@@ -1,0 +1,15 @@
+package exp.libs.warp.net.socket.nio.common.filter;
+
+/**
+ * <pre>
+ * 关闭会话过滤器（TODO:未完成）
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+public class ExitFilter {
+
+}
