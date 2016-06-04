@@ -10,7 +10,7 @@
 
     <name>exp-libs</name>
     <description>经验库</description>
-    <url>https://svn.sinacloud.com/expcodes/1/00-exp-libs/exp-libs/trunk</url>
+    <url>https://github.com/lyy289065406/expcodes.git/trunk/java/00-exp-libs/exp-libs/trunk</url>
     <inceptionYear>2016-01-01</inceptionYear>
 
     <!--项目的问题管理系统(可选)-->
@@ -28,9 +28,9 @@
     <!-- 软件配置管理 -->
     <scm>
         <!-- 项目SVN主干目录（需保证目录已存在） -->
-        <connection>scm:svn:https://svn.sinacloud.com/expcodes/1/00-exp-libs/exp-libs/trunk</connection>
-        <developerConnection>scm:svn:https://svn.sinacloud.com/expcodes/1/00-exp-libs/exp-libs/trunk</developerConnection>
-        <url>scm:svn:https://svn.sinacloud.com/expcodes/1/00-exp-libs/exp-libs/trunk</url>
+        <connection>scm:svn:https://github.com/lyy289065406/expcodes.git/trunk/java/00-exp-libs/exp-libs/trunk</connection>
+        <developerConnection>scm:svn:https://github.com/lyy289065406/expcodes.git/trunk/java/00-exp-libs/exp-libs/trunk</developerConnection>
+        <url>scm:svn:https://github.com/lyy289065406/expcodes.git/trunk/java/00-exp-libs/exp-libs/trunk</url>
     </scm>
 
     <!-- 变量定义 -->
@@ -50,10 +50,10 @@
     <dependencies>
     
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>1.6.2</version>
-        </dependency>
+		  <groupId>net.sf.ehcache</groupId>
+		  <artifactId>ehcache</artifactId>
+		  <version>2.9.1</version>
+		</dependency>
         
         <!-- swing美瞳构件 -->
         <dependency>
@@ -143,10 +143,10 @@
           <scope>${include.model.db}</scope>
           <!-- optional>true</optional -->
         </dependency>
-        <dependency>
+		<dependency>
 		  <groupId>com.oracle</groupId>
-		  <artifactId>ojdbc14</artifactId>
-		  <version>10.2.0.4.0</version>
+		  <artifactId>ojdbc</artifactId>
+		  <version>14</version>
 		  <scope>${include.model.db}</scope>
           <!-- optional>true</optional -->
 		</dependency>
@@ -591,7 +591,7 @@
                 <version>2.3.2</version>
                 <configuration>
                     <!-- 项目的SVN基线目录（需保证目录已存在） -->
-                    <tagBase>https://svn.sinacloud.com/expcodes/1/00-exp-libs/exp-libs/tags</tagBase>
+                    <tagBase>https://github.com/lyy289065406/expcodes.git/trunk/java/00-exp-libs/exp-libs/tags</tagBase>
                 </configuration>
             </plugin>
 
