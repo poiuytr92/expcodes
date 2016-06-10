@@ -34,10 +34,21 @@ public class CmdUtils {
 	 * @return
 	 */
 	public static String execute(String cmd) {
+		return execute(cmd, true);
+	}
+	
+	/**
+	 * 执行控制台命令
+	 * @param cmd
+	 * @param onlyResult 只返回命令执行结果（无执行状态、异常信息）
+	 * @return
+	 */
+	public static String execute(String cmd, boolean onlyResult) {
 		String result = "";
 		try {
 			Process process = Runtime.getRuntime().exec(cmd);
-			result = getCmdResult(process);
+			result = getCmdResult(process, onlyResult);
+			process.destroy();
 			
 		} catch (Exception e) {
 			log.error("执行控制台命令失败: {}", cmd, e);
@@ -45,20 +56,24 @@ public class CmdUtils {
 		return result;
 	}
 
-	private static String getCmdResult(Process process) {
+	private static String getCmdResult(Process process, boolean onlyResult) {
 		StringBuffer result = new StringBuffer();
 		try {
 			InputStream is = process.getInputStream();
 			InputStream isErr = process.getErrorStream();
-			int exitValue = process.waitFor();
+			int exitValue = process.waitFor();	// 此方法会阻塞, 直到命令执行结束
 	
-			result.append("[info ]\r\n").append(readInputStream(is));
-			result.append("[error]\r\n").append(readInputStream(isErr));
-			result.append("[state] ").append(exitValue);
+			if(onlyResult) {
+				result.append(readInputStream(is));
+				
+			} else {
+				result.append("[info ]\r\n").append(readInputStream(is));
+				result.append("[error]\r\n").append(readInputStream(isErr));
+				result.append("[state] ").append(exitValue);
+			}
 			
 			isErr.close();
 			is.close();
-			process.destroy();
 	
 		} catch (Exception e) {
 			log.error("获取命令返回值失败.", e);
