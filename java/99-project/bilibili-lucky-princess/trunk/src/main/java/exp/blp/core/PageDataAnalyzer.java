@@ -12,7 +12,6 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.blp.AppUI;
 import exp.blp.Config;
 import exp.blp.utils.BrowserUtils;
 import exp.blp.utils.UIUtils;
@@ -90,7 +89,7 @@ public class PageDataAnalyzer extends Thread {
 		WebDriver driver = null;
 		try {
 			driver = new ChromeDriver(getDefaultConfig());
-			
+
 			UIUtils.log("正在打开网页 [" + httpUrl + "] ...");
 			driver.get(httpUrl);
 			UIUtils.openHomePage();
@@ -123,10 +122,9 @@ public class PageDataAnalyzer extends Thread {
 			log.error("统计在线用户数据异常: [{}].", httpUrl, e);
 			
 		} finally {
+			UIUtils.log("浏览器已关闭.");
 			exit(driver);
 		}
-		log.info("浏览器已关闭.");
-		AppUI.getInstn().appendLog("浏览器已关闭.");
 	}
 	
 	private void exit(WebDriver driver) {
