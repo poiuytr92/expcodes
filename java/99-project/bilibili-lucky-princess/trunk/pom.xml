@@ -29,9 +29,9 @@
 	<!-- 软件配置管理 -->
 	<scm>
 		<!-- 项目SVN主干目录（需保证目录已存在） -->
-		<connection>scm:svn:http://172.168.27.5:81/svn/release/project/???/trunk</connection>
-		<developerConnection>scm:svn:http://172.168.27.5:81/svn/release/project/???/trunk</developerConnection>
-		<url>scm:svn:http://172.168.27.5:81/svn/release/project/???/trunk</url>
+		<connection>scm:svn:https://github.com/lyy289065406/expcodes.git/trunk/java/99-project/bilibili-lucky-princess/trunk</connection>
+		<developerConnection>scm:svn:https://github.com/lyy289065406/expcodes.git/trunk/java/99-project/bilibili-lucky-princess/trunk</developerConnection>
+		<url>scm:svn:https://github.com/lyy289065406/expcodes.git/trunk/java/99-project/bilibili-lucky-princess/trunk</url>
 	</scm>
 
 	<!-- 变量定义 -->
@@ -105,7 +105,7 @@
 				<version>2.3.2</version>
 				<configuration>
 					<!-- 项目的SVN基线目录（需保证目录已存在） -->
-					<tagBase>http://172.168.27.5:81/svn/release/project/???/tags</tagBase>
+					<tagBase>https://github.com/lyy289065406/expcodes.git/trunk/java/99-project/bilibili-lucky-princess/tags</tagBase>
 				</configuration>
 			</plugin>
 
