@@ -60,19 +60,20 @@ public class CmdUtils {
 		StringBuffer result = new StringBuffer();
 		try {
 			InputStream is = process.getInputStream();
-			InputStream isErr = process.getErrorStream();
-			int exitValue = process.waitFor();	// 此方法会阻塞, 直到命令执行结束
-	
+			
 			if(onlyResult) {
 				result.append(readInputStream(is));
 				
 			} else {
+				InputStream isErr = process.getErrorStream();
+				int exitValue = process.waitFor();	// 此方法会阻塞, 直到命令执行结束
+				
 				result.append("[info ]\r\n").append(readInputStream(is));
 				result.append("[error]\r\n").append(readInputStream(isErr));
 				result.append("[state] ").append(exitValue);
+				
+				isErr.close();
 			}
-			
-			isErr.close();
 			is.close();
 	
 		} catch (Exception e) {
