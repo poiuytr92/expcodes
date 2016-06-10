@@ -118,7 +118,7 @@ public class PageDataAnalyzer extends Thread {
 		} catch (NoSuchElementException e) {
 			log.error("加载网页元素失败: [{}].", httpUrl, e);
 			
-		} catch (Exception e) {
+		} catch (Throwable e) {
 			log.error("统计在线用户数据异常: [{}].", httpUrl, e);
 			
 		} finally {
