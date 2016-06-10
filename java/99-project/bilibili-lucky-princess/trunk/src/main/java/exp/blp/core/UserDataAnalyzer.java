@@ -48,7 +48,7 @@ public class UserDataAnalyzer {
 			String line = chatMsgList.get(i);
 			UIUtils.log(line);
 			FileUtils.write(Config.CHAT_MSG_LIST_FILE_PATH, 
-					StrUtils.concat(TimeUtils.getCurTimePrefix(), line), 
+					StrUtils.concat(TimeUtils.getCurTimePrefix(), line, "\r\n"), 
 					Charset.UTF8, true);
 			
 			// 空消息
