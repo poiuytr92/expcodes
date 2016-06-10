@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.blp.AppUI;
 import exp.blp.Config;
+import exp.blp.utils.BrowserUtils;
 import exp.blp.utils.UIUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.pub.FileUtils;
@@ -22,8 +23,6 @@ import exp.libs.utils.pub.StrUtils;
 public class PageDataAnalyzer extends Thread {
 
 	private final static Logger log = LoggerFactory.getLogger(PageDataAnalyzer.class);
-	
-	private final static String BROWSER_DRIVER = "./lib/chrome-driver.exe";
 	
 	private final static String CHAT_MSG_LIST_NAME = "chat-msg-list";
 	
@@ -40,7 +39,8 @@ public class PageDataAnalyzer extends Thread {
 		this.analyzer = new UserDataAnalyzer();
 		this.isStop = true;
 		
-		System.getProperties().setProperty("webdriver.chrome.driver", BROWSER_DRIVER);
+		System.getProperties().setProperty(
+				"webdriver.chrome.driver", Config.BROWSER_DRIVER_PATH);
 	}
 	
 	public void _start() {
@@ -118,11 +118,9 @@ public class PageDataAnalyzer extends Thread {
 			
 		} catch (NoSuchElementException e) {
 			log.error("加载网页元素失败: [{}].", httpUrl, e);
-			exit(driver);
 			
 		} catch (Exception e) {
 			log.error("统计在线用户数据异常: [{}].", httpUrl, e);
-			exit(driver);
 			
 		} finally {
 			exit(driver);
@@ -136,8 +134,8 @@ public class PageDataAnalyzer extends Thread {
 		if(driver != null) {
 			driver.close();
 		}
-		AppUI.getInstn().dispose();
-		System.exit(1);
+		BrowserUtils.stopChromBrowser();
+		System.exit(0);
 	}
 
 	public UserDataAnalyzer getAnalyzer() {
