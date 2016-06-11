@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import exp.blp.Config;
 import exp.blp.bean.BrowserDriver;
 import exp.blp.utils.UIUtils;
-import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.pub.FileUtils;
 import exp.libs.utils.pub.StrUtils;
 
@@ -19,8 +18,6 @@ public class PageDataAnalyzer extends Thread {
 	private final static Logger log = LoggerFactory.getLogger(PageDataAnalyzer.class);
 	
 	private final static String CHAT_MSG_LIST_NAME = "chat-msg-list";
-	
-	private final static long COLLECT_INTERVAL = 5000;
 	
 	private BrowserDriver browserDriver;
 	
@@ -93,7 +90,6 @@ public class PageDataAnalyzer extends Thread {
 					log.info("在线用户数据无变化.");
 				}
 				
-				ThreadUtils.tSleep(COLLECT_INTERVAL);
 				browserDriver.refresh(driver);
 			}
 			UIUtils.log("统计在线用户数据结束.");

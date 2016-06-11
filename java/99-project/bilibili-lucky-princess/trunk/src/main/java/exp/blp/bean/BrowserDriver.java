@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.CmdUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.pub.StrUtils;
 
 final public class BrowserDriver {
@@ -52,12 +53,15 @@ final public class BrowserDriver {
 		}
 	}
 	
+	// {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
 	private DesiredCapabilities getCapabilities() {
 		DesiredCapabilities capabilities = null;
 		
 		if(PhantomJS.equals(driverName)) {
 			capabilities = DesiredCapabilities.phantomjs();
 			capabilities.setJavascriptEnabled(true);
+//			capabilities.setCapability("XSSAuditingEnabled", true);
+//			capabilities.setCapability("loadImages", false);
 			
 		} else if(Chrome.equals(driverName)) {
 			Map<String, Object> defaultContentSettings = new HashMap<String, Object>();
@@ -68,6 +72,7 @@ final public class BrowserDriver {
 
 			capabilities = DesiredCapabilities.chrome();
 			capabilities.setJavascriptEnabled(true);
+//			capabilities.setCapability("loadImages", false);
 			capabilities.setCapability("chrome.prefs", profile);
 			
 		} else {
@@ -98,12 +103,15 @@ final public class BrowserDriver {
 		
 		// PhantomJS浏览器不会持续执行JS脚本，只能刷新页面实现
 		if(PhantomJS.equals(driverName)) {
-			webDriver.navigate().refresh();	
+			ThreadUtils.tSleep(10000);
+//			webDriver.navigate().refresh();	// FIXME:刷新会报错
 			
 		} else if(Chrome.equals(driverName)) {
+			ThreadUtils.tSleep(5000);
 			// Undo 
 			
 		} else {
+			ThreadUtils.tSleep(5000);
 			// Undo 
 		}
 	}
