@@ -1,19 +1,14 @@
 package exp.blp.core;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.blp.Config;
-import exp.blp.utils.BrowserUtils;
+import exp.blp.bean.BrowserDriver;
 import exp.blp.utils.UIUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.pub.FileUtils;
@@ -27,6 +22,8 @@ public class PageDataAnalyzer extends Thread {
 	
 	private final static long COLLECT_INTERVAL = 5000;
 	
+	private BrowserDriver browserDriver;
+	
 	private String httpUrl;
 	
 	private UserDataAnalyzer analyzer;
@@ -34,12 +31,10 @@ public class PageDataAnalyzer extends Thread {
 	private boolean isStop;
 	
 	public PageDataAnalyzer(String httpUrl) {
+		this.browserDriver = BrowserDriver.CHROME;
 		this.httpUrl = httpUrl;
 		this.analyzer = new UserDataAnalyzer();
 		this.isStop = true;
-		
-		System.getProperties().setProperty(
-				"webdriver.chrome.driver", Config.BROWSER_DRIVER_PATH);
 	}
 	
 	public void _start() {
@@ -65,19 +60,6 @@ public class PageDataAnalyzer extends Thread {
 		FileUtils.copyFile(Config.HOME_PAGE_PATH_BAK, Config.HOME_PAGE_PATH);
 	}
 	
-	private DesiredCapabilities getDefaultConfig() {
-		Map<String, Object> defaultContentSettings = new HashMap<String, Object>();
-		defaultContentSettings.put("images", 2);	// 不显示图片  FIXME: 不知为何不生效
-
-		Map<String, Object> profile = new HashMap<String, Object>();
-		profile.put("profile.default_content_settings", defaultContentSettings);
-
-		DesiredCapabilities dc = DesiredCapabilities.chrome();
-		dc.setJavascriptEnabled(true);	// 默认就是自动执行JS脚本，这里是以防万一
-		dc.setCapability("chrome.prefs", profile);
-		return dc;
-	}
-	
 	public void collectOnlineData() {
 		if(StrUtils.isEmpty(httpUrl)) {
 			UIUtils.log("无效的HTTP, 终止操作.");
@@ -88,8 +70,8 @@ public class PageDataAnalyzer extends Thread {
 		UIUtils.log("正在开启浏览器捕获数据...");
 		WebDriver driver = null;
 		try {
-			driver = new ChromeDriver(getDefaultConfig());
-
+			driver = browserDriver.getWebDriver();
+			
 			UIUtils.log("正在打开网页 [" + httpUrl + "] ...");
 			driver.get(httpUrl);
 			UIUtils.openHomePage();
@@ -112,6 +94,7 @@ public class PageDataAnalyzer extends Thread {
 				}
 				
 				ThreadUtils.tSleep(COLLECT_INTERVAL);
+				browserDriver.refresh(driver);
 			}
 			UIUtils.log("统计在线用户数据结束.");
 			
@@ -123,19 +106,12 @@ public class PageDataAnalyzer extends Thread {
 			
 		} finally {
 			UIUtils.log("浏览器已关闭.");
-			exit(driver);
+			isStop = true;
+			browserDriver.close(driver);
+			System.exit(0);
 		}
 	}
 	
-	private void exit(WebDriver driver) {
-		isStop = true;
-		if(driver != null) {
-			driver.close();
-		}
-		BrowserUtils.stopChromBrowser();
-		System.exit(0);
-	}
-
 	public UserDataAnalyzer getAnalyzer() {
 		return analyzer;
 	}
