@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -189,6 +191,22 @@ public class CmdUtils {
 			result = execute(cmd);
 		}
 		return result;
+	}
+	
+	public static void kill(String processName) {
+		Pattern ptn = Pattern.compile(StrUtils.concat(processName, " +?(\\d+) "));
+		String tasklist = execute("tasklist");
+		String[] tasks = tasklist.split("\n");
+		
+		for(String task : tasks) {
+			if(task.startsWith(StrUtils.concat(processName, " "))) {
+				Matcher mth = ptn.matcher(task);
+				if(mth.find()) {
+					String pid = mth.group(1);
+					execute(StrUtils.concat("taskkill /f /t /im ", pid));
+				}
+			}
+		}
 	}
 
 }
