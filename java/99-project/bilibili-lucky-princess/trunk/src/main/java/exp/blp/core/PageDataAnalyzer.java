@@ -30,8 +30,8 @@ public class PageDataAnalyzer extends Thread {
 	
 	private boolean isStop;
 	
-	public PageDataAnalyzer(String httpUrl) {
-		this.browserDriver = BrowserDriver.CHROME;
+	public PageDataAnalyzer(String httpUrl, BrowserDriver browserDriver) {
+		this.browserDriver = browserDriver;
 		this.httpUrl = httpUrl;
 		this.analyzer = new UserDataAnalyzer();
 		this.isStop = true;

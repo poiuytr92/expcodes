@@ -24,6 +24,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
+import exp.blp.bean.BrowserDriver;
 import exp.blp.bean.TableComponent;
 import exp.blp.bean.UserData;
 import exp.blp.core.PageDataAnalyzer;
@@ -71,6 +72,8 @@ public class AppUI extends JFrame {
 	
 	private PageDataAnalyzer pageAnalyzer;
 	
+	private static BrowserDriver browserDriver;
+	
 	/** 单例 */
 	private static volatile AppUI instance;
 	
@@ -109,7 +112,8 @@ public class AppUI extends JFrame {
 		});
 	}
 	
-	public static void createInstn() {
+	public static void createInstn(BrowserDriver browserDriver) {
+		AppUI.browserDriver = browserDriver;
 		getInstn();
 	}
 
@@ -260,7 +264,7 @@ public class AppUI extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(pageAnalyzer == null || pageAnalyzer.isStop()) {
 					String url = httpTF.getText().trim();
-					pageAnalyzer = new PageDataAnalyzer(url);
+					pageAnalyzer = new PageDataAnalyzer(url, AppUI.browserDriver);
 					pageAnalyzer._start();
 					
 					ThreadUtils.tSleep(1000);	// 避免连击

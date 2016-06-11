@@ -8,12 +8,16 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.pub.StrUtils;
 
 final public class BrowserDriver {
 
+	private final static Logger log = LoggerFactory.getLogger(BrowserDriver.class);
+	
 	private final static String DRIVER_DIR = "./lib/driver/";
 	
 	// JS属于内存浏览器，对JQuery支持不好
@@ -111,15 +115,19 @@ final public class BrowserDriver {
 		
 		if(PhantomJS.equals(driverName)) {
 			CmdUtils.kill(driverName);
-			webDriver.close();
 			
 		// Chrome 浏览器进程需要用系统命令终止
 		} else if(Chrome.equals(driverName)) {
 			CmdUtils.kill(driverName);
-			webDriver.close();
 			
 		} else {
+			// Undo
+		}
+		
+		try {
 			webDriver.close();
+		} catch(Throwable e) {
+			log.error("关闭浏览器失败.", e);
 		}
 	}
 	
