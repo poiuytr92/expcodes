@@ -29,6 +29,9 @@ final public class BrowserDriver {
 	private final static String Chrome = "chrome-driver.exe";
 	public final static BrowserDriver CHROME = new BrowserDriver(Chrome);
 	
+	private final static String HtmlUnit = "HtmlUnit";
+	public final static BrowserDriver HTMLUTIL = new BrowserDriver(HtmlUnit);
+	
 	private String driverName;
 	
 	private BrowserDriver(String driverName) {
