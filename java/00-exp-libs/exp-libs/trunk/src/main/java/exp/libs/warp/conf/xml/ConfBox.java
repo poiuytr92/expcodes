@@ -47,6 +47,7 @@ public class ConfBox {
 	/** 路径树 */
 	private Map<String, XNode> pathTree;
 	
+	// FIXME: diskFile 和 jarFile 要分开记录，还要保证整体顺序
 	protected List<File> confFiles; 
 	
 	protected ConfBox(String boxName) {
@@ -102,7 +103,7 @@ public class ConfBox {
 		boolean isOk = true;
 		for(String confFilePath : confFilePaths) {
 			if(StrUtils.isNotEmpty(confFilePath)) {
-				isOk &= loadConfFile(confFilePath);
+				isOk &= loadConfFileInJar(confFilePath);
 			}
 		}
 		return isOk;
