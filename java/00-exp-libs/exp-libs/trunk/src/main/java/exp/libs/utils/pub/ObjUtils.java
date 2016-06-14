@@ -2,7 +2,6 @@ package exp.libs.utils.pub;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,8 +11,6 @@ import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.math.BigInteger;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.LinkedList;
@@ -367,45 +364,6 @@ public class ObjUtils {
 		}
 		return result;
 	}
-	
-	public static boolean close(Closeable closeable) {
-		boolean isOk = true;
-		if (closeable != null) {
-			try {
-                closeable.close();
-	        } catch (Exception e) {
-	        	log.error("IO流关闭失败.", e);
-	        	isOk = false;
-	        }
-		}
-		return isOk;
-    }
-	
-	public static boolean close(Statement statement) {
-		boolean isOk = true;
-		if (statement != null) {
-			try {
-				statement.close();
-	        } catch (Exception e) {
-	        	log.error("IO流关闭失败.", e);
-	        	isOk = false;
-	        }
-		}
-		return isOk;
-    }
-	
-	public static boolean close(ResultSet resultSet) {
-		boolean isOk = true;
-		if (resultSet != null) {
-			try {
-				resultSet.close();
-	        } catch (Exception e) {
-	        	log.error("IO流关闭失败.", e);
-	        	isOk = false;
-	        }
-		}
-		return isOk;
-    }
 	
 	/**
 	 * 打印Bean中的所有成员域（使用MULTI_LINE_STYLE风格）

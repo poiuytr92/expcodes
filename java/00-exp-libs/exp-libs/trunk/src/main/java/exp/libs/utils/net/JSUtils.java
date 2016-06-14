@@ -9,7 +9,7 @@ import javax.script.ScriptEngineManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.utils.pub.ObjUtils;
+import exp.libs.utils.pub.IOUtils;
 
 /**
  * javascript工具包
@@ -51,7 +51,7 @@ public class JSUtils {
 		} catch (Exception e) {
 			log.error("执行JS方法 [{}] 失败, 所属文件: {}", jsMethod, jsFilePath, e);
 		}
-		ObjUtils.close(reader);
+		IOUtils.close(reader);
 		return result;
 	}
 

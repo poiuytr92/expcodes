@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
-import exp.libs.utils.pub.ObjUtils;
+import exp.libs.utils.pub.IOUtils;
 
 /**
  * <PRE>
@@ -74,7 +74,7 @@ final public class ExitUtils extends Thread {
 			}
 		} while(true);
 		
-		ObjUtils.close(in);
+		IOUtils.close(in);
 		System.exit(0);
 	}
 	

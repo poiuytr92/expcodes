@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.DBType;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.pub.ObjUtils;
+import exp.libs.utils.pub.IOUtils;
 import exp.libs.utils.pub.StrUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 
@@ -609,8 +609,8 @@ public class DBUtils {
 					log.error("execute procedure [{}] fail.", proSql, e);
 					
 				} finally {
-					ObjUtils.close(rs);
-					ObjUtils.close(cs);
+					IOUtils.close(rs);
+					IOUtils.close(cs);
 				}
 			}
 		}
@@ -675,7 +675,7 @@ public class DBUtils {
 					log.error("execute procedure [{}] fail.", proSql, e);
 					
 				} finally {
-					ObjUtils.close(cs);
+					IOUtils.close(cs);
 				}
 			}
 		}
@@ -749,7 +749,7 @@ public class DBUtils {
 					log.error("execute procedure [{}] fail.", proSql, e);
 					
 				} finally {
-					ObjUtils.close(cs);
+					IOUtils.close(cs);
 				}
 			}
 		}
@@ -869,8 +869,8 @@ public class DBUtils {
 					log.error("execute procedure [{}] fail.", proSql, e);
 					
 				} finally {
-					ObjUtils.close(rs);
-					ObjUtils.close(cs);
+					IOUtils.close(rs);
+					IOUtils.close(cs);
 				}
 			}
 		}
@@ -950,8 +950,8 @@ public class DBUtils {
 					log.error("execute procedure [{}] fail.", proSql, e);
 					
 				} finally {
-					ObjUtils.close(rs);
-					ObjUtils.close(cs);
+					IOUtils.close(rs);
+					IOUtils.close(cs);
 				}
 			}
 		}
