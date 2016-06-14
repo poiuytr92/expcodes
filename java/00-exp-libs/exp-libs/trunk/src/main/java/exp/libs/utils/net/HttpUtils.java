@@ -82,6 +82,12 @@ public class HttpUtils {
 		return httpClient;
 	}
 	
+	public static void close(HttpClient httpClient) {
+		if(httpClient != null) {
+			httpClient.getHttpConnectionManager().closeIdleConnections(0);
+		}
+	}
+	
 	public static String encodeURL(final String httpUrl) {
 		return encodeURL(httpUrl, Charset.UTF8);
 	}

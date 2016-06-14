@@ -273,6 +273,8 @@ public class WSClientUtils {
 		if (wsdlUrl.endsWith("?wsdl")) {
 			wsdlUrl = wsdlUrl.replace("?wsdl", "");
 		}
+		
+		HttpClient httpClient = HttpUtils.createHttpClient(connTimeOut, soTimeOut);
 		PostMethod postMethod = new PostMethod(wsdlUrl);
 		try {
 			if (header) {
@@ -281,10 +283,12 @@ public class WSClientUtils {
 			postMethod.setRequestEntity(new InputStreamRequestEntity(
 					new ByteArrayInputStream(requestXMLString.getBytes(CHARSET)), 
 					CONTENT_TYPE));
-			HttpUtils.createHttpClient(connTimeOut, soTimeOut).executeMethod(postMethod);
+			httpClient.executeMethod(postMethod);
 			responseXMLString = postMethod.getResponseBodyAsString();
+			
 		} finally {
 			postMethod.releaseConnection();
+			HttpUtils.close(httpClient);
 		}
 		return responseXMLString;
 	}
