@@ -13,7 +13,9 @@ import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
+import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
 import exp.libs.utils.pub.CharsetUtils;
+import exp.libs.utils.pub.IOUtils;
 import exp.libs.utils.pub.RegexUtils;
 import exp.libs.utils.pub.StrUtils;
 
@@ -43,8 +46,11 @@ public class HttpUtils {
 	/** 连接超时,默认1分钟 */
 	public static final int CONN_TIMEOUT = 60000;
 
-	/** 响应超时 ,默认10分钟 */
-	public static final int CALL_TIMEOUT = 600000;
+	/** 响应超时 ,默认1分钟 */
+	public static final int CALL_TIMEOUT = 60000;
+	
+	/** 默认下载路径 */
+	private final static String DEFAULT_DOWNLOAD_DIR = "./downloads/";
 	
 	/** 私有化构造函数 */
 	protected HttpUtils() {}
@@ -231,6 +237,35 @@ public class HttpUtils {
 			log.error("获取页面源码失败: {}", httpUrl, e);
 		}
 		return pageSource.toString();
+	}
+	
+	public static boolean download(String url) {
+		return download(url, null);
+	}
+
+	public static boolean download(String url, String savePath) {
+		boolean isOk = false;
+		savePath = StrUtils.isNotEmpty(savePath) ? savePath : 
+			StrUtils.concat(DEFAULT_DOWNLOAD_DIR, System.currentTimeMillis());
+		
+		HttpClient client = HttpUtils.createHttpClient();
+		HttpMethod method = new GetMethod(url);
+		try {
+			client.executeMethod(method);
+			InputStream is = method.getResponseBodyAsStream();
+			IOUtils.toFile(is, savePath);
+			is.close();
+			log.error("下载文件 [{}] 成功, 来源: [{}]", savePath, url);
+
+		} catch (Exception e) {
+			isOk = false;
+			log.error("下载文件 [{}] 失败, 来源: [{}]", savePath, url, e);
+			
+		} finally {
+			method.releaseConnection();
+			HttpUtils.close(client);
+		}
+		return isOk;
 	}
 	
 }
