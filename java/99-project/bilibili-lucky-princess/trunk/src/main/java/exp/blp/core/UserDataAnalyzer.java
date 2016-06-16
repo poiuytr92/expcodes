@@ -116,7 +116,7 @@ public class UserDataAnalyzer {
 		sb.append("    </div>");
 		
 		if(userdatas.size() > 0) {
-			String web = FileUtils.readFile(Config.HOME_PAGE_PATH, Charset.UTF8);
+			String web = FileUtils.read(Config.HOME_PAGE_PATH, Charset.UTF8);
 			web = web.replaceFirst("<div id=\"tagsList\">[\\s\\S]*?</div>", sb.toString());
 			FileUtils.write(Config.HOME_PAGE_PATH, web, Charset.UTF8, false);
 		}
