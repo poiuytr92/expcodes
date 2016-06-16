@@ -100,7 +100,7 @@ public class JavaUtils {
 			
 		} else {
 			if(file.getName().endsWith(".java")) {
-				String content = FileUtils.readFile(file, encoding);
+				String content = FileUtils.read(file, encoding);
 				Iterator<String> keyIts = packagePaths.keySet().iterator();
 				while(keyIts.hasNext()) {
 					String oldPackagePath = keyIts.next();

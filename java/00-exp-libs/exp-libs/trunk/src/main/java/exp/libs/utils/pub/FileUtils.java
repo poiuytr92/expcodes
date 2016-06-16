@@ -158,14 +158,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return isOk;
 	}
 	
-	public static String readFile(String filePath) {
+	public static String read(String filePath) {
 		if(filePath == null) {
 			return "";
 		}
-        return readFile(new File(filePath));
+        return read(new File(filePath));
     }
 	
-    public static String readFile(File file) {
+    public static String read(File file) {
     	String s = "";
         try {
 			s = org.apache.commons.io.FileUtils.readFileToString(file);
@@ -175,14 +175,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return s;
     }
     
-    public static String readFile(String filePath, String encoding) {
+    public static String read(String filePath, String encoding) {
     	if(filePath == null) {
 			return "";
 		}
-        return readFile(new File(filePath), encoding);
+        return read(new File(filePath), encoding);
     }
     
-    public static String readFile(File file, String encoding) {
+    public static String read(File file, String encoding) {
     	String s = "";
         try {
 			s = org.apache.commons.io.FileUtils.readFileToString(file, encoding);
