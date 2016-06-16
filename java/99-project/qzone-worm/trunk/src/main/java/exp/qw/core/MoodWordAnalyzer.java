@@ -67,13 +67,17 @@ public class MoodWordAnalyzer {
 			FileUtils.delete(INFO_DIR);	// 删除旧数据
 			
 			for(int idx = 0; idx < totalPageNum; idx++) {
-				UIUtils.log("正在抓取第 [", idx, "] 页的图文数据...");
+				UIUtils.log("正在抓取第 [", (idx + 1), "] 页的图文数据...");
 				String pageUrl = getPageUrl(targetQQ, idx, gtk);
 				driver.get(pageUrl);
 				
 				String pageData = driver.getPageSource();
-				parse(idx, pageData);
-				UIUtils.log("抓取第 [", idx, "] 页的图文数据完成.");
+				boolean isEnd = parse(idx, pageData);
+				UIUtils.log("抓取第 [", (idx + 1), "] 页的图文数据完成.");
+				
+				if(isEnd) {
+					break;
+				}
 			}
 		} else {
 			UIUtils.log("登陆失败： 无法获得 [g_tk] 码, 本次操作终止.");
@@ -108,9 +112,10 @@ public class MoodWordAnalyzer {
 	 * @param pageIdx
 	 * @param pageData
 	 */
-	protected static void parse(int pageIdx, String pageData) {
+	protected static boolean parse(int pageIdx, String pageData) {
 		String filePath = getSaveFilePath(pageIdx);
 		
+		boolean isEnd = false;
 		try {
 			String json = getJson(pageData);
 			JSONObject jsonObj = JSONObject.fromObject(json);
@@ -120,8 +125,16 @@ public class MoodWordAnalyzer {
 				save(msg, filePath);
 			}
 		} catch (Exception e) {
-			log.error("抓取第 [{}] 页的图文数据失败.", pageIdx, e);
+			
+			// 已到了最末页
+			if("JSONObject[\"msglist\"] is not a JSONArray.".equals(e.getMessage())) {
+				isEnd = true;
+				
+			} else {
+				log.error("抓取第 [{}] 页的图文数据失败.", pageIdx, e);
+			}
 		}
+		return isEnd;
 	}
 	
 	private static String getSaveFilePath(int pageIdx) {
@@ -196,7 +209,7 @@ public class MoodWordAnalyzer {
 		String fileName = pageInfo.getName().replace(INFO_PATH_SUFFIX, "");
 		UIUtils.log("正在下载 [", fileName, "] 记录的图文信息...");
 		
-		String info = FileUtils.readFile(pageInfo, Charset.UTF8);
+		String info = FileUtils.read(pageInfo, Charset.UTF8);
 		String[] msgs = info.split(MSG_SPLIT);
 		for(int idx = 0; idx < msgs.length; idx++) {
 			String msg = msgs[idx].trim();
