@@ -95,7 +95,7 @@ public class AppUI extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if(0 == JOptionPane.showConfirmDialog(basePanel, 
-						"退出BiliBili抽奖姬 ?\r\n\r\n", "警告", 
+						"退出QQ空间图文爬取器 ?\r\n\r\n", "警告", 
 						JOptionPane.YES_NO_OPTION)) {
 					dispose();
 					System.exit(0);
