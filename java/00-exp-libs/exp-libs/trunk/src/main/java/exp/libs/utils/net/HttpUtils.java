@@ -255,7 +255,7 @@ public class HttpUtils {
 			InputStream is = method.getResponseBodyAsStream();
 			IOUtils.toFile(is, savePath);
 			is.close();
-			log.error("下载文件 [{}] 成功, 来源: [{}]", savePath, url);
+			log.info("下载文件 [{}] 成功, 来源: [{}]", savePath, url);
 
 		} catch (Exception e) {
 			isOk = false;
