@@ -40,7 +40,9 @@ import exp.libs.utils.pub.StrUtils;
 final class _DBUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(_DBUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(_DBUtils.class);
+	
+	private final static String TEMPLATE_DB_BEAN = "/exp/libs/warp/db/sql/db-bean.tpl";
 	
 	private Set<String> registeredDS;
 	
@@ -261,7 +263,7 @@ final class _DBUtils {
 		
 		//取类模板
 		Template beanClazz = new Template();
-		beanClazz.read("/exp/libs/warp/db/sql/db-bean.tpl", Charset.ISO);
+		beanClazz.read(TEMPLATE_DB_BEAN, Charset.ISO);
 		
 		//设置年份和日期
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
