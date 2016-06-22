@@ -29,7 +29,7 @@ public class Test {
 		
 		DataSourceBean ds = cb.getDataSourceBean("TEST");
 		Connection conn = DBUtils.getConn(ds);
-		List<Map<String, String>> kvs = DBUtils.queryKvs(conn, "select * from django_admin_log");
+		List<Map<String, String>> kvs = DBUtils.queryKVSs(conn, "select * from django_admin_log");
 		for(Map<String, String> kv : kvs) {
 			System.out.println(kv);
 		}

@@ -258,12 +258,45 @@ public class DBUtils {
 	}
 	
 	/**
+	 * 仅适用于形如 【select key, value from table where ...】 的sql
+	 * @param conn
+	 * @param sql
+	 * @return Map<key, value>
+	 */
+	public static Map<String, String> queryKVS(Connection conn, String sql) {
+		Map<String, String> kvo = new HashMap<String, String>();
+
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+
+			ResultSetMetaData rsmd = null;
+			while (rs.next()) {
+				rsmd = rs.getMetaData();
+				int count = rsmd.getColumnCount();
+				if(count < 2) {
+					break;
+				}
+				
+				kvo.put(rs.getString(1), rs.getString(2));
+			}
+			
+			rs.close();
+			pstm.close();
+			
+		} catch (Throwable e) {
+			log.error("执行sql失败: [{}].", sql, e);
+		}
+		return kvo;
+	}
+	
+	/**
 	 * 从数据库查询kv表
 	 * @param conn 数据库连接
 	 * @param sql 查询sql
 	 * @return Map<String, String>类型的kv表,不会返回null
 	 */
-	public static List<Map<String, String>> queryKvs(Connection conn, String sql) {
+	public static List<Map<String, String>> queryKVSs(Connection conn, String sql) {
 		List<Map<String, String>> kvsList = new LinkedList<Map<String, String>>();
 
 		try {
@@ -291,12 +324,45 @@ public class DBUtils {
 	}
 	
 	/**
+	 * 仅适用于形如 【select key, value from table where ...】 的sql
+	 * @param conn
+	 * @param sql
+	 * @return Map<key, value>
+	 */
+	public static Map<String, Object> queryKVO(Connection conn, String sql) {
+		Map<String, Object> kvo = new HashMap<String, Object>();
+
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+
+			ResultSetMetaData rsmd = null;
+			while (rs.next()) {
+				rsmd = rs.getMetaData();
+				int count = rsmd.getColumnCount();
+				if(count < 2) {
+					break;
+				}
+				
+				kvo.put(rs.getString(1), rs.getObject(2));
+			}
+			
+			rs.close();
+			pstm.close();
+			
+		} catch (Throwable e) {
+			log.error("执行sql失败: [{}].", sql, e);
+		}
+		return kvo;
+	}
+	
+	/**
 	 * 从数据库查询kv表
 	 * @param conn 数据库连接
 	 * @param sql 查询sql
 	 * @return Map<String, Object>类型的kv表,不会返回null
 	 */
-	public static List<Map<String, Object>> queryKvo(Connection conn, String sql) {
+	public static List<Map<String, Object>> queryKVOs(Connection conn, String sql) {
 		List<Map<String, Object>> kvsList = new LinkedList<Map<String, Object>>();
 
 		try {
@@ -416,7 +482,7 @@ public class DBUtils {
 	 * @param sql 查询sql
 	 * @return 查询失败则返回-1
 	 */
-	public static int queryNum(Connection conn, String sql) {
+	public static int queryInt(Connection conn, String sql) {
 		int num = -1;
 
 		try {
@@ -424,6 +490,33 @@ public class DBUtils {
 			ResultSet rs = pstm.executeQuery();
 			if (rs.next()) {
 				num = rs.getInt(1);
+			}
+			
+			rs.close();
+			pstm.close();
+			
+		} catch (Throwable e) {
+			log.error("执行sql失败: [{}].", sql, e);
+		}
+		return num;
+	}
+	
+	/**
+	 * 从数据库查询一个整数值.
+	 * 若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 * 
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return 查询失败则返回-1
+	 */
+	public static long queryLong(Connection conn, String sql) {
+		long num = -1;
+
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+			if (rs.next()) {
+				num = rs.getLong(1);
 			}
 			
 			rs.close();

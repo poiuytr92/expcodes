@@ -222,6 +222,33 @@ public class ESCUtils {
 		}
 		return json;
 	}
+	
+	@SuppressWarnings("deprecation")
+	public static String toJson(Object obj, String dateFormat) {
+		String json = "";
+		if (obj == null) {
+			return json;
+		}
+			
+		StringWriter writer = new StringWriter();
+		SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.getSerializationConfig().setDateFormat(sdf);
+		
+		try {
+			mapper.writeValue(writer, obj);
+		} catch (Exception e) {
+			log.error("转换JSON失败: {}", obj, e);
+		}
+		json = writer.toString();
+		
+		try {
+			writer.close();
+		} catch (IOException e) {
+			log.error("转换JSON异常: 关闭输入流失败.", e);
+		}
+		return json;
+	}
 
 	public static Map<?, ?> unJson(String json) {
 		Map<?, ?> map = null;
