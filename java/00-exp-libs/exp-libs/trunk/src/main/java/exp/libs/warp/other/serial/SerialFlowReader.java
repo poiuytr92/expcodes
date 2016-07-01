@@ -32,6 +32,10 @@ public class SerialFlowReader {
 	
 	private boolean closed;
 	
+	public SerialFlowReader() {
+		init(null);
+	}
+	
 	public SerialFlowReader(String filePath) {
 		init(StrUtils.isEmpty(filePath) ? 
 				new File(DEFAULT_FILEPATH) : new File(filePath));

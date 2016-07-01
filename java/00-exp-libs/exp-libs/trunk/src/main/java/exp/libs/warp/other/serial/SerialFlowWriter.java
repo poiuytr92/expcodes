@@ -21,6 +21,10 @@ public class SerialFlowWriter {
 	
 	private FlowObjectOutputStream foos;
 	
+	public SerialFlowWriter() {
+		init(null);
+	}
+	
 	public SerialFlowWriter(String filePath) {
 		init(StrUtils.isEmpty(filePath) ? 
 				new File(DEFAULT_FILEPATH) : new File(filePath));
