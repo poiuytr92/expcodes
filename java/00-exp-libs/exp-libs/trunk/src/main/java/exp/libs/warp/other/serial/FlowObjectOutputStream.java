@@ -117,7 +117,7 @@ final class FlowObjectOutputStream {
 		@Override
 		protected void writeStreamHeader() throws IOException {
 			if (file == null || !file.exists() || 
-					file.length() == 0 || append == false) {
+					file.length() <= 0 || append == false) {
 				super.writeStreamHeader();
 				
 			} else {
