@@ -19,6 +19,8 @@ public class SerialFlowWriter {
 
 	private final static String DEFAULT_FILEPATH = "./serializable.dat";
 	
+	private File file;
+	
 	private FlowObjectOutputStream foos;
 	
 	public SerialFlowWriter() {
@@ -35,8 +37,8 @@ public class SerialFlowWriter {
 	}
 	
 	private void init(File file) {
-		file = (file == null ? new File(DEFAULT_FILEPATH) : file);
-		this.foos = new FlowObjectOutputStream(file, true);
+		this.file = (file == null ? new File(DEFAULT_FILEPATH) : file);
+		this.foos = new FlowObjectOutputStream(this.file, true);
 	}
 	
 	public boolean write(Serializable o) {
@@ -66,6 +68,10 @@ public class SerialFlowWriter {
 			isOk &= foos.close();
 		}
 		return isOk;
+	}
+
+	public File getFile() {
+		return file;
 	}
 	
 }

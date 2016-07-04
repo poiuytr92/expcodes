@@ -26,6 +26,8 @@ public class SerialFlowReader {
 	
 	private final static String DEFAULT_FILEPATH = "./serializable.dat";
 	
+	private File file;
+	
 	private ObjectInputStream ois;
 	
 	private Object obj;
@@ -46,15 +48,14 @@ public class SerialFlowReader {
 	}
 	
 	private void init(File file) {
-		file = (file == null ? new File(DEFAULT_FILEPATH) : file);
+		this.file = (file == null ? new File(DEFAULT_FILEPATH) : file);
 		try {
-			this.ois = new ObjectInputStream(new FileInputStream(file));
+			this.ois = new ObjectInputStream(new FileInputStream(this.file));
 			this.closed = false;
 			
 		} catch (Exception e) {
 			this.closed = true;
 		}
-		
 		this.obj = null;
 	}
 	
@@ -95,6 +96,10 @@ public class SerialFlowReader {
 			}
 		}
 		return closed;
+	}
+
+	public File getFile() {
+		return file;
 	}
 	
 }
