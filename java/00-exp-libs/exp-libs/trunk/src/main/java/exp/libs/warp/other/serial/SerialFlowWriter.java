@@ -38,6 +38,7 @@ public class SerialFlowWriter {
 	
 	private void init(File file) {
 		this.file = (file == null ? new File(DEFAULT_FILEPATH) : file);
+		this.file.getParentFile().mkdirs();
 		this.foos = new FlowObjectOutputStream(this.file, true);
 	}
 	
