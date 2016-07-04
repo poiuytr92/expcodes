@@ -114,6 +114,11 @@ final class FlowObjectOutputStream {
 			super(out);
 		}
 		
+		/**
+		 * 此方法会在 ObjectOutputStream 构造函数中被调用，
+		 * 	即使继承覆写，也无法在构造函数为参数 file 和 append 进行传参，
+		 * 	因此只能通过内联类方式间接传参。
+		 */
 		@Override
 		protected void writeStreamHeader() throws IOException {
 			if (file == null || !file.exists() || 
