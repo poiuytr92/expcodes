@@ -24,7 +24,7 @@ public class SerialFlowWriter {
 	private FlowObjectOutputStream foos;
 	
 	public SerialFlowWriter() {
-		init(null, true);
+		init(null, false);
 	}
 	
 	public SerialFlowWriter(boolean append) {
@@ -33,7 +33,7 @@ public class SerialFlowWriter {
 	
 	public SerialFlowWriter(String filePath) {
 		init(StrUtils.isEmpty(filePath) ? 
-				new File(DEFAULT_FILEPATH) : new File(filePath), true);
+				new File(DEFAULT_FILEPATH) : new File(filePath), false);
 	}
 	
 	public SerialFlowWriter(String filePath, boolean append) {
@@ -42,7 +42,7 @@ public class SerialFlowWriter {
 	}
 	
 	public SerialFlowWriter(File file) {
-		init(file, true);
+		init(file, false);
 	}
 	
 	public SerialFlowWriter(File file, boolean append) {
