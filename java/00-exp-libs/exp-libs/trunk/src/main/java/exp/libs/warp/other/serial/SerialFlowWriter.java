@@ -24,22 +24,35 @@ public class SerialFlowWriter {
 	private FlowObjectOutputStream foos;
 	
 	public SerialFlowWriter() {
-		init(null);
+		init(null, true);
+	}
+	
+	public SerialFlowWriter(boolean append) {
+		init(null, append);
 	}
 	
 	public SerialFlowWriter(String filePath) {
 		init(StrUtils.isEmpty(filePath) ? 
-				new File(DEFAULT_FILEPATH) : new File(filePath));
+				new File(DEFAULT_FILEPATH) : new File(filePath), true);
+	}
+	
+	public SerialFlowWriter(String filePath, boolean append) {
+		init(StrUtils.isEmpty(filePath) ? 
+				new File(DEFAULT_FILEPATH) : new File(filePath), append);
 	}
 	
 	public SerialFlowWriter(File file) {
-		init(file);
+		init(file, true);
 	}
 	
-	private void init(File file) {
+	public SerialFlowWriter(File file, boolean append) {
+		init(file, append);
+	}
+	
+	private void init(File file, boolean append) {
 		this.file = (file == null ? new File(DEFAULT_FILEPATH) : file);
 		this.file.getParentFile().mkdirs();
-		this.foos = new FlowObjectOutputStream(this.file, true);
+		this.foos = new FlowObjectOutputStream(this.file, append);
 	}
 	
 	public boolean write(Serializable o) {
