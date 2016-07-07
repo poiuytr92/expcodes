@@ -36,6 +36,19 @@ public class ConfBox {
 	private final String REGEX = StrUtils.concat(
 			XNode.ID_SPLIT, "[^", XNode.PATH_SPLIT, "]+$");
 	
+	/** 磁盘上的配置文件 */
+	protected final String DISK_FILE = "0";
+	
+	/** jar包内的配置文件 */
+	protected final String JAR_FILE = "1";
+	
+	/**
+	 * 依序记录所加载过的配置文件.
+	 *  其中 单个元素为  String[2] { filePath, isJarFile }
+	 */
+	protected List<String[]> confFiles; 
+	
+	/** 配置盒子名称 */
 	private String boxName;
 	
 	/** 名字索引, 用于加速检索 */
@@ -47,15 +60,12 @@ public class ConfBox {
 	/** 路径树 */
 	private Map<String, XNode> pathTree;
 	
-	// FIXME: diskFile 和 jarFile 要分开记录，还要保证整体顺序
-	protected List<File> confFiles; 
-	
 	protected ConfBox(String boxName) {
 		this.boxName = boxName;
 		this.namePath = new HashMap<String, String>();
 		this.pathIndex = new LinkedList<String>();
 		this.pathTree = new HashMap<String, XNode>();
-		this.confFiles = new LinkedList<File>();
+		this.confFiles = new LinkedList<String[]>();
 	}
 	
 	public boolean loadConfFiles(String[] confFilePaths) {
@@ -86,7 +96,7 @@ public class ConfBox {
 			Element root = doc.getRootElement();
 			createPathTree(root);
 			
-			confFiles.add(confFile);
+			confFiles.add(new String[] { confFilePath, DISK_FILE });
 			isOk = true;
 			
 		} catch (Exception e) {
@@ -122,6 +132,8 @@ public class ConfBox {
 			Document doc = DocumentHelper.parseText(xml);
 			Element root = doc.getRootElement();
 			createPathTree(root);
+			
+			confFiles.add(new String[] { confFilePath, JAR_FILE });
 			isOk = true;
 			
 		} catch (Exception e) {

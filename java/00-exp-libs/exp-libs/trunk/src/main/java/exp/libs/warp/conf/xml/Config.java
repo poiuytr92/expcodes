@@ -5,38 +5,97 @@ import java.util.Iterator;
 
 import exp.libs.utils.os.ThreadUtils;
 
+// FIXME : 刷新操作非多线程安全
 public class Config extends ConfBox implements Runnable {
 
-	private boolean isDestroy;
+	private final static long MIN_REFLASH_TIME = 1000L;
+	
+	private boolean isInit;
+	
+	private boolean isRun;
+	
+	private boolean isReflash;
+	
+	private long reflashTime;
+	
+	private byte[] lock;
 	
 	protected Config(String boxName) {
 		super(boxName);
-		this.isDestroy = false;
+		
+		this.isInit = false;
+		this.isRun = false;
+		this.isReflash = false;
+		this.reflashTime = MIN_REFLASH_TIME;
+		this.lock = new byte[1];
 	}
 
-	public void autoReflash() {
-		new Thread(this).start();
+	public void reflash(long timeMillis) {
+		reflashTime = (timeMillis <= MIN_REFLASH_TIME ? 
+				MIN_REFLASH_TIME : timeMillis);
+		
+		if(!isInit) {
+			synchronized (lock) {
+				if(!isInit) {
+					isInit = true;
+					isRun = true;
+					new Thread(this).start();
+					ThreadUtils.tSleep(1000);	// 初次启动, 先让线程陷入第一次无限阻塞状态
+				}
+			}
+		}
+		isReflash = true;
+		ThreadUtils.tNotify(lock);	// 退出无限阻塞， 进入限时阻塞状态
 	}
 	
-	public void stopReflash() {
-		isDestroy = true;
+	public void pause() {
+		isReflash = false;
+		ThreadUtils.tNotify(lock);	// 退出限时阻塞， 进入无限阻塞状态
+	}
+	
+	public void destroy() {
+		isRun = false;
+		ThreadUtils.tNotify(lock);	// 退出阻塞态, 通过掉落陷阱终止线程
 	}
 	
 	@Override
 	public void run() {
-		while(!isDestroy) {
-			ThreadUtils.tSleep(60000);
+		while(isRun) {
+			ThreadUtils.tWait(lock, 0);
+			if(!isRun) { break; }
 			
-			for(Iterator<File> files = confFiles.iterator(); files.hasNext();) {
-				File file = files.next();
-				if(!file.exists()) {
-					files.remove();
-				}
+			while(isReflash) {
+				ThreadUtils.tWait(lock, reflashTime);
+				if(!isRun || !isReflash) { break; }
+				reload();
+			}
+		}
+	}
+	
+	private void reload() {
+		if(confFiles == null || confFiles.isEmpty()) {
+			return;
+		}
+		
+		for(Iterator<String[]> fileInfos = confFiles.iterator(); 
+				fileInfos.hasNext();) {
+			String[] fileInfo = fileInfos.next();
+			String filePath = fileInfo[0];
+			String fileType = fileInfo[1];
+			
+			File file = new File(filePath);
+			if(!file.exists()) {
+				fileInfos.remove();
+			}
+			
+			if(DISK_FILE.equals(fileType)) {
+				loadConfFile(filePath);
 				
-//				if(file.getModifyTime) ...
+			} else if(JAR_FILE.equals(fileType)) {
+				loadConfFileInJar(filePath);
 				
-				loadConfFile(file.getPath());	// FIXME: 应用配置可能会覆盖工程配置。。。
-//				loadConfFileInJar(confFilePath);	// jar内配置文件需要分开记录
+			} else {
+				fileInfos.remove();
 			}
 		}
 	}
