@@ -99,7 +99,7 @@ class _Config {
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("Load file [{}] faild.", confFilePath, e);
+			log.error("加载文件失败: [{}].", confFilePath, e);
 		}
 		return isOk;
 	}
@@ -136,7 +136,7 @@ class _Config {
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("Load file [{}] faild.", confFilePath, e);
+			log.error("加载文件失败: [{}].", confFilePath, e);
 		}
 		return isOk;
 	}

@@ -111,18 +111,20 @@ public class Config extends _Config implements Runnable {
 			
 			File file = new File(filePath);
 			if(!file.exists()) {
+				log.info("配置文件 [{}] 已不存在, 不重载.", filePath);
 				fileInfos.remove();
 			}
 			
 			if(DISK_FILE.equals(fileType)) {
-				loadConfFile(filePath);
-				log.info("配置 [{}] 已重载文件 [{}].", configName, filePath);
+				boolean isOk = loadConfFile(filePath);
+				log.info("配置 [{}] 重载文件 [{}] {}.", configName, filePath, (isOk ? "成功" : "失败"));
 				
 			} else if(JAR_FILE.equals(fileType)) {
-				loadConfFileInJar(filePath);
-				log.info("配置 [{}] 已重载文件 [{}].", configName, filePath);
+				boolean isOk = loadConfFileInJar(filePath);
+				log.info("配置 [{}] 重载文件 [{}] {}.", configName, filePath, (isOk ? "成功" : "失败"));
 				
 			} else {
+				log.info("配置文件 [{}] 类型异常, 不重载.", filePath);
 				fileInfos.remove();
 			}
 		}
