@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 public class FileMonitor {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(FileMonitor.class);
+	private final static Logger log = LoggerFactory.getLogger(FileMonitor.class);
 	
 	/** 文件监控器 */
 	private FileAlterationMonitor monitor;

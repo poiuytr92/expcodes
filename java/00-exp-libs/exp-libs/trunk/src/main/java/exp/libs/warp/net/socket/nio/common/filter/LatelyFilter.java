@@ -26,7 +26,7 @@ public class LatelyFilter extends BaseFilter {
 	/**
 	 * 日志器
 	 */
-	private static Logger log = LoggerFactory.getLogger(LatelyFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(LatelyFilter.class);
 	
 	/**
 	 * 最后一次接收命令时间的属性 键值

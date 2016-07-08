@@ -43,7 +43,7 @@ import exp.libs.envm.FileType;
 public class CompressUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(CompressUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(CompressUtils.class);
 	
 	/** 默认压缩编码 */
 	public final static String DEFAULT_ENCODE = Charset.UTF8;

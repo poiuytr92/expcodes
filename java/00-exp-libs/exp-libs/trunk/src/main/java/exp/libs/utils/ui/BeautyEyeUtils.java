@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public final class BeautyEyeUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(BeautyEyeUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(BeautyEyeUtils.class);
 	
 	/** 私有化构造函数 */
 	private BeautyEyeUtils() {}

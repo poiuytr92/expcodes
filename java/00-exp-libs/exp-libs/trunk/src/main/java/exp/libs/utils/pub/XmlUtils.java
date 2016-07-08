@@ -38,7 +38,7 @@ import exp.libs.warp.other.flow.StringFlowReader;
 public class XmlUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(XmlUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(XmlUtils.class);
 	
 	private final static String DEFAULT_CHARSET = Charset.UTF8;
 	

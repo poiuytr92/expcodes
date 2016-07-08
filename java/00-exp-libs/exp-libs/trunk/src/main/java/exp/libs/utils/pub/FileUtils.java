@@ -31,7 +31,7 @@ import exp.libs.envm.StorageUnit;
 public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(FileUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(FileUtils.class);
 	
 	protected FileUtils() {}
 	

@@ -24,7 +24,7 @@ import exp.libs.utils.pub.VerifyUtils;
 public class Email {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(Email.class);
+	private final static Logger log = LoggerFactory.getLogger(Email.class);
 	
 	private final static SMTP DEFAULT_SMTP = SMTP._126;
 	

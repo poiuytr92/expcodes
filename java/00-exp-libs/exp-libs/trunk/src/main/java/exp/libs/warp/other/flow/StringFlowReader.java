@@ -25,7 +25,7 @@ import exp.libs.envm.Endline;
 public class StringFlowReader {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(StringFlowReader.class);
+	private final static Logger log = LoggerFactory.getLogger(StringFlowReader.class);
 	
 	/** 所读入字符串的默认编码 */
 	public final static String DEFAULT_ENCODE = Charset.ISO;

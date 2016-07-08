@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public class PCQueue<E> extends ArrayBlockingQueue<E> {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(PCQueue.class);
+	private final static Logger log = LoggerFactory.getLogger(PCQueue.class);
 	
 	/** 序列化标识 */
 	private static final long serialVersionUID = 4960086438647523367L;

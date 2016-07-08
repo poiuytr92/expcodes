@@ -33,7 +33,7 @@ final class Session implements ISession {
 	/**
 	 * 日志器
 	 */
-	private static Logger log = LoggerFactory.getLogger(Session.class);
+	private final static Logger log = LoggerFactory.getLogger(Session.class);
 	
 	/**
 	 * 会话名称

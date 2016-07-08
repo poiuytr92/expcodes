@@ -38,7 +38,7 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 public class DBUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(DBUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(DBUtils.class);
 	
 	/** DB重连间隔(ms) */
 	private final static long RECONN_INTERVAL = 10000;

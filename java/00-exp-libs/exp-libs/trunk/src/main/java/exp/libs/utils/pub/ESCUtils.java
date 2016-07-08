@@ -29,7 +29,7 @@ import exp.libs.envm.DateFormat;
 public class ESCUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(ESCUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(ESCUtils.class);
 	
 	/** 私有化构造函数. */
 	protected ESCUtils() {}

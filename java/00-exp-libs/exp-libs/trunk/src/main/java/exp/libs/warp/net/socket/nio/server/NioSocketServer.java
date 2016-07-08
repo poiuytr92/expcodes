@@ -34,7 +34,7 @@ public class NioSocketServer extends Thread {
 	/**
 	 * 日志器
 	 */
-	private static Logger log = LoggerFactory.getLogger(NioSocketServer.class);
+	private final static Logger log = LoggerFactory.getLogger(NioSocketServer.class);
 	
 	/**
 	 * 服务器名称

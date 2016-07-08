@@ -33,7 +33,7 @@ import exp.libs.utils.pub.StrUtils;
 public class Template {
 	
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(Template.class);
+	private final static Logger log = LoggerFactory.getLogger(Template.class);
 	
 	/**
 	 * 此模板的名称。

@@ -122,7 +122,7 @@ public class Consumer {
 	 */
 	private MessageProducer replyProducer;
 
-	// private static Logger log = Logger.getLogger(Consumer.class);
+	// private final static Logger log = Logger.getLogger(Consumer.class);
 	/**
 	 * 指定JMS的URL地址创建实例
 	 * 

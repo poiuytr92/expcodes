@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public class BoolUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(BoolUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(BoolUtils.class);
 	
 	/** 私有化构造函数 */
 	protected BoolUtils() {}

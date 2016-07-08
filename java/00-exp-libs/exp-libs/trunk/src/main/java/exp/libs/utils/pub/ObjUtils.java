@@ -37,7 +37,7 @@ import exp.libs.envm.DateFormat;
 public class ObjUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(ObjUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(ObjUtils.class);
 	
 	/** 私有化构造函数 */
 	protected ObjUtils() {}

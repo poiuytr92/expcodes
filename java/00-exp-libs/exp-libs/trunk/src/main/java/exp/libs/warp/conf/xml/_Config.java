@@ -28,7 +28,7 @@ import exp.libs.warp.net.socket.bean.SocketBean;
 class _Config {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(_Config.class);
+	protected final static Logger log = LoggerFactory.getLogger(_Config.class);
 	
 	private final static XNode NULL_XNODE = new XNode(null);
 	
@@ -48,7 +48,7 @@ class _Config {
 	protected List<String[]> confFiles; 
 	
 	/** 配置对象名称 */
-	private String configName;
+	protected String configName;
 	
 	/** 名字索引, 用于加速检索 */
 	private Map<String, String> namePath;

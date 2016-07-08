@@ -22,7 +22,7 @@ import exp.libs.utils.pub.StrUtils;
 public class SerialFlowReader {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(SerialFlowReader.class);
+	private final static Logger log = LoggerFactory.getLogger(SerialFlowReader.class);
 	
 	private final static String DEFAULT_FILEPATH = "./serializable.dat";
 	

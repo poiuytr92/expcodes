@@ -32,10 +32,19 @@ public class Config extends _Config implements Runnable {
 		this.lock = new byte[1];
 	}
 
+	/**
+	 * 刷新操作会对所加载过的配置文件依次重新加载.
+	 * 此行为非多线程安全, 若在重载文件过程中有读取配置的行为，注意加锁.
+	 */
 	public void reflash() {
 		reflash(DEFAULT_REFLASH_TIME);
 	}
 	
+	/**
+	 * 刷新操作会对所加载过的配置文件依次重新加载.
+	 * 此行为非多线程安全, 若在重载文件过程中有读取配置的行为，注意加锁.
+	 * @param timeMillis 刷新间隔
+	 */
 	public void reflash(long timeMillis) {
 		reflashTime = (timeMillis < MIN_REFLASH_TIME ? 
 				MIN_REFLASH_TIME : timeMillis);
@@ -50,18 +59,27 @@ public class Config extends _Config implements Runnable {
 				}
 			}
 		}
-		isReflash = true;
-		ThreadUtils.tNotify(lock);	// 退出无限阻塞， 进入限时阻塞状态
+		
+		if(!isReflash) {
+			isReflash = true;
+			ThreadUtils.tNotify(lock);	// 退出无限阻塞， 进入限时阻塞状态
+			log.info("配置 [{}] 自动刷新被激活, 刷新间隔为 [{} ms].", configName, reflashTime);
+			
+		} else {
+			log.info("配置 [{}] 刷新间隔变更为 [{} ms], 下个刷新周期生效.", configName, reflashTime);
+		}
 	}
 	
 	public void pause() {
 		isReflash = false;
 		ThreadUtils.tNotify(lock);	// 退出限时阻塞， 进入无限阻塞状态
+		log.info("配置 [{}] 自动刷新被暂停.", configName);
 	}
 	
 	public void destroy() {
 		isRun = false;
 		ThreadUtils.tNotify(lock);	// 退出阻塞态, 通过掉落陷阱终止线程
+		log.info("配置 [{}] 自动刷新被终止.", configName);
 	}
 	
 	@Override
@@ -79,7 +97,9 @@ public class Config extends _Config implements Runnable {
 	}
 	
 	private void reload() {
+		log.info("配置 [{}] 开始重载文件...", configName);
 		if(confFiles == null || confFiles.isEmpty()) {
+			log.info("配置 [{}] 并未加载过任何文件(或文件已被删除), 取消重载操作.", configName);
 			return;
 		}
 		
@@ -96,14 +116,17 @@ public class Config extends _Config implements Runnable {
 			
 			if(DISK_FILE.equals(fileType)) {
 				loadConfFile(filePath);
+				log.info("配置 [{}] 已重载文件 [{}].", configName, filePath);
 				
 			} else if(JAR_FILE.equals(fileType)) {
 				loadConfFileInJar(filePath);
+				log.info("配置 [{}] 已重载文件 [{}].", configName, filePath);
 				
 			} else {
 				fileInfos.remove();
 			}
 		}
+		log.info("配置 [{}] 重载所有文件完成.", configName);
 	}
 
 }

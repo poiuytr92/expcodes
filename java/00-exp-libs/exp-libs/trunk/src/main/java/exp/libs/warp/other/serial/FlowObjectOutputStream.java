@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 final class FlowObjectOutputStream {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(FlowObjectOutputStream.class);
+	private final static Logger log = LoggerFactory.getLogger(FlowObjectOutputStream.class);
 	
 	private File file;
 	

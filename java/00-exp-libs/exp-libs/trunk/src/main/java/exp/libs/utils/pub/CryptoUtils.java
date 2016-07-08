@@ -27,7 +27,7 @@ import exp.libs.envm.Charset;
 public class CryptoUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(CryptoUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(CryptoUtils.class);
 	
 	/**
 	 * DES共有四种工作模式.

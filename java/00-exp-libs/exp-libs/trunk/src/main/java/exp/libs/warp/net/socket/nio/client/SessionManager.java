@@ -37,7 +37,7 @@ final class SessionManager {
 	/**
 	 * 日志器
 	 */
-	private static Logger log = LoggerFactory.getLogger(SessionManager.class);
+	private final static Logger log = LoggerFactory.getLogger(SessionManager.class);
 	
 	/**
 	 * 会话

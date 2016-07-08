@@ -25,7 +25,7 @@ import exp.libs.utils.pub.StrUtils;
 public class CmdUtils {
 	
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(CmdUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(CmdUtils.class);
 	
 	/** 私有化构造函数 */
 	protected CmdUtils() {}

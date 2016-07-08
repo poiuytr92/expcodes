@@ -20,7 +20,7 @@ import org.slf4j.LoggerFactory;
 public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(DateUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(DateUtils.class);
 	
 	/** 私有化构造函数 */
 	protected DateUtils() {}

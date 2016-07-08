@@ -41,7 +41,7 @@ import exp.libs.utils.pub.StrUtils;
 public class HttpUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(HttpUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(HttpUtils.class);
 	
 	/** 连接超时,默认1分钟 */
 	public static final int CONN_TIMEOUT = 60000;

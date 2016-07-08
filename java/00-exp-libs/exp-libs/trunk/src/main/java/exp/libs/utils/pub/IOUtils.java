@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class IOUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(IOUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(IOUtils.class);
 	
 	/** 私有化构造函数 */
 	protected IOUtils() {}

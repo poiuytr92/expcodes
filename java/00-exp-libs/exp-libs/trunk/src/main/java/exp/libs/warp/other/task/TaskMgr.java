@@ -40,7 +40,7 @@ import exp.libs.utils.pub.TimeUtils;
 public class TaskMgr {
 	
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(TaskMgr.class);
+	private final static Logger log = LoggerFactory.getLogger(TaskMgr.class);
 	
 	/** 任务调度管理器 */
 	private static SchedulerFactory sf = new StdSchedulerFactory();

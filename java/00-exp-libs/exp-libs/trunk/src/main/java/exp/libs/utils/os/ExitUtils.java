@@ -26,7 +26,7 @@ import exp.libs.utils.pub.IOUtils;
 final public class ExitUtils extends Thread {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(ExitUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(ExitUtils.class);
 	
 	/** 被监听的停止命令文件位置 */
 	private final static String EXIT_CMD_FILE_PATH = "./exit.cmd";

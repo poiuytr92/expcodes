@@ -30,7 +30,7 @@ public class SensitiveFilter extends BaseFilter{
 	/**
 	 * 日志器
 	 */
-	private static Logger log = LoggerFactory.getLogger(SensitiveFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(SensitiveFilter.class);
 	
 	/**
 	 * 敏感词表

@@ -24,7 +24,7 @@ public class FlowMoniFilter extends BaseFilter {
 	/**
 	 * 日志器
 	 */
-	private static Logger log = LoggerFactory.getLogger(FlowMoniFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(FlowMoniFilter.class);
 	
 	/**
 	 * 接收数据流 属性标签

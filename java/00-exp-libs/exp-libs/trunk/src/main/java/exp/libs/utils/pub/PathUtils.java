@@ -26,7 +26,7 @@ import exp.libs.utils.os.OSUtils;
 public class PathUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(PathUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(PathUtils.class);
 	
 	/** 私有化构造函数 */
 	protected PathUtils() {}

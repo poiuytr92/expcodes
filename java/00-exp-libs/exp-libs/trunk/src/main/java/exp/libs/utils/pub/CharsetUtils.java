@@ -33,7 +33,7 @@ import org.slf4j.LoggerFactory;
 public class CharsetUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(CharsetUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(CharsetUtils.class);
 	
 	/** 私有化构造函数 */
 	protected CharsetUtils() {}

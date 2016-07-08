@@ -26,7 +26,7 @@ public final class ExceptionFilter extends BaseFilter {
 	/**
 	 * 日志器
 	 */
-	private static Logger log = LoggerFactory.getLogger(ExceptionFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(ExceptionFilter.class);
 	
 	@Override
 	public void onSessionCreated(INextFilter nextFilter, ISession session)

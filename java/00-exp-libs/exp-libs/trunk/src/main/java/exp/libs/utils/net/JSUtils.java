@@ -23,7 +23,7 @@ import exp.libs.utils.pub.IOUtils;
 public class JSUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(JSUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(JSUtils.class);
 	
 	/** 私有化构造函数. */
 	protected JSUtils() {}

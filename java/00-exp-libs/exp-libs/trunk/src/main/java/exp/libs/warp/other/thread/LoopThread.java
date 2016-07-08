@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 public abstract class LoopThread extends Thread {
 	
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(LoopThread.class);
+	private final static Logger log = LoggerFactory.getLogger(LoopThread.class);
 	
 	/**
 	 * 线程默认休眠时间.

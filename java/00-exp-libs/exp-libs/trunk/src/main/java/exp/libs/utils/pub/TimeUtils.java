@@ -26,7 +26,7 @@ import exp.libs.envm.TimeUnit;
 public class TimeUtils {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(TimeUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(TimeUtils.class);
 	
 	private final static String DEFAULT_TIME = "0000-00-00 00:00:00.000";
 	

@@ -24,7 +24,7 @@ public class LogFilter extends BaseFilter {
 	/**
 	 * 日志器
 	 */
-	private static Logger log = LoggerFactory.getLogger(LogFilter.class);
+	private final static Logger log = LoggerFactory.getLogger(LogFilter.class);
 	
 	@Override
 	public void onSessionCreated(INextFilter nextFilter, ISession session)

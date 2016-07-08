@@ -17,7 +17,7 @@ import org.slf4j.LoggerFactory;
 public class ThreadUtils {
 	
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(ThreadUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(ThreadUtils.class);
 	
 	/** 私有化构造函数 */
 	protected ThreadUtils() {}
