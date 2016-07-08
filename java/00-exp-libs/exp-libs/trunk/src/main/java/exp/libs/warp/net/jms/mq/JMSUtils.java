@@ -1,7 +1,7 @@
 package exp.libs.warp.net.jms.mq;
 
-import exp.libs.warp.conf.xml.ConfBox;
 import exp.libs.warp.conf.xml.ConfFactory;
+import exp.libs.warp.conf.xml.Config;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.jms.mq.sup.Consumer;
 import exp.libs.warp.net.jms.mq.sup.Producers;
@@ -41,7 +41,7 @@ public class JMSUtils {
 	 */
 	public static Producers getProducers(String producersId) {
 		// FIXME
-		ConfBox conf = ConfFactory.getDefaultConfBox();
+		Config conf = ConfFactory.getDefaultConfig();
 		JmsBean jmsBean = conf.getJmsBean(producersId);
 		return getProducers(jmsBean);
 	}
@@ -85,7 +85,7 @@ public class JMSUtils {
 	 */
 	public static Consumer getConsumer(String consumerId) throws Exception {
 		// FIXME
-		ConfBox conf = ConfFactory.getDefaultConfBox();
+		Config conf = ConfFactory.getDefaultConfig();
 		JmsBean jmsBean = conf.getJmsBean(consumerId);
 		return getConsumer(jmsBean);
 	}

@@ -6,9 +6,11 @@ import java.util.Iterator;
 import exp.libs.utils.os.ThreadUtils;
 
 // FIXME : 刷新操作非多线程安全
-public class Config extends ConfBox implements Runnable {
+public class Config extends _Config implements Runnable {
 
-	private final static long MIN_REFLASH_TIME = 1000L;
+	private final static long MIN_REFLASH_TIME = 10000L;
+	
+	private final static long DEFAULT_REFLASH_TIME = 60000L;
 	
 	private boolean isInit;
 	
@@ -26,12 +28,16 @@ public class Config extends ConfBox implements Runnable {
 		this.isInit = false;
 		this.isRun = false;
 		this.isReflash = false;
-		this.reflashTime = MIN_REFLASH_TIME;
+		this.reflashTime = DEFAULT_REFLASH_TIME;
 		this.lock = new byte[1];
 	}
 
+	public void reflash() {
+		reflash(DEFAULT_REFLASH_TIME);
+	}
+	
 	public void reflash(long timeMillis) {
-		reflashTime = (timeMillis <= MIN_REFLASH_TIME ? 
+		reflashTime = (timeMillis < MIN_REFLASH_TIME ? 
 				MIN_REFLASH_TIME : timeMillis);
 		
 		if(!isInit) {
@@ -40,7 +46,7 @@ public class Config extends ConfBox implements Runnable {
 					isInit = true;
 					isRun = true;
 					new Thread(this).start();
-					ThreadUtils.tSleep(1000);	// 初次启动, 先让线程陷入第一次无限阻塞状态
+					ThreadUtils.tSleep(1000);	// 初次启动, 用时间差保证先让线程陷入第一次无限阻塞状态
 				}
 			}
 		}

@@ -6,14 +6,14 @@ import java.util.Map;
 
 final public class ConfFactory {
 
-	private final static ConfBox DEFAULT_CONF_BOX = new ConfBox("DEFAULT_CONF_BOX");
+	private final static Config DEFAULT_CONFIG = new Config("DEFAULT_CONFIG");
 	
-	private Map<String, ConfBox> confBoxes;
+	private Map<String, Config> configs;
 	
 	private static volatile ConfFactory instance;
 	
 	private ConfFactory() {
-		this.confBoxes = new HashMap<String, ConfBox>(2);
+		this.configs = new HashMap<String, Config>(2);
 	}
 	
 	private static ConfFactory getInstn() {
@@ -27,54 +27,54 @@ final public class ConfFactory {
 		return instance;
 	}
 	
-	public static ConfBox createConfBox(final String name) {
-		return getInstn()._createConfBox(name);
+	public static Config createConfig(final String name) {
+		return getInstn()._createConfig(name);
 	}
 	
-	private ConfBox _createConfBox(final String name) {
+	private Config _createConfig(final String name) {
 		if(name == null) {
-			return DEFAULT_CONF_BOX;
+			return DEFAULT_CONFIG;
 		}
 		
-		ConfBox cBox = confBoxes.get(name);
-		if(cBox == null) {
-			cBox = new ConfBox(name);
+		Config conf = configs.get(name);
+		if(conf == null) {
+			conf = new Config(name);
 			
 		} else {
-			cBox.clear();
-			cBox = new ConfBox(name);
+			conf.clear();
+			conf = new Config(name);
 		}
-		confBoxes.put(name, cBox);
-		return cBox;
+		configs.put(name, conf);
+		return conf;
 	}
 	
-	public static ConfBox getDefaultConfBox() {
-		return getInstn()._getConfBox(null);
+	public static Config getDefaultConfig() {
+		return getInstn()._getConfig(null);
 	}
 	
-	public static ConfBox getConfBox(final String name) {
-		return getInstn()._getConfBox(name);
+	public static Config getConfig(final String name) {
+		return getInstn()._getConfig(name);
 	}
 	
-	private ConfBox _getConfBox(final String name) {
-		ConfBox cBox = DEFAULT_CONF_BOX;
+	private Config _getConfig(final String name) {
+		Config conf = DEFAULT_CONFIG;
 		if(name != null) {
-			cBox = confBoxes.get(name);
-			if(cBox == null) {
-				cBox = DEFAULT_CONF_BOX;
+			conf = configs.get(name);
+			if(conf == null) {
+				conf = DEFAULT_CONFIG;
 			}
 		}
-		return cBox;
+		return conf;
 	}
 	
-	public static void removeConfBox(final String name) {
-		getInstn()._removeConfBox(name);
+	public static void removeConfig(final String name) {
+		getInstn()._removeConfig(name);
 	}
 	
-	private void _removeConfBox(final String name) {
-		ConfBox cBox = confBoxes.remove(name);
-		if(cBox != null) {
-			cBox.clear();
+	private void _removeConfig(final String name) {
+		Config conf = configs.remove(name);
+		if(conf != null) {
+			conf.clear();
 		}
 	}
 	
@@ -83,12 +83,12 @@ final public class ConfFactory {
 	}
 	
 	private void _clear() {
-		Iterator<ConfBox> its = confBoxes.values().iterator();
+		Iterator<Config> its = configs.values().iterator();
 		while(its.hasNext()) {
-			ConfBox cBox = its.next();
-			cBox.clear();
+			Config conf = its.next();
+			conf.clear();
 		}
-		confBoxes.clear();
+		configs.clear();
 	}
 	
 }

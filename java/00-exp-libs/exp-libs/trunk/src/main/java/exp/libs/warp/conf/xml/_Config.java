@@ -25,11 +25,10 @@ import exp.libs.utils.pub.XmlUtils;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.socket.bean.SocketBean;
 
-// FIXME: final
-public class ConfBox {
+class _Config {
 
 	/** 日志器 */
-	private static Logger log = LoggerFactory.getLogger(ConfBox.class);
+	private static Logger log = LoggerFactory.getLogger(_Config.class);
 	
 	private final static XNode NULL_XNODE = new XNode(null);
 	
@@ -48,8 +47,8 @@ public class ConfBox {
 	 */
 	protected List<String[]> confFiles; 
 	
-	/** 配置盒子名称 */
-	private String boxName;
+	/** 配置对象名称 */
+	private String configName;
 	
 	/** 名字索引, 用于加速检索 */
 	private Map<String, String> namePath;
@@ -60,8 +59,8 @@ public class ConfBox {
 	/** 路径树 */
 	private Map<String, XNode> pathTree;
 	
-	protected ConfBox(String boxName) {
-		this.boxName = boxName;
+	protected _Config(String configName) {
+		this.configName = configName;
 		this.namePath = new HashMap<String, String>();
 		this.pathIndex = new LinkedList<String>();
 		this.pathTree = new HashMap<String, XNode>();
@@ -455,8 +454,8 @@ public class ConfBox {
 		pathTree.clear();
 	}
 
-	public String getBoxName() {
-		return boxName;
+	public String getConfigName() {
+		return configName;
 	}
 
 }

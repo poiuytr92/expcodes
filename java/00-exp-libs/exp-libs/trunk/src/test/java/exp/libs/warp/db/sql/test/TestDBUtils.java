@@ -11,24 +11,24 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import exp.libs.bean.test.TMtFault;
-import exp.libs.warp.conf.xml.ConfBox;
 import exp.libs.warp.conf.xml.ConfFactory;
+import exp.libs.warp.conf.xml.Config;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 
 public class TestDBUtils {
 
-	private static ConfBox cb;
+	private static Config conf;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		cb = ConfFactory.createConfBox("test");
-		cb.loadConfFile("./conf/conf.xml");
+		conf = ConfFactory.createConfig("test");
+		conf.loadConfFile("./conf/conf.xml");
 	}
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		cb.clear();
+		conf.clear();
 	}
 
 	@Ignore
@@ -68,7 +68,7 @@ public class TestDBUtils {
 
 	@Test
 	public void testCreateBeanFromDB() {
-		DataSourceBean ds = cb.getDataSourceBean("TEST");
+		DataSourceBean ds = conf.getDataSourceBean("TEST");
 		Connection conn = DBUtils.getConn(ds);
 		DBUtils.createBeanFromDB(conn, 
 				"exp.libs.bean.test", 
@@ -103,7 +103,7 @@ public class TestDBUtils {
 
 	@Test
 	public void testQuery() {
-		DataSourceBean ds = cb.getDataSourceBean("TEST");
+		DataSourceBean ds = conf.getDataSourceBean("TEST");
 		Connection conn = DBUtils.getConn(ds);
 		List<TMtFault> list = DBUtils.query(TMtFault.class, conn, TMtFault.SQL_SELECT);
 		for(TMtFault bean : list) {
