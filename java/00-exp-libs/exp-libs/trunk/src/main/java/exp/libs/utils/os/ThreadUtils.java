@@ -53,12 +53,30 @@ public class ThreadUtils {
 	 * @param millis 阻塞时间(ms)
 	 */
 	public static void tWait(Object o, long millis) {
+		if(o == null) {
+			return;
+		}
+		
 		try {
 			synchronized (o) {
 				o.wait(millis);
 			}
 		} catch (InterruptedException e) {
 			log.error("线程阻塞异常.", e);
+		}
+	}
+	
+	/**
+	 * 唤醒对象
+	 * @param o 已阻塞对象
+	 */
+	public static void tNotify(Object o) {
+		if(o == null) {
+			return;
+		}
+		
+		synchronized (o) {
+			o.notify();;
 		}
 	}
 	
