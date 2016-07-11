@@ -77,6 +77,7 @@ public class XmlUtils {
 		sfr.close();
 		return sb.toString();
 	}
+	
 	/**
 	 * 格式化xml.
 	 * 用于处理缩进、换行、子节点中多余的命名空间等格式问题。

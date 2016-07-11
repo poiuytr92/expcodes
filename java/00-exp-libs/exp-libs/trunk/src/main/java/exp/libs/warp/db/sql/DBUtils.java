@@ -124,7 +124,7 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 通过JDBC获取永不超时的数据库连接（目前主要用于同步告警的存储过程）
+	 * 通过JDBC获取永不超时的数据库连接（目前仅适用于MYSQL）
 	 * @param dbInfo 数据库配置信息
 	 * @return 数据库连接
 	 */
@@ -389,6 +389,13 @@ public class DBUtils {
 		return kvsList;
 	}
 	
+	/**
+	 * 查询一个JavaBean对应的物理表
+	 * @param clazz
+	 * @param conn
+	 * @param sql
+	 * @return
+	 */
 	public static <BEAN> List<BEAN> query(Class<BEAN> clazz, Connection conn, String sql) {
 		List<BEAN> beans = new LinkedList<BEAN>();
 		try {
@@ -401,6 +408,13 @@ public class DBUtils {
 		return beans;
 	}
 	
+	/**
+	 * 查询第一行第一列的单元格值.
+	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 * @param conn
+	 * @param sql
+	 * @return
+	 */
 	public static Object queryFirstCell(Connection conn, String sql) {
 		Object cell = null;
 		try {
@@ -422,6 +436,12 @@ public class DBUtils {
 		return cell;
 	}
 	
+	/**
+	 * 查询第一行
+	 * @param conn
+	 * @param sql
+	 * @return Map<String, Object>类型的kv表,不会返回null（key为表头）
+	 */
 	public static Map<String, Object> queryFirstRow(Connection conn, String sql) {
 		Map<String, Object> row = new HashMap<String, Object>();
 		try {
@@ -502,7 +522,7 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 从数据库查询一个整数值.
+	 * 从数据库查询一个长整数值.
 	 * 若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
 	 * 
 	 * @param conn 数据库连接
