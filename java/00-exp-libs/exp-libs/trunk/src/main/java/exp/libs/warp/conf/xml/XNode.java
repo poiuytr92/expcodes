@@ -56,6 +56,7 @@ final class XNode {
 		}
 	}
 	
+	// FIXME: 无法定位枚举数组
 	private String getEPath(Element e) {
 		String ePath = "";
 		while (e != null) {
@@ -89,7 +90,7 @@ final class XNode {
 		return id;
 	}
 
-	public String getDefavlt() {
+	public String getDefault() {
 		return defavlt;
 	}
 

@@ -25,7 +25,7 @@ import exp.libs.utils.pub.XmlUtils;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.socket.bean.SocketBean;
 
-class _Config {
+class _Config implements IConfig {
 
 	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(_Config.class);
@@ -34,12 +34,6 @@ class _Config {
 	
 	private final String REGEX = StrUtils.concat(
 			XNode.ID_SPLIT, "[^", XNode.PATH_SPLIT, "]+$");
-	
-	/** 磁盘上的配置文件 */
-	protected final String DISK_FILE = "0";
-	
-	/** jar包内的配置文件 */
-	protected final String JAR_FILE = "1";
 	
 	/**
 	 * 依序记录所加载过的配置文件.
@@ -67,6 +61,12 @@ class _Config {
 		this.confFiles = new LinkedList<String[]>();
 	}
 	
+	@Override
+	public String getConfigName() {
+		return configName;
+	}
+	
+	@Override
 	public boolean loadConfFiles(String[] confFilePaths) {
 		if(confFilePaths == null) {
 			return false;
@@ -80,7 +80,8 @@ class _Config {
 		}
 		return isOk;
 	}
-	
+
+	@Override
 	public boolean loadConfFile(String confFilePath) {
 		boolean isOk = false;
 		if(confFilePath == null) {
@@ -104,6 +105,7 @@ class _Config {
 		return isOk;
 	}
 	
+	@Override
 	public boolean loadConfFilesInJar(String[] confFilePaths) {
 		if(confFilePaths == null) {
 			return false;
@@ -118,6 +120,7 @@ class _Config {
 		return isOk;
 	}
 	
+	@Override
 	public boolean loadConfFileInJar(String confFilePath) {
 		boolean isOk = false;
 		if(confFilePath == null) {
@@ -232,28 +235,46 @@ class _Config {
 		return ePath;
 	}
 	
+	protected List<String[]> getConfFiles() {
+		return confFiles;
+	}
+	
+	@Override
+	public void clear() {
+		namePath.clear();
+		pathIndex.clear();
+		pathTree.clear();
+		confFiles.clear();
+	}
+
+	@Override
 	public Element getElement(String eNameOrPath) {
 		return getElement(eNameOrPath, null);
 	}
 	
+	@Override
 	public Element getElement(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
 		return xNode.getElement();
 	}
 	
+	@Override
 	public String getVal(String eNameOrPath) {
 		return getVal(eNameOrPath, null);
 	}
 	
+	@Override
 	public String getVal(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
 		return xNode.getVal();
 	}
 	
+	@Override
 	public int getInt(String eNameOrPath) {
 		return getInt(eNameOrPath, null);
 	}
 	
+	@Override
 	public int getInt(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
 		int val = 0;
@@ -261,16 +282,18 @@ class _Config {
 			val = Integer.parseInt(xNode.getVal());
 		} catch (Exception e) {
 			try {
-				val = Integer.parseInt(xNode.getDefavlt());
+				val = Integer.parseInt(xNode.getDefault());
 			} catch (Exception ex) {}
 		}
 		return val;
 	}
 	
+	@Override
 	public long getLong(String eNameOrPath) {
 		return getLong(eNameOrPath, null);
 	}
 	
+	@Override
 	public long getLong(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
 		long val = 0L;
@@ -278,16 +301,18 @@ class _Config {
 			val = Long.parseLong(xNode.getVal());
 		} catch (Exception e) {
 			try {
-				val = Long.parseLong(xNode.getDefavlt());
+				val = Long.parseLong(xNode.getDefault());
 			} catch (Exception ex) {}
 		}
 		return val;
 	}
 	
+	@Override
 	public boolean getBool(String eNameOrPath) {
 		return getBool(eNameOrPath, null);
 	}
 	
+	@Override
 	public boolean getBool(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
 		boolean bool = false;
@@ -295,16 +320,18 @@ class _Config {
 			bool = Boolean.parseBoolean(xNode.getVal());
 		} catch (Exception e) {
 			try {
-				bool = Boolean.parseBoolean(xNode.getDefavlt());
+				bool = Boolean.parseBoolean(xNode.getDefault());
 			} catch (Exception ex) {}
 		}
 		return bool;
 	}
 	
+	@Override
 	public List<String> getEnumVals(String eNameOrPath) {
 		return getEnumVals(eNameOrPath, null);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<String> getEnumVals(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
@@ -321,10 +348,12 @@ class _Config {
 		return enums;
 	}
 	
+	@Override
 	public List<Element> getEnum(String eNameOrPath) {
 		return getEnum(eNameOrPath, null);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public List<Element> getEnum(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
@@ -341,10 +370,12 @@ class _Config {
 		return enums;
 	}
 	
+	@Override
 	public Map<String, Element> getChildElements(String eNameOrPath) {
 		return getChildElements(eNameOrPath, null);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String, Element> getChildElements(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
@@ -361,10 +392,12 @@ class _Config {
 		return childElements;
 	}
 	
+	@Override
 	public String getAttribute(String eNameOrPath, String attributeName) {
 		return getAttribute(eNameOrPath, null, attributeName);
 	}
 	
+	@Override
 	public String getAttribute(String eNameOrPath, String eId, String attributeName) {
 		Element element = getElement(eNameOrPath, eId);
 		String val = null;
@@ -374,10 +407,12 @@ class _Config {
 		return (val == null ? "" : val.trim());
 	}
 	
+	@Override
 	public Map<String, String> getAttributes(String eNameOrPath) {
 		return getAttributes(eNameOrPath, null);
 	}
 	
+	@Override
 	@SuppressWarnings("unchecked")
 	public Map<String, String> getAttributes(String eNameOrPath, String eId) {
 		XNode xNode = getXNode(eNameOrPath, eId);
@@ -396,10 +431,12 @@ class _Config {
 		return attributes;
 	}
 	
+	@Override
 	public DataSourceBean getDataSourceBean(String dsId) {
 		return getDataSourceBean("datasource", dsId);
 	}
 	
+	@Override
 	public DataSourceBean getDataSourceBean(String eNameOrPath, String dsId) {
 		DataSourceBean ds = new DataSourceBean();
 		if(dsId != null) {
@@ -430,32 +467,26 @@ class _Config {
 		return ds;
 	}
 	
+	@Override
 	public SocketBean getSocketBean(String sockId) {
 		return getSocketBean("socket", sockId);
 	}
 	
+	@Override
 	public SocketBean getSocketBean(String eNameOrPath, String sockId) {
 		// TODO
 		return null;
 	}
 	
+	@Override
 	public JmsBean getJmsBean(String jmsId) {
 		return getJmsBean("jms", jmsId);
 	}
 	
+	@Override
 	public JmsBean getJmsBean(String eNameOrPath, String jmsId) {
 		// TODO
 		return null;
 	}
 	
-	public void clear() {
-		namePath.clear();
-		pathIndex.clear();
-		pathTree.clear();
-	}
-
-	public String getConfigName() {
-		return configName;
-	}
-
 }
