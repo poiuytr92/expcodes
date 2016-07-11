@@ -50,11 +50,23 @@ public class DBUtils {
 	protected DBUtils() {}
 	
 	/**
-	 * 获取数据库连接(在获取成功前，一直重试)
-	 * @param dbInfo 数据库配置信息
+	 * 获取数据库连接.
+	 * 	在连接成功前，重试若干次(默认10次)
+	 * @param ds 数据库配置信息
 	 * @return 数据库连接
 	 */
 	public static Connection getConn(DataSourceBean ds) {
+		return getConn(ds, RECONN_LIMIT);
+	}
+	
+	/**
+	 * 获取数据库连接.
+	 * 	在连接成功前，重试若干次.
+	 * @param ds
+	 * @param retry 重试次数
+	 * @return
+	 */
+	public static Connection getConn(DataSourceBean ds, int retry) {
 		Connection conn = null;
 		if(ds == null) {
 			return conn;
@@ -68,7 +80,7 @@ public class DBUtils {
 			}
 			cnt++;
 			ThreadUtils.tSleep(RECONN_INTERVAL);
-		} while(RECONN_LIMIT < 0 || cnt < RECONN_LIMIT);
+		} while(retry < 0 || cnt < retry);
 		return conn;
 	}
 	
@@ -87,20 +99,22 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 通过连接池获取数据库连接（平台方式，平台默认配置一般为通过连接池获取连接）
+	 * 通过连接池获取数据库连接
 	 * @param ds 数据源
 	 * @return 数据库连接
 	 */
 	public static Connection getConnByPool(DataSourceBean ds) {
 		Connection conn = null;
-		try {
-			_DBUtils.getInstn().registerToProxool(ds);
-			Class.forName(DBType.PROXOOL.DRIVER);
-			conn = DriverManager.getConnection(
-					DBType.PROXOOL.JDBCURL.replace(DBType.PH_ALIAS, ds.getId()));
-			
-		} catch (Throwable e) {
-			log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
+		if(ds != null) {
+			try {
+				_DBUtils.getInstn().registerToProxool(ds);
+				Class.forName(DBType.PROXOOL.DRIVER);
+				conn = DriverManager.getConnection(
+						DBType.PROXOOL.JDBCURL.replace(DBType.PH_ALIAS, ds.getId()));
+				
+			} catch (Throwable e) {
+				log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
+			}
 		}
 		return conn;
 	}
@@ -112,13 +126,15 @@ public class DBUtils {
 	 */
 	public static Connection getConnByJDBC(DataSourceBean ds) {
 		Connection conn = null;
-		try {
-			Class.forName(ds.getDriver());
-			conn = DriverManager.getConnection(
-					ds.getUrl(), ds.getUsername(), ds.getPassword());
-			
-		} catch (Throwable e) {
-			log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
+		if(ds != null) {
+			try {
+				Class.forName(ds.getDriver());
+				conn = DriverManager.getConnection(
+						ds.getUrl(), ds.getUsername(), ds.getPassword());
+				
+			} catch (Throwable e) {
+				log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
+			}
 		}
 		return conn;
 	}
