@@ -5,14 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import exp.libs.warp.conf.xml.ConfFactory;
-import exp.libs.warp.conf.xml.Config;
+import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 
 public class Test {
 
 	public static void main(String[] args) {
-		Config conf = ConfFactory.createConfig("TEST");
+		XConfig conf = ConfFactory.createConfig("TEST");
 		conf.loadConfFile("./conf/wsc_app_cfg.dat");
 		conf.loadConfFile("./conf/wsc_monitor_cfg.dat");
 		conf.loadConfFile("./conf/wsc_conf.xml");

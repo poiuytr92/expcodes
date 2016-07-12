@@ -12,13 +12,13 @@ import org.junit.Test;
 
 import exp.libs.bean.test.TMtFault;
 import exp.libs.warp.conf.xml.ConfFactory;
-import exp.libs.warp.conf.xml.Config;
+import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 
 public class TestDBUtils {
 
-	private static Config conf;
+	private static XConfig conf;
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
