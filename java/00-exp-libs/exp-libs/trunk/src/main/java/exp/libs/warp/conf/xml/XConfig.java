@@ -14,7 +14,7 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.socket.bean.SocketBean;
 
-public class Config implements Runnable, IConfig {
+public class XConfig implements Runnable, IConfig {
 
 	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(_Config.class);
@@ -41,7 +41,7 @@ public class Config implements Runnable, IConfig {
 	
 	private byte[] rLock;
 	
-	protected Config(String configName) {
+	protected XConfig(String configName) {
 		this.configName = configName;
 		this.config = new _Config(configName);
 		
