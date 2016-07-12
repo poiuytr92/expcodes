@@ -230,7 +230,6 @@ public class RandUtils {
 	}
 	
 	/**
-	 * FIXME： 可能null
 	 * 随机中文名.
 	 * @return 返回值为只有2个元素的数组，其中 0:拼音名; 1:中文名
 	 */
@@ -244,30 +243,31 @@ public class RandUtils {
 		String[] word2 = randomWord();
 		
 		int nameType = randomInt(1, 100);
-		if(nameType < SINGLE_SURNAME_1WORD) {
+		if(nameType <= SINGLE_SURNAME_1WORD) {
 			chineseName[0] = StrUtils.concat(singleSurname1[0], "-", word1[0]);
 			chineseName[1] = StrUtils.concat(singleSurname1[1], word1[1]);
 			
-		} else if(nameType < TWOSYLLABLE_SURNAME_1WORD) {
+		} else if(nameType <= TWOSYLLABLE_SURNAME_1WORD) {
 			chineseName[0] = StrUtils.concat(singleSurname1[0], singleSurname2[0], "-", word1[0]);
 			chineseName[1] = StrUtils.concat(singleSurname1[1], singleSurname2[1], word1[1]);
 			
-		} else if(nameType < COMPOUND_SURNAME_1WORD) {
+		} else if(nameType <= COMPOUND_SURNAME_1WORD) {
 			chineseName[0] = StrUtils.concat(compoundSurname[0], "-", word1[0]);
 			chineseName[1] = StrUtils.concat(compoundSurname[1], word1[1]);
 			
-		} else if(nameType < SINGLE_SURNAME_2WORD) {
+		} else if(nameType <= SINGLE_SURNAME_2WORD) {
 			chineseName[0] = StrUtils.concat(singleSurname1[0], "-", word1[0], word2[0]);
 			chineseName[1] = StrUtils.concat(singleSurname1[1], word1[1], word2[1]);
 			
-		} else if(nameType < TWOSYLLABLE_SURNAME_2WORD) {
+		} else if(nameType <= TWOSYLLABLE_SURNAME_2WORD) {
 			chineseName[0] = StrUtils.concat(singleSurname1[0], singleSurname2[0], "-", word1[0], word2[0]);
 			chineseName[1] = StrUtils.concat(singleSurname1[1], singleSurname2[1], word1[1], word2[1]);
 			
-		} else if(nameType < COMPOUND_SURNAME_2WORD) {
+		} else if(nameType <= COMPOUND_SURNAME_2WORD) {
 			chineseName[0] = StrUtils.concat(compoundSurname[0], "-", word1[0], word2[0]);
 			chineseName[1] = StrUtils.concat(compoundSurname[1], word1[1], word2[1]);
 		}
+		
 		return chineseName;
 	}
 	
