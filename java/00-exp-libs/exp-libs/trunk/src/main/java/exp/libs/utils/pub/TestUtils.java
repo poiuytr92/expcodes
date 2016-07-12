@@ -42,13 +42,13 @@ public class TestUtils {
 	
 	/**
 	 * 测试xml报文(片段)是否合法
-	 * @param xml xml报文(片段)
+	 * @param str xml报文(片段)
 	 * @return 是否合法
 	 */
-	public static boolean testXml(String xml) {
+	public static boolean testXml(String str) {
 		boolean isLegal = false;
 		try {
-			DocumentHelper.parseText(xml);
+			DocumentHelper.parseText(str);
 			isLegal = true;
 		} catch (DocumentException e) {
 			isLegal = false;
