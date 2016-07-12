@@ -178,24 +178,6 @@ public class ESCUtils {
 		return str;
 	}
 	
-	/**
-	 * 测试是否为json串
-	 * @param str 被测字符串
-	 * @return 是否为json串
-	 */
-	public static boolean testJson(String str) {
-		boolean isJson = true;
-		try {
-			ObjectMapper mapper = new ObjectMapper();
-			Map<?, ?> map = mapper.readValue(str, LinkedHashMap.class);
-			isJson = (map == null ? false : true);
-			
-		} catch (Exception e) {
-			isJson = false;
-		}
-		return isJson;
-	}
-	
 	@SuppressWarnings("deprecation")
 	public static String toJson(Object obj) {
 		String json = "";

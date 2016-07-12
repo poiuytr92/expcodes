@@ -34,7 +34,7 @@ public class TimeUtils {
 	
 	public final static String FORMAT_YMDHMSS = DateFormat.YMDHMSS;
 	
-	/** 私有化构造函数, 避免误用. */
+	/** 私有化构造函数 */
 	protected TimeUtils() {}
 	
 	/**

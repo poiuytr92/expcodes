@@ -9,8 +9,6 @@ import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
-import org.dom4j.DocumentException;
-import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.dom4j.Node;
@@ -44,22 +42,6 @@ public class XmlUtils {
 	
 	/** 私有化构造函数 */
 	protected XmlUtils() {}
-	
-	/**
-	 * 测试xml报文(片段)是否合法
-	 * @param xml xml报文(片段)
-	 * @return 是否合法
-	 */
-	public static boolean testXml(String xml) {
-		boolean isLegal = false;
-		try {
-			DocumentHelper.parseText(xml);
-			isLegal = true;
-		} catch (DocumentException e) {
-			isLegal = false;
-		}
-		return isLegal;
-	}
 	
 	/**
 	 * 移除xml中的空行
