@@ -37,14 +37,14 @@ class _Config implements IConfig {
 	
 	/**
 	 * 依序记录所加载过的配置文件.
-	 *  其中 单个元素为  String[2] { filePath, isJarFile }
+	 *  其中 单个元素为  String[2] { filePath, 文件类型:DISK|JAR }
 	 */
 	protected List<String[]> confFiles; 
 	
 	/** 配置对象名称 */
 	protected String configName;
 	
-	/** 名字索引, 用于加速检索 */
+	/** 记录已查找过一次xNode对应的配置节点路径, 用于加速检索 */
 	private Map<String, String> namePath;
 	
 	/** 路径索引 */
@@ -210,7 +210,7 @@ class _Config implements IConfig {
 		String ePath = namePath.get(eNameId);	// 避免重复检索
 		
 		// 一般不会触发此逻辑，除非是无效的 eName
-		if(StrUtils.isEmpty(ePath) == true) {
+		if(StrUtils.isEmpty(ePath)) {
 			Iterator<String> paths = pathIndex.iterator();
 			while(paths.hasNext()) {
 				String path = paths.next();
