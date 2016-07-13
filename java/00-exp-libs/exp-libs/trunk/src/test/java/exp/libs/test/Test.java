@@ -4,7 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
-import exp.libs.warp.conf.xml.ConfFactory;
+import exp.libs.warp.conf.xml.XConfigFactory;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
@@ -12,7 +12,7 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 public class Test {
 
 	public static void main(String[] args) {
-		XConfig conf = ConfFactory.createConfig("TEST");
+		XConfig conf = XConfigFactory.createConfig("TEST");
 		conf.loadConfFile("./conf/wsc_app_cfg.dat");
 		conf.loadConfFile("./conf/wsc_monitor_cfg.dat");
 		conf.loadConfFile("./conf/wsc_conf.xml");

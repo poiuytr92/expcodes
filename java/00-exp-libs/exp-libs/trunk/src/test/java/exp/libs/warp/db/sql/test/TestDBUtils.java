@@ -11,7 +11,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import exp.libs.bean.test.TMtFault;
-import exp.libs.warp.conf.xml.ConfFactory;
+import exp.libs.warp.conf.xml.XConfigFactory;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
@@ -22,7 +22,7 @@ public class TestDBUtils {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
-		conf = ConfFactory.createConfig("test");
+		conf = XConfigFactory.createConfig("test");
 		conf.loadConfFile("./conf/conf.xml");
 	}
 

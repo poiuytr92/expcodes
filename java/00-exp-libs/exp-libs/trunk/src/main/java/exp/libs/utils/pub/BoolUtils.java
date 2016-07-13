@@ -21,6 +21,10 @@ public class BoolUtils {
 	/** 私有化构造函数 */
 	protected BoolUtils() {}
 	
+	public static boolean toBool(String tof) {
+		return toBool(tof, false);
+	}
+	
 	public static boolean toBool(String tof, boolean defavlt) {
 		boolean bool = defavlt;
 		try {

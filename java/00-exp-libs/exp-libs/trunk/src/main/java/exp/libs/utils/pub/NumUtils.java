@@ -72,13 +72,34 @@ public class NumUtils {
 	}
 	
 	/**
+	 * 把[数字字符串]转换为[短整型]
+	 * @param s 数字字符串
+	 * @return 整型（若转换失败返回0）
+	 */
+	public static short toShort(final String s) {
+		return toShort(s, ((short) 0));
+	}
+	
+	public static short toShort(final String s, final short defavlt) {
+		short n = defavlt;
+		if(s != null && s.matches(Regex.INTEGER.VAL)) {
+			n = Short.parseShort(s);
+		}
+		return n;
+	}
+	
+	/**
 	 * 把[数字字符串]转换为[整型]
 	 * @param s 数字字符串
 	 * @return 整型（若转换失败返回0）
 	 */
 	public static int toInt(final String s) {
-		int n = 0;
-		if(s != null && s.matches("-?\\d+")) {
+		return toInt(s, 0);
+	}
+	
+	public static int toInt(final String s, final int defavlt) {
+		int n = defavlt;
+		if(s != null && s.matches(Regex.INTEGER.VAL)) {
 			n = Integer.parseInt(s);
 		}
 		return n;
@@ -90,7 +111,11 @@ public class NumUtils {
 	 * @return 长整型（若转换失败返回0）
 	 */
 	public static long toLong(final String s) {
-		long n = 0;
+		return toLong(s, 0L);
+	}
+	
+	public static long toLong(final String s, final long defavlt) {
+		long n = defavlt;
 		if(s != null && s.matches(Regex.INTEGER.VAL)) {
 			n = Long.parseLong(s);
 		}
@@ -98,7 +123,11 @@ public class NumUtils {
 	}
 	
 	public static float toFloat(final String s) {
-		float n = 0;
+		return toFloat(s , 0F);
+	}
+	
+	public static float toFloat(final String s, final float defavlt) {
+		float n = defavlt;
 		if(s != null && s.matches(Regex.FLOAT.VAL)) {
 			n = Float.parseFloat(s);
 		}
@@ -106,7 +135,11 @@ public class NumUtils {
 	}
 	
 	public static double toDouble(final String s) {
-		double n = 0;
+		return toDouble(s, 0D);
+	}
+	
+	public static double toDouble(final String s, final double defavlt) {
+		double n = defavlt;
 		if(s != null && s.matches(Regex.FLOAT.VAL)) {
 			n = Double.parseDouble(s);
 		}
