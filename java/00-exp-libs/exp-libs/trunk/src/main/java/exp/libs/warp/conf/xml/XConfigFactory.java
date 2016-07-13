@@ -4,23 +4,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-final public class ConfFactory {
+final public class XConfigFactory {
 
 	private final static XConfig DEFAULT_CONFIG = new XConfig("DEFAULT_CONFIG");
 	
 	private Map<String, XConfig> configs;
 	
-	private static volatile ConfFactory instance;
+	private static volatile XConfigFactory instance;
 	
-	private ConfFactory() {
+	private XConfigFactory() {
 		this.configs = new HashMap<String, XConfig>(2);
 	}
 	
-	private static ConfFactory getInstn() {
+	private static XConfigFactory getInstn() {
 		if(instance == null) {
-			synchronized (ConfFactory.class) {
+			synchronized (XConfigFactory.class) {
 				if(instance == null) {
-					instance = new ConfFactory();
+					instance = new XConfigFactory();
 				}
 			}
 		}
