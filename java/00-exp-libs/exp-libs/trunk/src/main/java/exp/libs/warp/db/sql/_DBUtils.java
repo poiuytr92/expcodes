@@ -44,6 +44,8 @@ final class _DBUtils {
 	
 	private final static String TEMPLATE_DB_BEAN = "/exp/libs/warp/db/sql/db-bean.tpl";
 	
+	private final static String TEMPLATE_PROXOOL = "/exp/libs/warp/db/sql/proxool.tpl";
+	
 	private Set<String> registeredDS;
 	
 	private static volatile _DBUtils instance;
@@ -87,7 +89,7 @@ final class _DBUtils {
 	
 	private static String createProxoolXml(DataSourceBean ds) throws Exception {
 		Template tpl = new Template(ds.getId());
-		tpl.read("/exp/libs/warp/db/sql/proxool.tpl", Charset.ISO);
+		tpl.read(TEMPLATE_PROXOOL, Charset.ISO);
 		tpl.set("alias", ds.getId());
 		tpl.set("driver-url", ds.getUrl());
 		tpl.set("driver-class", ds.getDriver());

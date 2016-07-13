@@ -146,7 +146,7 @@ public class DBUtils {
 	 */
 	public static Connection getConnNeverOT(DataSourceBean ds) {
 		Connection conn = null;
-		if(ds == null) {
+		if(ds == null || !DBType.MYSQL.DRIVER.equals(ds.getDriver())) {
 			return conn;
 		}
 		
