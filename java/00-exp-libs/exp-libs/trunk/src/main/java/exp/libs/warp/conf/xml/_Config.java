@@ -461,7 +461,7 @@ class _Config implements IConfig {
 				ds.setMaximumConnectionLifetime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "maximum-connection-lifetime")));
 				ds.setTestBeforeUse(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "test-before-use"), true));
 				ds.setTestAfterUse(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "test-after-use"), false));
-				ds.setTrace(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "false"), true));
+				ds.setTrace(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "trace"), true));
 			}
 		}
 		return ds;

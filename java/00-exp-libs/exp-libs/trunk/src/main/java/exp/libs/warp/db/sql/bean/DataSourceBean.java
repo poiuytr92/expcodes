@@ -403,76 +403,100 @@ public class DataSourceBean {
 	private String getDriverbyName(String dirverName) {
 		String driver = dirverName;
 		if(dirverName != null) {
-			if(dirverName.equals(DBType.MYSQL.NAME)) {
+			if(dirverName.equals(DBType.MYSQL.NAME) || 
+					dirverName.equals(DBType.MYSQL.DRIVER)) {
 				driver = DBType.MYSQL.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SQLITE.NAME)) {
+			} else if(dirverName.equals(DBType.SQLITE.NAME) || 
+					dirverName.equals(DBType.SQLITE.DRIVER)) {
 				driver = DBType.SQLITE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE.NAME)) {
+			} else if(dirverName.equals(DBType.ORACLE.NAME) || 
+					dirverName.equals(DBType.ORACLE.DRIVER)) {
 				driver = DBType.ORACLE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_8I.NAME)) {
+			} else if(dirverName.equals(DBType.ORACLE_8I.NAME) || 
+					dirverName.equals(DBType.ORACLE_8I.DRIVER)) {
 				driver = DBType.ORACLE_8I.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_8I_OCI.NAME)) {
+			} else if(dirverName.equals(DBType.ORACLE_8I_OCI.NAME) || 
+					dirverName.equals(DBType.ORACLE_8I_OCI.DRIVER)) {
 				driver = DBType.ORACLE_8I_OCI.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_9I.NAME)) {
+			} else if(dirverName.equals(DBType.ORACLE_9I.NAME) || 
+					dirverName.equals(DBType.ORACLE_9I.DRIVER)) {
 				driver = DBType.ORACLE_9I.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_10G.NAME)) {
+			} else if(dirverName.equals(DBType.ORACLE_10G.NAME) || 
+					dirverName.equals(DBType.ORACLE_10G.DRIVER)) {
 				driver = DBType.ORACLE_10G.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_10G_OCI.NAME)) {
+			} else if(dirverName.equals(DBType.ORACLE_10G_OCI.NAME) || 
+					dirverName.equals(DBType.ORACLE_10G_OCI.DRIVER)) {
 				driver = DBType.ORACLE_10G_OCI.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_11G.NAME)) {
+			} else if(dirverName.equals(DBType.ORACLE_11G.NAME) || 
+					dirverName.equals(DBType.ORACLE_11G.DRIVER)) {
 				driver = DBType.ORACLE_11G.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_11G_OCI.NAME)) {
+			} else if(dirverName.equals(DBType.ORACLE_11G_OCI.NAME) || 
+					dirverName.equals(DBType.ORACLE_11G_OCI.DRIVER)) {
 				driver = DBType.ORACLE_11G_OCI.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE.NAME)) {
+			} else if(dirverName.equals(DBType.SYBASE.NAME) || 
+					dirverName.equals(DBType.SYBASE.DRIVER)) {
 				driver = DBType.SYBASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_IQ.NAME)) {
+			} else if(dirverName.equals(DBType.SYBASE_IQ.NAME) || 
+					dirverName.equals(DBType.SYBASE_IQ.DRIVER)) {
 				driver = DBType.SYBASE_IQ.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_ASE.NAME)) {
+			} else if(dirverName.equals(DBType.SYBASE_ASE.NAME) || 
+					dirverName.equals(DBType.SYBASE_ASE.DRIVER)) {
 				driver = DBType.SYBASE_ASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_125ASE.NAME)) {
+			} else if(dirverName.equals(DBType.SYBASE_125ASE.NAME) || 
+					dirverName.equals(DBType.SYBASE_125ASE.DRIVER)) {
 				driver = DBType.SYBASE_125ASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_15ASE.NAME)) {
+			} else if(dirverName.equals(DBType.SYBASE_15ASE.NAME) || 
+					dirverName.equals(DBType.SYBASE_15ASE.DRIVER)) {
 				driver = DBType.SYBASE_15ASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_155ASE.NAME)) {
+			} else if(dirverName.equals(DBType.SYBASE_155ASE.NAME) || 
+					dirverName.equals(DBType.SYBASE_155ASE.DRIVER)) {
 				driver = DBType.SYBASE_155ASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.MSSQL.NAME)) {
+			} else if(dirverName.equals(DBType.MSSQL.NAME) || 
+					dirverName.equals(DBType.MSSQL.DRIVER)) {
 				driver = DBType.MSSQL.DRIVER;
 				
-			} else if(dirverName.equals(DBType.MSSQL2000.NAME)) {
+			} else if(dirverName.equals(DBType.MSSQL2000.NAME) || 
+					dirverName.equals(DBType.MSSQL2000.DRIVER)) {
 				driver = DBType.MSSQL2000.DRIVER;
 				
-			} else if(dirverName.equals(DBType.MSSQL2005.NAME)) {
+			} else if(dirverName.equals(DBType.MSSQL2005.NAME) || 
+					dirverName.equals(DBType.MSSQL2005.DRIVER)) {
 				driver = DBType.MSSQL2005.DRIVER;
 				
-			} else if(dirverName.equals(DBType.MSSQL2008.NAME)) {
+			} else if(dirverName.equals(DBType.MSSQL2008.NAME) || 
+					dirverName.equals(DBType.MSSQL2008.DRIVER)) {
 				driver = DBType.MSSQL2008.DRIVER;
 				
-			} else if(dirverName.equals(DBType.POSTGRESQL.NAME)) {
+			} else if(dirverName.equals(DBType.POSTGRESQL.NAME) || 
+					dirverName.equals(DBType.POSTGRESQL.DRIVER)) {
 				driver = DBType.POSTGRESQL.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ACCESS.NAME)) {
+			} else if(dirverName.equals(DBType.ACCESS.NAME) || 
+					dirverName.equals(DBType.ACCESS.DRIVER)) {
 				driver = DBType.ACCESS.DRIVER;
 				
-			} else if(dirverName.equals(DBType.INFORMIX.NAME)) {
+			} else if(dirverName.equals(DBType.INFORMIX.NAME) || 
+					dirverName.equals(DBType.INFORMIX.DRIVER)) {
 				driver = DBType.INFORMIX.DRIVER;
 				
-			} else if(dirverName.equals(DBType.IBM.NAME)) {
+			} else if(dirverName.equals(DBType.IBM.NAME) || 
+					dirverName.equals(DBType.IBM.DRIVER)) {
 				driver = DBType.IBM.DRIVER;
 			}
 		}
@@ -481,7 +505,28 @@ public class DataSourceBean {
 	
 	@Override
 	public String toString() {
-		// TODO Auto-generated method stub
+		StringBuilder sb = new StringBuilder();
+		sb.append("+++++++++++++++++++++++++++++++++++");
+		sb.append("id : ").append(getId());
+		sb.append("driver : ").append(getDriver());
+		sb.append("ip : ").append(getIp());
+		sb.append("port : ").append(getPort());
+		sb.append("username : ").append(getUsername());
+		sb.append("password : ").append(getPassword());
+		sb.append("name : ").append(getName());
+		sb.append("charset : ").append(getCharset());
+		sb.append("house-keeping-test-sql : ").append(getHouseKeepingTestSql());
+		sb.append("house-keeping-sleep-time : ").append(getHouseKeepingSleepTime());
+		sb.append("simultaneous-build-throttle : ").append(getSimultaneousBuildThrottle());
+		sb.append("maximum-connection-count : ").append(getMaximumConnectionCount());
+		sb.append("minimum-connection-count : ").append(getMinimumConnectionCount());
+		sb.append("maximum-new-connections : ").append(getMaximumNewConnections());
+		sb.append("prototype-count : ").append(getPrototypeCount());
+		sb.append("maximum-connection-lifetime : ").append(getMaximumConnectionLifetime());
+		sb.append("test-before-use : ").append(isTestBeforeUse());
+		sb.append("test-after-use : ").append(isTestAfterUse());
+		sb.append("trace : ").append(isTrace());
+		sb.append("-----------------------------------");
 		return super.toString();
 	}
 
