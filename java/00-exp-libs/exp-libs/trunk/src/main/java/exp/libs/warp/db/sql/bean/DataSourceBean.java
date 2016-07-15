@@ -3,6 +3,7 @@ package exp.libs.warp.db.sql.bean;
 import exp.libs.envm.Charset;
 import exp.libs.envm.DBType;
 import exp.libs.utils.pub.StrUtils;
+import exp.libs.utils.pub.VerifyUtils;
 
 public class DataSourceBean {
 
@@ -165,7 +166,8 @@ public class DataSourceBean {
 	}
 
 	public void setId(String id) {
-		this.id = (id == null ? DEFAULT_ID : id);
+		this.id = (StrUtils.isNotEmpty(id) ? id :
+				(StrUtils.isNotEmpty(this.id) ? this.id : DEFAULT_ID));
 	}
 
 	public String getDriver() {
@@ -173,8 +175,8 @@ public class DataSourceBean {
 	}
 
 	public void setDriver(String driver) {
-		this.driver = (driver == null ? 
-				DEFAULT_DRIVER : getDriverbyName(driver));
+		this.driver = (StrUtils.isNotEmpty(driver) ? getDriverbyName(driver) :
+			(StrUtils.isNotEmpty(this.driver) ? this.driver : DEFAULT_DRIVER));
 	}
 
 	public String getIp() {
@@ -182,7 +184,8 @@ public class DataSourceBean {
 	}
 
 	public void setIp(String ip) {
-		this.ip = (ip == null ? DEFAULT_IP : ip);
+		this.ip = (StrUtils.isNotEmpty(ip) ? ip :
+			(StrUtils.isNotEmpty(this.ip) ? this.ip : DEFAULT_IP));
 	}
 
 	public int getPort() {
@@ -190,7 +193,8 @@ public class DataSourceBean {
 	}
 
 	public void setPort(int port) {
-		this.port = (port <= 0 || port > 65535 ? DEFAULT_PORT : port);
+		this.port = (VerifyUtils.isPort(port) ? port :
+			(VerifyUtils.isPort(this.port) ? this.port : DEFAULT_PORT));
 	}
 
 	public String getUsername() {
@@ -198,7 +202,8 @@ public class DataSourceBean {
 	}
 
 	public void setUsername(String username) {
-		this.username = (username == null ? DEFAULT_USERNAME : username);
+		this.username = (StrUtils.isNotEmpty(username) ? username :
+			(StrUtils.isNotEmpty(this.username) ? this.username : DEFAULT_USERNAME));
 	}
 
 	public String getPassword() {
@@ -206,7 +211,8 @@ public class DataSourceBean {
 	}
 
 	public void setPassword(String password) {
-		this.password = (password == null ? DEFAULT_PASSWORD : password);
+		this.password = (StrUtils.isNotEmpty(password) ? password :
+			(StrUtils.isNotEmpty(this.password) ? this.password : DEFAULT_PASSWORD));
 	}
 
 	public String getName() {
@@ -214,7 +220,8 @@ public class DataSourceBean {
 	}
 
 	public void setName(String name) {
-		this.name = (name == null ? DEFAULT_DBNAME : name);
+		this.name = (StrUtils.isNotEmpty(name) ? name :
+			(StrUtils.isNotEmpty(this.name) ? this.name : DEFAULT_DBNAME));
 	}
 
 	public String getCharset() {
@@ -222,7 +229,8 @@ public class DataSourceBean {
 	}
 
 	public void setCharset(String charset) {
-		this.charset = (charset == null ? DEFAULT_CHARSET : charset);
+		this.charset = (StrUtils.isNotEmpty(charset) ? charset :
+			(StrUtils.isNotEmpty(this.charset) ? this.charset : DEFAULT_CHARSET));
 	}
 
 	public String getHouseKeepingTestSql() {
@@ -230,8 +238,8 @@ public class DataSourceBean {
 	}
 
 	public void setHouseKeepingTestSql(String houseKeepingTestSql) {
-		this.houseKeepingTestSql = (houseKeepingTestSql == null ? 
-				DEFAULT_KEEP_TEST_SQL : houseKeepingTestSql);
+		this.houseKeepingTestSql = (StrUtils.isNotEmpty(houseKeepingTestSql) ? houseKeepingTestSql :
+			(StrUtils.isNotEmpty(this.houseKeepingTestSql) ? this.houseKeepingTestSql : DEFAULT_KEEP_TEST_SQL));
 	}
 
 	public long getHouseKeepingSleepTime() {
@@ -239,8 +247,8 @@ public class DataSourceBean {
 	}
 
 	public void setHouseKeepingSleepTime(long houseKeepingSleepTime) {
-		this.houseKeepingSleepTime = (houseKeepingSleepTime < 0 ? 
-				DEFAULT_KEEP_SLEEP_TIME : houseKeepingSleepTime);
+		this.houseKeepingSleepTime = (houseKeepingSleepTime > 0 ? houseKeepingSleepTime :
+			(this.houseKeepingSleepTime >= 0 ? this.houseKeepingSleepTime : DEFAULT_KEEP_SLEEP_TIME));
 	}
 
 	public int getSimultaneousBuildThrottle() {
@@ -248,8 +256,8 @@ public class DataSourceBean {
 	}
 
 	public void setSimultaneousBuildThrottle(int simultaneousBuildThrottle) {
-		this.simultaneousBuildThrottle = (simultaneousBuildThrottle < 0 ? 
-				DEFAULT_SIMULTANEOUS_BUILD_THROTTLE : simultaneousBuildThrottle);
+		this.simultaneousBuildThrottle = (simultaneousBuildThrottle > 0 ? simultaneousBuildThrottle :
+				(this.simultaneousBuildThrottle >= 0 ? this.simultaneousBuildThrottle : DEFAULT_SIMULTANEOUS_BUILD_THROTTLE));
 	}
 
 	public int getMaximumConnectionCount() {
@@ -257,8 +265,8 @@ public class DataSourceBean {
 	}
 
 	public void setMaximumConnectionCount(int maximumConnectionCount) {
-		this.maximumConnectionCount = (maximumConnectionCount < 0 ? 
-				DEFAULT_MAX_CONN_COUNT : maximumConnectionCount);
+		this.maximumConnectionCount = (maximumConnectionCount > 0 ? maximumConnectionCount :
+			(this.maximumConnectionCount >= 0 ? this.maximumConnectionCount : DEFAULT_MAX_CONN_COUNT));
 	}
 
 	public int getMinimumConnectionCount() {
@@ -266,8 +274,8 @@ public class DataSourceBean {
 	}
 
 	public void setMinimumConnectionCount(int minimumConnectionCount) {
-		this.minimumConnectionCount = (minimumConnectionCount < 0 ? 
-				DEFAULT_MIN_CONN_COUNT : minimumConnectionCount);
+		this.minimumConnectionCount = (minimumConnectionCount > 0 ? minimumConnectionCount :
+			(this.minimumConnectionCount >= 0 ? this.minimumConnectionCount : DEFAULT_MIN_CONN_COUNT));
 	}
 
 	public int getMaximumNewConnections() {
@@ -275,8 +283,8 @@ public class DataSourceBean {
 	}
 
 	public void setMaximumNewConnections(int maximumNewConnections) {
-		this.maximumNewConnections = (maximumNewConnections < 0 ? 
-				DEFAULT_MAX_NEW_CONN : maximumNewConnections);
+		this.maximumNewConnections = (maximumNewConnections > 0 ? maximumNewConnections :
+			(this.maximumNewConnections >= 0 ? this.maximumNewConnections : DEFAULT_MAX_NEW_CONN));
 	}
 
 	public int getPrototypeCount() {
@@ -284,8 +292,8 @@ public class DataSourceBean {
 	}
 
 	public void setPrototypeCount(int prototypeCount) {
-		this.prototypeCount = (prototypeCount < 0 ? 
-				DEFAULT_PROTOTYPE_COUNT : prototypeCount);
+		this.prototypeCount = (prototypeCount > 0 ? prototypeCount :
+			(this.prototypeCount >= 0 ? this.prototypeCount : DEFAULT_PROTOTYPE_COUNT));
 	}
 
 	public long getMaximumConnectionLifetime() {
@@ -293,8 +301,8 @@ public class DataSourceBean {
 	}
 
 	public void setMaximumConnectionLifetime(long maximumConnectionLifetime) {
-		this.maximumConnectionLifetime = (maximumConnectionLifetime < 0 ? 
-				DEFAULT_MAX_CONN_LIFETIME : maximumConnectionLifetime);
+		this.maximumConnectionLifetime = (maximumConnectionLifetime > 0 ? maximumConnectionLifetime :
+			(this.maximumConnectionLifetime >= 0 ? this.maximumConnectionLifetime : DEFAULT_MAX_CONN_LIFETIME));
 	}
 
 	public boolean isTestBeforeUse() {
@@ -506,28 +514,28 @@ public class DataSourceBean {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("+++++++++++++++++++++++++++++++++++");
-		sb.append("id : ").append(getId());
-		sb.append("driver : ").append(getDriver());
-		sb.append("ip : ").append(getIp());
-		sb.append("port : ").append(getPort());
-		sb.append("username : ").append(getUsername());
-		sb.append("password : ").append(getPassword());
-		sb.append("name : ").append(getName());
-		sb.append("charset : ").append(getCharset());
-		sb.append("house-keeping-test-sql : ").append(getHouseKeepingTestSql());
-		sb.append("house-keeping-sleep-time : ").append(getHouseKeepingSleepTime());
-		sb.append("simultaneous-build-throttle : ").append(getSimultaneousBuildThrottle());
-		sb.append("maximum-connection-count : ").append(getMaximumConnectionCount());
-		sb.append("minimum-connection-count : ").append(getMinimumConnectionCount());
-		sb.append("maximum-new-connections : ").append(getMaximumNewConnections());
-		sb.append("prototype-count : ").append(getPrototypeCount());
-		sb.append("maximum-connection-lifetime : ").append(getMaximumConnectionLifetime());
-		sb.append("test-before-use : ").append(isTestBeforeUse());
-		sb.append("test-after-use : ").append(isTestAfterUse());
-		sb.append("trace : ").append(isTrace());
-		sb.append("-----------------------------------");
-		return super.toString();
+		sb.append("\r\n+++++++++++++++++++++++++++++++++++\r\n");
+		sb.append("id : ").append(getId()).append("\r\n");
+		sb.append("driver : ").append(getDriver()).append("\r\n");
+		sb.append("ip : ").append(getIp()).append("\r\n");
+		sb.append("port : ").append(getPort()).append("\r\n");
+		sb.append("username : ").append(getUsername()).append("\r\n");
+		sb.append("password : ").append(getPassword()).append("\r\n");
+		sb.append("name : ").append(getName()).append("\r\n");
+		sb.append("charset : ").append(getCharset()).append("\r\n");
+		sb.append("house-keeping-test-sql : ").append(getHouseKeepingTestSql()).append("\r\n");
+		sb.append("house-keeping-sleep-time : ").append(getHouseKeepingSleepTime()).append("\r\n");
+		sb.append("simultaneous-build-throttle : ").append(getSimultaneousBuildThrottle()).append("\r\n");
+		sb.append("maximum-connection-count : ").append(getMaximumConnectionCount()).append("\r\n");
+		sb.append("minimum-connection-count : ").append(getMinimumConnectionCount()).append("\r\n");
+		sb.append("maximum-new-connections : ").append(getMaximumNewConnections()).append("\r\n");
+		sb.append("prototype-count : ").append(getPrototypeCount()).append("\r\n");
+		sb.append("maximum-connection-lifetime : ").append(getMaximumConnectionLifetime()).append("\r\n");
+		sb.append("test-before-use : ").append(isTestBeforeUse()).append("\r\n");
+		sb.append("test-after-use : ").append(isTestAfterUse()).append("\r\n");
+		sb.append("trace : ").append(isTrace()).append("\r\n");
+		sb.append("-----------------------------------\r\n");
+		return sb.toString();
 	}
 
 }
