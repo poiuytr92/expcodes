@@ -2,7 +2,7 @@ package exp.libs.warp.net.socket.nio.client;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.OsDelimiter;
-import exp.libs.warp.net.socket.bean.SocketBean;
+import exp.libs.warp.net.socket.nio.SocketBean;
 import exp.libs.warp.net.socket.nio.common.envm.Protocol;
 import exp.libs.warp.net.socket.nio.common.filter.ThreadPoolFilter;
 import exp.libs.warp.net.socket.nio.common.filterchain.impl.FilterChain;

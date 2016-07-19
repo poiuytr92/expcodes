@@ -56,7 +56,6 @@ public class XConfig implements Runnable, IConfig {
 	
 	/**
 	 * 刷新操作会对所加载过的配置文件依次重新加载.
-	 * 此行为非多线程安全, 若在重载文件过程中有读取配置的行为，注意加锁.
 	 */
 	public void reflash() {
 		reflash(DEFAULT_REFLASH_TIME);
@@ -64,7 +63,6 @@ public class XConfig implements Runnable, IConfig {
 	
 	/**
 	 * 刷新操作会对所加载过的配置文件依次重新加载.
-	 * 此行为非多线程安全, 若在重载文件过程中有读取配置的行为，注意加锁.
 	 * @param timeMillis 刷新间隔
 	 */
 	public void reflash(long timeMillis) {

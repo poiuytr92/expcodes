@@ -16,12 +16,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
-import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.utils.pub.BoolUtils;
 import exp.libs.utils.pub.FileUtils;
 import exp.libs.utils.pub.NumUtils;
 import exp.libs.utils.pub.StrUtils;
 import exp.libs.utils.pub.XmlUtils;
+import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.socket.bean.SocketBean;
 
@@ -474,8 +474,31 @@ class _Config implements IConfig {
 	
 	@Override
 	public SocketBean getSocketBean(String eNameOrPath, String sockId) {
-		// TODO
-		return null;
+		SocketBean sb = new SocketBean();
+		if(sockId != null) {
+			sockId = sockId.trim();
+			Element socket = getElement(eNameOrPath, sockId);
+			if(socket != null) {
+				sb.setId(sockId);
+				sb.setIp(XmlUtils.getChildValue(socket, "ip"));
+				sb.setPort(NumUtils.toInt(XmlUtils.getChildValue(socket, "port")));
+				sb.setUsername(XmlUtils.getChildValue(socket, "username"));
+				sb.setPassword(XmlUtils.getChildValue(socket, "password"));
+				sb.setCharset(XmlUtils.getChildValue(socket, "charset"));
+				sb.setReadCharset(XmlUtils.getChildValue(socket, "readCharset"));
+				sb.setWriteCharset(XmlUtils.getChildValue(socket, "writeCharset"));
+				sb.setBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "bufferSize")));
+				sb.setReadBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "readBufferSize")));
+				sb.setWriteBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "writeBufferSize")));
+				sb.setDelimiter(XmlUtils.getChildValue(socket, "delimiter"));
+				sb.setReadDelimiter(XmlUtils.getChildValue(socket, "readDelimiter"));
+				sb.setWriteDelimiter(XmlUtils.getChildValue(socket, "writeDelimiter"));
+				sb.setOvertime(NumUtils.toInt(XmlUtils.getChildValue(socket, "overtime")));
+				sb.setMaxConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(socket, "maxConnectionCount")));
+				sb.setExitCmd(XmlUtils.getChildValue(socket, "exitCmd"));
+			}
+		}
+		return sb;
 	}
 	
 	@Override

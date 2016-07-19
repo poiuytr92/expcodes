@@ -2,13 +2,12 @@ package exp.libs.warp.db.sql.bean;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.DBType;
+import exp.libs.utils.pub.CharsetUtils;
 import exp.libs.utils.pub.StrUtils;
 import exp.libs.utils.pub.VerifyUtils;
 
 public class DataSourceBean {
 
-	private String url;
-	
 	private String id;
 	
 	private final static String DEFAULT_ID = "DEFAULT_DATASOURCE";
@@ -145,20 +144,15 @@ public class DataSourceBean {
 	}
 
 	public String getUrl() {
-		if(StrUtils.isEmpty(url) && getDriver() != null) {
-			String url = getUrlByDriver();
-			
-			if(url != null) {
-				url = url.replace(DBType.PH_ALIAS, getId());
-				url = url.replace(DBType.PH_HOST, getIp());
-				url = url.replace(DBType.PH_PORT, String.valueOf(getPort()));
-				url = url.replace(DBType.PH_DBNAME, getName());
-				url = url.replace(DBType.PH_CHARSET, getCharset());
-				
-				this.url = url;
-			}
+		String url = getUrlByDriver();
+		if(url != null) {
+			url = url.replace(DBType.PH_ALIAS, getId());
+			url = url.replace(DBType.PH_HOST, getIp());
+			url = url.replace(DBType.PH_PORT, String.valueOf(getPort()));
+			url = url.replace(DBType.PH_DBNAME, getName());
+			url = url.replace(DBType.PH_CHARSET, getCharset());
 		}
-		return this.url;
+		return (url == null ? "" : url);
 	}
 	
 	public String getId() {
@@ -202,8 +196,8 @@ public class DataSourceBean {
 	}
 
 	public void setUsername(String username) {
-		this.username = (StrUtils.isNotEmpty(username) ? username :
-			(StrUtils.isNotEmpty(this.username) ? this.username : DEFAULT_USERNAME));
+		this.username = (username != null ? username :
+			(this.username != null ? this.username : DEFAULT_USERNAME));
 	}
 
 	public String getPassword() {
@@ -211,8 +205,8 @@ public class DataSourceBean {
 	}
 
 	public void setPassword(String password) {
-		this.password = (StrUtils.isNotEmpty(password) ? password :
-			(StrUtils.isNotEmpty(this.password) ? this.password : DEFAULT_PASSWORD));
+		this.password = (password != null ? password :
+			(this.password != null ? this.password : DEFAULT_PASSWORD));
 	}
 
 	public String getName() {
@@ -229,8 +223,8 @@ public class DataSourceBean {
 	}
 
 	public void setCharset(String charset) {
-		this.charset = (StrUtils.isNotEmpty(charset) ? charset :
-			(StrUtils.isNotEmpty(this.charset) ? this.charset : DEFAULT_CHARSET));
+		this.charset = (CharsetUtils.isVaild(charset) ? charset :
+			(CharsetUtils.isVaild(this.charset) ? this.charset : DEFAULT_CHARSET));
 	}
 
 	public String getHouseKeepingTestSql() {
@@ -514,7 +508,7 @@ public class DataSourceBean {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\r\n+++++++++++++++++++++++++++++++++++\r\n");
+		sb.append("\r\n++++++++++++++++ DataSource ++++++++++++++++\r\n");
 		sb.append("id : ").append(getId()).append("\r\n");
 		sb.append("driver : ").append(getDriver()).append("\r\n");
 		sb.append("ip : ").append(getIp()).append("\r\n");
@@ -534,7 +528,7 @@ public class DataSourceBean {
 		sb.append("test-before-use : ").append(isTestBeforeUse()).append("\r\n");
 		sb.append("test-after-use : ").append(isTestAfterUse()).append("\r\n");
 		sb.append("trace : ").append(isTrace()).append("\r\n");
-		sb.append("-----------------------------------\r\n");
+		sb.append("--------------------------------------------\r\n");
 		return sb.toString();
 	}
 

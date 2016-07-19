@@ -9,33 +9,24 @@ import java.net.Socket;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.warp.net.socket.bean.SocketByteBuffer;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.pub.StrUtils;
+import exp.libs.warp.net.socket.bean.SocketBean;
+import exp.libs.warp.net.socket.bean.SocketByteBuffer;
 
-/**
- * <PRE>
- * Socket接口会话.
- * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: 272629724@qq.com
- * @since     jdk版本：jdk1.6
- */
-public class SocketSession {
+public class SocketClient {
 
 	/** 日志器 */
-	private Logger log = LoggerFactory.getLogger(SocketSession.class);
+	private Logger log = LoggerFactory.getLogger(SocketClient.class);
 	
 	/** Socket重连间隔(ms) */
-	private final static long RECONN_INTERVAL = 60000;
+	private final static long RECONN_INTERVAL = 10000;
 	
 	/** Socket连续重连次数上限 */
-	private final static int RECONN_LIMIT = 10;
+	private final static int RECONN_LIMIT = 30;
 	
 	/** Socket配置信息 */
-	private SocketInfo socketInfo;
+	private SocketBean socketBean;
 	
 	/** Socket客户端 */
 	private Socket socketClient;
@@ -45,14 +36,14 @@ public class SocketSession {
 	
 	/**
 	 * 构造函数
-	 * @param socketInfo socket配置信息
+	 * @param socketBean socket配置信息
 	 */
-	public SocketSession(SocketInfo socketInfo) {
-		this.socketInfo = socketInfo;
+	public SocketClient(SocketBean socketBean) {
+		this.socketBean = socketBean;
 	}
 	
-	public SocketInfo getSocketInfo() {
-		return socketInfo;
+	public SocketBean getSocketBean() {
+		return socketBean;
 	}
 	
 	/**
@@ -67,24 +58,15 @@ public class SocketSession {
 		// 创建会话
 		boolean isOk = false;
 		try {
-			socketClient = new Socket(socketInfo.getIp(), socketInfo.getPort());
-			socketClient.setSoTimeout(socketInfo.getOvertime());
-			socketClient.setReceiveBufferSize(socketInfo.getBufferSize());
+			socketClient = new Socket(socketBean.getIp(), socketBean.getPort());
+			socketClient.setSoTimeout(socketBean.getOvertime());
+			socketClient.setReceiveBufferSize(socketBean.getReadBufferSize());
 			localBuffer = new SocketByteBuffer(	//本地缓存要比Socket缓存稍大
-					socketInfo.getBufferSize() * 2, socketInfo.getCharset());
+					socketBean.getReadBufferSize() * 2, socketBean.getReadCharset());
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("Socket {} 创建会话失败.", socketInfo.toNaviInfo(), e);
-		}
-		
-		// 登陆
-		if(isOk == true) {
-			isOk = login();
-			
-			if(isOk == false) {
-				log.error("Socket {} 登录验证失败.", socketInfo.toNaviInfo());
-			}
+			log.error("Socket {} 创建会话失败.", socketBean.getSocket(), e);
 		}
 		return isOk;
 	}
@@ -93,7 +75,7 @@ public class SocketSession {
 	 * 重连 socket
 	 */
 	public void reconn() {
-		if(socketInfo == null) {
+		if(socketBean == null) {
 			return;
 		}
 		
@@ -105,11 +87,10 @@ public class SocketSession {
 			} else {
 				close();
 				log.warn("Socket {} 连接异常, {}ms后重连, 已重试{}次.", 
-						socketInfo.toNaviInfo(), RECONN_INTERVAL, cnt);
+						socketBean.getSocket(), RECONN_INTERVAL, cnt);
 			}
 			
 			cnt++;
-			
 			ThreadUtils.tSleep(RECONN_INTERVAL);
 		} while(RECONN_LIMIT < 0 || cnt < RECONN_LIMIT);
 	}
@@ -137,7 +118,7 @@ public class SocketSession {
 			} catch (Exception e) {
 				isClose = false;
 				log.error("Socket [{}] 关闭会话失败.", 
-						(socketInfo == null ? "null" : socketInfo.getId()), e);
+						(socketBean == null ? "null" : socketBean.getId()), e);
 			}
 		}
 		
@@ -152,28 +133,31 @@ public class SocketSession {
 	 * @return 读取的报文. 若返回null，则出现异常。
 	 */
 	public String read() {
-		reconn();
-		
 		String msg = null;
+		if(isClosed()) {
+			log.error("Socket [{}] 连接已断开, 无法读取返回消息.", socketBean.getId());
+			return msg;
+		}
+		
 		try {
 			msg = read(socketClient.getInputStream(), localBuffer, 
-					socketInfo.getDelimiter(), socketInfo.getOvertime());
+					socketBean.getReadDelimiter(), socketBean.getOvertime());
 			
 		} catch (ArrayIndexOutOfBoundsException e) {
 			log.error("Socket [{}] 本地缓冲区溢出(单条报文过长), 当前缓冲区大小: {}KB.", 
-					socketInfo.getId(), (socketInfo.getBufferSize() * 2), e);
+					socketBean.getId(), (socketBean.getReadBufferSize() * 2), e);
 						
 		} catch (UnsupportedEncodingException e) {
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
-					socketInfo.getId(), socketInfo.getCharset(), e);
+					socketBean.getId(), socketBean.getReadCharset(), e);
 					
 		} catch (IOException e) {
 			log.error("Socket [{}] 读操作超时, 当前超时上限: {}ms.", 
-					socketInfo.getId(), socketInfo.getOvertime(), e);
+					socketBean.getId(), socketBean.getOvertime(), e);
 			close();
 			
 		} catch (Exception e) {
-			log.error("Socket [{}] 读操作异常.", socketInfo.getId(), e);
+			log.error("Socket [{}] 读操作异常.", socketBean.getId(), e);
 			close();
 		}
 		return msg;
@@ -219,11 +203,8 @@ public class SocketSession {
 				
 				if(timeout > 0) {
 					
-					// FIXME：主要处理服务端无故不断返回\n的现象，
-					// 但若大量数据返回时间超过2分钟，则此处逻辑会导致正常数据接收失败。
-					// 但由于现在大量数据都是分批取的，暂时不会触发此问题，但若超时时间<2min可能会触发
 					if(System.currentTimeMillis() - bgnTime > timeout) {
-						throw new IOException("Socket服务端超时未返回消息终止符.");
+						throw new IOException("Socket服务端超时未返回消息终止符, 自动重连会话.");
 						
 					} else {
 						ThreadUtils.tSleep(100);
@@ -251,15 +232,15 @@ public class SocketSession {
 		
 		try {
 			write(socketClient.getOutputStream(), 
-					StrUtils.concat(msg, socketInfo.getDelimiter()), 
-					socketInfo.getCharset());
+					StrUtils.concat(msg, socketBean.getWriteDelimiter()), 
+					socketBean.getWriteCharset());
 			
 		} catch (UnsupportedEncodingException e) {
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
-					socketInfo.getId(), socketInfo.getCharset(), e);
+					socketBean.getId(), socketBean.getWriteCharset(), e);
 					
 		} catch (Exception e) {
-			log.error("Socket [{}] 写操作异常.", socketInfo.getId(), e);
+			log.error("Socket [{}] 写操作异常.", socketBean.getId(), e);
 			close();
 		}
 	}
@@ -285,15 +266,6 @@ public class SocketSession {
 		if(localBuffer != null) {
 			localBuffer.reset();
 		}
-	}
-	
-	/**
-	 * 登陆验证
-	 * @return true:登陆成功; false:登陆失败
-	 */
-	private boolean login() {
-		// TODO
-		return true;
 	}
 	
 }

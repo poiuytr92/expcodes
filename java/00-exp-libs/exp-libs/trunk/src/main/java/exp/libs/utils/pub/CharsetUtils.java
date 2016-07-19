@@ -59,9 +59,9 @@ public class CharsetUtils {
 	
 	/**
 	 * <pre>
-	 * 把以charset编码的bytes的字节数组，变成以charset编码的String形式
+	 * 把任意编码的bytes的字节数组，变成以charset编码的String
 	 * 
-	 * charset byte[] -> charset String
+	 * 任意编码byte[] -> charset String
 	 * </pre>
 	 * @param bytes 源字节数组
 	 * @param charset 源字节数组的编码
@@ -79,26 +79,45 @@ public class CharsetUtils {
 	
 	/**
 	 * <pre>
-	 * 把srcStr转换为使用destCharset编码的byte[]
+	 * 把使用charset编码的str转换为byte[]
 	 * 
-	 * ?charset String -> destCharset byte[] 
+	 * charset String -> charset byte[] 
+	 * 
+	 * 在不知道[源字符串]的编码时，慎用。
+	 * 因为[目标编码]可能不兼容[源字符串]的编码，导致乱码。
+	 * </pre>
+	 * @param str 源字符串
+	 * @param charset 目标字节数组的编码
+	 * @return 目标字节数组
+	 */
+	public static byte[] toBytes(String str, String charset) {
+		byte[] bytes = {};
+		try {
+			bytes = str.getBytes(charset);
+		} catch (Exception e) {
+			log.error("把字符串 [{}] 转换成 [{}] 编码字节数组失败.", str, charset, e);
+		}
+		return bytes;
+	}
+	
+	/**
+	 * <pre>
+	 * 把使用srcCharset编码的srcStr，转换为使用destCharset编码的String
+	 * 
+	 * srcCharset srcStr -> destCharset srcStr
 	 * 
 	 * 在不知道[源字符串]的编码时，慎用。
 	 * 因为[目标编码]可能不兼容[源字符串]的编码，导致乱码。
 	 * </pre>
 	 * @param srcStr 源字符串
-	 * @param destCharset 目标字节数组的编码
-	 * @return 目标字节数组
+	 * @param srcCharset 源字符串编码
+	 * @param destCharset 目标字符串编码
+	 * @return 以destCharset编码的字符串
 	 */
-	public static byte[] toBytes(String srcStr, String destCharset) {
-		byte[] bytes = {};
-		try {
-			bytes = srcStr.getBytes(destCharset);
-		} catch (Exception e) {
-			log.error("把字符串 [{}] 转换成 [{}] 编码字节数组失败.", 
-					srcStr, destCharset, e);
-		}
-		return bytes;
+	public static String tracnscode(String srcStr, 
+			String srcCharset, String destCharset) {
+		byte[] srcByte = toBytes(srcStr, srcCharset);
+		return toStr(srcByte, destCharset);
 	}
 	
 	/**
