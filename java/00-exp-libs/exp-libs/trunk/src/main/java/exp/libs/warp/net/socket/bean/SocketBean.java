@@ -1,6 +1,7 @@
 package exp.libs.warp.net.socket.bean;
 
 import exp.libs.utils.pub.CharsetUtils;
+import exp.libs.utils.pub.ESCUtils;
 import exp.libs.utils.pub.NumUtils;
 import exp.libs.utils.pub.StrUtils;
 import exp.libs.utils.pub.VerifyUtils;
@@ -55,7 +56,7 @@ public class SocketBean {
 	
 	private int overtime;
 	
-	private final static int DEFAULT_OVERTIME = 120000;
+	private final static int DEFAULT_OVERTIME = 60000;
 	
 	private int maxConnectionCount;
 	
@@ -232,6 +233,7 @@ public class SocketBean {
 
 	public void setDelimiter(String delimiter) {
 		if(StrUtils.isNotEmpty(delimiter)) {
+			delimiter = ESCUtils.toJavaESC(delimiter);
 			this.delimiter = delimiter;
 			this.readDelimiter = delimiter;
 			this.writeDelimiter = delimiter;
@@ -244,6 +246,7 @@ public class SocketBean {
 
 	public void setReadDelimiter(String readDelimiter) {
 		if(StrUtils.isNotEmpty(readDelimiter)) {
+			readDelimiter = ESCUtils.toJavaESC(readDelimiter);
 			this.readDelimiter = readDelimiter;
 			
 			if(this.readDelimiter.equals(this.writeDelimiter)) {
@@ -258,6 +261,7 @@ public class SocketBean {
 
 	public void setWriteDelimiter(String writeDelimiter) {
 		if(StrUtils.isNotEmpty(writeDelimiter)) {
+			writeDelimiter = ESCUtils.toJavaESC(writeDelimiter);
 			this.writeDelimiter = writeDelimiter;
 			
 			if(this.readDelimiter.equals(this.writeDelimiter)) {

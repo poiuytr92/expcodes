@@ -202,9 +202,8 @@ public class SocketClient {
 				}
 				
 				if(timeout > 0) {
-					
 					if(System.currentTimeMillis() - bgnTime > timeout) {
-						throw new IOException("Socket服务端超时未返回消息终止符, 自动重连会话.");
+						throw new IOException("Socket服务端超时未返回消息终止符, 自动断开会话.");
 						
 					} else {
 						ThreadUtils.tSleep(100);
