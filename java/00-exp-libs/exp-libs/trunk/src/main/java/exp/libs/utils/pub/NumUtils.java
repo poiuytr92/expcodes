@@ -196,16 +196,60 @@ public class NumUtils {
 		return a > b ? a : b;
 	}
 	
+	public static long max(long... nums) {
+		long max = 0;
+		if(nums != null && nums.length > 0) {
+			max = nums[0];
+			for(int i = 1; i < nums.length; i++) {
+				max = (max < nums[i] ? nums[i] : max);
+			}
+		}
+		return max;
+	}
+	
 	public static int max(int a, int b) {
 		return a > b ? a : b;
+	}
+	
+	public static int max(int... nums) {
+		int max = 0;
+		if(nums != null && nums.length > 0) {
+			max = nums[0];
+			for(int i = 1; i < nums.length; i++) {
+				max = (max < nums[i] ? nums[i] : max);
+			}
+		}
+		return max;
 	}
 	
 	public static long min(long a, long b) {
 		return a < b ? a : b;
 	}
 	
+	public static long min(long... nums) {
+		long min = 0;
+		if(nums != null && nums.length > 0) {
+			min = nums[0];
+			for(int i = 1; i < nums.length; i++) {
+				min = (min > nums[i] ? nums[i] : min);
+			}
+		}
+		return min;
+	}
+	
 	public static int min(int a, int b) {
 		return a < b ? a : b;
+	}
+	
+	public static int min(int... nums) {
+		int min = 0;
+		if(nums != null && nums.length > 0) {
+			min = nums[0];
+			for(int i = 1; i < nums.length; i++) {
+				min = (min > nums[i] ? nums[i] : min);
+			}
+		}
+		return min;
 	}
 	
 	/**
