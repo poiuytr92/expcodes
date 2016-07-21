@@ -1,7 +1,5 @@
 package exp.libs.utils.pub;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 import exp.libs.utils.os.ThreadUtils;
@@ -18,13 +16,14 @@ import exp.libs.utils.os.ThreadUtils;
  */
 public class IDUtils {
 
-	private final static int LIMIT = 128;
+	private final static byte[] LOCK_SECOND_ID = new byte[1];
+	private static volatile int LAST_SECOND_ID = -1;
 	
-	private final static Set<Integer> USED_SECOND = new HashSet<Integer>(LIMIT);
+	private final static byte[] LOCK_MILLIS_ID = new byte[1];
+	private static volatile long LAST_MILLIS_ID = -1L;
 	
-	private final static Set<Long> USED_MILLIS = new HashSet<Long>(LIMIT);
-	
-	private final static Set<Long> USED_TIME = new HashSet<Long>(LIMIT);
+	private final static byte[] LOCK_TIME_ID = new byte[1];
+	private static volatile long LAST_TIME_ID = -1L;
 	
 	protected IDUtils() {}
 	
@@ -42,15 +41,13 @@ public class IDUtils {
 	 */
 	public static int getSecondID() {
 		int id = -1;
-		do {
-			id = (int) (System.currentTimeMillis() / 1000);
-			ThreadUtils.tSleep(500);
-		} while(USED_SECOND.contains(id));
-		
-		if(USED_SECOND.size() >= LIMIT) {
-			USED_SECOND.clear();
+		synchronized (LOCK_SECOND_ID) {
+			do {
+				id = (int) (System.currentTimeMillis() / 1000);
+				ThreadUtils.tSleep(500);
+			} while(LAST_SECOND_ID == id);
+			LAST_SECOND_ID = id;
 		}
-		USED_SECOND.add(id);
 		return id;
 	}
 	
@@ -60,14 +57,12 @@ public class IDUtils {
 	 */
 	public static long getMillisID() {
 		long id = -1;
-		do {
-			id = System.currentTimeMillis();
-		} while(USED_MILLIS.contains(id));
-		
-		if(USED_MILLIS.size() >= LIMIT) {
-			USED_MILLIS.clear();
+		synchronized (LOCK_MILLIS_ID) {
+			do {
+				id = System.currentTimeMillis();
+			} while(LAST_MILLIS_ID == id);
+			LAST_MILLIS_ID = id;
 		}
-		USED_MILLIS.add(id);
 		return id;
 	}
 	
@@ -77,14 +72,12 @@ public class IDUtils {
 	 */
 	public static long getTimeID() {
 		long id = -1;
-		do {
-			id = NumUtils.toLong(TimeUtils.getSysDate("yyyyMMddHHmmssSSS"));
-		} while(USED_TIME.contains(id));
-		
-		if(USED_TIME.size() >= LIMIT) {
-			USED_TIME.clear();
+		synchronized (LOCK_TIME_ID) {
+			do {
+				id = NumUtils.toLong(TimeUtils.getSysDate("yyyyMMddHHmmssSSS"));
+			} while(LAST_TIME_ID == id);
+			LAST_TIME_ID = id;
 		}
-		USED_TIME.add(id);
 		return id;
 	}
 	
