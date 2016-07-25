@@ -10,7 +10,7 @@ import exp.libs.algorithm.graph.adt.Node;
 /**
  * <PRE>
  * 最短路径算法: Floyd算法.
- * 适用范围: 多源最短路问题, 有向图/无向图均可, 无负权环（但可检测负权环）
+ * 适用范围: 全源最短路问题, 有向图/无向图均可, 无负权环（但可检测负权环）
  * 时间复杂度: O(V^3)
  * 空间复杂度: O(V^2)
  * </PRE>
@@ -20,12 +20,10 @@ import exp.libs.algorithm.graph.adt.Node;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class Floyd {
+public class Floyd extends AbstractSPA {
 	
-	private AdjacencyMatrix matrix;
-
 	public Floyd(AdjacencyMatrix matrix) {
-		this.matrix = matrix;
+		super(matrix);
 	}
 	
 	public void exec() {
@@ -33,7 +31,7 @@ public class Floyd {
 			return;
 		}
 		
-		int n = matrix.getSize();
+		int n = matrix.getNodeNum();
 		for(int k = 0; k < n; k++) {
 			for(int s = 0; s < n; s++) {	// FIXME: 无向图可以减半迭代
 				for(int e = 0; e < n; e++) {
@@ -42,7 +40,7 @@ public class Floyd {
 						Double wSK = matrix.getWeight(s, k);
 						Double wKE = matrix.getWeight(k, e);
 						
-						if(compare(wSE, add(wSK, wKE)) == 1) {
+						if(compare(wSE, add(wSK, wKE)) == GT) {
 							matrix.setWeight(s, e, add(wSK, wKE));
 						}
 					}
@@ -51,37 +49,8 @@ public class Floyd {
 		}
 	}
 	
-	private int compare(Double a, Double b) {
-		if(a == null && b != null) {
-			return 1;
-			
-		} else if(a != null && b == null) {
-			return -1;
-			
-		} else if(a == null && b == null) {
-			return 0;
-			
-		} else {
-			double diff = a - b;
-			return (diff > 0 ? 1 : (diff < 0 ? -1 : 0));
-		}
-	}
-	
-	private Double add(Double a, Double b) {
-		if(a == null || b == null) {
-			return null;
-			
-		} else {
-			return (a + b);
-		}
-	}
-	
-	public Double getShortestPath(Node src, Node end) {
+	protected Double getPathWeight(Node src, Node end) {
 		return matrix.getWeight(src.getId(), end.getId());
-	}
-	
-	public void print() {
-		matrix.print();
 	}
 	
 	public static void main(String[] args) {
@@ -110,7 +79,7 @@ public class Floyd {
 		edges.add(e14);
 		edges.add(e34);
 		
-		AdjacencyMatrix m = new AdjacencyMatrix(edges, true);
+		AdjacencyMatrix m = new AdjacencyMatrix(edges, true);	// 可缓存
 		Floyd floyd = new Floyd(m);
 		floyd.print();
 		floyd.exec();

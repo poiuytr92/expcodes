@@ -1,9 +1,10 @@
 package exp.libs.algorithm.graph.adt;
 
 import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * <PRE>
@@ -18,10 +19,10 @@ import java.util.Map;
 public class AdjacencyMatrix {
 
 	/** 节点索引 */
-	private Map<Integer, Node> nodes;
+	private int nodeId;
 	
-	/** 边集 */
-	private List<Edge> edges;
+	/** 相关节点表 */
+	private Map<Node, Set<Node>> nodes;
 	
 	/**
 	 * 邻接矩阵.
@@ -41,17 +42,19 @@ public class AdjacencyMatrix {
 	 * @param undirected 是否为无向图
 	 */
 	public AdjacencyMatrix(List<Edge> edges, boolean undirected) {
-		this.nodes = new HashMap<Integer, Node>();
-		this.edges = (edges != null ? edges : new LinkedList<Edge>());
+		this.nodes = new HashMap<Node, Set<Node>>();
 		this.undirected = undirected;
 		
-		generateMatrix();
+		generateMatrix(edges);
 	}
 	
 	/**
 	 * 生成邻接矩阵
 	 */
-	private void generateMatrix() {
+	private void generateMatrix(List<Edge> edges) {
+		if(edges == null) {
+			return;
+		}
 		
 		// 构造节点索引
 		for(Edge edge : edges) {
@@ -61,8 +64,18 @@ public class AdjacencyMatrix {
 				continue;
 			}
 			
-			nodes.put(src.getId(), src);
-			nodes.put(end.getId(), end);
+			if(src.getId() == null) {
+				src.setId(nodeId++);
+			}
+			
+			if(end.getId() == null) {
+				end.setId(nodeId++);
+			}
+			
+			addRelations(src, end);
+			if(undirected) {
+				addRelations(end, src);
+			}
 		}
 		
 		// 生成邻接矩阵
@@ -78,27 +91,63 @@ public class AdjacencyMatrix {
 			}
 		}
 	}
+	
+	private void addRelations(Node node, Node relateNode) {
+		Set<Node> relations = nodes.get(node);
+		if(relations == null) {
+			relations = new HashSet<Node>();
+		}
+		
+		relations.add(relateNode);
+		nodes.put(node, relations);
+	}
 
-	public int getSize() {
+	public int getNodeNum() {
 		return size;
 	}
 	
 	public Double getWeight(int srcId, int endId) {
-		Double w = null;
-		if(matrix != null && srcId >= 0 && srcId < size && 
-				endId >= 0 && endId < size) {
-			w = matrix[srcId][endId];
+		Double weight = null;
+		if(inRange(srcId, endId)) {
+			weight = matrix[srcId][endId];
 		}
-		return w;
+		return weight;
 	}
 	
-	public void setWeight(int srcId, int endId, double weight) {
-		if(matrix != null && srcId >= 0 && srcId < size && 
-				endId >= 0 && endId < size) {
+	public void setWeight(int srcId, int endId, Double weight) {
+		if(inRange(srcId, endId)) {
 			matrix[srcId][endId] = weight;
 		}
 	}
 	
+	private boolean inRange(int srcId, int endId) {
+		return (matrix != null && 
+				srcId >= 0 && srcId < size && 
+				endId >= 0 && endId < size);
+	}
+	
+	/**
+	 * 是否为孤立节点
+	 * @param node
+	 * @return
+	 */
+	public boolean isolated(Node node) {
+		boolean isolated = true;
+		if(node != null) {
+			isolated = (nodes.get(node.getName()) == null);
+		}
+		return isolated;
+	}
+	
+	public Set<Node> getRelations(Node node) {
+		return nodes.get(node);
+	}
+	
+	public boolean isUndirected() {
+		return undirected;
+	}
+
+	// FIXME
 	public void print() {
 		if(matrix == null) {
 			return;
