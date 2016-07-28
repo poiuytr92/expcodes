@@ -2,6 +2,7 @@ package exp.libs.algorithm.graph.spa;
 
 import exp.libs.algorithm.graph.adt.AdjacencyMatrix;
 
+
 abstract class AbstractSPA {
 
 	protected final static int GT = 1;
