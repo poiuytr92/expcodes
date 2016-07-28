@@ -35,6 +35,6 @@ public class Test {
 		}
 		DBUtils.close(conn);
 		
-		conf.clear();
+		conf.destroy();
 	}
 }

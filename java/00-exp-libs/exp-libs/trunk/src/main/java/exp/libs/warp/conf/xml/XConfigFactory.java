@@ -41,7 +41,7 @@ final public class XConfigFactory {
 			conf = new XConfig(name);
 			
 		} else {
-			conf.clear();
+			conf.destroy();
 			conf = new XConfig(name);
 		}
 		configs.put(name, conf);
@@ -74,7 +74,7 @@ final public class XConfigFactory {
 	private void _removeConfig(final String name) {
 		XConfig conf = configs.remove(name);
 		if(conf != null) {
-			conf.clear();
+			conf.destroy();
 		}
 	}
 	
@@ -86,7 +86,7 @@ final public class XConfigFactory {
 		Iterator<XConfig> its = configs.values().iterator();
 		while(its.hasNext()) {
 			XConfig conf = its.next();
-			conf.clear();
+			conf.destroy();
 		}
 		configs.clear();
 	}

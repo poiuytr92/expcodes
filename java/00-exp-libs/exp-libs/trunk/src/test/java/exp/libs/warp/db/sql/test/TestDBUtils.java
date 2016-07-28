@@ -28,7 +28,7 @@ public class TestDBUtils {
 
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		conf.clear();
+		conf.destroy();
 	}
 
 	@Ignore

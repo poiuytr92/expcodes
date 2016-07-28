@@ -100,7 +100,9 @@ public class XConfig implements Runnable, IConfig {
 		isReflash = false;
 		isRun = false;
 		ThreadUtils.tNotify(tLock);	// 退出阻塞态, 通过掉落陷阱终止线程
-		log.info("配置 [{}] 自动刷新被终止.", configName);
+		
+		config.clear();
+		log.info("配置 [{}] 内容已销毁.", configName);
 	}
 	
 	@Override
@@ -184,11 +186,6 @@ public class XConfig implements Runnable, IConfig {
 	@Override
 	public boolean loadConfFileInJar(String confFilePath) {
 		return config.loadConfFileInJar(confFilePath);
-	}
-
-	@Override
-	public void clear() {
-		config.clear();
 	}
 
 	@Override

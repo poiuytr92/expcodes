@@ -27,8 +27,6 @@ interface IConfig {
 	
 	public boolean loadConfFileInJar(String confFilePath);
 	
-	public void clear();
-
 	public Element getElement(String eNameOrPath);
 	
 	public Element getElement(String eNameOrPath, String eId);

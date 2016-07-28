@@ -239,7 +239,6 @@ class _Config implements IConfig {
 		return confFiles;
 	}
 	
-	@Override
 	public void clear() {
 		namePath.clear();
 		pathIndex.clear();

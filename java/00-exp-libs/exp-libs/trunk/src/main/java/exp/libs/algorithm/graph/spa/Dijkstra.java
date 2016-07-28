@@ -27,7 +27,7 @@ public class Dijkstra extends AbstractSPA {
 		super(matrix);
 	}
 
-	protected List<Node> exec(Node src) {
+	public List<Node> exec(Node src) {
 		List<Node> nodes = new LinkedList<Node>();
 		if(matrix == null) {
 			return nodes;
