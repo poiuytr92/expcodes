@@ -1,10 +1,7 @@
 package exp.libs.algorithm.graph.adt;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * <PRE>
@@ -18,17 +15,8 @@ import java.util.Set;
  */
 public class AdjacencyMatrix {
 
-	/** 节点索引序列 */
-	private int nodeId;
-	
-	/** 节点名字集合（保证名字唯一） */
-	private Set<String> nodeNames;
-	
-	/** 相关节点表 */ // FIXME
-//	private Map<Node, Set<Node>> nodes;
-	
-	/** 节点索引表 */
-	private Map<Integer, Node> nodes;
+	/** 节点工厂：维护邻接矩阵的节点集 */
+	private NodeFactory nodeFactory;
 	
 	/**
 	 * 邻接矩阵.
@@ -48,9 +36,7 @@ public class AdjacencyMatrix {
 	 * @param undirected 是否为无向图
 	 */
 	public AdjacencyMatrix(List<Edge> edges, boolean undirected) {
-		this.nodeId = 0;
-		this.nodeNames = new HashSet<String>();
-		this.nodes = new HashMap<Integer, Node>();
+		this.nodeFactory = new NodeFactory();
 		this.undirected = undirected;
 		
 		generateMatrix(edges);
@@ -65,14 +51,22 @@ public class AdjacencyMatrix {
 		}
 		
 		// 构造节点索引
-		for(Edge edge : edges) {
-			setNodeId(edge.getSrc());
-			setNodeId(edge.getEnd());
+		Iterator<Edge> edgeIts = edges.iterator();
+		while(edgeIts.hasNext()) {
+			Edge edge = edgeIts.next();
+			Node src = edge.getSrc();
+			Node end = edge.getEnd();
+			if(src == null || end == null) {
+				edgeIts.remove();
+				continue;
+			}
+			
+			edge.setSrc(nodeFactory.add(src));
+			edge.setEnd(nodeFactory.add(end));
 		}
-		nodeNames.clear();
 		
 		// 生成邻接矩阵
-		this.size = nodes.size();
+		this.size = nodeFactory.size();
 		this.matrix = new Double[size][size];
 		for(Edge edge : edges) {
 			Node src = edge.getSrc();
@@ -85,29 +79,14 @@ public class AdjacencyMatrix {
 		}
 	}
 	
-	private void setNodeId(Node node) {
-		if(node != null && (node.getId() == null || node.getId() < 0) && 
-				!nodeNames.contains(node.getName())) {
-			node.setId(nodeId++);
-			nodes.put(node.getId(), node);
-			nodeNames.add(node.getName());
-		}
+	public Node findNode(String nodeName) {
+		return nodeFactory.find(nodeName);
 	}
 	
 	public Node findNode(int nodeId) {
-		return nodes.get(nodeId);
+		return nodeFactory.find(nodeId);
 	}
 	
-//	private void addRelations(Node node, Node relateNode) {
-//		Set<Node> relations = nodes.get(node);
-//		if(relations == null) {
-//			relations = new HashSet<Node>();
-//		}
-//		
-//		relations.add(relateNode);
-//		nodes.put(node, relations);
-//	}
-
 	public int getNodeNum() {
 		return size;
 	}
@@ -140,14 +119,10 @@ public class AdjacencyMatrix {
 	public boolean isolated(Node node) {
 		boolean isolated = true;
 		if(node != null) {
-			isolated = (nodes.get(node.getName()) == null);
+			isolated = !nodeFactory.contains(node.getId());
 		}
 		return isolated;
 	}
-	
-//	public Set<Node> getRelations(Node node) {
-//		return nodes.get(node);
-//	}
 	
 	public boolean isUndirected() {
 		return undirected;

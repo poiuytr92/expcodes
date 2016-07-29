@@ -1,5 +1,7 @@
 package exp.libs.algorithm.graph.adt;
 
+import exp.libs.utils.pub.StrUtils;
+
 public class Node {
 
 	private Integer id;
@@ -21,6 +23,11 @@ public class Node {
 	
 	public String getName() {
 		return name;
+	}
+	
+	@Override
+	public String toString() {
+		return StrUtils.concat(id, ":", name);
 	}
 
 }

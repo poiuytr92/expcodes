@@ -1,5 +1,6 @@
 package exp.libs.algorithm.graph.spa;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ public class Dijkstra extends AbstractSPA {
 	/** 源节点 */
 	private Node src;
 	
-	/** 源节点到各个节点的最短路 */
+	/** 源节点到各个节点的最短路所经过的中转节点 */
 	private Object[] paths;
 	
 	/** 源节点到各个节点的最短路权重和 */
@@ -35,14 +36,23 @@ public class Dijkstra extends AbstractSPA {
 	public Dijkstra(AdjacencyMatrix matrix) {
 		super(matrix);
 	}
+	
+	public void exec(String srcNodeName) {
+		exec(new Node(srcNodeName));
+	}
 
-	public void exec(Node src) {
-		if(matrix == null) {
+	public void exec(Node src) {	// FIXME: 给名字
+		if(matrix == null || src == null) {
 			return;
 		}
-		this.src = src;
-		int n = matrix.getNodeNum();
 		
+		src = matrix.findNode(src.getName());
+		this.src = src;
+		if(src == null) {
+			return;
+		}
+		
+		int n = matrix.getNodeNum();
 		boolean[] visiteds = new boolean[n];
 		visiteds[src.getId()] = true;
 		
@@ -80,37 +90,65 @@ public class Dijkstra extends AbstractSPA {
 	            	dist[j] = relax;
 	            	
 	            	if(paths[j] == null) {
-	            		paths[j] = new LinkedList<Integer>();
+	            		paths[j] = new ArrayList<Integer>();
 	            	}
-	            	((LinkedList<Integer>) paths[j]).add(id);
+	            	((ArrayList<Integer>) paths[j]).add(id);
 	            }
 	        } 
 		}
 	}
 	
-	public List<Node> getShortestPath(Node end) {
+	public List<Node> getShortestPath(String endNodeName) {
+		return getShortestPath(new Node(endNodeName));
+	}
+	
+	public List<Node> getShortestPath(Node end) {	// FIXME: 给名字
 		List<Node> nodes = new LinkedList<Node>();
 		if(src == null || end == null || paths == null || matrix == null) {
 			return nodes;
 		}
 		
-		nodes.add(src);
-		Object oPath = paths[end.getId()];	// FIXME: end.getId >= 0
-		if(oPath != null) {
-			LinkedList<Integer> path = (LinkedList<Integer>) oPath;
-			for(Integer id : path) {
-				nodes.add(matrix.findNode(id));
-			}
+		end = matrix.findNode(end.getName());
+		if(end == null) {
+			return nodes;
 		}
-		nodes.add(end);
+		
+		// 回溯最短路径
+		nodes.add(0, end);
+		int endId = end.getId();
+		do {
+			Object oPath = paths[endId];
+			if(oPath != null) {
+				ArrayList<Integer> path = (ArrayList<Integer>) oPath;
+				for(int i = path.size() - 1; i >= 0; i--) {	// FIXME
+					int id = path.get(i);
+					nodes.add(0, matrix.findNode(id));
+					endId = id;
+				}
+			} else {
+				break;
+			}
+		} while(true);
+		nodes.add(0, src);
 		return nodes;
+	}
+	
+	public Double getShortestWeight(String endNodeName) {
+		return getShortestWeight(new Node(endNodeName));
 	}
 	
 	public Double getShortestWeight(Node end) {
 		Double weight = null;
-		if(dist != null && end != null && end.getId() >= 0) {
-			weight = dist[end.getId()];
+		if(end == null || dist == null || matrix == null) {
+			return weight;
 		}
+		
+		end = matrix.findNode(end.getName());
+		if(end == null) {
+			return weight;
+		}
+		
+		weight = dist[end.getId()];
 		return weight;
 	}
 	
@@ -129,6 +167,7 @@ public class Dijkstra extends AbstractSPA {
 		Edge e24 = new Edge(n2, n4, 1D);
 		Edge e14 = new Edge(n1, n4, 3D);
 		Edge e34 = new Edge(n3, n4, 5D);
+		Edge e44 = new Edge(n4, n4, 2D);
 		
 		List<Edge> edges = new LinkedList<Edge>();
 		edges.add(e01);
@@ -139,6 +178,7 @@ public class Dijkstra extends AbstractSPA {
 		edges.add(e24);
 		edges.add(e14);
 		edges.add(e34);
+		edges.add(e44);
 		
 		AdjacencyMatrix m = new AdjacencyMatrix(edges, true);	// FIXME:可缓存?
 		Dijkstra dijkstra = new Dijkstra(m);

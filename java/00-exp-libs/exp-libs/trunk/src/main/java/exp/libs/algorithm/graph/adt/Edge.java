@@ -9,6 +9,12 @@ public class Edge {
 	/** 权重: null表示不可达 */
 	private Double weight;
 	
+	public Edge(String srcNodeName, String endNodeName, Double weight) {
+		this.src = new Node(srcNodeName);
+		this.end = new Node(endNodeName);
+		this.weight = weight;
+	}
+	
 	/**
 	 * 
 	 * @param src
@@ -24,9 +30,17 @@ public class Edge {
 	public Node getSrc() {
 		return src;
 	}
+	
+	public void setSrc(Node src) {
+		this.src = src;
+	}
 
 	public Node getEnd() {
 		return end;
+	}
+	
+	public void setEnd(Node end) {
+		this.end = end;
 	}
 
 	public Double getWeight() {
