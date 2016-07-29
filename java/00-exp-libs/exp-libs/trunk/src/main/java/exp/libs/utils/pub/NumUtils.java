@@ -252,14 +252,19 @@ public class NumUtils {
 		return min;
 	}
 	
+	public static List<String> compress(long[] ascSeries) {
+		return compress(ascSeries, '~');
+	}
+	
 	/**
 	 * 递增序列压缩.
 	 * 	例如把 { 1, 2, 3, 5, 6, 8, 10 }
 	 *  压缩为 [1~3, 5~6, 8, 10]
 	 * @param ascSeries 递增序列
+	 * @param endash 连字符
 	 * @return
 	 */
-	public static List<String> compress(long[] ascSeries) {
+	public static List<String> compress(long[] ascSeries, char endash) {
 		List<String> cmpNums = new LinkedList<String>();
 		if(ascSeries == null || ascSeries.length <= 0) {
 			return cmpNums;
