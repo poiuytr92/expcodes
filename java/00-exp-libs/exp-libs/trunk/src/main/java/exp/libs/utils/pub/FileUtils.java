@@ -39,6 +39,21 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		File file = new File(fileName);
 		return file.exists();
 	}
+	
+	public static boolean isFile(String filePath) {
+		File file = new File(filePath);
+		return file.isFile();
+	}
+	
+	public static boolean isDirectory(String filePath) {
+		File file = new File(filePath);
+		return file.isDirectory();
+	}
+	
+	public static String getName(String filePath) {
+		File file = new File(filePath);
+		return file.getName();
+	}
 
 	public static void copyFile(String srcPath, String destPath) {
 		File srcFile = new File(srcPath);

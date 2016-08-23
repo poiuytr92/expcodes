@@ -558,6 +558,8 @@ public class CompressUtils {
 		
 		File tarFile = new File(tarPath);
 		File unTarDir = new File(destPath);
+		unTarDir.mkdirs();
+		
 		TarArchiveInputStream tis = null;
 		try {
 			tis = new TarArchiveInputStream(new FileInputStream(tarFile));
@@ -716,10 +718,16 @@ public class CompressUtils {
 	}
 
 	private static String getDestPath(String srcPath, String destPath) {
-		String targetPath = (StrUtils.isEmpty(destPath) ? srcPath : destPath);
-		int pos = targetPath.lastIndexOf('.');
-		targetPath = (pos > 0 ? targetPath.substring(0, pos) : targetPath);
-		FileUtils.createDir(targetPath);
+		String targetPath = "";
+		if(StrUtils.isNotEmpty(srcPath) && StrUtils.isNotEmpty(destPath)) {
+			targetPath = destPath;
+			if(FileUtils.isDirectory(destPath)) {
+				String name = FileUtils.getName(srcPath);
+				int pos = name.lastIndexOf('.');
+				name = (pos > 0 ? name.substring(0, pos) : name);
+				targetPath = StrUtils.concat(targetPath, File.separator, name);
+			}
+		}
 		return targetPath;
 	}
 	

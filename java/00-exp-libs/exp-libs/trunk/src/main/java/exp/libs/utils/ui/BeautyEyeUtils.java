@@ -45,6 +45,15 @@ public final class BeautyEyeUtils {
 	}
 	
 	/**
+	 * 信息弹窗
+	 * @param msg 普通消息
+	 */
+	public static void info(String msg) {
+		JOptionPane.showMessageDialog(
+			    null, msg, "Info", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
 	 * 警告弹窗
 	 * @param msg 警告消息
 	 */
