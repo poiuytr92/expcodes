@@ -584,8 +584,9 @@ public class DBUtils {
 					}
 				}
 			}
-			rst = pstm.execute();
+			pstm.execute();
 			pstm.close();
+			rst = true;
 			
 		} catch (Exception e) {
 			log.error("执行sql失败: [{}].", preSql, e);
