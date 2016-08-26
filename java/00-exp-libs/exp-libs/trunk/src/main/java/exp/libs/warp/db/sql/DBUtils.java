@@ -431,7 +431,7 @@ public class DBUtils {
 	 * @param sql
 	 * @return
 	 */
-	public static Object queryFirstCell(Connection conn, String sql) {
+	public static Object queryFirstCellObj(Connection conn, String sql) {
 		Object cell = null;
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
@@ -452,13 +452,34 @@ public class DBUtils {
 		return cell;
 	}
 	
+	public static String queryFirstCellStr(Connection conn, String sql) {
+		String cell = "";
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+			if (rs.next()) {
+				ResultSetMetaData rsmd = rs.getMetaData();
+				if(rsmd.getColumnCount() > 0) {
+					cell = rs.getString(1);
+				}
+			}
+			
+			rs.close();
+			pstm.close();
+			
+		} catch (Throwable e) {
+			log.error("执行sql失败: [{}].", sql, e);
+		}
+		return cell;
+	}
+	
 	/**
 	 * 查询第一行
 	 * @param conn
 	 * @param sql
 	 * @return Map<String, Object>类型的kv表,不会返回null（key为表头）
 	 */
-	public static Map<String, Object> queryFirstRow(Connection conn, String sql) {
+	public static Map<String, Object> queryFirstRowObj(Connection conn, String sql) {
 		Map<String, Object> row = new HashMap<String, Object>();
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
@@ -480,13 +501,35 @@ public class DBUtils {
 		return row;
 	}
 	
+	public static Map<String, String> queryFirstRowStr(Connection conn, String sql) {
+		Map<String, String> row = new HashMap<String, String>();
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+			if (rs.next()) {
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int count = rs.getMetaData().getColumnCount();
+				for (int i = 1; i <= count; i++) {
+					row.put(rsmd.getColumnLabel(i), rs.getString(i));
+				}
+			}
+			
+			rs.close();
+			pstm.close();
+			
+		} catch (Throwable e) {
+			log.error("执行sql失败: [{}].", sql, e);
+		}
+		return row;
+	}
+	
 	/**
 	 * 从数据库查询第col列的所有值.
 	 * @param sql 查询sql
 	 * @param col 列号
 	 * @return List<Object>列表,不会返回null
 	 */
-	public static List<Object> queryColumn(Connection conn, String sql, int col) {
+	public static List<Object> queryColumnObj(Connection conn, String sql, int col) {
 		List<Object> vals = new LinkedList<Object>();
 		col = (col <= 0 ? 1 : col);
 		
@@ -500,6 +543,30 @@ public class DBUtils {
 			col = (col >= count ? count : col);
 			while (rs.next()) {
 				vals.add(rs.getObject(col));
+			}
+			
+			rs.close();
+			pstm.close();
+		} catch (Exception e) {
+			log.error("执行sql失败: [{}].", sql, e);
+		}
+		return vals;
+	}
+	
+	public static List<String> queryColumnStr(Connection conn, String sql, int col) {
+		List<String> vals = new LinkedList<String>();
+		col = (col <= 0 ? 1 : col);
+		
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		try {
+			pstm = conn.prepareStatement(sql);
+			rs = pstm.executeQuery();
+
+			int count = rs.getMetaData().getColumnCount();
+			col = (col >= count ? count : col);
+			while (rs.next()) {
+				vals.add(rs.getString(col));
 			}
 			
 			rs.close();
