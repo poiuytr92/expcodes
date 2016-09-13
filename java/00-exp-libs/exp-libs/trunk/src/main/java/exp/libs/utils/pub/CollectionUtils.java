@@ -1,8 +1,11 @@
 package exp.libs.utils.pub;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -249,4 +252,42 @@ public class CollectionUtils {
 		return isConsistency;
 	}
 
+	public static <E> List<E> copy(List<E> list) {
+		return copyLink(list);
+	}
+	
+	public static <E> List<E> copyLink(List<E> list) {
+		List<E> copy = new LinkedList<E>();
+		if(list != null) {
+			Collections.copy(copy, list);
+		}
+		return copy;
+	}
+	
+	public static <E> List<E> copyArray(List<E> list) {
+		List<E> copy = new ArrayList<E>(list == null ? 1 : list.size());
+		if(list != null) {
+			Collections.copy(copy, list);
+		}
+		return copy;
+	}
+	
+	public static <E> List<E> reverse(List<E> list) {
+		List<E> reverse = copy(list);
+		Collections.reverse(reverse);
+		return reverse;
+	}
+	
+	public static <E> List<E> reverseLink(List<E> list) {
+		List<E> reverse = copyLink(list);
+		Collections.reverse(reverse);
+		return reverse;
+	}
+	
+	public static <E> List<E> reverseArray(List<E> list) {
+		List<E> reverse = copyArray(list);
+		Collections.reverse(reverse);
+		return reverse;
+	}
+	
 }
