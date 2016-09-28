@@ -121,6 +121,10 @@ public class StrUtils {
 				}
 				sb.append(str).append(separator);
 			}
+			
+			if(sb.length() > separator.length()) {
+				sb.setLength(sb.length() - separator.length());
+			}
 		}
 		return sb.toString();
 	}
