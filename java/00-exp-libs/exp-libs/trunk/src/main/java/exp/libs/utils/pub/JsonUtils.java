@@ -1,7 +1,12 @@
 package exp.libs.utils.pub;
 
+import java.util.List;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -15,28 +20,108 @@ import net.sf.json.JSONObject;
  * @since     jdk版本：jdk1.6
  */
 public class JsonUtils {
+
+	private final static Logger log = LoggerFactory.getLogger(JsonUtils.class);
 	
 	/** 私有化构造函数 */
 	protected JsonUtils() {}
 	
-	public static JSONArray getJSONArray(JSONObject jsonObj, String arrayName) {
-		JSONArray array = new JSONArray();
+	public static String getStr(JSONObject json, String key) {
+		String val = "";
 		try {
-			array = jsonObj.getJSONArray(arrayName);
-		} catch(Exception e) {
-			// 当不存在array节点时会抛出异常
+			val = json.getString(key);
+		} catch(Throwable e) {
+			log.error("从JSON中提取 string 类型值 [{}] 失败.", key, e);
+		}
+		return val;
+	}
+	
+	public static boolean getBool(JSONObject json, String key, boolean defavlt) {
+		boolean val = defavlt;
+		try {
+			val = BoolUtils.toBool(json.getString(key), defavlt);
+		} catch(Throwable e) {
+			log.error("从JSON中提取 bool 类型值 [{}] 失败.", key, e);
+		}
+		return val;
+	}
+	
+	public static int getInt(JSONObject json, String key, int defavlt) {
+		int val = defavlt;
+		try {
+			val = NumUtils.toInt(json.getString(key), defavlt);
+		} catch(Throwable e) {
+			log.error("从JSON中提取 int 类型值 [{}] 失败.", key, e);
+		}
+		return val;
+	}
+	
+	public static long getLong(JSONObject json, String key, long defavlt) {
+		long val = defavlt;
+		try {
+			val = NumUtils.toLong(json.getString(key), defavlt);
+		} catch(Throwable e) {
+			log.error("从JSON中提取 long 类型值 [{}] 失败.", key, e);
+		}
+		return val;
+	}
+	
+	public static JSONObject getObject(JSONObject json, String key) {
+		JSONObject val = null;
+		try {
+			val = json.getJSONObject(key);
+		} catch(Throwable e) {
+			val = new JSONObject();
+			log.error("从JSON中提取 object 对象 [{}] 失败.", key, e);
+		}
+		return val;
+	}
+	
+	public static JSONArray getArray(JSONObject json, String key) {
+		JSONArray val = null;
+		try {
+			val = json.getJSONArray(key);
+		} catch(Throwable e) {
+			val = new JSONArray();
+			log.error("从JSON中提取 array 对象 [{}] 失败.", key, e);
+		}
+		return val;
+	}
+	
+	public static String[] toStrArray(JSONArray array) {
+		if(array == null) {
+			return new String[0];
+		}
+		
+		String[] sArray = new String[array.size()];
+		for(int i = 0; i < sArray.length; i++) {
+			sArray[i] = array.getString(i);
+		}
+		return sArray;
+	}
+	
+	public static String[] getStrArray(JSONObject json, String key) {
+		return toStrArray(getArray(json, key));
+	}
+	
+	public static JSONArray toJsonArray(List<String> list) {
+		JSONArray array = new JSONArray();
+		if(list != null) {
+			for(String s : list) {
+				array.add(s);
+			}
 		}
 		return array;
 	}
 	
-	public static String getString(JSONObject jsonObj, String name) {
-		String str = "";
-		try {
-			str = jsonObj.getString(name);
-		} catch(Exception e) {
-			// 当不存在name节点时会抛出异常
+	public static JSONArray toJsonArray(String[] array) {
+		JSONArray jsonArray = new JSONArray();
+		if(array != null) {
+			for(String s : array) {
+				jsonArray.add(s);
+			}
 		}
-		return str;
+		return jsonArray;
 	}
 	
 }

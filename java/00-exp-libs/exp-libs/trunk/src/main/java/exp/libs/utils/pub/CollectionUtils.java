@@ -259,7 +259,7 @@ public class CollectionUtils {
 	public static <E> List<E> copyLink(List<E> list) {
 		List<E> copy = new LinkedList<E>();
 		if(list != null) {
-			Collections.copy(copy, list);
+			copy.addAll(list);
 		}
 		return copy;
 	}
@@ -267,7 +267,7 @@ public class CollectionUtils {
 	public static <E> List<E> copyArray(List<E> list) {
 		List<E> copy = new ArrayList<E>(list == null ? 1 : list.size());
 		if(list != null) {
-			Collections.copy(copy, list);
+			copy.addAll(list);
 		}
 		return copy;
 	}
