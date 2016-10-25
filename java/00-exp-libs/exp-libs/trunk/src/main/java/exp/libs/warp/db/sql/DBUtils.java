@@ -795,12 +795,17 @@ public class DBUtils {
 					cs.executeQuery();
 					
 					//取最后一个结果集的首行首列值
-					do {
-						rs = cs.getResultSet();
-						if(rs != null && rs.next()) {
-							result = rs.getString(1);
-						}
-					} while(cs.getMoreResults() == true);
+					try {
+						do {
+							rs = cs.getResultSet();
+							if(rs != null && rs.next()) {
+								result = rs.getString(1);
+							}
+						} while(cs.getMoreResults() == true);
+						
+					} catch(NullPointerException e) {
+						result = "";	// 存储过程无返回值
+					}
 					
 				} catch (SQLException e) {
 					log.error("execute procedure [{}] fail.", proSql, e);

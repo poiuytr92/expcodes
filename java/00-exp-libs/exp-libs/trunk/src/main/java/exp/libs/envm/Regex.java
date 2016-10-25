@@ -96,6 +96,8 @@ public enum Regex {
 		
 	SOCKET(StrUtils.concat("(", IPV4, ":", PORT, ")"), "套接字"), 
 	
+	MD5(StrUtils.concat("(([0-9|A-F|a-f]{16}){1,2})"), "MD5码"), 
+	
 	;
 	
 	public String VAL;

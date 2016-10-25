@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
+import exp.libs.envm.Regex;
 
 /**
  * <PRE>
@@ -45,7 +46,7 @@ public class CryptoUtils {
 	public static final String ALGORITHM_MD5 = "MD5";
 	
 	/** 默认密钥 */
-	public final static String DEFAULT_KEY = "EXP-LIBS";
+	public final static String DEFAULT_KEY = "cattsoft";
 	
 	/** 默认加密编码 */
 	public final static String DEFAULT_ENCODE = Charset.UTF8;
@@ -119,10 +120,11 @@ public class CryptoUtils {
 	 * @return 16位MD5
 	 */
 	public static String to16MD5(String _32MD5) {
-		String _16MD5 = "";
-		if(_32MD5 != null && _32MD5.length() == 32) {
-			_16MD5 = _32MD5.substring(8, 24);
+		_32MD5 = (_32MD5 == null ? "" : _32MD5.trim());
+		if(_32MD5.length() != 32 || !_32MD5.matches(Regex.MD5.VAL)) {
+			_32MD5 = toMD5(_32MD5);
 		}
+		String _16MD5 = _32MD5.substring(8, 24);
 		return _16MD5;
 	}
 	

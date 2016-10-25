@@ -75,7 +75,7 @@ public class XConfig implements Runnable, IConfig {
 					isInit = true;
 					isRun = true;
 					new Thread(this).start();
-					ThreadUtils.tSleep(1000);	// 初次启动, 用时间差保证先让线程陷入第一次无限阻塞状态
+					ThreadUtils.tSleep(2000);	// 初次启动, 用时间差保证先让线程陷入第一次无限阻塞状态
 				}
 			}
 		}

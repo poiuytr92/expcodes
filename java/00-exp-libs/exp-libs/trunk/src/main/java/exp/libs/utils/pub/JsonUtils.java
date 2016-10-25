@@ -1,5 +1,7 @@
 package exp.libs.utils.pub;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 import net.sf.json.JSONArray;
@@ -100,11 +102,23 @@ public class JsonUtils {
 		return sArray;
 	}
 	
+	public static List<String> toStrList(JSONArray array) {
+		if(array == null) {
+			return new LinkedList<String>();
+		}
+		
+		List<String> sList = new LinkedList<String>();
+		for(int i = 0; i < array.size(); i++) {
+			sList.add(array.getString(i));
+		}
+		return sList;
+	}
+	
 	public static String[] getStrArray(JSONObject json, String key) {
 		return toStrArray(getArray(json, key));
 	}
 	
-	public static JSONArray toJsonArray(List<String> list) {
+	public static JSONArray toJsonArray(Collection<String> list) {
 		JSONArray array = new JSONArray();
 		if(list != null) {
 			for(String s : list) {
