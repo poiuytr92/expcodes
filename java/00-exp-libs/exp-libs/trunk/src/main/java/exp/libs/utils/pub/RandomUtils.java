@@ -12,7 +12,7 @@ import java.util.Random;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class RandUtils {
+public class RandomUtils {
 	
 	/** 随机对象 */
 	private final static Random random = new Random();
@@ -144,7 +144,7 @@ public class RandUtils {
 	private final static int COMPOUND_SURNAME_2WORD = 100;
 	
 	/** 私有化构造函数, 避免误用. */
-	private RandUtils() {}
+	private RandomUtils() {}
 	
 	public static int randomInt() {
 		return random.nextInt();
