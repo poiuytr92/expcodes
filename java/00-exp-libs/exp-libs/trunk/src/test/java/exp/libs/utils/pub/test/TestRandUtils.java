@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exp.libs.utils.pub.RandUtils;
+import exp.libs.utils.pub.RandomUtils;
 
 public class TestRandUtils {
 
@@ -71,7 +71,7 @@ public class TestRandUtils {
 	@Test
 	public void testRandomChineseName() {
 		for(int i = 0; i < 100; i++) {
-			String[] name = RandUtils.randomChineseName();
+			String[] name = RandomUtils.randomChineseName();
 			System.out.println(name[0]);
 			System.out.println(name[1]);
 		}
