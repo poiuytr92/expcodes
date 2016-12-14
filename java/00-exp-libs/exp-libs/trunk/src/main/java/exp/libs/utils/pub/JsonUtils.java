@@ -28,12 +28,36 @@ public class JsonUtils {
 	/** 私有化构造函数 */
 	protected JsonUtils() {}
 	
+	public static boolean isVaild(String json) {
+		boolean isVaild = true;
+		try {
+			JSONObject.fromObject(json);
+		} catch(Throwable e) {
+			isVaild = false;
+		}
+		return isVaild;
+	}
+	
+	public static boolean isInvaild(String json) {
+		return !isVaild(json);
+	}
+	
 	public static String getStr(JSONObject json, String key) {
 		String val = "";
 		try {
 			val = json.getString(key);
 		} catch(Throwable e) {
 			log.error("从JSON中提取 string 类型值 [{}] 失败.", key, e);
+		}
+		return val;
+	}
+	
+	public static String getStr(JSONObject json, String key, String defavlt) {
+		String val = defavlt;
+		try {
+			val = json.getString(key);
+		} catch(Throwable e) {
+			log.error("从JSON中提取 string 类型值 [{}] 失败.", key);
 		}
 		return val;
 	}

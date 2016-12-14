@@ -45,6 +45,14 @@ public class StrUtils {
 		return isEmpty(s.trim());
 	}
 	
+	public static boolean isTrimEmpty(String s) {
+		boolean isTrimEmpty = false;
+		if(s == null || "".equals(s.trim())) {
+			isTrimEmpty = true;
+		}
+		return isTrimEmpty;
+	}
+	
 	public static String toNotNull(String str) {
 		return (str == null ? "" : str);
 	}
