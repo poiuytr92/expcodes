@@ -405,100 +405,100 @@ public class DataSourceBean {
 	private String getDriverbyName(String dirverName) {
 		String driver = dirverName;
 		if(dirverName != null) {
-			if(dirverName.equals(DBType.MYSQL.NAME) || 
-					dirverName.equals(DBType.MYSQL.DRIVER)) {
+			if(dirverName.equalsIgnoreCase(DBType.MYSQL.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.MYSQL.DRIVER)) {
 				driver = DBType.MYSQL.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SQLITE.NAME) || 
-					dirverName.equals(DBType.SQLITE.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.SQLITE.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.SQLITE.DRIVER)) {
 				driver = DBType.SQLITE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE.NAME) || 
-					dirverName.equals(DBType.ORACLE.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ORACLE.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ORACLE.DRIVER)) {
 				driver = DBType.ORACLE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_8I.NAME) || 
-					dirverName.equals(DBType.ORACLE_8I.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ORACLE_8I.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ORACLE_8I.DRIVER)) {
 				driver = DBType.ORACLE_8I.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_8I_OCI.NAME) || 
-					dirverName.equals(DBType.ORACLE_8I_OCI.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ORACLE_8I_OCI.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ORACLE_8I_OCI.DRIVER)) {
 				driver = DBType.ORACLE_8I_OCI.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_9I.NAME) || 
-					dirverName.equals(DBType.ORACLE_9I.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ORACLE_9I.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ORACLE_9I.DRIVER)) {
 				driver = DBType.ORACLE_9I.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_10G.NAME) || 
-					dirverName.equals(DBType.ORACLE_10G.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ORACLE_10G.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ORACLE_10G.DRIVER)) {
 				driver = DBType.ORACLE_10G.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_10G_OCI.NAME) || 
-					dirverName.equals(DBType.ORACLE_10G_OCI.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ORACLE_10G_OCI.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ORACLE_10G_OCI.DRIVER)) {
 				driver = DBType.ORACLE_10G_OCI.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_11G.NAME) || 
-					dirverName.equals(DBType.ORACLE_11G.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ORACLE_11G.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ORACLE_11G.DRIVER)) {
 				driver = DBType.ORACLE_11G.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ORACLE_11G_OCI.NAME) || 
-					dirverName.equals(DBType.ORACLE_11G_OCI.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ORACLE_11G_OCI.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ORACLE_11G_OCI.DRIVER)) {
 				driver = DBType.ORACLE_11G_OCI.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE.NAME) || 
-					dirverName.equals(DBType.SYBASE.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.SYBASE.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.SYBASE.DRIVER)) {
 				driver = DBType.SYBASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_IQ.NAME) || 
-					dirverName.equals(DBType.SYBASE_IQ.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.SYBASE_IQ.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.SYBASE_IQ.DRIVER)) {
 				driver = DBType.SYBASE_IQ.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_ASE.NAME) || 
-					dirverName.equals(DBType.SYBASE_ASE.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.SYBASE_ASE.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.SYBASE_ASE.DRIVER)) {
 				driver = DBType.SYBASE_ASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_125ASE.NAME) || 
-					dirverName.equals(DBType.SYBASE_125ASE.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.SYBASE_125ASE.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.SYBASE_125ASE.DRIVER)) {
 				driver = DBType.SYBASE_125ASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_15ASE.NAME) || 
-					dirverName.equals(DBType.SYBASE_15ASE.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.SYBASE_15ASE.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.SYBASE_15ASE.DRIVER)) {
 				driver = DBType.SYBASE_15ASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.SYBASE_155ASE.NAME) || 
-					dirverName.equals(DBType.SYBASE_155ASE.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.SYBASE_155ASE.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.SYBASE_155ASE.DRIVER)) {
 				driver = DBType.SYBASE_155ASE.DRIVER;
 				
-			} else if(dirverName.equals(DBType.MSSQL.NAME) || 
-					dirverName.equals(DBType.MSSQL.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.MSSQL.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.MSSQL.DRIVER)) {
 				driver = DBType.MSSQL.DRIVER;
 				
-			} else if(dirverName.equals(DBType.MSSQL2000.NAME) || 
-					dirverName.equals(DBType.MSSQL2000.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.MSSQL2000.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.MSSQL2000.DRIVER)) {
 				driver = DBType.MSSQL2000.DRIVER;
 				
-			} else if(dirverName.equals(DBType.MSSQL2005.NAME) || 
-					dirverName.equals(DBType.MSSQL2005.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.MSSQL2005.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.MSSQL2005.DRIVER)) {
 				driver = DBType.MSSQL2005.DRIVER;
 				
-			} else if(dirverName.equals(DBType.MSSQL2008.NAME) || 
-					dirverName.equals(DBType.MSSQL2008.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.MSSQL2008.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.MSSQL2008.DRIVER)) {
 				driver = DBType.MSSQL2008.DRIVER;
 				
-			} else if(dirverName.equals(DBType.POSTGRESQL.NAME) || 
-					dirverName.equals(DBType.POSTGRESQL.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.POSTGRESQL.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.POSTGRESQL.DRIVER)) {
 				driver = DBType.POSTGRESQL.DRIVER;
 				
-			} else if(dirverName.equals(DBType.ACCESS.NAME) || 
-					dirverName.equals(DBType.ACCESS.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.ACCESS.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.ACCESS.DRIVER)) {
 				driver = DBType.ACCESS.DRIVER;
 				
-			} else if(dirverName.equals(DBType.INFORMIX.NAME) || 
-					dirverName.equals(DBType.INFORMIX.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.INFORMIX.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.INFORMIX.DRIVER)) {
 				driver = DBType.INFORMIX.DRIVER;
 				
-			} else if(dirverName.equals(DBType.IBM.NAME) || 
-					dirverName.equals(DBType.IBM.DRIVER)) {
+			} else if(dirverName.equalsIgnoreCase(DBType.IBM.NAME) || 
+					dirverName.equalsIgnoreCase(DBType.IBM.DRIVER)) {
 				driver = DBType.IBM.DRIVER;
 			}
 		}
