@@ -94,7 +94,7 @@ public class SwingUtils {
 	}
 	
 	public static JComponent addBorder(JComponent component, String borderTitle) {
-		component.setBorder(new TitledBorder(""));
+		component.setBorder(new TitledBorder(borderTitle));
 		return component;
 	}
 	
