@@ -12,6 +12,16 @@ import javax.swing.border.TitledBorder;
 
 import exp.libs.utils.pub.StrUtils;
 
+/**
+ * <PRE>
+ * swing组件工具包
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class SwingUtils {
 
 	public static final int AUTO_SCROLL_MODE = 0;
