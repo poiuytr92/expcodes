@@ -7,17 +7,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import exp.libs.utils.ui.SwingUtils;
 
 /**
  * <PRE>
  * swing通用窗口
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: 272629724@qq.com
+ * <B>项    目：</B>凯通J2SE开发平台(KTJSDP)
+ * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2014
+ * @version   1.0 2017-01-10
+ * @author    廖权斌：liaoquanbin@gdcattsoft.com
  * @since     jdk版本：jdk1.6
  */
 @SuppressWarnings("serial")
@@ -77,6 +78,18 @@ abstract class _SwingWindow extends JFrame {
 	 * @param relative 相对尺寸（当此值为true时, width/high为相对全屏宽度的大小）
 	 */
 	protected _SwingWindow(String name, int width, int high, boolean relative) {
+		this(name, width, high, relative, new Object[0]);
+	}
+	
+	/**
+	 * 全参初始化
+	 * @param name 窗口名称
+	 * @param width 初始窗宽(relative=true时, width<=0; relative=false时, width>0)
+	 * @param high 初始窗高(relative=true时, high<=0; relative=false时, high>0)
+	 * @param relative 相对尺寸（当此值为true时, width/high为相对全屏宽度的大小）
+	 * @param args 从外部传入的其他参数
+	 */
+	protected _SwingWindow(String name, int width, int high, boolean relative, Object... args) {
 		super(name);
 		if(relative == true) {
 			this.width = WIN_WIDTH - (width > 0 ? width : -width);
@@ -94,8 +107,9 @@ abstract class _SwingWindow extends JFrame {
 		this.setContentPane(basePanel);
 		basePanel.add(rootPanel, 0);
 		
-		initComponentsLayout(rootPanel);	//初始化组件布局
-		setComponentsListener(rootPanel);	//设置组件监听器
+		initComponents(args);				// 初始化组件
+		setComponentsLayout(rootPanel);		// 设置组件布局
+		setComponentsListener(rootPanel);	// 设置组件监听器
 		initCloseWindowMode();
 	}
 	
@@ -120,8 +134,7 @@ abstract class _SwingWindow extends JFrame {
 				
 				@Override
 				public void windowClosing(WindowEvent e) {
-					if(0 == JOptionPane.showConfirmDialog(rootPanel, 
-							"Exit ?\r\n\r\n", "WARN", JOptionPane.YES_NO_OPTION)) {
+					if(SwingUtils.confirm("Exit ?")) {
 						_hide();
 						System.exit(0);
 					}
@@ -156,15 +169,24 @@ abstract class _SwingWindow extends JFrame {
 	}
 
 	/**
+	 * 提供给子类个性化组件的初始化方法.
+	 *  (由于父类构造函数先于子类构造函数执行, 
+	 *  而initComponentsLayout 与 setComponentsListener 由父类构造函数调用,
+	 *  因此子类不能够在自身构造函数中初始化组件, 然后在上述两个方法中使用, 否则会报NPE异常.)
+	 *  @param args 从外部传入的其他参数
+	 */
+	protected abstract void initComponents(final Object... args);
+	
+	/**
 	 * 初始化组件布局
 	 * @param rootPanel 根面板（已设定布局样式为BorderLayout）
 	 */
-	protected abstract void initComponentsLayout(JPanel rootPanel);
+	protected abstract void setComponentsLayout(final JPanel rootPanel);
 
 	/**
 	 * 初始化组件监听器
 	 * @param rootPanel 根面板（已设定布局样式为BorderLayout）
 	 */
-	protected abstract void setComponentsListener(JPanel rootPanel);
+	protected abstract void setComponentsListener(final JPanel rootPanel);
 
 }

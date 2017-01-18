@@ -96,6 +96,7 @@ final class _DBUtils {
 		tpl.set("username", ds.getUsername());
 		tpl.set("password", ds.getPassword());
 		tpl.set("characterEncoding", ds.getCharset());
+		tpl.set("maximum-active-time", String.valueOf(ds.getMaximumActiveTime()));
 		tpl.set("house-keeping-test-sql", ds.getHouseKeepingTestSql());
 		tpl.set("house-keeping-sleep-time", String.valueOf(ds.getHouseKeepingSleepTime()));
 		tpl.set("simultaneous-build-throttle", String.valueOf(ds.getSimultaneousBuildThrottle()));

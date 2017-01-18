@@ -51,6 +51,12 @@ public class RegexUtils {
 		return isMatch;
 	}
 	
+	/**
+	 * 获取第0组的第1个匹配值（注意不是第0个）
+	 * @param str
+	 * @param regex
+	 * @return
+	 */
 	public static String findFirst(String str, String regex) {
 		String value = "";
 		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
@@ -63,6 +69,34 @@ public class RegexUtils {
 		return value;
 	}
 	
+	/**
+	 * 获取第0组的所有匹配值
+	 * @param str
+	 * @param regex
+	 * @return
+	 */
+	public static List<String> findFirstGroup(String str, String regex) {
+		List<String> list = new ArrayList<String>();
+		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
+			Pattern ptn = Pattern.compile(regex);
+			Matcher mth = ptn.matcher(str);
+			
+			int groupCount = mth.groupCount();
+			if(mth.find()) {
+				for (int i = 0; i <= groupCount; i++) {
+					list.add(mth.group(i));
+				}
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * 获取所有组的第1个匹配值（注意不是第0个）
+	 * @param str
+	 * @param regex
+	 * @return
+	 */
 	public static List<String> findFirsts(String str, String regex) {
 		List<String> list = new LinkedList<String>();
 		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
@@ -77,13 +111,19 @@ public class RegexUtils {
 		return list;
 	}
 	
+	/**
+	 * 获取所有组的所有匹配值
+	 * @param str
+	 * @param regex
+	 * @return
+	 */
 	public static List<List<String>> findAll(String str, String regex) {
 		List<List<String>> list = new LinkedList<List<String>>();
 		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
 			Pattern ptn = Pattern.compile(regex);
 			Matcher mth = ptn.matcher(str);
-			int groupCount = mth.groupCount();
 			
+			int groupCount = mth.groupCount();
 			while(mth.find()) {
 				List<String> groups = new ArrayList<String>(groupCount);
 				for (int i = 0; i <= groupCount; i++) {

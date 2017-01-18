@@ -450,6 +450,7 @@ class _Config implements IConfig {
 				ds.setPassword(XmlUtils.getChildValue(datasource, "password"));
 				ds.setName(XmlUtils.getChildValue(datasource, "name"));
 				ds.setCharset(XmlUtils.getChildValue(datasource, "charset"));
+				ds.setMaximumActiveTime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "maximum-active-time")));
 				ds.setHouseKeepingTestSql(XmlUtils.getChildValue(datasource, "house-keeping-test-sql"));
 				ds.setHouseKeepingSleepTime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "house-keeping-sleep-time")));
 				ds.setSimultaneousBuildThrottle(NumUtils.toInt(XmlUtils.getChildValue(datasource, "simultaneous-build-throttle")));

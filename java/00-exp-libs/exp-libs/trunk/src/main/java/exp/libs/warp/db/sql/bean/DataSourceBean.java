@@ -40,12 +40,19 @@ public class DataSourceBean {
 	
 	private final static String DEFAULT_CHARSET = Charset.UTF8;
 	
+	/** 单个连接的最大激活时间（即超时时间） */
+	private long maximumActiveTime;
+	
+	private final static long DEFAULT_MAX_ACTIVE_TIME = 60000L;
+	
 	/**
 	 * 如果发现了空闲的数据库连接.house keeper 将会用这个语句来测试.
 	 * 这个语句最好非常快的被执行.如果没有定义,测试过程将会被忽略
 	 */
 	private String houseKeepingTestSql;
 	
+	// FIXME: 此默认测试语句仅mysql可用, 其他数据库需自行设置(或关闭测试), 
+	// 否则连接池会报错 Created a new connection but it failed its test
 	private final static String DEFAULT_KEEP_TEST_SQL = "select 1";
 	
 	/**
@@ -130,6 +137,7 @@ public class DataSourceBean {
 		setPassword(DEFAULT_PASSWORD);
 		setName(DEFAULT_DBNAME);
 		setCharset(DEFAULT_CHARSET);
+		setMaximumActiveTime(DEFAULT_MAX_ACTIVE_TIME);
 		setHouseKeepingTestSql(DEFAULT_KEEP_TEST_SQL);
 		setHouseKeepingSleepTime(DEFAULT_KEEP_SLEEP_TIME);
 		setSimultaneousBuildThrottle(DEFAULT_SIMULTANEOUS_BUILD_THROTTLE);
@@ -227,6 +235,15 @@ public class DataSourceBean {
 			(CharsetUtils.isVaild(this.charset) ? this.charset : DEFAULT_CHARSET));
 	}
 
+	public long getMaximumActiveTime() {
+		return maximumActiveTime;
+	}
+
+	public void setMaximumActiveTime(long maximumActiveTime) {
+		this.maximumActiveTime = (maximumActiveTime >= 0 ? maximumActiveTime :
+			(this.maximumActiveTime >= 0 ? this.maximumActiveTime : DEFAULT_MAX_ACTIVE_TIME));
+	}
+
 	public String getHouseKeepingTestSql() {
 		return houseKeepingTestSql;
 	}
@@ -241,7 +258,7 @@ public class DataSourceBean {
 	}
 
 	public void setHouseKeepingSleepTime(long houseKeepingSleepTime) {
-		this.houseKeepingSleepTime = (houseKeepingSleepTime > 0 ? houseKeepingSleepTime :
+		this.houseKeepingSleepTime = (houseKeepingSleepTime >= 0 ? houseKeepingSleepTime :
 			(this.houseKeepingSleepTime >= 0 ? this.houseKeepingSleepTime : DEFAULT_KEEP_SLEEP_TIME));
 	}
 
@@ -250,7 +267,7 @@ public class DataSourceBean {
 	}
 
 	public void setSimultaneousBuildThrottle(int simultaneousBuildThrottle) {
-		this.simultaneousBuildThrottle = (simultaneousBuildThrottle > 0 ? simultaneousBuildThrottle :
+		this.simultaneousBuildThrottle = (simultaneousBuildThrottle >= 0 ? simultaneousBuildThrottle :
 				(this.simultaneousBuildThrottle >= 0 ? this.simultaneousBuildThrottle : DEFAULT_SIMULTANEOUS_BUILD_THROTTLE));
 	}
 
@@ -259,7 +276,7 @@ public class DataSourceBean {
 	}
 
 	public void setMaximumConnectionCount(int maximumConnectionCount) {
-		this.maximumConnectionCount = (maximumConnectionCount > 0 ? maximumConnectionCount :
+		this.maximumConnectionCount = (maximumConnectionCount >= 0 ? maximumConnectionCount :
 			(this.maximumConnectionCount >= 0 ? this.maximumConnectionCount : DEFAULT_MAX_CONN_COUNT));
 	}
 
@@ -268,7 +285,7 @@ public class DataSourceBean {
 	}
 
 	public void setMinimumConnectionCount(int minimumConnectionCount) {
-		this.minimumConnectionCount = (minimumConnectionCount > 0 ? minimumConnectionCount :
+		this.minimumConnectionCount = (minimumConnectionCount >= 0 ? minimumConnectionCount :
 			(this.minimumConnectionCount >= 0 ? this.minimumConnectionCount : DEFAULT_MIN_CONN_COUNT));
 	}
 
@@ -277,7 +294,7 @@ public class DataSourceBean {
 	}
 
 	public void setMaximumNewConnections(int maximumNewConnections) {
-		this.maximumNewConnections = (maximumNewConnections > 0 ? maximumNewConnections :
+		this.maximumNewConnections = (maximumNewConnections >= 0 ? maximumNewConnections :
 			(this.maximumNewConnections >= 0 ? this.maximumNewConnections : DEFAULT_MAX_NEW_CONN));
 	}
 
@@ -286,7 +303,7 @@ public class DataSourceBean {
 	}
 
 	public void setPrototypeCount(int prototypeCount) {
-		this.prototypeCount = (prototypeCount > 0 ? prototypeCount :
+		this.prototypeCount = (prototypeCount >= 0 ? prototypeCount :
 			(this.prototypeCount >= 0 ? this.prototypeCount : DEFAULT_PROTOTYPE_COUNT));
 	}
 
@@ -295,7 +312,7 @@ public class DataSourceBean {
 	}
 
 	public void setMaximumConnectionLifetime(long maximumConnectionLifetime) {
-		this.maximumConnectionLifetime = (maximumConnectionLifetime > 0 ? maximumConnectionLifetime :
+		this.maximumConnectionLifetime = (maximumConnectionLifetime >= 0 ? maximumConnectionLifetime :
 			(this.maximumConnectionLifetime >= 0 ? this.maximumConnectionLifetime : DEFAULT_MAX_CONN_LIFETIME));
 	}
 
@@ -517,6 +534,7 @@ public class DataSourceBean {
 		sb.append("password : ").append(getPassword()).append("\r\n");
 		sb.append("name : ").append(getName()).append("\r\n");
 		sb.append("charset : ").append(getCharset()).append("\r\n");
+		sb.append("maximum-active-time : ").append(getMaximumActiveTime()).append("\r\n");
 		sb.append("house-keeping-test-sql : ").append(getHouseKeepingTestSql()).append("\r\n");
 		sb.append("house-keeping-sleep-time : ").append(getHouseKeepingSleepTime()).append("\r\n");
 		sb.append("simultaneous-build-throttle : ").append(getSimultaneousBuildThrottle()).append("\r\n");

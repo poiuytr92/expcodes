@@ -40,11 +40,11 @@ public class BODHUtils {
 	 */
 	public static byte[] toBytes(String hex) {
 		byte[] bytes = {};
-		if(StrUtils.isEmpty(hex)) {
+		if(StrUtils.isTrimEmpty(hex)) {
 			return bytes;
 		}
 		
-		hex = hex.toUpperCase();
+		hex = hex.trim().toUpperCase();
 		if (!hex.matches("[0-9A-F]+")) {
 			return bytes;
 		}

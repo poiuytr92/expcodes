@@ -1,11 +1,8 @@
 package exp.libs.utils.ui;
 
-import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * <PRE>
@@ -19,10 +16,9 @@ import org.slf4j.LoggerFactory;
  */
 public final class BeautyEyeUtils {
 
-	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(BeautyEyeUtils.class);
-	
-	/** 私有化构造函数 */
+	/**
+	 * 私有化构造函数
+	 */
 	private BeautyEyeUtils() {}
 	
 	/**
@@ -40,37 +36,8 @@ public final class BeautyEyeUtils {
 		try {	
 			BeautyEyeLNFHelper.launchBeautyEyeLNF();
 		} catch (Exception e) {
-			warn("Failed to initialize the appearance component by BeautyEye.");
+			SwingUtils.warn("初始化 BeautyEye 外观组件失败.");
 		}
-	}
-	
-	/**
-	 * 信息弹窗
-	 * @param msg 普通消息
-	 */
-	public static void info(String msg) {
-		JOptionPane.showMessageDialog(
-			    null, msg, "Info", JOptionPane.INFORMATION_MESSAGE);
-	}
-	
-	/**
-	 * 警告弹窗
-	 * @param msg 警告消息
-	 */
-	public static void warn(String msg) {
-		JOptionPane.showMessageDialog(
-			    null, msg, "Warn", JOptionPane.WARNING_MESSAGE);
-	}
-	
-	/**
-	 * 异常弹窗
-	 * @param msg 异常消息
-	 * @param e 异常
-	 */
-	public static void error(String msg, Throwable e) {
-		JOptionPane.showMessageDialog(
-			    null, msg, "Error", JOptionPane.ERROR_MESSAGE);
-		log.error(msg, e);
 	}
 	
 }

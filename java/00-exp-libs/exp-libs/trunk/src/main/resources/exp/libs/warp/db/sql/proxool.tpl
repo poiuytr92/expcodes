@@ -9,6 +9,7 @@
             <property name="password" value="@{password}@" />
             <property name="characterEncoding" value="@{characterEncoding}@"/>
         </driver-properties>
+        <maximum-active-time>@{maximum-active-time}@</maximum-active-time>
         <house-keeping-test-sql>@{house-keeping-test-sql}@</house-keeping-test-sql>
         <house-keeping-sleep-time>@{house-keeping-sleep-time}@</house-keeping-sleep-time>
         <simultaneous-build-throttle>@{simultaneous-build-throttle}@</simultaneous-build-throttle>

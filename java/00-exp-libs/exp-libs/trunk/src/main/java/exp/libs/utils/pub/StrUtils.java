@@ -53,6 +53,10 @@ public class StrUtils {
 		return isTrimEmpty;
 	}
 	
+	public static boolean isNotTrimEmpty(String s) {
+		return !isTrimEmpty(s);
+	}
+	
 	public static String toNotNull(String str) {
 		return (str == null ? "" : str);
 	}
@@ -121,12 +125,9 @@ public class StrUtils {
 	 */
 	public static String concat(List<String> list, String separator) {
 		StringBuilder sb = new StringBuilder();
-		if(list != null) {
+		if(list != null && !list.isEmpty()) {
 			separator = (separator == null ? "" : separator);
 			for(String str : list) {
-				if(str == null) {
-					continue;
-				}
 				sb.append(str).append(separator);
 			}
 			
