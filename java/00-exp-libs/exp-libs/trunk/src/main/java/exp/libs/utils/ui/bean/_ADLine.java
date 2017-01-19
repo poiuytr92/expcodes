@@ -41,7 +41,7 @@ class _ADLine<T extends Component> {
 	/**
 	 * 构造函数
 	 * @param father 父面板（用于承载所有行组件的面板, 布局模式建议使用垂直流式布局器）
-	 * @param component 每行差异化组件的类(该组件类必须能提供无参构造函数, 保证组件能够被实例化和唯一性)
+	 * @param component 每行差异化组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
 	 */
 	protected _ADLine(JPanel father, Class<T> component) {
 		try {

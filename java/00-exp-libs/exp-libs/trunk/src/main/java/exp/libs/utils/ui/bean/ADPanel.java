@@ -30,7 +30,7 @@ public class ADPanel<T extends Component> {
 	
 	/**
 	 * 构造函数
-	 * @param component 每行差异化组件的类(该组件类必须能提供无参构造函数, 保证组件能够被实例化和唯一性)
+	 * @param component 每行差异化组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
 	 */
 	public ADPanel(Class<T> component) {
 		JPanel panel = new JPanel(new VFlowLayout());
