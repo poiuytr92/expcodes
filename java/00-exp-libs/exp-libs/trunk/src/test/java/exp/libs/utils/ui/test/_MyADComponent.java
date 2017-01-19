@@ -18,7 +18,7 @@ import javax.swing.JTextField;
  * @author    廖权斌：liaoquanbin@gdcattsoft.com
  * @since     jdk版本：jdk1.6
  */
-class _MyADComponent extends JPanel {
+public class _MyADComponent extends JPanel {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -8543279289759734486L;
@@ -27,7 +27,7 @@ class _MyADComponent extends JPanel {
 	
 	private JButton button;
 	
-	protected _MyADComponent() {
+	public _MyADComponent() {
 		super();
 		this.testField = new JTextField();
 		this.button = new JButton("...");
@@ -49,7 +49,7 @@ class _MyADComponent extends JPanel {
 		});
 	}
 	
-	protected String getText() {
+	public String getText() {
 		return testField.getText();
 	}
 	
