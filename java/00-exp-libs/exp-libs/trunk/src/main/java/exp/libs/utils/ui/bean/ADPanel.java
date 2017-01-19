@@ -80,14 +80,17 @@ public class ADPanel<T extends Component> {
 	@SuppressWarnings("unchecked")
 	public List<T> getLineComponents() {
 		List<T> components = new LinkedList<T>();
-		
-		Component[] linePanels = ((JPanel) ((JViewport) 
-				scrollPanel.getComponent(0)).getComponent(0)).getComponents();
-		if(linePanels != null) {
-			for(Component linePanel : linePanels) {
-				T component = (T) ((JPanel) linePanel).getComponent(0);
-				components.add(component);
+		try {
+			Component[] linePanels = ((JPanel) ((JViewport) 
+					scrollPanel.getComponent(0)).getComponent(0)).getComponents();
+			if(linePanels != null) {
+				for(Component linePanel : linePanels) {
+					T component = (T) ((JPanel) linePanel).getComponent(0);
+					components.add(component);
+				}
 			}
+		} catch (Throwable e) {
+			// Undo: 自定义行组件 T 实例化失败(没有提供public的无参构造函数), 导致无法获取行组件返回值
 		}
 		return components;
 	}
