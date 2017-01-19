@@ -266,6 +266,17 @@ public class SwingUtils {
 	}
 	
 	/**
+	 * 为组件添加边框布局面板，并将其置放到中心
+	 * @param center 期望置放到中心的组件
+	 * @return [中心] 边框布局面板
+	 */
+	public static JPanel addCenterPanel(Component center) {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(center, BorderLayout.CENTER);
+		return panel;
+	}
+	
+	/**
 	 * 为组件添加边框
 	 * @param component 需要添加边框的组件
 	 * @return 已添加边框的组件（与入参为同一对象）

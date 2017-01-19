@@ -54,7 +54,7 @@ public class TestADWindow extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				List<_MyADComponent> components = adPanel.getCurComponents();
+				List<_MyADComponent> components = adPanel.getLineComponents();
 				for(_MyADComponent component : components) {
 					System.out.println(component.getText());
 				}

@@ -11,7 +11,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import exp.libs.utils.ui.SwingUtils;
-import exp.libs.warp.other.layout.VFlowLayout;
+import exp.libs.utils.ui.layout.VFlowLayout;
 
 /**
  * <PRE>
@@ -78,7 +78,7 @@ public class ADPanel<T extends Component> {
 	 * @return 差异化行组件集合
 	 */
 	@SuppressWarnings("unchecked")
-	public List<T> getCurComponents() {
+	public List<T> getLineComponents() {
 		List<T> components = new LinkedList<T>();
 		
 		Component[] linePanels = ((JPanel) ((JViewport) 
