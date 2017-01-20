@@ -48,7 +48,7 @@ class _ADLine<T extends Component> {
 			this.component = (T) component.newInstance();
 		} catch (Throwable e) {
 			this.component = new JTextField(
-					"警告: 自定义行组件实例化失败(没有提供public的无参构造函数), 无法获取行组件返回值");
+					"警告: 自定义行组件实例化失败(没有提供public的无参构造函数), 已使用JTextField替代自定义行组件");
 		}
 		
 		this.father = father;

@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JViewport;
 
 import exp.libs.utils.ui.SwingUtils;
@@ -86,6 +87,28 @@ public class ADPanel<T extends Component> {
 			if(linePanels != null) {
 				for(Component linePanel : linePanels) {
 					T component = (T) ((JPanel) linePanel).getComponent(0);
+					components.add(component);
+				}
+			}
+		} catch (Throwable e) {
+			// Undo: 自定义行组件 T 实例化失败(没有提供public的无参构造函数), 导致无法获取行组件返回值
+		}
+		return components;
+	}
+	
+	/**
+	 * 获取承载面板上当前的所有行组件.
+	 * 	(当自定义行组件失效时，可使用此方法获取默认行组件的值)
+	 * @return 默认行组件集合
+	 */
+	public List<JTextField> getDefaultLineComponents() {
+		List<JTextField> components = new LinkedList<JTextField>();
+		try {
+			Component[] linePanels = ((JPanel) ((JViewport) 
+					scrollPanel.getComponent(0)).getComponent(0)).getComponents();
+			if(linePanels != null) {
+				for(Component linePanel : linePanels) {
+					JTextField component = (JTextField) ((JPanel) linePanel).getComponent(0);
 					components.add(component);
 				}
 			}

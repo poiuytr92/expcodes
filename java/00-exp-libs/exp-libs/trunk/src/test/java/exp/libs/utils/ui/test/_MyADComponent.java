@@ -27,7 +27,7 @@ public class _MyADComponent extends JPanel {
 	
 	private JButton button;
 	
-	public _MyADComponent() {
+	protected _MyADComponent() {
 		super();
 		this.testField = new JTextField();
 		this.button = new JButton("...");

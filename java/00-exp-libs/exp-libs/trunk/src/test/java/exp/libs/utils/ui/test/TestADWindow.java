@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import exp.libs.utils.ui.BeautyEyeUtils;
 import exp.libs.utils.ui.bean.ADPanel;
@@ -16,9 +17,8 @@ public class TestADWindow extends MainWindow {
 
 	public static void main(String[] args) {
 		BeautyEyeUtils.init();
-		new TestADWindow("TestADWindow", 600, 400, _MyADComponent.class);
+		new TestADWindow("TestADWindow", 700, 400, _MyADComponent.class);
 	}
-	
 	
 	
 	/** serialVersionUID */
@@ -54,9 +54,17 @@ public class TestADWindow extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				List<_MyADComponent> components = adPanel.getLineComponents();
-				for(_MyADComponent component : components) {
-					System.out.println(component.getText());
+				try {
+					List<_MyADComponent> components = adPanel.getLineComponents();
+					for(_MyADComponent component : components) {
+						System.out.println(component.getText());
+					}
+					
+				} catch (Throwable ex) {
+					List<JTextField> components = adPanel.getDefaultLineComponents();
+					for(JTextField component : components) {
+						System.out.println(component.getText());
+					}
 				}
 			}
 		});
