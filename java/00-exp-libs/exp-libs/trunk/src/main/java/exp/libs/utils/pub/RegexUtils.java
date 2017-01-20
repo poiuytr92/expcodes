@@ -52,7 +52,7 @@ public class RegexUtils {
 	}
 	
 	/**
-	 * 获取第0组的第1个匹配值（注意不是第0个）
+	 * 获取首次匹配的第1个匹配值（注意不是第0个, 即group(1)）
 	 * @param str
 	 * @param regex
 	 * @return
@@ -70,29 +70,7 @@ public class RegexUtils {
 	}
 	
 	/**
-	 * 获取第0组的所有匹配值
-	 * @param str
-	 * @param regex
-	 * @return
-	 */
-	public static List<String> findFirstGroup(String str, String regex) {
-		List<String> list = new ArrayList<String>();
-		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
-			Pattern ptn = Pattern.compile(regex);
-			Matcher mth = ptn.matcher(str);
-			
-			int groupCount = mth.groupCount();
-			if(mth.find()) {
-				for (int i = 0; i <= groupCount; i++) {
-					list.add(mth.group(i));
-				}
-			}
-		}
-		return list;
-	}
-	
-	/**
-	 * 获取所有组的第1个匹配值（注意不是第0个）
+	 * 获取每次匹配的第1个匹配值（注意不是第0个, 即group(1)s）
 	 * @param str
 	 * @param regex
 	 * @return
@@ -106,6 +84,28 @@ public class RegexUtils {
 			while(mth.find()) {
 				String value = (mth.groupCount() >= 1 ? mth.group(1) : "");
 				list.add(value);
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * 获取首次匹配的所有group的匹配值（即group(1...n)）
+	 * @param str
+	 * @param regex
+	 * @return
+	 */
+	public static List<String> findFirstMatches(String str, String regex) {
+		List<String> list = new ArrayList<String>();
+		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
+			Pattern ptn = Pattern.compile(regex);
+			Matcher mth = ptn.matcher(str);
+			
+			int groupCount = mth.groupCount();
+			if(mth.find()) {
+				for (int i = 0; i <= groupCount; i++) {
+					list.add(mth.group(i));
+				}
 			}
 		}
 		return list;
