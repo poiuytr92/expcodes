@@ -33,6 +33,29 @@ public class StrUtils {
 		return !isEmpty(s);
 	}
 	
+	public static boolean isEmpty(String... strs) {
+		boolean isEmpty = true;
+		if(strs != null) {
+			for(String s : strs) {
+				isEmpty &= isEmpty(s);
+			}
+		}
+		return isEmpty;
+	}
+	
+	public static boolean isNotEmpty(String... strs) {
+		boolean isNotEmpty = true;
+		if(strs != null) {
+			for(String s : strs) {
+				isNotEmpty &= isNotEmpty(s);
+			}
+			
+		} else {
+			isNotEmpty = false;
+		}
+		return isNotEmpty;
+	}
+	
 	/**
 	 * 判断字符串是否全为空白字符
 	 * @param s 待判断字符串
@@ -59,6 +82,33 @@ public class StrUtils {
 	
 	public static String toNotNull(String str) {
 		return (str == null ? "" : str);
+	}
+	
+	public static boolean equals(String... strs) {
+		boolean isEquals = true;
+		if(strs == null || strs.length <= 1) {
+			isEquals = false;
+			
+		} else {
+			String s = strs[0];
+			if(s == null) {
+				for(String str : strs) {
+					isEquals &= (str == null);
+					if(!isEquals) {
+						break;
+					}
+				}
+				
+			} else {
+				for(String str : strs) {
+					isEquals &= (s.equals(str));
+					if(!isEquals) {
+						break;
+					}
+				}
+			}
+		}
+		return isEquals;
 	}
 	
 	/**

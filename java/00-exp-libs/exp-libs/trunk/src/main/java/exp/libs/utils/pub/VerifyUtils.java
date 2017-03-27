@@ -227,7 +227,10 @@ public class VerifyUtils {
 		return RegexUtils.matches(str, Regex.SOCKET.VAL);
 	}
 	
-	@Deprecated
+	public static boolean isMD5(final String str) {
+		return RegexUtils.matches(str, Regex.MD5.VAL);
+	}
+	
 	public static boolean isChinese(final String str) {
 		return RegexUtils.matches(str, Regex.CHINESE.VAL);
 	}
