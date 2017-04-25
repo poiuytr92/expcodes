@@ -3,6 +3,7 @@ package exp.libs.utils.pub;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 /**
  * <PRE>
  * 字符集处理工具包.
@@ -59,12 +60,12 @@ public class CharsetUtils {
 	
 	/**
 	 * <pre>
-	 * 把任意编码的bytes的字节数组，变成以charset编码的String
+	 * 把以charset编码的bytes的字节数组，变成以charset编码的String
 	 * 
-	 * 任意编码byte[] -> charset String
+	 * charset byte[] -> charset String
 	 * </pre>
-	 * @param bytes 源字节数组
-	 * @param charset 源字节数组的编码
+	 * @param bytes 以charset编码的源字节数组
+	 * @param charset 指定编码
 	 * @return 以charset编码的字符串
 	 */
 	public static String toStr(byte[] bytes, String charset) {
@@ -79,16 +80,16 @@ public class CharsetUtils {
 	
 	/**
 	 * <pre>
-	 * 把使用charset编码的str转换为byte[]
+	 * 把任意编码的str转换为以charset编码的byte[]
 	 * 
-	 * charset String -> charset byte[] 
+	 * 任意编码 String -> charset byte[] 
 	 * 
-	 * 在不知道[源字符串]的编码时，慎用。
-	 * 因为[目标编码]可能不兼容[源字符串]的编码，导致乱码。
+	 * 在不知道str的编码时，慎用。
+	 * 因为charset可能不兼容str的编码，导致乱码。
 	 * </pre>
 	 * @param str 源字符串
 	 * @param charset 目标字节数组的编码
-	 * @return 目标字节数组
+	 * @return 以charset编码的byte[]
 	 */
 	public static byte[] toBytes(String str, String charset) {
 		byte[] bytes = {};
@@ -102,22 +103,20 @@ public class CharsetUtils {
 	
 	/**
 	 * <pre>
-	 * 把使用srcCharset编码的srcStr，转换为使用destCharset编码的String
+	 * 把任意编码的str，转换为使用charset编码的String
 	 * 
-	 * srcCharset srcStr -> destCharset srcStr
+	 * 任意编码 String -> charset String 
 	 * 
-	 * 在不知道[源字符串]的编码时，慎用。
-	 * 因为[目标编码]可能不兼容[源字符串]的编码，导致乱码。
+	 * 在不知道str的编码时，慎用。
+	 * 因为charset可能不兼容str的编码，导致乱码。
 	 * </pre>
-	 * @param srcStr 源字符串
-	 * @param srcCharset 源字符串编码
-	 * @param destCharset 目标字符串编码
-	 * @return 以destCharset编码的字符串
+	 * @param str 源字符串
+	 * @param charset 目标字符串编码
+	 * @return 以charset编码的字符串
 	 */
-	public static String tracnscode(String srcStr, 
-			String srcCharset, String destCharset) {
-		byte[] srcByte = toBytes(srcStr, srcCharset);
-		return toStr(srcByte, destCharset);
+	public static String tracnscode(String str, String charset) {
+		byte[] bytes = toBytes(str, charset);
+		return toStr(bytes, charset);
 	}
 	
 	/**
