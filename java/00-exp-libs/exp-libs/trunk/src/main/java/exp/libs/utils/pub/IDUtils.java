@@ -37,6 +37,7 @@ public class IDUtils {
 	
 	/**
 	 * 获取时间序唯一性ID（秒级）
+	 *  当频繁获取ID时，此方法会强制使得每次请求最多延迟1s以保证唯一性
 	 * @return
 	 */
 	public static int getSecondID() {
@@ -44,8 +45,11 @@ public class IDUtils {
 		synchronized (LOCK_SECOND_ID) {
 			do {
 				id = (int) (System.currentTimeMillis() / 1000);
+				if(LAST_SECOND_ID != id) {
+					break;
+				}
 				ThreadUtils.tSleep(500);
-			} while(LAST_SECOND_ID == id);
+			} while(true);
 			LAST_SECOND_ID = id;
 		}
 		return id;
