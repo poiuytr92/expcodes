@@ -54,7 +54,7 @@
 		  <artifactId>ehcache</artifactId>
 		  <version>2.9.1</version>
 		</dependency>
-        
+		
         <!-- swing美瞳构件 -->
         <dependency>
           <groupId>org.jb</groupId>
@@ -63,6 +63,25 @@
           <scope>${include.model.base}</scope>
           <!-- optional>true</optional -->
         </dependency>
+        
+        <!-- swing绘图构件 -->
+        <dependency>
+          <groupId>org.eclipse</groupId>
+          <artifactId>draw2d</artifactId>
+          <version>1.0.0</version>
+        </dependency>
+        
+        <dependency>
+		  <groupId>org.jgraph</groupId>
+		  <artifactId>jGraph</artifactId>
+		  <version>1.0.0</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>com.realpersist</groupId>
+		  <artifactId>schemaeditor</artifactId>
+		  <version>1.0.0</version>
+		</dependency>
         
         <!-- JVM代理器构件 -->
         <dependency>

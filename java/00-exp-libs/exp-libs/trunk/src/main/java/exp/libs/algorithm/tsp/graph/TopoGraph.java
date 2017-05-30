@@ -13,6 +13,8 @@ public class TopoGraph extends Graph {
 	
 	private Node snk;
 	
+	private boolean order;
+	
 	private List<Node> includes;
 	
 	public TopoGraph() {
@@ -27,6 +29,7 @@ public class TopoGraph extends Graph {
 		super(arrow);
 		this.src = Node.NULL;
 		this.snk = Node.NULL;
+		this.order = order;
 		this.includes = (order ? new LinkedList<Node>() : new ArrayList<Node>());
 	}
 
@@ -46,11 +49,26 @@ public class TopoGraph extends Graph {
 		this.snk = addNode(name);
 	}
 	
+	public List<Node> getIncludes() {
+		return (order ? new LinkedList<Node>(includes) : new ArrayList<Node>(includes));
+	}
+	
+	public boolean setInclude(String name) {
+		boolean isOk = false;
+		Node node = getNode(name);
+		if(node != Node.NULL) {
+			includes.add(node);
+			isOk = true;
+		}
+		return isOk;
+	}
+	
 	/**
 	 * 获取有效路径
 	 * @param num 最大的有效路径数
 	 * @return
 	 */
+	@Deprecated
 	public List<List<Node>> findVaildPaths(int num) {
 		List<List<Node>> paths = findAllPaths();
 		if(paths.size() > num) {
