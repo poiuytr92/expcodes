@@ -58,11 +58,11 @@ public class Graph {
 		return edges.size();
 	}
 	
-	public boolean addEdge(String nSrc, String nSnk, int weight) {
+	public boolean addEdge(String srcName, String snkName, int weight) {
 		boolean isOk = false;
-		if(matrix == null && nSrc != null && nSnk != null && weight >= 0) {
-			Node src = addNode(nSrc);
-			Node snk = addNode(nSnk);
+		if(matrix == null && srcName != null && snkName != null && weight >= 0) {
+			Node src = addNode(srcName);
+			Node snk = addNode(snkName);
 			
 			src.addNeighbor(snk);
 			if(arrow == false) {
@@ -85,6 +85,41 @@ public class Graph {
 		return node;
 	}
 	
+	public boolean delEdge(int srcId, int snkId) {
+		boolean isOk = false;
+		if(inRange(srcId) && inRange(snkId)) {
+			Node src = getNode(srcId);
+			Node snk = getNode(snkId);
+			isOk = delEdge(src, snk);
+		}
+		return isOk;
+	}
+	
+	public boolean delEdge(String srcName, String snkName) {
+		boolean isOk = false;
+		if(srcName != null && snkName != null) {
+			Node src = getNode(srcName);
+			Node snk = getNode(snkName);
+			isOk = delEdge(src, snk);
+		}
+		return isOk;
+	}
+	
+	public boolean delEdge(Node src, Node snk) {
+		boolean isOk = false;
+		if(matrix == null && src != null && snk != null && 
+				src != Node.NULL && snk != Node.NULL) {
+			src.delNeighbor(snk);
+			if(arrow == false) {
+				snk.delNeighbor(src);
+			}
+			
+			Edge edge = getEdge(src, snk);
+			edges.remove(edge.getKey());
+		}
+		return isOk;
+	}
+	
 	private boolean inRange(int idx) {
 		return (idx >= 0 && idx < nodeSize());
 	}
@@ -96,6 +131,10 @@ public class Graph {
 	
 	public Node getNode(int id) {
 		return getNode(nodeIdxs.get(id));
+	}
+	
+	public Edge getEdge(int srcId, int snkId) {
+		return getEdge(getNode(srcId), getNode(snkId));
 	}
 	
 	public Edge getEdge(String srcName, String snkName) {
@@ -124,6 +163,10 @@ public class Graph {
 			matrix[src.getId()][snk.getId()]);
 	}
 	
+	public Set<Integer> getAllNodeIds() {
+		return new HashSet<Integer>(nodeIdxs.keySet());
+	}
+	
 	public Set<Node> getAllNodes() {
 		return new HashSet<Node>(nodes.values());
 	}
@@ -132,24 +175,34 @@ public class Graph {
 		return new HashSet<Edge>(edges.values());
 	}
 	
-	public boolean toAdjacencyMatrix() {
-		boolean isOk = true;
+	public boolean setAdjacencyMatrix() {
+		boolean isOk = false;
 		if(matrix == null) {
-			int size = nodeSize();
-			matrix = new int[size][size];
-			
-			for(int r = 0; r < size; r++) {
-				String rName = nodeIdxs.get(r);
-				for(int c = (arrow ? 0 : r); c < size; c++) {
-					String cName = nodeIdxs.get(c);
-					matrix[r][c] = getWeight(rName, cName);
-					if(arrow == false) {
-						matrix[c][r] = matrix[r][c];
-					}
+			toAdjacencyMatrix();
+			isOk = true;
+		}
+		return isOk;
+	}
+	
+	public boolean resetAdjacencyMatrix() {
+		toAdjacencyMatrix();
+		return true;
+	}
+	
+	private void toAdjacencyMatrix() {
+		int size = nodeSize();
+		matrix = new int[size][size];
+		
+		for(int r = 0; r < size; r++) {
+			String rName = nodeIdxs.get(r);
+			for(int c = (arrow ? 0 : r); c < size; c++) {
+				String cName = nodeIdxs.get(c);
+				matrix[r][c] = getWeight(rName, cName);
+				if(arrow == false) {
+					matrix[c][r] = matrix[r][c];
 				}
 			}
 		}
-		return isOk;
 	}
 	
 	public int[][] getAdjacencyMatrix() {

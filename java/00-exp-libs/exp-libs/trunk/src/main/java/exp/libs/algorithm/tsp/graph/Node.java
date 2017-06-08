@@ -19,10 +19,7 @@ public class Node {
 	private int degree;
 	
 	// 仅用于在构图时保持唯一性
-	private Set<Node> neighborSet;
-	
-	// 构图后转用List存储，且Set集不允许再添加元素
-	private List<Node> neighbors;
+	private Set<Node> neighbors;
 	
 	@SuppressWarnings("unused")
 	private Node() {}
@@ -31,25 +28,25 @@ public class Node {
 		this.id = id;
 		this.name = name;
 		this.degree = 0;
-		this.neighborSet = new HashSet<Node>();
+		this.neighbors = new HashSet<Node>();
 	}
 	
 	protected void clear() {
-		if(neighborSet != null) {
-			neighborSet.clear();
-		}
-		if(neighbors != null) {
-			neighbors.clear();
-		}
+		neighbors.clear();
 	}
 	
 	protected boolean addNeighbor(Node node) {
-		boolean isOk = false;
-		if(neighborSet != null) {
-			isOk = neighborSet.add(node);
-			if(isOk == true) {
-				degree++;
-			}
+		boolean isOk = neighbors.add(node);
+		if(isOk == true) {
+			degree++;
+		}
+		return isOk;
+	}
+	
+	protected boolean delNeighbor(Node node) {
+		boolean isOk = neighbors.remove(node);
+		if(isOk == true) {
+			degree--;
 		}
 		return isOk;
 	}
@@ -67,20 +64,11 @@ public class Node {
 	}
 
 	public Iterator<Node> getNeighborIterator() {
-		return getNeighbors().iterator();
+		return getNeighborList().iterator();
 	}
 	
 	public List<Node> getNeighborList() {
-		return new ArrayList<Node>(getNeighbors());
-	}
-	
-	private List<Node> getNeighbors() {
-		if(neighbors == null) {
-			neighbors = new ArrayList<Node>(neighborSet);
-			neighborSet.clear();
-			neighborSet = null;
-		}
-		return neighbors;
+		return new ArrayList<Node>(neighbors);
 	}
 	
 	@Override
