@@ -18,23 +18,11 @@ class QAnt {
 	/** 该蚂蚁求得可行解的次数 */
 	private int solveCnt;
 	
+	/** 蚂蚁寻路环境 */
+	private QEnv env;
+	
 	/** 该蚂蚁所携带的所有路径信息素的概率幅(量子基因编码) */
 	private QPA[][] _QPAs;
-	
-	/** 该蚂蚁需要移动的拓扑图规模(节点数) */
-	private final int graphSize;
-	
-	/** 拓扑图源点编号 */
-	private final int graphSrcId;
-	
-	/** 拓扑图宿点编号 */
-	private final int graphSnkId;
-	
-	/** 该蚂蚁需要移动的拓扑图节点间距常量 */
-	private final int[][] graphDist;
-	
-	/** 蚂蚁移动从i->j移动的自启发常量(即能见度, 与i->j的距离成反比) */
-	private final double[][] eta;
 	
 	/** 蚂蚁当前所在的节点编号 */
 	private int curLocationId;
@@ -53,23 +41,15 @@ class QAnt {
 	
 	/**
 	 * 构造函数
-	 * @param graphSrcId 拓扑图源点
-	 * @param graphSnkId 拓扑图宿点
-	 * @param graphDist 拓扑图节点间距
-	 * @param eta 拓扑图节点间的能见度（自启发常量， 为节点间距的倒数）
+	 * @param env
 	 */
-	protected QAnt(final int graphSrcId, final int graphSnkId, 
-			final int[][] graphDist, final double[][] eta) {
-		this.graphSize = graphDist.length;
-		this.graphSrcId = graphSrcId;
-		this.graphSnkId = graphSnkId;
-		this.graphDist = graphDist;
-		this.eta = eta;
+	protected QAnt(QEnv env) {
+		this.env = env;
 		
 		this.generation = 0;
 		this.solveCnt = 0;
-		this.tabus = new boolean[graphSize];
-		this.moveTrack = new int[graphSize];
+		this.tabus = new boolean[env.size()];
+		this.moveTrack = new int[env.size()];
 		
 		initQPAs();
 	}
@@ -78,18 +58,18 @@ class QAnt {
 	 * 初始化蚂蚁的量子编码
 	 */
 	private void initQPAs() {
-		this._QPAs = new QPA[graphSize][graphSize];
-		for(int i = 0; i < graphSize; i++) {
+		this._QPAs = new QPA[env.size()][env.size()];
+		for(int i = 0; i < env.size(); i++) {
 			for(int j = 0; j <= i; j++) {
 				_QPAs[i][j] = new QPA();
-				if(eta[i][j] == 0) {
+				if(env.eta(i, j) == 0) {
 					_QPAs[i][j].setAlpha(1D);
 					_QPAs[i][j].setBeta(0D);
 				}
 				
 				if(i != j) {
 					_QPAs[j][i] = new QPA();
-					if(eta[j][i] == 0) {
+					if(env.eta(j, i) == 0) {
 						_QPAs[j][i].setAlpha(1D);
 						_QPAs[j][i].setBeta(0D);
 					}
@@ -126,6 +106,10 @@ class QAnt {
 	 * @return 若无路可走则返回-1
 	 */
 	protected int selectNextId() {
+		if(curLocationId < 0) {
+			return -1;	// FIXME 随机选一个城市？ 
+		}
+		
 		// FIXME 这两个值越小越重要， 且和为1？  若蚂蚁代数很大，依然未求得过一个解，则需要适当调整参数
 		final double ZETA = 0.2D;	//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
 		final double GAMMA = 0.8D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
@@ -137,13 +121,13 @@ class QAnt {
 		// 蚂蚁以80%的概率以信息素作为决策方式进行路径转移（协作性优先）
 		if(rand < RAND_LIMIT) {
 			double argmax = -1;
-			for(int i = curLocationId, j = 0; j < graphSize; j++) {
+			for(int i = curLocationId, j = 0; j < env.size(); j++) {
 				if(isTabu(j)) {
 					continue;
 				}
 
 				double arg = Math.pow(getTau(i, j), ZETA) * 
-						Math.pow(eta[i][j], GAMMA);
+						Math.pow(env.eta(i, j), GAMMA);
 				if(argmax <= arg) {
 					argmax = arg;
 					nextId = j;
@@ -156,13 +140,13 @@ class QAnt {
 			double sum = 0;
 			
 			Map<Integer, Double> map = new LinkedHashMap<Integer, Double>();
-			for(int i = curLocationId, j = 0; j < graphSize; j++) {
+			for(int i = curLocationId, j = 0; j < env.size(); j++) {
 				if(isTabu(j)) {
 					continue;
 				}
 				
 				double arg = Math.pow(getTau(i, j), ZETA) * 
-						Math.pow(eta[i][j], GAMMA);
+						Math.pow(env.eta(i, j), GAMMA);
 				sum += arg;
 				map.put(j, arg);
 			}
@@ -192,12 +176,12 @@ class QAnt {
 			isTabu = true;
 			
 		// 当前节点与下一跳节点不连通
-		} else if(graphDist[curLocationId][nextId] == Integer.MAX_VALUE) {
+		} else if(env.dist(curLocationId, nextId) == Integer.MAX_VALUE) {
 			isTabu = true;
 			
 		// 当下一跳节点为拓扑图的源宿点时，则下一跳只能是最后一跳
-		} else if((nextId == graphSrcId || nextId == graphSnkId)) {
-			isTabu = !(moveStep + 1 == graphSize);
+		} else if((nextId == env.srcId() || nextId == env.snkId())) {
+			isTabu = !(moveStep + 1 == env.size());
 		}
 		return isTabu;
 	}
@@ -219,19 +203,28 @@ class QAnt {
 	 * 移动到下一位置
 	 * @param nodeId
 	 */
-	protected void move(int nodeId) {
+	protected void move(int nextId) {
 		if(curLocationId >= 0) {
 			tabus[curLocationId] = true;
-			moveStep++;
+			moveCost += env.dist(curLocationId, nextId);
 		}
 		
-		// 哽新、挥发对应路径上的信息素
+		// TODO: 哽新、挥发对应路径上的信息素
 		
-		curLocationId = nodeId;
+		moveTrack[moveStep++] = nextId;
+		curLocationId = nextId;
 	}
 
 	protected int getCurLocationId() {
 		return curLocationId;
+	}
+	
+	protected int getCurMoveCost() {
+		return moveCost;
+	}
+	
+	protected int[] getCurMoveTrack() {
+		return moveTrack;
 	}
 	
 	/**
@@ -265,7 +258,7 @@ class QAnt {
 		final double cosTheta = Math.cos(theta);
 		final double sinTheta = Math.sin(theta);
 
-		for(int j = 0; j < graphSize; j++) {
+		for(int j = 0; j < env.size(); j++) {
 			if(j == preId || j == nextId) {
 				continue;
 			}
@@ -283,7 +276,7 @@ class QAnt {
 	 * 使用量子交叉对量子编码做变异处理 
 	 */
 	protected void qCross() {
-		for(int i = 0; i < graphSize; i++) {
+		for(int i = 0; i < env.size(); i++) {
 			for(int j = 0; j <= i; j++) {
 				final double beta = _QPAs[i][j].getBeta();
 				_QPAs[i][j].setBeta(_QPAs[i][j].getAlpha());

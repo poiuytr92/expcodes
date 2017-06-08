@@ -49,9 +49,13 @@ class QEnv {
 	 */
 	protected QEnv(int[][] dist, int srcId, int snkId) {
 		this.size = (dist == null ? 0 : dist.length);
-		this.dist = dist;
 		this.srcId = srcId;
 		this.snkId = snkId;
+		
+		this.dist = dist;
+		this.eta = new double[size][size];
+		this.avgDist = new double[size];
+		this.maxDist = new int[size];
 		initDist();
 	}
 	
@@ -81,31 +85,31 @@ class QEnv {
 		}
 	}
 
-	protected int getSize() {
+	protected int size() {
 		return size;
 	}
 
-	protected int getSrcId() {
+	protected int srcId() {
 		return srcId;
 	}
 
-	protected int getSnkId() {
+	protected int snkId() {
 		return snkId;
 	}
 
-	protected int getDist(int srcId, int snkId) {
+	protected int dist(int srcId, int snkId) {
 		return dist[srcId][snkId];
 	}
 
-	protected double getEta(int srcId, int snkId) {
+	protected double eta(int srcId, int snkId) {
 		return eta[srcId][snkId];
 	}
 
-	protected double getAvgDist(int nodeId) {
+	protected double avgDist(int nodeId) {
 		return avgDist[nodeId];
 	}
 
-	protected int getMaxDist(int nodeId) {
+	protected int maxDist(int nodeId) {
 		return maxDist[nodeId];
 	}
 

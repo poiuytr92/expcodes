@@ -1,7 +1,5 @@
 package exp.libs.algorithm.tsp.qant.bean;
 
-import java.util.Arrays;
-
 import exp.libs.utils.pub.RandomUtils;
 
 /**
@@ -21,165 +19,132 @@ public class QACA {
 	/** 最小精度 */
 	private final static double PRECISION = 1.0e-6D;
 	
-	/* Application Variable */
-	public final static int isUseCross = 1;			//是否启动变异处理，可避免算法停滞，但消耗时间
-	public final static int CROSS_CRIVAL = 50;		//变异处理阀值，isUseCross = 1时有效。当连续CROSS_CRIVAL次求解但没有更新最优解时，执行量子交叉
-	public final static int isUseVolatilize = 1;	//是否启用信息素自然挥发，可加速收敛，但消耗时间
-
-	/* User Variable */
-	public final static int N_QANT = 5;				//量子蚂蚁种群规模
-	public final static int MAX_GENERATION = 5;		//最大的蚂蚁代数（迭代次数）
-	private int N_CITY;			//城市规模
-	private int srcId;
-	private int snkId;
-
-	private int[][] distances;	//distances[A][B]: 城市A->B的距离
-	private double[] avgDist;		//avgDist[i]: 城市i到各个城市的平均距离 (∑distances[i][0~(N_CITY-1)])/N_CITY
-	private double[] maxDist;		//maxDist[i]: 城市i到各个城市的距离中的最大值 max{distances[i][0~(N_CITY-1)]}
-	private double[][] eta;			//计算蚂蚁转移时城市A->B的自启发量:η(A, B) = 1/distance[A][B]
-
-	private double theoryDistance;	//理论最优解
-	private int THEORY_GENERATION;	//因得到理论最优解而结束搜索时的蚂蚁代数（迭代次数）
-
-	private double currentDistance;	//当前解
-	private int[] currentRoute;		//当前解路径
-
-	private double bestDistance;	//最优解
-	private int[] bestRoute;		//最优解路径
-	private QPA[][] bestPheromone;	//最优解的路径信息素的概率幅
-
-	private QAnt[] qAnt;		//量子蚂蚁种群
+	/** 变异处理阀值: 当连续CROSS_LIMIT次求解但没有更新最优解时，执行量子交叉, 避免搜索陷入停滞 */
+	private final static int CROSS_LIMIT = 10;
 	
-	public QACA(int nCity, int srcId, int snkId) {
-		this.N_CITY = nCity;
-		this.srcId = srcId;
-		this.snkId = snkId;
-		this.theoryDistance = -1;	//理论最优解
-		this.THEORY_GENERATION = -1;	//因得到理论最优解而结束搜索时的蚂蚁代数（迭代次数）
-		this.currentDistance = -1D;
-		this.bestDistance = -1D;
-		
-		initRoom();
-	}
+	/** 默认量子蚂蚁种群规模 */
+	public final static int DEFAULT_QANT_SIZE = 10;
+	
+	/** 默认最大的蚂蚁代数（迭代次数） */
+	public final static int DEFAULT_MAX_GENERATION = 5;
+	
+	/** 量子蚂蚁种群规模 */
+	private int qAntSize;
+	
+	/** 量子蚂蚁最大代数 */
+	private int maxGeneration;
+	
+	/** 量子蚂蚁种群 */
+	private QAnt[] qAnt;
+	
+	/** 启动变异处理，可避免算法停滞到局部解或无解，但消耗更多时间 */
+	public boolean useQCross;
+	
+	/** 启用信息素自然挥发，可加速收敛到局部解或无解，但消耗更多时间 */
+	public boolean useVolatilize;
 
-		//初始化内存空间
-	public void initRoom() {
-		this.distances = new int[N_CITY][N_CITY];
-		this.avgDist = new double[N_CITY];
-		this.maxDist = new double[N_CITY];
-		this.eta = new double[N_CITY][N_CITY];
-		this.bestPheromone = new QPA[N_CITY][N_CITY];
-		this.bestRoute = new int[N_CITY];
-		this.currentRoute = new int[N_CITY];
-		this.qAnt = new QAnt[N_QANT];
-	}
+	/** 寻路环境 */
+	private QEnv env;
 
-		//初始化路径信息
-	// FIXME: 不一定是下三角矩阵, 要看distances是不是无向图
-	public void initPath(int[][] distances) {
-		this.distances = distances;
+	/** 最优解的移动路径开销 */
+	private int bestCost;
+	
+	/** 最优解的移动轨迹 */
+	private int[] bestTrack;
+	
+	/** 最优解的所有路径信息素的概率幅 */
+	private QPA[][] bestQPAs;
+
+	/**
+	 * 
+	 * @param dist
+	 * @param srcId
+	 * @param snkId
+	 */
+	public QACA(int[][] dist, int srcId, int snkId) {
+		this(dist, srcId, snkId, 0, 0, true, true);
+	}
+	
+	/**
+	 * 
+	 * @param dist
+	 * @param srcId
+	 * @param snkId
+	 * @param qAntSize
+	 * @param maxGeneration
+	 * @param useCross
+	 * @param useVolatilize
+	 */
+	public QACA(int[][] dist, int srcId, int snkId, 
+			int qAntSize, int maxGeneration,
+			boolean useCross, boolean useVolatilize) {
+		this.env = new QEnv(dist, srcId, snkId);
+		this.qAntSize = (qAntSize <= 0 ? DEFAULT_QANT_SIZE : qAntSize);
+		this.maxGeneration = (maxGeneration <= 0 ? 
+				DEFAULT_MAX_GENERATION : maxGeneration);
+		this.useQCross = useCross;
+		this.useVolatilize = useVolatilize;
 		
-		int i, j;
-		//计算最大距离, 平均距离
-		for(i=0; i<N_CITY; i++) {
-			double sumDist = 0;
-			maxDist[i] = -1;
-			for(j=0; j<N_CITY; j++) {
-				sumDist += distances[i][j];
-				if(maxDist[i] < distances[i][j])
-					maxDist[i] = distances[i][j];
-			}
-			avgDist[i] = sumDist / (N_CITY - 1);
+		this.qAnt = new QAnt[this.qAntSize];
+		for(int i = 0; i < this.qAntSize; i++) {
+			qAnt[i] = new QAnt(env);
 		}
-
-		//初始化最优解路径上的概率幅
-		final double initVal = 1.0/Math.sqrt(2.0);
-		for(i=0; i<N_CITY; i++) 
-			for(j=0; j<=i; j++) {
-				bestPheromone[i][j] = new QPA();
-				bestPheromone[j][i] = new QPA();
-				bestPheromone[i][j].setAlpha(initVal);
-				bestPheromone[i][j].setBeta(initVal);
-				bestPheromone[j][i].setAlpha(initVal);
-				bestPheromone[j][i].setBeta(initVal);
-			}
-
 		
-		//计算蚂蚁转移时城市A->B的自启发量:η(A, B) = 1/distances[A][B]
-		for(i=0; i<N_CITY; i++) {
-			for(j=0; j<=i; j++) {
-				if(isZero(distances[i][j])) {
-					eta[i][j] = eta[j][i] = 1.0;
-				} else if(distances[i][j] == Integer.MAX_VALUE) {
-					eta[i][j] = eta[j][i] = 0;
-				} else {
-					eta[i][j] = eta[j][i] = 1.0D/distances[i][j];
+		this.bestCost = 0;
+		this.bestTrack = new int[env.size()];
+		this.bestQPAs = new QPA[env.size()][env.size()];
+		for(int i = 0; i < env.size(); i++) {
+			for(int j = 0; j <= i; j++) {
+				bestQPAs[i][j] = new QPA();
+				if(i != j) {
+					bestQPAs[j][i] = new QPA();
 				}
 			}
 		}
 	}
 
-		//初始化量子蚂蚁种群
-	public void initQAntGroup() {
-		for(int i=0; i<N_QANT; i++) {
-			qAnt[i] = new QAnt(srcId, snkId, distances, eta);
-		}
-	}
-
 		//更新量子蚂蚁信息：分配起点城市、初始化禁忌表
-	public void updateAntInfo(int generation) {
-		for(int i=0; i<N_QANT; i++) {
-			//设置蚂蚁代数
-			qAnt[i].evolve();
+	public void updateAntInfo(QAnt qAnt) {
+		//设置蚂蚁代数
+		qAnt.evolve();
 
-			//把蚂蚁分配到各个城市
-//			int cityNo = (i + qAnt[i].getGeneration()) % N_CITY;
-			int cityNo = (RandomUtils.randomBoolean() ? srcId : snkId); // 只分配到源宿城市
-			qAnt[i].move(cityNo);
-		}
+		//把蚂蚁分配到各个城市
+//			int cityNo = (i + qAnt[i].getGeneration()) % env.size();
+		int cityNo = (RandomUtils.randomBoolean() ? env.srcId() : env.snkId()); // 只分配到源宿城市
+		qAnt.move(cityNo);
 	}
 
 		//运行量子蚁群算法求解
 	public void runQAnt() {
-		//初始化最优解
-		bestDistance = Double.MAX_VALUE;
-
-		//量子交叉计数器
-		int qtCrossCnt = 0;
+		bestCost = Integer.MAX_VALUE;	//初始化最优解
+		int qtCrossCnt = 0;	//量子交叉计数器
 
 		//第gn代量子蚁群
-		for(int gn=0; gn<MAX_GENERATION; gn++) {
-			//更新第i代蚂蚁的初始信息：分配起点城市、初始化禁忌表
-			updateAntInfo(gn);
+		for(int gn=0; gn<maxGeneration; gn++) {
 
 			//使用第k只蚂蚁求解
-			for(int k=0; k<N_QANT; k++)
-			{
-				//初始化当前解
-				currentDistance = 0;
-				Arrays.fill(currentRoute, -1);
+			for(int k=0; k<qAntSize; k++) {
+				updateAntInfo(qAnt[k]);
+				
 				boolean isOk = true;
 
 				//计算第k只蚂蚁的第s步
-				for(int s=0; s<N_CITY; s++)
-				{
-					//记录第k只蚂蚁的每一步
-					currentRoute[s] = qAnt[k].getCurLocationId();
+				for(int s=0; s<env.size(); s++) {
 					
 					//计算第k只蚂蚁的下一步
 					int nextCityNo = qAnt[k].selectNextId();
 					if(nextCityNo == -1) {
 //						nextCityNo = currentRoute[0];
-						isOk = (s != N_CITY - 1);
+						isOk = (s != env.size() - 1);
 						// FIXME 加入剩余点均为非必经点， 则认为得到一个解
 						break;
 					}
 
 					//计算蚂蚁从nowCityNo移动到nextCityNo时在路径上释放的信息素
 					double beta2 = getMoveQTPA(qAnt[k].getCurLocationId(), nextCityNo);
-					double pGeneration = ((double) qAnt[k].getGeneration()) / ((double) MAX_GENERATION);
+					double pGeneration = ((double) qAnt[k].getGeneration()) / ((double) maxGeneration);
 					QPA curQPA = qAnt[k].getQtpa()[qAnt[k].getCurLocationId()][nextCityNo];
-					QPA bestQPA = bestPheromone[qAnt[k].getCurLocationId()][nextCityNo];
+					QPA bestQPA = bestQPAs[qAnt[k].getCurLocationId()][nextCityNo];
 					
 					//计算量子旋转门的旋转角θ
 					double theta = QUtils.getTheta(beta2, pGeneration, curQPA, bestQPA);
@@ -188,38 +153,29 @@ public class QACA {
 					qAnt[k].updateQPA(qAnt[k].getCurLocationId(), nextCityNo, theta);
 
 					//其他未选择的路径信息素被自然挥发
-					if(isUseCross == 1) {
-						int preCityNo = (s==0?-1:currentRoute[s-1]);
+					if(useQCross == true) {
+						int preCityNo = (s==0?-1:qAnt[k].getCurMoveTrack()[s-1]); // FIXME
 						qAnt[k].updateQPAs(preCityNo, qAnt[k].getCurLocationId(), nextCityNo, -theta);
 					}
 
-					//更新当前解
-					currentDistance += distances[qAnt[k].getCurLocationId()][nextCityNo];
 					qAnt[k].move(nextCityNo);	//更新当前所在城市
 				}
 
 				//更新最优解
-				if(isOk && currentDistance < bestDistance) {
+				if(isOk && qAnt[k].getCurMoveCost() < bestCost) {
 					qtCrossCnt = 0;
-					bestDistance = currentDistance;
-					for(int i=0; i<N_CITY; i++) {
-						bestRoute[i] = currentRoute[i];
-						for(int j=0; j<N_CITY; j++) {
-							bestPheromone[i][j].setAlpha(qAnt[k].getQtpa()[i][j].getAlpha());
-							bestPheromone[i][j].setBeta(qAnt[k].getQtpa()[i][j].getBeta());
+					bestCost = qAnt[k].getCurMoveCost();
+					for(int i=0; i<env.size(); i++) {
+						bestTrack[i] = qAnt[k].getCurMoveTrack()[i];
+						for(int j=0; j<env.size(); j++) {
+							bestQPAs[i][j].setAlpha(qAnt[k].getQtpa()[i][j].getAlpha());
+							bestQPAs[i][j].setBeta(qAnt[k].getQtpa()[i][j].getBeta());
 						}
 					}
 
-					//判断当前最优解是否等于理论解，若是则结束程序
-					if(theoryDistance>0 && 
-							(true==isZero(bestDistance-theoryDistance) || 
-							bestDistance-theoryDistance<0)) {
-						THEORY_GENERATION = gn;
-						break;
-					}
 				} else {
 					System.out.println("第" + k + "只蚂蚁无解");
-					for(int r : currentRoute) {
+					for(int r : qAnt[k].getCurMoveTrack()) {
 						System.out.print(r + "<-");
 					}
 					System.out.println();
@@ -227,14 +183,11 @@ public class QACA {
 
 				//当超过一定次数没有更新最优解时，执行量子交叉
 				qtCrossCnt++;
-				if((isUseVolatilize == 1) && (qtCrossCnt > CROSS_CRIVAL)) {
+				if(useVolatilize && (qtCrossCnt > CROSS_LIMIT)) {
 					qtCrossCnt = 0;
 					qAnt[k].qCross();
 				}
 			}
-
-			if(THEORY_GENERATION > -1)
-				break;
 		}
 	}
 
@@ -251,25 +204,25 @@ public class QACA {
 
 		if(cityA == cityB)
 			beta = 0;
-		else if(true == isZero(maxDist[cityA]-avgDist[cityA]))
+		else if(true == isZero(env.maxDist(cityA)-env.avgDist(cityA)))
 			beta = 0.5;
 		else
-			beta = (distances[cityA][cityB]-avgDist[cityA])/
-				(2*(maxDist[cityA]-avgDist[cityA]))+0.5;
+			beta = (env.dist(cityA, cityB)-env.avgDist(cityA))/
+				(2*(env.maxDist(cityA)-env.avgDist(cityA)))+0.5;
 
-		beta = (beta + bestPheromone[cityA][cityB].getBeta()) / 2.0;
+		beta = (beta + bestQPAs[cityA][cityB].getBeta()) / 2.0;
 		return beta*beta;
 	}
 	
 		//打印最优解
 	public void printBestSolution() {
-		for(int r : bestRoute) {
+		for(int r : bestTrack) {
 			System.out.print(r + "<-");
 		}
 	}
 
 	//判断浮点数是否为0
-	public boolean isZero(double num) {
+	private boolean isZero(double num) {
 		return (Math.abs(num) < PRECISION)? true : false;
 	}
 
