@@ -1,15 +1,16 @@
-package exp.libs.algorithm.tsp.qant;
+package exp.libs.algorithm.tsp.qant.bean;
 
 import java.util.Arrays;
 
-import exp.libs.algorithm.tsp.qant.bean.QAnt;
-import exp.libs.algorithm.tsp.qant.bean.QPA;
 import exp.libs.utils.pub.RandomUtils;
 
 /**
  * 
  * <PRE>
  * 量子蚁群算法
+ *  (仅适用于无向对称拓扑图)
+ * 
+ *  FIXME: 设定边权最大值
  * </PRE>
  * 
  * @author lqb
@@ -17,22 +18,13 @@ import exp.libs.utils.pub.RandomUtils;
  */
 public class QACA {
 
-	/* System Variable */
-	public final static double PRECISION = 1.0e-6D;		//最小精度
-	public final static double PI = 3.141592654D;			//数学常量π
-	public final static double MAX_DOUBLE = Double.MAX_VALUE;//double最大值
-
+	/** 最小精度 */
+	private final static double PRECISION = 1.0e-6D;
+	
 	/* Application Variable */
-	public final static double ZETA = 1.5D;		//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
-	public final static double GAMMA = 4.0D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
-	public final static int SRAND_CRIVAL = 8;		//最优路径转移随机数阀值
 	public final static int isUseCross = 1;			//是否启动变异处理，可避免算法停滞，但消耗时间
 	public final static int CROSS_CRIVAL = 50;		//变异处理阀值，isUseCross = 1时有效。当连续CROSS_CRIVAL次求解但没有更新最优解时，执行量子交叉
 	public final static int isUseVolatilize = 1;	//是否启用信息素自然挥发，可加速收敛，但消耗时间
-
-	public final static double MIN_THETA = 0.001D * PI;	//最小旋转角
-	public final static double MAX_THETA = 0.05D * PI;	//最大旋转角
-	public final static double DELTA_THETA = MAX_THETA - MIN_THETA;	//旋转角
 
 	/* User Variable */
 	public final static int N_QANT = 5;				//量子蚂蚁种群规模
@@ -41,7 +33,7 @@ public class QACA {
 	private int srcId;
 	private int snkId;
 
-	private double[][] distances;	//distances[A][B]: 城市A->B的距离
+	private int[][] distances;	//distances[A][B]: 城市A->B的距离
 	private double[] avgDist;		//avgDist[i]: 城市i到各个城市的平均距离 (∑distances[i][0~(N_CITY-1)])/N_CITY
 	private double[] maxDist;		//maxDist[i]: 城市i到各个城市的距离中的最大值 max{distances[i][0~(N_CITY-1)]}
 	private double[][] eta;			//计算蚂蚁转移时城市A->B的自启发量:η(A, B) = 1/distance[A][B]
@@ -72,7 +64,7 @@ public class QACA {
 
 		//初始化内存空间
 	public void initRoom() {
-		this.distances = new double[N_CITY][N_CITY];
+		this.distances = new int[N_CITY][N_CITY];
 		this.avgDist = new double[N_CITY];
 		this.maxDist = new double[N_CITY];
 		this.eta = new double[N_CITY][N_CITY];
@@ -83,7 +75,8 @@ public class QACA {
 	}
 
 		//初始化路径信息
-	public void initPath(double[][] distances) {
+	// FIXME: 不一定是下三角矩阵, 要看distances是不是无向图
+	public void initPath(int[][] distances) {
 		this.distances = distances;
 		
 		int i, j;
@@ -111,13 +104,17 @@ public class QACA {
 				bestPheromone[j][i].setBeta(initVal);
 			}
 
+		
 		//计算蚂蚁转移时城市A->B的自启发量:η(A, B) = 1/distances[A][B]
 		for(i=0; i<N_CITY; i++) {
 			for(j=0; j<=i; j++) {
-				if(isZero(distances[i][j]) == true)
+				if(isZero(distances[i][j])) {
 					eta[i][j] = eta[j][i] = 1.0;
-				else
-					eta[i][j] = eta[j][i] = 1.0/distances[i][j];
+				} else if(distances[i][j] == Integer.MAX_VALUE) {
+					eta[i][j] = eta[j][i] = 0;
+				} else {
+					eta[i][j] = eta[j][i] = 1.0D/distances[i][j];
+				}
 			}
 		}
 	}
@@ -125,8 +122,7 @@ public class QACA {
 		//初始化量子蚂蚁种群
 	public void initQAntGroup() {
 		for(int i=0; i<N_QANT; i++) {
-			qAnt[i] = new QAnt();
-			qAnt[i].initAnt(N_CITY);
+			qAnt[i] = new QAnt(srcId, snkId, distances, eta);
 		}
 	}
 
@@ -134,14 +130,12 @@ public class QACA {
 	public void updateAntInfo(int generation) {
 		for(int i=0; i<N_QANT; i++) {
 			//设置蚂蚁代数
-			qAnt[i].setGeneration(generation);
+			qAnt[i].evolve();
 
 			//把蚂蚁分配到各个城市
 //			int cityNo = (i + qAnt[i].getGeneration()) % N_CITY;
 			int cityNo = (RandomUtils.randomBoolean() ? srcId : snkId); // 只分配到源宿城市
-			qAnt[i].setNowCityNo(cityNo);
-			qAnt[i].resetTabuCity();
-			qAnt[i].addTabuCity(cityNo);
+			qAnt[i].move(cityNo);
 		}
 	}
 
@@ -170,10 +164,10 @@ public class QACA {
 				for(int s=0; s<N_CITY; s++)
 				{
 					//记录第k只蚂蚁的每一步
-					currentRoute[s] = qAnt[k].getNowCityNo();
+					currentRoute[s] = qAnt[k].getCurLocationId();
 					
 					//计算第k只蚂蚁的下一步
-					int nextCityNo = qAnt[k].selectNextCity(eta, srcId, snkId);
+					int nextCityNo = qAnt[k].selectNextId();
 					if(nextCityNo == -1) {
 //						nextCityNo = currentRoute[0];
 						isOk = (s != N_CITY - 1);
@@ -182,24 +176,26 @@ public class QACA {
 					}
 
 					//计算蚂蚁从nowCityNo移动到nextCityNo时在路径上释放的信息素
-					double beta2 = getMoveQTPA(qAnt[k].getNowCityNo(), nextCityNo);
-
+					double beta2 = getMoveQTPA(qAnt[k].getCurLocationId(), nextCityNo);
+					double pGeneration = ((double) qAnt[k].getGeneration()) / ((double) MAX_GENERATION);
+					QPA curQPA = qAnt[k].getQtpa()[qAnt[k].getCurLocationId()][nextCityNo];
+					QPA bestQPA = bestPheromone[qAnt[k].getCurLocationId()][nextCityNo];
+					
 					//计算量子旋转门的旋转角θ
-					double theta = qAnt[k].getTheta(beta2, qAnt[k].getNowCityNo(), nextCityNo, bestPheromone);
-
+					double theta = QUtils.getTheta(beta2, pGeneration, curQPA, bestQPA);
+					
 					//使用量子旋转门更新当前移动路径上信息素
-					qAnt[k].updateQTPA(qAnt[k].getNowCityNo(), nextCityNo, theta);
+					qAnt[k].updateQPA(qAnt[k].getCurLocationId(), nextCityNo, theta);
 
 					//其他未选择的路径信息素被自然挥发
 					if(isUseCross == 1) {
 						int preCityNo = (s==0?-1:currentRoute[s-1]);
-						qAnt[k].updateOtherQTPA(preCityNo, qAnt[k].getNowCityNo(), nextCityNo, -theta);
+						qAnt[k].updateQPAs(preCityNo, qAnt[k].getCurLocationId(), nextCityNo, -theta);
 					}
 
 					//更新当前解
-					currentDistance += distances[qAnt[k].getNowCityNo()][nextCityNo];
-					qAnt[k].addTabuCity(nextCityNo);
-					qAnt[k].setNowCityNo(nextCityNo);	//更新当前所在城市
+					currentDistance += distances[qAnt[k].getCurLocationId()][nextCityNo];
+					qAnt[k].move(nextCityNo);	//更新当前所在城市
 				}
 
 				//更新最优解
@@ -233,7 +229,7 @@ public class QACA {
 				qtCrossCnt++;
 				if((isUseVolatilize == 1) && (qtCrossCnt > CROSS_CRIVAL)) {
 					qtCrossCnt = 0;
-					qAnt[k].qtCross();
+					qAnt[k].qCross();
 				}
 			}
 
@@ -272,14 +268,9 @@ public class QACA {
 		}
 	}
 
-		//释放全局内存
-	public void destory() {
-		
-	}
-
-		//判断浮点数是否为0
-	public static boolean isZero(double fNum) {
-		return (Math.abs(fNum)<PRECISION)?true:false;
+	//判断浮点数是否为0
+	public boolean isZero(double num) {
+		return (Math.abs(num) < PRECISION)? true : false;
 	}
 
 }

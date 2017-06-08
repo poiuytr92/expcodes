@@ -1,235 +1,296 @@
 package exp.libs.algorithm.tsp.qant.bean;
 
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-import exp.libs.algorithm.tsp.qant.QACA;
 import exp.libs.utils.pub.RandomUtils;
 
 /**
  * 量子蚂蚁
  */
-public class QAnt {
+class QAnt {
 
-	private int generation;	//第generation代的量子蚂蚁
+	/** 该蚂蚁已进化的代数 */
+	private int generation;
 	
-	private QPA[][] qtpa;	//qtpa[i][j]: city[i]->city[j]路径信息素的概率幅
+	/** 该蚂蚁求得可行解的次数 */
+	private int solveCnt;
 	
-	private int nowCityNo;	//蚂蚁当前所在的城市编号
+	/** 该蚂蚁所携带的所有路径信息素的概率幅(量子基因编码) */
+	private QPA[][] _QPAs;
 	
-	private boolean[] tabuCity;	//城市禁忌表
+	/** 该蚂蚁需要移动的拓扑图规模(节点数) */
+	private final int graphSize;
+	
+	/** 拓扑图源点编号 */
+	private final int graphSrcId;
+	
+	/** 拓扑图宿点编号 */
+	private final int graphSnkId;
+	
+	/** 该蚂蚁需要移动的拓扑图节点间距常量 */
+	private final int[][] graphDist;
+	
+	/** 蚂蚁移动从i->j移动的自启发常量(即能见度, 与i->j的距离成反比) */
+	private final double[][] eta;
+	
+	/** 蚂蚁当前所在的节点编号 */
+	private int curLocationId;
+	
+	/** 蚂蚁自身禁忌表（已走过的节点列入禁忌表） */
+	private boolean[] tabus;
 
-	private int tabuCnt;
+	/** 蚂蚁到目前为止的移动轨迹(局部解/当前解), 以及节点顺序集 */
+	private int[] moveTrack;
 	
-	private int nCity;		//tmp: 城市规模
-
-	public QAnt() {
+	/** 蚂蚁到目前为止的移动步数 */
+	private int moveStep;
+	
+	/** 蚂蚁到目前为止的移动轨迹代价(移动路径的边权总和, 评估当前解是否为最优解的参考值) */
+	private int moveCost;
+	
+	/**
+	 * 构造函数
+	 * @param graphSrcId 拓扑图源点
+	 * @param graphSnkId 拓扑图宿点
+	 * @param graphDist 拓扑图节点间距
+	 * @param eta 拓扑图节点间的能见度（自启发常量， 为节点间距的倒数）
+	 */
+	protected QAnt(final int graphSrcId, final int graphSnkId, 
+			final int[][] graphDist, final double[][] eta) {
+		this.graphSize = graphDist.length;
+		this.graphSrcId = graphSrcId;
+		this.graphSnkId = graphSnkId;
+		this.graphDist = graphDist;
+		this.eta = eta;
 		
+		this.generation = 0;
+		this.solveCnt = 0;
+		this.tabus = new boolean[graphSize];
+		this.moveTrack = new int[graphSize];
+		
+		initQPAs();
 	}
-
-	public int getGeneration() {
-		return generation;
-	}
-
-	public void setGeneration(int generation) {
-		this.generation = generation;
-	}
-
-	public int getNowCityNo() {
-		return nowCityNo;
-	}
-
-	public void setNowCityNo(int nowCityNo) {
-		this.nowCityNo = nowCityNo;
-	}
-
-	public void addTabuCity(int cityId) {
-		if(tabuCity[cityId] == false) {
-			tabuCity[cityId] = true;
-			tabuCnt++;
-		}
-	}
-
-	public QPA[][] getQtpa() {
-		return qtpa;
-	}
-
-	//初始化量子蚂蚁
-	public void initAnt(int nCity) {
-		this.nCity = nCity;
-
-		//初始化每只蚂蚁携带的路径信息素，初值为1/√2
-		double val = (double) (1.0/Math.sqrt(2.0D));
-		this.qtpa = new QPA[nCity][nCity];
-		for(int i=0; i<nCity; i++) {
-			for(int j=0; j<nCity; j++) {
-				qtpa[i][j] = new QPA();
-				qtpa[i][j].setAlpha(val);
-				qtpa[i][j].setBeta(val);
-			}
-		}
-
-		//分配蚂蚁禁忌表空间
-		this.tabuCity = new boolean[nCity];
-		resetTabuCity();
-	}
-
-	//获取cityA->cityB的路径信息素浓度: τ(cityA, cityB) = (qtpa[cityA][cityB].beta)^2
-	public double getTau(int cityA, int cityB) {
-		double beta2 = qtpa[cityA][cityB].getBeta() * qtpa[cityA][cityB].getBeta();
-		return beta2;
-	}
-
-	//蚂蚁根据转移规则选择下一个城市
-	public int selectNextCity(double[][] eta, int srcId, int snkId) {
-		int selectCityNo = -1; 
-		int randNum = RandomUtils.randomInt() % 11;
-
-		if(randNum < QACA.SRAND_CRIVAL)
-		{
-			double argmax = -1;
-			for(int nextCityNo=0; nextCityNo<nCity; nextCityNo++)
-			{
-				if(isTabu(nextCityNo, eta, srcId, snkId))
-					continue;
-
-				double tmpVal = Math.pow(getTau(nowCityNo, nextCityNo), QACA.ZETA) * 
-						Math.pow(eta[nowCityNo][nextCityNo], QACA.GAMMA);
-				if(argmax <= tmpVal) 
-				{
-					argmax = tmpVal;
-					selectCityNo = nextCityNo;
+	
+	/**
+	 * 初始化蚂蚁的量子编码
+	 */
+	private void initQPAs() {
+		this._QPAs = new QPA[graphSize][graphSize];
+		for(int i = 0; i < graphSize; i++) {
+			for(int j = 0; j <= i; j++) {
+				_QPAs[i][j] = new QPA();
+				if(eta[i][j] == 0) {
+					_QPAs[i][j].setAlpha(1D);
+					_QPAs[i][j].setBeta(0D);
+				}
+				
+				if(i != j) {
+					_QPAs[j][i] = new QPA();
+					if(eta[j][i] == 0) {
+						_QPAs[j][i].setAlpha(1D);
+						_QPAs[j][i].setBeta(0D);
+					}
 				}
 			}
 		}
-		else 
-		{
-			double frand = ((double) (RandomUtils.randomInt()%11))/11.0;
-			double sumVal = 0;
-			double perVal = 0;
-			int nextCityNo;
-
-			for(nextCityNo=0; nextCityNo<nCity; nextCityNo++)
-			{
-				if(isTabu(nextCityNo, eta, srcId, snkId))
-					continue;
-
-				sumVal += Math.pow(getTau(nowCityNo, nextCityNo), QACA.ZETA) * 
-						Math.pow(eta[nowCityNo][nextCityNo], QACA.GAMMA);
-			}
-
-			for(nextCityNo=0; nextCityNo<nCity; nextCityNo++) {
-				if(isTabu(nextCityNo, eta, srcId, snkId))
-					continue;
-
-				perVal += (Math.pow(getTau(nowCityNo, nextCityNo), QACA.ZETA) * 
-						Math.pow(eta[nowCityNo][nextCityNo], QACA.GAMMA)) / sumVal;
-				selectCityNo = nextCityNo;
-				if(perVal >= frand)
-					break;
-			}
-		}
-		return selectCityNo;
+	}
+	
+	/**
+	 * 进化到下一代蚂蚁
+	 *  （量子编码继承遗传，移动痕迹重置）
+	 */
+	protected void evolve() {
+		generation++;
+		curLocationId = -1;
+		moveStep = 0;
+		moveCost = 0;
+		
+		Arrays.fill(tabus, false);
+		Arrays.fill(moveTrack, -1);
 	}
 
-	private boolean isTabu(int cityId, double[][] eta, int srcId, int snkId) {
+	protected int getGeneration() {
+		return generation;
+	}
+	
+	@Deprecated
+	protected QPA[][] getQtpa() {
+		return _QPAs;
+	}
+	
+	/**
+	 * 根据寻路决策的规则选择下一个移动的节点ID
+	 * @return 若无路可走则返回-1
+	 */
+	protected int selectNextId() {
+		// FIXME 这两个值越小越重要， 且和为1？  若蚂蚁代数很大，依然未求得过一个解，则需要适当调整参数
+		final double ZETA = 0.2D;	//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
+		final double GAMMA = 0.8D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
+		
+		int nextId = -1;
+		final int SCOPE = 10, RAND_LIMIT = 8;
+		int rand = RandomUtils.randomInt(SCOPE);
+
+		// 蚂蚁以80%的概率以信息素作为决策方式进行路径转移（协作性优先）
+		if(rand < RAND_LIMIT) {
+			double argmax = -1;
+			for(int i = curLocationId, j = 0; j < graphSize; j++) {
+				if(isTabu(j)) {
+					continue;
+				}
+
+				double arg = Math.pow(getTau(i, j), ZETA) * 
+						Math.pow(eta[i][j], GAMMA);
+				if(argmax <= arg) {
+					argmax = arg;
+					nextId = j;
+				}
+			}
+			
+		// 蚂蚁以20%的概率以随机方式进行路径转移（保持创新性）
+		} else {
+			final double fRand = RandomUtils.randomInt(SCOPE) / (SCOPE * 1.0D);
+			double sum = 0;
+			
+			Map<Integer, Double> map = new LinkedHashMap<Integer, Double>();
+			for(int i = curLocationId, j = 0; j < graphSize; j++) {
+				if(isTabu(j)) {
+					continue;
+				}
+				
+				double arg = Math.pow(getTau(i, j), ZETA) * 
+						Math.pow(eta[i][j], GAMMA);
+				sum += arg;
+				map.put(j, arg);
+			}
+			
+			Iterator<Integer> nextIds = map.keySet().iterator();
+			while(nextIds.hasNext()) {
+				nextId = nextIds.next(); // 预选： 确保至少选到一个转移点
+				double arg = map.get(nextId);
+				if(arg / sum >= fRand) {
+					break;
+				}
+			}
+		}
+		return nextId;
+	}
+	
+	/**
+	 * 检查下一跳是否可行
+	 * @param nodeId
+	 * @return
+	 */
+	private boolean isTabu(int nextId) {
 		boolean isTabu = false;
-		if(tabuCity[cityId]) {
+		
+		// 下一节点已处于禁忌表
+		if(tabus[nextId]) {
 			isTabu = true;
-		} else if((cityId == srcId || cityId == snkId) && tabuCnt < nCity - 1) {
+			
+		// 当前节点与下一跳节点不连通
+		} else if(graphDist[curLocationId][nextId] == Integer.MAX_VALUE) {
 			isTabu = true;
-		} else if(QACA.isZero(eta[nowCityNo][cityId])) {
-			isTabu = true;
+			
+		// 当下一跳节点为拓扑图的源宿点时，则下一跳只能是最后一跳
+		} else if((nextId == graphSrcId || nextId == graphSnkId)) {
+			isTabu = !(moveStep + 1 == graphSize);
 		}
 		return isTabu;
 	}
 	
-	//计算量子旋转门的旋转角θ
-	public double getTheta(double beta2, int cityA, int cityB, QPA[][] bestPheromone) {
-		double ratio = generation / QACA.MAX_GENERATION;
-		double theta = (QACA.MAX_THETA - QACA.DELTA_THETA * ratio) * 
-				beta2 * getThetaDirection(cityA, cityB, bestPheromone);
-		return theta;
-	}
-
-	//计算旋转角θ的旋转方向
-	public int getThetaDirection(int cityA, int cityB, QPA[][] bestPheromone) {
-		double dbest = bestPheromone[cityA][cityB].getBeta() / bestPheromone[cityA][cityB].getAlpha();
-		double dnow = qtpa[cityA][cityB].getBeta() / qtpa[cityA][cityB].getAlpha();
-		double psiBest = Math.atan(dbest);
-		double psiNow = Math.atan(dnow);
-		int direction = -1;
-
-		if(((dbest/dnow)*(psiBest-psiNow)) >= 0)
-			direction = 1;
-
-		return direction;
-	}
-
-	//使用量子旋转门更新cityA->cityB的路径信息素
-	public void updateQTPA(int cityA, int cityB, double theta) {
-		double cosTheta = Math.cos(theta);
-		double sinTheta = Math.sin(theta);
-		double alphaTmp = qtpa[cityA][cityB].getAlpha();
-		double betaTmp = qtpa[cityA][cityB].getBeta();
-
-		qtpa[cityA][cityB].setAlpha(cosTheta*alphaTmp - sinTheta*betaTmp);
-		qtpa[cityA][cityB].setBeta(sinTheta*alphaTmp + cosTheta*betaTmp);
-		
-		qtpa[cityB][cityA].setAlpha(qtpa[cityA][cityB].getAlpha());
-		qtpa[cityB][cityA].setBeta(qtpa[cityA][cityB].getBeta());
-	}
-
-	/*
-	 * 挥发非preCityNo->curCityNo和非curCityNo->nextCityNo路径的路径信息素
-	 * 当蚂蚁选择了路径curCityNo->nextCityNo时
-	 * 以curCityNo为起点，非nextCityNo为终点的其他路径的信息素将自然挥发
-	 * 由于路径信息素是对称，因此curCityNo->preCityNo的路径信息素也不能挥发
+	/**
+	 * 获取路径 src->snk 的信息素浓度τ（即选择这条路径的概率）
+	 *  τ(src, snk) = (_QPAs[src][snk].beta)^2
+	 * @param srcId
+	 * @param snkId
+	 * @return
 	 */
-	public void updateOtherQTPA(int preCityNo, int curCityNo, int nextCityNo, double theta) {
-		double cosTheta = Math.cos(theta);
-		double sinTheta = Math.sin(theta);
-
-		for(int j=0; j<nCity; j++)
-		{
-			if(j==preCityNo || j==nextCityNo)
-				continue;
-			
-			double alphaTmp = qtpa[curCityNo][j].getAlpha();
-			double betaTmp = qtpa[curCityNo][j].getBeta();
-
-			qtpa[curCityNo][j].setAlpha(cosTheta*alphaTmp - sinTheta*betaTmp);
-			qtpa[curCityNo][j].setBeta(sinTheta*alphaTmp + cosTheta*betaTmp);
-
-			qtpa[j][curCityNo].setAlpha(qtpa[curCityNo][j].getAlpha());
-			qtpa[j][curCityNo].setBeta(qtpa[curCityNo][j].getBeta());
-		}
-	}
-
-	//变异处理：量子交叉
-	public void qtCross() {
-		for(int i=0; i<nCity; i++)
-		{
-			int k = ((i+1)==nCity)?0:i+1;
-			for(int j=0; j<=i; j++)
-			{
-				double tmp = qtpa[i][j].getBeta();
-				qtpa[i][j].setBeta(qtpa[i][j].getAlpha());
-				qtpa[i][j].setAlpha(tmp);
-
-				qtpa[j][i].setBeta(qtpa[i][j].getBeta());
-				qtpa[j][i].setAlpha(qtpa[i][j].getAlpha());			}
-		}
-	}
-
-	//重置蚂蚁禁忌表
-	public void resetTabuCity() {
-		this.tabuCnt = 0;
-		Arrays.fill(tabuCity, false);
+	private double getTau(int srcId, int snkId) {
+		double beta = _QPAs[srcId][snkId].getBeta();
+		double tau = beta * beta;
+		return tau;
 	}
 	
-	//释放量子蚂蚁占用的内存
-	public void destoryAnt() {
+	/**
+	 * 移动到下一位置
+	 * @param nodeId
+	 */
+	protected void move(int nodeId) {
+		if(curLocationId >= 0) {
+			tabus[curLocationId] = true;
+			moveStep++;
+		}
 		
+		// 哽新、挥发对应路径上的信息素
+		
+		curLocationId = nodeId;
+	}
+
+	protected int getCurLocationId() {
+		return curLocationId;
+	}
+	
+	/**
+	 * 使用量子旋转门更新量子编码: 
+	 * 	加强src->snk的路径信息素
+	 * @param srcId 路径起点
+	 * @param snkId 路径终点
+	 * @param theta 正向旋转角
+	 */
+	protected void updateQPA(final int srcId, final int snkId, final double theta) {
+		final double cosTheta = Math.cos(theta);
+		final double sinTheta = Math.sin(theta);
+		final double alpha = _QPAs[srcId][snkId].getAlpha();
+		final double beta = _QPAs[srcId][snkId].getBeta();
+		_QPAs[srcId][snkId].setAlpha(cosTheta * alpha - sinTheta * beta);
+		_QPAs[srcId][snkId].setBeta(sinTheta * alpha + cosTheta * beta);
+		_QPAs[snkId][srcId].setAlpha(_QPAs[srcId][snkId].getAlpha());
+		_QPAs[snkId][srcId].setBeta(_QPAs[srcId][snkId].getBeta());
+	}
+
+	/**
+	 * 使用量子旋转门更新量子编码: 
+	 *  挥发除了 cur->pre 和 cur->next 以外的与src相关的路径信息素
+	 *  (对称路径 pre->cur 信息素 等同于 cur->pre 信息素)
+	 * @param preId 上一节点
+	 * @param curId 当前节点
+	 * @param nextId 下一节点
+	 * @param theta 逆向旋转角
+	 */
+	protected void updateQPAs(int preId, int curId, int nextId, double theta) {
+		final double cosTheta = Math.cos(theta);
+		final double sinTheta = Math.sin(theta);
+
+		for(int j = 0; j < graphSize; j++) {
+			if(j == preId || j == nextId) {
+				continue;
+			}
+			
+			final double alphaTmp = _QPAs[curId][j].getAlpha();
+			final double betaTmp = _QPAs[curId][j].getBeta();
+			_QPAs[curId][j].setAlpha(cosTheta * alphaTmp - sinTheta * betaTmp);
+			_QPAs[curId][j].setBeta(sinTheta * alphaTmp + cosTheta * betaTmp);
+			_QPAs[j][curId].setAlpha(_QPAs[curId][j].getAlpha());
+			_QPAs[j][curId].setBeta(_QPAs[curId][j].getBeta());
+		}
+	}
+
+	/**
+	 * 使用量子交叉对量子编码做变异处理 
+	 */
+	protected void qCross() {
+		for(int i = 0; i < graphSize; i++) {
+			for(int j = 0; j <= i; j++) {
+				final double beta = _QPAs[i][j].getBeta();
+				_QPAs[i][j].setBeta(_QPAs[i][j].getAlpha());
+				_QPAs[i][j].setAlpha(beta);
+				_QPAs[j][i].setBeta(_QPAs[i][j].getBeta());
+				_QPAs[j][i].setAlpha(_QPAs[i][j].getAlpha());			}
+		}
 	}
 		
 }

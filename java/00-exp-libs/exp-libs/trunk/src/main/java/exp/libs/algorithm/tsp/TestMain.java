@@ -6,7 +6,7 @@ import java.util.Set;
 
 import exp.libs.algorithm.tsp.graph.Node;
 import exp.libs.algorithm.tsp.graph.TopoGraph;
-import exp.libs.algorithm.tsp.qant.QACA;
+import exp.libs.algorithm.tsp.qant.bean.QACA;
 import exp.libs.algorithm.tsp.spa.Dijkstra;
 import exp.libs.algorithm.tsp.ui.TopoGraphUI;
 import exp.libs.utils.ui.BeautyEyeUtils;
@@ -107,20 +107,13 @@ public class TestMain {
 		int nCity = subGraph.nodeSize();
 		subGraph.setAdjacencyMatrix();
 		int[][] matrix = subGraph.getAdjacencyMatrix();
-		double[][] dist = new double[nCity][nCity];
-		for(int i = 0; i < nCity; i++) {
-			for(int j = 0; j < nCity; j++) {
-				dist[i][j] = (double) matrix[i][j];
-			}
-		}
 		QACA fun = new QACA(nCity, 
 				subGraph.getSrc().getId(), subGraph.getSnk().getId());
 		fun.initRoom();	//初始化内存空间
-		fun.initPath(dist);	//初始化路径信息
+		fun.initPath(matrix);	//初始化路径信息
 		fun.initQAntGroup();	//初始化量子蚂蚁种群
 		fun.runQAnt();	//运行量子蚁群算法求解
 		fun.printBestSolution();	//打印最优解
-		fun.destory();	//释放全局内存
 	}
 	
 	/**

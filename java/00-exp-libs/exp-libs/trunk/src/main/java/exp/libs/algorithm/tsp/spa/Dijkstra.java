@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class Dijkstra {
 
-	private int MAX_WEIGHT = Integer.MAX_VALUE;
+	private final static int MAX_WEIGHT = Integer.MAX_VALUE;
 	
 	private int size;
 	
