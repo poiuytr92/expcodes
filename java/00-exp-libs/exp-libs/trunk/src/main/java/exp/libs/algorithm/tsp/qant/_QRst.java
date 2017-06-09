@@ -11,7 +11,7 @@ import java.util.Arrays;
  * @author lqb
  * @date 2017年6月9日
  */
-class _QRst {
+final class _QRst {
 
 	/** 拓扑图规模 */
 	private int size;
@@ -30,6 +30,12 @@ class _QRst {
 	
 	/** 是否为可行解 */
 	private boolean isVaild;
+	
+	private _QRst(final int size) {
+		this.size = size;
+		this.routes = new int[size];
+		this._QPAs = new __QPA[size][size];
+	}
 	
 	protected _QRst(final _QEnv env) {
 		this.size = env.size();
@@ -125,13 +131,23 @@ class _QRst {
 		this.isVaild = true;
 	}
 
-	protected void clone(_QRst other) {
+	protected _QRst clone() {
+		_QRst other = new _QRst(this.size);
+		other.copy(this);
+		return other;
+	}
+	
+	protected void copy(_QRst other) {
 		if(other != null && this.size == other.size) {
+			this.isVaild = other.isVaild;
 			this.cost = other.cost;
 			this.step = other.step;
 			for(int i = 0; i < size; i++) {
 				this.routes[i] = other.routes[i];
 				for(int j = 0; j < size; j++) {
+					if(this._QPAs[i][j] == null) {
+						this._QPAs[i][j] = new __QPA();
+					}
 					this._QPAs[i][j].setAlpha(other._QPAs[i][j].getAlpha());
 					this._QPAs[i][j].setBeta(other._QPAs[i][j].getBeta());
 				}

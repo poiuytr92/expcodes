@@ -10,7 +10,7 @@ import exp.libs.utils.pub.RandomUtils;
 /**
  * 量子蚂蚁
  */
-class _QAnt {
+final class _QAnt {
 
 	/** 最小精度 */
 	private final static double PRECISION = 1.0e-6D;
@@ -58,7 +58,7 @@ class _QAnt {
 		this.unsolveCnt = 0;
 	}
 	
-	protected _QRst getCurRst() {
+	protected _QRst getResult() {
 		return curRst;
 	}
 	

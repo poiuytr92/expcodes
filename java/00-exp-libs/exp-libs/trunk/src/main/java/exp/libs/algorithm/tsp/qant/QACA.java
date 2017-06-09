@@ -1,5 +1,13 @@
 package exp.libs.algorithm.tsp.qant;
 
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+
+import exp.libs.utils.os.ThreadUtils;
+import exp.libs.warp.other.thread.ThreadPool;
+
 
 /**
  * 
@@ -11,7 +19,7 @@ package exp.libs.algorithm.tsp.qant;
  * @author lqb
  * @date 2017年6月8日
  */
-public class QACA {
+public final class QACA {
 
 	/** 默认量子蚂蚁种群规模 */
 	public final static int DEFAULT_QANT_SIZE = 10;
@@ -72,27 +80,37 @@ public class QACA {
 		bestRst.setCost(Integer.MAX_VALUE);
 	}
 
-	// 运行量子蚁群算法求解
-	// FIXME: 多线程并行, 每只蚂蚁一条线程
-	public void runQAnt() {
-		for(int gn = 0; gn < ENV.MAX_GENERATION(); gn++) {  
+	public void exec() {
+		List<Future<_QRst>> rsts = new LinkedList<Future<_QRst>>();
+		for(int gn = 0; gn < ENV.MAX_GENERATION(); gn++) {
+			
+			// 每代蚂蚁的个体之间使用多线程并行搜索
+			ThreadPool<_QRst> tp = new ThreadPool<_QRst>(qAntSize);
 			for(_QAnt qAnt : qAnts) {
-				if(qAnt.solve(bestRst)) {	// FIXME： 多线程取最优解镜像
-					if(qAnt.getCurRst().getCost() < bestRst.getCost()) {
-						bestRst.clone(qAnt.getCurRst());	//更新最优解
+				rsts.add(tp.submit(new _QAntThread(qAnt, bestRst)));
+			}
+			
+			tp.shutdown();
+			while(!tp.isTerminated()) {
+				ThreadUtils.tSleep(200);
+			}
+			
+			// 每代蚂蚁更新一次种群的最优解
+			for(Future<_QRst> rst : rsts) {
+				try {
+					_QRst antRst = rst.get();
+					if(antRst.isVaild() && antRst.getCost() < bestRst.getCost()) {
+						bestRst.copy(antRst);
 					}
-				} else {
-					System.out.println("无解");
-					for(int r : qAnt.getCurRst().getRoutes()) {
-						System.out.print(r + "<-");
-					}
-					System.out.println();
+				} catch (Exception e) {
+					System.err.println("获取回调结果失败");	// FIXME
 				}
 			}
+			rsts.clear();
 		}
 	}
 	
-	//打印最优解
+	// FIXME 打印最优解
 	public void printBestSolution() {
 		System.out.println("最优解:");
 		for(int r : bestRst.getRoutes()) {

@@ -9,7 +9,7 @@ package exp.libs.algorithm.tsp.qant;
  * @author lqb
  * @date 2017年6月8日
  */
-class __QGraph {
+final class __QGraph {
 
 	/** 拓扑图规模(节点数) */
 	private int size;

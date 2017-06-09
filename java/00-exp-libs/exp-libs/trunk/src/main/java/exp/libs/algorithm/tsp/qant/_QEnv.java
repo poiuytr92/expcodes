@@ -1,6 +1,6 @@
 package exp.libs.algorithm.tsp.qant;
 
-class _QEnv {
+final class _QEnv {
 
 	/** 默认最大的蚂蚁代数（迭代次数） */
 	private final static int DEFAULT_MAX_GENERATION = 10;
