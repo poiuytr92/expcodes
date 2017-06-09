@@ -29,24 +29,32 @@ public class QACA {
 	private _QRst bestRst;
 	
 	/**
-	 * 
-	 * @param dist
-	 * @param srcId
-	 * @param snkId
+	 * 构造函数
+	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
+	 */
+	public QACA(int[][] dist) {
+		this(dist, -1, -1, 0, 0, true, true);
+	}
+	
+	/**
+	 * 构造函数
+	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
+	 * @param srcId 无向拓扑图的起点（若无则为-1）
+	 * @param snkId 无向拓扑图的重点（若无则为-1）
 	 */
 	public QACA(int[][] dist, int srcId, int snkId) {
 		this(dist, srcId, snkId, 0, 0, true, true);
 	}
 	
 	/**
-	 * 
-	 * @param dist
-	 * @param srcId
-	 * @param snkId
-	 * @param qAntSize
-	 * @param maxGeneration
-	 * @param useQCross
-	 * @param useVolatilize
+	 * 构造函数
+	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
+	 * @param srcId 无向拓扑图的起点（若无则为-1）
+	 * @param snkId 无向拓扑图的重点（若无则为-1）
+	 * @param qAntSize 量子蚂蚁数量（种群大小）, 默认值为10
+	 * @param maxGeneration 单只量子蚂蚁可遗传的最大代数（单只蚂蚁的求解次数）, 默认值为10
+	 * @param useQCross 是否使用量子交叉（可避免搜索陷入局部解或无解， 但降低收敛速度）, 默认启用
+	 * @param useVolatilize 信息素是否自然挥发（可避免陷入局部解，但降低收敛速度）, 默认启用
 	 */
 	public QACA(int[][] dist, int srcId, int snkId, 
 			int qAntSize, int maxGeneration,
