@@ -65,7 +65,7 @@ class _QRst {
 		Arrays.fill(routes, -1);
 	}
 	
-	protected boolean add(int nextRouteId, int routeCost) {
+	protected boolean move(int nextRouteId, int routeCost) {
 		boolean isOk = false;
 		if(step < size && nextRouteId >= 0 && routeCost >= 0) {
 			routes[step++] = nextRouteId;
@@ -98,6 +98,18 @@ class _QRst {
 	
 	protected int[] getRoutes() {
 		return routes;
+	}
+	
+	protected int getCurId() {
+		return routes[step];
+	}
+	
+	protected int getLastId() {
+		int lastId = -1;
+		if(step > 0) {
+			lastId = routes[step - 1];
+		}
+		return lastId;
 	}
 	
 	protected void clone(_QRst other) {
