@@ -12,6 +12,9 @@ package exp.libs.algorithm.tsp.qant.bean;
  */
 public class QUtils {
 
+	/** 最小精度 */
+	private final static double PRECISION = 1.0e-6D;
+	
 	/** 数学常量π */
 	private final static double PI = 3.141592654D;
 	
@@ -33,7 +36,7 @@ public class QUtils {
 	 * @return 旋转角θ
 	 */
 	public static double getTheta(double beta2, double pGeneration, 
-			QPA curQPA, QPA bestQPA) {
+			__QPA curQPA, __QPA bestQPA) {
 		double theta = (MAX_THETA - DELTA_THETA * pGeneration) * 
 				beta2 * getThetaDirection(curQPA, bestQPA);
 		return theta;
@@ -45,13 +48,18 @@ public class QUtils {
 	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
 	 * @return 顺时针:1; 逆时针:-1
 	 */
-	private static int getThetaDirection(QPA curQPA, QPA bestQPA) {
+	private static int getThetaDirection(__QPA curQPA, __QPA bestQPA) {
 		double pBest = bestQPA.getBeta() / bestQPA.getAlpha();
 		double pCur = curQPA.getBeta() / curQPA.getAlpha();
 		double atanBest = Math.atan(pBest);
 		double atanCur = Math.atan(pCur);
 		int direction = (((pBest / pCur) * (atanBest - atanCur)) >= 0 ? 1 : -1);
 		return direction;
+	}
+	
+	//判断浮点数是否为0
+	public static boolean isZero(double num) {
+		return (Math.abs(num) < PRECISION)? true : false;
 	}
 		
 }

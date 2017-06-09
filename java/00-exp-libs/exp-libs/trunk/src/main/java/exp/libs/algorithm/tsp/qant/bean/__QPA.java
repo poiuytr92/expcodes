@@ -8,7 +8,7 @@ package exp.libs.algorithm.tsp.qant.bean;
  *  其中α^2 + β^2 = 1, 含义为对量子态|ψ>测量时，有α^2的概率坍缩到基态|0>，有β^2的概率坍缩到基态|1>
  *  亦即  α^2为不选择路径的概率，β^2是选择路径的概率
  */
-class QPA {
+class __QPA {
 
 	/** 量子概率幅初始值(1/√2) */
 	private final static double DEFAULT_QPA = 1.0D / Math.sqrt(2.0D);
@@ -19,7 +19,7 @@ class QPA {
 	/** 路径信息素的β概率幅(选择的概率)  */
 	private double beta;
 	
-	protected QPA() {
+	protected __QPA() {
 		this.alpha = DEFAULT_QPA;
 		this.beta = DEFAULT_QPA;
 	}

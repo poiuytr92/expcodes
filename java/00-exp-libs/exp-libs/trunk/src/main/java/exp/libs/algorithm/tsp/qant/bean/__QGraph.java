@@ -9,7 +9,7 @@ package exp.libs.algorithm.tsp.qant.bean;
  * @author lqb
  * @date 2017年6月8日
  */
-class QEnv {
+class __QGraph {
 
 	/** 拓扑图规模(节点数) */
 	private int size;
@@ -47,7 +47,7 @@ class QEnv {
 	 * @param srcId 拓扑图源点编号
 	 * @param snkId 拓扑图终点编号
 	 */
-	protected QEnv(int[][] dist, int srcId, int snkId) {
+	protected __QGraph(int[][] dist, int srcId, int snkId) {
 		this.size = (dist == null ? 0 : dist.length);
 		this.srcId = srcId;
 		this.snkId = snkId;

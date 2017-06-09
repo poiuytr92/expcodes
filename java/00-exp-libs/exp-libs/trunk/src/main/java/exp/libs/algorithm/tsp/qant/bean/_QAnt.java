@@ -10,7 +10,7 @@ import exp.libs.utils.pub.RandomUtils;
 /**
  * 量子蚂蚁
  */
-class QAnt {
+class _QAnt {
 
 	/** 该蚂蚁已进化的代数 */
 	private int generation;
@@ -19,10 +19,7 @@ class QAnt {
 	private int solveCnt;
 	
 	/** 蚂蚁寻路环境 */
-	private QEnv env;
-	
-	/** 该蚂蚁所携带的所有路径信息素的概率幅(量子基因编码) */
-	private QPA[][] _QPAs;
+	private final _QEnv ENV;
 	
 	/** 蚂蚁当前所在的节点编号 */
 	private int curLocationId;
@@ -30,52 +27,19 @@ class QAnt {
 	/** 蚂蚁自身禁忌表（已走过的节点列入禁忌表） */
 	private boolean[] tabus;
 
-	/** 蚂蚁到目前为止的移动轨迹(局部解/当前解), 以及节点顺序集 */
-	private int[] moveTrack;
-	
-	/** 蚂蚁到目前为止的移动步数 */
-	private int moveStep;
-	
-	/** 蚂蚁到目前为止的移动轨迹代价(移动路径的边权总和, 评估当前解是否为最优解的参考值) */
-	private int moveCost;
+	/** 蚂蚁当前的移动数据(当前局部解) */
+	private _QRst curRst;
 	
 	/**
 	 * 构造函数
-	 * @param env
+	 * @param ENV
 	 */
-	protected QAnt(QEnv env) {
-		this.env = env;
-		
+	protected _QAnt(final _QEnv ENV) {
+		this.ENV = ENV;
 		this.generation = 0;
 		this.solveCnt = 0;
-		this.tabus = new boolean[env.size()];
-		this.moveTrack = new int[env.size()];
-		
-		initQPAs();
-	}
-	
-	/**
-	 * 初始化蚂蚁的量子编码
-	 */
-	private void initQPAs() {
-		this._QPAs = new QPA[env.size()][env.size()];
-		for(int i = 0; i < env.size(); i++) {
-			for(int j = 0; j <= i; j++) {
-				_QPAs[i][j] = new QPA();
-				if(env.eta(i, j) == 0) {
-					_QPAs[i][j].setAlpha(1D);
-					_QPAs[i][j].setBeta(0D);
-				}
-				
-				if(i != j) {
-					_QPAs[j][i] = new QPA();
-					if(env.eta(j, i) == 0) {
-						_QPAs[j][i].setAlpha(1D);
-						_QPAs[j][i].setBeta(0D);
-					}
-				}
-			}
-		}
+		this.tabus = new boolean[ENV.size()];
+		this.curRst = new _QRst(ENV);
 	}
 	
 	/**
@@ -85,11 +49,8 @@ class QAnt {
 	protected void evolve() {
 		generation++;
 		curLocationId = -1;
-		moveStep = 0;
-		moveCost = 0;
-		
+		curRst.reset();
 		Arrays.fill(tabus, false);
-		Arrays.fill(moveTrack, -1);
 	}
 
 	protected int getGeneration() {
@@ -97,8 +58,76 @@ class QAnt {
 	}
 	
 	@Deprecated
-	protected QPA[][] getQtpa() {
-		return _QPAs;
+	protected __QPA[][] getQtpa() {
+		return curRst.getQPAs();
+	}
+	
+	protected boolean solve(final _QRst bestRst) {
+		boolean isOk = true;
+		//设置蚂蚁代数
+		evolve();
+
+		//把蚂蚁分配到各个城市
+//		int cityNo = (i + qAnt[i].getGeneration()) % ENV.size();
+		int cityNo = (RandomUtils.randomBoolean() ? ENV.srcId() : ENV.snkId()); // 只分配到源宿城市
+		move(cityNo);
+				
+		//计算第k只蚂蚁的第s步
+		for(int s = 0; s < ENV.size(); s++) { // FIXME: 步长-1
+			
+			//计算第k只蚂蚁的下一步
+			int nextCityNo = selectNextId();
+			if(nextCityNo == -1) {
+//				nextCityNo = currentRoute[0];
+				isOk = (s != ENV.size() - 1);
+				// FIXME 加入剩余点均为非必经点， 则认为得到一个解
+				break;
+			}
+
+			//计算蚂蚁从nowCityNo移动到nextCityNo时在路径上释放的信息素
+			double beta2 = getMoveQTPA(getCurLocationId(), nextCityNo, bestRst);
+			double pGeneration = ((double) getGeneration()) / ((double) ENV.MAX_GENERATION());
+			__QPA curQPA = getQtpa()[getCurLocationId()][nextCityNo];
+			__QPA bestQPA = bestRst.QPA(getCurLocationId(), nextCityNo);
+			
+			//计算量子旋转门的旋转角θ
+			double theta = QUtils.getTheta(beta2, pGeneration, curQPA, bestQPA);
+			
+			//使用量子旋转门更新当前移动路径上信息素
+			updateQPA(getCurLocationId(), nextCityNo, theta);
+
+			//其他未选择的路径信息素被自然挥发
+			if(ENV.isUseVolatilize()) {
+				int preCityNo = (s==0?-1:getCurRst().getRoutes()[s-1]); // FIXME
+				updateQPAs(preCityNo, getCurLocationId(), nextCityNo, -theta);
+			}
+
+			move(nextCityNo);	//更新当前所在城市
+		}
+		return isOk;
+	}
+
+	/**
+	 * double* QANT::getMoveQTPA(int, int)
+	 * 计算蚂蚁在cityA->cityB移动时释放的信息素
+	 *
+	 * cityA : 当前城市A的编号
+	 * cityB : 目的城市B的编号
+	 * return: cityA->cityB的量子信息素增量的β概率幅的平方
+	 */
+	public double getMoveQTPA(int cityA, int cityB, final _QRst bestRst) {
+		double beta = 0;
+
+		if(cityA == cityB)
+			beta = 0;
+		else if(QUtils.isZero(ENV.maxDist(cityA)-ENV.avgDist(cityA)))
+			beta = 0.5;
+		else
+			beta = (ENV.dist(cityA, cityB)-ENV.avgDist(cityA))/
+				(2*(ENV.maxDist(cityA)-ENV.avgDist(cityA)))+0.5;
+
+		beta = (beta + bestRst.QPA(cityA, cityB).getBeta()) / 2.0;
+		return beta*beta;
 	}
 	
 	/**
@@ -121,13 +150,13 @@ class QAnt {
 		// 蚂蚁以80%的概率以信息素作为决策方式进行路径转移（协作性优先）
 		if(rand < RAND_LIMIT) {
 			double argmax = -1;
-			for(int i = curLocationId, j = 0; j < env.size(); j++) {
+			for(int i = curLocationId, j = 0; j < ENV.size(); j++) {
 				if(isTabu(j)) {
 					continue;
 				}
 
 				double arg = Math.pow(getTau(i, j), ZETA) * 
-						Math.pow(env.eta(i, j), GAMMA);
+						Math.pow(ENV.eta(i, j), GAMMA);
 				if(argmax <= arg) {
 					argmax = arg;
 					nextId = j;
@@ -140,13 +169,13 @@ class QAnt {
 			double sum = 0;
 			
 			Map<Integer, Double> map = new LinkedHashMap<Integer, Double>();
-			for(int i = curLocationId, j = 0; j < env.size(); j++) {
+			for(int i = curLocationId, j = 0; j < ENV.size(); j++) {
 				if(isTabu(j)) {
 					continue;
 				}
 				
 				double arg = Math.pow(getTau(i, j), ZETA) * 
-						Math.pow(env.eta(i, j), GAMMA);
+						Math.pow(ENV.eta(i, j), GAMMA);
 				sum += arg;
 				map.put(j, arg);
 			}
@@ -176,12 +205,12 @@ class QAnt {
 			isTabu = true;
 			
 		// 当前节点与下一跳节点不连通
-		} else if(env.dist(curLocationId, nextId) == Integer.MAX_VALUE) {
+		} else if(ENV.dist(curLocationId, nextId) == Integer.MAX_VALUE) {
 			isTabu = true;
 			
 		// 当下一跳节点为拓扑图的源宿点时，则下一跳只能是最后一跳
-		} else if((nextId == env.srcId() || nextId == env.snkId())) {
-			isTabu = !(moveStep + 1 == env.size());
+		} else if((nextId == ENV.srcId() || nextId == ENV.snkId())) {
+			isTabu = !(curRst.getStep() + 1 == ENV.size());
 		}
 		return isTabu;
 	}
@@ -194,7 +223,7 @@ class QAnt {
 	 * @return
 	 */
 	private double getTau(int srcId, int snkId) {
-		double beta = _QPAs[srcId][snkId].getBeta();
+		double beta = curRst.QPA(srcId, snkId).getBeta();
 		double tau = beta * beta;
 		return tau;
 	}
@@ -204,14 +233,14 @@ class QAnt {
 	 * @param nodeId
 	 */
 	protected void move(int nextId) {
+		int moveCost = 0;
 		if(curLocationId >= 0) {
 			tabus[curLocationId] = true;
-			moveCost += env.dist(curLocationId, nextId);
+			moveCost = ENV.dist(curLocationId, nextId);
 		}
+		curRst.add(nextId, moveCost);
 		
-		// TODO: 哽新、挥发对应路径上的信息素
-		
-		moveTrack[moveStep++] = nextId;
+		// TODO: 更新、挥发对应路径上的信息素
 		curLocationId = nextId;
 	}
 
@@ -219,12 +248,8 @@ class QAnt {
 		return curLocationId;
 	}
 	
-	protected int getCurMoveCost() {
-		return moveCost;
-	}
-	
-	protected int[] getCurMoveTrack() {
-		return moveTrack;
+	protected _QRst getCurRst() {
+		return curRst;
 	}
 	
 	/**
@@ -237,12 +262,12 @@ class QAnt {
 	protected void updateQPA(final int srcId, final int snkId, final double theta) {
 		final double cosTheta = Math.cos(theta);
 		final double sinTheta = Math.sin(theta);
-		final double alpha = _QPAs[srcId][snkId].getAlpha();
-		final double beta = _QPAs[srcId][snkId].getBeta();
-		_QPAs[srcId][snkId].setAlpha(cosTheta * alpha - sinTheta * beta);
-		_QPAs[srcId][snkId].setBeta(sinTheta * alpha + cosTheta * beta);
-		_QPAs[snkId][srcId].setAlpha(_QPAs[srcId][snkId].getAlpha());
-		_QPAs[snkId][srcId].setBeta(_QPAs[srcId][snkId].getBeta());
+		final double alpha = curRst.QPA(srcId, snkId).getAlpha();
+		final double beta = curRst.QPA(srcId, snkId).getBeta();
+		curRst.QPA(srcId, snkId).setAlpha(cosTheta * alpha - sinTheta * beta);
+		curRst.QPA(srcId, snkId).setBeta(sinTheta * alpha + cosTheta * beta);
+		curRst.QPA(snkId, srcId).setAlpha(curRst.QPA(srcId, snkId).getAlpha());
+		curRst.QPA(snkId, srcId).setBeta(curRst.QPA(srcId, snkId).getBeta());
 	}
 
 	/**
@@ -258,17 +283,17 @@ class QAnt {
 		final double cosTheta = Math.cos(theta);
 		final double sinTheta = Math.sin(theta);
 
-		for(int j = 0; j < env.size(); j++) {
+		for(int j = 0; j < ENV.size(); j++) {
 			if(j == preId || j == nextId) {
 				continue;
 			}
 			
-			final double alphaTmp = _QPAs[curId][j].getAlpha();
-			final double betaTmp = _QPAs[curId][j].getBeta();
-			_QPAs[curId][j].setAlpha(cosTheta * alphaTmp - sinTheta * betaTmp);
-			_QPAs[curId][j].setBeta(sinTheta * alphaTmp + cosTheta * betaTmp);
-			_QPAs[j][curId].setAlpha(_QPAs[curId][j].getAlpha());
-			_QPAs[j][curId].setBeta(_QPAs[curId][j].getBeta());
+			final double alphaTmp = curRst.QPA(curId, j).getAlpha();
+			final double betaTmp = curRst.QPA(curId, j).getBeta();
+			curRst.QPA(curId, j).setAlpha(cosTheta * alphaTmp - sinTheta * betaTmp);
+			curRst.QPA(curId, j).setBeta(sinTheta * alphaTmp + cosTheta * betaTmp);
+			curRst.QPA(j, curId).setAlpha(curRst.QPA(curId, j).getAlpha());
+			curRst.QPA(j, curId).setBeta(curRst.QPA(curId, j).getBeta());
 		}
 	}
 
@@ -276,13 +301,17 @@ class QAnt {
 	 * 使用量子交叉对量子编码做变异处理 
 	 */
 	protected void qCross() {
-		for(int i = 0; i < env.size(); i++) {
+		for(int i = 0; i < ENV.size(); i++) {
 			for(int j = 0; j <= i; j++) {
-				final double beta = _QPAs[i][j].getBeta();
-				_QPAs[i][j].setBeta(_QPAs[i][j].getAlpha());
-				_QPAs[i][j].setAlpha(beta);
-				_QPAs[j][i].setBeta(_QPAs[i][j].getBeta());
-				_QPAs[j][i].setAlpha(_QPAs[i][j].getAlpha());			}
+				if(ENV.dist(i, j) == Integer.MAX_VALUE) {
+					continue;	// 不连通的路径不做量子交叉
+				}
+				
+				final double beta = curRst.QPA(i, j).getBeta();
+				curRst.QPA(i, j).setBeta(curRst.QPA(i, j).getAlpha());
+				curRst.QPA(i, j).setAlpha(beta);
+				curRst.QPA(j, i).setBeta(curRst.QPA(i, j).getBeta());
+				curRst.QPA(j, i).setAlpha(curRst.QPA(i, j).getAlpha());			}
 		}
 	}
 		
