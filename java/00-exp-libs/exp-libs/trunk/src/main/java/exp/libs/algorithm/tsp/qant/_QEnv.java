@@ -3,10 +3,13 @@ package exp.libs.algorithm.tsp.qant;
 class _QEnv {
 
 	/** 默认最大的蚂蚁代数（迭代次数） */
-	private final static int DEFAULT_MAX_GENERATION = 5;
+	private final static int DEFAULT_MAX_GENERATION = 10;
 	
 	/** 量子蚂蚁最大代数 */
 	private int maxGeneration;
+	
+	/** 变异处理阀值: 当连续N次求解但没有更新最优解时, 则执行量子交叉, 避免搜索陷入停滞 */
+	private int qCrossThreshold;
 	
 	/** 使用变异处理，可避免算法停滞到局部解或无解，但消耗更多时间 */
 	public boolean useQCross;
@@ -31,6 +34,7 @@ class _QEnv {
 		this.qGraph = new __QGraph(dist, srcId, snkId);
 		this.maxGeneration = (maxGeneration <= 0 ? 
 				DEFAULT_MAX_GENERATION : maxGeneration);
+		this.qCrossThreshold = maxGeneration / 2;
 		this.useQCross = useQCross;
 		this.useVolatilize = useVolatilize;
 	}
@@ -63,15 +67,19 @@ class _QEnv {
 		return qGraph.maxDist(nodeId);
 	}
 
-	public int MAX_GENERATION() {
+	protected int MAX_GENERATION() {
 		return maxGeneration;
 	}
+	
+	protected int QCROSS_THRESHOLD() {
+		return qCrossThreshold;
+	}
 
-	public boolean isUseQCross() {
+	protected boolean isUseQCross() {
 		return useQCross;
 	}
 
-	public boolean isUseVolatilize() {
+	protected boolean isUseVolatilize() {
 		return useVolatilize;
 	}
 	

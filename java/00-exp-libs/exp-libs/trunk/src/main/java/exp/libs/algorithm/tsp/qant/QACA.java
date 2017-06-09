@@ -6,8 +6,6 @@ package exp.libs.algorithm.tsp.qant;
  * <PRE>
  * 量子蚁群算法
  *  (仅适用于无向对称拓扑图)
- * 
- *  FIXME: 设定边权最大值
  * </PRE>
  * 
  * @author lqb
@@ -15,9 +13,6 @@ package exp.libs.algorithm.tsp.qant;
  */
 public class QACA {
 
-	/** 变异处理阀值: 当连续CROSS_LIMIT次求解但没有更新最优解时，执行量子交叉, 避免搜索陷入停滞 */
-	private final static int CROSS_LIMIT = 10;
-	
 	/** 默认量子蚂蚁种群规模 */
 	public final static int DEFAULT_QANT_SIZE = 10;
 	
@@ -69,44 +64,29 @@ public class QACA {
 		bestRst.setCost(Integer.MAX_VALUE);
 	}
 
-		//运行量子蚁群算法求解
+	// 运行量子蚁群算法求解
+	// FIXME: 多线程并行, 每只蚂蚁一条线程
 	public void runQAnt() {
-		int qtCrossCnt = 0;	//量子交叉计数器(同一只蚂蚁连续N代没有得到最优解，则执行量子交叉)
-
-		//第gn代量子蚁群 FIXME: 多线程并行, 每只蚂蚁一条线程
-		for(int gn = 0; gn < ENV.MAX_GENERATION(); gn++) {
-
-			//使用第k只蚂蚁求解
-			for(int k=0; k<qAntSize; k++) {
-				_QAnt qAnt = qAnts[k];
+		for(int gn = 0; gn < ENV.MAX_GENERATION(); gn++) {  
+			for(_QAnt qAnt : qAnts) {
 				if(qAnt.solve(bestRst)) {	// FIXME： 多线程取最优解镜像
-					
-					//更新最优解
 					if(qAnt.getCurRst().getCost() < bestRst.getCost()) {
-						qtCrossCnt = 0;
-						bestRst.clone(qAnt.getCurRst());
-
-					} else {
-						System.out.println("第" + k + "只蚂蚁无解");
-						for(int r : qAnt.getCurRst().getRoutes()) {
-							System.out.print(r + "<-");
-						}
-						System.out.println();
+						bestRst.clone(qAnt.getCurRst());	//更新最优解
 					}
-
-					//当超过N代没有更新最优解时，执行量子交叉
-					qtCrossCnt++;
-					if(ENV.isUseQCross() && (qtCrossCnt > CROSS_LIMIT)) {
-						qtCrossCnt = 0;
-						qAnt.qCross();
+				} else {
+					System.out.println("无解");
+					for(int r : qAnt.getCurRst().getRoutes()) {
+						System.out.print(r + "<-");
 					}
+					System.out.println();
 				}
 			}
 		}
 	}
 	
-		//打印最优解
+	//打印最优解
 	public void printBestSolution() {
+		System.out.println("最优解:");
 		for(int r : bestRst.getRoutes()) {
 			System.out.print(r + "<-");
 		}

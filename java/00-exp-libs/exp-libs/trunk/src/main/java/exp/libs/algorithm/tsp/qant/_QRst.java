@@ -28,6 +28,9 @@ class _QRst {
 	/** 蚂蚁在当代的移动轨迹 */
 	private int[] routes;
 	
+	/** 是否为可行解 */
+	private boolean isVaild;
+	
 	protected _QRst(final _QEnv env) {
 		this.size = env.size();
 		this.routes = new int[size];
@@ -60,6 +63,7 @@ class _QRst {
 	}
 	
 	protected void reset() {
+		this.isVaild = false;
 		this.cost = 0;
 		this.step = 0;
 		Arrays.fill(routes, -1);
@@ -70,6 +74,7 @@ class _QRst {
 		if(step < size && nextRouteId >= 0 && routeCost >= 0) {
 			routes[step++] = nextRouteId;
 			cost += routeCost;
+			isVaild = (step == size);
 			isOk = true;
 		}
 		return isOk;
@@ -112,6 +117,14 @@ class _QRst {
 		return lastId;
 	}
 	
+	protected boolean isVaild() {
+		return isVaild;
+	}
+
+	protected void markVaild() {
+		this.isVaild = true;
+	}
+
 	protected void clone(_QRst other) {
 		if(other != null && this.size == other.size) {
 			this.cost = other.cost;
