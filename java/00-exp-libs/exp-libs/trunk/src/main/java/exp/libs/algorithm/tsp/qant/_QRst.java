@@ -86,11 +86,6 @@ final class _QRst {
 		return isOk;
 	}
 	
-	@Deprecated
-	protected __QPA[][] getQPAs() {
-		return _QPAs;
-	}
-	
 	protected __QPA QPA(int srcId, int snkId) {
 		return _QPAs[srcId][snkId];
 	}
@@ -112,13 +107,17 @@ final class _QRst {
 	}
 	
 	protected int getCurId() {
-		return routes[step];
+		int curId = -1;
+		if(step > 0) {
+			curId = routes[step - 1];
+		}
+		return curId;
 	}
 	
 	protected int getLastId() {
 		int lastId = -1;
-		if(step > 0) {
-			lastId = routes[step - 1];
+		if(step > 1) {
+			lastId = routes[step - 2];
 		}
 		return lastId;
 	}
@@ -155,4 +154,18 @@ final class _QRst {
 		}
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\r\n[vaild]: ").append(isVaild);
+		sb.append("\r\n[step/size]: ").append(step).append("/").append(size);
+		sb.append("\r\n[cost]: ").append(cost);
+		sb.append("\r\n[route]: ");
+		for(int i = 0; i < step - 1; i++) {
+			sb.append(routes[i]).append("->");
+		}
+		sb.append(routes[step - 1]);
+		return sb.toString();
+	}
+	
 }

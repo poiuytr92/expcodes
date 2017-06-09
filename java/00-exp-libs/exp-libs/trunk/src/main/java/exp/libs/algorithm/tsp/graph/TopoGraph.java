@@ -1,6 +1,7 @@
 package exp.libs.algorithm.tsp.graph;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -53,7 +54,34 @@ public class TopoGraph extends Graph {
 		return (order ? new LinkedList<Node>(includes) : new ArrayList<Node>(includes));
 	}
 	
-	public boolean setInclude(String name) {
+	public Set<String> getIncludeNames() {
+		Set<String> names = new HashSet<String>();
+		for(Node include : includes) {
+			names.add(include.getName());
+		}
+		return names;
+	}
+	
+	public Set<Integer> getIncludeIds() {
+		Set<Integer> ids = new HashSet<Integer>();
+		for(Node include : includes) {
+			ids.add(include.getId());
+		}
+		return ids;
+	}
+	
+	public boolean addIncludes(Collection<String> names) {
+		boolean isOk = false;
+		if(names != null) {
+			isOk = true;
+			for(String name : names) {
+				isOk &= addInclude(name);
+			}
+		}
+		return isOk;
+	}
+	
+	public boolean addInclude(String name) {
 		boolean isOk = false;
 		Node node = getNode(name);
 		if(node != Node.NULL) {

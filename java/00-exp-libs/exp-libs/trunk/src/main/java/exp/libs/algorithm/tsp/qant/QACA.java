@@ -1,8 +1,8 @@
 package exp.libs.algorithm.tsp.qant;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 import exp.libs.utils.os.ThreadUtils;
@@ -41,7 +41,7 @@ public final class QACA {
 	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
 	 */
 	public QACA(int[][] dist) {
-		this(dist, -1, -1, 0, 0, true, true);
+		this(dist, -1, -1, null, 0, 0, true, true);
 	}
 	
 	/**
@@ -49,9 +49,11 @@ public final class QACA {
 	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
 	 * @param srcId 无向拓扑图的起点（若无则为-1）
 	 * @param snkId 无向拓扑图的重点（若无则为-1）
+	 * @param includeIds 无向拓扑图的必经点集（若无则为null）
 	 */
-	public QACA(int[][] dist, int srcId, int snkId) {
-		this(dist, srcId, snkId, 0, 0, true, true);
+	public QACA(int[][] dist, int srcId, int snkId, 
+			Collection<Integer> includeIds) {
+		this(dist, srcId, snkId, includeIds, 0, 0, true, true);
 	}
 	
 	/**
@@ -59,18 +61,19 @@ public final class QACA {
 	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
 	 * @param srcId 无向拓扑图的起点（若无则为-1）
 	 * @param snkId 无向拓扑图的重点（若无则为-1）
+	 * @param includeIds 无向拓扑图的必经点集（若无则为null）
 	 * @param qAntSize 量子蚂蚁数量（种群大小）, 默认值为10
 	 * @param maxGeneration 单只量子蚂蚁可遗传的最大代数（单只蚂蚁的求解次数）, 默认值为10
 	 * @param useQCross 是否使用量子交叉（可避免搜索陷入局部解或无解， 但降低收敛速度）, 默认启用
 	 * @param useVolatilize 信息素是否自然挥发（可避免陷入局部解，但降低收敛速度）, 默认启用
 	 */
 	public QACA(int[][] dist, int srcId, int snkId, 
-			int qAntSize, int maxGeneration,
-			boolean useQCross, boolean useVolatilize) {
-		this.ENV = new _QEnv(dist, srcId, snkId, 
+			Collection<Integer> includeIds, int qAntSize, 
+			int maxGeneration, boolean useQCross, boolean useVolatilize) {
+		this.ENV = new _QEnv(dist, srcId, snkId, includeIds, 
 				maxGeneration, useQCross, useVolatilize);
-		this.qAntSize = (qAntSize <= 0 ? DEFAULT_QANT_SIZE : qAntSize);
 		
+		this.qAntSize = (qAntSize <= 0 ? DEFAULT_QANT_SIZE : qAntSize);
 		this.qAnts = new _QAnt[this.qAntSize];
 		for(int i = 0; i < this.qAntSize; i++) {
 			qAnts[i] = new _QAnt(ENV);
@@ -111,11 +114,8 @@ public final class QACA {
 	}
 	
 	// FIXME 打印最优解
-	public void printBestSolution() {
-		System.out.println("最优解:");
-		for(int r : bestRst.getRoutes()) {
-			System.out.print(r + "<-");
-		}
+	public void printBestRst() {
+		System.out.println(bestRst.toString());
 	}
 
 }

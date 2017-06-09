@@ -1,5 +1,9 @@
 package exp.libs.algorithm.tsp.qant;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * 
  * <PRE>
@@ -19,6 +23,9 @@ final class __QGraph {
 	
 	/** 拓扑图终点编号 */
 	private int snkId;
+	
+	/** 拓扑图的必经点集 */
+	private Set<Integer> includeIds;
 	
 	/** 节点间距 */
 	private int[][] dist;
@@ -46,11 +53,17 @@ final class __QGraph {
 	 * @param dist 拓扑图节点间距
 	 * @param srcId 拓扑图源点编号
 	 * @param snkId 拓扑图终点编号
+	 * @param includeIds 拓扑图必经点集
 	 */
-	protected __QGraph(int[][] dist, int srcId, int snkId) {
+	protected __QGraph(int[][] dist, int srcId, int snkId, 
+			Collection<Integer> includeIds) {
 		this.size = (dist == null ? 0 : dist.length);
 		this.srcId = srcId;
 		this.snkId = snkId;
+		this.includeIds = (includeIds == null ? 
+				new HashSet<Integer>() : new HashSet<Integer>(includeIds));
+		this.includeIds.add(srcId);
+		this.includeIds.add(snkId);
 		
 		this.dist = dist;
 		this.eta = new double[size][size];
@@ -111,6 +124,10 @@ final class __QGraph {
 
 	protected int maxDist(int nodeId) {
 		return maxDist[nodeId];
+	}
+	
+	protected boolean isInclude(int nodeId) {
+		return includeIds.contains(nodeId);
 	}
 
 }

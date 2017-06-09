@@ -1,5 +1,7 @@
 package exp.libs.algorithm.tsp.qant;
 
+import java.util.Collection;
+
 final class _QEnv {
 
 	/** 默认最大的蚂蚁代数（迭代次数） */
@@ -25,13 +27,15 @@ final class _QEnv {
 	 * @param dist 拓扑图节点间距
 	 * @param srcId 拓扑图源点编号
 	 * @param snkId 拓扑图终点编号
+	 * @param includeIds
 	 * @param maxGeneration
 	 * @param useQCross
 	 * @param useVolatilize
 	 */
 	protected _QEnv(int[][] dist, int srcId, int snkId, 
-			int maxGeneration, boolean useQCross, boolean useVolatilize) {
-		this.qGraph = new __QGraph(dist, srcId, snkId);
+			Collection<Integer> includeIds, int maxGeneration, 
+			boolean useQCross, boolean useVolatilize) {
+		this.qGraph = new __QGraph(dist, srcId, snkId, includeIds);
 		this.maxGeneration = (maxGeneration <= 0 ? 
 				DEFAULT_MAX_GENERATION : maxGeneration);
 		this.qCrossThreshold = maxGeneration / 2;
@@ -65,6 +69,10 @@ final class _QEnv {
 
 	protected int maxDist(int nodeId) {
 		return qGraph.maxDist(nodeId);
+	}
+	
+	protected boolean isInclude(int nodeId) {
+		return qGraph.isInclude(nodeId);
 	}
 
 	protected int MAX_GENERATION() {

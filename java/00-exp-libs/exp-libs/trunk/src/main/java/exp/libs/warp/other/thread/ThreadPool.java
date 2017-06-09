@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class ThreadPool {
+public class ThreadPool<T> {
 
 	/**
 	 * <pre>
@@ -195,7 +195,7 @@ public class ThreadPool {
 	 * @param command 任务线程
 	 * @return 线程返回值，通过Future.get()方法获取
 	 */
-	public Future<Object> submit(Callable<Object> command) {
+	public Future<T> submit(Callable<T> command) {
 		return threadPool.submit(command);
 	}
 	

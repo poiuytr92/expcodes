@@ -6,7 +6,7 @@ import java.util.Set;
 
 import exp.libs.algorithm.tsp.graph.Node;
 import exp.libs.algorithm.tsp.graph.TopoGraph;
-import exp.libs.algorithm.tsp.qant.bean.QACA;
+import exp.libs.algorithm.tsp.qant.QACA;
 import exp.libs.algorithm.tsp.spa.Dijkstra;
 import exp.libs.algorithm.tsp.ui.TopoGraphUI;
 import exp.libs.utils.ui.BeautyEyeUtils;
@@ -100,20 +100,18 @@ public class TestMain {
 				}
 			}
 		} while(isOk == false);
-		draw(subGraph);
 		
 		subGraph.setSrc(graph.getSrc().getName());
 		subGraph.setSnk(graph.getSnk().getName());
-		int nCity = subGraph.nodeSize();
+		subGraph.addIncludes(graph.getIncludeNames());
+		draw(subGraph);
+		
 		subGraph.setAdjacencyMatrix();
 		int[][] matrix = subGraph.getAdjacencyMatrix();
-		QACA fun = new QACA(nCity, 
-				subGraph.getSrc().getId(), subGraph.getSnk().getId());
-		fun.initRoom();	//初始化内存空间
-		fun.initPath(matrix);	//初始化路径信息
-		fun.initQAntGroup();	//初始化量子蚂蚁种群
-		fun.runQAnt();	//运行量子蚁群算法求解
-		fun.printBestSolution();	//打印最优解
+		QACA qaca = new QACA(matrix, subGraph.getSrc().getId(), 
+				subGraph.getSnk().getId(), subGraph.getIncludeIds());
+		qaca.exec();
+		qaca.printBestRst();
 	}
 	
 	/**
@@ -172,11 +170,11 @@ public class TestMain {
 		graph.addEdge("I", "K", 2);
 		graph.addEdge("B", "K", 3);
 		graph.addEdge("K", "F", 3);
-		graph.setInclude("C");
+		graph.addInclude("C");
 //		graph.setInclude("G");
 		
-		graph.setInclude("K");
-		graph.setInclude("I");
+		graph.addInclude("K");
+		graph.addInclude("I");
 		graph.setAdjacencyMatrix();
 		return graph;
 	}

@@ -67,7 +67,7 @@ final class _QAnt {
 	}
 	
 	protected boolean solve(final _QRst bestRst) {
-		boolean isOk = true;
+		boolean isFeasible = true;
 		evolve();	// 进化(清空父代移动痕迹, 并继承父代量子编码)
 		final double pGn = ((double) generation) / ENV.MAX_GENERATION(); // 代数比
 		int curId = move(selectFirstId());	// 移动到起始节点
@@ -75,12 +75,11 @@ final class _QAnt {
 		// 计算蚂蚁之后移动的每一步(最大步长为除了起始点之外的图节点数)
 		for(int step = 1; step < ENV.size(); step++) {
 			int nextId = selectNextId(curId);
-			if(nextId < 0) {
-				isOk = false;
+			if(nextId < 0) {	// 无路可走时检查是否已得到一个可行解
+				isFeasible = checkFeasible();
+				
+				// FIXME 释放当前路径上的所有信息素，保留其他路径上的信息素， 使得后代少走冤枉路
 				break;
-				// 无路可走
-				// FIXME 假如剩余点均为非必经点， 则认为得到一个解
-				// 否则释放当前路径上的所有信息素，保留其他路径上的信息素， 使得后代少走冤枉路
 			}
 
 			updateMoveQPA(curId, nextId, pGn, bestRst);
@@ -88,7 +87,7 @@ final class _QAnt {
 		}
 		
 		// 标记求得可行解
-		if(isOk == true) {
+		if(isFeasible == true) {
 			solveCnt++;
 			unsolveCnt = 0;
 			curRst.markVaild();
@@ -100,7 +99,7 @@ final class _QAnt {
 				qCross();
 			}
 		}
-		return isOk;
+		return isFeasible;
 	}
 	
 	/**
@@ -232,6 +231,22 @@ final class _QAnt {
 		double beta = curRst.QPA(srcId, snkId).getBeta();
 		double tau = beta * beta;
 		return tau;
+	}
+	
+	/**
+	 * 检查到目前为止的移动轨迹是否为一个可行解
+	 *  (剩余节点均不在必经点集中则认为已得到一个可行解)
+	 * @return
+	 */
+	private boolean checkFeasible() {
+		boolean isFeasible = true;
+		for(int nodeId = 0; nodeId < ENV.size(); nodeId++) {
+			if(!tabus[nodeId] && ENV.isInclude(nodeId)) {
+				isFeasible = false;
+				break;
+			}
+		}
+		return isFeasible;
 	}
 	
 	/**
