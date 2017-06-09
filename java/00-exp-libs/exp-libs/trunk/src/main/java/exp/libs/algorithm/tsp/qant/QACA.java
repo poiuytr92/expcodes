@@ -1,4 +1,4 @@
-package exp.libs.algorithm.tsp.qant.bean;
+package exp.libs.algorithm.tsp.qant;
 
 
 /**
