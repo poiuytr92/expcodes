@@ -110,7 +110,7 @@ public class TestMain {
 		int[][] matrix = subGraph.getAdjacencyMatrix();
 		QACA qaca = new QACA(matrix, subGraph.getSrc().getId(), 
 				subGraph.getSnk().getId(), subGraph.getIncludeIds(), 
-				1, 10, true, true);
+				1, 10, false, false);
 		qaca.exec();
 		qaca.printBestRst();
 	}

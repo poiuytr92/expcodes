@@ -80,9 +80,11 @@ final class _QAnt {
 				// 有解时增加信息素，挥发其他所有路径的信息素
 				// 无解时挥发本段路基的信息素
 				if(!isFeasible) {
-					int lastId = curRst.getLastId();
-					if(lastId >= 0 && curId >= 0) {
-						minusMoveQPA(lastId, curId, pGn, bestRst);
+					int[] route = curRst.getRoutes();
+					if(route.length > 1) {
+						for(int i = 0; i < curRst.getStep() - 1; i++) {
+							minusMoveQPA(route[i], route[i + 1], pGn, bestRst);
+						}
 					}
 				}
 				break;
@@ -123,12 +125,8 @@ final class _QAnt {
 		__QPA curQPA = curRst.QPA(curId, nextId);	// 当前解在本次移动时的量子信息素编码
 		__QPA bestQPA = bestRst.QPA(curId, nextId); // 最优解在对应路径上的量子信息素编码(参考值)
 		double theta = _getTheta(pGn, deltaBeta, curQPA, bestQPA); // 计算量子旋转门的旋转角θ
-		System.out.println(curRst.toString());
-		_addQPA(curId, nextId, theta);	// 使用量子旋转门增加本次移动路径上信息素   FIXME 为什么有时是负数？
-		System.out.println(curRst.toString());
-		_addQPA(curId, nextId, theta);
-		System.out.println(curRst.toString());
-		System.out.println();
+		_addQPA(curId, nextId, -theta);	// 使用量子旋转门增加本次移动路径上信息素   FIXME 为什么有时是负数？
+		_addQPA(curId, nextId, -theta);
 	}
 	
 	/**
@@ -160,8 +158,15 @@ final class _QAnt {
 	 * @return
 	 */
 	private int selectFirstId() {
-		int firstId = (RandomUtils.randomBoolean() ? ENV.srcId() : ENV.snkId());
-		return firstId;
+//		int firstId = (RandomUtils.randomBoolean() ? ENV.srcId() : ENV.snkId());
+//		return firstId;
+		return ENV.srcId();
+	}
+	
+	public static void main(String[] args) {
+		System.out.println(Math.pow(0.5, 0.2));
+		System.out.println(Math.pow(0.3, 0.2));
+		System.out.println(Math.pow(0.1, 0.2));
 	}
 
 	/**
@@ -173,9 +178,13 @@ final class _QAnt {
 			return -1;
 		}
 		
+		if(curId == 1) {
+			System.out.println();
+		}
+		
 		// FIXME 这两个值越小越重要， 且和为1？  若蚂蚁代数很大，依然未求得过一个解，则需要适当调整参数
-		final double ZETA = 0.2D;	//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
-		final double GAMMA = 0.8D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
+		final double ZETA = 0.8D;	//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
+		final double GAMMA = 0.2D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
 		
 		int nextId = -1;
 		final int SCOPE = 10, RAND_LIMIT = 8;
@@ -320,11 +329,12 @@ final class _QAnt {
 	 */
 	private double _getTheta(double pGn, double deltaBeta, 
 			__QPA curQPA, __QPA bestQPA) {
-		double theta = (MAX_THETA - DELTA_THETA * pGn) * 
-				deltaBeta * __getThetaDirection(curQPA, bestQPA);
+		double theta = (MAX_THETA - DELTA_THETA * pGn) * deltaBeta;
 		return theta;
 	}
 
+	// FIXME 这个旋转角方向是 当前解 与 最优解的偏差角，不能这样用
+	// 当 当前解的beta概率幅 大于 最优参考解时， 旋转角方向为负，反之为正
 	/**
 	 * 计算量子旋转角的旋转方向
 	 * @param curQPA 某只量子蚂蚁当前从i->j转移的量子编码(当前的路径信息素概率幅)
@@ -348,6 +358,9 @@ final class _QAnt {
 	 * @param theta 旋转角
 	 */
 	private void _addQPA(final int srcId, final int snkId, final double theta) {
+		if(srcId == 0 && snkId == 1) {
+			System.out.println();
+		}
 		final double cosTheta = Math.cos(theta);
 		final double sinTheta = Math.sin(theta);
 		final double alpha = curRst.QPA(srcId, snkId).getAlpha();
