@@ -18,6 +18,9 @@ import exp.libs.envm.Regex;
  */
 public class NumUtils {
 
+	/** 最小精度 */
+	private final static double PRECISION = 1.0e-6D;
+	
 	/** 私有化构造函数. */
 	protected NumUtils() {}
 	
@@ -289,6 +292,10 @@ public class NumUtils {
 			ps = ++pe;
 		}
 		return cmpNums;
+	}
+	
+	public static boolean isZero(double num) {
+		return (Math.abs(num) < PRECISION)? true : false;
 	}
 	
 }

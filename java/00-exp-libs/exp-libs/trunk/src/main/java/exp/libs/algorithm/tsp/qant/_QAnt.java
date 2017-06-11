@@ -12,9 +12,6 @@ import exp.libs.utils.pub.RandomUtils;
  */
 final class _QAnt {
 
-	/** 最小精度 */
-	private final static double PRECISION = 1.0e-6D;
-	
 	/** 数学常量π */
 	private final static double PI = 3.141592654D;
 	
@@ -78,11 +75,21 @@ final class _QAnt {
 			if(nextId < 0) {	// 无路可走时检查是否已得到一个可行解
 				isFeasible = checkFeasible();
 				
-				// FIXME 释放当前路径上的所有信息素，保留其他路径上的信息素， 使得后代少走冤枉路
+				// FIXME 释放当前路径上的所有信息素x2，保留其他路径上的信息素，
+				
+				// 有解时增加信息素，挥发其他所有路径的信息素
+				// 无解时挥发本段路基的信息素
+				if(!isFeasible) {
+					int lastId = curRst.getLastId();
+					if(lastId >= 0 && curId >= 0) {
+						minusMoveQPA(lastId, curId, pGn, bestRst);
+					}
+				}
 				break;
 			}
 
-			updateMoveQPA(curId, nextId, pGn, bestRst);
+//			updateMoveQPA(curId, nextId, pGn, bestRst);
+			addMoveQPA(curId, nextId, pGn, bestRst);
 			curId = move(nextId);
 		}
 		
@@ -91,6 +98,7 @@ final class _QAnt {
 			solveCnt++;
 			unsolveCnt = 0;
 			curRst.markVaild();
+			// FIXME 挥发可行解以外的其他路径的信息素
 			
 		// 当连续无解次数越限时，执行量子交叉打乱量子编码，避免搜索陷入停滞
 		} else {
@@ -100,6 +108,27 @@ final class _QAnt {
 			}
 		}
 		return isFeasible;
+	}
+	
+	private void addMoveQPA(int curId, int nextId, double pGn, _QRst bestRst) {
+		double deltaBeta = _getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
+		__QPA curQPA = curRst.QPA(curId, nextId);	// 当前解在本次移动时的量子信息素编码
+		__QPA bestQPA = bestRst.QPA(curId, nextId); // 最优解在对应路径上的量子信息素编码(参考值)
+		double theta = _getTheta(pGn, deltaBeta, curQPA, bestQPA); // 计算量子旋转门的旋转角θ
+		_addQPA(curId, nextId, theta);	// 使用量子旋转门增加本次移动路径上信息素
+	}
+	
+	private void minusMoveQPA(int curId, int nextId, double pGn, _QRst bestRst) {
+		double deltaBeta = _getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
+		__QPA curQPA = curRst.QPA(curId, nextId);	// 当前解在本次移动时的量子信息素编码
+		__QPA bestQPA = bestRst.QPA(curId, nextId); // 最优解在对应路径上的量子信息素编码(参考值)
+		double theta = _getTheta(pGn, deltaBeta, curQPA, bestQPA); // 计算量子旋转门的旋转角θ
+		System.out.println(curRst.toString());
+		_addQPA(curId, nextId, theta);	// 使用量子旋转门增加本次移动路径上信息素   FIXME 为什么有时是负数？
+		System.out.println(curRst.toString());
+		_addQPA(curId, nextId, theta);
+		System.out.println(curRst.toString());
+		System.out.println();
 	}
 	
 	/**
@@ -210,7 +239,7 @@ final class _QAnt {
 			isTabu = true;
 			
 		// 当前节点与下一跳节点不连通
-		} else if(!isLinked(curId, nextId)) {
+		} else if(!ENV.isLinked(curId, nextId)) {
 			isTabu = true;
 			
 		// 当下一跳节点为拓扑图的源宿点时，则下一跳只能是最后一跳
@@ -264,7 +293,7 @@ final class _QAnt {
 		
 		_addQPA(curId, nextId, theta);	// 使用量子旋转门增加本次移动路径上信息素
 		if(ENV.isUseVolatilize()) {		// 对本次移动时 没有被选择的候选路径上的信息素 进行自然挥发
-			_minusQPAs(curRst.getLastId(), curId, nextId, -theta);
+			_minusQPAs(curRst.getLastId(), curId, nextId, theta);
 		}
 	}
 	
@@ -276,17 +305,7 @@ final class _QAnt {
 	 * @return srcId->snkId路径上的 [量子信息素增量] 的 β概率幅的平方
 	 */
 	private double _getDeltaBeta(int srcId, int snkId, final _QRst bestRst) {
-		double beta = 0.0D;
-		if(srcId == snkId) {
-			beta = 0.0D;
-			
-		} else if(isZero(ENV.maxDist(srcId) - ENV.avgDist(srcId))) {
-			beta = 0.5D;
-			
-		} else {
-			beta = (ENV.dist(srcId, snkId) - ENV.avgDist(srcId)) / 
-				(2 * (ENV.maxDist(srcId) - ENV.avgDist(srcId))) + 0.5D;
-		}
+		double beta = ENV.deltaBeta(srcId, snkId);
 		beta = (beta + bestRst.QPA(srcId, snkId).getBeta()) / 2.0D;
 		return beta * beta;
 	}
@@ -326,7 +345,7 @@ final class _QAnt {
 	 * 	加强src->snk的路径信息素
 	 * @param srcId 路径起点
 	 * @param snkId 路径终点
-	 * @param theta 正向旋转角
+	 * @param theta 旋转角
 	 */
 	private void _addQPA(final int srcId, final int snkId, final double theta) {
 		final double cosTheta = Math.cos(theta);
@@ -346,21 +365,21 @@ final class _QAnt {
 	 * @param lastId 上一节点
 	 * @param curId 当前节点
 	 * @param nextId 下一节点
-	 * @param theta 逆向旋转角
+	 * @param theta 旋转角
 	 */
 	private void _minusQPAs(int lastId, int curId, int nextId, double theta) {
-		final double cosTheta = Math.cos(theta);
-		final double sinTheta = Math.sin(theta);
+		final double cosTheta = Math.cos(-theta);
+		final double sinTheta = Math.sin(-theta);
 
 		for(int j = 0; j < ENV.size(); j++) {
-			if(j == lastId || j == nextId || !isLinked(curId, j)) {
+			if(j == lastId || j == nextId || !ENV.isLinked(curId, j)) {
 				continue;
 			}
 			
-			final double alphaTmp = curRst.QPA(curId, j).getAlpha();
-			final double betaTmp = curRst.QPA(curId, j).getBeta();
-			curRst.QPA(curId, j).setAlpha(cosTheta * alphaTmp - sinTheta * betaTmp);
-			curRst.QPA(curId, j).setBeta(sinTheta * alphaTmp + cosTheta * betaTmp);
+			final double alpha = curRst.QPA(curId, j).getAlpha();
+			final double beta = curRst.QPA(curId, j).getBeta();
+			curRst.QPA(curId, j).setAlpha(cosTheta * alpha - sinTheta * beta);
+			curRst.QPA(curId, j).setBeta(sinTheta * alpha + cosTheta * beta);
 			curRst.QPA(j, curId).setAlpha(curRst.QPA(curId, j).getAlpha());
 			curRst.QPA(j, curId).setBeta(curRst.QPA(curId, j).getBeta());
 		}
@@ -372,7 +391,7 @@ final class _QAnt {
 	private void qCross() {
 		for(int i = 0; i < ENV.size(); i++) {
 			for(int j = 0; j <= i; j++) {
-				if(!isLinked(i, j)) {
+				if(!ENV.isLinked(i, j)) {
 					continue;
 				}
 				
@@ -384,17 +403,4 @@ final class _QAnt {
 		}
 	}
 	
-	private boolean isLinked(int srcId, int snkId) {
-		return ENV.dist(srcId, snkId) < Integer.MAX_VALUE;
-	}
-	
-	/**
-	 * 判断浮点数是否为0
-	 * @param num
-	 * @return
-	 */
-	private boolean isZero(double num) {
-		return (Math.abs(num) < PRECISION)? true : false;
-	}
-		
 }

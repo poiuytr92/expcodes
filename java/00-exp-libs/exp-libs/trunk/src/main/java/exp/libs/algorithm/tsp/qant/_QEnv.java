@@ -71,10 +71,18 @@ final class _QEnv {
 		return qGraph.maxDist(nodeId);
 	}
 	
+	protected double deltaBeta(int srcId, int snkId) {
+		return qGraph.deltaBeta(srcId, snkId);
+	}
+	
 	protected boolean isInclude(int nodeId) {
 		return qGraph.isInclude(nodeId);
 	}
 
+	protected boolean isLinked(int srcId, int snkId) {
+		return qGraph.isLinked(srcId, snkId);
+	}
+	
 	protected int MAX_GENERATION() {
 		return maxGeneration;
 	}

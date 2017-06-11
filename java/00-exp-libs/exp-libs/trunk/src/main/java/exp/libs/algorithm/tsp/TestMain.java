@@ -109,7 +109,8 @@ public class TestMain {
 		subGraph.setAdjacencyMatrix();
 		int[][] matrix = subGraph.getAdjacencyMatrix();
 		QACA qaca = new QACA(matrix, subGraph.getSrc().getId(), 
-				subGraph.getSnk().getId(), subGraph.getIncludeIds());
+				subGraph.getSnk().getId(), subGraph.getIncludeIds(), 
+				1, 10, true, true);
 		qaca.exec();
 		qaca.printBestRst();
 	}
@@ -171,10 +172,10 @@ public class TestMain {
 		graph.addEdge("B", "K", 3);
 		graph.addEdge("K", "F", 3);
 		graph.addInclude("C");
-//		graph.setInclude("G");
+		graph.addInclude("G");
 		
-		graph.addInclude("K");
-		graph.addInclude("I");
+//		graph.addInclude("K");
+//		graph.addInclude("I");
 		graph.setAdjacencyMatrix();
 		return graph;
 	}

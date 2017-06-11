@@ -4,6 +4,8 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import exp.libs.utils.pub.NumUtils;
+
 /**
  * 
  * <PRE>
@@ -31,7 +33,7 @@ final class __QGraph {
 	private int[][] dist;
 	
 	/**
-	 * 蚂蚁从i->j移动的自启发常量(即节点i的能见度)
+	 * 蚂蚁从节点i->j移动的自启发常量(即节点i的能见度)
 	 *  η(i, j) = 1/distance[i][j]
 	 */
 	private double[][] eta;
@@ -47,6 +49,9 @@ final class __QGraph {
 	 * 	maxDist[i] =  max{distances[i][0~(size-1)]}
 	 */
 	private int[] maxDist;
+	
+	/** 蚂蚁移动时释放的信息素的计算常量 */
+	private double[][] deltaBeta;
 	
 	/**
 	 * 构造函数
@@ -70,6 +75,9 @@ final class __QGraph {
 		this.avgDist = new double[size];
 		this.maxDist = new int[size];
 		initDist();
+		
+		this.deltaBeta = new double[size][size];
+		initBeta();
 	}
 	
 	private void initDist() {
@@ -81,7 +89,7 @@ final class __QGraph {
 					dist[i][j] = 0;
 					eta[i][j] = 1.0D;
 					
-				} else if(dist[i][j] == Integer.MAX_VALUE) {
+				} else if(!isLinked(i, j)) {
 					eta[i][j] = 0.0D;
 					
 				} else {
@@ -95,6 +103,23 @@ final class __QGraph {
 				}
 			}
 			avgDist[i] = sum / (cnt * 1.0D);
+		}
+	}
+	
+	private void initBeta() {
+		for(int i = 0; i < size; i++) {
+			for(int j = 0; j < size; j++) {
+				if(i == j) {
+					deltaBeta[i][j] = 0.0D;
+					
+				} else if(NumUtils.isZero(maxDist[i] - avgDist[i])) {
+					deltaBeta[i][j] = 0.5D;
+					
+				} else {
+					deltaBeta[i][j] = (dist[i][j] - avgDist[i]) / 
+						(2 * (maxDist[i] - avgDist[i])) + 0.5D;
+				}
+			}
 		}
 	}
 
@@ -126,8 +151,16 @@ final class __QGraph {
 		return maxDist[nodeId];
 	}
 	
+	protected double deltaBeta(int srcId, int snkId) {
+		return deltaBeta[srcId][snkId];
+	}
+	
 	protected boolean isInclude(int nodeId) {
 		return includeIds.contains(nodeId);
+	}
+	
+	protected boolean isLinked(int srcId, int snkId) {
+		return dist[srcId][snkId] < Integer.MAX_VALUE;
 	}
 
 }

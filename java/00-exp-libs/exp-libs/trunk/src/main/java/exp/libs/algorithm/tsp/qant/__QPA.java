@@ -40,4 +40,12 @@ final class __QPA {
 		this.beta = beta;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("α: ").append(alpha);
+		sb.append("\r\nβ: ").append(beta);
+		return sb.toString();
+	}
+	
 }

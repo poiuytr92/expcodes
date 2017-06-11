@@ -1,6 +1,10 @@
 package exp.libs.algorithm.tsp.qant;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
+import exp.libs.utils.pub.ESCUtils;
 
 /**
  * 
@@ -48,8 +52,8 @@ final class _QRst {
 	 * 初始化蚂蚁的量子编码
 	 */
 	private void initQPAs(final _QEnv env) {
-		this._QPAs = new __QPA[env.size()][env.size()];
-		for(int i = 0; i < env.size(); i++) {
+		this._QPAs = new __QPA[size][size];
+		for(int i = 0; i < size; i++) {
 			for(int j = 0; j <= i; j++) {
 				_QPAs[i][j] = new __QPA();
 				if(env.eta(i, j) == 0) {
@@ -154,17 +158,47 @@ final class _QRst {
 		}
 	}
 
-	@Override
-	public String toString() {
+	protected String toQPAInfo() {
+		List<List<Object>> table = new ArrayList<List<Object>>(size + 1);
+		List<Object> head = new ArrayList<Object>(size + 1);
+		head.add("");
+		for(int i = 0; i < size; i++) {
+			head.add(i);
+		}
+		table.add(head);
+		
+		for(int i = 0; i < size; i++) {
+			List<Object> row = new ArrayList<Object>(size + 1);
+			row.add(i);
+			for(int j = 0; j < size; j++) {
+				row.add(_QPAs[i][j].getBeta());
+			}
+			table.add(row);
+		}
+		return ESCUtils.toTXT(table, true);
+	}
+	
+	protected String toRouteInfo() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\r\n[vaild]: ").append(isVaild);
+		sb.append("[vaild]: ").append(isVaild);
 		sb.append("\r\n[step/size]: ").append(step).append("/").append(size);
 		sb.append("\r\n[cost]: ").append(cost);
 		sb.append("\r\n[route]: ");
-		for(int i = 0; i < step - 1; i++) {
-			sb.append(routes[i]).append("->");
+		if(step > 0) {
+			for(int i = 0; i < step - 1; i++) {
+				sb.append(routes[i]).append("->");
+			}
+			sb.append(routes[step - 1]);
+		} else {
+			sb.append("null");
 		}
-		sb.append(routes[step - 1]);
+		return sb.toString();
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(toQPAInfo()).append(toRouteInfo());
 		return sb.toString();
 	}
 	
