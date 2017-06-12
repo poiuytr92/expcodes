@@ -347,10 +347,37 @@ final class _QAnt {
 		final double sinTheta = Math.sin(theta);
 		final double alpha = ijQPA.getAlpha();
 		final double beta = ijQPA.getBeta();
-		ijQPA.setAlpha(cosTheta * alpha - sinTheta * beta);
-		ijQPA.setBeta(sinTheta * alpha + cosTheta * beta);
+		ijQPA.setAlpha(cosTheta * alpha - sinTheta * beta);	// FIXME 因浮点运算不精确，此处可能为负，
+		ijQPA.setBeta(sinTheta * alpha + cosTheta * beta); // 但beta不会>=1 可不处理？
 		jiQPA.setAlpha(ijQPA.getAlpha());
 		jiQPA.setBeta(ijQPA.getBeta());
+		
+		int cnt = 100;
+		double aa = alpha;
+		double bb = beta; 
+		while(cnt-- > 0) {
+			double a = aa;
+			double b = bb;
+			aa = cosTheta * a - sinTheta * b;
+			bb = sinTheta * a + cosTheta * b;
+			System.out.println(aa);
+			System.out.println(bb);
+		}
+	}
+	
+	public static void main(String[] args) {
+		double theta = 0.017710728586925;
+		final double cosTheta = Math.cos(theta);
+		final double sinTheta = Math.sin(theta);
+		final double alpha = 0.006126067254877698;
+		final double beta = 0.9999812354739412;
+		
+		System.out.println(alpha * alpha + beta * beta);
+		
+		double aa = cosTheta * alpha - sinTheta * beta;
+		double bb = sinTheta * alpha + cosTheta * beta;
+		System.out.println(aa);
+		System.out.println(bb);
 	}
 
 	/**
