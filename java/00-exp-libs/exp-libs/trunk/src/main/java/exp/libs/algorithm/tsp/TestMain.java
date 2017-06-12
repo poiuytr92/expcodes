@@ -110,7 +110,7 @@ public class TestMain {
 		int[][] matrix = subGraph.getAdjacencyMatrix();
 		QACA qaca = new QACA(matrix, subGraph.getSrc().getId(), 
 				subGraph.getSnk().getId(), subGraph.getIncludeIds(), 
-				1, 10, false, false);
+				1, 10, false, false);  // FIXME 100次收敛会出现负数
 		qaca.exec();
 		qaca.printBestRst();
 	}
@@ -174,8 +174,8 @@ public class TestMain {
 		graph.addInclude("C");
 		graph.addInclude("G");
 		
-//		graph.addInclude("K");
-//		graph.addInclude("I");
+		graph.addInclude("K");
+		graph.addInclude("I");
 		graph.setAdjacencyMatrix();
 		return graph;
 	}

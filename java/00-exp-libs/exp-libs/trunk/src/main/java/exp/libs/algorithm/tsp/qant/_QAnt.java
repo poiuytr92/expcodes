@@ -12,23 +12,19 @@ import exp.libs.utils.pub.RandomUtils;
  */
 final class _QAnt {
 
-	/** 数学常量π */
-	private final static double PI = 3.141592654D;
-	
-	/** 最小旋转角 */
-	private final static double MIN_THETA = 0.001D * PI;
-	
-	/** 最大旋转角 */
-	private final static double MAX_THETA = 0.05D * PI;
-	
-	/** 旋转角 */
-	private final static double DELTA_THETA = MAX_THETA - MIN_THETA;
+	private final static int INVAILD_ID = -1;
 	
 	/** 该蚂蚁已进化的代数 */
 	private int generation;
 	
 	/** 蚂蚁寻路环境 */
 	private final _QEnv ENV;
+	
+	/** 这只蚂蚁的寻路起点（第一代确定之后，后代不再变化） */
+	private final int SRC_ID;
+	
+	/** 这只蚂蚁的寻路终点（第一代确定之后，后代不再变化） */
+	private final int SNK_ID;
 	
 	/** 蚂蚁自身禁忌表（已走过的节点列入禁忌表） */
 	private boolean[] tabus;
@@ -48,6 +44,14 @@ final class _QAnt {
 	 */
 	protected _QAnt(final _QEnv ENV) {
 		this.ENV = ENV;
+		if(RandomUtils.randomBoolean()) {
+			this.SRC_ID = ENV.srcId();
+			this.SNK_ID = ENV.snkId();
+		} else {
+			this.SRC_ID = ENV.snkId();
+			this.SNK_ID = ENV.srcId();
+		}
+		
 		this.generation = 0;
 		this.tabus = new boolean[ENV.size()];
 		this.curRst = new _QRst(ENV);
@@ -72,27 +76,37 @@ final class _QAnt {
 		// 计算蚂蚁之后移动的每一步(最大步长为除了起始点之外的图节点数)
 		for(int step = 1; step < ENV.size(); step++) {
 			int nextId = selectNextId(curId);
-			if(nextId < 0) {	// 无路可走时检查是否已得到一个可行解
-				isFeasible = checkFeasible();
+			
+			// 无路可走
+			if(nextId < 0) {
+				isFeasible = checkFeasible();	// 检查是否已得到一个可行解(此处只针对无源宿端的拓扑图)
 				
-				// FIXME 释放当前路径上的所有信息素x2，保留其他路径上的信息素，
-				
-				// 有解时增加信息素，挥发其他所有路径的信息素
-				// 无解时挥发本段路基的信息素
+				// 对于非可行解, 2倍挥发掉本次移动轨迹中的所有信息素
 				if(!isFeasible) {
 					int[] route = curRst.getRoutes();
 					if(route.length > 1) {
 						for(int i = 0; i < curRst.getStep() - 1; i++) {
-							minusMoveQPA(route[i], route[i + 1], pGn, bestRst);
+							int cId = route[i];
+							int nId = route[i + 1];
+							double theta = -2 * getTheta(cId, nId, pGn, bestRst);
+							updateQPA(cId, nId, theta);
 						}
 					}
 				}
 				break;
 			}
-
-//			updateMoveQPA(curId, nextId, pGn, bestRst);
-			addMoveQPA(curId, nextId, pGn, bestRst);
+			
+			// 蚂蚁移动到下一节点，并在路径上释放信息素
+			double theta = getTheta(curId, nextId, pGn, bestRst);
+			updateQPA(curId, nextId, theta);
 			curId = move(nextId);
+			
+			// 若蚂蚁移动到的下一节点就是终点，则退出寻路
+			// (前面寻路决策中已经决定了此处不可能还存在未访问的必经点的情况)
+			if(nextId == SNK_ID) {
+				isFeasible = true;
+				break;
+			}
 		}
 		
 		// 标记求得可行解
@@ -100,7 +114,7 @@ final class _QAnt {
 			solveCnt++;
 			unsolveCnt = 0;
 			curRst.markVaild();
-			// FIXME 挥发可行解以外的其他路径的信息素
+			// FIXME 挥发可行解以外的其他路径的信息素(自然挥发)
 			
 		// 当连续无解次数越限时，执行量子交叉打乱量子编码，避免搜索陷入停滞
 		} else {
@@ -110,23 +124,6 @@ final class _QAnt {
 			}
 		}
 		return isFeasible;
-	}
-	
-	private void addMoveQPA(int curId, int nextId, double pGn, _QRst bestRst) {
-		double deltaBeta = _getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
-		__QPA curQPA = curRst.QPA(curId, nextId);	// 当前解在本次移动时的量子信息素编码
-		__QPA bestQPA = bestRst.QPA(curId, nextId); // 最优解在对应路径上的量子信息素编码(参考值)
-		double theta = _getTheta(pGn, deltaBeta, curQPA, bestQPA); // 计算量子旋转门的旋转角θ
-		_addQPA(curId, nextId, theta);	// 使用量子旋转门增加本次移动路径上信息素
-	}
-	
-	private void minusMoveQPA(int curId, int nextId, double pGn, _QRst bestRst) {
-		double deltaBeta = _getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
-		__QPA curQPA = curRst.QPA(curId, nextId);	// 当前解在本次移动时的量子信息素编码
-		__QPA bestQPA = bestRst.QPA(curId, nextId); // 最优解在对应路径上的量子信息素编码(参考值)
-		double theta = _getTheta(pGn, deltaBeta, curQPA, bestQPA); // 计算量子旋转门的旋转角θ
-		_addQPA(curId, nextId, -theta);	// 使用量子旋转门增加本次移动路径上信息素   FIXME 为什么有时是负数？
-		_addQPA(curId, nextId, -theta);
 	}
 	
 	/**
@@ -147,7 +144,7 @@ final class _QAnt {
 		int curId = curRst.getCurId();
 		int moveCost = (curId >= 0 ? ENV.dist(curId, nextId) : 0);
 		tabus[nextId] = true;
-		curId = curRst.move(nextId, moveCost) ? nextId : -1;
+		curId = curRst.move(nextId, moveCost) ? nextId : INVAILD_ID;
 		return curId;
 	}
 	
@@ -155,38 +152,33 @@ final class _QAnt {
 	 * 选择第一个节点ID.
 	 *   一般的TSP问题随机选择一个节点即可.
 	 *   但若拓扑图有源宿点，则在源端或宿端随机选择一个.
+	 *   (同族蚂蚁的每一代起始点是固定的， 但是不同族蚂蚁可以有不同的起始点)
 	 * @return
 	 */
 	private int selectFirstId() {
-//		int firstId = (RandomUtils.randomBoolean() ? ENV.srcId() : ENV.snkId());
-//		return firstId;
-		return ENV.srcId();
+		int firstId = INVAILD_ID;
+		if(SRC_ID > INVAILD_ID) {
+			firstId = SRC_ID;
+			
+		} else {
+			firstId = RandomUtils.randomInt(ENV.size());
+		}
+		return firstId;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(Math.pow(0.5, 0.2));
-		System.out.println(Math.pow(0.3, 0.2));
-		System.out.println(Math.pow(0.1, 0.2));
-	}
-
 	/**
 	 * 根据寻路决策的规则选择下一个移动的节点ID
-	 * @return 若无路可走则返回-1
+	 * @return 
 	 */
 	private int selectNextId(int curId) {
+		int nextId = INVAILD_ID;
 		if(curId < 0) {
-			return -1;
-		}
-		
-		if(curId == 1) {
-			System.out.println();
+			return nextId;
 		}
 		
 		// FIXME 这两个值越小越重要， 且和为1？  若蚂蚁代数很大，依然未求得过一个解，则需要适当调整参数
-		final double ZETA = 0.8D;	//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
-		final double GAMMA = 0.2D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
-		
-		int nextId = -1;
+		final double ZETA = 0.2D;	//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
+		final double GAMMA = 2D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
 		final int SCOPE = 10, RAND_LIMIT = 8;
 		int rand = RandomUtils.randomInt(SCOPE);
 
@@ -198,7 +190,7 @@ final class _QAnt {
 					continue;
 				}
 
-				double arg = Math.pow(_getTau(i, j), ZETA) * 
+				double arg = Math.pow(_getTau(i, j), ZETA) + 
 						Math.pow(ENV.eta(i, j), GAMMA);
 				if(argmax <= arg) {
 					argmax = arg;
@@ -217,7 +209,7 @@ final class _QAnt {
 					continue;
 				}
 				
-				double arg = Math.pow(_getTau(i, j), ZETA) * 
+				double arg = Math.pow(_getTau(i, j), ZETA) * // FIXME? to +
 						Math.pow(ENV.eta(i, j), GAMMA);
 				sum += arg;
 				map.put(j, arg);
@@ -251,9 +243,28 @@ final class _QAnt {
 		} else if(!ENV.isLinked(curId, nextId)) {
 			isTabu = true;
 			
-		// 当下一跳节点为拓扑图的源宿点时，则下一跳只能是最后一跳
-		} else if((nextId == ENV.srcId() || nextId == ENV.snkId())) {
-			isTabu = !(curRst.getStep() + 1 == ENV.size());
+		// 当下一跳节点为终点节点时
+		} else if(nextId == SNK_ID) {
+			isTabu = true;
+			
+			// 下一跳是最后一跳
+			if(curRst.getStep() + 1 == ENV.size()) {
+				isTabu = false;
+				
+			// 下一跳不是最后一条，但所有必经点已被访问过
+			} else {
+				int[] includes = ENV.getIncludes();
+				if(includes.length > 0) {
+					boolean allVisit = true;
+					for(int include : includes) {
+						if(tabus[include] == false) {
+							allVisit = false;
+							break;
+						}
+					}
+					isTabu = !allVisit;
+				}
+			}
 		}
 		return isTabu;
 	}
@@ -272,38 +283,41 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 检查到目前为止的移动轨迹是否为一个可行解
+	 * 当未遍历完全图时， 检查到目前为止的移动轨迹是否为一个可行解
 	 *  (剩余节点均不在必经点集中则认为已得到一个可行解)
 	 * @return
 	 */
 	private boolean checkFeasible() {
 		boolean isFeasible = true;
-		for(int nodeId = 0; nodeId < ENV.size(); nodeId++) {
-			if(!tabus[nodeId] && ENV.isInclude(nodeId)) {
-				isFeasible = false;
-				break;
+		
+		// 若不存在必经点集， 则表示需要全图遍历， 亦即当前解必定不是可行解
+		if(ENV.getIncludes().length <= 0) {
+			isFeasible = false;
+			
+		// 若存在必经点集，则检查所有未访问节点中（包括源宿点）是否还存在必经点
+		} else {
+			for(int nodeId = 0; nodeId < ENV.size(); nodeId++) {
+				if(!tabus[nodeId] && ENV.isInclude(nodeId)) {
+					isFeasible = false;
+					break;
+				}
 			}
 		}
 		return isFeasible;
 	}
 	
 	/**
-	 * 更新移动路径上的量子编码
-	 * @param curId
-	 * @param nextId
-	 * @param pGn
-	 * @param bestRst
+	 * 计算量子旋转门的旋转角θ
+	 * @param pGn 该量子蚂蚁的代数 与 最大代数 的代数比
+	 * @param deltaBeta 某只量子蚂蚁当前从i->j转移时释放的信息素
+	 * @param curQPA 该量子蚂蚁当前从i->j转移的量子编码(当前的路径信息素概率幅)
+	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
+	 * @return 旋转角θ
 	 */
-	private void updateMoveQPA(int curId, int nextId, double pGn, _QRst bestRst) {
+	private double getTheta(int curId, int nextId, double pGn, _QRst bestRst) {
 		double deltaBeta = _getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
-		__QPA curQPA = curRst.QPA(curId, nextId);	// 当前解在本次移动时的量子信息素编码
-		__QPA bestQPA = bestRst.QPA(curId, nextId); // 最优解在对应路径上的量子信息素编码(参考值)
-		double theta = _getTheta(pGn, deltaBeta, curQPA, bestQPA); // 计算量子旋转门的旋转角θ
-		
-		_addQPA(curId, nextId, theta);	// 使用量子旋转门增加本次移动路径上信息素
-		if(ENV.isUseVolatilize()) {		// 对本次移动时 没有被选择的候选路径上的信息素 进行自然挥发
-			_minusQPAs(curRst.getLastId(), curId, nextId, theta);
-		}
+		double theta = (_QEnv.MAX_THETA - _QEnv.DELTA_THETA * pGn) * deltaBeta;
+		return theta;
 	}
 	
 	/**
@@ -318,84 +332,25 @@ final class _QAnt {
 		beta = (beta + bestRst.QPA(srcId, snkId).getBeta()) / 2.0D;
 		return beta * beta;
 	}
-	
-	/**
-	 * 计算量子旋转门的旋转角θ
-	 * @param pGn 该量子蚂蚁的代数 与 最大代数 的代数比
-	 * @param deltaBeta 某只量子蚂蚁当前从i->j转移时释放的信息素
-	 * @param curQPA 该量子蚂蚁当前从i->j转移的量子编码(当前的路径信息素概率幅)
-	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
-	 * @return 旋转角θ
-	 */
-	private double _getTheta(double pGn, double deltaBeta, 
-			__QPA curQPA, __QPA bestQPA) {
-		double theta = (MAX_THETA - DELTA_THETA * pGn) * deltaBeta;
-		return theta;
-	}
 
-	// FIXME 这个旋转角方向是 当前解 与 最优解的偏差角，不能这样用
-	// 当 当前解的beta概率幅 大于 最优参考解时， 旋转角方向为负，反之为正
-	/**
-	 * 计算量子旋转角的旋转方向
-	 * @param curQPA 某只量子蚂蚁当前从i->j转移的量子编码(当前的路径信息素概率幅)
-	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
-	 * @return 顺时针:1; 逆时针:-1
-	 */
-	private int __getThetaDirection(__QPA curQPA, __QPA bestQPA) {
-		double pBest = bestQPA.getBeta() / bestQPA.getAlpha();
-		double pCur = curQPA.getBeta() / curQPA.getAlpha();
-		double atanBest = Math.atan(pBest);
-		double atanCur = Math.atan(pCur);
-		int direction = (((pBest / pCur) * (atanBest - atanCur)) >= 0 ? 1 : -1);
-		return direction;
-	}
-	
 	/**
 	 * 使用量子旋转门更新量子编码: 
 	 * 	加强src->snk的路径信息素
 	 * @param srcId 路径起点
 	 * @param snkId 路径终点
-	 * @param theta 旋转角
+	 * @param theta 旋转角: 正向(>0)为增加, 逆向(<0)为减少
 	 */
-	private void _addQPA(final int srcId, final int snkId, final double theta) {
-		if(srcId == 0 && snkId == 1) {
-			System.out.println();
-		}
+	private void updateQPA(final int srcId, final int snkId, final double theta) {
+		final __QPA ijQPA = curRst.QPA(srcId, snkId);
+		final __QPA jiQPA = curRst.QPA(snkId, srcId);
 		final double cosTheta = Math.cos(theta);
 		final double sinTheta = Math.sin(theta);
-		final double alpha = curRst.QPA(srcId, snkId).getAlpha();
-		final double beta = curRst.QPA(srcId, snkId).getBeta();
-		curRst.QPA(srcId, snkId).setAlpha(cosTheta * alpha - sinTheta * beta);
-		curRst.QPA(srcId, snkId).setBeta(sinTheta * alpha + cosTheta * beta);
-		curRst.QPA(snkId, srcId).setAlpha(curRst.QPA(srcId, snkId).getAlpha());
-		curRst.QPA(snkId, srcId).setBeta(curRst.QPA(srcId, snkId).getBeta());
-	}
-
-	/**
-	 * 使用量子旋转门更新量子编码: 
-	 *  挥发除了 cur->last 和 cur->next 以外的与cur相关的路径信息素
-	 *  (对称路径 last->cur 信息素 等同于 cur->last 信息素)
-	 * @param lastId 上一节点
-	 * @param curId 当前节点
-	 * @param nextId 下一节点
-	 * @param theta 旋转角
-	 */
-	private void _minusQPAs(int lastId, int curId, int nextId, double theta) {
-		final double cosTheta = Math.cos(-theta);
-		final double sinTheta = Math.sin(-theta);
-
-		for(int j = 0; j < ENV.size(); j++) {
-			if(j == lastId || j == nextId || !ENV.isLinked(curId, j)) {
-				continue;
-			}
-			
-			final double alpha = curRst.QPA(curId, j).getAlpha();
-			final double beta = curRst.QPA(curId, j).getBeta();
-			curRst.QPA(curId, j).setAlpha(cosTheta * alpha - sinTheta * beta);
-			curRst.QPA(curId, j).setBeta(sinTheta * alpha + cosTheta * beta);
-			curRst.QPA(j, curId).setAlpha(curRst.QPA(curId, j).getAlpha());
-			curRst.QPA(j, curId).setBeta(curRst.QPA(curId, j).getBeta());
-		}
+		final double alpha = ijQPA.getAlpha();
+		final double beta = ijQPA.getBeta();
+		ijQPA.setAlpha(cosTheta * alpha - sinTheta * beta);
+		ijQPA.setBeta(sinTheta * alpha + cosTheta * beta);
+		jiQPA.setAlpha(ijQPA.getAlpha());
+		jiQPA.setBeta(ijQPA.getBeta());
 	}
 
 	/**
@@ -408,11 +363,14 @@ final class _QAnt {
 					continue;
 				}
 				
-				final double beta = curRst.QPA(i, j).getBeta();
-				curRst.QPA(i, j).setBeta(curRst.QPA(i, j).getAlpha());
-				curRst.QPA(i, j).setAlpha(beta);
-				curRst.QPA(j, i).setBeta(curRst.QPA(i, j).getBeta());
-				curRst.QPA(j, i).setAlpha(curRst.QPA(i, j).getAlpha());			}
+				final __QPA ijQPA = curRst.QPA(i, j);
+				final __QPA jiQPA = curRst.QPA(j, i);
+				final double beta = ijQPA.getBeta();
+				ijQPA.setBeta(ijQPA.getAlpha());
+				ijQPA.setAlpha(beta);
+				jiQPA.setBeta(ijQPA.getBeta());
+				jiQPA.setAlpha(ijQPA.getAlpha());
+			}
 		}
 	}
 	

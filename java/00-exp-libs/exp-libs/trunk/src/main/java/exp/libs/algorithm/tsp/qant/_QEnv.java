@@ -4,6 +4,18 @@ import java.util.Collection;
 
 final class _QEnv {
 
+	/** 数学常量π */
+	protected final static double PI = 3.141592654D;
+	
+	/** 最小旋转角 */
+	protected final static double MIN_THETA = 0.001D * PI;
+	
+	/** 最大旋转角 */
+	protected final static double MAX_THETA = 0.05D * PI;
+	
+	/** 旋转角 */
+	protected final static double DELTA_THETA = MAX_THETA - MIN_THETA;
+	
 	/** 默认最大的蚂蚁代数（迭代次数） */
 	private final static int DEFAULT_MAX_GENERATION = 10;
 	
@@ -75,10 +87,23 @@ final class _QEnv {
 		return qGraph.deltaBeta(srcId, snkId);
 	}
 	
+	/**
+	 * 检查节点是否在必经点集中（包括源宿点）
+	 * @param nodeId
+	 * @return
+	 */
 	protected boolean isInclude(int nodeId) {
 		return qGraph.isInclude(nodeId);
 	}
 
+	/**
+	 * 获取必经点集
+	 * @return 不包括源宿点的必经点集
+	 */
+	protected int[] getIncludes() {
+		return qGraph.getIncludes();
+	}
+	
 	protected boolean isLinked(int srcId, int snkId) {
 		return qGraph.isLinked(srcId, snkId);
 	}

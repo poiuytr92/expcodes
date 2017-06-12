@@ -105,7 +105,6 @@ public final class QACA {
 					if(antRst.isVaild() && antRst.getCost() < bestRst.getCost()) {
 						bestRst.copy(antRst);
 					}
-					System.out.println(antRst.toString());
 				} catch (Exception e) {
 					System.err.println("获取回调结果失败");	// FIXME
 				}
