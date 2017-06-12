@@ -80,25 +80,14 @@ final class _QAnt {
 			// 无路可走
 			if(nextId < 0) {
 				isFeasible = checkFeasible();	// 检查是否已得到一个可行解(此处只针对无源宿端的拓扑图)
-				
-				// 对于非可行解, 2倍挥发掉本次移动轨迹中的所有信息素
-				if(!isFeasible) {
-					int[] route = curRst.getRoutes();
-					if(route.length > 1) {
-						for(int i = 0; i < curRst.getStep() - 1; i++) {
-							int cId = route[i];
-							int nId = route[i + 1];
-							double theta = -2 * getTheta(cId, nId, pGn, bestRst);
-							updateQPA(cId, nId, theta);
-						}
-					}
+				if(!isFeasible) {	// 对于非可行解, 2倍挥发掉本次移动轨迹中的所有信息素
+					minusRouteQPAs(curRst, pGn, bestRst);
 				}
 				break;
 			}
 			
 			// 蚂蚁移动到下一节点，并在路径上释放信息素
-			double theta = getTheta(curId, nextId, pGn, bestRst);
-			updateQPA(curId, nextId, theta);
+			addMoveQPA(curId, nextId, pGn, bestRst);
 			curId = move(nextId);
 			
 			// 若蚂蚁移动到的下一节点就是终点，则退出寻路
@@ -176,7 +165,7 @@ final class _QAnt {
 			return nextId;
 		}
 		
-		// FIXME 这两个值越小越重要， 且和为1？  若蚂蚁代数很大，依然未求得过一个解，则需要适当调整参数
+		// FIXME 这两个值越小越重要，   若蚂蚁代数很大，依然未求得过一个解，则需要适当调整参数
 		final double ZETA = 0.2D;	//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
 		final double GAMMA = 2D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
 		final int SCOPE = 10, RAND_LIMIT = 8;
@@ -185,16 +174,16 @@ final class _QAnt {
 		// 蚂蚁以80%的概率以信息素作为决策方式进行路径转移（协作性优先）
 		if(rand < RAND_LIMIT) {
 			double argmax = -1;
-			for(int i = curId, j = 0; j < ENV.size(); j++) {
-				if(_isTabu(i, j)) {
+			for(int a = curId, z = 0; z < ENV.size(); z++) {
+				if(_isTabu(a, z)) {
 					continue;
 				}
 
-				double arg = Math.pow(_getTau(i, j), ZETA) + 
-						Math.pow(ENV.eta(i, j), GAMMA);
+				double arg = Math.pow(_getTau(a, z), ZETA) + 
+						Math.pow(ENV.eta(a, z), GAMMA);
 				if(argmax <= arg) {
 					argmax = arg;
-					nextId = j;
+					nextId = z;
 				}
 			}
 			
@@ -204,15 +193,15 @@ final class _QAnt {
 			double sum = 0;
 			
 			Map<Integer, Double> map = new LinkedHashMap<Integer, Double>();
-			for(int i = curId, j = 0; j < ENV.size(); j++) {
-				if(_isTabu(i, j)) {
+			for(int a = curId, z = 0; z < ENV.size(); z++) {
+				if(_isTabu(a, z)) {
 					continue;
 				}
 				
-				double arg = Math.pow(_getTau(i, j), ZETA) * // FIXME? to +
-						Math.pow(ENV.eta(i, j), GAMMA);
+				double arg = Math.pow(_getTau(a, z), ZETA) + 
+						Math.pow(ENV.eta(a, z), GAMMA);
 				sum += arg;
-				map.put(j, arg);
+				map.put(z, arg);
 			}
 			
 			Iterator<Integer> nextIds = map.keySet().iterator();
@@ -306,6 +295,23 @@ final class _QAnt {
 		return isFeasible;
 	}
 	
+	private void addMoveQPA(int curId, int nextId, double pGn, _QRst bestRst) {
+		double theta = _getTheta(curId, nextId, pGn, bestRst);
+		_updateQPA(curId, nextId, theta);
+	}
+	
+	private void minusRouteQPAs(_QRst rst, double pGn, _QRst bestRst) {
+		int[] route = rst.getRoutes();
+		if(route.length > 1) {
+			for(int step = 0; step < rst.getStep() - 1; step++) {
+				int aId = route[step];
+				int zId = route[step + 1];
+				double theta = -2 * _getTheta(aId, zId, pGn, bestRst);
+				_updateQPA(aId, zId, theta);
+			}
+		}
+	}
+	
 	/**
 	 * 计算量子旋转门的旋转角θ
 	 * @param pGn 该量子蚂蚁的代数 与 最大代数 的代数比
@@ -314,8 +320,8 @@ final class _QAnt {
 	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
 	 * @return 旋转角θ
 	 */
-	private double getTheta(int curId, int nextId, double pGn, _QRst bestRst) {
-		double deltaBeta = _getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
+	private double _getTheta(int curId, int nextId, double pGn, _QRst bestRst) {
+		double deltaBeta = __getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
 		double theta = (_QEnv.MAX_THETA - _QEnv.DELTA_THETA * pGn) * deltaBeta;
 		return theta;
 	}
@@ -327,7 +333,7 @@ final class _QAnt {
 	 * @param bestRst
 	 * @return srcId->snkId路径上的 [量子信息素增量] 的 β概率幅的平方
 	 */
-	private double _getDeltaBeta(int srcId, int snkId, final _QRst bestRst) {
+	private double __getDeltaBeta(int srcId, int snkId, final _QRst bestRst) {
 		double beta = ENV.deltaBeta(srcId, snkId);
 		beta = (beta + bestRst.QPA(srcId, snkId).getBeta()) / 2.0D;
 		return beta * beta;
@@ -340,46 +346,19 @@ final class _QAnt {
 	 * @param snkId 路径终点
 	 * @param theta 旋转角: 正向(>0)为增加, 逆向(<0)为减少
 	 */
-	private void updateQPA(final int srcId, final int snkId, final double theta) {
-		final __QPA ijQPA = curRst.QPA(srcId, snkId);
-		final __QPA jiQPA = curRst.QPA(snkId, srcId);
+	private void _updateQPA(final int srcId, final int snkId, final double theta) {
+		final __QPA azQPA = curRst.QPA(srcId, snkId);
+		final __QPA zaQPA = curRst.QPA(snkId, srcId);
 		final double cosTheta = Math.cos(theta);
 		final double sinTheta = Math.sin(theta);
-		final double alpha = ijQPA.getAlpha();
-		final double beta = ijQPA.getBeta();
-		ijQPA.setAlpha(cosTheta * alpha - sinTheta * beta);	// FIXME 因浮点运算不精确，此处可能为负，
-		ijQPA.setBeta(sinTheta * alpha + cosTheta * beta); // 但beta不会>=1 可不处理？
-		jiQPA.setAlpha(ijQPA.getAlpha());
-		jiQPA.setBeta(ijQPA.getBeta());
-		
-		int cnt = 100;
-		double aa = alpha;
-		double bb = beta; 
-		while(cnt-- > 0) {
-			double a = aa;
-			double b = bb;
-			aa = cosTheta * a - sinTheta * b;
-			bb = sinTheta * a + cosTheta * b;
-			System.out.println(aa);
-			System.out.println(bb);
-		}
+		final double alpha = azQPA.getAlpha();
+		final double beta = azQPA.getBeta();
+		azQPA.setAlpha(Math.abs(cosTheta * alpha - sinTheta * beta)); // 此处可能为负， 避免影响beta值， 取绝对值
+		azQPA.setBeta(sinTheta * alpha + cosTheta * beta);
+		zaQPA.setAlpha(azQPA.getAlpha());
+		zaQPA.setBeta(azQPA.getBeta());
 	}
 	
-	public static void main(String[] args) {
-		double theta = 0.017710728586925;
-		final double cosTheta = Math.cos(theta);
-		final double sinTheta = Math.sin(theta);
-		final double alpha = 0.006126067254877698;
-		final double beta = 0.9999812354739412;
-		
-		System.out.println(alpha * alpha + beta * beta);
-		
-		double aa = cosTheta * alpha - sinTheta * beta;
-		double bb = sinTheta * alpha + cosTheta * beta;
-		System.out.println(aa);
-		System.out.println(bb);
-	}
-
 	/**
 	 * 使用量子交叉对量子编码做变异处理 
 	 */
@@ -390,13 +369,13 @@ final class _QAnt {
 					continue;
 				}
 				
-				final __QPA ijQPA = curRst.QPA(i, j);
-				final __QPA jiQPA = curRst.QPA(j, i);
-				final double beta = ijQPA.getBeta();
-				ijQPA.setBeta(ijQPA.getAlpha());
-				ijQPA.setAlpha(beta);
-				jiQPA.setBeta(ijQPA.getBeta());
-				jiQPA.setAlpha(ijQPA.getAlpha());
+				final __QPA azQPA = curRst.QPA(i, j);
+				final __QPA zaQPA = curRst.QPA(j, i);
+				final double beta = azQPA.getBeta();
+				azQPA.setBeta(azQPA.getAlpha());
+				azQPA.setAlpha(beta);
+				zaQPA.setBeta(azQPA.getBeta());
+				zaQPA.setAlpha(azQPA.getAlpha());
 			}
 		}
 	}

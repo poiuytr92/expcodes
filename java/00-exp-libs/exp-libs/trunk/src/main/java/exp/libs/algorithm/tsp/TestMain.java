@@ -33,6 +33,8 @@ public class TestMain {
 		includes.add(0, graph.getSrc());
 		includes.add(includes.size(), graph.getSnk());
 		
+		// 若无必经点则直接用dij计算最短路
+		
 		// 计算任意两点间的最短路径, 构造子图
 		TopoGraph subGraph = new TopoGraph(false);
 		int size = includes.size();
@@ -174,8 +176,8 @@ public class TestMain {
 		graph.addInclude("C");
 		graph.addInclude("G");
 		
-		graph.addInclude("K");
-		graph.addInclude("I");
+//		graph.addInclude("K");
+//		graph.addInclude("I");
 		graph.setAdjacencyMatrix();
 		return graph;
 	}
