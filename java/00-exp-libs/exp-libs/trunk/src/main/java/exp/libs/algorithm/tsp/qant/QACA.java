@@ -166,8 +166,8 @@ public final class QACA {
 		sb.append(" [变异处理] : ").append(ENV.isUseQCross()).append("\r\n");
 		sb.append(" [总求解次数] : ").append(qAntSize * ENV.MAX_GENERATION()).append("\r\n");
 		sb.append(" [得到可行解次数] : ").append(rstCnt).append("\r\n");
-		sb.append(" [首次得到可行解代数] : ").append(firstRstGn).append("\r\n");
-		sb.append(" [首次得到最优解代数] : ").append(firstBestRstGn).append("\r\n");
+		sb.append(" [首次得到可行解代数] : ").append(firstRstGn + 1).append("\r\n");
+		sb.append(" [首次得到最优解代数] : ").append(firstBestRstGn + 1).append("\r\n");
 		sb.append(" [最优解] : \r\n").append(bestRst.toRouteInfo());
 		return sb.toString();
 	}

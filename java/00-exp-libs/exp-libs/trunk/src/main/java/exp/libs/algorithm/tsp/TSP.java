@@ -148,6 +148,104 @@ public class TSP {
 	}
 	
 	/**
+	 * 子图死路补边：
+	 *  若存在非源宿、且度为1的节点X， 则先找到它的一个的邻居节点Y(度大于2, 可以是级联邻居), 
+	 *    (若Y的度<2, 说明子图不连通, 但根据上下文这是不可能的; 
+	 *     若Y的度=2, 说明X与Y同属一个死路支路， 则需要找下一个级联邻居Y)
+	 *  对于Y的邻居节点集Zs（不包括X）， 依次求X不经过Y到达Z1、Z2、...Zn的最短路，
+	 *  把最短的一条 X->Zk 添加到子图， 完成补边.
+	 *  
+	 * @param subGraph 子图
+	 * @param graph 原图
+	 * @param dijkstra 根据原图构造的dijkstra算法对象
+	 * @return 是否补边成功 (根据上下文逻辑, X必定是一个必经点, 因此若存在任意一个X补边失败， 则此图必定无解)
+	 */
+	private static boolean _fillEdges(final TopoGraph subGraph, 
+			final TopoGraph graph, final Dijkstra dijkstra) {
+		boolean isOk = true;
+		boolean exist = false;
+		do {
+			exist = false;
+			Set<Node> subNodes = subGraph.getAllNodes(); // 重新获取补边后新的子图节点
+			for(Node subNode : subNodes) {
+				if(subNode.getDegree() < 1) {
+					isOk = false;
+					break;
+					
+				} else if(subNode.getDegree() > 1) {
+					continue;
+					
+				} else if(subNode.getId() == subGraph.getSrc().getId() || 
+						subNode.getId() == subGraph.getSnk().getId()) {
+					continue;
+				}
+				
+				exist = true;
+				List<Integer> fillRoutes = __findFillRoutes(subNode, graph, dijkstra);
+				if(fillRoutes == null) {
+					isOk = false;
+					
+				} else {
+					__addEdges(subGraph, graph, fillRoutes); // 补边
+				}
+				break; // 子图节点已变化，需要跳出循环
+			}
+		} while(isOk && exist);
+		return isOk;
+	}
+	
+	/**
+	 * 获取子图死路节点级联到最近邻居的补边路径
+	 * @param subNode 子图的一个死路节点
+	 * @param graph 原图
+	 * @param dijkstra
+	 * @return
+	 */
+	private static List<Integer> __findFillRoutes(final Node subNode, 
+			final TopoGraph graph, final Dijkstra dijkstra) {
+		List<Integer> fillRoutes = null;
+		Set<Integer> tabu = new HashSet<Integer>();
+		Node lastNode = subNode;
+		Node curNode = lastNode.getNeighborList().get(0);
+		do {
+			// 非连通图
+			if(curNode.getDegree() <= 1) {
+				break;
+				
+			} else {
+				tabu.add(graph.getNode(curNode.getName()).getId());
+				
+				// 存在级联邻居
+				if(curNode.getDegree() == 2) { 
+					List<Node> neighbors = curNode.getNeighborList();
+					Node nextNode = (lastNode.getId() == neighbors.get(0).getId() ? 
+							neighbors.get(1) : neighbors.get(0));
+					lastNode = curNode;
+					curNode = nextNode;
+					continue;
+					
+				// 找一条短的补边
+				} else {
+					int MIN_COST = Integer.MAX_VALUE;
+					int aId = graph.getNode(subNode.getName()).getId();
+					List<Node> neighbors = curNode.getNeighborList();
+					for(Node z : neighbors) {
+						int zId = graph.getNode(z.getName()).getId();
+						dijkstra.calculate(aId, tabu);
+						int cost = dijkstra.getShortPathWeight(zId);
+						if(cost < MIN_COST) {
+							MIN_COST = cost;
+							fillRoutes = dijkstra.getShortPaths(zId);
+						}
+					}
+					break;
+				}
+			}
+		} while(true);
+		return fillRoutes;
+	}
+	
+	/**
 	 * 把原图中某一段路由的相关边添加到子图中
 	 * @param subGraph 子图
 	 * @param graph 原图
@@ -161,96 +259,6 @@ public class TSP {
 			int weight = graph.getWeight(src, snk);
 			subGraph.addEdge(src.getName(), snk.getName(), weight);
 		}
-	}
-	
-	/**
-	 * 子图死路补边：
-	 *  若存在非源宿、且度为1的节点X， 则先找到它的一个的邻居节点Y(度大于2, 可以是级联邻居), 
-	 *    (若Y的度<2, 说明子图不连通, 但根据上下文这是不可能的; 
-	 *     若Y的度=2, 说明X与Y同属一个死路支路， 则需要找下一个级联邻居Y)
-	 *  对于Y的邻居节点集Zs（不包括X）， 依次求X不经过Y到达Z1、Z2、...Zn的最短路，
-	 *  把最短的一条 X->Zk 添加到子图， 完成补边.
-	 *  
-	 * @param subGraph 子图
-	 * @param graph 原图
-	 * @param dijkstra 根据原图构造的dijkstra算法对象
-	 * @return 是否补边成功 (根据上下文逻辑, X必定是一个必经点, 因此若存在任意一个X补边失败， 则此图必定无解)
-	 */
-	private static boolean _fillEdges(final TopoGraph subGraph, final TopoGraph graph, final Dijkstra dijkstra) {
-		boolean isOk = true;
-		do {
-			isOk = true;
-			Set<Integer> tabu = __getTabu(graph, subGraph);
-			Set<Node> subNodes = subGraph.getAllNodes();
-			for(Node subNode : subNodes) {
-				if(subNode.getDegree() == 1 && 
-						!graph.getSrc().getName().equals(subNode.getName()) && 
-						!graph.getSnk().getName().equals(subNode.getName())) {
-					isOk = false;
-					
-					// 重新构造子图(从度1节点K开始，依次断开K的邻居节点X到其所有邻居节点Ys的边，找到最小的代价的那一条并替换之)
-					int minCost = Integer.MAX_VALUE;
-					List<Integer> minSP = null;
-					Node minNode = null;
-					Node[] twoNodes = __getNeighbor(subNode);
-					Node nNode = twoNodes[0];
-					Node tabuNode = twoNodes[1];
-					List<Node> nodes = nNode.getNeighborList();
-					for(Node node : nodes) {
-						if(node.equals(tabuNode)) {
-							continue;
-						}
-						int srcId = graph.getNode(subNode.getName()).getId();
-						int snkId = graph.getNode(node.getName()).getId();
-						Set<Integer> tmpTabu = new HashSet<Integer>(tabu);
-						tmpTabu.remove(snkId);
-						dijkstra.calculate(srcId, tmpTabu);
-						int cost = dijkstra.getShortPathWeight(snkId);
-						if(cost < minCost) {
-							minCost = cost;
-							minSP = dijkstra.getShortPaths(snkId);
-							minNode = node;
-						}
-					}
-					
-					if(minCost < Integer.MAX_VALUE) {
-						for(int i = 0; i < minSP.size() - 1; i++) {
-							Node src = graph.getNode(minSP.get(i));
-							Node snk = graph.getNode(minSP.get(i + 1));
-							int weight = graph.getWeight(src, snk);
-							subGraph.addEdge(src.getName(), snk.getName(), weight);
-						}
-					} else {
-						System.out.println("此必经点组合无解");
-						isOk = true;
-					}
-					break;
-				}
-			}
-		} while(isOk == false);
-		return isOk; // FIXME
-	}
-	
-	private static Node[] __getNeighbor(Node node) {
-		Node[] rst = null;
-		do {
-			Node neighbor = node.getNeighborList().get(0);
-			if(neighbor.getDegree() > 2) {
-				rst = new Node[] { neighbor, node };
-				break;
-			}
-			node = neighbor;
-		} while(true);
-		return rst;
-	}
-	
-	private static Set<Integer> __getTabu(TopoGraph graph, TopoGraph subGraph) {
-		Set<Integer> tabuIds = new HashSet<Integer>();
-		Set<Node> subNodes = subGraph.getAllNodes();
-		for(Node node : subNodes) {
-			tabuIds.add(graph.getNode(node.getName()).getId());
-		}
-		return tabuIds;
 	}
 	
 }

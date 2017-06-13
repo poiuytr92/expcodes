@@ -39,9 +39,9 @@ public class TestMain {
 		graph.addEdge("B", "K", 3);
 		graph.addEdge("K", "F", 3);
 		graph.addInclude("C");
-		graph.addInclude("G");
-		
-		graph.addInclude("K");
+//		graph.addInclude("G");
+//		
+//		graph.addInclude("K");
 		graph.addInclude("I");
 		return graph;
 	}
