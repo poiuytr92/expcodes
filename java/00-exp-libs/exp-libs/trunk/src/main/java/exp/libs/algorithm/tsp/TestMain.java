@@ -1,15 +1,6 @@
 package exp.libs.algorithm.tsp;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import exp.libs.algorithm.tsp.graph.Node;
 import exp.libs.algorithm.tsp.graph.TopoGraph;
-import exp.libs.algorithm.tsp.qant.QACA;
-import exp.libs.algorithm.tsp.spa.Dijkstra;
-import exp.libs.algorithm.tsp.ui.TopoGraphUI;
-import exp.libs.utils.ui.BeautyEyeUtils;
 
 /**
  * TODO:
@@ -25,136 +16,11 @@ public class TestMain {
 
 	public static void main(String[] args) {
 		TopoGraph graph = toOrgGrapth();
-		Dijkstra dij = new Dijkstra(graph.getAdjacencyMatrix());
-//		draw(graph);
-		
-		// 把源宿点也作为必经点
-		List<Node> includes = graph.getIncludes();
-		includes.add(0, graph.getSrc());
-		includes.add(includes.size(), graph.getSnk());
-		
-		// 若无必经点则直接用dij计算最短路
-		
-		// 计算任意两点间的最短路径, 构造子图
-		TopoGraph subGraph = new TopoGraph(false);
-		int size = includes.size();
-		for(int i = 0; i < size; i++) {
-			Node x = includes.get(i);
-			dij.calculate(x.getId());
-			
-			for(int j = i + 1; j < size; j++) {
-				Node y = includes.get(j);
-				List<Integer> xySP = dij.getShortPaths(y.getId());
-				addEdges(subGraph, graph, xySP);
-			}
-		}
-//		draw(subGraph);
-		
-		// 检查子图是否存在度数为1， 且非源宿点的节点, 对其补边
-		boolean isOk = true;
-		do {
-			isOk = true;
-			Set<Integer> tabu = getTabu(graph, subGraph);
-			Set<Node> subNodes = subGraph.getAllNodes();
-			for(Node subNode : subNodes) {
-				if(subNode.getDegree() == 1 && 
-						!graph.getSrc().getName().equals(subNode.getName()) && 
-						!graph.getSnk().getName().equals(subNode.getName())) {
-					isOk = false;
-					
-					// 重新构造子图(从度1节点K开始，依次断开K的邻居节点X到其所有邻居节点Ys的边，找到最小的代价的那一条并替换之)
-					int minCost = Integer.MAX_VALUE;
-					List<Integer> minSP = null;
-					Node minNode = null;
-					Node[] twoNodes = getNeighbor(subNode);
-					Node nNode = twoNodes[0];
-					Node tabuNode = twoNodes[1];
-					List<Node> nodes = nNode.getNeighborList();
-					for(Node node : nodes) {
-						if(node.equals(tabuNode)) {
-							continue;
-						}
-						int srcId = graph.getNode(subNode.getName()).getId();
-						int snkId = graph.getNode(node.getName()).getId();
-						Set<Integer> tmpTabu = new HashSet<Integer>(tabu);
-						tmpTabu.remove(snkId);
-						dij.calculate(srcId, tmpTabu);
-						int cost = dij.getShortPathWeight(snkId);
-						if(cost < minCost) {
-							minCost = cost;
-							minSP = dij.getShortPaths(snkId);
-							minNode = node;
-						}
-					}
-					
-					if(minCost < Integer.MAX_VALUE) {
-						for(int i = 0; i < minSP.size() - 1; i++) {
-							Node src = graph.getNode(minSP.get(i));
-							Node snk = graph.getNode(minSP.get(i + 1));
-							int weight = graph.getWeight(src, snk);
-							subGraph.addEdge(src.getName(), snk.getName(), weight);
-						}
-					} else {
-						System.out.println("此必经点组合无解");
-						isOk = true;
-					}
-					break;
-				}
-			}
-		} while(isOk == false);
-		
-		subGraph.setSrc(graph.getSrc().getName());
-		subGraph.setSnk(graph.getSnk().getName());
-		subGraph.addIncludes(graph.getIncludeNames());
-		draw(subGraph);
-		
-		subGraph.setAdjacencyMatrix();
-		int[][] matrix = subGraph.getAdjacencyMatrix();
-		QACA qaca = new QACA(matrix, subGraph.getSrc().getId(), 
-				subGraph.getSnk().getId(), subGraph.getIncludeIds(), 
-				10, 10, false); 
-		qaca.exec();
-	}
-	
-	/**
-	 * 
-	 * @param node 度为1
-	 * @return
-	 */
-	private static Node[] getNeighbor(Node node) {
-		Node[] rst = null;
-		do {
-			Node neighbor = node.getNeighborList().get(0);
-			if(neighbor.getDegree() > 2) {
-				rst = new Node[] { neighbor, node };
-				break;
-			}
-			node = neighbor;
-		} while(true);
-		return rst;
-	}
-	
-	private static Set<Integer> getTabu(TopoGraph graph, TopoGraph subGraph) {
-		Set<Integer> tabuIds = new HashSet<Integer>();
-		Set<Node> subNodes = subGraph.getAllNodes();
-		for(Node node : subNodes) {
-			tabuIds.add(graph.getNode(node.getName()).getId());
-		}
-		return tabuIds;
-	}
-	
-	private static void addEdges(TopoGraph subGraph, TopoGraph graph, List<Integer> sp) {
-		int size = sp.size();
-		for(int i = 0; i < size - 1; i++) {
-			Node src = graph.getNode(sp.get(i));
-			Node snk = graph.getNode(sp.get(i + 1));
-			int weight = graph.getWeight(src, snk);
-			subGraph.addEdge(src.getName(), snk.getName(), weight);
-		}
+		TSP.solve(graph);
 	}
 	
 	private static TopoGraph toOrgGrapth() {
-		TopoGraph graph = new TopoGraph(false);
+		TopoGraph graph = new TopoGraph();
 		graph.setSrc("A"); 
 		graph.setSnk("F");
 		graph.addEdge("A", "B", 2);
@@ -175,17 +41,9 @@ public class TestMain {
 		graph.addInclude("C");
 		graph.addInclude("G");
 		
-//		graph.addInclude("K");
-//		graph.addInclude("I");
-		graph.setAdjacencyMatrix();
+		graph.addInclude("K");
+		graph.addInclude("I");
 		return graph;
 	}
-	
-	private static void draw(TopoGraph graph) {
-		BeautyEyeUtils.init();
-		TopoGraphUI ui = new TopoGraphUI("拓扑图展示器", 500, 300, graph);
-		ui._view();
-	}
-	
 	
 }

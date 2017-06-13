@@ -39,6 +39,9 @@ public final class QACA {
 	/** 寻路环境 */
 	private final _QEnv ENV;
 
+	/** 搜索耗时 */
+	private long useTime;
+	
 	/** 首次得到可行解的代数 */
 	private int firstRstGn;
 	
@@ -93,18 +96,27 @@ public final class QACA {
 			qAnts[i] = new _QAnt(i, ENV);
 		}
 		
+		resetStatistics();
 		this.bestRst = new QRst(-1, ENV);
 		bestRst.setCost(Integer.MAX_VALUE);
 	}
 
 	/**
+	 * 重置统计参数
+	 */
+	private void resetStatistics() {
+		this.useTime = -1;
+		this.firstRstGn = -1;
+		this.firstBestRstGn = -1;
+		this.rstCnt = 0;
+	}
+	
+	/**
 	 * 执行QACA算法求解
 	 * @return 得到的最优解
 	 */
 	public QRst exec() {
-		this.firstRstGn = -1;
-		this.firstBestRstGn = -1;
-		this.rstCnt = 0;
+		resetStatistics();
 		long bgnTime = System.currentTimeMillis();
 		List<Future<QRst>> rsts = new LinkedList<Future<QRst>>();
 		
@@ -140,11 +152,11 @@ public final class QACA {
 			rsts.clear();
 		}
 		
-		printRst(System.currentTimeMillis() - bgnTime);
+		useTime = System.currentTimeMillis() - bgnTime;
 		return bestRst;
 	}
 	
-	private void printRst(long useTime) {
+	public String toRstInfo() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\r\nQACA搜索结果 : \r\n");
 		sb.append(" [拓扑图规模] : ").append(ENV.size()).append("\r\n");
@@ -157,7 +169,12 @@ public final class QACA {
 		sb.append(" [首次得到可行解代数] : ").append(firstRstGn).append("\r\n");
 		sb.append(" [首次得到最优解代数] : ").append(firstBestRstGn).append("\r\n");
 		sb.append(" [最优解] : \r\n").append(bestRst.toRouteInfo());
-		log.info(sb.toString());
+		return sb.toString();
+	}
+	
+	@Override
+	public String toString() {
+		return toRstInfo();
 	}
 
 }

@@ -23,6 +23,10 @@ public class Graph {
 		this(false);
 	}
 	
+	/**
+	 * 构造函数
+	 * @param arrow 有向图(默认false, 即无向图)
+	 */
 	public Graph(boolean arrow) {
 		this.arrow = arrow;
 		this.nodeIdxs = new HashMap<Integer, String>();
@@ -175,18 +179,23 @@ public class Graph {
 		return new HashSet<Edge>(edges.values());
 	}
 	
-	public boolean setAdjacencyMatrix() {
-		boolean isOk = false;
-		if(matrix == null) {
-			toAdjacencyMatrix();
-			isOk = true;
-		}
-		return isOk;
+	/**
+	 * 在获取邻接矩阵后， 若拓扑图被修改过，则需要调用此方法重新生成邻接矩阵
+	 * @return
+	 */
+	public void resetAdjacencyMatrix() {
+		toAdjacencyMatrix();
 	}
 	
-	public boolean resetAdjacencyMatrix() {
-		toAdjacencyMatrix();
-		return true;
+	/**
+	 * 获取邻接矩阵
+	 * @return
+	 */
+	public int[][] getAdjacencyMatrix() {
+		if(matrix == null) {
+			toAdjacencyMatrix();
+		}
+		return matrix;
 	}
 	
 	private void toAdjacencyMatrix() {
@@ -203,10 +212,6 @@ public class Graph {
 				}
 			}
 		}
-	}
-	
-	public int[][] getAdjacencyMatrix() {
-		return (matrix == null ? new int[0][0] : matrix);
 	}
 	
 }

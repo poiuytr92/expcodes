@@ -21,11 +21,20 @@ public class TopoGraph extends Graph {
 		this(false, false);
 	}
 	
-	public TopoGraph(boolean arrow) {
-		this(arrow, false);
+	/**
+	 * 
+	 * @param order 必经点有序(默认false, 即无序)
+	 */
+	public TopoGraph(boolean order) {
+		this(order, false);
 	}
 	
-	public TopoGraph(boolean arrow, boolean order) {
+	/**
+	 * 
+	 * @param order 必经点有序(默认false, 即无序)
+	 * @param arrow 有向图(默认false, 即无向图)
+	 */
+	public TopoGraph(boolean order, boolean arrow) {
 		super(arrow);
 		this.src = Node.NULL;
 		this.snk = Node.NULL;
@@ -50,10 +59,18 @@ public class TopoGraph extends Graph {
 	}
 	
 	/**
+	 * 是否存在必经点
+	 * @return
+	 */
+	public boolean existInclude() {
+		return !includes.isEmpty();
+	}
+	
+	/**
 	 * 必经点是否有序
 	 * @return
 	 */
-	public boolean isOrder() {
+	public boolean isOrderInclude() {
 		return order;
 	}
 	

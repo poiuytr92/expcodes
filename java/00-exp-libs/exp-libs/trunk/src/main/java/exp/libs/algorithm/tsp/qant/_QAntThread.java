@@ -4,11 +4,11 @@ import java.util.concurrent.Callable;
 
 final class _QAntThread implements Callable<QRst> {
 
-	private _QAnt qAnt;
+	private final _QAnt qAnt;
 	
-	private QRst bestRst;
+	private final QRst bestRst;
 	
-	protected _QAntThread(_QAnt qAnt, QRst bestRst) {
+	protected _QAntThread(final _QAnt qAnt, final QRst bestRst) {
 		this.qAnt = qAnt;
 		this.bestRst = bestRst;
 	}

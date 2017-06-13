@@ -58,7 +58,7 @@ final class _QEnv {
 		this.qGraph = new __QGraph(dist, srcId, snkId, includeIds);
 		this.maxGeneration = (maxGeneration <= 0 ? 
 				DEFAULT_MAX_GENERATION : maxGeneration);
-		this.qCrossThreshold = maxGeneration / 2;
+		this.qCrossThreshold = 1 - this.maxGeneration / 3;	// 当搜索代数超过2/3仍无解时才触发变异
 		this.useQCross = useQCross;
 		
 		this.eta = new double[size()][size()];
