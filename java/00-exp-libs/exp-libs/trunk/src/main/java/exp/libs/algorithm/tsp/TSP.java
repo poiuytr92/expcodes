@@ -30,9 +30,10 @@ public class TSP {
 	 * @return
 	 */
 	public static TSPRst solve(final TopoGraph graph) {
-		TSPRst rst = TSPRst.NULL;
+		TSPRst rst = new TSPRst();
 		if(graph == null || graph.isEmpty() || graph.isArrow() || // 暂不支持有向图
 				graph.getSrc() == Node.NULL || graph.getSnk() == Node.NULL) {
+			rst.setCause("拓扑图无效(图为空、或非无向图、或未指定源宿端)");
 			return rst;
 		}
 		
@@ -59,9 +60,29 @@ public class TSP {
 	private static TSPRst solveBySPA(final TopoGraph graph) {
 		Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
 		dijkstra.calculate(graph.getSrc().getId());
-		List<Integer> routes = dijkstra.getShortPaths(graph.getSnk().getId());
-		// TODO
-		return null;
+		int snkId = graph.getSnk().getId();
+		int cost = dijkstra.getShortPathWeight(snkId);
+		List<Integer> routes = dijkstra.getShortPaths(snkId);
+		return _toTSPRst(graph, cost, routes);
+	}
+	
+	private static TSPRst _toTSPRst(final TopoGraph graph, 
+			final int cost, final List<Integer> routeIds) {
+		TSPRst rst = new TSPRst();
+		if(cost < Dijkstra.MAX_WEIGHT) {
+			rst.setVaild(true);
+			rst.setCost(cost);
+			
+			List<Node> routes = new LinkedList<Node>();
+			for(int size = routeIds.size(), i = 0; i < size; i++) {
+				routes.add(graph.getNode(routeIds.get(i)));
+			}
+			rst.setRoutes(routes);
+			
+		} else {
+			rst.setCause("使用最短路算法求解失败: 源宿端不连通");
+		}
+		return rst;
 	}
 	
 	/**
@@ -84,23 +105,28 @@ public class TSP {
 	 * @return
 	 */
 	private static TSPRst solveByHeuristicAlgorithm(final TopoGraph graph) {
+		TSPRst rst = new TSPRst();
 		Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
 		
 		// 压缩图: 计算必经点集（包括源宿点）中的任意两点的最短路, 合并所有相关路径, 得到压缩子图
 		TopoGraph subGraph = _compressGraph(graph, dijkstra);
 		
 		// 子图补边： 对于子图中度数为1、 且非源宿点的节点, 对其增加一条最短回路, 连接到到最近的一个度大于2的节点
-		_fillEdges(subGraph, graph, dijkstra);
-		
-		// 求子图的哈密顿通路： 最坏的情况是过所有节点， 最好的情况是只过必经点
-		QACA qaca = new QACA(subGraph.getAdjacencyMatrix(), 
-				subGraph.getSrc().getId(), 
-				subGraph.getSnk().getId(), 
-				subGraph.getIncludeIds(), 10, 10, true); 
-		QRst qRst = qaca.exec();
-		
-		// 转换子图解为原图解（节点ID不同）
-		return toTSPRst(graph, subGraph, qRst);
+		if(!_fillEdges(subGraph, graph, dijkstra)) {
+			rst.setCause("使用启发式算法求解失败: 拓扑图不存在哈密顿通路");
+			
+		} else {
+			// 求子图的哈密顿通路： 最坏的情况是过所有节点， 最好的情况是只过必经点
+			QACA qaca = new QACA(subGraph.getAdjacencyMatrix(), 
+					subGraph.getSrc().getId(), 
+					subGraph.getSnk().getId(), 
+					subGraph.getIncludeIds(), 10, 10, true); 
+			QRst qRst = qaca.exec();
+			
+			// 转换子图解为原图解（节点ID不同）
+			_toTSPRst(graph, rst, subGraph, qRst);
+		}
+		return rst;
 	}
 	
 	/**
@@ -158,7 +184,7 @@ public class TSP {
 			exist = false;
 			Set<Node> subNodes = subGraph.getAllNodes(); // 重新获取补边后新的子图节点
 			for(Node subNode : subNodes) {
-				if(subNode.getDegree() < 1) {
+				if(subNode.getDegree() < 1) { // FIXME	: 度计算异常
 					isOk = false;
 					break;
 					
@@ -254,15 +280,14 @@ public class TSP {
 	/**
 	 * 转换子图解为原图解
 	 * @param graph 原图
+	 * @param rst 原图解
 	 * @param subGraph 子图
 	 * @param subRst 子图解
 	 * @return 原图解
 	 */
-	private static TSPRst toTSPRst(final TopoGraph graph, 
+	private static void _toTSPRst(final TopoGraph graph, final TSPRst rst, 
 			final TopoGraph subGraph, final QRst subRst) {
-		TSPRst rst = TSPRst.NULL;
 		if(subRst.isVaild()) {
-			rst = new TSPRst();
 			rst.setVaild(true);
 			rst.setCost(subRst.getCost());
 			
@@ -277,8 +302,10 @@ public class TSP {
 				Collections.reverse(routes);
 			}
 			rst.setRoutes(routes);
+			
+		} else {
+			rst.setCause("使用启发式算法求解失败: 未能收敛到一个可行解");
 		}
-		return rst;
 	}
 	
 }

@@ -7,11 +7,11 @@ import exp.libs.algorithm.tsp.graph.Node;
 
 public final class TSPRst {
 
-	/** 无效解 */
-	public final static TSPRst NULL = new TSPRst();
-	
 	/** 是否为可行解 */
 	private boolean isVaild;
+	
+	/** 无解的原因 */
+	private String cause;
 	
 	/** 解的总开销 */
 	private int cost;
@@ -21,6 +21,7 @@ public final class TSPRst {
 	
 	protected TSPRst() {
 		this.isVaild = false;
+		this.cause = "";
 		this.cost = -1;
 		this.routes = new LinkedList<Node>();
 	}
@@ -31,6 +32,14 @@ public final class TSPRst {
 
 	protected void setVaild(boolean isVaild) {
 		this.isVaild = isVaild;
+	}
+
+	public String getCause() {
+		return cause;
+	}
+
+	protected void setCause(String cause) {
+		this.cause = cause;
 	}
 
 	public int getCost() {
@@ -53,6 +62,7 @@ public final class TSPRst {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[vaild] : ").append(isVaild);
+		sb.append("\r\n[cause] : ").append(cause);
 		sb.append("\r\n[cost] : ").append(cost);
 		sb.append("\r\n[route] : ");
 		if(isVaild == true) {

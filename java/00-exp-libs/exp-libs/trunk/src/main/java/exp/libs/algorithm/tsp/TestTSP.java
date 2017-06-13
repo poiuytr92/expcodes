@@ -21,7 +21,7 @@ public class TestTSP {
 		graph.addEdge("B", "C", 2);
 		graph.addEdge("C", "D", 1);
 		graph.addEdge("D", "E", 1);
-		graph.addEdge("E", "F", 2);
+//		graph.addEdge("E", "F", 2);
 		graph.addEdge("C", "G", 2);
 		graph.addEdge("G", "E", 2);
 		graph.addEdge("C", "G", 3);
@@ -31,7 +31,7 @@ public class TestTSP {
 		graph.addEdge("I", "J", 2);
 		graph.addEdge("I", "K", 2);
 		graph.addEdge("B", "K", 3);
-		graph.addEdge("K", "F", 3);
+//		graph.addEdge("K", "F", 3);
 		graph.addInclude("C");
 		graph.addInclude("G");
 		
