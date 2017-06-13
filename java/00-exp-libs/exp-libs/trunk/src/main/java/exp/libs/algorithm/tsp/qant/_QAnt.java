@@ -1,9 +1,8 @@
 package exp.libs.algorithm.tsp.qant;
 
 import java.util.Arrays;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +16,19 @@ final class _QAnt {
 
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(_QAnt.class);
+	
+	/** ζ: 信息启发系数，反映了轨迹的重要性（协作性）, 值越小越重要 */
+	private final double ZETA = 0.2D;
+	
+	/** γ: 期望启发系数，反映了能见度的重要性（创新性）, 值越小越重要 */
+	private final double GAMMA = 2D;
+	
+	/**
+	 * 用于计算转移策略的随机值.
+	 *  通常情况下蚂蚁有 80% 的概率使用寻路决策法则转移到下一节点.
+	 *  但依然保持 20%的概率使得蚂蚁随机转移到下一个节点, 以确保创新性.
+	 */
+	private final int RAND_SCOPE = 100, RAND_LIMIT = 80;
 	
 	/** 蚂蚁编号 */
 	private int antId;
@@ -82,7 +94,6 @@ final class _QAnt {
 		return isFeasible;
 	}
 	
-	
 	private boolean _solve(final QRst bestRst) {
 		boolean isFeasible = true;
 		evolve();	// 进化(清空父代移动痕迹, 并继承父代量子编码)
@@ -119,8 +130,9 @@ final class _QAnt {
 			solveCnt++;
 			unsolveCnt = 0;
 			curRst.markVaild();
+			qCross(); // 得到一个可行解后马上进行变异处理， 提高其他路径的搜索概率， 避免陷入局部最优解
 			
-		// 变异处理：当连续无解次数越限时，执行量子交叉打乱量子编码，避免搜索陷入停滞
+		// 当连续无解次数越限时，执行变异处理，避免搜索陷入停滞
 		} else {
 			unsolveCnt++;
 			if(ENV.isUseQCross() && unsolveCnt >= ENV.QCROSS_THRESHOLD()) {
@@ -180,13 +192,8 @@ final class _QAnt {
 			return nextId;
 		}
 		
-		// FIXME 这两个值越小越重要，   若蚂蚁代数很大，依然未求得过一个解，则需要适当调整参数
-		final double ZETA = 0.2D;	//ζ: 信息启发系数，反映了轨迹的重要性（协作性）
-		final double GAMMA = 2D;	//γ: 期望启发系数，反映了能见度的重要性（创新性）
-		final int SCOPE = 10, RAND_LIMIT = 8;
-		int rand = RandomUtils.randomInt(SCOPE);
-
 		// 蚂蚁以80%的概率以信息素作为决策方式进行路径转移（协作性优先）
+		int rand = RandomUtils.randomInt(RAND_SCOPE);
 		if(rand < RAND_LIMIT) {
 			double argmax = -1;
 			for(int a = curId, z = 0; z < ENV.size(); z++) {
@@ -204,28 +211,17 @@ final class _QAnt {
 			
 		// 蚂蚁以20%的概率以随机方式进行路径转移（保持创新性）
 		} else {
-			final double fRand = RandomUtils.randomInt(SCOPE) / (SCOPE * 1.0D);
-			double sum = 0;
-			
-			Map<Integer, Double> map = new LinkedHashMap<Integer, Double>();
+			List<Integer> nextIds = new LinkedList<Integer>();
 			for(int a = curId, z = 0; z < ENV.size(); z++) {
 				if(_isTabu(a, z)) {
 					continue;
 				}
-				
-				double arg = Math.pow(_getTau(a, z), ZETA) + 
-						Math.pow(ENV.eta(a, z), GAMMA);
-				sum += arg;
-				map.put(z, arg);
+				nextIds.add(z);
 			}
 			
-			Iterator<Integer> nextIds = map.keySet().iterator();
-			while(nextIds.hasNext()) {
-				nextId = nextIds.next(); // 预选： 确保至少选到一个转移点
-				double arg = map.get(nextId);
-				if(arg / sum >= fRand) {
-					break;
-				}
+			if(nextIds.size() > 0) {
+				int idx = RandomUtils.randomInt(nextIds.size());
+				nextId = nextIds.get(idx);
 			}
 		}
 		return nextId;

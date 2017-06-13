@@ -77,8 +77,8 @@ public final class QACA {
 	 * @param srcId 无向拓扑图的起点（若无则为-1）
 	 * @param snkId 无向拓扑图的重点（若无则为-1）
 	 * @param includeIds 无向拓扑图的必经点集（若无则为null）
-	 * @param qAntSize 量子蚂蚁数量（种群大小）, 默认值为10
-	 * @param maxGeneration 单只量子蚂蚁可遗传的最大代数（单只蚂蚁的求解次数）, 默认值为10
+	 * @param qAntSize 量子蚂蚁数量（种群大小）, 默认值为10, (蚂蚁数量越多, 越注重创新性)
+	 * @param maxGeneration 单只量子蚂蚁可遗传的最大代数（单只蚂蚁的求解次数）, 默认值为10, (代数越大, 越注重协作性)
 	 * @param useQCross 是否使用量子交叉（可避免搜索陷入局部解或无解， 但降低收敛速度）, 默认不启用
 	 */
 	public QACA(int[][] dist, int srcId, int snkId, 
