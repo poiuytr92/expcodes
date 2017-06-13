@@ -107,6 +107,8 @@ public class TopoGraphUI extends PopChildWindow {
 	}
 
 	/**
+	 * FIXME: 当节点数超过50时，计算非常慢， 需要改用其他方法
+	 * 
 	 * 利用GEF框架内置功能自动计算拓扑图各个节点的XY坐标
 	 * @param edges 理论拓扑图的抽象边集（每条边的源宿节点只有边权衡量的相对距离）
 	 * @return 用于实际呈现的拓扑图边集（每条边的源宿节点具有实际的XY坐标值）

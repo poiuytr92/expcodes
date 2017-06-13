@@ -59,14 +59,27 @@ final class _QAnt {
 		this.unsolveCnt = 0;
 	}
 	
+	/**
+	 * 获取本次求解过程的结果
+	 * @return
+	 */
 	protected _QRst getResult() {
 		return curRst;
 	}
 	
+	/**
+	 * 获取蚂蚁在所有代数中得到可行解总数
+	 * @return
+	 */
 	protected int getSolveCnt() {
 		return solveCnt;
 	}
 	
+	/**
+	 * 尝试求一个可行解, 并遗传量子基因编码到下一代蚂蚁
+	 * @param bestRst 当前最优解（用于计算信息素的参考值）
+	 * @return 是否得到可行解
+	 */
 	protected boolean solve(final _QRst bestRst) {
 		boolean isFeasible = true;
 		evolve();	// 进化(清空父代移动痕迹, 并继承父代量子编码)
@@ -80,7 +93,7 @@ final class _QAnt {
 			// 无路可走
 			if(nextId < 0) {
 				isFeasible = checkFeasible();	// 检查是否已得到一个可行解(此处只针对无源宿端的拓扑图)
-				if(!isFeasible) {	// 对于非可行解, 2倍挥发掉本次移动轨迹中的所有信息素
+				if(!isFeasible) {	// 对于非可行解, 2倍挥发掉本次移动轨迹中的所有信息素（负反馈到后代）
 					minusRouteQPAs(curRst, pGn, bestRst);
 				}
 				break;
@@ -103,9 +116,8 @@ final class _QAnt {
 			solveCnt++;
 			unsolveCnt = 0;
 			curRst.markVaild();
-			// FIXME 挥发可行解以外的其他路径的信息素(自然挥发)
 			
-		// 当连续无解次数越限时，执行量子交叉打乱量子编码，避免搜索陷入停滞
+		// 变异处理：当连续无解次数越限时，执行量子交叉打乱量子编码，避免搜索陷入停滞
 		} else {
 			unsolveCnt++;
 			if(ENV.isUseQCross() && unsolveCnt >= ENV.QCROSS_THRESHOLD()) {
@@ -295,11 +307,24 @@ final class _QAnt {
 		return isFeasible;
 	}
 	
+	/**
+	 * 在移动路径上释放信息素
+	 * @param curId
+	 * @param nextId
+	 * @param pGn
+	 * @param bestRst
+	 */
 	private void addMoveQPA(int curId, int nextId, double pGn, _QRst bestRst) {
 		double theta = _getTheta(curId, nextId, pGn, bestRst);
 		_updateQPA(curId, nextId, theta);
 	}
 	
+	/**
+	 * 当得不到可行解时，对移动轨迹上的所有路径进行2倍的信息素挥发， 以负反馈到后代
+	 * @param rst
+	 * @param pGn
+	 * @param bestRst
+	 */
 	private void minusRouteQPAs(_QRst rst, double pGn, _QRst bestRst) {
 		int[] route = rst.getRoutes();
 		if(route.length > 1) {
@@ -353,8 +378,8 @@ final class _QAnt {
 		final double sinTheta = Math.sin(theta);
 		final double alpha = azQPA.getAlpha();
 		final double beta = azQPA.getBeta();
-		azQPA.setAlpha(Math.abs(cosTheta * alpha - sinTheta * beta)); // 此处可能为负， 避免影响beta值， 取绝对值
-		azQPA.setBeta(sinTheta * alpha + cosTheta * beta);
+		azQPA.setAlpha(Math.abs(cosTheta * alpha - sinTheta * beta));
+		azQPA.setBeta(Math.abs(sinTheta * alpha + cosTheta * beta));
 		zaQPA.setAlpha(azQPA.getAlpha());
 		zaQPA.setBeta(azQPA.getBeta());
 	}
@@ -378,6 +403,24 @@ final class _QAnt {
 				zaQPA.setAlpha(azQPA.getAlpha());
 			}
 		}
+	}
+	
+	/**
+	 * 计算当前解相对于最优解的量子旋转角的旋转方向
+	 *   当前解的概率幅 大于 最优解时， 旋转角方向为负，反之为正
+	 * @param curQPA 某只量子蚂蚁当前从i->j转移的量子编码(当前的路径信息素概率幅)
+	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
+	 * @return 顺时针:1; 逆时针:-1
+	 */
+	@SuppressWarnings("unused")
+	@Deprecated
+	private int __getThetaDirection(__QPA curQPA, __QPA bestQPA) {
+		double pBest = bestQPA.getBeta() / bestQPA.getAlpha();
+		double pCur = curQPA.getBeta() / curQPA.getAlpha();
+		double atanBest = Math.atan(pBest);
+		double atanCur = Math.atan(pCur);
+		int direction = (((pBest / pCur) * (atanBest - atanCur)) >= 0 ? 1 : -1);
+		return direction;
 	}
 	
 }
