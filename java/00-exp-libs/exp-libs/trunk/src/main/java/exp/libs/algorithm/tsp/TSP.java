@@ -1,6 +1,8 @@
 package exp.libs.algorithm.tsp;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -9,8 +11,6 @@ import exp.libs.algorithm.tsp.graph.TopoGraph;
 import exp.libs.algorithm.tsp.qant.QACA;
 import exp.libs.algorithm.tsp.qant.QRst;
 import exp.libs.algorithm.tsp.spa.Dijkstra;
-import exp.libs.algorithm.tsp.ui.TopoGraphUI;
-import exp.libs.utils.ui.BeautyEyeUtils;
 
 /**
  * <PRE>
@@ -24,25 +24,17 @@ public class TSP {
 
 	private TSP() {}
 	
-	private static void draw(TopoGraph graph) {
-		BeautyEyeUtils.init();
-		TopoGraphUI ui = new TopoGraphUI("拓扑图展示器", 500, 300, graph);
-		ui._view();
-	}
-	
 	/**
 	 * 求解
 	 * @param graph 拓扑图
 	 * @return
 	 */
 	public static TSPRst solve(final TopoGraph graph) {
-		TSPRst rst = new TSPRst();
-		if(graph == null || graph.isEmpty() || 
+		TSPRst rst = TSPRst.NULL;
+		if(graph == null || graph.isEmpty() || graph.isArrow() || // 暂不支持有向图
 				graph.getSrc() == Node.NULL || graph.getSnk() == Node.NULL) {
 			return rst;
 		}
-		
-		draw(graph);
 		
 		// 不存在必经点， 直接用Dijkstra算法求源端到宿端的最短路
 		if(!graph.existInclude()) {
@@ -99,7 +91,6 @@ public class TSP {
 		
 		// 子图补边： 对于子图中度数为1、 且非源宿点的节点, 对其增加一条最短回路, 连接到到最近的一个度大于2的节点
 		_fillEdges(subGraph, graph, dijkstra);
-		draw(subGraph);
 		
 		// 求子图的哈密顿通路： 最坏的情况是过所有节点， 最好的情况是只过必经点
 		QACA qaca = new QACA(subGraph.getAdjacencyMatrix(), 
@@ -107,10 +98,9 @@ public class TSP {
 				subGraph.getSnk().getId(), 
 				subGraph.getIncludeIds(), 10, 10, true); 
 		QRst qRst = qaca.exec();
-		System.out.println(qaca.toRstInfo());
 		
-		// TODO: 转换子图解为原图解（节点ID不同）
-		return null;
+		// 转换子图解为原图解（节点ID不同）
+		return toTSPRst(graph, subGraph, qRst);
 	}
 	
 	/**
@@ -259,6 +249,36 @@ public class TSP {
 			int weight = graph.getWeight(src, snk);
 			subGraph.addEdge(src.getName(), snk.getName(), weight);
 		}
+	}
+	
+	/**
+	 * 转换子图解为原图解
+	 * @param graph 原图
+	 * @param subGraph 子图
+	 * @param subRst 子图解
+	 * @return 原图解
+	 */
+	private static TSPRst toTSPRst(final TopoGraph graph, 
+			final TopoGraph subGraph, final QRst subRst) {
+		TSPRst rst = TSPRst.NULL;
+		if(subRst.isVaild()) {
+			rst = new TSPRst();
+			rst.setVaild(true);
+			rst.setCost(subRst.getCost());
+			
+			List<Node> routes = new LinkedList<Node>();
+			int[] subRoutes = subRst.getRoutes();
+			for(int step = subRst.getStep(), i = 0; i < step; i++) {
+				String name = subGraph.getNode(subRoutes[i]).getName();
+				routes.add(graph.getNode(name));
+			}
+			
+			if(routes.get(0).getId() == graph.getSnk().getId()) {
+				Collections.reverse(routes);
+			}
+			rst.setRoutes(routes);
+		}
+		return rst;
 	}
 	
 }
