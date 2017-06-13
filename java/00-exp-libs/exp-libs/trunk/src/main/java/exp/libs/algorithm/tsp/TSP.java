@@ -20,7 +20,7 @@ import exp.libs.algorithm.tsp.spa.Dijkstra;
  * @author lqb
  * @date 2017年6月13日
  */
-public class TSP {
+public class TSP { // FIXME 名称
 
 	private TSP() {}
 	
@@ -38,11 +38,11 @@ public class TSP {
 		}
 		
 		// 不存在必经点， 直接用Dijkstra算法求源端到宿端的最短路
-		if(!graph.existInclude()) {
+		if(!graph.existIncludes()) {
 			rst = solveBySPA(graph);
 			
 		// 必经点有序，使用Dijkstra算法按顺序分段求最短路， 然后拼接
-		} else if(graph.isOrderInclude()) {
+		} else if(graph.isOrderIncludes()) {
 			rst = solveBySegmentSPA(graph);
 			
 		// 必经点无序, 构造必经点子图后，使用启发式算法求最小连通通道
@@ -95,6 +95,7 @@ public class TSP {
 		includes.add(0, graph.getSrc());
 		includes.add(includes.size(), graph.getSnk());
 		
+		// 其他必经点作为禁忌点
 		// TODO  若结果不存在环则有解, 否则标示哪一段断开 或 存在环
 		return null;
 	}
@@ -108,11 +109,9 @@ public class TSP {
 		TSPRst rst = new TSPRst();
 		Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
 		
-		// 压缩图: 计算必经点集（包括源宿点）中的任意两点的最短路, 合并所有相关路径, 得到压缩子图
-		TopoGraph subGraph = _compressGraph(graph, dijkstra);
-		
-		// 子图补边： 对于子图中度数为1、 且非源宿点的节点, 对其增加一条最短回路, 连接到到最近的一个度大于2的节点
-		if(!_fillEdges(subGraph, graph, dijkstra)) {
+		TopoGraph subGraph = _compressGraph(graph, dijkstra);	// 压缩图
+		if(subGraph != graph && // 当子图不是原图时， 对子图补边
+				!_fillEdges(subGraph, graph, dijkstra)) {
 			rst.setCause("使用启发式算法求解失败: 拓扑图不存在哈密顿通路");
 			
 		} else {
@@ -120,8 +119,9 @@ public class TSP {
 			QACA qaca = new QACA(subGraph.getAdjacencyMatrix(), 
 					subGraph.getSrc().getId(), 
 					subGraph.getSnk().getId(), 
-					subGraph.getIncludeIds(), 10, 10, true); 
+					subGraph.getIncludeIds(), 10, 10, true); // FIXME: 设定参数？
 			QRst qRst = qaca.exec();
+			System.out.println(qaca.toRstInfo());
 			
 			// 转换子图解为原图解（节点ID不同）
 			_toTSPRst(graph, rst, subGraph, qRst);
@@ -142,6 +142,11 @@ public class TSP {
 		List<Node> includes = graph.getIncludes();
 		includes.add(0, graph.getSrc());
 		includes.add(includes.size(), graph.getSnk());
+		
+		// 若全图节点均为必经点， 无需构造子图
+		if(includes.size() == graph.nodeSize()) {
+			return graph;
+		}
 		
 		// 计算两两必经点间的最短路，构造子图
 		TopoGraph subGraph = new TopoGraph();

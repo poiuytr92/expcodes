@@ -95,7 +95,7 @@ public class Dijkstra {
 	
 	public List<Integer> getShortPaths(final int snkId) {
 		List<Integer> routeIds = new LinkedList<Integer>();
-		if(inRange(srcId) && inRange(snkId)) {
+		if(inRange(srcId) && getShortPathWeight(snkId) < MAX_WEIGHT) {
 			int endId = snkId;
 			routeIds.add(0, endId);
 			do {
