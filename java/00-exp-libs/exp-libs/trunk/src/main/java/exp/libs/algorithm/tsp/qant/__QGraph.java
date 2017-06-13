@@ -60,7 +60,7 @@ final class __QGraph {
 		this.snkId = snkId;
 		this.includeIds = (includeIds == null ? 
 				new HashSet<Integer>() : new HashSet<Integer>(includeIds));
-		this._includeIds = new int[includeIds.size()];
+		this._includeIds = new int[this.includeIds.size()];
 		initIncludes();
 		
 		this.dist = dist;
