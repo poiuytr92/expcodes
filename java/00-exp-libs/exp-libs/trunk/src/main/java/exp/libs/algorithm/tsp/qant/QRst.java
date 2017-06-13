@@ -15,8 +15,14 @@ import exp.libs.utils.pub.ESCUtils;
  * @author lqb
  * @date 2017年6月9日
  */
-final class _QRst {
+public class QRst {
 
+	/** 无效节点ID */
+	protected final static int INVAILD_ID = -1;
+	
+	/** 所属蚂蚁编号 */
+	private int antId;
+	
 	/** 拓扑图规模 */
 	private int size;
 	
@@ -35,13 +41,13 @@ final class _QRst {
 	/** 是否为可行解 */
 	private boolean isVaild;
 	
-	private _QRst(final int size) {
+	private QRst(final int antId, final int size) {
 		this.size = size;
 		this.routes = new int[size];
 		this._QPAs = new __QPA[size][size];
 	}
 	
-	protected _QRst(final _QEnv env) {
+	protected QRst(final int antId, final _QEnv env) {
 		this.size = env.size();
 		this.routes = new int[size];
 		initQPAs(env);
@@ -90,11 +96,15 @@ final class _QRst {
 		return isOk;
 	}
 	
+	public int getAntId() {
+		return antId;
+	}
+	
 	protected __QPA QPA(int srcId, int snkId) {
 		return _QPAs[srcId][snkId];
 	}
 
-	protected int getCost() {
+	public int getCost() {
 		return cost;
 	}
 	
@@ -102,16 +112,16 @@ final class _QRst {
 		this.cost = cost;
 	}
 
-	protected int getStep() {
+	public int getStep() {
 		return step;
 	}
 	
-	protected int[] getRoutes() {
+	public int[] getRoutes() {
 		return routes;
 	}
 	
 	protected int getCurId() {
-		int curId = -1;
+		int curId = INVAILD_ID;
 		if(step > 0) {
 			curId = routes[step - 1];
 		}
@@ -119,14 +129,14 @@ final class _QRst {
 	}
 	
 	protected int getLastId() {
-		int lastId = -1;
+		int lastId = INVAILD_ID;
 		if(step > 1) {
 			lastId = routes[step - 2];
 		}
 		return lastId;
 	}
 	
-	protected boolean isVaild() {
+	public boolean isVaild() {
 		return isVaild;
 	}
 
@@ -134,13 +144,13 @@ final class _QRst {
 		this.isVaild = true;
 	}
 
-	protected _QRst clone() {
-		_QRst other = new _QRst(this.size);
+	protected QRst clone() {
+		QRst other = new QRst(this.antId, this.size);
 		other.copy(this);
 		return other;
 	}
 	
-	protected void copy(_QRst other) {
+	protected void copy(QRst other) {
 		if(other != null && this.size == other.size) {
 			this.isVaild = other.isVaild;
 			this.cost = other.cost;
@@ -158,7 +168,7 @@ final class _QRst {
 		}
 	}
 
-	protected String toQPAInfo() {
+	public String toQPAInfo() {
 		List<List<Object>> table = new ArrayList<List<Object>>(size + 1);
 		List<Object> head = new ArrayList<Object>(size + 1);
 		head.add("");
@@ -178,12 +188,12 @@ final class _QRst {
 		return ESCUtils.toTXT(table, true);
 	}
 	
-	protected String toRouteInfo() {
+	public String toRouteInfo() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("[vaild]: ").append(isVaild);
-		sb.append("\r\n[step/size]: ").append(step).append("/").append(size);
-		sb.append("\r\n[cost]: ").append(cost);
-		sb.append("\r\n[route]: ");
+		sb.append("  [vaild] : ").append(isVaild);
+		sb.append("\r\n  [step/node] : ").append(step).append("/").append(size);
+		sb.append("\r\n  [cost] : ").append(cost);
+		sb.append("\r\n  [route] : ");
 		if(step > 0) {
 			for(int i = 0; i < step - 1; i++) {
 				sb.append(routes[i]).append("->");

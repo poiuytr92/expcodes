@@ -5,6 +5,9 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exp.libs.utils.pub.RandomUtils;
 
 /**
@@ -12,7 +15,11 @@ import exp.libs.utils.pub.RandomUtils;
  */
 final class _QAnt {
 
-	private final static int INVAILD_ID = -1;
+	/** 日志器 */
+	private final static Logger log = LoggerFactory.getLogger(_QAnt.class);
+	
+	/** 蚂蚁编号 */
+	private int antId;
 	
 	/** 该蚂蚁已进化的代数 */
 	private int generation;
@@ -30,7 +37,7 @@ final class _QAnt {
 	private boolean[] tabus;
 
 	/** 蚂蚁当前的移动数据(当前局部解) */
-	private _QRst curRst;
+	private QRst curRst;
 	
 	/** 该蚂蚁累计求得可行解的次数 */
 	private int solveCnt;
@@ -42,7 +49,8 @@ final class _QAnt {
 	 * 构造函数
 	 * @param ENV
 	 */
-	protected _QAnt(final _QEnv ENV) {
+	protected _QAnt(final int antId, final _QEnv ENV) {
+		this.antId = antId;
 		this.ENV = ENV;
 		if(RandomUtils.randomBoolean()) {
 			this.SRC_ID = ENV.srcId();
@@ -54,25 +62,9 @@ final class _QAnt {
 		
 		this.generation = 0;
 		this.tabus = new boolean[ENV.size()];
-		this.curRst = new _QRst(ENV);
+		this.curRst = new QRst(antId, ENV);
 		this.solveCnt = 0;
 		this.unsolveCnt = 0;
-	}
-	
-	/**
-	 * 获取本次求解过程的结果
-	 * @return
-	 */
-	protected _QRst getResult() {
-		return curRst;
-	}
-	
-	/**
-	 * 获取蚂蚁在所有代数中得到可行解总数
-	 * @return
-	 */
-	protected int getSolveCnt() {
-		return solveCnt;
 	}
 	
 	/**
@@ -80,7 +72,18 @@ final class _QAnt {
 	 * @param bestRst 当前最优解（用于计算信息素的参考值）
 	 * @return 是否得到可行解
 	 */
-	protected boolean solve(final _QRst bestRst) {
+	protected boolean solve(final QRst bestRst) {
+		boolean isFeasible = false;
+		try {
+			isFeasible = _solve(bestRst);
+		} catch(Exception e) {
+			log.error("编号为 [{}] 的蚂蚁在第 [{}] 求解过程中发生异常.", antId, generation, e);
+		}
+		return isFeasible;
+	}
+	
+	
+	private boolean _solve(final QRst bestRst) {
 		boolean isFeasible = true;
 		evolve();	// 进化(清空父代移动痕迹, 并继承父代量子编码)
 		final double pGn = ((double) generation) / ENV.MAX_GENERATION(); // 代数比
@@ -145,7 +148,7 @@ final class _QAnt {
 		int curId = curRst.getCurId();
 		int moveCost = (curId >= 0 ? ENV.dist(curId, nextId) : 0);
 		tabus[nextId] = true;
-		curId = curRst.move(nextId, moveCost) ? nextId : INVAILD_ID;
+		curId = curRst.move(nextId, moveCost) ? nextId : QRst.INVAILD_ID;
 		return curId;
 	}
 	
@@ -157,8 +160,8 @@ final class _QAnt {
 	 * @return
 	 */
 	private int selectFirstId() {
-		int firstId = INVAILD_ID;
-		if(SRC_ID > INVAILD_ID) {
+		int firstId = QRst.INVAILD_ID;
+		if(SRC_ID > QRst.INVAILD_ID) {
 			firstId = SRC_ID;
 			
 		} else {
@@ -172,7 +175,7 @@ final class _QAnt {
 	 * @return 
 	 */
 	private int selectNextId(int curId) {
-		int nextId = INVAILD_ID;
+		int nextId = QRst.INVAILD_ID;
 		if(curId < 0) {
 			return nextId;
 		}
@@ -314,7 +317,7 @@ final class _QAnt {
 	 * @param pGn
 	 * @param bestRst
 	 */
-	private void addMoveQPA(int curId, int nextId, double pGn, _QRst bestRst) {
+	private void addMoveQPA(int curId, int nextId, double pGn, QRst bestRst) {
 		double theta = _getTheta(curId, nextId, pGn, bestRst);
 		_updateQPA(curId, nextId, theta);
 	}
@@ -325,7 +328,7 @@ final class _QAnt {
 	 * @param pGn
 	 * @param bestRst
 	 */
-	private void minusRouteQPAs(_QRst rst, double pGn, _QRst bestRst) {
+	private void minusRouteQPAs(QRst rst, double pGn, QRst bestRst) {
 		int[] route = rst.getRoutes();
 		if(route.length > 1) {
 			for(int step = 0; step < rst.getStep() - 1; step++) {
@@ -345,7 +348,7 @@ final class _QAnt {
 	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
 	 * @return 旋转角θ
 	 */
-	private double _getTheta(int curId, int nextId, double pGn, _QRst bestRst) {
+	private double _getTheta(int curId, int nextId, double pGn, QRst bestRst) {
 		double deltaBeta = __getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
 		double theta = (_QEnv.MAX_THETA - _QEnv.DELTA_THETA * pGn) * deltaBeta;
 		return theta;
@@ -358,7 +361,7 @@ final class _QAnt {
 	 * @param bestRst
 	 * @return srcId->snkId路径上的 [量子信息素增量] 的 β概率幅的平方
 	 */
-	private double __getDeltaBeta(int srcId, int snkId, final _QRst bestRst) {
+	private double __getDeltaBeta(int srcId, int snkId, final QRst bestRst) {
 		double beta = ENV.deltaBeta(srcId, snkId);
 		beta = (beta + bestRst.QPA(srcId, snkId).getBeta()) / 2.0D;
 		return beta * beta;
@@ -421,6 +424,30 @@ final class _QAnt {
 		double atanCur = Math.atan(pCur);
 		int direction = (((pBest / pCur) * (atanBest - atanCur)) >= 0 ? 1 : -1);
 		return direction;
+	}
+	
+	/**
+	 * 获取蚂蚁编号
+	 * @return
+	 */
+	protected int ID() {
+		return antId;
+	}
+	
+	/**
+	 * 获取本次求解过程的结果
+	 * @return
+	 */
+	protected QRst getResult() {
+		return curRst;
+	}
+	
+	/**
+	 * 获取蚂蚁在所有代数中得到可行解总数
+	 * @return
+	 */
+	protected int getSolveCnt() {
+		return solveCnt;
 	}
 	
 }

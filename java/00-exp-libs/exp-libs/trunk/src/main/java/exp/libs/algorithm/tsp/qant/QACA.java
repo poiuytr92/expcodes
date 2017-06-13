@@ -5,6 +5,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.Future;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.other.thread.ThreadPool;
 
@@ -21,6 +24,9 @@ import exp.libs.warp.other.thread.ThreadPool;
  */
 public final class QACA {
 
+	/** 日志器 */
+	private final static Logger log = LoggerFactory.getLogger(QACA.class);
+	
 	/** 默认量子蚂蚁种群规模 */
 	public final static int DEFAULT_QANT_SIZE = 10;
 	
@@ -33,8 +39,17 @@ public final class QACA {
 	/** 寻路环境 */
 	private final _QEnv ENV;
 
+	/** 首次得到可行解的代数 */
+	private int firstRstGn;
+	
+	/** 首次得到最优解的代数 */
+	private int firstBestRstGn;
+	
+	/** 累计得到可行解的次数 */
+	private int rstCnt;
+	
 	/** 最优解的移动数据(全局最优解) */
-	private _QRst bestRst;
+	private QRst bestRst;
 	
 	/**
 	 * 构造函数
@@ -75,19 +90,28 @@ public final class QACA {
 		this.qAntSize = (qAntSize <= 0 ? DEFAULT_QANT_SIZE : qAntSize);
 		this.qAnts = new _QAnt[this.qAntSize];
 		for(int i = 0; i < this.qAntSize; i++) {
-			qAnts[i] = new _QAnt(ENV);
+			qAnts[i] = new _QAnt(i, ENV);
 		}
 		
-		this.bestRst = new _QRst(ENV);
+		this.bestRst = new QRst(-1, ENV);
 		bestRst.setCost(Integer.MAX_VALUE);
 	}
 
-	public void exec() {
-		List<Future<_QRst>> rsts = new LinkedList<Future<_QRst>>();
+	/**
+	 * 执行QACA算法求解
+	 * @return 得到的最优解
+	 */
+	public QRst exec() {
+		this.firstRstGn = -1;
+		this.firstBestRstGn = -1;
+		this.rstCnt = 0;
+		long bgnTime = System.currentTimeMillis();
+		List<Future<QRst>> rsts = new LinkedList<Future<QRst>>();
+		
 		for(int gn = 0; gn < ENV.MAX_GENERATION(); gn++) {
 			
 			// 每代蚂蚁的个体之间使用多线程并行搜索
-			ThreadPool<_QRst> tp = new ThreadPool<_QRst>(qAntSize);
+			ThreadPool<QRst> tp = new ThreadPool<QRst>(qAntSize);
 			for(_QAnt qAnt : qAnts) {
 				rsts.add(tp.submit(new _QAntThread(qAnt, bestRst)));
 			}
@@ -98,24 +122,42 @@ public final class QACA {
 			}
 			
 			// 每代蚂蚁更新一次种群的最优解
-			for(Future<_QRst> rst : rsts) {
+			for(Future<QRst> rst : rsts) {
 				try {
-					_QRst antRst = rst.get();
-					if(antRst.isVaild() && antRst.getCost() < bestRst.getCost()) {
-						bestRst.copy(antRst);
+					QRst antRst = rst.get();
+					if(antRst.isVaild()) {
+						rstCnt++;
+						firstRstGn = (firstRstGn < 0 ? gn : firstRstGn);
+						if(antRst.getCost() < bestRst.getCost()) {
+							firstBestRstGn = gn;
+							bestRst.copy(antRst);
+						}
 					}
-					System.out.println(antRst.toString());
 				} catch (Exception e) {
-					System.err.println("获取回调结果失败");	// FIXME
+					log.error("获取第 [{}] 代蚂蚁搜索结果异常.", gn, e);
 				}
 			}
 			rsts.clear();
 		}
+		
+		printRst(System.currentTimeMillis() - bgnTime);
+		return bestRst;
 	}
 	
-	// FIXME 打印最优解
-	public void printBestRst() {
-		System.out.println(bestRst.toString());
+	private void printRst(long useTime) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\r\nQACA算法搜索结果 : \r\n");
+		sb.append(" [拓扑图规模] : ").append(ENV.size()).append("\r\n");
+		sb.append(" [搜索耗时] : ").append(useTime).append("ms\r\n");
+		sb.append(" [蚂蚁族群大小] : ").append(qAntSize).append("\r\n");
+		sb.append(" [蚂蚁遗传代数] : ").append(ENV.MAX_GENERATION()).append("\r\n");
+		sb.append(" [变异处理] : ").append(ENV.isUseQCross()).append("\r\n");
+		sb.append(" [总求解次数] : ").append(qAntSize * ENV.MAX_GENERATION()).append("\r\n");
+		sb.append(" [得到可行解次数] : ").append(rstCnt).append("\r\n");
+		sb.append(" [首次得到可行解代数] : ").append(firstRstGn).append("\r\n");
+		sb.append(" [首次得到最优解代数] : ").append(firstBestRstGn).append("\r\n");
+		sb.append(" [最优解] : \r\n").append(bestRst.toRouteInfo());
+		log.info(sb.toString());
 	}
 
 }
