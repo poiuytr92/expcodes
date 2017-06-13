@@ -49,8 +49,17 @@ public class TopoGraph extends Graph {
 		this.snk = addNode(name);
 	}
 	
+	/**
+	 * 必经点是否有序
+	 * @return
+	 */
+	public boolean isOrder() {
+		return order;
+	}
+	
 	public List<Node> getIncludes() {
-		return (order ? new LinkedList<Node>(includes) : new ArrayList<Node>(includes));
+		return (order ? new LinkedList<Node>(includes) : 
+			new ArrayList<Node>(includes));
 	}
 	
 	public Set<String> getIncludeNames() {

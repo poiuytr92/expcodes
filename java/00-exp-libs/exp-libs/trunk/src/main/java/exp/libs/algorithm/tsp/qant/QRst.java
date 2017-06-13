@@ -17,6 +17,9 @@ import exp.libs.utils.pub.ESCUtils;
  */
 public class QRst {
 
+	/** 无效结果 */
+	public final static QRst NULL_RST = new QRst(-1, 0);
+	
 	/** 无效节点ID */
 	protected final static int INVAILD_ID = -1;
 	

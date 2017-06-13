@@ -8,7 +8,7 @@ import java.util.Set;
 /**
  * 
  * <PRE>
- * 量子寻路环境
+ * 拓扑图参数
  * </PRE>
  * 
  * @author lqb

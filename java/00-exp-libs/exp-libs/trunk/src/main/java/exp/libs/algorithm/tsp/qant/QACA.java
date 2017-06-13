@@ -146,7 +146,7 @@ public final class QACA {
 	
 	private void printRst(long useTime) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("\r\nQACA算法搜索结果 : \r\n");
+		sb.append("\r\nQACA搜索结果 : \r\n");
 		sb.append(" [拓扑图规模] : ").append(ENV.size()).append("\r\n");
 		sb.append(" [搜索耗时] : ").append(useTime).append("ms\r\n");
 		sb.append(" [蚂蚁族群大小] : ").append(qAntSize).append("\r\n");

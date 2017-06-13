@@ -6,6 +6,10 @@ import exp.libs.utils.pub.NumUtils;
 
 final class _QEnv {
 
+	/** 无效的环境 */
+	protected final static _QEnv NULL_ENV = new _QEnv(
+			new int[0][0], -1, -1, null, -1, false);
+	
 	/** 数学常量π */
 	protected final static double PI = 3.141592654D;
 	
