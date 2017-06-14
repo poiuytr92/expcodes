@@ -14,7 +14,7 @@ public class TestTSP {
 	}
 	
 	private static TopoGraph toGraph() {
-		TopoGraph graph = new TopoGraph();
+		TopoGraph graph = new TopoGraph(true);
 		graph.setSrc("A"); 
 		graph.setSnk("F");
 		graph.addEdge("A", "B", 2);
@@ -39,8 +39,8 @@ public class TestTSP {
 		graph.addInclude("I");
 		
 		graph.addInclude("B");
-//		graph.addInclude("D");
-//		graph.addInclude("E");
+		graph.addInclude("D");
+		graph.addInclude("E");
 		graph.addInclude("H");
 		graph.addInclude("J");
 		return graph;

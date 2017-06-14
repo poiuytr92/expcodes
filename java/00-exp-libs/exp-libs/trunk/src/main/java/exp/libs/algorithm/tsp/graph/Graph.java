@@ -163,8 +163,7 @@ public class Graph {
 	}
 	
 	public int getWeight(Node src, Node snk) {
-		return (matrix == null ? getEdge(src, snk).getWeight() : 
-			matrix[src.getId()][snk.getId()]);
+		return getWeight(src.getId(), snk.getId());
 	}
 	
 	public Set<Integer> getAllNodeIds() {

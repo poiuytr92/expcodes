@@ -1,5 +1,6 @@
 package exp.libs.algorithm.tsp;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -11,6 +12,7 @@ import exp.libs.algorithm.tsp.graph.TopoGraph;
 import exp.libs.algorithm.tsp.qant.QACA;
 import exp.libs.algorithm.tsp.qant.QRst;
 import exp.libs.algorithm.tsp.spa.Dijkstra;
+import exp.libs.utils.pub.StrUtils;
 
 /**
  * <PRE>
@@ -20,7 +22,7 @@ import exp.libs.algorithm.tsp.spa.Dijkstra;
  * @author lqb
  * @date 2017年6月13日
  */
-public class TSP { // FIXME 名称
+public class TSP {
 
 	private TSP() {}
 	
@@ -57,8 +59,8 @@ public class TSP { // FIXME 名称
 	 * @param graph
 	 * @return
 	 */
-	private static TSPRst solveBySPA(final TopoGraph graph) {
-		Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
+	protected static TSPRst solveBySPA(final TopoGraph graph) {
+		final Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
 		dijkstra.calculate(graph.getSrc().getId());
 		int snkId = graph.getSnk().getId();
 		int cost = dijkstra.getShortPathWeight(snkId);
@@ -90,14 +92,86 @@ public class TSP { // FIXME 名称
 	 * @param graph
 	 * @return
 	 */
-	private static TSPRst solveBySegmentSPA(final TopoGraph graph) {
+	protected static TSPRst solveBySegmentSPA(final TopoGraph graph) {
+		List<Integer> includeIds = _getIncludeIds(graph);
+		List<Integer> routeIds = _searchRouteIds(graph, includeIds);
+		return _toTSPRst(graph, routeIds);
+	}
+	
+	private static List<Integer> _getIncludeIds(final TopoGraph graph) {
 		List<Node> includes = graph.getIncludes();
-		includes.add(0, graph.getSrc());
-		includes.add(includes.size(), graph.getSnk());
+		List<Integer> includeIds = new ArrayList<Integer>(includes.size() + 2);
+		includeIds.add(graph.getSrc().getId());
+		for(Node include : includes) {
+			includeIds.add(include.getId());
+		}
+		includeIds.add(graph.getSnk().getId());
+		return includeIds;
+	}
+	
+	private static List<Integer> _searchRouteIds(
+			final TopoGraph graph, final List<Integer> includeIds) {
+		final Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
+		List<Integer> routeIds = new LinkedList<Integer>();
+		routeIds.add(graph.getSrc().getId());
+		for(int size = includeIds.size() - 1, i = 0; i < size; i++) {
+			int srcId = includeIds.get(i);
+			int snkId = includeIds.get(i + 1);
+			List<Integer> segRoutes = __findSegRouteIds(dijkstra, srcId, snkId, includeIds);
+			segRoutes.remove(0);
+			routeIds.addAll(segRoutes);
+		}
+		return routeIds;
+	}
+	
+	private static List<Integer> __findSegRouteIds(final Dijkstra dijkstra, 
+			final int srcId, final int snkId, final List<Integer> includeIds) {
+		Set<Integer> tabu = new HashSet<Integer>(includeIds);
+		tabu.remove(srcId);
+		tabu.remove(snkId);
+		dijkstra.calculate(srcId, tabu);
+		List<Integer> segRoutes = dijkstra.getShortPaths(snkId);
+		if(segRoutes.isEmpty()) {
+			segRoutes.add(srcId);
+			segRoutes.add(Node.NULL.getId());
+			segRoutes.add(snkId);
+		}
+		return segRoutes;
+	}
+	
+	private static TSPRst _toTSPRst(
+			final TopoGraph graph, final List<Integer> routeIds) {
+		int cost = 0;
+		String cause = "";
+		Set<Integer> repeats = new HashSet<Integer>();
+		List<Node> routes = new LinkedList<Node>();
+		routes.add(graph.getSrc());
+		for(int i = 1; i < routeIds.size(); i++) {
+			Node last = graph.getNode(routeIds.get(i - 1));
+			Node cur = graph.getNode(routeIds.get(i));
+			routes.add(cur);
+			
+			if(cur == Node.NULL) {
+				Node next = graph.getNode(routeIds.get(i + 1));
+				cause = StrUtils.concat(cause, "路径 [", last, "] -> [", next, "] 不连通.\r\n");
+				
+			} else {
+				if(last != Node.NULL) {
+					cost += graph.getWeight(last, cur);
+				}
+				
+				if(!repeats.add(cur.getId())) {
+					cause = StrUtils.concat(cause, "节点 [", cur, "] 被复用.\r\n");
+				}
+			}
+		}
 		
-		// 其他必经点作为禁忌点
-		// TODO  若结果不存在环则有解, 否则标示哪一段断开 或 存在环
-		return null;
+		TSPRst rst = new TSPRst();
+		rst.setVaild(StrUtils.isEmpty(cause));
+		rst.setCause(cause);
+		rst.setCost(cost);
+		rst.setRoutes(routes);
+		return rst;
 	}
 	
 	/**
@@ -105,23 +179,27 @@ public class TSP { // FIXME 名称
 	 * @param graph
 	 * @return
 	 */
-	private static TSPRst solveByHeuristicAlgorithm(final TopoGraph graph) {
+	protected static TSPRst solveByHeuristicAlgorithm(final TopoGraph graph) {
 		TSPRst rst = new TSPRst();
-		Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
+		final Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
 		
 		TopoGraph subGraph = _compressGraph(graph, dijkstra);	// 压缩图
-		if(subGraph != graph && // 当子图不是原图时， 对子图补边
+		if(subGraph.isEmpty()) {
+			rst.setCause("使用启发式算法求解失败: 拓扑图不连通");
+			
+		} else if(subGraph != graph && // 当子图不是原图时， 对子图补边
 				!_fillEdges(subGraph, graph, dijkstra)) {
 			rst.setCause("使用启发式算法求解失败: 拓扑图不存在哈密顿通路");
 			
 		} else {
 			// 求子图的哈密顿通路： 最坏的情况是过所有节点， 最好的情况是只过必经点
+			final int ANT_NUM = 10;
+			final int GN_NUM = 10;
 			QACA qaca = new QACA(subGraph.getAdjacencyMatrix(), 
 					subGraph.getSrc().getId(), 
 					subGraph.getSnk().getId(), 
-					subGraph.getIncludeIds(), 10, 10, true); // FIXME: 设定参数？
+					subGraph.getIncludeIds(), ANT_NUM, GN_NUM, true);
 			QRst qRst = qaca.exec();
-			System.out.println(qaca.toRstInfo());
 			
 			// 转换子图解为原图解（节点ID不同）
 			_toTSPRst(graph, rst, subGraph, qRst);
@@ -157,14 +235,22 @@ public class TSP { // FIXME 名称
 			for(int j = i + 1; j < size; j++) {
 				Node z = includes.get(j);
 				List<Integer> azRoutes = dijkstra.getShortPaths(z.getId());
-				__addEdges(subGraph, graph, azRoutes);
+				if(!azRoutes.isEmpty()) {
+					__addEdges(subGraph, graph, azRoutes);
+					
+				} else {
+					subGraph.clear();
+					break;
+				}
 			}
 		}
 		
 		// 设置子图的源宿点和必经点
-		subGraph.setSrc(graph.getSrc().getName());
-		subGraph.setSnk(graph.getSnk().getName());
-		subGraph.addIncludes(graph.getIncludeNames());
+		if(!subGraph.isEmpty()) {
+			subGraph.setSrc(graph.getSrc().getName());
+			subGraph.setSnk(graph.getSnk().getName());
+			subGraph.addIncludes(graph.getIncludeNames());
+		}
 		return subGraph;
 	}
 	
@@ -189,7 +275,7 @@ public class TSP { // FIXME 名称
 			exist = false;
 			Set<Node> subNodes = subGraph.getAllNodes(); // 重新获取补边后新的子图节点
 			for(Node subNode : subNodes) {
-				if(subNode.getDegree() < 1) { // FIXME	: 度计算异常
+				if(subNode.getDegree() < 1) {
 					isOk = false;
 					break;
 					
