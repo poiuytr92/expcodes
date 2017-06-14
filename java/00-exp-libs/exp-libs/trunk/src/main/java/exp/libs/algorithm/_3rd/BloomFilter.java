@@ -1,4 +1,4 @@
-package exp.libs.algorithm;
+package exp.libs.algorithm._3rd;
 
 import java.util.BitSet;
 
