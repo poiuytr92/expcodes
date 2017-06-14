@@ -1,4 +1,4 @@
-package exp.libs.algorithm.tsp.ui;
+package exp.libs.algorithm.graph.ui;
 
 final class GraphParams {
 

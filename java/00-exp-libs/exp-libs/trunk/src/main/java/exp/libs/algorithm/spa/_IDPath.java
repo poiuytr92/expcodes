@@ -1,16 +1,16 @@
-package exp.libs.algorithm.tsp.spa;
+package exp.libs.algorithm.spa;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-class IDPath {
+class _IDPath {
 
-	protected final static IDPath NULL = new IDPath();
+	protected final static _IDPath NULL = new _IDPath();
 	
 	private List<Integer> ids;
 	
-	protected IDPath() {
+	protected _IDPath() {
 		this.ids = new LinkedList<Integer>();
 	}
 

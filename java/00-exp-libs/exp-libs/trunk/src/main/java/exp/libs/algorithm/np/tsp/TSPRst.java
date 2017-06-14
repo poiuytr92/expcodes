@@ -1,9 +1,9 @@
-package exp.libs.algorithm.tsp;
+package exp.libs.algorithm.np.tsp;
 
 import java.util.LinkedList;
 import java.util.List;
 
-import exp.libs.algorithm.tsp.graph.Node;
+import exp.libs.algorithm.graph.adt.Node;
 
 public final class TSPRst {
 

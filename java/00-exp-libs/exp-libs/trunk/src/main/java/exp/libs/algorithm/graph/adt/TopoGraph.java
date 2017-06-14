@@ -1,4 +1,4 @@
-package exp.libs.algorithm.tsp.graph;
+package exp.libs.algorithm.graph.adt;
 
 import java.util.ArrayList;
 import java.util.Collection;

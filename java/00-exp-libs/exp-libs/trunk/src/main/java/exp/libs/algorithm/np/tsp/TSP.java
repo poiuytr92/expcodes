@@ -1,4 +1,4 @@
-package exp.libs.algorithm.tsp;
+package exp.libs.algorithm.np.tsp;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import exp.libs.algorithm.tsp.graph.Node;
-import exp.libs.algorithm.tsp.graph.TopoGraph;
-import exp.libs.algorithm.tsp.qant.QACA;
-import exp.libs.algorithm.tsp.qant.QRst;
-import exp.libs.algorithm.tsp.spa.Dijkstra;
+import exp.libs.algorithm.graph.adt.Node;
+import exp.libs.algorithm.graph.adt.TopoGraph;
+import exp.libs.algorithm.heuristic.qaca.QACA;
+import exp.libs.algorithm.heuristic.qaca.QRst;
+import exp.libs.algorithm.spa.Dijkstra;
 import exp.libs.utils.pub.StrUtils;
 
 /**

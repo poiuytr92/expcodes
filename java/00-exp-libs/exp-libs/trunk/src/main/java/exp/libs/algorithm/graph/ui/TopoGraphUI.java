@@ -1,4 +1,4 @@
-package exp.libs.algorithm.tsp.ui;
+package exp.libs.algorithm.graph.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,9 +24,9 @@ import org.jgraph.graph.GraphModel;
 
 import com.realpersist.gef.layout.NodeJoiningDirectedGraphLayout;
 
-import exp.libs.algorithm.tsp.graph.Edge;
-import exp.libs.algorithm.tsp.graph.Node;
-import exp.libs.algorithm.tsp.graph.TopoGraph;
+import exp.libs.algorithm.graph.adt.Edge;
+import exp.libs.algorithm.graph.adt.Node;
+import exp.libs.algorithm.graph.adt.TopoGraph;
 import exp.libs.utils.ui.SwingUtils;
 import exp.libs.utils.ui.win.PopChildWindow;
 

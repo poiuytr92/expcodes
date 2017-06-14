@@ -1,4 +1,4 @@
-package exp.libs.algorithm.graph.spa;
+package exp.libs.algorithm.spa;
 
 /**
  * <PRE>

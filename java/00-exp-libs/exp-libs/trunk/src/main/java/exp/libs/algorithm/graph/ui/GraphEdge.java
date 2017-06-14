@@ -1,4 +1,4 @@
-package exp.libs.algorithm.tsp.ui;
+package exp.libs.algorithm.graph.ui;
 
 import org.eclipse.draw2d.graph.Edge;
 import org.jgraph.graph.DefaultEdge;

@@ -1,4 +1,4 @@
-package exp.libs.algorithm.tsp.spa;
+package exp.libs.algorithm.spa;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -6,6 +6,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * <PRE>
+ * 最短路径算法: Dijkstra算法 (FIXME: 用Fibonacci堆优化).
+ * 适用范围: 单源最短路问题, 有向图/无向图均可, 无负权环
+ * 时间复杂度: O(V * lgV + E)
+ * 空间复杂度: 
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2016-07-25
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Dijkstra {
 
 	public final static int MAX_WEIGHT = Integer.MAX_VALUE;
@@ -18,7 +31,7 @@ public class Dijkstra {
 	
 	private int[] sDists;
 	
-	private IDPath[] sPaths;
+	private _IDPath[] sPaths;
 	
 	public Dijkstra(int[][] matrix) {
 		this.matrix = (matrix == null ? new int[0][0] : matrix);
@@ -29,7 +42,7 @@ public class Dijkstra {
 	private void clear() {
 		this.srcId = -1;
 		this.sDists = new int[size];
-		this.sPaths = new IDPath[size];
+		this.sPaths = new _IDPath[size];
 	}
 	
 	private boolean inRange(final int idx) {
@@ -80,7 +93,7 @@ public class Dijkstra {
 				if(sDists[i] > relex) {
 					sDists[i] = relex;
 					if(sPaths[i] == null) {
-						sPaths[i] = new IDPath();
+						sPaths[i] = new _IDPath();
 					}
 					sPaths[i].add(next);
 				}
@@ -99,7 +112,7 @@ public class Dijkstra {
 			int endId = snkId;
 			routeIds.add(0, endId);
 			do {
-				IDPath idPath = sPaths[endId];
+				_IDPath idPath = sPaths[endId];
 				if(idPath != null && !idPath.isEmpty()) {
 					List<Integer> ids = idPath.getIds();
 					for(int i = ids.size() - 1; i >= 0; i--) {

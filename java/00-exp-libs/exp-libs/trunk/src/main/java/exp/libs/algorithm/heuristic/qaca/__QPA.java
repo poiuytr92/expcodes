@@ -1,4 +1,4 @@
-package exp.libs.algorithm.tsp.qant;
+package exp.libs.algorithm.heuristic.qaca;
 
 
 /**
