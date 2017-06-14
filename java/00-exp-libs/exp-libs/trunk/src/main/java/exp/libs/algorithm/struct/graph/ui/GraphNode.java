@@ -16,6 +16,8 @@ public class GraphNode {
 	
 	private boolean isGraphSnk;
 	
+	private boolean isInclusive;
+	
 	private String name;
 	
 	private DefaultGraphCell cellNode;
@@ -25,6 +27,7 @@ public class GraphNode {
 	public GraphNode(String name) {
 		this.isGraphSrc = false;
 		this.isGraphSnk = false;
+		this.isInclusive = false;
 		this.name = (name == null ? "" : name);
 		this.cellNode = new DefaultGraphCell(this.name);
 		this.cellNode.addPort();
@@ -87,12 +90,20 @@ public class GraphNode {
 		return isGraphSnk;
 	}
 	
+	public boolean isInclusive() {
+		return isInclusive;
+	}
+
 	protected void markGraphSrc() {
 		this.isGraphSrc = true;
 	}
 	
 	protected void markGraphSnk() {
 		this.isGraphSnk = true;
+	}
+	
+	protected void markInclusive() {
+		this.isInclusive = true;
 	}
 	
 }

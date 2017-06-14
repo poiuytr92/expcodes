@@ -2,6 +2,7 @@ package exp.libs.algorithm.struct.graph.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.geom.Rectangle2D;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.eclipse.draw2d.graph.DirectedGraph;
@@ -47,12 +49,21 @@ public class TopoGraphUI extends PopChildWindow {
 	/** 建议最大的节点数（超过这个数量演算速度会极慢, 导致陷入长时间无法生成拓扑图的假死状态） */
 	private final static int MAX_NODE_NUM = 100;
 	
+	/** 源端颜色 */
+	private final static Color COLOR_SRC = Color.BLUE;
+	
+	/** 宿端颜色 */
+	private final static Color COLOR_SNK = Color.MAGENTA;
+	
+	/** 必经点颜色 */
+	private final static Color COLOR_INCLUSIVE = Color.ORANGE;
+	
+	/** 普通节点颜色 */
+	private final static Color COLOR_NORMAL = Color.GREEN;
+	
 	/** 拓扑图数据 */
 	private TopoGraph graphData;
 	
-	/** 拓扑图点边坐标计算器 */
-	private DirectedGraph graphCalculator;
-
 	/** 拓扑图展示模型 */
 	private GraphModel graphViewModel;
 	
@@ -69,7 +80,6 @@ public class TopoGraphUI extends PopChildWindow {
 		} else {
 			this.graphData = new TopoGraph();
 		}
-		this.graphCalculator = new DirectedGraph();
 		this.graphViewModel = new DefaultGraphModel();
 		this.jGraph = new JGraph(graphViewModel);
 		this.jGraph.setJumpToDefaultPort(true);
@@ -79,6 +89,25 @@ public class TopoGraphUI extends PopChildWindow {
 	@Override
 	protected void setComponentsLayout(JPanel root) {
 		paintGraph(graphData);	// 绘图
+		
+		JPanel tips = new JPanel(new FlowLayout()); {
+			JLabel srcTips = new JLabel("[ ■ : 源端 ]");
+			srcTips.setForeground(COLOR_SRC);
+			tips.add(srcTips);
+			
+			JLabel snkTips = new JLabel("[ ■ : 宿端 ]");
+			snkTips.setForeground(COLOR_SNK);
+			tips.add(snkTips);
+			
+			JLabel inclusiveTips = new JLabel("[ ■ : 必经节点 ]");
+			inclusiveTips.setForeground(COLOR_INCLUSIVE);
+			tips.add(inclusiveTips);
+			
+			JLabel normalTips = new JLabel("[ ■ : 普通节点 ]");
+			normalTips.setForeground(COLOR_NORMAL);
+			tips.add(normalTips);
+		}
+		rootPanel.add(tips, BorderLayout.NORTH);
 		rootPanel.add(SwingUtils.addAutoScroll(jGraph), BorderLayout.CENTER);
 	}
 
@@ -102,20 +131,25 @@ public class TopoGraphUI extends PopChildWindow {
 		}
 		
 		List<GraphEdge> graphEdges = calculatePosition(		// 计算坐标
-				graphData.getAllEdges(), graphData.getSrc(), graphData.getSnk());
+				graphData.getAllEdges(), graphData.getIncludeNames(), 
+				graphData.getSrc(), graphData.getSnk());
 		createViewModel(graphEdges, graphData.isArrow());	// 绘制视图
 	}
 
 	/**
-	 * FIXME: 当节点数超过50时，计算非常慢， 需要改用其他方法
-	 * 
 	 * 利用GEF框架内置功能自动计算拓扑图各个节点的XY坐标
+	 *  (当节点数超过50时，计算非常慢)
+	 *  
 	 * @param edges 理论拓扑图的抽象边集（每条边的源宿节点只有边权衡量的相对距离）
+	 * @param includes 必经点名称集
+	 * @param graphSrc 理论拓扑图的源点
+	 * @param graphSnk 理论拓扑图的宿点
 	 * @return 用于实际呈现的拓扑图边集（每条边的源宿节点具有实际的XY坐标值）
 	 */
 	@SuppressWarnings("unchecked")
-	private List<GraphEdge> calculatePosition(
-			Set<Edge> edges, Node graphSrc, Node graphSnk) {
+	private List<GraphEdge> calculatePosition(Set<Edge> edges, 
+			Set<String> includes, Node graphSrc, Node graphSnk) {
+		DirectedGraph graphCalculator = new DirectedGraph(); // 拓扑图点边坐标计算器
 		List<GraphEdge> graphEdges = new LinkedList<GraphEdge>();
 		Map<String, GraphNode> uniqueNodes = // 唯一性点集，避免重复放入同一节点到GEF造成拓扑图离散
 				new HashMap<String, GraphNode>();
@@ -129,9 +163,10 @@ public class TopoGraphUI extends PopChildWindow {
 				graphCalculator.nodes.add(gnSrc.getGefNode());	// 源端放入GEF模型
 				uniqueNodes.put(src.getName(), gnSrc);
 				
-				// 标记是否为拓扑图的源宿点
+				// 标记是否为拓扑图的源宿点/必经点
 				if(graphSrc.equals(src)) { gnSrc.markGraphSrc(); }
 				if(graphSnk.equals(src)) { gnSrc.markGraphSnk(); }
+				if(includes.contains(src.getName())) { gnSrc.markInclusive(); }
 			}
 			
 			Node snk = edge.getSnk();
@@ -141,9 +176,10 @@ public class TopoGraphUI extends PopChildWindow {
 				graphCalculator.nodes.add(gnSnk.getGefNode());	// 宿端放入GEF模型
 				uniqueNodes.put(snk.getName(), gnSnk);
 				
-				// 标记是否为拓扑图的源宿点
+				// 标记是否为拓扑图的源宿点/必经点
 				if(graphSrc.equals(snk)) { gnSnk.markGraphSrc(); }
 				if(graphSnk.equals(snk)) { gnSnk.markGraphSnk(); }
+				if(includes.contains(snk.getName())) { gnSnk.markInclusive(); }
 			}
 			
 			GraphEdge graphEdge = new GraphEdge(gnSrc, gnSnk, edge.getWeight());
@@ -196,7 +232,8 @@ public class TopoGraphUI extends PopChildWindow {
 			graphAttribute.put(viewSnk, getNodeAttribute(gnSnk));
 			
 			// 把边、点约束集写到展示模型
-			ConnectionSet connSet = new ConnectionSet(viewEdge, viewSrc.getChildAt(0), viewSnk.getChildAt(0));
+			ConnectionSet connSet = new ConnectionSet(viewEdge, 
+					viewSrc.getChildAt(0), viewSnk.getChildAt(0));
 			Object[] cells = new Object[] { viewEdge, viewSrc, viewSnk };
 			graphViewModel.insert(cells, graphAttribute, connSet, null, null);
 		}
@@ -234,8 +271,9 @@ public class TopoGraphUI extends PopChildWindow {
 		GraphConstants.setBounds(nodeAttribute, bound);	// 设置节点坐标
 		
 		// 设置节点边框颜色
-		Color backGround = (node.isGraphSrc() ? Color.BLUE : 
-			(node.isGraphSnk() ? Color.MAGENTA : Color.ORANGE));
+		Color backGround = (node.isGraphSrc() ? COLOR_SRC : 
+				(node.isGraphSnk() ? COLOR_SNK : 
+				(node.isInclusive() ? COLOR_INCLUSIVE : COLOR_NORMAL)));
 		GraphConstants.setBorderColor(nodeAttribute, backGround);
 		return nodeAttribute;
 	}

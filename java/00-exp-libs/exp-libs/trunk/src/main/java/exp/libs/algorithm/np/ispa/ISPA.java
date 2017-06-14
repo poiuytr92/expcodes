@@ -40,11 +40,11 @@ public class ISPA {
 		}
 		
 		// 不存在必经点， 直接用Dijkstra算法求源端到宿端的最短路
-		if(!graph.existIncludes()) {
+		if(!graph.existInclusive()) {
 			rst = solveBySPA(graph);
 			
 		// 必经点有序，使用Dijkstra算法按顺序分段求最短路， 然后拼接
-		} else if(graph.isOrderIncludes()) {
+		} else if(graph.isOrderInclusive()) {
 			rst = solveBySegmentSPA(graph);
 			
 		// 必经点无序, 构造必经点子图后，使用启发式算法求最小连通通道
@@ -249,7 +249,7 @@ public class ISPA {
 		if(!subGraph.isEmpty()) {
 			subGraph.setSrc(graph.getSrc().getName());
 			subGraph.setSnk(graph.getSnk().getName());
-			subGraph.addIncludes(graph.getIncludeNames());
+			subGraph.setIncludes(graph.getIncludeNames());
 		}
 		return subGraph;
 	}

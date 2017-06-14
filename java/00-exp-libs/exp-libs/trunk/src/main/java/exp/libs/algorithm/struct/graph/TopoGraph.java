@@ -62,7 +62,7 @@ public class TopoGraph extends Graph {
 	 * 是否存在必经点
 	 * @return
 	 */
-	public boolean existIncludes() {
+	public boolean existInclusive() {
 		return !includes.isEmpty();
 	}
 	
@@ -70,7 +70,7 @@ public class TopoGraph extends Graph {
 	 * 必经点是否有序
 	 * @return
 	 */
-	public boolean isOrderIncludes() {
+	public boolean isOrderInclusive() {
 		return order;
 	}
 	
@@ -78,7 +78,7 @@ public class TopoGraph extends Graph {
 	 * 必经点数量
 	 * @return
 	 */
-	public int includesSize() {
+	public int inclusiveSize() {
 		return includes.size();
 	}
 	
@@ -103,18 +103,18 @@ public class TopoGraph extends Graph {
 		return ids;
 	}
 	
-	public boolean addIncludes(Collection<String> names) {
+	public boolean setIncludes(Collection<String> names) {
 		boolean isOk = false;
 		if(names != null) {
 			isOk = true;
 			for(String name : names) {
-				isOk &= addInclude(name);
+				isOk &= setInclude(name);
 			}
 		}
 		return isOk;
 	}
 	
-	public boolean addInclude(String name) {
+	public boolean setInclude(String name) {
 		boolean isOk = false;
 		Node node = getNode(name);
 		if(node != Node.NULL) {

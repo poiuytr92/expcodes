@@ -34,17 +34,17 @@ public class TestISPA {
 		graph.addEdge("I", "K", 2);
 		graph.addEdge("B", "K", 3);
 		graph.addEdge("K", "F", 3);
-		graph.addInclude("C");
-		graph.addInclude("G");
+		graph.setInclude("C");
+		graph.setInclude("G");
 		
-		graph.addInclude("K");
-		graph.addInclude("I");
+		graph.setInclude("K");
+		graph.setInclude("I");
 		
-		graph.addInclude("B");
-		graph.addInclude("D");
-		graph.addInclude("E");
-		graph.addInclude("H");
-		graph.addInclude("J");
+		graph.setInclude("B");
+		graph.setInclude("D");
+		graph.setInclude("E");
+		graph.setInclude("H");
+		graph.setInclude("J");
 		return graph;
 	}
 	
