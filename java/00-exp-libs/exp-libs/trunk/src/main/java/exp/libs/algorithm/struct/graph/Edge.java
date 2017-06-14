@@ -1,4 +1,4 @@
-package exp.libs.algorithm.graph.adt;
+package exp.libs.algorithm.struct.graph;
 
 public class Edge {
 

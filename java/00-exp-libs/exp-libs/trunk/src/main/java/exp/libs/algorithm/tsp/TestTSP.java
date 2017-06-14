@@ -1,9 +1,9 @@
 package exp.libs.algorithm.tsp;
 
-import exp.libs.algorithm.graph.adt.TopoGraph;
-import exp.libs.algorithm.graph.ui.TopoGraphUI;
 import exp.libs.algorithm.np.tsp.TSP;
 import exp.libs.algorithm.np.tsp.TSPRst;
+import exp.libs.algorithm.struct.graph.TopoGraph;
+import exp.libs.algorithm.struct.graph.ui.TopoGraphUI;
 import exp.libs.utils.ui.BeautyEyeUtils;
 
 public class TestTSP {

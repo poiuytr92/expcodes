@@ -1,4 +1,4 @@
-package exp.libs.algorithm.graph.adt;
+package exp.libs.algorithm.struct.graph;
 
 import java.util.ArrayList;
 import java.util.Collection;

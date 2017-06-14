@@ -3,7 +3,7 @@ package exp.libs.algorithm.np.tsp;
 import java.util.LinkedList;
 import java.util.List;
 
-import exp.libs.algorithm.graph.adt.Node;
+import exp.libs.algorithm.struct.graph.Node;
 
 public final class TSPRst {
 

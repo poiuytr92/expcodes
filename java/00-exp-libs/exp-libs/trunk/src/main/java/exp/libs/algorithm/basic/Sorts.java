@@ -1,4 +1,4 @@
-package exp.libs.algorithm.struct;
+package exp.libs.algorithm.basic;
 
 import java.util.ArrayList;
 import java.util.Collections;

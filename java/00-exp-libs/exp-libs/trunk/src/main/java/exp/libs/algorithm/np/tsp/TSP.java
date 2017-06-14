@@ -7,11 +7,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import exp.libs.algorithm.graph.adt.Node;
-import exp.libs.algorithm.graph.adt.TopoGraph;
 import exp.libs.algorithm.heuristic.qaca.QACA;
 import exp.libs.algorithm.heuristic.qaca.QRst;
 import exp.libs.algorithm.spa.Dijkstra;
+import exp.libs.algorithm.struct.graph.Node;
+import exp.libs.algorithm.struct.graph.TopoGraph;
 import exp.libs.utils.pub.StrUtils;
 
 /**
