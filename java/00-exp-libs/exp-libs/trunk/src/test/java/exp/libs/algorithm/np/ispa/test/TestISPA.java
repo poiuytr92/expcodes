@@ -9,14 +9,44 @@ import exp.libs.utils.ui.BeautyEyeUtils;
 public class TestISPA {
 
 	public static void main(String[] args) {
-		TopoGraph graph = toGraph();
-		draw(graph);
-		ISPARst rst = ISPA.solve(graph);
-		System.out.println(rst.toString());
+		testNoneInclusive();
+		testOrderInclusive();
+		testExistInclusive();
 	}
 	
-	private static TopoGraph toGraph() {
-		TopoGraph graph = new TopoGraph(true);
+	private static void testNoneInclusive() {
+		TopoGraph graph = toGraph(false);
+		draw(graph, "无必经点");
+		ISPARst rst = ISPA.solve(graph);
+		System.out.println("无必经点（使用最短路算法求解）：");
+		System.out.println(rst.toString());
+		System.out.println("========================\r\n");
+	}
+	
+	private static void testOrderInclusive() {
+		TopoGraph graph = toGraph(true);
+		graph.setInclude("C");
+		graph.setInclude("K");
+		draw(graph, "必经点有序");
+		ISPARst rst = ISPA.solve(graph);
+		System.out.println("必经点有序（使用分段最短路算法求解）：");
+		System.out.println(rst.toString());
+		System.out.println("========================\r\n");
+	}
+	
+	private static void testExistInclusive() {
+		TopoGraph graph = toGraph(false);
+		graph.setInclude("C");
+		graph.setInclude("K");
+		draw(graph, "必经点无序");
+		ISPARst rst = ISPA.solve(graph);
+		System.out.println("必经点无序（使用启发式算法求解）：");
+		System.out.println(rst.toString());
+		System.out.println("========================\r\n");
+	}
+	
+	private static TopoGraph toGraph(boolean order) {
+		TopoGraph graph = new TopoGraph(order);
 		graph.setSrc("A"); 
 		graph.setSnk("F");
 		graph.addEdge("A", "B", 2);
@@ -34,23 +64,12 @@ public class TestISPA {
 		graph.addEdge("I", "K", 2);
 		graph.addEdge("B", "K", 3);
 		graph.addEdge("K", "F", 3);
-		graph.setInclude("C");
-		graph.setInclude("G");
-		
-		graph.setInclude("K");
-		graph.setInclude("I");
-		
-		graph.setInclude("B");
-		graph.setInclude("D");
-		graph.setInclude("E");
-		graph.setInclude("H");
-		graph.setInclude("J");
 		return graph;
 	}
 	
-	private static void draw(TopoGraph graph) {
+	private static void draw(TopoGraph graph, String title) {
 		BeautyEyeUtils.init();
-		TopoGraphUI ui = new TopoGraphUI("拓扑图展示器", 700, 300, graph);
+		TopoGraphUI ui = new TopoGraphUI(title, 700, 300, graph);
 		ui._view();
 	}
 	

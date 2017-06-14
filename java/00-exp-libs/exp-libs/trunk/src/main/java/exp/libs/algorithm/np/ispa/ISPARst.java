@@ -10,8 +10,8 @@ public final class ISPARst {
 	/** 是否为可行解 */
 	private boolean isVaild;
 	
-	/** 无解的原因 */
-	private String cause;
+	/** 求解过程的一些提示信息 */
+	private String tips;
 	
 	/** 解的总开销 */
 	private int cost;
@@ -21,7 +21,7 @@ public final class ISPARst {
 	
 	protected ISPARst() {
 		this.isVaild = false;
-		this.cause = "";
+		this.tips = "";
 		this.cost = -1;
 		this.routes = new LinkedList<Node>();
 	}
@@ -34,12 +34,12 @@ public final class ISPARst {
 		this.isVaild = isVaild;
 	}
 
-	public String getCause() {
-		return cause;
+	public String getTips() {
+		return tips;
 	}
 
-	protected void setCause(String cause) {
-		this.cause = cause;
+	protected void setTips(String tips) {
+		this.tips = tips;
 	}
 
 	public int getCost() {
@@ -62,7 +62,7 @@ public final class ISPARst {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("[vaild] : ").append(isVaild);
-		sb.append("\r\n[cause] : ").append(cause);
+		sb.append("\r\n[tips] : ").append(tips);
 		sb.append("\r\n[cost] : ").append(cost);
 		sb.append("\r\n[route] : ");
 		int size = routes.size();

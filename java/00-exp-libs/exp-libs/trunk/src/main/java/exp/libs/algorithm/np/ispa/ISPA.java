@@ -35,7 +35,7 @@ public class ISPA {
 		ISPARst rst = new ISPARst();
 		if(graph == null || graph.isEmpty() || graph.isArrow() || // 暂不支持有向图
 				graph.getSrc() == Node.NULL || graph.getSnk() == Node.NULL) {
-			rst.setCause("拓扑图无效(图为空、或非无向图、或未指定源宿端)");
+			rst.setTips("拓扑图无效(图为空、或非无向图、或未指定源宿端)");
 			return rst;
 		}
 		
@@ -82,7 +82,7 @@ public class ISPA {
 			rst.setRoutes(routes);
 			
 		} else {
-			rst.setCause("使用最短路算法求解失败: 源宿端不连通");
+			rst.setTips("使用最短路算法求解失败: 源宿端不连通");
 		}
 		return rst;
 	}
@@ -117,7 +117,8 @@ public class ISPA {
 		for(int size = includeIds.size() - 1, i = 0; i < size; i++) {
 			int srcId = includeIds.get(i);
 			int snkId = includeIds.get(i + 1);
-			List<Integer> segRoutes = __findSegRouteIds(dijkstra, srcId, snkId, includeIds);
+			List<Integer> segRoutes = __findSegRouteIds(
+					dijkstra, srcId, snkId, includeIds, routeIds);
 			segRoutes.remove(0);
 			routeIds.addAll(segRoutes);
 		}
@@ -125,10 +126,14 @@ public class ISPA {
 	}
 	
 	private static List<Integer> __findSegRouteIds(final Dijkstra dijkstra, 
-			final int srcId, final int snkId, final List<Integer> includeIds) {
-		Set<Integer> tabu = new HashSet<Integer>(includeIds);
-		tabu.remove(srcId);
-		tabu.remove(snkId);
+			final int srcId, final int snkId, 
+			final List<Integer> includeIds, final List<Integer> curRouteIds) {
+		Set<Integer> tabu = new HashSet<Integer>(); {
+			tabu.addAll(includeIds);
+			tabu.addAll(curRouteIds);
+			tabu.remove(srcId);
+			tabu.remove(snkId);
+		}
 		dijkstra.calculate(srcId, tabu);
 		List<Integer> segRoutes = dijkstra.getShortPaths(snkId);
 		if(segRoutes.isEmpty()) {
@@ -142,7 +147,7 @@ public class ISPA {
 	private static ISPARst _toISPARst(
 			final TopoGraph graph, final List<Integer> routeIds) {
 		int cost = 0;
-		String cause = "";
+		String tips = "";
 		Set<Integer> repeats = new HashSet<Integer>();
 		List<Node> routes = new LinkedList<Node>();
 		routes.add(graph.getSrc());
@@ -153,7 +158,7 @@ public class ISPA {
 			
 			if(cur == Node.NULL) {
 				Node next = graph.getNode(routeIds.get(i + 1));
-				cause = StrUtils.concat(cause, "路径 [", last, "] -> [", next, "] 不连通.\r\n");
+				tips = StrUtils.concat(tips, "\r\n路径 [", last, "] -> [", next, "] 不连通.");
 				
 			} else {
 				if(last != Node.NULL) {
@@ -161,14 +166,20 @@ public class ISPA {
 				}
 				
 				if(!repeats.add(cur.getId())) {
-					cause = StrUtils.concat(cause, "节点 [", cur, "] 被复用.\r\n");
+					tips = StrUtils.concat(tips, "\r\n节点 [", cur, "] 被复用.");
 				}
 			}
 		}
 		
+		boolean isVaild = true;
+		if(StrUtils.isNotEmpty(tips)) {
+			isVaild = false;
+			tips = tips.replaceFirst("\r\n", "");
+		}
+		
 		ISPARst rst = new ISPARst();
-		rst.setVaild(StrUtils.isEmpty(cause));
-		rst.setCause(cause);
+		rst.setVaild(isVaild);
+		rst.setTips(tips);
 		rst.setCost(cost);
 		rst.setRoutes(routes);
 		return rst;
@@ -185,21 +196,23 @@ public class ISPA {
 		
 		TopoGraph subGraph = _compressGraph(graph, dijkstra);	// 压缩图
 		if(subGraph.isEmpty()) {
-			rst.setCause("使用启发式算法求解失败: 拓扑图不连通");
+			rst.setTips("使用启发式算法求解失败: 拓扑图不连通");
 			
 		} else if(subGraph != graph && // 当子图不是原图时， 对子图补边
 				!_fillEdges(subGraph, graph, dijkstra)) {
-			rst.setCause("使用启发式算法求解失败: 拓扑图不存在哈密顿通路");
+			rst.setTips("使用启发式算法求解失败: 拓扑图不存在哈密顿通路");
 			
 		} else {
 			// 求子图的哈密顿通路： 最坏的情况是过所有节点， 最好的情况是只过必经点
-			final int ANT_NUM = 10;
-			final int GN_NUM = 10;
-			QACA qaca = new QACA(subGraph.getAdjacencyMatrix(), 
-					subGraph.getSrc().getId(), 
-					subGraph.getSnk().getId(), 
-					subGraph.getIncludeIds(), ANT_NUM, GN_NUM, true);
-			QRst qRst = qaca.exec();
+			QRst qRst = _toQACA(subGraph);
+			
+			// 当使用子图求哈密顿通路失败时，可能是构造子图时缺失边， 此时尝试用原图求解
+			if(!qRst.isVaild()) {
+				rst.setTips("所构造的子图不存在哈密顿通路, 切换原图做二次求解");
+				subGraph.clear();
+				subGraph = graph; // 目的是为了下面转换解操作时不会导致ID错位
+				qRst = _toQACA(subGraph);
+			}
 			
 			// 转换子图解为原图解（节点ID不同）
 			_toISPARst(graph, rst, subGraph, qRst);
@@ -369,6 +382,21 @@ public class ISPA {
 	}
 	
 	/**
+	 * 使用量子蚁群算法求解
+	 * @param graph
+	 * @return
+	 */
+	private static QRst _toQACA(final TopoGraph graph) {
+		final int ANT_NUM = 10;
+		final int GN_NUM = 10;
+		QACA qaca = new QACA(graph.getAdjacencyMatrix(), 
+				graph.getSrc().getId(), 
+				graph.getSnk().getId(), 
+				graph.getIncludeIds(), ANT_NUM, GN_NUM, true);
+		return qaca.exec();
+	}
+	
+	/**
 	 * 转换子图解为原图解
 	 * @param graph 原图
 	 * @param rst 原图解
@@ -395,7 +423,7 @@ public class ISPA {
 			rst.setRoutes(routes);
 			
 		} else {
-			rst.setCause("使用启发式算法求解失败: 未能收敛到一个可行解");
+			rst.setTips("使用启发式算法求解失败: 未能收敛到一个可行解");
 		}
 	}
 	

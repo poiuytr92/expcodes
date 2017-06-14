@@ -1,9 +1,5 @@
 package exp.libs.algorithm.struct.graph.ui.test;
 
-import org.junit.Test;
-
-import exp.libs.algorithm.np.ispa.ISPA;
-import exp.libs.algorithm.np.ispa.ISPARst;
 import exp.libs.algorithm.struct.graph.TopoGraph;
 import exp.libs.algorithm.struct.graph.ui.TopoGraphUI;
 import exp.libs.utils.ui.BeautyEyeUtils;
@@ -19,7 +15,7 @@ public class TestTopoGraphUI {
 	}
 	
 	private static TopoGraph toGraph() {
-		TopoGraph graph = new TopoGraph(true);
+		TopoGraph graph = new TopoGraph();
 		graph.setSrc("A"); 
 		graph.setSnk("F");
 		graph.addEdge("A", "B", 2);

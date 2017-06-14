@@ -156,7 +156,7 @@ public final class QACA {
 		return bestRst;
 	}
 	
-	public String toRstInfo() {
+	public String getBestRstInfo() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("\r\nQACA搜索结果 : \r\n");
 		sb.append(" [拓扑图规模] : ").append(ENV.size()).append("\r\n");
@@ -174,7 +174,7 @@ public final class QACA {
 	
 	@Override
 	public String toString() {
-		return toRstInfo();
+		return getBestRstInfo();
 	}
 
 }
