@@ -1,4 +1,4 @@
-package exp.libs.algorithm.np.tsp;
+package exp.libs.algorithm.np.ispa;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,17 +22,17 @@ import exp.libs.utils.pub.StrUtils;
  * @author lqb
  * @date 2017年6月13日
  */
-public class TSP {
+public class ISPA {
 
-	private TSP() {}
+	private ISPA() {}
 	
 	/**
 	 * 求解
 	 * @param graph 拓扑图
 	 * @return
 	 */
-	public static TSPRst solve(final TopoGraph graph) {
-		TSPRst rst = new TSPRst();
+	public static ISPARst solve(final TopoGraph graph) {
+		ISPARst rst = new ISPARst();
 		if(graph == null || graph.isEmpty() || graph.isArrow() || // 暂不支持有向图
 				graph.getSrc() == Node.NULL || graph.getSnk() == Node.NULL) {
 			rst.setCause("拓扑图无效(图为空、或非无向图、或未指定源宿端)");
@@ -59,18 +59,18 @@ public class TSP {
 	 * @param graph
 	 * @return
 	 */
-	protected static TSPRst solveBySPA(final TopoGraph graph) {
+	protected static ISPARst solveBySPA(final TopoGraph graph) {
 		final Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
 		dijkstra.calculate(graph.getSrc().getId());
 		int snkId = graph.getSnk().getId();
 		int cost = dijkstra.getShortPathWeight(snkId);
 		List<Integer> routes = dijkstra.getShortPaths(snkId);
-		return _toTSPRst(graph, cost, routes);
+		return _toISPARst(graph, cost, routes);
 	}
 	
-	private static TSPRst _toTSPRst(final TopoGraph graph, 
+	private static ISPARst _toISPARst(final TopoGraph graph, 
 			final int cost, final List<Integer> routeIds) {
-		TSPRst rst = new TSPRst();
+		ISPARst rst = new ISPARst();
 		if(cost < Dijkstra.MAX_WEIGHT) {
 			rst.setVaild(true);
 			rst.setCost(cost);
@@ -92,10 +92,10 @@ public class TSP {
 	 * @param graph
 	 * @return
 	 */
-	protected static TSPRst solveBySegmentSPA(final TopoGraph graph) {
+	protected static ISPARst solveBySegmentSPA(final TopoGraph graph) {
 		List<Integer> includeIds = _getIncludeIds(graph);
 		List<Integer> routeIds = _searchRouteIds(graph, includeIds);
-		return _toTSPRst(graph, routeIds);
+		return _toISPARst(graph, routeIds);
 	}
 	
 	private static List<Integer> _getIncludeIds(final TopoGraph graph) {
@@ -139,7 +139,7 @@ public class TSP {
 		return segRoutes;
 	}
 	
-	private static TSPRst _toTSPRst(
+	private static ISPARst _toISPARst(
 			final TopoGraph graph, final List<Integer> routeIds) {
 		int cost = 0;
 		String cause = "";
@@ -166,7 +166,7 @@ public class TSP {
 			}
 		}
 		
-		TSPRst rst = new TSPRst();
+		ISPARst rst = new ISPARst();
 		rst.setVaild(StrUtils.isEmpty(cause));
 		rst.setCause(cause);
 		rst.setCost(cost);
@@ -179,8 +179,8 @@ public class TSP {
 	 * @param graph
 	 * @return
 	 */
-	protected static TSPRst solveByHeuristicAlgorithm(final TopoGraph graph) {
-		TSPRst rst = new TSPRst();
+	protected static ISPARst solveByHeuristicAlgorithm(final TopoGraph graph) {
+		ISPARst rst = new ISPARst();
 		final Dijkstra dijkstra = new Dijkstra(graph.getAdjacencyMatrix());
 		
 		TopoGraph subGraph = _compressGraph(graph, dijkstra);	// 压缩图
@@ -202,7 +202,7 @@ public class TSP {
 			QRst qRst = qaca.exec();
 			
 			// 转换子图解为原图解（节点ID不同）
-			_toTSPRst(graph, rst, subGraph, qRst);
+			_toISPARst(graph, rst, subGraph, qRst);
 		}
 		return rst;
 	}
@@ -376,7 +376,7 @@ public class TSP {
 	 * @param subRst 子图解
 	 * @return 原图解
 	 */
-	private static void _toTSPRst(final TopoGraph graph, final TSPRst rst, 
+	private static void _toISPARst(final TopoGraph graph, final ISPARst rst, 
 			final TopoGraph subGraph, final QRst subRst) {
 		if(subRst.isVaild()) {
 			rst.setVaild(true);

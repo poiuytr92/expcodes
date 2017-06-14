@@ -1,11 +1,11 @@
-package exp.libs.algorithm.np.tsp;
+package exp.libs.algorithm.np.ispa;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import exp.libs.algorithm.struct.graph.Node;
 
-public final class TSPRst {
+public final class ISPARst {
 
 	/** 是否为可行解 */
 	private boolean isVaild;
@@ -19,7 +19,7 @@ public final class TSPRst {
 	/** 移动轨迹路由 */
 	private List<Node> routes;
 	
-	protected TSPRst() {
+	protected ISPARst() {
 		this.isVaild = false;
 		this.cause = "";
 		this.cost = -1;
