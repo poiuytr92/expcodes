@@ -143,8 +143,7 @@ public class RandomUtils {
 	/** 二字-复姓: 5% */
 	private final static int COMPOUND_SURNAME_2WORD = 100;
 	
-	/** 私有化构造函数, 避免误用. */
-	private RandomUtils() {}
+	protected RandomUtils() {}
 	
 	public static int randomInt() {
 		return random.nextInt();

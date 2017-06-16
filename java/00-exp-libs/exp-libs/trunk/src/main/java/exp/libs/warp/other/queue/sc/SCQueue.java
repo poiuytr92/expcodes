@@ -1,8 +1,8 @@
 package exp.libs.warp.other.queue.sc;
 
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.other.queue.loop.LoopQueue;
 import exp.libs.warp.other.thread.ThreadPool;
-import exp.libs.utils.os.ThreadUtils;
 
 /**
  * <PRE>
