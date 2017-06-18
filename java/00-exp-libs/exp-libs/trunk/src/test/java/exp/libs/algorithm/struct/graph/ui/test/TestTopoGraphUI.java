@@ -7,11 +7,30 @@ import exp.libs.utils.ui.BeautyEyeUtils;
 public class TestTopoGraphUI {
 
 	public static void main(String[] args) {
-		TopoGraph graph = toGraph();
+		TopoGraph graph = toGraph2();
 		
 		BeautyEyeUtils.init();
 		TopoGraphUI ui = new TopoGraphUI("拓扑图展示器", 700, 300, graph);
 		ui._view();
+	}
+	
+	private static TopoGraph toGraph2() {
+		TopoGraph graph = new TopoGraph();
+		graph.setSrc("A"); 
+		graph.setSnk("G");
+		graph.addEdge("A", "B", 2);
+		graph.addEdge("A", "C", 3);
+		graph.addEdge("A", "D", 4);
+		graph.addEdge("A", "E", 5);
+		graph.addEdge("A", "F", 6);
+		graph.addEdge("A", "G", 7);
+		
+		graph.addEdge("E", "X", 4);
+		graph.addEdge("E", "Y", 4);
+		graph.addEdge("E", "Z", 4);
+		
+		graph.addEdge("F", "O", 4);
+		return graph;
 	}
 	
 	private static TopoGraph toGraph() {

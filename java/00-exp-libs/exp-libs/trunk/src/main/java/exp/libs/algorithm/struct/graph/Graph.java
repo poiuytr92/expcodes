@@ -150,10 +150,6 @@ public class Graph {
 		return (edge == null ? Edge.NULL : edge);
 	}
 	
-	public int getWeight(String srcName, String snkName) {
-		return getEdge(srcName, snkName).getWeight();
-	}
-	
 	public int getWeight(int srcId, int snkId) {
 		int weight = Edge.MAX_WEIGHT;
 		if(matrix != null && inRange(srcId) && inRange(snkId)) {
@@ -162,8 +158,12 @@ public class Graph {
 		return weight;
 	}
 	
+	public int getWeight(String srcName, String snkName) {
+		return getEdge(srcName, snkName).getWeight();
+	}
+	
 	public int getWeight(Node src, Node snk) {
-		return getWeight(src.getId(), snk.getId());
+		return getEdge(src, snk).getWeight();
 	}
 	
 	public Set<Integer> getAllNodeIds() {

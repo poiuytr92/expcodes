@@ -13,7 +13,7 @@ public class GraphEdge {
 	
 	private Edge gefEdge;
 	
-	public GraphEdge(GraphNode src, GraphNode snk, int weight) {
+	protected GraphEdge(GraphNode src, GraphNode snk, int weight) {
 		this.src = src;
 		this.snk = snk;
 		

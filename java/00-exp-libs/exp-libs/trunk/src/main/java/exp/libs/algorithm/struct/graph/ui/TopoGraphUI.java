@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.LinkedList;
@@ -130,12 +132,66 @@ public class TopoGraphUI extends PopChildWindow {
 			}
 		}
 		
-		List<GraphEdge> graphEdges = calculatePosition(		// 计算坐标
-				graphData.getAllEdges(), graphData.getIncludeNames(), 
-				graphData.getSrc(), graphData.getSnk());
+//		List<GraphEdge> graphEdges = calculatePosition(		// 计算坐标
+//				graphData.getAllEdges(), graphData.getIncludeNames(), 
+//				graphData.getSrc(), graphData.getSnk());
+		
+		List<GraphEdge> graphEdges = calculatePosition(graphData);
 		createViewModel(graphEdges, graphData.isArrow());	// 绘制视图
 	}
 
+	private List<GraphEdge> calculatePosition(TopoGraph graphData) {
+		final int XOFFSET = 400;//屏幕中心
+		final int YOFFSET = 400;
+		
+		int size = graphData.nodeSize();
+		Node src = graphData.getSrc();
+		
+		boolean[] visit = new boolean[size];
+		Arrays.fill(visit, false);
+		visit[src.getId()] = true;
+		
+		Map<String, GraphNode> map = new HashMap<String, GraphNode>();
+		GraphNode srcNode = new GraphNode(src.getName(), 0 + XOFFSET, 0 + YOFFSET);
+		map.put(src.getName(), srcNode);
+		
+		
+		
+		List<GraphEdge> graphEdges = new LinkedList<GraphEdge>();
+		List<Node> queue = new ArrayList<Node>(size);
+		queue.add(src);
+		
+		for(int idx = 0; idx < size; idx++) {
+			Node cur = queue.get(idx);
+			List<Node> neighbors = cur.getNeighborList();
+			final int num = neighbors.size();
+			final int baseTheta = 360 / num;
+			for(int i = 0; i < num; i++) {
+				Node neighbor = neighbors.get(i);
+				if(visit[neighbor.getId()]) {
+					continue;
+				}
+				
+				queue.add(neighbor);
+				visit[neighbor.getId()] = true;
+				
+				int cost = graphData.getWeight(cur, neighbor);//归一化函数处理边权
+				int r = cost * 50;
+				int theta = baseTheta * i;
+				int x = (int) (r * Math.cos(theta) + 0.5 + XOFFSET);
+				int y = (int) (r * Math.sin(theta) + 0.5 + YOFFSET);
+				GraphNode neighborNode = new GraphNode(neighbor.getName());
+				map.put(neighbor.getName(), neighborNode);
+				
+				neighborNode.setX(x);
+				neighborNode.setY(y);
+				GraphEdge edge = new GraphEdge(map.get(cur.getName()), neighborNode, cost);
+				graphEdges.add(edge);
+			}
+		}
+		return graphEdges;
+	}
+	
 	/**
 	 * 利用GEF框架内置功能自动计算拓扑图各个节点的XY坐标
 	 *  (当节点数超过50时，计算非常慢)

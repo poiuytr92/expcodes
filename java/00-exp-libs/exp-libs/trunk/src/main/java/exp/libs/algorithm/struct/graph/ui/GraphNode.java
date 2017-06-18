@@ -24,7 +24,11 @@ public class GraphNode {
 	
 	private Node gefNode;
 	
-	public GraphNode(String name) {
+	protected GraphNode(String name) {
+		this(name, 0, 0);
+	}
+	
+	protected GraphNode(String name, int x, int y) {
 		this.isGraphSrc = false;
 		this.isGraphSnk = false;
 		this.isInclusive = false;
@@ -32,6 +36,8 @@ public class GraphNode {
 		this.cellNode = new DefaultGraphCell(this.name);
 		this.cellNode.addPort();
 		this.gefNode = new Node();
+		this.gefNode.x = x;
+		this.gefNode.y = y;
 		this.gefNode.width = calculateDensity(this.name);	// GEF计算节点X坐标的参考值，并非节点宽度值, 影响节点间密度
 		this.gefNode.height = this.gefNode.width;	// GEF计算节点Y坐标的参考值， 一般与width取值相同， 否则节点间距会过密
 		this.gefNode.setPadding(new Insets(	// GEF计算节点间间距的偏移量(不能为0， 否则节点会胶合)
@@ -66,6 +72,10 @@ public class GraphNode {
 		return gefNode;
 	}
 	
+	public int getWidth() {
+		return gefNode.width;
+	}
+	
 	public int getX() {
 		return gefNode.x;
 	}
@@ -74,8 +84,17 @@ public class GraphNode {
 		return gefNode.y;
 	}
 	
-	public int getWidth() {
-		return gefNode.width;
+	protected void setX(int x) {
+		gefNode.x = x;
+	}
+	
+	protected void setY(int y) {
+		gefNode.y = y;
+	}
+	
+	protected void setPos(int x, int y) {
+		setX(x);
+		setY(y);
 	}
 	
 	public int getHeight() {
