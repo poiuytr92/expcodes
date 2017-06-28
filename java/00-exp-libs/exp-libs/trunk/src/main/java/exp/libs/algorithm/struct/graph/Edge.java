@@ -56,7 +56,8 @@ public class Edge {
 		String srcId = String.valueOf(src.getId());
 		String snkId = String.valueOf(snk.getId());
 		return (arrow || (src.getId() < snk.getId()) ? 
-				srcId.concat(snkId) : snkId.concat(srcId));
+				srcId.concat("-").concat(snkId) : 
+				snkId.concat("-").concat(srcId));
 	}
 	
 }
