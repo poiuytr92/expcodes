@@ -37,19 +37,28 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
-        <auto.package.plugin.version>1.2.0.4</auto.package.plugin.version>
-        
-        <include.model.base>compile</include.model.base>
-        <include.model.conf>compile</include.model.conf>
-        <include.model.db>compile</include.model.db>
-        <include.model.net>compile</include.model.net>
-        <include.model.sys>runtime</include.model.sys>
+        <auto.package.plugin.version>1.2.0.8</auto.package.plugin.version>
     </properties>
 
     <!-- 项目依赖 -->
     <dependencies>
     
+        <!-- JVM代理器构件 -->
         <dependency>
+          <groupId>exp.libs</groupId>
+          <artifactId>jvm-agent</artifactId>
+          <version>1.0</version>
+        </dependency>
+            
+        <!-- CEP函数表达式解析构件 -->
+        <dependency>
+          <groupId>exp.libs</groupId>
+          <artifactId>jep</artifactId>
+          <version>3.3.1</version>
+        </dependency>
+        
+        <!-- ehcache缓存器 -->
+		<dependency>
 		  <groupId>net.sf.ehcache</groupId>
 		  <artifactId>ehcache</artifactId>
 		  <version>2.9.1</version>
@@ -60,8 +69,6 @@
           <groupId>org.jb</groupId>
           <artifactId>beauty-eye</artifactId>
           <version>3.4</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         
         <!-- swing绘图构件 -->
@@ -70,44 +77,22 @@
           <artifactId>draw2d</artifactId>
           <version>1.0.0</version>
         </dependency>
-        
         <dependency>
 		  <groupId>org.jgraph</groupId>
 		  <artifactId>jGraph</artifactId>
 		  <version>1.0.0</version>
 		</dependency>
-		
 		<dependency>
 		  <groupId>com.realpersist</groupId>
 		  <artifactId>schemaeditor</artifactId>
 		  <version>1.0.0</version>
 		</dependency>
-        
-        <!-- JVM代理器构件 -->
-        <dependency>
-          <groupId>exp.libs</groupId>
-          <artifactId>jvm-agent</artifactId>
-          <version>1.0</version>
-          <scope>${include.model.sys}</scope>
-          <!-- optional>true</optional -->
-        </dependency>
-            
-        <!-- CEP函数表达式解析构件 -->
-        <dependency>
-          <groupId>exp.libs</groupId>
-          <artifactId>jep</artifactId>
-          <version>3.3.1</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
-        </dependency>
-        
+		
         <!-- xml解析构件 -->
         <dependency>
           <groupId>org.dom4j</groupId>
           <artifactId>dom4j</artifactId>
           <version>1.6.1</version>
-          <scope>${include.model.conf}</scope>
-          <!-- optional>true</optional -->
         </dependency>
     
         <!-- 数据库连接池 -->
@@ -115,8 +100,6 @@
 	      <groupId>com.cloudhopper.proxool</groupId>
 	      <artifactId>proxool</artifactId>
 	      <version>0.9.1</version>
-	      <scope>${include.model.db}</scope>
-	      <!-- optional>true</optional -->
 	      <exclusions>
 	        <exclusion>
 	          <artifactId>log4j</artifactId>
@@ -136,8 +119,6 @@
           <groupId>com.cloudhopper.proxool</groupId>
           <artifactId>proxool-cglib</artifactId>
           <version>0.9.1</version>
-          <scope>${include.model.db}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         
         <!-- 数据库驱动 -->
@@ -145,38 +126,28 @@
 		  <groupId>redis.clients</groupId>
 		  <artifactId>jedis</artifactId>
 		  <version>2.7.3</version>
-		  <scope>${include.model.db}</scope>
-		  <!-- optional>true</optional -->
 		</dependency>
         <dependency>
 		  <groupId>mysql</groupId>
 		  <artifactId>mysql-connector-java</artifactId>
 		  <version>5.1.29</version>
-		  <scope>${include.model.db}</scope>
-		  <!-- optional>true</optional -->
 		</dependency>
         <dependency>
           <groupId>org.xerial</groupId>
           <artifactId>sqlite-jdbc</artifactId>
           <version>3.7.2</version>
-          <scope>${include.model.db}</scope>
-          <!-- optional>true</optional -->
         </dependency>
 		<dependency>
-          <groupId>com.oracle</groupId>
-          <artifactId>ojdbc</artifactId>
-          <version>14</version>
-          <scope>${include.model.db}</scope>
-          <!-- optional>true</optional -->
-        </dependency>
+		  <groupId>com.oracle</groupId>
+		  <artifactId>ojdbc</artifactId>
+		  <version>14</version>
+		</dependency>
          
 	    <!-- apache-excel -->
 	    <dependency>
 	      <groupId>org.apache.poi</groupId>
 	      <artifactId>poi-ooxml</artifactId>
 	      <version>3.9</version>
-	      <scope>${include.model.base}</scope>
-	      <!-- optional>true</optional -->
 	      <exclusions>
 	        <exclusion>
 	          <artifactId>xml-apis</artifactId>
@@ -198,8 +169,6 @@
 	      <groupId>org.quartz</groupId>
 	      <artifactId>quartz-all</artifactId>
 	      <version>1.8.3</version>
-	      <scope>${include.model.base}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    
 	    <!-- JSON工具包 -->
@@ -213,43 +182,31 @@
 		  <groupId>org.codehaus.jackson</groupId>
 		  <artifactId>jackson-xc</artifactId>
 		  <version>1.9.9</version>
-		  <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
 		</dependency>
 		<dependency>
 		  <groupId>org.codehaus.jackson</groupId>
 		  <artifactId>jackson-smile</artifactId>
 		  <version>1.9.9</version>
-		  <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
 		</dependency>
 		<dependency>
 		  <groupId>org.codehaus.jackson</groupId>
 		  <artifactId>jackson-mrbean</artifactId>
 		  <version>1.9.9</version>
-		  <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
 		</dependency>
 		<dependency>
 		  <groupId>org.codehaus.jackson</groupId>
 		  <artifactId>jackson-jaxrs</artifactId>
 		  <version>1.9.9</version>
-		  <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
 		</dependency>
 		<dependency>
 		  <groupId>org.codehaus.jackson</groupId>
 		  <artifactId>jackson-core-lgpl</artifactId>
 		  <version>1.9.9</version>
-		  <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
 		</dependency>
 		<dependency>
 		  <groupId>org.codehaus.jackson</groupId>
 		  <artifactId>jackson-mapper-lgpl</artifactId>
 		  <version>1.9.9</version>
-		  <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
 		</dependency>
     
 	    <!-- http -->
@@ -257,8 +214,6 @@
 	      <groupId>commons-httpclient</groupId>
 	      <artifactId>commons-httpclient</artifactId>
 	      <version>3.1-rc1</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	      <exclusions>
             <exclusion>
               <artifactId>commons-codec</artifactId>
@@ -270,8 +225,6 @@
 	      <groupId>commons-net</groupId>
 	      <artifactId>commons-net</artifactId>
 	      <version>3.3</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    
 	    <!-- sftp -->
@@ -279,8 +232,6 @@
 	      <groupId>jsch</groupId>
 	      <artifactId>jsch</artifactId>
 	      <version>0.1.29</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    
 	    <!-- mail -->
@@ -288,15 +239,11 @@
 	      <groupId>javax.activation</groupId>
 	      <artifactId>activation</artifactId>
 	      <version>1.1.1</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 		    <groupId>javax.mail</groupId>
 		    <artifactId>mail</artifactId>
 		    <version>1.4.1</version>
-		    <scope>${include.model.net}</scope>
-		    <!-- optional>true</optional -->
 		</dependency>
 	    
 	    <!-- apache-jms -->
@@ -304,8 +251,6 @@
           <groupId>org.apache.activemq</groupId>
           <artifactId>activemq-all</artifactId>
           <version>5.4.2</version>
-          <scope>${include.model.net}</scope>
-          <!-- optional>true</optional -->
         </dependency>
 	    
 	    <!-- apache-compress -->
@@ -313,8 +258,6 @@
 	      <groupId>org.apache.commons</groupId>
 	      <artifactId>commons-compress</artifactId>
 	      <version>1.8.1</version>
-	      <scope>${include.model.base}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    
 	    <!-- apache-db -->
@@ -322,8 +265,6 @@
           <groupId>commons-dbutils</groupId>
           <artifactId>commons-dbutils</artifactId>
           <version>1.5</version>
-          <scope>${include.model.db}</scope>
-          <!-- optional>true</optional -->
         </dependency>
     
 	    <!-- apache-base -->
@@ -331,22 +272,16 @@
           <groupId>commons-io</groupId>
           <artifactId>commons-io</artifactId>
           <version>2.4</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         <dependency>
           <groupId>commons-logging</groupId>
           <artifactId>commons-logging</artifactId>
           <version>1.1.3</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         <dependency>
           <groupId>org.apache.commons</groupId>
           <artifactId>commons-lang3</artifactId>
           <version>3.3</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         
         <!-- soapUI: webservice-client -->
@@ -354,57 +289,42 @@
 	      <groupId>net.webservices.client</groupId>
 	      <artifactId>wsdl4j</artifactId>
 	      <version>1.6.2</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>net.webservices.client</groupId>
 	      <artifactId>jabref</artifactId>
 	      <version>2.9.2</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>net.webservices.client</groupId>
 	      <artifactId>soapui</artifactId>
 	      <version>1.7.1</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>org.apache.xmlbeans</groupId>
 	      <artifactId>xmlbeans</artifactId>
 	      <version>2.6.0</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>net.webservices.client</groupId>
 	      <artifactId>soapui-xmlbeans</artifactId>
 	      <version>1.7</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>commons-codec</groupId>
 	      <artifactId>commons-codec</artifactId>
 	      <version>1.8</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>ch.qos.logback</groupId>
 	      <artifactId>logback-classic</artifactId>
 	      <version>1.0.13</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>org.apache</groupId>
 	      <artifactId>log4j</artifactId>
 	      <version>1.2.17</version>
 	      <scope>runtime</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	
 	    <!-- axis2-client -->
@@ -412,8 +332,6 @@
 	      <groupId>org.apache.axis2</groupId>
 	      <artifactId>axis2-adb</artifactId>
 	      <version>1.6.2</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	      <exclusions>
 	        <exclusion>
 	          <artifactId>geronimo-activation_1.1_spec</artifactId>
@@ -478,22 +396,16 @@
 	      <groupId>org.apache.ws.xmlschema</groupId>
 	      <artifactId>xmlschema-core</artifactId>
 	      <version>2.1.0</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>org.apache.axis2</groupId>
 	      <artifactId>axis2-transport-http</artifactId>
 	      <version>1.6.2</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    <dependency>
 	      <groupId>org.apache.axis2</groupId>
 	      <artifactId>axis2-transport-local</artifactId>
 	      <version>1.6.2</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 	    
 	    <!-- CXF3.0-client -->
@@ -501,8 +413,6 @@
 	      <groupId>org.apache.cxf</groupId>
 	      <artifactId>cxf-rt-frontend-jaxws</artifactId>
 	      <version>3.0.1</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	      <exclusions>
 	        <exclusion>
 	          <artifactId>cxf-rt-ws-addr</artifactId>
@@ -543,8 +453,6 @@
 	      <groupId>org.apache.cxf</groupId>
 	      <artifactId>cxf-rt-transports-http</artifactId>
 	      <version>3.0.1</version>
-	      <scope>${include.model.net}</scope>
-	      <!-- optional>true</optional -->
 	    </dependency>
 
         <!-- logback -->
@@ -552,29 +460,21 @@
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
           <version>1.7.5</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         <dependency>
           <groupId>ch.qos.logback</groupId>
           <artifactId>logback-core</artifactId>
           <version>1.0.13</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         <dependency>
           <groupId>ch.qos.logback</groupId>
           <artifactId>logback-classic</artifactId>
           <version>1.0.13</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         <dependency>
           <groupId>ch.qos.logback</groupId>
           <artifactId>logback-access</artifactId>
           <version>1.0.13</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
 
         <!-- logback condition -->
@@ -582,15 +482,11 @@
           <groupId>org.codehaus.janino</groupId>
           <artifactId>janino</artifactId>
           <version>2.7.8</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
         <dependency>
           <groupId>org.codehaus.janino</groupId>
           <artifactId>commons-compiler</artifactId>
           <version>2.7.8</version>
-          <scope>${include.model.base}</scope>
-          <!-- optional>true</optional -->
         </dependency>
 
         <!-- 单元测试 -->
