@@ -1,4 +1,4 @@
-package exp.libs.utils.pub.test;
+package exp.libs.utils.test;
 
 public class Person {
 

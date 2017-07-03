@@ -1,4 +1,4 @@
-package exp.libs.utils.ui.test;
+package exp.libs.warp.ui.test;
 
 import java.awt.BorderLayout;
 import java.util.Arrays;

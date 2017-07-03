@@ -1,4 +1,4 @@
-package exp.libs.warp.queue.sc.test;
+package exp.libs.algorithm.struct.queue.sc.test;
 
 import exp.libs.algorithm.struct.queue.sc.SCQBean;
 import exp.libs.algorithm.struct.queue.sc.SCQueue;

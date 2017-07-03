@@ -1,4 +1,4 @@
-package exp.libs.warp.queue.sc.test;
+package exp.libs.algorithm.struct.queue.sc.test;
 
 public class MyElement {	// 自定义类，包装原始对象以及处理后的结果
 
