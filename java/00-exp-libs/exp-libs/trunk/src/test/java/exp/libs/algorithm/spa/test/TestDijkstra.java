@@ -4,8 +4,8 @@ import java.util.List;
 
 import exp.libs.algorithm.spa.Dijkstra;
 import exp.libs.algorithm.struct.graph.TopoGraph;
-import exp.libs.algorithm.struct.graph.ui.TopoGraphUI;
 import exp.libs.warp.ui.BeautyEyeUtils;
+import exp.libs.warp.ui.topo.TopoGraphUI;
 
 public class TestDijkstra {
 

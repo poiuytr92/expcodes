@@ -1,4 +1,4 @@
-package exp.libs.algorithm.struct.graph.ui;
+package exp.libs.warp.ui.topo;
 
 final class GraphParams {
 
