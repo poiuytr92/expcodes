@@ -727,7 +727,6 @@ public class TestVerifyUtils {
 	}
 
 	@Test
-	@SuppressWarnings("deprecation")
 	public void testIsChineseString() {
 		Assert.assertFalse(VerifyUtils.isChinese("部分中文.!,,"));
 		Assert.assertFalse(VerifyUtils.isChinese("部分中文abc"));
