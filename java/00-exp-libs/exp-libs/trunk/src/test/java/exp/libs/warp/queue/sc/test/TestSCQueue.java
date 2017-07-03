@@ -1,7 +1,7 @@
 package exp.libs.warp.queue.sc.test;
 
-import exp.libs.warp.other.queue.sc.SCQBean;
-import exp.libs.warp.other.queue.sc.SCQueue;
+import exp.libs.algorithm.struct.queue.sc.SCQBean;
+import exp.libs.algorithm.struct.queue.sc.SCQueue;
 
 public class TestSCQueue {
 

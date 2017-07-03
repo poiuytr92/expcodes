@@ -7,7 +7,7 @@ import exp.libs.warp.net.socket.nio.common.envm.Event;
 import exp.libs.warp.net.socket.nio.common.filterchain.INextFilter;
 import exp.libs.warp.net.socket.nio.common.interfaze.IFilter;
 import exp.libs.warp.net.socket.nio.common.interfaze.ISession;
-import exp.libs.warp.other.thread.ThreadPool;
+import exp.libs.warp.thread.ThreadPool;
 
 /**
  * <pre>

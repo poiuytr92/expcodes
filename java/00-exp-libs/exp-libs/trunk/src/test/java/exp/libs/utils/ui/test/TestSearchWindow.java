@@ -6,9 +6,9 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import exp.libs.utils.ui.BeautyEyeUtils;
-import exp.libs.utils.ui.bean.SearchPanel;
-import exp.libs.utils.ui.win.MainWindow;
+import exp.libs.warp.ui.BeautyEyeUtils;
+import exp.libs.warp.ui.bean.SearchPanel;
+import exp.libs.warp.ui.win.MainWindow;
 
 public class TestSearchWindow extends MainWindow {
 

@@ -2,7 +2,7 @@ package exp.libs.algorithm.struct.graph.ui.test;
 
 import exp.libs.algorithm.struct.graph.TopoGraph;
 import exp.libs.algorithm.struct.graph.ui.TopoGraphUI;
-import exp.libs.utils.ui.BeautyEyeUtils;
+import exp.libs.warp.ui.BeautyEyeUtils;
 
 public class TestTopoGraphUI {
 

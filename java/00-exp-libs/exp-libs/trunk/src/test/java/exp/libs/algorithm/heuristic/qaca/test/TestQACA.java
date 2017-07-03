@@ -3,7 +3,7 @@ package exp.libs.algorithm.heuristic.qaca.test;
 import exp.libs.algorithm.heuristic.qaca.QACA;
 import exp.libs.algorithm.struct.graph.TopoGraph;
 import exp.libs.algorithm.struct.graph.ui.TopoGraphUI;
-import exp.libs.utils.ui.BeautyEyeUtils;
+import exp.libs.warp.ui.BeautyEyeUtils;
 
 public class TestQACA {
 

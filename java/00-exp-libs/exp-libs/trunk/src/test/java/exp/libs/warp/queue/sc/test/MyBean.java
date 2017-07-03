@@ -1,6 +1,6 @@
 package exp.libs.warp.queue.sc.test;
 
-import exp.libs.warp.other.queue.sc.SCQBean;
+import exp.libs.algorithm.struct.queue.sc.SCQBean;
 
 public class MyBean extends SCQBean<MyElement> {
 

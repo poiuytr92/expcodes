@@ -4,7 +4,7 @@ import exp.libs.algorithm.np.ispa.ISPA;
 import exp.libs.algorithm.np.ispa.ISPARst;
 import exp.libs.algorithm.struct.graph.TopoGraph;
 import exp.libs.algorithm.struct.graph.ui.TopoGraphUI;
-import exp.libs.utils.ui.BeautyEyeUtils;
+import exp.libs.warp.ui.BeautyEyeUtils;
 
 public class TestISPA {
 

@@ -22,8 +22,8 @@ import exp.libs.envm.Charset;
 import exp.libs.envm.Endline;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.other.PathUtils;
-import exp.libs.warp.other.flow.FileFlowReader;
-import exp.libs.warp.other.flow.StringFlowReader;
+import exp.libs.warp.io.flow.FileFlowReader;
+import exp.libs.warp.io.flow.StringFlowReader;
 
 /**
  * <PRE>

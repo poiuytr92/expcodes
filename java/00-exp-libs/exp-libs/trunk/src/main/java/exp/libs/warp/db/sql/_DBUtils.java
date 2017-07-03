@@ -29,7 +29,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
-import exp.libs.warp.other.tpl.Template;
+import exp.libs.warp.tpl.Template;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.db.sql.bean.PdmColumn;
 import exp.libs.warp.db.sql.bean.PdmTable;

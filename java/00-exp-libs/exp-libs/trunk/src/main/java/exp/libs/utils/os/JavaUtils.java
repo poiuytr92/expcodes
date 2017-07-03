@@ -11,7 +11,7 @@ import exp.libs.utils.StrUtils;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.verify.RegexUtils;
-import exp.libs.warp.other.flow.FileFlowReader;
+import exp.libs.warp.io.flow.FileFlowReader;
 
 /**
  * <PRE>
