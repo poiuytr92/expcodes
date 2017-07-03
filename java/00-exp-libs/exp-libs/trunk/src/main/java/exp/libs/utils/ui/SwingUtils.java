@@ -14,7 +14,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
-import exp.libs.utils.pub.StrUtils;
+import exp.libs.utils.StrUtils;
 
 /**
  * <PRE>

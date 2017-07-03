@@ -1,10 +1,10 @@
 package exp.libs.warp.net.socket.bean;
 
-import exp.libs.utils.pub.CharsetUtils;
-import exp.libs.utils.pub.ESCUtils;
-import exp.libs.utils.pub.NumUtils;
-import exp.libs.utils.pub.StrUtils;
-import exp.libs.utils.pub.VerifyUtils;
+import exp.libs.utils.StrUtils;
+import exp.libs.utils.encode.CharsetUtils;
+import exp.libs.utils.format.ESCUtils;
+import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.verify.VerifyUtils;
 
 public class SocketBean {
 

@@ -2,7 +2,7 @@ package exp.libs.algorithm.heuristic.qaca;
 
 import java.util.Collection;
 
-import exp.libs.utils.pub.NumUtils;
+import exp.libs.utils.num.NumUtils;
 
 final class _QEnv {
 

@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exp.libs.envm.Charset;
-import exp.libs.utils.pub.CryptoUtils;
+import exp.libs.utils.encode.CryptoUtils;
 
 public class TestCryptoUtils {
 

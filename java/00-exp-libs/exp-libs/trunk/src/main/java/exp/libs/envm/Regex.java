@@ -1,6 +1,6 @@
 package exp.libs.envm;
 
-import exp.libs.utils.pub.StrUtils;
+import exp.libs.utils.StrUtils;
 
 public enum Regex {
 

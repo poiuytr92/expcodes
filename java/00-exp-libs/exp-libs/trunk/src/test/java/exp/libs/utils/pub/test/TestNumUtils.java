@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import exp.libs.utils.pub.NumUtils;
+import exp.libs.utils.num.NumUtils;
 
 public class TestNumUtils {
 

@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exp.libs.utils.pub.VerifyUtils;
+import exp.libs.utils.verify.VerifyUtils;
 
 public class TestVerifyUtils {
 

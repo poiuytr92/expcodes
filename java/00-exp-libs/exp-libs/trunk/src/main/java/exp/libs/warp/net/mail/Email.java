@@ -15,11 +15,11 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.SMTP;
-import exp.libs.utils.pub.CharsetUtils;
-import exp.libs.utils.pub.CollectionUtils;
-import exp.libs.utils.pub.CryptoUtils;
-import exp.libs.utils.pub.StrUtils;
-import exp.libs.utils.pub.VerifyUtils;
+import exp.libs.utils.StrUtils;
+import exp.libs.utils.encode.CharsetUtils;
+import exp.libs.utils.encode.CryptoUtils;
+import exp.libs.utils.other.CollectionUtils;
+import exp.libs.utils.verify.VerifyUtils;
 
 public class Email {
 

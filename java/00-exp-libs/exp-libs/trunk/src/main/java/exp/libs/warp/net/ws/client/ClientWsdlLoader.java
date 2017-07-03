@@ -23,7 +23,7 @@ import com.eviware.soapui.impl.wsdl.support.wsdl.WsdlLoader;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class ClientWsdlLoader extends WsdlLoader{
+public class ClientWsdlLoader extends WsdlLoader {
 
 	/** 终止状态  */
     private boolean isAborted = false;

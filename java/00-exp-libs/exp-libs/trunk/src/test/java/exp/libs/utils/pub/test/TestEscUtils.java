@@ -10,7 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exp.libs.utils.pub.ESCUtils;
+import exp.libs.utils.format.ESCUtils;
 
 public class TestEscUtils {
 

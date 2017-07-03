@@ -5,8 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import exp.libs.envm.Charset;
-import exp.libs.utils.pub.BODHUtils;
-import exp.libs.utils.pub.CharsetUtils;
+import exp.libs.utils.encode.CharsetUtils;
+import exp.libs.utils.num.BODHUtils;
 
 public class TestCharsetUtils {
 

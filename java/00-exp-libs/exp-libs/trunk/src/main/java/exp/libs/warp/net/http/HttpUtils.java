@@ -1,260 +1,271 @@
 package exp.libs.warp.net.http;
-
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.HashMap;
+import java.net.URLConnection;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.UsernamePasswordCredentials;
-import org.apache.commons.httpclient.auth.AuthScope;
+import org.apache.commons.httpclient.HttpConnectionManager;
+import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
+import org.apache.commons.httpclient.params.HttpClientParams;
+import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import exp.libs.envm.Charset;
+import exp.libs.utils.StrUtils;
+import exp.libs.utils.encode.CharsetUtils;
+import exp.libs.utils.io.IOUtils;
+import exp.libs.utils.verify.RegexUtils;
 
 /**
- * <pre>
- *    简单的 HTTP 请求接口实现类
- *    高级应用请参考下面网址内容进行开发。
- *    参考：http://www.ibm.com/developerworks/cn/opensource/os-httpclient/
- * </pre>
+ * <PRE>
+ * URL工具包
+ * </PRE>
  * 
- * @version 1.0 by 2013-10-14
- * @since jdk版本：1.5以上
- * @author xiaolin HTTP 请求接口实现类
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class HttpUtils {
 
-	/** 请求类型 */
-	public final static int POST = 1;
+	/** 日志器 */
+	private final static Logger log = LoggerFactory.getLogger(HttpUtils.class);
+	
+	/** 连接超时,默认1分钟 */
+	public static final int CONN_TIMEOUT = 60000;
 
-	/** 请求类型 */
-	public final static int GET = 0;
+	/** 响应超时 ,默认1分钟 */
+	public static final int CALL_TIMEOUT = 60000;
 	
-	/** 编码，默认utf-8 */
-	public final static String ENCODING = "UTF-8";
+	/** 默认下载路径 */
+	private final static String DEFAULT_DOWNLOAD_DIR = "./downloads/";
 	
-	/**
-	 * 连接超时，默认90秒； 
-	 */
-	public static int timeOut = 90;
-
-	/** 请求客户端 */
-	private static HttpClient client = null;
-	
-	/** 请求客户端集合，保存需要账号密码的请求  */
-	private static Map<String ,HttpClient> clients = null;
-	
-//	public static String charset = "UTF-8";
-
-	/**
-	 * 单例http客户端对象
-	 * 
-	 * @return http客户端对象
-	 */
-	public synchronized static HttpClient getInstance() {
-		if (client == null) {
-			client = new HttpClient();
-		}
-		return client;
-	}
+	/** 私有化构造函数 */
+	protected HttpUtils() {}
 	
 	/**
-	 * 返回需要账号密码的http客户端对象
-	 *
-	 * @param url 请求地址
-	 * @return http客户端对象
+	 * 测试URL是否依然有效
+	 * @param httpUrl url路径
+	 * @return true:有效; false:无效
 	 */
-	public synchronized static HttpClient getInstance(String url) {
-		if (clients == null) {
-			clients = new HashMap<String, HttpClient>();
-		} else {
-			return clients.get(url);
-		}
-		return null;
-	}
-
-	/**
-	 * 获取http请求的回复
-	 * 
-	 * @param url
-	 *            请求地址
-	 * @param type
-	 *            0 get, 1 post
-	 * @return 返回请求结果字符串
-	 * @throws IOException
-	 * @throws HttpException
-	 */
-	public static String getResponse(String url, int type)
-			throws HttpException, IOException {
-		client = getInstance();
-		return getResponse(client, url, type);
-	}
-
-	/**
-	 * 请求连接POST方法
-	 * 
-	 * @param url
-	 *            请求地址
-	 * @return 请求响应反应字符串
-	 * @throws HttpException 发生致命的异常，可能是协议不对或者返回的内容有问题
-	 * @throws IOException 发生网络异常
-	 */
-	public static String getResponse(String url) throws HttpException,
-			IOException {
-		return getResponse(url, HttpUtils.POST);
-	}
-
-	/**
-	 * 获取http请求的回复
-	 * 
-	 * @param url
-	 *            请求地址
-	 * @param type
-	 *            0 get, 1 post
-	 * @return 请求响应反应字符串
-	 * @throws HttpException 发生致命的异常，可能是协议不对或者返回的内容有问题
-	 * @throws IOException 发生网络异常
-	 */
-	public static String getResponse(URL url, int type) throws HttpException,
-			IOException {
-		return getResponse(url.toString(), type);
-	}
-
-	/**
-	 * 获取http请求的回复，POST
-	 * 
-	 * @param url
-	 *            请求地址
-	 * @return 请求响应反应字符串
-	 * @throws HttpException 发生致命的异常，可能是协议不对或者返回的内容有问题
-	 * @throws IOException 发生网络异常
-	 */
-	public static String getResponse(URL url) throws HttpException, IOException {
-		return getResponse(url.toString(), HttpUtils.POST);
-	}
-
-	/**
-	 * 获取http请求的回复
-	 * 
-	 * @param url
-	 *            请求的地址
-	 * @param type
-	 *            0 get, 1 post
-	 * @param username
-	 * 				用户名
-	 * @param password
-	 * 				密码
-	 * @return 请求响应反应字符串
-	 * @throws HttpException 发生致命的异常，可能是协议不对或者返回的内容有问题
-	 * @throws IOException 发生网络异常
-	 */
-	public static String getResponse(String url, int type, String username,
-			String password) throws HttpException, IOException {
-		return getResponse(new URL(url), type, username, password);
+	public static boolean testValid(String httpUrl) {
+		boolean isValid = false;
+		try {
+			HttpURLConnection httpConn = 
+					(HttpURLConnection) new URL(httpUrl).openConnection();
+			isValid = (httpConn.getResponseCode() == 200);
+		} catch (Exception e) {}
+		return isValid;
 	}
 	
-	/**
-	 * 获取http请求的回复，POST
-	 * 
-	 * @param url
-	 *            请求的地址
-	 * @param username
-	 * 				用户名
-	 * @param password
-	 * 				密码
-	 * @return 请求响应反应字符串
-	 * @throws HttpException 发生致命的异常，可能是协议不对或者返回的内容有问题
-	 * @throws IOException 发生网络异常
-	 */
-	public static String getResponse(String url, String username,
-			String password) throws HttpException, IOException {
-		return getResponse(new URL(url), HttpUtils.POST, username, password);
+	public static HttpClient createHttpClient() {
+		return createHttpClient(CONN_TIMEOUT, CALL_TIMEOUT);
 	}
 
-	/**
-	 * 获取http请求的回复，POST
-	 * 
-	 * @param url
-	 *            请求的地址
-	 * @param username
-	 * 				用户名
-	 * @param password
-	 * 				密码
-	 * @return 请求响应反应字符串
-	 * @throws HttpException 发生致命的异常，可能是协议不对或者返回的内容有问题
-	 * @throws IOException 发生网络异常
-	 */
-	public static String getResponse(URL url, String username,
-			String password) throws HttpException, IOException {
-		return getResponse(url, HttpUtils.POST, username, password);
-
-	}
-	
-	/**
-	 * 获取http请求的回复
-	 * 
-	 * @param url
-	 *            请求的地址
-	 * @param type
-	 *            0 get, 1 post
-	 * @param username
-	 * 				用户名
-	 * @param password
-	 * 				密码
-	 * @return 请求响应反应字符串
-	 * @throws HttpException 发生致命的异常，可能是协议不对或者返回的内容有问题
-	 * @throws IOException 发生网络异常
-	 */
-	public static String getResponse(URL url, int type, String username,
-			String password) throws HttpException, IOException {
-		String strUrl = url.toString();
-		client = getInstance(strUrl);
+	public static HttpClient createHttpClient(int connTimeOut, int callTimeout) {
+		HttpConnectionManagerParams managerParams = new HttpConnectionManagerParams();
+		managerParams.setConnectionTimeout(connTimeOut);
+		managerParams.setDefaultMaxConnectionsPerHost(2);
+		managerParams.setSoTimeout(callTimeout);
 		
-		if (client == null) {
-			client = new HttpClient();
-			client.getState().setCredentials(
-					new AuthScope(url.getHost(), url.getPort(), null),
-					new UsernamePasswordCredentials(username, password));
-			clients.put(strUrl, client);
-		}
-		return getResponse(client, strUrl, type);
+		HttpConnectionManager httpConnectionManager = new MultiThreadedHttpConnectionManager();
+		httpConnectionManager.setParams(managerParams);
 
+		HttpClient httpClient = new HttpClient(new HttpClientParams());
+		httpClient.setHttpConnectionManager(httpConnectionManager);
+		return httpClient;
+	}
+	
+	public static void close(HttpClient httpClient) {
+		if(httpClient != null) {
+			httpClient.getHttpConnectionManager().closeIdleConnections(0);
+		}
+	}
+	
+	public static String encodeURL(final String httpUrl) {
+		return encodeURL(httpUrl, Charset.UTF8);
+	}
+	
+	/**
+	 * 对URL进行编码
+	 * @param httpUrl url路径
+	 * @return 编码后URL
+	 */
+	public static String encodeURL(final String httpUrl, final String encoding) {
+		String encodeURL = "";
+		try {
+			encodeURL = URLEncoder.encode(httpUrl, encoding);
+			
+		} catch (Exception e) {
+			log.error("对URL以 [{}] 编码失败: {}", encoding, httpUrl, e);
+		}
+		return encodeURL;
+	}
+
+	public static String decodeURL(final String httpUrl) {
+		return decodeURL(httpUrl, Charset.UTF8);
+	}
+	
+	/**
+	 * 对URL进行解码
+	 * @param httpUrl url路径
+	 * @return 解码后URL
+	 */
+	public static String decodeURL(final String httpUrl, final String encoding) {
+		String decodeURL = "";
+		try {
+			decodeURL = URLDecoder.decode(httpUrl, encoding);
+			
+		} catch (Exception e) {
+			log.error("对URL以 [{}] 解码失败: {}", encoding, httpUrl, e);
+		}
+		return decodeURL;
+	}
+
+	public static String encodeParams(final Map<String, String> requestParams) {
+		return encodeParams(requestParams, Charset.UTF8);
+	}
+	
+	/**
+	 * 把请求参数转换为 k1=v1&k2=v2&... 形式并进行编码
+	 * @param requestParams
+	 * @param encoding
+	 * @return
+	 */
+	public static String encodeParams(
+			final Map<String, String> requestParams, final String encoding) {
+		if(requestParams == null || requestParams.size() <= 0) {
+			return "";
+		}
+		
+		StringBuffer params = new StringBuffer(256);
+		Iterator<String> it = requestParams.keySet().iterator();
+		while(it.hasNext()) {
+			String key = it.next();
+			String value = requestParams.get(key);
+			
+			params.append(key);
+			params.append("=");
+			try {
+				params.append(URLEncoder.encode(value, encoding));
+			} catch (UnsupportedEncodingException e) {
+				params.append(value);
+			}
+			params.append("&");
+		}
+		params.setLength(params.length() - 1);
+		return params.toString();
 	}
 
 	/**
-	 * 获取http请求的回复
-	 * 
-	 * @param httpClient
-	 *            http客户端对象
-	 * @param url
-	 *            请求的地址
-	 * @param type
-	 *            0 get, 1 post
-	 * @return 请求响应反应字符串
-	 * @throws HttpException 发生致命的异常，可能是协议不对或者返回的内容有问题
-	 * @throws IOException 发生网络异常
+	 * 获取页面编码
+	 * @param httpUrl
+	 * @return
 	 */
-	private static String getResponse(HttpClient httpClient, String url,
-			int type) throws HttpException, IOException {
-		
-		httpClient.getHttpConnectionManager().getParams().setConnectionTimeout(
-				timeOut * 1000);
-		String response = null;
-		if (type == HttpUtils.GET) {
-//			System.out.println("GET*******************");
-			GetMethod get = new GetMethod(url);
-			httpClient.executeMethod(get);
-			response = new String(get.getResponseBody(), ENCODING);
-			get.releaseConnection();
-		} else {
-//			System.out.println("POST*******************");
-			PostMethod post = new PostMethod(url);
-			httpClient.executeMethod(post);
-			response=  new String(post.getResponseBody(), ENCODING);
-			post.releaseConnection();
+	public static String getPageEncoding(String httpUrl) {
+		final String RGX_ENCODING = "text/html;\\s*?charset=([a-zA-Z0-9\\-]+)";
+		String encoding = Charset.UTF8;
+		try {
+			URL url = new URL(httpUrl);
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			
+			encoding = conn.getContentEncoding();
+			encoding = (CharsetUtils.isVaild(encoding) ? encoding : 
+					RegexUtils.findFirst(conn.getContentType(), RGX_ENCODING));	
+			
+			if(CharsetUtils.isInvalid(encoding)) {
+				InputStream is = conn.getInputStream();
+				InputStreamReader isr = new InputStreamReader(is, Charset.ISO);
+				BufferedReader buff = new BufferedReader(isr);
+				String line = null;
+				while ((line = buff.readLine()) != null) {
+					if(line.contains("<meta ")) {
+						encoding = RegexUtils.findFirst(line, RGX_ENCODING);
+						if(StrUtils.isNotEmpty(encoding)) {
+							break;
+						}
+					}
+				}
+				buff.close();
+				is.close();
+			}
+		} catch (Exception e) {
+			log.error("获取页面编码失败: {}", httpUrl, e);
+			encoding = Charset.UTF8;
 		}
-		return response;
+		encoding = (CharsetUtils.isVaild(encoding) ? encoding : Charset.UTF8);
+		return encoding;
+	}
+	
+	/**
+	 * 获取页面源码
+	 * @param httpUrl
+	 * @return
+	 */
+	public static String getPageSource(String httpUrl) {
+		StringBuffer pageSource = new StringBuffer();
+		try {
+			String encoding = getPageEncoding(httpUrl);
+			URL url = new URL(httpUrl);
+			URLConnection conn = url.openConnection();
+			conn.connect();
+			
+			InputStream is = conn.getInputStream();
+			InputStreamReader isr = new InputStreamReader(is, encoding);
+			BufferedReader buff = new BufferedReader(isr);
+			String line = null;
+			while ((line = buff.readLine()) != null) {
+				pageSource.append(line).append("\r\n");
+			}
+			buff.close();
+			is.close();
+			
+		} catch (Exception e) {
+			log.error("获取页面源码失败: {}", httpUrl, e);
+		}
+		return pageSource.toString();
+	}
+	
+	public static boolean download(String url) {
+		return download(url, null);
 	}
 
+	public static boolean download(String url, String savePath) {
+		boolean isOk = false;
+		savePath = StrUtils.isNotEmpty(savePath) ? savePath : 
+			StrUtils.concat(DEFAULT_DOWNLOAD_DIR, System.currentTimeMillis());
+		
+		HttpClient client = HttpUtils.createHttpClient();
+		HttpMethod method = new GetMethod(url);
+		try {
+			client.executeMethod(method);
+			InputStream is = method.getResponseBodyAsStream();
+			IOUtils.toFile(is, savePath);
+			is.close();
+			log.info("下载文件 [{}] 成功, 来源: [{}]", savePath, url);
+
+		} catch (Exception e) {
+			isOk = false;
+			log.error("下载文件 [{}] 失败, 来源: [{}]", savePath, url, e);
+			
+		} finally {
+			method.releaseConnection();
+			HttpUtils.close(client);
+		}
+		return isOk;
+	}
+	
 }

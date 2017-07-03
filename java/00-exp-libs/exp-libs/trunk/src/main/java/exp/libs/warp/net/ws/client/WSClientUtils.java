@@ -30,8 +30,8 @@ import com.eviware.soapui.impl.wsdl.WsdlProject;
 import com.eviware.soapui.model.iface.Operation;
 import com.eviware.soapui.support.SoapUIException;
 
-import exp.libs.utils.net.HttpUtils;
-import exp.libs.utils.pub.StrUtils;
+import exp.libs.utils.StrUtils;
+import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>

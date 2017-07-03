@@ -9,7 +9,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exp.libs.utils.pub.ObjUtils;
+import exp.libs.utils.other.ObjUtils;
 
 public class TestObjUtils {
 

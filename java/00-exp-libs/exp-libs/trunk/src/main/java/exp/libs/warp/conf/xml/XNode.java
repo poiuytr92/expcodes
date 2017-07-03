@@ -2,7 +2,7 @@ package exp.libs.warp.conf.xml;
 
 import org.dom4j.Element;
 
-import exp.libs.utils.pub.StrUtils;
+import exp.libs.utils.StrUtils;
 
 final class XNode {
 
