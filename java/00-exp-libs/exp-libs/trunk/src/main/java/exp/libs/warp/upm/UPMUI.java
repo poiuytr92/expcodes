@@ -8,7 +8,7 @@ import javax.swing.JTabbedPane;
 
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
-import exp.libs.warp.ui.win.MainWindow;
+import exp.libs.warp.ui.cpt.win.MainWindow;
 
 public class UPMUI extends MainWindow {
 
