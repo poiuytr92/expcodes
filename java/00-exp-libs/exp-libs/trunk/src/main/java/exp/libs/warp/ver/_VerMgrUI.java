@@ -13,7 +13,6 @@ import javax.swing.JTabbedPane;
 
 import exp.libs.utils.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
-import exp.libs.warp.ui.cpt.tbl.Table;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
 class _VerMgrUI extends MainWindow {
@@ -45,7 +44,7 @@ class _VerMgrUI extends MainWindow {
 	
 	private Vector<Vector<String>> hisVerInfos;
 	
-	private Table<String> hisVerTable;
+	private _HisVerTable hisVerTable;
 	
 	/** 界面单例 */
 	private static volatile _VerMgrUI instance;
@@ -102,14 +101,14 @@ class _VerMgrUI extends MainWindow {
 	
 	private void initVer() {
 		this.tmpVerInfo = new _VerInfo();
-		this.hisVerInfos = new Vector<Vector<String>>();
 		this.hisVerTable = initTable();
 	}
 
-	private Table<String> initTable() {
+	private _HisVerTable initTable() {
 		Vector<String> header = initHeader();
-		reflashHisVerDatas();
-		return new Table<String>(header, hisVerInfos);
+		this.hisVerInfos = new Vector<Vector<String>>();
+		reflashHisVerInfos();
+		return new _HisVerTable(header, hisVerInfos);
 	}
 	
 	private Vector<String> initHeader() {
@@ -121,7 +120,8 @@ class _VerMgrUI extends MainWindow {
 		return header;
 	}
 	
-	private void reflashHisVerDatas() {
+	private void reflashHisVerInfos() {
+		final int MAX_HIS_VER_NUM = 50;	// 最多显示的历史版本数目
 		this.hisVerInfos.clear();
 		List<_VerInfo> historyVers = prjVerInfo.getHistoryVers();
 		for(int i = historyVers.size() - 1; i >= 0; i--) {
@@ -133,10 +133,16 @@ class _VerMgrUI extends MainWindow {
 			row.add(StrUtils.showSummary(verInfo.getUpgradeContent().trim()));
 			hisVerInfos.add(row);
 		}
+		
+		// 填充空白行
+		for(int size = MAX_HIS_VER_NUM - historyVers.size(), 
+				i = 0; i < size; i++) {
+			hisVerInfos.add(new Vector<String>());
+		}
 	}
 	
 	private void reflashHisVerTable() {
-		reflashHisVerDatas();
+		reflashHisVerInfos();
 		hisVerTable.reflash();
 	}
 	
