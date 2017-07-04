@@ -1,4 +1,4 @@
-package exp.libs.warp.ui.win;
+package exp.libs.warp.ui.cpt.win;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;

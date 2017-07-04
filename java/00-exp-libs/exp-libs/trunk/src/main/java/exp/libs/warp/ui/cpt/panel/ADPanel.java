@@ -1,4 +1,4 @@
-package exp.libs.warp.ui.bean;
+package exp.libs.warp.ui.cpt.panel;
 
 import java.awt.Component;
 import java.awt.event.ContainerEvent;
