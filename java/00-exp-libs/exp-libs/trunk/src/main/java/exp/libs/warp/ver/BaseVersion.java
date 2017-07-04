@@ -1,5 +1,7 @@
 package exp.libs.warp.ver;
 
+import exp.libs.utils.os.OSUtils;
+
 public class BaseVersion extends _Version {
 
 	/**
@@ -13,6 +15,9 @@ public class BaseVersion extends _Version {
 		boolean manage = true;
 		if(args != null && args.length >= 1) {
 			manage = "-m".equals(args[0]);
+			if(!OSUtils.isWin()) {
+				manage = false;
+			}
 		}
 		
 		if(manage == true) {

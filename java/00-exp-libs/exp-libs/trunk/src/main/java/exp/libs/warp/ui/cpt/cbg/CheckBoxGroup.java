@@ -54,7 +54,9 @@ public class CheckBoxGroup<T> {
 	 */
 	public void inverse(T item) {
 		Integer itemIdx = cbIdx.get(item);
-		inverse(itemIdx);
+		if(itemIdx != null) {
+			inverse(itemIdx);
+		}
 	}
 	
 	/**
@@ -84,7 +86,9 @@ public class CheckBoxGroup<T> {
 	 */
 	public void select(T item) {
 		Integer itemIdx = cbIdx.get(item);
-		select(itemIdx);
+		if(itemIdx != null) {
+			select(itemIdx);
+		}
 	}
 	
 	/**
@@ -114,7 +118,9 @@ public class CheckBoxGroup<T> {
 	 */
 	public void unselect(T item) {
 		Integer itemIdx = cbIdx.get(item);
-		unselect(itemIdx);
+		if(itemIdx != null) {
+			unselect(itemIdx);
+		}
 	}
 	
 	/**

@@ -7,11 +7,6 @@ import exp.libs.warp.ui.BeautyEyeUtils;
 
 class _Version {
 
-	public static void main(String[] args) {
-		BeautyEyeUtils.init();
-		_VerUI.getInstn();
-	}
-
 	/**
 	 * 存储版本信息的文件位置.
 	 * 	[src/main/resources] 为Maven项目默认的资源目录位置（即使非Maven项目也可用此位置）
@@ -29,11 +24,15 @@ class _Version {
 	}
 	
 	protected void print() {
-		
+		// 打印DOS
 	}
 	
 	protected void manage() {
+		BeautyEyeUtils.init();
 		
+		_PrjVerInfo prjVerInfo = new _PrjVerInfo(null);
+		prjVerInfo.setPrjName("测试用项目");
+		_VerMgrUI.getInstn(prjVerInfo); // FIXME
 	}
 
 }
