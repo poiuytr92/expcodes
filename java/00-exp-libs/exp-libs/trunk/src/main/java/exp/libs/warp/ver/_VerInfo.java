@@ -9,9 +9,10 @@ import javax.swing.JTextField;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.layout.VFlowLayout;
 
-// 单个版本细则
 class _VerInfo {
 
+	protected final static _VerInfo NULL = new _VerInfo();
+	
 	private String author;
 	
 	private JTextField authorTF;
@@ -68,7 +69,7 @@ class _VerInfo {
 		return SwingUtils.addAutoScroll(panel);
 	}
 
-	protected void setValToUI() {
+	private void setValToUI() {
 		authorTF.setText(author);
 		versionTF.setText(version);
 		datetimeTF.setText(datetime);
@@ -76,7 +77,7 @@ class _VerInfo {
 		upgradeStepTA.setText(upgradeStep);
 	}
 	
-	protected void setValFromUI() {
+	private void setValFromUI() {
 		author = authorTF.getText();
 		version = versionTF.getText();
 		datetime = datetimeTF.getText();

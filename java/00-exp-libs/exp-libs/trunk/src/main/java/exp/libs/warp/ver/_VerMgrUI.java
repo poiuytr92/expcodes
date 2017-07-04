@@ -150,7 +150,7 @@ class _VerMgrUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				prjVerInfo.save();
+				prjVerInfo.savePrjInfo();
 			}
 		});
 		

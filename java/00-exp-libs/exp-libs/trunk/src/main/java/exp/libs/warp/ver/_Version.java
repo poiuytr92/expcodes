@@ -1,6 +1,9 @@
 package exp.libs.warp.ver;
 
 import java.sql.Connection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.DBType;
@@ -26,12 +29,17 @@ class _Version {
 	/** 版本信息文件的数据源 */
 	private DataSourceBean ds;
 	
+	/** 项目版本信息 */
+	private _PrjVerInfo prjVerInfo;
+			
 	/**
 	 * 构造函数：创建版本信息文件
 	 */
 	protected _Version() {
 		initDS();
-		initVerDB();
+		if(initVerDB()) {
+			this.prjVerInfo = loadPrjVerInfo();
+		}
 	}
 	
 	private void initDS() {
@@ -41,10 +49,10 @@ class _Version {
 		ds.setCharset(Charset.UTF8);
 	}
 	
-	private void initVerDB() {
+	private boolean initVerDB() {
+		boolean isOk = true;
+		Connection conn = SqliteUtils.getConn(ds);
 		if(!FileUtils.exists(VER_DB)) {
-			boolean isOk = true;
-			Connection conn = SqliteUtils.getConn(ds);
 			String script = FileUtils.readFileInJar(VER_DB_SCRIPT, Charset.UTF8);
 			try {
 				String[] sqls = script.split(";");
@@ -54,14 +62,89 @@ class _Version {
 					}
 				}
 			} catch(Exception e) {
+				isOk = false;
 				SwingUtils.error("初始化项目版本信息库失败", e);
 			}
 			
 			if(isOk == false) {
 				SwingUtils.warn("执行项目版本信息库的初始化脚本失败");
 			}
-			SqliteUtils.close(conn);
+		} 
+		
+		SqliteUtils.close(conn);
+		SqliteUtils.releaseDisk(conn);
+		return isOk;
+	}
+	
+	private _PrjVerInfo loadPrjVerInfo() {
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = StrUtils.concat("SELECT S_PROJECT_NAME, S_PROJECT_DESC, ", 
+				"S_TEAM_NAME, S_PROJECT_CHARSET, S_DISK_SIZE, S_CACHE_SIZE, ",
+				"S_APIS FROM T_PROJECT_INFO ORDER BY I_ID DESC LIMIT 1");
+		Map<String, String> prjInfo = SqliteUtils.queryFirstRowStr(conn, sql);
+		
+		sql = StrUtils.concat("SELECT S_AUTHOR, S_VERSION, S_DATETIME, ", 
+				"S_UPGRADE_CONTENT, S_UPGRADE_STEP FROM T_HISTORY_VERSIONS");
+		List<_VerInfo> verInfos = toVerInfos(SqliteUtils.queryKVSs(conn, sql));
+		SqliteUtils.close(conn);
+		
+		_PrjVerInfo prjVerInfo = new _PrjVerInfo(this, verInfos);
+		prjVerInfo.setPrjName(prjInfo.get("S_PROJECT_NAME"));
+		prjVerInfo.setPrjDesc(prjInfo.get("S_PROJECT_DESC"));
+		prjVerInfo.setTeamName(prjInfo.get("S_TEAM_NAME"));
+		prjVerInfo.setPrjCharset(prjInfo.get("S_PROJECT_CHARSET"));
+		prjVerInfo.setDiskSize(prjInfo.get("S_DISK_SIZE"));
+		prjVerInfo.setCacheSize(prjInfo.get("S_CACHE_SIZE"));
+		prjVerInfo.setAPIs(prjInfo.get("S_APIS"));
+		return prjVerInfo;
+	}
+	
+	private List<_VerInfo> toVerInfos(List<Map<String, String>> verDatas) {
+		List<_VerInfo> verInfos = new LinkedList<_VerInfo>();
+		for(Map<String, String> verData : verDatas) {
+			_VerInfo verInfo = new _VerInfo();
+			verInfo.setAuthor(verData.get("S_AUTHOR"));
+			verInfo.setVersion(verData.get("S_VERSION"));
+			verInfo.setDatetime(verData.get("S_DATETIME"));
+			verInfo.setUpgradeContent(verData.get("S_UPGRADE_CONTENT"));
+			verInfo.setUpgradeStep(verData.get("S_UPGRADE_STEP"));
+			verInfos.add(verInfo);
 		}
+		return verInfos;
+	}
+	
+	protected boolean savePrjInfo() {
+		if(prjVerInfo == null) {
+			return false;
+		}
+		
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = "DELETE FROM T_PROJECT_INFO";
+		SqliteUtils.execute(conn, sql);
+		
+		sql = StrUtils.concat("INSERT INTO T_PROJECT_INFO(S_PROJECT_NAME, ", 
+				"S_PROJECT_DESC, S_TEAM_NAME, S_PROJECT_CHARSET, S_DISK_SIZE, ", 
+				"S_CACHE_SIZE, S_APIS) VALUES()");
+		
+		// TODO
+		SqliteUtils.close(conn);
+		return true;
+	}
+	
+	protected boolean addVerInfo(_VerInfo verInfo) {
+		if(prjVerInfo == null) {
+			return false;
+		}
+		// TODO
+		return true;
+	}
+	
+	protected boolean delVerInfo(_VerInfo verInfo) {
+		if(prjVerInfo == null) {
+			return false;
+		}
+		// TODO
+		return true;
 	}
 	
 	protected void print() {
@@ -70,10 +153,7 @@ class _Version {
 	
 	protected void manage() {
 		BeautyEyeUtils.init();
-		
-		_PrjVerInfo prjVerInfo = new _PrjVerInfo(null);
-		prjVerInfo.setPrjName("测试用项目");
-		_VerMgrUI.getInstn(prjVerInfo); // FIXME
+		_VerMgrUI.getInstn(prjVerInfo);
 	}
 
 }

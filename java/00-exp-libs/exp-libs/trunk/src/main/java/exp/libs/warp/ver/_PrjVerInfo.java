@@ -14,7 +14,6 @@ import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.cbg.CheckBoxGroup;
 import exp.libs.warp.ui.layout.VFlowLayout;
 
-// 项目版本信息
 class _PrjVerInfo {
 
 	private final static String[] API_ITEMS = new String[] {
@@ -26,6 +25,8 @@ class _PrjVerInfo {
 	};
 	
 	private final static String DELIMITER = ",";
+	
+	private _Version version;
 	
 	private String prjName;
 	
@@ -59,7 +60,8 @@ class _PrjVerInfo {
 	
 	private List<_VerInfo> historyVers;
 
-	protected _PrjVerInfo(List<_VerInfo> historyVers) {
+	protected _PrjVerInfo(_Version version, List<_VerInfo> historyVers) {
+		this.version = version;
 		this.prjName = "";
 		this.prjDesc = "";
 		this.teamName = "";
@@ -69,10 +71,11 @@ class _PrjVerInfo {
 		this._APIs = "";
 		this.historyVers = (historyVers == null ? 
 				new LinkedList<_VerInfo>() : historyVers);
-		if(this.historyVers.size() > 0) {
-			this.curVer = this.historyVers.get(0);
+		int size = this.historyVers.size();
+		if(size > 0) {
+			this.curVer = this.historyVers.get(size - 1);
 		} else {
-			this.curVer = new _VerInfo();
+			this.curVer = _VerInfo.NULL;
 		}
 		
 		this.prjNameTF = new JTextField();
@@ -99,7 +102,7 @@ class _PrjVerInfo {
 		return SwingUtils.addAutoScroll(panel);
 	}
 	
-	protected void setValToUI() {
+	private void setValToUI() {
 		prjNameTF.setText(prjName);
 		prjDescTF.setText(prjDesc);
 		teamNameTF.setText(teamName);
@@ -114,7 +117,7 @@ class _PrjVerInfo {
 		}
 	}
 	
-	protected void setValFromUI() {
+	private void setValFromUI() {
 		prjName = prjNameTF.getText();
 		prjDesc = prjDescTF.getText();
 		teamName = teamNameTF.getText();
@@ -126,9 +129,9 @@ class _PrjVerInfo {
 		_APIs = StrUtils.concat(apis, DELIMITER);
 	}
 	
-	protected boolean save() {
-		// 保存到外存
-		return true;
+	protected boolean savePrjInfo() {
+		setValFromUI();
+		return version.savePrjInfo();
 	}
 	
 	protected String getPrjName() {
@@ -179,11 +182,11 @@ class _PrjVerInfo {
 		this.cacheSize = cacheSize;
 	}
 
-	protected String get_APIs() {
+	protected String getAPIs() {
 		return _APIs;
 	}
 
-	protected void set_APIs(String _APIs) {
+	protected void setAPIs(String _APIs) {
 		this._APIs = _APIs;
 	}
 
