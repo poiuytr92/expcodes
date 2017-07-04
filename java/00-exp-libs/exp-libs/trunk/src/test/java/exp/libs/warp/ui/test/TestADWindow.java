@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import exp.libs.warp.ui.BeautyEyeUtils;
-import exp.libs.warp.ui.cpt.panel.ADPanel;
+import exp.libs.warp.ui.cpt.pnl.ADPanel;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
 public class TestADWindow extends MainWindow {
