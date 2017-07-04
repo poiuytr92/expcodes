@@ -2,7 +2,7 @@ package exp.libs.warp.ver;
 
 import exp.libs.utils.os.OSUtils;
 
-public class BaseVersion extends _Version {
+public class BaseVersion extends _VerMgr {
 
 	/**
 	 * 项目的Version类继承此类后，  通过Version类的main函数调用此方法.

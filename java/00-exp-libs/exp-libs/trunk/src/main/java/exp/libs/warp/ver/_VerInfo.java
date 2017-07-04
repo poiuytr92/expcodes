@@ -85,7 +85,7 @@ class _VerInfo {
 		return SwingUtils.addAutoScroll(panel);
 	}
 
-	private void setValToUI() {
+	protected void setValToUI() {
 		authorTF.setText(author);
 		versionTF.setText(version);
 		datetimeTF.setText(datetime);
@@ -93,12 +93,24 @@ class _VerInfo {
 		upgradeStepTA.setText(upgradeStep);
 	}
 	
-	private void setValFromUI() {
-		author = authorTF.getText();
-		version = versionTF.getText();
-		datetime = datetimeTF.getText();
-		upgradeContent = upgradeContentTA.getText();
-		upgradeStep = upgradeStepTA.getText();
+	protected void setValFromUI(_VerInfo other) {
+		if(other != null) {
+			author = other.getAuthorTF().getText();
+			version = other.getVersionTF().getText();
+			datetime = other.getDatetimeTF().getText();
+			upgradeContent = other.getUpgradeContentTA().getText();
+			upgradeStep = other.getUpgradeStepTA().getText();
+			
+			setValToUI();
+		}
+	}
+	
+	protected void clear() {
+		authorTF.setText("");
+		versionTF.setText("");
+		datetimeTF.setText("");
+		upgradeContentTA.setText("");
+		upgradeStepTA.setText("");
 	}
 	
 	protected JTextField getAuthorTF() {

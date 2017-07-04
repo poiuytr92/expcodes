@@ -15,7 +15,7 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 
-class _Version {
+class _VerMgr {
 
 	/** 版本信息库的脚本 */
 	private final static String VER_DB_SCRIPT = "/exp/libs/warp/ver/VERSION-INFO-DB.sql";
@@ -35,7 +35,7 @@ class _Version {
 	/**
 	 * 构造函数：创建版本信息文件
 	 */
-	protected _Version() {
+	protected _VerMgr() {
 		initDS();
 		if(initVerDB()) {
 			this.prjVerInfo = loadPrjVerInfo();

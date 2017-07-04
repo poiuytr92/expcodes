@@ -1,5 +1,6 @@
 package exp.libs.warp.ver;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,7 +27,7 @@ class _PrjVerInfo {
 	
 	private final static String DELIMITER = ",";
 	
-	private _Version version;
+	private _VerMgr verMgr;
 	
 	private String prjName;
 	
@@ -60,8 +61,8 @@ class _PrjVerInfo {
 	
 	private List<_VerInfo> historyVers;
 
-	protected _PrjVerInfo(_Version version, List<_VerInfo> historyVers) {
-		this.version = version;
+	protected _PrjVerInfo(_VerMgr verMgr, List<_VerInfo> historyVers) {
+		this.verMgr = verMgr;
 		this.prjName = "";
 		this.prjDesc = "";
 		this.teamName = "";
@@ -69,13 +70,15 @@ class _PrjVerInfo {
 		this.diskSize = "";
 		this.cacheSize = "";
 		this._APIs = "";
+		this.curVer = new _VerInfo();
 		this.historyVers = (historyVers == null ? 
 				new LinkedList<_VerInfo>() : historyVers);
+		
 		int size = this.historyVers.size();
 		if(size > 0) {
-			this.curVer = this.historyVers.get(size - 1);
-		} else {
-			this.curVer = _VerInfo.NULL;
+			_VerInfo verInfo = this.historyVers.get(size - 1);
+			verInfo.setValToUI();
+			curVer.setValFromUI(verInfo);
 		}
 		
 		this.prjNameTF = new JTextField();
@@ -131,7 +134,16 @@ class _PrjVerInfo {
 	
 	protected boolean savePrjInfo() {
 		setValFromUI();
-		return version.savePrjInfo();
+		return verMgr.savePrjInfo();
+	}
+	
+	protected boolean addVerInfo(_VerInfo verInfo) {
+		boolean isOk = verMgr.addVerInfo(verInfo);
+		if(isOk == true) {
+			curVer.setValFromUI(verInfo);
+			historyVers.add(verInfo);
+		}
+		return isOk;
 	}
 	
 	protected String getPrjName() {
@@ -194,16 +206,8 @@ class _PrjVerInfo {
 		return curVer;
 	}
 
-	protected void setCurVer(_VerInfo curVer) {
-		this.curVer = curVer;
-	}
-
 	protected List<_VerInfo> getHistoryVers() {
-		return historyVers;
+		return new ArrayList<_VerInfo>(historyVers);
 	}
 
-	protected void setHistoryVers(List<_VerInfo> historyVers) {
-		this.historyVers = historyVers;
-	}
-	
 }
