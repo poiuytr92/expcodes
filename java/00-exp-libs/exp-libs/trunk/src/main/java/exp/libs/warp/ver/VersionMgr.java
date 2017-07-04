@@ -2,17 +2,17 @@ package exp.libs.warp.ver;
 
 import exp.libs.utils.os.OSUtils;
 
-final public class BaseVersion extends _VerMgr {
+final public class VersionMgr extends _VerMgr {
 
-	private static volatile BaseVersion instance;
+	private static volatile VersionMgr instance;
 	
-	private BaseVersion() {}
+	private VersionMgr() {}
 	
-	private static BaseVersion getInstn() {
+	private static VersionMgr getInstn() {
 		if(instance == null) {
-			synchronized (BaseVersion.class) {
+			synchronized (VersionMgr.class) {
 				if(instance == null) {
-					instance = new BaseVersion();
+					instance = new VersionMgr();
 				}
 			}
 		}
