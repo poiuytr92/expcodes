@@ -139,7 +139,7 @@ class _PrjVerInfo {
 	}
 
 	protected void setPrjName(String prjName) {
-		this.prjName = prjName;
+		this.prjName = (prjName == null ? "" : prjName);
 	}
 
 	protected String getPrjDesc() {
@@ -147,7 +147,7 @@ class _PrjVerInfo {
 	}
 
 	protected void setPrjDesc(String prjDesc) {
-		this.prjDesc = prjDesc;
+		this.prjDesc = (prjDesc == null ? "" : prjDesc);
 	}
 
 	protected String getTeamName() {
@@ -155,7 +155,7 @@ class _PrjVerInfo {
 	}
 
 	protected void setTeamName(String teamName) {
-		this.teamName = teamName;
+		this.teamName = (teamName == null ? "" : teamName);
 	}
 
 	protected String getPrjCharset() {
@@ -163,7 +163,7 @@ class _PrjVerInfo {
 	}
 
 	protected void setPrjCharset(String prjCharset) {
-		this.prjCharset = prjCharset;
+		this.prjCharset = (prjCharset == null ? "" : prjCharset);
 	}
 
 	protected String getDiskSize() {
@@ -171,7 +171,7 @@ class _PrjVerInfo {
 	}
 
 	protected void setDiskSize(String diskSize) {
-		this.diskSize = diskSize;
+		this.diskSize = (diskSize == null ? "" : diskSize);
 	}
 
 	protected String getCacheSize() {
@@ -179,7 +179,7 @@ class _PrjVerInfo {
 	}
 
 	protected void setCacheSize(String cacheSize) {
-		this.cacheSize = cacheSize;
+		this.cacheSize = (cacheSize == null ? "" : cacheSize);
 	}
 
 	protected String getAPIs() {
@@ -187,7 +187,7 @@ class _PrjVerInfo {
 	}
 
 	protected void setAPIs(String _APIs) {
-		this._APIs = _APIs;
+		this._APIs = (_APIs == null ? "" : _APIs);
 	}
 
 	protected _VerInfo getCurVer() {

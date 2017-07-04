@@ -1,11 +1,15 @@
 package exp.libs.warp.ver;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import exp.libs.utils.time.TimeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.layout.VFlowLayout;
 
@@ -33,6 +37,8 @@ class _VerInfo {
 	
 	private JTextArea upgradeStepTA;
 	
+	private JButton curTimeBtn;
+	
 	protected _VerInfo() {
 		this.author = "";
 		this.version = "";
@@ -45,6 +51,16 @@ class _VerInfo {
 		this.datetimeTF = new JTextField();
 		this.upgradeContentTA = new JTextArea(6, 8);
 		this.upgradeStepTA = new JTextArea(6, 8);
+		this.curTimeBtn = new JButton("取当前时间"); {
+			
+			curTimeBtn.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					datetimeTF.setText(TimeUtils.getSysDate());
+				}
+			});
+		}
 	}
 
 	protected JScrollPane toPanel(boolean isEditable) {
@@ -60,7 +76,7 @@ class _VerInfo {
 			panel.add(SwingUtils.getPairsPanel(" 责任人 ", authorTF));
 			panel.add(SwingUtils.getPairsPanel(" 版本号 ", versionTF));
 			panel.add(SwingUtils.getPairsPanel("定版时间", !isEditable ? datetimeTF : 
-					SwingUtils.getEBorderPanel(datetimeTF, new JButton("当前时间"))));
+					SwingUtils.getEBorderPanel(datetimeTF, curTimeBtn)));
 			panel.add(SwingUtils.getPairsPanel("升级内容", 
 					SwingUtils.addScroll(upgradeContentTA)));
 			panel.add(SwingUtils.getPairsPanel("升级步骤", 

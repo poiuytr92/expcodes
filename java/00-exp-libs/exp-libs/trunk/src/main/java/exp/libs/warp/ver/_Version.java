@@ -52,27 +52,24 @@ class _Version {
 	private boolean initVerDB() {
 		boolean isOk = true;
 		Connection conn = SqliteUtils.getConn(ds);
-		if(!FileUtils.exists(VER_DB)) {
-			String script = FileUtils.readFileInJar(VER_DB_SCRIPT, Charset.UTF8);
-			try {
-				String[] sqls = script.split(";");
-				for(String sql : sqls) {
-					if(StrUtils.isNotTrimEmpty(sql)) {
-						isOk &= DBUtils.execute(conn, sql);
-					}
+		String script = FileUtils.readFileInJar(VER_DB_SCRIPT, Charset.UTF8);
+		try {
+			String[] sqls = script.split(";");
+			for(String sql : sqls) {
+				if(StrUtils.isNotTrimEmpty(sql)) {
+					isOk &= DBUtils.execute(conn, sql);
 				}
-			} catch(Exception e) {
-				isOk = false;
-				SwingUtils.error("初始化项目版本信息库失败", e);
 			}
-			
-			if(isOk == false) {
-				SwingUtils.warn("执行项目版本信息库的初始化脚本失败");
-			}
-		} 
+		} catch(Exception e) {
+			isOk = false;
+			SwingUtils.error("初始化项目版本信息库失败", e);
+		}
 		
-		SqliteUtils.close(conn);
+		if(isOk == false) {
+			SwingUtils.warn("执行项目版本信息库的初始化脚本失败");
+		}
 		SqliteUtils.releaseDisk(conn);
+		SqliteUtils.close(conn);
 		return isOk;
 	}
 	
@@ -84,7 +81,8 @@ class _Version {
 		Map<String, String> prjInfo = SqliteUtils.queryFirstRowStr(conn, sql);
 		
 		sql = StrUtils.concat("SELECT S_AUTHOR, S_VERSION, S_DATETIME, ", 
-				"S_UPGRADE_CONTENT, S_UPGRADE_STEP FROM T_HISTORY_VERSIONS");
+				"S_UPGRADE_CONTENT, S_UPGRADE_STEP FROM T_HISTORY_VERSIONS ", 
+				"ORDER BY I_ID ASC");
 		List<_VerInfo> verInfos = toVerInfos(SqliteUtils.queryKVSs(conn, sql));
 		SqliteUtils.close(conn);
 		
@@ -124,27 +122,46 @@ class _Version {
 		
 		sql = StrUtils.concat("INSERT INTO T_PROJECT_INFO(S_PROJECT_NAME, ", 
 				"S_PROJECT_DESC, S_TEAM_NAME, S_PROJECT_CHARSET, S_DISK_SIZE, ", 
-				"S_CACHE_SIZE, S_APIS) VALUES()");
-		
-		// TODO
+				"S_CACHE_SIZE, S_APIS) VALUES(?, ?, ?, ?, ?, ?, ?)");
+		boolean isOk = SqliteUtils.execute(conn, sql, new Object[] {
+				prjVerInfo.getPrjName(), prjVerInfo.getPrjDesc(), 
+				prjVerInfo.getTeamName(), prjVerInfo.getPrjCharset(), 
+				prjVerInfo.getDiskSize(), prjVerInfo.getCacheSize(),
+				prjVerInfo.getAPIs()
+		});
 		SqliteUtils.close(conn);
-		return true;
+		return isOk;
 	}
 	
 	protected boolean addVerInfo(_VerInfo verInfo) {
-		if(prjVerInfo == null) {
+		if(prjVerInfo == null || verInfo == null) {
 			return false;
 		}
-		// TODO
-		return true;
+		
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = StrUtils.concat("INSERT INTO T_HISTORY_VERSIONS(", 
+				"S_AUTHOR, S_VERSION, S_DATETIME, S_UPGRADE_CONTENT, ", 
+				"S_UPGRADE_STEP) VALUES(?, ?, ?, ?, ?)");
+		boolean isOk = SqliteUtils.execute(conn, sql, new Object[] {
+				verInfo.getAuthor(), verInfo.getVersion(), 
+				verInfo.getDatetime(), verInfo.getUpgradeContent(), 
+				verInfo.getUpgradeStep()
+		});
+		SqliteUtils.close(conn);
+		return isOk;
 	}
 	
 	protected boolean delVerInfo(_VerInfo verInfo) {
-		if(prjVerInfo == null) {
+		if(prjVerInfo == null || verInfo == null) {
 			return false;
 		}
-		// TODO
-		return true;
+		
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = StrUtils.concat("DELETE FROM T_HISTORY_VERSIONS ", 
+				"WHERE S_VERSION = '", verInfo.getVersion(), "'");
+		boolean isOk = SqliteUtils.execute(conn, sql);
+		SqliteUtils.close(conn);
+		return isOk;
 	}
 	
 	protected void print() {
