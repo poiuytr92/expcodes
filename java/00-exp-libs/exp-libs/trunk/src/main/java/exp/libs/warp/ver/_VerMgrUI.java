@@ -105,9 +105,12 @@ class _VerMgrUI extends MainWindow {
 		} else {
 			this.prjVerInfo = new _PrjVerInfo(null);
 		}
-		updateTitle(prjVerInfo);
-		this.hisVerTable = new _HisVerTable(prjVerInfo);
+		
+		this.hisVerTable = new _HisVerTable(this);
 		this.tmpVerInfo = new _VerInfo();
+		
+		updateTitle();
+		reflashHisVerTable();
 		
 		this.savePrjInfoBtn = new JButton("保存");
 		this.findHisVerBtn = new JButton("查找");
@@ -186,7 +189,7 @@ class _VerMgrUI extends MainWindow {
 		return verInfos;
 	}
 
-	private void updateTitle(_PrjVerInfo prjVerInfo) {
+	private void updateTitle() {
 		String title = DEFAULT_TITLE;
 		String prjName = prjVerInfo.getPrjName();
 		if(StrUtils.isNotEmpty(prjName)) {
@@ -240,7 +243,7 @@ class _VerMgrUI extends MainWindow {
 		return panel;
 	}
 
-	// 禁止添加重复的版本号 和 小于当前版本的版本号
+	// FIXME 禁止添加重复的版本号 和 小于当前版本的版本号
 	private Component initNewVerPanel() {
 		JPanel panel = new JPanel(new BorderLayout()); {
 			panel.add(tmpVerInfo.toPanel(true), BorderLayout.CENTER);
@@ -285,8 +288,8 @@ class _VerMgrUI extends MainWindow {
 				newVerInfo.setValFromUI(tmpVerInfo);
 				
 				if(addVerInfo(newVerInfo)) {
-					tmpVerInfo.clear();	// 清空 [新增版本信息] 面板
-					hisVerTable.reflashList();;	// 刷新 [历史版本信息] 列表
+					tmpVerInfo.clear();		// 清空 [新增版本信息] 面板
+					reflashHisVerTable();	// 刷新 [历史版本信息] 列表
 					tabbedPanel.setSelectedIndex(CUR_VER_TAB_IDX);	// 切到选中 [当前版本信息]
 					
 				} else {
@@ -296,6 +299,10 @@ class _VerMgrUI extends MainWindow {
 		});
 	}
 	
+	/**
+	 * 保存项目信息
+	 * @return
+	 */
 	protected boolean savePrjInfo() {
 		prjVerInfo.setValFromUI();
 		
@@ -316,6 +323,11 @@ class _VerMgrUI extends MainWindow {
 		return isOk;
 	}
 	
+	/**
+	 * 新增版本信息
+	 * @param verInfo
+	 * @return
+	 */
 	protected boolean addVerInfo(_VerInfo verInfo) {
 		Connection conn = SqliteUtils.getConn(ds);
 		String sql = StrUtils.concat("INSERT INTO T_HISTORY_VERSIONS(", 
@@ -328,10 +340,17 @@ class _VerMgrUI extends MainWindow {
 		});
 		SqliteUtils.close(conn);
 		
-		prjVerInfo.addVerInfo(verInfo);
+		if(isOk == true) {
+			prjVerInfo.addVerInfo(verInfo);
+		}
 		return isOk;
 	}
 	
+	/**
+	 * 删除版本信息
+	 * @param verInfo
+	 * @return
+	 */
 	protected boolean delVerInfo(_VerInfo verInfo) {
 		Connection conn = SqliteUtils.getConn(ds);
 		String sql = StrUtils.concat("DELETE FROM T_HISTORY_VERSIONS ", 
@@ -339,8 +358,22 @@ class _VerMgrUI extends MainWindow {
 		boolean isOk = SqliteUtils.execute(conn, sql);
 		SqliteUtils.close(conn);
 		
-		prjVerInfo.delVerInfo(verInfo);
+		if(isOk == true) {
+			prjVerInfo.delVerInfo(verInfo);
+		}
 		return isOk;
+	}
+	
+	protected _VerInfo getVerInfo(int row) {
+		return prjVerInfo.getVerInfo(row);
+	}
+	
+	protected void reflashHisVerTable() {
+		hisVerTable.reflash(prjVerInfo.toHisVerTable());
+	}
+	
+	protected _PrjVerInfo getPrjVerInfo() {
+		return prjVerInfo;
 	}
 	
 }

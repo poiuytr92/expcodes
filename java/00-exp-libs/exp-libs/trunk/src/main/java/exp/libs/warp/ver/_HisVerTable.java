@@ -23,15 +23,14 @@ class _HisVerTable extends AbstractTable {
 	
 	private int opRow;
 	
-	private _PrjVerInfo prjVerInfo;
+	private _VerMgrUI verMgrUI;
 	
 	private JPopupMenu popMenu;
 	
-	protected _HisVerTable(_PrjVerInfo prjVerInfo) {
+	protected _HisVerTable(_VerMgrUI verMgrUI) {
 		super(HEADER,  MAX_ROW);
 		this.opRow = -1;
-		this.prjVerInfo = prjVerInfo;
-		reflash(prjVerInfo.toHisVerTable());
+		this.verMgrUI = verMgrUI;
 		initPopMenu();
 	}
 	
@@ -48,7 +47,7 @@ class _HisVerTable extends AbstractTable {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				_VerInfo verInfo = prjVerInfo.getVerInfo(opRow);
+				_VerInfo verInfo = verMgrUI.getVerInfo(opRow);
 				if(verInfo != null) {
 					verInfo._view();
 				}
@@ -59,7 +58,7 @@ class _HisVerTable extends AbstractTable {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				_VerInfo verInfo = prjVerInfo.getVerInfo(opRow);
+				_VerInfo verInfo = verMgrUI.getVerInfo(opRow);
 				if(verInfo == null) {
 					return;
 				}
@@ -69,9 +68,9 @@ class _HisVerTable extends AbstractTable {
 					return;
 				}
 				
-				if(prjVerInfo.delVerInfo(verInfo)) {
+				if(verMgrUI.delVerInfo(verInfo)) {
 					opRow = -1;
-					reflashList();	// 刷新表单
+					verMgrUI.reflashHisVerTable();	// 刷新表单
 					SwingUtils.warn("删除历史版本成功");
 					
 				} else {
@@ -87,10 +86,6 @@ class _HisVerTable extends AbstractTable {
 				reflash();	// 刷新表单
 			}
 		});
-	}
-	
-	protected void reflashList() {
-		reflash(prjVerInfo.toHisVerTable());
 	}
 	
 	/**
