@@ -45,7 +45,7 @@ class _HisVerTable extends AbstractTable {
 			public void actionPerformed(ActionEvent e) {
 				_VerInfo verInfo = prjVerInfo.getVerInfo(opRow);
 				if(verInfo != null) {
-					new _VerWin(verInfo)._view();
+					new _VerInfoUI(verInfo)._view();
 				}
 			}
 		});
