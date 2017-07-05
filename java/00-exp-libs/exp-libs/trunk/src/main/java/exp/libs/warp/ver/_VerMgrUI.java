@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -42,7 +43,7 @@ class _VerMgrUI extends MainWindow {
 	/** 用于记录新增版本的临时版本信息 */
 	private _VerInfo tmpVerInfo;
 	
-	private Vector<Vector<String>> hisVerInfos;
+	private List<List<String>> hisVerInfos;
 	
 	private _HisVerTable hisVerTable;
 	
@@ -107,14 +108,14 @@ class _VerMgrUI extends MainWindow {
 	}
 
 	private _HisVerTable initTable() {
-		Vector<String> header = initHeader();
-		this.hisVerInfos = new Vector<Vector<String>>();
+		List<String> header = initHeader();
+		this.hisVerInfos = new ArrayList<List<String>>();
 		reflashHisVerInfos();
 		return new _HisVerTable(header, hisVerInfos, prjVerInfo);
 	}
 	
-	private Vector<String> initHeader() {
-		Vector<String> header = new Vector<String>();
+	private List<String> initHeader() {
+		List<String> header = new Vector<String>();
 		header.add("版本号");
 		header.add("责任人");
 		header.add("定版时间");
@@ -123,7 +124,6 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	private void reflashHisVerInfos() {
-		final int MAX_HIS_VER_NUM = 50;	// 最多显示的历史版本数目
 		this.hisVerInfos.clear();
 		List<_VerInfo> historyVers = prjVerInfo.getHistoryVers();
 		for(int i = historyVers.size() - 1; i >= 0; i--) {
@@ -134,12 +134,6 @@ class _VerMgrUI extends MainWindow {
 			row.add(verInfo.getDatetime());
 			row.add(StrUtils.showSummary(verInfo.getUpgradeContent().trim()));
 			hisVerInfos.add(row);
-		}
-		
-		// 填充空白行
-		for(int size = MAX_HIS_VER_NUM - historyVers.size(), 
-				i = 0; i < size; i++) {
-			hisVerInfos.add(new Vector<String>());
 		}
 	}
 	

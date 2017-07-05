@@ -1,91 +1,86 @@
 package exp.libs.warp.ui.cpt.tbl;
 
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Vector;
 
-@SuppressWarnings("rawtypes")
-public class Table<T> extends _Table<T> {
+public abstract class Table extends _Table {
 
 	/** serialVersionUID */
-	private static final long serialVersionUID = -6301415063691311781L;
+	private static final long serialVersionUID = 191838444436258900L;
+
+	public Table(List<String> headers) {
+		super(headers);
+	}
 	
-	private final static Vector DEFAULT_HEADER = new Vector();
-	
-	private final static Vector DEFAULT_DATAS = new Vector();
-	
-	private Vector<Vector<T>> datas;
-	
-	@SuppressWarnings("unchecked")
-	public Table(Vector<T> header, Vector<Vector<T>> datas) {
-		super(header == null ? DEFAULT_HEADER : header, 
-				datas == null ? DEFAULT_DATAS : datas);
-		this.datas = datas;
+	public Table(String[] headers) {
+		super(headers != null ? Arrays.asList(headers) : null);
 	}
 	
 	/**
 	 * 刷新表单数据
 	 */
 	public void reflash() {
-		reflash(null);
+		super._reflash(null);
 	}
 	
 	/**
 	 * 刷新表单数据
 	 * @param newDatas 新数据
 	 */
-	public void reflash(Vector<Vector<T>> newDatas) {
+	public void reflash(List<List<String>> datas) {
 		if(datas == null) {
-			return;
+			super._reflash(null);
+			
+		} else {
+			Vector<Vector<String>> vDatas = new Vector<Vector<String>>();
+			for(List<String> rowData : datas) {
+				vDatas.add(new Vector<String>(rowData));
+			}
+			super._reflash(vDatas);
 		}
-		
-		if(newDatas != null) {
-			datas.clear();
-			datas.addAll(newDatas);
-		}
-		this.repaint();
 	}
 	
-	public void add(Vector<T> rowData, int rowIdx) {
-		if(datas == null || rowData == null) {
+	public void add(List<String> rowData, int rowIdx) {
+		if(rowData == null) {
 			return;
 		}
-		
-		rowIdx = (rowIdx <= 0 ? 0 : rowIdx);
-		rowIdx = (rowIdx >= ROW_SIZE() ? ROW_SIZE() : rowIdx);
-		datas.add(rowIdx, rowData);
-		this.repaint();
+		super._add(new Vector<String>(rowData), rowIdx);
 	}
 	
-	public void addTop(Vector<T> rowData) {
+	public void addTop(List<String> rowData) {
 		add(rowData, 0);
 	}
 	
-	public void addBtm(Vector<T> rowData) {
+	public void addBtm(List<String> rowData) {
 		add(rowData, Integer.MAX_VALUE);
 	}
 	
-	public void del(int rowIdx) {
-		if(datas == null || !inRange(rowIdx)) {
-			return;
-		}
-		
-		datas.remove(rowIdx);
-		this.repaint();
+	public void add(List<String> rowData) {
+		addTop(rowData);
 	}
 	
-	public Vector<T> getRowData(int rowIdx) {
-		Vector<T> rowData = new Vector<T>();
-		if(datas != null && inRange(rowIdx)) {
-			rowData = datas.get(rowIdx);
+	public List<String> del(int rowIdx) {
+		List<String> rowData = new LinkedList<String>();
+		Vector<String> delData = super._del(rowIdx);
+		if(delData != null) {
+			rowData.addAll(delData);
 		}
 		return rowData;
 	}
 	
-	public Vector<T> getSelectedRowData() {
-		return getRowData(getCurSelectRow());
+	public List<String> getRowData(int rowIdx) {
+		List<String> rowData = new LinkedList<String>();
+		Vector<String> data = super._getRowData(rowIdx);
+		if(data != null) {
+			rowData.addAll(data);
+		}
+		return rowData;
 	}
 	
-	private boolean inRange(int rowIdx) {
-		return (rowIdx >= 0 && rowIdx < ROW_SIZE());
+	public List<String> getSelectedRowData() {
+		return getRowData(getCurSelectRow());
 	}
 	
 }

@@ -3,7 +3,7 @@ package exp.libs.warp.ver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.Vector;
+import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -11,7 +11,7 @@ import javax.swing.JPopupMenu;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.Table;
 
-class _HisVerTable extends Table<String> {
+class _HisVerTable extends Table {
 
 	private static final long serialVersionUID = -3111568334645181825L;
 	
@@ -21,9 +21,10 @@ class _HisVerTable extends Table<String> {
 	
 	private JPopupMenu popMenu;
 	
-	protected _HisVerTable(Vector<String> header, 
-			Vector<Vector<String>> datas, _PrjVerInfo prjVerInfo) {
-		super(header, datas);
+	protected _HisVerTable(List<String> header, 
+			List<List<String>> datas, _PrjVerInfo prjVerInfo) {
+		super(header);
+		reflash(datas);
 		
 		this.opRow = -1;
 		this.prjVerInfo = prjVerInfo;
@@ -82,6 +83,30 @@ class _HisVerTable extends Table<String> {
 		
 		// 呈现浮动菜单
 		popMenu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
