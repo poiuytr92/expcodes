@@ -1,6 +1,7 @@
 package exp.libs.warp.ver;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -77,7 +78,6 @@ class _PrjVerInfo {
 		int size = this.historyVers.size();
 		if(size > 0) {
 			_VerInfo verInfo = this.historyVers.get(size - 1);
-			verInfo.setValToUI();
 			curVer.setValFromUI(verInfo);
 		}
 		
@@ -133,17 +133,70 @@ class _PrjVerInfo {
 	}
 	
 	protected boolean savePrjInfo() {
+		if(verMgr == null) {
+			return false;
+		}
+		
 		setValFromUI();
 		return verMgr.savePrjInfo();
 	}
 	
 	protected boolean addVerInfo(_VerInfo verInfo) {
+		if(verMgr == null) {
+			return false;
+		}
+		
 		boolean isOk = verMgr.addVerInfo(verInfo);
 		if(isOk == true) {
 			curVer.setValFromUI(verInfo);
 			historyVers.add(verInfo);
 		}
 		return isOk;
+	}
+	
+	protected boolean delVerInfo(_VerInfo verInfo) {
+		if(verMgr == null || verInfo == null) {
+			return false;
+		}
+		
+		boolean isOk = verMgr.delVerInfo(verInfo);
+		if(isOk == true) {
+			Iterator<_VerInfo> verIts = historyVers.iterator();
+			while(verIts.hasNext()) {
+				_VerInfo ver = verIts.next();
+				if(ver.getVersion().equals(verInfo.getVersion())) {
+					verIts.remove();
+					break;
+				}
+			}
+			
+			int size = historyVers.size();
+			if(historyVers.size() > 0) {
+				curVer.setValFromUI(historyVers.get(size - 1));
+			} else {
+				curVer.clear();
+			}
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 
+	 * @param row 此行数为界面的版本列表行数， 对此处的历史版本列表而言是倒序的
+	 * @return
+	 */
+	protected _VerInfo getVerInfo(int row) {
+		_VerInfo verInfo = null;
+		if(verMgr == null || row < 0) {
+			return verInfo;
+		}
+		
+		int idx = historyVers.size() - 1 - row;
+		if(idx < 0) {
+			return verInfo;
+		}
+		
+		return historyVers.get(idx);
 	}
 	
 	protected String getPrjName() {

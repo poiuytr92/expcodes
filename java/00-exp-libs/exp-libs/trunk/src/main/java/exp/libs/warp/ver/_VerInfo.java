@@ -15,8 +15,6 @@ import exp.libs.warp.ui.layout.VFlowLayout;
 
 class _VerInfo {
 
-	protected final static _VerInfo NULL = new _VerInfo();
-	
 	private String author;
 	
 	private JTextField authorTF;

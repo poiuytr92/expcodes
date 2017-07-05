@@ -89,6 +89,8 @@ class _VerMgrUI extends MainWindow {
 	protected void initComponents(Object... args) {
 		if(args != null && args.length > 0 && args[0] instanceof _PrjVerInfo) {
 			this.prjVerInfo = (_PrjVerInfo) args[0];
+		} else {
+			this.prjVerInfo = new _PrjVerInfo(null, null);
 		}
 		
 		this.savePrjInfoBtn = new JButton("保存");
@@ -108,7 +110,7 @@ class _VerMgrUI extends MainWindow {
 		Vector<String> header = initHeader();
 		this.hisVerInfos = new Vector<Vector<String>>();
 		reflashHisVerInfos();
-		return new _HisVerTable(header, hisVerInfos);
+		return new _HisVerTable(header, hisVerInfos, prjVerInfo);
 	}
 	
 	private Vector<String> initHeader() {

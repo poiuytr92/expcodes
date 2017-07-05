@@ -36,6 +36,8 @@ class _VerMgr {
 	 * 构造函数：创建版本信息文件
 	 */
 	protected _VerMgr() {
+		BeautyEyeUtils.init();
+		
 		initDS();
 		if(initVerDB()) {
 			this.prjVerInfo = loadPrjVerInfo();
@@ -106,6 +108,8 @@ class _VerMgr {
 			verInfo.setDatetime(verData.get("S_DATETIME"));
 			verInfo.setUpgradeContent(verData.get("S_UPGRADE_CONTENT"));
 			verInfo.setUpgradeStep(verData.get("S_UPGRADE_STEP"));
+			
+			verInfo.setValToUI();	// 把读取到的值设置到界面容器中
 			verInfos.add(verInfo);
 		}
 		return verInfos;
@@ -169,7 +173,6 @@ class _VerMgr {
 	}
 	
 	protected void manage() {
-		BeautyEyeUtils.init();
 		_VerMgrUI.getInstn(prjVerInfo);
 	}
 
