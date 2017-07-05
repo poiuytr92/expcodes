@@ -5,21 +5,41 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Vector;
 
-public abstract class Table extends _Table {
+/**
+ * <PRE>
+ * 表单组件
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-07-05
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+public abstract class AbstractTable extends _BaseTable {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = 191838444436258900L;
 
-	public Table(List<String> headers) {
-		super(headers);
-	}
-	
-	public Table(String[] headers) {
-		super(headers != null ? Arrays.asList(headers) : null);
+	/**
+	 * 
+	 * @param headers 表头
+	 * @param maxViewRow 最大呈现的行数
+	 */
+	public AbstractTable(List<String> headers, int maxViewRow) {
+		super(headers, maxViewRow);
 	}
 	
 	/**
-	 * 刷新表单数据
+	 * 
+	 * @param headers 表头
+	 * @param maxViewRow 最大呈现的行数
+	 */
+	public AbstractTable(String[] headers, int maxViewRow) {
+		super((headers != null ? Arrays.asList(headers) : null), maxViewRow);
+	}
+	
+	/**
+	 * 刷新表单
 	 */
 	public void reflash() {
 		super._reflash(null);
@@ -27,7 +47,7 @@ public abstract class Table extends _Table {
 	
 	/**
 	 * 刷新表单数据
-	 * @param newDatas 新数据
+	 * @param newDatas 新的表单数据
 	 */
 	public void reflash(List<List<String>> datas) {
 		if(datas == null) {
@@ -42,6 +62,11 @@ public abstract class Table extends _Table {
 		}
 	}
 	
+	/**
+	 * 新增一行数据
+	 * @param rowData 行数据
+	 * @param rowIdx 插入位置
+	 */
 	public void add(List<String> rowData, int rowIdx) {
 		if(rowData == null) {
 			return;
@@ -49,18 +74,35 @@ public abstract class Table extends _Table {
 		super._add(new Vector<String>(rowData), rowIdx);
 	}
 	
+	/**
+	 * 插入到顶端
+	 * @param rowData
+	 */
 	public void addTop(List<String> rowData) {
 		add(rowData, 0);
 	}
 	
+	/**
+	 * 插入到底部
+	 * @param rowData
+	 */
 	public void addBtm(List<String> rowData) {
 		add(rowData, Integer.MAX_VALUE);
 	}
 	
+	/**
+	 * 插入到表单（默认在顶端）
+	 * @param rowData
+	 */
 	public void add(List<String> rowData) {
 		addTop(rowData);
 	}
 	
+	/**
+	 * 删除行数据
+	 * @param rowIdx 行索引
+	 * @return
+	 */
 	public List<String> del(int rowIdx) {
 		List<String> rowData = new LinkedList<String>();
 		Vector<String> delData = super._del(rowIdx);
@@ -70,6 +112,11 @@ public abstract class Table extends _Table {
 		return rowData;
 	}
 	
+	/**
+	 * 获取行数据
+	 * @param rowIdx 行索引
+	 * @return
+	 */
 	public List<String> getRowData(int rowIdx) {
 		List<String> rowData = new LinkedList<String>();
 		Vector<String> data = super._getRowData(rowIdx);
@@ -79,6 +126,10 @@ public abstract class Table extends _Table {
 		return rowData;
 	}
 	
+	/**
+	 * 获取当前选择行的行数据
+	 * @return
+	 */
 	public List<String> getSelectedRowData() {
 		return getRowData(getCurSelectRow());
 	}

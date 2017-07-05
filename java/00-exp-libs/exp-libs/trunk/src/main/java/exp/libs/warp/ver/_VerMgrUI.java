@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -42,8 +41,6 @@ class _VerMgrUI extends MainWindow {
 	
 	/** 用于记录新增版本的临时版本信息 */
 	private _VerInfo tmpVerInfo;
-	
-	private List<List<String>> hisVerInfos;
 	
 	private _HisVerTable hisVerTable;
 	
@@ -109,9 +106,7 @@ class _VerMgrUI extends MainWindow {
 
 	private _HisVerTable initTable() {
 		List<String> header = initHeader();
-		this.hisVerInfos = new ArrayList<List<String>>();
-		reflashHisVerInfos();
-		return new _HisVerTable(header, hisVerInfos, prjVerInfo);
+		return new _HisVerTable(header, prjVerInfo);
 	}
 	
 	private List<String> initHeader() {
@@ -123,23 +118,8 @@ class _VerMgrUI extends MainWindow {
 		return header;
 	}
 	
-	private void reflashHisVerInfos() {
-		this.hisVerInfos.clear();
-		List<_VerInfo> historyVers = prjVerInfo.getHistoryVers();
-		for(int i = historyVers.size() - 1; i >= 0; i--) {
-			_VerInfo verInfo = historyVers.get(i);
-			Vector<String> row = new Vector<String>();
-			row.add(verInfo.getVersion());
-			row.add(verInfo.getAuthor());
-			row.add(verInfo.getDatetime());
-			row.add(StrUtils.showSummary(verInfo.getUpgradeContent().trim()));
-			hisVerInfos.add(row);
-		}
-	}
-	
 	private void reflashHisVerTable() {
-		reflashHisVerInfos();
-		hisVerTable.reflash();
+		hisVerTable.reflash(prjVerInfo.toHisVerTable());	// 更新表单内数据
 	}
 	
 	@Override

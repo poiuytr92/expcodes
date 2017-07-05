@@ -19,7 +19,7 @@ import javax.swing.table.TableColumnModel;
 
 /**
  * <PRE>
- * 表单组件(重新渲染了JTabel的效果)
+ * 表单渲染器(重新渲染了JTabel的效果)
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -27,7 +27,7 @@ import javax.swing.table.TableColumnModel;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-abstract class __Table extends JTable implements MouseMotionListener, MouseListener {
+abstract class _TableRenderer extends JTable implements MouseMotionListener, MouseListener {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = 1945991710620583758L;
@@ -49,7 +49,7 @@ abstract class __Table extends JTable implements MouseMotionListener, MouseListe
 	 * @param headers 表头
 	 * @param dataContainer 表单数据容器
 	 */
-	public __Table(Vector<String> headers, Vector<Vector<String>> dataContainer) {
+	public _TableRenderer(Vector<String> headers, Vector<Vector<String>> dataContainer) {
 		super(new DefaultTableModel(dataContainer, headers));
 		this.headers = headers;
 		this.dataContainer = dataContainer;

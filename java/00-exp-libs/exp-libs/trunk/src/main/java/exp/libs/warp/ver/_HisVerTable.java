@@ -9,9 +9,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import exp.libs.warp.ui.SwingUtils;
-import exp.libs.warp.ui.cpt.tbl.Table;
+import exp.libs.warp.ui.cpt.tbl.AbstractTable;
 
-class _HisVerTable extends Table {
+class _HisVerTable extends AbstractTable {
 
 	private static final long serialVersionUID = -3111568334645181825L;
 	
@@ -21,10 +21,9 @@ class _HisVerTable extends Table {
 	
 	private JPopupMenu popMenu;
 	
-	protected _HisVerTable(List<String> header, 
-			List<List<String>> datas, _PrjVerInfo prjVerInfo) {
-		super(header);
-		reflash(datas);
+	protected _HisVerTable(List<String> header, _PrjVerInfo prjVerInfo) {
+		super(header, 50);
+		reflash(prjVerInfo.toHisVerTable());
 		
 		this.opRow = -1;
 		this.prjVerInfo = prjVerInfo;
@@ -35,8 +34,10 @@ class _HisVerTable extends Table {
 		this.popMenu = new JPopupMenu();
 		JMenuItem detail = new JMenuItem("查看详情");
 		JMenuItem delete = new JMenuItem("删除版本");
+		JMenuItem reflash = new JMenuItem("刷新列表");
 		popMenu.add(detail);
 		popMenu.add(delete);
+		popMenu.add(reflash);
 		
 		detail.addActionListener(new ActionListener() {
 			
@@ -56,11 +57,20 @@ class _HisVerTable extends Table {
 				_VerInfo verInfo = prjVerInfo.getVerInfo(opRow);
 				if(prjVerInfo.delVerInfo(verInfo)) {
 					opRow = -1;
+					reflash(prjVerInfo.toHisVerTable());	// 刷新表单
 					SwingUtils.warn("删除历史版本成功");
-					// FIXME: 重绘表单？
+					
 				} else {
 					SwingUtils.warn("删除历史版本失败");
 				}
+			}
+		});
+		
+		reflash.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				reflash();	// 刷新表单
 			}
 		});
 	}

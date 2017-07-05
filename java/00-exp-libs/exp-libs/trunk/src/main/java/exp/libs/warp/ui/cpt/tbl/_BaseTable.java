@@ -4,8 +4,18 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * <PRE>
+ * 表单组件
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 @SuppressWarnings({ "unchecked", "rawtypes" })
-abstract class _Table extends __Table {
+abstract class _BaseTable extends _TableRenderer {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -6301415063691311781L;
@@ -13,11 +23,20 @@ abstract class _Table extends __Table {
 	/** 表单默认列数 */
 	private final static int DEFAULT_COL = 5;
 	
-	/** 表单最多呈现的行数（超出范围只会显示前100行） */
-	private final static int MIN_ROW = 100;
+	/** 表单默认行数 */
+	private final static int DEFAULT_ROW = 100;
 	
-	protected _Table(List<String> headers) {
-		super(toVector(headers), createDataContainer(headers));
+	/** 表单最多呈现的行数（超出范围只会显示前N行） */
+	private int maxViewRow;
+	
+	/**
+	 * 
+	 * @param headers 表头（影响列数）
+	 * @param maxViewRow 表单最多呈现的行数
+	 */
+	protected _BaseTable(List<String> headers, int maxViewRow) {
+		super(toVector(headers), createDataContainer(headers, maxViewRow));
+		this.maxViewRow = (maxViewRow <= 0 ? DEFAULT_ROW : maxViewRow);
 	}
 	
 	/**
@@ -43,14 +62,16 @@ abstract class _Table extends __Table {
 	 * 构造一个固定大小的初始表单容器
 	 * @return
 	 */
-	private static Vector<Vector<String>> createDataContainer(List<String> headers) {
+	private static Vector<Vector<String>> createDataContainer(
+			List<String> headers, int maxViewRow) {
+		maxViewRow = (maxViewRow <= 0 ? DEFAULT_ROW : maxViewRow);
 		int col = DEFAULT_COL;
 		if(headers != null && headers.size() > 0) {
 			col = headers.size();
 		}
 		
-		Vector<Vector<String>> dataContainer = new Vector<Vector<String>>(MIN_ROW);
-		for(int r = 0; r < MIN_ROW; r++) {
+		Vector<Vector<String>> dataContainer = new Vector<Vector<String>>(maxViewRow);
+		for(int r = 0; r < maxViewRow; r++) {
 			dataContainer.add(getEmptyRow(col));
 		}
 		return dataContainer;
@@ -78,7 +99,7 @@ abstract class _Table extends __Table {
 			dataContainer.addAll(datas);
 			
 			// 容器未满，用空行填充
-			int size = MIN_ROW - datas.size();
+			int size = maxViewRow - datas.size();
 			if(size > 0) {
 				for(int i = 0; i < size; i++) {
 					dataContainer.add(getEmptyRow(COL_SIZE()));

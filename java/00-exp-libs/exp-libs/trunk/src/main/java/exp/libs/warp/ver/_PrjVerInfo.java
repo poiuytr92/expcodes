@@ -1,6 +1,5 @@
 package exp.libs.warp.ver;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -258,9 +257,19 @@ class _PrjVerInfo {
 	protected _VerInfo getCurVer() {
 		return curVer;
 	}
-
-	protected List<_VerInfo> getHistoryVers() {
-		return new ArrayList<_VerInfo>(historyVers);
+	
+	protected List<List<String>> toHisVerTable() {
+		List<List<String>> hisVerTable = new LinkedList<List<String>>();
+		for(int i = historyVers.size() - 1; i >= 0; i--) {
+			_VerInfo verInfo = historyVers.get(i);
+			List<String> row = new LinkedList<String>();
+			row.add(verInfo.getVersion());
+			row.add(verInfo.getAuthor());
+			row.add(verInfo.getDatetime());
+			row.add(StrUtils.showSummary(verInfo.getUpgradeContent().trim()));
+			hisVerTable.add(row);
+		}
+		return hisVerTable;
 	}
 
 }
