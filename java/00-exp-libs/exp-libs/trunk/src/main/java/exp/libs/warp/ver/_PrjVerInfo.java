@@ -27,8 +27,6 @@ class _PrjVerInfo {
 	
 	private final static String DELIMITER = ",";
 	
-	private _VerMgr verMgr;
-	
 	private String prjName;
 	
 	private JTextField prjNameTF;
@@ -61,8 +59,7 @@ class _PrjVerInfo {
 	
 	private List<_VerInfo> historyVers;
 
-	protected _PrjVerInfo(_VerMgr verMgr, List<_VerInfo> historyVers) {
-		this.verMgr = verMgr;
+	protected _PrjVerInfo(List<_VerInfo> historyVers) {
 		this.prjName = "";
 		this.prjDesc = "";
 		this.teamName = "";
@@ -104,7 +101,7 @@ class _PrjVerInfo {
 		return SwingUtils.addAutoScroll(panel);
 	}
 	
-	private void setValToUI() {
+	protected void setValToUI() {
 		prjNameTF.setText(prjName);
 		prjDescTF.setText(prjDesc);
 		teamNameTF.setText(teamName);
@@ -119,7 +116,7 @@ class _PrjVerInfo {
 		}
 	}
 	
-	private void setValFromUI() {
+	protected void setValFromUI() {
 		prjName = prjNameTF.getText();
 		prjDesc = prjDescTF.getText();
 		teamName = teamNameTF.getText();
@@ -131,52 +128,29 @@ class _PrjVerInfo {
 		_APIs = StrUtils.concat(apis, DELIMITER);
 	}
 	
-	protected boolean savePrjInfo() {
-		if(verMgr == null) {
-			return false;
-		}
-		
-		setValFromUI();
-		return verMgr.savePrjInfo();
-	}
-	
 	protected boolean addVerInfo(_VerInfo verInfo) {
-		if(verMgr == null) {
-			return false;
-		}
-		
-		boolean isOk = verMgr.addVerInfo(verInfo);
-		if(isOk == true) {
-			curVer.setValFromUI(verInfo);
-			historyVers.add(verInfo);
-		}
-		return isOk;
+		curVer.setValFromUI(verInfo);
+		historyVers.add(verInfo);
+		return true;
 	}
 	
 	protected boolean delVerInfo(_VerInfo verInfo) {
-		if(verMgr == null || verInfo == null) {
-			return false;
+		Iterator<_VerInfo> verIts = historyVers.iterator();
+		while(verIts.hasNext()) {
+			_VerInfo ver = verIts.next();
+			if(ver.getVersion().equals(verInfo.getVersion())) {
+				verIts.remove();
+				break;
+			}
 		}
 		
-		boolean isOk = verMgr.delVerInfo(verInfo);
-		if(isOk == true) {
-			Iterator<_VerInfo> verIts = historyVers.iterator();
-			while(verIts.hasNext()) {
-				_VerInfo ver = verIts.next();
-				if(ver.getVersion().equals(verInfo.getVersion())) {
-					verIts.remove();
-					break;
-				}
-			}
-			
-			int size = historyVers.size();
-			if(historyVers.size() > 0) {
-				curVer.setValFromUI(historyVers.get(size - 1));
-			} else {
-				curVer.clear();
-			}
+		int size = historyVers.size();
+		if(historyVers.size() > 0) {
+			curVer.setValFromUI(historyVers.get(size - 1));
+		} else {
+			curVer.clear();
 		}
-		return isOk;
+		return true;
 	}
 	
 	/**
@@ -186,7 +160,7 @@ class _PrjVerInfo {
 	 */
 	protected _VerInfo getVerInfo(int row) {
 		_VerInfo verInfo = null;
-		if(verMgr == null || row < 0) {
+		if(row < 0) {
 			return verInfo;
 		}
 		

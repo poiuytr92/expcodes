@@ -3,11 +3,11 @@ package exp.libs.warp.ver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import exp.libs.utils.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.AbstractTable;
 
@@ -15,18 +15,23 @@ class _HisVerTable extends AbstractTable {
 
 	private static final long serialVersionUID = -3111568334645181825L;
 	
+	private final static String[] HEADER = {
+		"版本号", "责任人", "定版时间", "升级内容概要"
+	};
+	
+	private final static int MAX_ROW = 50;
+	
 	private int opRow;
 	
 	private _PrjVerInfo prjVerInfo;
 	
 	private JPopupMenu popMenu;
 	
-	protected _HisVerTable(List<String> header, _PrjVerInfo prjVerInfo) {
-		super(header, 50);
-		reflash(prjVerInfo.toHisVerTable());
-		
+	protected _HisVerTable(_PrjVerInfo prjVerInfo) {
+		super(HEADER,  MAX_ROW);
 		this.opRow = -1;
 		this.prjVerInfo = prjVerInfo;
+		reflash(prjVerInfo.toHisVerTable());
 		initPopMenu();
 	}
 	
@@ -45,7 +50,7 @@ class _HisVerTable extends AbstractTable {
 			public void actionPerformed(ActionEvent e) {
 				_VerInfo verInfo = prjVerInfo.getVerInfo(opRow);
 				if(verInfo != null) {
-					new _VerInfoUI(verInfo)._view();
+					verInfo._view();
 				}
 			}
 		});
@@ -55,9 +60,18 @@ class _HisVerTable extends AbstractTable {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				_VerInfo verInfo = prjVerInfo.getVerInfo(opRow);
+				if(verInfo == null) {
+					return;
+				}
+				
+				if(!SwingUtils.confirm(StrUtils.concat("确认删除版本 [", 
+						verInfo.getVersion(), "] ?"))) {
+					return;
+				}
+				
 				if(prjVerInfo.delVerInfo(verInfo)) {
 					opRow = -1;
-					reflash(prjVerInfo.toHisVerTable());	// 刷新表单
+					reflashList();	// 刷新表单
 					SwingUtils.warn("删除历史版本成功");
 					
 				} else {
@@ -73,6 +87,10 @@ class _HisVerTable extends AbstractTable {
 				reflash();	// 刷新表单
 			}
 		});
+	}
+	
+	protected void reflashList() {
+		reflash(prjVerInfo.toHisVerTable());
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package exp.libs.warp.ver;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -11,9 +12,12 @@ import javax.swing.JTextField;
 
 import exp.libs.utils.time.TimeUtils;
 import exp.libs.warp.ui.SwingUtils;
+import exp.libs.warp.ui.cpt.win.PopChildWindow;
 import exp.libs.warp.ui.layout.VFlowLayout;
 
-class _VerInfo {
+class _VerInfo extends PopChildWindow {
+
+	private static final long serialVersionUID = -6820494056901951178L;
 
 	private String author;
 	
@@ -38,6 +42,11 @@ class _VerInfo {
 	private JButton curTimeBtn;
 	
 	protected _VerInfo() {
+		super("版本信息", 600, 490);
+	}
+
+	@Override
+	protected void initComponents(Object... args) {
 		this.author = "";
 		this.version = "";
 		this.datetime = "";
@@ -49,18 +58,26 @@ class _VerInfo {
 		this.datetimeTF = new JTextField();
 		this.upgradeContentTA = new JTextArea(6, 8);
 		this.upgradeStepTA = new JTextArea(6, 8);
-		this.curTimeBtn = new JButton("取当前时间"); {
-			
-			curTimeBtn.addActionListener(new ActionListener() {
-				
-				@Override
-				public void actionPerformed(ActionEvent e) {
-					datetimeTF.setText(TimeUtils.getSysDate());
-				}
-			});
-		}
+		this.curTimeBtn = new JButton("取当前时间");
 	}
 
+	@Override
+	protected void setComponentsLayout(JPanel rootPanel) {
+		JScrollPane verPanel = SwingUtils.addAutoScroll(toPanel(false));
+		rootPanel.add(verPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	protected void setComponentsListener(JPanel rootPanel) {
+		curTimeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				datetimeTF.setText(TimeUtils.getSysDate());
+			}
+		});
+	}
+	
 	protected JScrollPane toPanel(boolean isEditable) {
 		setValToUI();
 		
@@ -170,5 +187,5 @@ class _VerInfo {
 	protected void setUpgradeStep(String upgradeStep) {
 		this.upgradeStep = upgradeStep;
 	}
-	
+
 }

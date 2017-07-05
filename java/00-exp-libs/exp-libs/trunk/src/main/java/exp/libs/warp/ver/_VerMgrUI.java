@@ -4,14 +4,23 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import exp.libs.envm.Charset;
+import exp.libs.envm.DBType;
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.io.FileUtils;
+import exp.libs.warp.db.sql.DBUtils;
+import exp.libs.warp.db.sql.SqliteUtils;
+import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
@@ -20,12 +29,34 @@ class _VerMgrUI extends MainWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = -3365462601777108786L;
 	
+	private final static String DEFAULT_TITLE = "版本管理";
+	
+	/** 版本信息库的脚本 */
+	private final static String VER_DB_SCRIPT = "/exp/libs/warp/ver/VERSION-INFO-DB.sql";
+	
+	/**
+	 * 存储版本信息的文件数据库位置.
+	 * 	[src/main/resources] 为Maven项目默认的资源目录位置（即使非Maven项目也可用此位置）
+	 */
+	private final static String VER_DB = "./src/main/resources/.verinfo";
+	
+	/** [当前版本]的Tab面板索引 */
 	private final static int CUR_VER_TAB_IDX = 2;
 	
+	/** Tab面板 */
 	private JTabbedPane tabbedPanel;
+	
+	/** 版本信息文件的数据源 */
+	private DataSourceBean ds;
 	
 	/** 项目版本信息 */
 	private _PrjVerInfo prjVerInfo;
+	
+	/** 历史版本表单 */
+	private _HisVerTable hisVerTable;
+	
+	/** 用于编辑新增版本的临时对象 */
+	private _VerInfo tmpVerInfo;
 	
 	/** 保存项目信息的按钮 */
 	private JButton savePrjInfoBtn;
@@ -39,19 +70,14 @@ class _VerMgrUI extends MainWindow {
 	/** 新增新版本信息的按钮 */
 	private JButton createVerBtn;
 	
-	/** 用于记录新增版本的临时版本信息 */
-	private _VerInfo tmpVerInfo;
-	
-	private _HisVerTable hisVerTable;
-	
 	/** 界面单例 */
 	private static volatile _VerMgrUI instance;
 	
 	/**
 	 * 私有化构造函数
 	 */
-	private _VerMgrUI(String title, _PrjVerInfo prjVerInfo) {
-		super(title, 600, 400, false, prjVerInfo);
+	private _VerMgrUI() {
+		super(DEFAULT_TITLE, 600, 400);
 	}
 	
 	/**
@@ -60,66 +86,113 @@ class _VerMgrUI extends MainWindow {
 	 * @param verInfos 版本信息
 	 * @return
 	 */
-	public static _VerMgrUI getInstn(_PrjVerInfo prjVerInfo) {
+	public static _VerMgrUI getInstn() {
 		if(instance == null) {
 			synchronized (_VerMgrUI.class) {
 				if(instance == null) {
-					String title = getTitle(prjVerInfo);
-					instance = new _VerMgrUI(title, prjVerInfo);
+					instance = new _VerMgrUI();
 				}
 			}
 		}
 		return instance;
 	}
 	
-	private static String getTitle(_PrjVerInfo prjVerInfo) {
-		String title = "版本管理";
-		if(prjVerInfo != null) {
-			String prjName = prjVerInfo.getPrjName();
-			if(StrUtils.isNotEmpty(prjName)) {
-				title = StrUtils.concat(title, " [", prjName, "]");
-			}
-		}
-		return title;
-	}
-	
 	@Override
 	protected void initComponents(Object... args) {
-		if(args != null && args.length > 0 && args[0] instanceof _PrjVerInfo) {
-			this.prjVerInfo = (_PrjVerInfo) args[0];
+		initDS();
+		if(initVerDB()) {
+			this.prjVerInfo = loadPrjVerInfo();
 		} else {
-			this.prjVerInfo = new _PrjVerInfo(null, null);
+			this.prjVerInfo = new _PrjVerInfo(null);
 		}
+		updateTitle(prjVerInfo);
+		this.hisVerTable = new _HisVerTable(prjVerInfo);
+		this.tmpVerInfo = new _VerInfo();
 		
 		this.savePrjInfoBtn = new JButton("保存");
 		this.findHisVerBtn = new JButton("查找");
 		this.copyCurVerBtn = new JButton("复制当前版本信息");
 		this.createVerBtn = new JButton("保存");
-		
-		initVer();
 	}
 	
-	private void initVer() {
-		this.tmpVerInfo = new _VerInfo();
-		this.hisVerTable = initTable();
+	private void initDS() {
+		this.ds = new DataSourceBean();
+		ds.setDriver(DBType.SQLITE.DRIVER);
+		ds.setName(VER_DB);
+		ds.setCharset(Charset.UTF8);
+	}
+	
+	private boolean initVerDB() {
+		boolean isOk = true;
+		Connection conn = SqliteUtils.getConn(ds);
+		String script = FileUtils.readFileInJar(VER_DB_SCRIPT, Charset.UTF8);
+		try {
+			String[] sqls = script.split(";");
+			for(String sql : sqls) {
+				if(StrUtils.isNotTrimEmpty(sql)) {
+					isOk &= DBUtils.execute(conn, sql);
+				}
+			}
+		} catch(Exception e) {
+			isOk = false;
+			SwingUtils.error("初始化项目版本信息库失败", e);
+		}
+		
+		if(isOk == false) {
+			SwingUtils.warn("执行项目版本信息库的初始化脚本失败");
+		}
+		SqliteUtils.releaseDisk(conn);
+		SqliteUtils.close(conn);
+		return isOk;
+	}
+	
+	private _PrjVerInfo loadPrjVerInfo() {
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = StrUtils.concat("SELECT S_PROJECT_NAME, S_PROJECT_DESC, ", 
+				"S_TEAM_NAME, S_PROJECT_CHARSET, S_DISK_SIZE, S_CACHE_SIZE, ",
+				"S_APIS FROM T_PROJECT_INFO ORDER BY I_ID DESC LIMIT 1");
+		Map<String, String> prjInfo = SqliteUtils.queryFirstRowStr(conn, sql);
+		
+		sql = StrUtils.concat("SELECT S_AUTHOR, S_VERSION, S_DATETIME, ", 
+				"S_UPGRADE_CONTENT, S_UPGRADE_STEP FROM T_HISTORY_VERSIONS ", 
+				"ORDER BY I_ID ASC");
+		List<_VerInfo> verInfos = toVerInfos(SqliteUtils.queryKVSs(conn, sql));
+		SqliteUtils.close(conn);
+		
+		_PrjVerInfo prjVerInfo = new _PrjVerInfo(verInfos);
+		prjVerInfo.setPrjName(prjInfo.get("S_PROJECT_NAME"));
+		prjVerInfo.setPrjDesc(prjInfo.get("S_PROJECT_DESC"));
+		prjVerInfo.setTeamName(prjInfo.get("S_TEAM_NAME"));
+		prjVerInfo.setPrjCharset(prjInfo.get("S_PROJECT_CHARSET"));
+		prjVerInfo.setDiskSize(prjInfo.get("S_DISK_SIZE"));
+		prjVerInfo.setCacheSize(prjInfo.get("S_CACHE_SIZE"));
+		prjVerInfo.setAPIs(prjInfo.get("S_APIS"));
+		return prjVerInfo;
+	}
+	
+	private List<_VerInfo> toVerInfos(List<Map<String, String>> verDatas) {
+		List<_VerInfo> verInfos = new LinkedList<_VerInfo>();
+		for(Map<String, String> verData : verDatas) {
+			_VerInfo verInfo = new _VerInfo();
+			verInfo.setAuthor(verData.get("S_AUTHOR"));
+			verInfo.setVersion(verData.get("S_VERSION"));
+			verInfo.setDatetime(verData.get("S_DATETIME"));
+			verInfo.setUpgradeContent(verData.get("S_UPGRADE_CONTENT"));
+			verInfo.setUpgradeStep(verData.get("S_UPGRADE_STEP"));
+			
+			verInfo.setValToUI();	// 把读取到的值设置到界面容器中
+			verInfos.add(verInfo);
+		}
+		return verInfos;
 	}
 
-	private _HisVerTable initTable() {
-		List<String> header = initHeader();
-		return new _HisVerTable(header, prjVerInfo);
-	}
-	
-	private List<String> initHeader() {
-		List<String> header = new Vector<String>();
-		header.add("版本号");
-		header.add("责任人");
-		header.add("定版时间");
-		header.add("升级内容概要");
-		return header;
-	}
-	
-	private void reflashHisVerTable() {
-		hisVerTable.reflash(prjVerInfo.toHisVerTable());	// 更新表单内数据
+	private void updateTitle(_PrjVerInfo prjVerInfo) {
+		String title = DEFAULT_TITLE;
+		String prjName = prjVerInfo.getPrjName();
+		if(StrUtils.isNotEmpty(prjName)) {
+			title = StrUtils.concat(title, " [", prjName, "]");
+		}
+		setTitle(title);
 	}
 	
 	@Override
@@ -149,12 +222,9 @@ class _VerMgrUI extends MainWindow {
 		return panel;
 	}
 
-	// 右键可查看详情，允许删除, 删除需确认
 	private Component initHistoryPanel() {
 		JPanel panel = new JPanel(new BorderLayout()); {
-			JPanel tblPanel = new JPanel(new BorderLayout()); {
-				tblPanel.add(SwingUtils.addAutoScroll(hisVerTable), BorderLayout.CENTER);
-			}
+			JScrollPane tblPanel = SwingUtils.addAutoScroll(hisVerTable);
 			panel.add(tblPanel, BorderLayout.CENTER);
 		}
 		panel.add(findHisVerBtn, BorderLayout.SOUTH);
@@ -185,7 +255,7 @@ class _VerMgrUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				prjVerInfo.savePrjInfo();
+				savePrjInfo();
 			}
 		});
 		
@@ -214,9 +284,9 @@ class _VerMgrUI extends MainWindow {
 				_VerInfo newVerInfo = new _VerInfo();
 				newVerInfo.setValFromUI(tmpVerInfo);
 				
-				if(prjVerInfo.addVerInfo(newVerInfo)) {
+				if(addVerInfo(newVerInfo)) {
 					tmpVerInfo.clear();	// 清空 [新增版本信息] 面板
-					reflashHisVerTable();	// 刷新 [历史版本信息] 列表
+					hisVerTable.reflashList();;	// 刷新 [历史版本信息] 列表
 					tabbedPanel.setSelectedIndex(CUR_VER_TAB_IDX);	// 切到选中 [当前版本信息]
 					
 				} else {
@@ -224,6 +294,53 @@ class _VerMgrUI extends MainWindow {
 				}
 			}
 		});
+	}
+	
+	protected boolean savePrjInfo() {
+		prjVerInfo.setValFromUI();
+		
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = "DELETE FROM T_PROJECT_INFO";
+		SqliteUtils.execute(conn, sql);
+		
+		sql = StrUtils.concat("INSERT INTO T_PROJECT_INFO(S_PROJECT_NAME, ", 
+				"S_PROJECT_DESC, S_TEAM_NAME, S_PROJECT_CHARSET, S_DISK_SIZE, ", 
+				"S_CACHE_SIZE, S_APIS) VALUES(?, ?, ?, ?, ?, ?, ?)");
+		boolean isOk = SqliteUtils.execute(conn, sql, new Object[] {
+				prjVerInfo.getPrjName(), prjVerInfo.getPrjDesc(), 
+				prjVerInfo.getTeamName(), prjVerInfo.getPrjCharset(), 
+				prjVerInfo.getDiskSize(), prjVerInfo.getCacheSize(),
+				prjVerInfo.getAPIs()
+		});
+		SqliteUtils.close(conn);
+		return isOk;
+	}
+	
+	protected boolean addVerInfo(_VerInfo verInfo) {
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = StrUtils.concat("INSERT INTO T_HISTORY_VERSIONS(", 
+				"S_AUTHOR, S_VERSION, S_DATETIME, S_UPGRADE_CONTENT, ", 
+				"S_UPGRADE_STEP) VALUES(?, ?, ?, ?, ?)");
+		boolean isOk = SqliteUtils.execute(conn, sql, new Object[] {
+				verInfo.getAuthor(), verInfo.getVersion(), 
+				verInfo.getDatetime(), verInfo.getUpgradeContent(), 
+				verInfo.getUpgradeStep()
+		});
+		SqliteUtils.close(conn);
+		
+		prjVerInfo.addVerInfo(verInfo);
+		return isOk;
+	}
+	
+	protected boolean delVerInfo(_VerInfo verInfo) {
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = StrUtils.concat("DELETE FROM T_HISTORY_VERSIONS ", 
+				"WHERE S_VERSION = '", verInfo.getVersion(), "'");
+		boolean isOk = SqliteUtils.execute(conn, sql);
+		SqliteUtils.close(conn);
+		
+		prjVerInfo.delVerInfo(verInfo);
+		return isOk;
 	}
 	
 }

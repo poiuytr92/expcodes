@@ -1,12 +1,15 @@
 package exp.libs.warp.ver;
 
 import exp.libs.utils.os.OSUtils;
+import exp.libs.warp.ui.BeautyEyeUtils;
 
-final public class VersionMgr extends _VerMgr {
+final public class VersionMgr {
 
 	private static volatile VersionMgr instance;
 	
-	private VersionMgr() {}
+	private VersionMgr() {
+		BeautyEyeUtils.init();
+	}
 	
 	private static VersionMgr getInstn() {
 		if(instance == null) {
@@ -47,6 +50,14 @@ final public class VersionMgr extends _VerMgr {
 		} else {
 			print();
 		}
+	}
+	
+	protected void manage() {
+		_VerMgrUI.getInstn();
+	}
+	
+	protected void print() {
+		// 打印DOS
 	}
 	
 }
