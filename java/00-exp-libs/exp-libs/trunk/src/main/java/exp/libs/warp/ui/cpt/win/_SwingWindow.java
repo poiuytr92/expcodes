@@ -110,7 +110,7 @@ abstract class _SwingWindow extends JFrame {
 		initComponents(args);				// 初始化组件
 		setComponentsLayout(rootPanel);		// 设置组件布局
 		setComponentsListener(rootPanel);	// 设置组件监听器
-		initCloseWindowMode();
+		initCloseWindowMode();				// 初始化窗体关闭模式
 	}
 	
 	/**
@@ -124,7 +124,7 @@ abstract class _SwingWindow extends JFrame {
 	/**
 	 * 初始化关闭窗口模式
 	 */
-	private void initCloseWindowMode() {
+	protected void initCloseWindowMode() {
 		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); //避免一点击x就关闭
 		
 		// 主窗口模式

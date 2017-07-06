@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -30,7 +31,7 @@ import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.AbstractTable;
-import exp.libs.warp.ui.cpt.win.PopChildWindow;
+import exp.libs.warp.ui.cpt.win.MainWindow;
 
 /**
  * <PRE>
@@ -42,7 +43,7 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class _VerMgrUI extends PopChildWindow {
+class _VerMgrUI extends MainWindow {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -3365462601777108786L;
@@ -119,6 +120,25 @@ class _VerMgrUI extends PopChildWindow {
 		return instance;
 	}
 	
+	/**
+	 * 覆写窗口的退出模式
+	 * 	（不自动显示窗体， 且增加 System.exit, 因为单纯的隐藏窗体无法结束数据库进程）
+	 */
+	@Override
+	protected void initCloseWindowMode() {
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(SwingUtils.confirm("退出 ?")) {
+					_hide();
+					System.exit(0);
+				}
+			}
+		});
+	}
+	
 	@Override
 	protected void initComponents(Object... args) {
 		initDS();
@@ -138,18 +158,6 @@ class _VerMgrUI extends PopChildWindow {
 		this.findHisVerBtn = new JButton("查找");
 		this.copyCurVerBtn = new JButton("复制当前版本信息");
 		this.createVerBtn = new JButton("保存");
-		
-		// 覆写子窗口的退出模式（增加 System.exit, 因为单纯的隐藏窗体无法结束数据库进程）
-		this.addWindowListener(new WindowAdapter() {
-			
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if(SwingUtils.confirm("Exit ?")) {
-					_hide();
-					System.exit(0);
-				}
-			}
-		});
 	}
 	
 	private void initDS() {
@@ -291,7 +299,11 @@ class _VerMgrUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				savePrjInfo();
+				if(savePrjInfo()) {
+					SwingUtils.info("保存项目信息成功");
+				} else {
+					SwingUtils.warn("保存项目信息失败");
+				}
 			}
 		});
 		
@@ -326,7 +338,7 @@ class _VerMgrUI extends PopChildWindow {
 						tmpVerInfo.clear();		// 清空 [新增版本信息] 面板
 						reflashHisVerTable();	// 刷新 [历史版本信息] 列表
 						tabbedPanel.setSelectedIndex(CUR_VER_TAB_IDX);	// 切到选中 [当前版本信息]
-						SwingUtils.warn("新增版本成功");
+						SwingUtils.info("新增版本成功");
 						
 					} else {
 						SwingUtils.warn("保存新版本信息失败");
