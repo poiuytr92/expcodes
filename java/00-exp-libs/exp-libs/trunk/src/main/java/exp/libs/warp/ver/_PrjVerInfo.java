@@ -17,6 +17,17 @@ import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.cbg.CheckBoxGroup;
 import exp.libs.warp.ui.layout.VFlowLayout;
 
+/**
+ * <PRE>
+ * 项目版本信息
+ * 	(包括项目信息、当前版本信息、历史版本信息)
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _PrjVerInfo {
 
 	private final static String[] API_ITEMS = new String[] {

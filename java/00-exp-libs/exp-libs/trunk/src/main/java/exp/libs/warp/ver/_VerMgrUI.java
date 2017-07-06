@@ -5,7 +5,10 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,15 +23,26 @@ import javax.swing.JTabbedPane;
 import exp.libs.envm.Charset;
 import exp.libs.envm.DBType;
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.format.ESCUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.AbstractTable;
-import exp.libs.warp.ui.cpt.win.MainWindow;
+import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
-class _VerMgrUI extends MainWindow {
+/**
+ * <PRE>
+ * 程序版本管理界面
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+class _VerMgrUI extends PopChildWindow {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -3365462601777108786L;
@@ -124,6 +138,18 @@ class _VerMgrUI extends MainWindow {
 		this.findHisVerBtn = new JButton("查找");
 		this.copyCurVerBtn = new JButton("复制当前版本信息");
 		this.createVerBtn = new JButton("保存");
+		
+		// 覆写子窗口的退出模式（增加 System.exit, 因为单纯的隐藏窗体无法结束数据库进程）
+		this.addWindowListener(new WindowAdapter() {
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(SwingUtils.confirm("Exit ?")) {
+					_hide();
+					System.exit(0);
+				}
+			}
+		});
 	}
 	
 	private void initDS() {
@@ -392,6 +418,20 @@ class _VerMgrUI extends MainWindow {
 	
 	private void reflashHisVerTable() {
 		hisVerTable.reflash(prjVerInfo.toHisVerTable());
+	}
+	
+	protected String toCurVerInfo() {
+		List<List<String>> curVerInfo = new LinkedList<List<String>>();
+		curVerInfo.add(Arrays.asList(new String[] { "项目名称", prjVerInfo.getPrjName() }));
+		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
+		curVerInfo.add(Arrays.asList(new String[] { "项目描述", prjVerInfo.getPrjDesc()}));
+		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
+		curVerInfo.add(Arrays.asList(new String[] { "版本号", prjVerInfo.getCurVer().getVersion() }));
+		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
+		curVerInfo.add(Arrays.asList(new String[] { "定版时间", prjVerInfo.getCurVer().getDatetime() }));
+		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
+		curVerInfo.add(Arrays.asList(new String[] { "最后责任人", prjVerInfo.getCurVer().getAuthor() }));
+		return ESCUtils.toTXT(curVerInfo, false);
 	}
 	
 	

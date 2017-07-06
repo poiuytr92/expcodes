@@ -16,6 +16,16 @@ import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 import exp.libs.warp.ui.layout.VFlowLayout;
 
+/**
+ * <PRE>
+ * 单次版本信息
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _VerInfo extends PopChildWindow {
 
 	private static final long serialVersionUID = -6820494056901951178L;

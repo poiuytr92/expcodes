@@ -410,14 +410,14 @@ public class ESCUtils {
 		return unBCP(tsvListString, "\t");
 	}
 	
-	public static String toTXT(List<List<Object>> table, boolean header) {
+	public static <T> String toTXT(List<List<T>> table, boolean header) {
 		if(table == null || table.size() <= 0) {
 			return "";
 		}
 		
 		int rowNum = table.size();
 		int colNum = 0;
-		for(List<Object> row : table) {
+		for(List<T> row : table) {
 			colNum = NumUtils.max(colNum, row.size());
 		}
 		
@@ -430,9 +430,9 @@ public class ESCUtils {
 		Arrays.fill(colLens, 0);
 		
 		for(int r = 0; r < rowNum; r++) {
-			List<Object> row = table.get(r);
+			List<T> row = table.get(r);
 			for(int c = 0; c < row.size(); c++) {
-				Object col = row.get(c);
+				T col = row.get(c);
 				txtTable[r][c] = ObjUtils.toStr(col);
 				colLens[c] = NumUtils.max(colLens[c], 
 						StrUtils.chineseLen(txtTable[r][c]));

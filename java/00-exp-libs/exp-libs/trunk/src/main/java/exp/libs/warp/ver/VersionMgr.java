@@ -3,6 +3,16 @@ package exp.libs.warp.ver;
 import exp.libs.utils.os.OSUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 
+/**
+ * <PRE>
+ * 程序版本管理
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 final public class VersionMgr {
 
 	private static volatile VersionMgr instance;
@@ -45,6 +55,7 @@ final public class VersionMgr {
 			}
 		}
 		
+		_VerMgrUI.getInstn()._hide();
 		if(manage == true) {
 			manage();
 		} else {
@@ -53,11 +64,12 @@ final public class VersionMgr {
 	}
 	
 	protected void manage() {
-		_VerMgrUI.getInstn();
+		_VerMgrUI.getInstn()._view();
+		print();
 	}
 	
 	protected void print() {
-		// 打印DOS
+		System.out.println(_VerMgrUI.getInstn().toCurVerInfo());
 	}
 	
 }
