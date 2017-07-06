@@ -10,6 +10,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import exp.libs.utils.StrUtils;
 import exp.libs.utils.time.TimeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
@@ -26,6 +27,8 @@ class _VerInfo extends PopChildWindow {
 	private String version;
 	
 	private JTextField versionTF;
+	
+	private JButton snapshotBtn;
 	
 	private String datetime;
 	
@@ -47,59 +50,25 @@ class _VerInfo extends PopChildWindow {
 
 	@Override
 	protected void initComponents(Object... args) {
-		this.author = "";
-		this.version = "";
-		this.datetime = "";
-		this.upgradeContent = "";
-		this.upgradeStep = "";
-		
 		this.authorTF = new JTextField();
 		this.versionTF = new JTextField();
+		this.snapshotBtn = new JButton("快照版本");
 		this.datetimeTF = new JTextField();
 		this.upgradeContentTA = new JTextArea(6, 8);
 		this.upgradeStepTA = new JTextArea(6, 8);
-		this.curTimeBtn = new JButton("取当前时间");
+		this.curTimeBtn = new JButton("当前时间");
+		clear();
 	}
 
-	@Override
-	protected void setComponentsLayout(JPanel rootPanel) {
-		JScrollPane verPanel = SwingUtils.addAutoScroll(toPanel(false));
-		rootPanel.add(verPanel, BorderLayout.CENTER);
-	}
-
-	@Override
-	protected void setComponentsListener(JPanel rootPanel) {
-		curTimeBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				datetimeTF.setText(TimeUtils.getSysDate());
-			}
-		});
+	protected void clear() {
+		author = "";
+		version = "";
+		datetime = "";
+		upgradeContent = "";
+		upgradeStep = "";
+		setValToUI();
 	}
 	
-	protected JScrollPane toPanel(boolean isEditable) {
-		setValToUI();
-		
-		authorTF.setEditable(isEditable);
-		versionTF.setEditable(isEditable);
-		datetimeTF.setEditable(isEditable);
-		upgradeContentTA.setEditable(isEditable);
-		upgradeStepTA.setEditable(isEditable);
-		
-		JPanel panel = new JPanel(new VFlowLayout()); {
-			panel.add(SwingUtils.getPairsPanel(" 责任人 ", authorTF));
-			panel.add(SwingUtils.getPairsPanel(" 版本号 ", versionTF));
-			panel.add(SwingUtils.getPairsPanel("定版时间", !isEditable ? datetimeTF : 
-					SwingUtils.getEBorderPanel(datetimeTF, curTimeBtn)));
-			panel.add(SwingUtils.getPairsPanel("升级内容", 
-					SwingUtils.addScroll(upgradeContentTA)));
-			panel.add(SwingUtils.getPairsPanel("升级步骤", 
-					SwingUtils.addScroll(upgradeStepTA)));
-		}
-		return SwingUtils.addAutoScroll(panel);
-	}
-
 	protected void setValToUI() {
 		authorTF.setText(author);
 		versionTF.setText(version);
@@ -120,14 +89,59 @@ class _VerInfo extends PopChildWindow {
 		}
 	}
 	
-	protected void clear() {
-		authorTF.setText("");
-		versionTF.setText("");
-		datetimeTF.setText("");
-		upgradeContentTA.setText("");
-		upgradeStepTA.setText("");
+	@Override
+	protected void setComponentsLayout(JPanel rootPanel) {
+		JScrollPane verPanel = SwingUtils.addAutoScroll(toPanel(false));
+		rootPanel.add(verPanel, BorderLayout.CENTER);
+	}
+
+	@Override
+	protected void setComponentsListener(JPanel rootPanel) {
+		snapshotBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String version = versionTF.getText();
+				if(StrUtils.isNotTrimEmpty(version)) {
+					version = version.replaceAll("(?i)-SNAPSHOT", "");
+					version = version.concat("-SNAPSHOT");
+					versionTF.setText(version);
+				}
+			}
+		});
+		
+		curTimeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				datetimeTF.setText(TimeUtils.getSysDate());
+			}
+		});
 	}
 	
+	protected JScrollPane toPanel(boolean isEditable) {
+		setValToUI();
+		
+		authorTF.setEditable(isEditable);
+		versionTF.setEditable(isEditable);
+		datetimeTF.setEditable(isEditable);
+		upgradeContentTA.setEditable(isEditable);
+		upgradeStepTA.setEditable(isEditable);
+		
+		JPanel panel = new JPanel(new VFlowLayout()); {
+			panel.add(SwingUtils.getPairsPanel(" 责任人 ", authorTF));
+			panel.add(SwingUtils.getPairsPanel(" 版本号 ", !isEditable ? versionTF : 
+				SwingUtils.getEBorderPanel(versionTF, snapshotBtn)));
+			panel.add(SwingUtils.getPairsPanel("定版时间", !isEditable ? datetimeTF : 
+					SwingUtils.getEBorderPanel(datetimeTF, curTimeBtn)));
+			panel.add(SwingUtils.getPairsPanel("升级内容", 
+					SwingUtils.addScroll(upgradeContentTA)));
+			panel.add(SwingUtils.getPairsPanel("升级步骤", 
+					SwingUtils.addScroll(upgradeStepTA)));
+		}
+		return SwingUtils.addAutoScroll(panel);
+	}
+
 	protected JTextField getAuthorTF() {
 		return authorTF;
 	}

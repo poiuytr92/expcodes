@@ -72,12 +72,8 @@ class _PrjVerInfo {
 		this.curVer = new _VerInfo();
 		this.historyVers = (historyVers == null ? 
 				new LinkedList<_VerInfo>() : historyVers);
+		updateCurVer();
 		
-		int size = this.historyVers.size();
-		if(size > 0) {
-			_VerInfo verInfo = this.historyVers.get(size - 1);
-			curVer.setValFromUI(verInfo);
-		}
 		
 		this.prjNameTF = new JTextField();
 		this.prjDescTF = new JTextField();
@@ -210,22 +206,35 @@ class _PrjVerInfo {
 	}
 	
 	protected boolean delVerInfo(_VerInfo verInfo) {
+		boolean isOk = false;
 		Iterator<_VerInfo> verIts = historyVers.iterator();
 		while(verIts.hasNext()) {
 			_VerInfo ver = verIts.next();
 			if(ver.getVersion().equals(verInfo.getVersion())) {
 				verIts.remove();
+				isOk = true;
 				break;
 			}
 		}
 		
-		int size = historyVers.size();
-		if(historyVers.size() > 0) {
-			curVer.setValFromUI(historyVers.get(size - 1));
-		} else {
-			curVer.clear();
+		if(isOk == true) {
+			int size = historyVers.size();
+			if(historyVers.size() > 0) {
+				curVer.setValFromUI(historyVers.get(size - 1));
+			} else {
+				curVer.clear();
+			}
 		}
 		return true;
+	}
+	
+	private void updateCurVer() {
+		curVer.clear();
+		int size = this.historyVers.size();
+		if(size > 0) {
+			_VerInfo verInfo = this.historyVers.get(size - 1);
+			curVer.setValFromUI(verInfo);
+		}
 	}
 	
 	/**
