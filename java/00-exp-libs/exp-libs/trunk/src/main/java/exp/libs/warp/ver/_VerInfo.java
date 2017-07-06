@@ -144,10 +144,6 @@ class _VerInfo extends PopChildWindow {
 		return upgradeContentTA;
 	}
 
-	protected String getUpgradeStep() {
-		return upgradeStep;
-	}
-
 	protected JTextArea getUpgradeStepTA() {
 		return upgradeStepTA;
 	}
@@ -184,6 +180,10 @@ class _VerInfo extends PopChildWindow {
 		this.upgradeContent = upgradeContent;
 	}
 
+	protected String getUpgradeStep() {
+		return upgradeStep;
+	}
+	
 	protected void setUpgradeStep(String upgradeStep) {
 		this.upgradeStep = upgradeStep;
 	}

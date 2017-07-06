@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 
 import exp.libs.envm.Charset;
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.cbg.CheckBoxGroup;
 import exp.libs.warp.ui.layout.VFlowLayout;
@@ -128,7 +130,80 @@ class _PrjVerInfo {
 		_APIs = StrUtils.concat(apis, DELIMITER);
 	}
 	
+	protected String checkVersion(_VerInfo verInfo) {
+		String errDesc = "";
+		if(verInfo == null) {
+			errDesc = "版本对象为 null";
+			
+		} else if(StrUtils.isTrimEmpty(verInfo.getAuthor())) {
+			errDesc = "[责任人] 不能为空";
+			
+		} else if(StrUtils.isTrimEmpty(verInfo.getVersion())) {
+			errDesc = "[版本号] 不能为空";
+			
+		} else if(StrUtils.isTrimEmpty(verInfo.getDatetime())) {
+			errDesc = "[定版时间] 不能为空";
+			
+		} else if(StrUtils.isTrimEmpty(verInfo.getUpgradeContent())) {
+			errDesc = "[升级内容] 不能为空";
+			
+		} else {
+			final String regex = "(\\d+)\\.(\\d+)(-SNAPSHOT)?";
+			String newVer = verInfo.getVersion();
+			String curVer = this.curVer.getVersion();
+			
+			List<String> newVerIDs = RegexUtils.findFirstMatches(newVer, regex);
+			if(newVerIDs.isEmpty()) {
+				errDesc = StrUtils.concat("[版本号] 格式错误\r\n", 
+						"参考格式: Major.Minor{-SNAPSHOT}  (主版本.次版本-快照标识)\r\n", 
+						"如:  1.0-SNAPSHOT、 2.1、 2.2-SNAPSHOT 等");
+				
+			} else {
+				curVer = (StrUtils.isTrimEmpty(curVer) ? "0.0" : curVer);
+				List<String> curVerIDs = RegexUtils.findFirstMatches(curVer, regex);
+				if(!isGreater(newVerIDs, curVerIDs)) {
+					errDesc = "[版本号] 不能小于最后的版本.";
+				}
+			}
+		}
+		return errDesc;
+	}
+	
+	private boolean isGreater(List<String> aVerIDs, List<String> bVerIDs) {
+		final int MAJOR = 1, MINOR = 2, SNAPSHOT = 3;
+		int aMajor = NumUtils.toInt(aVerIDs.get(MAJOR), 0);
+		int aMinor = NumUtils.toInt(aVerIDs.get(MINOR), 0);
+		boolean aSnapshot = StrUtils.isNotEmpty(aVerIDs.get(SNAPSHOT));
+		int bMajor = NumUtils.toInt(bVerIDs.get(MAJOR), 0);
+		int bMinor = NumUtils.toInt(bVerIDs.get(MINOR), 0);
+		boolean bSnapshot = StrUtils.isNotEmpty(bVerIDs.get(SNAPSHOT));
+		
+		boolean isGreater = false;
+		if(aMajor > bMajor) {
+			isGreater = true;
+			
+		} else if(aMajor < bMajor) {
+			isGreater = false;
+			
+		} else {
+			if(aMinor > bMinor) {
+				isGreater = true;
+				
+			} else if(aMinor < bMinor) {
+				isGreater = false;
+				
+			} else {
+				isGreater = (!aSnapshot && bSnapshot);
+			}
+		}
+		return isGreater;
+	}
+
 	protected boolean addVerInfo(_VerInfo verInfo) {
+		if(verInfo == null) {
+			return false;
+		}
+		
 		curVer.setValFromUI(verInfo);
 		historyVers.add(verInfo);
 		return true;

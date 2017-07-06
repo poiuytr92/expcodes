@@ -4,13 +4,16 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import javax.swing.JButton;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
@@ -22,12 +25,17 @@ import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.ui.SwingUtils;
+import exp.libs.warp.ui.cpt.tbl.AbstractTable;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
 class _VerMgrUI extends MainWindow {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -3365462601777108786L;
+	
+	private final static String[] HEADER = {
+		"版本号", "责任人", "定版时间", "升级内容概要"
+	};
 	
 	private final static String DEFAULT_TITLE = "版本管理";
 	
@@ -106,7 +114,7 @@ class _VerMgrUI extends MainWindow {
 			this.prjVerInfo = new _PrjVerInfo(null);
 		}
 		
-		this.hisVerTable = new _HisVerTable(this);
+		this.hisVerTable = new _HisVerTable();
 		this.tmpVerInfo = new _VerInfo();
 		
 		updateTitle();
@@ -243,7 +251,6 @@ class _VerMgrUI extends MainWindow {
 		return panel;
 	}
 
-	// FIXME 禁止添加重复的版本号 和 小于当前版本的版本号
 	private Component initNewVerPanel() {
 		JPanel panel = new JPanel(new BorderLayout()); {
 			panel.add(tmpVerInfo.toPanel(true), BorderLayout.CENTER);
@@ -287,13 +294,19 @@ class _VerMgrUI extends MainWindow {
 				_VerInfo newVerInfo = new _VerInfo();
 				newVerInfo.setValFromUI(tmpVerInfo);
 				
-				if(addVerInfo(newVerInfo)) {
-					tmpVerInfo.clear();		// 清空 [新增版本信息] 面板
-					reflashHisVerTable();	// 刷新 [历史版本信息] 列表
-					tabbedPanel.setSelectedIndex(CUR_VER_TAB_IDX);	// 切到选中 [当前版本信息]
-					
+				String errDesc = checkVerInfo(newVerInfo);
+				if(StrUtils.isEmpty(errDesc)) {
+					if(addVerInfo(newVerInfo)) {
+						tmpVerInfo.clear();		// 清空 [新增版本信息] 面板
+						reflashHisVerTable();	// 刷新 [历史版本信息] 列表
+						tabbedPanel.setSelectedIndex(CUR_VER_TAB_IDX);	// 切到选中 [当前版本信息]
+						SwingUtils.warn("新增版本成功");
+						
+					} else {
+						SwingUtils.warn("保存新版本信息失败");
+					}
 				} else {
-					SwingUtils.warn("新建版本失败");
+					SwingUtils.warn("新增版本失败: ".concat(errDesc));
 				}
 			}
 		});
@@ -303,7 +316,7 @@ class _VerMgrUI extends MainWindow {
 	 * 保存项目信息
 	 * @return
 	 */
-	protected boolean savePrjInfo() {
+	private boolean savePrjInfo() {
 		prjVerInfo.setValFromUI();
 		
 		Connection conn = SqliteUtils.getConn(ds);
@@ -324,11 +337,20 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	/**
+	 * 检查版本信息
+	 * @param verInfo
+	 * @return 非空则通过
+	 */
+	private String checkVerInfo(_VerInfo verInfo) {
+		return prjVerInfo.checkVersion(verInfo);
+	}
+	
+	/**
 	 * 新增版本信息
 	 * @param verInfo
 	 * @return
 	 */
-	protected boolean addVerInfo(_VerInfo verInfo) {
+	private boolean addVerInfo(_VerInfo verInfo) {
 		Connection conn = SqliteUtils.getConn(ds);
 		String sql = StrUtils.concat("INSERT INTO T_HISTORY_VERSIONS(", 
 				"S_AUTHOR, S_VERSION, S_DATETIME, S_UPGRADE_CONTENT, ", 
@@ -351,7 +373,7 @@ class _VerMgrUI extends MainWindow {
 	 * @param verInfo
 	 * @return
 	 */
-	protected boolean delVerInfo(_VerInfo verInfo) {
+	private boolean delVerInfo(_VerInfo verInfo) {
 		Connection conn = SqliteUtils.getConn(ds);
 		String sql = StrUtils.concat("DELETE FROM T_HISTORY_VERSIONS ", 
 				"WHERE S_VERSION = '", verInfo.getVersion(), "'");
@@ -364,16 +386,134 @@ class _VerMgrUI extends MainWindow {
 		return isOk;
 	}
 	
-	protected _VerInfo getVerInfo(int row) {
+	private _VerInfo getVerInfo(int row) {
 		return prjVerInfo.getVerInfo(row);
 	}
 	
-	protected void reflashHisVerTable() {
+	private void reflashHisVerTable() {
 		hisVerTable.reflash(prjVerInfo.toHisVerTable());
 	}
 	
-	protected _PrjVerInfo getPrjVerInfo() {
-		return prjVerInfo;
-	}
 	
+	/**
+	 * <PRE>
+	 * 历史版本表单组件
+	 * </PRE>
+	 * 
+	 * @author Administrator
+	 * @date 2017年7月6日
+	 */
+	private class _HisVerTable extends AbstractTable {
+		
+		private static final long serialVersionUID = -3111568334645181825L;
+		
+		private final static int MAX_ROW = 50;
+		
+		private int curRow;
+		
+		private JPopupMenu popMenu;
+		
+		private _HisVerTable() {
+			super(HEADER, MAX_ROW);
+			this.curRow = -1;
+			initPopMenu();
+		}
+		
+		private void initPopMenu() {
+			this.popMenu = new JPopupMenu();
+			JMenuItem detail = new JMenuItem("查看详情");
+			JMenuItem delete = new JMenuItem("删除版本");
+			JMenuItem reflash = new JMenuItem("刷新列表");
+			popMenu.add(detail);
+			popMenu.add(delete);
+			popMenu.add(reflash);
+			
+			detail.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					_VerInfo verInfo = getVerInfo(curRow);
+					if(verInfo != null) {
+						verInfo._view();
+					}
+				}
+			});
+			
+			delete.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					_VerInfo verInfo = getVerInfo(curRow);
+					if(verInfo == null) {
+						return;
+					}
+					
+					String desc = StrUtils.concat("删除版本 [", verInfo.getVersion(), "]");
+					if(SwingUtils.confirm(StrUtils.concat("确认", desc, " ?"))) {
+						if(delVerInfo(verInfo)) {
+							curRow = -1;
+							reflashHisVerTable();	// 刷新表单
+							SwingUtils.warn(StrUtils.concat("删除", desc, " 成功"));
+							
+						} else {
+							SwingUtils.warn(StrUtils.concat("删除", desc, " 失败"));
+						}
+					}
+				}
+			});
+			
+			reflash.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					reflashHisVerTable();	// 刷新表单
+				}
+			});
+		}
+		
+		/**
+		 * 鼠标点击事件
+		 */
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			if(e.getButton() != MouseEvent.BUTTON3) {	
+				return;	// 只处理鼠标右键事件
+			}
+			
+			// 识别当前操作行（选中行优先，若无选中则为鼠标当前所在行）
+			curRow = getCurSelectRow();
+			curRow = (curRow < 0 ? getCurMouseRow() : curRow);
+			if(curRow < 0) {
+				return;
+			}
+			
+			// 呈现浮动菜单
+			popMenu.show(e.getComponent(), e.getX(), e.getY());
+		}
+
+		@Override
+		public void mouseDragged(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseEntered(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mousePressed(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {
+			// TODO Auto-generated method stub
+			
+		}
+		
+	}
 }
