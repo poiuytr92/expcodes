@@ -155,7 +155,7 @@ class _PrjVerInfo {
 			errDesc = "[升级内容] 不能为空";
 			
 		} else {
-			final String regex = "(\\d+)\\.(\\d+)(-SNAPSHOT)?";
+			final String regex = "^(\\d+)\\.(\\d+)(-SNAPSHOT)?$";
 			String newVer = verInfo.getVersion();
 			String curVer = this.curVer.getVersion();
 			
