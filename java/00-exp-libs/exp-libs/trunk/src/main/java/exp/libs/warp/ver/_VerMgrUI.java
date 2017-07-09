@@ -26,6 +26,7 @@ import exp.libs.envm.DBType;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.format.ESCUtils;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.time.TimeUtils;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
@@ -87,8 +88,8 @@ class _VerMgrUI extends MainWindow {
 	/** 查找历史版本的按钮 */
 	private JButton findHisVerBtn;
 	
-	/** 复制当前版本信息的按钮 */
-	private JButton copyCurVerBtn;
+	/** 修改当前版本信息的按钮 */
+	private JButton modifyCurVerBtn;
 	
 	/** 新增新版本信息的按钮 */
 	private JButton createVerBtn;
@@ -156,7 +157,7 @@ class _VerMgrUI extends MainWindow {
 		
 		this.savePrjInfoBtn = new JButton("保存");
 		this.findHisVerBtn = new JButton("查找");
-		this.copyCurVerBtn = new JButton("复制当前版本信息");
+		this.modifyCurVerBtn = new JButton("修改");
 		this.createVerBtn = new JButton("保存");
 	}
 	
@@ -281,7 +282,7 @@ class _VerMgrUI extends MainWindow {
 			_VerInfo curVerInfo = prjVerInfo.getCurVer();
 			panel.add(curVerInfo.toPanel(false), BorderLayout.CENTER);
 		}
-		panel.add(copyCurVerBtn, BorderLayout.SOUTH);
+		panel.add(modifyCurVerBtn, BorderLayout.SOUTH);
 		return panel;
 	}
 
@@ -316,12 +317,15 @@ class _VerMgrUI extends MainWindow {
 			}
 		});
 		
-		copyCurVerBtn.addActionListener(new ActionListener() {
+		modifyCurVerBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				if(modifyCurVerInfo()) {
+					SwingUtils.info("更新当前版本信息成功");
+				} else {
+					SwingUtils.warn("更新当前版本信息失败");
+				}
 			}
 		});
 		
@@ -402,6 +406,26 @@ class _VerMgrUI extends MainWindow {
 		
 		if(isOk == true) {
 			prjVerInfo.addVerInfo(verInfo);
+		}
+		return isOk;
+	}
+	
+	private boolean modifyCurVerInfo() {
+		_VerInfo curVer = prjVerInfo.getCurVer();
+		curVer.getDatetimeTF().setText(TimeUtils.getSysDate());
+		curVer.setValFromUI(null);
+		
+		Connection conn = SqliteUtils.getConn(ds);
+		String sql = StrUtils.concat("UPDATE T_HISTORY_VERSIONS ", 
+				"SET S_DATETIME = '", curVer.getDatetime(), "', ", 
+				"S_UPGRADE_CONTENT = '", curVer.getUpgradeContent(), "', ", 
+				"S_UPGRADE_STEP = '", curVer.getUpgradeStep(), "' ", 
+				"WHERE S_VERSION = '", curVer.getVersion(), "'");
+		boolean isOk = SqliteUtils.execute(conn, sql);
+		SqliteUtils.close(conn);
+		
+		if(isOk == true) {
+			prjVerInfo.modifyCurVerInfo();
 		}
 		return isOk;
 	}

@@ -216,6 +216,17 @@ class _PrjVerInfo {
 		return true;
 	}
 	
+	protected boolean modifyCurVerInfo() {
+		if(curVer == null) {
+			return false;
+		}
+		
+		curVer.setValFromUI(null);
+		int size = historyVers.size();
+		historyVers.get(size - 1).setValFromUI(curVer);
+		return true;
+	}
+	
 	protected boolean delVerInfo(_VerInfo verInfo) {
 		boolean isOk = false;
 		Iterator<_VerInfo> verIts = historyVers.iterator();

@@ -94,8 +94,14 @@ class _VerInfo extends PopChildWindow {
 			datetime = other.getDatetimeTF().getText();
 			upgradeContent = other.getUpgradeContentTA().getText();
 			upgradeStep = other.getUpgradeStepTA().getText();
-			
 			setValToUI();
+			
+		} else {
+			author = getAuthorTF().getText();
+			version = getVersionTF().getText();
+			datetime = getDatetimeTF().getText();
+			upgradeContent = getUpgradeContentTA().getText();
+			upgradeStep = getUpgradeStepTA().getText();
 		}
 	}
 	
@@ -135,8 +141,6 @@ class _VerInfo extends PopChildWindow {
 		authorTF.setEditable(isEditable);
 		versionTF.setEditable(isEditable);
 		datetimeTF.setEditable(isEditable);
-		upgradeContentTA.setEditable(isEditable);
-		upgradeStepTA.setEditable(isEditable);
 		
 		JPanel panel = new JPanel(new VFlowLayout()); {
 			panel.add(SwingUtils.getPairsPanel(" 责任人 ", authorTF));
