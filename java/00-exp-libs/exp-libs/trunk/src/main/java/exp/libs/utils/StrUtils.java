@@ -43,6 +43,9 @@ public class StrUtils {
 		if(strs != null) {
 			for(String s : strs) {
 				isEmpty &= isEmpty(s);
+				if(isEmpty == false) {
+					break;
+				}
 			}
 		}
 		return isEmpty;
@@ -53,8 +56,10 @@ public class StrUtils {
 		if(strs != null) {
 			for(String s : strs) {
 				isNotEmpty &= isNotEmpty(s);
+				if(isNotEmpty == false) {
+					break;
+				}
 			}
-			
 		} else {
 			isNotEmpty = false;
 		}
