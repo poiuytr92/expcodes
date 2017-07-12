@@ -8,6 +8,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,11 +59,16 @@ class _VerMgrUI extends MainWindow {
 	/** 版本信息库的脚本 */
 	private final static String VER_DB_SCRIPT = "/exp/libs/warp/ver/VERSION-INFO-DB.sql";
 	
+	private final static String RES_DIR = "./src/main/resources";
+	
 	/**
 	 * 存储版本信息的文件数据库位置.
 	 * 	[src/main/resources] 为Maven项目默认的资源目录位置（即使非Maven项目也可用此位置）
 	 */
-	private final static String VER_DB = "./src/main/resources/.verinfo";
+	private final static String VER_DB = RES_DIR.concat("/.verinfo");
+	
+	/** 临时版本库位置（仅用于查看版本信息） */
+	private final static String TMP_VER_DB = "./conf/.verinfo";
 	
 	/** [当前版本]的Tab面板索引 */
 	private final static int CUR_VER_TAB_IDX = 2;
@@ -166,6 +172,17 @@ class _VerMgrUI extends MainWindow {
 		ds.setDriver(DBType.SQLITE.DRIVER);
 		ds.setName(VER_DB);
 		ds.setCharset(Charset.UTF8);
+		
+		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
+		Connection testConn = null;
+		try {
+			Class.forName(ds.getDriver());
+			testConn = DriverManager.getConnection(ds.getUrl());
+		} catch(Exception e) {
+			FileUtils.copyFileInJar(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
+			ds.setName(TMP_VER_DB);
+		}
+		SqliteUtils.close(testConn);
 	}
 	
 	private boolean initVerDB() {
