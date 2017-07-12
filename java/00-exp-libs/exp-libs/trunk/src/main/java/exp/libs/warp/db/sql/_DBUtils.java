@@ -29,13 +29,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
-import exp.libs.warp.tpl.Template;
+import exp.libs.utils.StrUtils;
+import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.os.JavaUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.db.sql.bean.PdmColumn;
 import exp.libs.warp.db.sql.bean.PdmTable;
-import exp.libs.utils.StrUtils;
-import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.os.JVMUtils;
+import exp.libs.warp.tpl.Template;
 
 final class _DBUtils {
 
@@ -545,7 +545,7 @@ final class _DBUtils {
 		}
 		
 		// 表名是java关键字，则前面补 $
-		if(JVMUtils.isJavaKeyWord(tmpName)) {
+		if(JavaUtils.isJavaKeyWord(tmpName)) {
 			tmpName = "$" + tmpName;
 		}
 		return tmpName;
@@ -617,7 +617,7 @@ final class _DBUtils {
 		}
 		
 		// 表名是java关键字，则前面补 $
-		if(JVMUtils.isJavaKeyWord(tmpName)) {
+		if(JavaUtils.isJavaKeyWord(tmpName)) {
 			tmpName = "_" + tmpName;
 		}
 		return tmpName;

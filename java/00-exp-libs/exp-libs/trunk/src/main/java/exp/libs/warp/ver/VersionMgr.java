@@ -33,7 +33,7 @@ final public class VersionMgr {
 	}
 	
 	/**
-	 * @param args main函数入参: 
+	 * @param args 入口参数（win下默认为-m, linux下强制为-p）
 	 * 		[-p] 打印最后的版本信息（DOS界面）
 	 * 		[-m] 版本管理（UI界面）
 	 */

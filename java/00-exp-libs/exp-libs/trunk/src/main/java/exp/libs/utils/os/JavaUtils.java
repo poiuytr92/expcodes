@@ -2,8 +2,10 @@ package exp.libs.utils.os;
 
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 
 import exp.libs.envm.Charset;
@@ -25,8 +27,40 @@ import exp.libs.warp.io.flow.FileFlowReader;
  */
 public class JavaUtils {
 
+	/** Java关键字数组 */
+	private final static String[] JAVA_KEY_WORDS = {
+			"abstract", "assert", "boolean", "break", "byte",
+			"case", "catch", "char", "class", "const",
+			"continue", "default", "do", "double", "else",
+			"enum", "extends", "final", "finally", "float",
+			"for", "goto", "if", "implements", "import",
+			"instanceof", "int", "interface", "long", "native",
+			"new", "package", "private", "protected", "public",
+			"return", "short", "static", "strictfp", "super",
+			"switch", "synchronized", "this", "throw", "throws",
+			"transient", "try", "void", "volatile", "while",	
+	};
+	
+	/** java关键字列表 */
+	private final static List<String> JAVA_KEY_WORD_LIST = 
+			Arrays.asList(JAVA_KEY_WORDS);
+	
 	/** 私有化构造函数 */
 	protected JavaUtils() {}
+	
+	/**
+	 * 检查单词是否为java关键字
+	 * 
+	 * @param word 待检查字符串
+	 * @return true:是 ; false:不是
+	 */
+	public static boolean isJavaKeyWord(String word) {
+		boolean isKeyWord = false;
+		if(word != null && !"".equals(word.trim())) {
+			isKeyWord = JAVA_KEY_WORD_LIST.contains(word.trim());
+		}
+		return isKeyWord;
+	}
 	
 	public static void modifyPackagePath(String srcDirPath) {
 		modifyPackagePath(srcDirPath, Charset.UTF8);

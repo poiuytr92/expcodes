@@ -3,9 +3,7 @@ package exp.libs.utils.os;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.Arrays;
 import java.util.IdentityHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Stack;
 
@@ -25,40 +23,8 @@ import exp.libs.jvm.JVMAgent;
  */
 public final class JVMUtils {
 
-	/** Java关键字数组 */
-	private final static String[] JAVA_KEY_WORDS = {
-			"abstract", "assert", "boolean", "break", "byte",
-			"case", "catch", "char", "class", "const",
-			"continue", "default", "do", "double", "else",
-			"enum", "extends", "final", "finally", "float",
-			"for", "goto", "if", "implements", "import",
-			"instanceof", "int", "interface", "long", "native",
-			"new", "package", "private", "protected", "public",
-			"return", "short", "static", "strictfp", "super",
-			"switch", "synchronized", "this", "throw", "throws",
-			"transient", "try", "void", "volatile", "while",	
-	};
-	
-	/** java关键字列表 */
-	private final static List<String> JAVA_KEY_WORD_LIST = 
-			Arrays.asList(JAVA_KEY_WORDS);
-	
 	/** 私有化构造函数 */
 	protected JVMUtils() {}
-	
-	/**
-	 * 检查单词是否为java关键字
-	 * 
-	 * @param word 待检查字符串
-	 * @return true:是 ; false:不是
-	 */
-	public static boolean isJavaKeyWord(String word) {
-		boolean isKeyWord = false;
-		if(word != null && !"".equals(word.trim())) {
-			isKeyWord = JAVA_KEY_WORD_LIST.contains(word.trim());
-		}
-		return isKeyWord;
-	}
 	
 	/**
 	 * 直接计算当前对象占用空间大小.
