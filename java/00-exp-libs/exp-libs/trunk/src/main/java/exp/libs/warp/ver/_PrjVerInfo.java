@@ -68,10 +68,15 @@ class _PrjVerInfo {
 	
 	private CheckBoxGroup<String> _APIsCB;
 	
-	private _VerInfo curVer;
+	/** 显示用的历史版本数据(与界面过滤结果一致) */
+	private List<_VerInfo> viewHistoryVers;
 	
+	/** 实际的历史版本数据(与库存一致) */
 	private List<_VerInfo> historyVers;
 
+	/** 当前的版本信息(亦即最后一个版本) */
+	private _VerInfo curVer;
+	
 	protected _PrjVerInfo(List<_VerInfo> historyVers) {
 		this.prjName = "";
 		this.prjDesc = "";
@@ -80,9 +85,10 @@ class _PrjVerInfo {
 		this.diskSize = "";
 		this.cacheSize = "";
 		this._APIs = "";
-		this.curVer = new _VerInfo();
+		this.viewHistoryVers = new LinkedList<_VerInfo>();
 		this.historyVers = (historyVers == null ? 
 				new LinkedList<_VerInfo>() : historyVers);
+		this.curVer = new _VerInfo();
 		updateCurVer();
 		
 		
@@ -95,19 +101,13 @@ class _PrjVerInfo {
 		this._APIsCB = new CheckBoxGroup<String>(API_ITEMS);
 	}
 	
-	protected JScrollPane toPanel() {
-		setValToUI();
-		
-		JPanel panel = new JPanel(new VFlowLayout()); {
-			panel.add(SwingUtils.getPairsPanel("项目名称", prjNameTF));
-			panel.add(SwingUtils.getPairsPanel("项目简述", prjDescTF));
-			panel.add(SwingUtils.getPairsPanel("开发团队", teamNameTF));
-			panel.add(SwingUtils.getPairsPanel("项目编码", prjCharsetTF));
-			panel.add(SwingUtils.getPairsPanel("硬盘需求", diskSizeTF));
-			panel.add(SwingUtils.getPairsPanel("内存需求", cacheSizeTF));
-			panel.add(SwingUtils.getPairsPanel("相关接口", _APIsCB.toDefaultPanel()));
+	private void updateCurVer() {
+		curVer.clear();
+		int size = this.historyVers.size();
+		if(size > 0) {
+			_VerInfo verInfo = this.historyVers.get(size - 1);
+			curVer.setValFromUI(verInfo);
 		}
-		return SwingUtils.addAutoScroll(panel);
 	}
 	
 	protected void setValToUI() {
@@ -135,6 +135,21 @@ class _PrjVerInfo {
 		
 		List<String> apis = _APIsCB.getItems(true);
 		_APIs = StrUtils.concat(apis, DELIMITER);
+	}
+	
+	protected JScrollPane toPanel() {
+		setValToUI();
+		
+		JPanel panel = new JPanel(new VFlowLayout()); {
+			panel.add(SwingUtils.getPairsPanel("项目名称", prjNameTF));
+			panel.add(SwingUtils.getPairsPanel("项目简述", prjDescTF));
+			panel.add(SwingUtils.getPairsPanel("开发团队", teamNameTF));
+			panel.add(SwingUtils.getPairsPanel("项目编码", prjCharsetTF));
+			panel.add(SwingUtils.getPairsPanel("硬盘需求", diskSizeTF));
+			panel.add(SwingUtils.getPairsPanel("内存需求", cacheSizeTF));
+			panel.add(SwingUtils.getPairsPanel("相关接口", _APIsCB.toDefaultPanel()));
+		}
+		return SwingUtils.addAutoScroll(panel);
 	}
 	
 	protected String checkVersion(_VerInfo verInfo) {
@@ -205,7 +220,7 @@ class _PrjVerInfo {
 		}
 		return isGreater;
 	}
-
+	
 	protected boolean addVerInfo(_VerInfo verInfo) {
 		if(verInfo == null) {
 			return false;
@@ -250,15 +265,6 @@ class _PrjVerInfo {
 		return true;
 	}
 	
-	private void updateCurVer() {
-		curVer.clear();
-		int size = this.historyVers.size();
-		if(size > 0) {
-			_VerInfo verInfo = this.historyVers.get(size - 1);
-			curVer.setValFromUI(verInfo);
-		}
-	}
-	
 	/**
 	 * 
 	 * @param row 此行数为界面的版本列表行数， 对此处的历史版本列表而言是倒序的
@@ -266,16 +272,10 @@ class _PrjVerInfo {
 	 */
 	protected _VerInfo getVerInfo(int row) {
 		_VerInfo verInfo = null;
-		if(row < 0) {
-			return verInfo;
+		if(row >= 0 && row < viewHistoryVers.size()) {
+			verInfo = viewHistoryVers.get(row);
 		}
-		
-		int idx = historyVers.size() - 1 - row;
-		if(idx < 0) {
-			return verInfo;
-		}
-		
-		return historyVers.get(idx);
+		return verInfo;
 	}
 	
 	protected String getPrjName() {
@@ -339,15 +339,23 @@ class _PrjVerInfo {
 	}
 	
 	protected List<List<String>> toHisVerTable() {
+		return toHisVerTable(null);
+	}
+	
+	protected List<List<String>> toHisVerTable(String keyword) {
+		viewHistoryVers.clear();
 		List<List<String>> hisVerTable = new LinkedList<List<String>>();
 		for(int i = historyVers.size() - 1; i >= 0; i--) {
 			_VerInfo verInfo = historyVers.get(i);
-			List<String> row = new LinkedList<String>();
-			row.add(verInfo.getVersion());
-			row.add(verInfo.getAuthor());
-			row.add(verInfo.getDatetime());
-			row.add(StrUtils.showSummary(verInfo.getUpgradeContent().trim()));
-			hisVerTable.add(row);
+			if(StrUtils.isEmpty(keyword) || verInfo.contains(keyword)) {
+				List<String> row = new LinkedList<String>();
+				row.add(verInfo.getVersion());
+				row.add(verInfo.getAuthor());
+				row.add(verInfo.getDatetime());
+				row.add(StrUtils.showSummary(verInfo.getUpgradeContent().trim()));
+				hisVerTable.add(row);
+				viewHistoryVers.add(verInfo);
+			}
 		}
 		return hisVerTable;
 	}

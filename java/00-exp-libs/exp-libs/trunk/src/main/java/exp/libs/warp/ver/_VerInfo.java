@@ -17,7 +17,7 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
 import exp.libs.warp.ui.layout.VFlowLayout;
 
 /**
- * <PRE>
+ * <PRE>	
  * 单次版本信息
  * </PRE>
  * <B>PROJECT：</B> exp-libs
@@ -156,6 +156,15 @@ class _VerInfo extends PopChildWindow {
 		return SwingUtils.addAutoScroll(panel);
 	}
 
+	protected boolean contains(String keyword) {
+		boolean isContains = false;
+		if(StrUtils.isNotEmpty(keyword)) {
+			isContains = StrUtils.concat(author, version, datetime, 
+					upgradeContent, upgradeStep).contains(keyword);
+		}
+		return isContains;
+	}
+	
 	protected JTextField getAuthorTF() {
 		return authorTF;
 	}

@@ -346,4 +346,15 @@ public class SwingUtils {
 			    null, msg, "Tips", JOptionPane.ERROR_MESSAGE));
 	}
 	
+	/**
+	 * 输入弹窗
+	 * @param msg 提示消息
+	 * @return 输入内容
+	 */
+	public static String input(String msg) {
+		String input = JOptionPane.showInputDialog(
+			    null, msg, "Tips", JOptionPane.OK_CANCEL_OPTION);
+		return (input == null ? "" : input);
+	}
+	
 }

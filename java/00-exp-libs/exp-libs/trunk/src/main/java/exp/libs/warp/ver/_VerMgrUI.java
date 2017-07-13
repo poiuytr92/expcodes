@@ -323,8 +323,8 @@ class _VerMgrUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				
+				String keyword = SwingUtils.input("请输入查找关键字: ");
+				reflashHisVerTable(keyword);
 			}
 		});
 		
@@ -464,7 +464,11 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	private void reflashHisVerTable() {
-		hisVerTable.reflash(prjVerInfo.toHisVerTable());
+		reflashHisVerTable(null);
+	}
+	
+	private void reflashHisVerTable(String keyword) {
+		hisVerTable.reflash(prjVerInfo.toHisVerTable(keyword));
 	}
 	
 	protected String toCurVerInfo() {
