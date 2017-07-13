@@ -158,6 +158,7 @@ public class DataSourceBean {
 			url = url.replace(DBType.PH_HOST, getIp());
 			url = url.replace(DBType.PH_PORT, String.valueOf(getPort()));
 			url = url.replace(DBType.PH_DBNAME, getName());
+			url = url.replace(DBType.PH_TIMEOUT, String.valueOf(getMaximumActiveTime()));
 			url = url.replace(DBType.PH_CHARSET, getCharset());
 		}
 		return (url == null ? "" : url);

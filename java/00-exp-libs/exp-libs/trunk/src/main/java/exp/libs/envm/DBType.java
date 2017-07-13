@@ -7,7 +7,7 @@ public enum DBType {
 	
 	PROXOOL("proxool", "org.logicalcobwebs.proxool.ProxoolDriver", "proxool.<alias>"), 
 	
-	MYSQL("mysql", "com.mysql.jdbc.Driver", "jdbc:mysql://<host>:<port>/<dbname>?autoReconnect=true&amp;useUnicode=true&amp;zeroDateTimeBehavior=convertToNull&amp;characterEncoding=<charset>"),
+	MYSQL("mysql", "com.mysql.jdbc.Driver", "jdbc:mysql://<host>:<port>/<dbname>?autoReconnect=true&amp;useUnicode=true&amp;zeroDateTimeBehavior=convertToNull&amp;socketTimeout=<timeout>&amp;characterEncoding=<charset>"),
 	
 	SQLITE("sqlite", "org.sqlite.JDBC", "jdbc:sqlite:<dbname>"),
 	
@@ -64,6 +64,8 @@ public enum DBType {
 	public final static String PH_PORT = "<port>";
 	
 	public final static String PH_DBNAME = "<dbname>";
+	
+	public final static String PH_TIMEOUT = "<timeout>";
 	
 	public final static String PH_CHARSET = "<charset>";
 	

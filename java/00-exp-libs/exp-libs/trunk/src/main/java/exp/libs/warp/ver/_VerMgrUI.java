@@ -8,7 +8,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -174,15 +173,10 @@ class _VerMgrUI extends MainWindow {
 		ds.setCharset(Charset.UTF8);
 		
 		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
-		Connection testConn = null;
-		try {
-			Class.forName(ds.getDriver());
-			testConn = DriverManager.getConnection(ds.getUrl());
-		} catch(Exception e) {
+		if(!SqliteUtils.testConn(ds)) {
 			FileUtils.copyFileInJar(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
 			ds.setName(TMP_VER_DB);
 		}
-		SqliteUtils.close(testConn);
 	}
 	
 	private boolean initVerDB() {

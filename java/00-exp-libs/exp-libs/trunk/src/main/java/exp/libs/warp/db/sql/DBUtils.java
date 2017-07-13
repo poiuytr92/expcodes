@@ -50,6 +50,27 @@ public class DBUtils {
 	protected DBUtils() {}
 	
 	/**
+	 * 测试数据源连接是否可用
+	 * @param ds
+	 * @return
+	 */
+	public static boolean testConn(DataSourceBean ds) {
+		boolean isOk = false;
+		if(ds != null) {
+			Connection conn = null;
+			try {
+				Class.forName(ds.getDriver());
+				conn = DriverManager.getConnection(
+						ds.getUrl(), ds.getUsername(), ds.getPassword());
+				isOk = true;
+				
+			} catch (Throwable e) {}
+			close(conn);
+		}
+		return isOk;
+	}
+	
+	/**
 	 * 获取数据库连接.
 	 * 	在连接成功前，重试若干次(默认10次)
 	 * @param ds 数据库配置信息
@@ -137,34 +158,6 @@ public class DBUtils {
 			} catch (Throwable e) {
 				log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
 			}
-		}
-		return conn;
-	}
-	
-	/**
-	 * 通过JDBC获取永不超时的数据库连接（目前仅适用于MYSQL）
-	 * @param dbInfo 数据库配置信息
-	 * @return 数据库连接
-	 */
-	public static Connection getConnNeverOT(DataSourceBean ds) {
-		Connection conn = null;
-		if(ds == null || !DBType.MYSQL.DRIVER.equals(ds.getDriver())) {
-			return conn;
-		}
-		
-		String url = StrUtils.concat(
-				"jdbc:mysql://", ds.getIp(), ":", ds.getPort(), 
-				"/", ds.getName(), "?autoReconnect=true&useUnicode=true", 
-				"&zeroDateTimeBehavior=convertToNull&socketTimeout=0", 
-				"&characterEncoding=", ds.getCharset());
-		
-		try {
-			Class.forName(ds.getDriver());
-			conn = DriverManager.getConnection(
-					url, ds.getUsername(), ds.getPassword());
-			
-		} catch (Throwable e) {
-			log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
 		}
 		return conn;
 	}
