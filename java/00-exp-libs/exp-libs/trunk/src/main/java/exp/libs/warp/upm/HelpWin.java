@@ -1,7 +1,9 @@
 package exp.libs.warp.upm;
 
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 
+import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
 public class HelpWin extends PopChildWindow {
@@ -10,14 +12,12 @@ public class HelpWin extends PopChildWindow {
 	private static final long serialVersionUID = -6529277202660835224L;
 
 	protected HelpWin() {
-		super("", LogWin.WIDTH, 200);
-		this.setUndecorated(true);	// 窗口无边框
+		super("", LoginWin.WIDTH, 200);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
-		// TODO Auto-generated method stub
-		
+		SwingUtils.setNoFrame(this);
 	}
 
 	@Override

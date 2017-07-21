@@ -68,7 +68,7 @@
         <dependency>
           <groupId>org.jb</groupId>
           <artifactId>beauty-eye</artifactId>
-          <version>3.4</version>
+          <version>3.7</version>
         </dependency>
         
         <!-- swing绘图构件 -->

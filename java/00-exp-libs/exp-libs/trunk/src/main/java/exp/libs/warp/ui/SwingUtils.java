@@ -6,9 +6,11 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -35,6 +37,19 @@ public class SwingUtils {
 	public static final int HIDE_SCROLL_MODE = -1;
 	
 	protected SwingUtils() {}
+	
+	/**
+	 * 设置窗口无边框（需要在显示窗口前调用此方法）
+	 * @param frame
+	 */
+	public static void setNoFrame(JFrame frame) {
+		if(frame == null) {
+			return;
+		}
+		
+		frame.setUndecorated(true);
+		frame.getRootPane().setWindowDecorationStyle(JRootPane.NONE);
+	}
 	
 	/**
 	 * 为指定组件添加自动滚动条（当文本超过宽/高边界时自动出现水平/垂直滚动条）
