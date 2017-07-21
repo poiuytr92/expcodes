@@ -82,30 +82,15 @@ class LoginWin extends MainWindow {
 	@Override
 	protected void initComponents(Object... args) {
 		this.helpBtn = new JButton(OPEN);
+		helpBtn.setPreferredSize(new Dimension(WIDTH, 15));	// 设置按钮高度
+		
 		this.helpWin = new HelpWin();
 	}
 
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
 		rootPanel.add(toUnPwPanel(), BorderLayout.CENTER);
-		
-		helpBtn.setPreferredSize(new Dimension(WIDTH, 15));	// 设置按钮高度
 		rootPanel.add(helpBtn, BorderLayout.SOUTH);
-		
-		helpBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(OPEN.equals(helpBtn.getText())) {
-					helpWin._view();
-					helpBtn.setText(FOLD);
-					
-				} else {
-					helpWin._hide();
-					helpBtn.setText(OPEN);
-				}
-			}
-		});
 	}
 
 	private JPanel toUnPwPanel() {
@@ -142,7 +127,23 @@ class LoginWin extends MainWindow {
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
 		
-		// 黏着效果
+		// 设置帮助按钮的监听
+		helpBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(OPEN.equals(helpBtn.getText())) {
+					helpWin._view();
+					helpBtn.setText(FOLD);
+					
+				} else {
+					helpWin._hide();
+					helpBtn.setText(OPEN);
+				}
+			}
+		});
+
+		// 设置帮助窗口的黏着效果
 		this.addComponentListener(new ComponentAdapter() {
 			
 			//当登陆窗口移动时，帮助面板跟随移动
@@ -158,7 +159,6 @@ class LoginWin extends MainWindow {
 				Point point = getLocation();
 				helpWin.setLocation((int) point.getX(),(int) (point.getY() + HIGH));
 			}
-
 		});
 	}
 
