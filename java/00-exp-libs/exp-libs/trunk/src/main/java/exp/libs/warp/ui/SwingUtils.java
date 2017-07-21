@@ -244,7 +244,7 @@ public class SwingUtils {
 	/**
 	 * 获取 [中心-南] 边框布局面板
 	 * @param center 期望置放到中心的组件
-	 * @param north 期望置放到南方的组件
+	 * @param south 期望置放到南方的组件
 	 * @return [中心-南] 边框布局面板
 	 */
 	public static JPanel getSBorderPanel(Component center, Component south) {
@@ -257,7 +257,7 @@ public class SwingUtils {
 	/**
 	 * 获取 [中心-西] 边框布局面板
 	 * @param center 期望置放到中心的组件
-	 * @param north 期望置放到西方的组件
+	 * @param west 期望置放到西方的组件
 	 * @return [中心-西] 边框布局面板
 	 */
 	public static JPanel getWBorderPanel(Component center, Component west) {
@@ -270,13 +270,43 @@ public class SwingUtils {
 	/**
 	 * 获取 [中心-东] 边框布局面板
 	 * @param center 期望置放到中心的组件
-	 * @param north 期望置放到东方的组件
+	 * @param east 期望置放到东方的组件
 	 * @return [中心-东] 边框布局面板
 	 */
 	public static JPanel getEBorderPanel(Component center, Component east) {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(center, BorderLayout.CENTER);
 		panel.add(east, BorderLayout.EAST);
+		return panel;
+	}
+	
+	/**
+	 * 获取 [西-中心-东] 边框布局面板
+	 * @param west 期望置放到西方的组件
+	 * @param center 期望置放到中心的组件
+	 * @param east 期望置放到东方的组件
+	 * @return [西-中心-东] 边框布局面板
+	 */
+	public static JPanel getWEBorderPanel(Component west, Component center, Component east) {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(west, BorderLayout.WEST);
+		panel.add(center, BorderLayout.CENTER);
+		panel.add(east, BorderLayout.EAST);
+		return panel;
+	}
+	
+	/**
+	 * 获取 [北-中心-南] 边框布局面板
+	 * @param north 期望置放到北方的组件
+	 * @param center 期望置放到中心的组件
+	 * @param south 期望置放到南方的组件
+	 * @return [北-中心-南] 边框布局面板
+	 */
+	public static JPanel getNSBorderPanel(Component north, Component center, Component south) {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(north, BorderLayout.NORTH);
+		panel.add(center, BorderLayout.CENTER);
+		panel.add(south, BorderLayout.SOUTH);
 		return panel;
 	}
 	

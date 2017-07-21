@@ -15,6 +15,11 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
+
+import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.FrameBorderStyle;
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -23,16 +28,20 @@ import exp.libs.warp.ui.cpt.win.MainWindow;
 class LoginWin extends MainWindow {
 
 	public static void main(String[] args) {
-		BeautyEyeUtils.init();
+		BeautyEyeUtils.init(FrameBorderStyle.translucencySmallShadow);
 		new LoginWin();
 	}
 	
 	/** serialVersionUID */
 	private static final long serialVersionUID = -1752327112586227761L;
 
-	protected final static int HIGH = 250;
+	protected final static int HIGH = 210;
 	
 	protected final static int WIDTH = 330;
+	
+	private final static String FOLD = "︽", OPEN = "︾";
+	
+	private JButton helpBtn;
 	
 	private HelpWin helpWin;
 	
@@ -55,12 +64,16 @@ class LoginWin extends MainWindow {
 				}
 			}
 			
+			// 窗口最小化时隐藏帮助面板
 			public void windowIconified(WindowEvent e) { 
-				helpWin._hide();	// 窗口最小化时隐藏帮助面板
+				helpWin._hide();
 			}
 			
+			// 窗口还原时, 若帮助面板此前已展开则重新显示
 			public void windowDeiconified(WindowEvent e) {
-				helpWin._view();	// 窗口还原时显示帮助面板  FIXME 且按钮未按下, 覆写_view方法
+				if(FOLD.equals(helpBtn.getText())) {
+					helpWin._view();
+				}
 			}
 			
 		});
@@ -68,6 +81,7 @@ class LoginWin extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
+		this.helpBtn = new JButton(OPEN);
 		this.helpWin = new HelpWin();
 	}
 
@@ -75,15 +89,21 @@ class LoginWin extends MainWindow {
 	protected void setComponentsLayout(JPanel rootPanel) {
 		rootPanel.add(toUnPwPanel(), BorderLayout.CENTER);
 		
-		JButton btn = new JButton("︾");
-		btn.setPreferredSize(new Dimension(WIDTH, 15));	// 设置按钮高度
-		rootPanel.add(btn, BorderLayout.SOUTH);
+		helpBtn.setPreferredSize(new Dimension(WIDTH, 15));	// 设置按钮高度
+		rootPanel.add(helpBtn, BorderLayout.SOUTH);
 		
-		btn.addActionListener(new ActionListener() {
+		helpBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				helpWin._view(); // FIXME
+				if(OPEN.equals(helpBtn.getText())) {
+					helpWin._view();
+					helpBtn.setText(FOLD);
+					
+				} else {
+					helpWin._hide();
+					helpBtn.setText(OPEN);
+				}
 			}
 		});
 	}
@@ -91,9 +111,13 @@ class LoginWin extends MainWindow {
 	private JPanel toUnPwPanel() {
 		JPanel panel = new JPanel(new GridLayout(6, 1)); {
 			panel.add(new JLabel(), 0);
-			panel.add(SwingUtils.getPairsPanel("账号"), 1);
+			panel.add(SwingUtils.getWEBorderPanel(
+					new JLabel("  [账号] :  "), new JTextField(), 
+					new JLabel("   ")), 1);
 			panel.add(new JLabel(), 2);
-			panel.add(SwingUtils.getPairsPanel("密码"), 3);
+			panel.add(SwingUtils.getWEBorderPanel(
+					new JLabel("  [密码] :  "), new JPasswordField(), 
+					new JLabel("   ")), 3);
 			panel.add(new JLabel(), 4);
 			panel.add(toLogRegPanel(), 5);
 		} SwingUtils.addBorder(panel);
@@ -101,11 +125,15 @@ class LoginWin extends MainWindow {
 	}
 	
 	private JPanel toLogRegPanel() {
+		JButton loginBtn = new JButton("登陆");
+		JButton registBtn = new JButton("注册");
+		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn, registBtn);
+		
 		JPanel panel = new JPanel(new GridLayout(1, 5)); {
 			panel.add(new JLabel(), 0);
-			panel.add(new JButton("登陆"), 1);
+			panel.add(loginBtn, 1);
 			panel.add(new JLabel(), 2);
-			panel.add(new JButton("注册"), 3);
+			panel.add(registBtn, 3);
 			panel.add(new JLabel(), 4);
 		}
 		return panel;
@@ -128,7 +156,7 @@ class LoginWin extends MainWindow {
 			@Override
 			public void componentShown(ComponentEvent e) {
 				Point point = getLocation();
-				helpWin.setLocation((int) point.getX(),(int) (point.getY() + WIDTH));
+				helpWin.setLocation((int) point.getX(),(int) (point.getY() + HIGH));
 			}
 
 		});

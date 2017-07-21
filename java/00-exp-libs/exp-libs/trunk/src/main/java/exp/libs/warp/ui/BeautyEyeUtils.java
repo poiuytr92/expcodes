@@ -1,5 +1,7 @@
 package exp.libs.warp.ui;
 
+import java.awt.Font;
+
 import javax.swing.JButton;
 import javax.swing.UIManager;
 
@@ -21,6 +23,43 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
  */
 public final class BeautyEyeUtils {
 
+	/** UIManager中UI字体名称相关的key */
+	private final static String[] DEFAULT_FONT = new String[] {
+			"Table.font", 
+			"TableHeader.font", 
+			"CheckBox.font", 
+			"Tree.font", 
+			"Viewport.font", 
+			"ProgressBar.font", 
+			"RadioButtonMenuItem.font", 
+			"ToolBar.font", 
+			"ColorChooser.font", 
+			"ToggleButton.font", 
+			"Panel.font", 
+			"TextArea.font", 
+			"Menu.font", 
+			"TableHeader.font", 
+//			"TextField.font", 
+			"OptionPane.font", 
+			"MenuBar.font", 
+			"Button.font", 
+			"Label.font", 
+			"PasswordField.font", 
+			"ScrollPane.font", 
+			"MenuItem.font", 
+			"ToolTip.font", 
+			"List.font", 
+			"EditorPane.font", 
+			"Table.font", 
+			"TabbedPane.font", 
+			"RadioButton.font", 
+			"CheckBoxMenuItem.font", 
+			"TextPane.font", 
+			"PopupMenu.font", 
+			"TitledBorder.font", 
+			"ComboBox.font"
+	};
+			
 	/**
 	 * 私有化构造函数
 	 */
@@ -61,22 +100,52 @@ public final class BeautyEyeUtils {
 	}
 	
 	/**
+	 * 界面字体效果增强(除了文本框的字体，基本所有界面字体都会受到影响)
+	 * 	[使用微软雅黑14号字体]
+	 */
+	public static void boostUIFont() {
+		final Font FONT = new Font("微软雅黑", Font.PLAIN, 14);
+		for (int i = 0; i < DEFAULT_FONT.length; i++) {
+			UIManager.put(DEFAULT_FONT[i], FONT);
+		}
+	}
+	
+	/**
+	 * 界面字体效果设置(除了文本框的字体，基本所有界面字体都会受到影响)
+	 * @param font 字体效果
+	 */
+	public static void setUIFont(Font font) {
+		if(font == null) {
+			return;
+		}
+		
+		for (int i = 0; i < DEFAULT_FONT.length; i++) {
+			UIManager.put(DEFAULT_FONT[i], font);
+		}
+	}
+	
+	/**
 	 * 设置按钮风格样式
-	 * @param button 按钮对象
 	 * @param style 风格样式
 	 * 		normal: 普通样式（默认）
 	 * 		green: 绿色风格
 	 * 		lightBlue: 浅蓝风格
 	 * 		blue: 蓝色风格
 	 * 		red: 红色风格
+	 * @param buttons 按钮对象集
 	 */
-	public static void setButtonStyle(JButton button, NormalColor style) {
-		if(button == null) {
+	public static void setButtonStyle(NormalColor style, JButton... buttons) {
+		if(buttons == null) {
 			return;
 		}
 		
 		style = (style == null ? NormalColor.normal : style);
-		button.setUI(new BEButtonUI().setNormalColor(style));
+		BEButtonUI BTN_UI =  new BEButtonUI();
+		BTN_UI.setNormalColor(style);
+		
+		for(JButton button : buttons) {
+			button.setUI(BTN_UI);
+		}
 	}
 	
 }
