@@ -16,7 +16,7 @@ class _PFHandler implements IHandler {
 	
 	private SocketBean remoteSockBean;
 	
-	public _PFHandler(SocketBean remoteSockBean) {
+	protected _PFHandler(SocketBean remoteSockBean) {
 		this.remoteSockBean = remoteSockBean;
 	}
 	
@@ -34,10 +34,10 @@ class _PFHandler implements IHandler {
 		long overtime = localClient.getSocketBean().getOvertime();
 		Socket localSocket = localClient.getSocket();
 		Socket virtualSocket = virtualClient.getSocket();
-		new _TranslateData(localClient.ID(), localSocket, virtualSocket, 
-				overtime, _TranslateData.TYPE_REQUEST).start();	// 请求转发
-		new _TranslateData(localClient.ID(), virtualSocket, localSocket, 
-				overtime, _TranslateData.TYPE_RESPONE).start();	// 响应转发
+		new _TranslateData(localClient.ID(), _TranslateData.TYPE_REQUEST, 
+				overtime, localSocket, virtualSocket).start();	// 请求转发
+		new _TranslateData(localClient.ID(), _TranslateData.TYPE_RESPONE, 
+				overtime, virtualSocket, localSocket).start();	// 响应转发
 	}
 
 	@Override

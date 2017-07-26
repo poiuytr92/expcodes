@@ -17,25 +17,25 @@ class _TranslateData extends Thread {
 	
 	protected final static String TYPE_RESPONE = "RESPONE";
 	
-	private Logger log = LoggerFactory.getLogger(_PFHandler.class);
+	private Logger log = LoggerFactory.getLogger(_TranslateData.class);
 	
 	private String sessionId;
+	
+	private String type;
+	
+	private long overtime;
 	
 	private Socket src;
 	
 	private Socket snk;
 	
-	private long overtime;
-	
-	private String type;
-	
-	protected _TranslateData(String sessionId, Socket src, Socket snk, 
-			long overtime, String type) {
+	protected _TranslateData(String sessionId, String type, long overtime, 
+			Socket src, Socket snk) {
 		this.sessionId = sessionId;
+		this.type = type;
+		this.overtime = overtime;
 		this.src = src;
 		this.snk = snk;
-		this.overtime = overtime;
-		this.type = type;
 	}
 	
 	@Override

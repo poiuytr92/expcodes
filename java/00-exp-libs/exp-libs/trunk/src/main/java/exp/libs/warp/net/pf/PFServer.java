@@ -10,6 +10,8 @@ public class PFServer {
 	
 	private Logger log = LoggerFactory.getLogger(PFServer.class);
 
+	private final static String LOCAL_IP = "0.0.0.0";
+	
 	private final static int DEFAULT_OVERTIME = 10000;
 	
 	private final static int DEFAULT_MAX_PF_CONN = 100;
@@ -43,6 +45,7 @@ public class PFServer {
 	public PFServer(int localListenPort, String remoteIP, 
 			int remotePort, int overtime, int maxPFConn) {
 		this.localSockBean = new SocketBean(); {
+			localSockBean.setIp(LOCAL_IP);
 			localSockBean.setPort(localListenPort);
 			localSockBean.setOvertime(
 					overtime <= 0 ? DEFAULT_OVERTIME : overtime);
