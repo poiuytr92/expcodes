@@ -1,4 +1,4 @@
-package exp.libs.warp.net.socket.io.client;
+package exp.libs.warp.net.socket.io.server;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,42 +11,52 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.num.IDUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.socket.bean.SocketBean;
 import exp.libs.warp.net.socket.bean.SocketByteBuffer;
 import exp.libs.warp.net.socket.io.common.ISession;
 
-public class SocketClient implements ISession {
+class SocketClientProxy implements ISession, Runnable {
 
 	/** 日志器 */
-	private Logger log = LoggerFactory.getLogger(SocketClient.class);
+	private Logger log = LoggerFactory.getLogger(SocketClientProxy.class);
 	
-	/** Socket重连间隔(ms) */
-	private final static long RECONN_INTERVAL = 10000;
+	private String id;
 	
-	/** Socket连续重连次数上限 */
-	private final static int RECONN_LIMIT = 30;
-	
-	/** Socket配置信息 */
 	private SocketBean socketBean;
-	
-	/** Socket客户端 */
-	private Socket socket;
 	
 	/** Socket本地读缓存 */
 	private SocketByteBuffer localBuffer;
 	
-	/**
-	 * 构造函数
-	 * @param socketBean socket配置信息
-	 */
-	public SocketClient(SocketBean socketBean) {
-		this.socketBean = (socketBean == null ? new SocketBean() : socketBean);
+	private Socket socket;
+	
+	/** 业务处理器 */
+	private IHandler handler;
+	
+	protected SocketClientProxy(SocketBean socketBean, 
+			Socket socket, IHandler handler) {
+		this.id = String.valueOf(IDUtils.getTimeID());
+		this.socketBean = socketBean;
+		this.localBuffer = new SocketByteBuffer(	//本地缓存要比Socket缓存稍大
+				socketBean.getReadBufferSize() * 2, socketBean.getReadCharset());
+		
+		this.socket = socket;
+		this.handler = handler;
+	}
+	
+	@Override
+	public void run() {
+		try {
+			handler._handle(this);
+		} catch(Throwable e) {
+			log.error("Socket会话 [{}] 异常: 未捕获的业务逻辑错误", ID(), e);
+		}
 	}
 	
 	@Override
 	public String ID() {
-		return socketBean.getId();
+		return id;
 	}
 	
 	@Override
@@ -59,60 +69,13 @@ public class SocketClient implements ISession {
 		return socket;
 	}
 	
-	/**
-	 * 连接socket
-	 * @return 是否连接成功
-	 */
+	@Deprecated
 	@Override
 	public boolean conn() {
-		if(isClosed() == false) {
-			return true;
-		}
-		
-		// 创建会话
-		boolean isOk = false;
-		try {
-			socket = new Socket(socketBean.getIp(), socketBean.getPort());
-			socket.setSoTimeout(socketBean.getOvertime());
-			socket.setReceiveBufferSize(socketBean.getReadBufferSize());
-			localBuffer = new SocketByteBuffer(	//本地缓存要比Socket缓存稍大
-					socketBean.getReadBufferSize() * 2, socketBean.getReadCharset());
-			isOk = true;
-			
-		} catch (Exception e) {
-			log.error("Socket {} 创建会话失败.", socketBean.getSocket(), e);
-		}
-		return isOk;
+		// Undo 客户端代理会话已处于连接状态, 无需再连接
+		return false;
 	}
 	
-	/**
-	 * 重连 socket
-	 */
-	public void reconn() {
-		if(socketBean == null) {
-			return;
-		}
-		
-		int cnt = 0;
-		do {
-			if(conn() == true) {
-				break;
-				
-			} else {
-				close();
-				log.warn("Socket {} 连接异常, {}ms后重连, 已重试{}次.", 
-						socketBean.getSocket(), RECONN_INTERVAL, cnt);
-			}
-			
-			cnt++;
-			ThreadUtils.tSleep(RECONN_INTERVAL);
-		} while(RECONN_LIMIT < 0 || cnt < RECONN_LIMIT);
-	}
-	
-	/**
-	 * 检查socket连接是否已断开
-	 * @return
-	 */
 	@Override
 	public boolean isClosed() {
 		boolean isClosed = true;
@@ -122,9 +85,6 @@ public class SocketClient implements ISession {
 		return isClosed;
 	}
 	
-	/**
-	 * 释放所有资源
-	 */
 	@Override
 	public boolean close() {
 		boolean isClose = true;
@@ -133,8 +93,7 @@ public class SocketClient implements ISession {
 				socket.close();
 			} catch (Exception e) {
 				isClose = false;
-				log.error("Socket [{}] 关闭会话失败.", 
-						(socketBean == null ? "null" : socketBean.getId()), e);
+				log.error("关闭Socket会话失败.", e);
 			}
 		}
 		
@@ -143,12 +102,11 @@ public class SocketClient implements ISession {
 		}
 		return isClose;
 	}
-	
+
 	/**
 	 * Socket读操作
 	 * @return 读取的报文. 若返回null，则出现异常。
 	 */
-	@Override
 	public String read() {
 		String msg = null;
 		if(isClosed()) {
@@ -169,13 +127,11 @@ public class SocketClient implements ISession {
 					socketBean.getId(), socketBean.getReadCharset(), e);
 					
 		} catch (SocketTimeoutException e) {
-			log.error("Socket [{}] 读操作超时, 自动断开会话. 当前超时上限: {}ms.", 
+			log.error("Socket [{}] 读操作超时. 当前超时上限: {}ms.", 
 					socketBean.getId(), socketBean.getOvertime(), e);
-			close();
 			
 		} catch (Exception e) {
-			log.error("Socket [{}] 读操作异常, 自动断开会话.", socketBean.getId(), e);
-			close();
+			log.error("Socket [{}] 读操作异常.", socketBean.getId(), e);
 		}
 		return msg;
 	}
@@ -220,7 +176,7 @@ public class SocketClient implements ISession {
 				
 				if(timeout > 0) {
 					if(System.currentTimeMillis() - bgnTime > timeout) {
-						throw new SocketTimeoutException("Socket服务端超时未返回消息终止符.");
+						throw new SocketTimeoutException("Socket客户端超时未返回消息终止符.");
 						
 					} else {
 						ThreadUtils.tSleep(1);
@@ -243,10 +199,7 @@ public class SocketClient implements ISession {
 	 * Socket写操作.
 	 * @param msg 需发送的消息报文
 	 */
-	@Override
 	public void write(final String msg) {
-		reconn();
-		
 		try {
 			write(socket.getOutputStream(), 
 					StrUtils.concat(msg, socketBean.getWriteDelimiter()), 
@@ -258,7 +211,6 @@ public class SocketClient implements ISession {
 					
 		} catch (Exception e) {
 			log.error("Socket [{}] 写操作异常.", socketBean.getId(), e);
-			close();
 		}
 	}
 	
@@ -285,5 +237,5 @@ public class SocketClient implements ISession {
 			localBuffer.reset();
 		}
 	}
-	
+
 }

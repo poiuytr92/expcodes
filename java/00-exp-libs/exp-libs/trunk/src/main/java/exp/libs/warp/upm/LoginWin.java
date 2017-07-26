@@ -45,6 +45,12 @@ class LoginWin extends MainWindow {
 	
 	private HelpWin helpWin;
 	
+	private JButton loginBtn;
+	
+	private JButton registBtn;
+	
+	private RegisterWin registWin;
+	
 	protected LoginWin() {
 		super("登陆", WIDTH, HIGH);
 	}
@@ -83,17 +89,21 @@ class LoginWin extends MainWindow {
 	protected void initComponents(Object... args) {
 		this.helpBtn = new JButton(OPEN);
 		helpBtn.setPreferredSize(new Dimension(WIDTH, 15));	// 设置按钮高度
-		
 		this.helpWin = new HelpWin();
+		
+		this.loginBtn = new JButton("登陆");
+		
+		this.registBtn = new JButton("注册");
+		this.registWin = new RegisterWin();
 	}
 
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
-		rootPanel.add(toUnPwPanel(), BorderLayout.CENTER);
+		rootPanel.add(toUNPWPanel(), BorderLayout.CENTER);
 		rootPanel.add(helpBtn, BorderLayout.SOUTH);
 	}
 
-	private JPanel toUnPwPanel() {
+	private JPanel toUNPWPanel() {
 		JPanel panel = new JPanel(new GridLayout(6, 1)); {
 			panel.add(new JLabel(), 0);
 			panel.add(SwingUtils.getWEBorderPanel(
@@ -104,14 +114,12 @@ class LoginWin extends MainWindow {
 					new JLabel("  [密码] :  "), new JPasswordField(), 
 					new JLabel("   ")), 3);
 			panel.add(new JLabel(), 4);
-			panel.add(toLogRegPanel(), 5);
+			panel.add(getLogRegPanel(), 5);
 		} SwingUtils.addBorder(panel);
 		return panel;
 	}
 	
-	private JPanel toLogRegPanel() {
-		JButton loginBtn = new JButton("登陆");
-		JButton registBtn = new JButton("注册");
+	private JPanel getLogRegPanel() {
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn, registBtn);
 		
 		JPanel panel = new JPanel(new GridLayout(1, 5)); {
@@ -158,6 +166,15 @@ class LoginWin extends MainWindow {
 			public void componentShown(ComponentEvent e) {
 				Point point = getLocation();
 				helpWin.setLocation((int) point.getX(),(int) (point.getY() + HIGH));
+			}
+		});
+		
+		// 设置注册按钮监听
+		registBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				registWin._view();
 			}
 		});
 	}

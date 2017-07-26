@@ -181,8 +181,8 @@ public class NioSocketServer extends Thread {
 				"".equals(sockConf.getIp())) {
 			serverSocketChannel.socket().bind(
 					new InetSocketAddress(sockConf.getPort()));
-		}
-		else {
+			
+		} else {
 			serverSocketChannel.socket().bind(
 					new InetSocketAddress(sockConf.getIp(), 
 							sockConf.getPort()));

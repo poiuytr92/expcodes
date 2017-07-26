@@ -1,5 +1,6 @@
 package exp.libs.warp.net.socket.nio.common.interfaze;
 
+import java.nio.channels.SocketChannel;
 import java.util.Map;
 
 /**
@@ -27,14 +28,14 @@ public interface ISession {
 	 * 
 	 * @param layerSession 底层会话对象
 	 */
-	public void pack(Object layerSession);
+	public void pack(SocketChannel layerSession);
 
 	/**
 	 * 获取底层会话对象
 	 * 
 	 * @return 底层会话对象
 	 */
-	public Object getLayerSession();
+	public SocketChannel getLayerSession();
 	
 	/**
 	 * 获取远端机IP

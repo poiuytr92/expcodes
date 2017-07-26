@@ -149,18 +149,18 @@ public final class FilterChain implements INextFilter {
 	 * @return true:移除成功; false:移除失败
 	 */
 	public boolean removeFilter(String filterName) {
-		boolean isSuc = false;
+		boolean isOk = false;
 
 		synchronized (filterChain) {
 
 			if (this.headFilter.getFilterName().equals(filterName)
 					|| this.tailFilter.getFilterName().equals(filterName)) {
-				isSuc = false;
+				isOk = false;
 			} else {
 				AbstractNextFilter midFilter = filterChain.remove(filterName);
 
 				if (midFilter == null) {
-					isSuc = false;
+					isOk = false;
 				} else {
 					AbstractNextFilter pFilter = midFilter.getPreFilter();
 					AbstractNextFilter nFilter = midFilter.getNextFilter();
@@ -170,12 +170,12 @@ public final class FilterChain implements INextFilter {
 
 					midFilter.getFilter().clean();
 					midFilter = null;
-					isSuc = true;
+					isOk = true;
 				}
 			}
 
 		}
-		return isSuc;
+		return isOk;
 	}
 	
 	/**

@@ -122,8 +122,8 @@ final class Session implements ISession {
 	 * @param layerSession 底层会话对象，对NioSocket而言就是socketChannel
 	 */
 	@Override
-	public void pack(Object layerSession) {
-		this.socketChannel = (SocketChannel) layerSession;
+	public void pack(SocketChannel layerSession) {
+		this.socketChannel = layerSession;
 		this.name = "session@" + this.socketChannel.hashCode();
 	}
 
@@ -132,7 +132,7 @@ final class Session implements ISession {
 	 * @return 底层会话对象，对NioSocket而言就是socketChannel
 	 */
 	@Override
-	public Object getLayerSession() {
+	public SocketChannel getLayerSession() {
 		return socketChannel;
 	}
 	

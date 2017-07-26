@@ -172,6 +172,10 @@ public class DataSourceBean {
 		this.id = (StrUtils.isNotEmpty(id) ? id :
 				(StrUtils.isNotEmpty(this.id) ? this.id : DEFAULT_ID));
 	}
+	
+	public void setAlias(String alias) {
+		setId(alias);
+	}
 
 	public String getDriver() {
 		return driver;

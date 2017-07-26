@@ -190,7 +190,7 @@ final class SessionManager {
 	private int checkRtnMsg() throws Exception {
 		States exState = States.SUCCESS;
 
-		SocketChannel sc = (SocketChannel) session.getLayerSession();
+		SocketChannel sc = session.getLayerSession();
 		Selector selector = Selector.open();
 		sc.configureBlocking(false);
 		sc.register(selector, SelectionKey.OP_READ);
@@ -234,7 +234,7 @@ final class SessionManager {
 	 */
 	private int handleKey(SelectionKey sk) throws Exception {
 		int rtn = 0;
-		SocketChannel sc = (SocketChannel) session.getLayerSession();
+		SocketChannel sc = session.getLayerSession();
 		ByteBuffer channelBuffer = session.getChannelBuffer();
 		SocketByteBuffer socketBuffer = session.getSocketBuffer();
 		

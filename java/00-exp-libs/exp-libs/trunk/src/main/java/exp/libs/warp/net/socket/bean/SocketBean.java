@@ -73,7 +73,7 @@ public class SocketBean {
 		setUsername(DEFAULT_USERNAME);
 		setPassword(DEFAULT_PASSWORD);
 		setCharset(DEFAULT_CHARSET);
-		setBufferSize(DEFAULT_BUFF_SIZE * DEFAULT_BUFF_SIZE_UNIT);
+		setBufferSize(DEFAULT_BUFF_SIZE);
 		setDelimiter(DEFAULT_DELIMITER);
 		setOvertime(DEFAULT_OVERTIME);
 		setMaxConnectionCount(DEFAULT_MAX_CONNECTION_COUNT);
@@ -93,6 +93,14 @@ public class SocketBean {
 			(StrUtils.isNotEmpty(this.id) ? this.id : DEFAULT_ID));
 	}
 
+	public String getAlias() {
+		return getId();
+	}
+	
+	public void setAlias(String alias) {
+		setId(alias);
+	}
+	
 	public String getIp() {
 		return ip;
 	}

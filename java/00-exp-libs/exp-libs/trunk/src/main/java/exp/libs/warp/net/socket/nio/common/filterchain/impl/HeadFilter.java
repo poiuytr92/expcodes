@@ -1,7 +1,6 @@
 package exp.libs.warp.net.socket.nio.common.filterchain.impl;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
 
 import exp.libs.warp.net.socket.nio.common.interfaze.IConfig;
 import exp.libs.warp.net.socket.nio.common.interfaze.IFilter;
@@ -85,8 +84,7 @@ final class HeadFilter extends BaseNextFilter {
 				ByteBuffer sendBuffer = ByteBuffer.wrap(byteMsg);
 	
 				while (sendBuffer.hasRemaining()) {
-					((SocketChannel) session.getLayerSession())
-						.write(sendBuffer);
+					session.getLayerSession().write(sendBuffer);
 				}
 			}
 		} catch (Exception e) {

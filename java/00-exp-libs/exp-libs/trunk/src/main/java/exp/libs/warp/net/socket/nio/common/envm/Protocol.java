@@ -13,10 +13,10 @@ package exp.libs.warp.net.socket.nio.common.envm;
 public class Protocol {
 
 	/** 连接受限 */
-	public final static String CONN_LIMIT = "Connected limited number.";
+	public final static String CONN_LIMIT = "Connected limited number";
 	
 	/** 周期心跳 */
-	public final static String HEARTBEAT = "Regular Heartbeat.";
+	public final static String HEARTBEAT = "Regular Heartbeat";
 	
 	/** 断开命令 */
 	public final static String EXIT_CMD = "exit";

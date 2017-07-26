@@ -282,7 +282,7 @@ final class SessionManager implements Runnable {
 	private int checkNewMsg(Session session) throws Exception {
 		States exState = States.SUCCESS;
 
-		SocketChannel sc = (SocketChannel) session.getLayerSession();
+		SocketChannel sc = session.getLayerSession();
 		Selector selector = Selector.open();
 		sc.configureBlocking(false);
 		sc.register(selector, SelectionKey.OP_READ);
@@ -330,7 +330,7 @@ final class SessionManager implements Runnable {
 		int rtn = 0;
 		int maxEachClientTaskNum = sockConf.getMaxEachClientTaskNum();
 		
-		SocketChannel sc = (SocketChannel) session.getLayerSession();
+		SocketChannel sc = session.getLayerSession();
 		ByteBuffer channelBuffer = session.getChannelBuffer();
 		SocketByteBuffer socketBuffer = session.getSocketBuffer();
 		
@@ -408,7 +408,7 @@ final class SessionManager implements Runnable {
 	 * @throws Exception 异常
 	 */
 	public boolean addSession(Session newSession) throws Exception {
-		boolean isSuccess = false;
+		boolean isOk = false;
 		int maxLinkNum = sockConf.getMaxClientLinkNum();
 
 		synchronized (lock) {
@@ -416,12 +416,12 @@ final class SessionManager implements Runnable {
 				(maxLinkNum < 0 || sessionCnt < maxLinkNum)) {
 				sessions.add(newSession);
 				sessionCnt++;
-				isSuccess = true;
+				isOk = true;
 				log.info("成功添加新会话 [" + newSession + 
 						"] 到会话管理队列.当前活动会话数 [" + this.getSessionCnt() + "].");
 			}
 		}
-		return isSuccess;
+		return isOk;
 	}
 	
 	/**
@@ -450,7 +450,7 @@ final class SessionManager implements Runnable {
 	 * @throws Exception 
 	 */
 	public boolean removeAllSessions() {
-		boolean isSuccess = false;
+		boolean isOk = false;
 
 		synchronized (lock) {
 			if(sessions != null) {
@@ -461,10 +461,10 @@ final class SessionManager implements Runnable {
 				sessions.clear();
 				sessions = null;
 				sessionCnt = 0;
-				isSuccess = true;
+				isOk = true;
 			}
 		}
-		return isSuccess;
+		return isOk;
 	}
 
 	/**
