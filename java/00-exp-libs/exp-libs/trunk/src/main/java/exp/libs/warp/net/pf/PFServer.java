@@ -10,6 +10,10 @@ public class PFServer {
 	
 	private Logger log = LoggerFactory.getLogger(PFServer.class);
 
+	private final static int DEFAULT_OVERTIME = 10000;
+	
+	private final static int DEFAULT_MAX_PF_CONN = 100;
+	
 	private SocketBean localSockBean;
 	
 	private SocketBean remoteSockBean;
@@ -22,13 +26,28 @@ public class PFServer {
 	 * @param localListenPort 本地侦听端口（转发端口）
 	 * @param remoteIP 远程IP
 	 * @param remotePort 远程服务端口（被转发端口）
-	 * @param overtime 超时断连(单位ms, <=0 表示永不超时)
+	 */
+	public PFServer(int localListenPort, String remoteIP, int remotePort) {
+		this(localListenPort, remoteIP, remotePort, 
+				DEFAULT_OVERTIME, DEFAULT_MAX_PF_CONN);
+	}
+	
+	/**
+	 * 
+	 * @param localListenPort 本地侦听端口（转发端口）
+	 * @param remoteIP 远程IP
+	 * @param remotePort 远程服务端口（被转发端口）
+	 * @param overtime 超时断连(单位ms, <=0 表示永不超时, 默认10秒)
+	 * @param maxConn 最大的转发连接数(默认100)
 	 */
 	public PFServer(int localListenPort, String remoteIP, 
-			int remotePort, int overtime) {
+			int remotePort, int overtime, int maxPFConn) {
 		this.localSockBean = new SocketBean(); {
 			localSockBean.setPort(localListenPort);
-			localSockBean.setOvertime(overtime);
+			localSockBean.setOvertime(
+					overtime <= 0 ? DEFAULT_OVERTIME : overtime);
+			localSockBean.setMaxConnectionCount(
+					maxPFConn <= 0 ? DEFAULT_MAX_PF_CONN : maxPFConn);
 		}
 		
 		this.remoteSockBean = new SocketBean(); {

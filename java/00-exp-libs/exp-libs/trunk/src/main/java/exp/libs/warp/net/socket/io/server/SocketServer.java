@@ -112,12 +112,18 @@ public class SocketServer extends Thread {
 		do {
 			_SocketClientProxy clientProxy = listen();
 			if(clientProxy != null) {
-				if(checkOverLimit()) {
+				boolean isOver = checkOverLimit();
+				if(isOver == true) {
 					clientProxy.close();
 					
 				} else {
-					add(clientProxy);
+					clientProxys.add(clientProxy);
+					tp.execute(clientProxy);
 				}
+				
+				log.info("新增Socket会话 [{}] {}, 当前会话数: {}/{}", clientProxy.ID(), 
+						(isOver ? "失败" : ""), clientProxys.size(), 
+						socketBean.getMaxConnectionCount());
 			}
 		} while(running == true);
 		
@@ -160,13 +166,6 @@ public class SocketServer extends Thread {
 			}
 		}
 		return (clientProxys.size() >= socketBean.getMaxConnectionCount());
-	}
-	
-	private void add(_SocketClientProxy clientProxy) {
-		clientProxys.add(clientProxy);
-		tp.execute(clientProxy);
-		log.info("新增Socket会话 [{}], 当前会话数: {}/{}", clientProxy.ID(), 
-				clientProxys.size(), socketBean.getMaxConnectionCount());
 	}
 	
 	/**

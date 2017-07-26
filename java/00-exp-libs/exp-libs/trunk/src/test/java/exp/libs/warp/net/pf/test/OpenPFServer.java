@@ -11,8 +11,10 @@ public class OpenPFServer extends Thread {
 		String remoteIp = "172.168.10.63";
 		int remotePort = 3306;
 		int overtime = 10000;
+		int maxConn = 100;
 		
-		PFServer server = new PFServer(localPort, remoteIp, remotePort, overtime);
+		PFServer server = new PFServer(localPort, remoteIp, remotePort, 
+				overtime, maxConn);
 		server._start();
 	}
 	
