@@ -3,11 +3,12 @@ package exp.libs.warp.net.socket.io.server;
 import exp.libs.warp.net.socket.io.common.ISession;
 
 
-
 public interface IHandler {
 
 	/**
-	 * 业务处理逻辑
+	 * 业务处理逻辑.
+	 * 	离开此方法的控制域后, session会话依然存活.
+	 * 	默认的会话关闭方式是 客户端关闭 或 超时关闭, 但根据实际需要也可在此方法内直接close会话
 	 * @param session 客户端代理会话
 	 */
 	public void _handle(ISession session);

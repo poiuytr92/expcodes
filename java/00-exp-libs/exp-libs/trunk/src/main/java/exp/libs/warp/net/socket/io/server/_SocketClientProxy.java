@@ -17,10 +17,10 @@ import exp.libs.warp.net.socket.bean.SocketBean;
 import exp.libs.warp.net.socket.bean.SocketByteBuffer;
 import exp.libs.warp.net.socket.io.common.ISession;
 
-class SocketClientProxy implements ISession, Runnable {
+class _SocketClientProxy implements ISession, Runnable {
 
 	/** 日志器 */
-	private Logger log = LoggerFactory.getLogger(SocketClientProxy.class);
+	private Logger log = LoggerFactory.getLogger(_SocketClientProxy.class);
 	
 	private String id;
 	
@@ -34,7 +34,7 @@ class SocketClientProxy implements ISession, Runnable {
 	/** 业务处理器 */
 	private IHandler handler;
 	
-	protected SocketClientProxy(SocketBean socketBean, 
+	protected _SocketClientProxy(SocketBean socketBean, 
 			Socket socket, IHandler handler) {
 		this.id = String.valueOf(IDUtils.getTimeID());
 		this.socketBean = socketBean;

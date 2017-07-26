@@ -26,7 +26,7 @@ public class SocketServer extends Thread {
 	private ServerSocket socketServer;
 	
 	/** Socket会话队列 */
-	private List<SocketClientProxy> clientProxys;
+	private List<_SocketClientProxy> clientProxys;
 	
 	/** Socket会话线程池 */
 	private ThreadPool tp;
@@ -44,7 +44,7 @@ public class SocketServer extends Thread {
 	public SocketServer(SocketBean socketBean, IHandler handler) {
 		this.socketBean = (socketBean == null ? new SocketBean() : socketBean);
 		this.sHandler = (handler == null ? new _DefaultHandler() : handler);
-		this.clientProxys = new LinkedList<SocketClientProxy>();
+		this.clientProxys = new LinkedList<_SocketClientProxy>();
 		this.running = false;
 	}
 	
@@ -110,7 +110,7 @@ public class SocketServer extends Thread {
 		
 		running = true;
 		do {
-			SocketClientProxy clientProxy = listen();
+			_SocketClientProxy clientProxy = listen();
 			if(clientProxy != null) {
 				if(checkOverLimit()) {
 					clientProxy.close();
@@ -125,14 +125,14 @@ public class SocketServer extends Thread {
 		log.info("Socket服务已停止");
 	}
 	
-	private SocketClientProxy listen() {
-		SocketClientProxy clientProxy = null;
+	private _SocketClientProxy listen() {
+		_SocketClientProxy clientProxy = null;
 		if(running == true) {
 			try {
 				Socket client = socketServer.accept();
 				
 				IHandler cHandler = sHandler._clone();
-				clientProxy = new SocketClientProxy(socketBean, client, 
+				clientProxy = new _SocketClientProxy(socketBean, client, 
 						(cHandler == null ? sHandler : cHandler));
 				
 			} catch (Exception e) {
@@ -152,9 +152,9 @@ public class SocketServer extends Thread {
 	 * @return
 	 */
 	private boolean checkOverLimit() {
-		Iterator<SocketClientProxy> clients = clientProxys.iterator();
+		Iterator<_SocketClientProxy> clients = clientProxys.iterator();
 		while(clients.hasNext()) {
-			SocketClientProxy client = clients.next();
+			_SocketClientProxy client = clients.next();
 			if(client.isClosed()) {
 				clients.remove();
 			}
@@ -162,7 +162,7 @@ public class SocketServer extends Thread {
 		return (clientProxys.size() >= socketBean.getMaxConnectionCount());
 	}
 	
-	private void add(SocketClientProxy clientProxy) {
+	private void add(_SocketClientProxy clientProxy) {
 		clientProxys.add(clientProxy);
 		tp.execute(clientProxy);
 		log.info("新增Socket会话 [{}], 当前会话数: {}/{}", clientProxy.ID(), 
@@ -173,9 +173,9 @@ public class SocketServer extends Thread {
 	 * 强制关闭所有会话和线程池
 	 */
 	private void clear() {
-		Iterator<SocketClientProxy> clients = clientProxys.iterator();
+		Iterator<_SocketClientProxy> clients = clientProxys.iterator();
 		while(clients.hasNext()) {
-			SocketClientProxy client = clients.next();
+			_SocketClientProxy client = clients.next();
 			client.close();
 		}
 		clientProxys.clear();
