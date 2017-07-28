@@ -9,6 +9,8 @@ import java.net.SocketTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.os.ThreadUtils;
+
 class _TranslateData extends Thread {
 
 	protected final static String TYPE_REQUEST = "REQUEST";
@@ -51,12 +53,15 @@ class _TranslateData extends Thread {
 					bgnTime = System.currentTimeMillis();
 					
 				} else {
-					break;
-//					ThreadUtils.tSleep(100);
-//					if(overtime > 0 && 
-//							System.currentTimeMillis() - bgnTime >= overtime) {
-//						throw new SocketTimeoutException("超时无数据交互");
-//					}
+					if(overtime <= 0) {
+						break;
+						
+					} else {
+						ThreadUtils.tSleep(100);
+						if(System.currentTimeMillis() - bgnTime >= overtime) {
+							throw new SocketTimeoutException("超时无数据交互");
+						}
+					}
 				}
 			}
 		} catch (SocketTimeoutException e) {
