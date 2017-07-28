@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <PRE>
- * 文件监控器.
- * 	可监控指定文件夹下的所有文件和子文件夹(包括子文件夹下的文件)
+ * 文件监听器.
+ * 	可监听指定文件夹下的所有文件和子文件夹(包括子文件夹下的文件)的增删改事件
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -28,46 +28,40 @@ public class FileMonitor {
 	private FileAlterationMonitor monitor;
 
 	/**
-	 * 构造间隔
-	 * @param interval 监控间隔(ms)
-	 */
-	public FileMonitor(long interval) {
-		monitor = new FileAlterationMonitor(interval);
-	}
-
-	/**
-	 * 监控指定文件/文件夹.
-	 *  若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控.
+	 * 构造函数:监控指定文件/文件夹的增删改事件.
 	 * 
-	 * @param path 所监控的文件/文件夹位置 
+	 * @param path 所监听的文件/文件夹位置 (若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控.)
+	 * @param interval 监听间隔(ms)
 	 * @param listener 监听器
 	 */
-	public void monitor(String path, FileAlterationListener listener) {
+	public FileMonitor(String path, long interval, FileAlterationListener listener) {
+		listener = (listener == null ? new _DefaultFileListener() : listener);
 		FileAlterationObserver observer = new FileAlterationObserver(new File(path));
 		observer.addListener(listener);
 		
+		this.monitor = new FileAlterationMonitor(interval);
 		monitor.addObserver(observer);
 	}
 
 	/**
-	 * 启动监控器
+	 * 启动监听器
 	 */
 	public void _start() {
 		try {
 			monitor.start();
 		} catch (Exception e) {
-			log.error("文件监控器启动失败.", e);
+			log.error("启动文件监听器失败.", e);
 		}
 	}
 	
 	/**
-	 * 停止监控器
+	 * 停止监听器
 	 */
 	public void _stop() {
 		try {
 			monitor.stop();
 		} catch (Exception e) {
-			log.error("文件监控器停止失败.", e);
+			log.error("停止文件监听器失败.", e);
 		}
 	}
 

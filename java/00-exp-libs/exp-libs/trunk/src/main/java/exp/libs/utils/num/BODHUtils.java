@@ -28,8 +28,29 @@ public class BODHUtils {
 	 * @return 可视的十六进制的字符串
 	 */
 	public static String toHex(byte[] bytes) {
+		if(bytes == null) {
+			return "";
+		}
+		
 		StringBuilder sb = new StringBuilder();
-		for (byte b : bytes) {
+		for(byte b : bytes) {
+			sb.append(StrUtils.leftPad(Integer.toHexString(b & 0xFF), '0', 2));
+		}
+		return sb.toString().toUpperCase();
+	}
+	
+	public static String toHex(byte[] bytes, int offset, int len) {
+		if(bytes == null || bytes.length <= offset || len < 0) {
+			return "";
+		}
+		
+		offset = (offset < 0 ? 0 : offset);
+		len = offset + len;
+		len = (len > bytes.length ? bytes.length : len);
+		
+		StringBuilder sb = new StringBuilder();
+		for(int i = offset; i < len; i++) {
+			byte b = bytes[i];
 			sb.append(StrUtils.leftPad(Integer.toHexString(b & 0xFF), '0', 2));
 		}
 		return sb.toString().toUpperCase();

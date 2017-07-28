@@ -66,6 +66,12 @@ public class SocketBean {
 	
 	private final static String DEFAULT_EXIT_CMD = "exit";
 	
+	public SocketBean(String ip, int port) {
+		this();
+		setIp(ip);
+		setPort(port);
+	}
+	
 	public SocketBean() {
 		setId(DEFAULT_ID);
 		setIp(DEFAULT_IP);

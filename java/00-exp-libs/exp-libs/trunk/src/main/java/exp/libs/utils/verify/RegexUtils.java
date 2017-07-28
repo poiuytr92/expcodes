@@ -92,7 +92,7 @@ public class RegexUtils {
 	}
 	
 	/**
-	 * 获取首次匹配的所有group的匹配值（即group(1...n)）
+	 * 获取首次匹配的所有group的匹配值（即group(0...n)）
 	 * @param str
 	 * @param regex
 	 * @return

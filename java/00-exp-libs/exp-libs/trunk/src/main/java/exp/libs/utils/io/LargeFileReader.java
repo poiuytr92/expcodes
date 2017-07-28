@@ -41,8 +41,7 @@ public class LargeFileReader {
 	 * 构造方法
 	 */
 	@Deprecated
-	public LargeFileReader() {
-	}
+	public LargeFileReader() {}
 	
 	/**
 	 * 构造方法
