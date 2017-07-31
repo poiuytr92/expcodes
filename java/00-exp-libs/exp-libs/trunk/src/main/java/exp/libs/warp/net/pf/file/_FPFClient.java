@@ -55,7 +55,7 @@ class _FPFClient extends LoopThread {
 	private Map<String, SocketClient> sessions;
 	
 	/** 收发目录文件监听器 */
-	private FileMonitor fileMonitor;
+	private FileMonitor srFileMonitor;
 	
 	protected _FPFClient(_SRFileMgr srFileMgr, int overtime) {
 		super("端口转发数据接收器-".concat(String.valueOf(IDUtils.getMillisID())));
@@ -68,13 +68,13 @@ class _FPFClient extends LoopThread {
 		// 设置收发文件目录监听器(只监听 send 文件)
 		_SRFileListener fileListener = new _SRFileListener(srFileMgr, 
 				_Envm.PREFIX_SEND, _Envm.SUFFIX);
-		this.fileMonitor = new FileMonitor(srFileMgr.getDir(), 
+		this.srFileMonitor = new FileMonitor(srFileMgr.getDir(), 
 				_Envm.SCAN_FILE_INTERVAL, fileListener);
 	}
 
 	@Override
 	protected void _before() {
-		fileMonitor._start();
+		srFileMonitor._start();
 		log.info("端口转发数据接收器启动成功");
 	}
 
@@ -99,11 +99,11 @@ class _FPFClient extends LoopThread {
 				session = new SocketClient(ip, port);
 				if(session.conn()) {
 					new _TranslateCData(srFileMgr, sessionId, _Envm.PREFIX_SEND, 
-							overtime, sendList, session.getSocket()).start();
+							overtime, sendList, session.getSocket()).start();	// 请求转发
 					new _TranslateCData(srFileMgr, sessionId, _Envm.PREFIX_RECV, 
-							overtime, sendList, session.getSocket()).start();
+							overtime, sendList, session.getSocket()).start();	// 响应转发
 				} else {
-					log.warn("连接到真实服务 [{}:{}] 失败", ip, port);
+					log.warn("会话 [{}] 连接到真实服务端口 [{}:{}] 失败", sessionId, ip, port);
 				}
 				
 				sessions.put(sessionId, session);
@@ -124,7 +124,7 @@ class _FPFClient extends LoopThread {
 	
 	@Override
 	protected void _after() {
-		fileMonitor._stop();
+		srFileMonitor._stop();
 		
 		Iterator<PCQueue<String>> list = sendFiles.values().iterator();
 		while(list.hasNext()) {

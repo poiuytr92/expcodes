@@ -1,9 +1,9 @@
-package exp.libs.warp.net.pf.file;
+package exp.libs.warp.net.pf.flow;
 
 
 /**
  * <pre>
- * (文件流)端口转发代理服务配置
+ * (数据流)端口转发代理服务配置
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -11,8 +11,10 @@ package exp.libs.warp.net.pf.file;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class FPFConfig {
+public class PFConfig {
 
+	private final static int DEFAULT_OVERTIME = 10000;
+	
 	private final static int DEFAULT_MAX_CONN = 100;
 	
 	private String serverName;
@@ -23,12 +25,14 @@ public class FPFConfig {
 	
 	private int remotePort;
 	
+	private int overtime;
+	
 	private int maxConn;
 	
-	public FPFConfig(String serverName, int localListenPort, 
+	public PFConfig(String serverName, int localListenPort, 
 			String remoteIP, int remotePort) {
-		this(serverName, localListenPort, 
-				remoteIP, remotePort, DEFAULT_MAX_CONN);
+		this(serverName, localListenPort, remoteIP, remotePort, 
+				DEFAULT_OVERTIME, DEFAULT_MAX_CONN);
 	}
 	
 	/**
@@ -40,12 +44,13 @@ public class FPFConfig {
 	 * @param overtime 超时时间(单位ms)
 	 * @param maxConn 单个代理服务的最大连接数
 	 */
-	public FPFConfig(String serverName, int localListenPort, 
-			String remoteIP, int remotePort, int maxConn) {
+	public PFConfig(String serverName, int localListenPort, 
+			String remoteIP, int remotePort, int overtime, int maxConn) {
 		this.serverName = serverName;
 		this.localListenPort = localListenPort;
 		this.remoteIP = remoteIP;
 		this.remotePort = remotePort;
+		this.overtime = (overtime <= 0 ? DEFAULT_OVERTIME : overtime);
 		this.maxConn = (maxConn <= 0 ? DEFAULT_MAX_CONN : maxConn);
 	}
 
@@ -63,6 +68,10 @@ public class FPFConfig {
 
 	public int getRemotePort() {
 		return remotePort;
+	}
+
+	public int getOvertime() {
+		return overtime;
 	}
 
 	public int getMaxConn() {

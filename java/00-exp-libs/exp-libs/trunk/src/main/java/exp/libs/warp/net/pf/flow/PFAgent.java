@@ -1,82 +1,57 @@
 package exp.libs.warp.net.pf.flow;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.warp.net.socket.bean.SocketBean;
-import exp.libs.warp.net.socket.io.server.SocketServer;
-
+/**
+ * <pre>
+ * 单机数据流-端口转发代理程序
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-07-28
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class PFAgent {
-	
-	private Logger log = LoggerFactory.getLogger(PFAgent.class);
 
-	private final static String LOCAL_IP = "0.0.0.0";
+	private Logger log = LoggerFactory.getLogger(PFAgent.class);
 	
-	private final static int DEFAULT_OVERTIME = 10000;
+	private List<_PFServer> servers;
 	
-	private final static int DEFAULT_MAX_PF_CONN = 100;
-	
-	private SocketBean localSockBean;
-	
-	private SocketBean remoteSockBean;
-	
-	/** 本地端口侦听服务 */
-	private SocketServer listenServer;
-	
-	/**
-	 * 
-	 * @param localListenPort 本地侦听端口（转发端口）
-	 * @param remoteIP 远程服务IP
-	 * @param remotePort 远程服务端口（被转发端口）
-	 */
-	public PFAgent(int localListenPort, String remoteIP, int remotePort) {
-		this(localListenPort, remoteIP, remotePort, 
-				DEFAULT_OVERTIME, DEFAULT_MAX_PF_CONN);
+	public PFAgent(PFConfig... serverConfigs) {
+		this.servers = new LinkedList<_PFServer>();
+		if(serverConfigs != null) {
+			for(PFConfig config : serverConfigs) {
+				_PFServer server = new _PFServer(config);
+				servers.add(server);
+			}
+		}
 	}
 	
-	/**
-	 * 
-	 * @param localListenPort 本地侦听端口（转发端口）
-	 * @param remoteIP 远程服务IP
-	 * @param remotePort 远程服务端口（被转发端口）
-	 * @param overtime 超时断连(单位ms, <=0 表示永不超时, 默认10秒)
-	 * @param maxConn 最大的转发连接数(默认100)
-	 */
-	public PFAgent(int localListenPort, String remoteIP, 
-			int remotePort, int overtime, int maxPFConn) {
-		this.localSockBean = new SocketBean(); {
-			localSockBean.setIp(LOCAL_IP);
-			localSockBean.setPort(localListenPort);
-			localSockBean.setOvertime(
-					overtime <= 0 ? DEFAULT_OVERTIME : overtime);
-			localSockBean.setMaxConnectionCount(
-					maxPFConn <= 0 ? DEFAULT_MAX_PF_CONN : maxPFConn);
+	public void _start() {
+		boolean isOk = true;
+		for(_PFServer server : servers) {
+			isOk &= server._start();
 		}
 		
-		this.remoteSockBean = new SocketBean(); {
-			remoteSockBean.setIp(remoteIP);
-			remoteSockBean.setPort(remotePort);
-		}
-		
-		_PFHandler pfHandler = new _PFHandler(remoteSockBean);
-		this.listenServer = new SocketServer(localSockBean, pfHandler);
-	}
-	
-	public boolean _start() {
-		boolean isOk = listenServer._start();
 		if(isOk == true) {
-			log.info("端口转发服务启动成功: 本地侦听端口 [{}], 转发端口 [{}]", 
-					localSockBean.getPort(), remoteSockBean.getSocket());
-			
+			log.info("所有端口转发服务启动成功");
 		} else {
-			log.warn("端口转发服务启动失败");
+			log.warn("存在端口转发服务启动失败");
 		}
-		return isOk;
 	}
 	
 	public void _stop() {
-		listenServer._stop();
-		log.info("端口转发服务已停止");
+		for(_PFServer server : servers) {
+			server._stop();
+		}
+		servers.clear();
+		
+		log.info("所有端口转发服务已停止");
 	}
 	
 }
