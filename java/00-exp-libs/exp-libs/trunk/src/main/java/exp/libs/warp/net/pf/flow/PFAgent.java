@@ -22,6 +22,20 @@ public class PFAgent {
 	
 	private List<_PFServer> servers;
 	
+	/**
+	 * 单个端口转发代理服务
+	 * @param localListenPort 本地监听端口
+	 * @param remoteIP 远程代理IP（真实服务IP）
+	 * @param remotePort 远程代理端口（真实服务端口）
+	 */
+	public PFAgent(int localListenPort, String remoteIP, int remotePort) {
+		this(new PFConfig("", localListenPort, remoteIP, remotePort));
+	}
+	
+	/**
+	 * 多个端口转发代理服务
+	 * @param serverConfigs
+	 */
 	public PFAgent(PFConfig... serverConfigs) {
 		this.servers = new LinkedList<_PFServer>();
 		if(serverConfigs != null) {

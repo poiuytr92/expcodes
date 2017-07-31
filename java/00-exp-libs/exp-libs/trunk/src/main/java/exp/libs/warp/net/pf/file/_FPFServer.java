@@ -40,6 +40,7 @@ class _FPFServer {
 		
 		// 设置Socket端口监听服务
 		SocketBean localSockBean = new SocketBean(); {
+			localSockBean.setId(config.getServerName());
 			localSockBean.setIp(LOCAL_IP);
 			localSockBean.setPort(config.getLocalListenPort());
 			localSockBean.setOvertime(overtime);

@@ -1,5 +1,7 @@
 package exp.libs.warp.net.pf.flow;
 
+import exp.libs.utils.StrUtils;
+
 
 /**
  * <pre>
@@ -13,6 +15,8 @@ package exp.libs.warp.net.pf.flow;
  */
 public class PFConfig {
 
+	private final static String DEFAULT_NAME = "DEFAULT";
+	
 	private final static int DEFAULT_OVERTIME = 10000;
 	
 	private final static int DEFAULT_MAX_CONN = 100;
@@ -46,7 +50,7 @@ public class PFConfig {
 	 */
 	public PFConfig(String serverName, int localListenPort, 
 			String remoteIP, int remotePort, int overtime, int maxConn) {
-		this.serverName = serverName;
+		this.serverName = StrUtils.isEmpty(serverName) ? DEFAULT_NAME : serverName;
 		this.localListenPort = localListenPort;
 		this.remoteIP = remoteIP;
 		this.remotePort = remotePort;

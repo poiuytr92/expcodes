@@ -22,6 +22,7 @@ class _PFServer {
 		this.config = config;
 		
 		SocketBean localSockBean = new SocketBean(); {
+			localSockBean.setId(config.getServerName());
 			localSockBean.setIp(LOCAL_IP);
 			localSockBean.setPort(config.getLocalListenPort());
 			localSockBean.setOvertime(config.getOvertime());
