@@ -1,6 +1,6 @@
 package exp.libs.warp.net.pf.file.test;
 
-import exp.libs.warp.net.pf.file.FPFAgents;
+import exp.libs.warp.net.pf.file.FPFAgent;
 import exp.libs.warp.net.pf.file.FPFConfig;
 
 
@@ -16,8 +16,8 @@ public class TestInside {
 		int maxConn = 100;
 		
 		FPFConfig config = new FPFConfig("test", 
-				localListenPort, remoteIP, remotePort, overtime, maxConn);
-		FPFAgents agents = new FPFAgents(srDir, config);
+				localListenPort, remoteIP, remotePort, maxConn);
+		FPFAgent agents = new FPFAgent(srDir, overtime, config);
 		agents._start();
 	}
 	

@@ -7,62 +7,72 @@ import exp.libs.warp.io.listn.FileMonitor;
 import exp.libs.warp.net.socket.bean.SocketBean;
 import exp.libs.warp.net.socket.io.server.SocketServer;
 
+/**
+ * <pre>
+ * [端口转发代理服务-S] (请求发送器/响应接收器).
+ * 	1. 服务代理器: 为[本侧应用程序]提供[虚拟服务端口].
+ * 	2. 请求发送器: 把[本侧应用程序]的请求[发送]到[对侧真正的服务端口].
+ * 	3. 响应接收器: 把[对侧真正的服务端口]返回的响应数据[回传]到[本侧应用程序].
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-07-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _FPFServer {
 
 	private Logger log = LoggerFactory.getLogger(_FPFServer.class);
 	
 	private final static String LOCAL_IP = "0.0.0.0";
 	
-	private _SRFileMgr srFileMgr;
-	
+	/** 端口转发代理服务配置 */
 	private FPFConfig config;
-	
-	private SocketBean localSockBean;
 	
 	/** 本地端口侦听服务 */
 	private SocketServer listenServer;
 	
-	private FileMonitor fileMonitor;
+	/** 收发目录文件监听器 */
+	private FileMonitor srFileMonitor;
 	
-	protected _FPFServer(_SRFileMgr srFileMgr, FPFConfig config) {
-		this.srFileMgr = srFileMgr;
+	protected _FPFServer(_SRFileMgr srFileMgr, int overtime, FPFConfig config) {
 		this.config = config;
 		
-		// FIXME 需要开启多个监听服务， 或者添加上层服务集群
-		this.localSockBean = new SocketBean(); {
+		// 设置Socket端口监听服务
+		SocketBean localSockBean = new SocketBean(); {
 			localSockBean.setIp(LOCAL_IP);
 			localSockBean.setPort(config.getLocalListenPort());
-			localSockBean.setOvertime(config.getOvertime());
+			localSockBean.setOvertime(overtime);
 			localSockBean.setMaxConnectionCount(config.getMaxConn());
 		}
-		
 		_FPFSHandler ioPFHandler = new _FPFSHandler(srFileMgr, config);
 		this.listenServer = new SocketServer(localSockBean, ioPFHandler);
 		
-		// FIXME 间隔时间
-		_FileListener fileListener = new _FileListener(srFileMgr, 
-				_FileListener.PREFIX_RECV, _FileListener.SUFFIX);
-		this.fileMonitor = new FileMonitor(srFileMgr.getDir(), 100, fileListener);
+		// 设置收发文件目录监听器(只监听 recv 文件)
+		_SRFileListener fileListener = new _SRFileListener(srFileMgr, 
+				_Envm.PREFIX_RECV, _Envm.SUFFIX);
+		this.srFileMonitor = new FileMonitor(srFileMgr.getDir(), 
+				_Envm.SCAN_FILE_INTERVAL, fileListener);
 	}
 	
 	protected boolean _start() {
 		boolean isOk = listenServer._start();
 		if(isOk == true) {
-			fileMonitor._start();
-			log.info("启动端口转发服务成功");
-			log.info("本地侦听端口: [{}], 收发目录: [{}], 转发端口: [{}:{}]", 
-					localSockBean.getPort(), srFileMgr.getDir(), 
+			srFileMonitor._start();
+			log.info("端口转发服务 [{}] 启动成功: 本地侦听端口 [{}], 转发端口: [{}:{}]",
+					config.getServerName(), config.getLocalListenPort(), 
 					config.getRemoteIP(), config.getRemotePort());
+			
 		} else {
-			log.warn("启动端口转发服务失败");
+			log.warn("端口转发服务 [{}] 启动失败", config.getServerName());
 		}
 		return isOk;
 	}
 	
 	protected void _stop() {
-		fileMonitor._stop();
+		srFileMonitor._stop();
 		listenServer._stop();
-		log.info("端口转发服务已停止");
+		log.info("端口转发服务 [{}] 已停止", config.getServerName());
 	}
 	
 }

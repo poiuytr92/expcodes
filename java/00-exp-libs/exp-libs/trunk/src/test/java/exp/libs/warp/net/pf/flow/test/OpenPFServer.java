@@ -1,6 +1,6 @@
 package exp.libs.warp.net.pf.flow.test;
 
-import exp.libs.warp.net.pf.flow.PFServer;
+import exp.libs.warp.net.pf.flow.PFAgent;
 
 
 public class OpenPFServer extends Thread {
@@ -13,7 +13,7 @@ public class OpenPFServer extends Thread {
 		int overtime = 10000;
 		int maxConn = 100;
 		
-		PFServer server = new PFServer(localPort, remoteIp, remotePort, 
+		PFAgent server = new PFAgent(localPort, remoteIp, remotePort, 
 				overtime, maxConn);
 		server._start();
 	}

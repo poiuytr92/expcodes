@@ -14,71 +14,86 @@ import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.num.BODHUtils;
-import exp.libs.utils.num.IDUtils;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.PathUtils;
 
+/**
+ * <pre>
+ * [端口转发代理服务-C] 数据转发器
+ * 	1. 请求转发器: 把[对侧]的请求[转发]到[本侧真正的服务端口].
+ * 	2. 响应收转器: 把[本侧真正的服务端口]返回的响应数据[收转]到[对侧].
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-07-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _TranslateCData extends Thread {
 
 	private Logger log = LoggerFactory.getLogger(_TranslateCData.class);
 	
-	protected final static String PREFIX_SEND = _FileListener.PREFIX_SEND;
-	
-	protected final static String PREFIX_RECV = _FileListener.PREFIX_RECV;
-	
-	protected final static String SUFFIX = _FileListener.SUFFIX;
-	
-	private final static int IO_BUFF = 10240;	// 每次最多读写10K数据
-	
-	private String sessionId;
-	
-	private String type;
-	
-	private long overtime;
-	
-	private Socket src;
-	
-	private String snkDir;
-	
-	private String snkIP;
-	
-	private int snkPort;
-	
+	/** 收发文件管理器 */
 	private _SRFileMgr srFileMgr;
 	
-	private PCQueue<String> list;
+	/** socket通道会话ID */
+	private String sessionId;
 	
-	protected _TranslateCData(String sessionId, String type, long overtime, 
-			Socket src, String snkIP, int snkPort, 
-			_SRFileMgr srFileMgr, PCQueue<String> list) {
+	/** 转发数据类型: send/recv */
+	private String type;
+	
+	/** 通道无数据的超时时限 */
+	private long overtime;
+	
+	/** 数据流来源的文件队列 */
+	private PCQueue<String> srcList;
+	
+	/** 数据流目的(真实的socket服务会话) */
+	private Socket snk;
+	
+	/** 数据流目的IP */
+	private String snkIP;
+	
+	/** 数据流目的端口 */
+	private int snkPort;
+	
+	protected _TranslateCData(_SRFileMgr srFileMgr, 
+			String sessionId, String type, long overtime, 
+			PCQueue<String> srcList, Socket snk) {
+		this.srFileMgr = srFileMgr;
 		this.sessionId = sessionId;
 		this.type = type;
 		this.overtime = overtime;
-		this.src = src;
-		this.snkDir = srFileMgr.getDir();
-		this.snkIP = snkIP;
-		this.snkPort = snkPort;
-		this.srFileMgr = srFileMgr;
-		this.list = list;
+		this.srcList = srcList;
+		this.snk = snk;
+		this.snkIP = snk.getInetAddress().getHostAddress();
+		this.snkPort = snk.getPort();
 	}
 	
 	@Override
 	public void run() {
-		if(PREFIX_SEND.equals(type)) {
-			send();
+		if(_Envm.PREFIX_SEND.equals(type)) {
+			send();	// 请求转发
+			
+		} else if(_Envm.PREFIX_RECV.equals(type)) {
+			recv();	// 响应收转
+			
 		} else {
-			recv();
+			log.error("无效的数据转发操作类型： [{}]", type);
 		}
 	}
 	
+	/**
+	 * 请求转发器: 
+	 * 	从[收发目录]中获取由第三方程序送来的数据流文件, 
+	 * 	从数据流文件中读取[对侧应用程序]发送的请求数据, 
+	 * 	把请求数据[转发]到[本侧真正的服务端口]
+	 */
 	private void send() {
 		try {
 			long bgnTime = System.currentTimeMillis();
-			OutputStream out = src.getOutputStream();
-			
-			while(!src.isClosed()) {
-				String sendFilePath = list.get();
+			OutputStream out = snk.getOutputStream();
+			while(!snk.isClosed()) {
+				String sendFilePath = srcList.get();
 				if(StrUtils.isEmpty(sendFilePath)) {
 					if(overtime <= 0) {
 						break;
@@ -93,12 +108,12 @@ class _TranslateCData extends Thread {
 				}
 				
 				File in = new File(sendFilePath);
-				String hex = FileUtils.read(in, Charset.ISO);
-				byte[] buffer = BODHUtils.toBytes(hex);
+				String data = FileUtils.read(in, Charset.ISO);
+				byte[] buffer = _SRFileMgr.decode(data);
 				
 				for(int offset = 0, len = 0; offset < buffer.length; offset += len) {
 					len = buffer.length - offset;
-					len = (len > IO_BUFF ? IO_BUFF : len);
+					len = (len > _Envm.IO_BUFF ? _Envm.IO_BUFF : len);
 					out.write(buffer, offset, len);
 					out.flush();
 				}
@@ -114,23 +129,28 @@ class _TranslateCData extends Thread {
 			log.error("Socket会话 [{}] 的{}转发通道异常, 通道关闭", sessionId, type, e);
 			
 		} finally {
-			close(src);
+			close(snk);
 		}
 		
 	}
 	
+	/**
+	 * 响应收转器:
+	 * 	把[本侧真正的服务端口]返回的响应数据流转换成文件, 存储到指定的[收发目录], 
+	 * 	由第三方程序把收发目录中的数据流文件送到[对侧], 
+	 * 	借由[对侧的响应接收器]把响应送到[对侧应用程序].
+	 */
 	private void recv() {
 		try {
 			long bgnTime = System.currentTimeMillis();
-			InputStream in = src.getInputStream();
+			InputStream in = snk.getInputStream();
 			while (true) {
-				byte[] buffer = new byte[IO_BUFF];
+				byte[] buffer = new byte[_Envm.IO_BUFF];
 				int len = in.read(buffer);
 				if (len > 0) {
-					String hex = BODHUtils.toHex(buffer, 0, len);
+					String data = _SRFileMgr.encode(buffer, 0, len);
 					String recvFilePath = getRecvFilePath();
-					FileUtils.write(recvFilePath, hex, Charset.ISO, false);
-					
+					FileUtils.write(recvFilePath, data, Charset.ISO, false);
 					bgnTime = System.currentTimeMillis();
 					
 				} else {
@@ -155,16 +175,20 @@ class _TranslateCData extends Thread {
 			log.error("Socket会话 [{}] 的{}转发通道异常, 通道关闭", sessionId, type, e);
 			
 		} finally {
-			close(src);
+			close(snk);
 		}
 	}
 	
+	/**
+	 * 为[本侧响应收转器]构造数据流文件名.
+	 * 	同时该数据流文件列入禁忌表, 避免被[本侧响应接收器]误读.
+	 * @return 数据流文件名
+	 */
 	private String getRecvFilePath() {
-		String name = StrUtils.concat(type, "#", snkIP, "@", snkPort, 
-				"-T", IDUtils.getTimeID(), "-S", sessionId, SUFFIX);
-		String path = PathUtils.combine(snkDir, name);
-		srFileMgr.addRecvTabu(path);
-		return path;
+		String recvFilePath = _SRFileMgr.toFilePath(sessionId, type, 
+				srFileMgr.getDir(), snkIP, snkPort);
+		srFileMgr.addRecvTabu(recvFilePath);
+		return recvFilePath;
 	}
 	
 	private void close(Socket socket) {

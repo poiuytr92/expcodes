@@ -24,22 +24,37 @@ public class FileMonitor {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(FileMonitor.class);
 	
+	/** 默认扫描间隔 */
+	public final static long DEFAULR_SCAN_INTERVAL = 100;
+	
 	/** 文件监控器 */
 	private FileAlterationMonitor monitor;
 
 	/**
-	 * 构造函数:监控指定文件/文件夹的增删改事件.
+	 * 构造函数:监控指定文件/文件夹的增删改事件(默认扫描间隔为100ms)
 	 * 
-	 * @param path 所监听的文件/文件夹位置 (若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控.)
-	 * @param interval 监听间隔(ms)
+	 * @param path 所监听的文件/文件夹位置 (若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控)
 	 * @param listener 监听器
 	 */
-	public FileMonitor(String path, long interval, FileAlterationListener listener) {
+	public FileMonitor(String path, FileAlterationListener listener) {
+		this(path, DEFAULR_SCAN_INTERVAL, listener);
+	}
+	
+	/**
+	 * 构造函数:监控指定文件/文件夹的增删改事件.
+	 * 
+	 * @param path 所监听的文件/文件夹位置 (若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控)
+	 * @param scanInterval 文件/文件夹扫描间隔(ms)
+	 * @param listener 监听器
+	 */
+	public FileMonitor(String path, long scanInterval, 
+			FileAlterationListener listener) {
+		scanInterval = (scanInterval <= 0 ? DEFAULR_SCAN_INTERVAL : scanInterval);
 		listener = (listener == null ? new _DefaultFileListener() : listener);
 		FileAlterationObserver observer = new FileAlterationObserver(new File(path));
 		observer.addListener(listener);
 		
-		this.monitor = new FileAlterationMonitor(interval);
+		this.monitor = new FileAlterationMonitor(scanInterval);
 		monitor.addObserver(observer);
 	}
 

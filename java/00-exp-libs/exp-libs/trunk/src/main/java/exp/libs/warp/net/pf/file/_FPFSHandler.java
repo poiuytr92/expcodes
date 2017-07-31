@@ -5,6 +5,16 @@ import java.net.Socket;
 import exp.libs.warp.net.socket.io.common.ISession;
 import exp.libs.warp.net.socket.io.server.IHandler;
 
+/**
+ * <pre>
+ * [端口转发代理服务-S] 业务处理器
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-07-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _FPFSHandler implements IHandler {
 
 	private _SRFileMgr srFileMgr;
@@ -23,12 +33,13 @@ class _FPFSHandler implements IHandler {
 	}
 	
 	@Override
-	public void _handle(ISession localClient) {
-		Socket localSocket = localClient.getSocket();
-		new _TranslateSData(localClient.ID(), _TranslateSData.PREFIX_SEND,  
-				localSocket, config, srFileMgr).start();	// 请求转发
-		new _TranslateSData(localClient.ID(), _TranslateSData.PREFIX_RECV, 
-				localSocket, config, srFileMgr).start();	// 响应转发
+	public void _handle(ISession session) {
+		long overtime = session.getSocketBean().getOvertime();
+		Socket socket = session.getSocket();
+		new _TranslateSData(srFileMgr, config, session.ID(), 
+				_Envm.PREFIX_SEND, overtime, socket).start();	// 请求转发
+		new _TranslateSData(srFileMgr, config, session.ID(), 
+				_Envm.PREFIX_RECV, overtime, socket).start();	// 响应转发
 	}
 
 	@Override

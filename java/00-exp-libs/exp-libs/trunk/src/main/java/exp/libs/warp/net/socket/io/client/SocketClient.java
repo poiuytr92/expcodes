@@ -37,6 +37,15 @@ public class SocketClient implements ISession {
 	private SocketByteBuffer localBuffer;
 	
 	/**
+	 * 
+	 * @param ip
+	 * @param port
+	 */
+	public SocketClient(String ip, int port) {
+		this.socketBean = new SocketBean(ip, port);
+	}
+	
+	/**
 	 * 构造函数
 	 * @param socketBean socket配置信息
 	 */

@@ -9,115 +9,136 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
+import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.num.IDUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.io.listn.FileMonitor;
-import exp.libs.warp.net.socket.bean.SocketBean;
 import exp.libs.warp.net.socket.io.client.SocketClient;
 import exp.libs.warp.thread.LoopThread;
 
+/**
+ * <pre>
+ * [端口转发代理服务-C] (请求转发器/响应收转器).
+ * 	1. 请求转发器: 把[对侧]的请求[转发]到[本侧真正的服务端口].
+ * 	2. 响应收转器: 把[本侧真正的服务端口]返回的响应数据[收转]到[对侧].
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-07-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _FPFClient extends LoopThread {
 
 	private Logger log = LoggerFactory.getLogger(_FPFClient.class);
 	
+	/** [对侧]请求文件名称正则 */
 	private final static String REGEX = "([\\d\\.]+)@(\\d+)-T\\d+-S(\\d+)";
 	
+	/**
+	 * [对侧]请求文件名称正则组ID
+	 * 	1: [本侧]真正的服务IP
+	 * 	2: [本侧]真正的服务端口
+	 * 	3: [对侧]的会话ID
+	 */
 	private final static int IDX_IP = 1, IDX_PORT = 2, IDX_SID = 3;
-	
-	private final static int PC_CAPACITY = _SRFileMgr.DEFAULT_CAPACITY;
-	
-	/**
-	 * sessionId -> SocketClient
-	 */
-	private Map<String, SocketClient> clients;
-	
-	/**
-	 * sessionId -> 文件名称集
-	 */
-	private Map<String, PCQueue<String>> sFiles;
 	
 	private _SRFileMgr srFileMgr;
 	
 	private int overtime;
 	
+	/** 对侧会话ID -> 对侧请求文件队列 */
+	private Map<String, PCQueue<String>> sendFiles;
+	
+	/** 对侧会话ID -> 本侧与真正服务的Socket连接 */
+	private Map<String, SocketClient> sessions;
+	
+	/** 收发目录文件监听器 */
 	private FileMonitor fileMonitor;
 	
 	protected _FPFClient(_SRFileMgr srFileMgr, int overtime) {
-		super("IOPFClient");	// FIXME
-		this.clients = new HashMap<String, SocketClient>();
-		this.sFiles = new HashMap<String, PCQueue<String>>();
+		super("端口转发数据接收器-".concat(String.valueOf(IDUtils.getMillisID())));
 		
 		this.srFileMgr = srFileMgr;
 		this.overtime = overtime;
+		this.sendFiles = new HashMap<String, PCQueue<String>>();
+		this.sessions = new HashMap<String, SocketClient>();
 		
-		// FIXME 间隔时间
-		_FileListener fileListener = new _FileListener(srFileMgr, 
-				_FileListener.PREFIX_SEND, _FileListener.SUFFIX);
-		this.fileMonitor = new FileMonitor(srFileMgr.getDir(), 100, fileListener);
+		// 设置收发文件目录监听器(只监听 send 文件)
+		_SRFileListener fileListener = new _SRFileListener(srFileMgr, 
+				_Envm.PREFIX_SEND, _Envm.SUFFIX);
+		this.fileMonitor = new FileMonitor(srFileMgr.getDir(), 
+				_Envm.SCAN_FILE_INTERVAL, fileListener);
 	}
 
 	@Override
 	protected void _before() {
 		fileMonitor._start();
-		log.info("启动端口转发接收器成功");
+		log.info("端口转发数据接收器启动成功");
 	}
 
 	@Override
 	protected void _loopRun() {
 		String sendFilePath = srFileMgr.getSendFile();	// 阻塞
 		
-		SocketClient client = null;
-		String sessionId = null;
-		String ip = null;
-		int port = 0;
 		List<String> datas = RegexUtils.findFirstMatches(sendFilePath, REGEX);
-		if(!datas.isEmpty()) {
-			sessionId = datas.get(IDX_SID);
-			ip = datas.get(IDX_IP);
-			port = NumUtils.toInt(datas.get(IDX_PORT), 0);
+		if(datas.isEmpty()) {
+			FileUtils.delete(sendFilePath);
+			log.warn("无效的数据流文件 [{}], 直接删除", sendFilePath);
 			
-			client = clients.get(sessionId);
-			PCQueue<String> list = sFiles.get(sessionId);
-			if(client == null) {
-				SocketBean sb = new SocketBean(ip, port);
-				client = new SocketClient(sb);
-				clients.put(sessionId, client);
+		} else {
+			String sessionId = datas.get(IDX_SID);
+			String ip = datas.get(IDX_IP);
+			int port = NumUtils.toInt(datas.get(IDX_PORT), 0);
+			
+			PCQueue<String> sendList = sendFiles.get(sessionId);
+			SocketClient session = sessions.get(sessionId);
+			if(session == null) {
+				sendList = new PCQueue<String>(_Envm.PC_CAPACITY);
+				session = new SocketClient(ip, port);
+				if(session.conn()) {
+					new _TranslateCData(srFileMgr, sessionId, _Envm.PREFIX_SEND, 
+							overtime, sendList, session.getSocket()).start();
+					new _TranslateCData(srFileMgr, sessionId, _Envm.PREFIX_RECV, 
+							overtime, sendList, session.getSocket()).start();
+				} else {
+					log.warn("连接到真实服务 [{}:{}] 失败", ip, port);
+				}
 				
-				list = new PCQueue<String>(PC_CAPACITY);
-				sFiles.put(sessionId, list);
+				sessions.put(sessionId, session);
+				sendFiles.put(sessionId, sendList);
 			}
 			
-			
-			if(client.isClosed()) {
-				client.reconn();
+			if(session.isClosed()) {
+				sendList.clear();
+				sendFiles.remove(sessionId);
+				sessions.remove(sessionId);
+				FileUtils.delete(sendFilePath);
 				
-				// FIXME 参数
-				new _TranslateCData(sessionId, _TranslateCData.PREFIX_SEND, overtime, 
-						client.getSocket(), ip, port, srFileMgr, list).start();
-				new _TranslateCData(sessionId, _TranslateCData.PREFIX_RECV, overtime, 
-						client.getSocket(), ip, port, srFileMgr, list).start();
+			} else {
+				sendList.add(sendFilePath);
 			}
-			
-			list.add(sendFilePath);
 		}
 	}
 	
 	@Override
 	protected void _after() {
 		fileMonitor._stop();
-		Iterator<SocketClient> sockets = clients.values().iterator();
-		while(sockets.hasNext()) {
-			sockets.next().close();
-		}
-		clients.clear();
 		
-		Iterator<PCQueue<String>> list = sFiles.values().iterator();
+		Iterator<PCQueue<String>> list = sendFiles.values().iterator();
 		while(list.hasNext()) {
 			list.next().clear();
 		}
-		sFiles.clear();
+		sendFiles.clear();
 		
-		log.info("启动端口转发接收器停止");
+		Iterator<SocketClient> socks = sessions.values().iterator();
+		while(socks.hasNext()) {
+			socks.next().close();
+		}
+		sessions.clear();
+		
+		log.info("端口转发数据接收器已停止");
 	}
 	
 }

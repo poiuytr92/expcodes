@@ -6,21 +6,16 @@ import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 
 // FIXME 测试10秒监听， 依序放入 1~10个文件， 是否按照时序取出
-class _FileListener implements FileAlterationListener {
+class _SRFileListener implements FileAlterationListener {
 
-	protected final static String PREFIX_SEND = "send";
-	
-	protected final static String PREFIX_RECV = "recv";
-	
-	protected final static String SUFFIX = ".txt";
-	
 	private _SRFileMgr srFileMgr;
 	
 	private String prefix;
 	
 	private String suffix;
 	
-	protected _FileListener(_SRFileMgr srFileMgr, String prefix, String suffix) {
+	protected _SRFileListener(_SRFileMgr srFileMgr, 
+			String prefix, String suffix) {
 		this.srFileMgr = srFileMgr;
 		this.prefix = prefix;
 		this.suffix = suffix;
@@ -50,10 +45,10 @@ class _FileListener implements FileAlterationListener {
 	public void onFileCreate(File file) {
 		String name = file.getName();
 		if(name.endsWith(suffix) && name.startsWith(prefix)) {
-			if(PREFIX_SEND.equals(prefix)) {
+			if(_Envm.PREFIX_SEND.equals(prefix)) {
 				srFileMgr.addSendFile(file.getAbsolutePath());
 				
-			} else {
+			} else if(_Envm.PREFIX_RECV.equals(prefix)) {
 				srFileMgr.addRecvFile(file.getAbsolutePath());
 			}
 		}

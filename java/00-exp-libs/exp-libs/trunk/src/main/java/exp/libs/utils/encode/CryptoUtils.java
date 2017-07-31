@@ -48,7 +48,7 @@ public class CryptoUtils {
 	public static final String ALGORITHM_MD5 = "MD5";
 	
 	/** 默认密钥 */
-	public final static String DEFAULT_KEY = "cattsoft";
+	public final static String DEFAULT_KEY = "exp-libs";
 	
 	/** 默认加密编码 */
 	public final static String DEFAULT_ENCODE = Charset.UTF8;

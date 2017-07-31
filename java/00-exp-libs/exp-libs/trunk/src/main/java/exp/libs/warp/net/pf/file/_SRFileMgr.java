@@ -8,13 +8,14 @@ import java.util.Set;
 
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.encode.CryptoUtils;
+import exp.libs.utils.num.BODHUtils;
+import exp.libs.utils.num.IDUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.verify.RegexUtils;
 
 class _SRFileMgr {
 
-	protected final static int DEFAULT_CAPACITY = 1024;
-	
 	private final static String REGEX = "-S(\\d+)";
 	
 	private String dir;
@@ -39,7 +40,7 @@ class _SRFileMgr {
 	 */
 	protected _SRFileMgr(String dir) {
 		this.dir = dir;
-		this.sendFiles = new PCQueue<String>(DEFAULT_CAPACITY);
+		this.sendFiles = new PCQueue<String>(_Envm.PC_CAPACITY);
 		this.recvFiles = new HashMap<String, PCQueue<String>>();
 		this.sendTabus = new HashSet<String>();
 		this.recvTabus = new HashSet<String>();
@@ -90,7 +91,7 @@ class _SRFileMgr {
 		if(StrUtils.isNotEmpty(sessionId)) {
 			PCQueue<String> list = recvFiles.get(sessionId);
 			if(list == null) {
-				list = new PCQueue<String>(DEFAULT_CAPACITY);
+				list = new PCQueue<String>(_Envm.PC_CAPACITY);
 				recvFiles.put(sessionId, list);
 			}
 			list.add(filePath);
@@ -127,6 +128,24 @@ class _SRFileMgr {
 		
 		recvTabus.clear();
 		sendTabus.clear();
+	}
+	
+	protected static String encode(byte[] data, int offset, int len) {
+		String hex = BODHUtils.toHex(data, offset, len);
+		return CryptoUtils.toDES(hex);
+	}
+	
+	protected static byte[] decode(String data) {
+		String hex = CryptoUtils.deDES(data);
+		return BODHUtils.toBytes(hex);
+	}
+	
+	protected static String toFilePath(String sessionId, String fileType, 
+			String srDir, String snkIP, int snkPort) {
+		String fileName = StrUtils.concat(fileType, "#", snkIP, "@", snkPort, 
+				"-T", IDUtils.getTimeID(), "-S", sessionId, _Envm.SUFFIX);
+		String filePath = PathUtils.combine(srDir, fileName);
+		return filePath;
 	}
 	
 }
