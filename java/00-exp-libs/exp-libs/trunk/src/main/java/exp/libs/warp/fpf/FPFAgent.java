@@ -1,6 +1,5 @@
 package exp.libs.warp.fpf;
 
-import exp.libs.utils.io.FileUtils;
 
 class FPFAgent {
 
@@ -8,13 +7,9 @@ class FPFAgent {
 	
 	private _FPFClient client;
 	
-	protected FPFAgent(FPFAgentConfig config) {
-		this.server = new _FPFServer(config);
-		this.client = new _FPFClient(config.getSrDir(), config.getOvertime());
-		
-		// 清空所有残留的数据流文件
-		FileUtils.delete(config.getSrDir());
-		FileUtils.createDir(config.getSrDir());
+	protected FPFAgent(_SRFileMgr srFileMgr, FPFConfig config) {
+		this.server = new _FPFServer(srFileMgr, config);
+		this.client = new _FPFClient(srFileMgr, config.getOvertime());
 	}
 	
 	protected void _start() {

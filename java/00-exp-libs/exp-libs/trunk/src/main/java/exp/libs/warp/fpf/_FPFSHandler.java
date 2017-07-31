@@ -7,7 +7,9 @@ import exp.libs.warp.net.socket.io.server.IHandler;
 
 class _FPFSHandler implements IHandler {
 
-	private FPFAgentConfig agentConf;
+	private _SRFileMgr srFileMgr;
+	
+	private FPFConfig config;
 	
 	/**
 	 * 
@@ -15,22 +17,23 @@ class _FPFSHandler implements IHandler {
 	 * @param remoteIP
 	 * @param remotePort
 	 */
-	protected _FPFSHandler(FPFAgentConfig agentConf) {
-		this.agentConf = agentConf;
+	protected _FPFSHandler(_SRFileMgr srFileMgr, FPFConfig config) {
+		this.srFileMgr = srFileMgr;
+		this.config = config;
 	}
 	
 	@Override
 	public void _handle(ISession localClient) {
 		Socket localSocket = localClient.getSocket();
 		new _TranslateSData(localClient.ID(), _TranslateSData.PREFIX_SEND,  
-				localSocket, agentConf).start();	// 请求转发
+				localSocket, config, srFileMgr).start();	// 请求转发
 		new _TranslateSData(localClient.ID(), _TranslateSData.PREFIX_RECV, 
-				localSocket, agentConf).start();	// 响应转发
+				localSocket, config, srFileMgr).start();	// 响应转发
 	}
 
 	@Override
 	public IHandler _clone() {
-		return new _FPFSHandler(agentConf);
+		return new _FPFSHandler(srFileMgr, config);
 	}
 
 }

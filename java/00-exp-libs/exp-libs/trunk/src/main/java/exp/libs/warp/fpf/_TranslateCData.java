@@ -45,17 +45,21 @@ class _TranslateCData extends Thread {
 	
 	private int snkPort;
 	
+	private _SRFileMgr srFileMgr;
+	
 	private PCQueue<String> list;
 	
 	protected _TranslateCData(String sessionId, String type, long overtime, 
-			Socket src, String snkDir, String snkIP, int snkPort, PCQueue<String> list) {
+			Socket src, String snkIP, int snkPort, 
+			_SRFileMgr srFileMgr, PCQueue<String> list) {
 		this.sessionId = sessionId;
 		this.type = type;
 		this.overtime = overtime;
 		this.src = src;
-		this.snkDir = snkDir;
+		this.snkDir = srFileMgr.getDir();
 		this.snkIP = snkIP;
 		this.snkPort = snkPort;
+		this.srFileMgr = srFileMgr;
 		this.list = list;
 	}
 	
@@ -159,6 +163,7 @@ class _TranslateCData extends Thread {
 		String name = StrUtils.concat(type, "#", snkIP, "@", snkPort, 
 				"-T", IDUtils.getTimeID(), "-S", sessionId, SUFFIX);
 		String path = PathUtils.combine(snkDir, name);
+		srFileMgr.addRecvTabu(path);
 		return path;
 	}
 	

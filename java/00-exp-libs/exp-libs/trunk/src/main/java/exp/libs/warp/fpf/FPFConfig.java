@@ -11,7 +11,7 @@ package exp.libs.warp.fpf;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class FPFAgentConfig {
+public class FPFConfig {
 
 	private final static int DEFAULT_OVERTIME = 10000;
 	
@@ -25,15 +25,13 @@ public class FPFAgentConfig {
 	
 	private int remotePort;
 	
-	private String srDir;
-	
 	private int overtime;
 	
 	private int maxConn;
 	
-	public FPFAgentConfig(String agentName, int localListenPort, 
-			String remoteIP, int remotePort, String srDir) {
-		this(agentName, localListenPort, remoteIP, remotePort, srDir, 
+	public FPFConfig(String agentName, int localListenPort, 
+			String remoteIP, int remotePort) {
+		this(agentName, localListenPort, remoteIP, remotePort, 
 				DEFAULT_OVERTIME, DEFAULT_MAX_CONN);
 	}
 	
@@ -42,18 +40,16 @@ public class FPFAgentConfig {
 	 * @param agentName 代理服务名称（唯一即可）
 	 * @param localListenPort 本地监听端口
 	 * @param remoteIP 远程代理IP（真实服务IP）
-	 * @param remotePort 远程代理端口（真是服务端口）
-	 * @param srDir 数据流文件的收发目录
+	 * @param remotePort 远程代理端口（真实服务端口）
 	 * @param overtime 超时时间(单位ms)
 	 * @param maxConn 单个代理服务的最大连接数
 	 */
-	public FPFAgentConfig(String agentName, int localListenPort, String remoteIP, 
-			int remotePort, String srDir, int overtime, int maxConn) {
+	public FPFConfig(String agentName, int localListenPort, String remoteIP, 
+			int remotePort, int overtime, int maxConn) {
 		this.agentName = agentName;
 		this.localListenPort = localListenPort;
 		this.remoteIP = remoteIP;
 		this.remotePort = remotePort;
-		this.srDir = srDir;
 		this.overtime = (overtime <= 0 ? DEFAULT_OVERTIME : overtime);
 		this.maxConn = (maxConn <= 0 ? DEFAULT_MAX_CONN : maxConn);
 	}
@@ -72,10 +68,6 @@ public class FPFAgentConfig {
 
 	public int getRemotePort() {
 		return remotePort;
-	}
-
-	public String getSrDir() {
-		return srDir;
 	}
 
 	public int getOvertime() {

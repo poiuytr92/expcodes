@@ -24,7 +24,7 @@ class _FPFClient extends LoopThread {
 	
 	private final static int IDX_IP = 1, IDX_PORT = 2, IDX_SID = 3;
 	
-	private final static int IO_BUFF = 10240;	// 每次最多读写10K数据
+	private final static int PC_CAPACITY = _SRFileMgr.DEFAULT_CAPACITY;
 	
 	/**
 	 * sessionId -> SocketClient
@@ -36,24 +36,24 @@ class _FPFClient extends LoopThread {
 	 */
 	private Map<String, PCQueue<String>> sFiles;
 	
-	private FileMonitor fileMonitor;
-	
-	private String srDir;
+	private _SRFileMgr srFileMgr;
 	
 	private int overtime;
 	
-	protected _FPFClient(String srDir, int overtime) {
+	private FileMonitor fileMonitor;
+	
+	protected _FPFClient(_SRFileMgr srFileMgr, int overtime) {
 		super("IOPFClient");	// FIXME
 		this.clients = new HashMap<String, SocketClient>();
 		this.sFiles = new HashMap<String, PCQueue<String>>();
 		
-		this.srDir = srDir;
+		this.srFileMgr = srFileMgr;
 		this.overtime = overtime;
 		
 		// FIXME 间隔时间
-		_FileListener fileListener = new _FileListener(
+		_FileListener fileListener = new _FileListener(srFileMgr, 
 				_FileListener.PREFIX_SEND, _FileListener.SUFFIX);
-		this.fileMonitor = new FileMonitor(srDir, 100, fileListener);
+		this.fileMonitor = new FileMonitor(srFileMgr.getDir(), 100, fileListener);
 	}
 
 	@Override
@@ -64,7 +64,7 @@ class _FPFClient extends LoopThread {
 
 	@Override
 	protected void _loopRun() {
-		String sendFilePath = _SRFileMgr.getSendFile();	// 阻塞
+		String sendFilePath = srFileMgr.getSendFile();	// 阻塞
 		
 		SocketClient client = null;
 		String sessionId = null;
@@ -83,7 +83,7 @@ class _FPFClient extends LoopThread {
 				client = new SocketClient(sb);
 				clients.put(sessionId, client);
 				
-				list = new PCQueue<String>(1024); //FXIME
+				list = new PCQueue<String>(PC_CAPACITY);
 				sFiles.put(sessionId, list);
 			}
 			
@@ -93,9 +93,9 @@ class _FPFClient extends LoopThread {
 				
 				// FIXME 参数
 				new _TranslateCData(sessionId, _TranslateCData.PREFIX_SEND, overtime, 
-						client.getSocket(), srDir, ip, port, list).start();
+						client.getSocket(), ip, port, srFileMgr, list).start();
 				new _TranslateCData(sessionId, _TranslateCData.PREFIX_RECV, overtime, 
-						client.getSocket(), srDir, ip, port, list).start();
+						client.getSocket(), ip, port, srFileMgr, list).start();
 			}
 			
 			list.add(sendFilePath);
@@ -110,6 +110,12 @@ class _FPFClient extends LoopThread {
 			sockets.next().close();
 		}
 		clients.clear();
+		
+		Iterator<PCQueue<String>> list = sFiles.values().iterator();
+		while(list.hasNext()) {
+			list.next().clear();
+		}
+		sFiles.clear();
 		
 		log.info("启动端口转发接收器停止");
 	}

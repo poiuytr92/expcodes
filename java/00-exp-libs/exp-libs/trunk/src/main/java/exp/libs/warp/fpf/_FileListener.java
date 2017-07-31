@@ -14,11 +14,14 @@ class _FileListener implements FileAlterationListener {
 	
 	protected final static String SUFFIX = ".txt";
 	
+	private _SRFileMgr srFileMgr;
+	
 	private String prefix;
 	
 	private String suffix;
 	
-	protected _FileListener(String prefix, String suffix) {
+	protected _FileListener(_SRFileMgr srFileMgr, String prefix, String suffix) {
+		this.srFileMgr = srFileMgr;
 		this.prefix = prefix;
 		this.suffix = suffix;
 	}
@@ -48,10 +51,10 @@ class _FileListener implements FileAlterationListener {
 		String name = file.getName();
 		if(name.endsWith(suffix) && name.startsWith(prefix)) {
 			if(PREFIX_SEND.equals(prefix)) {
-				_SRFileMgr.addSendFile(file.getAbsolutePath());
+				srFileMgr.addSendFile(file.getAbsolutePath());
 				
 			} else {
-				_SRFileMgr.addRecvFile(file.getAbsolutePath());
+				srFileMgr.addRecvFile(file.getAbsolutePath());
 			}
 		}
 	}

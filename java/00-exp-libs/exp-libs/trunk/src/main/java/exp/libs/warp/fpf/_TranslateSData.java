@@ -44,15 +44,18 @@ class _TranslateSData extends Thread {
 	
 	private int snkPort;
 	
+	private _SRFileMgr srFileMgr;
+	
 	protected _TranslateSData(String sessionId, String type, 
-			Socket src, FPFAgentConfig agentConf) {
+			Socket src, FPFConfig config, _SRFileMgr srFileMgr) {
 		this.sessionId = sessionId;
 		this.type = type;
-		this.overtime = agentConf.getOvertime();
+		this.overtime = config.getOvertime();
 		this.src = src;
-		this.snkDir = agentConf.getSrDir();
-		this.snkIP = agentConf.getRemoteIP();
-		this.snkPort = agentConf.getRemotePort();
+		this.snkDir = srFileMgr.getDir();
+		this.snkIP = config.getRemoteIP();
+		this.snkPort = config.getRemotePort();
+		this.srFileMgr = srFileMgr;
 	}
 	
 	@Override
@@ -114,6 +117,7 @@ class _TranslateSData extends Thread {
 		String name = StrUtils.concat(type, "#", snkIP, "@", snkPort, 
 				"-T", IDUtils.getTimeID(), "-S", sessionId, SUFFIX);
 		String path = PathUtils.combine(snkDir, name);
+		srFileMgr.addSendTabu(path);
 		return path;
 	}
 	
@@ -123,7 +127,7 @@ class _TranslateSData extends Thread {
 			OutputStream out = src.getOutputStream();
 			
 			while(!src.isClosed()) {
-				String recvFilePath = _SRFileMgr.getRecvFile(sessionId);
+				String recvFilePath = srFileMgr.getRecvFile(sessionId);
 				if(StrUtils.isEmpty(recvFilePath)) {
 					if(overtime <= 0) {
 						break;
@@ -160,7 +164,7 @@ class _TranslateSData extends Thread {
 			
 		} finally {
 			close(src);
-			_SRFileMgr.clearRecvFiles(sessionId);
+			srFileMgr.clearRecvFiles(sessionId);
 		}
 		
 	}
