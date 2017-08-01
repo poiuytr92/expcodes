@@ -2,6 +2,9 @@ package exp.libs.warp.net.pf.file;
 
 import java.net.Socket;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exp.libs.warp.net.socket.io.common.ISession;
 import exp.libs.warp.net.socket.io.server.IHandler;
 
@@ -17,6 +20,8 @@ import exp.libs.warp.net.socket.io.server.IHandler;
  */
 class _FPFSHandler implements IHandler {
 
+	private Logger log = LoggerFactory.getLogger(_FPFSHandler.class);
+	
 	private _SRFileMgr srFileMgr;
 	
 	private FPFConfig config;
@@ -36,6 +41,9 @@ class _FPFSHandler implements IHandler {
 	public void _handle(ISession session) {
 		long overtime = session.getSocketBean().getOvertime();
 		Socket socket = session.getSocket();
+		log.info("新增一个到转发端口 [{}] 的会话: [{}:{}]", session.getSocketBean().getPort(), 
+				socket.getInetAddress().getHostAddress(), socket.getPort());
+		
 		new _TranslateSData(srFileMgr, config, session.ID(), 
 				_Envm.PREFIX_SEND, overtime, socket).start();	// 请求转发
 		new _TranslateSData(srFileMgr, config, session.ID(), 

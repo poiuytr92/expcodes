@@ -5,7 +5,6 @@ import java.io.File;
 import org.apache.commons.io.monitor.FileAlterationListener;
 import org.apache.commons.io.monitor.FileAlterationObserver;
 
-// FIXME 测试10秒监听， 依序放入 1~10个文件， 是否按照时序取出
 class _SRFileListener implements FileAlterationListener {
 
 	private _SRFileMgr srFileMgr;

@@ -102,8 +102,10 @@ class _FPFClient extends LoopThread {
 							overtime, sendList, session.getSocket()).start();	// 请求转发
 					new _TranslateCData(srFileMgr, sessionId, _Envm.PREFIX_RECV, 
 							overtime, sendList, session.getSocket()).start();	// 响应转发
+					log.info("新增一个到服务端口 [{}:{}] 的会话 [{}]", ip, port, sessionId);
+					
 				} else {
-					log.warn("会话 [{}] 连接到真实服务端口 [{}:{}] 失败", sessionId, ip, port);
+					log.warn("会话 [{}] 连接到服务端口 [{}:{}] 失败", sessionId, ip, port);
 				}
 				
 				sessions.put(sessionId, session);

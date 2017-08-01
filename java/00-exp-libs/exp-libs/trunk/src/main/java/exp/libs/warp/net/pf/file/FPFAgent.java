@@ -1,7 +1,6 @@
 package exp.libs.warp.net.pf.file;
 
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -31,7 +30,7 @@ public class FPFAgent {
 	
 	private int overtime;
 	
-	private List<_FPFServer> servers;
+	private _FPFServers servers;
 	
 	private _FPFClient client;
 	
@@ -51,7 +50,7 @@ public class FPFAgent {
 	 * 
 	 * 适用于 [本侧/对侧] 两方均提供服务的情况.
 	 * @param srDir 数据流传输目录
-	 * @param overtime 超时无交互断开转发通道(单位ms)
+	 * @param overtime 超时无交互断开转发通道(单位ms),  需根据实际传输的数据量以正比调整
 	 * @param serverConfigs 服务配置列表
 	 */
 	public FPFAgent(String srDir, int overtime, FPFConfig... serverConfigs) {
@@ -66,22 +65,13 @@ public class FPFAgent {
 	 * 
 	 * 适用于 [本侧/对侧] 两方均提供服务的情况.
 	 * @param srDir 数据流传输目录
-	 * @param overtime 超时无交互断开转发通道(单位ms)
+	 * @param overtime 超时无交互断开转发通道(单位ms),  需根据实际传输的数据量以正比调整
 	 * @param serverConfigs 服务配置列表
 	 */
 	public FPFAgent(String srDir, int overtime, List<FPFConfig> serverConfigs) {
 		this.srFileMgr = new _SRFileMgr(srDir);
 		this.overtime = (overtime <= 0 ? DEFAULT_OVERTIME : overtime);
-		this.servers = new LinkedList<_FPFServer>();
-		
-		if(serverConfigs != null) {
-			for(FPFConfig config : serverConfigs) {
-				_FPFServer server = new _FPFServer(
-						srFileMgr, this.overtime, config);
-				servers.add(server);
-			}
-		}
-		
+		this.servers = new _FPFServers(srFileMgr, this.overtime, serverConfigs);
 		this.client = new _FPFClient(srFileMgr, this.overtime);
 	}
 	
@@ -104,36 +94,22 @@ public class FPFAgent {
 			log.info("初始化端口转发服务成功, 数据缓存目录: [{}]", dir);
 			
 		} else {
-			log.error("初始化端口转发服务失败, 数据缓存目录未被授权读写: [{}]", dir);
+			log.error("初始化端口转发服务失败, 数据缓存目录未被授予读写权限: [{}]", dir);
 		}
 		return isOk;
 	}
 	
 	public void _start() {
 		if(_init()) {
-			boolean isOk = true;
-			for(_FPFServer server : servers) {
-				isOk &= server._start();
-			}
+			servers._start();
 			client._start();
-			
-			if(isOk == true) {
-				log.info("所有端口转发服务启动成功");
-			} else {
-				log.warn("存在端口转发服务启动失败");
-			}
 		}
 	}
 	
 	public void _stop() {
-		for(_FPFServer server : servers) {
-			server._stop();
-		}
-		servers.clear();
+		servers._stop();
 		client._stop();
 		srFileMgr.clear();
-		
-		log.info("所有端口转发服务已停止");
 	}
 	
 }

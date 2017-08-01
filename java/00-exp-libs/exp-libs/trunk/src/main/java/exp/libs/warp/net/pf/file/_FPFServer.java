@@ -3,7 +3,6 @@ package exp.libs.warp.net.pf.file;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.warp.io.listn.FileMonitor;
 import exp.libs.warp.net.socket.bean.SocketBean;
 import exp.libs.warp.net.socket.io.server.SocketServer;
 
@@ -32,9 +31,6 @@ class _FPFServer {
 	/** 本地端口侦听服务 */
 	private SocketServer listenServer;
 	
-	/** 收发目录文件监听器 */
-	private FileMonitor srFileMonitor;
-	
 	protected _FPFServer(_SRFileMgr srFileMgr, int overtime, FPFConfig config) {
 		this.config = config;
 		
@@ -48,18 +44,11 @@ class _FPFServer {
 		}
 		_FPFSHandler ioPFHandler = new _FPFSHandler(srFileMgr, config);
 		this.listenServer = new SocketServer(localSockBean, ioPFHandler);
-		
-		// 设置收发文件目录监听器(只监听 recv 文件)
-		_SRFileListener fileListener = new _SRFileListener(srFileMgr, 
-				_Envm.PREFIX_RECV, _Envm.SUFFIX);
-		this.srFileMonitor = new FileMonitor(srFileMgr.getDir(), 
-				_Envm.SCAN_FILE_INTERVAL, fileListener);
 	}
 	
 	protected boolean _start() {
 		boolean isOk = listenServer._start();
 		if(isOk == true) {
-			srFileMonitor._start();
 			log.info("端口转发服务 [{}] 启动成功: 本地侦听端口 [{}], 转发端口: [{}:{}]",
 					config.getServerName(), config.getLocalListenPort(), 
 					config.getRemoteIP(), config.getRemotePort());
@@ -71,7 +60,6 @@ class _FPFServer {
 	}
 	
 	protected void _stop() {
-		srFileMonitor._stop();
 		listenServer._stop();
 		log.info("端口转发服务 [{}] 已停止", config.getServerName());
 	}
