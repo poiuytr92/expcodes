@@ -102,7 +102,7 @@ class _SRFileMgr {
 		String filePath = null;
 		PCQueue<String> list = recvFiles.get(sessionId);
 		if(list != null) {
-			filePath = list.get();
+			filePath = list.getQuickly();
 		}
 		return filePath;
 	}
@@ -143,7 +143,7 @@ class _SRFileMgr {
 	protected static String toFilePath(String sessionId, String fileType, 
 			String srDir, String snkIP, int snkPort) {
 		String fileName = StrUtils.concat(fileType, "#", snkIP, "@", snkPort, 
-				"-T", IDUtils.getTimeID(), "-S", sessionId, _Envm.SUFFIX);
+				"-S", sessionId, "-T", IDUtils.getTimeID(), _Envm.SUFFIX);
 		String filePath = PathUtils.combine(srDir, fileName);
 		return filePath;
 	}

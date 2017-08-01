@@ -10,23 +10,23 @@ public class SocketBean {
 
 	private String id;
 	
-	private final static String DEFAULT_ID = "DEFAULT_SOCKET"; 
+	public final static String DEFAULT_ID = "DEFAULT_SOCKET"; 
 	
 	private String ip;
 	
-	private final static String DEFAULT_IP = "127.0.0.1"; 
+	public final static String DEFAULT_IP = "127.0.0.1"; 
 	
 	private int port;
 	
-	private final static int DEFAULT_PORT = 9998;
+	public final static int DEFAULT_PORT = 9998;
 	
 	private String username;
 	
-	private final static String DEFAULT_USERNAME = "";
+	public final static String DEFAULT_USERNAME = "";
 	
 	private String password;
 	
-	private final static String DEFAULT_PASSWORD = "";
+	public final static String DEFAULT_PASSWORD = "";
 	
 	private String charset;
 	
@@ -34,7 +34,7 @@ public class SocketBean {
 	
 	private String writeCharset;
 	
-	private final static String DEFAULT_CHARSET = "UTF-8";
+	public final static String DEFAULT_CHARSET = "UTF-8";
 	
 	private int bufferSize;
 	
@@ -42,9 +42,9 @@ public class SocketBean {
 	
 	private int writeBufferSize;
 	
-	private final static int DEFAULT_BUFF_SIZE = 1;
+	public final static int DEFAULT_BUFF_SIZE = 1;
 	
-	private final static int DEFAULT_BUFF_SIZE_UNIT = 1024 * 1024;	//1MB
+	public final static int DEFAULT_BUFF_SIZE_UNIT = 1024 * 1024;	//1MB
 	
 	private String delimiter;
 	
@@ -52,19 +52,19 @@ public class SocketBean {
 	
 	private String writeDelimiter;
 	
-	private final static String DEFAULT_DELIMITER = "\0";
+	public final static String DEFAULT_DELIMITER = "\0";
 	
 	private int overtime;
 	
-	private final static int DEFAULT_OVERTIME = 60000;
+	public final static int DEFAULT_OVERTIME = 60000;
 	
 	private int maxConnectionCount;
 	
-	private final static int DEFAULT_MAX_CONNECTION_COUNT = 100;
+	public final static int DEFAULT_MAX_CONNECTION_COUNT = 100;
 	
 	private String exitCmd;
 	
-	private final static String DEFAULT_EXIT_CMD = "exit";
+	public final static String DEFAULT_EXIT_CMD = "exit";
 	
 	public SocketBean(String ip, int port) {
 		this();

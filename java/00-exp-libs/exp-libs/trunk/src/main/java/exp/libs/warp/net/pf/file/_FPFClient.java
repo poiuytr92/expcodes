@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.num.IDUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.io.listn.FileMonitor;
@@ -34,7 +33,7 @@ class _FPFClient extends LoopThread {
 	private Logger log = LoggerFactory.getLogger(_FPFClient.class);
 	
 	/** [对侧]请求文件名称正则 */
-	private final static String REGEX = "([\\d\\.]+)@(\\d+)-T\\d+-S(\\d+)";
+	private final static String REGEX = "([\\d\\.]+)@(\\d+)-S(\\d+)";
 	
 	/**
 	 * [对侧]请求文件名称正则组ID
@@ -58,7 +57,7 @@ class _FPFClient extends LoopThread {
 	private FileMonitor srFileMonitor;
 	
 	protected _FPFClient(_SRFileMgr srFileMgr, int overtime) {
-		super("端口转发数据接收器-".concat(String.valueOf(IDUtils.getMillisID())));
+		super(_FPFClient.class.getName());
 		
 		this.srFileMgr = srFileMgr;
 		this.overtime = overtime;

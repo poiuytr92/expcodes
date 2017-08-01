@@ -10,14 +10,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.warp.net.socket.bean.SocketBean;
 
 class _TranslateData extends Thread {
 
+	private Logger log = LoggerFactory.getLogger(_TranslateData.class);
+	
 	protected final static String TYPE_REQUEST = "REQUEST";
 	
 	protected final static String TYPE_RESPONE = "RESPONE";
 	
-	private Logger log = LoggerFactory.getLogger(_TranslateData.class);
+	private final static int IO_BUFF = SocketBean.DEFAULT_BUFF_SIZE * 
+			SocketBean.DEFAULT_BUFF_SIZE_UNIT;	// 每次最多读写1MB数据
 	
 	private String sessionId;
 	
@@ -45,7 +49,7 @@ class _TranslateData extends Thread {
 			InputStream in = src.getInputStream();
 			OutputStream out = snk.getOutputStream();
 			while (true) {
-				byte[] buffer = new byte[10240];	//每次最多取出10K的数据
+				byte[] buffer = new byte[IO_BUFF];	//每次最多取出10K的数据
 				int len = in.read(buffer);
 				if (len > 0) {
 					out.write(buffer, 0, len);
@@ -57,7 +61,7 @@ class _TranslateData extends Thread {
 						break;
 						
 					} else {
-						ThreadUtils.tSleep(100);
+						ThreadUtils.tSleep(10);
 						if(System.currentTimeMillis() - bgnTime >= overtime) {
 							throw new SocketTimeoutException("超时无数据交互");
 						}

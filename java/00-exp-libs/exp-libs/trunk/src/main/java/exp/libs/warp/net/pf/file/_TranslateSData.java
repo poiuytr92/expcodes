@@ -119,7 +119,7 @@ class _TranslateSData extends Thread {
 					if(overtime <= 0) {
 						break;
 					} else {
-						ThreadUtils.tSleep(100);
+						ThreadUtils.tSleep(_Envm.SCAN_FILE_INTERVAL);
 						if(System.currentTimeMillis() - bgnTime >= overtime) {
 							throw new SocketTimeoutException("超时无数据交互");
 						}
@@ -170,7 +170,7 @@ class _TranslateSData extends Thread {
 						break;
 						
 					} else {
-						ThreadUtils.tSleep(100);
+						ThreadUtils.tSleep(_Envm.SCAN_FILE_INTERVAL);
 						if(System.currentTimeMillis() - bgnTime >= overtime) {
 							throw new SocketTimeoutException("超时无数据交互");
 						}

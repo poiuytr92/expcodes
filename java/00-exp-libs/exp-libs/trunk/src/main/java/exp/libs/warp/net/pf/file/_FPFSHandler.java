@@ -41,7 +41,9 @@ class _FPFSHandler implements IHandler {
 	public void _handle(ISession session) {
 		long overtime = session.getSocketBean().getOvertime();
 		Socket socket = session.getSocket();
-		log.info("新增一个到转发端口 [{}] 的会话: [{}:{}]", session.getSocketBean().getPort(), 
+		log.info("新增一个到转发端口 [{}-{}:{}] 的会话 [{}], 本地socket为 [{}:{}]", 
+				session.getSocketBean().getPort(), 
+				config.getRemoteIP(), config.getRemotePort(), session.ID(), 
 				socket.getInetAddress().getHostAddress(), socket.getPort());
 		
 		new _TranslateSData(srFileMgr, config, session.ID(), 
