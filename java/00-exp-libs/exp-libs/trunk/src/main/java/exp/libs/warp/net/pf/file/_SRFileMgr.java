@@ -39,7 +39,7 @@ class _SRFileMgr {
 	 * @param dir 数据流文件的收发目录
 	 */
 	protected _SRFileMgr(String dir) {
-		this.dir = dir;
+		this.dir = (dir == null ? "" : dir.trim());
 		this.sendFiles = new PCQueue<String>(_Envm.PC_CAPACITY);
 		this.recvFiles = new HashMap<String, PCQueue<String>>();
 		this.sendTabus = new HashSet<String>();

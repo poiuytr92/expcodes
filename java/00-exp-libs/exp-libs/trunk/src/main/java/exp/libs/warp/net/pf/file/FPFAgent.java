@@ -1,11 +1,13 @@
 package exp.libs.warp.net.pf.file;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
 
@@ -48,10 +50,26 @@ public class FPFAgent {
 	 * 	2. [端口转发代理服务-C] (请求转发器/响应收转器)
 	 * 
 	 * 适用于 [本侧/对侧] 两方均提供服务的情况.
-	 * @param srDir
-	 * @param serverConfigs
+	 * @param srDir 数据流传输目录
+	 * @param overtime 超时无交互断开转发通道(单位ms)
+	 * @param serverConfigs 服务配置列表
 	 */
 	public FPFAgent(String srDir, int overtime, FPFConfig... serverConfigs) {
+		this(srDir, overtime, Arrays.asList(
+				serverConfigs == null ? new FPFConfig[0] : serverConfigs));
+	}
+	
+	/**
+	 * 启动完整的端口转发代理服务, 包括:
+	 * 	1. [端口转发代理服务-S] (请求发送器/响应接收器)
+	 * 	2. [端口转发代理服务-C] (请求转发器/响应收转器)
+	 * 
+	 * 适用于 [本侧/对侧] 两方均提供服务的情况.
+	 * @param srDir 数据流传输目录
+	 * @param overtime 超时无交互断开转发通道(单位ms)
+	 * @param serverConfigs 服务配置列表
+	 */
+	public FPFAgent(String srDir, int overtime, List<FPFConfig> serverConfigs) {
 		this.srFileMgr = new _SRFileMgr(srDir);
 		this.overtime = (overtime <= 0 ? DEFAULT_OVERTIME : overtime);
 		this.servers = new LinkedList<_FPFServer>();
@@ -72,7 +90,8 @@ public class FPFAgent {
 		String dir = srFileMgr.getDir();
 		
 		// 禁止使用系统根目录(会清空该目录下所有文件和文件夹)
-		if("/".equals(dir) || PathUtils.toLinux("C:/").equals(dir)) {
+		if(StrUtils.isEmpty(dir) || 
+				"/".equals(dir) || PathUtils.toLinux("C:/").equals(dir)) {
 			isOk = false;
 			
 		// 清空所有残留的数据流文件
