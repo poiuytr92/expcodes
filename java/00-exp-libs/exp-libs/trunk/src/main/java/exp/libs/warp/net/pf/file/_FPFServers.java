@@ -24,7 +24,7 @@ class _FPFServers {
 			// 设置收发文件目录监听器(只监听 recv 文件)
 			_SRFileListener fileListener = new _SRFileListener(srFileMgr, 
 					_Envm.PREFIX_RECV, _Envm.SUFFIX);
-			this.srFileMonitor = new FileMonitor(srFileMgr.getDir(), 
+			this.srFileMonitor = new FileMonitor(srFileMgr.getRecvDir(), 
 					_Envm.SCAN_FILE_INTERVAL, fileListener);
 		}
 	}

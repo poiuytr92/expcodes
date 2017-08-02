@@ -11,14 +11,15 @@ import exp.libs.utils.StrUtils;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.num.IDUtils;
-import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.verify.RegexUtils;
 
 class _SRFileMgr {
 
 	private final static String REGEX = "-S(\\d+)";
 	
-	private String dir;
+	private String sendDir;
+	
+	private String recvDir;
 	
 	private PCQueue<String> sendFiles;
 	
@@ -38,73 +39,74 @@ class _SRFileMgr {
 	 * 
 	 * @param dir 数据流文件的收发目录
 	 */
-	protected _SRFileMgr(String dir) {
-		this.dir = (dir == null ? "" : dir.trim());
+	protected _SRFileMgr(String sendDir, String recvDir) {
+		this.sendDir = (sendDir == null ? "" : sendDir.trim());
+		this.recvDir = (recvDir == null ? "" : recvDir.trim());
 		this.sendFiles = new PCQueue<String>(_Envm.PC_CAPACITY);
 		this.recvFiles = new HashMap<String, PCQueue<String>>();
 		this.sendTabus = new HashSet<String>();
 		this.recvTabus = new HashSet<String>();
 	}
 
-	protected String getDir() {
-		return dir;
+	protected String getSendDir() {
+		return sendDir;
+	}
+
+	protected String getRecvDir() {
+		return recvDir;
 	}
 	
-	protected void addSendTabu(String filePath) {
-		filePath = PathUtils.toLinux(filePath);
+	protected void addSendTabu(String fileName) {
 		synchronized (sendTabus) {
-			sendTabus.add(filePath);
+			sendTabus.add(fileName);
 		}
 	}
 	
-	protected void addRecvTabu(String filePath) {
-		filePath = PathUtils.toLinux(filePath);
+	protected void addRecvTabu(String fileName) {
 		synchronized (recvTabus) {
-			recvTabus.add(filePath);
+			recvTabus.add(fileName);
 		}
 	}
 	
-	protected void addSendFile(String filePath) {
-		filePath = PathUtils.toLinux(filePath);
+	protected void addSendFile(String fileName) {
 		synchronized (sendTabus) {
-			if(sendTabus.remove(filePath) == true) {
+			if(sendTabus.remove(fileName) == true) {
 				return;
 			}
 		}
 		
-		sendFiles.add(filePath);
+		sendFiles.add(fileName);
 	}
 	
 	protected String getSendFile() {
 		return sendFiles.get();	// 阻塞
 	}
 	
-	protected void addRecvFile(String filePath) {
-		filePath = PathUtils.toLinux(filePath);
+	protected void addRecvFile(String fileName) {
 		synchronized (recvTabus) {
-			if(recvTabus.remove(filePath) == true) {
+			if(recvTabus.remove(fileName) == true) {
 				return;
 			}
 		}
 		
-		String sessionId = RegexUtils.findFirst(filePath, REGEX);
+		String sessionId = RegexUtils.findFirst(fileName, REGEX);
 		if(StrUtils.isNotEmpty(sessionId)) {
 			PCQueue<String> list = recvFiles.get(sessionId);
 			if(list == null) {
 				list = new PCQueue<String>(_Envm.PC_CAPACITY);
 				recvFiles.put(sessionId, list);
 			}
-			list.add(filePath);
+			list.add(fileName);
 		}
 	}
 	
 	protected String getRecvFile(String sessionId) {
-		String filePath = null;
+		String fileName = null;
 		PCQueue<String> list = recvFiles.get(sessionId);
 		if(list != null) {
-			filePath = list.getQuickly();
+			fileName = list.getQuickly();
 		}
-		return filePath;
+		return fileName;
 	}
 	
 	protected void clearSendFiles() {
@@ -140,12 +142,11 @@ class _SRFileMgr {
 		return BODHUtils.toBytes(hex);
 	}
 	
-	protected static String toFilePath(String sessionId, String fileType, 
-			String srDir, String snkIP, int snkPort) {
+	protected static String toFileName(String sessionId, 
+			String fileType, String snkIP, int snkPort) {
 		String fileName = StrUtils.concat(fileType, "#", snkIP, "@", snkPort, 
 				"-S", sessionId, "-T", IDUtils.getTimeID(), _Envm.SUFFIX);
-		String filePath = PathUtils.combine(srDir, fileName);
-		return filePath;
+		return fileName;
 	}
 	
 }

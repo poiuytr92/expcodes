@@ -9,8 +9,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
+import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.io.listn.FileMonitor;
 import exp.libs.warp.net.socket.io.client.SocketClient;
@@ -67,7 +70,7 @@ class _FPFClient extends LoopThread {
 		// 设置收发文件目录监听器(只监听 send 文件)
 		_SRFileListener fileListener = new _SRFileListener(srFileMgr, 
 				_Envm.PREFIX_SEND, _Envm.SUFFIX);
-		this.srFileMonitor = new FileMonitor(srFileMgr.getDir(), 
+		this.srFileMonitor = new FileMonitor(srFileMgr.getRecvDir(), 
 				_Envm.SCAN_FILE_INTERVAL, fileListener);
 	}
 
@@ -79,8 +82,13 @@ class _FPFClient extends LoopThread {
 
 	@Override
 	protected void _loopRun() {
-		String sendFilePath = srFileMgr.getSendFile();	// 阻塞
+		String sendFileName = srFileMgr.getSendFile();	// 阻塞
+		if(StrUtils.isEmpty(sendFileName)) {
+			ThreadUtils.tSleep(_Envm.SCAN_FILE_INTERVAL);
+			return;
+		}
 		
+		String sendFilePath = PathUtils.combine(srFileMgr.getRecvDir(), sendFileName);
 		List<String> datas = RegexUtils.findFirstMatches(sendFilePath, REGEX);
 		if(datas.isEmpty()) {
 			FileUtils.delete(sendFilePath);

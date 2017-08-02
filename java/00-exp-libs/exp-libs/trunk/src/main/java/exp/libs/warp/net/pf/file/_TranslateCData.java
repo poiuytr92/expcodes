@@ -15,6 +15,7 @@ import exp.libs.envm.Charset;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.PathUtils;
 
 /**
  * <pre>
@@ -118,7 +119,7 @@ class _TranslateCData extends Thread {
 					out.flush();
 				}
 				
-				FileUtils.delete(sendFilePath);	// 删除读取成功的流式文件
+				FileUtils.delete(sendFilePath);	
 				bgnTime = System.currentTimeMillis();
 			}
 		} catch (SocketTimeoutException e) {
@@ -131,7 +132,6 @@ class _TranslateCData extends Thread {
 		} finally {
 			close(snk);
 		}
-		
 	}
 	
 	/**
@@ -149,7 +149,7 @@ class _TranslateCData extends Thread {
 				int len = in.read(buffer);
 				if (len > 0) {
 					String data = _SRFileMgr.encode(buffer, 0, len);
-					String recvFilePath = getRecvFilePath();
+					String recvFilePath = _getRecvFilePath();
 					FileUtils.write(recvFilePath, data, Charset.ISO, false);
 					bgnTime = System.currentTimeMillis();
 					
@@ -180,14 +180,15 @@ class _TranslateCData extends Thread {
 	}
 	
 	/**
-	 * 为[本侧响应收转器]构造数据流文件名.
+	 * 为[本侧响应收转器]构造数据流文件路径.
 	 * 	同时该数据流文件列入禁忌表, 避免被[本侧响应接收器]误读.
-	 * @return 数据流文件名
+	 * @return 数据流文件路径
 	 */
-	private String getRecvFilePath() {
-		String recvFilePath = _SRFileMgr.toFilePath(sessionId, type, 
-				srFileMgr.getDir(), snkIP, snkPort);
-		srFileMgr.addRecvTabu(recvFilePath);
+	private String _getRecvFilePath() {
+		String recvFileName = _SRFileMgr.toFileName(sessionId, type, snkIP, snkPort);
+		srFileMgr.addSendTabu(recvFileName);
+		
+		String recvFilePath = PathUtils.combine(srFileMgr.getSendDir(), recvFileName);
 		return recvFilePath;
 	}
 	

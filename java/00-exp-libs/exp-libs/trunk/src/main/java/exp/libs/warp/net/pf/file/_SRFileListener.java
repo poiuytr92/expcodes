@@ -45,10 +45,10 @@ class _SRFileListener implements FileAlterationListener {
 		String name = file.getName();
 		if(name.endsWith(suffix) && name.startsWith(prefix)) {
 			if(_Envm.PREFIX_SEND.equals(prefix)) {
-				srFileMgr.addSendFile(file.getAbsolutePath());
+				srFileMgr.addSendFile(name);
 				
 			} else if(_Envm.PREFIX_RECV.equals(prefix)) {
-				srFileMgr.addRecvFile(file.getAbsolutePath());
+				srFileMgr.addRecvFile(name);
 			}
 		}
 	}

@@ -14,6 +14,7 @@ import exp.libs.envm.Charset;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.PathUtils;
 
 /**
  * <pre>
@@ -144,12 +145,13 @@ class _TranslateSData extends Thread {
 	/**
 	 * 为[本侧请求发送器]构造数据流文件名.
 	 * 	同时该数据流文件列入禁忌表, 避免被[本侧请求转发器]误读.
-	 * @return 数据流文件名
+	 * @return 数据流文件路径
 	 */
 	private String _getSendFilePath() {
-		String sendFilePath = _SRFileMgr.toFilePath(sessionId, type, 
-				srFileMgr.getDir(), snkIP, snkPort);
-		srFileMgr.addSendTabu(sendFilePath);
+		String sendFileName = _SRFileMgr.toFileName(sessionId, type, snkIP, snkPort);
+		srFileMgr.addSendTabu(sendFileName);
+		
+		String sendFilePath = PathUtils.combine(srFileMgr.getSendDir(), sendFileName);
 		return sendFilePath;
 	}
 	
@@ -164,7 +166,7 @@ class _TranslateSData extends Thread {
 			long bgnTime = System.currentTimeMillis();
 			OutputStream out = src.getOutputStream();
 			while(!src.isClosed()) {
-				String recvFilePath = srFileMgr.getRecvFile(sessionId);
+				String recvFilePath = _getRecvFilePath();
 				if(StrUtils.isEmpty(recvFilePath)) {
 					if(overtime <= 0) {
 						break;
@@ -189,7 +191,7 @@ class _TranslateSData extends Thread {
 					out.flush();
 				}
 				
-				FileUtils.delete(recvFilePath);	// 删除读取成功的流式文件
+				FileUtils.delete(recvFilePath);
 				bgnTime = System.currentTimeMillis();
 			}
 		} catch (SocketTimeoutException e) {
@@ -204,6 +206,19 @@ class _TranslateSData extends Thread {
 			srFileMgr.clearRecvFiles(sessionId);
 		}
 		
+	}
+	
+	/**
+	 * 为[响应接收器]获取数据流文件路径.
+	 * @return 数据流文件路径
+	 */
+	private String _getRecvFilePath() {
+		String recvFileName = srFileMgr.getRecvFile(sessionId);
+		String recvFilePath = ""; 
+		if(StrUtils.isNotEmpty(recvFileName)) {
+			recvFilePath = PathUtils.combine(srFileMgr.getRecvDir(), recvFileName);
+		}
+		return recvFilePath;
 	}
 	
 	private void _close(Socket socket) {
