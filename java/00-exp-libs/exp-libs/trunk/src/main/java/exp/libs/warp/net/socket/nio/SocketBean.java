@@ -20,6 +20,7 @@ import exp.libs.envm.OsDelimiter;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
+@Deprecated
 public class SocketBean implements Serializable {
 
 	/**
