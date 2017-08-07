@@ -29,7 +29,7 @@ public class SocketServer extends Thread {
 	private List<_SocketClientProxy> clientProxys;
 	
 	/** Socket会话线程池 */
-	private ThreadPool tp;
+	private ThreadPool stp;
 	
 	/** 运行标识 */
 	private boolean running;
@@ -46,6 +46,7 @@ public class SocketServer extends Thread {
 		this.sHandler = (handler == null ? new _DefaultHandler() : handler);
 		this.clientProxys = new LinkedList<_SocketClientProxy>();
 		this.running = false;
+		this.setName(this.socketBean.getAlias());
 	}
 	
 	/**
@@ -54,17 +55,22 @@ public class SocketServer extends Thread {
 	 */
 	private boolean init(boolean listenAllIP) {
 		boolean isOk = true;
+		InetSocketAddress socket = (listenAllIP ? 
+				new InetSocketAddress(socketBean.getPort()) : 
+				new InetSocketAddress(socketBean.getIp(), socketBean.getPort()));
+		
 		try {
-			socketServer = new ServerSocket(socketBean.getPort());
-			if(listenAllIP == false) {
-				socketServer.bind(new InetSocketAddress(
-						socketBean.getIp(), socketBean.getPort()));
-			}
-			tp = new ThreadPool(this.socketBean.getMaxConnectionCount());
+			socketServer = new ServerSocket();
+			socketServer.bind(socket);
+			log.info("Socket服务 [{}] 侦听 {}{} 端口成功.", getName(), 
+					(listenAllIP ? "" : socketBean.getIp().concat(" 上的 ")), 
+					socketBean.getPort());
+			
+			stp = new ThreadPool(socketBean.getMaxConnectionCount());
 			
 		} catch (Exception e) {
 			isOk = false;
-			log.error("无法启动Socket服务: 侦听 {}{} 端口失败.", 
+			log.error("无法启动Socket服务 [{}] : 侦听 {}{} 端口失败.", getName(), 
 					(listenAllIP ? "" : socketBean.getIp().concat(" 上的 ")), 
 					socketBean.getPort(), e);
 		}
@@ -106,7 +112,7 @@ public class SocketServer extends Thread {
 	@Override
 	public void run() {
 		log.debug("{}", socketBean.toString());
-		log.info("Socket服务已启动");
+		log.info("Socket服务 [{}] 已启动", getName());
 		
 		running = true;
 		do {
@@ -118,17 +124,17 @@ public class SocketServer extends Thread {
 					
 				} else {
 					clientProxys.add(clientProxy);
-					tp.execute(clientProxy);
+					stp.execute(clientProxy);
 				}
 				
-				log.info("新增Socket会话 [{}] {}, 当前会话数: {}/{}", clientProxy.ID(), 
-						(isOver ? "失败" : ""), clientProxys.size(), 
-						socketBean.getMaxConnectionCount());
+				log.debug("Socket服务 [{}] 新增会话 [{}] {}, 当前活动会话数: [{}/{}]", 
+						getName(), clientProxy.ID(), (isOver ? "失败" : ""), 
+						clientProxys.size(), socketBean.getMaxConnectionCount());
 			}
 		} while(running == true);
 		
 		clear();
-		log.info("Socket服务已停止");
+		log.info("Socket服务 [{}] 已停止", getName());
 	}
 	
 	private _SocketClientProxy listen() {
@@ -142,7 +148,7 @@ public class SocketServer extends Thread {
 						(cHandler == null ? sHandler : cHandler));
 				
 			} catch (Exception e) {
-				log.error("添加一个新的Socket连接请求失败", e);
+				log.error("Socket服务 [{}] 添加一个新的连接请求失败", getName(), e);
 			}
 		}
 		
@@ -178,7 +184,12 @@ public class SocketServer extends Thread {
 			client.close();
 		}
 		clientProxys.clear();
-		tp.shutdown();
+		stp.shutdown();
+	}
+	
+	@Override
+	public String toString() {
+		return socketBean.toString();
 	}
 	
 }

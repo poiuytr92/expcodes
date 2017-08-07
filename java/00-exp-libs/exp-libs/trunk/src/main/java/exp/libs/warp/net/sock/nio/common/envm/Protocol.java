@@ -15,6 +15,9 @@ public class Protocol {
 	/** 连接受限 */
 	public final static String CONN_LIMIT = "Connected limited number";
 	
+	/** 未处理消息数受限 */
+	public final static String MSG_LIMIT = "Undo Msg limited number";
+	
 	/** 周期心跳 */
 	public final static String HEARTBEAT = "Regular Heartbeat";
 	

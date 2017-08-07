@@ -85,7 +85,7 @@ final class Session implements ISession {
 	 * @param socketChannel Socket通讯通道
 	 * @param sockConf 服务器配置
 	 */
-	public Session(SocketChannel socketChannel, NioClientConfig sockConf) {
+	protected Session(SocketChannel socketChannel, NioClientConfig sockConf) {
 		this.pack(socketChannel);
 
 		this.state = States.NO_VERIFY;

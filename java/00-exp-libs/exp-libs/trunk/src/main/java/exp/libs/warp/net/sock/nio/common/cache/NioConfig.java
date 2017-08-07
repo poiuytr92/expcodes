@@ -1,7 +1,13 @@
 package exp.libs.warp.net.sock.nio.common.cache;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import exp.libs.utils.StrUtils;
+import exp.libs.utils.other.LAUtils;
 import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
+import exp.libs.warp.net.sock.nio.common.handler._DefaultHandler;
 import exp.libs.warp.net.sock.nio.common.interfaze.IConfig;
 import exp.libs.warp.net.sock.nio.common.interfaze.IFilter;
 import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
@@ -19,6 +25,17 @@ import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
  */
 public abstract class NioConfig extends SocketBean implements IConfig {
 
+	private final static Logger log = LoggerFactory.getLogger(NioConfig.class);
+	
+	private final static String A_DELIMITER = "!#@{[";
+	
+	private final static String Z_DELIMITER = "]}@#!";
+	
+	/**
+	 * 接收消息分隔符集
+	 */
+	private String[] readDelimiters;
+	
 	/** 业务处理器  */
 	private IHandler handler;
 
@@ -26,27 +43,34 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 	protected FilterChain filterChain;
 
 	/**
-	 * 
-	 * @param handler 业务处理器
-	 */
-	public NioConfig(IHandler handler) {
-		this(null, handler);
-	}
-	
-	/**
 	 * @param sb 从配置文件获取的配置实体
 	 * @param handler 业务处理器
 	 */
 	public NioConfig(SocketBean socketBean, IHandler handler) {
 		super(socketBean);
 		
-		this.handler = handler;
+		this.readDelimiters = StrUtils.split(
+				getReadDelimiter(), A_DELIMITER, Z_DELIMITER);
+		if(LAUtils.isEmpty(readDelimiters)) {
+			readDelimiters = new String[] { getReadDelimiter() };
+		}
+		
+		this.handler = (handler == null ? new _DefaultHandler() : handler);
 		this.filterChain = new FilterChain();
 		filterChain.setHandler(handler);
-		
 		initFilterChain();
 	}
 
+	@Deprecated
+	@Override
+	public String getReadDelimiter() {
+		return super.getReadDelimiter();
+	}
+	
+	public String[] getReadDelimiters() {
+		return readDelimiters;
+	}
+	
 	/**
 	 * <pre>
 	 * 初始化过滤链
@@ -78,7 +102,11 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 	 * 清除所有过滤器
 	 */
 	public void clearFilters() {
-		filterChain.clean();
+		try {
+			filterChain.clean();
+		} catch(Exception e) {
+			log.error("清理过滤器资源失败", e);
+		}
 	}
 	
 	/**

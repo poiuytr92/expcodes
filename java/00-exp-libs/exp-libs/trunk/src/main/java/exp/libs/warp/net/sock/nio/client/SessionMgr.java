@@ -14,7 +14,6 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.utils.StrUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.sock.bean.SocketByteBuffer;
 import exp.libs.warp.net.sock.nio.common.envm.Protocol;
@@ -52,26 +51,13 @@ final class SessionMgr {
 	private NioClientConfig sockConf;
 	
 	/**
-	 * 接收消息分隔符集
-	 */
-	private String[] readDelimiters;
-
-	/**
-	 * 对应 readDelimiters 中各个分隔符在消息缓冲区中的位置索引
-	 */
-	private int[] rdIdxs;
-	
-	/**
 	 * 构造函数
 	 * @param session 会话
 	 * @param sockConf Socket配置
 	 */
-	public SessionMgr(Session session, NioClientConfig sockConf) {
+	protected SessionMgr(Session session, NioClientConfig sockConf) {
 		this.session = session;
 		this.sockConf = sockConf;
-		
-		this.readDelimiters = StrUtils.split(sockConf.getReadDelimiter(), "!#@{[", "]}@#!");
-		this.rdIdxs = new int[readDelimiters.length];
 	}
 	
 	/**
@@ -248,8 +234,9 @@ final class SessionMgr {
 					socketBuffer.append(channelBuffer.get(i));
 				}
 
-				// 可能一次性收到多条消息，在缓冲区可读时需全部处理完，减少处理迟延
-				while (true) {
+				String[] readDelimiters = sockConf.getReadDelimiters();
+				int[] rdIdxs = new int[readDelimiters.length];	// 对应每个消息分隔符的索引
+				while (true) {	// 可能一次性收到多条消息，在缓冲区可读时需全部处理完，减少处理迟延
 					
 					// 枚举所有分隔符，取索引值最小的分隔符位置（索引值>=0有效）
 					int iEnd = -1;

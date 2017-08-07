@@ -74,21 +74,24 @@ public class SocketBean {
 	
 	public SocketBean(SocketBean other) {
 		this();
+		
+		// 内部设值时, 直接赋值而不使用set方法
+		// (因为部分set方法有针对外部设值的特殊处理, 在other中已处理过了, 若在this中再处理一次则可能异常)
 		if(other != null) {
-			setId(other.getId());
-			setIp(other.getIp());
-			setPort(other.getPort());
-			setUsername(other.getUsername());
-			setPassword(other.getPassword());
-			setReadCharset(other.getReadCharset());
-			setWriteCharset(other.getWriteCharset());
-			setReadBufferSize(other.getReadBufferSize());
-			setWriteBufferSize(other.getWriteBufferSize());
-			setReadDelimiter(other.getReadDelimiter());
-			setWriteDelimiter(other.getWriteDelimiter());
-			setOvertime(other.getOvertime());
-			setMaxConnectionCount(other.getMaxConnectionCount());
-			setExitCmd(other.getExitCmd());
+			this.id = other.getId();
+			this.ip = other.getIp();
+			this.port = other.getPort();
+			this.username = other.getUsername();
+			this.password = other.getPassword();
+			this.readCharset = other.getReadCharset();
+			this.writeCharset = other.getWriteCharset();
+			this.readBufferSize = other.getReadBufferSize();
+			this.writeBufferSize = other.getWriteBufferSize();
+			this.readDelimiter = other.getReadDelimiter();
+			this.writeDelimiter = other.getWriteDelimiter();
+			this.overtime = other.getOvertime();
+			this.maxConnectionCount = other.getMaxConnectionCount();
+			this.exitCmd = other.getExitCmd();
 		}
 	}
 	
@@ -222,8 +225,8 @@ public class SocketBean {
 	public void setBufferSize(int bufferSize) {
 		if(bufferSize > 0) {
 			this.bufferSize = bufferSize * DEFAULT_BUFF_SIZE_UNIT;
-			this.readBufferSize = bufferSize * DEFAULT_BUFF_SIZE_UNIT;
-			this.writeBufferSize = bufferSize * DEFAULT_BUFF_SIZE_UNIT;
+			this.readBufferSize = this.bufferSize;
+			this.writeBufferSize = this.bufferSize;
 		}
 	}
 

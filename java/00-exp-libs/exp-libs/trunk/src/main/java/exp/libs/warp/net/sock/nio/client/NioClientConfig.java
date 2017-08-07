@@ -4,6 +4,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.nio.common.cache.NioConfig;
 import exp.libs.warp.net.sock.nio.common.filter.ThreadPoolFilter;
 import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
+import exp.libs.warp.net.sock.nio.common.handler._DefaultHandler;
 import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
 
 /**
@@ -19,10 +20,9 @@ import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
  */
 public class NioClientConfig extends NioConfig {
 
-	public NioClientConfig(IHandler handler) {
-		super(handler);
-	}
-
+	public final static NioClientConfig _DEFAILT = 
+			new NioClientConfig(null, new _DefaultHandler());
+	
 	public NioClientConfig(SocketBean socketBean, IHandler handler) {
 		super(socketBean, handler);
 	}
