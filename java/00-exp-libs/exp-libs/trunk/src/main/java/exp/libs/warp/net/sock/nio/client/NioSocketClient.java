@@ -61,7 +61,7 @@ public class NioSocketClient extends Thread {
 	/**
 	 * 会话管理器
 	 */
-	private SessionManager sessionManager;
+	private SessionMgr sessionManager;
 	
 	/**
 	 * 线程死亡标识
@@ -178,7 +178,7 @@ public class NioSocketClient extends Thread {
 		sockConf.getFilterChain().onSessionCreated(session);
 		
 		//启动会话管理器，负责处理服务端返回的数据
-		sessionManager = new SessionManager(session, sockConf);
+		sessionManager = new SessionMgr(session, sockConf);
 		sessionManager.core(isStop);
 	}
 	

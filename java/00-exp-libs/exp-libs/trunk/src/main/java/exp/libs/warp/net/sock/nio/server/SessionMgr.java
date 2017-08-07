@@ -38,12 +38,12 @@ import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-final class SessionManager implements Runnable {
+final class SessionMgr implements Runnable {
 
 	/**
 	 * 日志器
 	 */
-	private final static Logger log = LoggerFactory.getLogger(SessionManager.class);
+	private final static Logger log = LoggerFactory.getLogger(SessionMgr.class);
 	
 	private final static String A_DELIMITER = "!#@{[";
 	
@@ -83,7 +83,7 @@ final class SessionManager implements Runnable {
 	 * 构造函数
 	 * @param sockConf 服务器配置
 	 */
-	public SessionManager(NioServerConfig sockConf) {
+	public SessionMgr(NioServerConfig sockConf) {
 		this.sockConf =  sockConf;
 		
 		this.sessions = new LinkedList<Session>();

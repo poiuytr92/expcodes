@@ -34,12 +34,12 @@ import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-final class SessionManager {
+final class SessionMgr {
 
 	/**
 	 * 日志器
 	 */
-	private final static Logger log = LoggerFactory.getLogger(SessionManager.class);
+	private final static Logger log = LoggerFactory.getLogger(SessionMgr.class);
 	
 	/**
 	 * 会话
@@ -66,7 +66,7 @@ final class SessionManager {
 	 * @param session 会话
 	 * @param sockConf Socket配置
 	 */
-	public SessionManager(Session session, NioClientConfig sockConf) {
+	public SessionMgr(Session session, NioClientConfig sockConf) {
 		this.session = session;
 		this.sockConf = sockConf;
 		

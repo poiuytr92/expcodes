@@ -58,7 +58,7 @@ public class NioSocketServer extends Thread {
 	/**
 	 * 会话管理线程
 	 */
-	private SessionManager sessionManager = null;
+	private SessionMgr sessionManager = null;
 
 	/**
 	 * 服务器线程是否死亡
@@ -127,7 +127,7 @@ public class NioSocketServer extends Thread {
 		isStop = false;
 		log.debug(sockConf.toString());
 		
-		sessionManager = new SessionManager(sockConf);
+		sessionManager = new SessionMgr(sockConf);
 		new Thread(sessionManager, "SocketSessionManager").start();
 		
 		try {

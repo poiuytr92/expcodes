@@ -105,7 +105,7 @@ public class SocketServer extends Thread {
 	
 	@Override
 	public void run() {
-		log.info("{}", socketBean.toString());
+		log.debug("{}", socketBean.toString());
 		log.info("Socket服务已启动");
 		
 		running = true;
