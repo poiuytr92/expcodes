@@ -347,7 +347,7 @@ public class StrUtils {
 		if(isNotEmpty(bgnDelmiter) && isNotEmpty(endDelmiter)) {
 			String regex = concat(ESCUtils.toRegexESC(bgnDelmiter), 
 					"([\\s\\S]*?)", ESCUtils.toRegexESC(endDelmiter));
-			List<String> subs = RegexUtils.findFirsts(s, regex);
+			List<String> subs = RegexUtils.findBrackets(s, regex);
 			ss = new String[subs.size()];
 			subs.toArray(ss);
 			

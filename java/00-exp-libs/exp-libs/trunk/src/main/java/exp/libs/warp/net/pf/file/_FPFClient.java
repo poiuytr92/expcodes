@@ -89,7 +89,7 @@ class _FPFClient extends LoopThread {
 		}
 		
 		String sendFilePath = PathUtils.combine(srFileMgr.getRecvDir(), sendFileName);
-		List<String> datas = RegexUtils.findFirstMatches(sendFilePath, REGEX);
+		List<String> datas = RegexUtils.findGroups(sendFilePath, REGEX);
 		if(datas.isEmpty()) {
 			FileUtils.delete(sendFilePath);
 			log.warn("无效的数据流文件 [{}], 直接删除", sendFilePath);

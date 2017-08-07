@@ -77,7 +77,7 @@ public class RegexUtils {
 	 * @param regex
 	 * @return
 	 */
-	public static List<String> findFirsts(String str, String regex) {
+	public static List<String> findBrackets(String str, String regex) {
 		List<String> list = new LinkedList<String>();
 		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
 			Pattern ptn = Pattern.compile(regex);
@@ -97,7 +97,7 @@ public class RegexUtils {
 	 * @param regex
 	 * @return
 	 */
-	public static List<String> findFirstMatches(String str, String regex) {
+	public static List<String> findGroups(String str, String regex) {
 		List<String> list = new ArrayList<String>();
 		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
 			Pattern ptn = Pattern.compile(regex);

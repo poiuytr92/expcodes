@@ -174,7 +174,7 @@ class _PrjVerInfo {
 			String newVer = verInfo.getVersion();
 			String curVer = this.curVer.getVersion();
 			
-			List<String> newVerIDs = RegexUtils.findFirstMatches(newVer, regex);
+			List<String> newVerIDs = RegexUtils.findGroups(newVer, regex);
 			if(newVerIDs.isEmpty()) {
 				errDesc = StrUtils.concat("[版本号] 格式错误\r\n", 
 						"参考格式: Major.Minor{-SNAPSHOT}  (主版本.次版本-快照标识)\r\n", 
@@ -182,7 +182,7 @@ class _PrjVerInfo {
 				
 			} else {
 				curVer = (StrUtils.isTrimEmpty(curVer) ? "0.0" : curVer);
-				List<String> curVerIDs = RegexUtils.findFirstMatches(curVer, regex);
+				List<String> curVerIDs = RegexUtils.findGroups(curVer, regex);
 				if(!isGreater(newVerIDs, curVerIDs)) {
 					errDesc = "[版本号] 不能小于最后的版本.";
 				}
