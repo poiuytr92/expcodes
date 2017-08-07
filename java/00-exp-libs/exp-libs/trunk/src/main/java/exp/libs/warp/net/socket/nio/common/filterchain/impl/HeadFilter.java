@@ -45,7 +45,7 @@ final class HeadFilter extends BaseNextFilter {
 		try {
 			
 			//若对方发来断开连接的命令消息，则直接断开连接
-			if(session.getConfig().getDisconCmd().equals(
+			if(session.getConfig().getExitCmd().equals(
 					msg.toString().trim())) {
 				session.close();
 			}
@@ -75,14 +75,14 @@ final class HeadFilter extends BaseNextFilter {
 				if(session.isClosed()) {
 					return;
 				}
-				
+			
 				IConfig conf = session.getConfig();
-	
 				String sendMsg = msg.toString();
-				sendMsg += conf.getSendDelimiter();
-				byte[] byteMsg = sendMsg.getBytes(conf.getSendCharset());
+				
+				sendMsg = sendMsg.concat(conf.getWriteDelimiter());
+				byte[] byteMsg = sendMsg.getBytes(conf.getWriteCharset());
+				
 				ByteBuffer sendBuffer = ByteBuffer.wrap(byteMsg);
-	
 				while (sendBuffer.hasRemaining()) {
 					session.getLayerSession().write(sendBuffer);
 				}

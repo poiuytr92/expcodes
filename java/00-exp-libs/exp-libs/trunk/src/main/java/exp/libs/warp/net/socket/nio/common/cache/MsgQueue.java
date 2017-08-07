@@ -17,6 +17,9 @@ import java.util.List;
  */
 public final class MsgQueue {
 
+	/** 允许缓存的最大未处理消息数 */
+	public final static int MAX_MSG_LIMIT = 100;
+	
 	/**
 	 * 原始消息队列
 	 */
@@ -75,11 +78,16 @@ public final class MsgQueue {
 	 * @param newMsg
 	 *            新消息
 	 */
-	public void addNewMsg(String newMsg) {
+	public boolean addNewMsg(String newMsg) {
+		boolean isOk = false;
 		synchronized (lock) {
-			msgList.add(newMsg);
-			totalMsgCnt++;
+			if(getWaitCnt() < MAX_MSG_LIMIT) {
+				msgList.add(newMsg);
+				totalMsgCnt++;
+				isOk = true;
+			}
 		}
+		return isOk;
 	}
 
 	/**
@@ -141,10 +149,8 @@ public final class MsgQueue {
 	 * 
 	 * @return 已执行的消息数
 	 */
-	public int getWaitCnt() {
-		synchronized (lock) {
-			return totalMsgCnt - handledMsgCnt;
-		}
+	private int getWaitCnt() {
+		return totalMsgCnt - handledMsgCnt;
 	}
 
 }

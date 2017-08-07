@@ -18,7 +18,7 @@ public interface ISession {
 	
 	public String read();
 	
-	public void cleanIOBuffer();
+	public void clearIOBuffer();
 	
 	public boolean isClosed();
 	

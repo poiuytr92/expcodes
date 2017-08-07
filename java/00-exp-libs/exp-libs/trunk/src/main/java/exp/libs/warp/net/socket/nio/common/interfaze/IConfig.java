@@ -33,7 +33,7 @@ public interface IConfig {
 	 * </pre>
 	 * @return 远端机字符集
 	 */
-	public String getRecvCharset();
+	public String getReadCharset();
 	
 	/**
 	 * <pre>
@@ -42,36 +42,36 @@ public interface IConfig {
 	 * </pre>
 	 * @return 本地机字符集
 	 */
-	public String getSendCharset();
+	public String getWriteCharset();
 
 	/**
 	 * 获取读缓冲区大小
 	 * @return 读缓冲区大小
 	 */
-	public int getReadBuffSize();
+	public int getReadBufferSize();
 	
 	/**
 	 * 获取写缓冲区大小
 	 * @return 写缓冲区大小
 	 */
-	public int getWriteBuffSize();
+	public int getWriteBufferSize();
 	
 	/**
 	 * 获取接收消息分隔符
 	 * @return 接收消息分隔符
 	 */
-	public String getRecvDelimiter();
+	public String getReadDelimiter();
 	
 	/**
 	 * 获取发送消息分隔符
 	 * @return 接收消息分隔符
 	 */
-	public String getSendDelimiter();
+	public String getWriteDelimiter();
 	
 	/**
 	 * 获取断开连接命令
 	 * @return 断开连接命令
 	 */
-	public String getDisconCmd();
+	public String getExitCmd();
 	
 }

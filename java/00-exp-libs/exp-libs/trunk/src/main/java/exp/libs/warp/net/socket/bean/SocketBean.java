@@ -72,6 +72,26 @@ public class SocketBean {
 		setPort(port);
 	}
 	
+	public SocketBean(SocketBean other) {
+		this();
+		if(other != null) {
+			setId(other.getId());
+			setIp(other.getIp());
+			setPort(other.getPort());
+			setUsername(other.getUsername());
+			setPassword(other.getPassword());
+			setReadCharset(other.getReadCharset());
+			setWriteCharset(other.getWriteCharset());
+			setReadBufferSize(other.getReadBufferSize());
+			setWriteBufferSize(other.getWriteBufferSize());
+			setReadDelimiter(other.getReadDelimiter());
+			setWriteDelimiter(other.getWriteDelimiter());
+			setOvertime(other.getOvertime());
+			setMaxConnectionCount(other.getMaxConnectionCount());
+			setExitCmd(other.getExitCmd());
+		}
+	}
+	
 	public SocketBean() {
 		setId(DEFAULT_ID);
 		setIp(DEFAULT_IP);

@@ -18,8 +18,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.LAUtils;
 import exp.libs.warp.net.socket.bean.SocketByteBuffer;
+import exp.libs.warp.net.socket.nio.common.cache.MsgQueue;
 import exp.libs.warp.net.socket.nio.common.envm.States;
+import exp.libs.warp.net.socket.nio.common.envm.Times;
 import exp.libs.warp.net.socket.nio.common.filterchain.impl.FilterChain;
 
 /**
@@ -40,6 +44,10 @@ final class SessionManager implements Runnable {
 	 * 日志器
 	 */
 	private final static Logger log = LoggerFactory.getLogger(SessionManager.class);
+	
+	private final static String A_DELIMITER = "!#@{[";
+	
+	private final static String Z_DELIMITER = "]}@#!";
 	
 	/**
 	 * 会话列表
@@ -69,13 +77,8 @@ final class SessionManager implements Runnable {
 	/**
 	 * 接收消息分隔符集
 	 */
-	private String[] recvDelimiters;
+	private String[] readDelimiters;
 
-	/**
-	 * 对应 recvDelimiters 中各个分隔符在消息缓冲区中的位置索引
-	 */
-	private int[] rdIdxs;
-	
 	/**
 	 * 构造函数
 	 * @param sockConf 服务器配置
@@ -87,9 +90,11 @@ final class SessionManager implements Runnable {
 		this.sessionCnt = 0;
 		this.lock = new byte[1];
 		this.isStop = true;
-		
-		this.recvDelimiters = StrUtils.split(sockConf.getRecvDelimiter(), "!#@{[", "]}@#!");
-		this.rdIdxs = new int[recvDelimiters.length];
+		this.readDelimiters = StrUtils.split(
+				sockConf.getReadDelimiter(), A_DELIMITER, Z_DELIMITER);
+		if(LAUtils.isEmpty(readDelimiters)) {
+			readDelimiters = new String[] { sockConf.getReadDelimiter() };
+		}
 	}
 
 	/**
@@ -99,7 +104,6 @@ final class SessionManager implements Runnable {
 	public void run() {
 		isStop = false;
 		log.info("服务器会话管理器线程启动.");
-//		long lastHbTime = System.currentTimeMillis();
 		
 		while (isStop == false) {
 			try {
@@ -114,13 +118,13 @@ final class SessionManager implements Runnable {
 						// 若该会话处于等待关闭状态，但超时仍未被远端机关闭，则本地主动关闭
 						if (session.isWaitingToClose() == true) {
 							if(curTime - session.getNotifyDisconTime() > 
-									sockConf.getWaitDisconTime()) {
+									sockConf.getOvertime()) {
 								session.close();
 							}
 						}
 						
 						// 检查会话是否超时无动作
-						if(session.isOverTime(curTime) == true) {
+						if(session.isOvertime(curTime) == true) {
 							log.info("会话 [" + session + "] 超时无动作.断开会话连接.");
 							session.close();
 						}
@@ -144,7 +148,7 @@ final class SessionManager implements Runnable {
 					}
 				}
 
-				//设置陷阱，诱导线程自杀
+				// 设置陷阱，在阻塞前诱导线程自杀
 				if(isStop == true) {
 					break;
 				}
@@ -163,29 +167,8 @@ final class SessionManager implements Runnable {
 					}
 				}
 				
-				//设置陷阱，诱导线程自杀
-				if(isStop == true) {
-					break;
-				}
+				ThreadUtils.tSleep(Times.SLEEP);
 				
-				// 定时发送心跳到客户端(暂时关闭此功能,建议增设开关)
-//				if(curTime - lastHbTime > sockConf.getHbTime()) {
-//					synchronized (lock) {
-//						for (Session session : sessions) {
-//							if (session.isVerfied() == true) {
-//								session.write(Protocol.HEARTBEAT);
-//							}
-//						}
-//					}
-//					lastHbTime = curTime;
-//				}
-				
-				// 会话管理线程休眠
-				Thread.sleep(sockConf.getSleepTime());
-			
-			} catch (InterruptedException e) {
-				log.error("休眠线程发生异常.程序即将结束.", e);
-				break;
 			} catch (Exception e) {
 				log.error("会话管理器发生未知异常.程序即将结束.", e);
 				break;
@@ -287,7 +270,7 @@ final class SessionManager implements Runnable {
 		sc.configureBlocking(false);
 		sc.register(selector, SelectionKey.OP_READ);
 
-		int eventNum = selector.select(sockConf.getBlockTime());
+		int eventNum = selector.select(Times.BLOCK);
 		if (eventNum > 0) {
 			Iterator<SelectionKey> iterator = selector.selectedKeys()
 					.iterator();
@@ -328,8 +311,6 @@ final class SessionManager implements Runnable {
 	 */
 	private int handleKey(SelectionKey sk, Session session) throws Exception {
 		int rtn = 0;
-		int maxEachClientTaskNum = sockConf.getMaxEachClientTaskNum();
-		
 		SocketChannel sc = session.getLayerSession();
 		ByteBuffer channelBuffer = session.getChannelBuffer();
 		SocketByteBuffer socketBuffer = session.getSocketBuffer();
@@ -340,18 +321,17 @@ final class SessionManager implements Runnable {
 			channelBuffer.clear();
 			while ((count = sc.read(channelBuffer)) > 0) {
 				channelBuffer.flip();
-
 				for (int i = 0; i < count; i++) {
 					socketBuffer.append(channelBuffer.get(i));
 				}
 
-				// 可能一次性收到多条消息，在缓冲区可读时需全部处理完，减少处理迟延
-				while (true) {
+				int[] rdIdxs = new int[readDelimiters.length];	// 对应每个消息分隔符的索引
+				while (true) {	// 可能一次性收到多条消息，在缓冲区可读时需全部处理完，减少处理迟延
 					
 					// 枚举所有分隔符，取索引值最小的分隔符位置（索引值>=0有效）
 					int iEnd = -1;
-					for(int i = 0; i < recvDelimiters.length; i++) {
-						rdIdxs[i] = socketBuffer.indexOf(recvDelimiters[i]);
+					for(int i = 0; i < readDelimiters.length; i++) {
+						rdIdxs[i] = socketBuffer.indexOf(readDelimiters[i]);
 						
 						if(rdIdxs[i] >= 0) {
 							if(iEnd < 0) {
@@ -369,21 +349,13 @@ final class SessionManager implements Runnable {
 					}
 					String newMsg = socketBuffer.subString(iEnd).trim();
 
-					// 把原始消息添加到原始消息队列，剔除空消息，防止攻击
+					// 把原始消息添加到原始消息队列，并剔除空消息和越限消息(防止攻击)
 					if (false == "".equals(newMsg)) {
-						
-						if (maxEachClientTaskNum < 0 || session.getMsgQueue()
-									.getWaitCnt() < maxEachClientTaskNum) {
-							
-							session.getMsgQueue().addNewMsg(newMsg);
-							
-						} else {
-							log.info("会话 [" + session + "] 连续发送超过 [" + 
-									maxEachClientTaskNum + "] 条未处理消息." +
-									"消息 [" + newMsg + "] 被服务器抛弃.");
-							session.writeErrMsg("服务端禁止连续发送 [" + 
-									maxEachClientTaskNum + "] 条未处理消息.消息 [" + 
-									newMsg + "] 被抛弃.");
+						if (!session.getMsgQueue().addNewMsg(newMsg)) {
+							log.info("会话 [{}] 连续发送超过 [{}] 条未处理消息.消息 [{}] 被服务器抛弃.", 
+									session, MsgQueue.MAX_MSG_LIMIT, newMsg);
+							session.writeErrMsg("服务端已积压 [" + MsgQueue.MAX_MSG_LIMIT + 
+									"] 条未处理消息, 消息 [" + newMsg + "] 被抛弃, 请控制消息发送频率.");
 						}
 					}
 					socketBuffer.delete(iEnd);
@@ -409,7 +381,7 @@ final class SessionManager implements Runnable {
 	 */
 	public boolean addSession(Session newSession) throws Exception {
 		boolean isOk = false;
-		int maxLinkNum = sockConf.getMaxClientLinkNum();
+		int maxLinkNum = sockConf.getMaxConnectionCount();
 
 		synchronized (lock) {
 			if (newSession != null && 

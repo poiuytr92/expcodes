@@ -12,6 +12,8 @@ import java.nio.channels.SocketChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.os.ThreadUtils;
+import exp.libs.warp.net.socket.nio.common.envm.Times;
 import exp.libs.warp.net.socket.nio.common.interfaze.ISession;
 
 /**
@@ -228,17 +230,13 @@ public class NioSocketClient extends Thread {
 		
 		//等待会话初始化
 		while(session == null) {
-			try {
-				Thread.sleep(sockConf.getSleepTime());
+			ThreadUtils.tSleep(Times.SLEEP);
 				
-				//会话超过依然未完成初始化，则认为初始化失败
-				curTime = System.currentTimeMillis();
-				if((curTime - bgnTime) > (sockConf.getOverTime())) {
-					this.stopClient();	//超时未初始化会话成功，结束客户端主线程
-					break;
-				}
-			} catch (InterruptedException e) {
-				log.error("线程休眠异常", e);
+			//会话超过依然未完成初始化，则认为初始化失败
+			curTime = System.currentTimeMillis();
+			if((curTime - bgnTime) > (sockConf.getOvertime())) {
+				this.stopClient();	//超时未初始化会话成功，结束客户端主线程
+				break;
 			}
 		}
 		
@@ -315,8 +313,7 @@ public class NioSocketClient extends Thread {
 	
 	/**
 	 * <pre>
-	 * 停止客户端。
-	 * 不推荐外部使用此方法关闭客户端。
+	 * 停止客户端(仅内部调用, 不推荐外部使用此方法关闭客户端)。
 	 * 建议通过session的关闭方法对客户端进行关闭。
 	 * </pre>
 	 */

@@ -11,7 +11,7 @@ import exp.libs.warp.net.socket.nio.common.interfaze.ISession;
  * 消息转码过滤器，仅适用于字符串的消息转码
  * 
  * 接收消息时：把接收到的消息字符串的recvCharset编码，转码为业务处理时使用的编码
- * 发送消息时：把业务处理时使用的编码，转码为发送消息时的sendCharset编码
+ * 发送消息时：把业务处理时使用的编码，转码为发送消息时的writeCharset编码
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -51,11 +51,11 @@ public class TranscodeFilter extends BaseFilter {
 			throws Exception {
 
 		IConfig conf = session.getConfig();
-		String sendCharset = conf.getSendCharset();
+		String writeCharset = conf.getWriteCharset();
 		
 		String hdrMsg = msg.toString();
-		byte[] sendbytes = hdrMsg.getBytes(sendCharset);
-		String sendMsg = new String(sendbytes, sendCharset);
+		byte[] sendbytes = hdrMsg.getBytes(writeCharset);
+		String sendMsg = new String(sendbytes, writeCharset);
 		
 		preFilter.onMessageSent(session, sendMsg);
 	}

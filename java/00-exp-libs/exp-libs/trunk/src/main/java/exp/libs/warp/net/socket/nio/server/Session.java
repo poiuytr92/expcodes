@@ -96,9 +96,9 @@ final class Session implements ISession {
 		this.state = States.NO_VERIFY;	//初始设置为未验证
 		this.sockConf = sockConf;
 
-		this.channelBuffer = ByteBuffer.allocate(sockConf.getReadBuffSize());
-		this.socketBuffer = new SocketByteBuffer(sockConf.getReadBuffSize(), 
-				sockConf.getRecvCharset());
+		this.channelBuffer = ByteBuffer.allocate(sockConf.getReadBufferSize());
+		this.socketBuffer = new SocketByteBuffer(sockConf.getReadBufferSize(), 
+				sockConf.getReadCharset());
 		this.recvMsgQueue = new MsgQueue();
 
 		this.properties = new HashMap<String, Object>();
@@ -301,9 +301,9 @@ final class Session implements ISession {
 	 * @param curTime 当前时间
 	 * @return 是否超时
 	 */
-	public boolean isOverTime(long curTime) {
-		if((sockConf.getOverTime() > 0) && 
-				(curTime - lastActionTime > sockConf.getOverTime())) {
+	public boolean isOvertime(long curTime) {
+		if((sockConf.getOvertime() > 0) && 
+				(curTime - lastActionTime > sockConf.getOvertime())) {
 			return true;
 		}
 		return false;
@@ -333,8 +333,8 @@ final class Session implements ISession {
 	public void writeErrMsg(Object errMsg) {
 		try {
 			String strMsg = errMsg.toString();
-			strMsg += sockConf.getSendDelimiter();
-			byte[] byteMsg = strMsg.getBytes(sockConf.getSendCharset());
+			strMsg = strMsg.concat(sockConf.getWriteDelimiter());
+			byte[] byteMsg = strMsg.getBytes(sockConf.getWriteCharset());
 			ByteBuffer sendBuffer = ByteBuffer.wrap(byteMsg);
 
 			while (sendBuffer.hasRemaining()) {
@@ -404,7 +404,7 @@ final class Session implements ISession {
 		
 		// 避免重复通知远端机断开连接
 		if(isWaitingToClose() == false) {
-			write(sockConf.getDisconCmd());		//发送一条断开命令
+			write(sockConf.getExitCmd());		//发送一条断开命令
 			this.notifyDisconTime = System.currentTimeMillis();
 			this.state = States.WAIT_TO_CLOSE;	//进入等待断开状态
 		}

@@ -13,7 +13,7 @@ import exp.libs.utils.num.NumUtils;
 
 /**
  * <PRE>
- * 集合操作工具包
+ * 队列/数组集合操作工具包
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -21,10 +21,18 @@ import exp.libs.utils.num.NumUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class CollectionUtils {
+public class LAUtils {
 
 	/** 私有化构造函数 */
-	protected CollectionUtils() {}
+	protected LAUtils() {}
+	
+	public static boolean isEmpty(Object[] array) {
+		return (array == null || array.length <= 0);
+	}
+	
+	public static boolean isEmpty(List<?> list) {
+		return (list == null || list.size() <= 0);
+	}
 	
 	public static String toString(Object[] array) {
 		StringBuffer sb = new StringBuffer();

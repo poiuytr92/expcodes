@@ -18,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.warp.net.socket.nio.common.envm.Protocol;
+import exp.libs.warp.net.socket.nio.common.envm.Times;
 
 /**
  * <pre>
@@ -31,9 +32,7 @@ import exp.libs.warp.net.socket.nio.common.envm.Protocol;
  */
 public class NioSocketServer extends Thread {
 
-	/**
-	 * 日志器
-	 */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(NioSocketServer.class);
 	
 	/**
@@ -126,7 +125,7 @@ public class NioSocketServer extends Thread {
 	@Override
 	public void run() {
 		isStop = false;
-		log.info(sockConf.toString());
+		log.debug(sockConf.toString());
 		
 		sessionManager = new SessionManager(sockConf);
 		new Thread(sessionManager, "SocketSessionManager").start();
@@ -175,7 +174,7 @@ public class NioSocketServer extends Thread {
 
 		serverSocketChannel = ServerSocketChannel.open();
 		serverSocketChannel.socket().setReceiveBufferSize(
-				sockConf.getReadBuffSize());
+				sockConf.getReadBufferSize());
 		
 		if(sockConf.getIp() == null || 
 				"".equals(sockConf.getIp())) {
@@ -205,11 +204,9 @@ public class NioSocketServer extends Thread {
 				break;
 			}
 			
-			int eventNum = selector.select(sockConf.getBlockTime());
-
+			int eventNum = selector.select(Times.BLOCK);
 			if (eventNum > 0) {
 				Set<SelectionKey> selectionKeys = selector.selectedKeys();
-
 				for (SelectionKey key : selectionKeys) {
 					handleSelectionKey(key); // 处理 Select事件
 				}
@@ -221,10 +218,9 @@ public class NioSocketServer extends Thread {
 			
 			//打印心跳
 			long currentTime = System.currentTimeMillis();
-            if(currentTime - lastHbTime >= sockConf.getHbTime()) {
-            	log.debug("[HeartBeat] Socket服务器 [" + serverName + 
-            			"] 当前活动会话数: [" + sessionManager.getSessionCnt() + 
-            			"].");
+            if(currentTime - lastHbTime >= Times.BLOCK) {
+            	log.debug("[HeartBeat] Socket服务器 [{}] 当前活动会话数: [{}].", 
+            			serverName, sessionManager.getSessionCnt());
                 lastHbTime = currentTime;
             }
 		}
@@ -260,17 +256,13 @@ public class NioSocketServer extends Thread {
 	 * 关闭服务器
 	 */
 	private void closeServer() {
-
-		//设置主线程已停止标识
-		isStop = true;
-				
-		//诱导会话管理线程自杀
-		sessionManager.setStop(true);
+		isStop = true;	//设置主线程已停止标识
+		sessionManager.setStop(true);	//诱导会话管理线程自杀
 		
 		try {
 			
 			//清理过滤链
-			sockConf.getFilterChain().clean();
+			sockConf.clearFilters();
 			
 			//关闭事件选择器
 			if (selector != null) {

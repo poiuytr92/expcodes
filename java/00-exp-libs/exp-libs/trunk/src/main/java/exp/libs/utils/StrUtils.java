@@ -348,7 +348,8 @@ public class StrUtils {
 			String regex = concat(ESCUtils.toRegexESC(bgnDelmiter), 
 					"([\\s\\S]*?)", ESCUtils.toRegexESC(endDelmiter));
 			List<String> subs = RegexUtils.findFirsts(s, regex);
-			ss = (String[]) subs.toArray();
+			ss = new String[subs.size()];
+			subs.toArray(ss);
 			
 		} else if(isNotEmpty(bgnDelmiter)) {
 			ss = s.split(bgnDelmiter);

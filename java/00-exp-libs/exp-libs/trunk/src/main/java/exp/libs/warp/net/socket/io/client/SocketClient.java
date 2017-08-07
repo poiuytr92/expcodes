@@ -289,7 +289,7 @@ public class SocketClient implements ISession {
 	 * 建议完成一次完整的读写交互后执行.
 	 */
 	@Override
-	public void cleanIOBuffer() {
+	public void clearIOBuffer() {
 		if(localBuffer != null) {
 			localBuffer.reset();
 		}

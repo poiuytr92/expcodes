@@ -15,9 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.socket.bean.SocketByteBuffer;
 import exp.libs.warp.net.socket.nio.common.envm.Protocol;
 import exp.libs.warp.net.socket.nio.common.envm.States;
+import exp.libs.warp.net.socket.nio.common.envm.Times;
 import exp.libs.warp.net.socket.nio.common.filterchain.impl.FilterChain;
 
 /**
@@ -52,10 +54,10 @@ final class SessionManager {
 	/**
 	 * 接收消息分隔符集
 	 */
-	private String[] recvDelimiters;
+	private String[] readDelimiters;
 
 	/**
-	 * 对应 recvDelimiters 中各个分隔符在消息缓冲区中的位置索引
+	 * 对应 readDelimiters 中各个分隔符在消息缓冲区中的位置索引
 	 */
 	private int[] rdIdxs;
 	
@@ -68,8 +70,8 @@ final class SessionManager {
 		this.session = session;
 		this.sockConf = sockConf;
 		
-		this.recvDelimiters = StrUtils.split(sockConf.getRecvDelimiter(), "!#@{[", "]}@#!");
-		this.rdIdxs = new int[recvDelimiters.length];
+		this.readDelimiters = StrUtils.split(sockConf.getReadDelimiter(), "!#@{[", "]}@#!");
+		this.rdIdxs = new int[readDelimiters.length];
 	}
 	
 	/**
@@ -95,7 +97,7 @@ final class SessionManager {
 				if (session.isWaitingToClose() == true) {
 					currentTime = System.currentTimeMillis();
 					if(currentTime - session.getNotifyDisconTime() > 
-							sockConf.getWaitDisconTime()) {
+							sockConf.getOvertime()) {
 						session.close();
 					}
 				}
@@ -128,7 +130,7 @@ final class SessionManager {
 				
 				//打印本地心跳
 				currentTime = System.currentTimeMillis();
-	            if(currentTime - lastLocalHbTime >= sockConf.getHbTime()) {
+	            if(currentTime - lastLocalHbTime >= Times.HEART_BEAT) {
 	            	log.debug("[HeartBeat] Socket客户端 [" + session + "] 活动中...");
 	            	lastLocalHbTime = currentTime;
 	            }
@@ -141,11 +143,7 @@ final class SessionManager {
 							"] 超过半小时没有收到服务端心跳.");
 	            }
 	            
-	            // 主线程休眠
-				Thread.sleep(sockConf.getSleepTime());
-				
-			} catch (InterruptedException e) {
-	        	log.error("客户端会话 [" + session + "] 线程休眠异常.不影响程序运行.", e);
+				ThreadUtils.tSleep(Times.SLEEP);
 	        	
 			} catch (ClosedSelectorException e) {
 	        	log.warn("客户端会话 [" + session + "] 关闭事件选择器失败." +
@@ -195,7 +193,7 @@ final class SessionManager {
 		sc.configureBlocking(false);
 		sc.register(selector, SelectionKey.OP_READ);
 		
-		int eventNum = selector.select(sockConf.getBlockTime());
+		int eventNum = selector.select(Times.BLOCK);
 		if (eventNum > 0) {
 			Iterator<SelectionKey> iterator = selector.selectedKeys()
 					.iterator();
@@ -255,8 +253,8 @@ final class SessionManager {
 					
 					// 枚举所有分隔符，取索引值最小的分隔符位置（索引值>=0有效）
 					int iEnd = -1;
-					for(int i = 0; i < recvDelimiters.length; i++) {
-						rdIdxs[i] = socketBuffer.indexOf(recvDelimiters[i]);
+					for(int i = 0; i < readDelimiters.length; i++) {
+						rdIdxs[i] = socketBuffer.indexOf(readDelimiters[i]);
 						
 						if(rdIdxs[i] >= 0) {
 							if(iEnd < 0) {
