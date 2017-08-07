@@ -7,7 +7,7 @@ import org.dom4j.Element;
 
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
-import exp.libs.warp.net.socket.bean.SocketBean;
+import exp.libs.warp.net.sock.bean.SocketBean;
 
 interface IConfig {
 

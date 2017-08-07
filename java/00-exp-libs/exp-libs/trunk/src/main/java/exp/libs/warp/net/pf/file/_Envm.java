@@ -1,6 +1,6 @@
 package exp.libs.warp.net.pf.file;
 
-import exp.libs.warp.net.socket.bean.SocketBean;
+import exp.libs.warp.net.sock.bean.SocketBean;
 
 final class _Envm {
 

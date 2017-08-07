@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
-import exp.libs.warp.net.socket.bean.SocketBean;
+import exp.libs.warp.net.sock.bean.SocketBean;
 
 public class XConfig implements Runnable, IConfig {
 

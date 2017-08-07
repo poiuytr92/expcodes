@@ -1,7 +1,7 @@
 package exp.libs.warp.net.socket.io.test;
 
-import exp.libs.warp.net.socket.bean.SocketBean;
-import exp.libs.warp.net.socket.io.server.SocketServer;
+import exp.libs.warp.net.sock.bean.SocketBean;
+import exp.libs.warp.net.sock.io.server.SocketServer;
 
 public class TestSocketServer {
 

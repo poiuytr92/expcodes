@@ -23,7 +23,7 @@ import exp.libs.utils.num.BoolUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
-import exp.libs.warp.net.socket.bean.SocketBean;
+import exp.libs.warp.net.sock.bean.SocketBean;
 
 class _Config implements IConfig {
 
