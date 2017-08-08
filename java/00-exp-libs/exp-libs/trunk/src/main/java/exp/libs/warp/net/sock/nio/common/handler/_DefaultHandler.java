@@ -14,7 +14,7 @@ public class _DefaultHandler implements IHandler {
 	@Override
 	public void onMessageReceived(ISession session, Object msg)
 			throws Exception {
-		session.write("connect success");
+		// TODO Auto-generated method stub
 	}
 
 	@Override

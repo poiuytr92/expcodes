@@ -57,7 +57,7 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 		
 		this.handler = (handler == null ? new _DefaultHandler() : handler);
 		this.filterChain = new FilterChain();
-		filterChain.setHandler(handler);
+		filterChain.setHandler(this.handler);
 		initFilterChain();
 	}
 

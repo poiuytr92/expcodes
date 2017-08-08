@@ -8,6 +8,8 @@ public class Times {
 	
 	public final static long SLEEP = 1;	// ms
 	
+	public final static long CONN = 100;	// ms
+	
 	private Times() {}
 	
 }

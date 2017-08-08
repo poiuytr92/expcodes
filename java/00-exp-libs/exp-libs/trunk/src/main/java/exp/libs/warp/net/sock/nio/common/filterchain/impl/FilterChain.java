@@ -95,7 +95,6 @@ public final class FilterChain implements INextFilter {
 	 */
 	public void clean() {
 		synchronized (filterChain) {
-			
 			for (Iterator<String> keys = filterChain.keySet().iterator(); 
 					keys.hasNext();) {
 				
@@ -104,8 +103,9 @@ public final class FilterChain implements INextFilter {
 			   filter.getFilter().clean();
 			}
 			
-			this.filterChain.clear();
-			this.filterChain = null;
+			// 不清空过滤器，确保重启服务时过滤链仍然可用
+//			this.filterChain.clear();
+//			this.filterChain = null;
 		}
 	}
 

@@ -72,7 +72,6 @@ public final class BaseHandler extends AbstractHandler {
 	 */
 	@Override
 	public void onExceptionCaught(ISession session, Throwable exception) {
-
 		handler.onExceptionCaught(session, exception);
 	}
 

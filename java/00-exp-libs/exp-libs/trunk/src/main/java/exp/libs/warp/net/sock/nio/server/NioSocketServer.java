@@ -57,7 +57,8 @@ public class NioSocketServer extends Thread {
 	public NioSocketServer(NioServerConfig sockConf) {
 		this.running = false;
 		this.sockConf = (sockConf == null ? NioServerConfig.DEFAULT : sockConf);
-		this.setName(sockConf.getAlias());
+		this.sessionMgr = new SessionMgr(this.sockConf);
+		this.setName(this.sockConf.getAlias());
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class NioSocketServer extends Thread {
 			serverSocketChannel = ServerSocketChannel.open();
 			serverSocketChannel.socket().setReceiveBufferSize(sockConf.getReadBufferSize());
 			serverSocketChannel.socket().bind(socket);
-			serverSocketChannel.configureBlocking(false);
+			serverSocketChannel.configureBlocking(false);	// 后续操作为非阻塞模式
 			serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
 			log.info("Socket服务 [{}] 侦听 {}{} 端口成功.", getName(), 
 					(listenAllIP ? "" : sockConf.getIp().concat(" 上的 ")), 
@@ -121,8 +122,7 @@ public class NioSocketServer extends Thread {
 		log.info("Socket服务 [{}] 已启动", getName());
 		
 		// 启动会话管理线程
-		sessionMgr = new SessionMgr(sockConf);
-		new Thread(sessionMgr, "SocketSessionMgr").start();
+		sessionMgr._start();
 		
 		// 启动会话监听服务
 		running = true;
@@ -183,7 +183,7 @@ public class NioSocketServer extends Thread {
 				log.warn("Socket服务 [{}] 连接数越限, 已拒绝新连接请求.", getName());
 				
 			} else {
-				log.debug("Socket服务 [{}] 新增会话 [{}] {}, 当前活动会话数: [{}]", 
+				log.debug("Socket服务 [{}] 新增会话 [{}], 当前活动会话数: [{}]", 
 						getName(), clientSession, sessionMgr.getSessionCnt());
 			}
 		}
@@ -193,7 +193,7 @@ public class NioSocketServer extends Thread {
 		this.running = false;
 	}
 	
-	public void clear() {
+	private void clear() {
 		sessionMgr._stop();
 		sockConf.clearFilters();
 		

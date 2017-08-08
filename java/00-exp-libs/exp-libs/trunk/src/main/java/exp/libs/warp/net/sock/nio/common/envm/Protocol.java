@@ -21,7 +21,4 @@ public class Protocol {
 	/** 周期心跳 */
 	public final static String HEARTBEAT = "Regular Heartbeat";
 	
-	/** 断开命令 */
-	public final static String EXIT_CMD = "exit";
-	
 }

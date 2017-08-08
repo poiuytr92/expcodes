@@ -371,7 +371,6 @@ final class Session implements ISession {
 		if (States.CLOSED.id != this.state.id) {
 			if (socketChannel != null) {
 				socketChannel.close();
-				socketChannel = null;
 			}
 			
 			channelBuffer = null;
@@ -406,7 +405,7 @@ final class Session implements ISession {
 	 * 检查会话是否已关闭
 	 * </pre>
 	 * 
-	 * @return true:关闭成功; false:关闭失败
+	 * @return true:已关闭; false:未关闭
 	 */
 	@Override
 	public boolean isClosed() {

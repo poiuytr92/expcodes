@@ -45,11 +45,10 @@ final class HeadFilter extends BaseNextFilter {
 		try {
 			
 			//若对方发来断开连接的命令消息，则直接断开连接
-			if(session.getConfig().getExitCmd().equals(
-					msg.toString().trim())) {
+			if(session.getConfig().getExitCmd().equals(msg.toString().trim())) {
 				session.close();
-			}
-			else {
+				
+			} else {
 				filter.onMessageReceived(this.nextFilter, session, msg);
 			}
 			

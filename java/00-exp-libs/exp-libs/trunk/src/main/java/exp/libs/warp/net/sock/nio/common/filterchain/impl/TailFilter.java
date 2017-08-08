@@ -75,7 +75,6 @@ final class TailFilter extends BaseNextFilter {
 	 */
 	@Override
 	public void onExceptionCaught(ISession session, Throwable exception) {
-
 		this.bHandler.onExceptionCaught(session, exception);
 	}
 

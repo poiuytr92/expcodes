@@ -1,19 +1,25 @@
 package exp.libs.warp.net.sock.nio.client;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.SocketTimeoutException;
-import java.nio.channels.ClosedChannelException;
+import java.nio.ByteBuffer;
 import java.nio.channels.ClosedSelectorException;
+import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
+import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.StrUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.warp.net.sock.bean.SocketByteBuffer;
+import exp.libs.warp.net.sock.nio.common.envm.Protocol;
+import exp.libs.warp.net.sock.nio.common.envm.States;
 import exp.libs.warp.net.sock.nio.common.envm.Times;
+import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
 import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 
 /**
@@ -28,84 +34,36 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  */
 public class NioSocketClient extends Thread {
 
-	/**
-	 * 日志器
-	 */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(NioSocketClient.class);
 	
-	/**
-	 * 客户端名称
-	 */
-	private String clientName;
+	/** Socket重连间隔(ms) */
+	private final static long RECONN_INTERVAL = 10000;
+	
+	/** Socket连续重连次数上限 */
+	private final static int RECONN_LIMIT = 30;
+	
+	/** 事件选择器 */
+	private Selector selector;
 
-	/**
-	 * 事件选择器
-	 */
-	private Selector selector = null;
+	/** Socket通讯通道 */
+	private SocketChannel clientSocketChannel;
 
-	/**
-	 * Socket通讯通道
-	 */
-	private SocketChannel clientSocketChannel = null;
-
-	/**
-	 * 客户端会话对象
-	 */
+	/** 客户端会话对象 */
 	private Session session;
 	
-	/**
-	 * Socket配置
-	 */
+	/** Socket配置 */
 	private NioClientConfig sockConf = null;
-
-	/**
-	 * 会话管理器
-	 */
-	private SessionMgr sessionManager;
-	
-	/**
-	 * 线程死亡标识
-	 */
-	private boolean isStop;
 
 	/**
 	 * 构造函数
 	 * @param sockConf 客户端名称
 	 */
 	public NioSocketClient(NioClientConfig sockConf) {
-		this.isStop = true;
-		this.setClientName("SocketClient@" + this.hashCode());
-		this.setSockConf(sockConf);
+		this.sockConf = (sockConf == null ? NioClientConfig.DEFAULT : sockConf);
+		this.setName(this.sockConf.getAlias());
 	}
 
-	/**
-	 * 构造函数
-	 * @param threadName 客户端名称
-	 * @param sockConf 客户端配置
-	 */
-	public NioSocketClient(String threadName, NioClientConfig sockConf) {
-		this.isStop = true;
-		this.setClientName(threadName);
-		this.setSockConf(sockConf);
-	}
-
-	/**
-	 * 构造函数
-	 * @param threadName 客户端名称
-	 */
-	public void setClientName(String threadName) {
-		this.clientName = threadName;
-		this.setName(this.clientName);
-	}
-
-	/**
-	 * 获取客户端名称
-	 * @return 客户端名称
-	 */
-	public String getClientName() {
-		return clientName;
-	}
-	
 	/**
 	 * 获取客户端配置
 	 * @return 客户端配置
@@ -115,211 +73,307 @@ public class NioSocketClient extends Thread {
 	}
 	
 	/**
-	 * 配置客户端配置，并初始化日志打印器
-	 * @param sockConf 客户端配置
-	 */
-	public void setSockConf(NioClientConfig sockConf) {
-		this.sockConf = sockConf;
-	}
-
-	/**
-	 * Socket客户端主线程核心
-	 */
-	@Override
-	public void run() {
-		isStop = false;
-		
-		try {
-			//启动客户端
-			startClient();
-			
-		} catch (ConnectException e) {
-			log.error("Socket客户端[" + clientName + "] 连接到服务端失败," +
-					"可能服务端未启动.程序退出.", e);
-			
-		} catch (IOException e) {
-			log.error("Socket客户端[" + clientName + "] 与服务端连接的通讯" +
-					"通道出现异常.程序退出.", e);
-			
-		} catch (Exception e) {
-			log.error("Socket客户端[" + clientName + 
-					"] 抛出未知异常.程序退出.", e);
-			
-		} finally {
-			closeClient();	//关闭客户端
-		}
-	}
-
-	/**
-	 * 启动Socket客户端
-	 * @throws Exception 
-	 */
-	private void startClient() throws Exception {
-		selector = Selector.open();
-		clientSocketChannel = SocketChannel.open();
-		clientSocketChannel.configureBlocking(true);	//建立连接时要为阻塞模式
-		
-		String ip = sockConf.getIp();
-		ip = (ip == null ? "127.0.0.1" : ip);
-		clientSocketChannel.connect(
-				new InetSocketAddress(ip, sockConf.getPort()));
-		
-		//后续操作为非阻塞模式
-		clientSocketChannel.configureBlocking(false);
-		
-		//封装会话对象
-		session = new Session(clientSocketChannel, sockConf);
-		
-		log.info("NIOSocket客户端 [" + clientName + "] 连接服务器成功.");
-		log.info("连接的服务器IP:[" + session.getIp() + 
-				"],服务器端口:[" + session.getPort() + "]");
-		
-		//触发会话创建事件
-		sockConf.getFilterChain().onSessionCreated(session);
-		
-		//启动会话管理器，负责处理服务端返回的数据
-		sessionManager = new SessionMgr(session, sockConf);
-		sessionManager.core(isStop);
-	}
-	
-	/**
 	 * <pre>
 	 * 获取客户端会话。
-	 * 
-	 * 此方法会阻塞等待客户端连接到服务端，返回session对象为止。
-	 * 但超时依然未返回则会返回null
 	 * </pre>
-	 * @return 客户端会话
+	 * @return 若未连接到服务端则会返回null
 	 */
 	public ISession getSession() {
-		ISession session = null;
-		try {
-			session = getSessionEx();
-		} catch (SocketTimeoutException e) {
-			log.error("Socket客户端 [" + clientName + 
-					"] 获取连接超时.程序结束.", e);
-		}
 		return session;
 	}
 	
 	/**
-	 * <pre>
-	 * 获取客户端会话。
-	 * 
-	 * 此方法会阻塞等待客户端连接到服务端，返回session对象为止。
-	 * 但超时未返回则会抛出连接超时异常
-	 * </pre>
-	 * @return 客户端会话
-	 * @throws SocketTimeoutException 连接超时
+	 * 连接到服务端
+	 * @return
 	 */
-	public ISession getSessionEx() throws SocketTimeoutException {
-		long bgnTime = System.currentTimeMillis();
-		long curTime = 0;
+	public boolean conn() {
+		if(isClosed() == false) {
+			return true;
+		}
 		
-		// 避免使用时start()后马上获取会话，因isStop状态未修改而返回null
+		boolean isOk = true;
+		InetSocketAddress socket = new InetSocketAddress(
+				sockConf.getIp(), sockConf.getPort());
 		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			log.error("线程休眠异常", e);
+			selector = Selector.open();
+			clientSocketChannel = SocketChannel.open();
+			clientSocketChannel.configureBlocking(true);	// 建立连接时要为阻塞模式
+			clientSocketChannel.connect(socket);
+			session = new Session(clientSocketChannel, sockConf);
+			clientSocketChannel.configureBlocking(false);	// 建立连接后为非阻塞模式
+			
+			this.start();
+			log.info("客户端 [{}] 连接到Socket服务 [{}] 成功", 
+					getName(), sockConf.getSocket());
+			
+		} catch (IOException e) {
+			isOk = false;
+			log.error("客户端 [{}] 连接到Socket服务 [{}] 失败", 
+					getName(), sockConf.getSocket(), e);
 		}
-		
-		//不允许获取已停止的客户端会话
-		if(this.isStop() == true) {
-			return null;
-		}
-		
-		//等待会话初始化
-		while(session == null) {
-			ThreadUtils.tSleep(Times.SLEEP);
-				
-			//会话超过依然未完成初始化，则认为初始化失败
-			curTime = System.currentTimeMillis();
-			if((curTime - bgnTime) > (sockConf.getOvertime())) {
-				this.stopClient();	//超时未初始化会话成功，结束客户端主线程
+		return isOk;
+	}
+	
+	public boolean reconn() {
+		int cnt = 0;
+		do {
+			if(conn() == true) {
 				break;
+				
+			} else {
+				_close();
+				log.warn("客户端 [{}] {}ms后重连(已重试 {}/{} 次)", 
+						getName(), RECONN_INTERVAL, cnt, RECONN_LIMIT);
 			}
-		}
-		
-		if(session == null) {
-			this.stopClient();
-			throw new SocketTimeoutException("Request Connect Timeout");
-		}
-		return session;
+			
+			cnt++;
+			ThreadUtils.tSleep(RECONN_INTERVAL);
+		} while(RECONN_LIMIT < 0 || cnt < RECONN_LIMIT);
+		return !isClosed();
 	}
 	
 	/**
-	 * 关闭客户端
+	 * 检查socket连接是否已断开
+	 * @return
 	 */
-	private void closeClient() {
+	public boolean isClosed() {
+		boolean isClosed = true;
+		if(session != null) {
+			isClosed = session.isClosed();
+		}
+		return isClosed;
+	}
+	
+	public void close() {
+		_close();	// 关闭会话
+		sockConf.getFilterChain().clean();	// 清理过滤链
+		
+		//关闭事件选择器
 		try {
-			this.setStop(true);
-			
-			//清理过滤链
-			sockConf.getFilterChain().clean();
-			
-			//关闭事件选择器
 			if (selector != null) {
 				selector.close();
 				selector = null;
 			}
-
-			if(session != null) {
-				session.close();
-				session = null;
-			}
-			
-			log.info("关闭Socket客户端 [" + clientName + "] 成功.");
-			
-		} catch (ClosedSelectorException  e) {
- 			log.error("Socket客户端 [" + clientName + 
- 					"] 关闭事件选择器失败.", e);
- 			
- 		} catch (ClosedChannelException e) {
-			log.error("Socket客户端 [" + clientName + 
-					"] 关闭Socket通道失败.", e);
-			
-		} catch (NullPointerException e) {
-			log.warn("Socket客户端[" + clientName + 
-					"] 已经提交过关闭请求.无需再次关闭.请耐心等待程序结束.");
-			
-		} catch (IOException e) {
-			log.error("关闭Socket客户端 [" + clientName + 
-					"] 通讯通道时发生异常.程序结束.", e);
-			
 		} catch (Exception e) {
-			log.error("关闭Socket客户端 [" + clientName + 
-					"] 时出现未知异常.程序结束.", e);
-			
-		} finally {
-			log.info("NioSocket客户端 [" + clientName + "] 已停止.");
+			log.error("客户端 [{}] 断开Socket连接异常", getName(), e);
 		}
 	}
-
-	/**
-	 * 检查主线程是否死亡
-	 * @return 死亡标识
-	 */
-	public boolean isStop() {
-		return isStop;
+	
+	private boolean _close() {
+		boolean isClose = true;
+		if(session != null) {
+			try {
+				session.close();
+				
+			} catch (Exception e) {
+				isClose = false;
+				log.error("客户端 [{}] 断开Socket连接异常", getName(), e);
+			}
+		}
+		return isClose;
+	}
+	
+	public boolean write(Object msg) {
+		boolean isOk = false;
+		if(!isClosed()) {
+			try {
+				session.write(msg);
+				isOk = true;
+				
+			} catch (Exception e) {}
+		}
+		return isOk;
+	}
+	
+	@Override
+	public void run() {
+		log.debug(sockConf.toString());
+		
+		long lastHbTime = 0;
+		long curTime = 0;
+		do {
+			curTime = System.currentTimeMillis();
+			
+			// 若该会话处于等待关闭状态，但超时仍未被远端机关闭，则本地主动关闭
+			if (session.isWaitingToClose() && 
+					curTime - session.getNotifyDisconTime() > sockConf.getOvertime()) {
+				break;
+			}
+			
+			// 打印本地心跳
+            if(curTime - lastHbTime >= Times.HEART_BEAT) {
+            	lastHbTime = curTime;
+            	log.info("Socket客户端 [{}] 正在监听响应消息...", getName());
+            }
+			
+            // 监听服务端返回消息
+			if(listen() == false) {
+				break;
+			}
+            
+			ThreadUtils.tSleep(Times.SLEEP);
+		} while(!session.isClosed());
+		
+		close();
+		log.info("Socket客户端 [{}] 已停止", getName());
 	}
 
 	/**
-	 * 设置主线程死亡标识
-	 * @param isStop 死亡标识
+	 * 监听服务端的返回消息（检查缓冲区）
+	 * @return
 	 */
-	private void setStop(boolean isStop) {
-		this.isStop = isStop;
+	private boolean listen() {
+		boolean isListn = true;
+		try {
+			if (States.SUCCESS.id == checkNewMsg()) {
+				
+				//提取远端机一次返回的所有消息，交付给handler处理（检查消息队列）
+				while (session.getMsgQueue().hasNewMsg()) {
+					String msg = session.getMsgQueue().getMsg();
+					
+					if(StrUtils.isEmpty(msg)) {
+						continue;	// 丢弃空消息, 防止被攻击
+						
+					} else if((Protocol.CONN_LIMIT).equals(msg)) {
+						log.warn("客户端 [{}] 被拒绝连接: 连接数受限", getName());
+						isListn = false;
+						break;
+						
+					} else if((Protocol.MSG_LIMIT).equals(msg)) {
+						log.warn("客户端 [{}] 被丢弃消息: 消息积压(请控制请求频率)", getName());
+						
+					} else if((Protocol.HEARTBEAT).equals(msg)) {
+						log.warn("客户端 [{}] 获得服务端心跳: Socket会话正常", getName());
+					}
+					
+					FilterChain filterChain = sockConf.getFilterChain();
+					filterChain.onMessageReceived(session, msg);
+				}
+			}
+			
+		} catch (ClosedSelectorException e) {
+			// Undo 关闭事件选择器失败, 此为可忽略异常，不影响程序运行
+        	
+		} catch(ArrayIndexOutOfBoundsException e) {
+			log.warn("客户端 [{}] 的本地缓冲区溢出, 上一条消息的数据可能已丢失或缺失.", getName(), e);
+			
+		} catch (SocketTimeoutException e) {
+			log.error("客户端 [{}] 超时无动作, 断开连接.", getName(), e);
+			isListn = false;
+			
+		} catch (Exception e) {
+			log.error("客户端 [{}] 异常, 断开连接.", getName(), e);
+			isListn = false;
+		}
+		return isListn;
 	}
 	
 	/**
-	 * <pre>
-	 * 停止客户端(仅内部调用, 不推荐外部使用此方法关闭客户端)。
-	 * 建议通过session的关闭方法对客户端进行关闭。
-	 * </pre>
+	 * 检查服务端是否有返回消息
+	 * @return 只要返回的消息队列非空，且会话未关闭，则返回成功状态
+	 * @throws Exception 异常
 	 */
-	@Deprecated
-	private void stopClient() {
-		this.setStop(true);
+	private int checkNewMsg() throws Exception {
+		States exState = States.SUCCESS;
+
+		SocketChannel sc = session.getLayerSession();
+		Selector selector = Selector.open();
+		sc.configureBlocking(false);
+		sc.register(selector, SelectionKey.OP_READ);
+		
+		int eventNum = selector.select(Times.BLOCK);
+		if (eventNum > 0) {
+			Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+			while (iterator.hasNext()) {
+				SelectionKey sk = iterator.next();
+				iterator.remove();
+				int rtn = handleKey(sk);
+
+				// 会话通道已断开
+				if (rtn < 0) {
+					session.close();
+					exState = States.FAIL;
+					break;
+				}
+			}
+
+		}
+		selector.close();
+
+		//检查消息队列是否存在未处理消息
+		if (States.SUCCESS.id == exState.id) {
+			if (!session.getMsgQueue().hasNewMsg()) {
+				exState = States.FAIL;
+			}
+		}
+		return exState.id;
+	}
+
+	/**
+	 * 从会话通道采集数据，返回-1表示通道已断开
+	 * 
+	 * @param sk 关注事件键
+	 * @return -1表示会话已关闭，0则正常通讯
+	 * @throws Exception 异常
+	 */
+	private int handleKey(SelectionKey sk) throws Exception {
+		int rtn = 0;
+		SocketChannel sc = session.getLayerSession();
+		ByteBuffer channelBuffer = session.getChannelBuffer();
+		SocketByteBuffer socketBuffer = session.getSocketBuffer();
+		
+		if (sk.channel().equals(sc) && sk.isReadable()) {
+
+			int count = 0;
+
+			channelBuffer.clear();
+			while ((count = sc.read(channelBuffer)) > 0) {
+				channelBuffer.flip();
+
+				for (int i = 0; i < count; i++) {
+					socketBuffer.append(channelBuffer.get(i));
+				}
+
+				String[] readDelimiters = sockConf.getReadDelimiters();
+				int[] rdIdxs = new int[readDelimiters.length];	// 对应每个消息分隔符的索引
+				while (true) {	// 可能一次性收到多条消息，在缓冲区可读时需全部处理完，减少处理迟延
+					
+					// 枚举所有分隔符，取索引值最小的分隔符位置（索引值>=0有效）
+					int iEnd = -1;
+					for(int i = 0; i < readDelimiters.length; i++) {
+						rdIdxs[i] = socketBuffer.indexOf(readDelimiters[i]);
+						
+						if(rdIdxs[i] >= 0) {
+							if(iEnd < 0) {
+								iEnd = rdIdxs[i];
+								
+							} else if(iEnd > rdIdxs[i]) {
+								iEnd = rdIdxs[i];
+							}
+						}
+					}
+					
+					// 所有分隔符都无法截获消息
+					if(iEnd < 0) {
+						break;
+					}
+					
+					// 把原始消息添加到原始消息队列，剔除空消息，防止攻击
+					String newMsg = socketBuffer.subString(iEnd).trim();
+					if(StrUtils.isNotEmpty(newMsg)) {
+						session.getMsgQueue().addNewMsg(newMsg);
+					}
+					socketBuffer.delete(iEnd);
+				}
+				channelBuffer.clear();
+			}
+			
+			// Socket通道已断开(服务端主动关闭会话)
+			if (count < 0) {
+				rtn = -1;
+			}
+		}
+		return rtn;
 	}
 	
 	/**
@@ -328,7 +382,7 @@ public class NioSocketClient extends Thread {
 	 */
 	@Override
 	public String toString() {
-		return this.getName();
+		return sockConf.toString();
 	}
 
 }

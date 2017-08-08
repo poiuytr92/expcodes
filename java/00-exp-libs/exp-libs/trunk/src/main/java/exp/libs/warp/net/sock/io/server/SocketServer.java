@@ -20,7 +20,7 @@ public class SocketServer extends Thread {
 	private Logger log = LoggerFactory.getLogger(SocketServer.class);
 	
 	/** Socket配置信息 */
-	private SocketBean socketBean;
+	private SocketBean sockConf;
 	
 	/** Socket服务端 */
 	private ServerSocket socketServer;
@@ -39,14 +39,14 @@ public class SocketServer extends Thread {
 	
 	/**
 	 * 构造函数
-	 * @param socketBean socket配置信息
+	 * @param sockConf socket配置信息
 	 */
-	public SocketServer(SocketBean socketBean, IHandler handler) {
-		this.socketBean = (socketBean == null ? new SocketBean() : socketBean);
+	public SocketServer(SocketBean sockConf, IHandler handler) {
+		this.sockConf = (sockConf == null ? new SocketBean() : sockConf);
 		this.sHandler = (handler == null ? new _DefaultHandler() : handler);
 		this.clientProxys = new LinkedList<_SocketClientProxy>();
 		this.running = false;
-		this.setName(this.socketBean.getAlias());
+		this.setName(this.sockConf.getAlias());
 	}
 	
 	/**
@@ -56,23 +56,23 @@ public class SocketServer extends Thread {
 	private boolean init(boolean listenAllIP) {
 		boolean isOk = true;
 		InetSocketAddress socket = (listenAllIP ? 
-				new InetSocketAddress(socketBean.getPort()) : 
-				new InetSocketAddress(socketBean.getIp(), socketBean.getPort()));
+				new InetSocketAddress(sockConf.getPort()) : 
+				new InetSocketAddress(sockConf.getIp(), sockConf.getPort()));
 		
 		try {
 			socketServer = new ServerSocket();
 			socketServer.bind(socket);
 			log.info("Socket服务 [{}] 侦听 {}{} 端口成功.", getName(), 
-					(listenAllIP ? "" : socketBean.getIp().concat(" 上的 ")), 
-					socketBean.getPort());
+					(listenAllIP ? "" : sockConf.getIp().concat(" 上的 ")), 
+					sockConf.getPort());
 			
-			stp = new ThreadPool(socketBean.getMaxConnectionCount());
+			stp = new ThreadPool(sockConf.getMaxConnectionCount());
 			
 		} catch (Exception e) {
 			isOk = false;
 			log.error("无法启动Socket服务 [{}] : 侦听 {}{} 端口失败.", getName(), 
-					(listenAllIP ? "" : socketBean.getIp().concat(" 上的 ")), 
-					socketBean.getPort(), e);
+					(listenAllIP ? "" : sockConf.getIp().concat(" 上的 ")), 
+					sockConf.getPort(), e);
 		}
 		return isOk;
 	}
@@ -104,14 +104,14 @@ public class SocketServer extends Thread {
 		running = false;
 		
 		// 利用虚拟连接跳出accept阻塞循环
-		SocketClient client = new SocketClient(socketBean);
+		SocketClient client = new SocketClient(sockConf);
 		client.conn();
 		client.close();
 	}
 	
 	@Override
 	public void run() {
-		log.debug("{}", socketBean.toString());
+		log.debug("{}", sockConf.toString());
 		log.info("Socket服务 [{}] 已启动", getName());
 		
 		running = true;
@@ -129,7 +129,7 @@ public class SocketServer extends Thread {
 				
 				log.debug("Socket服务 [{}] 新增会话 [{}] {}, 当前活动会话数: [{}/{}]", 
 						getName(), clientProxy.ID(), (isOver ? "失败" : ""), 
-						clientProxys.size(), socketBean.getMaxConnectionCount());
+						clientProxys.size(), sockConf.getMaxConnectionCount());
 			}
 		} while(running == true);
 		
@@ -144,7 +144,7 @@ public class SocketServer extends Thread {
 				Socket client = socketServer.accept();
 				
 				IHandler cHandler = sHandler._clone();
-				clientProxy = new _SocketClientProxy(socketBean, client, 
+				clientProxy = new _SocketClientProxy(sockConf, client, 
 						(cHandler == null ? sHandler : cHandler));
 				
 			} catch (Exception e) {
@@ -171,7 +171,7 @@ public class SocketServer extends Thread {
 				clients.remove();
 			}
 		}
-		return (clientProxys.size() >= socketBean.getMaxConnectionCount());
+		return (clientProxys.size() >= sockConf.getMaxConnectionCount());
 	}
 	
 	/**
@@ -189,7 +189,7 @@ public class SocketServer extends Thread {
 	
 	@Override
 	public String toString() {
-		return socketBean.toString();
+		return sockConf.toString();
 	}
 	
 }

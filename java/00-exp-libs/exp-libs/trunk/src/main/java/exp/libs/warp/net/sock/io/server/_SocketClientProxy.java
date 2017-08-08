@@ -24,7 +24,7 @@ class _SocketClientProxy implements ISession, Runnable {
 	
 	private String id;
 	
-	private SocketBean socketBean;
+	private SocketBean sockConf;
 	
 	/** Socket本地读缓存 */
 	private SocketByteBuffer localBuffer;
@@ -34,12 +34,12 @@ class _SocketClientProxy implements ISession, Runnable {
 	/** 业务处理器 */
 	private IHandler handler;
 	
-	protected _SocketClientProxy(SocketBean socketBean, 
+	protected _SocketClientProxy(SocketBean sockConf, 
 			Socket socket, IHandler handler) {
 		this.id = String.valueOf(IDUtils.getTimeID());
-		this.socketBean = socketBean;
+		this.sockConf = sockConf;
 		this.localBuffer = new SocketByteBuffer(	//本地缓存要比Socket缓存稍大
-				socketBean.getReadBufferSize() * 2, socketBean.getReadCharset());
+				sockConf.getReadBufferSize() * 2, sockConf.getReadCharset());
 		
 		this.socket = socket;
 		this.handler = handler;
@@ -61,7 +61,7 @@ class _SocketClientProxy implements ISession, Runnable {
 	
 	@Override
 	public SocketBean getSocketBean() {
-		return socketBean;
+		return sockConf;
 	}
 	
 	@Override
@@ -110,28 +110,28 @@ class _SocketClientProxy implements ISession, Runnable {
 	public String read() {
 		String msg = null;
 		if(isClosed()) {
-			log.error("Socket [{}] 连接已断开, 无法读取返回消息.", socketBean.getId());
+			log.error("Socket [{}] 连接已断开, 无法读取返回消息.", sockConf.getId());
 			return msg;
 		}
 		
 		try {
 			msg = read(socket.getInputStream(), localBuffer, 
-					socketBean.getReadDelimiter(), socketBean.getOvertime());
+					sockConf.getReadDelimiter(), sockConf.getOvertime());
 			
 		} catch (ArrayIndexOutOfBoundsException e) {
 			log.error("Socket [{}] 本地缓冲区溢出(单条报文过长), 当前缓冲区大小: {}KB.", 
-					socketBean.getId(), (socketBean.getReadBufferSize() * 2), e);
+					sockConf.getId(), (sockConf.getReadBufferSize() * 2), e);
 						
 		} catch (UnsupportedEncodingException e) {
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
-					socketBean.getId(), socketBean.getReadCharset(), e);
+					sockConf.getId(), sockConf.getReadCharset(), e);
 					
 		} catch (SocketTimeoutException e) {
 			log.error("Socket [{}] 读操作超时. 当前超时上限: {}ms.", 
-					socketBean.getId(), socketBean.getOvertime(), e);
+					sockConf.getId(), sockConf.getOvertime(), e);
 			
 		} catch (Exception e) {
-			log.error("Socket [{}] 读操作异常.", socketBean.getId(), e);
+			log.error("Socket [{}] 读操作异常.", sockConf.getId(), e);
 		}
 		return msg;
 	}
@@ -202,15 +202,15 @@ class _SocketClientProxy implements ISession, Runnable {
 	public void write(final String msg) {
 		try {
 			write(socket.getOutputStream(), 
-					StrUtils.concat(msg, socketBean.getWriteDelimiter()), 
-					socketBean.getWriteCharset());
+					StrUtils.concat(msg, sockConf.getWriteDelimiter()), 
+					sockConf.getWriteCharset());
 			
 		} catch (UnsupportedEncodingException e) {
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
-					socketBean.getId(), socketBean.getWriteCharset(), e);
+					sockConf.getId(), sockConf.getWriteCharset(), e);
 					
 		} catch (Exception e) {
-			log.error("Socket [{}] 写操作异常.", socketBean.getId(), e);
+			log.error("Socket [{}] 写操作异常.", sockConf.getId(), e);
 		}
 	}
 	

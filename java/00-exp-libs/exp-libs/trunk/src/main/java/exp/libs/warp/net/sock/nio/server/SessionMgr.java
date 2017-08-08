@@ -2,6 +2,7 @@ package exp.libs.warp.net.sock.nio.server;
 
 import java.net.SocketTimeoutException;
 import java.nio.ByteBuffer;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
@@ -12,6 +13,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.StrUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.sock.bean.SocketByteBuffer;
 import exp.libs.warp.net.sock.nio.common.cache.MsgQueue;
@@ -32,26 +34,18 @@ import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-final class SessionMgr implements Runnable {
+final class SessionMgr extends Thread {
 
-	/**
-	 * 日志器
-	 */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(SessionMgr.class);
 	
-	/**
-	 * 会话列表
-	 */
+	/** 会话列表  */
 	private List<Session> sessions;
 
-	/**
-	 * Socket服务端配置
-	 */
+	/** Socket服务端配置 */
 	private NioServerConfig sockConf;
 
-	/**
-	 * 工作锁
-	 */
+	/** 工作锁 */
 	private byte[] lock;
 	
 	private boolean running;
@@ -67,6 +61,18 @@ final class SessionMgr implements Runnable {
 		this.running = false;
 	}
 
+	protected void _start() {
+		this.start();
+	}
+	
+	protected void _stop() {
+		this.running = false;
+	}
+	
+	protected boolean isRunning() {
+		return running;
+	}
+	
 	/**
 	 * 会话管理线程核心
 	 */
@@ -138,12 +144,9 @@ final class SessionMgr implements Runnable {
 			} else if (session.isError() == true || 
 					session.isPassVerfy() == false || 
 					session.isClosed() == true) {
-
-				log.info("成功移除会话 [" + session + "].当前活动会话数" +
-						" [" + this.getSessionCnt() + "].");
-				
 				close(session);
 				sIts.remove();
+				log.debug("会话 [{}]已移除", session);
 			}
 		}
 	}
@@ -180,11 +183,14 @@ final class SessionMgr implements Runnable {
 				filterChain.onMessageReceived(session, msg);
 			}
 			
+		} catch (ClosedSelectorException e) {
+			// Undo 关闭事件选择器失败, 此为可忽略异常，不影响程序运行
+        	
 		} catch(ArrayIndexOutOfBoundsException e) {
 			log.error("会话 [{}] 的本地缓冲区溢出, 上一条消息的数据可能已丢失或缺失.", session, e);
         	
 		} catch (SocketTimeoutException e) {
-			log.warn("会话 [{}] 超时无动作, 关闭会话.", session);
+			log.error("会话 [{}] 超时无动作, 关闭会话.", session, e);
 			close(session);
 			
 		} catch (Exception e) {
@@ -230,8 +236,7 @@ final class SessionMgr implements Runnable {
 
 		//检查消息队列是否存在未处理消息
 		if (States.SUCCESS.id == exState.id) {
-			if (session.getMsgQueue() == null || 
-					false == session.getMsgQueue().hasNewMsg()) {
+			if (!session.getMsgQueue().hasNewMsg()) {
 				exState = States.FAIL;
 			}
 		}
@@ -287,7 +292,7 @@ final class SessionMgr implements Runnable {
 
 					// 把原始消息添加到原始消息队列，并剔除空消息和越限消息(防止攻击)
 					String newMsg = socketBuffer.subString(iEnd).trim();
-					if (!"".equals(newMsg)) {
+					if(StrUtils.isNotEmpty(newMsg)) {
 						if (!session.getMsgQueue().addNewMsg(newMsg)) {
 							session.writeErrMsg(Protocol.MSG_LIMIT);
 							
@@ -300,9 +305,8 @@ final class SessionMgr implements Runnable {
 				channelBuffer.clear();
 			}
 			
-			// Socket通道已断开
+			// Socket通道已断开(客户端主动关闭会话)
 			if (count < 0) {
-				log.info("客户端主动关闭会话.");
 				rtn = -1;
 			}
 		}
@@ -316,7 +320,7 @@ final class SessionMgr implements Runnable {
 	 * @return true:添加成功; false:添加失败
 	 * @throws Exception 异常
 	 */
-	public boolean addSession(Session newSession) throws Exception {
+	protected boolean addSession(Session newSession) throws Exception {
 		boolean isOk = false;
 		int maxLinkNum = sockConf.getMaxConnectionCount();
 
@@ -334,7 +338,7 @@ final class SessionMgr implements Runnable {
 	 * 关闭会话
 	 * @param session 会话
 	 */
-	public void close(Session session) {
+	private void close(Session session) {
 		try {
 			if(session != null) {
 				session.close();
@@ -351,7 +355,7 @@ final class SessionMgr implements Runnable {
 	 * @return true:移除成功; false:移除失败
 	 * @throws Exception 
 	 */
-	public boolean clear() {
+	private boolean clear() {
 		boolean isOk = false;
 
 		synchronized (lock) {
@@ -372,18 +376,10 @@ final class SessionMgr implements Runnable {
 	 * 
 	 * @return 当前活动的客户端连接数
 	 */
-	public int getSessionCnt() {
+	protected int getSessionCnt() {
 		synchronized (lock) {
 			return sessions.size();
 		}
-	}
-	
-	public boolean isRunning() {
-		return running;
-	}
-	
-	public void _stop() {
-		this.running = false;
 	}
 	
 }

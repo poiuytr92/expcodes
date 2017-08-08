@@ -28,7 +28,7 @@ public class SocketClient implements ISession {
 	private final static int RECONN_LIMIT = 30;
 	
 	/** Socket配置信息 */
-	private SocketBean socketBean;
+	private SocketBean sockConf;
 	
 	/** Socket客户端 */
 	private Socket socket;
@@ -42,25 +42,25 @@ public class SocketClient implements ISession {
 	 * @param port
 	 */
 	public SocketClient(String ip, int port) {
-		this.socketBean = new SocketBean(ip, port);
+		this.sockConf = new SocketBean(ip, port);
 	}
 	
 	/**
 	 * 构造函数
-	 * @param socketBean socket配置信息
+	 * @param sockConf socket配置信息
 	 */
-	public SocketClient(SocketBean socketBean) {
-		this.socketBean = (socketBean == null ? new SocketBean() : socketBean);
+	public SocketClient(SocketBean sockConf) {
+		this.sockConf = (sockConf == null ? new SocketBean() : sockConf);
 	}
 	
 	@Override
 	public String ID() {
-		return socketBean.getId();
+		return sockConf.getId();
 	}
 	
 	@Override
 	public SocketBean getSocketBean() {
-		return socketBean;
+		return sockConf;
 	}
 	
 	@Override
@@ -79,17 +79,20 @@ public class SocketClient implements ISession {
 		}
 		
 		// 创建会话
-		boolean isOk = false;
+		boolean isOk = true;
 		try {
-			socket = new Socket(socketBean.getIp(), socketBean.getPort());
-			socket.setSoTimeout(socketBean.getOvertime());
-			socket.setReceiveBufferSize(socketBean.getReadBufferSize());
+			socket = new Socket(sockConf.getIp(), sockConf.getPort());
+			socket.setSoTimeout(sockConf.getOvertime());
+			socket.setReceiveBufferSize(sockConf.getReadBufferSize());
 			localBuffer = new SocketByteBuffer(	//本地缓存要比Socket缓存稍大
-					socketBean.getReadBufferSize() * 2, socketBean.getReadCharset());
-			isOk = true;
+					sockConf.getReadBufferSize() * 2, sockConf.getReadCharset());
+			log.info("客户端 [{}] 连接到Socket服务 [{}] 成功", 
+					sockConf.getAlias(), sockConf.getSocket());
 			
 		} catch (Exception e) {
-			log.error("Socket {} 创建会话失败.", socketBean.getSocket(), e);
+			isOk = false;
+			log.error("客户端 [{}] 连接到Socket服务 [{}] 失败", 
+					sockConf.getAlias(), sockConf.getSocket(), e);
 		}
 		return isOk;
 	}
@@ -97,11 +100,7 @@ public class SocketClient implements ISession {
 	/**
 	 * 重连 socket
 	 */
-	public void reconn() {
-		if(socketBean == null) {
-			return;
-		}
-		
+	public boolean reconn() {
 		int cnt = 0;
 		do {
 			if(conn() == true) {
@@ -109,13 +108,14 @@ public class SocketClient implements ISession {
 				
 			} else {
 				close();
-				log.warn("Socket {} 连接异常, {}ms后重连, 已重试{}次.", 
-						socketBean.getSocket(), RECONN_INTERVAL, cnt);
+				log.warn("客户端 [{}] {}ms后重连(已重试 {}/{} 次)", 
+						sockConf.getAlias(), RECONN_INTERVAL, cnt, RECONN_LIMIT);
 			}
 			
 			cnt++;
 			ThreadUtils.tSleep(RECONN_INTERVAL);
 		} while(RECONN_LIMIT < 0 || cnt < RECONN_LIMIT);
+		return !isClosed();
 	}
 	
 	/**
@@ -142,8 +142,7 @@ public class SocketClient implements ISession {
 				socket.close();
 			} catch (Exception e) {
 				isClose = false;
-				log.error("Socket [{}] 关闭会话失败.", 
-						(socketBean == null ? "null" : socketBean.getId()), e);
+				log.error("客户端 [{}] 断开Socket连接异常", sockConf.getAlias(), e);
 			}
 		}
 		
@@ -161,29 +160,29 @@ public class SocketClient implements ISession {
 	public String read() {
 		String msg = null;
 		if(isClosed()) {
-			log.error("Socket [{}] 连接已断开, 无法读取返回消息.", socketBean.getId());
+			log.error("Socket [{}] 连接已断开, 无法读取返回消息.", sockConf.getId());
 			return msg;
 		}
 		
 		try {
 			msg = read(socket.getInputStream(), localBuffer, 
-					socketBean.getReadDelimiter(), socketBean.getOvertime());
+					sockConf.getReadDelimiter(), sockConf.getOvertime());
 			
 		} catch (ArrayIndexOutOfBoundsException e) {
 			log.error("Socket [{}] 本地缓冲区溢出(单条报文过长), 当前缓冲区大小: {}KB.", 
-					socketBean.getId(), (socketBean.getReadBufferSize() * 2), e);
+					sockConf.getId(), (sockConf.getReadBufferSize() * 2), e);
 						
 		} catch (UnsupportedEncodingException e) {
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
-					socketBean.getId(), socketBean.getReadCharset(), e);
+					sockConf.getId(), sockConf.getReadCharset(), e);
 					
 		} catch (SocketTimeoutException e) {
 			log.error("Socket [{}] 读操作超时, 自动断开会话. 当前超时上限: {}ms.", 
-					socketBean.getId(), socketBean.getOvertime(), e);
+					sockConf.getId(), sockConf.getOvertime(), e);
 			close();
 			
 		} catch (Exception e) {
-			log.error("Socket [{}] 读操作异常, 自动断开会话.", socketBean.getId(), e);
+			log.error("Socket [{}] 读操作异常, 自动断开会话.", sockConf.getId(), e);
 			close();
 		}
 		return msg;
@@ -258,15 +257,15 @@ public class SocketClient implements ISession {
 		
 		try {
 			write(socket.getOutputStream(), 
-					StrUtils.concat(msg, socketBean.getWriteDelimiter()), 
-					socketBean.getWriteCharset());
+					StrUtils.concat(msg, sockConf.getWriteDelimiter()), 
+					sockConf.getWriteCharset());
 			
 		} catch (UnsupportedEncodingException e) {
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
-					socketBean.getId(), socketBean.getWriteCharset(), e);
+					sockConf.getId(), sockConf.getWriteCharset(), e);
 					
 		} catch (Exception e) {
-			log.error("Socket [{}] 写操作异常.", socketBean.getId(), e);
+			log.error("Socket [{}] 写操作异常.", sockConf.getId(), e);
 			close();
 		}
 	}

@@ -20,7 +20,7 @@ import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
  */
 public class NioClientConfig extends NioConfig {
 
-	public final static NioClientConfig _DEFAILT = 
+	public final static NioClientConfig DEFAULT = 
 			new NioClientConfig(null, new _DefaultHandler());
 	
 	public NioClientConfig(SocketBean socketBean, IHandler handler) {
