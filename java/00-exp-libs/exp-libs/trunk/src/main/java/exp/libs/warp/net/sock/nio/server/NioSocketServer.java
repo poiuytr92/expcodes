@@ -10,8 +10,10 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.nio.common.envm.Protocol;
 import exp.libs.warp.net.sock.nio.common.envm.Times;
+import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
 
 /**
  * <pre>
@@ -53,19 +55,20 @@ public class NioSocketServer extends Thread {
 	/**
 	 * 构造函数
 	 * @param sockConf 服务器配置
+	 * @param handler 业务处理器
 	 */
-	public NioSocketServer(NioServerConfig sockConf) {
-		this.running = false;
-		this.sockConf = (sockConf == null ? NioServerConfig.DEFAULT : sockConf);
+	public NioSocketServer(SocketBean sockConf, IHandler handler) {
+		this.sockConf = new NioServerConfig(sockConf, handler);
 		this.sessionMgr = new SessionMgr(this.sockConf);
 		this.setName(this.sockConf.getAlias());
+		this.running = false;
 	}
 
 	/**
 	 * 获取服务器配置
 	 * @return 服务器配置
 	 */
-	public NioServerConfig getSockConf() {
+	public SocketBean getSockConf() {
 		return sockConf;
 	}
 

@@ -1,4 +1,4 @@
-package exp.libs.utils.num;
+package exp.libs.utils.other;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

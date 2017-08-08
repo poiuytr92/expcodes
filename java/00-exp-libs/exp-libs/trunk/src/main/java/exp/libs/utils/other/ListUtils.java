@@ -21,10 +21,10 @@ import exp.libs.utils.num.NumUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class LAUtils {
+public class ListUtils {
 
 	/** 私有化构造函数 */
-	protected LAUtils() {}
+	protected ListUtils() {}
 	
 	public static boolean isEmpty(Object[] array) {
 		return (array == null || array.length <= 0);

@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exp.libs.utils.other.LAUtils;
+import exp.libs.utils.other.ListUtils;
 
 public class TestLAUtils {
 
@@ -26,44 +26,44 @@ public class TestLAUtils {
 	@Test
 	public void testCutbackNull() {
 		String[] array = new String[] { null, "aaa", "bbb", null, "ccc", null, "ddd" };
-		System.out.println(LAUtils.toString(array));
-		System.out.println(LAUtils.cutbackNull(array));
-		System.out.println(LAUtils.toString(array));
+		System.out.println(ListUtils.toString(array));
+		System.out.println(ListUtils.cutbackNull(array));
+		System.out.println(ListUtils.toString(array));
 		
 		array = new String[] { null, "aaa", "bbb", null, null, null, "ccc", null, "ddd", null };
-		System.out.println(LAUtils.toString(array));
-		System.out.println(LAUtils.cutbackNull(array));
-		System.out.println(LAUtils.toString(array));
+		System.out.println(ListUtils.toString(array));
+		System.out.println(ListUtils.cutbackNull(array));
+		System.out.println(ListUtils.toString(array));
 		
 		array = new String[] { "aaa", "bbb", null, null, null, "ccc", null, "ddd", null };
-		System.out.println(LAUtils.toString(array));
-		System.out.println(LAUtils.cutbackNull(array));
-		System.out.println(LAUtils.toString(array));
+		System.out.println(ListUtils.toString(array));
+		System.out.println(ListUtils.cutbackNull(array));
+		System.out.println(ListUtils.toString(array));
 		
 		array = new String[] { "aaa", null, null, null, null };
-		System.out.println(LAUtils.toString(array));
-		System.out.println(LAUtils.cutbackNull(array));
-		System.out.println(LAUtils.toString(array));
+		System.out.println(ListUtils.toString(array));
+		System.out.println(ListUtils.cutbackNull(array));
+		System.out.println(ListUtils.toString(array));
 		
 		array = new String[] { null, null, null, null };
-		System.out.println(LAUtils.toString(array));
-		System.out.println(LAUtils.cutbackNull(array));
-		System.out.println(LAUtils.toString(array));
+		System.out.println(ListUtils.toString(array));
+		System.out.println(ListUtils.cutbackNull(array));
+		System.out.println(ListUtils.toString(array));
 		
 		array = new String[] { "aaa", "bbb", "ccc", "ddd" };
-		System.out.println(LAUtils.toString(array));
-		System.out.println(LAUtils.cutbackNull(array));
-		System.out.println(LAUtils.toString(array));
+		System.out.println(ListUtils.toString(array));
+		System.out.println(ListUtils.cutbackNull(array));
+		System.out.println(ListUtils.toString(array));
 		
 		array = new String[] { };
-		System.out.println(LAUtils.toString(array));
-		System.out.println(LAUtils.cutbackNull(array));
-		System.out.println(LAUtils.toString(array));
+		System.out.println(ListUtils.toString(array));
+		System.out.println(ListUtils.cutbackNull(array));
+		System.out.println(ListUtils.toString(array));
 		
 		array = null;
-		System.out.println(LAUtils.toString(array));
-		System.out.println(LAUtils.cutbackNull(array));
-		System.out.println(LAUtils.toString(array));
+		System.out.println(ListUtils.toString(array));
+		System.out.println(ListUtils.cutbackNull(array));
+		System.out.println(ListUtils.toString(array));
 	}
 
 	@Test

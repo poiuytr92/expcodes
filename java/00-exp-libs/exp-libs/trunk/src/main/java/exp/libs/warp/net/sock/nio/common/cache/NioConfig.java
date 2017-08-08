@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.StrUtils;
-import exp.libs.utils.other.LAUtils;
+import exp.libs.utils.other.ListUtils;
 import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
 import exp.libs.warp.net.sock.nio.common.handler._DefaultHandler;
@@ -51,7 +51,7 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 		
 		this.readDelimiters = StrUtils.split(
 				getReadDelimiter(), A_DELIMITER, Z_DELIMITER);
-		if(LAUtils.isEmpty(readDelimiters)) {
+		if(ListUtils.isEmpty(readDelimiters)) {
 			readDelimiters = new String[] { getReadDelimiter() };
 		}
 		

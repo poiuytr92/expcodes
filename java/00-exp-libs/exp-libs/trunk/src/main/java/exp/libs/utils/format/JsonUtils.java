@@ -10,8 +10,8 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.utils.num.BoolUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.other.BoolUtils;
 
 
 /**

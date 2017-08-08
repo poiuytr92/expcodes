@@ -18,7 +18,7 @@ import exp.libs.envm.SMTP;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.encode.CryptoUtils;
-import exp.libs.utils.other.LAUtils;
+import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.verify.VerifyUtils;
 
 public class Email {
@@ -189,7 +189,7 @@ public class Email {
     private Address[] toAddress(String[] receivers) {
     	receivers = (receivers == null || receivers.length <= 0 ? 
     			new String[] { sender } : receivers);
-    	int size = LAUtils.cutbackNull(receivers);
+    	int size = ListUtils.cutbackNull(receivers);
     	
     	Address[] address = new InternetAddress[size];
     	for(int i = 0; i < size; i++) {
