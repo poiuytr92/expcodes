@@ -18,7 +18,6 @@ import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.sock.bean.SocketByteBuffer;
 import exp.libs.warp.net.sock.nio.common.cache.MsgQueue;
 import exp.libs.warp.net.sock.nio.common.envm.Protocol;
-import exp.libs.warp.net.sock.nio.common.envm.States;
 import exp.libs.warp.net.sock.nio.common.envm.Times;
 import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
 
@@ -162,20 +161,18 @@ final class SessionMgr extends Thread {
 	}
 
 	/**
-	 * 交付消息处理器，处理会话中的消息级事件
+	 * 交付消息处理器，处理会话中的消息级事件.
+	 * 
+	 * 	这里没有通过while循环一次读完session的消息队列，主要是为了session间的公平性，
+	 *  避免当某个session一次有很多消息到来时，其他session要等很久。
+	 *  但此时如果某个session有很多消息、而另一个几乎没有消息，则会引起处理缓慢的假象。
+	 *  没有消息时的处理时延、主要受事件选择器的blockTime影响，其次是迭代的sleepTime。
 	 * 
 	 * @param session 会话
 	 */
 	private void handleMessageEvent(Session session) throws Exception {
 		try {
-			
-			// 检查会话是否有需要处理的消息
-			if (States.SUCCESS.id == checkNewMsg(session)) {
-				
-				// 这里没有通过while循环一次读完session的消息队列，主要是为了session间的公平性，
-				// 避免当某个session一次有很多消息到来时，其他session要等很久。
-				// 但此时如果某个session有很多消息、而另一个几乎没有消息，则会引起处理缓慢的假象。
-				// 没有消息时的处理时延、主要受事件选择器的blockTime影响，其次是迭代的sleepTime。
+			if (hasNewMsg(session)) {
 				String msg = session.getMsgQueue().getMsg();
 				FilterChain filterChain = sockConf.getFilterChain();
 
@@ -207,9 +204,7 @@ final class SessionMgr extends Thread {
 	 * @return 只要原始消息队列非空，且会话未关闭，则返回成功状态
 	 * @throws Exception 异常
 	 */
-	private int checkNewMsg(Session session) throws Exception {
-		States exState = States.SUCCESS;
-
+	private boolean hasNewMsg(Session session) throws Exception {
 		SocketChannel sc = session.getLayerSession();
 		Selector selector = Selector.open();
 		sc.configureBlocking(false);
@@ -221,26 +216,16 @@ final class SessionMgr extends Thread {
 			while (iterator.hasNext()) {
 				SelectionKey sk = iterator.next();
 				iterator.remove();
-				int rtn = handleKey(sk, session);
 
 				// 会话通道已断开
-				if (rtn < 0) {
+				if (!handleKey(sk, session)) {
 					session.close();
-					exState = States.FAIL;
 					break;
 				}
 			}
-
 		}
 		selector.close();
-
-		//检查消息队列是否存在未处理消息
-		if (States.SUCCESS.id == exState.id) {
-			if (!session.getMsgQueue().hasNewMsg()) {
-				exState = States.FAIL;
-			}
-		}
-		return exState.id;
+		return (!session.isClosed() && session.getMsgQueue().hasNewMsg());
 	}
 
 	/**
@@ -248,11 +233,11 @@ final class SessionMgr extends Thread {
 	 * 
 	 * @param sk 关注事件键
 	 * @param session 会话
-	 * @return -1表示会话已关闭，0则正常通讯
+	 * @return 
 	 * @throws Exception 异常
 	 */
-	private int handleKey(SelectionKey sk, Session session) throws Exception {
-		int rtn = 0;
+	private boolean handleKey(SelectionKey sk, Session session) throws Exception {
+		boolean isOk = true;
 		SocketChannel sc = session.getLayerSession();
 		ByteBuffer channelBuffer = session.getChannelBuffer();
 		SocketByteBuffer socketBuffer = session.getSocketBuffer();
@@ -307,10 +292,10 @@ final class SessionMgr extends Thread {
 			
 			// Socket通道已断开(客户端主动关闭会话)
 			if (count < 0) {
-				rtn = -1;
+				isOk = false;
 			}
 		}
-		return rtn;
+		return isOk;
 	}
 
 	/**

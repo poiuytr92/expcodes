@@ -18,7 +18,7 @@ public class TestSocketClient {
 			client.write("hello server");
 		}
 		
-		ThreadUtils.tSleep(60000);
+		ThreadUtils.tSleep(5000);
 		client.close();
 	}
 	

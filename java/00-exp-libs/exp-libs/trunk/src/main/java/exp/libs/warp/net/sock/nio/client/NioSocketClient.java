@@ -17,7 +17,6 @@ import exp.libs.utils.StrUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.sock.bean.SocketByteBuffer;
 import exp.libs.warp.net.sock.nio.common.envm.Protocol;
-import exp.libs.warp.net.sock.nio.common.envm.States;
 import exp.libs.warp.net.sock.nio.common.envm.Times;
 import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
 import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
@@ -225,9 +224,9 @@ public class NioSocketClient extends Thread {
 	private boolean listen() {
 		boolean isListn = true;
 		try {
-			if (States.SUCCESS.id == checkNewMsg()) {
+			if (hasNewMsg()) {
 				
-				//提取远端机一次返回的所有消息，交付给handler处理（检查消息队列）
+				// 一次性提取远端机返回的所有消息，交付给handler处理（检查消息队列）
 				while (session.getMsgQueue().hasNewMsg()) {
 					String msg = session.getMsgQueue().getMsg();
 					
@@ -273,9 +272,7 @@ public class NioSocketClient extends Thread {
 	 * @return 只要返回的消息队列非空，且会话未关闭，则返回成功状态
 	 * @throws Exception 异常
 	 */
-	private int checkNewMsg() throws Exception {
-		States exState = States.SUCCESS;
-
+	private boolean hasNewMsg() throws Exception {
 		SocketChannel sc = session.getLayerSession();
 		Selector selector = Selector.open();
 		sc.configureBlocking(false);
@@ -287,37 +284,28 @@ public class NioSocketClient extends Thread {
 			while (iterator.hasNext()) {
 				SelectionKey sk = iterator.next();
 				iterator.remove();
-				int rtn = handleKey(sk);
 
 				// 会话通道已断开
-				if (rtn < 0) {
+				if (!handleKey(sk)) {
 					session.close();
-					exState = States.FAIL;
 					break;
 				}
 			}
 
 		}
 		selector.close();
-
-		//检查消息队列是否存在未处理消息
-		if (States.SUCCESS.id == exState.id) {
-			if (!session.getMsgQueue().hasNewMsg()) {
-				exState = States.FAIL;
-			}
-		}
-		return exState.id;
+		return (!session.isClosed() && session.getMsgQueue().hasNewMsg());
 	}
 
 	/**
 	 * 从会话通道采集数据，返回-1表示通道已断开
 	 * 
 	 * @param sk 关注事件键
-	 * @return -1表示会话已关闭，0则正常通讯
+	 * @return 
 	 * @throws Exception 异常
 	 */
-	private int handleKey(SelectionKey sk) throws Exception {
-		int rtn = 0;
+	private boolean handleKey(SelectionKey sk) throws Exception {
+		boolean isOk = true;
 		SocketChannel sc = session.getLayerSession();
 		ByteBuffer channelBuffer = session.getChannelBuffer();
 		SocketByteBuffer socketBuffer = session.getSocketBuffer();
@@ -325,7 +313,6 @@ public class NioSocketClient extends Thread {
 		if (sk.channel().equals(sc) && sk.isReadable()) {
 
 			int count = 0;
-
 			channelBuffer.clear();
 			while ((count = sc.read(channelBuffer)) > 0) {
 				channelBuffer.flip();
@@ -370,10 +357,10 @@ public class NioSocketClient extends Thread {
 			
 			// Socket通道已断开(服务端主动关闭会话)
 			if (count < 0) {
-				rtn = -1;
+				isOk = false;
 			}
 		}
-		return rtn;
+		return isOk;
 	}
 	
 	/**
