@@ -10,6 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -400,6 +401,26 @@ public class SwingUtils {
 		String input = JOptionPane.showInputDialog(
 			    null, msg, "Tips", JOptionPane.OK_CANCEL_OPTION);
 		return (input == null ? "" : input);
+	}
+	
+	/**
+	 * 隐藏密码框内容
+	 * @param password
+	 */
+	public static void hide(JPasswordField password) {
+		if(password != null) {
+			password.setEchoChar('*');
+		}
+	}
+	
+	/**
+	 * 显示密码框内容
+	 * @param password
+	 */
+	public static void view(JPasswordField password) {
+		if(password != null) {
+			password.setEchoChar((char) 0);
+		}
 	}
 	
 }

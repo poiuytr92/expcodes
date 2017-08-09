@@ -28,7 +28,7 @@ public class HelpWin extends PopChildWindow {
 		toolTip.setTipText(
 			"<html>"
 				+ "<body bgcolor=\"#99CCDD\">In case you thought that tooltips had to be"
-					+ "<p>boring, one line descriptions, the <font color=blue size=+2>Swing!</font> team"
+					+ "<p>新用户输入帐密后点击注册即可 <font color=blue size=+2>Swing!</font> team"
 					+ "<p>is happy to shatter your illusions."
 					+ "<p>In Swing, you can use <b>HTML</b> to "
 					+ "<ul>"

@@ -8,9 +8,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -21,6 +24,7 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.FrameBorderStyle;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
+import exp.libs.utils.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -45,11 +49,15 @@ class LoginWin extends MainWindow {
 	
 	private HelpWin helpWin;
 	
+	private JTextField usernameTXT;
+	
+	private JPasswordField passwordTXT;
+	
+	private JButton viewBtn;
+	
 	private JButton loginBtn;
 	
 	private JButton registBtn;
-	
-	private RegisterWin registWin;
 	
 	protected LoginWin() {
 		super("登陆", WIDTH, HIGH);
@@ -87,14 +95,22 @@ class LoginWin extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
+		this.helpWin = new HelpWin();
 		this.helpBtn = new JButton(OPEN);
 		helpBtn.setPreferredSize(new Dimension(WIDTH, 15));	// 设置按钮高度
-		this.helpWin = new HelpWin();
+		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, helpBtn);
+		
+		this.usernameTXT = new JTextField();
+		this.passwordTXT = new JPasswordField();
+		SwingUtils.hide(passwordTXT);
+		
+		this.viewBtn = new JButton(new ImageIcon(
+				LoginWin.class.getResource("/exp/libs/warp/upm/eye.png")));
+		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, viewBtn);
 		
 		this.loginBtn = new JButton("登陆");
-		
 		this.registBtn = new JButton("注册");
-		this.registWin = new RegisterWin();
+		BeautyEyeUtils.setButtonStyle(NormalColor.normal, loginBtn, registBtn);
 	}
 
 	@Override
@@ -107,12 +123,12 @@ class LoginWin extends MainWindow {
 		JPanel panel = new JPanel(new GridLayout(6, 1)); {
 			panel.add(new JLabel(), 0);
 			panel.add(SwingUtils.getWEBorderPanel(
-					new JLabel("  [账号] :  "), new JTextField(), 
+					new JLabel("  [账号] :  "), usernameTXT, 
 					new JLabel("   ")), 1);
 			panel.add(new JLabel(), 2);
 			panel.add(SwingUtils.getWEBorderPanel(
-					new JLabel("  [密码] :  "), new JPasswordField(), 
-					new JLabel("   ")), 3);
+					new JLabel("  [密码] :  "), passwordTXT, 
+					SwingUtils.getEBorderPanel(viewBtn, new JLabel("   "))), 3);
 			panel.add(new JLabel(), 4);
 			panel.add(getLogRegPanel(), 5);
 		} SwingUtils.addBorder(panel);
@@ -120,7 +136,7 @@ class LoginWin extends MainWindow {
 	}
 	
 	private JPanel getLogRegPanel() {
-		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn, registBtn);
+//		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn, registBtn);
 		
 		JPanel panel = new JPanel(new GridLayout(1, 5)); {
 			panel.add(new JLabel(), 0);
@@ -174,9 +190,47 @@ class LoginWin extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				registWin._view();
+				String username = usernameTXT.getText();
+				String password = new String(passwordTXT.getPassword());
+				
+				if(StrUtils.isEmpty(username)) {
+					SwingUtils.warn("账号不能为空");
+					
+				} else if(StrUtils.isEmpty(password)) {
+					SwingUtils.warn("密码不能为空");
+					
+				} else {
+					
+					// TODO 注册到库
+					// 检查账号是否唯一, 密码不用检查
+					SwingUtils.info("注册成功");
+				}
 			}
 		});
+		
+		// 设置密码可视按钮监听
+		viewBtn.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				SwingUtils.hide(passwordTXT);	// 鼠标释放时隐藏明文
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				SwingUtils.view(passwordTXT);	// 鼠标按下时显示明文
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			
+		});
 	}
-
+	
 }
