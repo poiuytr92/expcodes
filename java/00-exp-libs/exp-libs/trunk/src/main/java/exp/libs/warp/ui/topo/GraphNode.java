@@ -76,6 +76,10 @@ public class GraphNode {
 		return gefNode.width;
 	}
 	
+	public int getHeight() {
+		return HEIGHT;	// 节点高度为固定值即可（文字描述的节点名称只能有一行）
+	}
+	
 	public int getX() {
 		return gefNode.x;
 	}
@@ -97,10 +101,6 @@ public class GraphNode {
 		setY(y);
 	}
 	
-	public int getHeight() {
-		return HEIGHT;	// 节点高度为固定值即可（文字描述的节点名称只能有一行）
-	}
-
 	public boolean isGraphSrc() {
 		return isGraphSrc;
 	}

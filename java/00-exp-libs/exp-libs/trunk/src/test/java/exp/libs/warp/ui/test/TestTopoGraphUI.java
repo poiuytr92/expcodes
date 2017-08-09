@@ -10,7 +10,7 @@ public class TestTopoGraphUI {
 		TopoGraph graph = toGraph2();
 		
 		BeautyEyeUtils.init();
-		TopoGraphUI ui = new TopoGraphUI("拓扑图展示器", 700, 300, graph);
+		TopoGraphUI ui = new TopoGraphUI("拓扑图展示器", 700, 500, graph);
 		ui._view();
 	}
 	
@@ -23,7 +23,7 @@ public class TestTopoGraphUI {
 		graph.addEdge("A", "D", 4);
 		graph.addEdge("A", "E", 5);
 		graph.addEdge("A", "F", 6);
-		graph.addEdge("A", "G", 7);
+		graph.addEdge("A", "G", 1000);
 		
 		graph.addEdge("E", "X", 4);
 		graph.addEdge("E", "Y", 4);

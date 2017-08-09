@@ -84,8 +84,8 @@ final class _QEnv {
 	 *   其中 offset = 3
 	 */
 	private void initEta() {
-		final double arg = 2 / _QEnv.PI;
-		final int offset = 3;
+		final double ARG = 2 / _QEnv.PI;
+		final int OFFSET = 3;
 		
 		for(int i = 0; i < size(); i++) {
 			for(int j = 0; j < size(); j++) {
@@ -96,7 +96,7 @@ final class _QEnv {
 					eta[i][j] = 0.0D;
 					
 				} else {
-					eta[i][j] = 1 - Math.atan(dist(i, j) + offset) * arg;	
+					eta[i][j] = 1 - Math.atan(dist(i, j) + OFFSET) * ARG;	
 				}
 			}
 		}

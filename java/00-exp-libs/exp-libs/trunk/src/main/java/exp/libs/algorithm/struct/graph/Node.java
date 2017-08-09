@@ -59,6 +59,10 @@ public class Node {
 		return name;
 	}
 
+	public String getAliasName() {
+		return StrUtils.concat(getId(), ":", getName());
+	}
+	
 	public int getDegree() {
 		return degree;
 	}
@@ -84,7 +88,7 @@ public class Node {
 	
 	@Override
 	public String toString() {
-		return StrUtils.concat(getId(), ":", getName());
+		return getAliasName();
 	}
 	
 }

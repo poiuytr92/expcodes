@@ -22,6 +22,18 @@ public class NumUtils {
 	/** 最小精度 */
 	private final static double PRECISION = 1.0e-6D;
 	
+	/** 自然底数e */
+	public final static double E = Math.E;
+	
+	/** 圆周率π */
+	public final static double PI = Math.PI;
+	
+	/** 角度转弧度公式常量 */
+	private final static double TO_RADIAN = PI / 180;
+	
+	/** 弧度转角度公式常量 */
+	private final static double TO_ANGEL = 180 / PI;
+	
 	/** 私有化构造函数. */
 	protected NumUtils() {}
 	
@@ -297,6 +309,24 @@ public class NumUtils {
 	
 	public static boolean isZero(double num) {
 		return (Math.abs(num) < PRECISION)? true : false;
+	}
+	
+	/**
+	 * 角度转弧度
+	 * @param angel 角度
+	 * @return 弧度
+	 */
+	public static double toRadian(double angel) {
+		return angel * TO_RADIAN;
+	}
+	
+	/**
+	 * 弧度转角度
+	 * @param radian 弧度
+	 * @return 角度
+	 */
+	public static double toAngel(double radian) {
+		return radian * TO_ANGEL;
 	}
 	
 }
