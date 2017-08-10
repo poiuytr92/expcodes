@@ -21,7 +21,6 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.FrameBorderStyle;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.libs.utils.StrUtils;
@@ -29,13 +28,8 @@ import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
-class LoginWin extends MainWindow {
+public class _LoginWin extends MainWindow {
 
-	public static void main(String[] args) {
-		BeautyEyeUtils.init(FrameBorderStyle.translucencySmallShadow);
-		new LoginWin();
-	}
-	
 	/** serialVersionUID */
 	private static final long serialVersionUID = -1752327112586227761L;
 
@@ -47,7 +41,7 @@ class LoginWin extends MainWindow {
 	
 	private JButton helpBtn;
 	
-	private HelpWin helpWin;
+	private _HelpWin helpWin;
 	
 	private JTextField usernameTXT;
 	
@@ -59,7 +53,7 @@ class LoginWin extends MainWindow {
 	
 	private JButton registBtn;
 	
-	protected LoginWin() {
+	protected _LoginWin() {
 		super("登陆", WIDTH, HIGH);
 	}
 	
@@ -95,7 +89,7 @@ class LoginWin extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.helpWin = new HelpWin();
+		this.helpWin = new _HelpWin();
 		this.helpBtn = new JButton(OPEN);
 		helpBtn.setPreferredSize(new Dimension(WIDTH, 15));	// 设置按钮高度
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, helpBtn);
@@ -105,7 +99,7 @@ class LoginWin extends MainWindow {
 		SwingUtils.hide(passwordTXT);
 		
 		this.viewBtn = new JButton(new ImageIcon(
-				LoginWin.class.getResource("/exp/libs/warp/upm/eye.png")));
+				_LoginWin.class.getResource("/exp/libs/warp/upm/eye.png")));
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, viewBtn);
 		
 		this.loginBtn = new JButton("登陆");

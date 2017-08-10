@@ -6,17 +6,11 @@ import java.awt.Component;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
-import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
-import exp.libs.warp.ui.cpt.win.MainWindow;
+import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
-public class UPMUI extends MainWindow {
+public class _AMWin extends PopChildWindow {
 
-	public static void main(String[] args) {
-		BeautyEyeUtils.init();
-		new UPMUI();
-	}
-	
 	private static final long serialVersionUID = -3227397290475968153L;
 
 	@Override

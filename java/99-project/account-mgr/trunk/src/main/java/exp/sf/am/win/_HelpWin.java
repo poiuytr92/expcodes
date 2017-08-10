@@ -8,13 +8,13 @@ import javax.swing.JToolTip;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
-public class HelpWin extends PopChildWindow {
+public class _HelpWin extends PopChildWindow {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -6529277202660835224L;
 
-	protected HelpWin() {
-		super("", LoginWin.WIDTH, 270);
+	protected _HelpWin() {
+		super("", _LoginWin.WIDTH, 270);
 	}
 	
 	@Override
