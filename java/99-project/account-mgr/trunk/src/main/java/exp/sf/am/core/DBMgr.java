@@ -2,6 +2,8 @@ package exp.sf.am.core;
 
 import java.io.File;
 import java.sql.Connection;
+import java.util.LinkedList;
+import java.util.List;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.DBType;
@@ -9,6 +11,7 @@ import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
+import exp.sf.am.bean.TAccount;
 import exp.sf.am.bean.TUser;
 import exp.sf.am.utils.CryptoUtils;
 
@@ -84,6 +87,14 @@ class DBMgr {
 		Connection conn = SqliteUtils.getConn(ds);
 		TUser.update(conn, user, where);
 		SqliteUtils.close(conn);
+	}
+	
+	protected static List<TAccount> queryAccounts(TUser user) {
+		String where = StrUtils.concat(TAccount.getUserId$CN(), " = ", user.getId());
+		Connection conn = SqliteUtils.getConn(ds);
+		List<TAccount> accounts = TAccount.querySome(conn, where);
+		SqliteUtils.close(conn);
+		return (accounts == null ? new LinkedList<TAccount>() : accounts);
 	}
 	
 }
