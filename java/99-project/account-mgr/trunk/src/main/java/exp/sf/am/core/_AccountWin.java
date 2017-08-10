@@ -70,14 +70,15 @@ public class _AccountWin extends MainWindow {
 	protected void setComponentsListener(JPanel rootPanel) {
 		tabPanel.addChangeListener(new ChangeListener() {
 			
+			// FIXME : 连续点击同一个TAB不会触发第二次
 			@Override
 			public void stateChanged(ChangeEvent e) {
 				int idx = ((JTabbedPane) e.getSource()).getSelectedIndex();
 				
 				// 搜索帐密
 				if(idx == 1) {
-					SwingUtils.input("请输入搜索关键字:");
-					// TODO
+					String keyword = SwingUtils.input("请输入搜索关键字:");
+					updateAccountTable(keyword);
 					
 				// 添加帐密
 				} else if(idx == 2) {
