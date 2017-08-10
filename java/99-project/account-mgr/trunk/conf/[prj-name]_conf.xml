@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config hint="工程配置文件（常用配置）">
+
+   <datasources caption="数据源列表">
+      <datasource id="TEST-DS" caption="测试数据源">
+         <pool default="proxool" caption="连接池" hint="数据库连接池，如果不配置连接池，则获取的是单连接">proxool</pool>
+         <driver caption="数据源类型" relenum="db_drivers" hint="数据库类型枚举,请从以下常用类型之中选择:
+            oracle/sybase_ase/sybase_iq/mysql/greenglumn/mssql/sqlite">mysql</driver>
+         <ip default="" caption="IP地址">127.0.0.1</ip>
+         <port default="" caption="端口">3306</port>
+         <name default="" caption="库名">alarm_adapter</name>
+         <username default="" caption="账户">root</username>
+         <password default="" caption="密码">root</password>
+         <charset default="cp936" caption="字符集" hint="数据库字符集">UTF-8</charset>
+         <jconnectVersion default="6" caption="连接等级" hint="仅sybase需要" />
+         <maximum-active-time default="300000" caption="连接有效时间(ms)" hint="若有长时操作需适当延长">300000</maximum-active-time>
+      </datasource>
+   </datasources>
+
+   <sockets caption="Socket列表">
+      <socket id="TEST-SOCK" caption="测试Socket">
+         <ip default="127.0.0.1" caption="ip">127.0.0.1</ip>
+         <port default="9998" caption="port">9998</port>
+         <username caption="账户" hint=""></username>
+         <password caption="密码" hint=""></password>
+         <charset default="UTF-8" caption="交互数据编码" hint="需与交互方协议">UTF-8</charset>
+         <bufferSize default="1" caption="读写缓冲区大小(MB)">1</bufferSize>
+         <delimiter default="\0" caption="交互数据结束标识" hint="需与交互方协议">\0</delimiter>
+         <overtime default="120000" caption="交互超时时间" hint="单位:ms">120000</overtime>
+      </socket>
+   </sockets>
+  
+</config>
