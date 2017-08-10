@@ -1,4 +1,4 @@
-package exp.sf.am.win;
+package exp.sf.am.core;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -99,7 +99,7 @@ public class _LoginWin extends MainWindow {
 		SwingUtils.hide(passwordTXT);
 		
 		this.viewBtn = new JButton(new ImageIcon(
-				_LoginWin.class.getResource("/exp/libs/warp/upm/eye.png")));
+				_LoginWin.class.getResource("/exp/sf/am/win/eye.png")));
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, viewBtn);
 		
 		this.loginBtn = new JButton("登陆");

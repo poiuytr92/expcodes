@@ -1,4 +1,4 @@
-package exp.sf.am.win;
+package exp.sf.am.core;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -9,7 +9,7 @@ import javax.swing.JTabbedPane;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
-public class _AMWin extends PopChildWindow {
+public class _AccountWin extends PopChildWindow {
 
 	private static final long serialVersionUID = -3227397290475968153L;
 

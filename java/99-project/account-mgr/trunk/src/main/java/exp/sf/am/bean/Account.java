@@ -1,12 +1,12 @@
 package exp.sf.am.bean;
 
-public class Bean {
+public class Account {
 
-	/** 外键 */
-	private int pId;
-	
 	/** 主键 */
 	private int id;
+	
+	/** 外键 */
+	private int userId;
 	
 	/** 应用名称 */
 	private String appName;

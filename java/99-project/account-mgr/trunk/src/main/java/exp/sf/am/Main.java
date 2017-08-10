@@ -4,7 +4,7 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper.FrameBorderStyle;
 
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
-import exp.sf.am.win.AccountMgr;
+import exp.sf.am.core.AppMgr;
 
 
 /**
@@ -22,7 +22,7 @@ public class Main {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		BeautyEyeUtils.init(FrameBorderStyle.translucencySmallShadow);
-		AccountMgr.createInstn();
+		AppMgr.createInstn();
 	}
 	
 }

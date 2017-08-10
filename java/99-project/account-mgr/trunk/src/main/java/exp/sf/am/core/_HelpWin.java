@@ -1,4 +1,4 @@
-package exp.sf.am.win;
+package exp.sf.am.core;
 
 import java.awt.BorderLayout;
 
