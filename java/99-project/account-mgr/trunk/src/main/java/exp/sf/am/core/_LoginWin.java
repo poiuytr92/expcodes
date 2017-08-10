@@ -27,6 +27,8 @@ import exp.libs.utils.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
+import exp.sf.am.bean.TUser;
+import exp.sf.am.utils.CryptoUtils;
 
 public class _LoginWin extends MainWindow {
 
@@ -138,6 +140,91 @@ public class _LoginWin extends MainWindow {
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
 		
+		// 设置登陆按钮监听
+		loginBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String username = usernameTXT.getText();
+				String password = new String(passwordTXT.getPassword());
+				
+				if(StrUtils.isEmpty(username)) {
+					SwingUtils.warn("账号不能为空");
+					
+				} else if(StrUtils.isEmpty(password)) {
+					SwingUtils.warn("密码不能为空");
+					
+				} else {
+					TUser user = DBMgr.findUser(username, password);
+					if(user != null) {
+						// TODO 切到帐密管理
+						String nickName = CryptoUtils.decode(user.getNickname());
+						SwingUtils.info("欢迎回来: ".concat(nickName).concat(" !"));
+						
+					} else {
+						SwingUtils.warn("登陆失败: 账号或密码错误");
+					}
+				}
+			}
+		});
+		
+		// 设置注册按钮监听
+		registBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String username = usernameTXT.getText();
+				String password = new String(passwordTXT.getPassword());
+				
+				if(StrUtils.isEmpty(username)) {
+					SwingUtils.warn("账号不能为空");
+					
+				} else if(StrUtils.isEmpty(password)) {
+					SwingUtils.warn("密码不能为空");
+					
+				} else {
+					TUser user = DBMgr.register(username, password);
+					if(user != null) {
+						String nickName = SwingUtils.input("注册成功 , 请问小姐姐/小哥哥怎么称呼? ");
+						if(StrUtils.isTrimEmpty(nickName)) {
+							SwingUtils.info("O(╯^╰)O 不肯说就算啦~");
+							
+						} else {
+							DBMgr.updateNickName(user, nickName);
+							SwingUtils.info("O(∩_∩)O 我记住啦~");
+						}
+						
+					} else {
+						SwingUtils.warn("注册失败: 此账号已被使用");
+					}
+				}
+			}
+		});
+		
+		// 设置密码可视按钮监听
+		viewBtn.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				SwingUtils.hide(passwordTXT);	// 鼠标释放时隐藏明文
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+				SwingUtils.view(passwordTXT);	// 鼠标按下时显示明文
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseClicked(MouseEvent e) {}
+			
+		});
+		
 		// 设置帮助按钮的监听
 		helpBtn.addActionListener(new ActionListener() {
 			
@@ -170,53 +257,6 @@ public class _LoginWin extends MainWindow {
 				Point point = getLocation();
 				helpWin.setLocation((int) point.getX(),(int) (point.getY() + HIGH));
 			}
-		});
-		
-		// 设置注册按钮监听
-		registBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String username = usernameTXT.getText();
-				String password = new String(passwordTXT.getPassword());
-				
-				if(StrUtils.isEmpty(username)) {
-					SwingUtils.warn("账号不能为空");
-					
-				} else if(StrUtils.isEmpty(password)) {
-					SwingUtils.warn("密码不能为空");
-					
-				} else {
-					
-					// TODO 注册到库
-					// 检查账号是否唯一, 密码不用检查
-					SwingUtils.info("注册成功");
-				}
-			}
-		});
-		
-		// 设置密码可视按钮监听
-		viewBtn.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				SwingUtils.hide(passwordTXT);	// 鼠标释放时隐藏明文
-			}
-			
-			@Override
-			public void mousePressed(MouseEvent e) {
-				SwingUtils.view(passwordTXT);	// 鼠标按下时显示明文
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent e) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent e) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {}
-			
 		});
 	}
 	
