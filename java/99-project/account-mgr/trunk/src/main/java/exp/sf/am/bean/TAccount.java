@@ -1031,6 +1031,32 @@ public class TAccount  {
         return "TAccount";
     }
     
+    public boolean contains(String keyword) {
+    	boolean contains = false;
+    	if(getAppName().contains(keyword) ||
+				getUrl().contains(keyword) || 
+				getLoginUsername().contains(keyword) || 
+				getLoginPassword().contains(keyword) || 
+				getQueryPassword().contains(keyword) || 
+				getAtmPassword().contains(keyword) || 
+				getPayPassword().contains(keyword) || 
+				getServicePassword().contains(keyword) || 
+				getEmail().contains(keyword) || 
+				getPhone().contains(keyword) || 
+				getIdcardNum().contains(keyword) || 
+				getIdcardName().contains(keyword) || 
+				getQuestion1().contains(keyword) || 
+				getAnswer1().contains(keyword) || 
+				getQuestion2().contains(keyword) || 
+				getAnswer2().contains(keyword) || 
+				getQuestion3().contains(keyword) || 
+				getAnswer3().contains(keyword) || 
+				getRemark().contains(keyword)) {
+    		contains = true;
+		}
+    	return contains;
+    }
+    
     /**
      * toString
      * @return String

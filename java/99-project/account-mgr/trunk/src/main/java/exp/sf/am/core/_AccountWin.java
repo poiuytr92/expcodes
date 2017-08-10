@@ -2,13 +2,16 @@ package exp.sf.am.core;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -73,6 +76,7 @@ public class _AccountWin extends MainWindow {
 				
 				// 搜索帐密
 				if(idx == 1) {
+					SwingUtils.input("请输入搜索关键字:");
 					// TODO
 					
 				// 添加帐密
@@ -84,8 +88,12 @@ public class _AccountWin extends MainWindow {
 	}
 	
 	private void updateAccountTable() {
+		updateAccountTable(null);
+	}
+	
+	private void updateAccountTable(String keyword) {
 		accDatas.clear();
-		accDatas.addAll(DBMgr.queryAccounts(user));
+		accDatas.addAll(DBMgr.queryAccounts(user, keyword));
 		accTable.reflash(_toTableDatas(accDatas));
 	}
 
@@ -110,50 +118,94 @@ public class _AccountWin extends MainWindow {
 	
 ///////////////////////////////////////////////////////////////////////////////
 	
+	// TODO 可以再封装一层， 带右键浮动菜单的表单, 右键表单自定义
 	private class AccountTable extends AbstractTable {
-
-		public AccountTable() {
-			super(HEADER, 100);
-			
-			/**
-			 * AUTO_RESIZE_ALL_COLUMNS : 自动取相同列宽，内容比表头长则内容省略, 若水平方向空间不足，则表头呈现省略号， 不会出现水平滚动条
-			 * AUTO_RESIZE_OFF: 列宽根据实际表头长度而定，内容比表头长则内容省略， 若水平方向空间不足，依然完全呈现表头文字， 会出现水平滚条
-			 */
-			setAutoResizeMode(JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS);
-		}
 
 		/** serialVersionUID */
 		private static final long serialVersionUID = -2194275100301409161L;
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+		
+		private int curRow;
+		
+		private JPopupMenu popMenu;
+		
+		public AccountTable() {
+			super(HEADER, 100);
+			this.curRow = -1;
+			initPopMenu();
 		}
 
+		private void initPopMenu() {
+			this.popMenu = new JPopupMenu();
+			JMenuItem detail = new JMenuItem("查看详情");
+			JMenuItem reflash = new JMenuItem("刷新列表");
+			JMenuItem copy = new JMenuItem("复制到剪贴板");
+			JMenuItem delete = new JMenuItem("删除");
+			popMenu.add(detail);
+			popMenu.add(reflash);
+			popMenu.add(copy);
+			popMenu.add(delete);
+			
+			detail.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//TODO
+				}
+			});
+			
+			reflash.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					updateAccountTable();
+				}
+			});
+			
+			copy.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//TODO
+				}
+			});
+
+			delete.addActionListener(new ActionListener() {
+				
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					//TODO
+				}
+			});
+		}
+		
 		@Override
 		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
+			if(e.getButton() != MouseEvent.BUTTON3) {	
+				return;	// 只处理鼠标右键事件
+			}
 			
+			// 识别当前操作行（选中行优先，若无选中则为鼠标当前所在行）
+			curRow = getCurSelectRow();
+			curRow = (curRow < 0 ? getCurMouseRow() : curRow);
+			if(curRow < 0) {
+				return;
+			}
+			
+			// 呈现浮动菜单
+			popMenu.show(e.getComponent(), e.getX(), e.getY());
 		}
 
 		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseDragged(MouseEvent e) {}
 
 		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mouseEntered(MouseEvent e) {}
 
 		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
+		public void mousePressed(MouseEvent e) {}
+
+		@Override
+		public void mouseReleased(MouseEvent e) {}
 		
 	}
 }

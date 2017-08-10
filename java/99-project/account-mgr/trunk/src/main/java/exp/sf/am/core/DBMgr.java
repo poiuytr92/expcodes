@@ -2,6 +2,7 @@ package exp.sf.am.core;
 
 import java.io.File;
 import java.sql.Connection;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -89,10 +90,19 @@ class DBMgr {
 		SqliteUtils.close(conn);
 	}
 	
-	protected static List<TAccount> queryAccounts(TUser user) {
+	protected static List<TAccount> queryAccounts(TUser user, String keyword) {
 		String where = StrUtils.concat(TAccount.getUserId$CN(), " = ", user.getId());
 		Connection conn = SqliteUtils.getConn(ds);
 		List<TAccount> accounts = TAccount.querySome(conn, where);
+		if(accounts != null && StrUtils.isNotEmpty(keyword)) {
+			Iterator<TAccount> its = accounts.iterator();
+			while(its.hasNext()) {
+				TAccount account = its.next();
+				if(!account.contains(keyword)) {
+					its.remove();
+				}
+			}
+		}
 		SqliteUtils.close(conn);
 		return (accounts == null ? new LinkedList<TAccount>() : accounts);
 	}
