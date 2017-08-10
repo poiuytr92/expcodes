@@ -28,7 +28,6 @@ import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 import exp.sf.am.bean.TUser;
-import exp.sf.am.utils.CryptoUtils;
 
 public class _LoginWin extends MainWindow {
 
@@ -54,6 +53,8 @@ public class _LoginWin extends MainWindow {
 	private JButton loginBtn;
 	
 	private JButton registBtn;
+	
+	private _AccountWin accWin;
 	
 	protected _LoginWin() {
 		super("登陆", WIDTH, HIGH);
@@ -157,8 +158,12 @@ public class _LoginWin extends MainWindow {
 				} else {
 					TUser user = DBMgr.findUser(username, password);
 					if(user != null) {
-						// TODO 切到帐密管理
-						String nickName = CryptoUtils.decode(user.getNickname());
+						_hide();			// 隐藏登陆窗口
+						helpWin._hide();	// 隐藏帮助窗口
+						accWin = new _AccountWin(user);
+						accWin._view();		// 显示帐密管理窗口
+						
+						String nickName = user.getNickname();
 						SwingUtils.info("欢迎回来: ".concat(nickName).concat(" !"));
 						
 					} else {

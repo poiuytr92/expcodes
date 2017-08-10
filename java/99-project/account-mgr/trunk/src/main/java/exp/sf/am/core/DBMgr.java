@@ -60,12 +60,13 @@ class DBMgr {
 		String sql = StrUtils.concat("SELECT COUNT(1) FROM ", TUser.getTableName(),  
 				" WHERE ", TUser.getUsername$CN(), " = '", enUsername, "'");
 		
-		TUser user = new TUser();
+		TUser user = null;
 		Connection conn = SqliteUtils.getConn(ds);
 		if(SqliteUtils.queryInt(conn, sql) == 0) {
-			user.setUsername(username);
-			user.setPassword(password);
-			user.setNickname(username);
+			user = new TUser();
+			user.encodeUsername(username);
+			user.encodePassword(password);
+			user.encodeNickname(username);
 			if(TUser.insert(conn, user)) {
 				user = findUser(username, password);
 			} else {
@@ -78,7 +79,7 @@ class DBMgr {
 	
 	protected static void updateNickName(TUser user, String nickName) {
 		String where = StrUtils.concat(TUser.getId$CN(), " = ", user.getId());
-		user.setNickname(nickName);
+		user.encodeNickname(nickName);
 		
 		Connection conn = SqliteUtils.getConn(ds);
 		TUser.update(conn, user, where);

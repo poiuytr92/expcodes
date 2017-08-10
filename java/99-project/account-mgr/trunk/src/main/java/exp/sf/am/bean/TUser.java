@@ -195,6 +195,10 @@ public class TUser  {
      * @param username username to set
      */
     public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    public void encodeUsername(String username) {
         this.username = CryptoUtils.encode(username);
     }
 
@@ -211,6 +215,10 @@ public class TUser  {
      * @param password password to set
      */
     public void setPassword(String password) {
+        this.password = password;
+    }
+    
+    public void encodePassword(String password) {
         this.password = CryptoUtils.encode(password);
     }
 
@@ -227,6 +235,10 @@ public class TUser  {
      * @param nickname nickname to set
      */
     public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+    
+    public void encodeNickname(String nickname) {
         this.nickname = CryptoUtils.encode(nickname);
     }
 

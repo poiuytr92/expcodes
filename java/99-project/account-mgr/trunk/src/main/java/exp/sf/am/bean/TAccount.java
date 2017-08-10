@@ -296,6 +296,10 @@ public class TAccount  {
      * @param appName appName to set
      */
     public void setAppName(String appName) {
+        this.appName = appName;
+    }
+    
+    public void encodeAppName(String appName) {
         this.appName = CryptoUtils.encode(appName);
     }
 
@@ -312,6 +316,10 @@ public class TAccount  {
      * @param url url to set
      */
     public void setUrl(String url) {
+        this.url = url;
+    }
+    
+    public void encodeUrl(String url) {
         this.url = CryptoUtils.encode(url);
     }
 
@@ -328,6 +336,10 @@ public class TAccount  {
      * @param loginUsername loginUsername to set
      */
     public void setLoginUsername(String loginUsername) {
+        this.loginUsername = loginUsername;
+    }
+    
+    public void encodeLoginUsername(String loginUsername) {
         this.loginUsername = CryptoUtils.encode(loginUsername);
     }
 
@@ -344,6 +356,10 @@ public class TAccount  {
      * @param loginPassword loginPassword to set
      */
     public void setLoginPassword(String loginPassword) {
+        this.loginPassword = loginPassword;
+    }
+    
+    public void encodeLoginPassword(String loginPassword) {
         this.loginPassword = CryptoUtils.encode(loginPassword);
     }
 
@@ -360,6 +376,10 @@ public class TAccount  {
      * @param queryPassword queryPassword to set
      */
     public void setQueryPassword(String queryPassword) {
+        this.queryPassword = queryPassword;
+    }
+    
+    public void encodeQueryPassword(String queryPassword) {
         this.queryPassword = CryptoUtils.encode(queryPassword);
     }
 
@@ -376,6 +396,10 @@ public class TAccount  {
      * @param atmPassword atmPassword to set
      */
     public void setAtmPassword(String atmPassword) {
+        this.atmPassword = atmPassword;
+    }
+    
+    public void encodeAtmPassword(String atmPassword) {
         this.atmPassword = CryptoUtils.encode(atmPassword);
     }
 
@@ -392,6 +416,10 @@ public class TAccount  {
      * @param payPassword payPassword to set
      */
     public void setPayPassword(String payPassword) {
+        this.payPassword = payPassword;
+    }
+    
+    public void encodePayPassword(String payPassword) {
         this.payPassword = CryptoUtils.encode(payPassword);
     }
 
@@ -408,6 +436,10 @@ public class TAccount  {
      * @param servicePassword servicePassword to set
      */
     public void setServicePassword(String servicePassword) {
+        this.servicePassword = servicePassword;
+    }
+    
+    public void encodeServicePassword(String servicePassword) {
         this.servicePassword = CryptoUtils.encode(servicePassword);
     }
 
@@ -424,6 +456,10 @@ public class TAccount  {
      * @param email email to set
      */
     public void setEmail(String email) {
+        this.email = email;
+    }
+    
+    public void encodeEmail(String email) {
         this.email = CryptoUtils.encode(email);
     }
 
@@ -440,6 +476,10 @@ public class TAccount  {
      * @param phone phone to set
      */
     public void setPhone(String phone) {
+        this.phone = phone;
+    }
+    
+    public void encodePhone(String phone) {
         this.phone = CryptoUtils.encode(phone);
     }
 
@@ -456,6 +496,10 @@ public class TAccount  {
      * @param idcardNum idcardNum to set
      */
     public void setIdcardNum(String idcardNum) {
+        this.idcardNum = idcardNum;
+    }
+    
+    public void encodeIdcardNum(String idcardNum) {
         this.idcardNum = CryptoUtils.encode(idcardNum);
     }
 
@@ -472,6 +516,10 @@ public class TAccount  {
      * @param idcardName idcardName to set
      */
     public void setIdcardName(String idcardName) {
+        this.idcardName = idcardName;
+    }
+    
+    public void encodeIdcardName(String idcardName) {
         this.idcardName = CryptoUtils.encode(idcardName);
     }
 
@@ -488,6 +536,10 @@ public class TAccount  {
      * @param question1 question1 to set
      */
     public void setQuestion1(String question1) {
+        this.question1 = question1;
+    }
+    
+    public void encodeQuestion1(String question1) {
         this.question1 = CryptoUtils.encode(question1);
     }
 
@@ -504,6 +556,10 @@ public class TAccount  {
      * @param answer1 answer1 to set
      */
     public void setAnswer1(String answer1) {
+        this.answer1 = answer1;
+    }
+    
+    public void encodeAnswer1(String answer1) {
         this.answer1 = CryptoUtils.encode(answer1);
     }
 
@@ -520,6 +576,10 @@ public class TAccount  {
      * @param question2 question2 to set
      */
     public void setQuestion2(String question2) {
+        this.question2 = question2;
+    }
+    
+    public void encodeQuestion2(String question2) {
         this.question2 = CryptoUtils.encode(question2);
     }
 
@@ -536,6 +596,10 @@ public class TAccount  {
      * @param answer2 answer2 to set
      */
     public void setAnswer2(String answer2) {
+        this.answer2 = answer2;
+    }
+    
+    public void encodeAnswer2(String answer2) {
         this.answer2 = CryptoUtils.encode(answer2);
     }
 
@@ -552,6 +616,10 @@ public class TAccount  {
      * @param question3 question3 to set
      */
     public void setQuestion3(String question3) {
+        this.question3 = question3;
+    }
+    
+    public void encodeQuestion3(String question3) {
         this.question3 = CryptoUtils.encode(question3);
     }
 
@@ -568,6 +636,10 @@ public class TAccount  {
      * @param answer3 answer3 to set
      */
     public void setAnswer3(String answer3) {
+        this.answer3 = answer3;
+    }
+    
+    public void encodeAnswer3(String answer3) {
         this.answer3 = CryptoUtils.encode(answer3);
     }
 
@@ -584,6 +656,10 @@ public class TAccount  {
      * @param remark remark to set
      */
     public void setRemark(String remark) {
+        this.remark = remark;
+    }
+    
+    public void encodeRemark(String remark) {
         this.remark = CryptoUtils.encode(remark);
     }
 
