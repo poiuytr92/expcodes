@@ -135,36 +135,33 @@ public class SwingUtils {
 	 * 获取配对组件面板（提示组件+输入组件）
 	 * 	布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
 	 * @param label 提示组件的提示信息
-	 * @param input 输入组件的默认输入值
+	 * @param textField 输入组件的默认输入值
 	 * @return JLabel + JTextFields
 	 */
-	public static JPanel getPairsPanel(String label, String input) {
-		return getPairsPanel(label, new JTextField(input));
+	public static JPanel getPairsPanel(String label, String textField) {
+		return getPairsPanel(label, new JTextField(textField));
 	}
 	
 	/**
 	 * 获取配对组件面板（提示组件+输入组件）
 	 * 	布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
 	 * @param label 提示组件的提示信息
-	 * @param input 输入组件
+	 * @param component 输入组件
 	 * @return JLabel + 自定义的输入组件
 	 */
-	public static JPanel getPairsPanel(String label, Component input) {
-		return getPairsPanel(new JLabel(StrUtils.concat("  [", label, "]:  ")), input);
+	public static JPanel getPairsPanel(String label, Component component) {
+		return getPairsPanel(new JLabel(StrUtils.concat("  [", label, "]:  ")), component);
 	}
 	
 	/**
 	 * 获取配对组件面板（提示组件+输入组件）
 	 * 	布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
 	 * @param label 提示组件
-	 * @param input 输入组件
+	 * @param component 输入组件
 	 * @return 自定义的提示组件 + 自定义的输入组件
 	 */
-	public static JPanel getPairsPanel(Component label, Component input) {
-		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(label, BorderLayout.WEST);
-		panel.add(input, BorderLayout.CENTER);
-		return panel;
+	public static JPanel getPairsPanel(Component label, Component component) {
+		return getWBorderPanel(component, label);
 	}
 	
 	/**

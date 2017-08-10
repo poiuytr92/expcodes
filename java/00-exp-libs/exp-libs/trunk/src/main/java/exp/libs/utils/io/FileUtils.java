@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
 import exp.libs.envm.StorageUnit;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.num.BODHUtils;
+import exp.libs.utils.os.CmdUtils;
+import exp.libs.utils.os.OSUtils;
 
 /**
  * <PRE>
@@ -599,6 +601,38 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 					(jarFile == null ? "null" : jarFile.getPath()), e);
 		}
 		return list;
+	}
+	
+	/**
+	 * 隐藏文件/文件夹
+	 * 	此方法仅适用于win系统. 
+	 * 	linux系统直接在文件名前加.即可实现隐藏
+	 * @param filePath
+	 * @return
+	 */
+	public static boolean hide(String filePath) {
+		boolean isOk = false;
+		if(StrUtils.isNotEmpty(filePath)) {
+			isOk = hide(new File(filePath));
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 隐藏文件/文件夹
+	 * 	此方法仅适用于win系统. 
+	 * 	linux系统直接在文件名前加.即可实现隐藏
+	 * @param filePath
+	 * @return
+	 */
+	public static boolean hide(File file) {
+		boolean isOk = false;
+		if(OSUtils.isWin() && file != null && file.exists()) {
+			String cmd = StrUtils.concat("attrib +H \"", 
+					file.getAbsolutePath(), "\"");
+			isOk = StrUtils.isTrimEmpty(CmdUtils.execute(cmd));
+		}
+		return isOk;
 	}
 	
 }

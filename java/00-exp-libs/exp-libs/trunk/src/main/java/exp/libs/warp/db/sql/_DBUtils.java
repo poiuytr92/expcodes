@@ -688,7 +688,7 @@ final class _DBUtils {
 			
 		} else if (dbType.equals("int") || dbType.equals("smallint") || 
 				dbType.equals("mediumint") || dbType.equals("tinyint") || 
-				dbType.matches("int\\([1-9]\\)")) {
+				dbType.equals("integer") || dbType.matches("int\\([1-9]\\)")) {
 			javaType = "Integer";
 			
 		} else if (dbType.equals("number") || dbType.equals("long") || 

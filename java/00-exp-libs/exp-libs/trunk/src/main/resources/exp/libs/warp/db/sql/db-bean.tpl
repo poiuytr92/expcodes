@@ -3,7 +3,7 @@ package @{package_path}@;
 import java.sql.Connection;
 import java.util.List;
 
-import exp.libs.db.DBUtils;
+import exp.libs.warp.db.sql.DBUtils;
 
 /**
  * <PRE>

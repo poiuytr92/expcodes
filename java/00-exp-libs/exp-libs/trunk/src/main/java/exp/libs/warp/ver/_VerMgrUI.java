@@ -498,14 +498,12 @@ class _VerMgrUI extends MainWindow {
 		
 		private static final long serialVersionUID = -3111568334645181825L;
 		
-		private final static int MAX_ROW = 50;
-		
 		private int curRow;
 		
 		private JPopupMenu popMenu;
 		
 		private _HisVerTable() {
-			super(HEADER, MAX_ROW);
+			super(HEADER, 100);
 			this.curRow = -1;
 			initPopMenu();
 		}
