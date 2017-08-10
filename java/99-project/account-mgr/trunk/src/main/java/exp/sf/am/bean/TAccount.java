@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.util.List;
 
 import exp.libs.warp.db.sql.DBUtils;
+import exp.sf.am.utils.CryptoUtils;
 
 /**
  * <PRE>
@@ -107,7 +108,7 @@ public class TAccount  {
     public static boolean insert(Connection conn, TAccount bean) {
         Object[] params = new Object[] {
                 bean.getId(),
-                bean.userId,
+                bean.getUserId(),
                 bean.appName,
                 bean.url,
                 bean.loginUsername,
@@ -174,7 +175,7 @@ public class TAccount  {
             sql.append(where);
         }
         Object[] params = new Object[] {
-                bean.userId,
+                bean.getUserId(),
                 bean.appName,
                 bean.url,
                 bean.loginUsername,
@@ -287,7 +288,7 @@ public class TAccount  {
      * @return String
      */
     public String getAppName() {
-        return this.appName;
+        return CryptoUtils.decode(this.appName);
     }
 
     /**
@@ -295,7 +296,7 @@ public class TAccount  {
      * @param appName appName to set
      */
     public void setAppName(String appName) {
-        this.appName = appName;
+        this.appName = CryptoUtils.encode(appName);
     }
 
     /**
@@ -303,7 +304,7 @@ public class TAccount  {
      * @return String
      */
     public String getUrl() {
-        return this.url;
+        return CryptoUtils.decode(this.url);
     }
 
     /**
@@ -311,7 +312,7 @@ public class TAccount  {
      * @param url url to set
      */
     public void setUrl(String url) {
-        this.url = url;
+        this.url = CryptoUtils.encode(url);
     }
 
     /**
@@ -319,7 +320,7 @@ public class TAccount  {
      * @return String
      */
     public String getLoginUsername() {
-        return this.loginUsername;
+        return CryptoUtils.decode(this.loginUsername);
     }
 
     /**
@@ -327,7 +328,7 @@ public class TAccount  {
      * @param loginUsername loginUsername to set
      */
     public void setLoginUsername(String loginUsername) {
-        this.loginUsername = loginUsername;
+        this.loginUsername = CryptoUtils.encode(loginUsername);
     }
 
     /**
@@ -335,7 +336,7 @@ public class TAccount  {
      * @return String
      */
     public String getLoginPassword() {
-        return this.loginPassword;
+        return CryptoUtils.decode(this.loginPassword);
     }
 
     /**
@@ -343,7 +344,7 @@ public class TAccount  {
      * @param loginPassword loginPassword to set
      */
     public void setLoginPassword(String loginPassword) {
-        this.loginPassword = loginPassword;
+        this.loginPassword = CryptoUtils.encode(loginPassword);
     }
 
     /**
@@ -351,7 +352,7 @@ public class TAccount  {
      * @return String
      */
     public String getQueryPassword() {
-        return this.queryPassword;
+        return CryptoUtils.decode(this.queryPassword);
     }
 
     /**
@@ -359,7 +360,7 @@ public class TAccount  {
      * @param queryPassword queryPassword to set
      */
     public void setQueryPassword(String queryPassword) {
-        this.queryPassword = queryPassword;
+        this.queryPassword = CryptoUtils.encode(queryPassword);
     }
 
     /**
@@ -367,7 +368,7 @@ public class TAccount  {
      * @return String
      */
     public String getAtmPassword() {
-        return this.atmPassword;
+        return CryptoUtils.decode(this.atmPassword);
     }
 
     /**
@@ -375,7 +376,7 @@ public class TAccount  {
      * @param atmPassword atmPassword to set
      */
     public void setAtmPassword(String atmPassword) {
-        this.atmPassword = atmPassword;
+        this.atmPassword = CryptoUtils.encode(atmPassword);
     }
 
     /**
@@ -383,7 +384,7 @@ public class TAccount  {
      * @return String
      */
     public String getPayPassword() {
-        return this.payPassword;
+        return CryptoUtils.decode(this.payPassword);
     }
 
     /**
@@ -391,7 +392,7 @@ public class TAccount  {
      * @param payPassword payPassword to set
      */
     public void setPayPassword(String payPassword) {
-        this.payPassword = payPassword;
+        this.payPassword = CryptoUtils.encode(payPassword);
     }
 
     /**
@@ -399,7 +400,7 @@ public class TAccount  {
      * @return String
      */
     public String getServicePassword() {
-        return this.servicePassword;
+        return CryptoUtils.decode(this.servicePassword);
     }
 
     /**
@@ -407,7 +408,7 @@ public class TAccount  {
      * @param servicePassword servicePassword to set
      */
     public void setServicePassword(String servicePassword) {
-        this.servicePassword = servicePassword;
+        this.servicePassword = CryptoUtils.encode(servicePassword);
     }
 
     /**
@@ -415,7 +416,7 @@ public class TAccount  {
      * @return String
      */
     public String getEmail() {
-        return this.email;
+        return CryptoUtils.decode(this.email);
     }
 
     /**
@@ -423,7 +424,7 @@ public class TAccount  {
      * @param email email to set
      */
     public void setEmail(String email) {
-        this.email = email;
+        this.email = CryptoUtils.encode(email);
     }
 
     /**
@@ -431,7 +432,7 @@ public class TAccount  {
      * @return String
      */
     public String getPhone() {
-        return this.phone;
+        return CryptoUtils.decode(this.phone);
     }
 
     /**
@@ -439,7 +440,7 @@ public class TAccount  {
      * @param phone phone to set
      */
     public void setPhone(String phone) {
-        this.phone = phone;
+        this.phone = CryptoUtils.encode(phone);
     }
 
     /**
@@ -447,7 +448,7 @@ public class TAccount  {
      * @return String
      */
     public String getIdcardNum() {
-        return this.idcardNum;
+        return CryptoUtils.decode(this.idcardNum);
     }
 
     /**
@@ -455,7 +456,7 @@ public class TAccount  {
      * @param idcardNum idcardNum to set
      */
     public void setIdcardNum(String idcardNum) {
-        this.idcardNum = idcardNum;
+        this.idcardNum = CryptoUtils.encode(idcardNum);
     }
 
     /**
@@ -463,7 +464,7 @@ public class TAccount  {
      * @return String
      */
     public String getIdcardName() {
-        return this.idcardName;
+        return CryptoUtils.decode(this.idcardName);
     }
 
     /**
@@ -471,7 +472,7 @@ public class TAccount  {
      * @param idcardName idcardName to set
      */
     public void setIdcardName(String idcardName) {
-        this.idcardName = idcardName;
+        this.idcardName = CryptoUtils.encode(idcardName);
     }
 
     /**
@@ -479,7 +480,7 @@ public class TAccount  {
      * @return String
      */
     public String getQuestion1() {
-        return this.question1;
+        return CryptoUtils.decode(this.question1);
     }
 
     /**
@@ -487,7 +488,7 @@ public class TAccount  {
      * @param question1 question1 to set
      */
     public void setQuestion1(String question1) {
-        this.question1 = question1;
+        this.question1 = CryptoUtils.encode(question1);
     }
 
     /**
@@ -495,7 +496,7 @@ public class TAccount  {
      * @return String
      */
     public String getAnswer1() {
-        return this.answer1;
+        return CryptoUtils.decode(this.answer1);
     }
 
     /**
@@ -503,7 +504,7 @@ public class TAccount  {
      * @param answer1 answer1 to set
      */
     public void setAnswer1(String answer1) {
-        this.answer1 = answer1;
+        this.answer1 = CryptoUtils.encode(answer1);
     }
 
     /**
@@ -511,7 +512,7 @@ public class TAccount  {
      * @return String
      */
     public String getQuestion2() {
-        return this.question2;
+        return CryptoUtils.decode(this.question2);
     }
 
     /**
@@ -519,7 +520,7 @@ public class TAccount  {
      * @param question2 question2 to set
      */
     public void setQuestion2(String question2) {
-        this.question2 = question2;
+        this.question2 = CryptoUtils.encode(question2);
     }
 
     /**
@@ -527,7 +528,7 @@ public class TAccount  {
      * @return String
      */
     public String getAnswer2() {
-        return this.answer2;
+        return CryptoUtils.decode(this.answer2);
     }
 
     /**
@@ -535,7 +536,7 @@ public class TAccount  {
      * @param answer2 answer2 to set
      */
     public void setAnswer2(String answer2) {
-        this.answer2 = answer2;
+        this.answer2 = CryptoUtils.encode(answer2);
     }
 
     /**
@@ -543,7 +544,7 @@ public class TAccount  {
      * @return String
      */
     public String getQuestion3() {
-        return this.question3;
+        return CryptoUtils.decode(this.question3);
     }
 
     /**
@@ -551,7 +552,7 @@ public class TAccount  {
      * @param question3 question3 to set
      */
     public void setQuestion3(String question3) {
-        this.question3 = question3;
+        this.question3 = CryptoUtils.encode(question3);
     }
 
     /**
@@ -559,7 +560,7 @@ public class TAccount  {
      * @return String
      */
     public String getAnswer3() {
-        return this.answer3;
+        return CryptoUtils.decode(this.answer3);
     }
 
     /**
@@ -567,7 +568,7 @@ public class TAccount  {
      * @param answer3 answer3 to set
      */
     public void setAnswer3(String answer3) {
-        this.answer3 = answer3;
+        this.answer3 = CryptoUtils.encode(answer3);
     }
 
     /**
@@ -575,7 +576,7 @@ public class TAccount  {
      * @return String
      */
     public String getRemark() {
-        return this.remark;
+        return CryptoUtils.decode(this.remark);
     }
 
     /**
@@ -583,7 +584,7 @@ public class TAccount  {
      * @param remark remark to set
      */
     public void setRemark(String remark) {
-        this.remark = remark;
+        this.remark = CryptoUtils.encode(remark);
     }
 
     /**
