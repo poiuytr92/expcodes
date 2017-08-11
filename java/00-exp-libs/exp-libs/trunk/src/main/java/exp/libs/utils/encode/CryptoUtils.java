@@ -51,7 +51,7 @@ public class CryptoUtils {
 	public final static String DEFAULT_KEY = "exp-libs";
 	
 	/** 默认加密编码 */
-	public final static String DEFAULT_ENCODE = Charset.UTF8;
+	public final static String DEFAULT_CHARSET = Charset.UTF8;
 	
 	/** 私有化构造函数 */
 	protected CryptoUtils() {}
@@ -62,17 +62,17 @@ public class CryptoUtils {
 	 * @return 32位MD5
 	 */
 	public static String toMD5(String data) {
-		return toMD5(data, DEFAULT_ENCODE);
+		return toMD5(data, DEFAULT_CHARSET);
 	}
 	
 	/**
 	 * 计算字符串的32位MD5
 	 * @param data 待加密的字符串
-	 * @param encode 字符串编码
+	 * @param charset 字符串编码
 	 * @return 32位MD5
 	 */
-	public static String toMD5(String data, String encode) {
-		byte[] md5 = toMD5Byte(CharsetUtils.toBytes(data, encode));
+	public static String toMD5(String data, String charset) {
+		byte[] md5 = toMD5Byte(CharsetUtils.toBytes(data, charset));
 		String sMD5 = BODHUtils.toHex(md5);
 		return sMD5;
 	}
@@ -83,7 +83,7 @@ public class CryptoUtils {
 	 * @return 32位MD5
 	 */
 	public static String toMD5(String[] datalist) {
-		return toMD5(datalist, DEFAULT_ENCODE);
+		return toMD5(datalist, DEFAULT_CHARSET);
 	}
 	
 	/**
@@ -92,9 +92,9 @@ public class CryptoUtils {
 	 * @param datalist 字符串编码
 	 * @return 32位MD5
 	 */
-	public static String toMD5(String[] datalist, String encode) {
+	public static String toMD5(String[] datalist, String charset) {
 		String data = StrUtils.concat(datalist);
-		return toMD5(data, encode);
+		return toMD5(data, charset);
 	}
 	
 	/**
@@ -131,22 +131,26 @@ public class CryptoUtils {
 	}
 	
 	public static String toDES(String data) {
-		return encrypt(CharsetUtils.toBytes(data, DEFAULT_ENCODE), 
-				CharsetUtils.toBytes(DEFAULT_KEY, DEFAULT_ENCODE));
+		return encrypt(CharsetUtils.toBytes(data, DEFAULT_CHARSET), 
+				CharsetUtils.toBytes(DEFAULT_KEY, DEFAULT_CHARSET));
 	}
 
 	public static String toDES(String data, String key) {
-		return encrypt(CharsetUtils.toBytes(data, DEFAULT_ENCODE), 
-				CharsetUtils.toBytes(key, DEFAULT_ENCODE));
+		return encrypt(CharsetUtils.toBytes(data, DEFAULT_CHARSET), 
+				CharsetUtils.toBytes(key, DEFAULT_CHARSET));
 	}
 	
-	public static String toDES(String data, String key, String encode) {
-		return encrypt(CharsetUtils.toBytes(data, encode), 
-				CharsetUtils.toBytes(key, encode));
+	public static String toDES(String data, String key, String charset) {
+		return encrypt(CharsetUtils.toBytes(data, charset), 
+				CharsetUtils.toBytes(key, charset));
 	}
 	
 	private static String encrypt(byte[] data, byte[] key) {
 		String eData = "";
+		if(data == null || data.length <= 0) {
+			return eData;
+		}
+		
 		int m = data.length / 8;
 		int n = data.length % 8;
 		
@@ -198,29 +202,32 @@ public class CryptoUtils {
 	
 	public static String deDES(String des) {
 		return decrypt(BODHUtils.toBytes(des), 
-				CharsetUtils.toBytes(DEFAULT_KEY, DEFAULT_ENCODE), 
-				DEFAULT_ENCODE);
+				CharsetUtils.toBytes(DEFAULT_KEY, DEFAULT_CHARSET), 
+				DEFAULT_CHARSET);
 	}
 	
 	public static String deDES(String des, String key) {
 		return decrypt(BODHUtils.toBytes(des), 
-				CharsetUtils.toBytes(key, DEFAULT_ENCODE), DEFAULT_ENCODE);
+				CharsetUtils.toBytes(key, DEFAULT_CHARSET), DEFAULT_CHARSET);
 	}
 	
-	public static String deDES(String des, String key, String encode) {
+	public static String deDES(String des, String key, String charset) {
 		return decrypt(BODHUtils.toBytes(des), 
-				CharsetUtils.toBytes(key, encode), encode);
+				CharsetUtils.toBytes(key, charset), charset);
 	}
 	
-	private static String decrypt(byte[] des, byte[] key, String encode) {
+	private static String decrypt(byte[] des, byte[] key, String charset) {
 		String dData = "";
-		byte[] buf = _decrypt(des, key, ALGORITHM_DES);
+		if(des == null || des.length <= 0) {
+			return dData;
+		}
 		
+		byte[] buf = _decrypt(des, key, ALGORITHM_DES);
 		try {
 			int i = 0;
 			while ((i < buf.length) && 
 					(buf[buf.length - 1 - i] == 0)) {  i++; }	// 去掉末尾0
-			dData = new String(buf, 0, buf.length - i, encode);	// 解密
+			dData = new String(buf, 0, buf.length - i, charset);	// 解密
 			
 		} catch (Exception e) {
 			log.error("执行 [{}解密] 失败.", ALGORITHM_DES, e);

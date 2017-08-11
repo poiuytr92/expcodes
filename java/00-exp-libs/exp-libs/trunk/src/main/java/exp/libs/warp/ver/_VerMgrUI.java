@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
@@ -31,7 +30,7 @@ import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.ui.SwingUtils;
-import exp.libs.warp.ui.cpt.tbl.AbstractTable;
+import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
 /**
@@ -494,22 +493,16 @@ class _VerMgrUI extends MainWindow {
 	 * @author Administrator
 	 * @date 2017年7月6日
 	 */
-	private class _HisVerTable extends AbstractTable {
+	private class _HisVerTable extends NormTable {
 		
 		private static final long serialVersionUID = -3111568334645181825L;
 		
-		private int curRow;
-		
-		private JPopupMenu popMenu;
-		
 		private _HisVerTable() {
 			super(HEADER, 100);
-			this.curRow = -1;
-			initPopMenu();
 		}
 		
-		private void initPopMenu() {
-			this.popMenu = new JPopupMenu();
+		@Override
+		protected void initRightBtnPopMenu(JPopupMenu popMenu) {
 			JMenuItem detail = new JMenuItem("查看详情");
 			JMenuItem delete = new JMenuItem("删除版本");
 			JMenuItem reflash = new JMenuItem("刷新列表");
@@ -521,7 +514,7 @@ class _VerMgrUI extends MainWindow {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					_VerInfo verInfo = getVerInfo(curRow);
+					_VerInfo verInfo = getVerInfo(getCurRow());
 					if(verInfo != null) {
 						verInfo._view();
 					}
@@ -532,7 +525,7 @@ class _VerMgrUI extends MainWindow {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					_VerInfo verInfo = getVerInfo(curRow);
+					_VerInfo verInfo = getVerInfo(getCurRow());
 					if(verInfo == null) {
 						return;
 					}
@@ -540,7 +533,6 @@ class _VerMgrUI extends MainWindow {
 					String desc = StrUtils.concat("删除版本 [", verInfo.getVersion(), "]");
 					if(SwingUtils.confirm(StrUtils.concat("确认", desc, " ?"))) {
 						if(delVerInfo(verInfo)) {
-							curRow = -1;
 							reflashHisVerTable();	// 刷新表单
 							SwingUtils.warn(StrUtils.concat("删除", desc, " 成功"));
 							
@@ -558,50 +550,6 @@ class _VerMgrUI extends MainWindow {
 					reflashHisVerTable();	// 刷新表单
 				}
 			});
-		}
-		
-		/**
-		 * 鼠标点击事件
-		 */
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			if(e.getButton() != MouseEvent.BUTTON3) {	
-				return;	// 只处理鼠标右键事件
-			}
-			
-			// 识别当前操作行（选中行优先，若无选中则为鼠标当前所在行）
-			curRow = getCurSelectRow();
-			curRow = (curRow < 0 ? getCurMouseRow() : curRow);
-			if(curRow < 0) {
-				return;
-			}
-			
-			// 呈现浮动菜单
-			popMenu.show(e.getComponent(), e.getX(), e.getY());
-		}
-
-		@Override
-		public void mouseDragged(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
 		}
 		
 	}

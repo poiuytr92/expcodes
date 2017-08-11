@@ -47,7 +47,7 @@ public abstract class AbstractTable extends _BaseTable {
 	
 	/**
 	 * 刷新表单数据
-	 * @param newDatas 新的表单数据
+	 * @param datas 新的表单数据
 	 */
 	public void reflash(List<List<String>> datas) {
 		if(datas == null) {
