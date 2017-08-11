@@ -2,8 +2,10 @@ package exp.sf.am.core;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
@@ -12,11 +14,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import exp.libs.warp.ui.SwingUtils;
-import exp.libs.warp.ui.cpt.tbl.AbstractTable;
+import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 import exp.sf.am.bean.TAccount;
 import exp.sf.am.bean.TUser;
@@ -68,20 +68,19 @@ public class _AccountWin extends MainWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
-		tabPanel.addChangeListener(new ChangeListener() {
-			
-			// FIXME : 连续点击同一个TAB不会触发第二次
+		tabPanel.addMouseListener(new MouseAdapter() {
 			@Override
-			public void stateChanged(ChangeEvent e) {
-				int idx = ((JTabbedPane) e.getSource()).getSelectedIndex();
+			public void mouseClicked(MouseEvent e) {
+				Rectangle searchBtn = tabPanel.getBoundsAt(1);
+				Rectangle addBtn = tabPanel.getBoundsAt(2);
 				
 				// 搜索帐密
-				if(idx == 1) {
+				if(searchBtn.contains(e.getX(), e.getY())) {
 					String keyword = SwingUtils.input("请输入搜索关键字:");
 					updateAccountTable(keyword);
 					
 				// 添加帐密
-				} else if(idx == 2) {
+				} else if(addBtn.contains(e.getX(), e.getY())) {
 					// TODO
 				}
 			}
@@ -119,24 +118,17 @@ public class _AccountWin extends MainWindow {
 	
 ///////////////////////////////////////////////////////////////////////////////
 	
-	// TODO 可以再封装一层， 带右键浮动菜单的表单, 右键表单自定义
-	private class AccountTable extends AbstractTable {
+	private class AccountTable extends NormTable {
 
 		/** serialVersionUID */
 		private static final long serialVersionUID = -2194275100301409161L;
 		
-		private int curRow;
-		
-		private JPopupMenu popMenu;
-		
 		public AccountTable() {
 			super(HEADER, 100);
-			this.curRow = -1;
-			initPopMenu();
 		}
 
-		private void initPopMenu() {
-			this.popMenu = new JPopupMenu();
+		@Override
+		protected void initRightBtnPopMenu(JPopupMenu popMenu) {
 			JMenuItem detail = new JMenuItem("查看详情");
 			JMenuItem reflash = new JMenuItem("刷新列表");
 			JMenuItem copy = new JMenuItem("复制到剪贴板");
@@ -178,35 +170,6 @@ public class _AccountWin extends MainWindow {
 				}
 			});
 		}
-		
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			if(e.getButton() != MouseEvent.BUTTON3) {	
-				return;	// 只处理鼠标右键事件
-			}
-			
-			// 识别当前操作行（选中行优先，若无选中则为鼠标当前所在行）
-			curRow = getCurSelectRow();
-			curRow = (curRow < 0 ? getCurMouseRow() : curRow);
-			if(curRow < 0) {
-				return;
-			}
-			
-			// 呈现浮动菜单
-			popMenu.show(e.getComponent(), e.getX(), e.getY());
-		}
-
-		@Override
-		public void mouseDragged(MouseEvent e) {}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {}
-
-		@Override
-		public void mousePressed(MouseEvent e) {}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {}
 		
 	}
 }
