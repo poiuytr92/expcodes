@@ -28,5 +28,6 @@ CREATE TABLE IF NOT EXISTS T_ACCOUNT (
   S_ANSWER2  TEXT(512)  NULL,			/* 密码提示答案2 */
   S_QUESTION3  TEXT(512)  NULL,			/* 密码提示问题3 */
   S_ANSWER3  TEXT(512)  NULL,			/* 密码提示答案3 */
-  S_REMARK  TEXT(1024)  NULL			/* 备注 */
+  S_REMARK  TEXT(1024)  NULL,			/* 备注 */
+  S_UPDATE_TIME  TEXT(32)  NULL			/* 最后修改时间 */
 );

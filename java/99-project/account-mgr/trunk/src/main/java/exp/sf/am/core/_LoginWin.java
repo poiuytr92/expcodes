@@ -54,7 +54,7 @@ public class _LoginWin extends MainWindow {
 	
 	private JButton registBtn;
 	
-	private _AccountWin accWin;
+	private _AccountListWin accWin;
 	
 	protected _LoginWin() {
 		super("登陆", WIDTH, HIGH);
@@ -160,7 +160,7 @@ public class _LoginWin extends MainWindow {
 					if(user != null) {
 						_hide();			// 隐藏登陆窗口
 						helpWin._hide();	// 隐藏帮助窗口
-						accWin = new _AccountWin(user);
+						accWin = new _AccountListWin(user);
 						accWin._view();		// 显示帐密管理窗口
 						
 						String nickName = user.getNickname();

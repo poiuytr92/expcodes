@@ -3,6 +3,7 @@ package exp.sf.am.bean;
 import java.sql.Connection;
 import java.util.List;
 
+import exp.libs.utils.time.TimeUtils;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.sf.am.utils.CryptoUtils;
 
@@ -21,7 +22,7 @@ public class TAccount  {
     
     /** insert sql */
     public final static String SQL_INSERT = 
-            "INSERT INTO T_ACCOUNT(I_ID, I_USER_ID, S_APP_NAME, S_URL, S_LOGIN_USERNAME, S_LOGIN_PASSWORD, S_QUERY_PASSWORD, S_ATM_PASSWORD, S_PAY_PASSWORD, S_SERVICE_PASSWORD, S_EMAIL, S_PHONE, S_IDCARD_NUM, S_IDCARD_NAME, S_QUESTION1, S_ANSWER1, S_QUESTION2, S_ANSWER2, S_QUESTION3, S_ANSWER3, S_REMARK) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            "INSERT INTO T_ACCOUNT(I_ID, I_USER_ID, S_APP_NAME, S_URL, S_LOGIN_USERNAME, S_LOGIN_PASSWORD, S_QUERY_PASSWORD, S_ATM_PASSWORD, S_PAY_PASSWORD, S_SERVICE_PASSWORD, S_EMAIL, S_PHONE, S_IDCARD_NUM, S_IDCARD_NAME, S_QUESTION1, S_ANSWER1, S_QUESTION2, S_ANSWER2, S_QUESTION3, S_ANSWER3, S_REMARK, S_UPDATE_TIME) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     
     /** delete sql */
     public final static String SQL_DELETE = 
@@ -29,11 +30,11 @@ public class TAccount  {
     
     /** update sql */
     public final static String SQL_UPDATE = 
-            "UPDATE T_ACCOUNT SET I_USER_ID = ?, S_APP_NAME = ?, S_URL = ?, S_LOGIN_USERNAME = ?, S_LOGIN_PASSWORD = ?, S_QUERY_PASSWORD = ?, S_ATM_PASSWORD = ?, S_PAY_PASSWORD = ?, S_SERVICE_PASSWORD = ?, S_EMAIL = ?, S_PHONE = ?, S_IDCARD_NUM = ?, S_IDCARD_NAME = ?, S_QUESTION1 = ?, S_ANSWER1 = ?, S_QUESTION2 = ?, S_ANSWER2 = ?, S_QUESTION3 = ?, S_ANSWER3 = ?, S_REMARK = ? WHERE 1 = 1 ";
+            "UPDATE T_ACCOUNT SET I_USER_ID = ?, S_APP_NAME = ?, S_URL = ?, S_LOGIN_USERNAME = ?, S_LOGIN_PASSWORD = ?, S_QUERY_PASSWORD = ?, S_ATM_PASSWORD = ?, S_PAY_PASSWORD = ?, S_SERVICE_PASSWORD = ?, S_EMAIL = ?, S_PHONE = ?, S_IDCARD_NUM = ?, S_IDCARD_NAME = ?, S_QUESTION1 = ?, S_ANSWER1 = ?, S_QUESTION2 = ?, S_ANSWER2 = ?, S_QUESTION3 = ?, S_ANSWER3 = ?, S_REMARK = ?, S_UPDATE_TIME = ? WHERE 1 = 1 ";
     
     /** select sql */
     public final static String SQL_SELECT = 
-            "SELECT I_ID AS 'id', I_USER_ID AS 'userId', S_APP_NAME AS 'appName', S_URL AS 'url', S_LOGIN_USERNAME AS 'loginUsername', S_LOGIN_PASSWORD AS 'loginPassword', S_QUERY_PASSWORD AS 'queryPassword', S_ATM_PASSWORD AS 'atmPassword', S_PAY_PASSWORD AS 'payPassword', S_SERVICE_PASSWORD AS 'servicePassword', S_EMAIL AS 'email', S_PHONE AS 'phone', S_IDCARD_NUM AS 'idcardNum', S_IDCARD_NAME AS 'idcardName', S_QUESTION1 AS 'question1', S_ANSWER1 AS 'answer1', S_QUESTION2 AS 'question2', S_ANSWER2 AS 'answer2', S_QUESTION3 AS 'question3', S_ANSWER3 AS 'answer3', S_REMARK AS 'remark' FROM T_ACCOUNT WHERE 1 = 1 ";
+            "SELECT I_ID AS 'id', I_USER_ID AS 'userId', S_APP_NAME AS 'appName', S_URL AS 'url', S_LOGIN_USERNAME AS 'loginUsername', S_LOGIN_PASSWORD AS 'loginPassword', S_QUERY_PASSWORD AS 'queryPassword', S_ATM_PASSWORD AS 'atmPassword', S_PAY_PASSWORD AS 'payPassword', S_SERVICE_PASSWORD AS 'servicePassword', S_EMAIL AS 'email', S_PHONE AS 'phone', S_IDCARD_NUM AS 'idcardNum', S_IDCARD_NAME AS 'idcardName', S_QUESTION1 AS 'question1', S_ANSWER1 AS 'answer1', S_QUESTION2 AS 'question2', S_ANSWER2 AS 'answer2', S_QUESTION3 AS 'question3', S_ANSWER3 AS 'answer3', S_REMARK AS 'remark', S_UPDATE_TIME AS 'updateTime' FROM T_ACCOUNT WHERE 1 = 1 ";
 
     /** I_ID */
     private Integer id;
@@ -98,6 +99,15 @@ public class TAccount  {
     /** S_REMARK */
     private String remark;
 
+    /** S_UPDATE_TIME */
+    private String updateTime;
+    
+    public TAccount() {}
+    
+    public TAccount(int userId) {
+    	this.userId = userId;
+    }
+    
     /**
      * insert the bean of TAccount to db.
      * 
@@ -127,7 +137,8 @@ public class TAccount  {
                 bean.answer2,
                 bean.question3,
                 bean.answer3,
-                bean.remark
+                bean.remark, 
+                TimeUtils.getSysDate()
         };
         return DBUtils.execute(conn, TAccount.SQL_INSERT, params);
     }
@@ -194,7 +205,8 @@ public class TAccount  {
                 bean.answer2,
                 bean.question3,
                 bean.answer3,
-                bean.remark
+                bean.remark, 
+                TimeUtils.getSysDate()
         };
         return DBUtils.execute(conn, sql.toString(), params);
     }    
@@ -662,7 +674,23 @@ public class TAccount  {
     public void encodeRemark(String remark) {
         this.remark = CryptoUtils.encode(remark);
     }
+    
+    /**
+     * getUpdateTime
+     * @return String
+     */
+    public String getUpdateTime() {
+        return this.updateTime;
+    }
 
+    /**
+     * setUpdateTime
+     * @param updateTime updateTime to set
+     */
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
+    
     /**
      * get column name
      * @return I_ID
@@ -829,6 +857,14 @@ public class TAccount  {
      */
     public static String getRemark$CN() {
         return "S_REMARK";
+    }
+    
+    /**
+     * get column name
+     * @return S_UPDATE_TIME
+     */
+    public static String getUpdateTime$CN() {
+        return "S_UPDATE_TIME";
     }
 
     /**
@@ -998,13 +1034,21 @@ public class TAccount  {
     public static String getRemark$JN() {
         return "remark";
     }
+    
+    /**
+     * get java name
+     * @return updateTime
+     */
+    public static String getUpdateTime$JN() {
+        return "updateTime";
+    }
 
     /**
      * get all column names
      * @return String
      */
     public static String getAllColNames() {
-        return "I_ID, I_USER_ID, S_APP_NAME, S_URL, S_LOGIN_USERNAME, S_LOGIN_PASSWORD, S_QUERY_PASSWORD, S_ATM_PASSWORD, S_PAY_PASSWORD, S_SERVICE_PASSWORD, S_EMAIL, S_PHONE, S_IDCARD_NUM, S_IDCARD_NAME, S_QUESTION1, S_ANSWER1, S_QUESTION2, S_ANSWER2, S_QUESTION3, S_ANSWER3, S_REMARK";
+        return "I_ID, I_USER_ID, S_APP_NAME, S_URL, S_LOGIN_USERNAME, S_LOGIN_PASSWORD, S_QUERY_PASSWORD, S_ATM_PASSWORD, S_PAY_PASSWORD, S_SERVICE_PASSWORD, S_EMAIL, S_PHONE, S_IDCARD_NUM, S_IDCARD_NAME, S_QUESTION1, S_ANSWER1, S_QUESTION2, S_ANSWER2, S_QUESTION3, S_ANSWER3, S_REMARK, S_UPDATE_TIME";
     }
 
     /**
@@ -1012,7 +1056,7 @@ public class TAccount  {
      * @return String
      */
     public static String getAllJavaNames() {
-        return "id, userId, appName, url, loginUsername, loginPassword, queryPassword, atmPassword, payPassword, servicePassword, email, phone, idcardNum, idcardName, question1, answer1, question2, answer2, question3, answer3, remark";
+        return "id, userId, appName, url, loginUsername, loginPassword, queryPassword, atmPassword, payPassword, servicePassword, email, phone, idcardNum, idcardName, question1, answer1, question2, answer2, question3, answer3, remark, updateTime";
     }
 
     /**
@@ -1051,7 +1095,8 @@ public class TAccount  {
 				getAnswer2().contains(keyword) || 
 				getQuestion3().contains(keyword) || 
 				getAnswer3().contains(keyword) || 
-				getRemark().contains(keyword)) {
+				getRemark().contains(keyword) || 
+				getUpdateTime().contains(keyword)) {
     		contains = true;
 		}
     	return contains;
@@ -1086,6 +1131,7 @@ public class TAccount  {
         sb.append("\tS_QUESTION3/question3").append(" = ").append(this.getQuestion3()).append("\r\n");
         sb.append("\tS_ANSWER3/answer3").append(" = ").append(this.getAnswer3()).append("\r\n");
         sb.append("\tS_REMARK/remark").append(" = ").append(this.getRemark()).append("\r\n");
+        sb.append("\tS_UPDATE_TIME/updateTime").append(" = ").append(this.getUpdateTime()).append("\r\n");
         sb.append("}\r\n");
         return sb.toString();
     }

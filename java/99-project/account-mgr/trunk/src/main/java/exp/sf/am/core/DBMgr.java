@@ -107,4 +107,22 @@ class DBMgr {
 		return (accounts == null ? new LinkedList<TAccount>() : accounts);
 	}
 	
+	protected static boolean edit(TAccount account) {
+		boolean isOk = false;
+		Connection conn = SqliteUtils.getConn(ds);
+		if(account.getId() == null) {
+			isOk = TAccount.insert(conn, account);
+			
+		} else {
+			String where = StrUtils.concat(TAccount.getId$CN(), " = ", account.getId());
+			isOk = TAccount.update(conn, account, where);
+		}
+		SqliteUtils.close(conn);
+		return isOk;
+	}
+	
+	protected static boolean delete(TAccount account) {
+		return true;
+	}
+	
 }
