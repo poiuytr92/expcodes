@@ -2,7 +2,7 @@ package exp.libs.utils.os;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.ClipboardOwner;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 
@@ -80,18 +80,30 @@ public final class OSUtils {
 	}
 	
 	/**
-	 * 复制内容到剪切板
-	 * @param result  结果
+	 * 复制文本到剪切板
+	 * @param txt 文本内容
 	 */
-	public static void copyToClipBoard(String str) {
+	public static void copyToClipboard(final String txt) {
 		Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-		clipboard.setContents(
-				new StringSelection(str),
-				new ClipboardOwner() {
-					public void lostOwnership(
-							Clipboard clipboard, Transferable contents) {
-						// None
-					}
-		});
+		clipboard.setContents(new StringSelection(txt), null);
 	}
+	
+	/**
+	 * 从剪切板获得文字
+	 * @return 文本内容
+	 */
+	public static String pasteFromClipboard() {
+		String txt = "";
+		Clipboard sysClip = Toolkit.getDefaultToolkit().getSystemClipboard();
+		Transferable tf = sysClip.getContents(null);
+		if (tf != null) {
+			if (tf.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+				try {
+					txt = (String) tf.getTransferData(DataFlavor.stringFlavor);
+				} catch (Exception e) {}
+			}
+		}
+		return txt;
+	}
+
 }
