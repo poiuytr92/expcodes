@@ -5,6 +5,7 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import javax.swing.JToolTip;
 
+import exp.libs.utils.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
@@ -14,7 +15,7 @@ public class _HelpWin extends PopChildWindow {
 	private static final long serialVersionUID = -6529277202660835224L;
 
 	protected _HelpWin() {
-		super("", _LoginWin.WIDTH, 270);
+		super("", _LoginWin.WIDTH, 170);
 	}
 	
 	@Override
@@ -25,37 +26,24 @@ public class _HelpWin extends PopChildWindow {
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
 		JToolTip toolTip = new JToolTip();
-		toolTip.setTipText(
-			"<html>"
-				+ "<body bgcolor=\"#99CCDD\">In case you thought that tooltips had to be"
-					+ "<p>新用户输入帐密后点击注册即可 <font color=blue size=+2>Swing!</font> team"
-					+ "<p>is happy to shatter your illusions."
-					+ "<p>In Swing, you can use <b>HTML</b> to "
-					+ "<ul>"
-						+ "<li>Have Lists<li><b>Bold</b> text"
-						+ "<li><em>emphasized</em>text"
-						+ "<li>text with <font color=red>Color</font><li>text in different <font size=+3>sizes</font>"
-						+ "<li>and <font face=AvantGarde>Fonts</font>"
-					+ "</ul>"
-					+ "Oh, and they can be <i>multi-line</i>, too."
-				+ "</body>"
-			+ "</html>");
-		
-//		toolTip.setToolTipText("");
+		toolTip.setTipText(StrUtils.concat(
+			"<html>", 
+				"<body bgcolor=\"#99CCDD\">", 
+					"<p>", 
+					"<p> <b>欢迎使用 <font color=\"#AA2222\" size=+1>帐密管理工具</font></b>", 
+					"<p>", 
+					"<p>  ● 此软件 <b>不会联网</b>  <em>(欢迎检测网络端口)</em>", 
+					"<p>  ● 首次使用需在 <b>本地注册</b> 以保护你的帐密", 
+					"<p>  ● 登记的帐密会 <b>加密存储</b> 以确保帐密存档安全", 
+					"<p>", 
+					"<p> 释放你的记忆~ 更方便地管理你的密码吧 O(∩_∩)O", 
+					"<p>", 
+				"</body>", 
+			"</html>")
+		);
 		rootPanel.add(toolTip, BorderLayout.CENTER);
 	}
 	
-//	private JComponent createToolTipRegion(String text) {
-//        JLabel region = new JLabel(text);
-//
-//        region.setForeground(Color.white);
-//        region.setFont(getFont().deriveFont(18f));
-//        region.setHorizontalAlignment(JLabel.CENTER);
-//        region.setVerticalAlignment(JLabel.CENTER);
-//
-//        return region;
-//    }
-
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
 		// TODO Auto-generated method stub

@@ -32,7 +32,8 @@ class DBMgr {
 	
 	protected static boolean initEnv() {
 		boolean isOk = true;
-		if(!new File(ENV_DB).exists()) {
+		File dbFile = new File(ENV_DB);
+		if(!dbFile.exists()) {
 			Connection conn = SqliteUtils.getConn(ds);
 			String script = FileUtils.readFileInJar(ENV_DB_SCRIPT, Charset.ISO);
 			String[] sqls = script.split(";");
@@ -42,6 +43,8 @@ class DBMgr {
 				}
 			}
 			SqliteUtils.close(conn);
+			
+			FileUtils.hide(dbFile);
 		}
 		return isOk;
 	}
