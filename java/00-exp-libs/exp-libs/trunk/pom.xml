@@ -37,7 +37,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
-        <auto.package.plugin.version>1.2.0.9</auto.package.plugin.version>
+        <auto.package.plugin.version>1.2.0.4</auto.package.plugin.version>
     </properties>
 
     <!-- 项目依赖 -->
@@ -102,8 +102,8 @@
 	      <version>0.9.1</version>
 	      <exclusions>
 	        <exclusion>
+	          <groupId>org.apache</groupId>
 	          <artifactId>log4j</artifactId>
-	          <groupId>log4j</groupId>
 	        </exclusion>
 	        <exclusion>
 	          <artifactId>avalon-framework-api</artifactId>
@@ -241,9 +241,9 @@
 	      <version>1.1.1</version>
 	    </dependency>
 	    <dependency>
-		    <groupId>javax.mail</groupId>
-		    <artifactId>mail</artifactId>
-		    <version>1.4.1</version>
+		   <groupId>javax.mail</groupId>
+		   <artifactId>mail</artifactId>
+		   <version>1.4.1</version>
 		</dependency>
 	    
 	    <!-- apache-jms -->
@@ -314,11 +314,6 @@
 	      <groupId>commons-codec</groupId>
 	      <artifactId>commons-codec</artifactId>
 	      <version>1.8</version>
-	    </dependency>
-	    <dependency>
-	      <groupId>ch.qos.logback</groupId>
-	      <artifactId>logback-classic</artifactId>
-	      <version>1.0.13</version>
 	    </dependency>
 	    <dependency>
 	      <groupId>org.apache</groupId>
