@@ -428,7 +428,7 @@
 							<winMavenLibPath>D:\mavenRepository</winMavenLibPath>
 							<pathPrefixMode>2</pathPrefixMode>
 							<mainProVersion>false</mainProVersion>
-							<noVerJars>explibs-,catt-</noVerJars>
+							<noVerJars>explibs-,exp-libs-,catt-</noVerJars>
 							<cpsMain>true</cpsMain>
 							<cpsAnt>false</cpsAnt>
 							<cpsCrypto>false</cpsCrypto>
