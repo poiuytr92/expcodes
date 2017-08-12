@@ -1123,7 +1123,7 @@ public class TAccount  {
         sb.append(" 密码提示答案2").append(" : ").append(this.getAnswer2()).append("\r\n");
         sb.append(" 密码提示问题3").append(" : ").append(this.getQuestion3()).append("\r\n");
         sb.append(" 密码提示答案3").append(" : ").append(this.getAnswer3()).append("\r\n");
-        sb.append(" 备注").append(" = ").append(this.getRemark()).append("\r\n");
+        sb.append(" 备注").append(" : ").append(this.getRemark()).append("\r\n");
         return sb.toString();
     }
     
