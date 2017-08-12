@@ -20,7 +20,7 @@ class DBMgr {
 
 	private final static String ENV_DB_SCRIPT = "/exp/sf/am/bean/AM-DB.sql";
 	
-	private final static String ENV_DB = "./conf/.AM";
+	private final static String ENV_DB = "./lib/.AM";
 	
 	private final static DataSourceBean ds = new DataSourceBean();
 	static {
@@ -122,7 +122,11 @@ class DBMgr {
 	}
 	
 	protected static boolean delete(TAccount account) {
-		return true;
+		Connection conn = SqliteUtils.getConn(ds);
+		String where = StrUtils.concat(TAccount.getId$CN(), " = ", account.getId());
+		boolean isOk = TAccount.delete(conn, where);
+		SqliteUtils.close(conn);
+		return isOk;
 	}
 	
 }

@@ -20,7 +20,6 @@ import exp.sf.am.core.AppMgr;
 public class Main {
 	
 	public static void main(String[] args) {
-		LogUtils.loadLogBackConfig();
 		BeautyEyeUtils.init(FrameBorderStyle.translucencySmallShadow);
 		AppMgr.createInstn();
 	}

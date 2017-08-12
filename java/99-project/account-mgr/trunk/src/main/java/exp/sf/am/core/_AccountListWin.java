@@ -18,6 +18,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTabbedPane;
 
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.os.OSUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -29,7 +30,7 @@ public class _AccountListWin extends MainWindow {
 	private static final long serialVersionUID = -3227397290475968153L;
 
 	private final static String[] HEADER = {
-		"相关应用", "相关网址", "登陆账号", "登陆密码", "绑定邮箱", "绑定手机", "最后修改时间", "提示"
+		"相关应用", "相关网址", "登陆账号", "登陆密码", "绑定邮箱", "绑定手机", "最后修改时间"
 	};
 	
 	private JTabbedPane tabPanel;
@@ -80,24 +81,27 @@ public class _AccountListWin extends MainWindow {
 				// 搜索帐密
 				if(searchBtn.contains(e.getX(), e.getY())) {
 					String keyword = SwingUtils.input("请输入搜索关键字:");
-					updateAccountTable(keyword);
-					SwingUtils.info(StrUtils.concat("找到 [", accounts.size(), "] 条相关记录"));
+					if(StrUtils.isNotTrimEmpty(keyword)) {
+						updateAccountTable(keyword);
+						SwingUtils.info(StrUtils.concat("找到 [", accounts.size(), "] 条相关记录"));
+					}
 					
 				// 添加帐密
 				} else if(addBtn.contains(e.getX(), e.getY())) {
 					TAccount account = new TAccount(user.getId());
-					editAccount(account);
+					editAccount(account, true);
 				}
 			}
 		});
 	}
 	
-	private void editAccount(TAccount account) {
+	private void editAccount(TAccount account, boolean add) {
 		if(account == null) {
 			return;
 		}
 		
-		final _AccountWin win = new _AccountWin(account, true);
+		final _AccountWin win = new _AccountWin(account, 
+				(add ? _AccountWin.TYPE_ADD : _AccountWin.TYPE_EDIT));
 		win.addWindowListener(new WindowAdapter() {
 			public void windowClosed(WindowEvent e) {
 				if(win.isEdited()) {
@@ -129,7 +133,6 @@ public class _AccountListWin extends MainWindow {
 			row.add(account.getEmail());
 			row.add(account.getPhone());
 			row.add(account.getUpdateTime());
-			row.add("右键详情查看更多");
 			datas.add(row);
 		}
 		return datas;
@@ -184,7 +187,7 @@ public class _AccountListWin extends MainWindow {
 					int rowId = getCurRow();
 					TAccount account = getAccount(rowId);
 					if(account != null) {
-						new _AccountWin(account, false)._view();
+						new _AccountWin(account, _AccountWin.TYPE_DETAIL)._view();
 					}
 				}
 			});
@@ -193,7 +196,12 @@ public class _AccountListWin extends MainWindow {
 				
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					//TODO
+					int rowId = getCurRow();
+					TAccount account = getAccount(rowId);
+					if(account != null) {
+						OSUtils.copyToClipboard(account.toInfo());
+						SwingUtils.info("复制到剪贴板成功");
+					}
 				}
 			});
 
@@ -203,7 +211,7 @@ public class _AccountListWin extends MainWindow {
 				public void actionPerformed(ActionEvent e) {
 					int rowId = getCurRow();
 					TAccount account = getAccount(rowId);
-					editAccount(account);
+					editAccount(account, false);
 				}
 			});
 

@@ -34,9 +34,9 @@ public class _LoginWin extends MainWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = -1752327112586227761L;
 
-	protected final static int HIGH = 210;
+	protected final static int HIGH = 230;
 	
-	protected final static int WIDTH = 330;
+	protected final static int WIDTH = 380;
 	
 	private final static String FOLD = "︽", OPEN = "︾";
 	

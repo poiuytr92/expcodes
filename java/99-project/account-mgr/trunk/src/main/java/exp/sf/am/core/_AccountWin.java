@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.os.OSUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
@@ -26,6 +27,14 @@ class _AccountWin extends PopChildWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = 8372296143631208035L;
 
+	protected final static Integer TYPE_ADD = 1;
+	
+	protected final static Integer TYPE_EDIT = 2;
+	
+	protected final static Integer TYPE_DETAIL = 3;
+	
+	private Integer type;
+	
 	private JTextField appName;
 
     private JTextField url;
@@ -70,23 +79,24 @@ class _AccountWin extends PopChildWindow {
 	
 	private TAccount account;
 	
-	private boolean edit;
-	
 	private boolean edited;
 	
-	protected _AccountWin(TAccount account, Boolean edit) {
-		super((edit ? "编辑帐密" : "查看详情"), 600, 580, false, account, edit);
+	protected _AccountWin(TAccount account, Integer type) {
+		super((type == TYPE_ADD ? "添加帐密" : 
+			(type == TYPE_EDIT ? "编辑帐密" : "查看详情")), 
+			600, 590, false, account, type);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
 		this.account = (TAccount) args[0];
-		this.edit = (Boolean) args[1];
-		initAccountField(edit);
+		this.type = (Integer) args[1];
+		initAccountField();
 		this.edited = false;
 	}
 	
-	private void initAccountField(boolean edit) {
+	private void initAccountField() {
+		boolean edit = (this.type != TYPE_DETAIL);
 		this.appName = new JTextField(); { appName.setEditable(edit); }
 		this.url = new JTextField(); { url.setEditable(edit); }
 		this.loginUsername = new JTextField(); { loginUsername.setEditable(edit); }
@@ -105,11 +115,15 @@ class _AccountWin extends PopChildWindow {
 		this.answer2 = new JTextField(); { answer2.setEditable(edit); }
 		this.question3 = new JTextField(); { question3.setEditable(edit); }
 		this.answer3 = new JTextField(); { answer3.setEditable(edit); }
-		this.remark = new JTextArea(5, 8); { remark.setEditable(edit); }
+		this.remark = new JTextArea(4, 8); { remark.setEditable(edit); }
 		
-		this.okBtn = new JButton("确认"); { okBtn.setEnabled(edit); }
+		this.okBtn = new JButton(edit ? "保存" : "复制");
 		this.offBtn = new JButton("关闭");
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, okBtn, offBtn);
+		
+		if(this.type == TYPE_DETAIL || this.type == TYPE_EDIT) {
+			setValueToUI();
+		}
 	}
 
 	private boolean getValueFromUI() {
@@ -126,7 +140,7 @@ class _AccountWin extends PopChildWindow {
 			account.encodeEmail(email.getText());
 			account.encodePhone(phone.getText());
 			account.encodeIdcardNum(idcardNum.getText());
-			account.encodeIdcardNum(idcardNum.getText());
+			account.encodeIdcardName(idcardName.getText());
 			account.encodeQuestion1(question1.getText());
 			account.encodeAnswer1(answer1.getText());
 			account.encodeQuestion2(question2.getText());
@@ -136,6 +150,28 @@ class _AccountWin extends PopChildWindow {
 			account.encodeRemark(remark.getText());
 		}
 		return isOk;
+	}
+	
+	private void setValueToUI() {
+		appName.setText(account.getAppName());
+		url.setText(account.getUrl());
+		loginUsername.setText(account.getLoginUsername());
+		loginPassword.setText(account.getLoginPassword());
+		queryPassword.setText(account.getQueryPassword());
+		atmPassword.setText(account.getAtmPassword());
+		payPassword.setText(account.getPayPassword());
+		servicePassword.setText(account.getServicePassword());
+		email.setText(account.getEmail());
+		phone.setText(account.getPhone());
+		idcardNum.setText(account.getIdcardNum());
+		idcardName.setText(account.getIdcardName());
+		question1.setText(account.getQuestion1());
+		answer1.setText(account.getAnswer1());
+		question2.setText(account.getQuestion2());
+		answer2.setText(account.getAnswer2());
+		question3.setText(account.getQuestion3());
+		answer3.setText(account.getAnswer3());
+		remark.setText(account.getRemark());
 	}
 	
 	@Override
@@ -212,12 +248,23 @@ class _AccountWin extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(getValueFromUI()) {
-					edited = DBMgr.edit(account);
-					SwingUtils.info("保存".concat(edited ? "成功" : "失败"));
+				if(type == TYPE_DETAIL) {
+					OSUtils.copyToClipboard(account.toInfo());
+					SwingUtils.info("复制到剪贴板成功");
 					
 				} else {
-					SwingUtils.info("[应用名称] 不能为空");
+					if(getValueFromUI()) {
+						edited = DBMgr.edit(account);
+						if(edited == true) {
+							SwingUtils.info("保存成功");
+							_hide();
+							
+						} else {
+							SwingUtils.info("保存失败");
+						}
+					} else {
+						SwingUtils.info("[应用名称] 不能为空");
+					}
 				}
 			}
 		});

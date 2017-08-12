@@ -1102,6 +1102,31 @@ public class TAccount  {
     	return contains;
     }
     
+    public String toInfo() {
+    	StringBuilder sb = new StringBuilder();
+        sb.append("详细帐密信息(").append(getUpdateTime()).append(") : \r\n");
+        sb.append(" 应用名称").append(" : ").append(this.getAppName()).append("\r\n");
+        sb.append(" 相关网址").append(" : ").append(this.getUrl()).append("\r\n");
+        sb.append(" 登陆账号").append(" : ").append(this.getLoginUsername()).append("\r\n");
+        sb.append(" 登陆密码").append(" : ").append(this.getLoginPassword()).append("\r\n");
+        sb.append(" 查询密码").append(" : ").append(this.getQueryPassword()).append("\r\n");
+        sb.append(" 取款密码").append(" : ").append(this.getAtmPassword()).append("\r\n");
+        sb.append(" 支付密码").append(" : ").append(this.getPayPassword()).append("\r\n");
+        sb.append(" 服务密码").append(" : ").append(this.getServicePassword()).append("\r\n");
+        sb.append(" 绑定邮箱").append(" : ").append(this.getEmail()).append("\r\n");
+        sb.append(" 绑定手机").append(" : ").append(this.getPhone()).append("\r\n");
+        sb.append(" 绑定身份证号码").append(" : ").append(this.getIdcardNum()).append("\r\n");
+        sb.append(" 绑定身份证姓名").append(" : ").append(this.getIdcardName()).append("\r\n");
+        sb.append(" 密码提示问题1").append(" : ").append(this.getQuestion1()).append("\r\n");
+        sb.append(" 密码提示答案1").append(" : ").append(this.getAnswer1()).append("\r\n");
+        sb.append(" 密码提示问题2").append(" : ").append(this.getQuestion2()).append("\r\n");
+        sb.append(" 密码提示答案2").append(" : ").append(this.getAnswer2()).append("\r\n");
+        sb.append(" 密码提示问题3").append(" : ").append(this.getQuestion3()).append("\r\n");
+        sb.append(" 密码提示答案3").append(" : ").append(this.getAnswer3()).append("\r\n");
+        sb.append(" 备注").append(" = ").append(this.getRemark()).append("\r\n");
+        return sb.toString();
+    }
+    
     /**
      * toString
      * @return String

@@ -39,7 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
 		<explibs.version>1.0-SNAPSHOT</explibs.version>
-		<catt.plugin.version>1.2.0.9</catt.plugin.version>
+		<catt.plugin.version>1.2.0.4</catt.plugin.version>
 	</properties>
 
 	<!-- 项目依赖 -->
@@ -271,24 +271,6 @@
 						<phase>install</phase>
 						<configuration>
 							<target>
-								<echo>拷贝数据库脚本</echo>
-								<copy todir="${release.dir}/script">
-									<fileset dir="script"></fileset>
-								</copy>
-								<echo>拷贝项目配置文件</echo>
-								<copy todir="${release.dir}/conf">
-									<fileset dir="conf" />
-								</copy>
-								<echo>拷贝文档</echo>
-								<copy todir="${release.dir}/doc/04_维护文档">
-									<fileset dir="doc/04_维护文档"></fileset>
-								</copy>
-								<copy todir="${release.dir}/doc/06_使用文档">
-									<fileset dir="doc/06_使用文档"></fileset>
-								</copy>
-								<copy todir="${release.dir}/doc/07_演示文档">
-									<fileset dir="doc/07_演示文档"></fileset>
-								</copy>
 								<echo>拷贝编译jar文件</echo>
 								<copy file="${release.dir}.jar"
 									tofile="${release.dir}/lib/${project.artifactId}.jar" />
