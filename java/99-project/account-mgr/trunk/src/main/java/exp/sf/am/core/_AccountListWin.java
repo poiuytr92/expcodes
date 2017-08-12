@@ -222,6 +222,11 @@ public class _AccountListWin extends MainWindow {
 					int rowId = getCurRow();
 					TAccount account = getAccount(rowId);
 					if(account != null) {
+						if(!SwingUtils.confirm("要删除 [".concat(
+									account.getAppName()).concat("] 吗?"))) {
+							return;
+						}
+						
 						if(DBMgr.delete(account)) {
 							updateAccountTable();
 							SwingUtils.info("删除 [".concat(
