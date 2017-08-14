@@ -84,7 +84,7 @@ class _AccountWin extends PopChildWindow {
 	protected _AccountWin(TAccount account, Integer type) {
 		super((type == TYPE_ADD ? "添加帐密" : 
 			(type == TYPE_EDIT ? "编辑帐密" : "查看详情")), 
-			600, 575, false, account, type);
+			600, 580, false, account, type);
 	}
 	
 	@Override
@@ -219,7 +219,6 @@ class _AccountWin extends PopChildWindow {
 					getWEBorderPanel("密码提示答案3", answer3)));
 			panel.add(new JLabel());
 			panel.add(getWEBorderPanel("备注", SwingUtils.addScroll(remark)));
-			panel.add(new JLabel());
 			panel.add(toBtnPanel());
 			panel.add(new JLabel());
 		} SwingUtils.addBorder(panel);

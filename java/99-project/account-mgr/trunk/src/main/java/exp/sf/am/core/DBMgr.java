@@ -20,20 +20,25 @@ class DBMgr {
 
 	private final static String ENV_DB_SCRIPT = "/exp/sf/am/bean/AM-DB.sql";
 	
-	private final static String ENV_DB = "./lib/.AM";
+	private final static String ENV_DB_DIR = "./lib/";
+	
+	private final static String ENV_DB_NAME = ".AM";
+	
+	private final static String ENV_DB_PATH = ENV_DB_DIR.concat(ENV_DB_NAME);
 	
 	private final static DataSourceBean ds = new DataSourceBean();
 	static {
 		ds.setDriver(DBType.SQLITE.DRIVER);
-		ds.setName(ENV_DB);
+		ds.setName(ENV_DB_PATH);
 	}
 	
 	private DBMgr() {}
 	
 	protected static boolean initEnv() {
 		boolean isOk = true;
-		File dbFile = new File(ENV_DB);
+		File dbFile = new File(ENV_DB_PATH);
 		if(!dbFile.exists()) {
+			FileUtils.createDir(ENV_DB_DIR);
 			Connection conn = SqliteUtils.getConn(ds);
 			String script = FileUtils.readFileInJar(ENV_DB_SCRIPT, Charset.ISO);
 			String[] sqls = script.split(";");
