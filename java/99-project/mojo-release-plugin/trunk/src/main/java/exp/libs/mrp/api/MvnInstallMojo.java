@@ -2,6 +2,7 @@ package exp.libs.mrp.api;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
 
 /**
  * <PRE>
@@ -34,7 +35,7 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	 * @required
 	 * @readonly
 	 */
-	private org.apache.maven.project.MavenProject project;
+	private MavenProject project;
 
 	/**
 	 * <PRE>
@@ -180,6 +181,70 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public MavenProject getProject() {
+		return project;
+	}
+
+	public String getDependType() {
+		return dependType;
+	}
+
+	public String getWinMavenRepository() {
+		return winMavenRepository;
+	}
+
+	public String getLinuxMavenRepository() {
+		return linuxMavenRepository;
+	}
+
+	public String getWinLibPath() {
+		return winLibPath;
+	}
+
+	public String getLinuxLibPath() {
+		return linuxLibPath;
+	}
+
+	public String getMainClass() {
+		return mainClass;
+	}
+
+	public String getVerClass() {
+		return verClass;
+	}
+
+	public String getCharset() {
+		return charset;
+	}
+
+	public String getXms() {
+		return xms;
+	}
+
+	public String getXmx() {
+		return xmx;
+	}
+
+	public String getJdkParams() {
+		return jdkParams;
+	}
+
+	public String getThreadSuffix() {
+		return threadSuffix;
+	}
+
+	public String getNoPrjVer() {
+		return noPrjVer;
+	}
+
+	public String getNoVerJars() {
+		return noVerJars;
+	}
+
+	public String getCmpPathMode() {
+		return cmpPathMode;
 	}
 
 }
