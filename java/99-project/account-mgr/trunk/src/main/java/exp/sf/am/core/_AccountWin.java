@@ -84,7 +84,7 @@ class _AccountWin extends PopChildWindow {
 	protected _AccountWin(TAccount account, Integer type) {
 		super((type == TYPE_ADD ? "添加帐密" : 
 			(type == TYPE_EDIT ? "编辑帐密" : "查看详情")), 
-			600, 590, false, account, type);
+			600, 575, false, account, type);
 	}
 	
 	@Override
