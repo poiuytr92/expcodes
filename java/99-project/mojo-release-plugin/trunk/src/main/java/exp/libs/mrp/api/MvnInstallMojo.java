@@ -4,6 +4,8 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
+import exp.libs.mrp.Config;
+
 /**
  * <PRE>
  * 项目发布插件:Maven调用入口 - install功能部分。
@@ -40,46 +42,33 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	/**
 	 * <PRE>
 	 * 依赖类型.
-	 * 	maven: 所发布的项目脚本，直接依赖本地maven仓库的jar包
-	 * 	lib: 所发布的项目的依赖jar包会先复制到lib目录，再在项目脚本中依赖lib下的jar包
+	 * 	maven: 仓库依赖，所发布的项目脚本，直接依赖本地maven仓库的jar包
+	 * 	self: 自身依赖，所发布的项目的依赖jar包会先复制到项目私有的lib目录，再在项目脚本中依赖lib下的jar包
 	 * </PRE>
 	 * 
-	 * @parameter default-value="maven"
+	 * @parameter default-value="self"
 	 * @required
 	 */
 	private String dependType;
 	
 	/**
-	 * win默认maven仓库路径
-	 * 
-	 * @parameter default-value="${settings.localRepository}"
-	 * @required
-	 */
-	private String winMavenRepository;
-	
-	/**
-	 * linux默认maven仓库路径
-	 * 
-	 * @parameter default-value="/home/cattsoft/mavenRepository"
-	 * @required
-	 */
-	private String linuxMavenRepository;
-	
-	/**
-	 * win默认lib目录路径
-	 * 
-	 * @parameter default-value=".\\lib"
-	 * @required
-	 */
-	private String winLibPath;
-	
-	/**
-	 * linux默认lib目录路径
+	 * <PRE>
+	 * 私有lib仓库的目录
+	 * dependType = self 时有效
+	 * </PRE>
 	 * 
 	 * @parameter default-value="./lib"
 	 * @required
 	 */
-	private String linuxLibPath;
+	private String selfLibDir;
+	
+	/**
+	 * maven仓库路径
+	 * 
+	 * @parameter default-value="${settings.localRepository}"
+	 * @required
+	 */
+	private String mavenRepository;
 	
 	/**
 	 * 项目启动类路径
@@ -151,20 +140,28 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String noPrjVer;
 	
 	/**
-	 * 打包时需要去掉版本号的jars列表（前缀匹配，逗号分隔）
+	 * 打包时需要去掉版本号的jars(使用正则匹配包名)
 	 * 
 	 * @parameter default-value=" "
 	 * @required
 	 */
-	private String noVerJars;
+	private String noVerJarRegex;
+	
+	/**
+	 * 是否使用混淆包（需与混淆打包插件配合使用）
+	 * 
+	 * @parameter default-value="false"
+	 * @required
+	 */
+	private String proguard;
 	
 	/**
 	 * 路径压缩模式：
-	 * 1：提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩。
-	 * 2：提取标准数量的路径前缀：路径中同层同名的节点至少出现2次以上才会被提取前缀，相同前缀压缩。
-	 * 3：提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩。
+	 * LEAST：提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩。
+	 * STAND：提取标准数量的路径前缀：路径中同层同名的节点至少出现2次以上才会被提取前缀，相同前缀压缩。
+	 * MOST：提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩。
 	 * 
-	 * @parameter default-value="2"
+	 * @parameter default-value="STAND"
 	 * @required
 	 */
 	private String cmpPathMode;
@@ -179,7 +176,7 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	 */
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		// TODO Auto-generated method stub
+		Config.createInstn(this);	// 初始化配置参数
 		
 	}
 
@@ -191,20 +188,12 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 		return dependType;
 	}
 
-	public String getWinMavenRepository() {
-		return winMavenRepository;
+	public String getSelfLibDir() {
+		return selfLibDir;
 	}
-
-	public String getLinuxMavenRepository() {
-		return linuxMavenRepository;
-	}
-
-	public String getWinLibPath() {
-		return winLibPath;
-	}
-
-	public String getLinuxLibPath() {
-		return linuxLibPath;
+	
+	public String getMavenRepository() {
+		return mavenRepository;
 	}
 
 	public String getMainClass() {
@@ -239,8 +228,12 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 		return noPrjVer;
 	}
 
-	public String getNoVerJars() {
-		return noVerJars;
+	public String getNoVerJarRegex() {
+		return noVerJarRegex;
+	}
+
+	public String getProguard() {
+		return proguard;
 	}
 
 	public String getCmpPathMode() {

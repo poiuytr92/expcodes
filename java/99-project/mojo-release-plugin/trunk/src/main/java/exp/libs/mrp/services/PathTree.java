@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import com.catt.plugin.utils.StandUtils;
+import exp.libs.mrp.envm.CmpPathMode;
 
 /**
  * <PRE>
@@ -28,24 +28,6 @@ public class PathTree {
 	 * 树名
 	 */
 	private String name;
-	
-	/**
-	 * 路径前缀模式1：
-	 * 	提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩。
-	 */
-	public final static int PRE_MODE_LEAST = 1;
-	
-	/**
-	 * 路径前缀模式2：
-	 * 	提取标准数量的路径前缀：路径中同层同名的节点至少出现2次以上才会被提取前缀，相同前缀压缩。
-	 */
-	public final static int PRE_MODE_STAND = 2;
-	
-	/**
-	 * 路径前缀模式3：
-	 * 	提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩。
-	 */
-	public final static int PRE_MODE_MOST = 3;
 	
 	/**
 	 * 根节点
@@ -146,9 +128,9 @@ public class PathTree {
 	 * @param pathPrefixMode 路径前缀模式
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 */
-	public List<String> getWinPathPrefixSet(int pathPrefixMode) {
+	public List<String> getWinPathPrefixSet(CmpPathMode mode) {
 		List<String> winPathPres = new ArrayList<String>();
-		List<String> pathPres = getPathPrefixSet(pathPrefixMode);
+		List<String> pathPres = getPathPrefixSet(mode);
 		
 		for(String pathPre : pathPres) {
 			winPathPres.add(StandUtils.toWinPath(pathPre));
@@ -164,9 +146,9 @@ public class PathTree {
 	 * @param pathPrefixMode 路径前缀模式
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 */
-	public List<String> getLinuxPathPrefixSet(int pathPrefixMode) {
+	public List<String> getLinuxPathPrefixSet(CmpPathMode mode) {
 		List<String> linuxPathPres = new ArrayList<String>();
-		List<String> pathPres = getPathPrefixSet(pathPrefixMode);
+		List<String> pathPres = getPathPrefixSet(mode);
 		
 		for(String pathPre : pathPres) {
 			linuxPathPres.add(StandUtils.toLinuxPath(pathPre));
@@ -227,26 +209,17 @@ public class PathTree {
 	 * @param pathPrefixMode 路径前缀模式
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 */
-	public List<String> getPathPrefixSet(int pathPrefixMode) {
+	public List<String> getPathPrefixSet(CmpPathMode mode) {
 		List<String> prePaths = null;
 		
-		switch (pathPrefixMode) {
-			case PRE_MODE_LEAST: {
-				prePaths = getPathPrefixByMode1();
-				break;
-			}
-			case PRE_MODE_STAND: {
-				prePaths = getPathPrefixByMode2();
-				break;
-			}	
-			case PRE_MODE_MOST: {
-				prePaths = getPathPrefixByMode3();
-				break;
-			}	
-			default: {
-				prePaths = getPathPrefixByMode1();
-				break;
-			}
+		if(CmpPathMode.LEAST == mode) {
+			prePaths = getPathPrefixByMode1();
+			
+		} else if(CmpPathMode.MOST == mode) {
+			prePaths = getPathPrefixByMode3();
+			
+		} else {
+			prePaths = getPathPrefixByMode2();
 		}
 		Collections.sort(prePaths, new StrLenSort());	//按长度倒序排序
 		return prePaths;

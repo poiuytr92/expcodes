@@ -28,17 +28,6 @@ import com.catt.util.regex.ValidateUtils;
 public class JarMgr {
 
 	/**
-	 * jar包禁忌表的配置文件名。
-	 * 不使用路径是因为该文件嵌入jar包内，且与本类同编译路径。
-	 */
-	private final static String TABU_JARS_FILE = "tabu_jars";
-	
-	/**
-	 * jar包禁忌表
-	 */
-	private List<String> tabuJars;
-	
-	/**
 	 * 多个项目的依赖包集合。
 	 * 记录其他项目的所有依赖包的完整路径。
 	 * 
@@ -86,36 +75,6 @@ public class JarMgr {
 			}
 		}
 		return instance;
-	}
-	
-	/**
-	 * 加载jar包禁忌表。
-	 * 记录在禁忌表中的jar包无论如何也不会被添加进管理器中。
-	 */
-	private void loadTabuJars() {
-		String content = "";
-		InputStream is = JarMgr.class.
-				getResourceAsStream(TABU_JARS_FILE);
-		ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
-		
-		try {
-			byte[] buff = new byte[1024];
-			int rc = 0;
-			while ((rc = is.read(buff, 0, 1024)) > 0) {
-				swapStream.write(buff, 0, rc);
-			}
-			byte[] arrByte = swapStream.toByteArray();
-			content = new String(arrByte, FinalParams.DEFAULT_CHARSET);
-			
-		} catch (Exception e) {
-			LogMgr.error("读取jar禁忌表记录文件[" + TABU_JARS_FILE + 
-					"]失败,不影响程序运行.", e);
-		}
-		
-		String[] jars = content.split("[,|;|\r|\n]");
-		for(String jar : jars) {
-			tabuJars.add(jar);
-		}
 	}
 	
 	/**
