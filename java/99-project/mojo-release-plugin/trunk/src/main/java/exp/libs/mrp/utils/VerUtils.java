@@ -1,4 +1,4 @@
-package exp.libs.mrp.services;
+package exp.libs.mrp.utils;
 
 public class VerUtils {
 

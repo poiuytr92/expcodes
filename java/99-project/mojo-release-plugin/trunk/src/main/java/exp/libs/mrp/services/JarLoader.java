@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Log;
-import exp.libs.mrp.utils.MavenUtils;
+import exp.libs.mrp.utils.MvnUtils;
 
 /**
  * <PRE>
@@ -49,7 +49,7 @@ public class JarLoader {
 		for(org.apache.maven.artifact.Artifact artifact : artifacts) {
 			jarPathList.add(PathUtils.combPath(
 					_MvnConfig.getInstn().getMavenLibPath(), 
-					MavenUtils.getRelativeJarPath(artifact)));
+					MvnUtils.getRelativeJarPath(artifact)));
 		}
 		JarMgr.getInstn().addMore(
 				_MvnConfig.getInstn().getProjectName(), jarPathList);

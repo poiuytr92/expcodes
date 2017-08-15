@@ -9,8 +9,8 @@ import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Config;
-import exp.libs.mrp.services.PathUtils;
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.other.PathUtils;
 
 /**
  * <PRE>
@@ -23,9 +23,9 @@ import exp.libs.utils.StrUtils;
  * @author    廖权斌：liaoquanbin@gdcattsoft.com
  * @since     jdk版本：jdk1.6
  */
-public class MavenUtils {
+public class MvnUtils {
 
-	protected MavenUtils() {}
+	protected MvnUtils() {}
 	
 	/**
 	 * 获取pom中依赖构件的绝对路径（有序）
@@ -37,7 +37,7 @@ public class MavenUtils {
 		List<String> paths = new LinkedList<String>();
 		List<Artifact> artifacts = mvnPrj.getCompileArtifacts();
 		for(Artifact artifact : artifacts) {
-			paths.add(PathUtils.combPath(
+			paths.add(PathUtils.combine(
 					Config.getInstn().getMavenRepository(), 
 					getRelativePath(artifact)));
 		}
