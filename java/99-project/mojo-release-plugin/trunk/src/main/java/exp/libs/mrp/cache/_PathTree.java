@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import exp.libs.mrp.bean.PathNode;
 import exp.libs.mrp.envm.CmpPathMode;
 import exp.libs.utils.other.PathUtils;
 
@@ -29,19 +28,19 @@ class _PathTree {
 	/**
 	 * 根节点
 	 */
-	private PathNode root;
+	private _PathNode root;
 	
 	/**
 	 * 路径树中所有节点的集合
 	 */
-	private List<PathNode> nodes;
+	private List<_PathNode> nodes;
 	
 	/**
 	 * 构造函数
 	 */
 	public _PathTree() {
-		this.nodes = new LinkedList<PathNode>();
-		this.root = new PathNode(null, -1, false, "root");
+		this.nodes = new LinkedList<_PathNode>();
+		this.root = new _PathNode(null, -1, false, "root");
 		nodes.add(root);
 	}
 	
@@ -59,7 +58,7 @@ class _PathTree {
 		}
 		
 		String[] nodeNames = path.split("[\\\\|/]");
-		PathNode parent = root;
+		_PathNode parent = root;
 		
 		if(isLinuxFullPath == true) {
 			nodeNames[0] = "/" + nodeNames[0];
@@ -67,7 +66,7 @@ class _PathTree {
 		
 		for(int i = 0; i < nodeNames.length; i++) {
 			boolean isLeaf = (i == nodeNames.length - 1);
-			PathNode cNode = new PathNode(parent, i, isLeaf, nodeNames[i]);
+			_PathNode cNode = new _PathNode(parent, i, isLeaf, nodeNames[i]);
 			parent = addNode(cNode);
 		}
 	}
@@ -89,11 +88,11 @@ class _PathTree {
 	 * @param newNode 新节点
 	 * @return 若发生压缩行为,返回已有节点; 否则返回新节点.
 	 */
-	private PathNode addNode(PathNode newNode) {
+	private _PathNode addNode(_PathNode newNode) {
 		boolean isNeedCompress = false;
-		PathNode rtnNode = null;
+		_PathNode rtnNode = null;
 		
-		for(PathNode node : nodes) {
+		for(_PathNode node : nodes) {
 			
 			//根节点必唯一,排除
 			if(node.getLevel() == -1) {
@@ -292,13 +291,13 @@ class _PathTree {
 	private List<String> getPathPrefixByMode2() {
 		Set<String> prePaths = new HashSet<String>();	//路径前缀集
 		
-		for(PathNode node : nodes) {
+		for(_PathNode node : nodes) {
 			if(node.isLeaf()) {
 				String prePath = "";	//从起始节点到根节点之间的路径前缀
 				int cnt = 0;			//回溯次数(即路径层数)
 				
 				//回溯到根节点
-				for(PathNode parent = node.getParent(); 
+				for(_PathNode parent = node.getParent(); 
 						parent != null && parent.getLevel() != -1;
 						parent = parent.getParent()) {
 					
@@ -340,13 +339,13 @@ class _PathTree {
 	private List<String> getPathPrefixByMode3() {
 		Set<String> prePaths = new HashSet<String>();	//路径前缀集
 		
-		for(PathNode node : nodes) {
+		for(_PathNode node : nodes) {
 			if(node.isLeaf()) {
 				String prePath = "";	//从起始节点到根节点之间的路径前缀
 				int cnt = 0;			//回溯次数(即路径层数)
 				
 				//回溯到根节点
-				for(PathNode parent = node.getParent(); 
+				for(_PathNode parent = node.getParent(); 
 						parent != null && parent.getLevel() != -1;
 						parent = parent.getParent()) {
 					cnt++;
@@ -369,7 +368,7 @@ class _PathTree {
 	public String toPrintTree() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Path Tree :\r\n");
-		for(PathNode node : nodes) {
+		for(_PathNode node : nodes) {
 			sb.append('\t').append(node.toString()).append("\r\n");
 		}
 		sb.append("----------\r\n");

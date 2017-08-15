@@ -1,4 +1,4 @@
-package exp.libs.mrp.bean;
+package exp.libs.mrp.cache;
 
 import java.io.File;
 
@@ -14,12 +14,12 @@ import exp.libs.utils.StrUtils;
  * @author    廖权斌：liaoquanbin@gdcattsoft.com
  * @since     jdk版本：jdk1.6
  */
-public class PathNode {
+public class _PathNode {
 
 	/**
 	 * 父节点
 	 */
-	private PathNode parent;
+	private _PathNode parent;
 	
 	/**
 	 * 标记自身在整棵路径树的层数(根节点为第-1层)
@@ -49,7 +49,7 @@ public class PathNode {
 	 * @param isLeaf 叶子节点标识
 	 * @param name 节点名称
 	 */
-	public PathNode(PathNode parent, int level, boolean isLeaf, String name) {
+	public _PathNode(_PathNode parent, int level, boolean isLeaf, String name) {
 		this.parent = parent;
 		this.level = level;
 		this.isLeaf = isLeaf;
@@ -57,7 +57,7 @@ public class PathNode {
 		this.compress = 1;
 	}
 
-	public PathNode getParent() {
+	public _PathNode getParent() {
 		return parent;
 	}
 
@@ -83,7 +83,7 @@ public class PathNode {
 	
 	public String getPath() {
 		String path = getName();
-		for(PathNode parent = this.getParent(); 
+		for(_PathNode parent = this.getParent(); 
 				parent != null && parent.getLevel() != -1; 
 				parent = parent.getParent()) {
 			path = StrUtils.concat(parent.getName(), File.separator, path);
@@ -98,7 +98,7 @@ public class PathNode {
 			isSame = false;
 			
 		} else {
-			PathNode that = (PathNode) obj;
+			_PathNode that = (_PathNode) obj;
 			
 			// 同层
 			isSame = (isSame == true ? 
