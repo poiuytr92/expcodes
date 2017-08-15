@@ -24,17 +24,12 @@ import exp.libs.utils.other.PathUtils;
  * @author    廖权斌：liaoquanbin@gdcattsoft.com
  * @since     jdk版本：jdk1.6
  */
-public class PathTree {
+class _PathTree {
 
-	/**
-	 * 树名
-	 */
-	private String name;
-	
 	/**
 	 * 根节点
 	 */
-	private PathNode rootNode;
+	private PathNode root;
 	
 	/**
 	 * 路径树中所有节点的集合
@@ -43,13 +38,11 @@ public class PathTree {
 	
 	/**
 	 * 构造函数
-	 * @param name 树名
 	 */
-	public PathTree(String name) {
-		this.name = name;
+	public _PathTree() {
 		this.nodes = new LinkedList<PathNode>();
-		this.rootNode = new PathNode(null, -1, false, "root");
-		nodes.add(rootNode);
+		this.root = new PathNode(null, -1, false, "root");
+		nodes.add(root);
 	}
 	
 	/**
@@ -66,7 +59,7 @@ public class PathTree {
 		}
 		
 		String[] nodeNames = path.split("[\\\\|/]");
-		PathNode fNode = rootNode;
+		PathNode parent = root;
 		
 		if(isLinuxFullPath == true) {
 			nodeNames[0] = "/" + nodeNames[0];
@@ -74,8 +67,8 @@ public class PathTree {
 		
 		for(int i = 0; i < nodeNames.length; i++) {
 			boolean isLeaf = (i == nodeNames.length - 1);
-			PathNode cNode = new PathNode(fNode, i, isLeaf, nodeNames[i]);
-			fNode = addNode(cNode);
+			PathNode cNode = new PathNode(parent, i, isLeaf, nodeNames[i]);
+			parent = addNode(cNode);
 		}
 	}
 	
@@ -131,7 +124,7 @@ public class PathTree {
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 */
 	public List<String> getWinPathPrefixSet(CmpPathMode mode) {
-		List<String> winPathPres = new ArrayList<String>();
+		List<String> winPathPres = new LinkedList<String>();
 		List<String> pathPres = getPathPrefixSet(mode);
 		
 		for(String pathPre : pathPres) {
@@ -149,7 +142,7 @@ public class PathTree {
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 */
 	public List<String> getLinuxPathPrefixSet(CmpPathMode mode) {
-		List<String> linuxPathPres = new ArrayList<String>();
+		List<String> linuxPathPres = new LinkedList<String>();
 		List<String> pathPres = getPathPrefixSet(mode);
 		
 		for(String pathPre : pathPres) {
@@ -164,13 +157,13 @@ public class PathTree {
 	 * 会根据当前路径树实时构造路径前缀集,路径格式符合当前运行平台的标准.
 	 * 
 	 * 路径前缀模式：
-	 * PRE_MODE_LEAST：提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩。
-	 * PRE_MODE_STAND：提取标准数量的路径前缀：路径中同层同名的节点至少出现2次以上才会被提取前缀，相同前缀压缩。
-	 * PRE_MODE_MOST：提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩。
+	 * LEAST：提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩。
+	 * STAND：提取标准数量的路径前缀：路径中同层同名的节点至少出现2次以上才会被提取前缀，相同前缀压缩。
+	 * MOST：提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩。
 	 * 
 	 * --------------------------------------------
-	 * 模式1不会存在冗余路径前缀，但是灵活性不高。
-	 * 模式2、3存在不同程度的冗余性，但灵活性相对模式1较高。
+	 * 模式LEAST不会存在冗余路径前缀，但是灵活性不高。
+	 * 模式STAND、MOST存在不同程度的冗余性，但灵活性相对模式1较高。
 	 * 
 	 * --------------------------------------------
 	 * 大前提：
@@ -182,14 +175,14 @@ public class PathTree {
 	 * 	D:\mavenRepository\org\apache\maven\maven-artifact\maven-artifact-2.0.6.jar
 	 * 	D:\commonLib\j2se\catt\1.1.1.0\catt-utils.jar
 	 * 
-	 * (1) 在模式1下：
+	 * (1) 在模式LEAST下：
 	 * 	提到到的路径前缀为：
 	 * 		D:\mavenRepository\org\apache\maven\maven-monitor
 	 * 		D:\mavenRepository\org\apache\maven
 	 * 	由于子前缀会被压缩，最终得到的路径前缀只有：
 	 * 		D:\mavenRepository\org\apache\maven
 	 * 
-	 * (2) 在模式2下：
+	 * (2) 在模式STAND下：
 	 * 	提到到的路径前缀为：
 	 * 		D:\mavenRepository\org\apache\maven\maven-monitor
 	 * 		D:\mavenRepository\org\apache\maven
@@ -197,7 +190,7 @@ public class PathTree {
 	 * 		D:\mavenRepository\org\apache\maven\maven-monitor
 	 * 		D:\mavenRepository\org\apache\maven
 	 * 
-	 * (3) 在模式3下：
+	 * (3) 在模式MOST下：
 	 * 	所有路径都会被提取前缀：
 	 * 		D:\mavenRepository\org\apache\maven\maven-monitor
 	 * 		D:\mavenRepository\org\apache\maven\maven-monitor
@@ -231,12 +224,12 @@ public class PathTree {
 	 * 获取路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 * 会根据当前路径树实时构造路径前缀集,路径格式符合当前运行平台的标准.
 	 * 
-	 * 模式1 算法：
+	 * 模式LEAST 算法：
 	 * 1、前提： 
 	 * 	(1) 上层节点的压缩次数必定 >= 下层节点的压缩次数；
 	 * 	(2) 叶子节点的压缩次数必定 = 1.
 	 * 
-	 * 2、步骤(前3步实际上就是模式2)：
+	 * 2、步骤(前3步实际上就是模式STAND)：
 	 * 	(1) 迭代每一个叶子节点，从叶子开始往上回溯；
 	 * 	(2) 回溯时检查自身节点的压缩次数,只要压缩次数 > 1,则标记为 起始节点；
 	 * 	(3) 从起始节点(包括)到根节点(除外)进行回溯拼接,只要得到的路径的拼接次数 > 1(即路径层数至少为2),
@@ -283,7 +276,7 @@ public class PathTree {
 	 * 获取路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 * 会根据当前路径树实时构造路径前缀集,路径格式符合当前运行平台的标准.
 	 * 
-	 * 模式2 算法：
+	 * 模式STAND 算法：
 	 * 1、前提： 
 	 * 	(1) 上层节点的压缩次数必定 >= 下层节点的压缩次数；
 	 * 	(2) 叶子节点的压缩次数必定 = 1.
@@ -305,17 +298,17 @@ public class PathTree {
 				int cnt = 0;			//回溯次数(即路径层数)
 				
 				//回溯到根节点
-				for(PathNode fNode = node.getParent(); 
-						fNode != null && fNode.getLevel() != -1;
-						fNode = fNode.getParent()) {
+				for(PathNode parent = node.getParent(); 
+						parent != null && parent.getLevel() != -1;
+						parent = parent.getParent()) {
 					
 					//跳过叶子节点前面所有没压缩的节点
-					if(fNode.getCompress() <= 1) {
+					if(parent.getCompress() <= 1) {
 						continue;
 					}
 					
 					cnt++;
-					prePath = fNode.getName() + File.separator + prePath;
+					prePath = parent.getName() + File.separator + prePath;
 				}
 				
 				if(cnt > 1 && !"".equals(prePath)) {
@@ -331,7 +324,7 @@ public class PathTree {
 	 * 获取路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 * 会根据当前路径树实时构造路径前缀集,路径格式符合当前运行平台的标准.
 	 * 
-	 * 模式3 算法：
+	 * 模式MOST 算法：
 	 * 1、前提： 
 	 * 	(1) 上层节点的压缩次数必定 >= 下层节点的压缩次数；
 	 * 	(2) 叶子节点的压缩次数必定 = 1.
@@ -353,11 +346,11 @@ public class PathTree {
 				int cnt = 0;			//回溯次数(即路径层数)
 				
 				//回溯到根节点
-				for(PathNode fNode = node.getParent(); 
-						fNode != null && fNode.getLevel() != -1;
-						fNode = fNode.getParent()) {
+				for(PathNode parent = node.getParent(); 
+						parent != null && parent.getLevel() != -1;
+						parent = parent.getParent()) {
 					cnt++;
-					prePath = fNode.getName() + File.separator + prePath;
+					prePath = parent.getName() + File.separator + prePath;
 				}
 				
 				if(cnt > 1 && !"".equals(prePath)) {
@@ -375,7 +368,7 @@ public class PathTree {
 	 */
 	public String toPrintTree() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Path Tree [").append(getName()).append("]:\r\n");
+		sb.append("Path Tree :\r\n");
 		for(PathNode node : nodes) {
 			sb.append('\t').append(node.toString()).append("\r\n");
 		}
@@ -388,14 +381,6 @@ public class PathTree {
 		return toPrintTree();
 	}
 	
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 	/**
 	 * <PRE>
 	 * 字符串长度排序器(降序,即从最长到最短)。

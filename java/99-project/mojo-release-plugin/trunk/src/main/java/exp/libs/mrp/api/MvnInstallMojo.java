@@ -10,8 +10,8 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Config;
+import exp.libs.mrp.cache.JarMgr;
 import exp.libs.mrp.envm.DependType;
-import exp.libs.mrp.services.JarMgr;
 import exp.libs.mrp.utils.MvnUtils;
 import exp.libs.utils.other.PathUtils;
 

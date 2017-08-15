@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Log;
+import exp.libs.mrp.cache.JarMgr;
 import exp.libs.mrp.utils.MvnUtils;
 
 /**

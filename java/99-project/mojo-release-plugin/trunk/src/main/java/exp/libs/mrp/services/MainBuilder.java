@@ -88,7 +88,7 @@ final public class MainBuilder implements IBuilder {
 		List<String> jarPaths = JarMgr.getInstn().getWinJarPaths(prjName);
 		
 		//构造路径树,获取路径前缀集合
-		PathTree pt = new PathTree("DOS-" + prjName);
+		_PathTree pt = new _PathTree("DOS-" + prjName);
 		pt.addMore(jarPaths);
 		List<String> pathPres = pt.getWinPathPrefixSet(
 				_MvnConfig.getInstn().getPathPrefixMode());
@@ -159,7 +159,7 @@ final public class MainBuilder implements IBuilder {
 		List<String> jarPaths = JarMgr.getInstn().getLinuxJarPaths(prjName);
 		
 		//构造路径树,获取路径前缀集合
-		PathTree pt = new PathTree("LINUX-" + prjName);
+		_PathTree pt = new _PathTree("LINUX-" + prjName);
 		pt.addMore(jarPaths);
 		List<String> pathPres = pt.getLinuxPathPrefixSet(
 				_MvnConfig.getInstn().getPathPrefixMode());
@@ -245,7 +245,7 @@ final public class MainBuilder implements IBuilder {
 		List<String> jarPaths = JarMgr.getInstn().getWinJarPaths(prjName);
 		
 		//构造路径树,获取路径前缀集合
-		PathTree pt = new PathTree("DOS-" + prjName);
+		_PathTree pt = new _PathTree("DOS-" + prjName);
 		pt.addMore(jarPaths);
 		List<String> pathPres = pt.getWinPathPrefixSet(
 				_MvnConfig.getInstn().getPathPrefixMode());
@@ -316,7 +316,7 @@ final public class MainBuilder implements IBuilder {
 		List<String> jarPaths = JarMgr.getInstn().getLinuxJarPaths(prjName);
 		
 		//构造路径树,获取路径前缀集合
-		PathTree pt = new PathTree("LINUX-" + prjName);
+		_PathTree pt = new _PathTree("LINUX-" + prjName);
 		pt.addMore(jarPaths);
 		List<String> pathPres = pt.getLinuxPathPrefixSet(
 				_MvnConfig.getInstn().getPathPrefixMode());
@@ -388,7 +388,7 @@ final public class MainBuilder implements IBuilder {
 		List<String> jarPaths = JarMgr.getInstn().getWinJarPaths(prjName);
 		
 		//构造路径树,获取路径前缀集合
-		PathTree pt = new PathTree("DOS-" + prjName);
+		_PathTree pt = new _PathTree("DOS-" + prjName);
 		pt.addMore(jarPaths);
 		List<String> pathPres = pt.getWinPathPrefixSet(
 				_MvnConfig.getInstn().getPathPrefixMode());
@@ -463,7 +463,7 @@ final public class MainBuilder implements IBuilder {
 		List<String> jarPaths = JarMgr.getInstn().getLinuxJarPaths(prjName);
 		
 		//构造路径树,获取路径前缀集合
-		PathTree pt = new PathTree("LINUX-" + prjName);
+		_PathTree pt = new _PathTree("LINUX-" + prjName);
 		pt.addMore(jarPaths);
 		List<String> pathPres = pt.getLinuxPathPrefixSet(
 				_MvnConfig.getInstn().getPathPrefixMode());
