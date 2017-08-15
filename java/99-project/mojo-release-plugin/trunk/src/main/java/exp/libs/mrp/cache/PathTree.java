@@ -1,4 +1,4 @@
-package exp.libs.mrp.path;
+package exp.libs.mrp.cache;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -10,8 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import exp.libs.mrp.bean.PathNode;
 import exp.libs.mrp.envm.CmpPathMode;
-import exp.libs.mrp.services.StandUtils;
+import exp.libs.utils.other.PathUtils;
 
 /**
  * <PRE>
@@ -134,7 +135,7 @@ public class PathTree {
 		List<String> pathPres = getPathPrefixSet(mode);
 		
 		for(String pathPre : pathPres) {
-			winPathPres.add(StandUtils.toWinPath(pathPre));
+			winPathPres.add(PathUtils.toWin(pathPre));
 		}
 		return winPathPres;
 	}
@@ -152,7 +153,7 @@ public class PathTree {
 		List<String> pathPres = getPathPrefixSet(mode);
 		
 		for(String pathPre : pathPres) {
-			linuxPathPres.add(StandUtils.toLinuxPath(pathPre));
+			linuxPathPres.add(PathUtils.toLinux(pathPre));
 		}
 		return linuxPathPres;
 	}
@@ -304,9 +305,9 @@ public class PathTree {
 				int cnt = 0;			//回溯次数(即路径层数)
 				
 				//回溯到根节点
-				for(PathNode fNode = node.getFNode(); 
+				for(PathNode fNode = node.getParent(); 
 						fNode != null && fNode.getLevel() != -1;
-						fNode = fNode.getFNode()) {
+						fNode = fNode.getParent()) {
 					
 					//跳过叶子节点前面所有没压缩的节点
 					if(fNode.getCompress() <= 1) {
@@ -352,9 +353,9 @@ public class PathTree {
 				int cnt = 0;			//回溯次数(即路径层数)
 				
 				//回溯到根节点
-				for(PathNode fNode = node.getFNode(); 
+				for(PathNode fNode = node.getParent(); 
 						fNode != null && fNode.getLevel() != -1;
-						fNode = fNode.getFNode()) {
+						fNode = fNode.getParent()) {
 					cnt++;
 					prePath = fNode.getName() + File.separator + prePath;
 				}

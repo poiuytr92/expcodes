@@ -28,12 +28,12 @@ public class MvnUtils {
 	protected MvnUtils() {}
 	
 	/**
-	 * 获取pom中依赖构件的绝对路径（有序）
+	 * 获取pom中依赖构件的在Maven仓库中的绝对路径（有序）
 	 * @param mvnPrj
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<String> getArtifactPaths(MavenProject mvnPrj) {
+	public static List<String> getArtifactPaths(MavenProject mvnPrj) {
 		List<String> paths = new LinkedList<String>();
 		List<Artifact> artifacts = mvnPrj.getCompileArtifacts();
 		for(Artifact artifact : artifacts) {

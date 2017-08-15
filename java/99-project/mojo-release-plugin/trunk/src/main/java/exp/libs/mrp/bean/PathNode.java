@@ -1,6 +1,8 @@
-package exp.libs.mrp.path;
+package exp.libs.mrp.bean;
 
 import java.io.File;
+
+import exp.libs.utils.StrUtils;
 
 /**
  * <PRE>
@@ -17,7 +19,7 @@ public class PathNode {
 	/**
 	 * 父节点
 	 */
-	private PathNode fNode;
+	private PathNode parent;
 	
 	/**
 	 * 标记自身在整棵路径树的层数(根节点为第-1层)
@@ -42,21 +44,21 @@ public class PathNode {
 	
 	/**
 	 * 构造函数
-	 * @param fNode 父节点引用
+	 * @param parent 父节点引用
 	 * @param level 所在路径树的层数
 	 * @param isLeaf 叶子节点标识
 	 * @param name 节点名称
 	 */
-	public PathNode(PathNode fNode, int level, boolean isLeaf, String name) {
-		this.fNode = fNode;
+	public PathNode(PathNode parent, int level, boolean isLeaf, String name) {
+		this.parent = parent;
 		this.level = level;
 		this.isLeaf = isLeaf;
-		this.name = (name == null ? "" : name);	//保证名字不为null
+		this.name = (name == null ? "" : name);	
 		this.compress = 1;
 	}
 
-	public PathNode getFNode() {
-		return fNode;
+	public PathNode getParent() {
+		return parent;
 	}
 
 	public int getLevel() {
@@ -77,6 +79,16 @@ public class PathNode {
 
 	public void addCompress() {
 		compress++;
+	}
+	
+	public String getPath() {
+		String path = getName();
+		for(PathNode parent = this.getParent(); 
+				parent != null && parent.getLevel() != -1; 
+				parent = parent.getParent()) {
+			path = StrUtils.concat(parent.getName(), File.separator, path);
+		}
+		return path;
 	}
 	
 	@Override
@@ -100,11 +112,11 @@ public class PathNode {
 			if(isSame == true) {
 				
 				// 向上递归比较
-				if(this.getFNode() != null && that.getFNode() != null) {
-					isSame = this.getFNode().equals(that.getFNode());
+				if(this.getParent() != null && that.getParent() != null) {
+					isSame = this.getParent().equals(that.getParent());
 					
 				// 同时递归到根节点
-				} else if(this.getFNode() == null && that.getFNode() == null) {
+				} else if(this.getParent() == null && that.getParent() == null) {
 					isSame = true;
 				
 				// 其中一个递归到根节点
@@ -120,22 +132,14 @@ public class PathNode {
 	 * 打印节点信息
 	 * @return 节点信息
 	 */
-	public String toPrint() {
+	public String toInfo() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("Node Info: \r\n");
 		sb.append("\tname : ").append(getName()).append("\r\n");
 		sb.append("\tlevel : ").append(getLevel()).append("\r\n");
 		sb.append("\tisLeaf : ").append(isLeaf()).append("\r\n");
 		sb.append("\tcompress : ").append(getCompress()).append("\r\n");
-		sb.append("\tpostion : ");
-		
-		String path = getName();
-		for(PathNode fNode = this.getFNode(); 
-				fNode != null && fNode.getLevel() != -1; 
-				fNode = fNode.getFNode()) {
-			path = fNode.getName() + File.separator + path;
-		}
-		sb.append(path).append("\r\n");
+		sb.append("\tpostion : ").append(getPath()).append("\r\n");
 		sb.append("----------\r\n");
 		return sb.toString();
 	}
@@ -146,12 +150,6 @@ public class PathNode {
 	 */
 	@Override
 	public String toString() {
-		String path = getName();
-		for(PathNode fNode = this.getFNode(); 
-				fNode != null && fNode.getLevel() != -1; 
-				fNode = fNode.getFNode()) {
-			path = fNode.getName() + File.separator + path;
-		}
-		return path;
+		return getPath();
 	}
 }
