@@ -1,19 +1,12 @@
 package exp.libs.mrp.api;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Config;
 import exp.libs.mrp.cache.JarMgr;
-import exp.libs.mrp.envm.DependType;
-import exp.libs.mrp.utils.MvnUtils;
-import exp.libs.utils.other.PathUtils;
+import exp.libs.mrp.services.ScriptBuilder;
 
 /**
  * <PRE>
@@ -186,8 +179,12 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		Config.createInstn(this);	// 初始化配置参数
+		
+		JarMgr.getInstn().loadPrjJarPath();
 		JarMgr.getInstn().loadDependJarPaths(project);
-		JarMgr.getInstn().copyDependJars();
+		JarMgr.getInstn().copyJars();
+		
+		ScriptBuilder.exec();
 	}
 	
 	public MavenProject getProject() {

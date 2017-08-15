@@ -1,14 +1,19 @@
 package exp.libs.mrp;
 
-import exp.libs.envm.Charset;
 import exp.libs.mrp.api.MvnInstallMojo;
 import exp.libs.mrp.envm.CmpPathMode;
 import exp.libs.mrp.envm.DependType;
 import exp.libs.utils.StrUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.BoolUtils;
+import exp.libs.utils.other.PathUtils;
 
 public class Config {
 
+	public final static String TARGET_DIR = "./target";
+	
+	public final static String PROGUARD_SUFFIX = "-pg";
+	
 	private DependType dependType;
 	
 	private String selfLibDir;
@@ -28,9 +33,6 @@ public class Config {
 	/** 自动生成, 无需配置 */
 	private String releaseDir;
 	
-	/** 自动生成, 无需配置 */
-	private String releaseName;
-	
 	private String mainClass;
 	
 	private String verClass;
@@ -49,28 +51,13 @@ public class Config {
 	
 	private boolean proguard;
 	
+	private String proguardDir;
+	
+	private String copyJarDir;
+	
 	private static volatile Config instance;
 	
-	private Config() {
-		this.dependType = DependType.SELF;
-		this.selfLibDir = "./lib";
-		this.mavenRepository = "D:\\mavenRepository";
-		this.prjName = "";
-		this.prjVer = "";
-		this.noPrjVer = true;
-		this.noVerJarRegex = "";
-		this.releaseDir = "";
-		this.releaseName = "";
-		this.mainClass = "foo.bar.prj.Main";
-		this.verClass = "foo.bar.prj.Version";
-		this.charset = Charset.UTF8;
-		this.xms = "64m";
-		this.xmx = "128m";
-		this.jdkParams = "";
-		this.threadSuffix = "";
-		this.cmpPathMode = CmpPathMode.STAND;
-		this.proguard = false;
-	}
+	private Config() {}
 	
 	public static Config createInstn(MvnInstallMojo mvn) {
 		if(mvn == null) {
@@ -114,8 +101,7 @@ public class Config {
 			this.prjVer = mvn.getProject().getVersion();
 			this.noPrjVer = BoolUtils.toBool(mvn.getNoPrjVer().trim(), false);
 			this.noVerJarRegex = mvn.getNoVerJarRegex().trim();
-			this.releaseDir = StrUtils.concat("./target/", prjName, "-", prjVer);
-			this.releaseName = StrUtils.concat(prjName, (noPrjVer ? "" : "-".concat(prjVer)), ".jar");
+			this.releaseDir = StrUtils.concat(TARGET_DIR, "/", prjName, "-", prjVer);
 			this.mainClass = mvn.getMainClass().trim();
 			this.verClass = mvn.getVerClass().trim();
 			this.charset = mvn.getCharset().trim();
@@ -125,9 +111,16 @@ public class Config {
 			this.threadSuffix = mvn.getThreadSuffix().trim().concat(" ");	// 线程后缀必须至少有一个空格, 便于sh脚本定位线程号
 			this.cmpPathMode = CmpPathMode.toMode(mvn.getCmpPathMode().trim());
 			this.proguard = BoolUtils.toBool(mvn.getProguard().trim(), false);
+			this.proguardDir = StrUtils.concat(releaseDir, PROGUARD_SUFFIX);
+			this.copyJarDir = PathUtils.combine(releaseDir, selfLibDir);
 			
 		} catch(Exception e) {
 			Log.error("加载 mojo-release-plugin 配置失败", e);
+			System.exit(1);
+		}
+		
+		if(FileUtils.createDir(copyJarDir) == null) {
+			Log.error("创建构件目录失败: ".concat(copyJarDir));
 			System.exit(1);
 		}
 	}
@@ -135,11 +128,11 @@ public class Config {
 	public DependType getDependType() {
 		return dependType;
 	}
-
+	
 	public String getSelfLibDir() {
 		return selfLibDir;
 	}
-	
+
 	public String getMavenRepository() {
 		return mavenRepository;
 	}
@@ -162,10 +155,6 @@ public class Config {
 
 	public String getReleaseDir() {
 		return releaseDir;
-	}
-
-	public String getReleaseName() {
-		return releaseName;
 	}
 
 	public String getMainClass() {
@@ -202,6 +191,14 @@ public class Config {
 
 	public boolean isProguard() {
 		return proguard;
+	}
+	
+	public String getProguardDir() {
+		return proguardDir;
+	}
+	
+	public String getCopyJarDir() {
+		return copyJarDir;
 	}
 
 }

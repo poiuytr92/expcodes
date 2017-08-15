@@ -11,6 +11,7 @@ import exp.libs.mrp.Config;
 import exp.libs.mrp.envm.CmpPathMode;
 import exp.libs.mrp.envm.DependType;
 import exp.libs.mrp.utils.MvnUtils;
+import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.verify.RegexUtils;
@@ -35,7 +36,7 @@ public class JarMgr {
 	
 	private _PathTree snkPathTree;
 	
-	private List<String> snkPathPrefixs; 
+	private List<String> snkPathPrefixs;
 	
 	private static volatile JarMgr instance;
 	
@@ -59,16 +60,35 @@ public class JarMgr {
 		return instance;
 	}
 	
+	public void loadPrjJarPath() {
+		String srcDir = Config.getInstn().isProguard() ? 
+				Config.getInstn().getProguardDir() : Config.TARGET_DIR;
+		String srcName = StrUtils.concat(Config.getInstn().getPrjName(), "-", 
+				Config.getInstn().getPrjVer(), ".jar");
+		String srcPath = PathUtils.combine(srcDir, srcName);
+		
+		String snkDir = Config.getInstn().getSelfLibDir();
+		String snkName = !Config.getInstn().isNoPrjVer() ? srcName : 
+				StrUtils.concat(Config.getInstn().getPrjName(), ".jar");
+		String snkPath = PathUtils.combine(snkDir, snkName);
+		
+		snkNames.put(srcPath, snkName);
+		snkPaths.add(snkPath);
+		snkPathTree.add(snkPath);
+	}
+
 	public void loadDependJarPaths(MavenProject mvnPrj) {
 		srcPaths.addAll(MvnUtils.getArtifactPaths(mvnPrj));
 		for(String srcPath : srcPaths) {
 			String snkPath = srcPath;
-			if(Config.getInstn().getDependType() == DependType.SELF) {
+			
+			if(DependType.SELF == Config.getInstn().getDependType()) {
 				String snkName = PathUtils.toLinux(srcPath).replaceFirst(".*/", "");
 				snkName = cutVer(snkName);	// 版本号裁剪
-				
 				snkNames.put(srcPath, snkName);
-				snkPath = PathUtils.combine(Config.getInstn().getSelfLibDir(), snkName);
+				
+				String snkDir = Config.getInstn().getSelfLibDir();
+				snkPath = PathUtils.combine(snkDir, snkName);
 			}
 			
 			snkPaths.add(snkPath);
@@ -84,16 +104,14 @@ public class JarMgr {
 		return name;
 	}
 	
-	public void copyDependJars() {
-		if(Config.getInstn().getDependType() == DependType.SELF) {
-			final String selfLibDir = Config.getInstn().getSelfLibDir();
-			String copySnkDir = PathUtils.isFullPath(selfLibDir) ? selfLibDir : 
-				PathUtils.combine(Config.getInstn().getReleaseDir(), selfLibDir);
-			FileUtils.createDir(copySnkDir);
+	public void copyJars() {
+		for(String srcPath : srcPaths) {
+			String snkPath = PathUtils.combine(
+					Config.getInstn().getCopyJarDir(), snkNames.get(srcPath));
+			FileUtils.copyFile(srcPath, snkPath);
 			
-			for(String srcPath : srcPaths) {
-				String snkPath = PathUtils.combine(copySnkDir, snkNames.get(srcPath));
-				FileUtils.copyFile(srcPath, snkPath);
+			if(DependType.SELF != Config.getInstn().getDependType()) {
+				break;	// 若不使用私有仓库， 则只复制项目jar包
 			}
 		}
 	}

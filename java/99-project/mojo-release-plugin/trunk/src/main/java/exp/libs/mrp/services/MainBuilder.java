@@ -53,7 +53,7 @@ final public class MainBuilder implements IBuilder {
 	public void buildThreadName() {
 		// 加载模板
 		Template tpl = new Template(ScriptNames.THREAD_NAME);
-		tpl.read(TemplateFiles.THREADNAME_TEMPLATE);
+		tpl.read(TplNames.THREADNAME_TEMPLATE);
 		
 		// 设置项目名称
 		tpl.set(Placeholders.PROJECT_NAME, prjName);
@@ -70,7 +70,7 @@ final public class MainBuilder implements IBuilder {
 	public void buildUnixPid() {
 		// 加载模板
 		Template tpl = new Template(ScriptNames.ECHO_PID);
-		tpl.read(TemplateFiles.PID_TEMPLATE_UNIX);
+		tpl.read(TplNames.PID_TEMPLATE_UNIX);
 		
 		// 设置项目名称
 		tpl.set(Placeholders.PROJECT_NAME, prjName);
@@ -97,7 +97,7 @@ final public class MainBuilder implements IBuilder {
 		/////////////////////////////////////////////////////
 		// 加载模板
 		Template tpl = new Template(ScriptNames.START_BAT);
-		tpl.read(TemplateFiles.START_TEMPLATE_DOS);
+		tpl.read(TplNames.START_TEMPLATE_DOS);
 		
 		/////////////////////////////////////////////////////
 		// 设置项目名称
@@ -168,7 +168,7 @@ final public class MainBuilder implements IBuilder {
 		/////////////////////////////////////////////////////
 		// 加载模板
 		Template tpl = new Template(ScriptNames.START_SH);
-		tpl.read(TemplateFiles.START_TEMPLATE_UNIX);
+		tpl.read(TplNames.START_TEMPLATE_UNIX);
 		
 		/////////////////////////////////////////////////////
 		// 设置项目名称
@@ -227,7 +227,7 @@ final public class MainBuilder implements IBuilder {
 	public void buildUnixStop() {
 		// 加载模板
 		Template tpl = new Template(ScriptNames.STOP_SH);
-		tpl.read(TemplateFiles.STOP_TEMPLATE_DOS);
+		tpl.read(TplNames.STOP_TEMPLATE_DOS);
 		
 		// 设置项目名称
 		tpl.set(Placeholders.PROJECT_NAME, prjName);
@@ -254,7 +254,7 @@ final public class MainBuilder implements IBuilder {
 		/////////////////////////////////////////////////////
 		// 加载模板
 		Template tpl = new Template(ScriptNames.VERSION_BAT);
-		tpl.read(TemplateFiles.START_TEMPLATE_DOS);
+		tpl.read(TplNames.START_TEMPLATE_DOS);
 		
 		/////////////////////////////////////////////////////
 		// 设置项目名称
@@ -325,7 +325,7 @@ final public class MainBuilder implements IBuilder {
 		/////////////////////////////////////////////////////
 		// 加载模板
 		Template tpl = new Template(ScriptNames.VERSION_SH);
-		tpl.read(TemplateFiles.START_TEMPLATE_UNIX);
+		tpl.read(TplNames.START_TEMPLATE_UNIX);
 		
 		/////////////////////////////////////////////////////
 		// 设置项目名称
@@ -397,7 +397,7 @@ final public class MainBuilder implements IBuilder {
 		/////////////////////////////////////////////////////
 		// 加载模板
 		Template tpl = new Template(ScriptNames.START_GC_BAT);
-		tpl.read(TemplateFiles.START_TEMPLATE_DOS);
+		tpl.read(TplNames.START_TEMPLATE_DOS);
 		
 		/////////////////////////////////////////////////////
 		// 设置项目名称
@@ -472,7 +472,7 @@ final public class MainBuilder implements IBuilder {
 		/////////////////////////////////////////////////////
 		// 加载模板
 		Template tpl = new Template(ScriptNames.START_GC_SH);
-		tpl.read(TemplateFiles.START_TEMPLATE_UNIX);
+		tpl.read(TplNames.START_TEMPLATE_UNIX);
 		
 		/////////////////////////////////////////////////////
 		// 设置项目名称

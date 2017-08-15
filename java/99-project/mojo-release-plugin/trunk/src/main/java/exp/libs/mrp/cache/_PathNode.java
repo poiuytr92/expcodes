@@ -14,7 +14,7 @@ import exp.libs.utils.StrUtils;
  * @author    廖权斌：liaoquanbin@gdcattsoft.com
  * @since     jdk版本：jdk1.6
  */
-public class _PathNode {
+class _PathNode {
 
 	/**
 	 * 父节点

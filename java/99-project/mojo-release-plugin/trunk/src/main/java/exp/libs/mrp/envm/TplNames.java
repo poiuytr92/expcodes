@@ -12,7 +12,7 @@ package exp.libs.mrp.envm;
  * @author    廖权斌：liaoquanbin@gdcattsoft.com
  * @since     jdk版本：jdk1.6
  */
-public class TemplateFiles {
+public class TplNames {
 
 	/**
 	 * ant启动脚本模板名称
@@ -25,7 +25,12 @@ public class TemplateFiles {
 	public final static String BUILD_TEMPLATE_XML = "build_template_xml";
 	
 	/**
-	 * 线程名声明脚本模板名称
+	 * 程序位置脚本模板名称
+	 */
+	public final static String APP_PATH_TEMPLATE = "app_path_template";
+	
+	/**
+	 * 线程名脚本模板名称
 	 */
 	public final static String THREADNAME_TEMPLATE = "threadname_template";
 	
@@ -52,5 +57,5 @@ public class TemplateFiles {
 	/**
 	 * 禁止外部构造，避免误用
 	 */
-	private TemplateFiles() {}
+	private TplNames() {}
 }
