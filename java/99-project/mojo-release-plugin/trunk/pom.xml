@@ -378,7 +378,7 @@
 				</executions>
 			</plugin>
 			
-			<!-- 项目发布插件
+			<!-- 项目发布插件(自动生成脚本)
 			<plugin>
 				<groupId>exp.libs</groupId>
 				<artifactId>mojo-release-plugin</artifactId>

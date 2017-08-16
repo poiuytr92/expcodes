@@ -121,8 +121,9 @@ public class Config {
 			this.jdkParams = mvn.getJdkParams().trim();
 			this.threadSuffix = mvn.getThreadSuffix().trim().concat(" ");	// 线程后缀必须至少有一个空格, 便于sh脚本定位线程号
 			this.cmpPathMode = CmpPathMode.toMode(mvn.getCmpPathMode().trim());
-			this.proguard = BoolUtils.toBool(mvn.getProguard().trim(), false);
 			this.proguardDir = StrUtils.concat(releaseDir, PROGUARD_SUFFIX);
+			this.proguard = BoolUtils.toBool(mvn.getProguard().trim(), false);
+			if(!FileUtils.exists(proguardDir)) { proguard = false; }
 			this.copyJarDir = PathUtils.combine(releaseDir, jarLibDir);
 			
 		} catch(Exception e) {
