@@ -400,45 +400,7 @@
 				</configuration>
 			</plugin>
 
-			<!-- 自动生成脚本插件:项目打包 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>catt-maven-plugin</artifactId>
-				<version>${catt.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>catt-install</id>
-						<phase>install</phase>
-						<goals>
-							<goal>install</goal>
-						</goals>
-						<configuration>
-							<scriptType>lib</scriptType>
-							<mainClass>exp.sf.am.Main</mainClass>	<!-- 根据实际项目修改 -->
-							<versionClass>exp.sf.am.Version</versionClass>	<!-- 根据实际项目修改 -->
-							<charset>UTF-8</charset>	<!-- 根据实际项目修改 -->
-							<xms>64m</xms>
-							<xmx>128m</xmx>
-							<linuxLibPath>./lib</linuxLibPath>
-							<winLibPath>.\lib</winLibPath>
-							<linuxCommonLibPath>/home/cattsoft/commonLib</linuxCommonLibPath>
-							<winCommonLibPath>D:\commonLib</winCommonLibPath>
-							<linuxMavenLibPath>/home/cattsoft/mavenRepository</linuxMavenLibPath>
-							<winMavenLibPath>D:\mavenRepository</winMavenLibPath>
-							<pathPrefixMode>2</pathPrefixMode>
-							<mainProVersion>false</mainProVersion>
-							<noVerJars>explibs-,exp-libs-,catt-</noVerJars>
-							<cpsMain>true</cpsMain>
-							<cpsAnt>false</cpsAnt>
-							<cpsCrypto>false</cpsCrypto>
-							<cpsAutodb>false</cpsAutodb>
-							<cpsStartcheck>false</cpsStartcheck>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- Ant插件：项目部署文件复制 -->
+			<!-- Ant插件：项目打包/文件复制 -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-antrun-plugin</artifactId>
@@ -447,13 +409,6 @@
 					<execution>
 						<id>ant-build</id>
 						<phase>install</phase>
-						<configuration>
-							<target>
-								<echo>拷贝编译jar文件</echo>
-								<copy file="${release.dir}.jar"
-									tofile="${release.dir}/lib/${project.artifactId}.jar" />
-							</target>
-						</configuration>
 						<goals>
 							<goal>run</goal>
 						</goals>
@@ -461,6 +416,32 @@
 				</executions>
 			</plugin>
 
+			<!-- 项目发布插件 -->
+			<plugin>
+				<groupId>exp.libs</groupId>
+				<artifactId>mojo-release-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>mrp</id>
+						<phase>install</phase>
+						<goals>
+							<goal>install</goal>
+						</goals>
+						<configuration>
+							<verClass>exp.sf.am.Version</verClass>
+							<mainClass>exp.sf.am.Main</mainClass>
+							<charset>UTF-8</charset>
+							<jdkPath>javaw</jdkPath>
+							<xms>32m</xms>
+							<xmx>64m</xmx>
+							<noVerJarRegex>exp-?libs-.*</noVerJarRegex>
+							<proguard>true</proguard>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+       
 			<!-- 打包源码: 项目发布基线版本时会自动打包源码，不要启用此插件，否则会失败 -->
 			<!-- plugin>
 				<groupId>org.apache.maven.plugins</groupId>
