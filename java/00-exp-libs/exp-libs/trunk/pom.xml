@@ -531,7 +531,71 @@
                 </configuration>
             </plugin>
             
-            <!-- 自动生成脚本插件:项目打包 -->
+            <!-- Ant插件：项目部署文件复制 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>ant-build</id>
+                        <phase>install</phase>
+                        <configuration>
+                            <target>
+                                <echo>拷贝数据库脚本</echo>
+                                <copy todir="${release.dir}/script">
+                                    <fileset dir="script"></fileset>
+                                </copy>
+                                <echo>拷贝项目配置文件</echo>
+                                <copy todir="${release.dir}/conf">
+                                    <fileset dir="conf" />
+                                </copy>
+                                <echo>拷贝文档</echo>
+                                <copy todir="${release.dir}/doc/04_维护文档">
+                                    <fileset dir="doc/04_维护文档"></fileset>
+                                </copy>
+                                <copy todir="${release.dir}/doc/06_使用文档">
+                                    <fileset dir="doc/06_使用文档"></fileset>
+                                </copy>
+                                <copy todir="${release.dir}/doc/07_演示文档">
+                                    <fileset dir="doc/07_演示文档"></fileset>
+                                </copy>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- 项目发布插件 -->
+			<plugin>
+				<groupId>exp.libs</groupId>
+				<artifactId>mojo-release-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>mrp</id>
+						<phase>install</phase>
+						<goals>
+							<goal>install</goal>
+						</goals>
+						<configuration>
+							<verClass>exp.libs.Version</verClass>
+							<mainClass>exp.libs.Version</mainClass>
+							<mainArgs></mainArgs>
+							<xms>32m</xms>
+							<xmx>64m</xmx>
+							<jdkParams>-javaagent:./lib/jvm-agent.jar</jdkParams>
+							<noVerJarRegex>exp-?libs-.*</noVerJarRegex>
+							<proguard>false</proguard>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 自动生成脚本插件:项目打包 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>catt-maven-plugin</artifactId>
@@ -569,53 +633,7 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- Ant插件：项目部署文件复制 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>1.7</version>
-                <executions>
-                    <execution>
-                        <id>ant-build</id>
-                        <phase>install</phase>
-                        <configuration>
-                            <target>
-                                <echo>拷贝数据库脚本</echo>
-                                <copy todir="${release.dir}/script">
-                                    <fileset dir="script"></fileset>
-                                </copy>
-                                <echo>拷贝项目配置文件</echo>
-                                <copy todir="${release.dir}/conf">
-                                    <fileset dir="conf" />
-                                </copy>
-                                <echo>拷贝文档</echo>
-                                <copy todir="${release.dir}/doc/04_维护文档">
-                                    <fileset dir="doc/04_维护文档"></fileset>
-                                </copy>
-                                <copy todir="${release.dir}/doc/06_使用文档">
-                                    <fileset dir="doc/06_使用文档"></fileset>
-                                </copy>
-                                <copy todir="${release.dir}/doc/07_演示文档">
-                                    <fileset dir="doc/07_演示文档"></fileset>
-                                </copy>
-                                <echo>拷贝编译jar文件</echo>
-                                <copy file="${project.build.directory}/${project.artifactId}-${project.version}.jar"
-                                    tofile="${release.dir}/lib/${project.artifactId}.jar" />
-                                <!-- copy todir="${release.dir}/lib">
-                                    <fileset dir="${project.build.directory}">
-                                        <include name="${project.artifactId}-${project.version}.jar" />
-                                    </fileset>
-                                </copy -->
-                            </target>
-                        </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
+            
             <!-- 打包源码: 项目发布基线版本时会自动打包源码，不要启用此插件，否则会失败 -->
             <!-- plugin>
                 <groupId>org.apache.maven.plugins</groupId>

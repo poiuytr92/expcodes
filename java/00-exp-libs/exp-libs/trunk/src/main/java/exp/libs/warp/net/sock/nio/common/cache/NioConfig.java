@@ -27,9 +27,9 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 
 	private final static Logger log = LoggerFactory.getLogger(NioConfig.class);
 	
-	private final static String A_DELIMITER = "!#@{[";
+	private final static String A_BRACKET = "@{";
 	
-	private final static String Z_DELIMITER = "]}@#!";
+	private final static String Z_BRACKET = "}@";
 	
 	/**
 	 * 接收消息分隔符集
@@ -50,7 +50,7 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 		super(socketBean);
 		
 		this.readDelimiters = StrUtils.split(
-				getReadDelimiter(), A_DELIMITER, Z_DELIMITER);
+				getReadDelimiter(), A_BRACKET, Z_BRACKET);
 		if(ListUtils.isEmpty(readDelimiters)) {
 			readDelimiters = new String[] { getReadDelimiter() };
 		}
