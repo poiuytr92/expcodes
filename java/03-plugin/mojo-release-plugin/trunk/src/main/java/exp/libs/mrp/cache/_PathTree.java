@@ -119,17 +119,16 @@ class _PathTree {
 	 * 获取路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 * 会根据当前路径树实时构造路径前缀集,路径格式符合win的标准.
 	 * 
-	 * @param pathPrefixMode 路径前缀模式
+	 * @param mode 路径前缀模式
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 */
-	public List<String> getWinPathPrefixSet(CmpPathMode mode) {
-		List<String> winPathPres = new LinkedList<String>();
-		List<String> pathPres = getPathPrefixSet(mode);
-		
-		for(String pathPre : pathPres) {
-			winPathPres.add(PathUtils.toWin(pathPre));
+	public List<String> getWinPrefixs(CmpPathMode mode) {
+		List<String> winPrefixs = new LinkedList<String>();
+		List<String> prefixs = getPathPrefixs(mode);
+		for(String prefix : prefixs) {
+			winPrefixs.add(PathUtils.toWin(prefix));
 		}
-		return winPathPres;
+		return winPrefixs;
 	}
 	
 	/**
@@ -137,17 +136,17 @@ class _PathTree {
 	 * 获取路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 * 会根据当前路径树实时构造路径前缀集,路径格式符合linux的标准.
 	 * 
-	 * @param pathPrefixMode 路径前缀模式
+	 * @param mode 路径前缀模式
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 */
-	public List<String> getLinuxPathPrefixSet(CmpPathMode mode) {
-		List<String> linuxPathPres = new LinkedList<String>();
-		List<String> pathPres = getPathPrefixSet(mode);
+	public List<String> getLinuxPrefixs(CmpPathMode mode) {
+		List<String> linuxPrefixs = new LinkedList<String>();
+		List<String> prefixs = getPathPrefixs(mode);
 		
-		for(String pathPre : pathPres) {
-			linuxPathPres.add(PathUtils.toLinux(pathPre));
+		for(String prefix : prefixs) {
+			linuxPrefixs.add(PathUtils.toLinux(prefix));
 		}
-		return linuxPathPres;
+		return linuxPrefixs;
 	}
 	
 	/**
@@ -200,23 +199,23 @@ class _PathTree {
 	 * 		D:\mavenRepository\org\apache\maven\maven-artifact
 	 * 		D:\commonLib\j2se\catt\1.1.1.0
 	 * 
-	 * @param pathPrefixMode 路径前缀模式
+	 * @param mode 路径前缀模式
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
 	 */
-	public List<String> getPathPrefixSet(CmpPathMode mode) {
-		List<String> prePaths = null;
+	public List<String> getPathPrefixs(CmpPathMode mode) {
+		List<String> prefixs = null;
 		
 		if(CmpPathMode.LEAST == mode) {
-			prePaths = getPathPrefixByMode1();
+			prefixs = getLeastPrefixs();
 			
 		} else if(CmpPathMode.MOST == mode) {
-			prePaths = getPathPrefixByMode3();
+			prefixs = getMostPrefixs();
 			
 		} else {
-			prePaths = getPathPrefixByMode2();
+			prefixs = getStandPrefixs();
 		}
-		Collections.sort(prePaths, new StrLenSort());	//按长度倒序排序
-		return prePaths;
+		Collections.sort(prefixs, new StrLenSort());	//按长度倒序排序
+		return prefixs;
 	}
 	
 	/**
@@ -240,16 +239,16 @@ class _PathTree {
 	 * 
 	 * @return 路径前缀集(路径不以分隔符结尾)
 	 */
-	private List<String> getPathPrefixByMode1() {
-		List<String> mbPrePaths = getPathPrefixByMode2();	//候选路径前缀集
-		List<String> prePaths = new ArrayList<String>();	//路径前缀集
+	private List<String> getLeastPrefixs() {
+		List<String> mbPrefixs = getStandPrefixs();	//候选路径前缀集
+		List<String> prefixs = new ArrayList<String>();	//路径前缀集
 		
 		// 构造路径前缀集（压缩子前缀）
-		while(mbPrePaths.isEmpty() == false) {
+		while(mbPrefixs.isEmpty() == false) {
 			int minLen = Integer.MAX_VALUE;
 			String minPath = "";
 			
-			for(String path : mbPrePaths) {
+			for(String path : mbPrefixs) {
 				int len = path.length();
 				if(minLen > len) {
 					minLen = len;
@@ -257,10 +256,10 @@ class _PathTree {
 				}
 			}
 			
-			mbPrePaths.remove(minPath);
-			prePaths.add(minPath);
+			mbPrefixs.remove(minPath);
+			prefixs.add(minPath);
 			
-			for(Iterator<String> pathIts = mbPrePaths.iterator();
+			for(Iterator<String> pathIts = mbPrefixs.iterator();
 					pathIts.hasNext();) {
 				String path = pathIts.next();
 				if(path.startsWith(minPath)) {
@@ -268,7 +267,7 @@ class _PathTree {
 				}
 			}
 		}
-		return prePaths;
+		return prefixs;
 	}
 	
 	/**
@@ -288,12 +287,12 @@ class _PathTree {
 	 * 
 	 * @return 路径前缀集(路径不以分隔符结尾)
 	 */
-	private List<String> getPathPrefixByMode2() {
-		Set<String> prePaths = new HashSet<String>();	//路径前缀集
+	private List<String> getStandPrefixs() {
+		Set<String> prefixs = new HashSet<String>();	//路径前缀集
 		
 		for(_PathNode node : nodes) {
 			if(node.isLeaf()) {
-				String prePath = "";	//从起始节点到根节点之间的路径前缀
+				String prefix = "";	//从起始节点到根节点之间的路径前缀
 				int cnt = 0;			//回溯次数(即路径层数)
 				
 				//回溯到根节点
@@ -307,16 +306,16 @@ class _PathTree {
 					}
 					
 					cnt++;
-					prePath = parent.getName() + File.separator + prePath;
+					prefix = parent.getName() + File.separator + prefix;
 				}
 				
-				if(cnt > 1 && !"".equals(prePath)) {
-					prePaths.add(prePath.substring(0, 
-							prePath.length() - 1));	//去除结尾分隔符;
+				if(cnt > 1 && !"".equals(prefix)) {
+					prefixs.add(prefix.substring(0, 
+							prefix.length() - 1));	//去除结尾分隔符;
 				}
 			}
 		}
-		return new ArrayList<String>(prePaths);
+		return new ArrayList<String>(prefixs);
 	}
 	
 	/**
@@ -336,12 +335,12 @@ class _PathTree {
 	 * 
 	 * @return 路径前缀集(路径不以分隔符结尾)
 	 */
-	private List<String> getPathPrefixByMode3() {
-		Set<String> prePaths = new HashSet<String>();	//路径前缀集
+	private List<String> getMostPrefixs() {
+		Set<String> prefixs = new HashSet<String>();	//路径前缀集
 		
 		for(_PathNode node : nodes) {
 			if(node.isLeaf()) {
-				String prePath = "";	//从起始节点到根节点之间的路径前缀
+				String prefix = "";	//从起始节点到根节点之间的路径前缀
 				int cnt = 0;			//回溯次数(即路径层数)
 				
 				//回溯到根节点
@@ -349,16 +348,16 @@ class _PathTree {
 						parent != null && parent.getLevel() != -1;
 						parent = parent.getParent()) {
 					cnt++;
-					prePath = parent.getName() + File.separator + prePath;
+					prefix = parent.getName() + File.separator + prefix;
 				}
 				
-				if(cnt > 1 && !"".equals(prePath)) {
-					prePaths.add(prePath.substring(0, 
-							prePath.length() - 1));	//去除结尾分隔符;
+				if(cnt > 1 && !"".equals(prefix)) {
+					prefixs.add(prefix.substring(0, 
+							prefix.length() - 1));	//去除结尾分隔符;
 				}
 			}
 		}
-		return new ArrayList<String>(prePaths);
+		return new ArrayList<String>(prefixs);
 	}
 
 	/**

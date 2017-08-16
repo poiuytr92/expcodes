@@ -137,7 +137,7 @@ public class JarMgr {
 	public List<String> getJarPathPrefixs() {
 		if(jarPathPrefixs.isEmpty()) {
 			jarPathPrefixs.addAll(
-					jarPathTree.getLinuxPathPrefixSet(CmpPathMode.STAND));
+					jarPathTree.getLinuxPrefixs(CmpPathMode.STAND));
 		}
 		return jarPathPrefixs;
 	}
