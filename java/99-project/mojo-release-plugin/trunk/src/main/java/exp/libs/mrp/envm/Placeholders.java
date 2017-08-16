@@ -62,6 +62,9 @@ public class Placeholders {
 	/** 收尾操作 */
 	public final static String END_OP = "end_op";
 	
+	/** 版本打印脚本标识 */
+	public final static String VER = "ver";
+	
 	/** 禁止外部构造，避免误用 */
 	private Placeholders() {}
 	

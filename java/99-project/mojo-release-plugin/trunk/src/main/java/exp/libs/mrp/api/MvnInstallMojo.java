@@ -73,6 +73,14 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String mavenRepository;
 	
 	/**
+	 * 项目版本类路径
+	 * 
+	 * @parameter default-value="foo.bar.prj.Version"
+	 * @required
+	 */
+	private String verClass;
+	
+	/**
 	 * 项目启动类路径
 	 * 
 	 * @parameter default-value="foo.bar.prj.Main"
@@ -81,12 +89,12 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String mainClass;
 	
 	/**
-	 * 项目版本类路径
+	 * main方法入参
 	 * 
-	 * @parameter default-value="foo.bar.prj.Version"
+	 * @parameter default-value=" "
 	 * @required
 	 */
-	private String verClass;
+	private String mainArgs;
 	
 	/**
 	 * 项目编码
@@ -96,6 +104,17 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	 */
 	private String charset;
 
+	/**
+	 * JDK路径.
+	 * 	默认为控制台模式的java（需环境变量支持）, 
+	 * 	视实际运行需求，可为全路径，如 C:\Program Files\Java\jdk1.6.0_43\bin\java
+	 *  或者应为UI时，可为 javaw
+	 * 
+	 * @parameter default-value="java"
+	 * @required
+	 */
+	private String jdkPath;
+	
 	/**
 	 * 默认分配JVM堆空间
 	 * 
@@ -203,16 +222,24 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 		return mavenRepository;
 	}
 
+	public String getVerClass() {
+		return verClass;
+	}
+	
 	public String getMainClass() {
 		return mainClass;
 	}
 
-	public String getVerClass() {
-		return verClass;
+	public String getMainArgs() {
+		return mainArgs;
 	}
 
 	public String getCharset() {
 		return charset;
+	}
+
+	public String getJdkPath() {
+		return jdkPath;
 	}
 
 	public String getXms() {

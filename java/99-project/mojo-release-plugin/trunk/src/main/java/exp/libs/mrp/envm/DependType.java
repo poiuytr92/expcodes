@@ -2,8 +2,17 @@ package exp.libs.mrp.envm;
 
 public class DependType {
 
+	/**
+	 * 生成引用maven目录优先的脚本。
+	 * 即若依赖包原本是在maven仓库的，则在脚本直接引用。
+	 * 若不在maven仓库的，先复制到./lib下，再在脚本引用。
+	 */
 	public final static DependType MAVEN = new DependType(1, "MAVEN");
 	
+	/**
+	 * 生成引用lib目录优先的脚本。
+	 * 即把所有依赖包都复制到./lib目录下，然后脚本引用./lib的包。
+	 */
 	public final static DependType SELF = new DependType(2, "SELF");
 	
 	private int id;

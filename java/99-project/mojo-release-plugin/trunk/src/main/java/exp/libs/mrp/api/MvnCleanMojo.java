@@ -2,6 +2,10 @@ package exp.libs.mrp.api;
 
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
+import org.apache.maven.project.MavenProject;
+
+import exp.libs.mrp.Config;
+import exp.libs.utils.io.FileUtils;
 
 /**
  * <PRE>
@@ -21,12 +25,47 @@ import org.apache.maven.plugin.MojoFailureException;
  */
 public class MvnCleanMojo extends org.apache.maven.plugin.AbstractMojo {
 
+	/**
+	 * Maven所发布的项目对象
+	 * 
+	 * @parameter default-value="${project}"
+	 * @required
+	 * @readonly
+	 */
+	private MavenProject project;
+	
+	/**
+	 * <PRE>
+	 * 私有lib仓库的目录
+	 * dependType = self 时有效
+	 * </PRE>
+	 * 
+	 * @parameter default-value="./lib"
+	 * @required
+	 */
+	private String selfLibDir;
+	
 	public MvnCleanMojo() {}
 	
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		// TODO Auto-generated method stub
+		String prjName = project.getArtifactId();
+		String prjVer = project.getVersion();
 		
+		String releaseDir = Config.toReleaseDir(prjName, prjVer);
+		String copyLibDir = Config.toCopyJarDir(releaseDir, selfLibDir.trim());
+		
+		if(!isSysDir(copyLibDir)) {
+			FileUtils.delete(copyLibDir);
+		}
+		
+		if(!isSysDir(releaseDir)) {
+			FileUtils.delete(releaseDir);
+		}
+	}
+	
+	private boolean isSysDir(String dir) {
+		return "/".equals(dir) || "C:\\\\".equalsIgnoreCase(dir);
 	}
 
 }

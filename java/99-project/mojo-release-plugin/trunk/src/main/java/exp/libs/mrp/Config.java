@@ -33,11 +33,15 @@ public class Config {
 	/** 自动生成, 无需配置 */
 	private String releaseDir;
 	
-	private String mainClass;
-	
 	private String verClass;
 	
+	private String mainClass;
+	
+	private String mainArgs;
+	
 	private String charset;
+	
+	private String jdkPath;
 	
 	private String xms;
 	
@@ -101,10 +105,12 @@ public class Config {
 			this.prjVer = mvn.getProject().getVersion();
 			this.noPrjVer = BoolUtils.toBool(mvn.getNoPrjVer().trim(), false);
 			this.noVerJarRegex = mvn.getNoVerJarRegex().trim();
-			this.releaseDir = StrUtils.concat(TARGET_DIR, "/", prjName, "-", prjVer);
-			this.mainClass = mvn.getMainClass().trim();
+			this.releaseDir = toReleaseDir(prjName, prjVer);
 			this.verClass = mvn.getVerClass().trim();
+			this.mainClass = mvn.getMainClass().trim();
+			this.mainArgs = mvn.getMainArgs().trim();
 			this.charset = mvn.getCharset().trim();
+			this.jdkPath = mvn.getJdkPath().trim();
 			this.xms = mvn.getXms().trim();
 			this.xmx = mvn.getXmx().trim();
 			this.jdkParams = mvn.getJdkParams().trim();
@@ -112,7 +118,7 @@ public class Config {
 			this.cmpPathMode = CmpPathMode.toMode(mvn.getCmpPathMode().trim());
 			this.proguard = BoolUtils.toBool(mvn.getProguard().trim(), false);
 			this.proguardDir = StrUtils.concat(releaseDir, PROGUARD_SUFFIX);
-			this.copyJarDir = PathUtils.combine(releaseDir, selfLibDir);
+			this.copyJarDir = toCopyJarDir(releaseDir, selfLibDir);
 			
 		} catch(Exception e) {
 			Log.error("加载 mojo-release-plugin 配置失败", e);
@@ -123,6 +129,14 @@ public class Config {
 			Log.error("创建构件目录失败: ".concat(copyJarDir));
 			System.exit(1);
 		}
+	}
+	
+	public static String toReleaseDir(String prjName, String prjVer) {
+		return StrUtils.concat(TARGET_DIR, "/", prjName, "-", prjVer);
+	}
+	
+	public static String toCopyJarDir(String releaseDir, String selfLibDir) {
+		return PathUtils.combine(releaseDir, selfLibDir);
 	}
 
 	public DependType getDependType() {
@@ -157,16 +171,24 @@ public class Config {
 		return releaseDir;
 	}
 
+	public String getVerClass() {
+		return verClass;
+	}
+	
 	public String getMainClass() {
 		return mainClass;
 	}
 
-	public String getVerClass() {
-		return verClass;
+	public String getMainArgs() {
+		return mainArgs;
 	}
 
 	public String getCharset() {
 		return charset;
+	}
+
+	public String getJdkPath() {
+		return jdkPath;
 	}
 
 	public String getXms() {
@@ -199,6 +221,33 @@ public class Config {
 	
 	public String getCopyJarDir() {
 		return copyJarDir;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("  dependType: ").append(getDependType().TYPE()).append("\r\n");
+		sb.append("  selfLibDir: ").append(getSelfLibDir()).append("\r\n");
+		sb.append("  mavenRepository: ").append(getMavenRepository()).append("\r\n");
+		sb.append("  prjName: ").append(getPrjName()).append("\r\n");
+		sb.append("  prjVer: ").append(getPrjVer()).append("\r\n");
+		sb.append("  noPrjVer: ").append(isNoPrjVer()).append("\r\n");
+		sb.append("  noVerJarRegex: ").append(getNoVerJarRegex()).append("\r\n");
+		sb.append("  releaseDir: ").append(getReleaseDir()).append("\r\n");
+		sb.append("  verClass: ").append(getVerClass()).append("\r\n");
+		sb.append("  mainClass: ").append(getMainClass()).append("\r\n");
+		sb.append("  mainArgs: ").append(getMainArgs()).append("\r\n");
+		sb.append("  charset: ").append(getCharset()).append("\r\n");
+		sb.append("  jdkPath: ").append(getJdkPath()).append("\r\n");
+		sb.append("  xms: ").append(getXms()).append("\r\n");
+		sb.append("  xmx: ").append(getXmx()).append("\r\n");
+		sb.append("  jdkParams: ").append(getJdkParams()).append("\r\n");
+		sb.append("  threadSuffix: ").append(getThreadSuffix()).append("\r\n");
+		sb.append("  cmpPathMode: ").append(getCmpPathMode().MODE()).append("\r\n");
+		sb.append("  proguard: ").append(isProguard()).append("\r\n");
+		sb.append("  proguardDir: ").append(getProguardDir()).append("\r\n");
+		sb.append("  copyJarDir: ").append(getCopyJarDir()).append("\r\n");
+		return sb.toString();
 	}
 
 }
