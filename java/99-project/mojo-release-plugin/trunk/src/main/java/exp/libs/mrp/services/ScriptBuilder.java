@@ -168,7 +168,7 @@ public class ScriptBuilder {
 		tpl.set(Placeholders.CLASSPATH, cps);
 		
 		// 设置main方法与入参
-		tpl.set(Placeholders.MAIN_METHOD, Config.getInstn().getMainClass());
+		tpl.set(Placeholders.MAIN_METHOD, Config.getInstn().getVerClass());
 		tpl.set(Placeholders.MAIN_METHOD_PARAMS, "-p");	// 只打印版本
 		tpl.set(Placeholders.VER, "ver-");	// 声明为版本脚本
 		
@@ -271,7 +271,7 @@ public class ScriptBuilder {
 		tpl.set(Placeholders.CLASSPATH, cps);
 				
 		// 设置main方法与入参
-		tpl.set(Placeholders.MAIN_METHOD, Config.getInstn().getMainClass());
+		tpl.set(Placeholders.MAIN_METHOD, Config.getInstn().getVerClass());
 		tpl.set(Placeholders.MAIN_METHOD_PARAMS, "-p");	// 只打印版本
 		
 		// 设置标准流和异常流输出位置

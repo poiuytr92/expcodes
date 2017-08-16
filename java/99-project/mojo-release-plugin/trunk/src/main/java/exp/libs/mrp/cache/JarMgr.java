@@ -8,6 +8,7 @@ import java.util.Map;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Config;
+import exp.libs.mrp.Log;
 import exp.libs.mrp.envm.CmpPathMode;
 import exp.libs.mrp.envm.DependType;
 import exp.libs.mrp.utils.MvnUtils;
@@ -30,23 +31,23 @@ public class JarMgr {
 
 	private List<String> srcPaths;
 	
-	private List<String> snkPaths;
+	private List<String> jarPaths;
 	
-	private Map<String, String> snkNames;
+	private Map<String, String> jarNames;
 	
-	private _PathTree snkPathTree;
+	private _PathTree jarPathTree;
 	
-	private List<String> snkPathPrefixs;
+	private List<String> jarPathPrefixs;
 	
 	private static volatile JarMgr instance;
 	
 	private JarMgr() {
 		this.srcPaths = new LinkedList<String>();
-		this.snkPaths = new LinkedList<String>();
-		this.snkNames = new HashMap<String, String>();
+		this.jarPaths = new LinkedList<String>();
+		this.jarNames = new HashMap<String, String>();
 		
-		this.snkPathTree = new _PathTree();
-		this.snkPathPrefixs = new LinkedList<String>();
+		this.jarPathTree = new _PathTree();
+		this.jarPathPrefixs = new LinkedList<String>();
 	}
 	
 	public static JarMgr getInstn() {
@@ -60,44 +61,31 @@ public class JarMgr {
 		return instance;
 	}
 	
-	public void loadPrjJarPath() {
-		String srcDir = Config.getInstn().isProguard() ? 
-				Config.getInstn().getProguardDir() : Config.TARGET_DIR;
-		String srcName = StrUtils.concat(Config.getInstn().getPrjName(), "-", 
-				Config.getInstn().getPrjVer(), ".jar");
-		String srcPath = PathUtils.combine(srcDir, srcName);
-		
-		String snkDir = Config.getInstn().getSelfLibDir();
-		String snkName = !Config.getInstn().isNoPrjVer() ? srcName : 
-				StrUtils.concat(Config.getInstn().getPrjName(), ".jar");
-		String snkPath = PathUtils.combine(snkDir, snkName);
-		
-		srcPaths.add(0, srcPath);
-		snkNames.put(srcPath, snkName);
-		snkPaths.add(0, snkPath);
-		snkPathTree.add(snkPath);
+	public void loadJarPaths(MavenProject mvnPrj) {
+		_loadDependJarPaths(mvnPrj);
+		_loadPrjJarPath();
 	}
-
-	public void loadDependJarPaths(MavenProject mvnPrj) {
+	
+	private void _loadDependJarPaths(MavenProject mvnPrj) {
 		srcPaths.addAll(MvnUtils.getArtifactPaths(mvnPrj));
 		for(String srcPath : srcPaths) {
-			String snkPath = srcPath;
+			String jarPath = srcPath;
 			
 			if(DependType.SELF == Config.getInstn().getDependType()) {
-				String snkName = PathUtils.toLinux(srcPath).replaceFirst(".*/", "");
-				snkName = cutVer(snkName);	// 版本号裁剪
-				snkNames.put(srcPath, snkName);
+				String jarName = PathUtils.toLinux(srcPath).replaceFirst(".*/", "");
+				jarName = _cutVer(jarName);	// 版本号裁剪
+				jarNames.put(srcPath, jarName);
 				
-				String snkDir = Config.getInstn().getSelfLibDir();
-				snkPath = PathUtils.combine(snkDir, snkName);
+				String jarDir = Config.getInstn().getJarLibDir();
+				jarPath = PathUtils.combine(jarDir, jarName);
 			}
 			
-			snkPaths.add(snkPath);
-			snkPathTree.add(snkPath);
+			jarPaths.add(jarPath);
+			jarPathTree.add(jarPath);
 		}
 	}
 	
-	private String cutVer(String jarName) {
+	private String _cutVer(String jarName) {
 		String name = jarName;
 		if(RegexUtils.matches(name, Config.getInstn().getNoVerJarRegex())) {
 			name = name.replaceAll("[-_\\.]?\\d+\\..*", ".jar");
@@ -105,11 +93,32 @@ public class JarMgr {
 		return name;
 	}
 	
+	private void _loadPrjJarPath() {
+		String srcDir = Config.getInstn().isProguard() ? 
+				Config.getInstn().getProguardDir() : Config.TARGET_DIR;
+		String srcName = StrUtils.concat(Config.getInstn().getPrjName(), "-", 
+				Config.getInstn().getPrjVer(), ".jar");
+		String srcPath = PathUtils.combine(srcDir, srcName);
+		
+		String jarDir = Config.getInstn().getJarLibDir();
+		String jarName = !Config.getInstn().isNoPrjVer() ? srcName : 
+				StrUtils.concat(Config.getInstn().getPrjName(), ".jar");
+		String jarPath = PathUtils.combine(jarDir, jarName);
+		
+		jarNames.put(srcPath, jarName);
+		srcPaths.add(0, srcPath);
+		jarPaths.add(0, jarPath);
+		jarPathTree.add(jarPath);
+	}
+	
 	public void copyJars() {
 		for(String srcPath : srcPaths) {
 			String snkPath = PathUtils.combine(
-					Config.getInstn().getCopyJarDir(), snkNames.get(srcPath));
+					Config.getInstn().getCopyJarDir(), jarNames.get(srcPath));
 			FileUtils.copyFile(srcPath, snkPath);
+			
+			Log.debug("拷贝: [".concat(srcPath).concat("] -> [").
+					concat(snkPath).concat("]"));
 			
 			if(DependType.SELF != Config.getInstn().getDependType()) {
 				break;	// 若不使用私有仓库， 则只复制项目jar包
@@ -126,15 +135,15 @@ public class JarMgr {
 	}
 	
 	public List<String> getJarPathPrefixs() {
-		if(snkPathPrefixs.isEmpty()) {
-			snkPathPrefixs.addAll(
-					snkPathTree.getLinuxPathPrefixSet(CmpPathMode.STAND));
+		if(jarPathPrefixs.isEmpty()) {
+			jarPathPrefixs.addAll(
+					jarPathTree.getLinuxPathPrefixSet(CmpPathMode.STAND));
 		}
-		return snkPathPrefixs;
+		return jarPathPrefixs;
 	}
 	
 	public List<String> getJarPaths() {
-		return snkPaths;
+		return jarPaths;
 	}
 	
 }

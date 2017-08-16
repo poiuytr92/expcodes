@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-plugins</artifactId>
-		<version>30</version>
+		<version>16</version>
 	</parent>
 
 	<!--项目基本信息(必填)-->
@@ -46,7 +46,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
         <explibs.version>1.0-SNAPSHOT</explibs.version>
-        <mvn.version>2.2.1</mvn.version>
+        <mvn.version>2.0.6</mvn.version>
     </properties>
 
 	<!-- FIXME ： 设定子pom，以便导入/去除某一类构件 -->
@@ -392,7 +392,7 @@
 						</goals>
 						<configuration>
 							<dependType>SELF</dependType>
-							<selfLibDir>./lib</selfLibDir>
+							<jarLibDir>./lib</jarLibDir>
 							<mavenRepository>D:\mavenRepository</mavenRepository>
 							<verClass>foo.bar.prj.Version</verClass>
 							<mainClass>foo.bar.prj.Main</mainClass>

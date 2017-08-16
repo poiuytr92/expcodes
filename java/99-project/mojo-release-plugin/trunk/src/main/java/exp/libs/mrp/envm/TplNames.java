@@ -14,45 +14,47 @@ package exp.libs.mrp.envm;
  */
 public class TplNames {
 
+	private final static String PACKAGE = "/exp/lib/mrp/";
+	
 	/**
 	 * ant启动脚本模板名称
 	 */
-	public final static String BUILD_TEMPLATE_DOS = "build_template_dos";
+	public final static String BUILD_TEMPLATE_DOS = PACKAGE.concat("build_template_dos");
 	
 	/**
 	 * ant配置脚本模板名称
 	 */
-	public final static String BUILD_TEMPLATE_XML = "build_template_xml";
+	public final static String BUILD_TEMPLATE_XML = PACKAGE.concat("build_template_xml");
 	
 	/**
 	 * 程序位置脚本模板名称
 	 */
-	public final static String APP_PATH_TEMPLATE = "app_path_template";
+	public final static String APP_PATH_TEMPLATE = PACKAGE.concat("app_path_template");
 	
 	/**
 	 * 线程名脚本模板名称
 	 */
-	public final static String THREADNAME_TEMPLATE = "threadname_template";
+	public final static String THREADNAME_TEMPLATE = PACKAGE.concat("threadname_template");
 	
 	/**
 	 * 线程号查询脚本模板名称
 	 */
-	public final static String PID_TEMPLATE_UNIX = "pid_template_unix";
+	public final static String PID_TEMPLATE_UNIX = PACKAGE.concat("pid_template_unix");
 	
 	/**
 	 * dos启动脚本模板名称
 	 */
-	public final static String START_TEMPLATE_DOS = "start_template_dos";
+	public final static String START_TEMPLATE_DOS = PACKAGE.concat("start_template_dos");
 	
 	/**
 	 * unix启动脚本模板名称
 	 */
-	public final static String START_TEMPLATE_UNIX = "start_template_unix";
+	public final static String START_TEMPLATE_UNIX = PACKAGE.concat("start_template_unix");
 	
 	/**
 	 * unix停止脚本模板名称
 	 */
-	public final static String STOP_TEMPLATE_DOS = "stop_template_unix";
+	public final static String STOP_TEMPLATE_DOS = PACKAGE.concat("stop_template_unix");
 	
 	/**
 	 * 禁止外部构造，避免误用

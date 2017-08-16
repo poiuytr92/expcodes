@@ -8,6 +8,7 @@ import exp.libs.mrp.Config;
 import exp.libs.mrp.Log;
 import exp.libs.mrp.cache.JarMgr;
 import exp.libs.mrp.services.ScriptBuilder;
+import exp.libs.utils.io.FileUtils;
 
 /**
  * <PRE>
@@ -63,7 +64,7 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	 * @parameter default-value="./lib"
 	 * @required
 	 */
-	private String selfLibDir;
+	private String jarLibDir;
 	
 	/**
 	 * maven仓库路径
@@ -202,10 +203,14 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 		Log.info("正在发布项目: ".concat(Config.getInstn().getReleaseName()));
 		Log.info("项目发布参数: \r\n".concat(Config.getInstn().toString()));
 		
+		Log.info("正在清理上次发布缓存...");	// 由于Ant插件先于本插件运行，不能删除ReleaseDir
+		FileUtils.delete(Config.getInstn().getCopyJarDir());
+		FileUtils.createDir(Config.getInstn().getCopyJarDir());
+		
 		Log.info("正在定位项目依赖构件...");
-		JarMgr.getInstn().loadPrjJarPath();
-		JarMgr.getInstn().loadDependJarPaths(project);
-		Log.info("依赖构件清单(有序):\r\n".concat(JarMgr.getInstn().getJarSrcPathsInfo()));
+		JarMgr.getInstn().loadJarPaths(project);
+		Log.info("依赖构件清单(有序):\r\n".
+				concat(JarMgr.getInstn().getJarSrcPathsInfo()));
 		
 		Log.info("正在拷贝项目依赖构件...");
 		JarMgr.getInstn().copyJars();
@@ -213,7 +218,8 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 		Log.info("正在生成项目脚本...");
 		ScriptBuilder.exec();
 		
-		Log.info("项目发布完成, 发布目录: ".concat(Config.getInstn().getReleaseDir()));
+		Log.info("项目发布完成, 发布目录: ".
+				concat(Config.getInstn().getReleaseDir()));
 	}
 	
 	public MavenProject getProject() {
@@ -224,8 +230,8 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 		return dependType;
 	}
 
-	public String getSelfLibDir() {
-		return selfLibDir;
+	public String getJarLibDir() {
+		return jarLibDir;
 	}
 	
 	public String getMavenRepository() {

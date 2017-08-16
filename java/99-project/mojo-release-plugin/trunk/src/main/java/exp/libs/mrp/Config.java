@@ -14,9 +14,11 @@ public class Config {
 	
 	public final static String PROGUARD_SUFFIX = "-pg";
 	
+	private final static String DEFAULT_JAR_LIB = "./lib";
+	
 	private DependType dependType;
 	
-	private String selfLibDir;
+	private String jarLibDir;
 	
 	private String mavenRepository;
 	
@@ -100,14 +102,15 @@ public class Config {
 	private void init(MvnInstallMojo mvn) {
 		try {
 			this.dependType = DependType.toType(mvn.getDependType().trim());
-			this.selfLibDir = mvn.getSelfLibDir().trim();
+			this.jarLibDir = mvn.getJarLibDir().trim();
+			if(PathUtils.isFullPath(jarLibDir)) { jarLibDir = DEFAULT_JAR_LIB; }
 			this.mavenRepository = mvn.getMavenRepository().trim();
 			this.prjName = mvn.getProject().getArtifactId();
 			this.prjVer = mvn.getProject().getVersion();
 			this.noPrjVer = BoolUtils.toBool(mvn.getNoPrjVer().trim(), false);
 			this.noVerJarRegex = mvn.getNoVerJarRegex().trim();
-			this.releaseName = toReleaseName(prjName, prjVer);
-			this.releaseDir = toReleaseDir(releaseName);
+			this.releaseName = StrUtils.concat(prjName, "-", prjVer);
+			this.releaseDir = StrUtils.concat(TARGET_DIR, "/", releaseName);
 			this.verClass = mvn.getVerClass().trim();
 			this.mainClass = mvn.getMainClass().trim();
 			this.mainArgs = mvn.getMainArgs().trim();
@@ -120,7 +123,7 @@ public class Config {
 			this.cmpPathMode = CmpPathMode.toMode(mvn.getCmpPathMode().trim());
 			this.proguard = BoolUtils.toBool(mvn.getProguard().trim(), false);
 			this.proguardDir = StrUtils.concat(releaseDir, PROGUARD_SUFFIX);
-			this.copyJarDir = toCopyJarDir(releaseDir, selfLibDir);
+			this.copyJarDir = PathUtils.combine(releaseDir, jarLibDir);
 			
 		} catch(Exception e) {
 			Log.error("加载 mojo-release-plugin 配置失败", e);
@@ -133,24 +136,12 @@ public class Config {
 		}
 	}
 	
-	public static String toReleaseName(String prjName, String prjVer) {
-		return StrUtils.concat(prjName, "-", prjVer);
-	}
-	
-	public static String toReleaseDir(String releaseName) {
-		return StrUtils.concat(TARGET_DIR, "/", releaseName);
-	}
-	
-	public static String toCopyJarDir(String releaseDir, String selfLibDir) {
-		return PathUtils.combine(releaseDir, selfLibDir);
-	}
-
 	public DependType getDependType() {
 		return dependType;
 	}
 	
-	public String getSelfLibDir() {
-		return selfLibDir;
+	public String getJarLibDir() {
+		return jarLibDir;
 	}
 
 	public String getMavenRepository() {
@@ -237,7 +228,7 @@ public class Config {
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("  dependType: ").append(getDependType().TYPE()).append("\r\n");
-		sb.append("  selfLibDir: ").append(getSelfLibDir()).append("\r\n");
+		sb.append("  jarLibDir: ").append(getJarLibDir()).append("\r\n");
 		sb.append("  mavenRepository: ").append(getMavenRepository()).append("\r\n");
 		sb.append("  prjName: ").append(getPrjName()).append("\r\n");
 		sb.append("  prjVer: ").append(getPrjVer()).append("\r\n");
