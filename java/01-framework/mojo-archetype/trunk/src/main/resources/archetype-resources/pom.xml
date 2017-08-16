@@ -234,6 +234,9 @@
 					<execution>
 						<id>ant-build</id>
 						<phase>install</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
 						<configuration>
 							<target>
 								<echo>拷贝数据库脚本</echo>
@@ -256,9 +259,6 @@
 								</copy>
 							</target>
 						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
 					</execution>
 				</executions>
 			</plugin>
