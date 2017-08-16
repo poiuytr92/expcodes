@@ -378,41 +378,34 @@
 				</executions>
 			</plugin>
 			
-			<!-- 自动生成脚本插件
+			<!-- 项目发布插件
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>catt-maven-plugin</artifactId>
-				<version>1.2.0.8</version>
+				<groupId>exp.libs</groupId>
+				<artifactId>mojo-release-plugin</artifactId>
+				<version>1.0-SNAPSHOT</version>
 				<executions>
 					<execution>
-						<id>catt-maven-plugin</id>
+						<id>mrp</id>
 						<phase>install</phase>
 						<goals>
 							<goal>install</goal>
 						</goals>
 						<configuration>
-							<scriptType>lib</scriptType>
-							<mainClass>com.catt.demo.Main</mainClass>
-							<versionClass>com.catt.demo.Version</versionClass>
+							<dependType>SELF</dependType>
+							<selfLibDir>./lib</selfLibDir>
+							<mavenRepository>D:\mavenRepository</mavenRepository>
+							<verClass>foo.bar.prj.Version</verClass>
+							<mainClass>foo.bar.prj.Main</mainClass>
+							<mainArgs></mainArgs>
 							<charset>UTF-8</charset>
+							<jdkPath>java</jdkPath>
 							<xms>32m</xms>
 							<xmx>64m</xmx>
 							<threadSuffix></threadSuffix>
-							<jdkParams></jdkParams>
-							<linuxLibPath>./lib</linuxLibPath>
-							<winLibPath>.\lib</winLibPath>
-							<linuxCommonLibPath>/home/cattsoft/commonLib</linuxCommonLibPath>
-							<winCommonLibPath>D:\commonLib</winCommonLibPath>
-							<linuxMavenLibPath>/home/cattsoft/mavenRepository</linuxMavenLibPath>
-							<winMavenLibPath>D:\mavenRepository</winMavenLibPath>
-							<pathPrefixMode>2</pathPrefixMode>
-							<mainProVersion>true</mainProVersion>
-							<noVerJars></noVerJars>
-							<cpsMain>true</cpsMain>
-							<cpsAnt>false</cpsAnt>
-							<cpsCrypto>true</cpsCrypto>
-							<cpsAutodb>true</cpsAutodb>
-							<cpsStartcheck>true</cpsStartcheck>
+							<noPrjVer>true</noPrjVer>
+							<noVerJarRegex>exp-?libs-.*</noVerJarRegex>
+							<proguard>false</proguard>
+							<cmpPathMode>STAND</cmpPathMode>
 						</configuration>
 					</execution>
 				</executions>

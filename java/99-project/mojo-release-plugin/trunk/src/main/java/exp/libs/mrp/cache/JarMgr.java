@@ -72,8 +72,9 @@ public class JarMgr {
 				StrUtils.concat(Config.getInstn().getPrjName(), ".jar");
 		String snkPath = PathUtils.combine(snkDir, snkName);
 		
+		srcPaths.add(0, srcPath);
 		snkNames.put(srcPath, snkName);
-		snkPaths.add(snkPath);
+		snkPaths.add(0, snkPath);
 		snkPathTree.add(snkPath);
 	}
 
@@ -114,6 +115,14 @@ public class JarMgr {
 				break;	// 若不使用私有仓库， 则只复制项目jar包
 			}
 		}
+	}
+	
+	public String getJarSrcPathsInfo() {
+		StringBuilder sb = new StringBuilder();
+		for(String srcPath : srcPaths) {
+			sb.append("  ").append(srcPath).append("\r\n");
+		}
+		return sb.toString();
 	}
 	
 	public List<String> getJarPathPrefixs() {

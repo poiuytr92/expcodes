@@ -5,6 +5,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Config;
+import exp.libs.mrp.Log;
 import exp.libs.mrp.cache.JarMgr;
 import exp.libs.mrp.services.ScriptBuilder;
 
@@ -44,11 +45,11 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	/**
 	 * <PRE>
 	 * 依赖类型.
-	 * 	maven: 仓库依赖，所发布的项目脚本，直接依赖本地maven仓库的jar包
-	 * 	self: 自身依赖，所发布的项目的依赖jar包会先复制到项目私有的lib目录，再在项目脚本中依赖lib下的jar包
+	 * 	MAVEN: 仓库依赖，所发布的项目脚本，直接依赖本地maven仓库的jar包
+	 * 	SELF: 自身依赖，所发布的项目的依赖jar包会先复制到项目私有的lib目录，再在项目脚本中依赖lib下的jar包
 	 * </PRE>
 	 * 
-	 * @parameter default-value="self"
+	 * @parameter default-value="SELF"
 	 * @required
 	 */
 	private String dependType;
@@ -197,13 +198,22 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	 */
 	@Override
 	public void execute() throws MojoExecutionException, MojoFailureException {
-		Config.createInstn(this);	// 初始化配置参数
+		Config.createInstn(this);
+		Log.info("正在发布项目: ".concat(Config.getInstn().getReleaseName()));
+		Log.info("项目发布参数: \r\n".concat(Config.getInstn().toString()));
 		
+		Log.info("正在定位项目依赖构件...");
 		JarMgr.getInstn().loadPrjJarPath();
 		JarMgr.getInstn().loadDependJarPaths(project);
+		Log.info("依赖构件清单(有序):\r\n".concat(JarMgr.getInstn().getJarSrcPathsInfo()));
+		
+		Log.info("正在拷贝项目依赖构件...");
 		JarMgr.getInstn().copyJars();
 		
+		Log.info("正在生成项目脚本...");
 		ScriptBuilder.exec();
+		
+		Log.info("项目发布完成, 发布目录: ".concat(Config.getInstn().getReleaseDir()));
 	}
 	
 	public MavenProject getProject() {

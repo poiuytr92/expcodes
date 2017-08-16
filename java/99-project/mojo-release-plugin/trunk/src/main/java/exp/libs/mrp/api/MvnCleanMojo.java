@@ -5,6 +5,7 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Config;
+import exp.libs.mrp.Log;
 import exp.libs.utils.io.FileUtils;
 
 /**
@@ -51,16 +52,24 @@ public class MvnCleanMojo extends org.apache.maven.plugin.AbstractMojo {
 	public void execute() throws MojoExecutionException, MojoFailureException {
 		String prjName = project.getArtifactId();
 		String prjVer = project.getVersion();
-		
-		String releaseDir = Config.toReleaseDir(prjName, prjVer);
+		String releaseDir = Config.toReleaseDir(Config.toReleaseName(prjName, prjVer));
 		String copyLibDir = Config.toCopyJarDir(releaseDir, selfLibDir.trim());
 		
-		if(!isSysDir(copyLibDir)) {
-			FileUtils.delete(copyLibDir);
-		}
-		
-		if(!isSysDir(releaseDir)) {
-			FileUtils.delete(releaseDir);
+		Log.info("正在清理上次发项目的缓存文件...");
+		clear(copyLibDir);
+		clear(releaseDir);
+		Log.info("清理完成.");
+	}
+	
+	private void clear(String dir) {
+		if(!isSysDir(dir)) {
+			if(FileUtils.delete(dir)) {
+				Log.info("清理目录成功: ".concat(dir));
+			} else {
+				Log.warn("清理目录失败: ".concat(dir));
+			}
+		} else {
+			Log.error("无法删除系统目录: ".concat(dir));
 		}
 	}
 	

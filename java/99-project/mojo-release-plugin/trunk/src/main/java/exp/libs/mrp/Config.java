@@ -30,7 +30,8 @@ public class Config {
 	
 	private String noVerJarRegex;
 	
-	/** 自动生成, 无需配置 */
+	private String releaseName;
+	
 	private String releaseDir;
 	
 	private String verClass;
@@ -105,7 +106,8 @@ public class Config {
 			this.prjVer = mvn.getProject().getVersion();
 			this.noPrjVer = BoolUtils.toBool(mvn.getNoPrjVer().trim(), false);
 			this.noVerJarRegex = mvn.getNoVerJarRegex().trim();
-			this.releaseDir = toReleaseDir(prjName, prjVer);
+			this.releaseName = toReleaseName(prjName, prjVer);
+			this.releaseDir = toReleaseDir(releaseName);
 			this.verClass = mvn.getVerClass().trim();
 			this.mainClass = mvn.getMainClass().trim();
 			this.mainArgs = mvn.getMainArgs().trim();
@@ -131,8 +133,12 @@ public class Config {
 		}
 	}
 	
-	public static String toReleaseDir(String prjName, String prjVer) {
-		return StrUtils.concat(TARGET_DIR, "/", prjName, "-", prjVer);
+	public static String toReleaseName(String prjName, String prjVer) {
+		return StrUtils.concat(prjName, "-", prjVer);
+	}
+	
+	public static String toReleaseDir(String releaseName) {
+		return StrUtils.concat(TARGET_DIR, "/", releaseName);
 	}
 	
 	public static String toCopyJarDir(String releaseDir, String selfLibDir) {
@@ -167,6 +173,10 @@ public class Config {
 		return noVerJarRegex;
 	}
 
+	public String getReleaseName() {
+		return releaseName;
+	}
+	
 	public String getReleaseDir() {
 		return releaseDir;
 	}
