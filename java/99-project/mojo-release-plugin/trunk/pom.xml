@@ -401,6 +401,7 @@
 							<jdkPath>java</jdkPath>
 							<xms>32m</xms>
 							<xmx>64m</xmx>
+							<jdkParams></jdkParams>
 							<threadSuffix></threadSuffix>
 							<noPrjVer>true</noPrjVer>
 							<noVerJarRegex>exp-?libs-.*</noVerJarRegex>

@@ -107,7 +107,7 @@ public class Config {
 			this.mavenRepository = mvn.getMavenRepository().trim();
 			this.prjName = mvn.getProject().getArtifactId();
 			this.prjVer = mvn.getProject().getVersion();
-			this.noPrjVer = BoolUtils.toBool(mvn.getNoPrjVer().trim(), false);
+			this.noPrjVer = BoolUtils.toBool(mvn.getNoPrjVer().trim(), true);
 			this.noVerJarRegex = mvn.getNoVerJarRegex().trim();
 			this.releaseName = StrUtils.concat(prjName, "-", prjVer);
 			this.releaseDir = StrUtils.concat(TARGET_DIR, "/", releaseName);
