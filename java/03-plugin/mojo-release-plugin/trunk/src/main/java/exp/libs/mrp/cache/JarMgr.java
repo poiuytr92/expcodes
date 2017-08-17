@@ -21,10 +21,10 @@ import exp.libs.utils.verify.RegexUtils;
  * <PRE>
  * Jar包管理器
  * </PRE>
- * <B>项    目：</B>凯通J2SE开发平台(KTJSDP)
- * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2014
- * @version   1.0 2014-9-19
- * @author    廖权斌：liaoquanbin@gdcattsoft.com
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-17
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class JarMgr {
@@ -117,7 +117,7 @@ public class JarMgr {
 					Config.getInstn().getCopyJarDir(), jarNames.get(srcPath));
 			FileUtils.copyFile(srcPath, snkPath);
 			
-			Log.debug("拷贝: [".concat(srcPath).concat("] -> [").
+			Log.debug("拷贝: [".concat(srcPath).concat("] => [").
 					concat(snkPath).concat("]"));
 			
 			if(DependType.SELF != Config.getInstn().getDependType()) {

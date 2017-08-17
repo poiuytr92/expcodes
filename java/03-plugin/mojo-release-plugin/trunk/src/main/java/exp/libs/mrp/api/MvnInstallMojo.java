@@ -21,12 +21,11 @@ import exp.libs.utils.io.FileUtils;
  * 
  * </PRE>
  * 
- * <B>项 目：</B>凯通J2SE开发平台(KTJSDP) 
- * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2014
- * 
- * @version 1.0 2017-08-14
- * @author EXP：272629724@qq.com
- * @since jdk版本：jdk1.6
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  * 
  * @goal install
  * @requiresDependencyResolution runtime

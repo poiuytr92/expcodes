@@ -17,10 +17,10 @@ import exp.libs.utils.other.PathUtils;
  * <PRE>
  * 路径树.
  * </PRE>
- * <B>项    目：</B>凯通J2SE开发平台(KTJSDP)
- * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2014
- * @version   1.0 2014-9-19
- * @author    廖权斌：liaoquanbin@gdcattsoft.com
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-17
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _PathTree {
@@ -171,7 +171,7 @@ class _PathTree {
 	 * 	D:\mavenRepository\org\apache\maven\maven-monitor\maven-core-2.0.6.jar
 	 * 	D:\mavenRepository\org\apache\maven\maven-monitor\maven-monitor-2.0.6.jar
 	 * 	D:\mavenRepository\org\apache\maven\maven-artifact\maven-artifact-2.0.6.jar
-	 * 	D:\commonLib\j2se\catt\1.1.1.0\catt-utils.jar
+	 * 	D:\commonLib\j2se\foo\1.1.1.0\exp-utils.jar
 	 * 
 	 * (1) 在模式LEAST下：
 	 * 	提到到的路径前缀为：
@@ -193,11 +193,11 @@ class _PathTree {
 	 * 		D:\mavenRepository\org\apache\maven\maven-monitor
 	 * 		D:\mavenRepository\org\apache\maven\maven-monitor
 	 * 		D:\mavenRepository\org\apache\maven\maven-artifact
-	 * 		D:\commonLib\j2se\catt\1.1.1.0
+	 * 		D:\commonLib\j2se\foo\1.1.1.0
 	 * 	由于相同的前缀会被压缩，最终得到的路径前缀有：
 	 * 		D:\mavenRepository\org\apache\maven\maven-monitor
 	 * 		D:\mavenRepository\org\apache\maven\maven-artifact
-	 * 		D:\commonLib\j2se\catt\1.1.1.0
+	 * 		D:\commonLib\j2se\foo\1.1.1.0
 	 * 
 	 * @param mode 路径前缀模式
 	 * @return 路径前缀集(路径不以分隔符结尾).集合按路径长度从大到小排序.
@@ -383,10 +383,10 @@ class _PathTree {
 	 * <PRE>
 	 * 字符串长度排序器(降序,即从最长到最短)。
 	 * </PRE>
-	 * <B>项    目：</B>凯通J2SE开发平台(KTJSDP)
-	 * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2014
-	 * @version   1.0 2014-9-16
-	 * @author    廖权斌：liaoquanbin@gdcattsoft.com
+	 * <B>PROJECT：</B> exp-libs
+	 * <B>SUPPORT：</B> EXP
+	 * @version   1.0 2017-08-17
+	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6
 	 */
 	private class StrLenSort implements Comparator<String> {

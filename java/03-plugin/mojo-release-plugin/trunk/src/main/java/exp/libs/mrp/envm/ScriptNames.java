@@ -6,10 +6,10 @@ package exp.libs.mrp.envm;
  * 要求所有脚本文件名称都要先在此处定义(注意末尾还有一个所有脚本清单ALL_SCRIPTS)，以便管理。
  * 
  * </PRE>
- * <B>项    目：</B>凯通J2SE开发平台(KTJSDP)
- * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2014
- * @version   1.0 2014-09-12
- * @author    廖权斌：liaoquanbin@gdcattsoft.com
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-17
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ScriptNames {
