@@ -183,7 +183,7 @@ public class JarLoaderUtils {
 	 * 拷贝jar包内的文件
 	 * 
 	 * @param sourcePath
-	 *            文件路径 例如：com/catt/*.xml
+	 *            文件路径 例如：foo/bar/*.xml
 	 * @param targetPath
 	 *            目标路径 例如：./copy/file.log
 	 * @param encoding
@@ -203,7 +203,7 @@ public class JarLoaderUtils {
 	 * @param _class
 	 *            类对象
 	 * @param sourcePath
-	 *            文件路径 例如：com/catt/*.xml
+	 *            文件路径 例如：foo/bar/*.xml
 	 * @param targetPath
 	 *            目标路径 例如：./copy/file.log
 	 * @param encoding
@@ -246,7 +246,7 @@ public class JarLoaderUtils {
 	 * @param _class
 	 *            类对象
 	 * @param sourcePath
-	 *            文件路径 例如：./com/catt/*.xml
+	 *            文件路径 例如：./foo/bar/*.xml
 	 * @param encoding
 	 *            编码
 	 * @throws IOException

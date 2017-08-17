@@ -31,8 +31,7 @@ function QxCmd(inparam1, inparam2, inparam3) {
 function QxCmd(inparam) {
 	var ip = inparam.get("ip");
 	var port = inparam.get("port");
-	var telnet = Packages.com.catt.util.javascript.test.TestScriptUtils
-					.telnet(ip, port);
+	var telnet = Packages.exp.libs.util.javascript.test.TestScriptUtils.telnet(ip, port);
 	var out = Packages.java.util.HashMap();
 	out.put("result", "success");
 	out.put("telnet", telnet);

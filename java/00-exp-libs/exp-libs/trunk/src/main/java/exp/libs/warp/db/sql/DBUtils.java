@@ -701,7 +701,7 @@ public class DBUtils {
 	 * 	返回值：当proSql的占位符?个数比入参表params多1，则认为最后1个占位符是出参。
 	 * </pre>
 	 * @param conn 数据库连接
-	 * @param proSql 存储过程SQL，占位符格式，如 KTP_TEST(?,?,?)
+	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
 	 * @return 
 	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
@@ -745,7 +745,7 @@ public class DBUtils {
 	 * 	返回值：最后一个结果集（即SELECT语句）的第1行、第1列的值。
 	 * 
 	 * @param conn 数据库连接
-	 * @param proSql 存储过程SQL，占位符格式，如 KTP_TEST(?,?,?)
+	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
 	 * @return 
 	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
@@ -822,7 +822,7 @@ public class DBUtils {
 	 * 	返回值：return所指定的值。
 	 * 
 	 * @param conn 数据库连接
-	 * @param proSql 存储过程SQL，占位符格式，如 KTP_TEST(?,?,?)
+	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
 	 * @return 
 	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
@@ -888,7 +888,7 @@ public class DBUtils {
 	 * 	返回值：当proSql的占位符?个数比入参表params多1，则认为最后1个占位符是出参。
 	 * 
 	 * @param conn 数据库连接
-	 * @param proSql 存储过程SQL，占位符格式，如 KTP_TEST(?,?,?)
+	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
 	 * @return 
 	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
@@ -1002,7 +1002,7 @@ public class DBUtils {
 	 * 	返回值：最后一个结果集（即SELECT语句）。
 	 *  
 	 * @param conn 数据库连接
-	 * @param proSql 存储过程SQL，占位符格式，如 KTP_TEST(?,?,?)
+	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
 	 * @return 返回结果集的多行记录，每行为 列名-列值 的键值对。
 	 * 
@@ -1083,7 +1083,7 @@ public class DBUtils {
 	 * 	返回值：结果集。
 	 * 
 	 * @param conn Oracle数据库连接
-	 * @param proSql 存储过程SQL，占位符格式，如 KTP_TEST(?,?,?)
+	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表，长度必须必占位符少1
 	 * @return 返回结果集的多行记录，每行为 列名-列值 的键值对。
 	 * 

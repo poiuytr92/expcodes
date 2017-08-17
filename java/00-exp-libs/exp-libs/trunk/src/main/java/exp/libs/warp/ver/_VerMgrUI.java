@@ -57,16 +57,20 @@ class _VerMgrUI extends MainWindow {
 	/** 版本信息库的脚本 */
 	private final static String VER_DB_SCRIPT = "/exp/libs/warp/ver/VERSION-INFO-DB.sql";
 	
+	/** 版本库库名 */
+	private final static String DB_NAME = ".verinfo";
+	
+	/** 资源目录 */
 	private final static String RES_DIR = "./src/main/resources";
 	
 	/**
 	 * 存储版本信息的文件数据库位置.
 	 * 	[src/main/resources] 为Maven项目默认的资源目录位置（即使非Maven项目也可用此位置）
 	 */
-	private final static String VER_DB = RES_DIR.concat("/.verinfo");
+	private final static String VER_DB = RES_DIR.concat("/").concat(DB_NAME);
 	
 	/** 临时版本库位置（仅用于查看版本信息） */
-	private final static String TMP_VER_DB = "./conf/.verinfo";
+	private final static String TMP_VER_DB = "./conf/".concat(DB_NAME);
 	
 	/** [当前版本]的Tab面板索引 */
 	private final static int CUR_VER_TAB_IDX = 2;
@@ -174,6 +178,7 @@ class _VerMgrUI extends MainWindow {
 		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
 		if(!SqliteUtils.testConn(ds)) {
 			FileUtils.copyFileInJar(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
+			FileUtils.hide(TMP_VER_DB);
 			ds.setName(TMP_VER_DB);
 		}
 	}

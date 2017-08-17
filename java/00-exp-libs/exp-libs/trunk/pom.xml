@@ -37,7 +37,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
-        <auto.package.plugin.version>1.2.0.4</auto.package.plugin.version>
+        <mrp.plugin.version>1.0-SNAPSHOT</mrp.plugin.version>
     </properties>
 
     <!-- 项目依赖 -->
@@ -573,6 +573,30 @@
 			<plugin>
 				<groupId>exp.libs</groupId>
 				<artifactId>mojo-release-plugin</artifactId>
+				<version>${mrp.plugin.version}</version>
+				<executions>
+					<execution>
+						<id>mrp</id>
+						<phase>install</phase>
+						<goals>
+							<goal>install</goal>
+						</goals>
+						<configuration>
+							<jarLibDir>./lib</jarLibDir>
+							<mavenRepository>D:\mavenRepository</mavenRepository>
+							<verClass>exp.libs.Version</verClass>
+							<mainClass>exp.libs.Version</mainClass>
+							<jdkParams>-javaagent:./lib/jvm-agent.jar</jdkParams>
+							<noVerJarRegex>((exp-?libs-)|(jvm-agent)).*</noVerJarRegex>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- 项目发布插件（自动生成脚本） -->
+			<plugin>
+				<groupId>exp.libs</groupId>
+				<artifactId>mojo-release-plugin</artifactId>
 				<version>1.0-SNAPSHOT</version>
 				<executions>
 					<execution>
@@ -582,58 +606,15 @@
 							<goal>install</goal>
 						</goals>
 						<configuration>
+							<mavenRepository>D:\mavenRepository</mavenRepository>
 							<verClass>exp.libs.Version</verClass>
 							<mainClass>exp.libs.Version</mainClass>
-							<mainArgs></mainArgs>
-							<xms>32m</xms>
-							<xmx>64m</xmx>
 							<jdkParams>-javaagent:./lib/jvm-agent.jar</jdkParams>
-							<noVerJarRegex>exp-?libs-.*</noVerJarRegex>
-							<proguard>false</proguard>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- 自动生成脚本插件:项目打包 -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>catt-maven-plugin</artifactId>
-                <version>${auto.package.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>catt-install</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>install</goal>
-                        </goals>
-                        <configuration>
-                            <scriptType>lib</scriptType>
-                            <mainClass>com.catt.demo.Main</mainClass>    <!-- 根据实际项目修改 -->
-                            <versionClass>com.catt.demo.Version</versionClass>    <!-- 根据实际项目修改 -->
-                            <charset>UTF-8</charset>    <!-- 根据实际项目修改 -->
-                            <xms>64m</xms>
-                            <xmx>128m</xmx>
-                            <threadSuffix />
-                            <jdkParams>-javaagent:./lib/jvm-agent.jar</jdkParams>
-                            <linuxLibPath>./lib</linuxLibPath>
-                            <winLibPath>.\lib</winLibPath>
-                            <linuxCommonLibPath>/home/cattsoft/commonLib</linuxCommonLibPath>
-                            <winCommonLibPath>D:\commonLib</winCommonLibPath>
-                            <linuxMavenLibPath>/home/cattsoft/mavenRepository</linuxMavenLibPath>
-                            <winMavenLibPath>D:\mavenRepository</winMavenLibPath>
-                            <pathPrefixMode>2</pathPrefixMode>
-                            <mainProVersion>false</mainProVersion>
-                            <cpsMain>true</cpsMain>
-                            <cpsAnt>false</cpsAnt>
-                            <cpsCrypto>false</cpsCrypto>
-                            <cpsAutodb>false</cpsAutodb>
-                            <cpsStartcheck>false</cpsStartcheck>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
+			
             <!-- 打包源码: 项目发布基线版本时会自动打包源码，不要启用此插件，否则会失败 -->
             <!-- plugin>
                 <groupId>org.apache.maven.plugins</groupId>

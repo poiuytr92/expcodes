@@ -12,10 +12,10 @@ import javax.swing.JTextField;
  * <PRE>
  * 自定义的动态增减行组件的差异化组件
  * </PRE>
- * <B>项    目：</B>凯通J2SE开发平台(KTJSDP)
- * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2014
- * @version   1.0 2017-01-17
- * @author    廖权斌：liaoquanbin@gdcattsoft.com
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-17
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class _MyADComponent extends JPanel {
