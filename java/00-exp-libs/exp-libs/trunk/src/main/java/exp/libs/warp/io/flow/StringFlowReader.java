@@ -28,7 +28,7 @@ public class StringFlowReader {
 	private final static Logger log = LoggerFactory.getLogger(StringFlowReader.class);
 	
 	/** 所读入字符串的默认编码 */
-	public final static String DEFAULT_ENCODE = Charset.ISO;
+	public final static String DEFAULT_CHARSET = Charset.ISO;
 	
 	/**
 	 * 所读入字符串的默认[行终止符].
@@ -37,7 +37,7 @@ public class StringFlowReader {
 	public final static char DEFAULT_LINE_END = Endline.CR;
 	
 	/** 所读入的字符串编码 */
-	private String encode;
+	private String charset;
 	
 	/** 流读取器 */
 	private InputStreamReader strReader;
@@ -50,32 +50,32 @@ public class StringFlowReader {
 	 * @param str 待读入字符串
 	 */
 	public StringFlowReader(String str) {
-		init(str, DEFAULT_ENCODE);
+		init(str, DEFAULT_CHARSET);
 	}
 	
 	/**
 	 * 构造函数
 	 * @param str 待读入字符串
-	 * @param encode 待读入字符串的编码
+	 * @param charset 待读入字符串的编码
 	 */
-	public StringFlowReader(String str, String encode) {
-		init(str, encode);
+	public StringFlowReader(String str, String charset) {
+		init(str, charset);
 	}
 	
 	/**
 	 * 初始化
 	 * @param str 待读入字符串
-	 * @param encode 待读入字符串的编码
+	 * @param charset 待读入字符串的编码
 	 */
-	public void init(String str, String encode) {
-		this.encode = testEncode(encode) ? encode : DEFAULT_ENCODE;
+	public void init(String str, String charset) {
+		this.charset = testEncode(charset) ? charset : DEFAULT_CHARSET;
 		this.hasNextLine = false;
 		
 		if(str != null) {
 			try {
 				this.strReader = new InputStreamReader(
-						new ByteArrayInputStream(str.getBytes(this.encode)), 
-						this.encode);
+						new ByteArrayInputStream(str.getBytes(this.charset)), 
+						this.charset);
 				this.hasNextLine = true;
 			} catch (Exception e) {
 				log.error("读取字符串 [{}] 失败.", str, e);
@@ -90,13 +90,13 @@ public class StringFlowReader {
 	
 	/**
 	 * 测试编码是否合法.
-	 * @param encode 被测试编码
+	 * @param charset 被测试编码
 	 * @return true:编码合法; false:编码非法
 	 */
-	private boolean testEncode(String encode) {
+	private boolean testEncode(String charset) {
 		boolean isVaild = true;
 		try {
-			"test".getBytes(encode);
+			"test".getBytes(charset);
 		} catch (UnsupportedEncodingException e) {
 			isVaild = false;
 		}

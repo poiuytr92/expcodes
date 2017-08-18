@@ -19,6 +19,7 @@ import exp.libs.envm.Charset;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.format.XmlUtils;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.io.JarUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.BoolUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
@@ -128,9 +129,9 @@ class _Config implements IConfig {
 		}
 		
 		try {
-			String content = FileUtils.readFileInJar(confFilePath, Charset.ISO);
+			String content = JarUtils.readFileInJar(confFilePath, Charset.ISO);
 			String charset = XmlUtils.getCharset(content);
-			String xml = FileUtils.readFileInJar(confFilePath, charset);
+			String xml = JarUtils.readFileInJar(confFilePath, charset);
 			Document doc = DocumentHelper.parseText(xml);
 			Element root = doc.getRootElement();
 			createPathTree(root);

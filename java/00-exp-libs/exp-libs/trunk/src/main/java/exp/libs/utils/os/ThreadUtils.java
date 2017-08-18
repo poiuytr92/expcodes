@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <PRE>
- * 线程查询组件.
+ * 线程工具.
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

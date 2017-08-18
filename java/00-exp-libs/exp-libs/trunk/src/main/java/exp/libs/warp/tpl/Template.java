@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
 import exp.libs.utils.StrUtils;
-import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.io.JarUtils;
 
 /**
  * <PRE>
@@ -124,17 +124,17 @@ public class Template {
 	/**
 	 * 使用指定编码读取模板文件。
 	 * 
-	 * @param packTemplatePath 包内模板文件的包路径,如: /foo/bar/test.txt
+	 * @param tplPackagePath 包内模板文件的包路径,如: /foo/bar/test.txt
 	 * @param charset 指定读取文件用的编码
 	 */
-	public void read(String packTemplatePath, String charset) {
+	public void read(String tplPackagePath, String charset) {
 		this.fileCharset = charset;
 		try {
-			this.orgContent = FileUtils.readFileInJar(packTemplatePath, charset);
+			this.orgContent = JarUtils.readFileInJar(tplPackagePath, charset);
 			
 		} catch (Exception e) {
 			this.orgContent = "";
-			log.error("读取包内模板文件[{}]失败.", packTemplatePath, e);
+			log.error("读取包内模板文件[{}]失败.", tplPackagePath, e);
 		}
 	}
 	

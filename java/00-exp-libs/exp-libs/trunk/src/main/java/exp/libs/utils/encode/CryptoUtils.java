@@ -19,7 +19,7 @@ import exp.libs.utils.num.BODHUtils;
 
 /**
  * <PRE>
- * 加解密工具类
+ * 加解密工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -130,16 +130,34 @@ public class CryptoUtils {
 		return _16MD5;
 	}
 	
+	/**
+	 * 使用默认密钥对数据进行DES加密（加密编码为UTF-8）
+	 * @param data 被加密数据
+	 * @return DES加密后的16进制字符串
+	 */
 	public static String toDES(String data) {
 		return encrypt(CharsetUtils.toBytes(data, DEFAULT_CHARSET), 
 				CharsetUtils.toBytes(DEFAULT_KEY, DEFAULT_CHARSET));
 	}
 
+	/**
+	 * 对数据进行DES加密（加密编码为UTF-8）
+	 * @param data 被加密数据
+	 * @param key 密钥
+	 * @return DES加密后的16进制字符串
+	 */
 	public static String toDES(String data, String key) {
 		return encrypt(CharsetUtils.toBytes(data, DEFAULT_CHARSET), 
 				CharsetUtils.toBytes(key, DEFAULT_CHARSET));
 	}
 	
+	/**
+	 * 对数据进行DES加密
+	 * @param data 被加密数据
+	 * @param key 密钥
+	 * @param charset 加密编码
+	 * @return DES加密后的16进制字符串
+	 */
 	public static String toDES(String data, String key, String charset) {
 		return encrypt(CharsetUtils.toBytes(data, charset), 
 				CharsetUtils.toBytes(key, charset));
@@ -200,17 +218,35 @@ public class CryptoUtils {
 		return eData;
 	}
 	
+	/**
+	 * 使用默认密钥对DES加密串解码（解密编码为UTF-8）
+	 * @param des 16进制加密串
+	 * @return 加密前的数据
+	 */
 	public static String deDES(String des) {
 		return decrypt(BODHUtils.toBytes(des), 
 				CharsetUtils.toBytes(DEFAULT_KEY, DEFAULT_CHARSET), 
 				DEFAULT_CHARSET);
 	}
 	
+	/**
+	 * 对DES加密串解码（解密编码为UTF-8）
+	 * @param des 16进制加密串
+	 * @param key 密钥
+	 * @return 加密前的数据
+	 */
 	public static String deDES(String des, String key) {
 		return decrypt(BODHUtils.toBytes(des), 
 				CharsetUtils.toBytes(key, DEFAULT_CHARSET), DEFAULT_CHARSET);
 	}
 	
+	/**
+	 * 对DES加密串解码
+	 * @param des 16进制加密串
+	 * @param key 密钥
+	 * @param charset 解密编码
+	 * @return 加密前的数据
+	 */
 	public static String deDES(String des, String key, String charset) {
 		return decrypt(BODHUtils.toBytes(des), 
 				CharsetUtils.toBytes(key, charset), charset);

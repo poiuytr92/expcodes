@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -25,6 +26,7 @@ import exp.libs.envm.DBType;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.format.ESCUtils;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.io.JarUtils;
 import exp.libs.utils.time.TimeUtils;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
@@ -172,13 +174,15 @@ class _VerMgrUI extends MainWindow {
 	private void initDS() {
 		this.ds = new DataSourceBean();
 		ds.setDriver(DBType.SQLITE.DRIVER);
-		ds.setName(VER_DB);
 		ds.setCharset(Charset.UTF8);
+		ds.setName(VER_DB);
 		
 		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
 		if(!SqliteUtils.testConn(ds)) {
-			FileUtils.copyFileInJar(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
-			FileUtils.hide(TMP_VER_DB);
+			if(!FileUtils.exists(TMP_VER_DB)) {
+				JarUtils.copyFileInJar(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
+				FileUtils.hide(TMP_VER_DB);
+			}
 			ds.setName(TMP_VER_DB);
 		}
 	}
@@ -186,7 +190,7 @@ class _VerMgrUI extends MainWindow {
 	private boolean initVerDB() {
 		boolean isOk = true;
 		Connection conn = SqliteUtils.getConn(ds);
-		String script = FileUtils.readFileInJar(VER_DB_SCRIPT, Charset.UTF8);
+		String script = JarUtils.readFileInJar(VER_DB_SCRIPT, Charset.UTF8);
 		try {
 			String[] sqls = script.split(";");
 			for(String sql : sqls) {

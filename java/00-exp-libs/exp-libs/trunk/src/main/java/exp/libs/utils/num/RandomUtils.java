@@ -6,7 +6,7 @@ import exp.libs.utils.StrUtils;
 
 /**
  * <PRE>
- * 随机生成器工具包.
+ * 随机生成器工具.
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -145,14 +145,19 @@ public class RandomUtils {
 	/** 二字-复姓: 5% */
 	private final static int COMPOUND_SURNAME_2WORD = 100;
 	
+	/** 私有化构造函数 */
 	protected RandomUtils() {}
 	
+	/**
+	 * 获取int随机数
+	 * @return 返回随机数范围 [0,+∞)
+	 */
 	public static int randomInt() {
 		return random.nextInt();
 	}
 	
 	/**
-	 * int型随机数
+	 * 获取int随机数
 	 * @param scope 随机数限界
 	 * @return 返回随机数范围 [0,scope)
 	 */
@@ -161,7 +166,7 @@ public class RandomUtils {
 	}
 	
 	/**
-	 * int型随机数
+	 * 获取int随机数
 	 * @param min 随机数限界最小值
 	 * @param max 随机数限界最大值
 	 * @return 返回随机数范围 [min,max]
@@ -175,7 +180,7 @@ public class RandomUtils {
 	}
 	
 	/**
-	 * long型随机数
+	 * 获取long随机数
 	 * @return 返回随机数范围 [0,+∞)
 	 */
 	public static long randomLong() {
@@ -183,15 +188,7 @@ public class RandomUtils {
 	}
 	
 	/**
-	 * double型随机数
-	 * @return 返回随机数范围 [0,+∞)
-	 */
-	public static double randomDouble() {
-		return random.nextDouble();
-	}
-	
-	/**
-	 * float型随机数
+	 * 获取float随机数
 	 * @return 返回随机数范围 [0,+∞)
 	 */
 	public static float randomFloat() {
@@ -199,7 +196,15 @@ public class RandomUtils {
 	}
 	
 	/**
-	 * boolean型随机数
+	 * 获取double随机数
+	 * @return 返回随机数范围 [0,+∞)
+	 */
+	public static double randomDouble() {
+		return random.nextDouble();
+	}
+	
+	/**
+	 * 获取bool随机数
 	 * @return 返回随机数范围 true|false
 	 */
 	public static boolean randomBoolean() {
@@ -207,31 +212,31 @@ public class RandomUtils {
 	}
 	
 	/**
-	 * 高斯随机数
-	 * @return 随机数范围 (-∞,+∞)
+	 * 获取高斯随机数
+	 * @return 返回随机数范围 (-∞,+∞)
 	 */
 	public static double randomGaussian() {
 		return random.nextGaussian();
 	}
 	
 	/**
-	 * 随机拼音名
-	 * @return 拼音名
+	 * 获取随机姓名（拼音）
+	 * @return 随机姓名（拼音）
 	 */
 	public static String randomSpellName() {
 		return randomChineseName()[0];
 	}
 	
 	/**
-	 * 随机汉字名
-	 * @return 中文名
+	 * 获取随机姓名（汉字）
+	 * @return 随机姓名（汉字）
 	 */
 	public static String randomKanjiName() {
 		return randomChineseName()[1];
 	}
 	
 	/**
-	 * 随机中文名.
+	 * 获取随机姓名
 	 * @return 返回值为只有2个元素的数组，其中 0:拼音名; 1:中文名
 	 */
 	public static String[] randomChineseName() {

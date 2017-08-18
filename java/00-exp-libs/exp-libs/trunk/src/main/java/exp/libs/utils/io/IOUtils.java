@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <PRE>
- * IO工具包.
+ * IO工具.
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -28,16 +28,27 @@ public class IOUtils {
 	/** 私有化构造函数 */
 	protected IOUtils() {}
 	
+	/**
+	 * 保存流式数据到文件
+	 * @param is 流式数据通道
+	 * @param savePath 保存文件位置
+	 * @return true:保存成功; false:保存是吧
+	 */
 	public static boolean toFile(InputStream is, String savePath) {
 		File saveFile = new File(savePath);
-		FileUtils.createDir(saveFile.getParent());
 		return toFile(is, saveFile);
 	}
 	
+	/**
+	 * 保存流式数据到文件
+	 * @param is 流式数据通道
+	 * @param saveFile 保存文件对象
+	 * @return true:保存成功; false:保存是吧
+	 */
 	public static boolean toFile(InputStream is, File saveFile) {
 		boolean isOk = false;
 		if(is != null && saveFile != null) {
-			
+			FileUtils.createDir(saveFile.getParent());
 			FileOutputStream fos = null;
 			try {
 				fos = new FileOutputStream(saveFile);
@@ -59,6 +70,11 @@ public class IOUtils {
 		return isOk;
 	}
 	
+	/**
+	 * 关闭IO流
+	 * @param closeable IO流接口
+	 * @return true:关闭成功; false:关闭失败
+	 */
 	public static boolean close(Closeable closeable) {
 		boolean isOk = true;
 		if (closeable != null) {
@@ -72,6 +88,11 @@ public class IOUtils {
 		return isOk;
     }
 	
+	/**
+	 * 关闭数据库sql接口
+	 * @param statement 数据库sql接口
+	 * @return true:关闭成功; false:关闭失败
+	 */
 	public static boolean close(Statement statement) {
 		boolean isOk = true;
 		if (statement != null) {
@@ -85,6 +106,11 @@ public class IOUtils {
 		return isOk;
     }
 	
+	/**
+	 * 关闭数据库结果集接口
+	 * @param resultSet 数据库结果集接口
+	 * @return true:关闭成功; false:关闭失败
+	 */
 	public static boolean close(ResultSet resultSet) {
 		boolean isOk = true;
 		if (resultSet != null) {

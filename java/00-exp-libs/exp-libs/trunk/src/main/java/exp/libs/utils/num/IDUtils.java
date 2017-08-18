@@ -7,7 +7,7 @@ import exp.libs.utils.time.TimeUtils;
 
 /**
  * <PRE>
- * 唯一性ID生成器工具包.
+ * 唯一性ID生成器工具.
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -30,16 +30,18 @@ public class IDUtils {
 	
 	/**
 	 * 获取时空唯一性ID
-	 * @return
+	 * @return UUID
 	 */
 	public static String getUUID() {
 		return UUID.randomUUID().toString();
 	}
 	
 	/**
+	 * <PRE>
 	 * 获取时间序唯一性ID（秒级）
 	 *  当频繁获取ID时，此方法会强制使得每次请求最多延迟1s以保证唯一性
-	 * @return
+	 * </PRE>
+	 * @return 时间序唯一性ID（秒级）
 	 */
 	public static int getSecondID() {
 		int id = -1;
@@ -58,7 +60,7 @@ public class IDUtils {
 	
 	/**
 	 * 获取时间序唯一性ID（毫秒级）
-	 * @return
+	 * @return 时间序唯一性ID（毫秒级）
 	 */
 	public static long getMillisID() {
 		long id = -1;
@@ -73,7 +75,7 @@ public class IDUtils {
 	
 	/**
 	 * 获取时间序唯一性ID（yyyyMMddHHmmssSSS）
-	 * @return
+	 * @return 时间序唯一性ID（毫秒级）
 	 */
 	public static long getTimeID() {
 		long id = -1;

@@ -27,6 +27,7 @@ public final class JVMUtils {
 	protected JVMUtils() {}
 	
 	/**
+	 * <PRE>
 	 * 直接计算当前对象占用空间大小.
 	 * 
 	 * 包括：
@@ -38,6 +39,7 @@ public final class JVMUtils {
 	 * 但是不包括：
 	 *  超类继承下来的和当前类声明的实例引用字段的对象本身的大小、
 	 *  实例引用数组引用的对象本身的大小
+	 * </PRE>
 	 * @param o 当前对象
 	 * @return 占用内存大小（byte） 若计算失败则返回 -1.
 	 */

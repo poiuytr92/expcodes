@@ -1,6 +1,16 @@
 package exp.libs.envm;
 
-
+/**
+ * <PRE>
+ * 枚举类：数据库类型
+ * 	(提供数据库驱动名、以及JDBC-URL模板)
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public enum DBType {
 
 	UNKNOW("unknow", "null", "null"), 

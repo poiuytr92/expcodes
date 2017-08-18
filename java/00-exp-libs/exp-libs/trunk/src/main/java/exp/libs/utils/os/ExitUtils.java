@@ -15,7 +15,7 @@ import exp.libs.utils.io.IOUtils;
 
 /**
  * <PRE>
- * 退出程序工具类.
+ * 退出程序工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

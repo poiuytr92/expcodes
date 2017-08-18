@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <PRE>
- * 字符集处理工具包.
+ * 字符集编码转换工具.
  * 
  * 在仅有 中文字符 和 ASCII字符 的环境下，
  * 已知的无错误的编码转换方向如下：
@@ -54,6 +54,11 @@ public class CharsetUtils {
 		return isVaild;
 	}
 	
+	/**
+	 * 检查字符编码是否无效
+	 * @param charset 被检测的字符编码
+	 * @return true:无效; false:有效
+	 */
 	public static boolean isInvalid(String charset) {
 		return !isVaild(charset);
 	}

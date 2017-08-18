@@ -14,7 +14,7 @@ import exp.libs.utils.StrUtils;
 
 /**
  * <PRE>
- * 系统命令行操作工具包.	
+ * 系统命令行操作工具.	
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -32,8 +32,8 @@ public class CmdUtils {
 	
 	/**
 	 * 执行控制台命令
-	 * @param cmd
-	 * @return
+	 * @param cmd 控制台命令
+	 * @return 执行结果
 	 */
 	public static String execute(String cmd) {
 		return execute(cmd, true);
@@ -41,9 +41,9 @@ public class CmdUtils {
 	
 	/**
 	 * 执行控制台命令
-	 * @param cmd
-	 * @param onlyResult 只返回命令执行结果（无执行状态、异常信息）
-	 * @return
+	 * @param cmd 控制台命令
+	 * @param onlyResult true:只返回命令执行结果; false:包含执行状态、异常信息
+	 * @return 执行结果
 	 */
 	public static String execute(String cmd, boolean onlyResult) {
 		String result = "";
@@ -102,27 +102,32 @@ public class CmdUtils {
 	
 	/**
 	 * 通过命令行进行文件/文件夹复制
-	 * @param srcPath
-	 * @param destPath
+	 * @param srcPath 源文件路径
+	 * @param snkPath 目标文件路径
+	 * @return 执行结果
 	 */
-	public static String copy(String srcPath, String destPath) {
+	public static String copy(String srcPath, String snkPath) {
 		String cmd = "";
 		File file = new File(srcPath);
 		if (OSUtils.isWin()) {
 			if (file.isFile()) {
-				cmd = StrUtils.concat("copy ", srcPath, " ", destPath, " /Y");
+				cmd = StrUtils.concat("copy ", srcPath, " ", snkPath, " /Y");
 				
 			} else {
 				srcPath = srcPath.trim().replaceAll("\\\\$", "");
-				cmd = StrUtils.concat("xcopy ", srcPath, " ", destPath, " /e /y");
+				cmd = StrUtils.concat("xcopy ", srcPath, " ", snkPath, " /e /y");
 			}
 		} else {
 			srcPath = srcPath.trim().replaceAll("/$", "");
-			cmd = StrUtils.concat("cp -r ", srcPath, " ", destPath);
+			cmd = StrUtils.concat("cp -r ", srcPath, " ", snkPath);
 		}
 		return execute(cmd);
 	}
 	
+	/**
+	 * 打开DOS控制台（只支持win系统）
+	 * @return 执行结果
+	 */
 	public static String openDosUI() {
 		String result = "";
 		if(!OSUtils.isWin()) {
@@ -137,8 +142,8 @@ public class CmdUtils {
 	
 	/**
 	 * 打开文件（只支持win系统）
-	 * @param filePath
-	 * @return
+	 * @param filePath 文件路径
+	 * @return 执行结果
 	 */
 	public static String openFile(String filePath) {
 		String result = "";
@@ -163,6 +168,11 @@ public class CmdUtils {
 		return result;
 	}
 	
+	/**
+	 * 打开网页（只支持win系统）
+	 * @param url 网页地址
+	 * @return 执行结果
+	 */
 	public static String openHttp(String url) {
 		String result = "";
 		if(!OSUtils.isWin()) {
@@ -178,6 +188,11 @@ public class CmdUtils {
 		return result;
 	}
 	
+	/**
+	 * 运行bat脚本（只支持win系统）
+	 * @param batFilePath 批处理脚本路径
+	 * @return 执行结果
+	 */
 	public static String runBat(String batFilePath) {
 		String result = "";
 		if(!OSUtils.isWin()) {
@@ -193,7 +208,15 @@ public class CmdUtils {
 		return result;
 	}
 	
+	/**
+	 * 终止进程（只支持win系统）
+	 * @param processName 进程名称
+	 */
 	public static void kill(String processName) {
+		if(!OSUtils.isWin()) {
+			return;
+		}
+		
 		Pattern ptn = Pattern.compile(StrUtils.concat(processName, " +?(\\d+) "));
 		String tasklist = execute("tasklist");
 		String[] tasks = tasklist.split("\n");

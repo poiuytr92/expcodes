@@ -16,7 +16,7 @@ import exp.libs.utils.other.BoolUtils;
 
 /**
  * <PRE>
- * Json处理工具包
+ * Json工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -26,11 +26,17 @@ import exp.libs.utils.other.BoolUtils;
  */
 public class JsonUtils {
 
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(JsonUtils.class);
 	
 	/** 私有化构造函数 */
 	protected JsonUtils() {}
 	
+	/**
+	 * 是否为合法的json格式字符串
+	 * @param json json格式字符串
+	 * @return true:合法; false:非法
+	 */
 	public static boolean isVaild(String json) {
 		boolean isVaild = true;
 		try {
@@ -41,10 +47,21 @@ public class JsonUtils {
 		return isVaild;
 	}
 	
+	/**
+	 * 是否为非法的json格式字符串
+	 * @param json json格式字符串
+	 * @return true:非法; false:合法
+	 */
 	public static boolean isInvaild(String json) {
 		return !isVaild(json);
 	}
 	
+	/**
+	 * 从json对象中取指定键名的string类型值
+	 * @param json json对象
+	 * @param key 键名
+	 * @return string类型值, 若无值则返回""
+	 */
 	public static String getStr(JSONObject json, String key) {
 		String val = "";
 		try {
@@ -55,6 +72,13 @@ public class JsonUtils {
 		return val;
 	}
 	
+	/**
+	 * 从json对象中取指定键名的string类型值.
+	 * @param json json对象
+	 * @param key 键名
+	 * @param defavlt 默认值
+	 * @return string类型值, 若无值则返回默认值
+	 */
 	public static String getStr(JSONObject json, String key, String defavlt) {
 		String val = defavlt;
 		try {
@@ -65,6 +89,13 @@ public class JsonUtils {
 		return val;
 	}
 	
+	/**
+	 * 从json对象中取指定键名的bool类型值.
+	 * @param json json对象
+	 * @param key 键名
+	 * @param defavlt 默认值
+	 * @return bool类型值, 若无值则返回默认值
+	 */
 	public static boolean getBool(JSONObject json, String key, boolean defavlt) {
 		boolean val = defavlt;
 		try {
@@ -75,6 +106,13 @@ public class JsonUtils {
 		return val;
 	}
 	
+	/**
+	 * 从json对象中取指定键名的int类型值.
+	 * @param json json对象
+	 * @param key 键名
+	 * @param defavlt 默认值
+	 * @return int类型值, 若无值则返回默认值
+	 */
 	public static int getInt(JSONObject json, String key, int defavlt) {
 		int val = defavlt;
 		try {
@@ -85,6 +123,13 @@ public class JsonUtils {
 		return val;
 	}
 	
+	/**
+	 * 从json对象中取指定键名的long类型值.
+	 * @param json json对象
+	 * @param key 键名
+	 * @param defavlt 默认值
+	 * @return long类型值, 若无值则返回默认值
+	 */
 	public static long getLong(JSONObject json, String key, long defavlt) {
 		long val = defavlt;
 		try {
@@ -95,6 +140,12 @@ public class JsonUtils {
 		return val;
 	}
 	
+	/**
+	 * 从json对象中取指定键名的JSONObject对象
+	 * @param json json对象
+	 * @param key 键名
+	 * @return JSONObject对象, 若无值则返回null
+	 */
 	public static JSONObject getObject(JSONObject json, String key) {
 		JSONObject val = null;
 		try {
@@ -106,6 +157,12 @@ public class JsonUtils {
 		return val;
 	}
 	
+	/**
+	 * 从json对象中取指定键名的JSONArray对象
+	 * @param json json对象
+	 * @param key 键名
+	 * @return JSONArray对象, 若无值则返回null
+	 */
 	public static JSONArray getArray(JSONObject json, String key) {
 		JSONArray val = null;
 		try {
@@ -117,6 +174,31 @@ public class JsonUtils {
 		return val;
 	}
 	
+	/**
+	 * 从json对象中取指定键名的JSONArray对象, 并将其转换成String[]数组
+	 * @param json json对象
+	 * @param key 键名
+	 * @return 
+	 * 	<PRE>
+	 * 		String[]数组.
+	 * 		由于第三方构件问题, 若JSONArray无元素, 会自动填充一个 "" 元素, 
+	 * 		此时返回的不是 String[0], 而是 String[1] { "" }
+	 * 	</PRE>
+	 */
+	public static String[] getStrArray(JSONObject json, String key) {
+		return toStrArray(getArray(json, key));
+	}
+	
+	/**
+	 * 把json的array对象转换成String[]数组
+	 * @param array json的array对象
+	 * @return 
+	 * 	<PRE>
+	 * 		String[]数组.
+	 * 		由于第三方构件问题, 若JSONArray无元素, 会自动填充一个 "" 元素, 
+	 * 		此时返回的不是 String[0], 而是 String[1] { "" }
+	 * 	</PRE>
+	 */
 	public static String[] toStrArray(JSONArray array) {
 		if(array == null) {
 			return new String[0];
@@ -129,6 +211,16 @@ public class JsonUtils {
 		return sArray;
 	}
 	
+	/**
+	 * 把json的array对象转换成List<String>队列
+	 * @param array json的array对象
+	 * @return 
+	 * 	<PRE>
+	 * 		String[]数组.
+	 * 		由于第三方构件问题, 若JSONArray无元素, 会自动填充一个 "" 元素, 
+	 * 		此时返回的不是 List<String>(0), 而是 List<String>(1) { "" }
+	 * 	</PRE>
+	 */
 	public static List<String> toStrList(JSONArray array) {
 		if(array == null) {
 			return new LinkedList<String>();
@@ -141,10 +233,11 @@ public class JsonUtils {
 		return sList;
 	}
 	
-	public static String[] getStrArray(JSONObject json, String key) {
-		return toStrArray(getArray(json, key));
-	}
-	
+	/**
+	 * 把List对象转换成JSONArray对象
+	 * @param list List对象
+	 * @return JSONArray对象
+	 */
 	public static JSONArray toJsonArray(Collection<String> list) {
 		JSONArray array = new JSONArray();
 		if(list != null) {
@@ -155,6 +248,11 @@ public class JsonUtils {
 		return array;
 	}
 	
+	/**
+	 * 把 String[]数组转换成JSONArray对象
+	 * @param array  String[]数组
+	 * @return JSONArray对象
+	 */
 	public static JSONArray toJsonArray(String[] array) {
 		JSONArray jsonArray = new JSONArray();
 		if(array != null) {

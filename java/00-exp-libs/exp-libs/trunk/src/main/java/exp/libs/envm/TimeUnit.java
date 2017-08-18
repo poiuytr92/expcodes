@@ -1,5 +1,15 @@
 package exp.libs.envm;
 
+/**
+ * <PRE>
+ * 枚举类：时间单位
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public enum TimeUnit {
 
 	NS("ns", "cell: nanosecond", "纳秒"), 

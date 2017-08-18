@@ -41,7 +41,7 @@ public class FileFlowReader {
 	private File file;
 	
 	/** 所读入的文件编码 */
-	private String fileEncode;
+	private String charset;
 	
 	/** 文件流读取器 */
 	private InputStreamReader fileReader;
@@ -52,35 +52,35 @@ public class FileFlowReader {
 	/**
 	 * 构造函数
 	 * @param file 待读入文件
-	 * @param fileEncode 待读入文件的编码
+	 * @param charset 待读入文件的编码
 	 */
-	public FileFlowReader(File file, String fileEncode) {
-		init(file, fileEncode);
+	public FileFlowReader(File file, String charset) {
+		init(file, charset);
 	}
 	
 	/**
 	 * 构造函数
 	 * @param filePath 待读入文件的路径
-	 * @param fileEncode 待读入文件的编码
+	 * @param charset 待读入文件的编码
 	 */
-	public FileFlowReader(String filePath, String fileEncode) {
-		init(new File(filePath), fileEncode);
+	public FileFlowReader(String filePath, String charset) {
+		init(new File(filePath), charset);
 	}
 	
 	/**
 	 * 初始化
 	 * @param file 待读入文件
-	 * @param fileEncode 待读入文件的编码
+	 * @param charset 待读入文件的编码
 	 */
-	private void init(File file, String fileEncode) {
+	private void init(File file, String charset) {
 		this.file = file;
-		this.fileEncode = testEncode(fileEncode) ? fileEncode : DEFAULT_ENCODE;
+		this.charset = testEncode(charset) ? charset : DEFAULT_ENCODE;
 		this.hasNextLine = false;
 		
 		if(file != null && file.isFile()) {
 			try {
 				this.fileReader = new InputStreamReader(
-						new FileInputStream(this.file), this.fileEncode);
+						new FileInputStream(this.file), this.charset);
 				this.hasNextLine = true;
 			} catch (Exception e) {
 				log.error("读取文件 [{}] 失败.", file.getAbsoluteFile(), e);
@@ -96,13 +96,13 @@ public class FileFlowReader {
 	
 	/**
 	 * 测试编码是否合法.
-	 * @param encode 被测试编码
+	 * @param charset 被测试编码
 	 * @return true:编码合法; false:编码非法
 	 */
-	private boolean testEncode(String encode) {
+	private boolean testEncode(String charset) {
 		boolean isVaild = true;
 		try {
-			"test".getBytes(encode);
+			"test".getBytes(charset);
 		} catch (UnsupportedEncodingException e) {
 			isVaild = false;
 		}

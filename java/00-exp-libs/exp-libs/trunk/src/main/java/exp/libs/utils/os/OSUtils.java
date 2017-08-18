@@ -35,7 +35,7 @@ public final class OSUtils {
 	
 	/**
 	 * 判断当前操作系统是否为windows
-	 * @return true:windows; false:linux/mac
+	 * @return true:windows; false:其他
 	 */
 	public static boolean isWin() {
 		boolean isWin = true;
@@ -52,29 +52,44 @@ public final class OSUtils {
 		return isWin;
 	}
 	
+	/**
+	 * 判断当前操作系统是否为unix
+	 * @return true:unix; false:其他
+	 */
 	public static boolean isUnix() {
 		return !isWin();
 	}
 	
 	/**
-	 * 判断当前操作系统位宽是否为32位.
+	 * <PRE>
+	 * 判断当前操作系统位宽是否为64位.
 	 * （主要针对win, linux由于兼容32和64, 只能用64位）.
 	 * 
 	 * os 32位： x86
 	 * os 64位：amd64
 	 * linux 32位: i386
 	 * linux 64位：amd64
-	 * 
+	 * <PRE>
 	 * @return true:64; false:32
 	 */
 	public static boolean isX64() {
 		return OS_ARCH.contains("64");
 	}
 	
+	/**
+	 * <PRE>
+	 * 判断当前操作系统位宽是否为32位.
+	 * <PRE>
+	 * @return true:64; false:32
+	 */
 	public static boolean isX32() {
 		return !isX64();
 	}
 	
+	/**
+	 * 获取操作系统字符集编码
+	 * @return 操作系统字符集编码
+	 */
 	public static String getSysEncoding() {
 		return OS_ENCODING;
 	}

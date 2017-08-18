@@ -1,11 +1,9 @@
 package exp.libs.utils.format;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * <PRE>
- * 标准化工具类
+ * 标准化工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -19,10 +17,10 @@ public final class StandardUtils {
 	private StandardUtils() {}
 	
 	/**
-	 * 根据实际需要的容量，返回构造Map的标准容量。
-	 * 返回值为 >= actualSize 的 2^n 
-	 * 
-	 * int最大值为 2^30 -1 = 2147483647
+	 * <PRE>
+	 * 根据实际需要的容量，返回构造Map的标准容量(使得Map的搜索性能最优)。
+	 * 	返回值为大于 actualSize 的 2^n (不超过2^30 -1, 即int最大值)
+	 * </PRE>
 	 * 
 	 * @param actualSize 实际容量
 	 * @return 标准容量
@@ -46,10 +44,12 @@ public final class StandardUtils {
 	}
 	
 	/**
-	 * dos脚本内容转换为符合unix标准内容。
-	 * 实则上不是dos也能转换为unix。
+	 * <PRE>
+	 * 把dos内容转换为符合unix标准内容。
+	 * 	(实则上不是dos也能转换为unix)
+	 * </PRE>
 	 * 
-	 * @param dos dos脚本内容
+	 * @param dos dos内容
 	 * @return 符合unix标准内容
 	 */
 	public static String dos2unix(String dos) {
@@ -61,10 +61,12 @@ public final class StandardUtils {
 	}
 	
 	/**
-	 * unix脚本内容转换为符合dos标准内容。
-	 * 实则上不是unix也能转换为dos。
+	 * <PRE>
+	 * unix内容转换为符合dos标准内容。
+	 * 	(实则上不是unix也能转换为dos)
+	 * </PRE>
 	 * 
-	 * @param unix unix脚本内容
+	 * @param unix unix内容
 	 * @return 符合dos标准内容
 	 */
 	public static String unix2dos(String unix) {
@@ -73,32 +75,6 @@ public final class StandardUtils {
 			dos = unix.replace("\r", "").replace("\n", "\r\n").replace('/', '\\');
 		}
 		return dos;
-	}
-	
-	public static String javaBatToSh(String javaBat) {
-		String shell = dos2unix(javaBat);
-		
-		Pattern ptn = Pattern.compile("-cp\\s+(\\S+)");
-		Matcher mth = ptn.matcher(shell);
-		if(mth.find()) {
-			String dosCp = mth.group(1);
-			String unixCp = dosCp.replace("jar;", "jar:");
-			shell = shell.replace(dosCp, unixCp);
-		}
-		return shell;
-	}
-	
-	public static String javaShToBat(String javaShell) {
-		String bat = unix2dos(javaShell);
-		
-		Pattern ptn = Pattern.compile("-cp\\s+(\\S+)");
-		Matcher mth = ptn.matcher(bat);
-		if(mth.find()) {
-			String unixCp = mth.group(1);
-			String dosCp = unixCp.replace("jar:", "jar;");
-			bat = bat.replace(unixCp, dosCp);
-		}
-		return bat;
 	}
 	
 }

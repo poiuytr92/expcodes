@@ -12,14 +12,19 @@ package exp.libs.envm;
  */
 public class Endline {
 
+	/** 回车 */
 	public final static char CR = '\n';
 	
+	/** 换行 */
 	public final static char LF = '\r';
 	
+	/** 制表符 */
 	public final static char HT = '\t';
 	
+	/** 空格 */
 	public final static char SPACE = ' ';
 	
+	/** 空字符 */
 	public final static char NULL = '\0';
 	
 }

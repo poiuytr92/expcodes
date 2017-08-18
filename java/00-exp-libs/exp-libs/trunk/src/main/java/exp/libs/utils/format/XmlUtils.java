@@ -27,7 +27,7 @@ import exp.libs.warp.io.flow.StringFlowReader;
 
 /**
  * <PRE>
- * xml处理工具包
+ * xml处理工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -40,6 +40,7 @@ public class XmlUtils {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(XmlUtils.class);
 	
+	/** 默认编码 */
 	private final static String DEFAULT_CHARSET = Charset.UTF8;
 	
 	/** 私有化构造函数 */
@@ -48,12 +49,12 @@ public class XmlUtils {
 	/**
 	 * 移除xml中的空行
 	 * @param xml xml报文
-	 * @param encode 数据编码
+	 * @param charset xml编码
 	 * @return 移除空行后的xml
 	 */
-	public static String removeEmptyLines(String xml, String encode) {
+	public static String removeEmptyLines(String xml, String charset) {
 		StringBuilder sb = new StringBuilder();
-		StringFlowReader sfr = new StringFlowReader(xml, encode);
+		StringFlowReader sfr = new StringFlowReader(xml, charset);
 		while(sfr.hasNextLine()) {
 			String line = sfr.readLine('>');
 			sb.append(line.trim());
@@ -63,17 +64,18 @@ public class XmlUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * 格式化xml.
-	 * 用于处理缩进、换行、子节点中多余的命名空间等格式问题。
-	 * 
+	 * 	(缩进、换行、删除子节点中多余的命名空间等)
+	 * </PRE>
 	 * @param xml xml报文
 	 * @param linePrefix 在每一行前添加的前缀，亦即缩进符
 	 * @param newLine 是否为行尾增加换行符
-	 * @param encode 数据编码
+	 * @param charset xml编码
 	 * @return 格式化的xml报文
 	 */
 	public static String formatXml(final String xml, 
-			final String linePrefix, boolean newLine, String encode) {
+			final String linePrefix, boolean newLine, String charset) {
 		String fmtXml = xml;
 		if(fmtXml != null) {
 			try {
@@ -82,7 +84,7 @@ public class XmlUtils {
 				
 				if (doc != null) {
 					StringWriter sWriter = new StringWriter();
-					OutputFormat format = new OutputFormat(linePrefix, newLine, encode);
+					OutputFormat format = new OutputFormat(linePrefix, newLine, charset);
 					XMLWriter xmlWriter = new XMLWriter(sWriter, format);
 					xmlWriter.write(doc);
 					xmlWriter.flush();
@@ -96,6 +98,11 @@ public class XmlUtils {
 		return fmtXml;
 	}
 	
+	/**
+	 * 从xml声明头中截取编码信息
+	 * @param xmlFile xml文件对象
+	 * @return xml编码(若未声明编码，则返回默认编码UTF-8)
+	 */
 	public static String getCharset(File xmlFile) {
 		String charset = DEFAULT_CHARSET;
 		FileFlowReader ffr = new FileFlowReader(xmlFile, Charset.ISO);
@@ -115,9 +122,14 @@ public class XmlUtils {
 		return charset;
 	}
 	
-	public static String getCharset(String xml) {
+	/**
+	 * 从xml声明头中截取编码信息
+	 * @param xmlContent xml内容
+	 * @return xml编码(若未声明编码，则返回默认编码UTF-8)
+	 */
+	public static String getCharset(String xmlContent) {
 		String charset = DEFAULT_CHARSET;
-		StringFlowReader sfr = new StringFlowReader(xml, Charset.ISO);
+		StringFlowReader sfr = new StringFlowReader(xmlContent, Charset.ISO);
 		if(sfr.hasNextLine()) {
 			String headLine = sfr.readLine(Endline.CR);
 			
@@ -156,7 +168,6 @@ public class XmlUtils {
 	 */
 	public static Element getFirstChild(Element father) {
 		Element child = null;
-		
 		if(father != null) {
 			@SuppressWarnings("unchecked")
 			Iterator<Element> childs = father.elementIterator();
@@ -227,6 +238,12 @@ public class XmlUtils {
 		return val;
 	}
 	
+	/**
+	 * 取[指定节点]的子节点的节点值（去除前后空字符）.
+	 * @param e 指定节点
+	 * @param childName 子节点名称
+	 * @return 节点值, 若为null则替换为""
+	 */
 	public static String getChildValue(Element e, String childName) {
 		String val = "";
 		if(e != null) {
@@ -239,7 +256,7 @@ public class XmlUtils {
 	/**
 	 * 取[指定节点]的[指定属性]的属性值（去除前后空字符）.
 	 * @param e 指定节点
-	 * @param attName 指定属性名称
+	 * @param attributeName 指定属性名称
 	 * @return 属性值, 若为null则替换为""
 	 */
 	public static String getAttribute(Element e, String attributeName) {
@@ -254,8 +271,8 @@ public class XmlUtils {
 	/**
 	 * 移除元素中的属性
 	 * @param e 元素对象
-	 * @param attName 属性名称
-	 * @return 是否移除成功
+	 * @param attributeName 属性名称
+	 * @return true:移除成功; false:移除失败
 	 */
 	public static boolean removeAttribute(Element e, String attributeName) {
 		boolean isDel = false;
@@ -272,11 +289,11 @@ public class XmlUtils {
 	 * @param element 节点
 	 * @return 命名空间地址串
 	 */
-	public static String getSelfNameSpace(Element element) {
+	public static String getSelfNamespace(Element element) {
 		if(element == null) {
 			return "";
 		}
-		return getNamespaceURL(element.getNamespace());
+		return toNamespaceURL(element.getNamespace());
 	}
 	
 	/**
@@ -284,7 +301,7 @@ public class XmlUtils {
 	 * @param element 节点
 	 * @return 所有命名空间地址串
 	 */
-	public static String getAllNameSpace(Element element) {
+	public static String getAllNamespace(Element element) {
 		if(element == null) {
 			return "";
 		}
@@ -296,7 +313,7 @@ public class XmlUtils {
 
             if (node instanceof Namespace) {
                 Namespace ns = (Namespace) node;
-                sb.append(getNamespaceURL(ns));
+                sb.append(toNamespaceURL(ns));
             }
         }
 		return sb.toString();
@@ -307,20 +324,20 @@ public class XmlUtils {
 	 * @param namespace 命名空间
 	 * @return 命名空间地址
 	 */
-	private static String getNamespaceURL(Namespace namespace) {
+	private static String toNamespaceURL(Namespace namespace) {
 		if(namespace == null) {
 			return "";
 		}
-        return getNamespaceURL(namespace.getPrefix(), namespace.getURI());
+        return toNamespaceURL(namespace.getPrefix(), namespace.getURI());
     }
 	
 	/**
 	 * 构造命名空间地址
 	 * @param prefix 地址前缀
-	 * @param uri 唯一地址标识值
+	 * @param _URI 唯一地址标识值
 	 * @return 命名空间地址
 	 */
-	private static String getNamespaceURL(String prefix, String uri)  {
+	private static String toNamespaceURL(String prefix, String _URI)  {
 		StringBuilder sb = new StringBuilder();
         if ((prefix != null) && (prefix.length() > 0)) {
             sb.append(" xmlns:");
@@ -331,15 +348,17 @@ public class XmlUtils {
             sb.append(" xmlns=\"");
         }
 
-        sb.append(uri);
+        sb.append(_URI);
         sb.append("\"");
         return sb.toString();
     }
 	
 	/**
+	 * <PRE>
 	 * 构造xml完整路径对应的压缩路径.
 	 * 	如完整路径为 /root/test/one
 	 *  则压缩路径为/r/t/one
+	 * </PRE>
 	 * @param path xml完整路径
 	 * @return xml压缩路径
 	 */

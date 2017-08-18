@@ -1,30 +1,23 @@
 package exp.libs.utils.io;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.text.DecimalFormat;
-import java.util.Enumeration;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.envm.StorageUnit;
 import exp.libs.utils.StrUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.os.OSUtils;
+import exp.libs.warp.io.flow.FileFlowReader;
 
 /**
  * <PRE>
- * 文件工具包
+ * 文件工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -37,104 +30,181 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(FileUtils.class);
 	
+	/** 私有化构造函数 */
 	protected FileUtils() {}
 	
-	public static boolean exists(String fileName) {
-		File file = new File(fileName);
+	/**
+	 * 检查文件是否存在
+	 * @param filePath 文件路径
+	 * @return true:存在; false:不存在
+	 */
+	public static boolean exists(String filePath) {
+		File file = new File(filePath);
 		return file.exists();
 	}
 	
+	/**
+	 * 测试文件类型是否为[文件]
+	 * @param filePath 文件路径
+	 * @return true:是; false:否
+	 */
 	public static boolean isFile(String filePath) {
 		File file = new File(filePath);
 		return file.isFile();
 	}
 	
+	/**
+	 * 测试文件类型是否为[文件夹]
+	 * @param filePath 文件路径
+	 * @return true:是; false:否
+	 */
 	public static boolean isDirectory(String filePath) {
 		File file = new File(filePath);
 		return file.isDirectory();
 	}
 	
+	/**
+	 * 获取文件名
+	 * @param filePath 文件路径
+	 * @return 文件名（包括后缀）
+	 */
 	public static String getName(String filePath) {
 		File file = new File(filePath);
 		return file.getName();
 	}
 
-	public static void copyFile(String srcPath, String destPath) {
+	/**
+	 * 复制文件
+	 * @param srcPath 源位置
+	 * @param snkPath 目标位置
+	 */
+	public static void copyFile(String srcPath, String snkPath) {
 		File srcFile = new File(srcPath);
-		File destFile = new File(destPath);
-		copyFile(srcFile, destFile);
+		File snkFile = new File(snkPath);
+		copyFile(srcFile, snkFile);
 	}
 	
-	public static void copyFile(File srcFile, File destFile) {
+	/**
+	 * 复制文件
+	 * @param srcFile 源文件
+	 * @param snkFile 目标文件
+	 */
+	public static void copyFile(File srcFile, File snkFile) {
 		try {
-			org.apache.commons.io.FileUtils.copyFile(srcFile, destFile);
+			org.apache.commons.io.FileUtils.copyFile(srcFile, snkFile);
 			
 		} catch (Exception e) {
 			log.error("复制文件失败: 从 [{}] 到 [{}].", 
 					(srcFile == null ? "null" : srcFile.getPath()), 
-					(destFile == null ? "null" : destFile.getPath()), e);
+					(snkFile == null ? "null" : snkFile.getPath()), e);
 		}
 	}
 
-	public static void copyDirectory(String srcPath, String destPath) {
+	/**
+	 * 复制文件夹
+	 * @param srcPath 原位置
+	 * @param snkPath 目标位置
+	 */
+	public static void copyDirectory(String srcPath, String snkPath) {
 		File srcFile = new File(srcPath);
-		File destFile = new File(destPath);
-		copyDirectory(srcFile, destFile);
+		File snkFile = new File(snkPath);
+		copyDirectory(srcFile, snkFile);
 	}
 	
-	public static void copyDirectory(File srcDir, File destDir)  {
+	/**
+	 * 复制文件夹
+	 * @param srcDir 源目录
+	 * @param snkDir 目标目录
+	 */
+	public static void copyDirectory(File srcDir, File snkDir)  {
 		try {
-			org.apache.commons.io.FileUtils.copyDirectory(srcDir, destDir);
+			org.apache.commons.io.FileUtils.copyDirectory(srcDir, snkDir);
 			
 		} catch (Exception e) {
 			log.error("复制文件夹失败: 从 [{}] 到 [{}].", 
 					(srcDir == null ? "null" : srcDir.getPath()), 
-					(destDir == null ? "null" : destDir.getPath()), e);
+					(snkDir == null ? "null" : snkDir.getPath()), e);
 		}
 	}
 	
-	public static void moveFile(String srcPath, String destPath) {
+	/**
+	 * 移动文件
+	 * @param srcPath 源位置
+	 * @param snkPath 目标位置
+	 */
+	public static void moveFile(String srcPath, String snkPath) {
 		File srcFile = new File(srcPath);
-		File destFile = new File(destPath);
-		moveFile(srcFile, destFile);
+		File snkFile = new File(snkPath);
+		moveFile(srcFile, snkFile);
 	}
 	
-	public static void moveFile(File srcFile, File destFile) {
+	/**
+	 * 移动文件
+	 * @param srcFile 源文件
+	 * @param snkFile 目标文件
+	 */
+	public static void moveFile(File srcFile, File snkFile) {
 		try {
-			org.apache.commons.io.FileUtils.moveFile(srcFile, destFile);
+			org.apache.commons.io.FileUtils.moveFile(srcFile, snkFile);
 			
 		} catch (Exception e) {
 			log.error("移动文件失败: 从 [{}] 到 [{}].", 
 					(srcFile == null ? "null" : srcFile.getPath()), 
-					(destFile == null ? "null" : destFile.getPath()), e);
+					(snkFile == null ? "null" : snkFile.getPath()), e);
 		}
 	}
 	
-	public static void moveDirectory(String srcPath, String destPath) {
+	/**
+	 * 移动文件夹
+	 * @param srcPath 源位置
+	 * @param snkPath 目标位置
+	 */
+	public static void moveDirectory(String srcPath, String snkPath) {
 		File srcFile = new File(srcPath);
-		File destFile = new File(destPath);
-		moveDirectory(srcFile, destFile);
+		File snkFile = new File(snkPath);
+		moveDirectory(srcFile, snkFile);
 	}
 	
-	public static void moveDirectory(File srcDir, File destDir)  {
+	/**
+	 * 移动文件夹 
+	 * @param srcDir 源目录
+	 * @param snkDir 目标目录
+	 */
+	public static void moveDirectory(File srcDir, File snkDir)  {
 		try {
-			org.apache.commons.io.FileUtils.moveDirectory(srcDir, destDir);
+			org.apache.commons.io.FileUtils.moveDirectory(srcDir, snkDir);
 			
 		} catch (Exception e) {
 			log.error("移动文件夹失败: 从 [{}] 到 [{}].", 
 					(srcDir == null ? "null" : srcDir.getPath()), 
-					(destDir == null ? "null" : destDir.getPath()), e);
+					(snkDir == null ? "null" : snkDir.getPath()), e);
 		}
 	}
 	
+	/**
+	 * 创建文件（若为linux系统, 创建的文件会自动授权可读写）
+	 * @param filePath 文件路径
+	 * @return true:创建成功; false:创建失败
+	 */
 	public static File createFile(String filePath) {
 		return create(filePath, true);
 	}
 	
+	/**
+	 * 创建目录（若为linux系统, 创建的目录会自动授权可读写）
+	 * @param dirPath 目录路径
+	 * @return true:创建成功; false:创建失败
+	 */
 	public static File createDir(String dirPath) {
 		return create(dirPath, false);
 	}
 
+	/**
+	 * 创建文件/目录
+	 * @param path 文件/目录位置
+	 * @param isFile true:创建文件; false:创建目录
+	 * @return true:创建成功; false:创建失败
+	 */
 	public static File create(String path, boolean isFile) {
 		File file = new File(path);
 		file.setWritable(true, false); // 处理linux的权限问题
@@ -156,10 +226,20 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return file;
 	}
 	
+	/**
+	 * 删除文件/目录(包括子文件/子目录)
+	 * @param path 文件/目录路径
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
 	public static boolean delete(String path) {
 		return delete(new File(path));
 	}
 	
+	/**
+	 * 删除文件/目录(包括子文件/子目录)
+	 * @param file 文件/目录
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
 	public static boolean delete(File file) {
 		boolean isOk = true;
 		if(file.exists()) {
@@ -177,6 +257,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return isOk;
 	}
 	
+	/**
+	 * <PRE>
+	 * 使用系统默认编码读取文件内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+	 * @param filePath 文件路径
+	 * @return 文件内容
+	 */
 	public static String read(String filePath) {
 		if(filePath == null) {
 			return "";
@@ -184,6 +272,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return read(new File(filePath));
     }
 	
+	/**
+	 * <PRE>
+	 * 使用系统默认编码读取文件内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+	 * @param file 文件
+	 * @return 文件内容
+	 */
     public static String read(File file) {
     	String s = "";
         try {
@@ -194,27 +290,61 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return s;
     }
     
-    public static String read(String filePath, String encoding) {
+    /**
+     * <PRE>
+	 * 读取文件内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+     * @param filePath 文件路径
+     * @param charset 文件编码
+     * @return 文件内容
+     */
+    public static String read(String filePath, String charset) {
     	if(filePath == null) {
 			return "";
 		}
-        return read(new File(filePath), encoding);
+        return read(new File(filePath), charset);
     }
     
-    public static String read(File file, String encoding) {
+    /**
+     * <PRE>
+	 * 读取文件内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+     * @param file 文件
+     * @param charset 文件编码
+     * @return 文件内容
+     */
+    public static String read(File file, String charset) {
     	String s = "";
         try {
-			s = org.apache.commons.io.FileUtils.readFileToString(file, encoding);
+			s = org.apache.commons.io.FileUtils.readFileToString(file, charset);
 		} catch (Exception e) {
 			log.error("读取文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
         return s;
     }
     
+    /**
+     * <PRE>
+	 * 使用系统默认编码分行读取文件所有内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+     * @param filePath 文件路径
+     * @return 文件内容
+     */
     public static List<String> readLines(String filePath) {
         return readLines(new File(filePath));
 	}
     
+    /**
+     * <PRE>
+	 * 使用系统默认编码分行读取文件所有内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+     * @param file 文件
+     * @return 文件内容
+     */
     public static List<String> readLines(File file) {
     	List<String> lines = new LinkedList<String>();
         try {
@@ -225,38 +355,132 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return lines;
 	}
     
-    public static List<String> readLines(String filePath, String encoding) {
-    	return readLines(new File(filePath), encoding);
+    /**
+     * <PRE>
+	 * 分行读取文件所有内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+     * @param filePath 文件路径
+     * @param charset 文件编码
+     * @return 文件内容
+     */
+    public static List<String> readLines(String filePath, String charset) {
+    	return readLines(new File(filePath), charset);
 	}
     
-    public static List<String> readLines(File file, String encoding) {
+    /**
+     * <PRE>
+	 * 分行读取文件所有内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+     * @param file 文件
+     * @param charset 文件编码
+     * @return 文件内容
+     */
+    public static List<String> readLines(File file, String charset) {
     	List<String> lines = new LinkedList<String>();
         try {
-        	lines = org.apache.commons.io.FileUtils.readLines(file, encoding);
+        	lines = org.apache.commons.io.FileUtils.readLines(file, charset);
 		} catch (Exception e) {
 			log.error("读取文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
         return lines;
 	}
     
-    public static List<String> readLines(String filePath, Charset encoding) {
-    	return readLines(new File(filePath), encoding);
+    /**
+     * <PRE>
+	 * 分行读取文件所有内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+     * @param filePath 文件路径
+     * @param charset 文件编码
+     * @return 文件内容
+     */
+    public static List<String> readLines(String filePath, Charset charset) {
+    	return readLines(new File(filePath), charset);
 	}
     
-    public static List<String> readLines(File file, Charset encoding) {
+    /**
+     * <PRE>
+	 * 分行读取文件所有内容.
+	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * </PRE>
+     * @param file 文件
+     * @param charset 文件编码
+     * @return 文件内容
+     */
+    public static List<String> readLines(File file, Charset charset) {
     	List<String> lines = new LinkedList<String>();
         try {
-        	lines = org.apache.commons.io.FileUtils.readLines(file, encoding);
+        	lines = org.apache.commons.io.FileUtils.readLines(file, charset);
 		} catch (Exception e) {
 			log.error("读取文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
         return lines;
 	}
 
+    /**
+     * <PRE>
+	 * 流式读取文件内容.
+	 * 	(此方法会流式分段读取文件内容，适用于读取任意文件)
+	 * 
+	 * 示例:
+	 * 	FileFlowReader ffr = readFlow(FILE_PATH, Charset.UTF8);
+	 *  while(ffr.hasNextLine()) {
+	 *  	String line = ffr.readLine('\n');
+	 *  	// ... do for line
+	 *  }
+	 *  ffr.close();
+	 * </PRE>
+     * @param filePath 文件路径
+     * @param charset 文件编码
+     * @return 文件流式读取器
+     */
+    public static FileFlowReader readFlow(String filePath, String charset) {
+    	return new FileFlowReader(filePath, charset);
+    }
+    
+    /**
+     * <PRE>
+	 * 流式读取文件内容.
+	 * 	(此方法会流式分段读取文件内容，适用于读取任意文件)
+	 * 
+	 * 示例:
+	 * 	FileFlowReader ffr = readFlow(FILE_PATH, Charset.UTF8);
+	 *  while(ffr.hasNextLine()) {
+	 *  	String line = ffr.readLine('\n');
+	 *  	// ... do for line
+	 *  }
+	 *  ffr.close();
+	 * </PRE>
+     * @param file 文件
+     * @param charset 文件编码
+     * @return 文件流式读取器
+     */
+    public static FileFlowReader readFlow(File file, String charset) {
+    	return new FileFlowReader(file, charset);
+    }
+    
+    /**
+     * <PRE>
+	 * 把数据覆写到指定文件.
+	 * </PRE>
+     * @param filePath 文件路径
+     * @param data 文件数据(使用系统默认编码)
+     * @return true：写入成功; false:写入失败
+     */
 	public static boolean write(String filePath, String data) {
     	return write(new File(filePath), data);
 	}
 	
+	/**
+     * <PRE>
+	 * 把数据覆写到指定文件.
+	 * </PRE>
+     * @param file 文件
+     * @param data 文件数据(使用系统默认编码)
+     * @return true：写入成功; false:写入失败
+     */
 	public static boolean write(File file, String data) {
     	boolean isOk = false;
         try {
@@ -269,10 +493,28 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return isOk;
 	}
 	
+	/**
+	 * <PRE>
+	 * 把数据写到指定文件.
+	 * </PRE>
+	 * @param filePath 文件路径
+	 * @param data 文件数据(使用系统默认编码)
+	 * @param append true:附加到末尾; false:覆写
+	 * @return true：写入成功; false:写入失败
+	 */
 	public static boolean write(String filePath, String data, boolean append) {
 		return write(new File(filePath), data, append);
 	}
 	
+	/**
+	 * <PRE>
+	 * 把数据写到指定文件.
+	 * </PRE>
+	 * @param file 文件
+	 * @param data 文件数据(使用系统默认编码)
+	 * @param append true:附加到末尾; false:覆写
+	 * @return true：写入成功; false:写入失败
+	 */
 	public static boolean write(File file, String data, boolean append) {
     	boolean isOk = false;
         try {
@@ -285,175 +527,176 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         return isOk;
 	}
 	
-	public static boolean write(String filePath, String data, String encoding) {
-		return write(new File(filePath), data, encoding);
-	}
-	
-	public static boolean write(File file, String data, String encoding) {
-    	boolean isOk = false;
-        try {
-        	org.apache.commons.io.FileUtils.write(file, data, encoding);
-        	isOk = true;
-        	
-		} catch (Exception e) {
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
-		}
-        return isOk;
-	}
-	
-	public static boolean write(String filePath, String data, Charset encoding) {
-		return write(new File(filePath), data, encoding);
-	}
-	
-	public static boolean write(File file, String data, Charset encoding) {
-    	boolean isOk = false;
-        try {
-        	org.apache.commons.io.FileUtils.write(file, data, encoding);
-        	isOk = true;
-        	
-		} catch (Exception e) {
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
-		}
-        return isOk;
-	}
-	
-	public static boolean write(String filePath, String data, String encoding, boolean append) {
-		return write(new File(filePath), data, encoding, append);
-	}
-	
-	public static boolean write(File file, String data, String encoding, boolean append) {
-    	boolean isOk = false;
-        try {
-        	org.apache.commons.io.FileUtils.write(file, data, encoding, append);
-        	isOk = true;
-        	
-		} catch (Exception e) {
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
-		}
-        return isOk;
-	}
-	
-	public static boolean write(String filePath, String data, Charset encoding, boolean append) {
-		return write(new File(filePath), data, encoding, append);
-	}
-	
-	public static boolean write(File file, String data, Charset encoding, boolean append) {
-    	boolean isOk = false;
-        try {
-        	org.apache.commons.io.FileUtils.write(file, data, encoding, append);
-        	isOk = true;
-        	
-		} catch (Exception e) {
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
-		}
-        return isOk;
-	}
-	
-	public static double getByteSize(File file) {
-		return (file == null ? 0D : file.length());
-	}
-	
-	public static double getKBSize(File file) {
-		return getByteSize(file) / 1024.0;
-	}
-	
-	public static double getMBSize(File file) {
-		return getKBSize(file) / 1024.0;
-	}
-	
-	public static double getGBSize(File file) {
-		return getMBSize(file) / 1024.0;
-	}
-	
-	public static double getTBSize(File file) {
-		return getGBSize(file) / 1024.0;
-	}
-	
-	public static String getSize(File file) {
-		double size = getByteSize(file);
-		String unit = StorageUnit.BYTE.VAL;
-		
-		if(size >= 1024 && StorageUnit.BYTE.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.KB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.KB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.MB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.MB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.GB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.GB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.TB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.TB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.PB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.PB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.EB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.EB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.ZB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.ZB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.YB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.YB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.BB.VAL;
-		}
-		return new DecimalFormat("0.00 " + unit).format(size);
+	/**
+	 * <PRE>
+	 * 把数据覆写到指定文件.
+	 * </PRE>
+	 * @param filePath 文件路径
+	 * @param data 文件数据
+	 * @param charset 数据编码
+	 * @return true：写入成功; false:写入失败
+	 */
+	public static boolean write(String filePath, String data, String charset) {
+		return write(new File(filePath), data, charset);
 	}
 	
 	/**
-	 * 递归遍历目录下的每一层，计算整个目录的大小
-	 * @param dirPath 目录/文件路径
-	 * @return 整个目录/文件大小，单位bytes
+	 * <PRE>
+	 * 把数据覆写到指定文件.
+	 * </PRE>
+	 * @param file 文件
+	 * @param data 文件数据
+	 * @param charset 数据编码
+	 * @return true：写入成功; false:写入失败
 	 */
-	public static long getDirSize(final String dirPath) {
-		File dir = new File(dirPath);
+	public static boolean write(File file, String data, String charset) {
+    	boolean isOk = false;
+        try {
+        	org.apache.commons.io.FileUtils.write(file, data, charset);
+        	isOk = true;
+        	
+		} catch (Exception e) {
+			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
+		}
+        return isOk;
+	}
+	
+	/**
+	 * <PRE>
+	 * 把数据覆写到指定文件.
+	 * </PRE>
+	 * @param filePath 文件路径
+	 * @param data 文件数据
+	 * @param charset 数据编码
+	 * @return true：写入成功; false:写入失败
+	 */
+	public static boolean write(String filePath, String data, Charset charset) {
+		return write(new File(filePath), data, charset);
+	}
+	
+	/**
+	 * <PRE>
+	 * 把数据覆写到指定文件.
+	 * </PRE>
+	 * @param file 文件
+	 * @param data 文件数据
+	 * @param charset 数据编码
+	 * @return true：写入成功; false:写入失败
+	 */
+	public static boolean write(File file, String data, Charset charset) {
+    	boolean isOk = false;
+        try {
+        	org.apache.commons.io.FileUtils.write(file, data, charset);
+        	isOk = true;
+        	
+		} catch (Exception e) {
+			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
+		}
+        return isOk;
+	}
+	
+	/**
+	 * <PRE>
+	 * 把数据写到指定文件.
+	 * </PRE>
+	 * @param filePath 文件路径
+	 * @param data 文件数据
+	 * @param charset 数据编码
+	 * @param append true:附加到末尾; false:覆写
+	 * @return true：写入成功; false:写入失败
+	 */
+	public static boolean write(String filePath, String data, String charset, boolean append) {
+		return write(new File(filePath), data, charset, append);
+	}
+	
+	/**
+	 * <PRE>
+	 * 把数据写到指定文件.
+	 * </PRE>
+	 * @param file 文件
+	 * @param data 文件数据
+	 * @param charset 数据编码
+	 * @param append true:附加到末尾; false:覆写
+	 * @return true：写入成功; false:写入失败
+	 */
+	public static boolean write(File file, String data, String charset, boolean append) {
+    	boolean isOk = false;
+        try {
+        	org.apache.commons.io.FileUtils.write(file, data, charset, append);
+        	isOk = true;
+        	
+		} catch (Exception e) {
+			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
+		}
+        return isOk;
+	}
+	
+	/**
+	 * <PRE>
+	 * 把数据写到指定文件.
+	 * </PRE>
+	 * @param filePath 文件路径
+	 * @param data 文件数据
+	 * @param charset 数据编码
+	 * @param append true:附加到末尾; false:覆写
+	 * @return true：写入成功; false:写入失败
+	 */
+	public static boolean write(String filePath, String data, Charset charset, boolean append) {
+		return write(new File(filePath), data, charset, append);
+	}
+	
+	/**
+	 * <PRE>
+	 * 把数据写到指定文件.
+	 * </PRE>
+	 * @param file 文件
+	 * @param data 文件数据
+	 * @param charset 数据编码
+	 * @param append true:附加到末尾; false:覆写
+	 * @return true：写入成功; false:写入失败
+	 */
+	public static boolean write(File file, String data, Charset charset, boolean append) {
+    	boolean isOk = false;
+        try {
+        	org.apache.commons.io.FileUtils.write(file, data, charset, append);
+        	isOk = true;
+        	
+		} catch (Exception e) {
+			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
+		}
+        return isOk;
+	}
+	
+	/**
+	 * 计算文件/目录大小
+	 * @param filePath 文件/目录路径
+	 * @return 文件/目录大小，单位bytes
+	 */
+	public static long getSize(String filePath) {
 		long size = 0;
-
-		if (dir.exists()) {
-			if (dir.isDirectory()) {
-				for (File file : dir.listFiles()) {
-					size += getDirSize(StrUtils.concat(dirPath, 
-							File.separator, file.getName()));
-				}
-			} else {
-				size = dir.length();
-			}
+		if(StrUtils.isNotTrimEmpty(filePath)) {
+			size = getSize(new File(filePath));
 		}
 		return size;
 	}
 	
 	/**
-	 * 获取文件头信息
-	 * @param file 文件
-	 * @return 文件头信息
+	 * 计算文件/目录大小
+	 * @param file 文件/目录
+	 * @return 文件/目录大小，单位bytes
 	 */
-	public static String getHeadMsg(File file) {
-		String head = "";
-		String filePath = (file == null ? null : file.getAbsolutePath());
-		if(filePath != null) {
-			head = getHeadMsg(filePath);
+	public static long getSize(File file) {
+		long size = 0;
+		if (file != null && file.exists()) {
+			if (file.isDirectory()) {
+				for (File sFile : file.listFiles()) {
+					size += getSize(sFile);
+				}
+			} else {
+				size = file.length();
+			}
 		}
-		return head;
+		return size;
 	}
 	
 	/**
@@ -463,8 +706,21 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 */
 	public static String getHeadMsg(String filePath) {
 		String head = "";
+		if(filePath != null) {
+			head = getHeadMsg(new File(filePath));
+		}
+		return head;
+	}
+	
+	/**
+	 * 获取文件头信息
+	 * @param file 文件
+	 * @return 文件头信息
+	 */
+	public static String getHeadMsg(File file) {
+		String head = "";
 		try {
-			FileInputStream is = new FileInputStream(filePath);
+			FileInputStream is = new FileInputStream(file);
 			byte[] bytes = new byte[4];
 			
 			is.read(bytes, 0, bytes.length);
@@ -473,32 +729,32 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			head = BODHUtils.toHex(bytes);
 			
 		} catch (Exception e) {
-			log.error("获取文件 [{}] 的文件头信息失败.", filePath, e);
+			log.error("获取文件 [{}] 的文件头信息失败.", 
+					(file == null ? "null" : file.getAbsolutePath()), e);
 		}
 		return head;
 	}
 	
 	/**
-	 * 获取文件扩展名，包括[.]符号
+	 * 获取文件扩展名(包括[.]符号)
 	 * @param file 文件
-	 * @return 文件扩展名，包括[.]符号
+	 * @return 文件扩展名(包括[.]符号)
 	 */
 	public static String getExtension(File file) {
-		String extension = "";
-		String fileName = (file == null ? null : file.getName());
-		if(fileName != null) {
-			extension = getExtension(fileName);
-		}
-		return extension;
+		return getExtension(file == null ? "" : file.getName());
 	}
 	
 	/**
-	 * 获取文件扩展名，包括[.]符号
+	 * 获取文件扩展名(包括[.]符号)
 	 * @param fileName 文件名
-	 * @return 文件扩展名，包括[.]符号
+	 * @return 文件扩展名(包括[.]符号)
 	 */
 	public static String getExtension(String fileName) {
 		String extension = "";
+		if(fileName == null) {
+			return extension;
+		}
+		
 		int pos = fileName.lastIndexOf(".");
 		if (pos != -1) {
 			extension = fileName.substring(pos).toLowerCase();
@@ -507,108 +763,62 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 复制jar包内中的文件
-	 * @param packPath 包内文件的包路径,如: /foo/bar/test.txt
-	 * @param destPath
+	 * 列举目录下的文件清单
+	 * @param dirPath 目录位置
+	 * @param extension 文件后缀
+	 * @return 后缀匹配的文件清单
 	 */
-	public static boolean copyFileInJar(String packPath, String destPath) {
-		boolean isOk = false;
-		final int BUFFER_SIZE = 4096;
-		InputStream is = FileUtils.class.getResourceAsStream(packPath);
-		createFile(destPath);
-		
-		try {
-			FileOutputStream fos = new FileOutputStream(destPath);
-			byte[] buff = new byte[BUFFER_SIZE];
-			int rc = 0;
-			while ((rc = is.read(buff, 0, BUFFER_SIZE)) > 0) {
-				fos.write(buff, 0, rc);
-			}
-			fos.flush();
-			fos.close();
-			isOk = true;
-			
-		} catch (Exception e) {
-			log.error("复制文件失败: 从 [{}] 到 [{}].", packPath, destPath, e);
-		}
-		
-		try {
-			is.close();
-		} catch (Exception e) {
-			log.error("读取Jar内文件异常: 关闭IO流失败.", e);
-		}
-		return isOk;
+	public static List<File> listFiles(String dirPath, String extension) {
+		return listFiles((dirPath == null ? null : new File(dirPath)), extension);
 	}
 	
 	/**
-	 * 读取jar包中的文件
-	 * @param packPath 包内文件的包路径,如: /foo/bar/test.txt
-	 * @param encode 文件编码
-	 * @return 文件内容
-	 * @throws Exception
+	 * 列举目录下的文件清单
+	 * @param dirPath 目录位置
+	 * @param extension 文件后缀
+	 * @return 后缀匹配的文件清单
 	 */
-	public static String readFileInJar(String packPath, String encoding) {
-		final int BUFFER_SIZE = 4096;
-		InputStream is = FileUtils.class.getResourceAsStream(packPath);
-		String str = "";
-		try {
-			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			byte[] buff = new byte[BUFFER_SIZE];
-			int rc = 0;
-			while ((rc = is.read(buff, 0, BUFFER_SIZE)) > 0) {
-				bos.write(buff, 0, rc);
-			}
-			byte[] arrByte = bos.toByteArray();
-			str = new String(arrByte, encoding);
-			bos.close();
-			
-		} catch (Exception e) {
-			log.error("读取Jar内文件失败: ", packPath, e);
-		}
-		
-		try {
-			is.close();
-		} catch (Exception e) {
-			log.error("读取Jar内文件异常: 关闭IO流失败.", e);
-		}
-		return str;
-	}
-	
-	public static List<String> listFilesInJar(String jarFilePath) {
-		return listFilesInJar(jarFilePath, null);
-	}
-
-	public static List<String> listFilesInJar(String jarFilePath, String extension) {
-		return listFilesInJar(new File(jarFilePath), extension);
-	}
-	
-	public static List<String> listFilesInJar(File jarFile, String extension) {
-		List<String> list = new LinkedList<String>();
-		boolean isFilter = StrUtils.isNotEmpty(extension);
-		try {
-			JarFile jar = new JarFile(jarFile);
-			Enumeration<JarEntry> envm = jar.entries();
-			while (envm.hasMoreElements()) {
-				JarEntry e = envm.nextElement();
-				String path = e.getName();
-				
-				if(isFilter && path.toLowerCase().endsWith(extension.toLowerCase())) {
-					list.add(path);
+	public static List<File> listFiles(File dir, String extension) {
+		List<File> list = new LinkedList<File>();
+		if(dir != null) {
+			if(dir.exists()) {
+				if(dir.isFile()) {
+					if(_match(dir, extension)) {
+						list.add(dir);
+					}
+					
+				} else {
+					File[] files = dir.listFiles();
+					for(File file : files) {
+						if(_match(file, extension)) {
+							list.add(file);
+						}
+					}
 				}
 			}
-		} catch (Exception e) {
-			log.error("读取Jar内文件列表失败: ", 
-					(jarFile == null ? "null" : jarFile.getPath()), e);
 		}
 		return list;
 	}
 	
 	/**
+	 * 检查文件与后缀是否匹配
+	 * @param file 文件
+	 * @param extension 后缀
+	 * @return true:匹配; false:不匹配
+	 */
+	private static boolean _match(File file, String extension) {
+		return (StrUtils.isEmpty(extension) || 
+				file.getName().toLowerCase().endsWith(extension.toLowerCase()));
+	}
+	
+	/**
+	 * <PRE>
 	 * 隐藏文件/文件夹
 	 * 	此方法仅适用于win系统. 
 	 * 	linux系统直接在文件名前加.即可实现隐藏
-	 * @param filePath
-	 * @return
+	 * </PRE>
+	 * @param filePath 文件路径
+	 * @return true:隐藏成功; false:隐藏失败
 	 */
 	public static boolean hide(String filePath) {
 		boolean isOk = false;
@@ -619,18 +829,25 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * 隐藏文件/文件夹
 	 * 	此方法仅适用于win系统. 
 	 * 	linux系统直接在文件名前加.即可实现隐藏
+	 * </PRE>
 	 * @param filePath
 	 * @return
 	 */
 	public static boolean hide(File file) {
 		boolean isOk = false;
-		if(OSUtils.isWin() && file != null && file.exists()) {
-			String cmd = StrUtils.concat("attrib +H \"", 
-					file.getAbsolutePath(), "\"");
-			isOk = StrUtils.isTrimEmpty(CmdUtils.execute(cmd));
+		if(file != null && file.exists()) {
+			if(OSUtils.isWin()) {
+				String cmd = StrUtils.concat("attrib +H \"", 
+						file.getAbsolutePath(), "\"");
+				isOk = StrUtils.isTrimEmpty(CmdUtils.execute(cmd));
+				
+			} else if(OSUtils.isUnix()) {
+				isOk = file.getName().startsWith(".");
+			}
 		}
 		return isOk;
 	}

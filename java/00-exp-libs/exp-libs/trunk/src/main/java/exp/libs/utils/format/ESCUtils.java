@@ -21,7 +21,7 @@ import exp.libs.utils.other.ObjUtils;
 
 /**
  * <PRE>
- * 数据格式转换工具包.
+ * 数据格式转换工具.
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -38,6 +38,7 @@ public class ESCUtils {
 	protected ESCUtils() {}
 
 	/**
+	 * <PRE>
 	 * 把字符串中的特殊字符转义为xml的转义字符.
 	 * 
 	 * [&] 转义 [&amp;] 意为 [地址符].
@@ -49,12 +50,13 @@ public class ESCUtils {
 	 * [©] 转义 [&copy;] 意为 [版权符].
 	 * [®] 转义 [&reg;] 意为 [注册符].
 	 * 
+	 * @param str 原字符串 
 	 * @return 转义后的字符串
 	 */
-	public static String toXmlESC(final String javaStr) {
+	public static String toXmlESC(final String str) {
 		String xml = "";
-		if(javaStr != null) {
-			xml = javaStr;
+		if(str != null) {
+			xml = str;
 			xml = xml.replace("&", "&amp;");
 			xml = xml.replace("<", "&lt;");
 			xml = xml.replace(">", "&gt;");
@@ -67,18 +69,20 @@ public class ESCUtils {
 	}
 	
 	/**
-	 * 把含有xml特殊字符的字符串进行转义.
+	 * 把含有xml转义字符的字符串还原成普通字符串
 	 * 
-	 * [&amp;] 转义 [&] 意为 [地址符].
-	 * [&lt;] 转义 [<] 意为 [小于].
-	 * [&gt;] 转义 [>] 意为 [大于号].
-	 * [&apos;] 转义 ['] 意为 [单引号].
-	 * [&quot;] 转义 ["] 意为 [双引号].
-	 * [&nbsp;] 转义 [ ] 意为 [空格].
-	 * [&copy;] 转义 [©] 意为 [版权符].
-	 * [&reg;] 转义 [®] 意为 [注册符].
+	 * [&amp;] 反转义 [&] 意为 [地址符].
+	 * [&lt;] 反转义 [<] 意为 [小于].
+	 * [&gt;] 反转义 [>] 意为 [大于号].
+	 * [&apos;] 反转义 ['] 意为 [单引号].
+	 * [&quot;] 反转义 ["] 意为 [双引号].
+	 * [&nbsp;] 反转义 [ ] 意为 [空格].
+	 * [&copy;] 反转义 [©] 意为 [版权符].
+	 * [&reg;] 反转义 [®] 意为 [注册符].
+	 * </PRE>
 	 * 
-	 * @return 转义后的字符串
+	 * @param 含有xml转义字符的字符串
+	 * @return 普通字符串
 	 */
 	public static String unXmlESC(final String xmlStr) {
 		String str = "";
@@ -96,6 +100,7 @@ public class ESCUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * 把普通字符串中由[两个连续字符构成的特殊字符]转换为java的[转义字符].
 	 * 
 	 *  [\\\\] 转义 [\\].
@@ -106,30 +111,54 @@ public class ESCUtils {
 	 *  [\\0] 转义 [\0].
 	 *  [\\b] 转义 [\b].
 	 *  [\\f] 转义 [\f].
+	 * </PRE>
 	 *  
-	 * @param xml
-	 * @return
+	 * @param str 原字符串
+	 * @return 含java转义字符的字符串
 	 */
-	public static String toJavaESC(final String escStr) {
-		String str = "";
-		if(escStr != null) {
-			str = escStr;
-			str = str.replace("\\\\", "\\");
-			str = str.replace("\\t", "\t");
-			str = str.replace("\\r", "\r");
-			str = str.replace("\\n", "\n");
-			str = str.replace("\\\"", "\"");
-			str = str.replace("\\0", "\0");
-			str = str.replace("\\b", "\b");
-			str = str.replace("\\f", "\f");
+	public static String toJavaESC(final String str) {
+		String javaStr = "";
+		if(str != null) {
+			javaStr = str;
+			javaStr = javaStr.replace("\\\\", "\\");
+			javaStr = javaStr.replace("\\t", "\t");
+			javaStr = javaStr.replace("\\r", "\r");
+			javaStr = javaStr.replace("\\n", "\n");
+			javaStr = javaStr.replace("\\\"", "\"");
+			javaStr = javaStr.replace("\\0", "\0");
+			javaStr = javaStr.replace("\\b", "\b");
+			javaStr = javaStr.replace("\\f", "\f");
 		}
-		return str;
+		return javaStr;
 	}
 	
-	public static String toRegexESC(final String escStr) {
+	/**
+	 * <PRE>
+	 * 为正则表达式中所有特殊字符添加前置反斜杠, 使其转义为普通字符
+	 * 
+	 * 	[ \ ] -> [ \\ ]
+	 * 	[ ( ] -> [ \( ]
+	 *  [ ) ] -> [ \) ]
+	 *  [ [ ] -> [ \[ ]
+	 *  [ ] ] -> [ \] ]
+	 *  [ { ] -> [ \{ ]
+	 *  [ } ] -> [ \} ]
+	 *  [ + ] -> [ \+ ]
+	 *  [ - ] -> [ \- ]
+	 *  [ . ] -> [ \. ]
+	 *  [ * ] -> [ \* ]
+	 *  [ ? ] -> [ \? ]
+	 *  [ ^ ] -> [ \^ ]
+	 *  [ $ ] -> [ \$ ]
+	 * </PRE>
+	 * 
+	 * @param regex 正则表达式
+	 * @return 转义后的正则表达式
+	 */
+	public static String toRegexESC(final String regex) {
 		String str = "";
-		if(escStr != null) {
-			str = escStr;
+		if(regex != null) {
+			str = regex;
 			str = str.replace("\\", "\\\\");
 			str = str.replace("(", "\\(");
 			str = str.replace(")", "\\)");
@@ -149,25 +178,24 @@ public class ESCUtils {
 	}
 	
 	/**
-	 * 对json中的键值字符串的特殊字符进行转义。
+	 * <PRE>
+	 * 为json串中所有特殊字符添加前置反斜杠, 使其转义为普通字符, 同时删除所有空字符
 	 * 
-	 * 	[\] 转义 [\\].
-	 * 	[,] 转义 [\,].
-	 *  ["] 转义 [\"].
-	 *  [:] 转义 [\:].
-	 *  [\r] 转义 [].
-	 *  [\n] 转义 [].
-	 *  [\b] 转义 [].
-	 *  [\t] 转义 [].
-	 *  [\f] 转义 [].
+	 * 	[ \ ] -> [ \\ ]
+	 * 	[ , ] -> [ \, ]
+	 *  [ " ] -> [ \" ]
+	 *  [ : ] -> [ \: ]
 	 *  
+	 *  删除: \r \n \b \t \f
+	 * </PRE>
+	 * 
 	 * @param jsonKV java字符
 	 * @return json转义字符
 	 */
-	public static String toJsonESC(final String jsonKV) {
+	public static String toJsonESC(final String json) {
 		String str = "";
-		if(jsonKV != null) {
-			str = jsonKV;
+		if(json != null) {
+			str = json;
 			str = str.replace("\\", "\\\\");
 			str = str.replace(",", "\\,");
 			str = str.replace("\"", "\\\"");
@@ -181,6 +209,15 @@ public class ESCUtils {
 		return str;
 	}
 	
+	/**
+	 * <PRE>
+	 * 把一个对象转换成json字符串.
+	 * 
+	 * 	此方法仅适用于简单对象的转换, 如 String、Integer、 Map<?, ?>等， 且Map对象不允许嵌套.
+	 * <PRE>
+	 * @param obj 简单对象
+	 * @return 若转换失败返回""
+	 */
 	@SuppressWarnings("deprecation")
 	public static String toJson(Object obj) {
 		String json = "";
@@ -208,6 +245,17 @@ public class ESCUtils {
 		return json;
 	}
 	
+	/**
+	 * <PRE>
+	 * 把一个对象转换成json字符串.
+	 * 若对象中存在日期属性, 则使用指定日期格式转换.
+	 * 
+	 * 	此方法仅适用于简单对象的转换, 如 String、Integer、 Map<?, ?>等， 且Map对象不允许嵌套.
+	 * <PRE>
+	 * @param obj 简单对象
+	 * @param dateFormat 日期格式
+	 * @return 若转换失败返回""
+	 */
 	@SuppressWarnings("deprecation")
 	public static String toJson(Object obj, String dateFormat) {
 		String json = "";
@@ -235,6 +283,15 @@ public class ESCUtils {
 		return json;
 	}
 
+	/**
+	 * <PRE>
+	 * 把json字符串转换成Map对象.
+	 * 
+	 * 	此方法仅适用于纯KV键值对的json字符串, 多重嵌套的json字符串可能会转换失败.
+	 * <PRE>
+	 * @param json 纯KV键值对的json字符串
+	 * @return 若转换失败返回null
+	 */
 	public static Map<?, ?> unJson(String json) {
 		Map<?, ?> map = null;
 		try {
@@ -247,6 +304,14 @@ public class ESCUtils {
 		return map;
 	}
 	
+	/**
+	 * 把二维数组转换成BCP格式字符串
+	 * 
+	 * @param table 二维数组
+	 * @param rowDelimiter 行分隔符
+	 * @param colDelimiter 列分隔符
+	 * @return BCP字符串
+	 */
 	public static String toBCP(List<List<Object>> table, 
 			String rowDelimiter, String colDelimiter) {
 		if(table == null) {
@@ -275,6 +340,34 @@ public class ESCUtils {
 		return sb.toString();
 	}
 
+	/**
+	 * 把BCP字符串还原成二维数组
+	 * 
+	 * @param bcpString BCP字符串
+	 * @param rowDelimiter 行分隔符
+	 * @param colDelimiter 列分隔符
+	 * @return 二维数组
+	 */
+	public static List<List<String>> unBCP(String bcpString, 
+			String rowDelimiter, String colDelimiter) {
+		bcpString = (bcpString == null ? "" : bcpString);
+		rowDelimiter = (rowDelimiter == null ? "" : rowDelimiter);
+		
+		String[] bcpTable = bcpString.split(rowDelimiter);
+		List<List<String>> table = new ArrayList<List<String>>(bcpTable.length);
+		for(String bcpListString : bcpTable) {
+			table.add(unBCP(bcpListString, colDelimiter));
+		}
+		return table;
+	}
+	
+	/**
+	 * 把一维队列转换成BCP格式字符串
+	 * 
+	 * @param list 一维队列
+	 * @param delimiter 分隔符
+	 * @return BCP字符串
+	 */
 	public static String toBCP(List<Object> list, String delimiter) {
 		if(list == null || list.size() <= 0) {
 			return "";
@@ -290,26 +383,25 @@ public class ESCUtils {
 		return sb.toString();
 	}
 	
-	public static List<List<String>> unBCP(String bcpTableString, 
-			String rowDelimiter, String colDelimiter) {
-		bcpTableString = (bcpTableString == null ? "" : bcpTableString);
-		rowDelimiter = (rowDelimiter == null ? "" : rowDelimiter);
-		
-		String[] bcpTable = bcpTableString.split(rowDelimiter);
-		List<List<String>> table = new ArrayList<List<String>>(bcpTable.length);
-		for(String bcpListString : bcpTable) {
-			table.add(unBCP(bcpListString, colDelimiter));
-		}
-		return table;
-	}
-	
-	public static List<String> unBCP(String bcpListString, String delimiter) {
-		bcpListString = (bcpListString == null ? "" : bcpListString);
+	/**
+	 * 把BCP字符串还原成一维队列
+	 * 
+	 * @param bcpString BCP字符串
+	 * @param delimiter 分隔符
+	 * @return 一维队列
+	 */
+	public static List<String> unBCP(String bcpString, String delimiter) {
+		bcpString = (bcpString == null ? "" : bcpString);
 		delimiter = (delimiter == null ? "" : delimiter);
-		String[] bcpList = bcpListString.split(delimiter);
+		String[] bcpList = bcpString.split(delimiter);
 		return Arrays.asList(bcpList);
 	}
 
+	/**
+	 * 把二维数组转换成CSV字符串
+	 * @param table 二维数组
+	 * @return CSV字符串
+	 */
 	public static String toCSV(List<List<Object>> table) {
 		if(table == null) {
 			return "";
@@ -322,7 +414,7 @@ public class ESCUtils {
 		for (List<Object> row : table) {
 			for (Object col : row) {
 				String data = (col == null ? "" : col.toString());
-				sb.append(toCsvString(data)).append(colDelimiter);
+				sb.append(_toCSV(data)).append(colDelimiter);
 			}
 
 			if (row.size() > 0) {
@@ -337,6 +429,28 @@ public class ESCUtils {
 		return sb.toString();
 	}
 
+	/**
+	 * 把CSV字符串转换成二维数组
+	 * @param csv CSV字符串
+	 * @return 二维数组
+	 */
+	public static List<List<String>> unCsvTable(String csv) {
+		csv = (csv == null ? "" : csv);
+		final String rowDelimiter = "\r\n";
+		
+		String[] csvTable = csv.split(rowDelimiter);
+		List<List<String>> table = new ArrayList<List<String>>(csvTable.length);
+		for(String csvListString : csvTable) {
+			table.add(unCsvList(csvListString));
+		}
+		return table;
+	}
+	
+	/**
+	 * 把一维队列转换成CSV字符串
+	 * @param list 一维队列
+	 * @return CSV字符串
+	 */
 	public static String toCsv(List<Object> list) {
 		if(list == null || list.size() <= 0) {
 			return "";
@@ -346,70 +460,93 @@ public class ESCUtils {
 		StringBuilder sb = new StringBuilder();
 		for (Object o : list) {
 			String data = (o == null ? "" : o.toString());
-			sb.append(toCsvString(data)).append(delimiter);
+			sb.append(_toCSV(data)).append(delimiter);
 		}
 		sb.setLength(sb.length() - delimiter.length());
 		return sb.toString();
 	}
 
 	/**
-	 * 把普通字符串转换成CSV格式字符串
-	 * @param s
-	 * @return
+	 * 把CSV字符串转换成一维队列
+	 * @param csv CSV字符串
+	 * @return 一维队列
 	 */
-	private static String toCsvString(String s) {
-		return StringEscapeUtils.escapeCsv(s);
-	}
-	
-	public static List<List<String>> unCSV(String csvTableString) {
-		csvTableString = (csvTableString == null ? "" : csvTableString);
-		final String rowDelimiter = "\r\n";
-		
-		String[] csvTable = csvTableString.split(rowDelimiter);
-		List<List<String>> table = new ArrayList<List<String>>(csvTable.length);
-		for(String csvListString : csvTable) {
-			table.add(unCsv(csvListString));
-		}
-		return table;
-	}
-	
-	public static List<String> unCsv(String csvListString) {
-		csvListString = (csvListString == null ? "" : csvListString);
+	public static List<String> unCsvList(String csv) {
+		csv = (csv == null ? "" : csv);
 		final String delimiter = ",";
 		
-		String[] csvList = csvListString.split(delimiter);
+		String[] csvList = csv.split(delimiter);
 		List<String> list = new ArrayList<String>(csvList.length);
 		for(String csvData : csvList) {
-			list.add(unCsvString(csvData));
+			list.add(_unCSV(csvData));
 		}
 		return list;
 	}
 	
 	/**
-	 * 把CSV格式字符串转换成普通字符串
-	 * @param s
-	 * @return
+	 * 把普通字符串转换成CSV格式字符串
+	 * @param s 普通字符串
+	 * @return CSV格式字符串
 	 */
-	private static String unCsvString(String s) {
-		return StringEscapeUtils.unescapeCsv(s);
+	private static String _toCSV(String str) {
+		return StringEscapeUtils.escapeCsv(str);
 	}
 	
+	/**
+	 * 把CSV格式字符串转换成普通字符串
+	 * @param csv CSV格式字符串
+	 * @return 普通字符串
+	 */
+	private static String _unCSV(String csv) {
+		return StringEscapeUtils.unescapeCsv(csv);
+	}
+	
+	/**
+	 * 把二维数组转换成TSV格式字符串
+	 * @param table 二维数组
+	 * @return TSV格式字符串
+	 */
 	public static String toTSV(List<List<Object>> table) {
 		return toBCP(table, "\r\n", "\t");
 	}
 
+	/**
+	 * 把TSV格式字符串转换成二维数组
+	 * @param tsv TSV字符串
+	 * @return 二维数组
+	 */
+	public static List<List<String>> unTsvTable(String tsv) {
+		return unBCP(tsv, "\r\n", "\t");
+	}
+	
+	/**
+	 * 把一维队列转换成TSV格式
+	 * @param list 一维队列
+	 * @return TSV字符串
+	 */
 	public static String toTsv(List<Object> list) {
 		return toBCP(list, "\t");
 	}
 	
-	public static List<List<String>> unTSV(String tsvTableString) {
-		return unBCP(tsvTableString, "\r\n", "\t");
+	/**
+	 * 把TSV字符串转换成一维队列
+	 * @param tsv TSV字符串
+	 * @return 一维队列
+	 */
+	public static List<String> unTsvList(String tsv) {
+		return unBCP(tsv, "\t");
 	}
 	
-	public static List<String> unTsv(String tsvListString) {
-		return unBCP(tsvListString, "\t");
-	}
-	
+	/**
+	 * <PRE>
+	 * 把二维数组转换成TXT表单字符串.
+	 * 	生成的TXT表单是行列对齐的,若不对齐则是字体等宽问题, 宋体为非等宽字体， 幼圆则为等宽字体.
+	 * <PRE>
+	 * 
+	 * @param table 二维数组
+	 * @param header 是否存在表头(若为true则取第一行为表头)
+	 * @return TXT表单字符串
+	 */
 	public static <T> String toTXT(List<List<T>> table, boolean header) {
 		if(table == null || table.size() <= 0) {
 			return "";

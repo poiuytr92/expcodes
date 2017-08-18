@@ -5,7 +5,7 @@ import exp.libs.utils.StrUtils;
 
 /**
  * <PRE>
- * 进制转换工具包.
+ * 进制转换工具.
  * B:bin
  * O:oct
  * D:dec
@@ -39,6 +39,13 @@ public class BODHUtils {
 		return sb.toString().toUpperCase();
 	}
 	
+	/**
+	 * 将字节数组转为可视的十六进制的字符串
+	 * @param bytes 字节数组
+	 * @param offset 数组起始偏移索引
+	 * @param len 转换字节数
+	 * @return 可视的十六进制的字符串
+	 */
 	public static String toHex(byte[] bytes, int offset, int len) {
 		if(bytes == null || bytes.length <= offset || len < 0) {
 			return "";
@@ -108,10 +115,20 @@ public class BODHUtils {
 		return ((byte) n);
 	}
 	
+	/**
+	 * 二进制数字串 -> 八进制数字串
+	 * @param bin 二进制数字串
+	 * @return 八进制数字串
+	 */
 	public static String binToOct(String bin) {
 		return decToOct(binToDec(bin));
 	}
 	
+	/**
+	 * 二进制数字串 -> 十进制数
+	 * @param bin 二进制数
+	 * @return 十进制数字串
+	 */
 	public static long binToDec(String bin) {
 		long dec = 0L;
 		if(bin != null) {
@@ -127,10 +144,20 @@ public class BODHUtils {
 		return dec;
 	}
 	
+	/**
+	 * 二进制数字串 -> 十六进制数字串
+	 * @param bin 二进制数字串
+	 * @return 十六进制数字串
+	 */
 	public static String binToHex(String bin) {
 		return decToHex(binToDec(bin));
 	}
 	
+	/**
+	 * 八进制数字串 -> 二进制数字串
+	 * @param oct 八进制数字串
+	 * @return 二进制数字串
+	 */
 	public static String octToBin(String oct) {
 		StringBuilder bin = new StringBuilder();
 		if(oct != null) {
@@ -151,38 +178,83 @@ public class BODHUtils {
 		return bin.toString();
 	}
 	
+	/**
+	 * 八进制数字串 -> 十进制数
+	 * @param oct 八进制数字串
+	 * @return 十进制数
+	 */
 	public static long octToDec(String oct) {
 		return binToDec(octToBin(oct));
 	}
 	
+	/**
+	 * 八进制数字串 -> 十六进制数字串
+	 * @param oct 八进制数字串
+	 * @return 十六进制数字串
+	 */
 	public static String octToHex(String oct) {
 		return binToHex(octToBin(oct));
 	}
 	
-	public static String decToBin(long n) {
-		return Long.toBinaryString(n);
+	/**
+	 * 十进制数 -> 二进制数字串
+	 * @param dec 十进制数
+	 * @return 二进制数字串
+	 */
+	public static String decToBin(long dec) {
+		return Long.toBinaryString(dec);
 	}
 	
-	public static String decToOct(long n) {
-		return Long.toOctalString(n);
+	/**
+	 * 十进制数 -> 八进制数字串
+	 * @param dec 十进制数
+	 * @return 八进制数字串
+	 */
+	public static String decToOct(long dec) {
+		return Long.toOctalString(dec);
 	}
 	
-	public static String decToHex(long n) {
-		return Long.toHexString(n).toUpperCase();
+	/**
+	 * 十进制数 -> 十六进制数字串
+	 * @param dec 十进制数
+	 * @return 十六进制数字串
+	 */
+	public static String decToHex(long dec) {
+		return Long.toHexString(dec).toUpperCase();
 	}
 	
+	/**
+	 * 十进制数字串 -> 二进制数字串
+	 * @param dec 十进制数字串
+	 * @return 二进制数字串
+	 */
 	public static String decToBin(String dec) {
 		return Long.toBinaryString(NumUtils.toLong(dec));
 	}
 	
+	/**
+	 * 十进制数字串 -> 八进制数字串
+	 * @param dec 十进制数字串
+	 * @return 八进制数字串
+	 */
 	public static String decToOct(String dec) {
 		return Long.toOctalString(NumUtils.toLong(dec));
 	}
 	
+	/**
+	 * 十进制数字串 -> 十六进制数字串
+	 * @param dec 十进制数字串
+	 * @return 十六进制数字串
+	 */
 	public static String decToHex(String dec) {
 		return Long.toHexString(NumUtils.toLong(dec)).toUpperCase();
 	}
 	
+	/**
+	 * 十六进制数字串 -> 二进制数字串
+	 * @param dec 十六进制数字串
+	 * @return 二进制数字串
+	 */
 	public static String hexToBin(String hex) {
 		StringBuilder bin = new StringBuilder();
 		if(hex != null) {
@@ -212,10 +284,20 @@ public class BODHUtils {
 		return bin.toString();
 	}
 	
+	/**
+	 * 十六进制数字串 -> 八进制数字串
+	 * @param dec 十六进制数字串
+	 * @return 八进制数字串
+	 */
 	public static String hexToOct(String hex) {
 		return decToOct(hexToDec(hex));
 	}
 	
+	/**
+	 * 十六进制数字串 -> 十进制数字串
+	 * @param dec 十六进制数字串
+	 * @return 十进制数字串
+	 */
 	public static long hexToDec(String hex) {
 		return binToDec(hexToBin(hex));
 	}

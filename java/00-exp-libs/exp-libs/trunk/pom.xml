@@ -585,7 +585,7 @@
 							<jarLibDir>./lib</jarLibDir>
 							<mavenRepository>D:\mavenRepository</mavenRepository>
 							<verClass>exp.libs.Version</verClass>
-							<mainClass>exp.libs.Version</mainClass>
+							<mainClass>exp.libs.Main</mainClass>
 							<jdkParams>-javaagent:./lib/jvm-agent.jar</jdkParams>
 							<noVerJarRegex>((exp-?libs-)|(jvm-agent)).*</noVerJarRegex>
 						</configuration>
@@ -593,28 +593,6 @@
 				</executions>
 			</plugin>
 
-			<!-- 项目发布插件（自动生成脚本） -->
-			<plugin>
-				<groupId>exp.libs</groupId>
-				<artifactId>mojo-release-plugin</artifactId>
-				<version>1.0-SNAPSHOT</version>
-				<executions>
-					<execution>
-						<id>mrp</id>
-						<phase>install</phase>
-						<goals>
-							<goal>install</goal>
-						</goals>
-						<configuration>
-							<mavenRepository>D:\mavenRepository</mavenRepository>
-							<verClass>exp.libs.Version</verClass>
-							<mainClass>exp.libs.Version</mainClass>
-							<jdkParams>-javaagent:./lib/jvm-agent.jar</jdkParams>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			
             <!-- 打包源码: 项目发布基线版本时会自动打包源码，不要启用此插件，否则会失败 -->
             <!-- plugin>
                 <groupId>org.apache.maven.plugins</groupId>

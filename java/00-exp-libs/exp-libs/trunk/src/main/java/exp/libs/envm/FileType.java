@@ -1,5 +1,16 @@
 package exp.libs.envm;
 
+/**
+ * <PRE>
+ * 枚举类：文件类型
+ * 	(提供文件类型后缀、以及文件头信息)
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public enum FileType {
 
 	RAR(".rar", "52617221"),
