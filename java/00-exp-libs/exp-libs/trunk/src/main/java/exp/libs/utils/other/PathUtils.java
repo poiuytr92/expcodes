@@ -52,9 +52,10 @@ public class PathUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * 路径合并, 返回符合unix标准的合并路径。
 	 * 所有不满足合并条件的入参，均返回 prefixPath。
-	 * 
+	 * <PRE>
 	 * @param prefixPath 路径前缀，全路径或相对路径
 	 * @param suffixPath 路径后缀，必须是相对路径
 	 * @return 路径前缀 + 路径分隔符 + 路径后缀 (路径不以路径分隔符结尾)
@@ -83,35 +84,7 @@ public class PathUtils {
 	}
 	
 	/**
-	 * 获取代码运行处类的调用堆栈路径，用“|”将堆栈路径拼接起来。
-	 * @return 用“|”连接的堆栈路径
-	 */
-	public static String getCallStackPath() {
-		StringBuilder sb = new StringBuilder();
-		try {
-			throw new Exception();
-			
-		} catch (Exception e) {
-			StackTraceElement[] stes = e.getStackTrace();
-
-			for (StackTraceElement ste : stes) {
-				sb.append(ste.getClassName());
-				sb.append("(").append(ste.getFileName());
-				sb.append(":").append(ste.getLineNumber());
-				sb.append(")|");
-			}
-			
-			if(stes.length > 0) {
-				sb.setLength(sb.length() - 1);
-			}
-		}
-		return sb.toString();
-	}
-	
-	/**
-	 * 取得项目的绝对路径, 如: 
-	 * 	X:\foo\project
-	 * 
+	 * 取得项目的绝对路径, 如: X:\foo\project
 	 * @return 项目的绝对路径
 	 */
 	public static String getProjectPath() {
@@ -125,9 +98,7 @@ public class PathUtils {
 	}
 	
 	/**
-	 * 获取 项目的根路径，如：
-	 * 	X:\foo\project
-	 * 
+	 * 获取 项目的根路径，如： X:\foo\project
 	 * @return 项目的根路径
 	 */
 	public static String getProjectRootPath() {
@@ -135,21 +106,17 @@ public class PathUtils {
 	}
 	
 	/**
-	 * 获取 项目的编译目录的根路径，如：
-	 * 	X:/foo/bar/project/target/classes
-	 * 
+	 * 获取项目的编译目录的根路径，如： X:/foo/bar/project/target/classes
 	 * @return 项目的编译根路径
 	 */
-	public static String getRootCompilePath() {
+	public static String getProjectCompilePath() {
 		return new File(PathUtils.class.getResource("/").getPath()).
 				getAbsolutePath();
 	}
 	
 	/**
-	 * 获取 类的编译路径，如：
-	 * 	X:/workspace/project/target/classes/foo/bar
-	 * 
-	 * @param clazz 求路径的类
+	 * 获取 类的编译路径，如：X:/workspace/project/target/classes/foo/bar
+	 * @param clazz 类
 	 * @return 类的编译路径
 	 */
 	public static String getClassCompilePath(Class<?> clazz) {
@@ -158,11 +125,11 @@ public class PathUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * 获取项目自身引用的所有jar包的路径。
 	 * 只能获取运行main方法的项目所需要的jar包路径，而不能获取其他项目的jar包类路径。
-	 * 
-	 * 如果是外部jdk调用，则返回的是 -cp 的参数表。
-	 * 
+	 * (如果是外部jdk调用，则返回的是 -cp 的参数表)
+	 * </PRE>
 	 * @return 项目引用的所有包的路径
 	 */
 	public static String[] getAllClassPaths() {
@@ -174,7 +141,7 @@ public class PathUtils {
 	 * @param paths 路径集
 	 * @return 标准路径集
 	 */
-	public static List<String> toStand(List<String> paths) {
+	public static List<String> toStandard(List<String> paths) {
 		return (OSUtils.isWin() ? toWin(paths) : toLinux(paths));
 	}
 	
@@ -183,14 +150,14 @@ public class PathUtils {
 	 * @param path 路径
 	 * @return 标准路径
 	 */
-	public static String toStand(String path) {
+	public static String toStandard(String path) {
 		return (OSUtils.isWin() ? toWin(path) : toLinux(path));
 	}
 	
 	/**
 	 * 把linux路径转换为win路径
-	 * @param linuxPaths linux路径
-	 * @return win路径
+	 * @param linuxPaths linux路径集
+	 * @return win路径集
 	 */
 	public static List<String> toWin(List<String> linuxPaths) {
 		List<String> winPaths = new LinkedList<String>();
@@ -215,8 +182,8 @@ public class PathUtils {
 	
 	/**
 	 * 把win路径转换为linux路径
-	 * @param winPaths win路径
-	 * @return linux路径
+	 * @param winPaths win路径集
+	 * @return linux路径集
 	 */
 	public static List<String> toLinux(List<String> winPaths) {
 		List<String> linuxPaths = new LinkedList<String>();
@@ -237,6 +204,32 @@ public class PathUtils {
 			linuxPath = winPath.replace('\\', '/');
 		}
 		return linuxPath;
+	}
+	
+	/**
+	 * 获取 [当前代码运行处] 的调用堆栈路径, 并用“|”将堆栈路径拼接起来。
+	 * @return 用“|”连接的堆栈路径
+	 */
+	public static String getCallStackPath() {
+		StringBuilder sb = new StringBuilder();
+		try {
+			throw new Exception();
+			
+		} catch (Exception e) {
+			StackTraceElement[] stes = e.getStackTrace();
+
+			for (StackTraceElement ste : stes) {
+				sb.append(ste.getClassName());
+				sb.append("(").append(ste.getFileName());
+				sb.append(":").append(ste.getLineNumber());
+				sb.append(")|");
+			}
+			
+			if(stes.length > 0) {
+				sb.setLength(sb.length() - 1);
+			}
+		}
+		return sb.toString();
 	}
 	
 }

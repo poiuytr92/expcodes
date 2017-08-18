@@ -13,7 +13,7 @@ import exp.libs.utils.num.NumUtils;
 
 /**
  * <PRE>
- * 队列/数组集合操作工具包
+ * 队列/数组集合操作工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

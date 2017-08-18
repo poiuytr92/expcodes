@@ -28,7 +28,7 @@ import exp.libs.utils.time.TimeUtils;
 
 /**
  * <PRE>
- * 对象工具包.
+ * 对象工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -44,6 +44,15 @@ public class ObjUtils {
 	/** 私有化构造函数 */
 	protected ObjUtils() {}
 	
+	/**
+	 * <PRE>
+	 * 把String对象转换成其他实体对象.
+	 * 	允许转换的对象包括：Integer、Long、BigInteger、Float、Double、Date、Timestamp
+	 * </PRE>
+	 * @param s String对象
+	 * @param clazz 期望转换的对象类
+	 * @return 允许转换的对象(不支持转换则返回String)
+	 */
 	public static Object toObj(String s, Class<?> clazz) {
 		if(StrUtils.isEmpty(s)) {
 			return (String.class == clazz ? "" : null);
@@ -75,6 +84,15 @@ public class ObjUtils {
 		return o;
 	}
 	
+	/**
+	 * <PRE>
+	 * 把其他实体对象转换成String.
+	 * 	(对于Date和Timestamp对象会返回 yyyy-MM-dd HH:mm:ss.SSS格式字符串)
+	 * </PRE>
+	 * @param o 被转换的实体对象
+	 * @param clazz 被转换的实体对象类型
+	 * @return String对象(若转换失败返回"")
+	 */
 	public static String toStr(Object o, Class<?> clazz) {
 		String s = "";
 		if(o == null) {
@@ -101,6 +119,14 @@ public class ObjUtils {
 		return s;
 	}
 	
+	/**
+	 * <PRE>
+	 * 把其他实体对象转换成String.
+	 * 	(对于Date和Timestamp对象会返回 yyyy-MM-dd HH:mm:ss.SSS格式字符串)
+	 * </PRE>
+	 * @param o 被转换的实体对象
+	 * @return String对象(若转换失败返回"")
+	 */
 	public static String toStr(Object o) {
 		String s = "";
 		if(o == null) {
@@ -123,10 +149,16 @@ public class ObjUtils {
 		return s;
 	}
 	
-	public static boolean isSubclass(Class<?> cClazz, Class<?> fClazz) {
+	/**
+	 * 检查cClazz是否为fClazz的子类
+	 * @param cClazz (期望的)子类
+	 * @param fClazz (期望的)父类
+	 * @return true:是; false:否
+	 */
+	public static boolean isSubclass(Class<?> cClass, Class<?> fClass) {
 		boolean isChild = false;
 		try {
-			cClazz.asSubclass(fClazz);
+			cClass.asSubclass(fClass);
 			isChild = true;
 			
 		} catch (Exception e) {
@@ -146,7 +178,7 @@ public class ObjUtils {
 	 * 
 	 * 若待克隆对象下存在[引用数据类型]（如自定义的class），则要求它必须实现Serializable接口。
 	 * </pre>
-	 * @param serialObject 被克隆的对象，必须实现Serializable接口
+	 * @param serialObject 被克隆的对象(必须实现Serializable接口)
 	 * @return 克隆的对象
 	 */
 	public static Object clone(Object serialObject) {
@@ -170,42 +202,41 @@ public class ObjUtils {
 	
 	/**
 	 * 实例化对象
-	 *
-	 * @param _class 类路径
-	 * @return 实例化对象
-	 * @throws ClassNotFoundException 找不到类
-	 * @throws InstantiationException	实例化异常
-	 * @throws IllegalAccessException  反射调用异常
+	 * @param clazzPath 类路径, 如: foo.bar.Test （该类必须支持无参构造函数）
+	 * @return 实例化对象（若失败则返回null）
 	 */
-	public static Object instanceClass(String clazz) 
-			throws ClassNotFoundException, InstantiationException, 
-			IllegalAccessException {
-		Class<?> inst = Class.forName(clazz);
-		return inst.newInstance();
+	public static Object instanceClass(String clazzPath) {
+		Object inst = null;
+		try {
+			Class<?> clazz = Class.forName(clazzPath);
+			inst = clazz.newInstance();
+		} catch(Exception e) {
+			log.error("实例化类 [{}] 失败", clazzPath, e);
+		}
+		return inst;
 	}
 	
 	/**
+	 * <PRE>
 	 * 获取指定基类的所有子类.
-	 * 
-	 * 由于java父类不清楚其下的子孙是什么,
-	 * 此方式通过递归检索编译目录判断所有类之间的关联性,以确认父子关系.
-	 * 
+	 * (由于java父类不清楚其下的子孙是什么, 此方式通过递归检索编译目录判断所有类之间的关联性,以确认父子关系.)
+	 * </PRE>
 	 * @param baseClass 基类
 	 * @return 子类列表
 	 */
 	public static List<String> getAllChildClass(Class<?> baseClass) {
-		String compilePath = PathUtils.getRootCompilePath();	//根编译目录
+		String compilePath = PathUtils.getProjectCompilePath();	//根编译目录
 		File rootDir = new File(compilePath);
 		
-		//路径分隔符转换为包分隔符
+		// 路径分隔符转换为包分隔符
 		compilePath = compilePath.replaceAll("[\\\\|/]", ".");
-		if(compilePath.endsWith(".") == false) {
-			compilePath += ".";
+		if(!compilePath.endsWith(".")) {
+			compilePath = compilePath.concat(".");
 		}
 		
-		List<String> childClassList = new LinkedList<String>();
-		searchChildClass(rootDir, compilePath, baseClass, childClassList);
-		return childClassList;
+		List<String> childClazzs = new LinkedList<String>();
+		searchChildClass(rootDir, compilePath, baseClass, childClazzs);
+		return childClazzs;
 	}
 	
 	/**
@@ -214,51 +245,57 @@ public class ObjUtils {
 	 * @param curFile 当前处理的文件类
 	 * @param pathPrefix 路径前缀（包路径格式）
 	 * @param baseClass 需查找子类的基类
-	 * @param childClassList 存储检索的子类列表（包路径格式）
+	 * @param childClazzs 存储检索的子类列表（包路径格式）
 	 */
 	private static void searchChildClass(File curFile, String pathPrefix, 
-			Class<?> baseClass, List<String> childClassList) {
-		if(childClassList == null || pathPrefix == null) {
+			Class<?> baseClass, List<String> childClazzs) {
+		if(childClazzs == null || pathPrefix == null) {
 			return;
 		}
 		
-		//若是目录,向下递归
+		// 若是目录,向下递归
 		if(curFile.isDirectory()) {
 			File[] files = curFile.listFiles();
 			for (File file : files) {
-				searchChildClass(file, pathPrefix, baseClass, childClassList);
+				searchChildClass(file, pathPrefix, baseClass, childClazzs);
 			}
 			
-		//若是文件,判定处理
-		} else {
-			if (curFile.getPath().endsWith(".class") == true) {
-				String childClassName = null;
-				try {
-					childClassName = curFile.getPath().
-							replaceAll("[\\\\|/]", ".").	//路径分隔符转换为包分隔符
-							replace(pathPrefix, "").	//去前缀
-							replace(".class", "");		//去后缀
+		// 若是类文件,判定处理
+		} else if (curFile.getPath().endsWith(".class")) {
+			try {
+				String childClassName = curFile.getPath().
+						replaceAll("[\\\\|/]", ".").//路径分隔符转换为包分隔符
+						replace(pathPrefix, "").	//去前缀
+						replace(".class", "");		//去后缀
+				
+				//基类不会是自身的子类
+				if(childClassName.equals(baseClass.getName())) {
+					// Undo
 					
-					//基类不会是自身的子类
-					if(childClassName.equals(baseClass.getName())) {
-						return;
-					}
-					
-					//实例化当前类,并尝试将指定基类做转换测试,只要不抛出异常则说明为父子关系
+				// 实例化当前类,并尝试将指定基类做转换测试,只要不抛出异常则说明为父子关系
+				} else {
 					Class<?> childClass = Class.forName(childClassName);
 					childClass.asSubclass(baseClass);
-					childClassList.add(childClassName);
-					
-				} catch (ClassNotFoundException e) {
-					//forName 类不存在
-					
-				} catch (ClassCastException e) {
-					//asSubclass 非父子关系都会抛出此异常
+					childClazzs.add(childClassName);
 				}
+			} catch (ClassNotFoundException e) {
+				// forName 类不存在
+				
+			} catch (ClassCastException e) {
+				// asSubclass 非父子关系都会抛出此异常
 			}
 		}
 	}
 	
+	/**
+	 * <PRE>
+	 * 把map转换成clazz类声明的Bean实例对象.
+	 * 	(map的key为Bean的成员域，value为对应的成员值)
+	 * </PRE>
+	 * @param map KV表
+	 * @param clazz Bean所属类(该类需支持无参构造函数)
+	 * @return Bean对象(转换失败返回null)
+	 */
 	public static Object toBean(Map<String, Object> map, 
 			Class<? extends Object> clazz) {
 		if(map == null || clazz == null) {
@@ -296,10 +333,12 @@ public class ObjUtils {
 					try {
 						method.invoke(obj, value);
 					} catch (Exception e) {
-						log.error("[{}]: 为成员域 [{}] 置值失败.", clazz.getName(), fieldName);
+						log.error("[{}]: 为成员域 [{}] 置值失败.", 
+								clazz.getName(), fieldName);
 					}
 				} else {
-					log.warn("[{}]: 不存在属性值 [{}] 对应的成员域.", clazz.getName(), propertyName);
+					log.warn("[{}]: 不存在属性值 [{}] 对应的成员域.", 
+							clazz.getName(), propertyName);
 				}
 			}
 		}
@@ -307,9 +346,10 @@ public class ObjUtils {
 	}
 	
 	/**
-	 * 通过反射调用私有方法.
-	 * 	可用于单元测试私有方法.
-	 * 
+	 * <PRE>
+	 * 通过反射调用对象内部方法.
+	 * 	(私有方法也可调用, 可用于单元测试)
+	 * </PRE>
 	 * @param instnOrClazz
 	 *            如果是调用实例方法，该参数为实例对象，
 	 *            如果调用静态方法，该参数为实例对象或对应类***.class
@@ -330,7 +370,8 @@ public class ObjUtils {
 		Class[] valTypes = null;
 		if(paramVals != null && valClazzs != null) {
 			if(paramVals.length != valClazzs.length) {
-				log.error("反射调用方法失败: [{}.{}()], 入参与类型个数不一致.", clazz, methodName);
+				log.error("反射调用方法失败: [{}.{}()], 入参与类型个数不一致.", 
+						clazz, methodName);
 				return null;
 			} else {
 				valTypes = valClazzs;
@@ -368,51 +409,65 @@ public class ObjUtils {
 	}
 	
 	/**
-	 * 打印Bean中的所有成员域（使用MULTI_LINE_STYLE风格）
+	 * 生成Bean中的所有成员域的KV对信息（使用MULTI_LINE_STYLE风格）
 	 * @param bean bean对象
-	 * @return
+	 * @return 所有成员域的KV对信息
 	 */
-	public static String printBean(Object bean) {
+	public static String toBeanInfo(Object bean) {
 		return new ReflectionToStringBuilder(bean, 
 				ToStringStyle.MULTI_LINE_STYLE).toString();
 	}
 	
 	/**
-	 * 打印Bean中的所有成员域
+	 * 生成Bean中的所有成员域的KV对信息
 	 * @param bean bean对象
-	 * @param toStringStyle 打印风格, 建议值 ToStringStyle.MULTI_LINE_STYLE
-	 * @return
+	 * @param style 打印风格, 建议值 MULTI_LINE_STYLE
+	 * @return 所有成员域的KV对信息
 	 */
-	public static String printBean(Object bean, ToStringStyle style) {
-		if(bean == null) {
-			return "";
+	public static String toBeanInfo(Object bean, ToStringStyle style) {
+		String info = "";
+		if(bean != null) {
+			info = new ReflectionToStringBuilder(bean, style).toString();
 		}
-		return new ReflectionToStringBuilder(bean, style).toString();
+		return info;
 	}
 	
-	public static boolean toSerializable(Serializable o, String outFile) {
+	/**
+	 * 把内存对象序列化并保存到外存文件
+	 * @param o 内存对象（需继承Serializable接口）
+	 * @param outFilePath 外存文件位置
+	 * @return true:序列化成功; false:序列化失败
+	 */
+	public static boolean toSerializable(Serializable o, String outFilePath) {
 		boolean isOk = false;
 		try {
-			ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(outFile));
+			ObjectOutputStream oos = new ObjectOutputStream(
+					new FileOutputStream(outFilePath));
 			oos.writeObject(o);
 			oos.flush();
 			oos.close();
 			
 		} catch (Exception e) {
-			log.error("序列化对象到外存文件失败: [{}]", outFile, e);
+			log.error("序列化对象到外存文件失败: [{}]", outFilePath, e);
 		}
 		return isOk;
 	}
 	
-	public static Object unSerializable(String inFile) {
+	/**
+	 * 反序列化外存文件，还原为内存对象
+	 * @param inFile 外存序列化文件
+	 * @return 内存对象(失败返回null)
+	 */
+	public static Object unSerializable(String inFilePath) {
 		Object o = null;
 		try {
-			ObjectInputStream ois = new ObjectInputStream(new FileInputStream(inFile));
+			ObjectInputStream ois = new ObjectInputStream(
+					new FileInputStream(inFilePath));
 			o = ois.readObject();
 			ois.close();
 			
 		} catch (Exception e) {
-			log.error("从外存文件恢复序列化对象失败: [{}]", inFile, e);
+			log.error("从外存文件反序列化对象失败: [{}]", inFilePath, e);
 		}
 		return o;
 	}

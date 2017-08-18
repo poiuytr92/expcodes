@@ -5,7 +5,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import exp.libs.envm.Regex;
-import exp.libs.envm.StorageUnit;
 import exp.libs.utils.StrUtils;
 
 /**
@@ -436,98 +435,6 @@ public class NumUtils {
 	 */
 	public static double toAngel(double radian) {
 		return radian * TO_ANGEL;
-	}
-	
-	/**
-	 * 字节单位转换
-	 * @param bytes 字节大小
-	 * @return 根据字节大小自动调整为byte、KB、MB等单位字符串
-	 */
-	public String convertBytes(long bytes) {
-		double size = (double) bytes;
-		String unit = StorageUnit.BYTE.VAL;
-		
-		if(size >= 1024 && StorageUnit.BYTE.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.KB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.KB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.MB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.MB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.GB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.GB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.TB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.TB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.PB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.PB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.EB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.EB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.ZB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.ZB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.YB.VAL;
-		}
-		
-		if(size >= 1024 && StorageUnit.YB.VAL.equals(unit)) { 
-			size = size / 1024.0;
-			unit = StorageUnit.BB.VAL;
-		}
-		return new DecimalFormat("0.00 " + unit).format(size);
-	}
-	
-	/**
-	 * byte -> KB
-	 * @param bytes 字节大小
-	 * @return KB大小
-	 */
-	public static double toKB(long bytes) {
-		return bytes / 1024.0;
-	}
-	
-	/**
-	 * byte -> MB
-	 * @param bytes 字节大小
-	 * @return MB大小
-	 */
-	public static double toMB(long bytes) {
-		return toKB(bytes) / 1024.0;
-	}
-	
-	/**
-	 * byte -> GB
-	 * @param bytes 字节大小
-	 * @return GB大小
-	 */
-	public static double toGB(long bytes) {
-		return toMB(bytes) / 1024.0;
-	}
-	
-	/**
-	 * byte -> TB
-	 * @param bytes 字节大小
-	 * @return TB大小
-	 */
-	public static double toTB(long bytes) {
-		return toGB(bytes) / 1024.0;
 	}
 	
 }

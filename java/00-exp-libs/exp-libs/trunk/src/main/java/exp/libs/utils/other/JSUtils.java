@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory;
 import exp.libs.utils.io.IOUtils;
 
 /**
- * javascript工具包
+ * javascript工具
  * 
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -30,11 +30,10 @@ public class JSUtils {
 	
 	/**
 	 * 执行JS脚本中的方法
-	 * 
 	 * @param jsFilePath JS文件路径
 	 * @param jsMethod JS方法
 	 * @param args 方法参数
-	 * @return Object
+	 * @return Object 执行结果
 	 */
 	public static Object executeJS(String jsFilePath, String jsMethod, Object... args) {
 		ScriptEngineManager manager = new ScriptEngineManager();

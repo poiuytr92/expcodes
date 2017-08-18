@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <PRE>
- * 日期工具类.
+ * 日期工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -26,109 +26,9 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	protected DateUtils() {}
 
 	/**
-	 * 是否为同一天
-	 * @param date1
-	 * @param date2
-	 * @return
-	 */
-	public static boolean isSameDay(Date date1, Date date2) {
-		if (date1 == null || date2 == null) {
-			return false;
-		}
-		return org.apache.commons.lang3.time.DateUtils.isSameDay(date1, date2);
-	}
-
-	/**
-	 * 是否为同一天
-	 * @param cal1
-	 * @param cal2
-	 * @return
-	 */
-	public static boolean isSameDay(Calendar cal1, Calendar cal2) {
-		if (cal1 == null || cal2 == null) {
-			return false;
-		}
-		return org.apache.commons.lang3.time.DateUtils.isSameDay(cal1, cal1);
-	}
-
-	/**
-	 * 是否为同一时间
-	 * @param date1
-	 * @param date2
-	 * @return
-	 */
-	public static boolean isSameInstant(Date date1, Date date2) {
-		if (date1 == null || date2 == null) {
-			return false;
-		}
-		return org.apache.commons.lang3.time.DateUtils.isSameInstant(date1, date2);
-	}
-
-	/**
-	 * 是否为同一时间
-	 * @param cal1
-	 * @param cal2
-	 * @return
-	 */
-	public static boolean isSameInstant(Calendar cal1, Calendar cal2) {
-		if (cal1 == null || cal2 == null) {
-			return false;
-		}
-		return org.apache.commons.lang3.time.DateUtils.isSameInstant(cal1, cal2);
-	}
-
-	/**
-	 * 是否为同一本地时间
-	 * @param cal1
-	 * @param cal2
-	 * @return
-	 */
-	public static boolean isSameLocalTime(Calendar cal1, Calendar cal2) {
-		if (cal1 == null || cal2 == null) {
-			return false;
-		}
-		return org.apache.commons.lang3.time.DateUtils.isSameLocalTime(cal1, cal2);
-	}
-
-	/**
-	 * 尝试使用多种时间格式将字符串转换成为日期对象, 返回最先成功匹配时间格式的对象
-	 * @param str
-	 * @param parsePatterns
-	 * @return 若解析失败则返回 new Date(0)
-	 */
-	public static Date parseDate(String str, String... parsePatterns) {
-		Date date = new Date(0);
-		try {
-			date = org.apache.commons.lang3.time.
-					DateUtils.parseDate(str, parsePatterns);
-		} catch (ParseException e) {
-			log.error("解析字符串[{}] 为时间格式失败.", e);
-		}
-		return date;
-	}
-	
-	/**
-	 * 尝试使用多种时间格式将字符串转换成为日期对象, 返回最先成功匹配时间格式的对象.
-	 * 此方法严格按照实际日期标准转换, 如2月30日是非法日期, 则作为解析失败处理.
-	 * @param str
-	 * @param parsePatterns
-	 * @return 若解析失败则返回 new Date(0)
-	 */
-	public static Date parseDateStrictly(String str, String... parsePatterns) {
-		Date date = new Date(0);
-		try {
-			date = org.apache.commons.lang3.time.
-					DateUtils.parseDateStrictly(str, parsePatterns);
-		} catch (ParseException e) {
-			log.error("解析字符串[{}] 为时间格式失败.", e);
-		}
-		return date;
-	}
-
-	/**
 	 * 增减日期年份
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param amount 增加数量（单位：年）
 	 * @return 若失败则返回变化前的时间
 	 */
 	public static Date addYears(Date date, int amount) {
@@ -145,8 +45,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
 	/**
 	 * 增减日期月份，年份自动按12进位
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param amount 增减数（单位：月）
 	 * @return 若失败则返回变化前的时间
 	 */
 	public static Date addMonths(Date date, int amount) {
@@ -163,8 +63,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
 	/**
 	 * 以周为单位增减日期时间
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param amount 增减数（单位：周）
 	 * @return 若失败则返回变化前的时间
 	 */
 	public static Date addWeeks(Date date, int amount) {
@@ -181,8 +81,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 以天数为单位增减日期时间
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param amount 增减数（单位：天）
 	 * @return 若失败则返回变化前的时间
 	 */
 	public static Date addDays(Date date, int amount) {
@@ -199,8 +99,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 以小时为单位增减日期时间
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param amount 增减数（单位：小时）
 	 * @return 若失败则返回变化前的时间
 	 */
 	public static Date addHours(Date date, int amount) {
@@ -217,8 +117,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
 	/**
 	 * 以分钟为单位增减日期时间
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param amount 增减数（单位：分钟）
 	 * @return 若失败则返回变化前的时间
 	 */
 	public static Date addMinutes(Date date, int amount) {
@@ -235,8 +135,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 以秒为单位增减日期时间
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param amount 增减数（单位：秒）
 	 * @return 若失败则返回变化前的时间
 	 */
 	public static Date addSeconds(Date date, int amount) {
@@ -253,8 +153,8 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 以毫秒为单位增减日期时间
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param amount 增减数（单位：毫秒）
 	 * @return 若失败则返回变化前的时间
 	 */
 	public static Date addMilliseconds(Date date, int amount) {
@@ -271,15 +171,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
 	/**
 	 * 设置日期中的年份
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param year 年份值
 	 * @return 若失败则返回设置前的时间
 	 */
-	public static Date setYears(Date date, int amount) {
+	public static Date setYears(Date date, int year) {
 		Date newDate = new Date(0);
 		try {
 			newDate = org.apache.commons.lang3.time.
-					DateUtils.setYears(date, amount);
+					DateUtils.setYears(date, year);
 		} catch (Exception e) {
 			newDate = date;
 			log.error("设置日期年份失败.", e);
@@ -289,15 +189,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 设置日期中的月份
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param month 月份值
 	 * @return 若失败则返回设置前的时间
 	 */
-	public static Date setMonths(Date date, int amount) {
+	public static Date setMonths(Date date, int month) {
 		Date newDate = new Date(0);
 		try {
 			newDate = org.apache.commons.lang3.time.
-					DateUtils.setMonths(date, amount);
+					DateUtils.setMonths(date, month);
 		} catch (Exception e) {
 			newDate = date;
 			log.error("设置日期月份失败.", e);
@@ -307,15 +207,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 设置日期中的天数
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param day 天数值
 	 * @return 若失败则返回设置前的时间
 	 */
-	public static Date setDays(Date date, int amount) {
+	public static Date setDays(Date date, int day) {
 		Date newDate = new Date(0);
 		try {
 			newDate = org.apache.commons.lang3.time.
-					DateUtils.setDays(date, amount);
+					DateUtils.setDays(date, day);
 		} catch (Exception e) {
 			newDate = date;
 			log.error("设置日期天数失败.", e);
@@ -325,15 +225,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 设置日期中的小时数
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param hour 小时值
 	 * @return 若失败则返回设置前的时间
 	 */
-	public static Date setHours(Date date, int amount) {
+	public static Date setHours(Date date, int hour) {
 		Date newDate = new Date(0);
 		try {
 			newDate = org.apache.commons.lang3.time.
-					DateUtils.setHours(date, amount);
+					DateUtils.setHours(date, hour);
 		} catch (Exception e) {
 			newDate = date;
 			log.error("设置日期小时数失败.", e);
@@ -343,15 +243,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 
 	/**
 	 * 设置日期中的分钟数
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param minute 分钟值
 	 * @return 若失败则返回设置前的时间
 	 */
-	public static Date setMinutes(Date date, int amount) {
+	public static Date setMinutes(Date date, int minute) {
 		Date newDate = new Date(0);
 		try {
 			newDate = org.apache.commons.lang3.time.
-					DateUtils.setMinutes(date, amount);
+					DateUtils.setMinutes(date, minute);
 		} catch (Exception e) {
 			newDate = date;
 			log.error("设置日期分钟数失败.", e);
@@ -361,15 +261,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 设置日期中的秒数
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param second 秒值
 	 * @return 若失败则返回设置前的时间
 	 */
-	public static Date setSeconds(Date date, int amount) {
+	public static Date setSeconds(Date date, int second) {
 		Date newDate = new Date(0);
 		try {
 			newDate = org.apache.commons.lang3.time.
-					DateUtils.setSeconds(date, amount);
+					DateUtils.setSeconds(date, second);
 		} catch (Exception e) {
 			newDate = date;
 			log.error("设置日期秒数失败.", e);
@@ -379,15 +279,15 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	
 	/**
 	 * 设置日期中的毫秒数
-	 * @param date
-	 * @param amount
+	 * @param date 日期
+	 * @param mills 毫秒值
 	 * @return 若失败则返回设置前的时间
 	 */
-	public static Date setMilliseconds(Date date, int amount) {
+	public static Date setMilliseconds(Date date, int mills) {
 		Date newDate = new Date(0);
 		try {
 			newDate = org.apache.commons.lang3.time.
-					DateUtils.setMilliseconds(date, amount);
+					DateUtils.setMilliseconds(date, mills);
 		} catch (Exception e) {
 			newDate = date;
 			log.error("设置日期秒毫秒数失败.", e);
@@ -396,183 +296,115 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils {
 	}
 	
 	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[天]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
+	 * 尝试使用多种时间格式将字符串转换成为日期对象, 返回最先成功匹配时间格式的对象
+	 * @param str 字符串
+	 * @param formats 日期格式集
+	 * @return 若解析失败则返回 new Date(0)
 	 */
-	public static long getFragmentInDays(Calendar cal, int fragment) {
-		long millis = 0L;
+	public static Date parseDate(String str, String... formats) {
+		Date date = new Date(0);
 		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInDays(cal, fragment);
-		} catch (Exception e) {
-			log.error("截取天数时间失败.", e);
+			date = org.apache.commons.lang3.time.
+					DateUtils.parseDate(str, formats);
+		} catch (ParseException e) {
+			log.error("解析字符串[{}] 为时间格式失败.", e);
 		}
-		return millis;
+		return date;
 	}
 	
 	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[月份]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
+	 * <PRE>
+	 * 尝试使用多种时间格式将字符串转换成为日期对象, 返回最先成功匹配时间格式的对象.
+	 * (此方法严格按照实际日期标准转换, 如2月30日是非法日期, 则作为解析失败处理)
+	 * </PRE>
+	 * @param str 字符串
+	 * @param formats 日期格式集
+	 * @return 若解析失败则返回 new Date(0)
 	 */
-	public static long getFragmentInDays(Date date, int fragment) {
-		long millis = 0L;
+	public static Date parseDateStrictly(String str, String... formats) {
+		Date date = new Date(0);
 		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInDays(date, fragment);
-		} catch (Exception e) {
-			log.error("截取天数时间失败.", e);
+			date = org.apache.commons.lang3.time.
+					DateUtils.parseDateStrictly(str, formats);
+		} catch (ParseException e) {
+			log.error("解析字符串[{}] 为时间格式失败.", e);
 		}
-		return millis;
+		return date;
 	}
 	
 	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[小时]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
+	 * 校验两个日期是否为同一天
+	 * @param date1  日期1
+	 * @param date2  日期2
+	 * @return true:同一天; false:不是同一天
 	 */
-	public static long getFragmentInHours(Calendar cal, int fragment) {
-		long millis = 0L;
-		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInHours(cal, fragment);
-		} catch (Exception e) {
-			log.error("截取小时时间失败.", e);
+	public static boolean isSameDay(Date date1, Date date2) {
+		boolean isSameDay = false;
+		if (date1 != null && date2 != null) {
+			isSameDay = org.apache.commons.lang3.time.
+					DateUtils.isSameDay(date1, date2);
 		}
-		return millis;
-	}
-	
-	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[小时]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
-	 */
-	public static long getFragmentInHours(Date date, int fragment) {
-		long millis = 0L;
-		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInHours(date, fragment);
-		} catch (Exception e) {
-			log.error("截取小时时间失败.", e);
-		}
-		return millis;
-	}
-	
-	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[分钟]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
-	 */
-	public static long getFragmentInMinutes(Calendar cal, int fragment) {
-		long millis = 0L;
-		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInMinutes(cal, fragment);
-		} catch (Exception e) {
-			log.error("截取分钟时间失败.", e);
-		}
-		return millis;
-	}
-	
-	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[分钟]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
-	 */
-	public static long getFragmentInMinutes(Date date, int fragment) {
-		long millis = 0L;
-		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInMinutes(date, fragment);
-		} catch (Exception e) {
-			log.error("截取分钟时间失败.", e);
-		}
-		return millis;
-	}
-	
-	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[秒]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
-	 */
-	public static long getFragmentInSeconds(Calendar cal, int fragment) {
-		long millis = 0L;
-		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInSeconds(cal, fragment);
-		} catch (Exception e) {
-			log.error("截取毫秒时间失败.", e);
-		}
-		return millis;
-	}
-	
-	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[秒]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
-	 */
-	public static long getFragmentInSeconds(Date date, int fragment) {
-		long millis = 0L;
-		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInSeconds(date, fragment);
-		} catch (Exception e) {
-			log.error("截取毫秒时间失败.", e);
-		}
-		return millis;
+		return isSameDay;
 	}
 
 	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[毫秒]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
+	 * 校验两个日期是否为同一天
+	 * @param cal1  日期1
+	 * @param cal2  日期2
+	 * @return true:同一天; false:不是同一天
 	 */
-	public static long getFragmentInMilliseconds(Calendar cal, int fragment) {
-		long millis = 0L;
-		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInMilliseconds(cal, fragment);
-		} catch (Exception e) {
-			log.error("截取毫秒时间失败.", e);
+	public static boolean isSameDay(Calendar cal1, Calendar cal2) {
+		boolean isSameDay = false;
+		if (cal1 != null && cal2 != null) {
+			isSameDay = org.apache.commons.lang3.time.
+					DateUtils.isSameDay(cal1, cal1);
 		}
-		return millis;
+		return isSameDay;
 	}
-	
+
 	/**
-	 * 截取指定单位（秒，分钟，小时，月，年）以下的时间，大于该单位的被舍弃.
-	 * 返回的数字以[毫秒]为单位.
-	 * @param date
-	 * @param fragment
-	 * @return 截取失败返回0
+	 * 校验两个日期是否为同一时间（精确到毫秒）
+	 * @param date1  日期1
+	 * @param date2  日期2
+	 * @return true:同一时间; false:不是同一时间
 	 */
-	public static long getFragmentInMilliseconds(Date date, int fragment) {
-		long millis = 0L;
-		try {
-			millis = org.apache.commons.lang3.time.
-					DateUtils.getFragmentInMilliseconds(date, fragment);
-		} catch (Exception e) {
-			log.error("截取毫秒时间失败.", e);
+	public static boolean isSameInstant(Date date1, Date date2) {
+		boolean isSameInstant = false;
+		if (date1 != null && date2 != null) {
+			isSameInstant = org.apache.commons.lang3.time.
+					DateUtils.isSameInstant(date1, date2);
 		}
-		return millis;
+		return isSameInstant;
+	}
+
+	/**
+	 * 校验两个日期是否为同一时间（精确到毫秒）
+	 * @param cal1  日期1
+	 * @param cal2  日期2
+	 * @return true:同一时间; false:不是同一时间
+	 */
+	public static boolean isSameInstant(Calendar cal1, Calendar cal2) {
+		boolean isSameInstant = false;
+		if (cal1 != null && cal2 != null) {
+			isSameInstant = org.apache.commons.lang3.time.
+					DateUtils.isSameInstant(cal1, cal2);
+		}
+		return isSameInstant;
+	}
+
+	/**
+	 * 校验两个日期是否为同一本地时间
+	 * @param cal1  日期1
+	 * @param cal2  日期2
+	 * @return true:同一本地时间; false:不是同一本地时间
+	 */
+	public static boolean isSameLocalTime(Calendar cal1, Calendar cal2) {
+		boolean isSameLocalTime = false;
+		if (cal1 != null && cal2 != null) {
+			isSameLocalTime = org.apache.commons.lang3.time.
+					DateUtils.isSameLocalTime(cal1, cal2);
+		}
+		return isSameLocalTime;
 	}
 
 }
