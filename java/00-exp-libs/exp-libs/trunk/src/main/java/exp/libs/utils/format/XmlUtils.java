@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 
 import org.dom4j.Attribute;
 import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.Namespace;
 import org.dom4j.Node;
@@ -45,6 +46,30 @@ public class XmlUtils {
 	
 	/** 私有化构造函数 */
 	protected XmlUtils() {}
+	
+	/**
+	 * 是否为合法的xml格式字符串
+	 * @param xml xml格式字符串
+	 * @return true:合法; false:非法
+	 */
+	public static boolean isVaild(String xml) {
+		boolean isVaild = true;
+		try {
+			DocumentHelper.parseText(xml);
+		} catch(Throwable e) {
+			isVaild = false;
+		}
+		return isVaild;
+	}
+	
+	/**
+	 * 是否为非法的xml格式字符串
+	 * @param xml xml格式字符串
+	 * @return true:非法; false:合法
+	 */
+	public static boolean isInvaild(String xml) {
+		return !isVaild(xml);
+	}
 	
 	/**
 	 * 移除xml中的空行

@@ -24,22 +24,22 @@ public class TestVerifyUtils {
 
 	@Test
 	public void testIsAscii() {
-		Assert.assertTrue(VerifyUtils.isAscii('0'));
-		Assert.assertTrue(VerifyUtils.isAscii('a'));
-		Assert.assertTrue(VerifyUtils.isAscii('A'));
-		Assert.assertTrue(VerifyUtils.isAscii('+'));
-		Assert.assertTrue(VerifyUtils.isAscii('\n'));
-		Assert.assertFalse(VerifyUtils.isAscii('天'));
+		Assert.assertTrue(VerifyUtils.isASCII('0'));
+		Assert.assertTrue(VerifyUtils.isASCII('a'));
+		Assert.assertTrue(VerifyUtils.isASCII('A'));
+		Assert.assertTrue(VerifyUtils.isASCII('+'));
+		Assert.assertTrue(VerifyUtils.isASCII('\n'));
+		Assert.assertFalse(VerifyUtils.isASCII('天'));
 	}
 
 	@Test
 	public void testIsAsciiCtrl() {
-		Assert.assertTrue(VerifyUtils.isAsciiCtrl('\0'));
-		Assert.assertTrue(VerifyUtils.isAsciiCtrl('\t'));
-		Assert.assertFalse(VerifyUtils.isAsciiCtrl('A'));
-		Assert.assertFalse(VerifyUtils.isAsciiCtrl('+'));
-		Assert.assertTrue(VerifyUtils.isAsciiCtrl('\n'));
-		Assert.assertFalse(VerifyUtils.isAsciiCtrl('天'));
+		Assert.assertTrue(VerifyUtils.isASCIICtrl('\0'));
+		Assert.assertTrue(VerifyUtils.isASCIICtrl('\t'));
+		Assert.assertFalse(VerifyUtils.isASCIICtrl('A'));
+		Assert.assertFalse(VerifyUtils.isASCIICtrl('+'));
+		Assert.assertTrue(VerifyUtils.isASCIICtrl('\n'));
+		Assert.assertFalse(VerifyUtils.isASCIICtrl('天'));
 	}
 
 	@Test
@@ -638,47 +638,47 @@ public class TestVerifyUtils {
 
 	@Test
 	public void testIsIp() {
-		Assert.assertFalse(VerifyUtils.isIp("68-F7-28-F5-2C-D3"));
-		Assert.assertFalse(VerifyUtils.isIp("00-01-00-01-1D-30-A6-F8-68-F7-28-F5-2C-D3"));
-		Assert.assertTrue(VerifyUtils.isIp("127.0.0.1"));
-		Assert.assertTrue(VerifyUtils.isIp("0.0.0.0"));
-		Assert.assertTrue(VerifyUtils.isIp("255.255.255.255"));
-		Assert.assertFalse(VerifyUtils.isIp("256.0.0.0"));
-		Assert.assertFalse(VerifyUtils.isIp("127.0.0.1:9998"));
-		Assert.assertFalse(VerifyUtils.isIp("fe80::5168:bd2c:886e:5550%13"));
-		Assert.assertFalse(VerifyUtils.isIp("00-00-00-00-00-00-00-E0"));
+		Assert.assertFalse(VerifyUtils.isIP("68-F7-28-F5-2C-D3"));
+		Assert.assertFalse(VerifyUtils.isIP("00-01-00-01-1D-30-A6-F8-68-F7-28-F5-2C-D3"));
+		Assert.assertTrue(VerifyUtils.isIP("127.0.0.1"));
+		Assert.assertTrue(VerifyUtils.isIP("0.0.0.0"));
+		Assert.assertTrue(VerifyUtils.isIP("255.255.255.255"));
+		Assert.assertFalse(VerifyUtils.isIP("256.0.0.0"));
+		Assert.assertFalse(VerifyUtils.isIP("127.0.0.1:9998"));
+		Assert.assertFalse(VerifyUtils.isIP("fe80::5168:bd2c:886e:5550%13"));
+		Assert.assertFalse(VerifyUtils.isIP("00-00-00-00-00-00-00-E0"));
 	}
 
 	@Test
 	public void testIsIpv4() {
-		Assert.assertFalse(VerifyUtils.isIpv4("68-F7-28-F5-2C-D3"));
-		Assert.assertFalse(VerifyUtils.isIpv4("00-01-00-01-1D-30-A6-F8-68-F7-28-F5-2C-D3"));
-		Assert.assertTrue(VerifyUtils.isIpv4("127.0.0.1"));
-		Assert.assertTrue(VerifyUtils.isIpv4("0.0.0.0"));
-		Assert.assertTrue(VerifyUtils.isIpv4("255.255.255.255"));
-		Assert.assertFalse(VerifyUtils.isIpv4("256.0.0.0"));
-		Assert.assertFalse(VerifyUtils.isIpv4("127.0.0.1:9998"));
-		Assert.assertFalse(VerifyUtils.isIpv4("fe80::5168:bd2c:886e:5550%13"));
-		Assert.assertFalse(VerifyUtils.isIpv4("00-00-00-00-00-00-00-E0"));
+		Assert.assertFalse(VerifyUtils.isIPv4("68-F7-28-F5-2C-D3"));
+		Assert.assertFalse(VerifyUtils.isIPv4("00-01-00-01-1D-30-A6-F8-68-F7-28-F5-2C-D3"));
+		Assert.assertTrue(VerifyUtils.isIPv4("127.0.0.1"));
+		Assert.assertTrue(VerifyUtils.isIPv4("0.0.0.0"));
+		Assert.assertTrue(VerifyUtils.isIPv4("255.255.255.255"));
+		Assert.assertFalse(VerifyUtils.isIPv4("256.0.0.0"));
+		Assert.assertFalse(VerifyUtils.isIPv4("127.0.0.1:9998"));
+		Assert.assertFalse(VerifyUtils.isIPv4("fe80::5168:bd2c:886e:5550%13"));
+		Assert.assertFalse(VerifyUtils.isIPv4("00-00-00-00-00-00-00-E0"));
 	}
 
 	@Test
 	public void testIsIpv6() {
-		Assert.assertFalse(VerifyUtils.isIpv6("68-F7-28-F5-2C-D3"));
-		Assert.assertFalse(VerifyUtils.isIpv6("00-01-00-01-1D-30-A6-F8-68-F7-28-F5-2C-D3"));
-		Assert.assertFalse(VerifyUtils.isIpv6("127.0.0.1"));
-		Assert.assertFalse(VerifyUtils.isIpv6("0.0.0.0"));
-		Assert.assertFalse(VerifyUtils.isIpv6("255.255.255.255"));
-		Assert.assertFalse(VerifyUtils.isIpv6("256.0.0.0"));
-		Assert.assertFalse(VerifyUtils.isIpv6("127.0.0.1:9998"));
-		Assert.assertFalse(VerifyUtils.isIpv6("00-00-00-00-00-00-00-E0"));
-		Assert.assertTrue(VerifyUtils.isIpv6("fe80::5168:bd2c:886e:5550%13"));
-		Assert.assertTrue(VerifyUtils.isIpv6("fe80:0000:0000:0000:0204:61ff:fe9d:f156"));	// 完整地址
-		Assert.assertTrue(VerifyUtils.isIpv6("fe80:0:0:0:204:61ff:fe9d:f156"));	// 压缩全0字段 
-		Assert.assertTrue(VerifyUtils.isIpv6("fe80::204:61ff:fe9d:f156"));	// 去掉全0字段 
-		Assert.assertTrue(VerifyUtils.isIpv6("fe80:0000:0000:0000:0204:61ff:254.157.241.86"));	// 后2位为ipv4
-		Assert.assertTrue(VerifyUtils.isIpv6("fe80:0:0:0:204:61ff:254.157.241.86"));	// 压缩全0字段，后2位为ipv4
-		Assert.assertTrue(VerifyUtils.isIpv6("fe80::204:61ff:254.157.241.86"));	// 去掉全0字段，后2位为ipv4
+		Assert.assertFalse(VerifyUtils.isIPv6("68-F7-28-F5-2C-D3"));
+		Assert.assertFalse(VerifyUtils.isIPv6("00-01-00-01-1D-30-A6-F8-68-F7-28-F5-2C-D3"));
+		Assert.assertFalse(VerifyUtils.isIPv6("127.0.0.1"));
+		Assert.assertFalse(VerifyUtils.isIPv6("0.0.0.0"));
+		Assert.assertFalse(VerifyUtils.isIPv6("255.255.255.255"));
+		Assert.assertFalse(VerifyUtils.isIPv6("256.0.0.0"));
+		Assert.assertFalse(VerifyUtils.isIPv6("127.0.0.1:9998"));
+		Assert.assertFalse(VerifyUtils.isIPv6("00-00-00-00-00-00-00-E0"));
+		Assert.assertTrue(VerifyUtils.isIPv6("fe80::5168:bd2c:886e:5550%13"));
+		Assert.assertTrue(VerifyUtils.isIPv6("fe80:0000:0000:0000:0204:61ff:fe9d:f156"));	// 完整地址
+		Assert.assertTrue(VerifyUtils.isIPv6("fe80:0:0:0:204:61ff:fe9d:f156"));	// 压缩全0字段 
+		Assert.assertTrue(VerifyUtils.isIPv6("fe80::204:61ff:fe9d:f156"));	// 去掉全0字段 
+		Assert.assertTrue(VerifyUtils.isIPv6("fe80:0000:0000:0000:0204:61ff:254.157.241.86"));	// 后2位为ipv4
+		Assert.assertTrue(VerifyUtils.isIPv6("fe80:0:0:0:204:61ff:254.157.241.86"));	// 压缩全0字段，后2位为ipv4
+		Assert.assertTrue(VerifyUtils.isIPv6("fe80::204:61ff:254.157.241.86"));	// 去掉全0字段，后2位为ipv4
 	}
 
 	@Test

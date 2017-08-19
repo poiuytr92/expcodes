@@ -10,7 +10,7 @@ import exp.libs.utils.StrUtils;
 
 /**
  * <PRE>
- * 正则表达式工具包
+ * 正则表达式工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -25,9 +25,9 @@ public class RegexUtils {
 	
 	/**
 	 * 完全匹配
-	 * @param str
-	 * @param regex
-	 * @return
+	 * @param str 被匹配字符串
+	 * @param regex 正则表达式
+	 * @return true:完全匹配; false:非完全匹配
 	 */
 	public static boolean matches(String str, String regex) {
 		boolean isMatch = false;
@@ -39,9 +39,9 @@ public class RegexUtils {
 	
 	/**
 	 * 部分匹配
-	 * @param str
-	 * @param regex
-	 * @return
+	 * @param str 被匹配字符串
+	 * @param regex 正则表达式
+	 * @return true:存在子串匹配; false:完全不匹配
 	 */
 	public static boolean contains(String str, String regex) {
 		boolean isMatch = false;
@@ -54,10 +54,12 @@ public class RegexUtils {
 	}
 	
 	/**
-	 * 获取首次匹配的第1个匹配值（注意不是第0个, 即group(1)）
-	 * @param str
-	 * @param regex
-	 * @return
+	 * <PRE>
+	 * 取首次匹配的group(1)
+	 * </PRE>
+	 * @param str 被匹配字符串
+	 * @param regex 正则表达式(必须至少含有1个括号)
+	 * @return 匹配值(若无匹配返回"")
 	 */
 	public static String findFirst(String str, String regex) {
 		String value = "";
@@ -72,10 +74,12 @@ public class RegexUtils {
 	}
 	
 	/**
-	 * 获取每次匹配的第1个匹配值（注意不是第0个, 即group(1)s）
-	 * @param str
-	 * @param regex
-	 * @return
+	 * <PRE>
+	 * 取每次匹配的group(1)
+	 * </PRE>
+	 * @param str 被匹配字符串
+	 * @param regex 正则表达式(必须至少含有1个括号)
+	 * @return 匹配值集（集合大小即为匹配次数）
 	 */
 	public static List<String> findBrackets(String str, String regex) {
 		List<String> list = new LinkedList<String>();
@@ -92,10 +96,12 @@ public class RegexUtils {
 	}
 	
 	/**
-	 * 获取首次匹配的所有group的匹配值（即group(0...n)）
-	 * @param str
-	 * @param regex
-	 * @return
+	 * <PRE>
+	 * 取首次匹配的group(0...n)
+	 * </PRE>
+	 * @param str 被匹配字符串
+	 * @param regex 正则表达式
+	 * @return 匹配值集(集合索引值对应正则式括号次序)
 	 */
 	public static List<String> findGroups(String str, String regex) {
 		List<String> list = new ArrayList<String>();
@@ -114,10 +120,12 @@ public class RegexUtils {
 	}
 	
 	/**
-	 * 获取所有组的所有匹配值
-	 * @param str
-	 * @param regex
-	 * @return
+	 * <PRE>
+	 * 取每次匹配的group(0...n)
+	 * </PRE>
+	 * @param str 被匹配字符串
+	 * @param regex 正则表达式
+	 * @return 匹配值集(行索引对应匹配次数，列索引值对应正则式括号次序)
 	 */
 	public static List<List<String>> findAll(String str, String regex) {
 		List<List<String>> list = new LinkedList<List<String>>();
