@@ -9,7 +9,7 @@ import exp.libs.utils.verify.VerifyUtils;
 
 /**
  * <PRE>
- * 字符串处理工具包
+ * 字符串处理工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -19,12 +19,13 @@ import exp.libs.utils.verify.VerifyUtils;
  */
 public class StrUtils {
 
+	/** 私有化构造函数 */
 	protected StrUtils() {}
 	
 	/**
 	 * 判断字符串是否为空
-	 * @param s 字符串
-	 * @return true:s为null或""; false:反之
+	 * @param s 待判断字符串
+	 * @return true:字符串为null或""; false:字符串非空
 	 */
 	public static boolean isEmpty(String s) {
 		boolean isEmpty = false;
@@ -34,10 +35,20 @@ public class StrUtils {
 		return isEmpty;
 	}
 	
+	/**
+	 * 判断字符串是否非空
+	 * @param s 待判断字符串
+	 * @return true:字符串非空; false:字符串为null或""
+	 */
 	public static boolean isNotEmpty(String s) {
 		return !isEmpty(s);
 	}
 	
+	/**
+	 * 判断所有字符串是否均为空
+	 * @param strs 字符串集
+	 * @return true:所有字符串为null或""; false:存在字符串非空
+	 */
 	public static boolean isEmpty(String... strs) {
 		boolean isEmpty = true;
 		if(strs != null) {
@@ -51,6 +62,11 @@ public class StrUtils {
 		return isEmpty;
 	}
 	
+	/**
+	 * 判断所有字符串是否均为非空
+	 * @param strs 字符串集
+	 * @return true:所有字符串非空; false:存在字符串为null或""
+	 */
 	public static boolean isNotEmpty(String... strs) {
 		boolean isNotEmpty = true;
 		if(strs != null) {
@@ -78,6 +94,11 @@ public class StrUtils {
 		return isEmpty(s.trim());
 	}
 	
+	/**
+	 * 判断trim(字符串)是否为空
+	 * @param s 待判断字符串
+	 * @return true:trim(字符串)为null或""; false:trim(字符串)非空
+	 */
 	public static boolean isTrimEmpty(String s) {
 		boolean isTrimEmpty = false;
 		if(s == null || "".equals(s.trim())) {
@@ -86,14 +107,29 @@ public class StrUtils {
 		return isTrimEmpty;
 	}
 	
+	/**
+	 * 判断trim(字符串)是否非空
+	 * @param s 待判断字符串
+	 * @return true:trim(字符串)非空; false:trim(字符串)为null或""
+	 */
 	public static boolean isNotTrimEmpty(String s) {
 		return !isTrimEmpty(s);
 	}
 	
+	/**
+	 * 判断字符串是否非null
+	 * @param s 待判断字符串
+	 * @return true:字符串非null; false:字符串为null
+	 */
 	public static String toNotNull(String str) {
 		return (str == null ? "" : str);
 	}
 	
+	/**
+	 * 判断字符串集中所有字符串是否均相同
+	 * @param strs 字符串集
+	 * @return true:所有字符串均相同; false:存在差异的字符串 或 字符串集数量<=1
+	 */
 	public static boolean equals(String... strs) {
 		boolean isEquals = true;
 		if(strs == null || strs.length <= 1) {
@@ -122,9 +158,9 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 字符串倒转
+	 * 反转字符串
 	 * @param str 原字符串
-	 * @return 倒转的字符串
+	 * @return 反转字符串
 	 */
 	public static String reverse(String str) {
 		if (str == null) {
@@ -133,6 +169,12 @@ public class StrUtils {
 		return new StringBuilder(str).reverse().toString();
 	}
 	
+	/**
+	 * 把N个字符拼接成一个字符串
+	 * @param c 字符
+	 * @param num 数量
+	 * @return 字符串(c*N)
+	 */
 	public static String multiChar(char c, int num) {
 		StringBuffer sb = new StringBuffer();
 		for(int i = 0; i < num; i++) {
@@ -181,7 +223,7 @@ public class StrUtils {
 	 * 使用指定分隔符连接字符串
 	 * @param list 字符串列表
 	 * @param separator 分隔符
-	 * @return 依次连接所有字符串的字符串
+	 * @return 使用分隔符依次连接所有字符串的字符串
 	 */
 	public static String concat(List<String> list, String separator) {
 		StringBuilder sb = new StringBuilder();
@@ -200,7 +242,6 @@ public class StrUtils {
 	
 	/**
 	 * 转换字符串的第一个字母大写
-	 * 
 	 * @param str 要转换字符串
 	 * @return 转换后的结果 ，如： string==>String
 	 */
@@ -212,7 +253,6 @@ public class StrUtils {
 	
 	/**
 	 * 转换字符串的第一个字母为小写
-	 * 
 	 * @param str 要转换字符串
 	 * @return 转换后的结果 ，如： String==>string
 	 */
@@ -250,13 +290,16 @@ public class StrUtils {
 			case '\n' : { str = "\\n"; break; } 
 			case '\0' : { str = "\\0"; break; } 
 			case '\b' : { str = "\\b"; break; } 
-			default : { str = String.valueOf(emptyChar); break; }
+			default : { str = String.valueOf(emptyChar); }
 		}
 		return str;
 	}
 	
 	/**
-	 * 在字符串s[左边]用字符c补长, 目标长度是size.
+	 * <PRE>
+	 * 在字符串s[左边]用字符c补长, 使得新字符串的长度补长到size.
+	 * 	(若原字符串长度>=size， 则不再补长)
+	 * <PRE>
 	 * @param s 待填充的字符串
 	 * @param c 用于填充的字符
 	 * @param size 填充完成后字符串的总长度
@@ -277,7 +320,10 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 在字符串s[右边]用字符c补长, 目标长度是size.
+	 * <PRE>
+	 * 在字符串s[右边]用字符c补长, 使得新字符串的长度补长到size.
+	 * 	(若原字符串长度>=size， 则不再补长)
+	 * <PRE>
 	 * @param s 待填充的字符串
 	 * @param c 用于填充的字符
 	 * @param size 填充完成后字符串的总长度
@@ -315,7 +361,7 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 在字符串特定距离填充空格
+	 * 在字符串特定距离填充1个空格
 	 * @param str 原字符串
 	 * @param interval 填充间隔
 	 * @return 填充空格后的字符串
@@ -340,6 +386,20 @@ public class StrUtils {
 		return sb.toString();
 	}
 	
+	/**
+	 * <PRE>
+	 * 根据首尾切割符，切割字符串.
+	 * 
+	 * 	如: s = xyzAAqqqZZabcAAwwwZZrstAAeeeZZzyx
+	 * 		bgnDelmiter = AA
+	 * 		endDelmiter = ZZ
+	 * 	则切割成 qqq、www、eee
+	 * </PRE>
+	 * @param s 被切割字符串
+	 * @param bgnDelmiter 首切割符
+	 * @param endDelmiter 尾切割符
+	 * @return 切割字符串集
+	 */
 	public static String[] split(String s, String bgnDelmiter, String endDelmiter) {
 		s = (s == null ? "" : s);
 		String[] ss = null;
@@ -364,11 +424,11 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 按子串类型切割字符串
-	 * @param s
-	 * @param delmiter
-	 * @param clazz
-	 * @return
+	 * 使用delmiter切割字符串，并把得到的切割子串转换成clazz对象
+	 * @param s 被切割字符串
+	 * @param delmiter 切割符
+	 * @param clazz 子串的强制转换类型
+	 * @return 被切割对象集
 	 */
 	public static Object[] split(String s, String delmiter, Class<?>[] clazz) {
 		s = (s == null ? "" : s);
@@ -386,7 +446,9 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 把字符串切割成不同长度的子串
+	 * <PRE>
+	 * 把字符串切割成不同长度的子串 (第i个子串的长度为len[i])
+	 * </PRE>
 	 * @param str 原字符串
 	 * @param lens 每个子串的长度
 	 * @return 切割后的子串
@@ -419,10 +481,10 @@ public class StrUtils {
 	
 	/**
 	 * 从字符串s中截取bgn（不包括）和end（不包括）之间的子串
-	 * @param s
-	 * @param bgn
-	 * @param end
-	 * @return
+	 * @param s 原字符串
+	 * @param bgn 离字符串首最近的起始标识
+	 * @param end 离bgn最近的结束标识
+	 * @return 子串
 	 */
 	public static String substr(String s, String bgn, String end) {
 		String sub = "";
@@ -454,10 +516,10 @@ public class StrUtils {
 	
 	/**
 	 * 在字符串s中截取第amount次出现的mark（不包括）之前的子串
-	 * @param s
-	 * @param mark
-	 * @param amount
-	 * @return
+	 * @param s 原字符串
+	 * @param mark 标记字符串
+	 * @param amount 标记字符串出现次数
+	 * @return 子串
 	 */
 	public static String substr(String s, String mark, int amount) {
 		String sub = (s == null ? "" : s);
@@ -481,9 +543,12 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 截取字符串摘要
-	 * @param str
-	 * @return
+	 * <PRE>
+	 * 截取字符串摘要.
+	 * 	若字符串长度超过128字符，则截取前128个字符，并在末尾补省略号[...]
+	 * </PRE>
+	 * @param str 原字符串
+	 * @return 字符串摘要
 	 */
 	public static String showSummary(String str) {
 		String summary = "";
@@ -500,9 +565,9 @@ public class StrUtils {
 	
 	/**
 	 * 计算字符串中指定字符出现的个数
-	 * @param s
-	 * @param c
-	 * @return
+	 * @param s 原字符串
+	 * @param c 被核查字符
+	 * @return 字符出现次数
 	 */
 	public static int count(final String s, final char c) {
 		int cnt = 0;
@@ -519,8 +584,8 @@ public class StrUtils {
 	
 	/**
 	 * 获取字符串中的中文个数
-	 * @param s
-	 * @return
+	 * @param s 原字符串
+	 * @return 中文个数
 	 */
 	public static int chineseCnt(final String s) {
 		int cnt = 0;
@@ -534,9 +599,12 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 以 [1中文长度=2英文长度] 换算字符串长度
-	 * @param s
-	 * @return
+	 * <PRE>
+	 * 计算字符串的中文长度.
+	 * 	（默认情况下java的中文字符和英文字符均占长度为1字符，此方法以 [1中文长度=2英文长度] 换算字符串长度）
+	 * </PRE>
+	 * @param s 原字符串
+	 * @return 中文长度
 	 */
 	public static int chineseLen(final String s) {
 		int len = 0;
