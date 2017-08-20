@@ -1,9 +1,8 @@
-package exp.libs.utils;
+package exp.libs.utils.other;
 
 import java.util.List;
 
 import exp.libs.utils.format.ESCUtils;
-import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.utils.verify.VerifyUtils;
 

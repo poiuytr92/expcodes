@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import exp.libs.utils.StrUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>

@@ -12,7 +12,7 @@ import exp.libs.algorithm.heuristic.qaca.QRst;
 import exp.libs.algorithm.spa.Dijkstra;
 import exp.libs.algorithm.struct.graph.Node;
 import exp.libs.algorithm.struct.graph.TopoGraph;
-import exp.libs.utils.StrUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>

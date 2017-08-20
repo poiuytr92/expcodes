@@ -13,7 +13,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import exp.libs.utils.StrUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 
 /**

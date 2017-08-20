@@ -3,7 +3,7 @@ package exp.libs.warp.io.serial;
 import java.io.File;
 import java.io.Serializable;
 
-import exp.libs.utils.StrUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>

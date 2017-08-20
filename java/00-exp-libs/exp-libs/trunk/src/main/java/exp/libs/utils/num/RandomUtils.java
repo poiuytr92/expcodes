@@ -2,7 +2,7 @@ package exp.libs.utils.num;
 
 import java.util.Random;
 
-import exp.libs.utils.StrUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
