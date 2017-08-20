@@ -51,8 +51,8 @@ public class DBUtils {
 	
 	/**
 	 * 测试数据源连接是否可用
-	 * @param ds
-	 * @return
+	 * @param ds 数据源
+	 * @return true:连接可用; false:连接不可用
 	 */
 	public static boolean testConn(DataSourceBean ds) {
 		boolean isOk = false;

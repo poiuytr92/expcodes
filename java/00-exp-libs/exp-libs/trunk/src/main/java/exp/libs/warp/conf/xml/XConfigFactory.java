@@ -4,6 +4,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+/**
+ * <pre>
+ * XML文件配置器工厂.
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 final public class XConfigFactory {
 
 	private final static XConfig DEFAULT_CONFIG = new XConfig("DEFAULT_CONFIG");

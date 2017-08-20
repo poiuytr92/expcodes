@@ -14,6 +14,36 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;
 
+/**
+ * <PRE>
+ * XML文件配置器.
+ * 
+ * 使用示例:
+ * 	XConfig conf = XConfigFactory.createConfig("CONF_NAME");
+ * 
+ * 	// 加载多份配置文件， 后加载的会覆盖前加载的相同配置项
+ * 	conf.loadConfFile("./conf/wsc_app_cfg.dat");
+ * 	conf.loadConfFile("./conf/wsc_monitor_cfg.dat");
+ * 	conf.loadConfFile("./conf/wsc_conf.xml");
+ * 
+ * 	// 配置路径用 [ / ] 分隔, 返回值绝对不为null
+ * 	// 若含有多个同名配置项， 配置项中包含属性 [id] 则可用 [ @ ] 定位 (也可直接通过传参定位)
+ * 	// 若配置项中含有 [ default ] 属性且无配置值，则取 [ default ] 属性值
+ * 	boolean val = conf.getBool("config/bases/base@app/useIf");
+ * 	String val = conf.getVal("pool");
+ * 	int val = conf.getInt("iteratorMode");
+ *  String val = conf.getAttribute("base@ftp", "hint");
+ *  List<String> enums = System.out.println(conf.getEnumVals("datasource", "WXP");
+ *  Map<String, Element> enums = conf.getChildElements("config/bases/base", "ws");
+ *  Map<String, Element> enums = conf.getChildElements("datasource@WXP");
+ * </PRE>
+ * 
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class XConfig implements Runnable, IConfig {
 
 	/** 日志器 */
