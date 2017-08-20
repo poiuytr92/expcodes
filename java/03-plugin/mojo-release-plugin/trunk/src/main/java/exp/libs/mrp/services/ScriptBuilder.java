@@ -8,10 +8,10 @@ import exp.libs.mrp.cache.JarMgr;
 import exp.libs.mrp.envm.Placeholders;
 import exp.libs.mrp.envm.ScriptNames;
 import exp.libs.mrp.envm.TplNames;
-import exp.libs.utils.StrUtils;
 import exp.libs.utils.format.StandardUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.tpl.Template;
 
 public class ScriptBuilder {

@@ -12,9 +12,9 @@ import exp.libs.mrp.Log;
 import exp.libs.mrp.envm.CmpPathMode;
 import exp.libs.mrp.envm.DependType;
 import exp.libs.mrp.utils.MvnUtils;
-import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 
 /**

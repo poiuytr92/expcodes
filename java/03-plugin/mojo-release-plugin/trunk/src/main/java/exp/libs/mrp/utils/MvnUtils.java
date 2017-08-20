@@ -9,8 +9,8 @@ import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.project.MavenProject;
 
 import exp.libs.mrp.Config;
-import exp.libs.utils.StrUtils;
 import exp.libs.utils.other.PathUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
