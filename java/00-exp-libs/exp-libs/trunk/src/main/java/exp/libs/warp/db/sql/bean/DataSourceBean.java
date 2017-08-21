@@ -8,7 +8,7 @@ import exp.libs.utils.verify.VerifyUtils;
 
 /**
  * <PRE>
- * 数据源配置.
+ * 数据源配置对象.
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

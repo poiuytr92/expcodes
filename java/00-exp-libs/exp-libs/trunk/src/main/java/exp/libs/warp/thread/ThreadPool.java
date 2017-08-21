@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * 线程池.
+ * 线程池(回调值为Object).
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class ThreadPool extends _ThreadPool<Object> {
+public class ThreadPool extends BaseThreadPool<Object> {
 
 	/**
 	 * <pre>

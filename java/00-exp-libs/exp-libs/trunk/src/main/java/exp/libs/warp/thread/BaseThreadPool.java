@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <pre>
- * 线程池.
+ * 线程池(自定义回调值类型).
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class _ThreadPool<T> {
+public class BaseThreadPool<T> {
 
 	/**
 	 * <pre>
@@ -103,7 +103,7 @@ public class _ThreadPool<T> {
 	 * </pre>
 	 * @param taskNum 任务数
 	 */
-	public _ThreadPool(int taskNum) {
+	public BaseThreadPool(int taskNum) {
 		taskNum = (taskNum <= 0 ? 10 : taskNum);
 		this.corePoolSize = (int)(taskNum * 0.2);
 		this.corePoolSize = (this.corePoolSize <= 0 ? 1 : this.corePoolSize);
@@ -133,7 +133,7 @@ public class _ThreadPool<T> {
 	 * @param keepAliveTime 线程池维护线程所允许的空闲时间
 	 * @param workQueueSize 线程池所使用的任务队列容量
 	 */
-	public _ThreadPool(int corePoolSize, int maxPoolSize,
+	public BaseThreadPool(int corePoolSize, int maxPoolSize,
 			long keepAliveTime, int workQueueSize) {
 
 		this.corePoolSize = corePoolSize;
@@ -160,7 +160,7 @@ public class _ThreadPool<T> {
 	 * @param workQueueSize 线程池所使用的任务队列容量
 	 * @param reHandler 线程池对拒绝任务的处理策略
 	 */
-	public _ThreadPool(int corePoolSize, int maxPoolSize,
+	public BaseThreadPool(int corePoolSize, int maxPoolSize,
 			long keepAliveTime, TimeUnit unit, int workQueueSize,
 			RejectedExecutionHandler reHandler) {
 
@@ -220,7 +220,7 @@ public class _ThreadPool<T> {
 	
 	/**
 	 * 判断线程池中的任务是否全部执行完毕（该方法只有在shutdown执行后才会返回true）
-	 * @return true
+	 * @return true:线程池已终止; false:存在线程运行中
 	 */
 	public boolean isTerminated() {
 		return threadPool.isTerminated();

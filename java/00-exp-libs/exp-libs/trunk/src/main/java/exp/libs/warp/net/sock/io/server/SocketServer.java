@@ -14,6 +14,25 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.io.client.SocketClient;
 import exp.libs.warp.thread.ThreadPool;
 
+/**
+ * <pre>
+ * Socket服务端(阻塞模式)
+ * 
+ * 使用示例:
+ * 	SocketBean sockConf = new SocketBean(SERVER_IP, SERVER_PORT);
+ * 	ServerHandler handler = new ServerHandler();	// 实现IHandler接口（注意包路径为io）
+ * 	SocketServer server = new SocketServer(sockConf, handler);
+ * 	server._start();
+ * 	// ...
+ * 	server._stop();
+ * 
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class SocketServer extends Thread {
 
 	/** 日志器 */
@@ -77,6 +96,10 @@ public class SocketServer extends Thread {
 		return isOk;
 	}
 	
+	/**
+	 * 启动服务端(默认侦听所有IP上的同一端口)
+	 * @return true:启动成功; false:启动失败
+	 */
 	public boolean _start() {
 		return _start(true);
 	}
@@ -84,6 +107,7 @@ public class SocketServer extends Thread {
 	/**
 	 * 启动服务端
 	 * @param listenAllIP 是否侦听所有IP上的同一端口(适用于多网卡)
+	 * @return true:启动成功; false:启动失败
 	 */
 	public boolean _start(boolean listenAllIP) {
 		boolean isOk = false;
@@ -187,6 +211,18 @@ public class SocketServer extends Thread {
 		stp.shutdown();
 	}
 	
+	/**
+	 * 测试socket服务是否在运行
+	 * @return true:运行中; false:已停止
+	 */
+	public boolean isRunning() {
+		return running;
+	}
+	
+	/**
+	 * 返回socket配置信息
+	 * @return socket配置信息
+	 */
 	@Override
 	public String toString() {
 		return sockConf.toString();

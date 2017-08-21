@@ -5,7 +5,16 @@ import exp.libs.warp.ui.BeautyEyeUtils;
 
 /**
  * <PRE>
- * 程序版本管理
+ * 程序版本管理.
+ * 直接在程序版本类的main方法调用即可.
+ * 
+ * 使用示例:
+ * 	public class Version {
+ * 		public static void main(String[] args) {
+ * 			VersionMgr.exec(args);
+ * 		}
+ * 	}
+ * 
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

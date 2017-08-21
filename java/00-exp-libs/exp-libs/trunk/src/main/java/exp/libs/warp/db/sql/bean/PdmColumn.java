@@ -1,5 +1,15 @@
 package exp.libs.warp.db.sql.bean;
 
+/**
+ * <PRE>
+ * PDM物理模型 - 列.
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class PdmColumn {
 
 	/** 列编号 */

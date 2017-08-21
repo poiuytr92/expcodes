@@ -17,7 +17,16 @@ import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
 
 /**
  * <pre>
- * NIOSocket服务端
+ * Socket服务端(非阻塞模式)
+ * 
+ * 使用示例:
+ * 	SocketBean sockConf = new SocketBean(SERVER_IP, SERVER_PORT);
+ * 	ServerHandler handler = new ServerHandler();	// 实现IHandler接口（注意包路径为nio）
+ * 	NioSocketServer server = new NioSocketServer(sockConf, handler);
+ * 	server._start();
+ * 	// ...
+ * 	server._stop();
+ * 
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -50,6 +59,9 @@ public class NioSocketServer extends Thread {
 	 */
 	private SessionMgr sessionMgr = null;
 
+	/**
+	 * socket服务端运行状态标识
+	 */
 	private boolean running;
 
 	/**
@@ -72,7 +84,10 @@ public class NioSocketServer extends Thread {
 		return sockConf;
 	}
 
-	
+	/**
+	 * 启动服务端(默认侦听所有IP上的同一端口)
+	 * @return true:启动成功; false:启动失败
+	 */
 	public boolean _start() {
 		return _start(true);
 	}
@@ -80,6 +95,7 @@ public class NioSocketServer extends Thread {
 	/**
 	 * 启动服务端
 	 * @param listenAllIP 是否侦听所有IP上的同一端口(适用于多网卡)
+	 * @return true:启动成功; false:启动失败
 	 */
 	public boolean _start(boolean listenAllIP) {
 		boolean isOk = false;
@@ -147,8 +163,7 @@ public class NioSocketServer extends Thread {
 	}
 
 	/**
-	 * 启动Socket服务器
-	 * @throws Exception 异常
+	 * 监听客户端连接请求事件
 	 */
 	private void listen() {
 		try {
@@ -192,6 +207,9 @@ public class NioSocketServer extends Thread {
 		}
 	}
 
+	/**
+	 * 停止服务端
+	 */
 	public void _stop() {
 		this.running = false;
 	}
@@ -215,13 +233,17 @@ public class NioSocketServer extends Thread {
 		}
 	}
 	
+	/**
+	 * 测试socket服务是否在运行
+	 * @return true:运行中; false:已停止
+	 */
 	public boolean isRunning() {
 		return running;
 	}
 	
 	/**
-	 * 重载toString，返回主线程名称
-	 * @return 主线程名称
+	 * 返回socket配置信息
+	 * @return socket配置信息
 	 */
 	@Override
 	public String toString() {

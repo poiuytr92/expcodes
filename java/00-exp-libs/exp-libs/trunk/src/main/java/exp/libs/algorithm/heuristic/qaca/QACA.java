@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.warp.thread._ThreadPool;
+import exp.libs.warp.thread.BaseThreadPool;
 
 
 /**
@@ -123,7 +123,7 @@ public final class QACA {
 		for(int gn = 0; gn < ENV.MAX_GENERATION(); gn++) {
 			
 			// 每代蚂蚁的个体之间使用多线程并行搜索
-			_ThreadPool<QRst> tp = new _ThreadPool<QRst>(qAntSize);
+			BaseThreadPool<QRst> tp = new BaseThreadPool<QRst>(qAntSize);
 			for(_QAnt qAnt : qAnts) {
 				rsts.add(tp.submit(new _QAntThread(qAnt, bestRst)));
 			}

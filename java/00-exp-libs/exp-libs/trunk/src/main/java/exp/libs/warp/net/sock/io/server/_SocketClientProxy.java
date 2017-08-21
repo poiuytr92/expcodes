@@ -199,11 +199,13 @@ class _SocketClientProxy implements ISession, Runnable {
 	 * Socket写操作.
 	 * @param msg 需发送的消息报文
 	 */
-	public void write(final String msg) {
+	public boolean write(final String msg) {
+		boolean isOk = false;
 		try {
 			write(socket.getOutputStream(), 
 					StrUtils.concat(msg, sockConf.getWriteDelimiter()), 
 					sockConf.getWriteCharset());
+			isOk = true;
 			
 		} catch (UnsupportedEncodingException e) {
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
@@ -212,6 +214,7 @@ class _SocketClientProxy implements ISession, Runnable {
 		} catch (Exception e) {
 			log.error("Socket [{}] 写操作异常.", sockConf.getId(), e);
 		}
+		return isOk;
 	}
 	
 	/**

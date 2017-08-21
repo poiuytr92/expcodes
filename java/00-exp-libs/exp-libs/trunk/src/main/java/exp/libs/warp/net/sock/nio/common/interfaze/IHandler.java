@@ -2,13 +2,11 @@ package exp.libs.warp.net.sock.nio.common.interfaze;
 
 /**
  * <pre>
- * 业务处理接口
- * 
- * 由用户实现
+ * Socket业务逻辑处理接口(NIO-非阻塞模式)
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
+ * @version   1.0 2017-08-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

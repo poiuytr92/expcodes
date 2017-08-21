@@ -12,7 +12,7 @@ public interface ISession {
 	
 	public Socket getSocket();
 	
-	public void write(String msg);
+	public boolean write(String msg);
 	
 	public boolean conn();
 	

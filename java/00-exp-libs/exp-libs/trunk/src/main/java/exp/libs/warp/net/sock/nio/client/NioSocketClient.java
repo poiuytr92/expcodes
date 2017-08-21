@@ -25,7 +25,17 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 
 /**
  * <pre>
- * NIOSocket客户端
+ * Socket客户端(非阻塞模式)
+ * 
+ * 使用示例:
+ * 	SocketBean sockConf = new SocketBean(SERVER_IP, SERVER_PORT);
+ * 	ClientHandler handler = new ClientHandler();	// 实现IHandler接口（注意包路径为nio）
+ * 	NioSocketClient client = new NioSocketClient(sockConf, handler);
+ * 	if(client.conn()) {
+ * 		client.write();	// NIO模式下，读写是异步的，数据通过IHandler.onMessageReceived()接收
+ * 	}
+ * 	client.close();
+ * 
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -85,8 +95,8 @@ public class NioSocketClient extends Thread {
 	}
 	
 	/**
-	 * 连接到服务端
-	 * @return
+	 * 连接到socket服务
+	 * @return true:连接成功; false:连接失败
 	 */
 	public boolean conn() {
 		if(isClosed() == false) {
@@ -116,6 +126,10 @@ public class NioSocketClient extends Thread {
 		return isOk;
 	}
 	
+	/**
+	 * 重连socket服务
+	 * @return true:连接成功; false:连接失败
+	 */
 	public boolean reconn() {
 		int cnt = 0;
 		do {
@@ -136,7 +150,7 @@ public class NioSocketClient extends Thread {
 	
 	/**
 	 * 检查socket连接是否已断开
-	 * @return
+	 * @return true:已断开; false:未断开
 	 */
 	public boolean isClosed() {
 		boolean isClosed = true;
@@ -146,8 +160,12 @@ public class NioSocketClient extends Thread {
 		return isClosed;
 	}
 	
-	public void close() {
-		_close();	// 关闭会话
+	/**
+	 * 断开socket连接并释放所有资源
+	 * @return true:断开成功; false:断开异常
+	 */
+	public boolean close() {
+		boolean isOk = _close();	// 关闭会话
 		sockConf.getFilterChain().clean();	// 清理过滤链
 		
 		//关闭事件选择器
@@ -157,8 +175,10 @@ public class NioSocketClient extends Thread {
 				selector = null;
 			}
 		} catch (Exception e) {
+			isOk = false;
 			log.error("客户端 [{}] 断开Socket连接异常", getName(), e);
 		}
+		return isOk;
 	}
 	
 	private boolean _close() {
@@ -175,6 +195,11 @@ public class NioSocketClient extends Thread {
 		return isClose;
 	}
 	
+	/**
+	 * Socket写操作.
+	 * @param msg 需发送到服务端的的消息报文
+	 * @return true:发送成功; false:发送失败
+	 */
 	public boolean write(Object msg) {
 		boolean isOk = false;
 		if(!isClosed()) {
@@ -367,8 +392,8 @@ public class NioSocketClient extends Thread {
 	}
 	
 	/**
-	 * 重载toString，返回主线程名称
-	 * @return 主线程名称
+	 * 返回socket配置信息
+	 * @return socket配置信息
 	 */
 	@Override
 	public String toString() {

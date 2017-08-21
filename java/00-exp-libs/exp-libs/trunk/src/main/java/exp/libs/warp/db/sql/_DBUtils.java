@@ -88,8 +88,7 @@ final class _DBUtils {
 	}
 	
 	private static String createProxoolXml(DataSourceBean ds) throws Exception {
-		Template tpl = new Template(ds.getId());
-		tpl.read(TEMPLATE_PROXOOL, Charset.ISO);
+		Template tpl = new Template(TEMPLATE_PROXOOL, Charset.ISO);
 		tpl.set("alias", ds.getId());
 		tpl.set("driver-url", ds.getUrl());
 		tpl.set("driver-class", ds.getDriver());
@@ -108,7 +107,7 @@ final class _DBUtils {
 		tpl.set("test-before-use", String.valueOf(ds.isTestBeforeUse()));
 		tpl.set("test-after-use", String.valueOf(ds.isTestAfterUse()));
 		tpl.set("trace", String.valueOf(ds.isTrace()));
-		return tpl.getContent(Charset.ISO);
+		return tpl.getContent();
 	}
 	
 	// FIXME: 当表中存在不同类型、但同名属性时，如 i_num 和 s_num， 则去除前缀后所生成的BEAN会报错
@@ -265,8 +264,7 @@ final class _DBUtils {
 		int colNum = colNameList.size();	//列数
 		
 		//取类模板
-		Template beanClazz = new Template();
-		beanClazz.read(TEMPLATE_DB_BEAN, Charset.ISO);
+		Template beanClazz = new Template(TEMPLATE_DB_BEAN, Charset.ISO);
 		
 		//设置年份和日期
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

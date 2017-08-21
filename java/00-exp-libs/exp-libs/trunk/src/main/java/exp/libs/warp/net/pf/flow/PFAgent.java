@@ -8,7 +8,12 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <pre>
- * 单机数据流-端口转发代理程序
+ * 单机数据流-端口转发代理程序.
+ * 
+ * 使用示例：
+ * 	PFConfig pfc = new PFConfig("serverName", localListenPort, remoteIP, remotePort);
+ * 	PFAgent agent = new PFAgent(pfc);
+ * 	agent._start();
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

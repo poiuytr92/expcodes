@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * <PRE>
- * 抽象循环线程.
+ * 抽象循环线程（需继承使用）.
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

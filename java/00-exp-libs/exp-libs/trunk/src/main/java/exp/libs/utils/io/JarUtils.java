@@ -104,7 +104,7 @@ public class JarUtils {
 	 * @param snkPath 磁盘文件路径
 	 * @return true:复制成功; false:复制失败
 	 */
-	public static boolean copyFileInJar(String packagePath, String snkPath) {
+	public static boolean copyFile(String packagePath, String snkPath) {
 		boolean isOk = false;
 		final int BUFFER_SIZE = 4096;
 		InputStream is = FileUtils.class.getResourceAsStream(packagePath);
@@ -138,7 +138,7 @@ public class JarUtils {
 	 * @param charset 文件编码
 	 * @return 文件内容
 	 */
-	public static String readFileInJar(String packagePath, String charset) {
+	public static String read(String packagePath, String charset) {
 		final int BUFFER_SIZE = 4096;
 		InputStream is = FileUtils.class.getResourceAsStream(packagePath);
 		String str = "";
@@ -170,8 +170,8 @@ public class JarUtils {
 	 * @param jarFilePath jar文件的磁盘位置
 	 * @return jar内文件清单
 	 */
-	public static List<String> listFilesInJar(String jarFilePath) {
-		return listFilesInJar(jarFilePath, null);
+	public static List<String> listFiles(String jarFilePath) {
+		return listFiles(jarFilePath, null);
 	}
 
 	/**
@@ -180,8 +180,8 @@ public class JarUtils {
 	 * @param extension 文件后缀
 	 * @return 后缀匹配的文件清单
 	 */
-	public static List<String> listFilesInJar(String jarFilePath, String extension) {
-		return listFilesInJar(new File(jarFilePath), extension);
+	public static List<String> listFiles(String jarFilePath, String extension) {
+		return listFiles(new File(jarFilePath), extension);
 	}
 	
 	/**
@@ -190,7 +190,7 @@ public class JarUtils {
 	 * @param extension 文件后缀
 	 * @return 后缀匹配的文件清单
 	 */
-	public static List<String> listFilesInJar(File jarFile, String extension) {
+	public static List<String> listFiles(File jarFile, String extension) {
 		List<String> list = new LinkedList<String>();
 		boolean isFilter = StrUtils.isNotEmpty(extension);
 		try {

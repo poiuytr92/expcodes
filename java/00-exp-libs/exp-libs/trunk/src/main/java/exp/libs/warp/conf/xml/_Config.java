@@ -129,9 +129,9 @@ class _Config implements IConfig {
 		}
 		
 		try {
-			String content = JarUtils.readFileInJar(confFilePath, Charset.ISO);
+			String content = JarUtils.read(confFilePath, Charset.ISO);
 			String charset = XmlUtils.getCharset(content);
-			String xml = JarUtils.readFileInJar(confFilePath, charset);
+			String xml = JarUtils.read(confFilePath, charset);
 			Document doc = DocumentHelper.parseText(xml);
 			Element root = doc.getRootElement();
 			createPathTree(root);

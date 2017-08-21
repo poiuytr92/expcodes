@@ -6,8 +6,6 @@ import java.util.Map;
 /**
  * <pre>
  * NioSocket会话接口
- * 
- * 预留接口，无需用户实现
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

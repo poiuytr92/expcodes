@@ -21,7 +21,7 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * swing组件工具包
+ * swing组件工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -31,17 +31,21 @@ import exp.libs.utils.other.StrUtils;
  */
 public class SwingUtils {
 
+	/** 滚动条模式：自动(当内容越界时自动出现滚动条) */
 	public static final int AUTO_SCROLL_MODE = 0;
 	
+	/** 滚动条模式：显式(无论内容是否越界均显示滚动条) */
 	public static final int SHOW_SCROLL_MODE = 1;
 	
+	/** 滚动条模式：无滚动条 */
 	public static final int HIDE_SCROLL_MODE = -1;
 	
+	/** 私有化构造函数 */
 	protected SwingUtils() {}
 	
 	/**
 	 * 设置窗口无边框（需要在显示窗口前调用此方法）
-	 * @param frame
+	 * @param frame 窗口组件
 	 */
 	public static void setNoFrame(JFrame frame) {
 		if(frame == null) {
@@ -92,9 +96,9 @@ public class SwingUtils {
 	 * 为指定组件添加滚动条
 	 * @param component 组件
 	 * @param mode 
-	 * 		0:自动模式（当内容超过宽/高边界时自动出现水平/垂直滚动条）.
-	 * 		1:显式模式（总是出现水平/垂直滚动条）.
-	 * 		-1:隐式模式（总是隐藏水平/垂直滚动条）
+	 * 		0:AUTO_SCROLL_MODE, 自动模式（当内容超过宽/高边界时自动出现水平/垂直滚动条）.
+	 * 		1:SHOW_SCROLL_MODE, 显式模式（总是出现水平/垂直滚动条）.
+	 * 		-1:HIDE_SCROLL_MODE, 隐式模式（总是隐藏水平/垂直滚动条）
 	 * @return 已添加滚动条的组件
 	 */
 	public static JScrollPane addScroll(Component component, int mode) {
@@ -124,7 +128,7 @@ public class SwingUtils {
 	/**
 	 * 获取配对组件面板（提示组件+输入组件）
 	 *  布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
-	 * @param label 提示组件的提示信息
+	 * @param label 提示组件的提示信息 ( 自动添加 [...] 包围 )
 	 * @return JLabel + JTextFields
 	 */
 	public static JPanel getPairsPanel(String label) {
@@ -134,7 +138,7 @@ public class SwingUtils {
 	/**
 	 * 获取配对组件面板（提示组件+输入组件）
 	 * 	布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
-	 * @param label 提示组件的提示信息
+	 * @param label 提示组件的提示信息 ( 自动添加 [...] 包围 )
 	 * @param textField 输入组件的默认输入值
 	 * @return JLabel + JTextFields
 	 */
@@ -145,7 +149,7 @@ public class SwingUtils {
 	/**
 	 * 获取配对组件面板（提示组件+输入组件）
 	 * 	布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
-	 * @param label 提示组件的提示信息
+	 * @param label 提示组件的提示信息 ( 自动添加 [...] 包围 )
 	 * @param component 输入组件
 	 * @return JLabel + 自定义的输入组件
 	 */
@@ -402,7 +406,7 @@ public class SwingUtils {
 	
 	/**
 	 * 隐藏密码框内容
-	 * @param password
+	 * @param password 密码框组件
 	 */
 	public static void hide(JPasswordField password) {
 		if(password != null) {
@@ -412,7 +416,7 @@ public class SwingUtils {
 	
 	/**
 	 * 显示密码框内容
-	 * @param password
+	 * @param password 密码框组件
 	 */
 	public static void view(JPasswordField password) {
 		if(password != null) {

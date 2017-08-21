@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.File;
 import java.sql.Connection;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -180,7 +179,7 @@ class _VerMgrUI extends MainWindow {
 		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
 		if(!SqliteUtils.testConn(ds)) {
 			if(!FileUtils.exists(TMP_VER_DB)) {
-				JarUtils.copyFileInJar(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
+				JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
 				FileUtils.hide(TMP_VER_DB);
 			}
 			ds.setName(TMP_VER_DB);
@@ -190,7 +189,7 @@ class _VerMgrUI extends MainWindow {
 	private boolean initVerDB() {
 		boolean isOk = true;
 		Connection conn = SqliteUtils.getConn(ds);
-		String script = JarUtils.readFileInJar(VER_DB_SCRIPT, Charset.UTF8);
+		String script = JarUtils.read(VER_DB_SCRIPT, Charset.UTF8);
 		try {
 			String[] sqls = script.split(";");
 			for(String sql : sqls) {

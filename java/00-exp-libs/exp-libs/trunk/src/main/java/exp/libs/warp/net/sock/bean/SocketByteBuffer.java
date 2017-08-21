@@ -4,7 +4,7 @@ import java.io.UnsupportedEncodingException;
 
 /**
  * <pre>
- * Socket专用的字节缓冲区，仅用于读通道数据的操作时
+ * Socket专用的字节缓冲区(仅用于读取通道数据的操作)
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

@@ -13,7 +13,11 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 /**
  * <PRE>
  * swing美瞳组件工具.
- * 	设置swing组件风格样式
+ * 	(设置swing组件风格样式)
+ * 
+ * 使用示例:
+ * 	在初始化界面之前, 调用BeautyEyeUtils.init()方法即可（程序运行期间只需调用一次）.
+ * 
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -60,10 +64,8 @@ public final class BeautyEyeUtils {
 			"ComboBox.font"
 	};
 			
-	/**
-	 * 私有化构造函数
-	 */
-	private BeautyEyeUtils() {}
+	/** 私有化构造函数 */
+	protected BeautyEyeUtils() {}
 	
 	/**
 	 * 初始化 BeautyEye 

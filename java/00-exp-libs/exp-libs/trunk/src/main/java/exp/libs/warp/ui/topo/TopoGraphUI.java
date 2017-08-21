@@ -38,13 +38,14 @@ import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
 /**
- * 
  * <PRE>
- * 拓扑图呈现界面
+ * 拓扑图绘制器
  * </PRE>
- * 
- * @author lqb
- * @date 2017年5月25日
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class TopoGraphUI extends PopChildWindow {
 

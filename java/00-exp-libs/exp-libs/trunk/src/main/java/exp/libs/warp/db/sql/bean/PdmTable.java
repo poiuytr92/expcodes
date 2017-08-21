@@ -3,6 +3,16 @@ package exp.libs.warp.db.sql.bean;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * <PRE>
+ * PDM物理模型 - 表.
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class PdmTable {
 
 	private String tableName;

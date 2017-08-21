@@ -16,6 +16,25 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.bean.SocketByteBuffer;
 import exp.libs.warp.net.sock.io.common.ISession;
 
+/**
+ * <pre>
+ * Socket客户端(阻塞模式)
+ * 
+ * 使用示例:
+ * 	SocketBean sockConf = new SocketBean(SERVER_IP, SERVER_PORT);
+ * 	SocketClient client = new SocketClient(sockConf);
+ * 	if(client.conn()) {
+ * 		String msg = client.read();	// IO模式下，读取数据会阻塞等待
+ * 		client.write(msg);
+ * 	}
+ * 	client.close();
+ * </pre>	
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class SocketClient implements ISession {
 
 	/** 日志器 */
@@ -37,9 +56,9 @@ public class SocketClient implements ISession {
 	private SocketByteBuffer localBuffer;
 	
 	/**
-	 * 
-	 * @param ip
-	 * @param port
+	 * 构造函数
+	 * @param ip 服务IP
+	 * @param port 服务端口
 	 */
 	public SocketClient(String ip, int port) {
 		this.sockConf = new SocketBean(ip, port);
@@ -53,24 +72,36 @@ public class SocketClient implements ISession {
 		this.sockConf = (sockConf == null ? new SocketBean() : sockConf);
 	}
 	
+	/**
+	 * 获取客户端标识
+	 * @return 客户端标识
+	 */
 	@Override
 	public String ID() {
 		return sockConf.getId();
 	}
 	
+	/**
+	 * 获取socket配置
+	 * @return socket配置
+	 */
 	@Override
 	public SocketBean getSocketBean() {
 		return sockConf;
 	}
 	
+	/**
+	 * 获取socket会话对象
+	 * @return socket会话对象
+	 */
 	@Override
 	public Socket getSocket() {
 		return socket;
 	}
 	
 	/**
-	 * 连接socket
-	 * @return 是否连接成功
+	 * 连接socket服务
+	 * @return true:连接成功; false:连接失败
 	 */
 	@Override
 	public boolean conn() {
@@ -98,7 +129,8 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 重连 socket
+	 * 重连 socket服务
+	 * @return true:连接成功; false:连接失败
 	 */
 	public boolean reconn() {
 		int cnt = 0;
@@ -120,7 +152,7 @@ public class SocketClient implements ISession {
 	
 	/**
 	 * 检查socket连接是否已断开
-	 * @return
+	 * @return true:已断开; false:未断开
 	 */
 	@Override
 	public boolean isClosed() {
@@ -132,7 +164,8 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 释放所有资源
+	 * 断开socket连接并释放所有资源
+	 * @return true:断开成功; false:断开异常
 	 */
 	@Override
 	public boolean close() {
@@ -154,7 +187,7 @@ public class SocketClient implements ISession {
 	
 	/**
 	 * Socket读操作
-	 * @return 读取的报文. 若返回null，则出现异常。
+	 * @return 服务端返回的消息(若返回null，则出现超时等异常)
 	 */
 	@Override
 	public String read() {
@@ -249,11 +282,11 @@ public class SocketClient implements ISession {
 	
 	/**
 	 * Socket写操作.
-	 * @param msg 需发送的消息报文
+	 * @param msg 需发送到服务端的的消息报文
 	 */
 	@Override
-	public void write(final String msg) {
-		reconn();
+	public boolean write(final String msg) {
+		boolean isOk = reconn();
 		
 		try {
 			write(socket.getOutputStream(), 
@@ -261,13 +294,16 @@ public class SocketClient implements ISession {
 					sockConf.getWriteCharset());
 			
 		} catch (UnsupportedEncodingException e) {
+			isOk = false;
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
 					sockConf.getId(), sockConf.getWriteCharset(), e);
 					
 		} catch (Exception e) {
+			isOk = false;
 			log.error("Socket [{}] 写操作异常.", sockConf.getId(), e);
 			close();
 		}
+		return isOk;
 	}
 	
 	/**
@@ -292,6 +328,15 @@ public class SocketClient implements ISession {
 		if(localBuffer != null) {
 			localBuffer.reset();
 		}
+	}
+	
+	/**
+	 * 返回socket配置信息
+	 * @return socket配置信息
+	 */
+	@Override
+	public String toString() {
+		return sockConf.toString();
 	}
 	
 }
