@@ -2,7 +2,7 @@ package exp.libs.warp.cep.fun.impl.cast;
 
 import com.singularsys.jep.EvaluationException;
 
-import exp.libs.warp.cep.ex.CEPParseException;
+import exp.libs.warp.cep.CEPParseException;
 import exp.libs.warp.cep.fun.BaseFunction1;
 
 /**

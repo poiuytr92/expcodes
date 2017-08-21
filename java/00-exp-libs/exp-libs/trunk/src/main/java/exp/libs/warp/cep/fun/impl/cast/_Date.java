@@ -7,7 +7,7 @@ import java.util.List;
 
 import com.singularsys.jep.EvaluationException;
 
-import exp.libs.warp.cep.ex.CEPParseException;
+import exp.libs.warp.cep.CEPParseException;
 import exp.libs.warp.cep.fun.BaseFunctionN;
 
 /**

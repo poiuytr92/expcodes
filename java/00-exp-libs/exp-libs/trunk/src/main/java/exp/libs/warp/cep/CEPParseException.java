@@ -1,4 +1,4 @@
-package exp.libs.warp.cep.ex;
+package exp.libs.warp.cep;
 
 import com.singularsys.jep.EvaluationException;
 import com.singularsys.jep.PostfixMathCommandI;

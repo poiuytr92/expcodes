@@ -50,6 +50,21 @@ import exp.libs.warp.cep.fun.impl.time.Sec2Date;
  * <pre>
  * Expression Parser
  * 表达式/函数式解析工具
+ * 
+ * 使用示例:
+ * 	// 完整表达式调用
+ * 	String expression = "(6 + 2) * (4 / (5 % 3) ^ 7)";
+ * 	Object rst = CEPUtils.eval(expression)
+ * 
+ * 	// 声明变量后调用表达式(变量在表达式中需需用$包括起来)
+ * 	CEPUtils.declare("x", 10);
+ * 	CEPUtils.declare("y", -2);
+ * 	Object rst = CEPUtils.eval("$x$ + $y$ - 3");
+ * 
+ *	// 函数调用
+ *	CEPUtils.declare("z", -2);
+ *	Object rst = CEPUtils.call("abs($z$)");
+ *
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
