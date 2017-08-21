@@ -38,7 +38,7 @@ import exp.libs.warp.cep.fun.impl.str.MTrim;
 import exp.libs.warp.cep.fun.impl.str.RTrim;
 import exp.libs.warp.cep.fun.impl.str.Replace;
 import exp.libs.warp.cep.fun.impl.str.Reverse;
-import exp.libs.warp.cep.fun.impl.str.SPrintfInt;
+import exp.libs.warp.cep.fun.impl.str.SprintfINT;
 import exp.libs.warp.cep.fun.impl.str.Trim;
 import exp.libs.warp.cep.fun.impl.time.Date2Sec;
 import exp.libs.warp.cep.fun.impl.time.GetLongTime;
@@ -111,13 +111,13 @@ public final class CEPUtils {
 	/**
 	 * 由内部定义的常用函数表名称
 	 */
-	private final static List<String> allInnerFunNames = 
+	private final static List<String> innerFunNames = 
 			new LinkedList<String>();
 	
 	/**
 	 * 自定义的函数表名称
 	 */
-	private final static List<String> allCustomFunNames = 
+	private final static List<String> customFunNames = 
 			new LinkedList<String>();
 	
 	/**
@@ -220,7 +220,7 @@ public final class CEPUtils {
 			PostfixMathCommand funInstn = 
 					(PostfixMathCommand) Class.forName(clazzPath).newInstance();
 			jep.addFunction(customFunctionName, funInstn);
-			allCustomFunNames.add(customFunctionName);
+			customFunNames.add(customFunctionName);
 			
 		} catch (Exception e) {
 			throw new Exception(REGISTER_FUNCTION_ERROR + 
@@ -424,7 +424,7 @@ public final class CEPUtils {
 	 * @return 所有内部定义的函数名称
 	 */
 	public static List<String> getAllInnerFunctionsName() {
-		return allInnerFunNames;
+		return innerFunNames;
 	}
 	
 	/**
@@ -432,7 +432,7 @@ public final class CEPUtils {
 	 * @return 所有自定义函数名称
 	 */
 	public static List<String> getAllCustomFunctionsName() {
-		return allCustomFunNames;
+		return customFunNames;
 	}
 	
 	/**
@@ -476,8 +476,8 @@ public final class CEPUtils {
 	 */
 	public static void unregisterAllFunctions() {
 		jep.getFunctionTable().clear();
-		allInnerFunNames.clear();
-		allCustomFunNames.clear();
+		innerFunNames.clear();
+		customFunNames.clear();
 	}
 	
 	/**
@@ -497,102 +497,102 @@ public final class CEPUtils {
 	private static void addInnerFunctions() {
 		//强制类型转换函数
 		jep.addFunction(_Date.NAME, new _Date());
-		allInnerFunNames.add(_Date.NAME);
+		innerFunNames.add(_Date.NAME);
 		
 		jep.addFunction(_Double.NAME, new _Double());
-		allInnerFunNames.add(_Double.NAME);
+		innerFunNames.add(_Double.NAME);
 		
 		jep.addFunction(_Int.NAME, new _Int());
-		allInnerFunNames.add(_Int.NAME);
+		innerFunNames.add(_Int.NAME);
 		
 		jep.addFunction(_Long.NAME, new _Long());
-		allInnerFunNames.add(_Long.NAME);
+		innerFunNames.add(_Long.NAME);
 		
 		jep.addFunction(_Null.NAME, new _Null());
-		allInnerFunNames.add(_Null.NAME);
+		innerFunNames.add(_Null.NAME);
 		
 		jep.addFunction(_NullStr.NAME, new _NullStr());
-		allInnerFunNames.add(_NullStr.NAME);
+		innerFunNames.add(_NullStr.NAME);
 		
 		jep.addFunction(_String.NAME, new _String());
-		allInnerFunNames.add(_String.NAME);
+		innerFunNames.add(_String.NAME);
 		
 		//数值操作类函数
 		jep.addFunction(BaseConvert.NAME, new BaseConvert());
-		allInnerFunNames.add(BaseConvert.NAME);
+		innerFunNames.add(BaseConvert.NAME);
 		
 		jep.addFunction(Bin.NAME, new Bin());
-		allInnerFunNames.add(Bin.NAME);
+		innerFunNames.add(Bin.NAME);
 		
 		jep.addFunction(Hex.NAME, new Hex());
-		allInnerFunNames.add(Hex.NAME);
+		innerFunNames.add(Hex.NAME);
 		
 		jep.addFunction(Oct.NAME, new Oct());
-		allInnerFunNames.add(Oct.NAME);
+		innerFunNames.add(Oct.NAME);
 		
 		//SQL操作类函数
 		jep.addFunction(CopyDquote.NAME, new CopyDquote());
-		allInnerFunNames.add(CopyDquote.NAME);
+		innerFunNames.add(CopyDquote.NAME);
 		
 		jep.addFunction(CopySquote.NAME, new CopySquote());
-		allInnerFunNames.add(CopySquote.NAME);
+		innerFunNames.add(CopySquote.NAME);
 		
 		//字符串操作类函数
 		jep.addFunction(Concat.NAME, new Concat());
-		allInnerFunNames.add(Concat.NAME);
+		innerFunNames.add(Concat.NAME);
 		
 		jep.addFunction(Cut.NAME, new Cut());
-		allInnerFunNames.add(Cut.NAME);
+		innerFunNames.add(Cut.NAME);
 		
 		jep.addFunction(LTrim.NAME, new LTrim());
-		allInnerFunNames.add(LTrim.NAME);
+		innerFunNames.add(LTrim.NAME);
 		
 		jep.addFunction(Replace.NAME, new Replace());
-		allInnerFunNames.add(Replace.NAME);
+		innerFunNames.add(Replace.NAME);
 		
 		jep.addFunction(Reverse.NAME, new Reverse());
-		allInnerFunNames.add(Reverse.NAME);
+		innerFunNames.add(Reverse.NAME);
 		
 		jep.addFunction(RTrim.NAME, new RTrim());
-		allInnerFunNames.add(RTrim.NAME);
+		innerFunNames.add(RTrim.NAME);
 		
 		jep.addFunction(Trim.NAME, new Trim());
-		allInnerFunNames.add(Trim.NAME);
+		innerFunNames.add(Trim.NAME);
 		
-		jep.addFunction(SPrintfInt.NAME, new SPrintfInt());
-		allInnerFunNames.add(SPrintfInt.NAME);
+		jep.addFunction(SprintfINT.NAME, new SprintfINT());
+		innerFunNames.add(SprintfINT.NAME);
 		
 		jep.addFunction(MTrim.NAME, new MTrim());
-		allInnerFunNames.add(MTrim.NAME);
+		innerFunNames.add(MTrim.NAME);
 		
 		//时间操作类函数
 		jep.addFunction(Date2Sec.NAME, new Date2Sec());
-		allInnerFunNames.add(Date2Sec.NAME);
+		innerFunNames.add(Date2Sec.NAME);
 		
 		jep.addFunction(Now.NAME, new Now());
-		allInnerFunNames.add(Now.NAME);
+		innerFunNames.add(Now.NAME);
 		
 		jep.addFunction(Sec2Date.NAME, new Sec2Date());
-		allInnerFunNames.add(Sec2Date.NAME);
+		innerFunNames.add(Sec2Date.NAME);
 		
 		jep.addFunction(GetLongTime.NAME, new GetLongTime());
-		allInnerFunNames.add(GetLongTime.NAME);
+		innerFunNames.add(GetLongTime.NAME);
 		
 		jep.addFunction(GetYear.NAME, new GetYear());
-		allInnerFunNames.add(GetYear.NAME);
+		innerFunNames.add(GetYear.NAME);
 		
 		//其他函数
 		jep.addFunction(IfElse.NAME, new IfElse());
-		allInnerFunNames.add(IfElse.NAME);
+		innerFunNames.add(IfElse.NAME);
 		
 		jep.addFunction(Macro.NAME, new Macro());
-		allInnerFunNames.add(Macro.NAME);
+		innerFunNames.add(Macro.NAME);
 		
 		jep.addFunction(Print.NAME, new Print());
-		allInnerFunNames.add(Print.NAME);
+		innerFunNames.add(Print.NAME);
 		
 		jep.addFunction(Wait.NAME, new Wait());
-		allInnerFunNames.add(Wait.NAME);
+		innerFunNames.add(Wait.NAME);
 	}
 	
 }

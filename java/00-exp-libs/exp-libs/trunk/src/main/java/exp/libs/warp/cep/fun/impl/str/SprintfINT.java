@@ -18,7 +18,7 @@ import exp.libs.warp.cep.fun.BaseFunctionN;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class SPrintfInt extends BaseFunctionN {
+public class SprintfINT extends BaseFunctionN {
 
 	/**
 	 * 序列化唯一ID

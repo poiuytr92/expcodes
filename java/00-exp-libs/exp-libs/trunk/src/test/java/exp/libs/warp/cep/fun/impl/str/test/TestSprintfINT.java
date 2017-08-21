@@ -1,5 +1,6 @@
 package exp.libs.warp.cep.fun.impl.str.test;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 import exp.libs.warp.cep.CEPUtils;
@@ -15,13 +16,21 @@ import exp.libs.warp.cep.CEPUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class TestSPrintfInt {
+public class TestSprintfINT {
 
 	@Test
 	public void testEval() throws Exception {
 		Object re = null;
-		re = CEPUtils.call("sprintf(\"%2f\", 0.22)");
+		re = CEPUtils.call("sprintf(\"%2d\", 2)");
+		Assert.assertEquals(" 2", re.toString());
 		System.out.println(re);
+		
+		// 不允许非整型入参
+		try {
+			re = CEPUtils.call("sprintf(\"%2f\", 0.22)");
+		} catch(Exception e) {
+			Assert.assertFalse(false);
+		}
 	}
 
 }
