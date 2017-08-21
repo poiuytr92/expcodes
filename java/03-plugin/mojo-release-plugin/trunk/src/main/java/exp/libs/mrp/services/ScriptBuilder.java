@@ -2,6 +2,7 @@ package exp.libs.mrp.services;
 
 import java.util.List;
 
+import exp.libs.envm.Charset;
 import exp.libs.mrp.Config;
 import exp.libs.mrp.Log;
 import exp.libs.mrp.cache.JarMgr;
@@ -45,32 +46,28 @@ public class ScriptBuilder {
 	}
 	
 	private static boolean buildAppPath() {
-		Template tpl = new Template(ScriptNames.APP_PATH);
-		tpl.read(TplNames.APP_PATH_TEMPLATE);
-		return createScript(tpl.getName(), 
+		Template tpl = new Template(TplNames.APP_PATH_TEMPLATE, Charset.ISO);
+		return createScript(ScriptNames.APP_PATH, 
 				StandardUtils.dos2unix(tpl.getContent()));
 	}
 	
 	private static boolean buildThreadName() {
-		Template tpl = new Template(ScriptNames.THREAD_NAME);
-		tpl.read(TplNames.THREADNAME_TEMPLATE);
+		Template tpl = new Template(TplNames.THREADNAME_TEMPLATE, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 		tpl.set(Placeholders.THREAD_SUFFIX, Config.getInstn().getThreadSuffix());
-		return createScript(tpl.getName(), 
+		return createScript(ScriptNames.THREAD_NAME, 
 				StandardUtils.dos2unix(tpl.getContent()));
 	}
 	
 	private static boolean buildUnixPid() {
-		Template tpl = new Template(ScriptNames.ECHO_PID);
-		tpl.read(TplNames.PID_TEMPLATE_UNIX);
+		Template tpl = new Template(TplNames.PID_TEMPLATE_UNIX, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
-		return createScript(tpl.getName(), 
+		return createScript(ScriptNames.ECHO_PID, 
 				StandardUtils.dos2unix(tpl.getContent()));
 	}
 	
 	private static boolean buildUnixStart() {
-		Template tpl = new Template(ScriptNames.START_SH);
-		tpl.read(TplNames.START_TEMPLATE_UNIX);
+		Template tpl = new Template(TplNames.START_TEMPLATE_UNIX, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 				
 		// 声明变量（-cp路径前缀）
@@ -116,21 +113,19 @@ public class ScriptBuilder {
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		tpl.set(Placeholders.RUN_IN_BACKGROUND, "&");
 		
-		return createScript(tpl.getName(), 
+		return createScript(ScriptNames.START_SH, 
 				StandardUtils.dos2unix(tpl.getContent()));
 	}
 	
 	private static boolean buildUnixStop() {
-		Template tpl = new Template(ScriptNames.STOP_SH);
-		tpl.read(TplNames.STOP_TEMPLATE_DOS);
+		Template tpl = new Template(TplNames.STOP_TEMPLATE_DOS, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
-		return createScript(tpl.getName(), 
+		return createScript(ScriptNames.STOP_SH, 
 				StandardUtils.dos2unix(tpl.getContent()));
 	}
 	
 	private static boolean buildUnixVersion() {
-		Template tpl = new Template(ScriptNames.VERSION_SH);
-		tpl.read(TplNames.START_TEMPLATE_UNIX);
+		Template tpl = new Template(TplNames.START_TEMPLATE_UNIX, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 				
 		// 声明变量（-cp路径前缀）
@@ -177,13 +172,12 @@ public class ScriptBuilder {
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		tpl.set(Placeholders.RUN_IN_BACKGROUND, "");
 		
-		return createScript(tpl.getName(), 
+		return createScript(ScriptNames.VERSION_SH, 
 				StandardUtils.dos2unix(tpl.getContent()));
 	}
 	
 	private static boolean buildDosStart() {
-		Template tpl = new Template(ScriptNames.START_BAT);
-		tpl.read(TplNames.START_TEMPLATE_DOS);
+		Template tpl = new Template(TplNames.START_TEMPLATE_DOS, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 		
 		// 声明变量（-cp路径前缀）
@@ -227,13 +221,12 @@ public class ScriptBuilder {
 		tpl.set(Placeholders.STDOUT_CTRL, "");
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		
-		return createScript(tpl.getName(), 
+		return createScript(ScriptNames.START_BAT, 
 				StandardUtils.unix2dos(tpl.getContent()));
 	}
 	
 	private static boolean buildDosVersion() {
-		Template tpl = new Template(ScriptNames.VERSION_BAT);
-		tpl.read(TplNames.START_TEMPLATE_DOS);
+		Template tpl = new Template(TplNames.START_TEMPLATE_DOS, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 		
 		// 声明变量（-cp路径前缀）
@@ -278,7 +271,7 @@ public class ScriptBuilder {
 		tpl.set(Placeholders.STDOUT_CTRL, "");
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		
-		return createScript(tpl.getName(), 
+		return createScript(ScriptNames.VERSION_BAT, 
 				StandardUtils.unix2dos(tpl.getContent()));
 	}
 	
