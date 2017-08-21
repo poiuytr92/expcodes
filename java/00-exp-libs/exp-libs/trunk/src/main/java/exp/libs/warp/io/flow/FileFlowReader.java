@@ -16,6 +16,14 @@ import exp.libs.envm.Endline;
  * <PRE>
  * 文件流读取器.
  * 	该读取器只会对指定文件逐字符读入一次，无法重新读取.
+ * 
+ * 使用示例:
+ * 	FileFlowReader ffr = new FileFlowReader(FILE_PATH, Charset.UTF8);
+ *  while(ffr.hasNextLine()) {
+ *  	String line = ffr.readLine('\n');	// 行分隔符可自由替换
+ *  	// ... do for line
+ *  }
+ *  ffr.close();
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

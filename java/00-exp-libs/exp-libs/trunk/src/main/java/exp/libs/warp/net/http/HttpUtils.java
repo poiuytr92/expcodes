@@ -29,7 +29,7 @@ import exp.libs.utils.verify.RegexUtils;
 
 /**
  * <PRE>
- * URL工具包
+ * URL工具
  * </PRE>
  * 
  * <B>PROJECT：</B> exp-libs

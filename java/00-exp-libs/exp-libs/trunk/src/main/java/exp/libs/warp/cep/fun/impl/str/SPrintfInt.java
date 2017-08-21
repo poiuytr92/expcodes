@@ -10,7 +10,7 @@ import exp.libs.warp.cep.fun.BaseFunctionN;
 /**
  * <pre>
  * 自定函数：
- * 	printf 风格的格式字符串，针对int入参
+ * 	获取C语言 sprintf 风格的格式字符串（仅针对int入参）
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

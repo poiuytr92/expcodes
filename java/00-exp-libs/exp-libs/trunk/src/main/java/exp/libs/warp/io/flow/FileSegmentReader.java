@@ -13,6 +13,18 @@ import java.util.Map;
  * 使用限制: 
  *   1.完整的 [段] 不能被拆分到不同的文件中, 否则该[段]会被完全抛弃.
  *   2.由于是流式读取, 只要中途有一 [段] 发生错位, 后面即使还有 [段] 也读取不了.
+ *   
+ * 使用示例:
+ * 	FileFlowReader ffr = new FileFlowReader(FILE_PATH, Charset.UTF8);
+ * 	final char LINE_END = '\n';
+ * 	final String SEG_HEAD = "== bgn ==";
+ *  final String SEG_TAIL = "== end ==";
+ * 	FileSegmentReader fsr = new FileSegmentReader(ffr, LINE_END, SEG_HEAD, SEG_TAIL);
+ *  while(fsr.hasNextSegment()) {
+ *  	String segment = fsr.getSegment();
+ *  	// ... do for segment
+ *  }
+ *  fsr.close();
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

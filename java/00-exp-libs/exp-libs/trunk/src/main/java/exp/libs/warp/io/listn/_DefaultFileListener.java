@@ -7,7 +7,7 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
 
 /**
  * <PRE>
- * 文件监控器的事件监听器
+ * 文件监控器的默认事件监听器
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

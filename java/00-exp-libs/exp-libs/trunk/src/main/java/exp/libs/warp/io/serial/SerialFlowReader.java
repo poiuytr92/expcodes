@@ -11,7 +11,16 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * 批量序列化读取器.
+ * 批量序列化读取器(需配合写入器使用).
+ * 	用于把外存序列化文件记录的多个序列化对象反序列化到内存.
+ * 
+ * 使用示例:
+ * 	SerialFlowReader sfr = new SerialFlowReader(FILE_PATH);
+ * 	while(sfr.hasNext()) {
+ * 		Object obj = sfr.next();
+ * 		// .....
+ * 	}
+ * 	sfr.close();
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -24,29 +33,52 @@ public class SerialFlowReader {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(SerialFlowReader.class);
 	
+	/** 默认序列化文件位置 */
 	private final static String DEFAULT_FILEPATH = "./serializable.dat";
 	
+	/** 序列化文件 */
 	private File file;
 	
+	/** 序列化输入流 */
 	private ObjectInputStream ois;
 	
+	/** 当前得到的反序列化对象 */
 	private Object obj;
 	
+	/** 序列化输入流是否已关闭 */
 	private boolean closed;
 	
+	/**
+	 * <PRE>
+	 * 构造函数.
+	 * 序列化文件使用默认位置: ./serializable.dat
+	 * </PRE>
+	 */
 	public SerialFlowReader() {
 		init(null);
 	}
 	
+	/**
+	 * 构造函数
+	 * @param filePath 序列化文件存储位置
+	 */
 	public SerialFlowReader(String filePath) {
 		init(StrUtils.isEmpty(filePath) ? 
 				new File(DEFAULT_FILEPATH) : new File(filePath));
 	}
 	
+	/**
+	 * 构造函数
+	 * @param file 序列化文件
+	 */
 	public SerialFlowReader(File file) {
 		init(file);
 	}
 	
+	/**
+	 * 初始化
+	 * @param file 序列化文件
+	 */
 	private void init(File file) {
 		this.file = (file == null ? new File(DEFAULT_FILEPATH) : file);
 		try {
@@ -59,11 +91,19 @@ public class SerialFlowReader {
 		this.obj = null;
 	}
 	
+	/**
+	 * 检测是否还有下一个序列化对象
+	 * @return true:有; false:无
+	 */
 	public boolean hasNext() {
 		obj = get();
 		return (obj != null);
 	}
 	
+	/**
+	 * 获取下一个序列化对象，将其反序列化到内存
+	 * @return 反序列化对象
+	 */
 	public Object next() {
 		return obj;
 	}
@@ -81,10 +121,18 @@ public class SerialFlowReader {
 		return o;
 	}
 	
+	/**
+	 * 测试序列化输入流是否关闭
+	 * @return true:关闭; false:未关闭
+	 */
 	public boolean isClosed() {
 		return closed;
 	}
 	
+	/**
+	 * 关闭序列化输入流
+	 * @return true:成功; false:写入
+	 */
 	public boolean close() {
 		if(ois != null && closed == false) {
 			try {
@@ -98,6 +146,10 @@ public class SerialFlowReader {
 		return closed;
 	}
 
+	/**
+	 * 获取内存序列化文件对象
+	 * @return 内存序列化文件对象
+	 */
 	public File getFile() {
 		return file;
 	}

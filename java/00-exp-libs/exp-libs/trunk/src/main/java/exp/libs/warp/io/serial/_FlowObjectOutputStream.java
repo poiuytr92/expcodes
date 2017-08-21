@@ -22,10 +22,10 @@ import org.slf4j.LoggerFactory;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-final class FlowObjectOutputStream {
+final class _FlowObjectOutputStream {
 
 	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(FlowObjectOutputStream.class);
+	private final static Logger log = LoggerFactory.getLogger(_FlowObjectOutputStream.class);
 	
 	private File file;
 	
@@ -35,7 +35,7 @@ final class FlowObjectOutputStream {
 	
 	private boolean closed;
 	
-	protected FlowObjectOutputStream(File file, boolean append) {
+	protected _FlowObjectOutputStream(File file, boolean append) {
 		this.file = file;
 		this.append = append;
 		try {

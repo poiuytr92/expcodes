@@ -26,14 +26,32 @@ public class ListUtils {
 	/** 私有化构造函数 */
 	protected ListUtils() {}
 	
+	/**
+	 * 测试数组是否为空(null或长度<=0)
+	 * @param array 被测试数组
+	 * @return true:是; false:否
+	 */
 	public static boolean isEmpty(Object[] array) {
 		return (array == null || array.length <= 0);
 	}
 	
+	/**
+	 * 测试队列是否为空(null或长度<=0)
+	 * @param array 被测试数组
+	 * @return true:是; false:否
+	 */
 	public static boolean isEmpty(List<?> list) {
 		return (list == null || list.size() <= 0);
 	}
 	
+	/**
+	 * <PRE>
+	 * 把数组转换成String字符串.
+	 * 	(空元素用"null"代替, 其他元素调用其toString()方法, 元素间用逗号分隔)
+	 * </PRE>
+	 * @param array 数组
+	 * @return 若数组为空则返回 [], 否则返回形如 [aa, null, cc, dd]
+	 */
 	public static String toString(Object[] array) {
 		StringBuffer sb = new StringBuffer();
 		sb.append('[');
@@ -51,26 +69,30 @@ public class ListUtils {
 	}
 	
 	/**
-	 * 移除list中的重复元素，但保持顺序不变
+	 * 移除list中的重复元素（其他元素保持顺序不变）
 	 * @param list 需要移除重复元素的list
+	 * @param 移除元素个数
 	 */
-	public static <E> void removeDuplicate(List<E> list) {
+	public static <E> int removeDuplicate(List<E> list) {
+		int cnt = 0;
 		if(list != null) {
 			Set<E> set = new HashSet<E>();	// 唯一集
 			for(Iterator<E> its = list.iterator(); its.hasNext();) {
 				E e = its.next();
 				if(set.add(e) == false) {
 					its.remove();
+					cnt++;
 				}
 			}
 			set.clear();
 		}
+		return cnt;
 	}
 	
 	/**
-     * 后移数组中所有null值，返回非null元素的个数(即数组实际长度)
-     * @param array
-     * @return 数组实际长度
+     * 把数组中所有null元素后移，非null元素前移（数组实际长度不变, 非空元素顺序不变）
+     * @param array 原数组
+     * @return 数组非空元素长度
      */
     public static int cutbackNull(Object[] array) {
     	if(array == null) {
@@ -78,7 +100,7 @@ public class ListUtils {
     	}
     	
 		int nullPos = 0;	// 上次检索到的空元素指针位置
-		int len = 0;		// 非空数组的实际长度
+		int len = 0;		// 非空数组的实际长度（即非空元素个数）
 		for(; len < array.length; len++) {
 			if(array[len] != null) {
 				continue;
@@ -104,22 +126,23 @@ public class ListUtils {
     }
     
 	/**
-	 * 检查队列大小是否已经 > 阀值。
+	 * <PRE>
+	 * 检查队列大小是否已经超过 阀值。
 	 * 此方法不会调用size()遍历list所有元素。
-	 * 	(1.6版本之后的JDK的size()方法返回的是一个变量，不会执行迭代操作)
-	 * 
+	 * 	(1.6版本之后的List.size()方法返回的是一个常量, 不会执行遍历全表操作, 此方法已无用)
+	 * </PRE>
 	 * @param list 队列
-	 * @param sizeLimit 大小阀值
+	 * @param limit 大小阀值
 	 * @return true:已超过阀值; false:未超过阀值
 	 */
 	@Deprecated
-	public static <E> boolean checkSize(List<E> list, int sizeLimit) {
+	public static <E> boolean checkSize(List<E> list, int limit) {
 		boolean isOver = false;
 		if(list != null) {
 			int cnt = 0;
 			for(Iterator<E> its = list.iterator(); its.hasNext();) {
 				its.next();
-				if(++cnt > sizeLimit) {
+				if(++cnt > limit) {
 					isOver = true;
 					break;
 				}
@@ -198,11 +221,10 @@ public class ListUtils {
 	}
 	
 	/**
-	 * 比较两个集合是否完全一致(顺序无关)
-	 * @param <T>
+	 * 比较两个集合是否完全一致(元素顺序无关)
 	 * @param c1 集合1
 	 * @param c2 集合2
-	 * @return
+	 * @return true:一致; false:存异
 	 */
 	public static <E extends Comparable<E>> boolean compare(
 			Collection<E> c1, Collection<E> c2) {
@@ -230,7 +252,7 @@ public class ListUtils {
 	 * @param <T>
 	 * @param c1 集合1
 	 * @param c2 集合2
-	 * @return
+	 * @return true:一致; false:存异
 	 */
 	public static <E extends Comparable<E>> boolean compare(
 			List<E> list1, List<E> list2) {
@@ -262,10 +284,20 @@ public class ListUtils {
 		return isConsistency;
 	}
 
+	/**
+	 * 克隆队列
+	 * @param list 原队列
+	 * @return 克隆队列（与原队列属于不同对象， 但若队列元素非常量，则两个队列的【元素内部操作】会互相影响）
+	 */
 	public static <E> List<E> copy(List<E> list) {
 		return copyLink(list);
 	}
 	
+	/**
+	 * 克隆链表队列()
+	 * @param list 原链表队列
+	 * @return 克隆链表队列（与原队列属于不同对象， 但若队列元素非常量，则两个队列的【元素内部操作】会互相影响）
+	 */
 	public static <E> List<E> copyLink(List<E> list) {
 		List<E> copy = new LinkedList<E>();
 		if(list != null) {
@@ -274,6 +306,11 @@ public class ListUtils {
 		return copy;
 	}
 	
+	/**
+	 * 克隆数组队列
+	 * @param list 原数组队列
+	 * @return 克隆数组队列（与原队列属于不同对象， 但若队列元素非常量，则两个队列的【元素内部操作】会互相影响）
+	 */
 	public static <E> List<E> copyArray(List<E> list) {
 		List<E> copy = new ArrayList<E>(list == null ? 1 : list.size());
 		if(list != null) {
@@ -282,18 +319,33 @@ public class ListUtils {
 		return copy;
 	}
 	
+	/**
+	 * 反转队列元素
+	 * @param list 原队列
+	 * @return 反转元素队列（与原队列属于不同对象， 但若队列元素非常量，则两个队列的【元素内部操作】会互相影响）
+	 */
 	public static <E> List<E> reverse(List<E> list) {
 		List<E> reverse = copy(list);
 		Collections.reverse(reverse);
 		return reverse;
 	}
 	
+	/**
+	 * 反转链表队列元素
+	 * @param list 原链表队列
+	 * @return 反转元素的链表队列（与原队列属于不同对象， 但若队列元素非常量，则两个队列的【元素内部操作】会互相影响）
+	 */
 	public static <E> List<E> reverseLink(List<E> list) {
 		List<E> reverse = copyLink(list);
 		Collections.reverse(reverse);
 		return reverse;
 	}
 	
+	/**
+	 * 反转数组队列元素
+	 * @param list 原数组队列
+	 * @return 反转元素的数组队列（与原队列属于不同对象， 但若队列元素非常量，则两个队列的【元素内部操作】会互相影响）
+	 */
 	public static <E> List<E> reverseArray(List<E> list) {
 		List<E> reverse = copyArray(list);
 		Collections.reverse(reverse);

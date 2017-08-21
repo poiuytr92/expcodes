@@ -13,16 +13,15 @@ import exp.libs.warp.cep.fun.impl.str.Trim;
 
 /**
  * <pre>
- * Catt Expression Parser
+ * Expression Parser
  * 
  * 表达式/函数式解析工具测试/样例
  * </pre>	
- * @version   1.0 by 2014-09-29
- * @since     jdk版本：1.6
- * @author 廖权斌 ：liaoquanbin@gdcattsoft.com	<PRE>
- * 	<B>任务编号</B>： 
- *	<B>项目</B>：研发-集约化产品开发平台	 
- *	<B>公司</B>：广东凯通软件开发技术有限公司 综合网管接口组 (c) 2013 </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class TestCEPUtils {
 
@@ -91,7 +90,7 @@ public class TestCEPUtils {
 	@Test
 	public void testCustomNameCall() throws Exception {
 		
-		//catt或jep已经提供的函数可直接使用，实际应用时建议用函数自带名字常量,如 Cut.NAME 
+		// 经验库自定义或jep已经提供的函数可直接使用，实际应用时建议用函数自带名字常量,如 Cut.NAME 
 		String defaultName = Cut.NAME;
 		Object cutStr = CEPUtils.call(
 				defaultName, new Object[] {"abcdef", 1, 5});
@@ -99,10 +98,9 @@ public class TestCEPUtils {
 		System.out.println("\"abcdef\" cut 1-5: " + cutStr);
 		Assert.assertEquals("bcde", cutStr.toString());
 		
-		//也可重新注册函数名称调用，名称可随意（注意同名函数会被覆盖）
+		// 也可重新注册函数名称调用，名称可随意（注意同名函数会被覆盖）
 		String MyFunName = "TestCut";
-		CEPUtils.register(MyFunName, 
-				"com.catt.util.expression.functions.impl.str.Cut");
+		CEPUtils.register(MyFunName, "exp.libs.warp.cep.fun.impl.str.Cut");
 		cutStr = CEPUtils.call(MyFunName, new Object[] {"abcdef", 2, 4});
 		
 		System.out.println("\"abcdef\" cut 2-4: " + cutStr);
@@ -123,8 +121,7 @@ public class TestCEPUtils {
 		
 		//先注册一个自定义函数,该函数功能是把 Date 或 特定格式的时间字符串 转换成秒
 		//换而言之，该函数的入参可能是 Date类型，也可能是 String类型，但出参均是long类型
-		CEPUtils.register("TimeToSecond",
-				"com.catt.util.expression.functions.impl.time.Date2Sec");
+		CEPUtils.register("TimeToSecond", "exp.libs.warp.cep.fun.impl.time.Date2Sec");
 		
 		//调用方式1：传参调用
 		//此方法适用于 参数表中的类型只有 字符串 或 数字 的情况

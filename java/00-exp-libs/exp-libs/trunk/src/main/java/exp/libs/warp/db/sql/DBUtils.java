@@ -27,7 +27,7 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 
 /**
  * <PRE>
- * 数据库工具类.
+ * 数据库工具.
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -69,158 +69,6 @@ public class DBUtils {
 		}
 		return isOk;
 	}
-	
-	/**
-	 * 获取数据库连接.
-	 * 	在连接成功前，重试若干次(默认10次)
-	 * @param ds 数据库配置信息
-	 * @return 数据库连接
-	 */
-	public static Connection getConn(DataSourceBean ds) {
-		return getConn(ds, RECONN_LIMIT);
-	}
-	
-	/**
-	 * 获取数据库连接.
-	 * 	在连接成功前，重试若干次.
-	 * @param ds
-	 * @param retry 重试次数
-	 * @return
-	 */
-	public static Connection getConn(DataSourceBean ds, int retry) {
-		Connection conn = null;
-		if(ds == null) {
-			return conn;
-		}
-		
-		int cnt = 0;	
-		do {
-			conn = _getConn(ds);
-			if(conn != null) {
-				break;
-			}
-			cnt++;
-			ThreadUtils.tSleep(RECONN_INTERVAL);
-		} while(retry < 0 || cnt < retry);
-		return conn;
-	}
-	
-	/**
-	 * 获取数据库连接。
-	 * 	先通过数据池获取，若数据池获取失败，则马上改用JDBC获取
-	 * @param ds 数据源
-	 * @return 数据库连接
-	 */
-	private static Connection _getConn(DataSourceBean ds) {
-		Connection conn = getConnByPool(ds);
-		if(conn == null) {
-			conn = getConnByJDBC(ds);
-		}
-		return conn;
-	}
-	
-	/**
-	 * 通过连接池获取数据库连接
-	 * @param ds 数据源
-	 * @return 数据库连接
-	 */
-	public static Connection getConnByPool(DataSourceBean ds) {
-		Connection conn = null;
-		if(ds != null) {
-			try {
-				_DBUtils.getInstn().registerToProxool(ds);
-				Class.forName(DBType.PROXOOL.DRIVER);
-				conn = DriverManager.getConnection(
-						DBType.PROXOOL.JDBCURL.replace(DBType.PH_ALIAS, ds.getId()));
-				
-			} catch (Throwable e) {
-				if(!e.getMessage().contains("maximum connection count (0/0)")) {
-					log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
-				}
-			}
-		}
-		return conn;
-	}
-	
-	/**
-	 * 通过JDBC获取数据库连接（备用方式，shutdown清理现场时无法通过数据池获取连接）
-	 * @param ds 数据源
-	 * @return 数据库连接
-	 */
-	public static Connection getConnByJDBC(DataSourceBean ds) {
-		Connection conn = null;
-		if(ds != null) {
-			try {
-				Class.forName(ds.getDriver());
-				conn = DriverManager.getConnection(
-						ds.getUrl(), ds.getUsername(), ds.getPassword());
-				
-			} catch (Throwable e) {
-				log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
-			}
-		}
-		return conn;
-	}
-	
-	/**
-	 * 开/关 数据库自动提交
-	 * @param conn 数据库连接
-	 * @param autoCommit 是否自动提交
-	 */
-	public static void setAutoCommit(Connection conn, boolean autoCommit) {
-		if(conn != null) {
-			try {
-				conn.setAutoCommit(autoCommit);
-			} catch (SQLException e) {
-				log.error("开/关数据库自动提交失败.", e);
-			}
-		}
-	}
-	
-	/**
-	 * 关闭数据库连接
-	 * @param conn 数据库连接
-	 */
-	public static void close(Connection conn) {
-		if(conn != null) {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				log.error("关闭数据库连接失败.", e);
-			}
-		}
-	}
-	
-	public static boolean createBeanFromDB(Connection conn, String packageName,
-			String outDirPath, String[] exportTables) {
-		boolean isOk = true;
-		try {
-			List<String> exportTableList = 
-					(exportTables == null ? null : Arrays.asList(exportTables));
-			_DBUtils.createBeanFromDB(conn, packageName, outDirPath, exportTableList);
-			
-		} catch (Exception e) {
-			isOk = false;
-			log.error("构造JavaBean失败.", e);
-		}
-		return isOk;
-	}
-	
-	public static boolean createBeanFromPDM(String pdmPath, String packageName,
-			String outDirPath, String[] exportTables) {
-		boolean isOk = true;
-		try {
-			List<String> exportTableList = 
-					(exportTables == null ? null : Arrays.asList(exportTables));
-			_DBUtils.createBeanFromPDM(pdmPath, packageName, outDirPath, exportTableList);
-			
-		} catch (Exception e) {
-			isOk = false;
-			log.error("构造JavaBean失败.", e);
-		}
-		return isOk;
-	}
-			
 	
 	/**
 	 * 通过Connection判断数据库类型
@@ -269,10 +117,220 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 仅适用于形如 【select key, value from table where ...】 的sql
-	 * @param conn
-	 * @param sql
-	 * @return Map<key, value>
+	 * <PRE>
+	 * 获取数据库连接(先通过数据池获取，若数据池获取失败，则改用JDBC获取).
+	 * 	在连接成功前，重试若干次(默认10次)
+	 * <PRE>
+	 * @param ds 数据库配置信息
+	 * @return 数据库连接(若连接失败返回null)
+	 */
+	public static Connection getConn(DataSourceBean ds) {
+		return getConn(ds, RECONN_LIMIT);
+	}
+	
+	/**
+	 * <PRE>
+	 * 获取数据库连接(先通过数据池获取，若数据池获取失败，则改用JDBC获取).
+	 * 	在连接成功前，重试若干次.
+	 * </PRE>
+	 * @param ds 数据库配置信息
+	 * @param retry 重试次数
+	 * @return 数据库连接(若连接失败返回null)
+	 */
+	public static Connection getConn(DataSourceBean ds, int retry) {
+		Connection conn = null;
+		if(ds == null) {
+			return conn;
+		}
+		
+		int cnt = 0;	
+		do {
+			conn = _getConn(ds);
+			if(conn != null) {
+				break;
+			}
+			cnt++;
+			ThreadUtils.tSleep(RECONN_INTERVAL);
+		} while(retry < 0 || cnt < retry);
+		return conn;
+	}
+	
+	/**
+	 * <PRE>
+	 * 获取数据库连接。
+	 * 	先通过数据池获取，若数据池获取失败，则改用JDBC获取
+	 * <PRE>
+	 * @param ds 数据库配置信息
+	 * @return 数据库连接(若连接失败返回null)
+	 */
+	private static Connection _getConn(DataSourceBean ds) {
+		Connection conn = getConnByPool(ds);
+		if(conn == null) {
+			conn = getConnByJDBC(ds);
+		}
+		return conn;
+	}
+	
+	/**
+	 * 通过连接池获取数据库连接
+	 * @param ds 数据库配置信息
+	 * @return 数据库连接(若连接失败返回null)
+	 */
+	public static Connection getConnByPool(DataSourceBean ds) {
+		Connection conn = null;
+		if(ds != null) {
+			try {
+				_DBUtils.getInstn().registerToProxool(ds);
+				Class.forName(DBType.PROXOOL.DRIVER);
+				conn = DriverManager.getConnection(
+						DBType.PROXOOL.JDBCURL.replace(DBType.PH_ALIAS, ds.getId()));
+				
+			} catch (Throwable e) {
+				if(!e.getMessage().contains("maximum connection count (0/0)")) {
+					log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
+				}
+			}
+		}
+		return conn;
+	}
+	
+	/**
+	 * <PRE>
+	 * 通过JDBC获取数据库连接.
+	 * （在shutdown等场景下无法通过数据池获取连接，此时需用JDBC方式）
+	 * <PRE>
+	 * @param ds 数据库配置信息
+	 * @return 数据库连接(若连接失败返回null)
+	 */
+	public static Connection getConnByJDBC(DataSourceBean ds) {
+		Connection conn = null;
+		if(ds != null) {
+			try {
+				Class.forName(ds.getDriver());
+				conn = DriverManager.getConnection(
+						ds.getUrl(), ds.getUsername(), ds.getPassword());
+				
+			} catch (Throwable e) {
+				log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
+			}
+		}
+		return conn;
+	}
+	
+	/**
+	 * 开/关 数据库自动提交
+	 * @param conn 数据库连接
+	 * @param autoCommit 是否自动提交
+	 */
+	public static void setAutoCommit(Connection conn, boolean autoCommit) {
+		if(conn != null) {
+			try {
+				conn.setAutoCommit(autoCommit);
+			} catch (SQLException e) {
+				log.error("开/关数据库自动提交失败.", e);
+			}
+		}
+	}
+	
+	/**
+	 * 关闭数据库连接
+	 * @param conn 数据库连接
+	 */
+	public static void close(Connection conn) {
+		if(conn != null) {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				log.error("关闭数据库连接失败.", e);
+			}
+		}
+	}
+	
+	/**
+	 * <PRE>
+	 * 根据物理表生成对应的JavaBean类文件（类似Bean与Dao的复合对象）.
+	 * 	表名和列名会自动做前缀删除和驼峰处理.
+	 * 	例如：
+	 * 		表名为 T_CP_USER， 类名则为 CpUser
+	 * 		列名为 I_ID，类成员域名则为iId
+	 * <PRE>
+	 * @param conn 数据库连接
+	 * @param packageName 所生成的JavaBean类文件的包路径, 如: foo.bar.bean
+	 * @param outDirPath 所生成的JavaBean类文件的存储路径, 如: ./src/main/java/foo/bar/bean
+	 * @param exportTables 需要导出为JavaBean的物理表名集（若为空则全库导出）
+	 * @return true:成功; false:失败
+	 */
+	public static boolean createBeanFromDB(Connection conn, String packageName,
+			String outDirPath, String[] exportTables) {
+		boolean isOk = true;
+		try {
+			List<String> exportTableList = 
+					(exportTables == null ? null : Arrays.asList(exportTables));
+			_DBUtils.createBeanFromDB(conn, packageName, outDirPath, exportTableList);
+			
+		} catch (Exception e) {
+			isOk = false;
+			log.error("构造JavaBean失败.", e);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * <PRE>
+	 * 根据物理模型生成对应的JavaBean类文件（类似Bean与Dao的复合对象）.
+	 * 	表名和列名会自动做前缀删除和驼峰处理.
+	 * 	例如：
+	 * 		表名为 T_CP_USER， 类名则为 CpUser
+	 * 		列名为 I_ID，类成员域名则为iId
+	 * <PRE>
+	 * @param pdmPath 物理模型文件路径（支持PowerDesigner）
+	 * @param packageName 所生成的JavaBean类文件的包路径, 如: foo.bar.bean
+	 * @param outDirPath 所生成的JavaBean类文件的存储路径, 如: ./src/main/java/foo/bar/bean
+	 * @param exportTables 需要导出为JavaBean的物理表名集（若为空则全库导出）
+	 * @return true:成功; false:失败
+	 */
+	public static boolean createBeanFromPDM(String pdmPath, String packageName,
+			String outDirPath, String[] exportTables) {
+		boolean isOk = true;
+		try {
+			List<String> exportTableList = 
+					(exportTables == null ? null : Arrays.asList(exportTables));
+			_DBUtils.createBeanFromPDM(pdmPath, packageName, outDirPath, exportTableList);
+			
+		} catch (Exception e) {
+			isOk = false;
+			log.error("构造JavaBean失败.", e);
+		}
+		return isOk;
+	}
+			
+	/**
+	 * 查询一个JavaBean对应的物理表数据，并把对应列值转存到JavaBean对应的成员域.
+	 * @param clazz JavaBean类定义
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return JavaBean对象列表（查询失败返回null）
+	 */
+	public static <BEAN> List<BEAN> query(Class<BEAN> clazz, Connection conn, String sql) {
+		List<BEAN> beans = new LinkedList<BEAN>();
+		try {
+            QueryRunner runner = new QueryRunner();
+            beans = runner.query(conn, sql, new BeanListHandler<BEAN>(clazz));
+            
+        } catch (Throwable e) {
+        	log.error("执行sql失败: [{}].", sql, e);
+        }
+		return beans;
+	}
+	
+	/**
+	 * <PRE>
+	 * 查询键值对(其中值会被强制转换为String类型).
+	 * 	仅适用于形如 【select key, value from table where ...】 的sql
+	 * </PRE>
+	 * @param conn 数据库连接
+	 * @param sql 键值对查询SQL
+	 * @return Map<key, value> 键值对表 （不会返回null）
 	 */
 	public static Map<String, String> queryKVS(Connection conn, String sql) {
 		Map<String, String> kvo = new HashMap<String, String>();
@@ -302,43 +360,13 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 从数据库查询kv表
+	 * <PRE>
+	 * 查询键值对(其中值会保留其原本数据类型).
+	 * 	仅适用于形如 【select key, value from table where ...】 的sql
+	 * </PRE>
 	 * @param conn 数据库连接
-	 * @param sql 查询sql
-	 * @return Map<String, String>类型的kv表,不会返回null
-	 */
-	public static List<Map<String, String>> queryKVSs(Connection conn, String sql) {
-		List<Map<String, String>> kvsList = new LinkedList<Map<String, String>>();
-
-		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			ResultSet rs = pstm.executeQuery();
-
-			ResultSetMetaData rsmd = null;
-			while (rs.next()) {
-				Map<String, String> kvs = new HashMap<String, String>();
-				rsmd = rs.getMetaData();
-				int count = rsmd.getColumnCount();
-				for (int i = 1; i <= count; i++) {
-					kvs.put(rsmd.getColumnLabel(i), rs.getString(i));
-				}
-				kvsList.add(kvs);
-			}
-			
-			rs.close();
-			pstm.close();
-			
-		} catch (Throwable e) {
-			log.error("执行sql失败: [{}].", sql, e);
-		}
-		return kvsList;
-	}
-	
-	/**
-	 * 仅适用于形如 【select key, value from table where ...】 的sql
-	 * @param conn
-	 * @param sql
-	 * @return Map<key, value>
+	 * @param sql 键值对查询SQL
+	 * @return Map<key, value> 键值对表 （不会返回null）
 	 */
 	public static Map<String, Object> queryKVO(Connection conn, String sql) {
 		Map<String, Object> kvo = new HashMap<String, Object>();
@@ -368,10 +396,49 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 从数据库查询kv表
+	 * <PRE>
+	 * 查询多行表数据.
+	 * 	每行数据以列名为key，以列值为val（列值会被强制转换成String类型）.
+	 * </PRE>
 	 * @param conn 数据库连接
 	 * @param sql 查询sql
-	 * @return Map<String, Object>类型的kv表,不会返回null
+	 * @return List<Map<colName, colVal>> (不会返回null)
+	 */
+	public static List<Map<String, String>> queryKVSs(Connection conn, String sql) {
+		List<Map<String, String>> kvsList = new LinkedList<Map<String, String>>();
+
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+
+			ResultSetMetaData rsmd = null;
+			while (rs.next()) {
+				Map<String, String> kvs = new HashMap<String, String>();
+				rsmd = rs.getMetaData();
+				int count = rsmd.getColumnCount();
+				for (int i = 1; i <= count; i++) {
+					kvs.put(rsmd.getColumnLabel(i), rs.getString(i));
+				}
+				kvsList.add(kvs);
+			}
+			
+			rs.close();
+			pstm.close();
+			
+		} catch (Throwable e) {
+			log.error("执行sql失败: [{}].", sql, e);
+		}
+		return kvsList;
+	}
+	
+	/**
+	 * <PRE>
+	 * 查询多行表数据.
+	 * 	每行数据以列名为key，以列值为val（列值会保留其原本数据类型）.
+	 * </PRE>
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return List<Map<colName, colVal>> (不会返回null)
 	 */
 	public static List<Map<String, Object>> queryKVOs(Connection conn, String sql) {
 		List<Map<String, Object>> kvsList = new LinkedList<Map<String, Object>>();
@@ -401,41 +468,22 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 查询一个JavaBean对应的物理表
-	 * @param clazz
-	 * @param conn
-	 * @param sql
-	 * @return
-	 */
-	public static <BEAN> List<BEAN> query(Class<BEAN> clazz, Connection conn, String sql) {
-		List<BEAN> beans = new LinkedList<BEAN>();
-		try {
-            QueryRunner runner = new QueryRunner();
-            beans = runner.query(conn, sql, new BeanListHandler<BEAN>(clazz));
-            
-        } catch (Throwable e) {
-        	log.error("执行sql失败: [{}].", sql, e);
-        }
-		return beans;
-	}
-	
-	/**
-	 * 查询第一行第一列的单元格值.
+	 * <PRE>
+	 * 查询一个int整数值.
 	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
-	 * @param conn
-	 * @param sql
-	 * @return
+	 * </PRE>
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return 查询结果（查询失败则返回-1）
 	 */
-	public static Object queryFirstCellObj(Connection conn, String sql) {
-		Object cell = null;
+	public static int queryInt(Connection conn, String sql) {
+		int num = -1;
+
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
 			ResultSet rs = pstm.executeQuery();
 			if (rs.next()) {
-				ResultSetMetaData rsmd = rs.getMetaData();
-				if(rsmd.getColumnCount() > 0) {
-					cell = rs.getObject(1);
-				}
+				num = rs.getInt(1);
 			}
 			
 			rs.close();
@@ -444,10 +492,47 @@ public class DBUtils {
 		} catch (Throwable e) {
 			log.error("执行sql失败: [{}].", sql, e);
 		}
-		return cell;
+		return num;
 	}
 	
-	public static String queryFirstCellStr(Connection conn, String sql) {
+	/**
+	 * <PRE>
+	 * 查询一个long整数值.
+	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 * </PRE>
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return 查询结果（查询失败则返回-1）
+	 */
+	public static long queryLong(Connection conn, String sql) {
+		long num = -1;
+
+		try {
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+			if (rs.next()) {
+				num = rs.getLong(1);
+			}
+			
+			rs.close();
+			pstm.close();
+			
+		} catch (Throwable e) {
+			log.error("执行sql失败: [{}].", sql, e);
+		}
+		return num;
+	}
+	
+	/**
+	 * <PRE>
+	 * 查询[第一行][第一列]的单元格值（所得值强制转换为String类型）.
+	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 * </PRE>
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return 查询结果（查询失败则返回null）
+	 */
+	public static String queryCellStr(Connection conn, String sql) {
 		String cell = "";
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
@@ -469,21 +554,23 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 查询第一行
-	 * @param conn
-	 * @param sql
-	 * @return Map<String, Object>类型的kv表,不会返回null（key为表头）
+	 * <PRE>
+	 * 查询[第一行][第一列]的单元格值（所得值保留其原本的数据类型）.
+	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 * </PRE>
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return 查询结果（查询失败则返回null）
 	 */
-	public static Map<String, Object> queryFirstRowObj(Connection conn, String sql) {
-		Map<String, Object> row = new HashMap<String, Object>();
+	public static Object queryCellObj(Connection conn, String sql) {
+		Object cell = null;
 		try {
 			PreparedStatement pstm = conn.prepareStatement(sql);
 			ResultSet rs = pstm.executeQuery();
 			if (rs.next()) {
 				ResultSetMetaData rsmd = rs.getMetaData();
-				int count = rs.getMetaData().getColumnCount();
-				for (int i = 1; i <= count; i++) {
-					row.put(rsmd.getColumnLabel(i), rs.getObject(i));
+				if(rsmd.getColumnCount() > 0) {
+					cell = rs.getObject(1);
 				}
 			}
 			
@@ -493,9 +580,18 @@ public class DBUtils {
 		} catch (Throwable e) {
 			log.error("执行sql失败: [{}].", sql, e);
 		}
-		return row;
+		return cell;
 	}
 	
+	/**
+	 * <PRE>
+	 * 查询[第一行]表数据.
+	 * 	行数据以列名为key，以列值为val（列值会被强制转换成String类型）.
+	 * </PRE>
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return Map<colName, colVal> (不会返回null)
+	 */
 	public static Map<String, String> queryFirstRowStr(Connection conn, String sql) {
 		Map<String, String> row = new HashMap<String, String>();
 		try {
@@ -519,35 +615,44 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 从数据库查询第col列的所有值.
+	 * <PRE>
+	 * 查询[第一行]表数据.
+	 * 	行数据以列名为key，以列值为val（列值保留其原本的数据类型）.
+	 * </PRE>
+	 * @param conn 数据库连接
 	 * @param sql 查询sql
-	 * @param col 列号
-	 * @return List<Object>列表,不会返回null
+	 * @return Map<colName, colVal> (不会返回null)
 	 */
-	public static List<Object> queryColumnObj(Connection conn, String sql, int col) {
-		List<Object> vals = new LinkedList<Object>();
-		col = (col <= 0 ? 1 : col);
-		
-		PreparedStatement pstm = null;
-		ResultSet rs = null;
+	public static Map<String, Object> queryFirstRowObj(Connection conn, String sql) {
+		Map<String, Object> row = new HashMap<String, Object>();
 		try {
-			pstm = conn.prepareStatement(sql);
-			rs = pstm.executeQuery();
-
-			int count = rs.getMetaData().getColumnCount();
-			col = (col >= count ? count : col);
-			while (rs.next()) {
-				vals.add(rs.getObject(col));
+			PreparedStatement pstm = conn.prepareStatement(sql);
+			ResultSet rs = pstm.executeQuery();
+			if (rs.next()) {
+				ResultSetMetaData rsmd = rs.getMetaData();
+				int count = rs.getMetaData().getColumnCount();
+				for (int i = 1; i <= count; i++) {
+					row.put(rsmd.getColumnLabel(i), rs.getObject(i));
+				}
 			}
 			
 			rs.close();
 			pstm.close();
-		} catch (Exception e) {
+			
+		} catch (Throwable e) {
 			log.error("执行sql失败: [{}].", sql, e);
 		}
-		return vals;
+		return row;
 	}
 	
+	/**
+	 * <PRE>
+	 * 查询[第col列]表数据（数据值会被强制转换成String类型）.
+	 * </PRE>
+	 * @param conn 数据库连接
+	 * @param sql 查询sql
+	 * @return List<colVal> (不会返回null)
+	 */
 	public static List<String> queryColumnStr(Connection conn, String sql, int col) {
 		List<String> vals = new LinkedList<String>();
 		col = (col <= 0 ? 1 : col);
@@ -573,58 +678,38 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 从数据库查询一个整数值.
-	 * 若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
-	 * 
+	 * <PRE>
+	 * 查询[第col列]表数据（数据值保留其原本的数据类型）.
+	 * </PRE>
 	 * @param conn 数据库连接
 	 * @param sql 查询sql
-	 * @return 查询失败则返回-1
+	 * @return List<colVal> (不会返回null)
 	 */
-	public static int queryInt(Connection conn, String sql) {
-		int num = -1;
-
+	public static List<Object> queryColumnObj(Connection conn, String sql, int col) {
+		List<Object> vals = new LinkedList<Object>();
+		col = (col <= 0 ? 1 : col);
+		
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
 		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			ResultSet rs = pstm.executeQuery();
-			if (rs.next()) {
-				num = rs.getInt(1);
+			pstm = conn.prepareStatement(sql);
+			rs = pstm.executeQuery();
+
+			int count = rs.getMetaData().getColumnCount();
+			col = (col >= count ? count : col);
+			while (rs.next()) {
+				vals.add(rs.getObject(col));
 			}
 			
 			rs.close();
 			pstm.close();
-			
-		} catch (Throwable e) {
+		} catch (Exception e) {
 			log.error("执行sql失败: [{}].", sql, e);
 		}
-		return num;
+		return vals;
 	}
 	
-	/**
-	 * 从数据库查询一个长整数值.
-	 * 若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
-	 * 
-	 * @param conn 数据库连接
-	 * @param sql 查询sql
-	 * @return 查询失败则返回-1
-	 */
-	public static long queryLong(Connection conn, String sql) {
-		long num = -1;
-
-		try {
-			PreparedStatement pstm = conn.prepareStatement(sql);
-			ResultSet rs = pstm.executeQuery();
-			if (rs.next()) {
-				num = rs.getLong(1);
-			}
-			
-			rs.close();
-			pstm.close();
-			
-		} catch (Throwable e) {
-			log.error("执行sql失败: [{}].", sql, e);
-		}
-		return num;
-	}
+	
 	
 	/**
 	 * 执行预编译sql
@@ -677,8 +762,6 @@ public class DBUtils {
 		return isOk;
 	}
 	
-	
-	
 	/**
 	 * <pre>
 	 * 执行存储过程，获得简单返回值（支持[无返回值]和 [单值]返回两种形式）。
@@ -706,8 +789,6 @@ public class DBUtils {
 	 * @return 
 	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
 	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可。
-	 * 
-	 * @throws SQLException 不支持的数据库类型、或占位符与入参表个数不一致、或执行异常则抛出错误。
 	 */
 	public static String execSP(Connection conn, String proSql, Object[] params) {
 		if(conn == null) {
@@ -718,15 +799,15 @@ public class DBUtils {
 		DBType dbType = judgeDBType(conn);
 		switch (dbType) {
 			case MYSQL: {
-				result = execSpByMysql(conn, proSql, params);
+				result = _execSpByMysql(conn, proSql, params);
 				break;
 			}
 			case SYBASE: {
-				result = execSpBySybase(conn, proSql, params);
+				result = _execSpBySybase(conn, proSql, params);
 				break;
 			}
 			case ORACLE: {
-				result = execSpByOracle(conn, proSql, params);
+				result = _execSpByOracle(conn, proSql, params);
 				break;
 			}
 			default: {
@@ -738,12 +819,13 @@ public class DBUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * mysql存储过程调用，支持[无返回值]和 [单值]返回两种形式。
 	 * 
 	 * 要求：
 	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
 	 * 	返回值：最后一个结果集（即SELECT语句）的第1行、第1列的值。
-	 * 
+	 * </PRE>
 	 * @param conn 数据库连接
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
@@ -753,7 +835,7 @@ public class DBUtils {
 	 * 
 	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误。
 	 */
-	private static String execSpByMysql(Connection conn, String proSql, Object[] params) {
+	private static String _execSpByMysql(Connection conn, String proSql, Object[] params) {
 		String result = null;
 		if(conn == null) {
 			log.error("DB connection is closed.");
@@ -815,12 +897,13 @@ public class DBUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * sybase存储过程调用，支持[无返回值]和 [单值]返回两种形式。
 	 * 
 	 * 要求：
 	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
 	 * 	返回值：return所指定的值。
-	 * 
+	 * </PRE>
 	 * @param conn 数据库连接
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
@@ -830,7 +913,7 @@ public class DBUtils {
 	 * 
 	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误。
 	 */
-	private static String execSpBySybase(Connection conn, String proSql, Object[] params) {
+	private static String _execSpBySybase(Connection conn, String proSql, Object[] params) {
 		String result = null;
 		if(conn == null) {
 			log.error("DB connection is closed.");
@@ -857,7 +940,6 @@ public class DBUtils {
 					cs.registerOutParameter(1, Types.JAVA_OBJECT);
 					if(params != null){
 						for(int i = 0; i < params.length; i++) {
-//							cs.setObject(i + 2, params[i]);
 							if (params[i] == null) {
 								cs.setNull(i + 2, Types.INTEGER);
 							} else {
@@ -880,13 +962,14 @@ public class DBUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * oracle存储过程调用，支持[无返回值]和 [单值]返回两种形式。
 	 * 
 	 * 要求：
 	 *  入参表：当proSql的占位符?个数 比 入参表params长度多0，为无返回值形式；
 	 *       多1，为有返回值形式。其余情况抛出SQLException异常。
 	 * 	返回值：当proSql的占位符?个数比入参表params多1，则认为最后1个占位符是出参。
-	 * 
+	 * </PRE>
 	 * @param conn 数据库连接
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
@@ -896,7 +979,7 @@ public class DBUtils {
 	 * 
 	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误。
 	 */
-	private static String execSpByOracle(Connection conn, String proSql, Object[] params) {
+	private static String _execSpByOracle(Connection conn, String proSql, Object[] params) {
 		String result = null;
 		if(conn == null) {
 			log.error("DB connection is closed.");
@@ -957,12 +1040,28 @@ public class DBUtils {
 	 * <pre>
 	 * 调用存储过程，获取[结果集]返回。
 	 * 根据数据库连接自动识别 mysql、sybase、oracle。
+	 * 
+	 * 注意：
+	 * 参数如果有null，则可能出错，特别是sybase数据库
+	 * 
+	 * mysql存储过程要求：
+	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
+	 * 	返回值：最后一个结果集（即SELECT语句）的第1行、第1列的值。
+	 * 
+	 * sybase存储过程要求：
+	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
+	 * 	返回值：return所指定的值。
+	 * 
+	 * oracle存储过程要求：
+	 *  入参表：当proSql的占位符?个数 比 入参表params长度多0，为无返回值形式；
+	 *       多1，为有返回值形式。其余情况抛出SQLException异常。
+	 * 	返回值：当proSql的占位符?个数比入参表params多1，则认为最后1个占位符是出参。
 	 * </pre>
 	 * 
-	 * @param conn
-	 * @param proSql
-	 * @param params
-	 * @return
+	 * @param conn 数据库连接
+	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
+	 * @param params 入参表
+	 * @return List<Map<String, Object>>结果集（不会返回null）
 	 */
 	public static List<Map<String, Object>> callSP(Connection conn, 
 			String proSql, Object[] params) {
@@ -974,15 +1073,15 @@ public class DBUtils {
 		DBType dbType = judgeDBType(conn);
 		switch (dbType) {
 			case MYSQL: {
-				result = callSpByMysqlOrSybase(conn, proSql, params);
+				result = _callSpByMysqlOrSybase(conn, proSql, params);
 				break;
 			}
 			case SYBASE: {
-				result = callSpByMysqlOrSybase(conn, proSql, params);
+				result = _callSpByMysqlOrSybase(conn, proSql, params);
 				break;
 			}
 			case ORACLE: {
-				result = callSpByOracle(conn, proSql, params);
+				result = _callSpByOracle(conn, proSql, params);
 				break;
 			}
 			default: {
@@ -994,22 +1093,21 @@ public class DBUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * 存储过程调用，支持[结果集]返回形式。
 	 * 兼容mysql和sybase，不支持oralce。
 	 * 
 	 * 要求：
 	 * 	入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
 	 * 	返回值：最后一个结果集（即SELECT语句）。
-	 *  
+	 * <PRE>
 	 * @param conn 数据库连接
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表
 	 * @return 返回结果集的多行记录，每行为 列名-列值 的键值对。
-	 * 
-	 * @throws SQLException 不支持的数据库类型、或占位符与入参表个数不一致、或执行异常则抛出错误。
 	 */
-	private static List<Map<String, Object>> callSpByMysqlOrSybase(Connection conn, 
-			String proSql, Object[] params) {
+	private static List<Map<String, Object>> _callSpByMysqlOrSybase(
+			Connection conn, String proSql, Object[] params) {
 		List<Map<String, Object>> result = new LinkedList<Map<String, Object>>();
 		if(conn == null) {
 			log.error("DB connection is closed.");
@@ -1075,21 +1173,20 @@ public class DBUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * oracle存储过程调用，仅支持[结果集]返回。
 	 * 
 	 * 要求：
 	 *  入参表：proSql的占位符?个数 比 入参表params长度多1，且最后1个占位符为返回结果集。
 	 *  	其余情况抛出SQLException异常。
 	 * 	返回值：结果集。
-	 * 
+	 * </PRE>
 	 * @param conn Oracle数据库连接
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
 	 * @param params 入参表，长度必须必占位符少1
 	 * @return 返回结果集的多行记录，每行为 列名-列值 的键值对。
-	 * 
-	 * @throws SQLException 占位符-入参表个数!=1，或执行异常则抛出错误。
 	 */
-	private static List<Map<String, Object>> callSpByOracle(
+	private static List<Map<String, Object>> _callSpByOracle(
 			Connection conn, String proSql, Object[] params) {
 		List<Map<String, Object>> result = new LinkedList<Map<String, Object>>();
 		if(conn == null) {
@@ -1154,4 +1251,5 @@ public class DBUtils {
 		}
 		return result;
 	}
+	
 }

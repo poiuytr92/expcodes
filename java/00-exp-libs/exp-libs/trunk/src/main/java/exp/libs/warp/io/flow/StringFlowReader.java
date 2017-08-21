@@ -15,6 +15,14 @@ import exp.libs.envm.Endline;
  * <PRE>
  * 字符串流读取器.
  * 	该读取器只会对指定字符串逐字符读入一次，无法重新读取.
+ * 
+ * 使用示例:
+ * 	StringFlowReader sfr = new StringFlowReader(String, Charset.UTF8);
+ *  while(sfr.hasNextLine()) {
+ *  	String line = sfr.readLine('\n');	// 行分隔符可自由替换
+ *  	// ... do for line
+ *  }
+ *  sfr.close();
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

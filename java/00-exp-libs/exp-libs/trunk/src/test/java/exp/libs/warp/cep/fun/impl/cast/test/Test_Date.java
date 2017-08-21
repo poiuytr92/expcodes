@@ -11,15 +11,14 @@ import exp.libs.warp.cep.fun.impl.cast._Date;
 
 /**
  * <pre>
- * Catt自定函数测试：
+ * 自定义函数测试：
  * 	强制类型转换: String -> Date
  * </pre>	
- * @version   1.0 by 2014-09-29
- * @since     jdk版本：1.6
- * @author 廖权斌 ：liaoquanbin@gdcattsoft.com	<PRE>
- * 	<B>任务编号</B>： 
- *	<B>项目</B>：研发-集约化产品开发平台	 
- *	<B>公司</B>：广东凯通软件开发技术有限公司 综合网管接口组 (c) 2013 </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class Test_Date {
 

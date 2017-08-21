@@ -11,7 +11,15 @@ import org.slf4j.LoggerFactory;
 /**
  * <PRE>
  * 文件监听器.
- * 	可监听指定文件夹下的所有文件和子文件夹(包括子文件夹下的文件)的增删改事件
+ * 	可监听指定文件夹下的所有文件和子文件夹(包括子文件夹下的文件)的增删改事件.
+ * 
+ * 
+ * 使用示例:
+ * 	FileListener listn = new FileListener(); // 实现 FileAlterationListener 接口
+ * 	FileMonitor fm = new FileMonitor(DIR_PATH, listn);
+ * 	fm._start();
+ * 	// do something ...
+ * 	fm._stop();
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
