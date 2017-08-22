@@ -298,7 +298,7 @@ public class Sheet {
 	public List<List<Object>> getAllDatas() {
 		List<List<Object>> tableDatas = new ArrayList<List<Object>>(2);
 		if(isNull() == false) {
-			tableDatas = getRowDatas(0, getCurRowNum());
+			tableDatas = getRowDatas(0, getLastRowNum());
 		}
 		return tableDatas;
 	}
@@ -470,7 +470,7 @@ public class Sheet {
 	 * @return true:添加成功; false:添加失败
 	 */
 	public boolean addRowDatas(List<Object> rowDatas, int offsetCol) {
-		return setRowDatas(rowDatas, getCurRowNum() + 1, offsetCol);
+		return setRowDatas(rowDatas, getLastRowNum() + 1, offsetCol);
 	}
 	
 	/**
@@ -499,7 +499,7 @@ public class Sheet {
 	 */
 	public void setStyle(CellStyle style) {
 		if(!isNull()) {
-			for(int row = 0; row < getCurRowNum(); row++) {
+			for(int row = 0; row < getLastRowNum(); row++) {
 				Row _row = _getRow(row);
 				if(_row != null) {
 					_row.setRowStyle(style);
@@ -537,7 +537,7 @@ public class Sheet {
 	/**
 	 * 清空行数据（但不删除行）
 	 * @param row 行索引（从0开始）
-	 * @return
+	 * @return true:清空成功; false:清空失败
 	 */
 	public boolean clrRow(int row) {
 		if(isNull() == true) {
@@ -548,6 +548,11 @@ public class Sheet {
 		return true;
 	}
 	
+	/**
+	 * 删除行
+	 * @param row 行索引（从0开始）
+	 * @return true:清空成功; false:清空失败
+	 */
 	public boolean delRow(int row) {
 		if(isNull() == true) {
 			return false;
@@ -558,6 +563,11 @@ public class Sheet {
 		return true;
 	}
 	
+	/**
+	 * 清空行数据（但不删除行）
+	 * @param row 行索引（从0开始）
+	 * @return true:清空成功; false:清空失败
+	 */
 	private void _clearRow(int row) {
 		Row _row = _getRow(row);
 		if (_row != null) {
@@ -565,14 +575,23 @@ public class Sheet {
 		}
 	}
 	
+	/**
+	 * 把删除行以下的所有行都上移一行
+	 * @param delRow 删除行的行索引（从0开始）
+	 * @return true:上移成功; false:上移失败
+	 */
 	private void _shiftRow(int delRow) {
 		int bgnRow = delRow + 1;		// 移动的开始行号, 此处为删除行的下一行
-		int endRow = getCurRowNum();	// 移动的结束的行号, 此处为最后一行
+		int endRow = getLastRowNum();	// 移动的结束的行号, 此处为最后一行
 		int shiftCnt = (endRow - bgnRow + 1) * -1;	// 移动的行数(正数向下移动, 负数向上移动)
 		sheet.shiftRows(bgnRow, endRow, shiftCnt);
 	}
 	
-	public int getCurRowNum() {
+	/**
+	 * 返回当前Sheet页最后一行的行索引
+	 * @return 最后一行的行索引
+	 */
+	public int getLastRowNum() {
 		return (isNull() ? 0 : sheet.getLastRowNum());
 	}
 	
@@ -584,14 +603,17 @@ public class Sheet {
 			return;
 		}
 		
-		for(int i = getCurRowNum(); i >= 0; i--) {
+		for(int i = getLastRowNum(); i >= 0; i--) {
 			_clearRow(i);
 		}
 	}
 	
+	/**
+	 * 测试当前Sheet页是否为空对象（无效对象）
+	 * @return true:无效对象; false:有效对象
+	 */
 	public boolean isNull() {
 		return (sheet == null);
 	}
-
 	
 }
