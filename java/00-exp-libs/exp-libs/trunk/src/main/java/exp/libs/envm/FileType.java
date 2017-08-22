@@ -23,6 +23,10 @@ public enum FileType {
 	
 	BZ2(".bz2", "425A6839"),
 	
+	XLS(".xls", "D0CF11E0"),
+	
+	XLSX(".xlsx", "504B0304"),
+	
 	;
 	
 	public String EXT;

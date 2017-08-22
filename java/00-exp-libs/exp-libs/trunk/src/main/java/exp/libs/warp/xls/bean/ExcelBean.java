@@ -120,7 +120,7 @@ public abstract class ExcelBean {
 		if (index < 0 || index >= workbook.getNumberOfSheets()) {
 			return null;
 		}
-
+		
 		Sheet sheet = workbook.getSheetAt(index);
 		return getSheetBean(sheet);
 	}
@@ -313,7 +313,6 @@ public abstract class ExcelBean {
 			DataFormat format = workbook.createDataFormat();
 			dateCellStyle.setDataFormat(format.getFormat("yyyy-m-d"));
 		}
-
 		return dateCellStyle;
 	}
 

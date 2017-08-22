@@ -13,8 +13,9 @@ import java.util.Map;
 import org.apache.poi.ss.util.CellReference;
 
 /**
- * Excel工具类
- * 
+ * <PRE>
+ * Excel工具
+ * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2015-12-27
