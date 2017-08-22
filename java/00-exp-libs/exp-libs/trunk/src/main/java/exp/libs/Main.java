@@ -1,10 +1,10 @@
 package exp.libs;
 
-import exp.libs.utils.os.CmdUtils;
+import exp.libs.utils.other.LogUtils;
 
 public class Main {
 
 	public static void main(String[] args) {
-		CmdUtils.kill("MstpAdapter");
+		LogUtils.loadLogBackConfig();
 	}
 }

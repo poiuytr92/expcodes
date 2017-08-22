@@ -39,7 +39,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true:存在; false:不存在
 	 */
 	public static boolean exists(String filePath) {
-		return exists(filePath);
+		return (filePath != null && exists(new File(filePath)));
+		
 	}
 	
 	/**

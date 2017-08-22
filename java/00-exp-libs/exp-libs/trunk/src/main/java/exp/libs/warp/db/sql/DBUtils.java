@@ -195,7 +195,10 @@ public class DBUtils {
 						DBType.PROXOOL.JDBCURL.replace(DBType.PH_ALIAS, ds.getId()));
 				
 			} catch (Throwable e) {
-				if(!e.getMessage().contains("maximum connection count (0/0)")) {
+				String errMsg = e.getMessage();
+				if(errMsg != null && errMsg.contains("maximum connection count (0/0)")) {
+					// Undo 连接正常
+				} else {
 					log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
 				}
 			}
