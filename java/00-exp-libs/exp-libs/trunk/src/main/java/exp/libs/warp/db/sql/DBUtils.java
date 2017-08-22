@@ -28,6 +28,15 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 /**
  * <PRE>
  * 数据库工具.
+ * 
+ * 使用示例:
+ * 	DataSourceBean ds = new DataSourceBean();
+ * 	ds.setDriver(DBType.MYSQL.DRIVER);
+ * 	ds.set....
+ * 
+ * 	Connection conn = DBUtils.getConn(ds);
+ * 	DBUtils.query(DBUtils, sql);
+ * 	DBUtils.close(conn);
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

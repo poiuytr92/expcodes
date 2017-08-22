@@ -35,7 +35,7 @@ public enum FileType {
 	
 	private FileType(String ext, String headMsg) {
 		this.EXT = (ext != null ? ext.trim().toLowerCase() : "");
-		this.HEAD_MSG = (headMsg != null ? ext.trim().toUpperCase() : "");
+		this.HEAD_MSG = (headMsg != null ? headMsg.trim().toUpperCase() : "");
 	}
 	
 }

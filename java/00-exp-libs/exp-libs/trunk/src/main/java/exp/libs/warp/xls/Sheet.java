@@ -13,17 +13,37 @@ import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFHyperlink;
 
+/**
+ * <PRE>
+ * Sheet页，需配合Excel工作簿使用.
+ * 	(对Sheet页的所有操作均只影响内存数据，对外存文件无影响)
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-08-22
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Sheet {
 
-	private final CellStyle DEFAULT_DATETIME_STYLE;
-	
+	/** 默认的Sheet操作对象 */
 	public final static Sheet NULL = new Sheet(null, false, null);
 	
-	/** sheet页 */
+	/** 日期时间单元格的默认格式风格 */
+	private final CellStyle DEFAULT_DATETIME_STYLE;
+	
+	/** POI的sheet页对象 */
 	private org.apache.poi.ss.usermodel.Sheet sheet;
 	
+	/** 是否为2007版本的xlsx（反之为2003版本的xls） */
 	private boolean is2007;
 	
+	/**
+	 * 构造函数
+	 * @param sheet POI的sheet页对象
+	 * @param is2007 是否为2007版本的xlsx（反之为2003版本的xls）
+	 * @param dataTimeStyle 日期时间单元格的默认格式风格
+	 */
 	protected Sheet(org.apache.poi.ss.usermodel.Sheet sheet, 
 			boolean is2007, CellStyle dataTimeStyle) {
 		this.sheet = sheet;
@@ -31,55 +51,97 @@ public class Sheet {
 		this.DEFAULT_DATETIME_STYLE = dataTimeStyle;
 	}
 
+	/**
+	 * 单个Sheet页支持的最大行数
+	 * @return 若初始化失败则返回0
+	 */
 	public int MAX_ROW() {
-		return (is2007 ? SpreadsheetVersion.EXCEL2007.getMaxRows() : 
-				SpreadsheetVersion.EXCEL97.getMaxRows());
+		return (isNull() ? 0 : (is2007 ? 
+				SpreadsheetVersion.EXCEL2007.getMaxRows() : 
+				SpreadsheetVersion.EXCEL97.getMaxRows()));
 	}
 	
+	/**
+	 * 单个Sheet页支持的最大列数
+	 * @return 若初始化失败则返回0
+	 */
 	public int MAX_COL() {
-		return (is2007 ? SpreadsheetVersion.EXCEL2007.getMaxColumns() : 
-				SpreadsheetVersion.EXCEL97.getMaxColumns());
+		return (isNull() ? 0 : (is2007 ? 
+				SpreadsheetVersion.EXCEL2007.getMaxColumns() : 
+				SpreadsheetVersion.EXCEL97.getMaxColumns()));
 	}
 	
+	/**
+	 * 检查sheet的行列索引是否在有效范围内
+	 * @param row 行索引
+	 * @param col 列索引
+	 * @return true:是;  false:否
+	 */
 	private boolean _inRange(int row, int col) {
 		return (row >= 0 && row < MAX_ROW() && col >= 0 && col < MAX_COL());
 	}
 	
-	private Row _createRow(int rowIdx) {
-		Row row = sheet.getRow(rowIdx);
-		if (row == null) {
-			row = sheet.createRow(rowIdx);
+	/**
+	 * 创建行
+	 * @param row 行索引（从0开始）
+	 * @return 创建失败返回null
+	 */
+	private Row _createRow(int row) {
+		Row _row = _getRow(row);
+		if (_row == null) {
+			_row = sheet.createRow(row);
 		}
-		return row;
+		return _row;
 	}
 	
-	private Cell _createCell(int rowIdx, int colIdx) {
+	/**
+	 * 获取行
+	 * @param row 行索引（从0开始）
+	 * @return 获取失败返回null
+	 */
+	private Row _getRow(int row) {
+		return sheet.getRow(row);
+	}
+	
+	/**
+	 * 创建单元格
+	 * @param row 行索引（从0开始）
+	 * @param col 列索引（从0开始）
+	 * @return 创建失败返回null
+	 */
+	private Cell _createCell(int row, int col) {
 		Cell cell = null;
-		Row row = _createRow(rowIdx);
-		if(row != null) {
-			cell = row.getCell(colIdx);
+		Row _row = _createRow(row);
+		if(_row != null) {
+			cell = _row.getCell(col);
 			if (cell == null) {
-				cell = row.createCell(colIdx);
+				cell = _row.createCell(col);
 			}
 		}
 		return cell;
 	}
 	
 	/**
-	 * 
-	 * @param rowIdx 行索引(从0开始)
-	 * @param colIdx 列索引(从0开始)
-	 * @return
+	 * 获取单元格
+	 * @param row 行索引（从0开始）
+	 * @param col 列索引（从0开始）
+	 * @return 获取失败返回null
 	 */
-	private Cell _getCell(int rowIdx, int colIdx) {
+	private Cell _getCell(int row, int col) {
 		Cell cell = null;
-		Row row = sheet.getRow(rowIdx);
-		if (row != null) {
-			cell = row.getCell(colIdx);
+		Row _row = sheet.getRow(row);
+		if (_row != null) {
+			cell = _row.getCell(col);
 		}
 		return cell;
 	}
 	
+	/**
+	 * 获取单元格值
+	 * @param row 行索引（从0开始）
+	 * @param col 列索引（从0开始）
+	 * @return 无值或异常返回null
+	 */
 	public Object getVal(int row, int col) {
 		if(isNull() || !_inRange(row, col)) {
 			return null;
@@ -87,6 +149,12 @@ public class Sheet {
 		return _getVal(row, col);
 	}
 	
+	/**
+	 * 获取单元格值
+	 * @param row 行索引（从0开始）
+	 * @param col 列索引（从0开始）
+	 * @return 无值或异常返回null
+	 */
 	private Object _getVal(int row, int col) {
 		Cell cell = _getCell(row, col);
 		if (cell == null) {
@@ -101,6 +169,12 @@ public class Sheet {
 		return _getVal(cell, valType);
 	}
 
+	/**
+	 * 获取单元格值
+	 * @param cell 单元格对象
+	 * @param valType 值类型
+	 * @return 无值或异常返回null
+	 */
 	private Object _getVal(Cell cell, int valType) {
 		Object val = null;
 		switch (valType) {
@@ -141,6 +215,13 @@ public class Sheet {
 		return val;
 	}
 	
+	/**
+	 * 设置单元格值
+	 * @param row 行索引（从0开始）
+	 * @param col 列索引（从0开始）
+	 * @param val 单元格值
+	 * @return true:设置成功; false:设置失败
+	 */
 	public boolean setVal(int row, int col, Object val) {
 		if(isNull() || !_inRange(row, col)) {
 			return false;
@@ -148,6 +229,13 @@ public class Sheet {
 		return _setVal(row, col, val);
 	}
 	
+	/**
+	 * 设置单元格值
+	 * @param row 行索引（从0开始）
+	 * @param col 列索引（从0开始）
+	 * @param val 单元格值
+	 * @return true:设置成功; false:设置失败
+	 */
 	private boolean _setVal(int row, int col, Object val) {
 		Cell cell = _createCell(row, col);
 		if(cell == null) {
@@ -176,6 +264,14 @@ public class Sheet {
 		return true;
 	}
 	
+	/**
+	 * 设置单元格超链接
+	 * @param row 行索引（从0开始）
+	 * @param col 列索引（从0开始）
+	 * @param val 单元格值
+	 * @param url 超链接地址
+	 * @return true:设置成功; false:设置失败
+	 */
 	public boolean setHyperlink(int row, int col, String val, String url) {
 		if(isNull() || !_inRange(row, col)) {
 			return false;
@@ -195,26 +291,26 @@ public class Sheet {
 		return true;
 	}
 	
-	public void setStyle(int row, CellStyle style) {
-		if(!isNull() && _inRange(row, 0)) {
-			_createRow(row).setRowStyle(style);
-		}
-	}
-	
-	public void setStyle(int row, int col, CellStyle style) {
-		if(!isNull() && _inRange(row, col)) {
-			_createCell(row, col).setCellStyle(style);
-		}
-	}
-	
-	public List<List<Object>> getAllDatas(int bgnRow, int endRow) {
+	/**
+	 * 获取Sheet页所有数据
+	 * @return List<List<Object>> (不会返回null)
+	 */
+	public List<List<Object>> getAllDatas() {
 		List<List<Object>> tableDatas = new ArrayList<List<Object>>(2);
 		if(isNull() == false) {
-			tableDatas = getRowDatas(0, sheet.getLastRowNum());
+			tableDatas = getRowDatas(0, getCurRowNum());
 		}
 		return tableDatas;
 	}
 	
+	/**
+	 * 获取指定范围内的数据
+	 * @param bgnRow 起始行索引（从0开始）
+	 * @param bgnCol 起始列索引（从0开始）
+	 * @param endRow 结束行索引（从0开始）
+	 * @param endCol 结束列索引（从0开始）
+	 * @return List<List<Object>> (不会返回null)
+	 */
 	public List<List<Object>> getRangeDatas(
 			int bgnRow, int bgnCol, int endRow, int endCol) {
 		List<List<Object>> tableDatas = new ArrayList<List<Object>>(2);
@@ -234,6 +330,12 @@ public class Sheet {
 		return tableDatas;
 	}
 	
+	/**
+	 * 获取指定行范围的数据
+	 * @param bgnRow 起始行索引（从0开始）
+	 * @param endRow 结束行索引（从0开始）
+	 * @return List<List<Object>> (不会返回null)
+	 */
 	public List<List<Object>> getRowDatas(int bgnRow, int endRow) {
 		List<List<Object>> tableDatas = new ArrayList<List<Object>>(2);
 		if(isNull() || bgnRow > endRow || 
@@ -248,6 +350,11 @@ public class Sheet {
 		return tableDatas;
 	}
 	
+	/**
+	 * 获取指定行的数据
+	 * @param row 行索引（从0开始）
+	 * @return List<Object> (不会返回null)
+	 */
 	public List<Object> getRowDatas(int row) {
 		List<Object> rowDatas = new ArrayList<Object>(2);
 		if(isNull() || !_inRange(row, 0)) {
@@ -256,6 +363,11 @@ public class Sheet {
 		return _getRowDatas(row);
 	}
 	
+	/**
+	 * 获取指定行的数据
+	 * @param row 行索引（从0开始）
+	 * @return List<Object> (不会返回null)
+	 */
 	private List<Object> _getRowDatas(int row) {
 		List<Object> rowDatas = new ArrayList<Object>(2);
 		Row _row = _createRow(row);
@@ -269,10 +381,28 @@ public class Sheet {
 		return rowDatas;
 	}
 	
+	/**
+	 * <PRE>
+	 * 覆写Sheet页某个行列范围内的数据.
+	 * 	覆写范围与覆写数据的行列数相关.
+	 * </PRE>
+	 * @param datas 覆写数据
+	 * @return true:覆写成功; false:覆写失败
+	 */
 	public boolean setDatas(List<List<Object>> datas) {
 		return setDatas(datas, 0, 0);
 	}
 	
+	/**
+	 * <PRE>
+	 * 覆写Sheet页某个行列范围内的数据.
+	 * 	覆写范围与覆写数据的行列数相关.
+	 * </PRE>
+	 * @param datas 覆写数据
+	 * @param offsetRow 覆写操作的偏移行索引（即起始行，从0开始）
+	 * @param offsetCol 覆写操作的偏移列索引（即起始列，从0开始）
+	 * @return true:覆写成功; false:覆写失败
+	 */
 	public boolean setDatas(List<List<Object>> datas, int offsetRow, int offsetCol) {
 		if(isNull() || datas == null || 
 				!_inRange(datas.size() + offsetRow - 1, 0)) {
@@ -287,10 +417,29 @@ public class Sheet {
 		return isOk;
 	}
 	
+	/**
+	 * <PRE>
+	 * 覆写指定行的数据.
+	 * 	覆写列范围与覆写数据的长度相关.
+	 * </PRE>
+	 * @param rowDatas 行数据
+	 * @param row 行索引（从0开始）
+	 * @return true:覆写成功; false:覆写失败
+	 */
 	public boolean setRowDatas(List<Object> rowDatas, int row) {
-		return setRowDatas(rowDatas, 0);
+		return setRowDatas(rowDatas, row, 0);
 	}
 	
+	/**
+	 * <PRE>
+	 * 覆写指定行的数据.
+	 * 	覆写列范围与覆写数据的长度相关.
+	 * </PRE>
+	 * @param rowDatas 行数据
+	 * @param row 行索引（从0开始）
+	 * @param offsetCol 覆写操作的偏移列索引（即起始列，从0开始）
+	 * @return true:覆写成功; false:覆写失败
+	 */
 	public boolean setRowDatas(List<Object> rowDatas, int row, int offsetCol) {
 		if(isNull() || rowDatas == null || 
 				!_inRange(row, rowDatas.size() + offsetCol - 1)) {
@@ -305,10 +454,128 @@ public class Sheet {
 		return isOk;
 	}
 	
-	public boolean isNull() {
-		return (sheet == null);
+	/**
+	 * 在Sheet页末尾添加行
+	 * @param rowDatas 行数据
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean addRowDatas(List<Object> rowDatas) {
+		return addRowDatas(rowDatas, 0);
 	}
-
+	
+	/**
+	 * 在Sheet页末尾添加行
+	 * @param rowDatas 行数据
+	 * @param offsetCol 添加操作的偏移列索引（即起始列，从0开始）
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean addRowDatas(List<Object> rowDatas, int offsetCol) {
+		return setRowDatas(rowDatas, getCurRowNum() + 1, offsetCol);
+	}
+	
+	/**
+	 * <PRE>
+	 * 设置表头(默认在Sheet页的第一行).
+	 * </PRE>
+	 * @param header 表头列表
+	 * @return true:设置成功; false:设置失败
+	 */
+	public boolean setHeader(List<String> header) {
+		if(isNull() || header == null) {
+			return false;
+		}
+		
+		boolean isOk = true;
+		for(int size = header.size(), col = 0; col < size; col++) {
+			String val = header.get(col);
+			isOk &= _setVal(0, col, val);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 设置Sheet页所有单元格格式
+	 * @param style 单元格格式
+	 */
+	public void setStyle(CellStyle style) {
+		if(!isNull()) {
+			for(int row = 0; row < getCurRowNum(); row++) {
+				Row _row = _getRow(row);
+				if(_row != null) {
+					_row.setRowStyle(style);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 设置指定行的所有单元格格式
+	 * @param row 行索引（从0开始）
+	 * @param style 单元格格式
+	 */
+	public void setStyle(int row, CellStyle style) {
+		if(!isNull() && _inRange(row, 0)) {
+			Row _row = _createRow(row);
+			if(_row != null) {
+				_row.setRowStyle(style);
+			}
+		}
+	}
+	
+	/**
+	 * 设置单元格格式
+	 * @param row 行索引（从0开始）
+	 * @param col 列索引（从0开始）
+	 * @param style 单元格格式
+	 */
+	public void setStyle(int row, int col, CellStyle style) {
+		if(!isNull() && _inRange(row, col)) {
+			_createCell(row, col).setCellStyle(style);
+		}
+	}
+	
+	/**
+	 * 清空行数据（但不删除行）
+	 * @param row 行索引（从0开始）
+	 * @return
+	 */
+	public boolean clrRow(int row) {
+		if(isNull() == true) {
+			return false;
+		}
+		
+		_clearRow(row);
+		return true;
+	}
+	
+	public boolean delRow(int row) {
+		if(isNull() == true) {
+			return false;
+		}
+		
+		_clearRow(row);	// 删除行数据
+		_shiftRow(row);	// 删除行的下面所有行上移一行
+		return true;
+	}
+	
+	private void _clearRow(int row) {
+		Row _row = _getRow(row);
+		if (_row != null) {
+			sheet.removeRow(_row);
+		}
+	}
+	
+	private void _shiftRow(int delRow) {
+		int bgnRow = delRow + 1;		// 移动的开始行号, 此处为删除行的下一行
+		int endRow = getCurRowNum();	// 移动的结束的行号, 此处为最后一行
+		int shiftCnt = (endRow - bgnRow + 1) * -1;	// 移动的行数(正数向下移动, 负数向上移动)
+		sheet.shiftRows(bgnRow, endRow, shiftCnt);
+	}
+	
+	public int getCurRowNum() {
+		return (isNull() ? 0 : sheet.getLastRowNum());
+	}
+	
 	/**
 	 * 清空sheet页内容
 	 */
@@ -317,12 +584,14 @@ public class Sheet {
 			return;
 		}
 		
-		for(int i = sheet.getLastRowNum(); i >= 0; i--) {
-			Row row = sheet.getRow(i);
-			if (row != null) {
-				sheet.removeRow(row);
-			}
+		for(int i = getCurRowNum(); i >= 0; i--) {
+			_clearRow(i);
 		}
 	}
+	
+	public boolean isNull() {
+		return (sheet == null);
+	}
+
 	
 }

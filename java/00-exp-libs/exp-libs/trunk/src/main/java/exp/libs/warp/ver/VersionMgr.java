@@ -18,7 +18,7 @@ import exp.libs.warp.ui.BeautyEyeUtils;
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
+ * @version   1.0 2017-08-22
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
