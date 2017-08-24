@@ -4,7 +4,7 @@
 package ${package}._demo;
 
 import exp.libs.envm.Charset;
-import exp.libs.utils.StrUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
 import exp.libs.warp.db.sql.bean.DataSourceBean;

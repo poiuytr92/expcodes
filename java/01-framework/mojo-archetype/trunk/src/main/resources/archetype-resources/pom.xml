@@ -19,8 +19,8 @@
 
 	<!--项目的问题管理系统(可选)-->
 	<issueManagement>
-		<system>JIAR</system>
-		<url>http://null</url>
+		<system>EXPLIBS-API-ONLINE</system>
+		<url>https://lyy289065406.github.io/api-online/</url>
 	</issueManagement>
 	
 	<!--项目的问题追踪系统(可选)-->
