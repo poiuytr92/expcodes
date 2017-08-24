@@ -11,7 +11,7 @@ import exp.libs.warp.cep.fun.BaseFunctionN;
 /**
  * <pre>
  * 自定函数：
- * 	获取当前系统时间
+ * 	获取年份
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
