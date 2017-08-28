@@ -163,9 +163,11 @@ class _TranslateSData extends Thread {
 	 */
 	private void recv() {
 		try {
-			long bgnTime = System.currentTimeMillis();
+			long curTime = System.currentTimeMillis();
 			OutputStream out = src.getOutputStream();
 			while(!src.isClosed()) {
+				
+				// 等待文件
 				String recvFilePath = _getRecvFilePath();
 				if(StrUtils.isEmpty(recvFilePath)) {
 					if(overtime <= 0) {
@@ -173,17 +175,27 @@ class _TranslateSData extends Thread {
 						
 					} else {
 						ThreadUtils.tSleep(_Envm.SCAN_FILE_INTERVAL);
-						if(System.currentTimeMillis() - bgnTime >= overtime) {
+						if(System.currentTimeMillis() - curTime >= overtime) {
 							throw new SocketTimeoutException("超时无数据交互");
 						}
 						continue;
 					}
 				}
 				
+				// 等待文件数据（文件已生成、但数据可能未写入到文件）
+				curTime = System.currentTimeMillis();
 				File in = new File(recvFilePath);
-				String data = FileUtils.read(in, Charset.ISO);
-				byte[] buffer = _SRFileMgr.decode(data);
+				String data = "";
+				do {
+					data = FileUtils.read(in, Charset.ISO);
+					ThreadUtils.tSleep(_Envm.WAIT_DATA_INTERVAL);
+					if(System.currentTimeMillis() - curTime >= overtime) {
+						throw new SocketTimeoutException("等待文件数据完成传输超时");
+					}
+				} while(StrUtils.isEmpty(data));
 				
+				// 解析文件数据转送到socket通道
+				byte[] buffer = _SRFileMgr.decode(data);
 				for(int offset = 0, len = 0; offset < buffer.length; offset += len) {
 					len = buffer.length - offset;
 					len = (len > _Envm.IO_BUFF ? _Envm.IO_BUFF : len);
@@ -191,8 +203,9 @@ class _TranslateSData extends Thread {
 					out.flush();
 				}
 				
+				// 删除文件
 				FileUtils.delete(recvFilePath);
-				bgnTime = System.currentTimeMillis();
+				curTime = System.currentTimeMillis();
 			}
 		} catch (SocketTimeoutException e) {
 			log.warn("Socket会话 [{}] 的{}转发通道超过 [{}ms] 无数据交互, 通道自动关闭", 

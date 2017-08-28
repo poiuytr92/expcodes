@@ -10,10 +10,13 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.singularsys.jep.Jep;
-import com.singularsys.jep.JepException;
 import com.singularsys.jep.functions.PostfixMathCommand;
 
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.cep.fun.impl.cast._Date;
 import exp.libs.warp.cep.fun.impl.cast._Double;
 import exp.libs.warp.cep.fun.impl.cast._Int;
@@ -74,6 +77,8 @@ import exp.libs.warp.cep.fun.impl.time.Sec2Date;
  */
 public final class CEPUtils {
 
+	private final static Logger log = LoggerFactory.getLogger(CEPUtils.class);
+	
 	/**
 	 * 声明变量失败提示关键字
 	 */
@@ -162,15 +167,13 @@ public final class CEPUtils {
 	 * 
 	 * @param variableName 变量名称
 	 * @param value 变量值
-	 * @throws Exception 声明变量失败,关键字取值 DECLARE_VARIABLE_ERROR
 	 */
-	public static void declare(String variableName, Object value) 
-			throws Exception {
+	public static void declare(String variableName, Object value) {
 		try {
 			jep.addVariable(getVarCallName(variableName), value);
 			
-		} catch (JepException e) {
-			throw new Exception(DECLARE_VARIABLE_ERROR + variableName, e);
+		} catch (Exception e) {
+			log.error(DECLARE_VARIABLE_ERROR.concat("{}"), variableName, e);
 		}
 	}
 	
@@ -192,15 +195,14 @@ public final class CEPUtils {
 	 * @return 
 	 * 	解析正常且表达式合法:返回结果值(一般为Double类型,除非计算失败).
 	 * 	解析正常但表达式非法：如除0, 返回Infinity。
-	 * @throws Exception 解析表达式失败,关键字取值 PARSE_EXPRESSION_ERROR
 	 */
-	public static Object eval(String expression) throws Exception {
+	public static Object eval(String expression) {
 		Object result = ERROR_RESULT;
 		try {
 			result = evaluate(expression);
 			
-		} catch (JepException e) {
-			throw new Exception(PARSE_EXPRESSION_ERROR + expression, e);
+		} catch (Exception e) {
+			log.error(PARSE_EXPRESSION_ERROR.concat("{}"), expression, e);
 		}
 		return result;
 	}
@@ -212,10 +214,8 @@ public final class CEPUtils {
 	 * 
 	 * @param customFunctionName 注册函数名称，调用时依赖此名称
 	 * @param clazzPath 自定义函数的类路径，如： foo.bar.util.expression.functions.xxx
-	 * @throws Exception 注册自定义函数失败,关键字取值 REGISTER_FUNCTION_ERROR
 	 */
-	public static void register(String customFunctionName, 
-			String clazzPath) throws Exception {
+	public static void register(String customFunctionName, String clazzPath) {
 		try {
 			PostfixMathCommand funInstn = 
 					(PostfixMathCommand) Class.forName(clazzPath).newInstance();
@@ -223,8 +223,7 @@ public final class CEPUtils {
 			customFunNames.add(customFunctionName);
 			
 		} catch (Exception e) {
-			throw new Exception(REGISTER_FUNCTION_ERROR + 
-					customFunctionName, e);
+			log.error(REGISTER_FUNCTION_ERROR.concat("{}"), customFunctionName, e);
 		}
 	}
 	
@@ -233,10 +232,9 @@ public final class CEPUtils {
 	 * 当调用单个函数时,若发现函数未注册,则尝试自动注册.
 	 * 
 	 * @param functionName 需要注册的函数名称
-	 * @throws Exception  注册函数失败,关键字取值 REGISTER_FUNCTION_ERROR
 	 * @return true:注册成功; false:注册失败
 	 */
-	private static boolean autoRegister(String functionName) throws Exception  {
+	private static boolean autoRegister(String functionName) {
 		boolean isRegister = false;
 		String funClassPath = allFunsMap.get(functionName);
 		
@@ -264,10 +262,8 @@ public final class CEPUtils {
 	 * @param functionName 函数名称.注册时用的名称
 	 * @param params 函数参数,支持传入变量
 	 * @return 执行结果
-	 * @throws Exception 解析函数失败,关键字取值 PARSE_EXPRESSION_ERROR
 	 */
-	public static Object call(String functionName, Object[] params) 
-			throws Exception {
+	public static Object call(String functionName, Object[] params) {
 		List<Object> paramList = new ArrayList<Object>();
 		if(params != null) {
 			paramList = Arrays.asList(params);
@@ -285,22 +281,18 @@ public final class CEPUtils {
 	 * @param functionName 函数名称.注册时用的名称
 	 * @param params 函数参数,支持传入变量
 	 * @return 执行结果
-	 * @throws Exception 解析函数失败,关键字取值 PARSE_EXPRESSION_ERROR
 	 */
-	public static Object call(String functionName, List<Object> params) 
-			throws Exception {
+	public static Object call(String functionName, List<Object> params) {
 		Object result = ERROR_RESULT;
 		if(params == null) {
 			params = new ArrayList<Object>();
 		}
 			
 		//当函数未注册时,尝试自动注册
-		if(checkRegister(functionName) == false) {
-			if(false == autoRegister(functionName)) {
-				throw new Exception(REGISTER_FUNCTION_ERROR + 
-						"The function [" + functionName + 
-						"] has not been registered.");
-			}
+		if(!checkRegister(functionName) && !autoRegister(functionName)) {
+			log.error(REGISTER_FUNCTION_ERROR.concat(
+					"The function [{}] has not been registered."), functionName);
+			return ERROR_RESULT;
 		}
 		
 		//构造函数表达式
@@ -341,14 +333,14 @@ public final class CEPUtils {
 	 * 
 	 * @param funExpression 完整的函数表达式,支持嵌套调用.
 	 * @return 执行结果
-	 * @throws Exception 解析函数失败,关键字取值 PARSE_EXPRESSION_ERROR
 	 */
-	public static Object call(String funExpression) throws Exception {
+	public static Object call(String funExpression) {
 		Object result = ERROR_RESULT;
 		try {
 			result = evaluate(funExpression);
 		
 		} catch (Exception e) {
+			String errMsg = PARSE_EXPRESSION_ERROR.concat(funExpression);
 			
 			//检查最外层函数是否已注册
 			Pattern ptn = Pattern.compile("^([^\\(]+)\\(.*$");
@@ -356,12 +348,11 @@ public final class CEPUtils {
 			if(mth.find()) {
 				String functionName = mth.group(1);
 				if(checkRegister(functionName) == false) {
-					throw new Exception(REGISTER_FUNCTION_ERROR + 
-							"The function [" + functionName + 
-							"] has not been registered.");
+					errMsg = StrUtils.concat(REGISTER_FUNCTION_ERROR, 
+							"The function [", functionName, "] has not been registered.");
 				}
 			}
-			throw new Exception(PARSE_EXPRESSION_ERROR + funExpression, e);
+			log.error(errMsg, e);
 		}
 		return result;
 	}

@@ -33,9 +33,6 @@ class _Config implements IConfig {
 	
 	private final static XNode NULL_XNODE = new XNode(null);
 	
-	private final String REGEX = StrUtils.concat(
-			XNode.ID_SPLIT, "[^", XNode.PATH_SPLIT, "]+$");
-	
 	/**
 	 * 依序记录所加载过的配置文件.
 	 *  其中 单个元素为  String[2] { filePath, 文件类型:DISK|JAR }
@@ -147,6 +144,11 @@ class _Config implements IConfig {
 	
 	@SuppressWarnings("unchecked")
 	private void createPathTree(Element root) {
+		final String REGEX_LASTID = StrUtils.concat(XNode.ID_SPLIT, "[^", 
+				XNode.ID_SPLIT, XNode.PATH_SPLIT, "]*$");
+		final String REGEX_ALLID = StrUtils.concat(XNode.ID_SPLIT, "[^", 
+				XNode.ID_SPLIT, XNode.PATH_SPLIT, "]*");
+		
 		List<Element> bfsQueue = new ArrayList<Element>();
 		bfsQueue.add(root);
 		int head = 0;
@@ -169,6 +171,8 @@ class _Config implements IConfig {
 						xNode.getEName(), XNode.ID_SPLIT, xNode.getId());
 				namePath.put(eNameId, xNode.getEPath());
 			}
+			namePath.put(xNode.getEPath().replaceFirst(REGEX_LASTID, ""), xNode.getEPath());
+			namePath.put(xNode.getEPath().replaceAll(REGEX_ALLID, ""), xNode.getEPath());
 			
 			// 更新BFS队列
 			Iterator<Element> childs = element.elementIterator();
@@ -194,6 +198,11 @@ class _Config implements IConfig {
 					StrUtils.concat(ePath, XNode.ID_SPLIT, eId);
 			}
 			xNode = pathTree.get(ePath);
+			
+			if(xNode == null && eNameOrPath.contains(XNode.PATH_SPLIT)) {
+				ePath = getEPath(eNameOrPath, eId);
+				xNode = pathTree.get(ePath);
+			}
 		}
 		return (xNode == null ? NULL_XNODE : xNode);
 	}
@@ -212,6 +221,9 @@ class _Config implements IConfig {
 		
 		// 一般不会触发此逻辑，除非是无效的 eName
 		if(StrUtils.isEmpty(ePath)) {
+			final String REGEX = StrUtils.concat(
+					XNode.ID_SPLIT, "[^", XNode.PATH_SPLIT, "]+$");
+			
 			Iterator<String> paths = pathIndex.iterator();
 			while(paths.hasNext()) {
 				String path = paths.next();

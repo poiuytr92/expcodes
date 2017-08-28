@@ -18,4 +18,5 @@ final class Version {
 	public static void main(String[] args) {
 		VersionMgr.exec(args);
 	}
+	
 }

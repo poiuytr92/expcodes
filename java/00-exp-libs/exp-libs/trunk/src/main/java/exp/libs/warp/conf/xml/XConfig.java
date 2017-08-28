@@ -17,6 +17,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 /**
  * <PRE>
  * XML文件配置器.
+ * =========================================================
  * 
  * 使用示例:
  * 	XConfig conf = XConfigFactory.createConfig("CONF_NAME");
@@ -36,11 +37,29 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  *  List<String> enums = System.out.println(conf.getEnumVals("datasource", "WXP");
  *  Map<String, Element> enums = conf.getChildElements("config/bases/base", "ws");
  *  Map<String, Element> enums = conf.getChildElements("datasource@WXP");
- * </PRE>
+ * =========================================================
  * 
+ * 格式定义:
+ * &lt;root&gt;
+ *   &lt;tag&gt;789&lt;/tag&gt;
+ *   &lt;foo&gt;
+ *     &lt;bar id="a"&gt;
+ *       &lt;tag id="here"&gt;123&lt;/tag&gt;
+ *     &lt;/bar&gt;
+ *     &lt;bar id="b"&gt;
+ *       &lt;tag id="here"&gt;456&lt;/tag&gt;
+ *     &lt;/bar&gt;
+ *   &lt;/foo&gt;
+ * &lt;/root&gt;
+ * 标签名称格式: tag  (模糊名称查找，若存在同名标签则取随机值，若非唯一不建议使用)
+ * 标签名称格式: tag@here  (模糊路径精确名称查找，若存在同位置标签则取第一个, 若非唯一不建议使用, 此处取值为456)
+ * 标签路径格式: root/foo/bar@a/tag  (精确路径查找, 推荐使用，此处取值为123)
+ * 	【注：[@]后是标签中id属性的值】
+ * 
+ * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
+ * @version   1.0 2017-08-25
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -71,6 +90,10 @@ public class XConfig implements Runnable, IConfig {
 	
 	private byte[] rLock;
 	
+	/**
+	 * 构造函数
+	 * @param configName 配置器名称
+	 */
 	protected XConfig(String configName) {
 		this.configName = configName;
 		this.config = new _Config(configName);
@@ -85,14 +108,20 @@ public class XConfig implements Runnable, IConfig {
 	}
 	
 	/**
-	 * 刷新操作会对所加载过的配置文件依次重新加载.
+	 * <PRE>
+	 * 刷新配置文件(每60秒刷新一次).
+	 * 	刷新操作会对所加载过的配置文件依次重新加载.
+	 * <PRE>
 	 */
 	public void reflash() {
 		reflash(DEFAULT_REFLASH_TIME);
 	}
 	
 	/**
-	 * 刷新操作会对所加载过的配置文件依次重新加载.
+	 * <PRE>
+	 * 刷新配置文件.
+	 * 	刷新操作会对所加载过的配置文件依次重新加载.
+	 * <PRE>
 	 * @param timeMillis 刷新间隔
 	 */
 	public void reflash(long timeMillis) {
@@ -120,12 +149,18 @@ public class XConfig implements Runnable, IConfig {
 		}
 	}
 	
+	/**
+	 * 暂停刷新
+	 */
 	public void pause() {
 		isReflash = false;
 		ThreadUtils.tNotify(tLock);	// 退出限时阻塞， 进入无限阻塞状态
 		log.info("配置 [{}] 自动刷新被暂停.", configName);
 	}
 	
+	/**
+	 * 销毁配置（删除内存所有配置参数）
+	 */
 	public void destroy() {
 		isReflash = false;
 		isRun = false;
@@ -149,6 +184,9 @@ public class XConfig implements Runnable, IConfig {
 		}
 	}
 	
+	/**
+	 * 重载配置文件
+	 */
 	private void reload() {
 		log.info("配置 [{}] 开始重载文件...", configName);
 		if(config.getConfFiles() == null || config.getConfFiles().isEmpty()) {
@@ -193,31 +231,67 @@ public class XConfig implements Runnable, IConfig {
 		log.info("配置 [{}] 重载所有文件完成.", configName);
 	}
 	
+	/**
+	 * 获取配置加载器名称
+	 */
 	@Override
 	public String getConfigName() {
 		return configName;
 	}
 
+	/**
+	 * <PRE>
+	 * 加载多个配置文件.
+	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
+	 * </PRE>
+	 * @param confFilePaths 配置文件路径
+	 */
 	@Override
 	public boolean loadConfFiles(String[] confFilePaths) {
 		return config.loadConfFiles(confFilePaths);
 	}
 
+	/**
+	 * <PRE>
+	 * 加载配置文件.
+	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
+	 * </PRE>
+	 * @param confFilePath 配置文件路径
+	 */
 	@Override
 	public boolean loadConfFile(String confFilePath) {
 		return config.loadConfFile(confFilePath);
 	}
 
+	/**
+	 * <PRE>
+	 * 加载多个jar内配置文件.
+	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
+	 * </PRE>
+	 * @param confFilePaths 配置文件路径
+	 */
 	@Override
 	public boolean loadConfFilesInJar(String[] confFilePaths) {
 		return config.loadConfFilesInJar(confFilePaths);
 	}
 
+	/**
+	 * <PRE>
+	 * 加载jar内配置文件.
+	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
+	 * </PRE>
+	 * @param confFilePath 配置文件路径
+	 */
 	@Override
 	public boolean loadConfFileInJar(String confFilePath) {
 		return config.loadConfFileInJar(confFilePath);
 	}
 
+	/**
+	 * 获取Element对象.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若找不到对象则返回null
+	 */
 	@Override
 	public Element getElement(String eNameOrPath) {
 		Element e = null;
@@ -231,6 +305,12 @@ public class XConfig implements Runnable, IConfig {
 		return e;
 	}
 
+	/**
+	 * 获取Element对象.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若找不到对象则返回null
+	 */
 	@Override
 	public Element getElement(String eNameOrPath, String eId) {
 		Element e = null;
@@ -244,6 +324,11 @@ public class XConfig implements Runnable, IConfig {
 		return e;
 	}
 
+	/**
+	 * 获取String标签值(使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若标签无值则返回default属性值, 若default无值则返回"" (绝不返回null)
+	 */
 	@Override
 	public String getVal(String eNameOrPath) {
 		String val = null;
@@ -257,6 +342,12 @@ public class XConfig implements Runnable, IConfig {
 		return val;
 	}
 
+	/**
+	 * 获取String标签值(使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若标签无值则返回default属性值, 若default无值则返回"" (绝不返回null)
+	 */
 	@Override
 	public String getVal(String eNameOrPath, String eId) {
 		String val = null;
@@ -270,6 +361,11 @@ public class XConfig implements Runnable, IConfig {
 		return val;
 	}
 
+	/**
+	 * 获取int标签值(原值使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
+	 */
 	@Override
 	public int getInt(String eNameOrPath) {
 		int n = 0;
@@ -283,6 +379,12 @@ public class XConfig implements Runnable, IConfig {
 		return n;
 	}
 
+	/**
+	 * 获取int标签值(原值使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
+	 */
 	@Override
 	public int getInt(String eNameOrPath, String eId) {
 		int n = 0;
@@ -296,6 +398,11 @@ public class XConfig implements Runnable, IConfig {
 		return n;
 	}
 
+	/**
+	 * 获取long标签值(原值使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
+	 */
 	@Override
 	public long getLong(String eNameOrPath) {
 		long n = 0;
@@ -309,6 +416,12 @@ public class XConfig implements Runnable, IConfig {
 		return n;
 	}
 
+	/**
+	 * 获取long标签值(原值使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
+	 */
 	@Override
 	public long getLong(String eNameOrPath, String eId) {
 		long n = 0;
@@ -322,6 +435,11 @@ public class XConfig implements Runnable, IConfig {
 		return n;
 	}
 
+	/**
+	 * 获取bool标签值(原值使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回false
+	 */
 	@Override
 	public boolean getBool(String eNameOrPath) {
 		boolean bool = false;
@@ -335,6 +453,12 @@ public class XConfig implements Runnable, IConfig {
 		return bool;
 	}
 
+	/**
+	 * 获取bool标签值(原值使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回false
+	 */
 	@Override
 	public boolean getBool(String eNameOrPath, String eId) {
 		boolean bool = false;
@@ -348,6 +472,11 @@ public class XConfig implements Runnable, IConfig {
 		return bool;
 	}
 
+	/**
+	 * 获取枚举标签值列表(原值使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若标签无效则返回无元素的List<String> （绝不返回null）
+	 */
 	@Override
 	public List<String> getEnumVals(String eNameOrPath) {
 		List<String> enumVals = null;
@@ -361,6 +490,12 @@ public class XConfig implements Runnable, IConfig {
 		return enumVals;
 	}
 
+	/**
+	 * 获取枚举标签值列表(原值使用trim处理).
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若标签无效则返回无元素的List<String> （绝不返回null）
+	 */
 	@Override
 	public List<String> getEnumVals(String eNameOrPath, String eId) {
 		List<String> enumVals = null;
@@ -374,6 +509,11 @@ public class XConfig implements Runnable, IConfig {
 		return enumVals;
 	}
 
+	/**
+	 * 获取枚举标签对象列表.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若标签无效则返回无元素的List<Element> （绝不返回null）
+	 */
 	@Override
 	public List<Element> getEnum(String eNameOrPath) {
 		List<Element> envm = null;
@@ -387,6 +527,12 @@ public class XConfig implements Runnable, IConfig {
 		return envm;
 	}
 
+	/**
+	 * 获取枚举标签对象列表.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若标签无效则返回无元素的List<Element> （绝不返回null）
+	 */
 	@Override
 	public List<Element> getEnum(String eNameOrPath, String eId) {
 		List<Element> envm = null;
@@ -400,6 +546,11 @@ public class XConfig implements Runnable, IConfig {
 		return envm;
 	}
 
+	/**
+	 * 获取标签子对象.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若标签无效则返回无元素的Map<String, Element> （绝不返回null）
+	 */
 	@Override
 	public Map<String, Element> getChildElements(String eNameOrPath) {
 		Map<String, Element> childElements = null;
@@ -413,6 +564,12 @@ public class XConfig implements Runnable, IConfig {
 		return childElements;
 	}
 
+	/**
+	 * 获取标签子对象.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若标签无效则返回无元素的Map<String, Element> （绝不返回null）
+	 */
 	@Override
 	public Map<String, Element> getChildElements(String eNameOrPath, String eId) {
 		Map<String, Element> childElements = null;
@@ -426,6 +583,12 @@ public class XConfig implements Runnable, IConfig {
 		return childElements;
 	}
 
+	/**
+	 * 获取标签属性值.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param attributeName 标签的属性名
+	 * @return 若无效则返回"" （绝不返回null）
+	 */
 	@Override
 	public String getAttribute(String eNameOrPath, String attributeName) {
 		String attribute = null;
@@ -439,6 +602,13 @@ public class XConfig implements Runnable, IConfig {
 		return attribute;
 	}
 
+	/**
+	 * 获取标签属性值.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @param attributeName 标签的属性名
+	 * @return 若无效则返回"" （绝不返回null）
+	 */
 	@Override
 	public String getAttribute(String eNameOrPath, String eId, String attributeName) {
 		String attribute = null;
@@ -452,6 +622,11 @@ public class XConfig implements Runnable, IConfig {
 		return attribute;
 	}
 
+	/**
+	 * 获取标签属性表.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @return 若无效则返回无元素的Map<String, String> （绝不返回null）
+	 */
 	@Override
 	public Map<String, String> getAttributes(String eNameOrPath) {
 		Map<String, String> attributes = null;
@@ -465,6 +640,12 @@ public class XConfig implements Runnable, IConfig {
 		return attributes;
 	}
 
+	/**
+	 * 获取标签属性表.
+	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若无效则返回无元素的Map<String, String> （绝不返回null）
+	 */
 	@Override
 	public Map<String, String> getAttributes(String eNameOrPath, String eId) {
 		Map<String, String> attributes = null;
@@ -478,6 +659,11 @@ public class XConfig implements Runnable, IConfig {
 		return attributes;
 	}
 
+	/**
+	 * 获取固定格式配置对象 - 数据源.
+	 * @param dsId 数据源标签的id
+	 * @return 若无效则返回默认数据源对象 (绝对不返回null)
+	 */
 	@Override
 	public DataSourceBean getDataSourceBean(String dsId) {
 		DataSourceBean ds = null;
@@ -491,6 +677,12 @@ public class XConfig implements Runnable, IConfig {
 		return ds;
 	}
 
+	/**
+	 * 获取固定格式配置对象 - 数据源.
+	 * @param eNameOrPath 数据源对象的标签名称或标签路径
+	 * @param dsId 数据源标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若无效则返回默认数据源对象 (绝对不返回null)
+	 */
 	@Override
 	public DataSourceBean getDataSourceBean(String eNameOrPath, String dsId) {
 		DataSourceBean ds = null;
@@ -504,6 +696,11 @@ public class XConfig implements Runnable, IConfig {
 		return ds;
 	}
 
+	/**
+	 * 获取固定格式配置对象 - socket.
+	 * @param sockId socket标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若无效则返回默认socket对象 (绝对不返回null)
+	 */
 	@Override
 	public SocketBean getSocketBean(String sockId) {
 		SocketBean sb = null;
@@ -517,6 +714,12 @@ public class XConfig implements Runnable, IConfig {
 		return sb;
 	}
 
+	/**
+	 * 获取固定格式配置对象 - socket.
+	 * @param eNameOrPath socket对象的标签名称或标签路径
+	 * @param sockId socket标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若无效则返回默认socket对象 (绝对不返回null)
+	 */
 	@Override
 	public SocketBean getSocketBean(String eNameOrPath, String sockId) {
 		SocketBean sb = null;
@@ -530,6 +733,11 @@ public class XConfig implements Runnable, IConfig {
 		return sb;
 	}
 
+	/**
+	 * 获取固定格式配置对象 - jms.
+	 * @param jmsId jms标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若无效则返回默认jms对象 (绝对不返回null)
+	 */
 	@Override
 	public JmsBean getJmsBean(String jmsId) {
 		JmsBean jb = null;
@@ -543,6 +751,12 @@ public class XConfig implements Runnable, IConfig {
 		return jb;
 	}
 
+	/**
+	 * 获取固定格式配置对象 - jms.
+	 * @param eNameOrPath jms对象的标签名称或标签路径
+	 * @param jmsId jms标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @return 若无效则返回默认jms对象 (绝对不返回null)
+	 */
 	@Override
 	public JmsBean getJmsBean(String eNameOrPath, String jmsId) {
 		JmsBean jb = null;

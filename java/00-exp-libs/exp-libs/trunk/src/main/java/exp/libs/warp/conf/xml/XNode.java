@@ -6,17 +6,17 @@ import exp.libs.utils.other.StrUtils;
 
 final class XNode {
 
-	public final static String PATH_SPLIT = "/";
+	protected final static String PATH_SPLIT = "/";
 	
-	public final static String ID_SPLIT = "@";
+	protected final static String ID_SPLIT = "@";
 	
-	public final static String ATT_ID = "id";
+	protected final static String ATT_ID = "id";
 	
-	public final static String ATT_DEFAULT = "default";
+	protected final static String ATT_DEFAULT = "default";
 	
-	public final static String ATT_CAPTION = "caption";
+	protected final static String ATT_CAPTION = "caption";
 	
-	public final static String ATT_HINT = "hint";
+	protected final static String ATT_HINT = "hint";
 	
 	private Element element;
 	
@@ -34,7 +34,7 @@ final class XNode {
 	
 	private String val;
 	
-	public XNode(Element element) {
+	protected XNode(Element element) {
 		this.element = element;
 		this.ePath = getEPath(element);
 		
@@ -74,35 +74,35 @@ final class XNode {
 		return (val == null ? "" : val.trim());
 	}
 
-	public Element getElement() {
+	protected Element getElement() {
 		return element;
 	}
 
-	public String getEPath() {
+	protected String getEPath() {
 		return ePath;
 	}
 
-	public String getEName() {
+	protected String getEName() {
 		return eName;
 	}
 
-	public String getId() {
+	protected String getId() {
 		return id;
 	}
 
-	public String getDefault() {
+	protected String getDefault() {
 		return defavlt;
 	}
 
-	public String getCaption() {
+	protected String getCaption() {
 		return caption;
 	}
 
-	public String getHint() {
+	protected String getHint() {
 		return hint;
 	}
 
-	public String getVal() {
+	protected String getVal() {
 		return val;
 	}
 	

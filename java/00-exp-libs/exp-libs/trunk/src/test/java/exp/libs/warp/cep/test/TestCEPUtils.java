@@ -137,7 +137,7 @@ public class TestCEPUtils {
 		System.out.println("Now sec:" + sec);
 		Assert.assertEquals(nowDate.getTime(), sec);
 		
-		//试试用方式1调用，由于给定 Date 类型参数,因此会解析失败
+		//尝试用方式1调用，由于给定 Date 类型参数,因此会解析失败
 		try {
 			sec = CEPUtils.call(
 					"TimeToSecond", new Object[] {nowDate});	//这里传参是 Date
@@ -156,7 +156,7 @@ public class TestCEPUtils {
 	}
 	
 	/**
-	 * 当入参是字符串时，两种调用方式的区别 测试/样例
+	 * 当入参是常量字符串时，两种调用方式的区别 测试/样例
 	 */
 	@Test
 	public void testDiffStrCall() throws Exception {
@@ -174,7 +174,7 @@ public class TestCEPUtils {
 		System.out.println("trim:" + str);
 		Assert.assertEquals("abcd fg", str);
 		
-		//调用方式2：试试不加双引号
+		//调用方式2：尝试不加双引号
 		//jep会认为不存在变量"  abcd fg   "而解析失败报错
 		try {
 			CEPUtils.call("trim(  abcd fg   )");	
