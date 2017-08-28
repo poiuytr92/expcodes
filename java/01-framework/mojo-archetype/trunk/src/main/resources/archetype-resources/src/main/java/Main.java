@@ -10,10 +10,10 @@ import exp.libs.utils.other.LogUtils;
  * <PRE>
  * 程序入口
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2017-08-17
- * @author    EXP: 272629724@qq.com
+ * <B>PROJECT：</B> xxxxxx
+ * <B>SUPPORT：</B> xxxxxx
+ * @version   xxxxxx
+ * @author    xxxxxx
  * @since     jdk版本：jdk1.6
  */
 public class Main {
