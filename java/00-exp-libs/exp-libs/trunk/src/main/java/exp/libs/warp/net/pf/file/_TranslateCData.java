@@ -110,17 +110,9 @@ class _TranslateCData extends Thread {
 					}
 				}
 				
-				// 等待文件数据（文件已生成、但数据可能未写入到文件）
+				// 读取文件数据（文件已生成、但数据可能未写入到文件，需要确认数据已传输完毕）
 				curTime = System.currentTimeMillis();
-				File in = new File(sendFilePath);
-				String data = "";
-				do {
-					data = FileUtils.read(in, Charset.ISO);
-					ThreadUtils.tSleep(_Envm.WAIT_DATA_INTERVAL);
-					if(System.currentTimeMillis() - curTime >= overtime) {
-						throw new SocketTimeoutException("等待文件数据完成传输超时");
-					}
-				} while(StrUtils.isEmpty(data));
+				String data = _readDatas(sendFilePath, curTime);
 				
 				// 解析文件数据转送到socket通道
 				byte[] buffer = _SRFileMgr.decode(data);
@@ -145,6 +137,39 @@ class _TranslateCData extends Thread {
 		} finally {
 			close(snk);
 		}
+	}
+	
+	/**
+	 * 从文件中读取数据（至少读取2次，确保文件内的数据已传输完成）
+	 * @param filePath 文件路径
+	 * @param bgnTime 开始读取时间
+	 * @return 文件内容
+	 * @throws SocketTimeoutException 读取超时
+	 */
+	private String _readDatas(String filePath, long bgnTime) 
+			throws SocketTimeoutException {
+		File in = new File(filePath);
+		String data = "";
+		int dataSize = 0;
+		while(true) {
+			data = FileUtils.read(in, Charset.ISO);
+			int curSize = data.length();
+			if(curSize > 0 && dataSize == curSize) {
+				break;
+			}
+			dataSize = curSize;
+			
+			ThreadUtils.tSleep(_Envm.WAIT_DATA_INTERVAL);
+			if(System.currentTimeMillis() - bgnTime >= overtime) {
+				throw new SocketTimeoutException("等待文件数据完成传输超时");
+			}
+		}
+		
+		// 若文件内容是连接标识, 则认为文件内容为空（仅socket会话创建连接）
+		if(_Envm.MARK_CONN.equals(data)) {
+			data = "";
+		}
+		return data;
 	}
 	
 	/**

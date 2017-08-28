@@ -88,13 +88,13 @@ class _TranslateSData extends Thread {
 	}
 	
 	/**
-	 * 通过创建一个无数据的空文件, 通知对侧与真正的服务端口建立socket连接.
+	 * 通过创建一个内容仅有 #conn# 标识的文件, 通知对侧与真正的服务端口建立socket连接.
 	 * 	(某些Socket连接需要先收到服务端响应才会触发客户端发送请求，
 	 * 	因此若不先创建连接获取响应，就会一直阻塞在本侧的read方法)
 	 */
 	private void conn() {
 		String emptyFilePath = _getSendFilePath();
-		FileUtils.createFile(emptyFilePath);
+		FileUtils.write(emptyFilePath, _Envm.MARK_CONN, Charset.ISO, false);
 	}
 	
 	/**
@@ -182,17 +182,9 @@ class _TranslateSData extends Thread {
 					}
 				}
 				
-				// 等待文件数据（文件已生成、但数据可能未写入到文件）
+				// 读取文件数据（文件已生成、但数据可能未写入到文件，需要确认数据已传输完毕）
 				curTime = System.currentTimeMillis();
-				File in = new File(recvFilePath);
-				String data = "";
-				do {
-					data = FileUtils.read(in, Charset.ISO);
-					ThreadUtils.tSleep(_Envm.WAIT_DATA_INTERVAL);
-					if(System.currentTimeMillis() - curTime >= overtime) {
-						throw new SocketTimeoutException("等待文件数据完成传输超时");
-					}
-				} while(StrUtils.isEmpty(data));
+				String data = _readDatas(recvFilePath, curTime);
 				
 				// 解析文件数据转送到socket通道
 				byte[] buffer = _SRFileMgr.decode(data);
@@ -234,6 +226,38 @@ class _TranslateSData extends Thread {
 		return recvFilePath;
 	}
 	
+	/**
+	 * 从文件中读取数据（至少读取2次，确保文件内的数据已传输完成）
+	 * @param filePath 文件路径
+	 * @param bgnTime 开始读取时间
+	 * @return 文件内容
+	 * @throws SocketTimeoutException 读取超时
+	 */
+	private String _readDatas(String filePath, long bgnTime) 
+			throws SocketTimeoutException {
+		File in = new File(filePath);
+		String data = "";
+		int dataSize = 0;
+		while(true) {
+			data = FileUtils.read(in, Charset.ISO);
+			int curSize = data.length();
+			if(curSize > 0 && dataSize == curSize) {
+				break;
+			}
+			dataSize = curSize;
+			
+			ThreadUtils.tSleep(_Envm.WAIT_DATA_INTERVAL);
+			if(System.currentTimeMillis() - bgnTime >= overtime) {
+				throw new SocketTimeoutException("等待文件数据完成传输超时");
+			}
+		}
+		return data;
+	}
+	
+	/**
+	 * 关闭socket通道
+	 * @param socket
+	 */
 	private void _close(Socket socket) {
 		try {
 			socket.close();

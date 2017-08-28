@@ -89,15 +89,15 @@ class _FPFClient extends LoopThread {
 		}
 		
 		String sendFilePath = PathUtils.combine(srFileMgr.getRecvDir(), sendFileName);
-		List<String> datas = RegexUtils.findGroups(sendFilePath, REGEX);
-		if(datas.isEmpty()) {
+		List<String> features = RegexUtils.findGroups(sendFilePath, REGEX);
+		if(features.isEmpty()) {
 			FileUtils.delete(sendFilePath);
 			log.warn("无效的数据流文件 [{}], 直接删除", sendFilePath);
 			
 		} else {
-			String sessionId = datas.get(IDX_SID);
-			String ip = datas.get(IDX_IP);
-			int port = NumUtils.toInt(datas.get(IDX_PORT), 0);
+			String sessionId = features.get(IDX_SID);
+			String ip = features.get(IDX_IP);
+			int port = NumUtils.toInt(features.get(IDX_PORT), 0);
 			
 			PCQueue<String> sendList = sendFiles.get(sessionId);
 			SocketClient session = sessions.get(sessionId);

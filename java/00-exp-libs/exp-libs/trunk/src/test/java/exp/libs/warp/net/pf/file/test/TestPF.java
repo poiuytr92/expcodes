@@ -17,7 +17,7 @@ public class TestPF {
 		ds.setDriver(DBType.MYSQL.DRIVER);
 		ds.setCharset(Charset.UTF8);
 		ds.setIp("172.168.10.26");
-		ds.setPort(9999);
+		ds.setPort(9998);
 //		ds.setIp("172.168.10.63");
 //		ds.setPort(3306);
 		ds.setName("mstp_zte_2");

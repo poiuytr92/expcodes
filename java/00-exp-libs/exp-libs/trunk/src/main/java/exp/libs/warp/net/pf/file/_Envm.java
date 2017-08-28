@@ -4,6 +4,9 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 
 final class _Envm {
 
+	/** 建立连接标识 */
+	protected final static String MARK_CONN = "#conn#";
+	
 	protected final static String PREFIX_SEND = "send";
 	
 	protected final static String PREFIX_RECV = "recv";
