@@ -463,15 +463,15 @@ class _Config implements IConfig {
 				ds.setPassword(XmlUtils.getChildValue(datasource, "password"));
 				ds.setName(XmlUtils.getChildValue(datasource, "name"));
 				ds.setCharset(XmlUtils.getChildValue(datasource, "charset"));
-				ds.setMaximumActiveTime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "maximum-active-time")));
+				ds.setMaximumActiveTime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "maximum-active-time"), -1));
 				ds.setHouseKeepingTestSql(XmlUtils.getChildValue(datasource, "house-keeping-test-sql"));
-				ds.setHouseKeepingSleepTime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "house-keeping-sleep-time")));
-				ds.setSimultaneousBuildThrottle(NumUtils.toInt(XmlUtils.getChildValue(datasource, "simultaneous-build-throttle")));
-				ds.setMaximumConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "maximum-connection-count")));
-				ds.setMinimumConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "minimum-connection-count")));
-				ds.setMaximumNewConnections(NumUtils.toInt(XmlUtils.getChildValue(datasource, "maximum-new-connections")));
-				ds.setPrototypeCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "prototype-count")));
-				ds.setMaximumConnectionLifetime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "maximum-connection-lifetime")));
+				ds.setHouseKeepingSleepTime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "house-keeping-sleep-time"), -1));
+				ds.setSimultaneousBuildThrottle(NumUtils.toInt(XmlUtils.getChildValue(datasource, "simultaneous-build-throttle"), -1));
+				ds.setMaximumConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "maximum-connection-count"), -1));
+				ds.setMinimumConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "minimum-connection-count"), -1));
+				ds.setMaximumNewConnections(NumUtils.toInt(XmlUtils.getChildValue(datasource, "maximum-new-connections"), -1));
+				ds.setPrototypeCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "prototype-count"), -1));
+				ds.setMaximumConnectionLifetime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "maximum-connection-lifetime"), -1));
 				ds.setTestBeforeUse(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "test-before-use"), true));
 				ds.setTestAfterUse(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "test-after-use"), false));
 				ds.setTrace(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "trace"), true));
@@ -500,14 +500,14 @@ class _Config implements IConfig {
 				sb.setCharset(XmlUtils.getChildValue(socket, "charset"));
 				sb.setReadCharset(XmlUtils.getChildValue(socket, "readCharset"));
 				sb.setWriteCharset(XmlUtils.getChildValue(socket, "writeCharset"));
-				sb.setBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "bufferSize")));
-				sb.setReadBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "readBufferSize")));
-				sb.setWriteBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "writeBufferSize")));
+				sb.setBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "bufferSize"), -1));
+				sb.setReadBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "readBufferSize"), -1));
+				sb.setWriteBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "writeBufferSize"), -1));
 				sb.setDelimiter(XmlUtils.getChildValue(socket, "delimiter"));
 				sb.setReadDelimiter(XmlUtils.getChildValue(socket, "readDelimiter"));
 				sb.setWriteDelimiter(XmlUtils.getChildValue(socket, "writeDelimiter"));
-				sb.setOvertime(NumUtils.toInt(XmlUtils.getChildValue(socket, "overtime")));
-				sb.setMaxConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(socket, "maxConnectionCount")));
+				sb.setOvertime(NumUtils.toInt(XmlUtils.getChildValue(socket, "overtime"), -1));
+				sb.setMaxConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(socket, "maxConnectionCount"), -1));
 				sb.setExitCmd(XmlUtils.getChildValue(socket, "exitCmd"));
 			}
 		}

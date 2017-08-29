@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
  */
 public class BoolUtils {
 
+	// TODO 布隆过滤器
+	
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(BoolUtils.class);
 	
