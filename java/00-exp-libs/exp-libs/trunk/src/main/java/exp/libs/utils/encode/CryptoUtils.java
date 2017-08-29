@@ -296,8 +296,9 @@ public class CryptoUtils {
 	 * @return
 	 */
 	private static byte[] zeroize(byte[] key) {
-		byte[] zKey = key; 
-		if(key == null || key.length < 8) {
+		key = (key == null ? new byte[0] : key);
+		byte[] zKey = key;
+		if(key.length < 8) {
 			zKey = new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
 			for(int i = 0; i < key.length; i++) {
 				zKey[i] = key[i];
