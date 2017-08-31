@@ -180,6 +180,7 @@ public class XConfig implements Runnable, _IConfig {
 		isRun = false;
 		ThreadUtils.tNotify(tLock);	// 退出阻塞态, 通过掉落陷阱终止线程
 		
+		nearValues.clear();
 		config.clear();
 		log.info("配置 [{}] 内容已销毁.", name);
 	}
