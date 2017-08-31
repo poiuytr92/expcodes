@@ -260,7 +260,7 @@ class _Config implements _IConfig {
 			ds.setMaximumNewConnections(NumUtils.toInt(xNode.getChildVal("maximum-new-connections"), -1));
 			ds.setPrototypeCount(NumUtils.toInt(xNode.getChildVal("prototype-count"), -1));
 			ds.setMaximumConnectionLifetime(NumUtils.toLong(xNode.getChildVal("maximum-connection-lifetime"), -1));
-			ds.setTestBeforeUse(BoolUtils.toBool(xNode.getChildVal("test-before-use"), true));
+			ds.setTestBeforeUse(BoolUtils.toBool(xNode.getChildVal("test-before-use"), false));
 			ds.setTestAfterUse(BoolUtils.toBool(xNode.getChildVal("test-after-use"), false));
 			ds.setTrace(BoolUtils.toBool(xNode.getChildVal("trace"), true));
 		}

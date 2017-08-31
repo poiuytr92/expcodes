@@ -119,7 +119,7 @@ public class DataSourceBean {
 	 */
 	private boolean testBeforeUse;
 	
-	private final static boolean DEFAULT_TEST_BEFORE_USE = true;
+	private final static boolean DEFAULT_TEST_BEFORE_USE = false;
 	
 	/**
 	 * 在连接使用后测试是否可用(回收到连接池复用).
