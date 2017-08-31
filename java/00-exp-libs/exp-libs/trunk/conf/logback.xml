@@ -36,7 +36,7 @@
    </appender>
    
 	<!-- 经验库日志 -->
-	<logger name="com.kt.explibs" level="info" additivity="true">
+	<logger name="exp.libs" level="info" additivity="true">
 		<appender-ref ref="exp-libs" />
 	</logger>
 	

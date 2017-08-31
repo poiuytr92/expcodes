@@ -369,4 +369,23 @@ public class SocketBean {
 		return sb.toString();
 	}
 
+	public SocketBean clone() {
+		SocketBean sb = new SocketBean();
+		sb.setId(getId());
+		sb.setIp(getIp());
+		sb.setPort(getPort());
+		sb.setUsername(getUsername());
+		sb.setPassword(getPassword());
+		sb.setReadCharset(getReadCharset());
+		sb.setWriteCharset(getWriteCharset());
+		sb.setReadBufferSize(getReadBufferSize());
+		sb.setWriteBufferSize(getWriteBufferSize());
+		sb.setReadDelimiter(getReadDelimiter());
+		sb.setWriteDelimiter(getWriteDelimiter());
+		sb.setOvertime(getOvertime());
+		sb.setMaxConnectionCount(getMaxConnectionCount());
+		sb.setExitCmd(getExitCmd());
+		return sb;
+	}
+	
 }

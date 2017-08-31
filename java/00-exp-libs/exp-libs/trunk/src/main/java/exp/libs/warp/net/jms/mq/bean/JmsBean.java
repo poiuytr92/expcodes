@@ -546,5 +546,10 @@ public class JmsBean {
 	public void setLongConnection(boolean longConnection) {
 		this.longConnection = longConnection;
 	}
+	
+	public JmsBean clone() {
+		// TODO
+		return this;
+	}
 
 }

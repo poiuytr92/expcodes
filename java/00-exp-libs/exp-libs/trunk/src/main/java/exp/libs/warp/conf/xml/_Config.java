@@ -1,14 +1,11 @@
 package exp.libs.warp.conf.xml;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Attribute;
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
@@ -26,503 +23,286 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;
 
-class _Config implements IConfig {
+class _Config implements _IConfig {
 
 	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(_Config.class);
 	
-	private final static XNode NULL_XNODE = new XNode(null);
+	private final static _XNode NULL_XNODE = new _XNode(null, null);
+	
+	/** 配置对象名称 */
+	protected String name;
 	
 	/**
 	 * 依序记录所加载过的配置文件.
-	 *  其中 单个元素为  String[2] { filePath, 文件类型:DISK|JAR }
+	 *  其中 单个元素为  String[2] { filxPath, 文件类型:DISK|JAR }
 	 */
 	protected List<String[]> confFiles; 
 	
-	/** 配置对象名称 */
-	protected String configName;
+	private _XTree xTree;
 	
-	/** 记录已查找过一次xNode对应的配置节点路径, 用于加速检索 */
-	private Map<String, String> namePath;
-	
-	/** 路径索引 */
-	private List<String> pathIndex;	
-	
-	/** 路径树 */
-	private Map<String, XNode> pathTree;
-	
-	protected _Config(String configName) {
-		this.configName = configName;
-		this.namePath = new HashMap<String, String>();
-		this.pathIndex = new LinkedList<String>();
-		this.pathTree = new HashMap<String, XNode>();
+	/**
+	 * 构造函数
+	 * @param configName 配置器名称
+	 */
+	protected _Config(String name) {
+		this.name = name;
 		this.confFiles = new LinkedList<String[]>();
+		this.xTree = new _XTree();
 	}
 	
 	@Override
-	public String getConfigName() {
-		return configName;
+	public String NAME() {
+		return name;
+	}
+	
+	protected void clear() {
+		confFiles.clear();
+		xTree.clear();
 	}
 	
 	@Override
-	public boolean loadConfFiles(String[] confFilePaths) {
-		if(confFilePaths == null) {
+	public boolean loadConfFiles(String[] confFilxPaths) {
+		if(confFilxPaths == null) {
 			return false;
 		}
 		
 		boolean isOk = true;
-		for(String confFilePath : confFilePaths) {
-			if(StrUtils.isNotEmpty(confFilePath)) {
-				isOk &= loadConfFile(confFilePath);
+		for(String confFilxPath : confFilxPaths) {
+			if(StrUtils.isNotEmpty(confFilxPath)) {
+				isOk &= loadConfFile(confFilxPath);
 			}
 		}
 		return isOk;
 	}
 
 	@Override
-	public boolean loadConfFile(String confFilePath) {
+	public boolean loadConfFile(String confFilxPath) {
 		boolean isOk = false;
-		if(confFilePath == null) {
+		if(confFilxPath == null) {
 			return isOk;
 		}
 		
 		try {
-			File confFile = new File(confFilePath);
+			File confFile = new File(confFilxPath);
 			String charset = XmlUtils.getCharset(confFile);
 			String xml = FileUtils.readFileToString(confFile, charset);
 			Document doc = DocumentHelper.parseText(xml);
 			Element root = doc.getRootElement();
-			createPathTree(root);
+			xTree.update(root);
 			
-			confFiles.add(new String[] { confFilePath, DISK_FILE });
+			confFiles.add(new String[] { confFilxPath, DISK_FILE });
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("加载文件失败: [{}].", confFilePath, e);
+			log.error("加载文件失败: [{}].", confFilxPath, e);
 		}
 		return isOk;
 	}
 	
 	@Override
-	public boolean loadConfFilesInJar(String[] confFilePaths) {
-		if(confFilePaths == null) {
+	public boolean loadConfFilesInJar(String[] confFilxPaths) {
+		if(confFilxPaths == null) {
 			return false;
 		}
 		
 		boolean isOk = true;
-		for(String confFilePath : confFilePaths) {
-			if(StrUtils.isNotEmpty(confFilePath)) {
-				isOk &= loadConfFileInJar(confFilePath);
+		for(String confFilxPath : confFilxPaths) {
+			if(StrUtils.isNotEmpty(confFilxPath)) {
+				isOk &= loadConfFileInJar(confFilxPath);
 			}
 		}
 		return isOk;
 	}
 	
 	@Override
-	public boolean loadConfFileInJar(String confFilePath) {
+	public boolean loadConfFileInJar(String confFilxPath) {
 		boolean isOk = false;
-		if(confFilePath == null) {
+		if(confFilxPath == null) {
 			return isOk;
 		}
 		
 		try {
-			String content = JarUtils.read(confFilePath, Charset.ISO);
+			String content = JarUtils.read(confFilxPath, Charset.ISO);
 			String charset = XmlUtils.getCharset(content);
-			String xml = JarUtils.read(confFilePath, charset);
+			String xml = JarUtils.read(confFilxPath, charset);
 			Document doc = DocumentHelper.parseText(xml);
 			Element root = doc.getRootElement();
-			createPathTree(root);
+			xTree.update(root);
 			
-			confFiles.add(new String[] { confFilePath, JAR_FILE });
+			confFiles.add(new String[] { confFilxPath, JAR_FILE });
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("加载文件失败: [{}].", confFilePath, e);
+			log.error("加载文件失败: [{}].", confFilxPath, e);
 		}
 		return isOk;
-	}
-	
-	@SuppressWarnings("unchecked")
-	private void createPathTree(Element root) {
-		final String REGEX_LASTID = StrUtils.concat(XNode.ID_SPLIT, "[^", 
-				XNode.ID_SPLIT, XNode.PATH_SPLIT, "]*$");
-		final String REGEX_ALLID = StrUtils.concat(XNode.ID_SPLIT, "[^", 
-				XNode.ID_SPLIT, XNode.PATH_SPLIT, "]*");
-		
-		List<Element> bfsQueue = new ArrayList<Element>();
-		bfsQueue.add(root);
-		int head = 0;
-		int tail = 0;
-		
-		while(head <= tail) {
-			Element element = bfsQueue.get(head);
-			XNode xNode = new XNode(element);
-			
-			// 更新路径树
-			if(pathTree.remove(xNode.getEPath()) == null) {
-				pathIndex.add(xNode.getEPath());
-			}
-			pathTree.put(xNode.getEPath(), xNode);
-			
-			// 更新名字索引，用于加速检索
-			namePath.put(xNode.getEName(), xNode.getEPath());
-			if(StrUtils.isEmpty(xNode.getId()) == false) {
-				String eNameId = StrUtils.concat(
-						xNode.getEName(), XNode.ID_SPLIT, xNode.getId());
-				namePath.put(eNameId, xNode.getEPath());
-			}
-			namePath.put(xNode.getEPath().replaceFirst(REGEX_LASTID, ""), xNode.getEPath());
-			namePath.put(xNode.getEPath().replaceAll(REGEX_ALLID, ""), xNode.getEPath());
-			
-			// 更新BFS队列
-			Iterator<Element> childs = element.elementIterator();
-			while(childs.hasNext()) {
-				bfsQueue.add(childs.next());
-				tail++;
-			}
-			
-			head++;
-		}
-	}
-	
-	private XNode getXNode(String eNameOrPath, String eId) {
-		XNode xNode = null;
-		
-		if(eNameOrPath != null) {
-			String ePath = eNameOrPath;
-			if(!eNameOrPath.contains(XNode.PATH_SPLIT)) {
-				ePath = getEPath(eNameOrPath, eId);
-				
-			} else {
-				ePath = StrUtils.isEmpty(eId) ? ePath : 
-					StrUtils.concat(ePath, XNode.ID_SPLIT, eId);
-			}
-			xNode = pathTree.get(ePath);
-			
-			if(xNode == null && eNameOrPath.contains(XNode.PATH_SPLIT)) {
-				ePath = getEPath(eNameOrPath, eId);
-				xNode = pathTree.get(ePath);
-			}
-		}
-		return (xNode == null ? NULL_XNODE : xNode);
-	}
-	
-	/**
-	 * 根据 eName 和 eId 检索对应的 ePath
-	 * 
-	 * @param eName
-	 * @param eId
-	 * @return
-	 */
-	private String getEPath(final String eName, final String eId) {
-		final String eNameId = StrUtils.isEmpty(eId) ? eName : 
-			StrUtils.concat(eName, XNode.ID_SPLIT, eId);
-		String ePath = namePath.get(eNameId);	// 避免重复检索
-		
-		// 一般不会触发此逻辑，除非是无效的 eName
-		if(StrUtils.isEmpty(ePath)) {
-			final String REGEX = StrUtils.concat(
-					XNode.ID_SPLIT, "[^", XNode.PATH_SPLIT, "]+$");
-			
-			Iterator<String> paths = pathIndex.iterator();
-			while(paths.hasNext()) {
-				String path = paths.next();
-				
-				if(path.endsWith(eNameId)) {
-					ePath = path;
-					break;
-					
-				} else if(StrUtils.isEmpty(eId)) {
-					path = path.replaceFirst(REGEX, "");
-					if(path.endsWith(eNameId)) {
-						ePath = path;
-						break;
-					}
-				}
-			}
-			
-			if(StrUtils.isEmpty(ePath) == false) {
-				namePath.put(eNameId, ePath);
-			}
-		}
-		return ePath;
 	}
 	
 	protected List<String[]> getConfFiles() {
 		return confFiles;
 	}
 	
-	public void clear() {
-		namePath.clear();
-		pathIndex.clear();
-		pathTree.clear();
-		confFiles.clear();
+	protected String toXPath(String eName, String xId) {
+		return xTree.toXPath(eName, xId);
 	}
-
-	@Override
-	public Element getElement(String eNameOrPath) {
-		return getElement(eNameOrPath, null);
+	
+	private _XNode findXNode(String xPath) {
+		_XNode node = xTree.findXNode(xPath);
+		return (node == null ? NULL_XNODE : node);
 	}
 	
 	@Override
-	public Element getElement(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		return xNode.getElement();
+	public String getVal(String xPath) {
+		_XNode xNode = findXNode(xPath);
+		return xNode.VAL();
 	}
 	
 	@Override
-	public String getVal(String eNameOrPath) {
-		return getVal(eNameOrPath, null);
+	public String getVal(String eName, String xId) {
+		return getVal(toXPath(eName, xId));
 	}
 	
 	@Override
-	public String getVal(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		return xNode.getVal();
+	public int getInt(String xPath) {
+		return NumUtils.toInt(getVal(xPath), 0);
 	}
 	
 	@Override
-	public int getInt(String eNameOrPath) {
-		return getInt(eNameOrPath, null);
+	public int getInt(String eName, String xId) {
+		return getInt(toXPath(eName, xId));
 	}
 	
 	@Override
-	public int getInt(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		int val = 0;
-		try {
-			val = Integer.parseInt(xNode.getVal());
-		} catch (Exception e) {
-			try {
-				val = Integer.parseInt(xNode.getDefault());
-			} catch (Exception ex) {}
-		}
-		return val;
+	public long getLong(String xPath) {
+		return NumUtils.toLong(getVal(xPath), 0L);
 	}
 	
 	@Override
-	public long getLong(String eNameOrPath) {
-		return getLong(eNameOrPath, null);
+	public long getLong(String eName, String xId) {
+		return getLong(toXPath(eName, xId));
 	}
 	
 	@Override
-	public long getLong(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		long val = 0L;
-		try {
-			val = Long.parseLong(xNode.getVal());
-		} catch (Exception e) {
-			try {
-				val = Long.parseLong(xNode.getDefault());
-			} catch (Exception ex) {}
-		}
-		return val;
+	public boolean getBool(String xPath) {
+		return BoolUtils.toBool(getVal(xPath), false);
 	}
 	
 	@Override
-	public boolean getBool(String eNameOrPath) {
-		return getBool(eNameOrPath, null);
+	public boolean getBool(String eName, String xId) {
+		return getBool(toXPath(eName, xId));
 	}
 	
 	@Override
-	public boolean getBool(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		boolean bool = false;
-		try {
-			bool = Boolean.parseBoolean(xNode.getVal());
-		} catch (Exception e) {
-			try {
-				bool = Boolean.parseBoolean(xNode.getDefault());
-			} catch (Exception ex) {}
-		}
-		return bool;
-	}
-	
-	@Override
-	public List<String> getEnumVals(String eNameOrPath) {
-		return getEnumVals(eNameOrPath, null);
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public List<String> getEnumVals(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		Element element = xNode.getElement();
-		
+	public List<String> getEnums(String xPath) {
 		List<String> enums = new LinkedList<String>();
-		if(element != null) {
-			Iterator<Element> its = element.elementIterator();
-			while(its.hasNext()) {
-				Element child = its.next();
-				enums.add(child.getTextTrim());
-			}
+		_XNode xNode = findXNode(xPath);
+		Iterator<_XNode> childs = xNode.getChilds();
+		while(childs.hasNext()) {
+			_XNode child = childs.next();
+			enums.add(child.VAL());
 		}
 		return enums;
 	}
 	
 	@Override
-	public List<Element> getEnum(String eNameOrPath) {
-		return getEnum(eNameOrPath, null);
+	public List<String> getEnums(String eName, String xId) {
+		return getEnums(toXPath(eName, xId));
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
-	public List<Element> getEnum(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		Element element = xNode.getElement();
-		
-		List<Element> enums = new LinkedList<Element>();
-		if(element != null) {
-			Iterator<Element> its = element.elementIterator();
-			while(its.hasNext()) {
-				Element child = its.next();
-				enums.add(child);
-			}
-		}
-		return enums;
+	public String getAttribute(String xPath, String attributeName) {
+		_XNode xNode = findXNode(xPath);
+		return xNode.getAttribute(attributeName);
 	}
 	
 	@Override
-	public Map<String, Element> getChildElements(String eNameOrPath) {
-		return getChildElements(eNameOrPath, null);
+	public String getAttribute(String eName, String xId, String attributeName) {
+		return getAttribute(toXPath(eName, xId), attributeName);
 	}
 	
 	@Override
-	@SuppressWarnings("unchecked")
-	public Map<String, Element> getChildElements(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		Element element = xNode.getElement();
-		
-		Map<String, Element> childElements = new HashMap<String, Element>();
-		if(element != null) {
-			Iterator<Element> childs = element.elementIterator();
-			while(childs.hasNext()) {
-				Element child = childs.next();
-				childElements.put(child.getName(), child);
-			}
-		}
-		return childElements;
+	public Map<String, String> getAttributes(String xPath) {
+		_XNode xNode = findXNode(xPath);
+		return xNode.getAttributes();
 	}
 	
 	@Override
-	public String getAttribute(String eNameOrPath, String attributeName) {
-		return getAttribute(eNameOrPath, null, attributeName);
-	}
-	
-	@Override
-	public String getAttribute(String eNameOrPath, String eId, String attributeName) {
-		Element element = getElement(eNameOrPath, eId);
-		String val = null;
-		if(element != null) {
-			val = element.attributeValue(attributeName);
-		}
-		return (val == null ? "" : val.trim());
-	}
-	
-	@Override
-	public Map<String, String> getAttributes(String eNameOrPath) {
-		return getAttributes(eNameOrPath, null);
-	}
-	
-	@Override
-	@SuppressWarnings("unchecked")
-	public Map<String, String> getAttributes(String eNameOrPath, String eId) {
-		XNode xNode = getXNode(eNameOrPath, eId);
-		Element element = xNode.getElement();
-		
-		Map<String, String> attributes = new HashMap<String, String>();
-		if(element != null) {
-			Iterator<Attribute> its = element.attributeIterator();
-			while(its.hasNext()) {
-				Attribute attribute = its.next();
-				String name = attribute.getName();
-				String value = attribute.getText();
-				attributes.put(name, value.trim());
-			}
-		}
-		return attributes;
+	public Map<String, String> getAttributes(String eName, String xId) {
+		return getAttributes(toXPath(eName, xId));
 	}
 	
 	@Override
 	public DataSourceBean getDataSourceBean(String dsId) {
-		return getDataSourceBean("datasource", dsId);
-	}
-	
-	@Override
-	public DataSourceBean getDataSourceBean(String eNameOrPath, String dsId) {
 		DataSourceBean ds = new DataSourceBean();
-		if(dsId != null) {
-			dsId = dsId.trim();
-			Element datasource = getElement(eNameOrPath, dsId);
-			if(datasource != null) {
-				ds.setId(dsId);
-				ds.setDriver(XmlUtils.getChildValue(datasource, "driver"));
-				ds.setIp(XmlUtils.getChildValue(datasource, "ip"));
-				ds.setPort(NumUtils.toInt(XmlUtils.getChildValue(datasource, "port")));
-				ds.setUsername(XmlUtils.getChildValue(datasource, "username"));
-				ds.setPassword(XmlUtils.getChildValue(datasource, "password"));
-				ds.setName(XmlUtils.getChildValue(datasource, "name"));
-				ds.setCharset(XmlUtils.getChildValue(datasource, "charset"));
-				ds.setMaximumActiveTime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "maximum-active-time"), -1));
-				ds.setHouseKeepingTestSql(XmlUtils.getChildValue(datasource, "house-keeping-test-sql"));
-				ds.setHouseKeepingSleepTime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "house-keeping-sleep-time"), -1));
-				ds.setSimultaneousBuildThrottle(NumUtils.toInt(XmlUtils.getChildValue(datasource, "simultaneous-build-throttle"), -1));
-				ds.setMaximumConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "maximum-connection-count"), -1));
-				ds.setMinimumConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "minimum-connection-count"), -1));
-				ds.setMaximumNewConnections(NumUtils.toInt(XmlUtils.getChildValue(datasource, "maximum-new-connections"), -1));
-				ds.setPrototypeCount(NumUtils.toInt(XmlUtils.getChildValue(datasource, "prototype-count"), -1));
-				ds.setMaximumConnectionLifetime(NumUtils.toLong(XmlUtils.getChildValue(datasource, "maximum-connection-lifetime"), -1));
-				ds.setTestBeforeUse(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "test-before-use"), true));
-				ds.setTestAfterUse(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "test-after-use"), false));
-				ds.setTrace(BoolUtils.toBool(XmlUtils.getChildValue(datasource, "trace"), true));
-			}
+		if(StrUtils.isEmpty(dsId)) {
+			return ds;
+		}
+		
+		dsId = dsId.trim();
+		String xPath = toXPath("datasource", dsId);
+		_XNode xNode = findXNode(xPath);
+		if(xNode != NULL_XNODE) {
+			ds.setId(dsId);
+			ds.setDriver(xNode.getChildVal("driver"));
+			ds.setIp(xNode.getChildVal("ip"));
+			ds.setPort(NumUtils.toInt(xNode.getChildVal("port")));
+			ds.setUsername(xNode.getChildVal("username"));
+			ds.setPassword(xNode.getChildVal("password"));
+			ds.setName(xNode.getChildVal("name"));
+			ds.setCharset(xNode.getChildVal("charset"));
+			ds.setMaximumActiveTime(NumUtils.toLong(xNode.getChildVal("maximum-active-time"), -1));
+			ds.setHouseKeepingTestSql(xNode.getChildVal("house-keeping-test-sql"));
+			ds.setHouseKeepingSleepTime(NumUtils.toLong(xNode.getChildVal("house-keeping-sleep-time"), -1));
+			ds.setSimultaneousBuildThrottle(NumUtils.toInt(xNode.getChildVal("simultaneous-build-throttle"), -1));
+			ds.setMaximumConnectionCount(NumUtils.toInt(xNode.getChildVal("maximum-connection-count"), -1));
+			ds.setMinimumConnectionCount(NumUtils.toInt(xNode.getChildVal("minimum-connection-count"), -1));
+			ds.setMaximumNewConnections(NumUtils.toInt(xNode.getChildVal("maximum-new-connections"), -1));
+			ds.setPrototypeCount(NumUtils.toInt(xNode.getChildVal("prototype-count"), -1));
+			ds.setMaximumConnectionLifetime(NumUtils.toLong(xNode.getChildVal("maximum-connection-lifetime"), -1));
+			ds.setTestBeforeUse(BoolUtils.toBool(xNode.getChildVal("test-before-use"), true));
+			ds.setTestAfterUse(BoolUtils.toBool(xNode.getChildVal("test-after-use"), false));
+			ds.setTrace(BoolUtils.toBool(xNode.getChildVal("trace"), true));
 		}
 		return ds;
 	}
 	
 	@Override
 	public SocketBean getSocketBean(String sockId) {
-		return getSocketBean("socket", sockId);
-	}
-	
-	@Override
-	public SocketBean getSocketBean(String eNameOrPath, String sockId) {
 		SocketBean sb = new SocketBean();
-		if(sockId != null) {
-			sockId = sockId.trim();
-			Element socket = getElement(eNameOrPath, sockId);
-			if(socket != null) {
-				sb.setId(sockId);
-				sb.setIp(XmlUtils.getChildValue(socket, "ip"));
-				sb.setPort(NumUtils.toInt(XmlUtils.getChildValue(socket, "port")));
-				sb.setUsername(XmlUtils.getChildValue(socket, "username"));
-				sb.setPassword(XmlUtils.getChildValue(socket, "password"));
-				sb.setCharset(XmlUtils.getChildValue(socket, "charset"));
-				sb.setReadCharset(XmlUtils.getChildValue(socket, "readCharset"));
-				sb.setWriteCharset(XmlUtils.getChildValue(socket, "writeCharset"));
-				sb.setBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "bufferSize"), -1));
-				sb.setReadBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "readBufferSize"), -1));
-				sb.setWriteBufferSize(NumUtils.toInt(XmlUtils.getChildValue(socket, "writeBufferSize"), -1));
-				sb.setDelimiter(XmlUtils.getChildValue(socket, "delimiter"));
-				sb.setReadDelimiter(XmlUtils.getChildValue(socket, "readDelimiter"));
-				sb.setWriteDelimiter(XmlUtils.getChildValue(socket, "writeDelimiter"));
-				sb.setOvertime(NumUtils.toInt(XmlUtils.getChildValue(socket, "overtime"), -1));
-				sb.setMaxConnectionCount(NumUtils.toInt(XmlUtils.getChildValue(socket, "maxConnectionCount"), -1));
-				sb.setExitCmd(XmlUtils.getChildValue(socket, "exitCmd"));
-			}
+		if(StrUtils.isEmpty(sockId)) {
+			return sb;
+		}
+		
+		sockId = sockId.trim();
+		String xPath = toXPath("socket", sockId);
+		_XNode xNode = findXNode(xPath);
+		if(xNode != NULL_XNODE) {
+			sb.setId(sockId);
+			sb.setIp(xNode.getChildVal("ip"));
+			sb.setPort(NumUtils.toInt(xNode.getChildVal("port")));
+			sb.setUsername(xNode.getChildVal("username"));
+			sb.setPassword(xNode.getChildVal("password"));
+			sb.setCharset(xNode.getChildVal("charset"));
+			sb.setReadCharset(xNode.getChildVal("readCharset"));
+			sb.setWriteCharset(xNode.getChildVal("writeCharset"));
+			sb.setBufferSize(NumUtils.toInt(xNode.getChildVal("bufferSize"), -1));
+			sb.setReadBufferSize(NumUtils.toInt(xNode.getChildVal("readBufferSize"), -1));
+			sb.setWriteBufferSize(NumUtils.toInt(xNode.getChildVal("writeBufferSize"), -1));
+			sb.setDelimiter(xNode.getChildVal("delimiter"));
+			sb.setReadDelimiter(xNode.getChildVal("readDelimiter"));
+			sb.setWriteDelimiter(xNode.getChildVal("writeDelimiter"));
+			sb.setOvertime(NumUtils.toInt(xNode.getChildVal("overtime"), -1));
+			sb.setMaxConnectionCount(NumUtils.toInt(xNode.getChildVal("maxConnectionCount"), -1));
+			sb.setExitCmd(xNode.getChildVal("exitCmd"));
 		}
 		return sb;
 	}
 	
 	@Override
 	public JmsBean getJmsBean(String jmsId) {
-		return getJmsBean("jms", jmsId);
-	}
-	
-	@Override
-	public JmsBean getJmsBean(String eNameOrPath, String jmsId) {
 		// TODO
-		return null;
+		return new JmsBean();
 	}
 	
 }

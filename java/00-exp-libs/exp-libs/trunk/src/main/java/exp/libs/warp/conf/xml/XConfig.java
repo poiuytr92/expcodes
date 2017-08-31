@@ -1,15 +1,17 @@
 package exp.libs.warp.conf.xml;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;
@@ -17,6 +19,8 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 /**
  * <PRE>
  * XML文件配置器.
+ * 	此组件由于支持配置节点合并/覆写，因此不提供获取Element方法.
+ * 	(合并/覆写后的Element已与原节点不是同一个对象).
  * =========================================================
  * 
  * 使用示例:
@@ -34,9 +38,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * 	String val = conf.getVal("pool");
  * 	int val = conf.getInt("iteratorMode");
  *  String val = conf.getAttribute("base@ftp", "hint");
- *  List<String> enums = System.out.println(conf.getEnumVals("datasource", "WXP");
- *  Map<String, Element> enums = conf.getChildElements("config/bases/base", "ws");
- *  Map<String, Element> enums = conf.getChildElements("datasource@WXP");
+ *  List<String> enums = conf.getEnums("enumTag");	// 枚举节点需要声明属性type="enum"
  * =========================================================
  * 
  * 格式定义:
@@ -48,6 +50,11 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  *     &lt;/bar&gt;
  *     &lt;bar id="b"&gt;
  *       &lt;tag id="here"&gt;456&lt;/tag&gt;
+ *     &lt;/bar&gt;
+ *     &lt;bar id="c" type="enum"&gt;	&lt;!-- 枚举节点要声明type="enum" --&gt;
+ *       &lt;tag&gt;qwe&lt;/tag&gt;
+ *       &lt;tag&gt;asd&lt;/tag&gt;
+ *       &lt;tag&gt;zxc&lt;/tag&gt;
  *     &lt;/bar&gt;
  *   &lt;/foo&gt;
  * &lt;/root&gt;
@@ -63,7 +70,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class XConfig implements Runnable, IConfig {
+public class XConfig implements Runnable, _IConfig {
 
 	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(_Config.class);
@@ -72,7 +79,7 @@ public class XConfig implements Runnable, IConfig {
 	
 	private final static long DEFAULT_REFLASH_TIME = 60000L;
 	
-	private String configName;
+	private String name;
 	
 	private _Config config;
 	
@@ -86,17 +93,22 @@ public class XConfig implements Runnable, IConfig {
 	
 	private long reflashTime;
 	
+	/** 线程锁 */
 	private byte[] tLock;
 	
+	/** 刷新锁 */
 	private byte[] rLock;
+	
+	/** 保存最近查找过的配置值（用于快速检索重复配置） */
+	private Map<String, Object> nearValues;
 	
 	/**
 	 * 构造函数
-	 * @param configName 配置器名称
+	 * @param name 配置器名称
 	 */
-	protected XConfig(String configName) {
-		this.configName = configName;
-		this.config = new _Config(configName);
+	protected XConfig(String name) {
+		this.name = name;
+		this.config = new _Config(name);
 		
 		this.isInit = false;
 		this.isRun = false;
@@ -105,6 +117,8 @@ public class XConfig implements Runnable, IConfig {
 		this.reflashTime = DEFAULT_REFLASH_TIME;
 		this.tLock = new byte[1];
 		this.rLock = new byte[1];
+		
+		this.nearValues = new HashMap<String, Object>();
 	}
 	
 	/**
@@ -142,10 +156,10 @@ public class XConfig implements Runnable, IConfig {
 		if(!isReflash) {
 			isReflash = true;
 			ThreadUtils.tNotify(tLock);	// 退出无限阻塞， 进入限时阻塞状态
-			log.info("配置 [{}] 自动刷新被激活, 刷新间隔为 [{} ms].", configName, reflashTime);
+			log.info("配置 [{}] 自动刷新被激活, 刷新间隔为 [{} ms].", name, reflashTime);
 			
 		} else {
-			log.info("配置 [{}] 刷新间隔变更为 [{} ms], 下个刷新周期生效.", configName, reflashTime);
+			log.info("配置 [{}] 刷新间隔变更为 [{} ms], 下个刷新周期生效.", name, reflashTime);
 		}
 	}
 	
@@ -155,7 +169,7 @@ public class XConfig implements Runnable, IConfig {
 	public void pause() {
 		isReflash = false;
 		ThreadUtils.tNotify(tLock);	// 退出限时阻塞， 进入无限阻塞状态
-		log.info("配置 [{}] 自动刷新被暂停.", configName);
+		log.info("配置 [{}] 自动刷新被暂停.", name);
 	}
 	
 	/**
@@ -167,7 +181,7 @@ public class XConfig implements Runnable, IConfig {
 		ThreadUtils.tNotify(tLock);	// 退出阻塞态, 通过掉落陷阱终止线程
 		
 		config.clear();
-		log.info("配置 [{}] 内容已销毁.", configName);
+		log.info("配置 [{}] 内容已销毁.", name);
 	}
 	
 	@Override
@@ -188,36 +202,36 @@ public class XConfig implements Runnable, IConfig {
 	 * 重载配置文件
 	 */
 	private void reload() {
-		log.info("配置 [{}] 开始重载文件...", configName);
+		log.info("配置 [{}] 开始重载文件...", name);
 		if(config.getConfFiles() == null || config.getConfFiles().isEmpty()) {
-			log.info("配置 [{}] 并未加载过任何文件(或文件已被删除), 取消重载操作.", configName);
+			log.info("配置 [{}] 并未加载过任何文件(或文件已被删除), 取消重载操作.", name);
 			return;
 		}
 		
 		reflashing = true;
-		_Config conf = new _Config(configName);
+		_Config conf = new _Config(name);
 		for(Iterator<String[]> fileInfos = config.getConfFiles().iterator(); 
 				fileInfos.hasNext();) {
 			String[] fileInfo = fileInfos.next();
-			String filePath = fileInfo[0];
+			String filxPath = fileInfo[0];
 			String fileType = fileInfo[1];
 			
-			File file = new File(filePath);
+			File file = new File(filxPath);
 			if(!file.exists()) {
-				log.info("配置文件 [{}] 已不存在, 不重载.", filePath);
+				log.info("配置文件 [{}] 已不存在, 不重载.", filxPath);
 				fileInfos.remove();
 			}
 			
 			if(DISK_FILE.equals(fileType)) {
-				boolean isOk = conf.loadConfFile(filePath);
-				log.info("配置 [{}] 重载文件 [{}] {}.", configName, filePath, (isOk ? "成功" : "失败"));
+				boolean isOk = conf.loadConfFile(filxPath);
+				log.info("配置 [{}] 重载文件 [{}] {}.", name, filxPath, (isOk ? "成功" : "失败"));
 				
 			} else if(JAR_FILE.equals(fileType)) {
-				boolean isOk = conf.loadConfFileInJar(filePath);
-				log.info("配置 [{}] 重载文件 [{}] {}.", configName, filePath, (isOk ? "成功" : "失败"));
+				boolean isOk = conf.loadConfFileInJar(filxPath);
+				log.info("配置 [{}] 重载文件 [{}] {}.", name, filxPath, (isOk ? "成功" : "失败"));
 				
 			} else {
-				log.info("配置文件 [{}] 类型异常, 不重载.", filePath);
+				log.info("配置文件 [{}] 类型异常, 不重载.", filxPath);
 				fileInfos.remove();
 			}
 		}
@@ -228,15 +242,15 @@ public class XConfig implements Runnable, IConfig {
 			config = conf;
 		}
 		reflashing = false;
-		log.info("配置 [{}] 重载所有文件完成.", configName);
+		log.info("配置 [{}] 重载所有文件完成.", name);
 	}
 	
 	/**
 	 * 获取配置加载器名称
 	 */
 	@Override
-	public String getConfigName() {
-		return configName;
+	public String NAME() {
+		return name;
 	}
 
 	/**
@@ -244,11 +258,11 @@ public class XConfig implements Runnable, IConfig {
 	 * 加载多个配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
-	 * @param confFilePaths 配置文件路径
+	 * @param confFilxPaths 配置文件路径
 	 */
 	@Override
-	public boolean loadConfFiles(String[] confFilePaths) {
-		return config.loadConfFiles(confFilePaths);
+	public boolean loadConfFiles(String[] confFilxPaths) {
+		return config.loadConfFiles(confFilxPaths);
 	}
 
 	/**
@@ -256,11 +270,11 @@ public class XConfig implements Runnable, IConfig {
 	 * 加载配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
-	 * @param confFilePath 配置文件路径
+	 * @param confFilxPath 配置文件路径
 	 */
 	@Override
-	public boolean loadConfFile(String confFilePath) {
-		return config.loadConfFile(confFilePath);
+	public boolean loadConfFile(String confFilxPath) {
+		return config.loadConfFile(confFilxPath);
 	}
 
 	/**
@@ -268,11 +282,11 @@ public class XConfig implements Runnable, IConfig {
 	 * 加载多个jar内配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
-	 * @param confFilePaths 配置文件路径
+	 * @param confFilxPaths 配置文件路径
 	 */
 	@Override
-	public boolean loadConfFilesInJar(String[] confFilePaths) {
-		return config.loadConfFilesInJar(confFilePaths);
+	public boolean loadConfFilesInJar(String[] confFilxPaths) {
+		return config.loadConfFilesInJar(confFilxPaths);
 	}
 
 	/**
@@ -280,388 +294,295 @@ public class XConfig implements Runnable, IConfig {
 	 * 加载jar内配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
-	 * @param confFilePath 配置文件路径
+	 * @param confFilxPath 配置文件路径
 	 */
 	@Override
-	public boolean loadConfFileInJar(String confFilePath) {
-		return config.loadConfFileInJar(confFilePath);
-	}
-
-	/**
-	 * 获取Element对象.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @return 若找不到对象则返回null
-	 */
-	@Override
-	public Element getElement(String eNameOrPath) {
-		Element e = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				e = config.getElement(eNameOrPath);
-			}
-		} else {
-			e = config.getElement(eNameOrPath);
-		}
-		return e;
-	}
-
-	/**
-	 * 获取Element对象.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
-	 * @return 若找不到对象则返回null
-	 */
-	@Override
-	public Element getElement(String eNameOrPath, String eId) {
-		Element e = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				e = config.getElement(eNameOrPath, eId);
-			}
-		} else {
-			e = config.getElement(eNameOrPath, eId);
-		}
-		return e;
+	public boolean loadConfFileInJar(String confFilxPath) {
+		return config.loadConfFileInJar(confFilxPath);
 	}
 
 	/**
 	 * 获取String标签值(使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
 	 * @return 若标签无值则返回default属性值, 若default无值则返回"" (绝不返回null)
 	 */
 	@Override
-	public String getVal(String eNameOrPath) {
+	public String getVal(String xPath) {
 		String val = null;
 		if(isReflash && reflashing) {
 			synchronized (rLock) {
-				val = config.getVal(eNameOrPath);
+				val = config.getVal(xPath);
 			}
 		} else {
-			val = config.getVal(eNameOrPath);
+			Object obj = nearValues.remove(xPath);
+			val = (obj == null ? config.getVal(xPath) : (String) obj);
+			nearValues.put(xPath, val);
 		}
 		return val;
 	}
 
 	/**
 	 * 获取String标签值(使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
 	 * @return 若标签无值则返回default属性值, 若default无值则返回"" (绝不返回null)
 	 */
 	@Override
-	public String getVal(String eNameOrPath, String eId) {
-		String val = null;
+	public String getVal(String xName, String xId) {
+		String xPath = config.toXPath(xName, xId);
+		return getVal(xPath);
+	}
+
+	/**
+	 * 获取int标签值(原值使用trim处理).
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
+	 */
+	@Override
+	public int getInt(String xPath) {
+		int val = 0;
 		if(isReflash && reflashing) {
 			synchronized (rLock) {
-				val = config.getVal(eNameOrPath, eId);
+				val = config.getInt(xPath);
 			}
 		} else {
-			val = config.getVal(eNameOrPath, eId);
+			Object obj = nearValues.remove(xPath);
+			val = (obj == null ? config.getInt(xPath) : (Integer) obj);
+			nearValues.put(xPath, val);
 		}
 		return val;
 	}
 
 	/**
 	 * 获取int标签值(原值使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
 	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
 	 */
 	@Override
-	public int getInt(String eNameOrPath) {
-		int n = 0;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				n = config.getInt(eNameOrPath);
-			}
-		} else {
-			n = config.getInt(eNameOrPath);
-		}
-		return n;
-	}
-
-	/**
-	 * 获取int标签值(原值使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
-	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
-	 */
-	@Override
-	public int getInt(String eNameOrPath, String eId) {
-		int n = 0;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				n = config.getInt(eNameOrPath, eId);
-			}
-		} else {
-			n = config.getInt(eNameOrPath, eId);
-		}
-		return n;
+	public int getInt(String xName, String xId) {
+		String xPath = config.toXPath(xName, xId);
+		return getInt(xPath);
 	}
 
 	/**
 	 * 获取long标签值(原值使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
 	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
 	 */
 	@Override
-	public long getLong(String eNameOrPath) {
-		long n = 0;
+	public long getLong(String xPath) {
+		long val = 0;
 		if(isReflash && reflashing) {
 			synchronized (rLock) {
-				n = config.getLong(eNameOrPath);
+				val = config.getLong(xPath);
 			}
 		} else {
-			n = config.getLong(eNameOrPath);
+			Object obj = nearValues.remove(xPath);
+			val = (obj == null ? config.getLong(xPath) : (Long) obj);
+			nearValues.put(xPath, val);
 		}
-		return n;
+		return val;
 	}
 
 	/**
 	 * 获取long标签值(原值使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
 	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
 	 */
 	@Override
-	public long getLong(String eNameOrPath, String eId) {
-		long n = 0;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				n = config.getLong(eNameOrPath, eId);
-			}
-		} else {
-			n = config.getLong(eNameOrPath, eId);
-		}
-		return n;
+	public long getLong(String xName, String xId) {
+		String xPath = config.toXPath(xName, xId);
+		return getLong(xPath);
 	}
 
 	/**
 	 * 获取bool标签值(原值使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
 	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回false
 	 */
 	@Override
-	public boolean getBool(String eNameOrPath) {
-		boolean bool = false;
+	public boolean getBool(String xPath) {
+		boolean val = false;
 		if(isReflash && reflashing) {
 			synchronized (rLock) {
-				bool = config.getBool(eNameOrPath);
+				val = config.getBool(xPath);
 			}
 		} else {
-			bool = config.getBool(eNameOrPath);
+			Object obj = nearValues.remove(xPath);
+			val = (obj == null ? config.getBool(xPath) : (Boolean) obj);
+			nearValues.put(xPath, val);
 		}
-		return bool;
+		return val;
 	}
 
 	/**
 	 * 获取bool标签值(原值使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
 	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回false
 	 */
 	@Override
-	public boolean getBool(String eNameOrPath, String eId) {
-		boolean bool = false;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				bool = config.getBool(eNameOrPath, eId);
-			}
-		} else {
-			bool = config.getBool(eNameOrPath, eId);
-		}
-		return bool;
+	public boolean getBool(String xName, String xId) {
+		String xPath = config.toXPath(xName, xId);
+		return getBool(xPath);
 	}
 
 	/**
-	 * 获取枚举标签值列表(原值使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * <PRE>
+	 * 枚举Element节点下所有子节点的配置值(使用trim处理).
+	 * 	<B>若子节点同名, 则被枚举节点Element要声明属性 type="enum"</B>
+	 * 
+	 * 子节点同名，父节点需要声明枚举属性：
+	 * &lt;tag type="enum"&gt;
+	 * 	&lt;foo&gt;xxx&lt;/foo&gt;
+	 * 	&lt;foo&gt;yyy&lt;/foo&gt;
+	 * 	&lt;foo&gt;zzz&lt;/foo&gt;
+	 * &lt;/tag&gt;
+	 * 
+	 * 子节点不同名，父节点可以不声明枚举属性：
+	 * &lt;tag&gt;
+	 * 	&lt;foo1&gt;xxx&lt;/foo1&gt;
+	 * 	&lt;foo2&gt;yyy&lt;/foo2&gt;
+	 * 	&lt;foo3&gt;zzz&lt;/foo3&gt;
+	 * &lt;/tag&gt;
+	 * 
+	 * 子节点同名但声明了不同id，父节点可以不声明枚举属性：
+	 * &lt;tag&gt;
+	 * 	&lt;foo id="a"&gt;xxx&lt;/foo&gt;
+	 * 	&lt;foo id="b"&gt;yyy&lt;/foo&gt;
+	 * 	&lt;foo id="c"&gt;zzz&lt;/foo&gt;
+	 * &lt;/tag&gt;
+	 * 
+	 * </PRE>
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
 	 * @return 若标签无效则返回无元素的List<String> （绝不返回null）
 	 */
 	@Override
-	public List<String> getEnumVals(String eNameOrPath) {
-		List<String> enumVals = null;
+	@SuppressWarnings("unchecked")
+	public List<String> getEnums(String xPath) {
+		List<String> enums = null;
 		if(isReflash && reflashing) {
 			synchronized (rLock) {
-				enumVals = config.getEnumVals(eNameOrPath);
+				enums = config.getEnums(xPath);
 			}
 		} else {
-			enumVals = config.getEnumVals(eNameOrPath);
+			Object obj = nearValues.remove(xPath);
+			enums = (obj == null ? config.getEnums(xPath) : (List<String>) obj);
+			nearValues.put(xPath, new LinkedList<String>(enums));
 		}
-		return enumVals;
+		return enums;
 	}
 
 	/**
-	 * 获取枚举标签值列表(原值使用trim处理).
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * <PRE>
+	 * 枚举Element节点下所有子节点的配置值(使用trim处理).
+	 * 	<B>若子节点同名, 则被枚举节点Element要声明属性 type="enum"</B>
+	 * 
+	 * 子节点同名，父节点需要声明枚举属性：
+	 * &lt;tag type="enum"&gt;
+	 * 	&lt;foo&gt;xxx&lt;/foo&gt;
+	 * 	&lt;foo&gt;yyy&lt;/foo&gt;
+	 * 	&lt;foo&gt;zzz&lt;/foo&gt;
+	 * &lt;/tag&gt;
+	 * 
+	 * 子节点不同名，父节点可以不声明枚举属性：
+	 * &lt;tag&gt;
+	 * 	&lt;foo1&gt;xxx&lt;/foo1&gt;
+	 * 	&lt;foo2&gt;yyy&lt;/foo2&gt;
+	 * 	&lt;foo3&gt;zzz&lt;/foo3&gt;
+	 * &lt;/tag&gt;
+	 * 
+	 * 子节点同名但声明了不同id，父节点可以不声明枚举属性：
+	 * &lt;tag&gt;
+	 * 	&lt;foo id="a"&gt;xxx&lt;/foo&gt;
+	 * 	&lt;foo id="b"&gt;yyy&lt;/foo&gt;
+	 * 	&lt;foo id="c"&gt;zzz&lt;/foo&gt;
+	 * &lt;/tag&gt;
+	 * 
+	 * </PRE>
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
 	 * @return 若标签无效则返回无元素的List<String> （绝不返回null）
 	 */
 	@Override
-	public List<String> getEnumVals(String eNameOrPath, String eId) {
-		List<String> enumVals = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				enumVals = config.getEnumVals(eNameOrPath, eId);
-			}
-		} else {
-			enumVals = config.getEnumVals(eNameOrPath, eId);
-		}
-		return enumVals;
-	}
-
-	/**
-	 * 获取枚举标签对象列表.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @return 若标签无效则返回无元素的List<Element> （绝不返回null）
-	 */
-	@Override
-	public List<Element> getEnum(String eNameOrPath) {
-		List<Element> envm = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				envm = config.getEnum(eNameOrPath);
-			}
-		} else {
-			envm = config.getEnum(eNameOrPath);
-		}
-		return envm;
-	}
-
-	/**
-	 * 获取枚举标签对象列表.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
-	 * @return 若标签无效则返回无元素的List<Element> （绝不返回null）
-	 */
-	@Override
-	public List<Element> getEnum(String eNameOrPath, String eId) {
-		List<Element> envm = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				envm = config.getEnum(eNameOrPath, eId);
-			}
-		} else {
-			envm = config.getEnum(eNameOrPath, eId);
-		}
-		return envm;
-	}
-
-	/**
-	 * 获取标签子对象.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @return 若标签无效则返回无元素的Map<String, Element> （绝不返回null）
-	 */
-	@Override
-	public Map<String, Element> getChildElements(String eNameOrPath) {
-		Map<String, Element> childElements = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				childElements = config.getChildElements(eNameOrPath);
-			}
-		} else {
-			childElements = config.getChildElements(eNameOrPath);
-		}
-		return childElements;
-	}
-
-	/**
-	 * 获取标签子对象.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
-	 * @return 若标签无效则返回无元素的Map<String, Element> （绝不返回null）
-	 */
-	@Override
-	public Map<String, Element> getChildElements(String eNameOrPath, String eId) {
-		Map<String, Element> childElements = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				childElements = config.getChildElements(eNameOrPath, eId);
-			}
-		} else {
-			childElements = config.getChildElements(eNameOrPath, eId);
-		}
-		return childElements;
+	public List<String> getEnums(String xName, String xId) {
+		String xPath = config.toXPath(xName, xId);
+		return getEnums(xPath);
 	}
 
 	/**
 	 * 获取标签属性值.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param attributeName 标签的属性名
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @param attributxName 标签的属性名
 	 * @return 若无效则返回"" （绝不返回null）
 	 */
 	@Override
-	public String getAttribute(String eNameOrPath, String attributeName) {
+	public String getAttribute(String xPath, String attributxName) {
 		String attribute = null;
 		if(isReflash && reflashing) {
 			synchronized (rLock) {
-				attribute = config.getAttribute(eNameOrPath, attributeName);
+				attribute = config.getAttribute(xPath, attributxName);
 			}
 		} else {
-			attribute = config.getAttribute(eNameOrPath, attributeName);
+			String axPath = StrUtils.concat(xPath, ".", attributxName);
+			Object obj = nearValues.remove(axPath);
+			attribute = (obj == null ? config.getAttribute(xPath, attributxName) : (String) obj);
+			nearValues.put(axPath, attribute);
 		}
 		return attribute;
 	}
 
 	/**
 	 * 获取标签属性值.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
-	 * @param attributeName 标签的属性名
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @param attributxName 标签的属性名
 	 * @return 若无效则返回"" （绝不返回null）
 	 */
 	@Override
-	public String getAttribute(String eNameOrPath, String eId, String attributeName) {
-		String attribute = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				attribute = config.getAttribute(eNameOrPath, eId, attributeName);
-			}
-		} else {
-			attribute = config.getAttribute(eNameOrPath, eId, attributeName);
-		}
-		return attribute;
+	public String getAttribute(String xName, String xId, String attributxName) {
+		String xPath = config.toXPath(xName, xId);
+		return getAttribute(xPath, attributxName);
 	}
 
 	/**
 	 * 获取标签属性表.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
 	 * @return 若无效则返回无元素的Map<String, String> （绝不返回null）
 	 */
 	@Override
-	public Map<String, String> getAttributes(String eNameOrPath) {
+	@SuppressWarnings("unchecked")
+	public Map<String, String> getAttributes(String xPath) {
 		Map<String, String> attributes = null;
 		if(isReflash && reflashing) {
 			synchronized (rLock) {
-				attributes = config.getAttributes(eNameOrPath);
+				attributes = config.getAttributes(xPath);
 			}
 		} else {
-			attributes = config.getAttributes(eNameOrPath);
+			Object obj = nearValues.remove(xPath);
+			attributes = (obj == null ? config.getAttributes(xPath) : (Map<String, String>) obj);
+			nearValues.put(xPath, new HashMap<String, String>(attributes));
 		}
 		return attributes;
 	}
 
 	/**
 	 * 获取标签属性表.
-	 * @param eNameOrPath Element对象的标签名称或标签路径
-	 * @param eId Element对象的标签名称的id属性值（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
 	 * @return 若无效则返回无元素的Map<String, String> （绝不返回null）
 	 */
 	@Override
-	public Map<String, String> getAttributes(String eNameOrPath, String eId) {
-		Map<String, String> attributes = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				attributes = config.getAttributes(eNameOrPath, eId);
-			}
-		} else {
-			attributes = config.getAttributes(eNameOrPath, eId);
-		}
-		return attributes;
+	public Map<String, String> getAttributes(String xName, String xId) {
+		String xPath = config.toXPath(xName, xId);
+		return getAttributes(xPath);
 	}
 
 	/**
 	 * 获取固定格式配置对象 - 数据源.
-	 * @param dsId 数据源标签的id
+	 * @param dsId 数据源标签的id属性值
 	 * @return 若无效则返回默认数据源对象 (绝对不返回null)
 	 */
 	@Override
@@ -672,33 +593,16 @@ public class XConfig implements Runnable, IConfig {
 				ds = config.getDataSourceBean(dsId);
 			}
 		} else {
-			ds = config.getDataSourceBean(dsId);
-		}
-		return ds;
-	}
-
-	/**
-	 * 获取固定格式配置对象 - 数据源.
-	 * @param eNameOrPath 数据源对象的标签名称或标签路径
-	 * @param dsId 数据源标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
-	 * @return 若无效则返回默认数据源对象 (绝对不返回null)
-	 */
-	@Override
-	public DataSourceBean getDataSourceBean(String eNameOrPath, String dsId) {
-		DataSourceBean ds = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				ds = config.getDataSourceBean(eNameOrPath, dsId);
-			}
-		} else {
-			ds = config.getDataSourceBean(eNameOrPath, dsId);
+			Object obj = nearValues.remove(dsId);
+			ds = (obj == null ? config.getDataSourceBean(dsId) : (DataSourceBean) obj);
+			nearValues.put(dsId, ds.clone());
 		}
 		return ds;
 	}
 
 	/**
 	 * 获取固定格式配置对象 - socket.
-	 * @param sockId socket标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @param sockId socket标签的id属性值
 	 * @return 若无效则返回默认socket对象 (绝对不返回null)
 	 */
 	@Override
@@ -709,33 +613,16 @@ public class XConfig implements Runnable, IConfig {
 				sb = config.getSocketBean(sockId);
 			}
 		} else {
-			sb = config.getSocketBean(sockId);
-		}
-		return sb;
-	}
-
-	/**
-	 * 获取固定格式配置对象 - socket.
-	 * @param eNameOrPath socket对象的标签名称或标签路径
-	 * @param sockId socket标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
-	 * @return 若无效则返回默认socket对象 (绝对不返回null)
-	 */
-	@Override
-	public SocketBean getSocketBean(String eNameOrPath, String sockId) {
-		SocketBean sb = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				sb = config.getSocketBean(eNameOrPath, sockId);
-			}
-		} else {
-			sb = config.getSocketBean(eNameOrPath, sockId);
+			Object obj = nearValues.remove(sockId);
+			sb = (obj == null ? config.getSocketBean(sockId) : (SocketBean) obj);
+			nearValues.put(sockId, sb.clone());
 		}
 		return sb;
 	}
 
 	/**
 	 * 获取固定格式配置对象 - jms.
-	 * @param jmsId jms标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
+	 * @param jmsId jms标签的id属性值
 	 * @return 若无效则返回默认jms对象 (绝对不返回null)
 	 */
 	@Override
@@ -746,26 +633,9 @@ public class XConfig implements Runnable, IConfig {
 				jb = config.getJmsBean(jmsId);
 			}
 		} else {
-			jb = config.getJmsBean(jmsId);
-		}
-		return jb;
-	}
-
-	/**
-	 * 获取固定格式配置对象 - jms.
-	 * @param eNameOrPath jms对象的标签名称或标签路径
-	 * @param jmsId jms标签的id（若eNameOrPath已通过[@]配置id属性值 则无需再填）
-	 * @return 若无效则返回默认jms对象 (绝对不返回null)
-	 */
-	@Override
-	public JmsBean getJmsBean(String eNameOrPath, String jmsId) {
-		JmsBean jb = null;
-		if(isReflash && reflashing) {
-			synchronized (rLock) {
-				jb = config.getJmsBean(eNameOrPath, jmsId);
-			}
-		} else {
-			jb = config.getJmsBean(eNameOrPath, jmsId);
+			Object obj = nearValues.remove(jmsId);
+			jb = (obj == null ? config.getJmsBean(jmsId) : (JmsBean) obj);
+			nearValues.put(jmsId, jb.clone());
 		}
 		return jb;
 	}
