@@ -82,7 +82,7 @@
 	</logger>
 	
 	<!-- 经验库日志 -->
-	<logger name="com.kt.explibs" level="info" additivity="false">
+	<logger name="exp.libs" level="info" additivity="false">
 		<appender-ref ref="other" />
 		<appender-ref ref="exception" />
 	</logger>

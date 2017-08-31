@@ -4,8 +4,7 @@
 package ${package}._demo;
 
 import java.util.List;
-
-import org.dom4j.Element;
+import java.util.Map;
 
 import exp.libs.envm.Charset;
 import exp.libs.warp.conf.xml.XConfig;
@@ -26,7 +25,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 public class Config {
 	
 	/** 程序配置文件（全量配置） */
-	private final static String APP_CONF = "./conf/[prj-name]_app_cfg.dat";
+	private final static String APP_CONF = "./conf/[prj-name]_conf.dat";
 	
 	/** 工程配置文件（常用配置） */
 	private final static String USE_CONF = "./conf/[prj-name]_conf.xml";
@@ -94,30 +93,32 @@ public class Config {
 	/**
 	 * 取值样例
 	 */
+	@Deprecated
 	@SuppressWarnings("unused")
 	public void loadExample() {
 		// 取对象
 		DataSourceBean ds = xConf.getDataSourceBean(DS_NAME);
 		SocketBean sb = xConf.getSocketBean(SOCK_NAME);
-		
-		// 取枚举
-		List<Element> sysPorts = xConf.getEnum("system");
-		List<String> systemPorts = xConf.getEnumVals("system");
-		List<String> customPorts = xConf.getEnumVals("config/tabuPorts/coustom");
+
+		// 取枚举值
+		List<String> enums = xConf.getEnums("enumTag@EX-A");
 		
 		// 取字符串
-		String anyName = xConf.getVal("name");	// 重名标签返回任意值
-		String mysqlName = xConf.getVal("config/datasources/datasource@TEST-DS/name");
-		String oracleName = xConf.getVal("config/datasources/datasource@TMP-DS/name");
+		String port = xConf.getVal("port");	// 重名标签返回第一个值
+		String dsPort = xConf.getVal("config/datasources/datasource@TEST/port");
+		String sockPort = xConf.getVal("config/sockets/socket@TEST/port");
 		
 		// 取数值
-		int httpPort = xConf.getInt("port@http");
-		httpPort = xConf.getInt("port", "http");
-		int anyPort = xConf.getInt("config/tabuPorts/coustom/port");	// 重名标签返回任意值
+		int maxConn = xConf.getInt("maximum-connection-count");
+		int foob = xConf.getInt("foo", "b");
+		long lifeTime = xConf.getInt("config/datasources/datasource@TEST/maximum-connection-lifetime");
 		
 		// 取属性值
-		String caption = xConf.getAttribute("config/sockets/socket/charset", "caption");
-		caption = xConf.getAttribute("config/sockets/socket@TEST-SOCK/charset", "caption");
+		String caption = xConf.getAttribute("config/sockets/socket/delimiter", "caption");
+		String hint = xConf.getAttribute("config/sockets/socket@TEST/delimiter", "hint");
+		
+		// 取属性集
+		Map<String, String> attributs = xConf.getAttributes("enumTag@EX-B");
 	}
 	
 }
