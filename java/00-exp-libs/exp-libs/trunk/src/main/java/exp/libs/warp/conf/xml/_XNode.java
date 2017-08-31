@@ -220,10 +220,4 @@ class _XNode {
 		attributes.clear();
 	}
 	
-	@Override
-	public String toString() {
-		// TODO Auto-generated method stub
-		return StrUtils.concat(POS(), " : ", VAL(), "(", childs.size(), ")");
-	}
-	
 }
