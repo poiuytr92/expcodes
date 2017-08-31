@@ -289,7 +289,7 @@ public class TopoGraphUI extends PopChildWindow {
 	 * @return
 	 */
 	private double _toNormalization(int weight) {
-		return Math.atan(weight) * NORM_ARG;
+		return Math.atan(weight) * NORM_ARG;	// NORM_ARG已包含放大倍数
 	}
 	
 	/**
