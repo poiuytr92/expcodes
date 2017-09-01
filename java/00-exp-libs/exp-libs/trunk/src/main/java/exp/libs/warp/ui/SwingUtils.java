@@ -238,8 +238,8 @@ public class SwingUtils {
 	 */
 	public static JPanel getNBorderPanel(Component center, Component north) {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(center, BorderLayout.CENTER);
 		panel.add(north, BorderLayout.NORTH);
+		panel.add(center, BorderLayout.CENTER);
 		return panel;
 	}
 	
@@ -251,8 +251,8 @@ public class SwingUtils {
 	 */
 	public static JPanel getSBorderPanel(Component center, Component south) {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(center, BorderLayout.CENTER);
 		panel.add(south, BorderLayout.SOUTH);
+		panel.add(center, BorderLayout.CENTER);
 		return panel;
 	}
 	
@@ -264,8 +264,8 @@ public class SwingUtils {
 	 */
 	public static JPanel getWBorderPanel(Component center, Component west) {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(center, BorderLayout.CENTER);
 		panel.add(west, BorderLayout.WEST);
+		panel.add(center, BorderLayout.CENTER);
 		return panel;
 	}
 	
@@ -277,8 +277,8 @@ public class SwingUtils {
 	 */
 	public static JPanel getEBorderPanel(Component center, Component east) {
 		JPanel panel = new JPanel(new BorderLayout());
-		panel.add(center, BorderLayout.CENTER);
 		panel.add(east, BorderLayout.EAST);
+		panel.add(center, BorderLayout.CENTER);
 		return panel;
 	}
 	

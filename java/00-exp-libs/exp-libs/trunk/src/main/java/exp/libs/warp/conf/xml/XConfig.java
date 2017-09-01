@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Element;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -224,11 +225,11 @@ public class XConfig implements Runnable, _IConfig {
 			}
 			
 			if(DISK_FILE.equals(fileType)) {
-				boolean isOk = conf.loadConfFile(filxPath);
+				boolean isOk = (conf.loadConfFile(filxPath) != null);
 				log.info("配置 [{}] 重载文件 [{}] {}.", name, filxPath, (isOk ? "成功" : "失败"));
 				
 			} else if(JAR_FILE.equals(fileType)) {
-				boolean isOk = conf.loadConfFileInJar(filxPath);
+				boolean isOk = (conf.loadConfFileInJar(filxPath) != null);
 				log.info("配置 [{}] 重载文件 [{}] {}.", name, filxPath, (isOk ? "成功" : "失败"));
 				
 			} else {
@@ -260,6 +261,7 @@ public class XConfig implements Runnable, _IConfig {
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
 	 * @param confFilxPaths 配置文件路径
+	 * @return true:全部加载成功; false:存在加载失败
 	 */
 	@Override
 	public boolean loadConfFiles(String[] confFilxPaths) {
@@ -272,9 +274,10 @@ public class XConfig implements Runnable, _IConfig {
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
 	 * @param confFilxPath 配置文件路径
+	 * @return 若为null则加载失败; 否则为配置文件的根节点
 	 */
 	@Override
-	public boolean loadConfFile(String confFilxPath) {
+	public Element loadConfFile(String confFilxPath) {
 		return config.loadConfFile(confFilxPath);
 	}
 
@@ -284,6 +287,7 @@ public class XConfig implements Runnable, _IConfig {
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
 	 * @param confFilxPaths 配置文件路径
+	 * @return true:全部加载成功; false:存在加载失败
 	 */
 	@Override
 	public boolean loadConfFilesInJar(String[] confFilxPaths) {
@@ -296,9 +300,10 @@ public class XConfig implements Runnable, _IConfig {
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
 	 * @param confFilxPath 配置文件路径
+	 * @return 若为null则加载失败; 否则为配置文件的根节点
 	 */
 	@Override
-	public boolean loadConfFileInJar(String confFilxPath) {
+	public Element loadConfFileInJar(String confFilxPath) {
 		return config.loadConfFileInJar(confFilxPath);
 	}
 

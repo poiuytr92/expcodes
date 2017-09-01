@@ -70,34 +70,32 @@ class _Config implements _IConfig {
 		boolean isOk = true;
 		for(String confFilxPath : confFilxPaths) {
 			if(StrUtils.isNotEmpty(confFilxPath)) {
-				isOk &= loadConfFile(confFilxPath);
+				isOk &= (loadConfFile(confFilxPath) != null);
 			}
 		}
 		return isOk;
 	}
 
 	@Override
-	public boolean loadConfFile(String confFilxPath) {
-		boolean isOk = false;
+	public Element loadConfFile(String confFilxPath) {
 		if(confFilxPath == null) {
-			return isOk;
+			return null;
 		}
 		
+		Element root = null;
 		try {
 			File confFile = new File(confFilxPath);
 			String charset = XmlUtils.getCharset(confFile);
 			String xml = FileUtils.readFileToString(confFile, charset);
 			Document doc = DocumentHelper.parseText(xml);
-			Element root = doc.getRootElement();
+			root = doc.getRootElement();
 			xTree.update(root);
-			
 			confFiles.add(new String[] { confFilxPath, DISK_FILE });
-			isOk = true;
 			
 		} catch (Exception e) {
 			log.error("加载文件失败: [{}].", confFilxPath, e);
 		}
-		return isOk;
+		return root;
 	}
 	
 	@Override
@@ -109,34 +107,32 @@ class _Config implements _IConfig {
 		boolean isOk = true;
 		for(String confFilxPath : confFilxPaths) {
 			if(StrUtils.isNotEmpty(confFilxPath)) {
-				isOk &= loadConfFileInJar(confFilxPath);
+				isOk &= (loadConfFileInJar(confFilxPath) != null);
 			}
 		}
 		return isOk;
 	}
 	
 	@Override
-	public boolean loadConfFileInJar(String confFilxPath) {
-		boolean isOk = false;
+	public Element loadConfFileInJar(String confFilxPath) {
 		if(confFilxPath == null) {
-			return isOk;
+			return null;
 		}
 		
+		Element root = null;
 		try {
 			String content = JarUtils.read(confFilxPath, Charset.ISO);
 			String charset = XmlUtils.getCharset(content);
 			String xml = JarUtils.read(confFilxPath, charset);
 			Document doc = DocumentHelper.parseText(xml);
-			Element root = doc.getRootElement();
+			root = doc.getRootElement();
 			xTree.update(root);
-			
 			confFiles.add(new String[] { confFilxPath, JAR_FILE });
-			isOk = true;
 			
 		} catch (Exception e) {
 			log.error("加载文件失败: [{}].", confFilxPath, e);
 		}
-		return isOk;
+		return root;
 	}
 	
 	protected List<String[]> getConfFiles() {

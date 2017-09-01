@@ -3,6 +3,8 @@ package exp.libs.warp.conf.xml;
 import java.util.List;
 import java.util.Map;
 
+import org.dom4j.Element;
+
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;
@@ -19,11 +21,11 @@ interface _IConfig {
 	
 	public boolean loadConfFiles(String[] confFilePaths);
 	
-	public boolean loadConfFile(String confFilePath);
+	public Element loadConfFile(String confFilePath);
 	
 	public boolean loadConfFilesInJar(String[] confFilePaths);
 	
-	public boolean loadConfFileInJar(String confFilePath);
+	public Element loadConfFileInJar(String confFilePath);
 	
 	public String getVal(String ePath);
 	
