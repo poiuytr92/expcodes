@@ -87,6 +87,10 @@
 		<appender-ref ref="exception" />
 	</logger>
 	
+	<!-- 第三方日志 -->
+	<logger name="org.apache" level="error" additivity="true" />
+	<logger name="org.logicalcobwebs" level="error" additivity="true" />
+	
 	<!-- 其他日志 -->
 	<logger name="OTHER" level="info" additivity="false">
 		<appender-ref ref="other" />

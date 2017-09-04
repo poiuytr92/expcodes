@@ -3,6 +3,7 @@
 #set( $symbol_escape = '\' )
 package ${package}._demo;
 
+import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ver.VersionMgr;
 
 /**
@@ -25,6 +26,7 @@ public class Version {
 	 * 		[-m] 版本管理（UI界面）
 	 */
 	public static void main(String[] args) {
+		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
 	}
 	
