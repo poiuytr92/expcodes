@@ -84,6 +84,13 @@ public class NioSocketServer extends Thread {
 		return sockConf;
 	}
 
+	@Deprecated
+	@Override
+	public synchronized void start() {
+		init(true);
+		super.start();
+	}
+	
 	/**
 	 * 启动服务端(默认侦听所有IP上的同一端口)
 	 * @return true:启动成功; false:启动失败
