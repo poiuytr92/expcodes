@@ -370,22 +370,30 @@ public class SocketBean {
 	}
 
 	public SocketBean clone() {
-		SocketBean sb = new SocketBean();
-		sb.setId(getId());
-		sb.setIp(getIp());
-		sb.setPort(getPort());
-		sb.setUsername(getUsername());
-		sb.setPassword(getPassword());
-		sb.setReadCharset(getReadCharset());
-		sb.setWriteCharset(getWriteCharset());
-		sb.setReadBufferSize(getReadBufferSize());
-		sb.setWriteBufferSize(getWriteBufferSize());
-		sb.setReadDelimiter(getReadDelimiter());
-		sb.setWriteDelimiter(getWriteDelimiter());
-		sb.setOvertime(getOvertime());
-		sb.setMaxConnectionCount(getMaxConnectionCount());
-		sb.setExitCmd(getExitCmd());
-		return sb;
+		
+		// 部分get/set方法含有校验逻辑，若通过setXX(getXX)可能会因为重复校验导致数据异常
+		// 如bufferSize则会因为重复乘以单位导致数值越界
+		// 因此此处采用直接赋值方式进行克隆
+		
+		SocketBean _clone = new SocketBean();
+		_clone.id = this.id;
+		_clone.ip = this.ip;
+		_clone.port = this.port;
+		_clone.username = this.username;
+		_clone.password = this.password;
+		_clone.charset = this.charset;
+		_clone.readCharset = this.readCharset;
+		_clone.writeCharset = this.writeCharset;
+		_clone.bufferSize = this.bufferSize;
+		_clone.readBufferSize = this.readBufferSize;
+		_clone.writeBufferSize = this.writeBufferSize;
+		_clone.delimiter = this.delimiter;
+		_clone.readDelimiter = this.readDelimiter;
+		_clone.writeDelimiter = this.writeDelimiter;
+		_clone.overtime = this.overtime;
+		_clone.maxConnectionCount = this.maxConnectionCount;
+		_clone.exitCmd = this.exitCmd;
+		return _clone;
 	}
 	
 }

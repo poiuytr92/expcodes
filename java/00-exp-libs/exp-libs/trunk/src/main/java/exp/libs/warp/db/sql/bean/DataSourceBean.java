@@ -567,28 +567,32 @@ public class DataSourceBean {
 	}
 	
 	public DataSourceBean clone() {
-		DataSourceBean ds = new DataSourceBean();
-		ds.setId(getId());
-		ds.setDriver(getDriver());
-		ds.setIp(getIp());
-		ds.setPort(getPort());
-		ds.setUsername(getUsername());
-		ds.setPassword(getPassword());
-		ds.setName(getName());
-		ds.setCharset(getCharset());
-		ds.setMaximumActiveTime(getMaximumActiveTime());
-		ds.setHouseKeepingTestSql(getHouseKeepingTestSql());
-		ds.setHouseKeepingSleepTime(getHouseKeepingSleepTime());
-		ds.setSimultaneousBuildThrottle(getSimultaneousBuildThrottle());
-		ds.setMaximumConnectionCount(getMaximumConnectionCount());
-		ds.setMinimumConnectionCount(getMinimumConnectionCount());
-		ds.setMaximumNewConnections(getMaximumNewConnections());
-		ds.setPrototypeCount(getPrototypeCount());
-		ds.setMaximumConnectionLifetime(getMaximumConnectionLifetime());
-		ds.setTestBeforeUse(isTestBeforeUse());
-		ds.setTestAfterUse(isTestAfterUse());
-		ds.setTrace(isTrace());
-		return ds;
+		
+		// 部分get/set方法含有校验逻辑，若通过setXX(getXX)可能会因为重复校验导致数据异常
+		// 因此此处采用直接赋值方式进行克隆
+		
+		DataSourceBean _clone = new DataSourceBean();
+		_clone.id = this.id;
+		_clone.driver = this.driver;
+		_clone.ip = this.ip;
+		_clone.port = this.port;
+		_clone.username = this.username;
+		_clone.password = this.password;
+		_clone.name = this.name;
+		_clone.charset = this.charset;
+		_clone.maximumActiveTime = this.maximumActiveTime;
+		_clone.houseKeepingTestSql = this.houseKeepingTestSql;
+		_clone.houseKeepingSleepTime = this.houseKeepingSleepTime;
+		_clone.simultaneousBuildThrottle = this.simultaneousBuildThrottle;
+		_clone.maximumConnectionCount = this.maximumConnectionCount;
+		_clone.minimumConnectionCount = this.minimumConnectionCount;
+		_clone.maximumNewConnections = this.maximumNewConnections;
+		_clone.prototypeCount = this.prototypeCount;
+		_clone.maximumConnectionLifetime = this.maximumConnectionLifetime;
+		_clone.testBeforeUse = this.testBeforeUse;
+		_clone.testAfterUse = this.testAfterUse;
+		_clone.trace = this.trace;
+		return _clone;
 	}
 
 }

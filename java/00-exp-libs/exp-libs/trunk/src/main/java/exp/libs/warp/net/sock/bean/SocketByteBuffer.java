@@ -14,49 +14,38 @@ import java.io.UnsupportedEncodingException;
  */
 public final class SocketByteBuffer {
 
-	/**
-	 * <pre>
-	 * 接收消息时使用的字符集编码
-	 * </pre>
-	 */
-	private String recvCharset;
+	/** 接收消息时使用的字符集编码 */
+	private String charset;
 
-	/**
-	 * 存储接收到的字节流
-	 */
-	private byte[] recvByteArray;
+	/** 存储字节流数组 */
+	private byte[] byteArray;
 	
-	/**
-	 * remoteByteArray容量
-	 */
-	private int size;
+	/** 字节缓冲器容量 */
+	private int capacity;
 
-	/**
-	 * remoteByteArray当前已存储的字节数
-	 */
+	/** 字节缓冲器当前已存储的字节数 */
 	private int length;
 
-	/**
-	 * 操作锁
-	 */
+	/** 操作锁 */
 	private byte[] lock;
 
 	/**
 	 * 构造函数
-	 * @param size 字节数组容量
-	 * @param recvCharset 远端机器的编码字符集
+	 * @param capacity 字节缓冲器容量
+	 * @param charset 字节缓冲器存储的字节使用的编码
 	 */
-	public SocketByteBuffer(int size, String recvCharset) {
+	public SocketByteBuffer(int capacity, String charset) {
 		this.length = 0;
-		this.setSize(size);
-		this.setRecvCharset(recvCharset);
+		this.capacity = capacity;
+		this.byteArray = new byte[capacity];
+		this.charset = charset;
 
 		this.lock = new byte[1];
 	}
 
 	/**
 	 * <pre>
-	 * 往remoteByteArray添加整个字节数组。
+	 * 往字节缓冲器添加整个字节数组。
 	 * 此方法谨慎使用。若所添加的字节数组未满，数组末尾的无效字符也会作为有效字符处理。 
 	 * </pre>
 	 * @param bytes 新字节数组
@@ -78,7 +67,7 @@ public final class SocketByteBuffer {
 	
 	/**
 	 * <pre>
-	 * 往remoteByteArray添加字节数组第 0~len-1个字节。
+	 * 往字节缓冲器添加字节数组第 0~len-1个字节。
 	 * 推荐方法。
 	 * </pre>
 	 * @param bytes 新字节数组
@@ -101,7 +90,7 @@ public final class SocketByteBuffer {
 	
 	/**
 	 * <pre>
-	 * 往remoteByteArray添加1个字节
+	 * 往字节缓冲器添加1个字节
 	 * 推荐方法。
 	 * </pre>
 	 * @param newByte 新字节
@@ -112,16 +101,16 @@ public final class SocketByteBuffer {
 		boolean flag = false;
 		
 		synchronized (lock) {
-			if(length < size) {
-				recvByteArray[length++] = newByte;
+			if(length < capacity) {
+				byteArray[length++] = newByte;
 				flag = true;
 				
 			} else {
 				
 				StringBuilder errMsg = new StringBuilder("ReadBuffer OverFlow\r\n");
 				try {
-					errMsg.append(new String(recvByteArray, 
-							0, (size > 10240 ? 10240 : size), recvCharset));
+					errMsg.append(new String(byteArray, 
+							0, (capacity > 10240 ? 10240 : capacity), charset));
 				} catch (UnsupportedEncodingException e) {
 					errMsg.append("Inner Error : UnsupportedEncodingException");
 				}
@@ -135,11 +124,11 @@ public final class SocketByteBuffer {
 
 	/**
 	 * <pre>
-	 * 在remoteByteArray查找posStr所在的索引位置
+	 * 在字节缓冲器查找posStr所在的索引位置
 	 * 
-	 * 如remoteByteArray = {0x00, 0x01, 0x02, 0x03}
+	 * 如字节缓冲器 = {0x00, 0x01, 0x02, 0x03}
 	 * posStr先被转换编码，如得到 {0x01, 0x02}
-	 * 则匹配成功后，返货0x02在remoteByteArray的索引"2"
+	 * 则匹配成功后，返货0x02在字节缓冲器的索引"2"
 	 * 匹配失败则返回-1
 	 * </pre>
 	 * 
@@ -150,7 +139,7 @@ public final class SocketByteBuffer {
 	public int indexOf(String posStr) throws UnsupportedEncodingException {
 		int rtn = -1;
 		boolean flag = true;
-		byte[] posByte = posStr.getBytes(recvCharset);
+		byte[] posByte = posStr.getBytes(charset);
 
 		synchronized (lock) {
 			for (int i = 0; i < length; i++) {
@@ -160,7 +149,7 @@ public final class SocketByteBuffer {
 
 				flag = true;
 				for (int j = 0; j < posByte.length; j++) {
-					if (recvByteArray[i + j] != posByte[j]) {
+					if (byteArray[i + j] != posByte[j]) {
 						flag = false;
 						break;
 					}
@@ -176,7 +165,7 @@ public final class SocketByteBuffer {
 	}
 
 	/**
-	 * 截取remoteByteArray的子数组，并将其转换编码返回
+	 * 截取字节缓冲器的子数组，并将其转换编码返回
 	 * @param end 截取终点索引
 	 * @return 截取部分的转码字符串
 	 * @throws UnsupportedEncodingException 不支持字符集编码异常
@@ -186,7 +175,7 @@ public final class SocketByteBuffer {
 	}
 	
 	/**
-	 * 截取remoteByteArray的子数组，并将其转换编码返回
+	 * 截取字节缓冲器的子数组，并将其转换编码返回
 	 * @param bgn 截取起点索引
 	 * @param end 截取终点索引
 	 * @return 截取部分的转码字符串
@@ -204,16 +193,16 @@ public final class SocketByteBuffer {
 				byte[] tmpByteArray = new byte[end - bgn + 1];
 				
 				for(int i = 0; i <= end; i++) {
-					tmpByteArray[i] = recvByteArray[i + bgn];
+					tmpByteArray[i] = byteArray[i + bgn];
 				}
-				rtnStr = new String(tmpByteArray, recvCharset);
+				rtnStr = new String(tmpByteArray, charset);
 			}
 		}
 		return rtnStr;
 	}
 
 	/**
-	 * 删除remoteByteArray的某部分字节，后面的字节前移
+	 * 删除字节缓冲器的某部分字节，后面的字节前移
 	 * @param end 删除终点索引
 	 * @return 删除成功与否
 	 */
@@ -222,7 +211,7 @@ public final class SocketByteBuffer {
 	}
 	
 	/**
-	 * 删除remoteByteArray的某部分字节，后面的字节前移
+	 * 删除字节缓冲器的某部分字节，后面的字节前移
 	 * 包含bgn,包含end
 	 * @param bgn 删除起始索引
 	 * @param end 删除终点索引
@@ -240,7 +229,7 @@ public final class SocketByteBuffer {
 				int stt = bgn;
 				
 				for(int i = end + 1; i < length; i++) {
-					recvByteArray[bgn++] = recvByteArray[i];
+					byteArray[bgn++] = byteArray[i];
 				}
 				length -= (end - stt + 1);
 				flag = true;
@@ -250,44 +239,41 @@ public final class SocketByteBuffer {
 	}
 
 	/**
-	 * 初始化缓冲区，所有数据丢失
+	 * 初始化缓冲区(所有缓存数据丢失)
 	 */
 	public void reset() {
 		length = 0;
 	}
 	
 	/**
-	 * 释放remoteByteArray资源，程序结束时用
+	 * 释放字节缓冲器资源(程序结束时用)
 	 */
 	public void clear() {
-		length = 0;
-		size = 0;
-		recvByteArray = null;
+		reset();
 	}
 	
-	public String getRecvCharset() {
-		return recvCharset;
-	}
-
-	public void setRecvCharset(String recvCharset) {
-		this.recvCharset = recvCharset;
-	}
-
-	public int getLength() {
-		return length;
-	}
-
-	public int getSize() {
-		return size;
+	/**
+	 * 获取字节缓冲器所存储的字节使用的编码
+	 * @return
+	 */
+	public String getCharset() {
+		return charset;
 	}
 
 	/**
-	 * 设置remoteByteArray的容量，并初始化remoteByteArray
-	 * @param size 容量
+	 * 获取字节缓冲器当前已存储的字节数
+	 * @return
 	 */
-	public void setSize(int size) {
-		this.size = size;
-		this.recvByteArray = new byte[size];
+	public int length() {
+		return length;
 	}
 
+	/**
+	 * 获取字节缓冲器容量
+	 * @return
+	 */
+	public int getCapacity() {
+		return capacity;
+	}
+	
 }
