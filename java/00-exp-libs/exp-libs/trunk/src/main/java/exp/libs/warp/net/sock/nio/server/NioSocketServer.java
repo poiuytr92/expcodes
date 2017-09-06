@@ -87,8 +87,9 @@ public class NioSocketServer extends Thread {
 	@Deprecated
 	@Override
 	public synchronized void start() {
-		init(true);
-		super.start();
+		if(init(true)) {
+			super.start();
+		}
 	}
 	
 	/**
@@ -107,7 +108,7 @@ public class NioSocketServer extends Thread {
 	public boolean _start(boolean listenAllIP) {
 		boolean isOk = false;
 		if(init(listenAllIP)) {
-			this.start();
+			super.start();
 			isOk = true;
 		}
 		return isOk;

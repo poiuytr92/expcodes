@@ -44,7 +44,7 @@ public class DataSourceBean {
 	
 	private String name;
 	
-	private final static String DEFAULT_DBNAME = "test";
+	private final static String DEFAULT_DBNAME = "test-db";
 	
 	private String charset;
 	

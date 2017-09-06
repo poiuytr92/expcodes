@@ -240,6 +240,7 @@ public class XConfig implements Runnable, _IConfig {
 		
 		// 替换配置
 		synchronized (rLock) {
+			nearValues.clear();
 			config.clear();
 			config = conf;
 		}
@@ -599,9 +600,12 @@ public class XConfig implements Runnable, _IConfig {
 				ds = config.getDataSourceBean(dsId);
 			}
 		} else {
-			Object obj = nearValues.remove(dsId);
-			ds = (obj == null ? config.getDataSourceBean(dsId) : (DataSourceBean) obj);
-			nearValues.put(dsId, ds.clone());
+			Object obj = nearValues.get(dsId);
+			if(obj == null) {
+				obj = config.getDataSourceBean(dsId);
+				nearValues.put(dsId, obj);
+			}
+			ds = ((DataSourceBean) obj).clone();
 		}
 		return ds;
 	}
@@ -619,9 +623,12 @@ public class XConfig implements Runnable, _IConfig {
 				sb = config.getSocketBean(sockId);
 			}
 		} else {
-			Object obj = nearValues.remove(sockId);
-			sb = (obj == null ? config.getSocketBean(sockId) : (SocketBean) obj);
-			nearValues.put(sockId, sb.clone());
+			Object obj = nearValues.get(sockId);
+			if(obj == null) {
+				obj = config.getSocketBean(sockId);
+				nearValues.put(sockId, obj);
+			}
+			sb = ((SocketBean) obj).clone();
 		}
 		return sb;
 	}
@@ -639,9 +646,12 @@ public class XConfig implements Runnable, _IConfig {
 				jb = config.getJmsBean(jmsId);
 			}
 		} else {
-			Object obj = nearValues.remove(jmsId);
-			jb = (obj == null ? config.getJmsBean(jmsId) : (JmsBean) obj);
-			nearValues.put(jmsId, jb.clone());
+			Object obj = nearValues.get(jmsId);
+			if(obj == null) {
+				obj = config.getJmsBean(jmsId);
+				nearValues.put(jmsId, obj);
+			}
+			jb = ((JmsBean) obj).clone();
 		}
 		return jb;
 	}
