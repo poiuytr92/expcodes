@@ -64,7 +64,6 @@ final public class VersionMgr {
 			}
 		}
 		
-		_VerMgrUI.getInstn()._hide();
 		if(manage == true) {
 			manage();
 		} else {
@@ -74,11 +73,15 @@ final public class VersionMgr {
 	
 	protected void manage() {
 		_VerMgrUI.getInstn()._view();
-		print();
+		System.out.println(_VerMgrUI.getInstn().getCurVerInfo());
 	}
 	
 	protected void print() {
-		System.out.println(_VerMgrUI.getInstn().toCurVerInfo());
+		if(_VerDBMgr.getInstn().initVerDB()) {
+			System.out.println(_VerDBMgr.getInstn().getCurVerInfo());
+		} else {
+			System.err.println("获取当前版本信息失败");
+		}
 	}
 	
 }

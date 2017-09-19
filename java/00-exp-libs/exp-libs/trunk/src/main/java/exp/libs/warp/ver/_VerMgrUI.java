@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.sql.Connection;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -20,14 +19,8 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import exp.libs.envm.Charset;
-import exp.libs.envm.DBType;
-import exp.libs.utils.format.ESCUtils;
-import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.io.JarUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
-import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.ui.SwingUtils;
@@ -55,32 +48,11 @@ class _VerMgrUI extends MainWindow {
 	
 	private final static String DEFAULT_TITLE = "版本管理";
 	
-	/** 版本信息库的脚本 */
-	private final static String VER_DB_SCRIPT = "/exp/libs/warp/ver/VERSION-INFO-DB.sql";
-	
-	/** 版本库库名 */
-	private final static String DB_NAME = ".verinfo";
-	
-	/** 资源目录 */
-	private final static String RES_DIR = "./src/main/resources";
-	
-	/**
-	 * 存储版本信息的文件数据库位置.
-	 * 	[src/main/resources] 为Maven项目默认的资源目录位置（即使非Maven项目也可用此位置）
-	 */
-	private final static String VER_DB = RES_DIR.concat("/").concat(DB_NAME);
-	
-	/** 临时版本库位置（仅用于查看版本信息） */
-	private final static String TMP_VER_DB = "./conf/".concat(DB_NAME);
-	
 	/** [当前版本]的Tab面板索引 */
 	private final static int CUR_VER_TAB_IDX = 2;
 	
 	/** Tab面板 */
 	private JTabbedPane tabbedPanel;
-	
-	/** 版本信息文件的数据源 */
-	private DataSourceBean ds;
 	
 	/** 项目版本信息 */
 	private _PrjVerInfo prjVerInfo;
@@ -103,6 +75,9 @@ class _VerMgrUI extends MainWindow {
 	/** 新增新版本信息的按钮 */
 	private JButton createVerBtn;
 	
+	/** 版本信息文件的数据源 */
+	private DataSourceBean ds;
+	
 	/** 界面单例 */
 	private static volatile _VerMgrUI instance;
 	
@@ -119,7 +94,7 @@ class _VerMgrUI extends MainWindow {
 	 * @param verInfos 版本信息
 	 * @return
 	 */
-	public static _VerMgrUI getInstn() {
+	protected static _VerMgrUI getInstn() {
 		if(instance == null) {
 			synchronized (_VerMgrUI.class) {
 				if(instance == null) {
@@ -151,8 +126,8 @@ class _VerMgrUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		initDS();
-		if(initVerDB()) {
+		this.ds = _VerDBMgr.getInstn().getDS();
+		if(_VerDBMgr.getInstn().initVerDB()) {
 			this.prjVerInfo = loadPrjVerInfo();
 		} else {
 			this.prjVerInfo = new _PrjVerInfo(null);
@@ -168,46 +143,6 @@ class _VerMgrUI extends MainWindow {
 		this.findHisVerBtn = new JButton("查找");
 		this.modifyCurVerBtn = new JButton("修改");
 		this.createVerBtn = new JButton("保存");
-	}
-	
-	private void initDS() {
-		this.ds = new DataSourceBean();
-		ds.setDriver(DBType.SQLITE.DRIVER);
-		ds.setCharset(Charset.UTF8);
-		ds.setName(VER_DB);
-		
-		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
-		if(!SqliteUtils.testConn(ds)) {
-			if(!FileUtils.exists(TMP_VER_DB)) {
-				JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
-				FileUtils.hide(TMP_VER_DB);
-			}
-			ds.setName(TMP_VER_DB);
-		}
-	}
-	
-	private boolean initVerDB() {
-		boolean isOk = true;
-		Connection conn = SqliteUtils.getConn(ds);
-		String script = JarUtils.read(VER_DB_SCRIPT, Charset.UTF8);
-		try {
-			String[] sqls = script.split(";");
-			for(String sql : sqls) {
-				if(StrUtils.isNotTrimEmpty(sql)) {
-					isOk &= DBUtils.execute(conn, sql);
-				}
-			}
-		} catch(Exception e) {
-			isOk = false;
-			SwingUtils.error("初始化项目版本信息库失败", e);
-		}
-		
-		if(isOk == false) {
-			SwingUtils.warn("执行项目版本信息库的初始化脚本失败");
-		}
-		SqliteUtils.releaseDisk(conn);
-		SqliteUtils.close(conn);
-		return isOk;
 	}
 	
 	private _PrjVerInfo loadPrjVerInfo() {
@@ -478,18 +413,13 @@ class _VerMgrUI extends MainWindow {
 		hisVerTable.reflash(prjVerInfo.toHisVerTable(keyword));
 	}
 	
-	protected String toCurVerInfo() {
-		List<List<String>> curVerInfo = new LinkedList<List<String>>();
-		curVerInfo.add(Arrays.asList(new String[] { "项目名称", prjVerInfo.getPrjName() }));
-		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
-		curVerInfo.add(Arrays.asList(new String[] { "项目描述", prjVerInfo.getPrjDesc()}));
-		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
-		curVerInfo.add(Arrays.asList(new String[] { "版本号", prjVerInfo.getCurVer().getVersion() }));
-		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
-		curVerInfo.add(Arrays.asList(new String[] { "定版时间", prjVerInfo.getCurVer().getDatetime() }));
-		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
-		curVerInfo.add(Arrays.asList(new String[] { "最后责任人", prjVerInfo.getCurVer().getAuthor() }));
-		return ESCUtils.toTXT(curVerInfo, false);
+	protected String getCurVerInfo() {
+		return _VerDBMgr.getInstn()._toCurVerInfo(
+				prjVerInfo.getPrjName(), 
+				prjVerInfo.getPrjDesc(), 
+				prjVerInfo.getCurVer().getVersion(), 
+				prjVerInfo.getCurVer().getDatetime(), 
+				prjVerInfo.getCurVer().getAuthor());
 	}
 	
 	
