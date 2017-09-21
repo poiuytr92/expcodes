@@ -77,10 +77,8 @@ public class _VerDBMgr {
 		
 		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
 		if(!SqliteUtils.testConn(ds)) {
-			if(!FileUtils.exists(TMP_VER_DB)) {
-				JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
-				FileUtils.hide(TMP_VER_DB);
-			}
+			JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
+			FileUtils.hide(TMP_VER_DB);
 			ds.setName(TMP_VER_DB);
 		}
 	}
