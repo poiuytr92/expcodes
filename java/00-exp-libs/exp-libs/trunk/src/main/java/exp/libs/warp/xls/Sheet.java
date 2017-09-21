@@ -52,6 +52,14 @@ public class Sheet {
 	}
 
 	/**
+	 * 获取sheet页名称
+	 * @return sheet页名称
+	 */
+	public String NAME() {
+		return (isNull() ? "NULL" : sheet.getSheetName());
+	}
+	
+	/**
 	 * 单个Sheet页支持的最大行数
 	 * @return 若初始化失败则返回0
 	 */
@@ -370,7 +378,7 @@ public class Sheet {
 	 */
 	private List<Object> _getRowDatas(int row) {
 		List<Object> rowDatas = new ArrayList<Object>(2);
-		Row _row = _createRow(row);
+		Row _row = _getRow(row);
 		if(_row != null) {
 			int size = _row.getLastCellNum();
 			rowDatas = new ArrayList<Object>(size);
