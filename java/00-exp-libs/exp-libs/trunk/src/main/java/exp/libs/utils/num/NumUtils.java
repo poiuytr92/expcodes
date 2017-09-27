@@ -437,4 +437,44 @@ public class NumUtils {
 		return radian * TO_ANGEL;
 	}
 	
+	/**
+	 * <PRE>
+	 * 生成从bgn到end的范围数组.
+	 * 	例如:
+	 *    从 1...5 的范围数组为 [1, 2, 3, 4, 5]
+	 *    从 2...-2 的的范围数组为 [2, 1, 0, -1, 2]
+	 * </PRE>
+	 * @param bgn 范围数组起始值（包括）
+	 * @param end 范围数组终止值（包括）
+	 * @return 范围数组
+	 */
+	public static int[] toRangeArray(int bgn, int end) {
+		boolean isAsc = (bgn <= end);
+		int[] array = new int[(isAsc ? (end - bgn) : (bgn - end)) + 1];
+		for(int i = 0; i < array.length; i++) {
+			array[i] = (isAsc ? (bgn + i) : bgn - i);
+		}
+		return array;
+	}
+	
+	/**
+	 * <PRE>
+	 * 生成从bgn到end的范围数组.
+	 * 	例如:
+	 *    从 1...5 的范围数组为 [1, 2, 3, 4, 5]
+	 *    从 2...-2 的的范围数组为 [2, 1, 0, -1, 2]
+	 * </PRE>
+	 * @param bgn 范围数组起始值（包括）
+	 * @param end 范围数组终止值（包括）
+	 * @return 范围数组
+	 */
+	public static long[] toRangeArray(long bgn, long end) {
+		boolean isAsc = (bgn <= end);
+		long[] array = new long[(int) (isAsc ? (end - bgn) : (bgn - end)) + 1];
+		for(int i = 0; i < array.length; i++) {
+			array[i] = (isAsc ? (bgn + i) : bgn - i);
+		}
+		return array;
+	}
+	
 }
