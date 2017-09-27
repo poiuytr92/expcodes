@@ -1,6 +1,7 @@
 package exp.libs.utils.other;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
@@ -69,7 +70,10 @@ public class ListUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * 移除list中的重复元素（其他元素保持顺序不变）
+	 * 	此方法[会修改]list的内容.
+	 * <PRE>
 	 * @param list 需要移除重复元素的list
 	 * @param 移除元素个数
 	 */
@@ -90,30 +94,55 @@ public class ListUtils {
 	}
 	
 	/**
+	 * <PRE>
+	 * 移除array中的重复元素（其他元素保持顺序不变）
+	 * 	此方法[不会修改]array的内容.
+	 * <PRE>
+	 * @param array 需要移除重复元素的array
+	 * @param 移除重复元素后的array
+	 */
+	public static <E> E[] removeDuplicate(E[] array) {
+		E[] ary = null;
+		if(array != null) {
+			ary = Arrays.copyOf(array, array.length);	// 复制源数组
+			Set<E> set = new HashSet<E>();	// 唯一集
+			for(int i = 0; i < ary.length; i++) {
+				if(set.add(ary[i]) == false) {
+					ary[i] = null;
+				}
+			}
+			set.clear();
+			int len = cutbackNull(ary);	// 后移null元素(即被删除的元素)
+			ary = Arrays.copyOfRange(ary, 0, len);	// 删除末尾空元素
+		}
+		return ary;
+	}
+	
+	/**
      * 把数组中所有null元素后移，非null元素前移（数组实际长度不变, 非空元素顺序不变）
      * @param array 原数组
      * @return 数组非空元素长度
      */
-    public static int cutbackNull(Object[] array) {
+    public static <E> int cutbackNull(E[] array) {
     	if(array == null) {
     		return 0;
     	}
     	
-		int nullPos = 0;	// 上次检索到的空元素指针位置
+		int pNull = 0;	// 上次检索到的空元素指针位置
 		int len = 0;		// 非空数组的实际长度（即非空元素个数）
 		for(; len < array.length; len++) {
 			if(array[len] != null) {
 				continue;
 			}
 			
-			for(int j = NumUtils.max(len, nullPos) + 1; j < array.length; j++) {
+			for(int j = NumUtils.max(len, pNull) + 1; j < array.length; j++) {
 				if(array[j] == null) {
 					continue;
 				}
 				
 				array[len] = array[j];
 				array[j] = null;
-				nullPos = j;
+				pNull = j;
 				break;
 			}
 			
