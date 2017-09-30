@@ -67,7 +67,7 @@ public class TimeUtils {
 	 * @return yyyy-MM-dd HH:mm:ss格式字符串
 	 */
 	public static String toStr(long millis) {
-		return toStr((millis > 0 ? new Date(millis) : null), FORMAT_YMDHMS);
+		return toStr(millis, FORMAT_YMDHMS);
 	}
 	
 	/**
@@ -77,7 +77,7 @@ public class TimeUtils {
 	 * @return 指定格式字符串
 	 */
 	public static String toStr(long millis, String format) {
-		return toStr((millis > 0 ? new Date(millis) : null), format);
+		return toStr((millis >= 0 ? new Date(millis) : null), format);
 	}
 	
 	/**
