@@ -37,12 +37,30 @@ public class ListUtils {
 	}
 	
 	/**
-	 * 测试队列是否为空(null或长度<=0)
+	 * 测试数组是否非空(长度>0)
 	 * @param array 被测试数组
+	 * @return true:是; false:否
+	 */
+	public static boolean isNotEmpty(Object[] array) {
+		return !isEmpty(array);
+	}
+	
+	/**
+	 * 测试队列是否为空(null或长度<=0)
+	 * @param list 被测试队列
 	 * @return true:是; false:否
 	 */
 	public static boolean isEmpty(List<?> list) {
 		return (list == null || list.size() <= 0);
+	}
+	
+	/**
+	 * 测试队列是否非空(长度>0)
+	 * @param list 被测试队列
+	 * @return true:是; false:否
+	 */
+	public static boolean isNotEmpty(List<?> list) {
+		return !isEmpty(list);
 	}
 	
 	/**
