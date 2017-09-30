@@ -8,8 +8,9 @@ import java.util.List;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.DBType;
-import exp.libs.utils.StrUtils;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.io.JarUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.sf.am.bean.TAccount;
@@ -40,7 +41,7 @@ class DBMgr {
 		if(!dbFile.exists()) {
 			FileUtils.createDir(ENV_DB_DIR);
 			Connection conn = SqliteUtils.getConn(ds);
-			String script = FileUtils.readFileInJar(ENV_DB_SCRIPT, Charset.ISO);
+			String script = JarUtils.read(ENV_DB_SCRIPT, Charset.ISO);
 			String[] sqls = script.split(";");
 			for(String sql : sqls) {
 				if(StrUtils.isNotTrimEmpty(sql)) {

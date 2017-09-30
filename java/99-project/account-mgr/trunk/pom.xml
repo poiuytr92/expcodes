@@ -39,7 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
 		<explibs.version>1.0-SNAPSHOT</explibs.version>
-		<catt.plugin.version>1.2.0.4</catt.plugin.version>
+		<mrp.plugin.version>1.0-SNAPSHOT</mrp.plugin.version>
 	</properties>
 
 	<!-- 项目依赖 -->
@@ -420,7 +420,7 @@
 			<plugin>
 				<groupId>exp.libs</groupId>
 				<artifactId>mojo-release-plugin</artifactId>
-				<version>1.0-SNAPSHOT</version>
+				<version>${mrp.plugin.version}</version>
 				<executions>
 					<execution>
 						<id>mrp</id>
