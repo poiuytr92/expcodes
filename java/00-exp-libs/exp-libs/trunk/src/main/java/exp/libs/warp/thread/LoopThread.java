@@ -42,6 +42,11 @@ public abstract class LoopThread extends Thread {
 	protected final int DEFAULT_JOIN_MILLIS = 60000;
 	
 	/**
+	 * 标记线程是否已经运行过（同一线程对象只能被start一次）
+	 */
+	private volatile boolean hasRun;
+	
+	/**
 	 * 线程停止标识
 	 */
 	private volatile boolean isStop;
@@ -67,6 +72,7 @@ public abstract class LoopThread extends Thread {
 	 */
 	protected LoopThread(final String name) {
 		super(name);
+		this.hasRun = false;
 		this.isStop = true;
 		this.isNotifyPause = false;
 		this.isPause = false;
@@ -109,9 +115,16 @@ public abstract class LoopThread extends Thread {
 	/**
 	 * 启动线程
 	 */
-	public final void _start() {
-		isStop = false;
-		super.start();
+	public final synchronized boolean _start() {
+		boolean isOk = false;
+		if(hasRun == false) {
+			hasRun = true;
+			isOk = true;
+			
+			isStop = false;
+			super.start();
+		}
+		return isOk;
 	}
 	
 	/**
