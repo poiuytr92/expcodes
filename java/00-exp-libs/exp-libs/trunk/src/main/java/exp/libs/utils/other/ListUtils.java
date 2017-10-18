@@ -46,7 +46,7 @@ public class ListUtils {
 	}
 	
 	/**
-	 * 测试队列是否为空(null或长度<=0)
+	 * 测试队列/集合是否为空(null或长度<=0)
 	 * @param list 被测试队列
 	 * @return true:是; false:否
 	 */
