@@ -186,7 +186,7 @@ public class ISPA {
 	}
 	
 	/**
-	 * 含无需必经点的最短路问题， 使用启发式算法求解
+	 * 含无序必经点的最短路问题， 使用启发式算法求解
 	 * @param graph
 	 * @return
 	 */
@@ -387,8 +387,10 @@ public class ISPA {
 	 * @return
 	 */
 	private static QRst _toQACA(final TopoGraph graph) {
-		final int ANT_NUM = 10;
-		final int GN_NUM = 10;
+		final int GN_NUM = 10;	// 迭代代数
+		int ANT_NUM = graph.nodeSize() / 20;	// 蚂蚁规模
+		ANT_NUM = (ANT_NUM < 10 ? 10 : ANT_NUM);
+		
 		QACA qaca = new QACA(graph.getAdjacencyMatrix(), 
 				graph.getSrc().getId(), 
 				graph.getSnk().getId(), 

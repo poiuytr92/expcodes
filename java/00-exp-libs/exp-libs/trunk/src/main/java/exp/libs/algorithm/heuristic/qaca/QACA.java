@@ -30,6 +30,9 @@ public final class QACA {
 	/** 默认量子蚂蚁种群规模 */
 	public final static int DEFAULT_QANT_SIZE = 10;
 	
+	/** 默认求解的收敛超时时间(ms) */
+	private final static long DEFAULT_TIMEOUT = 60000;
+	
 	/** 量子蚂蚁种群规模 */
 	private int qAntSize;
 	
@@ -112,15 +115,28 @@ public final class QACA {
 	}
 	
 	/**
-	 * 执行QACA算法求解
+	 * 执行QACA算法求解(默认超时为1分钟)
 	 * @return 得到的最优解
 	 */
 	public QRst exec() {
+		return exec(DEFAULT_TIMEOUT);
+	}
+	
+	/**
+	 * 执行QACA算法求解
+	 * @param timeout 求解超时(<=0表示无限制), 避免收敛过慢
+	 * @return 得到的最优解
+	 */
+	public QRst exec(long timeout) {
 		resetStatistics();
 		long bgnTime = System.currentTimeMillis();
 		List<Future<QRst>> rsts = new LinkedList<Future<QRst>>();
 		
 		for(int gn = 0; gn < ENV.MAX_GENERATION(); gn++) {
+			if(timeout > 0 && System.currentTimeMillis() - bgnTime > timeout) {
+				log.error("QACA 收敛到可行解超时, 已检索代数:[{}] (TIMEOUT={}ms, ANT={})", gn, timeout, qAntSize);
+				break;
+			}
 			
 			// 每代蚂蚁的个体之间使用多线程并行搜索
 			BaseThreadPool<QRst> tp = new BaseThreadPool<QRst>(qAntSize);
