@@ -12,6 +12,7 @@ using namespace std;
 // 无效的进程号(系统进程号为0, DWORD为无符号整型，只能取最大值)
 const static DWORD INVAILD_PID = 0xFFFFFFFF;
 
+
 /************************************************************************/
 /* 单个进程的信息对象                                                   */
 /************************************************************************/ 
@@ -36,10 +37,13 @@ class Process {
 static Process INVAILD_PROCESS;
 
 
-
+/************************************************************************/
+/* 单个进程内的所有模块对象                                             */
+/************************************************************************/ 
 class ProcessModule : public Process {
 	public:
-		DWORD mSize;				// modBaseSize 模块大小（字节）
+		int mCnt;					// 模块个数
+		DWORD mSize;				// modBaseSize 单个模块大小（字节）
 		DWORD mID;					// th32ModuleID, 此成员已经不再被使用，通常被设置为1
 		DWORD usage;				// GlblcntUsage 或 ProccntUsage 全局模块的使用计数，即模块的总载入次数。通常这一项是没有意义的
 		BYTE* baseAddr;				// modBaseAddr 模块基址（在所属进程范围内）
@@ -47,49 +51,24 @@ class ProcessModule : public Process {
 		list<string>* mNames;		// szModule[MAX_MODULE_NAME32 + 1];	 NULL结尾的字符串，其中包含模块名。
 		list<string>* mPaths;		// szExePath[MAX_PATH];	 NULL结尾的字符串，其中包含的位置，或模块的路径。
 
-		ProcessModule() : Process() {
-
+		ProcessModule() : Process(), 
+			mCnt(0), mSize(0), mID(0), usage(0), baseAddr(NULL), hModule(NULL) {
+			this->mNames = new list<string>();
+			this->mPaths = new list<string>();
 		}
+
+		~ProcessModule() {
+			clear();
+			delete mNames; mNames = NULL;
+			delete mPaths; mPaths = NULL;
+		}
+
+	private:
+		void clear();
 };
 
-/************************************************************************/
-/* 
-备注编辑
-modBaseAddr和hModule的成员只有在指定的th32ProcessID进程中才有效。
-
----->  me32.dwSize==1080
----->  me32.GlblcntUsage==2
----->  me32.hModule==0xfd930000
----->  me32.modBaseAddr==0xfd930000
----->  me32.ProccntUsage==2
----->  me32.szExePath==C:\Windows\system32\CRYPTBASE.dll
----->  me32.szModule==CRYPTBASE.dll
----->  me32.th32ModuleID==1
----->  me32.th32ProcessID==664
----->  CNT==16
-
----->  me32.dwSize==1080
----->  me32.GlblcntUsage==2
----->  me32.hModule==0xff760000
----->  me32.modBaseAddr==0xff760000
----->  me32.ProccntUsage==2
----->  me32.szExePath==C:\Windows\system32\ADVAPI32.dll
----->  me32.szModule==ADVAPI32.dll
----->  me32.th32ModuleID==1
----->  me32.th32ProcessID==664
----->  CNT==17
-
----->  me32.dwSize==1080
----->  me32.GlblcntUsage==8
----->  me32.hModule==0xff240000
----->  me32.modBaseAddr==0xff240000
----->  me32.ProccntUsage==8
----->  me32.szExePath==C:\Windows\SYSTEM32\sechost.dll
----->  me32.szModule==sechost.dll
----->  me32.th32ModuleID==1
----->  me32.th32ProcessID==664
----->  CNT==18*/
-/************************************************************************/
+// 默认的空进程模块对象
+static ProcessModule INVAILD_PROCESS_MODULE;
 
 
 /************************************************************************/
@@ -99,18 +78,19 @@ class SystemProcessMgr
 {
 	public:
 		SystemProcessMgr() {
-			IS_X64_OS = OS_UTILS::isX64();
-			processMap = new map<DWORD, Process>();
-			pids = new DWORD[1];
-			processes = new Process*[1];
+			this->IS_X64_OS = OS_UTILS::isX64();
+			this->processMap = new map<DWORD, Process>();
+			this->pids = new DWORD[1];
+			this->processes = new Process*[1];
+			this->processModule = new ProcessModule();
 		}
 
 		~SystemProcessMgr() {
 			clearProcesses();
-
 			delete processMap; processMap = NULL;
 			delete[] pids; pids = NULL;
 			delete[] processes; processes = NULL;
+			delete processModule; processModule = NULL;
 		}
 
 		bool reflashProcessList();
@@ -133,6 +113,7 @@ class SystemProcessMgr
 		map<DWORD, Process>* processMap;	// 当前进程表
 		DWORD* pids;						// 当前进程对象号数组
 		Process** processes;				// 当前进程对象的指针数组
+		ProcessModule* processModule;		// 当前选中的进程模块指针
 };
 
 

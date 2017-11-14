@@ -14,6 +14,15 @@ using namespace std;
 
 
 /************************************************************************/
+/* 清空进程模块列表                                                     */
+/************************************************************************/ 
+void ProcessModule::clear() {
+	mNames->clear();
+	mPaths->clear();
+}
+
+
+/************************************************************************/
 /* 刷新当前系统进程列表                                                 */
 /* @return 是否刷新成功                                                 */
 /************************************************************************/ 
@@ -183,34 +192,44 @@ bool SystemProcessMgr::isX64Process(DWORD pid) {
 
 
 ProcessModule* SystemProcessMgr::getProcessModuleInfo(DWORD pid) {
+	delete processModule;
+
 	HANDLE hProcess = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
 	if(hProcess == INVALID_HANDLE_VALUE) {
+		processModule = &INVAILD_PROCESS_MODULE;
 		TRACE(_T("Create Process-Module Snapshot Error\r\n"));
 
 	} else {
+		processModule = new ProcessModule();
+		processModule->pid = pid;
+
 		MODULEENTRY32 me;
 		me.dwSize = sizeof(MODULEENTRY32);
-
-		int cnt = 0;
 		BOOL hasNext = Module32First(hProcess, &me);
 		while (hasNext) {
-			cnt++;
+			processModule->mCnt++;
+			processModule->mSize = me.dwSize;
+			processModule->mID = me.th32ModuleID;
+			processModule->usage = me.GlblcntUsage;
+			processModule->baseAddr = me.modBaseAddr;
+			processModule->hModule = me.hModule;
 			
-			TRACE(_T("\n ---->  me32.dwSize==%d"), me.dwSize);
-			TRACE(_T("\n ---->  me32.GlblcntUsage==%d"), me.GlblcntUsage);
-			TRACE(_T("\n ---->  me32.hModule==0x%x"), me.hModule);
-			TRACE(_T("\n ---->  me32.modBaseAddr==0x%x"), me.modBaseAddr);
-			TRACE(_T("\n ---->  me32.ProccntUsage==%d"), me.ProccntUsage);
-			TRACE(_T("\n ---->  me32.szExePath==%s"), me.szExePath);
-			TRACE(_T("\n ---->  me32.szModule==%s"), me.szModule);
-			TRACE(_T("\n ---->  me32.th32ModuleID==%d"), me.th32ModuleID);
-			TRACE(_T("\n ---->  me32.th32ProcessID==%d"), me.th32ProcessID);
-			TRACE(_T("\n ---->  CNT==%d\n"),cnt);
+			char* tmp = STR_UTILS::toChar(me.szModule);
+			string mName = string(tmp);
+			STR_UTILS::sFree(tmp);
+
+			tmp = STR_UTILS::toChar(me.szExePath);
+			string mPath = string(tmp);
+			STR_UTILS::sFree(tmp);
+
+			(processModule->mNames)->push_back(mName);
+			(processModule->mPaths)->push_back(mPath);
+
 			hasNext = Module32Next(hProcess, &me);
 		}
 	}
 	CloseHandle(hProcess);
-	return NULL;	// FIXME
+	return processModule;
 }
 
 //void SystemProcessMgr::getProcessInfo2(DWORD pid) {

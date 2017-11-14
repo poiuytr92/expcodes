@@ -1,5 +1,6 @@
 #pragma once
 
+#include "SystemProcessMgr.h"
 
 // DialogProcessDetail 对话框
 
@@ -10,6 +11,8 @@ class DialogProcessDetail : public CDialogEx
 public:
 	DialogProcessDetail(CWnd* pParent = NULL);   // 标准构造函数
 	virtual ~DialogProcessDetail();
+
+	void updateToList(ProcessModule* pm);
 
 // 对话框数据
 	enum { IDD = IDD_PROC_DETAIL };

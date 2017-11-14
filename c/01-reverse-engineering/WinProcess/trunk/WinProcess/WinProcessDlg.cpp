@@ -245,15 +245,10 @@ void CWinProcessDlg::OnBnClickedDetail()
 		CString sPID = m_process_table.GetItemText(rowId, 1);
 		DWORD pid = _wtol(sPID);
 
-		spMgr->getProcessModuleInfo(pid);
-
-		// TODO 枚举进程信息
-		/*TCHAR _wchar[10] = { '\0' };
-		wsprintf(_wchar, _T("%d"), pid);
-		MessageBox(_wchar);*/
-
+		ProcessModule* pm = spMgr->getProcessModuleInfo(pid);
 		DialogProcessDetail* dpd = new DialogProcessDetail();
-		dpd->DoModal();
+		dpd->updateToList(pm);
+		dpd->DoModal();	// 显示界面
 	}
 }
 
