@@ -6,6 +6,7 @@
 #include <Windows.h>
 #include <string>
 #include <map>
+#include <list>
 using namespace std;
 
 // 无效的进程号(系统进程号为0, DWORD为无符号整型，只能取最大值)
@@ -38,13 +39,13 @@ static Process INVAILD_PROCESS;
 
 class ProcessModule : public Process {
 	public:
-		DWORD mSize;		// modBaseSize 模块大小（字节）
-		DWORD mID;			// th32ModuleID, 此成员已经不再被使用，通常被设置为1
-		DWORD usage;		// GlblcntUsage 或 ProccntUsage 全局模块的使用计数，即模块的总载入次数。通常这一项是没有意义的
-		BYTE* baseAddr;		// modBaseAddr 模块基址（在所属进程范围内）
-		HMODULE hModule;	// hModule 模块句柄地址（在所属进程范围内）
-		string mName;		// szModule[MAX_MODULE_NAME32 + 1];	 NULL结尾的字符串，其中包含模块名。
-		string mPath;		// szExePath[MAX_PATH];	 NULL结尾的字符串，其中包含的位置，或模块的路径。
+		DWORD mSize;				// modBaseSize 模块大小（字节）
+		DWORD mID;					// th32ModuleID, 此成员已经不再被使用，通常被设置为1
+		DWORD usage;				// GlblcntUsage 或 ProccntUsage 全局模块的使用计数，即模块的总载入次数。通常这一项是没有意义的
+		BYTE* baseAddr;				// modBaseAddr 模块基址（在所属进程范围内）
+		HMODULE hModule;			// hModule 模块句柄地址（在所属进程范围内）
+		list<string>* mNames;		// szModule[MAX_MODULE_NAME32 + 1];	 NULL结尾的字符串，其中包含模块名。
+		list<string>* mPaths;		// szExePath[MAX_PATH];	 NULL结尾的字符串，其中包含的位置，或模块的路径。
 
 		ProcessModule() : Process() {
 
@@ -106,9 +107,9 @@ class SystemProcessMgr
 
 		~SystemProcessMgr() {
 			clearProcesses();
-			delete processMap;
-			delete pids;
-			delete processes;
+			delete[] processMap; processMap = NULL;
+			delete[] pids; pids = NULL;
+			delete[] processes; processes = NULL;
 		}
 
 		bool reflashProcessList();
@@ -134,23 +135,23 @@ class SystemProcessMgr
 };
 
 
-//在psaipi.dll中的函数EnumProcesses用来枚举进程 
-typedef BOOL (_stdcall *ENUMPROCESSES)(  //注意这里要指明调用约定为-stdcall
-	DWORD* pProcessIds,  //指向进程ID数组链  
-	DWORD cb,    //ID数组的大小，用字节计数
-	DWORD* pBytesReturned);   //返回的字节
-
-//在psapi.dll中的函数EnumProcessModules用来枚举进程模块
-typedef BOOL (_stdcall *ENUMPROCESSMODULES)(
-	HANDLE hProcess,   //进程句柄
-	HMODULE* lphModule, //指向模块句柄数组链
-	DWORD cb,    //模块句柄数组大小，字节计数
-	LPDWORD lpcbNeeded);   //存储所有模块句柄所需的字节数
-
-//在psapi.dll中的函数GetModuleFileNameEx获得进程模块名
-typedef DWORD (_stdcall *GETMODULEFILENAMEEX)(
-	HANDLE hProcess,   //进程句柄
-	HMODULE hModule,   //进程模块句柄
-	LPTSTR lpFilename,   //存放模块全路径名
-	DWORD nSize    //lpFilename缓冲区大小，字符计算
-	);
+////在psaipi.dll中的函数EnumProcesses用来枚举进程 
+//typedef BOOL (_stdcall *ENUMPROCESSES)(  //注意这里要指明调用约定为-stdcall
+//	DWORD* pProcessIds,  //指向进程ID数组链  
+//	DWORD cb,    //ID数组的大小，用字节计数
+//	DWORD* pBytesReturned);   //返回的字节
+//
+////在psapi.dll中的函数EnumProcessModules用来枚举进程模块
+//typedef BOOL (_stdcall *ENUMPROCESSMODULES)(
+//	HANDLE hProcess,   //进程句柄
+//	HMODULE* lphModule, //指向模块句柄数组链
+//	DWORD cb,    //模块句柄数组大小，字节计数
+//	LPDWORD lpcbNeeded);   //存储所有模块句柄所需的字节数
+//
+////在psapi.dll中的函数GetModuleFileNameEx获得进程模块名
+//typedef DWORD (_stdcall *GETMODULEFILENAMEEX)(
+//	HANDLE hProcess,   //进程句柄
+//	HMODULE hModule,   //进程模块句柄
+//	LPTSTR lpFilename,   //存放模块全路径名
+//	DWORD nSize    //lpFilename缓冲区大小，字符计算
+//	);

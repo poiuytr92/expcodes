@@ -59,7 +59,7 @@ CWinProcessDlg::CWinProcessDlg(CWnd* pParent /*=NULL*/)
 }
 
 CWinProcessDlg::~CWinProcessDlg() {
-	delete spMgr;
+	delete spMgr; spMgr = NULL;
 }
 
 void CWinProcessDlg::DoDataExchange(CDataExchange* pDX)
