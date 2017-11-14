@@ -217,15 +217,25 @@ void CWinProcessDlg::reflashProcessList(bool sortByPID) {
 	}
 
 	// 更新进程总数
-	SetDlgItemText(IDC_PROCESS_NUM, STR_UTILS::toWChar(cnt));
+	TCHAR* wCNT = STR_UTILS::toWChar(cnt);
+	SetDlgItemText(IDC_PROCESS_NUM, wCNT);
+	STR_UTILS::sFree(wCNT);
 }
 
 // FIXME : toWChar返回的数组所占用的资源未被释放
 void CWinProcessDlg::addToList(int idx, Process process) {
-	m_process_table.InsertItem(idx, STR_UTILS::toWChar((idx + 1)));
-	m_process_table.SetItemText(idx, 1, STR_UTILS::toWChar(process.pid));
+	TCHAR* wIDX = STR_UTILS::toWChar(idx + 1);
+	TCHAR* wPID = STR_UTILS::toWChar(process.pid);
+	TCHAR* wName = STR_UTILS::toWChar(process.pName.c_str());
+
+	m_process_table.InsertItem(idx, wIDX);
+	m_process_table.SetItemText(idx, 1, wPID);
 	m_process_table.SetItemText(idx, 2, (process.isX64 ? _T("x64") : _T("x86")));
-	m_process_table.SetItemText(idx, 3, STR_UTILS::toWChar(process.pName.c_str()));	// 进程名称的字节数组长度为260，缓冲区比其大即可
+	m_process_table.SetItemText(idx, 3, wName);	
+
+	STR_UTILS::sFree(wIDX);
+	STR_UTILS::sFree(wPID);
+	STR_UTILS::sFree(wName);
 }
 
 void CWinProcessDlg::OnBnClickedDetail()
