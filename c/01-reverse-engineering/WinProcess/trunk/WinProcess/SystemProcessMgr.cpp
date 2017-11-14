@@ -1,7 +1,7 @@
 
 #include "stdafx.h"
-#include "os_utils.h"
-#include "str_utils.h"
+#include "utils_os.h"
+#include "utils_str.h"
 #include "SystemProcessMgr.h"
 
 #include <algorithm>
@@ -64,10 +64,10 @@ bool SystemProcessMgr::traverseProcesses() {
 
 		BOOL hasNext = Process32First(hProcessSNapshot, &pe32);	// 取出快照列表中的第一个进程
 		while (hasNext) {
-			char* tmp = toChar(pe32.szExeFile);
+			char* tmp = STR_UTILS::toChar(pe32.szExeFile);
 			string pName = string(tmp);
 			DWORD pid = pe32.th32ProcessID;
-			delete tmp;
+			STR_UTILS::sFree(tmp);
 			
 			addProcess(pid, pName);	// 把进程信息添加到缓存
 			hasNext = Process32NextW(hProcessSNapshot, &pe32);	// 取出快照列表中的下一个进程
@@ -220,7 +220,7 @@ ProcessModule* SystemProcessMgr::getProcessModuleInfo(DWORD pid) {
 //}
 //
 //void SystemProcessMgr::getProcessInfo3(DWORD pid) {
-//	HMODULE hPsDll = LoadLibrary(_T("PSAPI.DLL"));	// FreeLibrary
+//	HMODULE hPsDll = LoadLibrary(_T("PSAPI.DLL"));	// FreeLibrary 动态库使用后需要释放
 //	ENUMPROCESSES pEnumProcesses = (ENUMPROCESSES) GetProcAddress(hPsDll, "EnumProcesses");
 //	ENUMPROCESSMODULES pEnumProcessModules = (ENUMPROCESSMODULES) GetProcAddress(hPsDll, "EnumProcessModules");
 //	GETMODULEFILENAMEEX pGetModuleFileNameEx = (GETMODULEFILENAMEEX) GetProcAddress(hPsDll, "GetModuleFileNameExA");

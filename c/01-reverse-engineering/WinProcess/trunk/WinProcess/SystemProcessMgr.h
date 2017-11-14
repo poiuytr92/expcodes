@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-#include "os_utils.h"
+#include "utils_os.h"
 
 #include <Windows.h>
 #include <string>
@@ -98,7 +98,7 @@ class SystemProcessMgr
 {
 	public:
 		SystemProcessMgr() {
-			IS_X64_OS = isX64OS();
+			IS_X64_OS = OS_UTILS::isX64();
 			processMap = new map<DWORD, Process>();
 			pids = new DWORD[1];
 			processes = new Process*[1];

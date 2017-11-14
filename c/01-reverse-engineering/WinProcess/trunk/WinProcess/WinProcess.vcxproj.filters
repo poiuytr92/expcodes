@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{0af38a4a-f009-436b-952e-8be68211eb74}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -21,6 +24,9 @@
     </None>
     <None Include="res\WinProcess.rc2">
       <Filter>资源文件</Filter>
+    </None>
+    <None Include="exp-libs.dll">
+      <Filter>lib</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -31,12 +37,6 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="str_utils.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="os_utils.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="DialogProcessDetail.h">
@@ -51,15 +51,15 @@
     <ClInclude Include="SystemProcessMgr.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="utils_os.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="utils_str.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="str_utils.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="os_utils.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="DialogProcessDetail.cpp">
@@ -79,5 +79,10 @@
     <ResourceCompile Include="WinProcess.rc">
       <Filter>资源文件</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="exp-libs.lib">
+      <Filter>lib</Filter>
+    </Library>
   </ItemGroup>
 </Project>
