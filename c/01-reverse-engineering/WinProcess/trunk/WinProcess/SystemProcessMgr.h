@@ -107,6 +107,7 @@ class SystemProcessMgr
 
 		~SystemProcessMgr() {
 			clearProcesses();
+
 			delete processMap; processMap = NULL;
 			delete[] pids; pids = NULL;
 			delete[] processes; processes = NULL;
