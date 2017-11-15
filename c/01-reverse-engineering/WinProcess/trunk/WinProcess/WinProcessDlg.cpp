@@ -65,8 +65,7 @@ CWinProcessDlg::~CWinProcessDlg() {
 void CWinProcessDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LIST2, m_process_table);
-	//  DDX_Control(pDX, IDC_PROCESS_NUM, m_process_num);
+	DDX_Control(pDX, IDC_PROCESS_LIST, m_process_table);
 }
 
 BEGIN_MESSAGE_MAP(CWinProcessDlg, CDialogEx)
@@ -76,7 +75,7 @@ BEGIN_MESSAGE_MAP(CWinProcessDlg, CDialogEx)
 	ON_BN_CLICKED(IDOK, &CWinProcessDlg::OnBnClickedReflash)
 	ON_BN_CLICKED(IDC_DETAIL, &CWinProcessDlg::OnBnClickedDetail)
 	ON_BN_CLICKED(IDCANCEL, &CWinProcessDlg::OnBnClickedExit)
-	ON_NOTIFY(LVN_ITEMCHANGED, IDC_LIST2, &CWinProcessDlg::OnLvnItemchangedList2)
+	ON_NOTIFY(LVN_ITEMCHANGED, IDC_PROCESS_LIST, &CWinProcessDlg::OnLvnItemchangedList2)
 END_MESSAGE_MAP()
 
 
