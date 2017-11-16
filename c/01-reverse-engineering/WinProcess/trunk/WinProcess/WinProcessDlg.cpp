@@ -55,11 +55,16 @@ CWinProcessDlg::CWinProcessDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(CWinProcessDlg::IDD, pParent)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+
 	spMgr = new SystemProcessMgr();
+
+	dpd = new DialogProcessDetail(this);
+	dpd->Create(IDD_PROC_DETAIL, this);
 }
 
 CWinProcessDlg::~CWinProcessDlg() {
 	delete spMgr; spMgr = NULL;
+	delete dpd; dpd = NULL;
 }
 
 void CWinProcessDlg::DoDataExchange(CDataExchange* pDX)
@@ -84,33 +89,6 @@ END_MESSAGE_MAP()
 BOOL CWinProcessDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
-
-	// 将“关于...”菜单项添加到系统菜单中。
-
-	// IDM_ABOUTBOX 必须在系统命令范围内。
-	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
-	ASSERT(IDM_ABOUTBOX < 0xF000);
-
-	CMenu* pSysMenu = GetSystemMenu(FALSE);
-	if (pSysMenu != NULL)
-	{
-		BOOL bNameValid;
-		CString strAboutMenu;
-		bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
-		ASSERT(bNameValid);
-		if (!strAboutMenu.IsEmpty())
-		{
-			pSysMenu->AppendMenu(MF_SEPARATOR);
-			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
-		}
-	}
-
-	// 设置此对话框的图标。当应用程序主窗口不是对话框时，框架将自动
-	//  执行此操作
-	SetIcon(m_hIcon, TRUE);			// 设置大图标
-	SetIcon(m_hIcon, FALSE);		// 设置小图标
-
-	// TODO: 在此添加额外的初始化代码
 
 	/*++++ 初始化进程表单 ++++*/
 	DWORD style = m_process_table.GetExtendedStyle();
@@ -244,10 +222,8 @@ void CWinProcessDlg::OnBnClickedDetail()
 		CString sPID = m_process_table.GetItemText(rowId, 1);
 		DWORD pid = _wtol(sPID);
 
-		ProcessModule* pm = spMgr->getProcessModuleInfo(pid);
-		DialogProcessDetail* dpd = new DialogProcessDetail();
-		dpd->updateToList(pm);
-		dpd->DoModal();	// 显示界面
+		dpd->updateToList(spMgr->getProcessModuleInfo(pid));
+		dpd->ShowWindow(SW_SHOW);	// 显示界面
 	}
 }
 

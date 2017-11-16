@@ -61,9 +61,9 @@ void DialogProcessDetail::updateToList(ProcessModule* pm) {
 	TRACE(_T("\n ---->  CNT==%d\n"), pm->mCnt);
 
 
+	m_module_table.DeleteAllItems();
 	list<string>::iterator nameIts = pm->mNames->begin();
 	list<string>::iterator pathIts = pm->mPaths->begin();
-
 	for(int i = 0; i < pm->mCnt; i++, nameIts++, pathIts++) {
 		string name = *nameIts;
 		string path = *pathIts;
