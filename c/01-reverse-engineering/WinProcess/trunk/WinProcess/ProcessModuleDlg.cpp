@@ -51,16 +51,33 @@ BOOL ProcessModuleDlg::OnInitDialog() {
 
 void ProcessModuleDlg::updateToList(ProcessModule* pm) {
 
-	TRACE(_T("\n ---->  me32.dwSize==%d"), pm->mSize);
-	TRACE(_T("\n ---->  me32.GlblcntUsage==%d"), pm->usage);
-	TRACE(_T("\n ---->  me32.hModule==0x%x"), pm->hModule);
-	TRACE(_T("\n ---->  me32.modBaseAddr==0x%x"), pm->baseAddr);
-	//TRACE(_T("\n ---->  me32.szExePath==%s"), me.szExePath);
-	//TRACE(_T("\n ---->  me32.szModule==%s"), me.szModule);
-	TRACE(_T("\n ---->  me32.th32ModuleID==%d"), pm->mID);
-	TRACE(_T("\n ---->  me32.th32ProcessID==%d"), pm->pid);
-	TRACE(_T("\n ---->  CNT==%d\n"), pm->mCnt);
+	TCHAR* wTmp = STR_UTILS::toWChar(pm->pid);
+	SetDlgItemText(IDC_STATIC_PID, wTmp);
+	STR_UTILS::sFree(wTmp);
 
+	wTmp = STR_UTILS::toWChar(pm->mID);
+	SetDlgItemText(IDC_STATIC_MID, wTmp);
+	STR_UTILS::sFree(wTmp);
+
+	wTmp = STR_UTILS::toWChar(string((char*) pm->hModule).c_str());
+	SetDlgItemText(IDC_STATIC_MHWND, wTmp);
+	STR_UTILS::sFree(wTmp);
+
+	wTmp = STR_UTILS::toWChar(string((char*) pm->baseAddr).c_str());
+	SetDlgItemText(IDC_STATIC_MADDR, wTmp);
+	STR_UTILS::sFree(wTmp);
+
+	wTmp = STR_UTILS::toWChar(pm->mCnt);
+	SetDlgItemText(IDC_STATIC_MCNT, wTmp);
+	STR_UTILS::sFree(wTmp);
+
+	wTmp = STR_UTILS::toWChar(pm->mSize);
+	SetDlgItemText(IDC_STATIC_MSIZE, wTmp);
+	STR_UTILS::sFree(wTmp);
+
+	wTmp = STR_UTILS::toWChar(pm->usage);
+	SetDlgItemText(IDC_STATIC_MUSAGE, wTmp);
+	STR_UTILS::sFree(wTmp);
 
 	m_module_table.DeleteAllItems();
 	list<string>::iterator nameIts = pm->mNames->begin();

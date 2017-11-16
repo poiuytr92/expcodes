@@ -52,7 +52,7 @@ class ProcessModule : public Process {	// 从 MODULEENTRY32 映射字段
 		list<string>* mPaths;		// szExePath[MAX_PATH];	 NULL结尾的字符串，其中包含的位置，或模块的路径。
 
 		ProcessModule() : Process(), 
-			mCnt(0), mSize(0), mID(0), usage(0), baseAddr(NULL), hModule(NULL) {
+			mCnt(0), mSize(0), mID(0), usage(0), baseAddr(0), hModule(0) {
 			this->mNames = new list<string>();
 			this->mPaths = new list<string>();
 		}

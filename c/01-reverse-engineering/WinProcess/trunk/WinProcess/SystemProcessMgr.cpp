@@ -192,7 +192,9 @@ bool SystemProcessMgr::isX64Process(DWORD pid) {
 
 
 ProcessModule* SystemProcessMgr::getProcessModuleInfo(DWORD pid) {
-	delete processModule;
+	if(processModule != &INVAILD_PROCESS_MODULE) {
+		delete processModule;	// INVAILD_PROCESS_MODULE 是栈对象，不能被delete
+	}
 
 	HANDLE hProcess = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
 	if(hProcess == INVALID_HANDLE_VALUE) {
