@@ -40,7 +40,7 @@ static Process INVAILD_PROCESS;
 /************************************************************************/
 /* 单个进程内的所有模块对象                                             */
 /************************************************************************/ 
-class ProcessModule : public Process {
+class ProcessModule : public Process {	// 从 MODULEENTRY32 映射字段
 	public:
 		int mCnt;					// 模块个数
 		DWORD mSize;				// modBaseSize 单个模块大小（字节）

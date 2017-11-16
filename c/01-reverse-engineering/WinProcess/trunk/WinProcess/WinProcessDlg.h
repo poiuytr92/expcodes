@@ -5,7 +5,7 @@
 #pragma once
 
 #include "SystemProcessMgr.h"
-#include "DialogProcessDetail.h"
+#include "ProcessModuleDlg.h"
 
 // CWinProcessDlg ¶Ô»°¿ò
 class CWinProcessDlg : public CDialogEx
@@ -44,5 +44,5 @@ public:
 	CListCtrl m_process_table;
 
 	SystemProcessMgr* spMgr;
-	DialogProcessDetail* dpd;
+	ProcessModuleDlg* dpd;
 };

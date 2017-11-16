@@ -2,15 +2,15 @@
 
 #include "SystemProcessMgr.h"
 
-// DialogProcessDetail 对话框
+// ProcessModuleDlg 对话框
 
-class DialogProcessDetail : public CDialogEx
+class ProcessModuleDlg : public CDialogEx
 {
-	DECLARE_DYNAMIC(DialogProcessDetail)
+	DECLARE_DYNAMIC(ProcessModuleDlg)
 
 public:
-	DialogProcessDetail(CWnd* pParent = NULL);   // 标准构造函数
-	virtual ~DialogProcessDetail();
+	ProcessModuleDlg(CWnd* pParent = NULL);   // 标准构造函数
+	virtual ~ProcessModuleDlg();
 
 	void updateToList(ProcessModule* pm);
 

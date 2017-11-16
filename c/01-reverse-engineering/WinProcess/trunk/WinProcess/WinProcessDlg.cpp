@@ -8,7 +8,7 @@
 #include "afxdialogex.h"
 
 #include "utils_str.h"
-#include "DialogProcessDetail.h"
+#include "ProcessModuleDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -58,7 +58,7 @@ CWinProcessDlg::CWinProcessDlg(CWnd* pParent /*=NULL*/)
 
 	spMgr = new SystemProcessMgr();
 
-	dpd = new DialogProcessDetail(this);
+	dpd = new ProcessModuleDlg(this);
 	dpd->Create(IDD_PROC_DETAIL, this);
 }
 

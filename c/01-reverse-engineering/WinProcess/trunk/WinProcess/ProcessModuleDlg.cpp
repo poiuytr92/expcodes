@@ -1,35 +1,35 @@
-// DialogProcessDetail.cpp : 实现文件
+// ProcessModuleDlg.cpp : 实现文件
 //
 
 #include "stdafx.h"
 #include "WinProcess.h"
-#include "DialogProcessDetail.h"
+#include "ProcessModuleDlg.h"
 #include "afxdialogex.h"
 #include "SystemProcessMgr.h"
 #include "utils_str.h"
 
 
-// DialogProcessDetail 对话框
+// ProcessModuleDlg 对话框
 
-IMPLEMENT_DYNAMIC(DialogProcessDetail, CDialogEx)
+IMPLEMENT_DYNAMIC(ProcessModuleDlg, CDialogEx)
 
 
-DialogProcessDetail::DialogProcessDetail(CWnd* pParent /*=NULL*/)
-	: CDialogEx(DialogProcessDetail::IDD, pParent)
+ProcessModuleDlg::ProcessModuleDlg(CWnd* pParent /*=NULL*/)
+	: CDialogEx(ProcessModuleDlg::IDD, pParent)
 {
 }
 
-DialogProcessDetail::~DialogProcessDetail()
+ProcessModuleDlg::~ProcessModuleDlg()
 {
 }
 
-void DialogProcessDetail::DoDataExchange(CDataExchange* pDX)
+void ProcessModuleDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_MODULE_LIST, m_module_table);
 }
 
-BOOL DialogProcessDetail::OnInitDialog() {
+BOOL ProcessModuleDlg::OnInitDialog() {
 	CDialogEx::OnInitDialog();
 
 	// TODO: 在此添加额外的初始化代码
@@ -40,15 +40,16 @@ BOOL DialogProcessDetail::OnInitDialog() {
 	style |= LVS_ALIGNTOP;			// 垂直滚动条
 	m_module_table.SetExtendedStyle(style);
 
-	m_module_table.InsertColumn(0, _T("序号"), LVCFMT_CENTER, 50);
+	m_module_table.InsertColumn(0, _T("序号"), LVCFMT_CENTER, 40);
 	m_module_table.InsertColumn(1, _T("模块名称"), LVCFMT_CENTER, 100);
+	m_module_table.InsertColumn(2, _T("模块路径"), LVCFMT_CENTER, 100);
 	m_module_table.SetColumnWidth(2, LVSCW_AUTOSIZE_USEHEADER);	// 自动调整最后一列列宽, 避免出现空列
 	/*---- 初始化进程模块表单 ----*/
 
 	return TRUE;
 }
 
-void DialogProcessDetail::updateToList(ProcessModule* pm) {
+void ProcessModuleDlg::updateToList(ProcessModule* pm) {
 
 	TRACE(_T("\n ---->  me32.dwSize==%d"), pm->mSize);
 	TRACE(_T("\n ---->  me32.GlblcntUsage==%d"), pm->usage);
@@ -73,7 +74,7 @@ void DialogProcessDetail::updateToList(ProcessModule* pm) {
 }
 
 // FIXME : toWChar返回的数组所占用的资源未被释放
-void DialogProcessDetail::addToList(int idx, string mName, string mPath) {
+void ProcessModuleDlg::addToList(int idx, string mName, string mPath) {
 	TCHAR* wIDX = STR_UTILS::toWChar(idx + 1);
 	TCHAR* wName = STR_UTILS::toWChar(mName.c_str());
 	TCHAR* wPath = STR_UTILS::toWChar(mPath.c_str());
@@ -87,8 +88,8 @@ void DialogProcessDetail::addToList(int idx, string mName, string mPath) {
 	STR_UTILS::sFree(wPath);
 }
 
-BEGIN_MESSAGE_MAP(DialogProcessDetail, CDialogEx)
+BEGIN_MESSAGE_MAP(ProcessModuleDlg, CDialogEx)
 END_MESSAGE_MAP()
 
 
-// DialogProcessDetail 消息处理程序
+// ProcessModuleDlg 消息处理程序
