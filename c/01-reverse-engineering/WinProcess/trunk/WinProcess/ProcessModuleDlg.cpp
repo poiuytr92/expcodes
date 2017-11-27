@@ -66,6 +66,20 @@ void ProcessModuleDlg::updateToList(Process* process) {
 		addToList(i, module);
 	}
 
+}
+
+void ProcessModuleDlg::addToList(int idx, Module* module) {
+	TCHAR* wIDX = STR_UTILS::toWChar(idx + 1);
+	TCHAR* wName = STR_UTILS::toWChar(module->name.c_str());
+	TCHAR* wPath = STR_UTILS::toWChar(module->path.c_str());
+
+	m_module_table.InsertItem(idx, wIDX);
+	m_module_table.SetItemText(idx, 1, wName);
+	m_module_table.SetItemText(idx, 2, wPath);
+
+	STR_UTILS::sFree(wIDX);
+	STR_UTILS::sFree(wName);
+	STR_UTILS::sFree(wPath);
 
 	//wTmp = STR_UTILS::toWChar(pm->mID);
 	//SetDlgItemText(IDC_STATIC_MID, wTmp);
@@ -86,21 +100,6 @@ void ProcessModuleDlg::updateToList(Process* process) {
 	//wTmp = STR_UTILS::toWChar(pm->usage);
 	//SetDlgItemText(IDC_STATIC_MUSAGE, wTmp);
 	//STR_UTILS::sFree(wTmp);
-
-}
-
-void ProcessModuleDlg::addToList(int idx, Module* module) {
-	TCHAR* wIDX = STR_UTILS::toWChar(idx + 1);
-	TCHAR* wName = STR_UTILS::toWChar(module->name.c_str());
-	TCHAR* wPath = STR_UTILS::toWChar(module->path.c_str());
-
-	m_module_table.InsertItem(idx, wIDX);
-	m_module_table.SetItemText(idx, 1, wName);
-	m_module_table.SetItemText(idx, 2, wPath);
-
-	STR_UTILS::sFree(wIDX);
-	STR_UTILS::sFree(wName);
-	STR_UTILS::sFree(wPath);
 }
 
 BEGIN_MESSAGE_MAP(ProcessModuleDlg, CDialogEx)
