@@ -16,59 +16,74 @@ const static DWORD INVAILD_PID = 0xFFFFFFFF;
 /************************************************************************/
 /* 单个进程的信息对象                                                   */
 /************************************************************************/ 
-class Process {
+class BaseProcess {
 	public:
 		DWORD pid;
 		string pName;
 		bool isX64;
 
-		Process(): pid(INVAILD_PID), pName(""), isX64(false) {}
+		BaseProcess(): pid(INVAILD_PID), pName(""), isX64(false) {}
 
-		bool operator == (const Process& other) {
+		bool operator == (const BaseProcess& other) {
 			return (this == &other || this->pid == other.pid);
 		}
 
-		bool operator != (const Process& other) {
+		bool operator != (const BaseProcess& other) {
 			return !(operator == (other));
 		}
 };
 
 // 默认的空进程对象
-static Process INVAILD_PROCESS;
+static BaseProcess INVAILD_PROCESS;
 
+
+/************************************************************************/
+/* 单个模块对象（从 MODULEENTRY32 映射字段）                            */
+/************************************************************************/ 
+class Module {
+	public:
+		DWORD mSize;		// modBaseSize 单个模块大小（字节）
+		DWORD mid;			// th32ModuleID, 此成员已经不再被使用，通常被设置为1
+		DWORD usage;		// GlblcntUsage 或 ProccntUsage 全局模块的使用计数，即模块的总载入次数。通常这一项是没有意义的
+		BYTE* baseAddr;		// modBaseAddr 模块基址（在所属进程范围内）
+		HMODULE hModule;	// hModule 模块句柄地址（在所属进程范围内）
+		string name;		// szModule[MAX_MODULE_NAME32 + 1];	 NULL结尾的字符串，其中包含模块名。
+		string path;		// szExePath[MAX_PATH];	 NULL结尾的字符串，其中包含的位置，或模块的路径。
+
+		Module() : mSize(0), mid(0), usage(0), baseAddr(0), hModule(0) {
+			// Undo
+		}
+
+		~Module() {
+			// Undo
+		}
+};
 
 /************************************************************************/
 /* 单个进程内的所有模块对象                                             */
 /************************************************************************/ 
-class ProcessModule : public Process {	// 从 MODULEENTRY32 映射字段
+class Process : public BaseProcess {	// 从 MODULEENTRY32 映射字段
 	public:
-		int mCnt;					// 模块个数
-		DWORD mSize;				// modBaseSize 单个模块大小（字节）
-		DWORD mID;					// th32ModuleID, 此成员已经不再被使用，通常被设置为1
-		DWORD usage;				// GlblcntUsage 或 ProccntUsage 全局模块的使用计数，即模块的总载入次数。通常这一项是没有意义的
-		BYTE* baseAddr;				// modBaseAddr 模块基址（在所属进程范围内）
-		HMODULE hModule;			// hModule 模块句柄地址（在所属进程范围内）
-		list<string>* mNames;		// szModule[MAX_MODULE_NAME32 + 1];	 NULL结尾的字符串，其中包含模块名。
-		list<string>* mPaths;		// szExePath[MAX_PATH];	 NULL结尾的字符串，其中包含的位置，或模块的路径。
-
-		ProcessModule() : Process(), 
-			mCnt(0), mSize(0), mID(0), usage(0), baseAddr(0), hModule(0) {
-			this->mNames = new list<string>();
-			this->mPaths = new list<string>();
+		Process() : BaseProcess() {
+			this->mCnt = 0;
+			this->modules = new list<Module*>();
 		}
 
-		~ProcessModule() {
+		~Process() {
 			clear();
-			delete mNames; mNames = NULL;
-			delete mPaths; mPaths = NULL;
+			delete modules; modules = NULL;
 		}
+
+		int mCnt;					// 模块个数
+		list<Module*>* modules;		// 模块列表
+		void add(Module* modules);
 
 	private:
 		void clear();
 };
 
 // 默认的空进程模块对象
-static ProcessModule INVAILD_PROCESS_MODULE;
+static Process INVAILD_PROCESS_MODULE;
 
 
 /************************************************************************/
@@ -79,10 +94,10 @@ class SystemProcessMgr
 	public:
 		SystemProcessMgr() {
 			this->IS_X64_OS = OS_UTILS::isX64();
-			this->processMap = new map<DWORD, Process>();
+			this->processMap = new map<DWORD, BaseProcess>();
 			this->pids = new DWORD[1];
-			this->processes = new Process*[1];
-			this->processModule = new ProcessModule();
+			this->processes = new BaseProcess*[1];
+			this->process = new Process();
 		}
 
 		~SystemProcessMgr() {
@@ -90,31 +105,35 @@ class SystemProcessMgr
 			delete processMap; processMap = NULL;
 			delete[] pids; pids = NULL;
 			delete[] processes; processes = NULL;
-			delete processModule; processModule = NULL;
+			delete process; process = NULL;
 		}
 
 		bool reflashProcessList();
-		const Process& getProcess(DWORD pid);
+		const BaseProcess& getBaseProcessInfo(DWORD pid);	// 获取简单的进程信息
 
 		DWORD* getAllPIDs();
-		Process** getAllProcesses();	// 获取所有进程对象的地址数组
-		ProcessModule* getProcessModuleInfo(DWORD pid);	// 获取进程模块信息
+		BaseProcess** getAllProcesses();	// 获取所有进程对象的地址数组
+		Process* getProcess(DWORD pid);		// 获取进程对象指针(包含模块信息)
 
 	protected:
 		bool traverseProcesses();
 		void clearProcesses();
 
-		const Process& addProcess(DWORD pid, string pName);
+		const BaseProcess& addProcess(DWORD pid, string pName);
 		bool isX64Process(DWORD pid);
-		static bool compare(Process* aProc, Process* bProc);	// 类内的sort比较函数必须是静态
+		static bool compare(BaseProcess* aProc, BaseProcess* bProc);	// 类内的sort比较函数必须是静态
 
 	private:
 		bool IS_X64_OS;
-		map<DWORD, Process>* processMap;	// 当前进程表
-		DWORD* pids;						// 当前进程对象号数组
-		Process** processes;				// 当前进程对象的指针数组
-		ProcessModule* processModule;		// 当前选中的进程模块指针
+		map<DWORD, BaseProcess>* processMap;	// 当前进程表
+		DWORD* pids;							// 当前进程对象的ID数组
+		BaseProcess** processes;				// 当前进程对象的指针数组
+		Process* process;						// 当前选中的进程指针
 };
+
+
+
+
 
 
 ////在psaipi.dll中的函数EnumProcesses用来枚举进程 

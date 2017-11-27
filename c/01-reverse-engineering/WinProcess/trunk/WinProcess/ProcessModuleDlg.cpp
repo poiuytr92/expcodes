@@ -49,52 +49,50 @@ BOOL ProcessModuleDlg::OnInitDialog() {
 	return TRUE;
 }
 
-void ProcessModuleDlg::updateToList(ProcessModule* pm) {
+void ProcessModuleDlg::updateToList(Process* process) {
 
-	TCHAR* wTmp = STR_UTILS::toWChar(pm->pid);
+	TCHAR* wTmp = STR_UTILS::toWChar(process->pid);
 	SetDlgItemText(IDC_STATIC_PID, wTmp);
 	STR_UTILS::sFree(wTmp);
 
-	wTmp = STR_UTILS::toWChar(pm->mID);
-	SetDlgItemText(IDC_STATIC_MID, wTmp);
-	STR_UTILS::sFree(wTmp);
-
-	wTmp = STR_UTILS::toWChar(string((char*) pm->hModule).c_str());
-	SetDlgItemText(IDC_STATIC_MHWND, wTmp);
-	STR_UTILS::sFree(wTmp);
-
-	wTmp = STR_UTILS::toWChar(string((char*) pm->baseAddr).c_str());
-	SetDlgItemText(IDC_STATIC_MADDR, wTmp);
-	STR_UTILS::sFree(wTmp);
-
-	wTmp = STR_UTILS::toWChar(pm->mCnt);
+	wTmp = STR_UTILS::toWChar(process->mCnt);
 	SetDlgItemText(IDC_STATIC_MCNT, wTmp);
 	STR_UTILS::sFree(wTmp);
 
-	wTmp = STR_UTILS::toWChar(pm->mSize);
-	SetDlgItemText(IDC_STATIC_MSIZE, wTmp);
-	STR_UTILS::sFree(wTmp);
-
-	wTmp = STR_UTILS::toWChar(pm->usage);
-	SetDlgItemText(IDC_STATIC_MUSAGE, wTmp);
-	STR_UTILS::sFree(wTmp);
-
 	m_module_table.DeleteAllItems();
-	list<string>::iterator nameIts = pm->mNames->begin();
-	list<string>::iterator pathIts = pm->mPaths->begin();
-	for(int i = 0; i < pm->mCnt; i++, nameIts++, pathIts++) {
-		string name = *nameIts;
-		string path = *pathIts;
-		addToList(i, name, path);
+	list<Module*>::iterator moduleIts = process->modules->begin();
+	for(int i = 0; i < process->mCnt; i++, moduleIts++) {
+		Module* module = *moduleIts;
+		addToList(i, module);
 	}
+
+
+	//wTmp = STR_UTILS::toWChar(pm->mID);
+	//SetDlgItemText(IDC_STATIC_MID, wTmp);
+	//STR_UTILS::sFree(wTmp);
+
+	//wTmp = STR_UTILS::toWChar(string((char*) pm->hModule).c_str());
+	//SetDlgItemText(IDC_STATIC_MHWND, wTmp);
+	//STR_UTILS::sFree(wTmp);
+
+	//wTmp = STR_UTILS::toWChar(string((char*) pm->baseAddr).c_str());
+	//SetDlgItemText(IDC_STATIC_MADDR, wTmp);
+	//STR_UTILS::sFree(wTmp);
+
+	//wTmp = STR_UTILS::toWChar(pm->mSize);
+	//SetDlgItemText(IDC_STATIC_MSIZE, wTmp);
+	//STR_UTILS::sFree(wTmp);
+
+	//wTmp = STR_UTILS::toWChar(pm->usage);
+	//SetDlgItemText(IDC_STATIC_MUSAGE, wTmp);
+	//STR_UTILS::sFree(wTmp);
 
 }
 
-// FIXME : toWChar返回的数组所占用的资源未被释放
-void ProcessModuleDlg::addToList(int idx, string mName, string mPath) {
+void ProcessModuleDlg::addToList(int idx, Module* module) {
 	TCHAR* wIDX = STR_UTILS::toWChar(idx + 1);
-	TCHAR* wName = STR_UTILS::toWChar(mName.c_str());
-	TCHAR* wPath = STR_UTILS::toWChar(mPath.c_str());
+	TCHAR* wName = STR_UTILS::toWChar(module->name.c_str());
+	TCHAR* wPath = STR_UTILS::toWChar(module->path.c_str());
 
 	m_module_table.InsertItem(idx, wIDX);
 	m_module_table.SetItemText(idx, 1, wName);

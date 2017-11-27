@@ -34,7 +34,7 @@ protected:
 	DECLARE_MESSAGE_MAP()
 
 	void reflashProcessList(bool sortByPID);
-	void addToList(int idx, Process process);
+	void addToList(int idx, BaseProcess process);
 
 public:
 	afx_msg void OnBnClickedReflash();

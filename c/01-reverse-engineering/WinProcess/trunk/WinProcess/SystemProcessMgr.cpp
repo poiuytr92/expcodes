@@ -14,13 +14,19 @@ using namespace std;
 
 
 /************************************************************************/
-/* 清空进程模块列表                                                     */
+/* 添加进程模块                                                         */
 /************************************************************************/ 
-void ProcessModule::clear() {
-	mNames->clear();
-	mPaths->clear();
+void Process::add(Module* module) {
+	modules->push_back(module);
+	mCnt++;
 }
 
+/************************************************************************/
+/* 清空进程模块列表                                                     */
+/************************************************************************/ 
+void Process::clear() {
+	modules->clear();
+}
 
 /************************************************************************/
 /* 刷新当前系统进程列表                                                 */
@@ -43,9 +49,9 @@ bool SystemProcessMgr::reflashProcessList() {
 /* 清空当前系统进程列表快照                                             */
 /************************************************************************/ 
 void SystemProcessMgr::clearProcesses() {
-	map<DWORD, Process>::iterator its = processMap->begin();
+	map<DWORD, BaseProcess>::iterator its = processMap->begin();
 	while(its != processMap->end()) {
-		map<DWORD, Process>::iterator obj = its;
+		map<DWORD, BaseProcess>::iterator obj = its;
 		its++;
 		processMap->erase(obj);
 	}
@@ -63,7 +69,7 @@ bool SystemProcessMgr::traverseProcesses() {
 	// 获取当前系统进程列表快照
 	HANDLE hProcessSNapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if(hProcessSNapshot == INVALID_HANDLE_VALUE) {
-		TRACE(_T("Create Process Snapshot Error\r\n"));
+		TRACE(_T("Create BaseProcess Snapshot Error\r\n"));
 		isOk = false;
 
 	} else {
@@ -90,22 +96,22 @@ bool SystemProcessMgr::traverseProcesses() {
 /************************************************************************/
 /* 添加一个进程                                                         */
 /************************************************************************/
-const Process& SystemProcessMgr::addProcess(DWORD pid, string pName) {
-	Process process;
+const BaseProcess& SystemProcessMgr::addProcess(DWORD pid, string pName) {
+	BaseProcess process;
 	process.pid = pid;
 	process.pName = pName;
 	process.isX64 = isX64Process(pid);
 
-	processMap->insert(pair<DWORD, Process>(pid, process));
-	return getProcess(pid);	// 注意局部变量process的生命周期已结束，不能返回之
+	processMap->insert(pair<DWORD, BaseProcess>(pid, process));
+	return getBaseProcessInfo(pid);	// 注意局部变量process的生命周期已结束，不能返回之
 }
 
 
 /************************************************************************/
 /* 获取一个进程                                                         */
 /************************************************************************/
-const Process& SystemProcessMgr::getProcess(DWORD pid) {
-	map<DWORD, Process>::iterator its = processMap->find(pid);
+const BaseProcess& SystemProcessMgr::getBaseProcessInfo(DWORD pid) {
+	map<DWORD, BaseProcess>::iterator its = processMap->find(pid);
 	return ( its == processMap->end() ? INVAILD_PROCESS : its->second );
 }
 
@@ -120,7 +126,7 @@ DWORD* SystemProcessMgr::getAllPIDs() {
 	pids = new DWORD[LEN + 1];
 
 	int idx = 0;
-	map<DWORD, Process>::iterator its = processMap->begin();
+	map<DWORD, BaseProcess>::iterator its = processMap->begin();
 	while(its != processMap->end()) {
 		*(pids + idx++) = its->first;
 		its++;
@@ -135,13 +141,13 @@ DWORD* SystemProcessMgr::getAllPIDs() {
 /* 获取所有进程对象引用                                                 */
 /* @return 进程对象的指针数组ID（数组最后一个对象为INVAILD_PROCESS）    */
 /************************************************************************/
-Process** SystemProcessMgr::getAllProcesses() {
+BaseProcess** SystemProcessMgr::getAllProcesses() {
 	delete processes;
 	const int LEN = processMap->size();
-	processes = new Process*[LEN + 1];
+	processes = new BaseProcess*[LEN + 1];
 
 	int idx = 0;
-	map<DWORD, Process>::iterator its = processMap->begin();
+	map<DWORD, BaseProcess>::iterator its = processMap->begin();
 	while(its != processMap->end()) {
 		*(processes + idx++) = &(its->second);
 		its++;
@@ -152,7 +158,7 @@ Process** SystemProcessMgr::getAllProcesses() {
 	return processes;
 }
 
-bool SystemProcessMgr::compare(Process* aProc, Process* bProc) {
+bool SystemProcessMgr::compare(BaseProcess* aProc, BaseProcess* bProc) {
 	int rst = stricmp((*aProc).pName.c_str(), (*bProc).pName.c_str());
 
 	// 注：由于sort()版本BUG问题，当rst==0时必须返回false，否则会报错
@@ -191,31 +197,24 @@ bool SystemProcessMgr::isX64Process(DWORD pid) {
 }
 
 
-ProcessModule* SystemProcessMgr::getProcessModuleInfo(DWORD pid) {
-	if(processModule != &INVAILD_PROCESS_MODULE) {
-		delete processModule;	// INVAILD_PROCESS_MODULE 是栈对象，不能被delete
+Process* SystemProcessMgr::getProcess(DWORD pid) {
+	if(process != &INVAILD_PROCESS_MODULE) {
+		delete process;	// INVAILD_PROCESS_MODULE 是栈对象，不能被delete
 	}
 
 	HANDLE hProcess = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
 	if(hProcess == INVALID_HANDLE_VALUE) {
-		processModule = &INVAILD_PROCESS_MODULE;
-		TRACE(_T("Create Process-Module Snapshot Error\r\n"));
+		process = &INVAILD_PROCESS_MODULE;
+		TRACE(_T("Create BaseProcess-Module Snapshot Error\r\n"));
 
 	} else {
-		processModule = new ProcessModule();
-		processModule->pid = pid;
+		process = new Process();
+		process->pid = pid;
 
 		MODULEENTRY32 me;
 		me.dwSize = sizeof(MODULEENTRY32);
 		BOOL hasNext = Module32First(hProcess, &me);
 		while (hasNext) {
-			processModule->mCnt++;
-			processModule->mSize = me.dwSize;
-			processModule->mID = me.th32ModuleID;
-			processModule->usage = me.GlblcntUsage;
-			processModule->baseAddr = me.modBaseAddr;
-			processModule->hModule = me.hModule;
-			
 			char* tmp = STR_UTILS::toChar(me.szModule);
 			string mName = string(tmp);
 			STR_UTILS::sFree(tmp);
@@ -224,14 +223,21 @@ ProcessModule* SystemProcessMgr::getProcessModuleInfo(DWORD pid) {
 			string mPath = string(tmp);
 			STR_UTILS::sFree(tmp);
 
-			(processModule->mNames)->push_back(mName);
-			(processModule->mPaths)->push_back(mPath);
+			Module* module = new Module();
+			module->mSize = me.dwSize;
+			module->mid = me.th32ModuleID;
+			module->usage = me.GlblcntUsage;
+			module->baseAddr = me.modBaseAddr;
+			module->hModule = me.hModule;
+			module->name = mName;
+			module->path = mPath;
 
+			process->add(module);
 			hasNext = Module32Next(hProcess, &me);
 		}
 	}
 	CloseHandle(hProcess);
-	return processModule;
+	return process;
 }
 
 //void SystemProcessMgr::getProcessInfo2(DWORD pid) {

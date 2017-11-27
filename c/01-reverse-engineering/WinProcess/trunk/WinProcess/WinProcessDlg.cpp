@@ -181,14 +181,14 @@ void CWinProcessDlg::reflashProcessList(bool sortByPID) {
 		DWORD* pids = spMgr->getAllPIDs();
 		for(; *(pids + cnt) != INVAILD_PID; cnt++) {
 			DWORD pid = *(pids + cnt);
-			Process process = spMgr->getProcess(pid);
+			BaseProcess process = spMgr->getBaseProcessInfo(pid);
 			addToList(cnt, process);
 		}
 
 	} else {	// 按进程名升序排序
-		Process** processes = spMgr->getAllProcesses();
+		BaseProcess** processes = spMgr->getAllProcesses();
 		for(; (**(processes + cnt)) != INVAILD_PROCESS; cnt++) {
-			Process process = (**(processes + cnt));
+			BaseProcess process = (**(processes + cnt));
 			addToList(cnt, process);
 		}
 	}
@@ -200,7 +200,7 @@ void CWinProcessDlg::reflashProcessList(bool sortByPID) {
 }
 
 // FIXME : toWChar返回的数组所占用的资源未被释放
-void CWinProcessDlg::addToList(int idx, Process process) {
+void CWinProcessDlg::addToList(int idx, BaseProcess process) {
 	TCHAR* wIDX = STR_UTILS::toWChar(idx + 1);
 	TCHAR* wPID = STR_UTILS::toWChar(process.pid);
 	TCHAR* wName = STR_UTILS::toWChar(process.pName.c_str());
@@ -222,7 +222,7 @@ void CWinProcessDlg::OnBnClickedDetail()
 		CString sPID = m_process_table.GetItemText(rowId, 1);
 		DWORD pid = _wtol(sPID);
 
-		dpd->updateToList(spMgr->getProcessModuleInfo(pid));
+		dpd->updateToList(spMgr->getProcess(pid));
 		dpd->ShowWindow(SW_SHOW);	// 显示界面
 	}
 }
