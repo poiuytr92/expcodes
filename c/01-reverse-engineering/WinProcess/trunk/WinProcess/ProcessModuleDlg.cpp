@@ -17,6 +17,7 @@ IMPLEMENT_DYNAMIC(ProcessModuleDlg, CDialogEx)
 ProcessModuleDlg::ProcessModuleDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(ProcessModuleDlg::IDD, pParent)
 {
+	process = NULL;
 }
 
 ProcessModuleDlg::~ProcessModuleDlg()
@@ -54,6 +55,7 @@ BOOL ProcessModuleDlg::OnInitDialog() {
 }
 
 void ProcessModuleDlg::updateToList(Process* process) {
+	this->process = process;	// 临时记录当前的进程对象指针
 
 	TCHAR* wTmp = STR_UTILS::toWChar(process->pid);
 	SetDlgItemText(IDC_STATIC_PID, wTmp);
@@ -110,9 +112,16 @@ END_MESSAGE_MAP()
 // ProcessModuleDlg 消息处理程序
 
 void ProcessModuleDlg::OnBnClickedOk() {
+	if(process == NULL) {
+		::MessageBox(this->m_hWnd, _T("copy fail"), _T("Tips"), MB_OK);
+		//AfxMessageBox(_T("copy fail"));	// 虽然更简单，但是默认父句柄是基于主窗口的，不合理
 
+	} else {
+
+		char* pInfo = NULL;
+		// TODO: concat
+
+		::MessageBox(this->m_hWnd, _T("copy success"), _T("Tips"), MB_OK);
+	}
 	
-
-	::MessageBox(this->m_hWnd, _T("copy success"), _T("Tips"), MB_OK);
-	//AfxMessageBox(_T("copy success"));	// 虽然更简单，但是默认父句柄是基于主窗口的，不合理
 }

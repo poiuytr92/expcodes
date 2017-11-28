@@ -27,4 +27,7 @@ protected:
 public:
 	CListCtrl m_module_table;
 	afx_msg void OnBnClickedOk();
+
+private:
+	Process* process;
 };

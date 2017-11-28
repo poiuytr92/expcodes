@@ -15,6 +15,13 @@
 	namespace OS_UTILS {
 
 		DLL_API bool isX64();
+
+		DLL_API bool copyToClipboard(const char* pData);
+
+		DLL_API bool copyToClipboard(const char* pData, const int len);
+
+		DLL_API const char* pasteFromClipboard();
+
 	}
 
 #endif
