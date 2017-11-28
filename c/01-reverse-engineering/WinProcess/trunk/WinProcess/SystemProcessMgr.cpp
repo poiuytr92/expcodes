@@ -12,7 +12,6 @@
 #include <iostream>
 using namespace std;
 
-
 /************************************************************************/
 /* 添加进程模块                                                         */
 /************************************************************************/ 
@@ -196,7 +195,6 @@ bool SystemProcessMgr::isX64Process(DWORD pid) {
 	return isX64Process;
 }
 
-
 Process* SystemProcessMgr::getProcess(DWORD pid) {
 	if(process != &INVAILD_PROCESS_MODULE) {
 		delete process;	// INVAILD_PROCESS_MODULE 是栈对象，不能被delete
@@ -227,7 +225,7 @@ Process* SystemProcessMgr::getProcess(DWORD pid) {
 			module->mSize = me.dwSize;
 			module->mid = me.th32ModuleID;
 			module->usage = me.GlblcntUsage;
-			module->baseAddr = me.modBaseAddr;
+			module->pBaseAddr = me.modBaseAddr;
 			module->hModule = me.hModule;
 			module->name = mName;
 			module->path = mPath;
@@ -240,35 +238,24 @@ Process* SystemProcessMgr::getProcess(DWORD pid) {
 	return process;
 }
 
-//void SystemProcessMgr::getProcessInfo2(DWORD pid) {
-//	HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION, FALSE, pid);
+//#include <Psapi.h>
+//#pragma comment (lib,"Psapi.lib")
+//Process* SystemProcessMgr::getProcess2(DWORD pid) {
+//	HMODULE hMods[512] = {0};
+//	DWORD cbNeeded = 0;
+//	TCHAR szModName[MAX_PATH];
+//	BOOL Wow64Process;
 //
-//	CloseHandle(hProcess);
-//}
+//	HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_INFORMATION|PROCESS_VM_READ|PROCESS_QUERY_LIMITED_INFORMATION, FALSE, 1032);
+//	IsWow64Process(hProcess, &Wow64Process); //判断是32位还是64位进程
+//	EnumProcessModulesEx(hProcess, hMods, sizeof(hMods), &cbNeeded, Wow64Process?LIST_MODULES_32BIT:LIST_MODULES_64BIT);
 //
-//void SystemProcessMgr::getProcessInfo3(DWORD pid) {
-//	HMODULE hPsDll = LoadLibrary(_T("PSAPI.DLL"));	// FreeLibrary 动态库使用后需要释放
-//	ENUMPROCESSES pEnumProcesses = (ENUMPROCESSES) GetProcAddress(hPsDll, "EnumProcesses");
-//	ENUMPROCESSMODULES pEnumProcessModules = (ENUMPROCESSMODULES) GetProcAddress(hPsDll, "EnumProcessModules");
-//	GETMODULEFILENAMEEX pGetModuleFileNameEx = (GETMODULEFILENAMEEX) GetProcAddress(hPsDll, "GetModuleFileNameExA");
-//
-//	DWORD pids[1] = { pid };
-//	DWORD rst[1];
-//	pEnumProcesses(pids, sizeof(pid), rst);
-//	DWORD processcount = rst[0] / sizeof(DWORD);
-//
-//	for (int i = 0; i < processcount; i++) {
-//		//打开进程
-//		HANDLE hProcess = OpenProcess(PROCESS_QUERY_INFORMATION|PROCESS_VM_READ, false, pids[i]);
-//		if (hProcess) {
-//			pEnumProcessModules(hProcess, &hModule, sizeof(hModule), &needed);
-//			pGetModuleFileNameEx(hProcess, hModule, path, sizeof(path));
-//			GetShortPathName(path,path,256);
-//			itoa(pids[i], temp, 10);
-//			printf("%s --- %s\n",path,temp);
-//
-//		} else {
-//			printf("Failed!!!\n");
-//		}
+//	for (UINT i = 0; i < (cbNeeded / sizeof(HMODULE)); i++ )
+//	{
+//		GetModuleFileNameEx(hProcess, hMods[i], szModName, _countof(szModName));
+//		TRACE(TEXT("%s\n"),szModName);
 //	}
+//	CloseHandle(hProcess);
+//
+//	return NULL;
 //}

@@ -9,6 +9,30 @@
 #include <list>
 using namespace std;
 
+
+/************************************************************************/
+/* 单个模块对象（从 MODULEENTRY32 映射字段）                            */
+/************************************************************************/ 
+class Module {
+public:
+	DWORD mid;			// th32ModuleID, 此成员已经不再被使用，通常被设置为1
+	DWORD mSize;		// modBaseSize 单个模块大小（字节）
+	DWORD usage;		// GlblcntUsage 或 ProccntUsage 全局模块的使用计数，即模块的总载入次数。通常这一项是没有意义的
+	BYTE* pBaseAddr;	// modBaseAddr 模块基址的指针（在所属进程范围内），真实类型是unsigned char*
+	HMODULE hModule;	// hModule 模块句柄地址的指针（在所属进程范围内），真实类型是int， 16进制地址值等于pBaseAddr
+	string name;		// szModule[MAX_MODULE_NAME32 + 1];	 NULL结尾的字符串，其中包含模块名。
+	string path;		// szExePath[MAX_PATH];	 NULL结尾的字符串，其中包含的位置，或模块的路径。
+
+	Module() : mSize(0), mid(0), usage(0), pBaseAddr(0), hModule(0) {
+		// Undo
+	}
+
+	~Module() {
+		// Undo
+	}
+};
+
+
 // 无效的进程号(系统进程号为0, DWORD为无符号整型，只能取最大值)
 const static DWORD INVAILD_PID = 0xFFFFFFFF;
 
@@ -36,28 +60,6 @@ class BaseProcess {
 // 默认的空进程对象
 static BaseProcess INVAILD_PROCESS;
 
-
-/************************************************************************/
-/* 单个模块对象（从 MODULEENTRY32 映射字段）                            */
-/************************************************************************/ 
-class Module {
-	public:
-		DWORD mSize;		// modBaseSize 单个模块大小（字节）
-		DWORD mid;			// th32ModuleID, 此成员已经不再被使用，通常被设置为1
-		DWORD usage;		// GlblcntUsage 或 ProccntUsage 全局模块的使用计数，即模块的总载入次数。通常这一项是没有意义的
-		BYTE* baseAddr;		// modBaseAddr 模块基址（在所属进程范围内）
-		HMODULE hModule;	// hModule 模块句柄地址（在所属进程范围内）
-		string name;		// szModule[MAX_MODULE_NAME32 + 1];	 NULL结尾的字符串，其中包含模块名。
-		string path;		// szExePath[MAX_PATH];	 NULL结尾的字符串，其中包含的位置，或模块的路径。
-
-		Module() : mSize(0), mid(0), usage(0), baseAddr(0), hModule(0) {
-			// Undo
-		}
-
-		~Module() {
-			// Undo
-		}
-};
 
 /************************************************************************/
 /* 单个进程内的所有模块对象                                             */
