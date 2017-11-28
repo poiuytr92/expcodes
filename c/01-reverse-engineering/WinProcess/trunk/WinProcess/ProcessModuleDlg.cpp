@@ -7,6 +7,7 @@
 #include "afxdialogex.h"
 #include "SystemProcessMgr.h"
 #include "utils_str.h"
+#include "utils_os.h"
 
 
 // ProcessModuleDlg 对话框
@@ -17,7 +18,6 @@ IMPLEMENT_DYNAMIC(ProcessModuleDlg, CDialogEx)
 ProcessModuleDlg::ProcessModuleDlg(CWnd* pParent /*=NULL*/)
 	: CDialogEx(ProcessModuleDlg::IDD, pParent)
 {
-	process = NULL;
 }
 
 ProcessModuleDlg::~ProcessModuleDlg()
@@ -42,10 +42,10 @@ BOOL ProcessModuleDlg::OnInitDialog() {
 	style |= LVS_ALIGNTOP;			// 垂直滚动条
 	m_module_table.SetExtendedStyle(style);
 
-	m_module_table.InsertColumn(0, _T("序号"), LVCFMT_CENTER, 40);
-	m_module_table.InsertColumn(1, _T("模块大小(byte)"), LVCFMT_CENTER, 100);
-	m_module_table.InsertColumn(2, _T("全局引用数"), LVCFMT_CENTER, 80);
-	m_module_table.InsertColumn(3, _T("基址指针(指向地址可能无效)"), LVCFMT_CENTER, 180);
+	m_module_table.InsertColumn(0, _T("序号"), LVCFMT_CENTER, 50);
+	m_module_table.InsertColumn(1, _T("模块大小(byte)"), LVCFMT_CENTER, 120);
+	m_module_table.InsertColumn(2, _T("全局引用数"), LVCFMT_CENTER, 100);
+	m_module_table.InsertColumn(3, _T("基址指针(指向地址可能无效)"), LVCFMT_CENTER, 220);
 	m_module_table.InsertColumn(4, _T("模块名称"), LVCFMT_CENTER, 100);
 	m_module_table.InsertColumn(5, _T("模块路径"), LVCFMT_CENTER, 100);
 	m_module_table.SetColumnWidth(5, LVSCW_AUTOSIZE_USEHEADER);	// 自动调整最后一列列宽, 避免出现空列
@@ -55,8 +55,6 @@ BOOL ProcessModuleDlg::OnInitDialog() {
 }
 
 void ProcessModuleDlg::updateToList(Process* process) {
-	this->process = process;	// 临时记录当前的进程对象指针
-
 	TCHAR* wTmp = STR_UTILS::toWChar(process->pid);
 	SetDlgItemText(IDC_STATIC_PID, wTmp);
 	STR_UTILS::sFree(wTmp);
@@ -112,16 +110,32 @@ END_MESSAGE_MAP()
 // ProcessModuleDlg 消息处理程序
 
 void ProcessModuleDlg::OnBnClickedOk() {
-	if(process == NULL) {
-		::MessageBox(this->m_hWnd, _T("copy fail"), _T("Tips"), MB_OK);
-		//AfxMessageBox(_T("copy fail"));	// 虽然更简单，但是默认父句柄是基于主窗口的，不合理
+	bool isOk = false;
+	int rowId = m_module_table.GetNextItem(-1, LVIS_SELECTED);
+	if(rowId >= 0) {
+		CString mSize = m_module_table.GetItemText(rowId, 1);
+		CString usage = m_module_table.GetItemText(rowId, 2);
+		CString mAddr = m_module_table.GetItemText(rowId, 3);
+		CString mName = m_module_table.GetItemText(rowId, 4);
+		CString mPath = m_module_table.GetItemText(rowId, 5);
+		
+		// 拼接模块信息
+		CString mInfo;
+		mInfo.Format(_T("[模块名称] %s\r\n[模块路径] %s\r\n[模块基址] %s\r\n[模块大小] %s byte\r\n[全局引用] %s\r\n"), 
+			mName, mPath, mAddr, mSize, usage);
 
-	} else {
+		// 转换信息格式并复制到剪贴板
+		char* pMInfo = STR_UTILS::toChar(mInfo.GetBuffer(mInfo.GetLength()));
+		isOk = OS_UTILS::copyToClipboard(pMInfo);
 
-		char* pInfo = NULL;
-		// TODO: concat
-
-		::MessageBox(this->m_hWnd, _T("copy success"), _T("Tips"), MB_OK);
+		STR_UTILS::sFree(pMInfo);
+		mInfo.ReleaseBuffer();
 	}
 	
+	if(isOk == true) {
+		::MessageBox(this->m_hWnd, _T("copy success"), _T("Tips"), MB_OK);
+	} else {
+		::MessageBox(this->m_hWnd, _T("copy fail"), _T("Tips"), MB_OK);
+		//AfxMessageBox(_T("copy fail"));	// 虽然更简单，但是默认父句柄是基于主窗口的，不合理
+	}
 }
