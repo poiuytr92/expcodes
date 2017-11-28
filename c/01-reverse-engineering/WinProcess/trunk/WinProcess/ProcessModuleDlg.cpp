@@ -33,6 +33,7 @@ BOOL ProcessModuleDlg::OnInitDialog() {
 	CDialogEx::OnInitDialog();
 
 	// TODO: 在此添加额外的初始化代码
+
 	/*++++ 初始化进程模块表单 ++++*/
 	DWORD style = m_module_table.GetExtendedStyle();
 	style |= LVS_EX_FULLROWSELECT;	// 当选中某个单元格时同时选中整行
@@ -71,9 +72,6 @@ void ProcessModuleDlg::updateToList(Process* process) {
 
 }
 
-
-//m_module_table.InsertColumn(4, _T("模块基址"), LVCFMT_CENTER, 40);
-//m_module_table.InsertColumn(5, _T("模块句柄地址"), LVCFMT_CENTER, 40);
 void ProcessModuleDlg::addToList(int idx, Module* module) {
 	TCHAR* wIDX = STR_UTILS::toWChar(idx + 1);
 	TCHAR* wSize = STR_UTILS::toWChar(module->mSize);
@@ -105,7 +103,16 @@ void ProcessModuleDlg::addToList(int idx, Module* module) {
 }
 
 BEGIN_MESSAGE_MAP(ProcessModuleDlg, CDialogEx)
+	ON_BN_CLICKED(IDOK, &ProcessModuleDlg::OnBnClickedOk)
 END_MESSAGE_MAP()
 
 
 // ProcessModuleDlg 消息处理程序
+
+void ProcessModuleDlg::OnBnClickedOk() {
+
+	
+
+	::MessageBox(this->m_hWnd, _T("copy success"), _T("Tips"), MB_OK);
+	//AfxMessageBox(_T("copy success"));	// 虽然更简单，但是默认父句柄是基于主窗口的，不合理
+}
