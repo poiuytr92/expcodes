@@ -26,8 +26,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	cout << CRYPTO_UTILS::toMD5("asfjhsj128y89&&32", "explibs") << endl;
 	cout << OS_UTILS::isX64() << endl;
 	cout << string(STR_UTILS::toChar(_T("ABCf134"))) << endl;
-	wprintf(STR_UTILS::toWChar("System.console"));
 
+	wprintf(STR_UTILS::toWChar("System.console"));
+	cout << endl;
+
+	OS_UTILS::copyToClipboard("abcd¼ôÌù°å²âÊÔuasa");
+	const char* data = OS_UTILS::pasteFromClipboard();
+	cout << data << endl;
+	
 	system("pause");
 	return 0;
 }

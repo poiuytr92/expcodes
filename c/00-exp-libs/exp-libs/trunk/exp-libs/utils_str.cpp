@@ -179,7 +179,7 @@ namespace STR_UTILS {
 	 * 释放等宽字符串指针指向的内存
 	 * @param str 等宽字符串指针
 	 */
-	DLL_API void sFree(const TCHAR* str) {
+	DLL_API void sFree(const wchar_t* str) {
 		delete[] str;
 		str = NULL;
 	}
@@ -189,8 +189,8 @@ namespace STR_UTILS {
 	 * @param num 整数
 	 * @return 等宽字符数组(unicode)
 	 */
-	DLL_API TCHAR* toWChar(const int num) {
-		TCHAR* _out_wchar = new TCHAR[22];	// int32最长为11位, int64最长为21位
+	DLL_API wchar_t* toWChar(const int num) {
+		wchar_t* _out_wchar = new wchar_t[22];	// int32最长为11位, int64最长为21位
 		wsprintf(_out_wchar, _T("%d"), num);
 		return _out_wchar;
 	}
@@ -200,11 +200,11 @@ namespace STR_UTILS {
 	 * @param _char 不等宽字符数组
 	 * @return 等宽字符数组(unicode)
 	 */
-	DLL_API TCHAR* toWChar(const char* _char) {
-		int len = MultiByteToWideChar (CP_ACP, 0, _char, (strlen(_char) + 1), NULL, 0) ;  
-		TCHAR* _out_wchar = new TCHAR[len];	// 堆空间new的局部变量，在delete之前不会释放
+	DLL_API wchar_t* toWChar(const char* _char) {
+		int len = MultiByteToWideChar(CP_ACP, 0, _char, (strlen(_char) + 1), NULL, 0) ;  
+		wchar_t* _out_wchar = new wchar_t[len];	// 堆空间new的局部变量，在delete之前不会释放
 
-		MultiByteToWideChar (CP_ACP, 0, _char, (strlen(_char) + 1), _out_wchar, len) ;  
+		MultiByteToWideChar(CP_ACP, 0, _char, (strlen(_char) + 1), _out_wchar, len) ;  
 		return _out_wchar;
 	}
 
@@ -213,7 +213,7 @@ namespace STR_UTILS {
 	 * @param _wchar 等宽字符数组(unicode)
 	 * @return 不等宽字符数组
 	 */
-	DLL_API char* toChar(const TCHAR* _wchar) {
+	DLL_API char* toChar(const wchar_t* _wchar) {
 		int len = WideCharToMultiByte(CP_ACP, 0, _wchar, -1, NULL, 0, NULL, NULL);
 		char* _out_char = new char[len];	// 堆空间new的局部变量，在delete之前不会释放
 

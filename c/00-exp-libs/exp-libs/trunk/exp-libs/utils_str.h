@@ -77,28 +77,28 @@
 		 * 释放字符串指针指向的内存
 		 * @param str 等宽字符串指针
 		 */
-		DLL_API void sFree(const TCHAR* str);
+		DLL_API void sFree(const wchar_t* str);
 
 		/*
 		 * 把[整数]转换成[等宽字符数组(unicode)]
 		 * @param num 整数
 		 * @return 等宽字符数组(unicode)
 		 */
-		DLL_API TCHAR* toWChar(const int num);
+		DLL_API wchar_t* toWChar(const int num);
 
 		/*
 		 * 把[不等宽字符数组]转换成[等宽字符数组(unicode)]
 		 * @param _char 不等宽字符数组
 		 * @return 等宽字符数组(unicode)
 		 */
-		DLL_API TCHAR* toWChar(const char* _char);
+		DLL_API wchar_t* toWChar(const char* _char);
 
 		/*
 		 * 把[等宽字符数组(unicode)]转换成[不等宽字符数组]
 		 * @param _wchar 等宽字符数组(unicode)
 		 * @return 不等宽字符数组
 		 */
-		DLL_API char* toChar(const TCHAR* _wchar);
+		DLL_API char* toChar(const wchar_t* _wchar);
 
 	}
 

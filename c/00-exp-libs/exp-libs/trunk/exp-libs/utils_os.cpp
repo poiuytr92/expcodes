@@ -29,4 +29,47 @@ namespace OS_UTILS {
 		return x64;
 	}
 
+	DLL_API bool copyToClipboard(const char* pData) {
+		const int len = strlen(pData);
+		return copyToClipboard(pData, len);
+	}
+
+	DLL_API bool copyToClipboard(const char* pData, const int len) {
+		BOOL isOk = FALSE;
+		if(::OpenClipboard(NULL)) {
+			::EmptyClipboard();
+
+			HGLOBAL clipbuffer = ::GlobalAlloc(GMEM_DDESHARE, len + 1); {
+				char* buffer = (char*)::GlobalLock(clipbuffer);
+				strcpy(buffer, pData);
+				::GlobalUnlock(clipbuffer);
+			}
+			::SetClipboardData(CF_TEXT, clipbuffer);
+			
+			isOk = TRUE;
+		}
+		::CloseClipboard();
+		return isOk;
+	}
+
+	DLL_API const char* pasteFromClipboard() {
+		char* pData = new char[1];
+		pData[0] = '\0';
+
+		if(::OpenClipboard(NULL)) {
+			HGLOBAL hMemory = GetClipboardData(CF_TEXT);
+			if(hMemory != NULL) {
+				delete[] pData;
+				pData = (char*)::GlobalLock(hMemory); 
+				if(pData == NULL) {
+					pData = new char[1];
+					pData[0] = '\0';
+				}
+				::GlobalUnlock(hMemory);
+			}
+		}
+		::CloseClipboard();
+		return pData;
+	}
+
 }
