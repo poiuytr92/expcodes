@@ -32,23 +32,49 @@
 	  ⑤ 比较频次数列会存在碰撞几率，亦即只是疑似解（但由于题目没有给出乱序表，基本不可能得到准确解）
 */
 
+#include <algorithm>
 #include <iostream>
 using namespace std;
 
-// 密文/明文最大长度
-const int MAX_LEN = 101;
+
+const int MAX_LEN = 101;	// 密文/明文最大长度
+const int FRE_LEN = 26;	// 频率数组长度
 
 
+void countFrequency(char* _in_str, int* _out_frequency);
+bool isSame(int* aAry, int* bAry);
 
 int main(void) {
 	char cipher[MAX_LEN] = { '\0' };	// 密文
 	char text[MAX_LEN] = { '\0' };		// 明文
-	int cFrequency[MAX_LEN] = { 0 };	// 密文频次数列
-	int tFrequency[MAX_LEN] = { 0 };	// 明文频次数列
+	int cFrequency[FRE_LEN] = { 0 };	// 密文频次数列
+	int tFrequency[FRE_LEN] = { 0 };	// 明文频次数列
 
 	cin >> cipher >> text;
+	countFrequency(cipher, cFrequency);
+	countFrequency(text, tFrequency);
 
+	cout << (isSame(cFrequency, tFrequency) ? "YES" : "NO") << endl; 
 
-	system("pause");
+	//system("pause");
 	return 0;
+}
+
+
+void countFrequency(char* _in_str, int* _out_frequency) {
+	for(int i = 0; *(_in_str + i) != '\0'; i++) {
+		*(_out_frequency + (*(_in_str + i) - 'A')) += 1;
+	}
+	sort(_out_frequency, _out_frequency + FRE_LEN);
+}
+
+bool isSame(int* aAry, int* bAry) {
+	bool isSame = true;
+	for(int i = 0; i < FRE_LEN; i++) {
+		isSame = (*(aAry + i) == *(bAry + i));
+		if(isSame == false) {
+			break;
+		}
+	}
+	return isSame;
 }
