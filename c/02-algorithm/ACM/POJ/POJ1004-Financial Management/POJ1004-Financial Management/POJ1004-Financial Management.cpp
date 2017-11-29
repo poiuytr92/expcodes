@@ -3,7 +3,7 @@
 	Date:       2017-11-29
 	Code:       POJ 1004
 	Problem:    Financial Management
-	URL:		http://poj.org/problem?id=1003
+	URL:		http://poj.org/problem?id=1004
 */
 
 /*
