@@ -39,6 +39,7 @@ bool SystemProcessMgr::reflashProcessList() {
 		TRACE(_T("Reflash Processes Success\r\n"));
 	} else {
 		TRACE(_T("Reflash Processes Fail\r\n"));
+		AfxMessageBox(_T("Reflash Processes Fail"));
 	}
 	return isOk;
 }
@@ -68,7 +69,8 @@ bool SystemProcessMgr::traverseProcesses() {
 	// 获取当前系统进程列表快照
 	HANDLE hProcessSNapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
 	if(hProcessSNapshot == INVALID_HANDLE_VALUE) {
-		TRACE(_T("Create BaseProcess Snapshot Error\r\n"));
+		TRACE(_T("Create All Processes Snapshot Error\r\n"));
+		AfxMessageBox(_T("Create All Processes Snapshot Error"));
 		isOk = false;
 
 	} else {
@@ -111,7 +113,7 @@ const BaseProcess& SystemProcessMgr::addProcess(DWORD pid, string pName) {
 /************************************************************************/
 const BaseProcess& SystemProcessMgr::getBaseProcessInfo(DWORD pid) {
 	map<DWORD, BaseProcess>::iterator its = processMap->find(pid);
-	return ( its == processMap->end() ? INVAILD_PROCESS : its->second );
+	return ( its == processMap->end() ? INVAILD_BASE_PROCESS : its->second );
 }
 
 
@@ -138,7 +140,7 @@ DWORD* SystemProcessMgr::getAllPIDs() {
 
 /************************************************************************/
 /* 获取所有进程对象引用                                                 */
-/* @return 进程对象的指针数组ID（数组最后一个对象为INVAILD_PROCESS）    */
+/* @return 进程对象的指针数组ID（数组最后一个对象为INVAILD_BASE_PROCESS）    */
 /************************************************************************/
 BaseProcess** SystemProcessMgr::getAllProcesses() {
 	delete processes;
@@ -153,7 +155,7 @@ BaseProcess** SystemProcessMgr::getAllProcesses() {
 	}
 	
 	sort(processes, processes + LEN, compare);	// 按进程名升序排序
-	*(processes + idx) = &INVAILD_PROCESS;		// 添加末尾标识
+	*(processes + idx) = &INVAILD_BASE_PROCESS;		// 添加末尾标识
 	return processes;
 }
 
@@ -196,14 +198,15 @@ bool SystemProcessMgr::isX64Process(DWORD pid) {
 }
 
 Process* SystemProcessMgr::getProcess(DWORD pid) {
-	if(process != &INVAILD_PROCESS_MODULE) {
-		delete process;	// INVAILD_PROCESS_MODULE 是栈对象，不能被delete
+	if(*process != INVAILD_PROCESS) {
+		delete process;	// INVAILD_PROCESS 是栈对象，不能被delete
 	}
 
 	HANDLE hProcess = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pid);
 	if(hProcess == INVALID_HANDLE_VALUE) {
-		process = &INVAILD_PROCESS_MODULE;
-		TRACE(_T("Create BaseProcess-Module Snapshot Error\r\n"));
+		process = &INVAILD_PROCESS;
+		TRACE(_T("Create Process Snapshot Error\r\n"));
+		AfxMessageBox(_T("Create Process Snapshot Error"));
 
 	} else {
 		process = new Process();

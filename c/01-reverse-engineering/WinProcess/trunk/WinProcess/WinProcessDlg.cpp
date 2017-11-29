@@ -187,7 +187,7 @@ void CWinProcessDlg::reflashProcessList(bool sortByPID) {
 
 	} else {	// 按进程名升序排序
 		BaseProcess** processes = spMgr->getAllProcesses();
-		for(; (**(processes + cnt)) != INVAILD_PROCESS; cnt++) {
+		for(; (**(processes + cnt)) != INVAILD_BASE_PROCESS; cnt++) {
 			BaseProcess process = (**(processes + cnt));
 			addToList(cnt, process);
 		}
@@ -222,8 +222,11 @@ void CWinProcessDlg::OnBnClickedDetail()
 		CString sPID = m_process_table.GetItemText(rowId, 1);
 		DWORD pid = _wtol(sPID);
 
-		dpd->updateToList(spMgr->getProcess(pid));
-		dpd->ShowWindow(SW_SHOW);	// 显示界面
+		Process* process = spMgr->getProcess(pid);
+		if(*process != INVAILD_PROCESS) {
+			dpd->updateToList(process);
+			dpd->ShowWindow(SW_SHOW);	// 显示界面
+		}
 	}
 }
 

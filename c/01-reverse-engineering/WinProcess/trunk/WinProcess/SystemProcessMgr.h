@@ -38,7 +38,7 @@ const static DWORD INVAILD_PID = 0xFFFFFFFF;
 
 
 /************************************************************************/
-/* 单个进程的信息对象                                                   */
+/* 单个进程的基本信息                                                   */
 /************************************************************************/ 
 class BaseProcess {
 	public:
@@ -57,12 +57,12 @@ class BaseProcess {
 		}
 };
 
-// 默认的空进程对象
-static BaseProcess INVAILD_PROCESS;
+// 默认的基本空进程对象
+static BaseProcess INVAILD_BASE_PROCESS;
 
 
 /************************************************************************/
-/* 单个进程内的所有模块对象                                             */
+/* 单个进程对象的详细信息（含模块对象）                                             */
 /************************************************************************/ 
 class Process : public BaseProcess {	// 从 MODULEENTRY32 映射字段
 	public:
@@ -84,8 +84,8 @@ class Process : public BaseProcess {	// 从 MODULEENTRY32 映射字段
 		void clear();
 };
 
-// 默认的空进程模块对象
-static Process INVAILD_PROCESS_MODULE;
+// 默认的空进程对象
+static Process INVAILD_PROCESS;
 
 
 /************************************************************************/
