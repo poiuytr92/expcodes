@@ -2,7 +2,7 @@
 	Author:     Exp
 	Date:       2017-11-29
 	Code:       POJ 3299
-	Problem:    Financial Management
+	Problem:    Humidex
 	URL:		http://poj.org/problem?id=3299
 */
 
