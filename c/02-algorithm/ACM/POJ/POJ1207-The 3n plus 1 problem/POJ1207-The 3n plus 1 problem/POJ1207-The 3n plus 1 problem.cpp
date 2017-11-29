@@ -2,7 +2,7 @@
 	Author:     Exp
 	Date:       2017-11-29
 	Code:       POJ 1207
-	Problem:    Financial Management
+	Problem:    The 3n plus 1 problem
 	URL:		http://poj.org/problem?id=1207
 */
 
