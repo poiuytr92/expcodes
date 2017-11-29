@@ -35,7 +35,20 @@
 #include <iostream>
 using namespace std;
 
-int main(void) {
+// 密文/明文最大长度
+const int MAX_LEN = 101;
 
+
+
+int main(void) {
+	char cipher[MAX_LEN] = { '\0' };	// 密文
+	char text[MAX_LEN] = { '\0' };		// 明文
+	int cFrequency[MAX_LEN] = { 0 };	// 密文频次数列
+	int tFrequency[MAX_LEN] = { 0 };	// 明文频次数列
+
+	cin >> cipher >> text;
+
+
+	system("pause");
 	return 0;
 }
