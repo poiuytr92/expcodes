@@ -21,9 +21,9 @@
 #include <iostream>
 using namespace std;
 
-const double PI = 3.141592654;	// 常量π
-const double HALF_PI = PI / 2;	// 半圆面积公式常量
-const double EACH_AREA = 50;	// 每次扩散面积
+const static double PI = 3.141592654;	// 常量π
+const static double HALF_PI = PI / 2;	// 半圆面积公式常量
+const static double EACH_AREA = 50;	// 每次扩散面积
 
 /* 
  * 求解扩散次数
