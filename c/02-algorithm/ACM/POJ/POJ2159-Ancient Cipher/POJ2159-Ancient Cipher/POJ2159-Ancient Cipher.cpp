@@ -38,7 +38,7 @@
 using namespace std;
 
 
-const static int MAX_LEN = 101;	// 密文/明文最大长度
+const static int MAX_LEN = 101;		// 密文/明文最大长度
 const static int FRE_LEN = 26;		// 频率数组长度（记录每个字母的出现次数）
 
 
