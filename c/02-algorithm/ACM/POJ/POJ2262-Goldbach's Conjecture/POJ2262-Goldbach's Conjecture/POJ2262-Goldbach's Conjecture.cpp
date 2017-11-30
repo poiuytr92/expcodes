@@ -53,35 +53,35 @@ const static int SQRT_NUM = ceil(sqrt((double) LEN));	// ¸ù¾ÝºÏÊý¶¨ÀíµÃµ½µÄÖÊÒòÊ
 
 /* 
  * Ê¹ÓÃÉ¸·¨ÕÒ³ö×ÔÈ»Êý·¶Î§ÄÚµÄËùÓÐËØÊý
- * @param prime ËØÊý±í
+ * @param primes ËØÊý±í
  */
-void findPrimes(bool* prime);
+void findPrimes(bool* primes);
 
 /* 
  * ´òÓ¡¸çµÂ°ÍºÕ²ÂÏë½á¹û
- * @param prime ËØÊý¼¯
+ * @param primes ËØÊý¼¯
  * @param n ºÏÊý£¬È¡Öµ·¶Î§ [6, 10000000)
  */
-void printGoldbach(bool* prime, int n);
+void printGoldbach(bool* primes, int n);
 
 int main(void) {
-	bool prime[LEN];		// ËØÊý¼¯, ±ê¼ÇÃ¿¸ö×ÔÈ»ÊýÊÇ·ñÎªËØÊý
-	findPrimes(prime);		// ÕÒ³ö·¶Î§ÄÚËùÓÐËØÊý
+	bool primes[LEN];		// ËØÊý¼¯, ±ê¼ÇÃ¿¸ö×ÔÈ»ÊýÊÇ·ñÎªËØÊý
+	findPrimes(primes);		// ÕÒ³ö·¶Î§ÄÚËùÓÐËØÊý
 
 	int n = 0;
 	while(cin >> n && n > 0) {
-		printGoldbach(prime, n);	// ´òÓ¡¸çµÂ°ÍºÕ²ÂÏëµÄ½á¹û
+		printGoldbach(primes, n);	// ´òÓ¡¸çµÂ°ÍºÕ²ÂÏëµÄ½á¹û
 	}
 	return 0;
 }
 
 
-void findPrimes(bool* prime) {
-	memset(prime, true, sizeof(bool) * LEN);	// ×¢ÒâmemsetÊÇ°´×Ö½Ú¸²Ð´ÄÚ´æµÄ
-	prime[0] = prime[1] = false;
+void findPrimes(bool* primes) {
+	memset(primes, true, sizeof(bool) * LEN);	// ×¢ÒâmemsetÊÇ°´×Ö½Ú¸²Ð´ÄÚ´æµÄ
+	primes[0] = primes[1] = false;
 
 	for(int i = 2; i <= SQRT_NUM; i++) {
-		if(prime[i] == false) {
+		if(primes[i] == false) {
 			continue;
 		}
 
@@ -92,20 +92,20 @@ void findPrimes(bool* prime) {
 			if(mNum >= LEN) {
 				break;
 			}
-			prime[mNum] = false;
+			primes[mNum] = false;
 			multiple++;
 		}
 	}
 }
 
-void printGoldbach(bool* prime, int n) {
+void printGoldbach(bool* primes, int n) {
 	int x, y = 0;
 	for(x = 3; x < n; x++) {
-		if(prime[x] == false) {
+		if(primes[x] == false) {
 			continue;
 		}
 
-		if(prime[n - x] == true) {
+		if(primes[n - x] == true) {
 			y = n - x;
 			break;
 		}
