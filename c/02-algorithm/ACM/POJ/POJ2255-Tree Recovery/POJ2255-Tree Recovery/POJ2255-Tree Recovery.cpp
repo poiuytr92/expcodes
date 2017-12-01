@@ -130,5 +130,6 @@ void dfs(Node* root, char* _out_postOrder) {
 	dfs(root->left, _out_postOrder);
 	dfs(root->right, _out_postOrder);
 
-	*(_out_postOrder + strlen(_out_postOrder)) = node->name;
+	// 构造后序序列：从右子树返回时把当前节点名称放到序列末尾
+	*(_out_postOrder + strlen(_out_postOrder)) = root->name;	
 }
