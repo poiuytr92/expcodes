@@ -42,34 +42,34 @@ public class Prime {
 	private int count;
 	
 	/** 标记范围内的每一个数是否为素数 */
-	private boolean[] isPrime;
+	private boolean[] isPrimes;
 	
 	/** 范围内的素数集合 */
 	private List<Integer> primes;
 	
 	/**
-	 * 构造函数
+	 * 构造 [2, range] 范围内的素数集
 	 * @param range 自然数范围
 	 */
 	public Prime(int range) {
-		this.range = (range < 2 ? 2 : range);
+		this.range = (range < 2 ? 2 : range + 1);
 		this.count = 0;
-		this.isPrime = new boolean[range];
+		this.isPrimes = new boolean[this.range];
 		this.primes = new LinkedList<Integer>();
 	}
 	
 	/**
-	 * 埃拉托斯特尼筛法求解素数集
+	 * 使用埃拉托斯特尼筛法求解素数集
 	 */
-	public void find() {
-		Arrays.fill(isPrime, true);
-		isPrime[0] = isPrime[1] = false;
+	public void screen() {
+		Arrays.fill(isPrimes, true);
+		isPrimes[0] = isPrimes[1] = false;
 		count = 2;
 		
 		// 根据合数定理，在 [2, range] 范围内筛掉 [2, sqrt(range)] 之间的所有数的倍数
 		final int SQRT_NUM = (int) Math.ceil(Math.sqrt(range));
 		for(int i = 2; i <= SQRT_NUM; i++) {
-			if(isPrime[i] == false) {
+			if(isPrimes[i] == false) {
 				continue;
 			}
 
@@ -81,8 +81,8 @@ public class Prime {
 					break;
 				}
 				
-				if(isPrime[mNum] == true) {	// 避免重复计数
-					isPrime[mNum] = false;
+				if(isPrimes[mNum] == true) {	// 避免重复计数
+					isPrimes[mNum] = false;
 					count++;
 				}
 				multiple++;
@@ -92,7 +92,7 @@ public class Prime {
 		
 		// 构造素数集
 		for(int i = 0; i < range; i++) {
-			if(isPrime[i] == true) {
+			if(isPrimes[i] == true) {
 				primes.add(i);
 			}
 		}
@@ -106,7 +106,7 @@ public class Prime {
 	}
 
 	/**
-	 * 获取素数个数
+	 * 获取范围内的素数个数
 	 * @return 素数个数
 	 */
 	public int getCount() {
@@ -114,11 +114,24 @@ public class Prime {
 	}
 
 	/**
-	 * 获取素数集
+	 * 获取范围内的素数集合
 	 * @return 素数集
 	 */
 	public List<Integer> getPrimes() {
 		return new LinkedList<Integer>(primes);
+	}
+	
+	/**
+	 * 检测范围内的指定整数是否为素数
+	 * @param num 被检测整数
+	 * @return true:是素数; false:不是素数 或 所检测整数不在范围内
+	 */
+	public boolean isPrime(int num) {
+		boolean isPrime = false;
+		if(num > 1 && num <= range) {
+			isPrime = isPrimes[num];
+		}
+		return isPrime;
 	}
 	
 }
