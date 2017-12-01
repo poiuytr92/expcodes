@@ -76,8 +76,8 @@ int main(void) {
 		cout << postOrder << endl;
 
 		delete root;
-		memset(preOrder, STR_LEN, sizeof(char) * STR_LEN);
-		memset(inOrder, STR_LEN, sizeof(char) * STR_LEN);
+		memset(preOrder, NULL_CHAR, sizeof(char) * STR_LEN);
+		memset(inOrder, NULL_CHAR, sizeof(char) * STR_LEN);
 	}
 	return 0;
 }
