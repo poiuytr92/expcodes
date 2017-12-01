@@ -35,16 +35,16 @@ import java.util.List;
  */
 public class Prime {
 
-	/** 要求解的素数集的自然数范围 */
+	/** 要求解的素数集的自然数范围(包含range) */
 	private int range;
 	
 	/** 范围内的素数个数 */
 	private int count;
 	
-	/** 标记范围内的每一个数是否为素数 */
+	/** 素数标记集: 标记范围内的每一个数是否为素数 */
 	private boolean[] isPrimes;
 	
-	/** 范围内的素数集合 */
+	/** 素数集: 依次存储范围内每一个素数 */
 	private List<Integer> primes;
 	
 	/**
