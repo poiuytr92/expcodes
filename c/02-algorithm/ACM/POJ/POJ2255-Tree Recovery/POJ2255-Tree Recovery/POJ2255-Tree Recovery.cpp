@@ -40,6 +40,11 @@ class Node {
 		Node* right;	// 右子树根节点
 
 		Node(): name(NULL_CHAR), left(NULL), right(NULL) {}
+		~Node() {
+			name = NULL_CHAR;
+			delete left; left = NULL;
+			delete right; right = NULL;
+		}
 };
 
 
@@ -70,6 +75,7 @@ int main(void) {
 		dfs(root, postOrder);	// DFS遍历树，生成后序序列
 		cout << postOrder << endl;
 
+		delete root;
 		memset(preOrder, STR_LEN, sizeof(char) * STR_LEN);
 		memset(inOrder, STR_LEN, sizeof(char) * STR_LEN);
 	}
