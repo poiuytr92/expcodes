@@ -2,6 +2,7 @@
 // 参考教程：《VS2010编写动态链接库DLL及单元测试用例》 http://blog.csdn.net/testcs_dn/article/details/27237509
 
 #include "stdafx.h"
+#include "..\\exp-libs\algorithm_math.h"
 #include "..\\exp-libs\utils_time.h"
 #include "..\\exp-libs\utils_num.h"
 #include "..\\exp-libs\\utils_str.h"
@@ -34,6 +35,20 @@ int _tmain(int argc, _TCHAR* argv[])
 	const char* data = OS_UTILS::pasteFromClipboard();
 	cout << data << endl;
 	
+
+	Prime* prime = new Prime(10000);
+	int count = prime->getCount();
+	cout << count << endl;
+	cout << prime->isPrime(103) << endl;
+	cout << prime->isPrime(99) << endl;
+
+	
+	int* primes = prime->getPrimes();
+	for(int i = 0; i < count; i++) {
+		cout << primes[i] << " ";	
+	}
+
+	delete prime;
 	system("pause");
 	return 0;
 }
