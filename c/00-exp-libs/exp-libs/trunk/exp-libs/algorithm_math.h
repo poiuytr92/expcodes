@@ -44,10 +44,10 @@
 			DLL_API int* getPrimes(void);	// 获取范围内的素数集
 
 		private:
-			int range;
-			int count;
-			bool* isPrimes;			// 素数标记集
-			int* primes;			// 素数集
+			int range;				// 要求解的素数集的自然数范围(包含range)
+			int count;				// 范围内的素数个数
+			bool* isPrimes;			// 素数标记集: 标记范围内的每一个数是否为素数
+			int* primes;			// 素数集: 依次存储范围内每一个素数
 
 			int screen(void);		// 使用埃拉托斯特尼筛法求解素数集
 			void toPrimes(void);	// 把素数标记集转换成素数集
