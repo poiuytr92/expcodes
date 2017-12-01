@@ -1,6 +1,6 @@
 /*
 	Author:     Exp
-	Date:       2017-11-29
+	Date:       2017-11-30
 	Code:       POJ 3006
 	Problem:    Dirichlet's Theorem on Arithmetic Progressions
 	URL:		http://poj.org/problem?id=3006
