@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="algorithm_math.h" />
     <ClInclude Include="utils_os.h" />
     <ClInclude Include="utils_crypto.h" />
     <ClInclude Include="_des.h" />
@@ -148,6 +149,7 @@
     <ClInclude Include="utils_time.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="algorithm_math.cpp" />
     <ClCompile Include="utils_os.cpp" />
     <ClCompile Include="utils_crypto.cpp" />
     <ClCompile Include="_des.cpp" />

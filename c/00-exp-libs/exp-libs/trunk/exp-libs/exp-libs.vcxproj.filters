@@ -48,6 +48,9 @@
     <ClInclude Include="utils_os.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="algorithm_math.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="utils_crypto.cpp">
@@ -75,6 +78,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="utils_os.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="algorithm_math.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
