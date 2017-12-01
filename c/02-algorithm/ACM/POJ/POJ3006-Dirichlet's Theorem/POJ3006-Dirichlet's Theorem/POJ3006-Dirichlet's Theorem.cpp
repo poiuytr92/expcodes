@@ -18,11 +18,12 @@
 
 	解题思路：
 	 这题的关键不是狄利克雷数列，还是求素数。
-	 素数的范围可以通过 a、b、n 的最大值圈定（约为100W以内），
+	 素数的范围可以通过 a、b、n 的最大值圈定（根据给定的数列参数最大值，约为100W以内的素数）
 	 有了素数表之后就是暴力美学的工作了
 
 	 ① 用筛法求取题目给定最大范围内的所有素数
 	 ② 根据a、b构造狄利克雷数列，通过素数表找到其中第n个素数
+	 ③ 遍历数列时不要用 a+nd 公式，去掉乘法， 只用加法循环 a += d 即可
 
 */
 
@@ -56,7 +57,8 @@ int main(void) {
 	findPrimes(primes);		// 找出范围内所有素数
 
 	int a, d, n;
-	while(cin >> a >> d >> n && (a + d + n != 0)) {
+	while(cin >> a >> d >> n && 
+		a != 0 && d != 0 && n != 0) {	// 注意POJ测试用例中有个陷阱: a非质数,d=0,n>0, 若不单独约束d=0这个条件会因死循环导致TLE
 		int prime = getDirichletPrime(primes, a, d, n);
 		cout << prime << endl;
 	}
@@ -87,18 +89,12 @@ void findPrimes(bool* primes) {
 }
 
 int getDirichletPrime(bool* primes, int a, int d, int n) {
-	int dirichlet = 0;	// 第n个素数
-	int cnt = 0;		// 素数出现计数器
-	int i = 1;
-	while(true) {
-		int num = a + i * d;
-		if(primes[num] == true) {
+	int prime = 0;		// 第n个素数
+	for(int cnt = 0, dirichlet = a; cnt < n; dirichlet += d) {
+		if(primes[dirichlet] == true) {
+			prime = dirichlet;
 			cnt++;
-			if(cnt >= n) {
-				dirichlet = num;
-				break;
-			}
 		}
 	}
-	return dirichlet;
+	return prime;
 }
