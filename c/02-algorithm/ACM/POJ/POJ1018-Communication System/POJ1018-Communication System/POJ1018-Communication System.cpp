@@ -127,11 +127,11 @@ class CSystem {
 		int min(int a, int b);	// 计算两个数的最小值
 
 	private:
-		int eqNum;				// 路由设备数
-		int* facNums;			// facNums[e]: 可以生产设备e的厂家数
-		int** Bs;				// Bs[e][f]: 设备e被厂家f生产时的带宽B
-		int** Ps;				// Ps[e][f]: 设备e被厂家f生产时的价格P
-		int** dp;				// dp[e][b]: 选择前e个设备所构成带宽为b的系统所需支付的最小价格
+		int eqNum;		// 路由设备数
+		int* facNums;	// facNums[e]: 可以生产设备e的厂家数
+		int** Bs;		// Bs[e][f]: 设备e被厂家f生产时的带宽B
+		int** Ps;		// Ps[e][f]: 设备e被厂家f生产时的价格P
+		int** dp;		// dp[e][b]: 选择前e个设备所构成带宽为b的系统所需支付的最小价格
 };
 
 
