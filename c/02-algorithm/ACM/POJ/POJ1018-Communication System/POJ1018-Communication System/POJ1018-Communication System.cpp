@@ -231,7 +231,7 @@ void CSystem::print() {
 
 		// 枚举最后一次决策的候选解集，得到最优性价比
 		for(int e = eqNum - 1, b = 0; b < MAX_B; b++) {
-			if(dp[e][b] < INVAILD) {
+			if(dp[e][b] < INVAILD && dp[e][b] > 0) {
 				double pCost = ((double) b) / ((double) dp[e][b]);
 				maxPCost = (maxPCost < pCost ? pCost : maxPCost);
 			}
