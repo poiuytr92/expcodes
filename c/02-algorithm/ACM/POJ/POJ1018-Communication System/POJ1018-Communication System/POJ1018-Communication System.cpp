@@ -93,6 +93,9 @@
 					}
 				}
 			}
+
+		注：为了构造dp(e, B)状态数组，其实还缺了一个必要条件，带宽B的取值范围.
+			而题目并未给出这个范围，只能通过测试进行猜测，从猜测情况来看 B∈[1,400]
 */
 
 #include <set>
@@ -100,10 +103,13 @@
 #include <iostream>
 using namespace std;
 
-const static int MAX_INT = 0x7FFFFFFF;	// 最大int值
-const static int MAX_B = 400;			// 最大带宽值(暂定)
+const static int INVAILD = 0x7FFFFFFF;	// 无效值
+const static int MAX_B = 400;	// 最大带宽值(测试数据的上限，若测试数据变更需调整)
 
 
+/**
+ * 若干路由设备组建的通讯系统
+ */
 class CSystem {
 	public:
 		CSystem(int eqNum);
@@ -122,7 +128,6 @@ class CSystem {
 		int** Bs;				// Bs[e][f]: 设备e被厂家f生产时的带宽B
 		int** Ps;				// Ps[e][f]: 设备e被厂家f生产时的价格P
 		int** dp;				// dp[e][b]: 选择前e个设备所构成带宽为b的系统所需支付的最小价格
-		set<int>* bandwidths;	// bandwidths[e]: 第e次决策中有效的系统带宽集
 };
 
 
@@ -150,7 +155,6 @@ CSystem::CSystem(int eqNum) {
 		this->Bs = new int*[eqNum];
 		this->Ps = new int*[eqNum];
 		this->dp = new int*[eqNum];
-		this->bandwidths = new set<int>[eqNum];
 	}
 }
 
@@ -161,11 +165,6 @@ CSystem::~CSystem() {
 		delete[] Bs;
 		delete[] Ps;
 		delete[] dp;
-
-		for(int e = 0; e < eqNum; e++) {
-			bandwidths[e].clear();
-		}
-		delete[] bandwidths;
 	}
 }
 
@@ -189,7 +188,7 @@ void CSystem::init(void) {
 		// 此处不用memset初始化dp，因为memset只能初始化为0或-1
 		dp[e] = new int[MAX_B];
 		for(int B = 0; B < MAX_B; B++) {
-			dp[e][B] = MAX_INT;
+			dp[e][B] = INVAILD;
 		}
 	}
 }
@@ -204,23 +203,14 @@ void CSystem::solve() {
 
 			// 初始化首次决策的参数与状态
 			if(e == 0) {
-				bandwidths[e].insert(B);
 				dp[e][B] = min(dp[e][B], P);
 
 			// 更新前e次决策的参数与状态
 			} else {
 
 				// 枚举前一次决策时的有效带宽
-				//for(set<int>::iterator bwIts = bandwidths[e - 1].begin(); 
-				//		bwIts != bandwidths[e - 1].end(); bwIts++) {
-				//	int b = *bwIts;
-				//	int minB = min(B, b);		// 短板效应
-				//	bandwidths[e].insert(minB);	// 更新本次决策的有效带宽
-				//	dp[e][minB] = min(dp[e][minB], dp[e - 1][b] + P);	// 更新转移状态
-				//}
-
 				for(int b = 0; b < MAX_B; b++) {
-					if(dp[e - 1][b] < MAX_INT) {	// 前一个状态存在
+					if(dp[e - 1][b] < INVAILD) {	// 前一个状态存在
 						int minB = min(B, b);		// 当前状态的带宽需要根据前一个状态而定
 						dp[e][minB] = min(dp[e][minB], dp[e - 1][b] + P);	// 更新转移状态
 					}
@@ -232,27 +222,17 @@ void CSystem::solve() {
 
 
 void CSystem::print() {
-	double max = 0.0;
+	double maxPCost = 0.0;	// 最优性价比
 	if(eqNum > 0) {
-		//int e = eqNum - 1;
-		//for(set<int>::iterator bwIts = bandwidths[e].begin(); 
-		//		bwIts != bandwidths[e].end(); bwIts++) {
-		//	int b = *bwIts;
-		//	if(dp[e][b] == 0) {
-		//		continue;
-		//	}
 
-		//	double pCost = ((double) b) / ((double) dp[e][b]);
-		//	max = (max < pCost ? pCost : max);
-		//}
-
+		// 枚举最后一次决策的候选解集，得到最优性价比
 		for(int e = eqNum - 1, b = 0; b < MAX_B; b++) {
-			if(dp[e][b] < MAX_INT) {
+			if(dp[e][b] < INVAILD) {
 				double pCost = ((double) b) / ((double) dp[e][b]);
-				max = (max < pCost ? pCost : max);
+				maxPCost = (maxPCost < pCost ? pCost : maxPCost);
 			}
 		}
 	}
-	cout << fixed << setprecision(3) << max << endl;
+	cout << fixed << setprecision(3) << maxPCost << endl;
 }
 
