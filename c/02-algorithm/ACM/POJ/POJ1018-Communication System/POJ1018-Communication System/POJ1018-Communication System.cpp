@@ -1,6 +1,6 @@
 /*
 	Author:     Exp
-	Date:       2017-11-29
+	Date:       2017-12-03
 	Code:       POJ 1018
 	Problem:    Communication System
 	URL:		http://poj.org/problem?id=1018
