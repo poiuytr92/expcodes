@@ -8,19 +8,115 @@
 
 /*
 	题意分析：
-	  给出一棵二叉树的前序遍历与中序遍历，求后序遍历.
-	  其中二叉树由不重复的大写字母组成，每个节点一个字母.
+	 使棋盘全黑，需要翻转多少步
 
 	解题思路：
-	 ① 前序遍历的第一个字母必是 根
-	 ② 在中序遍历的字母串中找出 根字母，那么根字母左右两边的字符串就分别是它的左、右子树
-	 ③ 由于树的最大深度只有26，因此可以不考虑堆栈溢出，利用[递归]结合①②复原二叉树
-	 ④ 对复原的二叉树使用DFS做后序遍历即可
 
-	 注：
-	  对二叉树的 前序遍历、中序遍历、后序遍历 均可以使用DFS来做，
-	  均是自上而下、自左至右遍历，区别在于打印节点的时机不同：
-	  [前序遍历] 从父节点进入时打印当前节点
-	  [中序遍历] 从左子树返回时打印当前节点
-	  [后序遍历] 从右子树返回时打印当前节点
+	  对棋盘矩阵进行编码：
+	    * * * *      从右到左分别为第 0, 1, 2, 3位
+	    % % % %      从右到左分别为第 4, 5, 6, 7位
+	    # # # #      从右到左分别为第 8, 9,10,11位
+        @ @ @ @      从右到左分别为第12,13,14,15位
+
+	  由于棋盘每一格只有黑白两种状态，可用0、1进行表示，由此可转换成二进制数：
+	    @@@@ #### %%%% ****
+	   15      ←         0
+
+	  最终可以用一个int数存储整个棋盘状态：
+	    ① 当翻转某一位上的棋子时，相当于使该位与 1 做异或运算.
+		② 棋盘处于全黑状态时，int值为 0x0000
+		③ 棋盘处于全白状态时，int值为 0xFFFF
+
+
+	  记录从全黑=0开始，经过翻转0~16次后可以到达的所有状态.
+	  理论上最多只能翻16次，共2^16 = 65536 种状态
+
 */
+
+
+#include <set>
+#include <iostream>
+using namespace std;
+
+
+/**
+ * 翻转棋盘上的一只棋子
+ * @param chess 翻转前的棋盘编码
+ * @param pos 要翻转的棋子位置, 取值范围为[0, 15]
+ * return 翻转后的棋盘编码
+ */
+int filp(int chess, int pos);
+
+
+/**
+ * 判断棋盘是否为单色（全黑或全白）
+ * return true:单色; false:非单色
+ */
+bool isMonochrome(int chess);
+
+
+int main(void) {
+	set<int>* statusTable = new set<int>[17];	// 记录翻动0~16次的所有状态
+	int chess = 0;	// 初始状态（全黑）
+
+	
+	//for(int s = 1; s <= 16; s++) {
+	//	set<int> lastStatus = status[s - 1];
+	//	set<int> curStatus = status[s];
+
+	//}
+
+	//for(int pos = 0; pos < 16; pos++) {
+	//	//int chess = status[0].iterator(); 上一次的状态
+
+	//	statusTable[1].insert(filp(chess, pos));
+	//}
+
+	statusTable[0].insert(chess);	// 翻动0次
+	for(int a = 0; a < 16; a++) {
+
+		for(int b = 0; b < 16; b++) {
+
+			for(int c = 0; c < 16; c++) {
+
+				for(int d = 0; d < 16; d++) {
+
+				}
+			}
+		}
+	}
+	
+	int input = 0;	// FIXME
+	int step = -1;
+	for(int s = 0; s <= 16; s++) {
+		set<int> status = statusTable[step];
+		if(status.count(input) > 0) {
+			step = s;
+			break;
+		}
+	}
+	if(step >= 0) {
+		cout << step << endl;
+	} else {
+		cout << "Impossible" << endl;
+	}
+	return 0;
+}
+
+
+int filp(int chess, int pos) {
+	int op = 0x01 << pos;	// 翻转棋子自身位置
+	if(pos > 3) { op |= (pos - 4);  }	// 翻转棋子上方的棋子
+	if(pos < 12) { op |= (pos + 4);  }	// 翻转棋子下方的棋子
+
+	int mod = pos % 4;
+	if(mod != 0) { op |= (pos - 1);  }	// 翻转棋子左方的棋子
+	if(mod != 3) { op |= (pos + 1);  }	// 翻转棋子右方的棋子
+
+	return chess ^ op;
+}
+
+
+bool isMonochrome(int chess) {
+	return (chess == 0 || chess == 0xFFFF);
+}
