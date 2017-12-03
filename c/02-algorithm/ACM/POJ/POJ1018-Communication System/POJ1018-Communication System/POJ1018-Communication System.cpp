@@ -96,9 +96,13 @@
 
 		注：为了构造dp(e, B)状态数组，其实还缺了一个必要条件，带宽B的取值范围.
 			而题目并未给出这个范围，只能通过测试进行猜测，从猜测情况来看 B∈[1,400]
+
+			其实从数据结构角度看，由于B是离散的，dp(e, B) 最好使用 dp[e][map<B, P>] 的形式，
+			即第一维是数组，第二维是map，使用这种数据结构就无需预测带宽B的范围。
+			但是由于STL的map维护代价过高，会造成TLE超时，因此放弃了这种数据结构。
 */
 
-#include <set>
+
 #include <iomanip>
 #include <iostream>
 using namespace std;
