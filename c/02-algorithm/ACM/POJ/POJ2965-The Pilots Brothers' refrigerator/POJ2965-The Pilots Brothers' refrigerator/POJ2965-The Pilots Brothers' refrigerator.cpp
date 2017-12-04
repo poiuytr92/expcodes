@@ -135,6 +135,7 @@ void Chess::bfsAllStatus(void) {
 	steps[ALL_ZERO_CHESS] = 0;	// 初始状态，棋盘全黑
 	chessStatus[0].insert(ALL_ZERO_CHESS);	// 即翻动0次的状态集
 
+	int cnt =0;
 	// 记录以不重复的组合方式翻动1-16次的可以到达的所有状态集
 	for(int filpStep = 1; filpStep <= MAX_STEP; filpStep++) {
 		set<_UINT>* lastStatus = &chessStatus[filpStep - 1];	// 上一步的状态集
@@ -161,15 +162,17 @@ void Chess::bfsAllStatus(void) {
 					//  通过不同步数、翻棋组合可达到的重复状态共61440种，
 					//  总翻棋次数才65536，换言之有效状态只有4096种，
 					//  这步剪枝是很重要的，否则必定超时
+					cnt++;
 				}
 			}
 		}
-
+		cout << filpStep << ":" << nextStatus->size() << endl;
 		// 剪枝3：当前状态集（因剪枝导致）全空，则后面所有状态集无需再计算
 		if(nextStatus->empty()) {
 			break;
 		}
 	}
+	cout << cnt << endl;
 }
 
 
