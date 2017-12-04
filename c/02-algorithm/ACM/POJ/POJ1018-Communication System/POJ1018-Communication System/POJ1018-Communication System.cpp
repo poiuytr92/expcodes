@@ -165,10 +165,10 @@ CSystem::CSystem(int eqNum) {
 
 CSystem::~CSystem() {
 	if(eqNum > 0) {
-		delete[] facNums;
-		delete[] Bs;
-		delete[] Ps;
-		delete[] dp;
+		delete[] facNums; facNums = NULL;
+		delete[] Bs; Bs = NULL;
+		delete[] Ps; Ps = NULL;
+		delete[] dp; dp = NULL;
 	}
 }
 
