@@ -42,6 +42,7 @@ class Chess {
 		Chess();
 		~Chess();
 		int getStep(int status);	// 计算从全0或全1状态到达指定棋盘状态的最小步数
+		int getOp(int status);
 		int min(int a, int b);		// 返回最小值
 
 	private:
@@ -55,6 +56,7 @@ class Chess {
 	private:
 		set<_UINT>* chessStatus;	// 从棋盘全0开始，分别记录不重复地翻动1-16步可得到的所有棋盘状态
 		int* steps;					// 从棋盘全0开始，到达指定棋盘状态需要翻动棋子的最小步数
+		int* ops;
 };
 
 
@@ -76,11 +78,15 @@ int main(void) {
 
 		// 每输入4个字节求解一次
 		if(byteCnt >= 4) {
+			chessStatus = (~chessStatus) & 0x0000FFFF;
 			int step = chess->getStep(chessStatus);
-			if(step >= 0) {
-				cout << step << endl;
-			} else {
-				cout << "Impossible" << endl;
+			cout << step << endl;
+
+			int op = chess->getOp(chessStatus);
+			for(int base = 0x0001, bit = 0; bit < MAX_STEP; bit++, base <<= 1) {
+				if((op & base) > 0) {
+					cout << (bit / 4) + 1 << " " << (bit % 4) + 1 << endl;
+				}
 			}
 
 			byteCnt = 0;
@@ -101,6 +107,9 @@ Chess::Chess() {
 	this->steps = new int[MAX_STATUS];
 	memset(steps, -1, sizeof(int) * MAX_STATUS);
 
+	this->ops = new int[MAX_STATUS];
+	memset(ops, -1, sizeof(int) * MAX_STATUS);
+
 	bfsAllStatus();
 }
 
@@ -114,6 +123,7 @@ Chess::~Chess() {
 	}
 	delete[] chessStatus; chessStatus = NULL;
 	delete[] steps; steps = NULL;
+	delete[] ops; ops = NULL;
 }
 
 
@@ -143,6 +153,7 @@ void Chess::bfsAllStatus(void) {
 				// 注意这里使用steps数组进行全局状态判重，而不能仅仅使用nextStatus对本次翻动判重
 				if(steps[status] < 0) {	
 					steps[status] = filpStep;		// 状态首次出现的步数必定是最小步数
+					ops[status] = nextChess >> 16;	// FIXME
 					nextStatus->insert(nextChess);
 
 				} else {
@@ -233,22 +244,21 @@ int Chess::getFilpCount(_UINT chess) {
 int Chess::getStep(int status) {
 	int step = -1;
 	if(status >= 0 && status < MAX_STATUS) {
-		int bStep = steps[status];					// 从全0开始到达指定状态的步数
-		int wStep = steps[(~status) & 0x0000FFFF];	// 取反，从全1开始到达状态chess的步数
+		step = steps[status];	// 从全0开始到达指定状态的步数
+		// 无需考虑全1的情况，本题需要的是完全打开开关，
 		
-		if(bStep >= 0 && wStep >= 0) {
-			step = min(bStep, wStep);
-
-		} else if(bStep >= 0) {
-			step = bStep;
-
-		} else if(wStep = 0) {
-			step = wStep;
-		}
 	}
 	return step;
 }
 
+
+int Chess::getOp(int status) {
+	int op = -1;
+	if(status >= 0 && status < MAX_STATUS) {
+		op = ops[status];
+	}
+	return op;
+}
 
 /**
  * 返回最小值
