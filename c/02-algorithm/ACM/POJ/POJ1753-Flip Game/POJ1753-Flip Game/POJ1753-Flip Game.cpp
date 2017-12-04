@@ -117,6 +117,16 @@ const static int MAX_STEP = 16;			// 可翻棋的最大步数
 const static int MAX_STATUS = 65536;	// 总状态数 = 2^16（含重复数）
 
 
+// 棋盘状态掩码：当翻转位置i的棋子时,STATUS_MASKS[i]为所有受影响的相邻位置
+// 位置i：在4x4棋盘内，从左到右、从上到下按0-15依次编码
+const static _UINT STATUS_MASKS[MAX_STEP] = {
+	0x00000013, 0x00000027, 0x0000004E, 0x0000008C,
+	0x00000131, 0x00000272, 0x000004E4, 0x000008C8,
+	0x00001310, 0x00002720, 0x00004E40, 0x00008C80,
+	0x00003100, 0x00007200, 0x0000E400, 0x0000C800
+};
+
+
 /**
  * 棋盘对象
  */
@@ -254,6 +264,13 @@ void Chess::bfsAllStatus(void) {
  * return 翻转后的棋盘编码
  */
 _UINT Chess::filp(_UINT chess, int bitPos) {
+	_UINT OP_MASK = 0x00010000 << bitPos;		// 高16位:当前操作位
+	_UINT STATUS_MASK = STATUS_MASKS[bitPos];	// 低16位:相关状态位
+	return (chess ^ (OP_MASK | STATUS_MASK));	// 更新棋盘编码
+}
+
+/* 常规翻转棋子的方法，比较易懂但运算量大，不推荐
+_UINT Chess::filp(_UINT chess, int bitPos) {
 
 	// 高16位:当前操作位
 	_UINT op = 0x00010000 << bitPos;
@@ -270,8 +287,7 @@ _UINT Chess::filp(_UINT chess, int bitPos) {
 
 	return chess ^ op;	// 更新棋盘编码
 }
-
-
+*/
 
 /**
  * 从棋盘编码提取棋盘状态信息
@@ -355,5 +371,3 @@ int Chess::getStep(int status) {
 int Chess::min(int a, int b) {
 	return (a <= b ? a : b);
 }
-
-
