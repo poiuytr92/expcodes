@@ -50,6 +50,7 @@ class Chess {
 		Chess();
 		~Chess();
 		int getStep(int chess);
+		int min(int a, int b);
 
 	private:
 		void initAllStatus(void);
@@ -66,8 +67,10 @@ class Chess {
 
 
 int main(void) {
+	// 一次计算把所有棋盘状态打表
 	Chess* chess = new Chess();
 
+	// 迭代输入棋盘状态 查表
 	int status = 0;
 	int byteCnt = 0;
 	char byteBuff[5] = { '\0' };
@@ -79,6 +82,7 @@ int main(void) {
 			}
 		}
 
+		// 每输入4个字节求解一次
 		if(byteCnt >= 4) {
 			int step = chess->getStep(status);
 			if(step >= 0) {
@@ -117,33 +121,41 @@ Chess::~Chess() {
 
 void Chess::initAllStatus(void) {
 	const int ALL_ZERO_CHESS = 0;
-	steps[ALL_ZERO_CHESS] = 0;
-	chessStatus[0].insert(ALL_ZERO_CHESS);	// 翻动0次的状态集(初始状态，棋盘全黑)
+	steps[ALL_ZERO_CHESS] = 0;	// 初始状态，棋盘全黑
+	chessStatus[0].insert(ALL_ZERO_CHESS);	// 即翻动0次的状态集
 
-	//int cnt = 1;
+	// 记录以不重复的组合方式翻动1-16次的可以到达的所有状态集
+	for(int filpStep = 1; filpStep <= MAX_STEP; filpStep++) {
+		set<_UINT>* lastStatus = &chessStatus[filpStep - 1];	// 上一步的状态集
+		set<_UINT>* nextStatus = &chessStatus[filpStep];		// 下一步的状态集
 
-	// 记录翻动1-16次的所有状态集
-	for(int filpCnt = 1; filpCnt <= MAX_STEP; filpCnt++) {
-		set<_UINT>* lastStatus = &chessStatus[filpCnt - 1];	// 在前一次的状态集基础上翻动棋子
-		set<_UINT>* curStatus = &chessStatus[filpCnt];	// 更新翻动filpCnt的状态集
-
+		// 迭代上一步每个棋盘状态，在其基础上均多翻一个棋子，作为下一步的状态集
 		for(set<_UINT>::iterator its = lastStatus->begin(); its != lastStatus->end(); its++) {
-			_UINT chess = *its;
-			for(int pos = getMaxBitPos(chess) + 1; pos < 16; pos++) {
-				_UINT nextChess = filp(chess, pos);
-				curStatus->insert(nextChess);
+			_UINT lastChess = *its;	// 上一次棋盘状态
 
-				// 取第一次出现的即是最小步数
-				int status = (nextChess & 0x0000FFFF); // 屏蔽操作位
-				if(steps[status] < 0) {
-					steps[status] = filpCnt;
+			// 剪枝1：棋子是从低位编号开始翻动的，为了不重复翻动棋子，从上一棋盘状态的最高位编号开始翻动
+			for(int pos = getMaxBitPos(lastChess) + 1; pos < MAX_STEP; pos++) {
+				_UINT nextChess = filp(lastChess, pos);
+				
+				int status = (nextChess & 0x0000FFFF); // 屏蔽高16位操作位，得到低16位棋盘状态
+				if(steps[status] < 0) {		// 只取第一次出现的此状态的最小步数
+					steps[status] = filpStep;
+					nextStatus->insert(nextChess);	// 剪枝2：仅不重复的状态才需要登记到下一步的状态集
+
+				} else {
+					// Undo: 重复状态不再记录到状态集
+					//  通过不同步数、翻棋组合可达到的重复状态共61440种，
+					//  总翻棋次数才65536，换言之有效状态只有4096种，
+					//  这步剪枝是很重要的，否则必定超时
 				}
 			}
 		}
-		//cout << "翻动" << filpCnt << "次共" << curStatus->size() << "种状态" << endl;
-		//cnt += curStatus->size();
+
+		// 剪枝3：当前状态集（因剪枝导致）全空，则后面所有状态集无需再计算
+		if(nextStatus->empty()) {
+			break;
+		}
 	}
-	//cout << "总状态数" << cnt << endl;
 }
 
 
@@ -192,14 +204,25 @@ int Chess::getMaxBitPos(_UINT chess) {
 int Chess::getStep(int chess) {
 	int step = -1;
 	if(chess >= 0 && chess < MAX_STATUS) {
-		step = steps[chess];
+		int bStep = steps[chess];	// 从全0开始到达状态chess的步数
+		int wStep = steps[(~chess) & 0x0000FFFF];	// 取反，从全1开始到达状态chess的步数
+		
+		if(bStep >= 0 && wStep >= 0) {
+			step = min(bStep, wStep);
 
-		//if(step < 0) {
-		//	chess = ((~chess) & 0x0000FFFF);	// 取反
-		//	step = steps[chess];
-		//}
+		} else if(bStep >= 0) {
+			step = bStep;
+
+		} else if(wStep = 0) {
+			step = wStep;
+		}
 	}
 	return step;
+}
+
+
+int Chess::min(int a, int b) {
+	return (a <= b ? a : b);
 }
 
 
