@@ -11,6 +11,7 @@
 	 从某个状态开始，使棋盘全黑或全白，至少需要翻转多少步
 
 	解题思路：
+	状态压缩
 
 	  对棋盘矩阵进行编码：
 	    * * * *      从右到左分别为第 0, 1, 2, 3位
@@ -34,35 +35,42 @@
 */
 
 
-
 #include <set>
 #include <iostream>
 using namespace std;
 
-// 无符号整型(32位)
+// 无符号整型(32位)，用于记录棋盘编码，主要为了避免int32的负数影响
+// 初始棋盘状态为全0（全黑）
+// 高16位为棋盘操作位，翻动过的棋子位置标记为1
+// 低16位为棋盘状态位, 记录当前棋盘状态（白朝上为1，黑朝上为0）
 typedef unsigned int _UINT;
 
-const static int MAX_STEP = 16;			// 可翻棋的最大步数
-const static int MAX_STATUS = 65536;	// 总状态数 = 2^16
 
+const static int MAX_STEP = 16;			// 可翻棋的最大步数
+const static int MAX_STATUS = 65536;	// 总状态数 = 2^16（含重复数）
+
+
+/**
+ * 棋盘对象
+ */
 class Chess {
 	public:
 		Chess();
 		~Chess();
-		int getStep(int chess);
-		int min(int a, int b);
+		int getStep(int status);	// 计算从全0或全1状态到达指定棋盘状态的最小步数
+		int min(int a, int b);		// 返回最小值
 
 	private:
-		void initAllStatus(void);
-		_UINT filp(_UINT chess, int bitPos);
-		int getMaxBitPos(_UINT chess);
-
-		bool isMonochrome(_UINT chess);
-		int getFilpCount(_UINT chess);
+		void initAllStatus(void);			// 初始化不重复地翻动1-16步可得到的所有棋盘状态
+		_UINT filp(_UINT chess, int bitPos);// 翻动棋盘上某个指定位位置的棋子
+		
+		int toStatus(_UINT chess);		// 从棋盘编码提取棋盘状态信息
+		int getMaxBitPos(_UINT chess);	// 从棋盘编码提取棋盘操作信息，获得其中最大翻转编号的位置
+		int getFilpCount(_UINT chess);	// 从棋盘编码提取棋盘操作信息，获取棋盘从全0状态开始共被翻动棋子的次数
 
 	private:
-		set<_UINT>* chessStatus;
-		int* steps;
+		set<_UINT>* chessStatus;	// 从棋盘全0开始，分别记录不重复地翻动1-16步可得到的所有棋盘状态
+		int* steps;					// 从棋盘全0开始，到达指定棋盘状态需要翻动棋子的最小步数
 };
 
 
@@ -71,20 +79,20 @@ int main(void) {
 	Chess* chess = new Chess();
 
 	// 迭代输入棋盘状态 查表
-	int status = 0;
+	int chessStatus = 0;
 	int byteCnt = 0;
 	char byteBuff[5] = { '\0' };
 	while(cin >> byteBuff && ++byteCnt) {
 		int offset = 4 * (byteCnt - 1);
 		for(int i = 0; i < 4; i++) {
 			if(byteBuff[i] == 'w') {	// b标记为0, w标记为1
-				status |= (0x00000001 << (i + offset));
+				chessStatus |= (0x00000001 << (i + offset));
 			}
 		}
 
 		// 每输入4个字节求解一次
 		if(byteCnt >= 4) {
-			int step = chess->getStep(status);
+			int step = chess->getStep(chessStatus);
 			if(step >= 0) {
 				cout << step << endl;
 			} else {
@@ -92,7 +100,7 @@ int main(void) {
 			}
 
 			byteCnt = 0;
-			status = 0;
+			chessStatus = 0;
 		}
 	}
 	delete chess;
@@ -100,6 +108,9 @@ int main(void) {
 }
 
 
+/**
+ * 构造函数
+ */
 Chess::Chess() {
 	this->chessStatus = new set<_UINT>[MAX_STEP + 1];
 
@@ -110,6 +121,9 @@ Chess::Chess() {
 }
 
 
+/**
+ * 析构函数
+ */
 Chess::~Chess() {
 	for(int s = 0; s <= MAX_STEP; s++) {
 		chessStatus->clear();
@@ -119,6 +133,9 @@ Chess::~Chess() {
 }
 
 
+/**
+ * 初始化不重复地翻动1-16步可得到的所有棋盘状态
+ */
 void Chess::initAllStatus(void) {
 	const int ALL_ZERO_CHESS = 0;
 	steps[ALL_ZERO_CHESS] = 0;	// 初始状态，棋盘全黑
@@ -131,16 +148,18 @@ void Chess::initAllStatus(void) {
 
 		// 迭代上一步每个棋盘状态，在其基础上均多翻一个棋子，作为下一步的状态集
 		for(set<_UINT>::iterator its = lastStatus->begin(); its != lastStatus->end(); its++) {
-			_UINT lastChess = *its;	// 上一次棋盘状态
+			_UINT lastChess = *its;	// 上一次棋盘状态编码
 
 			// 剪枝1：棋子是从低位编号开始翻动的，为了不重复翻动棋子，从上一棋盘状态的最高位编号开始翻动
 			for(int pos = getMaxBitPos(lastChess) + 1; pos < MAX_STEP; pos++) {
-				_UINT nextChess = filp(lastChess, pos);
-				
-				int status = (nextChess & 0x0000FFFF); // 屏蔽高16位操作位，得到低16位棋盘状态
-				if(steps[status] < 0) {		// 只取第一次出现的此状态的最小步数
-					steps[status] = filpStep;
-					nextStatus->insert(nextChess);	// 剪枝2：仅不重复的状态才需要登记到下一步的状态集
+				_UINT nextChess = filp(lastChess, pos);	// 翻动棋子得到下一个棋盘状态编码
+				int status = toStatus(nextChess);		// 屏蔽高16位操作位，得到低16位的真正棋盘状态
+
+				// 剪枝2：仅不重复的状态才需要登记到下一步的状态集
+				// 注意这里使用steps数组进行全局状态判重，而不能仅仅使用nextStatus对本次翻动判重
+				if(steps[status] < 0) {	
+					steps[status] = filpStep;		// 状态首次出现的步数必定是最小步数
+					nextStatus->insert(nextChess);
 
 				} else {
 					// Undo: 重复状态不再记录到状态集
@@ -160,17 +179,19 @@ void Chess::initAllStatus(void) {
 
 
 /**
- * 翻转棋盘上的一只棋子
- * @param chess 翻转前的棋盘编码(低16位表示棋盘状态, 高16位表示从全0状态翻到当前状态的操作位)
- * @param bitPos 要翻转的棋子位置, 取值范围为[0, 15]
+ * 翻动棋盘上某个指定位位置的棋子,
+ *  此操作会同时改变棋盘编码的操作位（高16位）和状态位（低16位）
+ * @param chess 翻转前的棋盘编码
+ * @param bitPos 要翻转的棋子位置, 取值范围为[0, 15]，
+ *				依次对应4x4棋盘上从左到右、自上而下的编号，也对应二进制数从低到高的进制位
  * return 翻转后的棋盘编码
  */
 _UINT Chess::filp(_UINT chess, int bitPos) {
 
-	// 高16位记录当前操作位
+	// 高16位:当前操作位
 	_UINT op = 0x00010000 << bitPos;
 
-	// 低16位记录状态
+	// 低16位:相关状态位
 	const _UINT BASE = 0x00000001;
 	op |= BASE << bitPos;	// 翻转棋子自身位置
 	if(bitPos > 3) { op |= BASE << (bitPos - 4);  }	// 翻转棋子上方的棋子
@@ -179,12 +200,25 @@ _UINT Chess::filp(_UINT chess, int bitPos) {
 	int mod = bitPos % 4;
 	if(mod != 0) { op |= BASE << (bitPos - 1);  }	// 翻转棋子左方的棋子
 	if(mod != 3) { op |= BASE << (bitPos + 1);  }	// 翻转棋子右方的棋子
-	return chess ^ op;
+
+	return chess ^ op;	// 更新棋盘编码
+}
+
+
+
+/**
+ * 从棋盘编码提取棋盘状态信息
+ * return 棋盘状态信息（低16位）
+ */
+int Chess::toStatus(_UINT chess) {
+	const _UINT MASK = 0x0000FFFF;
+	return (int) (chess & MASK);
 }
 
 
 /**
- * 获取棋盘被翻转棋子中编号最大的一个
+ * 从棋盘编码提取棋盘操作信息（高16位），获得其中最大翻转编号的位置
+ * @param chess 棋盘编码
  * return 没有操作过则返回-1，否则返回0-15
  */
 int Chess::getMaxBitPos(_UINT chess) {
@@ -201,11 +235,35 @@ int Chess::getMaxBitPos(_UINT chess) {
 }
 
 
-int Chess::getStep(int chess) {
+/**
+ * 从棋盘编码提取棋盘操作信息（高16位），获取棋盘从全0状态开始共被翻动棋子的次数
+ * @param chess 棋盘编码
+ * return 被翻转次数
+ */
+int Chess::getFilpCount(_UINT chess) {
+	const _UINT MASK = 0xFFFF0000;
+	chess &= MASK;	// 屏蔽低16位的状态位
+
+	// 判断高16位操作位有多少个1, 即为翻转次数
+	int cnt = 0;
+	while(chess > 0) {
+		chess = (chess & (chess - 1));
+		cnt++;
+	}
+	return cnt;
+}
+
+
+/**
+ * 计算从全0或全1状态到达指定棋盘状态的最小步数
+ * @param status 棋盘状态
+ * return 最小步数（若不可达则返回-1）
+ */
+int Chess::getStep(int status) {
 	int step = -1;
-	if(chess >= 0 && chess < MAX_STATUS) {
-		int bStep = steps[chess];	// 从全0开始到达状态chess的步数
-		int wStep = steps[(~chess) & 0x0000FFFF];	// 取反，从全1开始到达状态chess的步数
+	if(status >= 0 && status < MAX_STATUS) {
+		int bStep = steps[status];					// 从全0开始到达指定状态的步数
+		int wStep = steps[(~status) & 0x0000FFFF];	// 取反，从全1开始到达状态chess的步数
 		
 		if(bStep >= 0 && wStep >= 0) {
 			step = min(bStep, wStep);
@@ -221,34 +279,14 @@ int Chess::getStep(int chess) {
 }
 
 
+/**
+ * 返回最小值
+ * @param a 参数a
+ * @param b 参数b
+ * return 最小值
+ */
 int Chess::min(int a, int b) {
 	return (a <= b ? a : b);
 }
 
 
-/**
- * 获取棋盘被翻转棋子的棋子数量
- * return 
- */
-int Chess::getFilpCount(_UINT chess) {
-	const _UINT MASK = 0xFFFF0000;
-	chess &= MASK;	// 屏蔽低16位的状态位
-
-	// 判断高16位操作位有多少个1, 即为翻转次数
-	int cnt = 0;
-	while(chess > 0) {
-		chess = (chess & (chess - 1));
-		cnt++;
-	}
-	return cnt;
-}
-
-/**
- * 判断棋盘是否为单色（全黑或全白）
- * return true:单色; false:非单色
- */
-bool Chess::isMonochrome(_UINT chess) {
-	const _UINT MASK = 0x0000FFFF;
-	chess &= MASK;	// 屏蔽高16位的操作位
-	return (chess == 0 || chess == MASK);
-}
