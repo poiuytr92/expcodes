@@ -1,4 +1,4 @@
-package exp.libs.warp.mail.test;
+package exp.libs.warp.net.mail.test;
 
 import org.junit.After;
 import org.junit.Before;

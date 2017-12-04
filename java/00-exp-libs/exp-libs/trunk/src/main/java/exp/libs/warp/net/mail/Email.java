@@ -168,6 +168,7 @@ public class Email {
 		prop.setProperty("mail.smtp.host", this.smtpServer);
 		prop.setProperty("mail.smtp.port", String.valueOf(this.smtpPort));
 		prop.setProperty("mail.smtp.auth", "true");
+		prop.setProperty("mail.smtp.starttls.enable", "true");
 		this.session = Session.getInstance(prop);
 		this.session.setDebug(false);
 	}
