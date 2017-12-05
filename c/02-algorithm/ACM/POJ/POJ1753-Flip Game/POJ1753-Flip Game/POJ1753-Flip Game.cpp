@@ -297,8 +297,8 @@ _UINT Chess::filp(_UINT chess, int bitPos) {
 */
 
 /**
- * 从棋盘编码提取棋盘状态信息
- * return 棋盘状态信息（低16位）
+ * 从棋盘编码提取棋盘状态信息（低16位）
+ * return 棋盘状态信息
  */
 int Chess::toStatus(_UINT chess) {
 	const _UINT MASK = 0x0000FFFF;
