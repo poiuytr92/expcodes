@@ -352,8 +352,8 @@ int Chess::getFilpCount(_UINT chess) {
 int Chess::getStep(int status) {
 	int step = -1;
 	if(status >= 0 && status < MAX_STATUS) {
-		int bStep = steps[status];					// 从全0开始到达指定状态的步数
-		int wStep = steps[(~status) & 0x0000FFFF];	// 取反，从全1开始到达状态chess的步数
+		int bStep = steps[status];				// 从全0开始到达指定状态的步数
+		int wStep = steps[toStatus(~status)];	// 取反，从全1开始到达状态chess的步数
 		
 		if(bStep >= 0 && wStep >= 0) {
 			step = min(bStep, wStep);
@@ -361,7 +361,7 @@ int Chess::getStep(int status) {
 		} else if(bStep >= 0) {
 			step = bStep;
 
-		} else if(wStep = 0) {
+		} else if(wStep >= 0) {
 			step = wStep;
 		}
 	}
