@@ -142,8 +142,7 @@ class Chess {
 		Chess();
 		~Chess();
 		int getStep(int status);	// 计算从全0或全1状态到达指定棋盘状态的最小步数
-		int min(int a, int b);		// 返回最小值
-
+		
 	private:
 		void bfsAllStatus(void);			// 记录不重复地翻动1-16步可得到的所有棋盘状态
 		_UINT filp(_UINT chess, int bitPos);// 翻动棋盘上某个指定位位置的棋子
@@ -151,6 +150,7 @@ class Chess {
 		int toStatus(_UINT chess);		// 从棋盘编码提取棋盘状态信息
 		int getMaxBitPos(_UINT chess);	// 从棋盘编码提取棋盘操作信息，获得其中最大翻转编号的位置
 		int getFilpCount(_UINT chess);	// 从棋盘编码提取棋盘操作信息，获取棋盘从全0状态开始共被翻动棋子的次数
+		int min(int a, int b);		// 返回最小值
 
 	private:
 		set<_UINT>* chesses;	// 从棋盘全0开始，分别记录不重复地翻动1-16步可得到的所有棋盘编码
@@ -222,7 +222,7 @@ Chess::~Chess() {
  */
 void Chess::bfsAllStatus(void) {
 	const int ALL_ZERO_CHESS = 0;
-	steps[ALL_ZERO_CHESS] = 0;	// 初始状态，棋盘全黑
+	steps[0] = ALL_ZERO_CHESS;	// 初始状态，棋盘全黑
 	chesses[0].insert(ALL_ZERO_CHESS);	// 即翻动0次的状态集
 
 	// 记录以不重复的组合方式翻动1-16次的可以到达的所有状态集
