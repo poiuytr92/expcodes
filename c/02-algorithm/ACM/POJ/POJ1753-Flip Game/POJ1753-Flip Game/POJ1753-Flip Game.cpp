@@ -153,8 +153,8 @@ class Chess {
 		int getFilpCount(_UINT chess);	// 从棋盘编码提取棋盘操作信息，获取棋盘从全0状态开始共被翻动棋子的次数
 
 	private:
-		set<_UINT>* chessStatus;	// 从棋盘全0开始，分别记录不重复地翻动1-16步可得到的所有棋盘状态
-		int* steps;					// 从棋盘全0开始，到达指定棋盘状态需要翻动棋子的最小步数
+		set<_UINT>* chesses;	// 从棋盘全0开始，分别记录不重复地翻动1-16步可得到的所有棋盘编码
+		int* steps;				// 从棋盘全0开始，到达指定棋盘状态需要翻动棋子的最小步数
 };
 
 
@@ -196,7 +196,7 @@ int main(void) {
  * 构造函数
  */
 Chess::Chess() {
-	this->chessStatus = new set<_UINT>[MAX_STEP + 1];
+	this->chesses = new set<_UINT>[MAX_STEP + 1];
 
 	this->steps = new int[MAX_STATUS];
 	memset(steps, -1, sizeof(int) * MAX_STATUS);
@@ -210,9 +210,9 @@ Chess::Chess() {
  */
 Chess::~Chess() {
 	for(int s = 0; s <= MAX_STEP; s++) {
-		chessStatus->clear();
+		chesses->clear();
 	}
-	delete[] chessStatus; chessStatus = NULL;
+	delete[] chesses; chesses = NULL;
 	delete[] steps; steps = NULL;
 }
 
@@ -223,15 +223,15 @@ Chess::~Chess() {
 void Chess::bfsAllStatus(void) {
 	const int ALL_ZERO_CHESS = 0;
 	steps[ALL_ZERO_CHESS] = 0;	// 初始状态，棋盘全黑
-	chessStatus[0].insert(ALL_ZERO_CHESS);	// 即翻动0次的状态集
+	chesses[0].insert(ALL_ZERO_CHESS);	// 即翻动0次的状态集
 
 	// 记录以不重复的组合方式翻动1-16次的可以到达的所有状态集
 	for(int filpStep = 1; filpStep <= MAX_STEP; filpStep++) {
-		set<_UINT>* lastStatus = &chessStatus[filpStep - 1];	// 上一步的状态集
-		set<_UINT>* nextStatus = &chessStatus[filpStep];		// 下一步的状态集
+		set<_UINT>* lastChesses = &chesses[filpStep - 1];	// 上一步的状态集
+		set<_UINT>* nextChesses = &chesses[filpStep];		// 下一步的状态集
 
 		// 迭代上一步每个棋盘状态，在其基础上均多翻一个棋子，作为下一步的状态集
-		for(set<_UINT>::iterator its = lastStatus->begin(); its != lastStatus->end(); its++) {
+		for(set<_UINT>::iterator its = lastChesses->begin(); its != lastChesses->end(); its++) {
 			_UINT lastChess = *its;	// 上一次棋盘状态编码
 
 			// 剪枝1：棋子是从低位编号开始翻动的，为了不重复翻动棋子，从上一棋盘状态的最高位编号开始翻动
@@ -243,7 +243,7 @@ void Chess::bfsAllStatus(void) {
 				// 注意这里使用steps数组进行全局状态判重，而不能仅仅使用nextStatus对本次翻动判重
 				if(steps[status] < 0) {	
 					steps[status] = filpStep;		// 状态首次出现的步数必定是最小步数
-					nextStatus->insert(nextChess);
+					nextChesses->insert(nextChess);
 
 				} else {
 					// Undo: 重复状态不再记录到状态集
@@ -255,7 +255,7 @@ void Chess::bfsAllStatus(void) {
 		}
 
 		// 剪枝3：当前状态集（因剪枝导致）全空，则后面所有状态集无需再计算
-		if(nextStatus->empty()) {
+		if(nextChesses->empty()) {
 			break;
 		}
 	}
