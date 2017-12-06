@@ -1,6 +1,6 @@
 /*
 	Author:     Exp
-	Date:       2017-11-30
+	Date:       2017-12-06
 	Code:       POJ 1328
 	Problem:    Radar Installation
 	URL:		http://poj.org/problem?id=1328
@@ -37,101 +37,100 @@
 	  
 	  可使用贪心算法求解：
 	    根据每个区间的左端点坐标对所有区间从左到右排序:
-		① 在第i个区间的右端点 R(i) 放置一个点，总放置点数 P+1 , 其中i∈[1, n]
-		② 令j=i
-		③ 令j++
-		④ 若第j个区间的左端点 L(j)<=R(i)，则转③，否则转⑤
-		⑤ 令i=j，转①
+		① 在左起第一个区间A 的右端点 A.R 放置一个点，总放置点数 P+1 
+		② 若下一个区间B 的左端点 B.L > A.R, 
+		    说明 区间A 与 区间B 无交集，此时在区间B 的右端点 B.R 放置一个点，总放置点数 P+1 
+
+		   否则说明 区间A 与 区间B 相交, 此时进一步判断，若 B.R < A.R，
+			说明 区间B 在 区间A 的内部，此时把原本放置在 A.R 的点移动到 B.R（确保区间B有一个点），总放置点数不变
+
+		③ 重复这个过程直到所有区间被遍历完成
 */
 
 
+#include <math.h>
+#include <algorithm>
 #include <iostream>
 using namespace std;
 
 
+// 海岛在x轴上的投影区间
+struct Interval {
+	double left;	// 左端点在x轴上的坐标
+	double right;	// 右端点在x轴上的坐标
+};
+
+
+/* 
+ * 求解问题：在每个区间内至少放置一个点，使得放置的点的总量最少
+ * @param intervals 区间集合
+ * @param size 区间个数
+ * return 最小的放置点数
+ */
+int solve(Interval* intervals, int size);
+
+
+/* 
+ * 比较两个区间的大小（用于排序）
+ *  左端点越小的区间，该区间的顺次越小
+ * @param a 区间a
+ * @param b 区间b
+ * return a.left <= b.left
+ */
+bool compare(Interval a, Interval b);
+
 
 int main(void) {
+	int island, radius, testCase = 0;
+	while((cin >> island >> radius) && island && radius) {
+		const double R2 = radius * radius;	// 半径平方
+		Interval* intervals = new Interval[island];
 
+		bool isSolvable = true;
+		for(int i = 0; i < island; i++) {
+			double x, y;
+			cin >> x >> y;
+			if(y > radius) {	// 存在海岛不在雷达的最大影响范围，无解
+				isSolvable = false;
+			}
+
+			double offset = sqrt(R2 - y * y);	// 勾股定理
+			intervals[i].left = x - offset;
+			intervals[i].right = x + offset;
+		}
+
+		int minRadar = (isSolvable ? solve(intervals, island) : -1);
+		cout << "Case " << ++testCase << ": " << minRadar << endl;
+		delete[] intervals;
+	}
 	return 0;
 }
 
 
+int solve(Interval* intervals, int size) {
+	sort(intervals, intervals + size, compare);
 
+	int minPoint = 1;
+	double right = intervals[0].right;
+	for(int i = 1; i < size; i++) {
 
+		// 区间i-1 与 区间i 无交集
+		if(intervals[i].left > right) {
+			minPoint++;
+			right = intervals[i].right;
 
+		// 区间i-1 在 区间i 内部
+		} else if(intervals[i].right < right) {
+			right = intervals[i].right;
 
-//Memory Time 
-//288K   110MS 
-
-
-#include<iostream>
-#include<math.h>
-using namespace std;
-
-const int island_max=1000;
-
-int main(void)
-{
-	int i,j;
-	double x[island_max],y[island_max];
-	double num,rad;
-	for(;;)
-	{
-		/*Input end*/
-		cin>>num>>rad;
-		if(!(num&&rad))break;
-
-		static int count=1;  //记录case数目
-
-		/*read in coordinate*/
-		bool flag=false;
-		for(i=0;i<num;i++)
-		{
-			cin>>x[i]>>y[i];
-			if(y[i]>rad)
-				flag=true;
+		} else {
+			// Undo: 区间i-1 与 区间i 相交 
 		}
-
-		/*case fail*/
-		if(flag)
-		{
-			cout<<"Case "<<count++<<": -1"<<endl;
-			continue;
-		}
-
-		/*bubble sort*/
-		//这里由于y要随x连带排序，不能简单地使用 快排qsort
-		double temp;
-		for(i=0;i<num-1;i++)
-			for(j=0;j<num-i-1;j++)
-				if(x[j]>x[j+1])
-				{
-					temp=x[j];
-					x[j]=x[j+1];
-					x[j+1]=temp;
-					temp=y[j];
-					y[j]=y[j+1];
-					y[j+1]=temp;
-				}
-
-				double left[island_max],righ[island_max];  //海岛圆在海岸线上的左右交点
-				for(i=0;i<num;i++)
-				{
-					left[i]=x[i]-sqrt(rad*rad-y[i]*y[i]);
-					righ[i]=x[i]+sqrt(rad*rad-y[i]*y[i]);
-				}
-
-				int radar=1;
-				for(i=0,temp=righ[0];i<num-1;i++)
-					if(left[i+1]>temp)
-					{
-						temp=righ[i+1];
-						radar++;
-					}
-					else if(righ[i+1]<temp)
-						temp=righ[i+1];
-
-				cout<<"Case "<<count++<<": "<<radar<<endl;
 	}
-	return 0;
+	return minPoint;
+}
+
+
+bool compare(Interval a, Interval b) {
+	return a.left <= b.left;
 }
