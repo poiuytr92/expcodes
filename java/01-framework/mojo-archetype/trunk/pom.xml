@@ -14,9 +14,9 @@
 
 	<!-- 软件配置管理 -->
 	<scm>
-		<connection>scm:svn:https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-archetype/trunk</connection>
-		<developerConnection>scm:svn:https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-archetype/trunk</developerConnection>
-		<url>scm:svn:https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-archetype/trunk</url>
+		<connection>scm:svn:https://github.com/lyy289065406/expcodes/tags/java/01-framework/mojo-archetype/tags/mojo-archetype-1.0</connection>
+		<developerConnection>scm:svn:https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-archetype/tags/mojo-archetype-1.0</developerConnection>
+		<url>scm:svn:https://github.com/lyy289065406/expcodes/tags/java/01-framework/mojo-archetype/tags/mojo-archetype-1.0</url>
 	</scm>
 	
 	<!-- 项目构建 -->
