@@ -2,7 +2,7 @@ package exp.bilibli.plugin;
 
 import java.net.URISyntaxException;
 
-import exp.bilibli.plugin.core.lottery.WebSockMonitor;
+import exp.bilibli.plugin.core.gift.WebSockMonitor;
 import exp.libs.utils.other.LogUtils;
 
 

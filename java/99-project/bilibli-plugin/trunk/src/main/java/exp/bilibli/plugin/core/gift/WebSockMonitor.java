@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.core.lottery;
+package exp.bilibli.plugin.core.gift;
 
 import java.net.URI;
 
