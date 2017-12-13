@@ -1,10 +1,13 @@
 package exp.bilibli.plugin.core.gift;
 
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
+import exp.libs.utils.other.StrUtils;
 
 
 public class GiftRoomMgr {
 
+	private final static String LIVE_URL_PREFIX = "http://live.bilibili.com/";
+	
 	private PCQueue<String> roomIds;
 	
 	private static volatile GiftRoomMgr instance;
@@ -29,7 +32,7 @@ public class GiftRoomMgr {
 	}
 	
 	public String get() {
-		return roomIds.get();
+		return StrUtils.concat(LIVE_URL_PREFIX, roomIds.get());
 	}
 	
 	public int size() {

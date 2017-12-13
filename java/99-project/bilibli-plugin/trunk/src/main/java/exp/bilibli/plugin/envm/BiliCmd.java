@@ -2,6 +2,15 @@ package exp.bilibli.plugin.envm;
 
 /**
  * 
+ * 
+系统公告
+{
+  "cmd": "SYS_MSG",
+  "msg": "\u7cfb\u7edf\u516c\u544a\uff1a\u76f4\u64ad2017\u5e74\u5ea6\u56de\u9988\uff0c\u505a\u4efb\u52a1\u9886\u5956\u52b1\uff01",
+  "rep": 1,
+  "url": "https:\/\/live.bilibili.com\/pages\/1703\/2017livethx.html"
+}
+
 小电视抽奖：
 {
 "cmd": "SYS_MSG",
@@ -125,6 +134,18 @@ package exp.bilibli.plugin.envm;
     "addFollow": 0
   }
 }
+
+欢迎
+{
+  "cmd": "WELCOME_GUARD",
+  "data": {
+    "uid": 1650868,
+    "username": "M-亚絲娜",
+    "guard_level": "2"
+  }
+}
+
+
 */
 
 public class BiliCmd {
@@ -137,5 +158,8 @@ public class BiliCmd {
 	
 	/** 投喂消息 */
 	public final static String SEND_GIFT = "SEND_GIFT";
+	
+	/** 欢迎消息 */
+	public final static String WELCOME_GUARD = "WELCOME_GUARD";
 	
 }

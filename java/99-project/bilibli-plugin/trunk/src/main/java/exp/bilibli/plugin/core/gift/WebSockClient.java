@@ -27,6 +27,8 @@ public class WebSockClient extends WebSocketClient {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockClient.class);
 	
+	private final static String RGX_JSON = "[^{]*(.*)";
+	
 	/** 连接超时 */
 	private final static long CONN_TIMEOUT = 10000;
 	
@@ -110,7 +112,7 @@ public class WebSockClient extends WebSocketClient {
 			
 		} else {
 			String msg = new String(buff);
-			String sJson = RegexUtils.findFirst(msg, "[^{]*(.*)");
+			String sJson = RegexUtils.findFirst(msg, RGX_JSON);
 			
 			if(JsonUtils.isVaild(sJson)) {
 				JSONObject json = JSONObject.fromObject(sJson);
@@ -146,6 +148,10 @@ public class WebSockClient extends WebSocketClient {
 				log.info("全频道公告: {}", msgText);
 			}
 			
+		} else if(BiliCmd.WELCOME_GUARD.equals(cmd)) {
+			// Undo 被监听的直播间送过来的欢迎舰长/老爷进入直播间的消息
+			isOk = false;
+						
 		} else if(BiliCmd.SEND_GIFT.equals(cmd)) {
 			// Undo 被监听的直播间送过来的投喂消息
 			isOk = false;
