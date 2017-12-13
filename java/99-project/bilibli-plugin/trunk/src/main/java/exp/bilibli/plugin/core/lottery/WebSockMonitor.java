@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.monitort;
+package exp.bilibli.plugin.core.lottery;
 
 import java.net.URI;
 
@@ -8,7 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.ldm.Frame;
-import exp.bilibli.plugin.core.lottery.WebSockClient;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.thread.LoopThread;
 
