@@ -31,7 +31,7 @@ public class WebSockMonitor extends LoopThread {
 	private static volatile WebSockMonitor instance;
 	
 	private WebSockMonitor() {
-		super("WebSocket连接监控线程");
+		super("websocket连接监控线程");
 		reconn();
 	}
 	
