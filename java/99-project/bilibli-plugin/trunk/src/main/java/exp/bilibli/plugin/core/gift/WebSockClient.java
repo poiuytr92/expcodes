@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.ldm.Frame;
+import exp.bilibli.plugin.envm.BiliCmd;
+import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.BinaryData;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
@@ -101,34 +103,56 @@ public class WebSockClient extends WebSocketClient {
 		String hex = BODHUtils.toHex(buff);
 		
 		if(hex.startsWith(BinaryData.SERVER_HB_CONFIRM)) {
-			log.info("websocket连接保活确认");
+			log.debug("websocket连接保活确认");
 			
 		} else if(BinaryData.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.info("websocket连接成功确认");
 			
 		} else {
-			log.info("接收到 [ByteBuffer] 类型数据: {}", hex);
 			String msg = new String(buff);
 			String sJson = RegexUtils.findFirst(msg, "[^{]*(.*)");
 			
 			if(JsonUtils.isVaild(sJson)) {
 				JSONObject json = JSONObject.fromObject(sJson);
-				String roomId = JsonUtils.getStr(json, "real_roomid");
-				if(StrUtils.isEmpty(roomId)) {
-					roomId = JsonUtils.getStr(json, "roomid");
-				}
-				
-				if(StrUtils.isNotEmpty(roomId)) {
-					GiftRoomMgr.getInstn().add(roomId);
-					log.info("直播间 [{}] 正在高能抽奖中!!!", roomId);
-					
-				} else {
-					String msgText = JsonUtils.getStr(json, "msg_text");
-					log.info("全频道公告: {}", msgText);
+				if(!handle(json)) {
+					log.info("接收到未识别的 [ByteBuffer] 类型数据: {}", hex);
 				}
 			}
 		}
     }
+	
+	private boolean handle(JSONObject msg) {
+		boolean isOk = true;
+		String cmd = JsonUtils.getStr(msg, BiliCmdAtrbt.cmd);
+		if(BiliCmd.SYS_MSG.equals(cmd) || BiliCmd.SYS_GIFT.equals(cmd)) {
+			String roomId = getRoomId(msg);
+			if(StrUtils.isNotEmpty(roomId)) {
+				GiftRoomMgr.getInstn().add(roomId);
+				log.info("直播间 [{}] 正在{}抽奖中!!!", roomId, 
+						(BiliCmd.SYS_MSG.equals(cmd) ? "小电视" : "高能"));
+			} else {
+				String msgText = JsonUtils.getStr(msg, BiliCmdAtrbt.msg_text);
+				log.info("全频道公告: {}", msgText);
+			}
+			
+		} else if(BiliCmd.SEND_GIFT.equals(cmd)) {
+			// Undo 被监听的直播间送过来的投喂消息
+			isOk = false;
+			
+		} else {
+			// Undo 其他跟刷礼物无关的消息
+			isOk = false;
+		}
+		return isOk;
+	}
+	
+	private String getRoomId(JSONObject msg) {
+		String roomId = JsonUtils.getStr(msg, BiliCmdAtrbt.real_roomid);
+		if(StrUtils.isEmpty(roomId)) {
+			roomId = JsonUtils.getStr(msg, BiliCmdAtrbt.roomid);
+		}
+		return roomId;
+	}
 
 	@Override
     public void onFragment(Framedata framedata) {
