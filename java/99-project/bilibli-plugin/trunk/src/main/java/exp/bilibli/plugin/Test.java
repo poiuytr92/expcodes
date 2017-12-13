@@ -12,19 +12,18 @@ public class Test {
 	public static void main(String[] args) {
 		BrowserDriver browser = BrowserDriver.PHANTOMJS;
 		WebDriver driver = browser.getWebDriver();
+		driver.get(URL);	// 建立cookies前需要先登录页面，否则会报错
 		
+		// 获取所有cookie个数
+		System.out.println(driver.manage().getCookies().size());
 		
-//		// 获取所有cookie个数
-//		System.out.println(driver.manage().getCookies().size());
-//		
-//		// 增加cookie
-//		Cookie username = new Cookie("username", "289065406@qq.com", "/", null);
-//		Cookie password = new Cookie("password", "liao5422", "/", null);
-//		
-//		driver.manage().addCookie(username);
-//		driver.manage().addCookie(password);
-//		
-		driver.get(URL);
+		// 增加cookie
+		Cookie username = new Cookie("username", "289065406@qq.com", "/", null);
+		Cookie password = new Cookie("password", "liao5422", "/", null);
+		
+		driver.manage().addCookie(username);
+		driver.manage().addCookie(password);
+		
 		
 	}
 }
