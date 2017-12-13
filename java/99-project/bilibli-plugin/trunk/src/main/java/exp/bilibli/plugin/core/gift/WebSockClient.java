@@ -101,13 +101,13 @@ public class WebSockClient extends WebSocketClient {
 		String hex = BODHUtils.toHex(buff);
 		
 		if(hex.startsWith(BinaryData.SERVER_HB_CONFIRM)) {
-			log.info("server连接保活确认");
+			log.info("websocket连接保活确认");
 			
 		} else if(BinaryData.SERVER_CONN_CONFIRM.equals(hex)) {
-			log.info("server连接成功确认");
+			log.info("websocket连接成功确认");
 			
 		} else {
-			log.debug("接收到 [ByteBuffer] 类型数据: {}", hex);
+			log.info("接收到 [ByteBuffer] 类型数据: {}", hex);
 			String msg = new String(buff);
 			String sJson = RegexUtils.findFirst(msg, "[^{]*(.*)");
 			
@@ -120,7 +120,7 @@ public class WebSockClient extends WebSocketClient {
 				
 				if(StrUtils.isNotEmpty(roomId)) {
 					GiftRoomMgr.getInstn().add(roomId);
-					log.info("直播房间 [{}] 正在高能抽奖中!!!", roomId);
+					log.info("直播间 [{}] 正在高能抽奖中!!!", roomId);
 					
 				} else {
 					String msgText = JsonUtils.getStr(json, "msg_text");
