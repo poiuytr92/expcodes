@@ -6,16 +6,22 @@ import java.nio.ByteBuffer;
 import org.java_websocket.WebSocketImpl;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
-import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ServerHandshake;
 
+import exp.bilibli.plugin.envm.BinaryData;
+import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.verify.RegexUtils;
 
 public class WebSockClient extends WebSocketClient {
 
-	private final static long TIMEOUT = 20000;
+	/** 连接超时 */
+	private final static long CONN_TIMEOUT = 10000;
+	
+	public WebSockClient(URI serverURI, Draft draft) {
+		this(serverURI, draft, 0, false);
+	}
 	
 	/**
 	 * 
@@ -23,13 +29,18 @@ public class WebSockClient extends WebSocketClient {
 	 * @param draft WebSocket协议版本
 	 * 				WebSocket协议说明可查看 http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
 	 * 				通过打开调试开关 WebSocketImpl.DEBUG = true 可以知道服务端的协议版本
+	 * 				Draft_6455 为最新的WebSocket协议版本
+	 * @param timeout 本地连接保活超时（0不生效，默认60，即60秒后自动断开）
+	 * @param debug 调试模式
 	 */
-	public WebSockClient(URI serverUri, Draft draft) {
-		super(serverUri, draft);
+	public WebSockClient(URI serverURI, Draft draft, int timeout, boolean debug) {
+		super(serverURI, draft);
+		setTimeout(timeout);
+		debug(debug);
 	}
 	
-	public WebSockClient(URI serverUri) {
-		super(serverUri, new Draft_6455());	// Draft_6455 为最新的WebSocket协议版本
+	public void setTimeout(int timeout) {
+		setConnectionLostTimeout(timeout);
 	}
 	
 	public void debug(boolean open) {
@@ -53,8 +64,16 @@ public class WebSockClient extends WebSocketClient {
 				break;
 			}
 			ThreadUtils.tSleep(1000);
-		} while(System.currentTimeMillis() - bgnTime <= TIMEOUT);
+		} while(System.currentTimeMillis() - bgnTime <= CONN_TIMEOUT);
 		return isOk;
+	}
+	
+	public void send(Frame frame) {
+		sendFrame(frame);
+	}
+	
+	public void send(byte[] bytes) {
+		send(new Frame(bytes));
 	}
 	
 	@Override
@@ -107,11 +126,18 @@ public class WebSockClient extends WebSocketClient {
 	 */
 	@Override
 	public void onMessage(ByteBuffer byteBuffer) {
-		String msg = new String(byteBuffer.array());
-		if(Frame.SERVER_HB.equals(msg)) {
-			System.out.println("received ByteBuffer: heartbeat");
+		byte[] buff = byteBuffer.array();
+		String hex = BODHUtils.toHex(buff);
+		System.out.println("received ByteBuffer: " + hex);
+		
+		if(hex.startsWith(BinaryData.SERVER_HB_CONFIRM)) {
+			System.out.println("received ByteBuffer: server hb confirm");
+			
+		} else if(BinaryData.SERVER_CONN_CONFIRM.equals(hex)) {
+			System.out.println("received ByteBuffer: server conn confirm");
+			
 		} else {
-			System.out.println("received ByteBuffer: " + msg);
+			String msg = new String(buff);
 			String json = RegexUtils.findFirst(msg, "[^{]*(.*)");
 			System.out.println("received ByteBuffer: " + json);
 		}

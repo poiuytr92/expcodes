@@ -4,52 +4,45 @@ import java.nio.ByteBuffer;
 
 import org.java_websocket.framing.Framedata;
 
+import exp.bilibli.plugin.envm.BinaryData;
 import exp.libs.utils.num.BODHUtils;
 
 /**
+ * <PRE>
+ * 数据帧.
+ * 	注意数据帧是有时间戳的，即使内容相同，时间戳不匹配当前时间的话是无法发送出去的.
+ *  所以数据帧只能在发送前new出来，不能提前构造好final常量.
+ * </PRE>
  * 
-14:15:04:9179 WSSession199.WebSocket'WebSocket #199'
-MessageID:	Client.924
-MessageType:	Binary
-PayloadString:	00-00-00-1F-00-10-00-01-00-00-00-02-00-00-00-01-5B-6F-62-6A-65-63-74-20-4F-62-6A-65-63-74-5D
-Masking:	27-72-F5-28
-
-14:15:04:9529 WSSession199.WebSocket'WebSocket #199'
-MessageID:	Server.925
-MessageType:	Binary
-PayloadString:	00-00-00-14-00-10-00-01-00-00-00-03-00-00-00-01-00-00-00-0B
-Masking:	<none>
-
+ * @author Administrator
+ * @date 2017年12月13日
  */
 public class Frame implements Framedata {
 
-	// 通过Fiddler抓包解析得到B站WebSocket建立会话时发送的链接数据
-	public final static String CLIENT_CONNECT = 
-			("00-00-00-36-00-10-00-01-00-00-00-07-00-00-00-01-" + 
-			"7B-22-75-69-64-22-3A-30-2C-22-72-6F-6F-6D-69-64-22-3A-33-39-30-34-38-30-2C-22-70-72-6F-74-6F-76-65-72-22-3A-31-7D").
-			replace("-", "");
-	
-	// 通过Fiddler抓包解析得到B站WebSocket保持会话时发送的心跳数据
-	public final static String CLIENT_HB = 
-			("00-00-00-1F-00-10-00-01-00-00-00-02-00-00-00-01-" + 
-			"5B-6F-62-6A-65-63-74-20-4F-62-6A-65-63-74-5D").
-			replace("-", "");
-	
-	// 通过Fiddler抓包解析得到B站WebSocket保持会话时收到的心跳数据
-	public final static String SERVER_HB = 
-			"00-00-00-14-00-10-00-01-00-00-00-03-00-00-00-01-00-00-00-0B".
-			replace("-", "");
-	
 	private ByteBuffer payloadData;
 	
-	public Frame(boolean forConn) {
-		this.payloadData = ByteBuffer.wrap(
-				BODHUtils.toBytes(forConn ? CLIENT_CONNECT : CLIENT_HB));
+	private Opcode opcode;
+	
+	public Frame(String byteHex) {
+		this(byteHex, Opcode.BINARY);
+	}
+	
+	public Frame(byte[] bytes) {
+		this(bytes, Opcode.BINARY);
+	}
+	
+	public Frame(String byteHex, Opcode opcode) {
+		this(BODHUtils.toBytes(byteHex), opcode);
+	}
+	
+	public Frame(byte[] bytes, Opcode opcode) {
+		this.payloadData = ByteBuffer.wrap(bytes);
+		this.opcode = opcode;
 	}
 	
 	@Override
 	public boolean isFin() {
-		return true;
+		return true;	// 暂不存在多帧分包发送的情况
 	}
 
 	@Override
@@ -74,7 +67,7 @@ public class Frame implements Framedata {
 
 	@Override
 	public Opcode getOpcode() {
-		return Opcode.BINARY;
+		return opcode;
 	}
 
 	@Override
@@ -88,4 +81,16 @@ public class Frame implements Framedata {
 		
 	}
 
+	public static Frame C2S_CONN() {
+		return new Frame(BinaryData.CLIENT_CONNECT);
+	}
+	
+	public static Frame C2S_CLOSE() {
+		return new Frame(BinaryData.CLIENT_CLOSE, Opcode.CLOSING);
+	}
+	
+	public static Frame C2S_HB() {
+		return new Frame(BinaryData.CLIENT_HB);
+	}
+	
 }
