@@ -124,12 +124,23 @@ public class WebSockClient extends WebSocketClient {
 	private boolean handle(JSONObject msg) {
 		boolean isOk = true;
 		String cmd = JsonUtils.getStr(msg, BiliCmdAtrbt.cmd);
-		if(BiliCmd.SYS_MSG.equals(cmd) || BiliCmd.SYS_GIFT.equals(cmd)) {
+		if(BiliCmd.SYS_MSG.equals(cmd)) {
 			String roomId = getRoomId(msg);
 			if(StrUtils.isNotEmpty(roomId)) {
 				GiftRoomMgr.getInstn().add(roomId);
-				log.info("直播间 [{}] 正在{}抽奖中!!!", roomId, 
-						(BiliCmd.SYS_MSG.equals(cmd) ? "小电视" : "高能"));
+				log.info("直播间 [{}] 正在小电视抽奖中!!!", roomId);
+				
+			} else {
+				// Undo: 系统公告
+				isOk = false;
+			}
+			
+		} else if(BiliCmd.SYS_GIFT.equals(cmd)) {
+			String roomId = getRoomId(msg);
+			if(StrUtils.isNotEmpty(roomId)) {
+				GiftRoomMgr.getInstn().add(roomId);
+				log.info("直播间 [{}] 正在高能抽奖中!!!", roomId);
+				
 			} else {
 				String msgText = JsonUtils.getStr(msg, BiliCmdAtrbt.msg_text);
 				log.info("全频道公告: {}", msgText);
