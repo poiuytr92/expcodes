@@ -120,7 +120,7 @@ final public class BrowserDriver {
 		// PhantomJS浏览器不会持续执行JS脚本，只能刷新页面实现
 		if(PhantomJS.equals(driverName)) {
 			ThreadUtils.tSleep(10000);
-//			webDriver.navigate().refresh();	// FIXME:刷新会报错
+//			webDriver.navigate().refresh();	// FIXME:刷新会报错???
 			
 		} else if(Chrome.equals(driverName)) {
 			ThreadUtils.tSleep(5000);

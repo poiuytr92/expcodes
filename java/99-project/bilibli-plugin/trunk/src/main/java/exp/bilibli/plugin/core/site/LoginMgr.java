@@ -23,17 +23,15 @@ import exp.libs.warp.net.http.HttpUtils;
  * 之后登陆通过cookie, 以回避校验码问题.
  * </PRE>
  */
-public class BiliPageMgr {
+public class LoginMgr {
 
-	private final static Logger log = LoggerFactory.getLogger(BiliPageMgr.class);
+	private final static Logger log = LoggerFactory.getLogger(LoginMgr.class);
 	
 	/** B站登陆页面 */
 	private final static String LOGIN_URL = "https://passport.bilibili.com/login";
 	
 	/** B站主页 */
 	private final static String HOME_URL = "https://www.bilibili.com/";
-	
-//	private final static String LIVE_URL = "http://live.bilibili.com/438";
 	
 	private final static long WAIT_ELEMENT_TIME = 30;
 	
@@ -47,18 +45,18 @@ public class BiliPageMgr {
 	
 	private WebDriver driver;
 	
-	private static volatile BiliPageMgr instance;
+	private static volatile LoginMgr instance;
 	
-	private BiliPageMgr() {
+	private LoginMgr() {
 		this.browser = BrowserDriver.PHANTOMJS;
 		this.driver = browser.getWebDriver(WAIT_ELEMENT_TIME);
 	}
 	
-	public static BiliPageMgr getInstn() {
+	public static LoginMgr getInstn() {
 		if(instance == null) {
-			synchronized (BiliPageMgr.class) {
+			synchronized (LoginMgr.class) {
 				if(instance == null) {
-					instance = new BiliPageMgr();
+					instance = new LoginMgr();
 				}
 			}
 		}

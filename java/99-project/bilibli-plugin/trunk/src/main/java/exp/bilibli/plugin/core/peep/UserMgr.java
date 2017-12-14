@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.WebElement;
+
 import exp.bilibli.plugin.bean.ldm.Action;
 import exp.bilibli.plugin.bean.ldm.User;
 
@@ -35,6 +37,10 @@ public class UserMgr {
 			}
 		}
 		return instance;
+	}
+	
+	public void analyse(WebElement chatItem) {
+		
 	}
 	
 }

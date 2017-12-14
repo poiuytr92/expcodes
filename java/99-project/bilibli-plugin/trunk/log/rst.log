@@ -1,2919 +1,0 @@
-Client.1(BC-B8-DE-E1):
- -> \0\0\06\0\0\0\0\0\0\0\0{"uid":0,"roomid":390480,"protover":1}
-
-Server.2(<none>):
- -> \0\0\0\0\0\0\0\0\b\0\0\0
-
-Client.3(56-26-D1-29):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.4(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\n
-
-Client.5(DF-6C-11-4B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.6(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.7(0D-4D-F7-2D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.8(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.9(B3-FF-81-A8):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.10(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.11(<none>):
- -> \0\0j\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u523a\\u732c\\u6c38\\u8fdc\\u662f\\u51db\\u51db\\u5bb6\\u7684\\u5728\\u76f4\\u64ad\\u95f4280446\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u523a\\u732c\\u6c38\\u8fdc\\u662f\\u51db\\u51db\\u5bb6\\u7684\\u5728\\u76f4\\u64ad\\u95f4280446\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u523a\\u732c\\u6c38\\u8fdc\\u662f\\u51db\\u51db\\u5bb6\\u7684\\u5728\\u76f4\\u64ad\\u95f4280446\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/280446","roomid":280446,"real_roomid":280446,"giftId":107,"msgTips":0}
-
-Client.12(D0-6E-A2-D2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.13(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.14(C7-2C-67-8E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.15(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.16(02-59-C3-6D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.17(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.18(F6-CE-46-EF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.19(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.20(68-3D-18-07):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.21(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.22(77-6D-9A-8E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.23(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.24(26-20-20-90):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.25(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.26(89-C6-67-BD):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.27(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.28(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u7cfb\\u7edf\\u516c\\u544a\\uff1a\\u8bc4\\u8bba\\u7559\\u8a00\\u7adf\\u80fd\\u9886\\u53d6\\u4e3a\\u6240\\u6b32\\u4e3a\\u5934\\u8854\\uff1f\\u70b9\\u51fb\\u67e5\\u770b\\uff01","rep":1,"url":"http:\\/\\/live.bilibili.com\\/pages\\/1703\\/BLS-2017.html#\\/zone"}
-
-Client.29(17-A0-19-B7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.30(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.31(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5c9a\\u6953\\u5728\\u76f4\\u64ad\\u95f4989573\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5c9a\\u6953\\u5728\\u76f4\\u64ad\\u95f4989573\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5c9a\\u6953\\u5728\\u76f4\\u64ad\\u95f4989573\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/989573","roomid":989573,"real_roomid":989573,"giftId":106,"msgTips":0}
-
-Client.32(E4-B6-9E-A4):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.33(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.34(E9-D8-4F-08):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.35(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.36(B2-4D-A2-14):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.37(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.38(<none>):
- -> \0\0:\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u82b1\\u5377\\u7684\\u94f2\\u5c4e\\u5b98\\u5728\\u76f4\\u64ad\\u95f43514612\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u82b1\\u5377\\u7684\\u94f2\\u5c4e\\u5b98\\u5728\\u76f4\\u64ad\\u95f43514612\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u82b1\\u5377\\u7684\\u94f2\\u5c4e\\u5b98\\u5728\\u76f4\\u64ad\\u95f43514612\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/3514612","roomid":3514612,"real_roomid":3514612,"giftId":107,"msgTips":0}
-
-Client.39(36-BC-46-E1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.40(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.41(64-C0-B4-A7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.42(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.43(61-27-6A-0B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.44(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.45(40-10-C2-52):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.46(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.47(BD-0E-DE-E1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.48(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.49(EB-2A-09-DF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.50(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.51(7C-4F-4F-F0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.52(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.53(61-B3-73-C2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.54(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.55(78-C2-0A-E2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.56(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.57(92-0A-CD-CB):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.58(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.59(0B-A9-AF-D3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.60(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.61(C9-20-CF-93):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.62(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.63(DE-EC-BC-A5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.64(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.65(BF-68-BB-B3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.66(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.67(CF-AB-01-F9):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.68(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.69(E3-68-D8-EA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.70(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.71(DD-EC-E9-25):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.72(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.73(3F-E0-AE-9A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.74(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.75(18-8D-8B-9B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.76(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.77(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"是只兔子没错了:?  在诱黑-的:?直播间2198426:?内赠送:?3:?共46个","rnd":"1513047924","uid":11748423,"msg_text":"是只兔子没错了在诱黑-的直播间2198426内赠送B坷垃共46个"}
-
-Client.78(7A-98-FE-01):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.79(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.80(8C-46-25-46):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.81(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.82(4B-61-AE-C5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.83(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.84(<none>):
- -> \0\0+\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u751c\\u751c\\u751c\\u751c\\u751ca\\u5728\\u76f4\\u64ad\\u95f46534150\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u751c\\u751c\\u751c\\u751c\\u751ca\\u5728\\u76f4\\u64ad\\u95f46534150\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u751c\\u751c\\u751c\\u751c\\u751ca\\u5728\\u76f4\\u64ad\\u95f46534150\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/6534150","roomid":6534150,"real_roomid":6534150,"giftId":107,"msgTips":0}
-
-Client.85(C3-91-5A-CA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.86(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.87(09-8B-9D-0B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.88(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.89(50-46-3E-E6):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.90(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.91(BD-5F-3B-D8):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.92(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.93(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"OnMyOwY\\u5728\\u76f4\\u64ad\\u95f46753633\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"OnMyOwY\\u5728\\u76f4\\u64ad\\u95f46753633\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"OnMyOwY\\u5728\\u76f4\\u64ad\\u95f46753633\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/6753633","roomid":6753633,"real_roomid":6753633,"giftId":106,"msgTips":0}
-
-Client.94(ED-31-D7-8A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.95(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.96(6F-DB-ED-B5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.97(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.98(27-6F-7A-9B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.99(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.100(3F-77-37-9A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.101(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.102(94-37-C6-93):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.103(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.104(80-24-D5-FD):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.105(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.106(3A-A4-E4-13):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.107(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.108(06-06-A8-A7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.109(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.110(1E-97-B6-C0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.111(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.112(FA-82-E4-1A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.113(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.114(<none>):
- -> \0\0\r\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5927\\u9992\\u5934QAQ\\u5728\\u76f4\\u64ad\\u95f44319256\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5927\\u9992\\u5934QAQ\\u5728\\u76f4\\u64ad\\u95f44319256\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5927\\u9992\\u5934QAQ\\u5728\\u76f4\\u64ad\\u95f44319256\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/4319256","roomid":4319256,"real_roomid":4319256,"giftId":107,"msgTips":0}
-
-Client.115(9E-40-AD-B8):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.116(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.117(F9-0C-4D-1D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.118(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.119(5C-7B-99-B3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.120(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.121(86-F9-CE-BA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.122(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.123(EF-5B-B4-E6):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.124(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.125(9C-22-0E-77):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.126(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.127(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"OnMyOwY\\u5728\\u76f4\\u64ad\\u95f46753633\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"OnMyOwY\\u5728\\u76f4\\u64ad\\u95f46753633\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"OnMyOwY\\u5728\\u76f4\\u64ad\\u95f46753633\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/6753633","roomid":6753633,"real_roomid":6753633,"giftId":106,"msgTips":0}
-
-Client.128(65-04-BE-A2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.129(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.130(<none>):
- -> \0\0:\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u6325\\u7fd4\\u7684\\u91d1\\u5777\\u5783\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u6325\\u7fd4\\u7684\\u91d1\\u5777\\u5783\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u6325\\u7fd4\\u7684\\u91d1\\u5777\\u5783\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/3742025","roomid":3742025,"real_roomid":3742025,"giftId":106,"msgTips":0}
-
-Client.131(55-2A-73-70):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.132(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.133(4A-16-F6-B0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.134(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.135(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"肖恩在树上别开枪:?  在-剪墨-的:?直播间542:?内赠送:?6:?共450个","rnd":"1513047354","uid":1606048,"msg_text":"肖恩在树上别开枪在-剪墨-的直播间542内赠送亿圆共450个"}
-
-Client.136(06-66-D6-5A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.137(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.138(A8-09-C3-F2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.139(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\n
-
-Client.140(AD-55-8E-87):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.141(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.142(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"肖恩在树上别开枪:?  在-剪墨-的:?直播间542:?内赠送:?6:?共450个","rnd":"1513047354","uid":1606048,"msg_text":"肖恩在树上别开枪在-剪墨-的直播间542内赠送亿圆共450个"}
-
-Server.143(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"肖恩在树上别开枪:?  在-剪墨-的:?直播间542:?内赠送:?6:?共450个","rnd":"1513047354","uid":1606048,"msg_text":"肖恩在树上别开枪在-剪墨-的直播间542内赠送亿圆共450个"}
-
-Client.144(57-17-4F-29):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.145(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.146(47-0A-AD-5F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.147(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.148(69-B8-98-0A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.149(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.150(<none>):
- -> \0\0\n\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u4f0a\\u85e4\\u30e3\\u8bda\\u5728\\u76f4\\u64ad\\u95f492450\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u4f0a\\u85e4\\u30e3\\u8bda\\u5728\\u76f4\\u64ad\\u95f492450\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u4f0a\\u85e4\\u30e3\\u8bda\\u5728\\u76f4\\u64ad\\u95f492450\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/92450","roomid":92450,"real_roomid":92450,"giftId":106,"msgTips":0}
-
-Client.151(D3-4A-2D-F0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.152(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.153(E1-B9-50-BB):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.154(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.155(8D-2F-79-80):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.156(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.157(3D-C4-02-0C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.158(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.159(EF-28-22-CD):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.160(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.161(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u7cfb\\u7edf\\u516c\\u544a\\uff1a\\u76f4\\u64ad2017\\u5e74\\u5ea6\\u56de\\u9988\\uff0c\\u505a\\u4efb\\u52a1\\u9886\\u5956\\u52b1\\uff01","rep":1,"url":"https:\\/\\/live.bilibili.com\\/pages\\/1703\\/2017livethx.html"}
-
-Client.162(FF-82-46-17):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.163(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.164(C4-A3-94-ED):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.165(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.166(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"二条恭一:?  在爱吃辣条的BABA的:?直播间541762:?内赠送:?105:?共225个","rnd":"36470591","uid":3298755,"msg_text":"二条恭一在爱吃辣条的BABA的直播间541762内赠送火力票共225个"}
-
-Client.167(ED-96-01-12):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.168(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.169(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"熊之小饼:?  在酱酱げ的:?直播间506:?内赠送:?1:?共4500个","rnd":"1513044322","uid":3545477,"msg_text":"熊之小饼在酱酱げ的直播间506内赠送辣条共4500个"}
-
-Client.170(D8-8E-52-52):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.171(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.172(<none>):
- -> \0\0X\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u8096\\u6069\\u5728\\u6811\\u4e0a\\u522b\\u5f00\\u67aa\\u5728\\u76f4\\u64ad\\u95f4459020\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u8096\\u6069\\u5728\\u6811\\u4e0a\\u522b\\u5f00\\u67aa\\u5728\\u76f4\\u64ad\\u95f4459020\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u8096\\u6069\\u5728\\u6811\\u4e0a\\u522b\\u5f00\\u67aa\\u5728\\u76f4\\u64ad\\u95f4459020\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/459020","roomid":459020,"real_roomid":459020,"giftId":107,"msgTips":0}
-
-Client.173(87-66-51-4E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.174(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.175(54-46-DA-1E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.176(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.177(86-2C-F5-51):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.178(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.179(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"是你依然在丶:?  在虾虾虾虾虾丶的:?直播间1282:?内赠送:?1:?共4500个","rnd":"1513049200","uid":89498499,"msg_text":"是你依然在丶在虾虾虾虾虾丶的直播间1282内赠送辣条共4500个"}
-
-Client.180(E7-C5-DF-DC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.181(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.182(D1-2F-3E-1F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.183(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.184(A0-7C-70-3A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.185(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.186(0D-A2-89-D3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.187(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.188(F0-76-B7-0C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.189(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.190(A0-30-A5-07):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.191(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.192(AA-94-F3-F5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.193(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.194(39-D4-36-C5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.195(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.196(B1-9D-98-73):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.197(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.198(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"ReikoZ\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"ReikoZ\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"ReikoZ\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/34180","roomid":34180,"real_roomid":34180,"giftId":106,"msgTips":0}
-
-Client.199(D1-CD-B4-53):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.200(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.201(22-07-EC-66):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.202(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\n
-
-Client.203(4D-0E-2C-E5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.204(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.205(70-86-14-E5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.206(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.207(A0-A7-AF-89):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.208(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.209(57-2E-95-7D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.210(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.211(A3-17-17-DC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.212(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.213(77-9A-7D-E3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.214(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.215(27-06-18-6B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.216(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.217(DA-BD-67-14):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.218(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.219(<none>):
- -> \0\0F\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u795e\\u5947\\u5c0fy\\u8d85\\u673a\\u667aOvO\\u5728\\u76f4\\u64ad\\u95f46534150\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u795e\\u5947\\u5c0fy\\u8d85\\u673a\\u667aOvO\\u5728\\u76f4\\u64ad\\u95f46534150\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u795e\\u5947\\u5c0fy\\u8d85\\u673a\\u667aOvO\\u5728\\u76f4\\u64ad\\u95f46534150\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/6534150","roomid":6534150,"real_roomid":6534150,"giftId":107,"msgTips":0}
-
-Client.220(4C-AA-78-77):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.221(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.222(F5-D8-26-F0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.223(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.224(<none>):
- -> \0\0:\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u7761\\u4e0d\\u9192\\u7684\\u8389\\u8389\\u5728\\u76f4\\u64ad\\u95f41569975\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u7761\\u4e0d\\u9192\\u7684\\u8389\\u8389\\u5728\\u76f4\\u64ad\\u95f41569975\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u7761\\u4e0d\\u9192\\u7684\\u8389\\u8389\\u5728\\u76f4\\u64ad\\u95f41569975\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1569975","roomid":1569975,"real_roomid":1569975,"giftId":107,"msgTips":0}
-
-Client.225(0A-78-30-7B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.226(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.227(21-F5-A7-F7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.228(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.229(0B-D9-57-C8):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.230(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.231(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"ReikoZ\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"ReikoZ\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"ReikoZ\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/34180","roomid":34180,"real_roomid":34180,"giftId":106,"msgTips":0}
-
-Client.232(C1-91-A9-CC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.233(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.234(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u9c7c\\u9999\\u5728\\u76f4\\u64ad\\u95f4869069\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u9c7c\\u9999\\u5728\\u76f4\\u64ad\\u95f4869069\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u9c7c\\u9999\\u5728\\u76f4\\u64ad\\u95f4869069\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/869069","roomid":869069,"real_roomid":869069,"giftId":106,"msgTips":0}
-
-Client.235(B6-BE-99-FA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.236(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.237(E3-B9-CA-77):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.238(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.239(60-54-12-F6):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.240(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.241(BD-79-E6-0C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.242(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.243(DE-10-6F-AD):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.244(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.245(0C-67-00-48):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.246(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.247(<none>):
- -> \0\0\0m\0\0\0\0\0\0\0\0\0\0{"cmd":"WELCOME","data":{"uid":94601280,"uname":"吃土少女姌","is_admin":false,"svip":1}}
-
-Server.248(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u4ebf\\u5706","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506007,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050545,"giftId":6,"giftType":0,"action":"\\u8d60\\u9001","super":0,"price":1000,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":1,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":3972,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u4ebf\\u5706","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506007,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050545,"giftId":6,"giftType":0,"action":"\\u8d60\\u9001","super":0,"price":1000,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":0,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":4972,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}
-
-Server.249(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506018,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050547,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":4,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":5072,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506019,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050547,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":3,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":5172,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506019,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050548,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":2,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":5272,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506019,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050548,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":1,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":5372,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}
-
-Client.250(1A-F8-29-70):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.251(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.252(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506023,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050554,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":3,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":5572,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506024,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050554,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":2,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":5672,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506024,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050554,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":1,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":5772,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506024,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050554,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":0,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":5872,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}
-
-Server.253(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u706b\\u529b\\u7968","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506026,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050557,"giftId":105,"giftType":3,"action":"\\u8d60\\u9001","super":0,"price":2000,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":5,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":7872,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u706b\\u529b\\u7968","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506026,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050557,"giftId":105,"giftType":3,"action":"\\u8d60\\u9001","super":0,"price":2000,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":4,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":3,"change":0,"progress":{"now":9872,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u706b\\u529b\\u7968","num":1,"uname":"\\u5403\\u571f\\u5c11\\u5973\\u59cc","rcost":2506026,"uid":94601280,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i0.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513050557,"giftId":105,"giftType":3,"action":"\\u8d60\\u9001","super":0,"price":2000,"rnd":"1513050520","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"0","biz_source":"live","metadata":"","remain":3,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":4,"change":1,"progress":{"now":1872,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":1000,"max":5000}}},"addFollow":0}}
-
-Server.254(<none>):
- -> \0\0j\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u523a\\u732c\\u6c38\\u8fdc\\u662f\\u51db\\u51db\\u5bb6\\u7684\\u5728\\u76f4\\u64ad\\u95f4280446\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u523a\\u732c\\u6c38\\u8fdc\\u662f\\u51db\\u51db\\u5bb6\\u7684\\u5728\\u76f4\\u64ad\\u95f4280446\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u523a\\u732c\\u6c38\\u8fdc\\u662f\\u51db\\u51db\\u5bb6\\u7684\\u5728\\u76f4\\u64ad\\u95f4280446\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/280446","roomid":280446,"real_roomid":280446,"giftId":107,"msgTips":0}
-
-Client.255(48-FD-72-5F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.256(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.257(FC-13-1F-4F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.258(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.259(3E-8A-54-66):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.260(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.261(D2-1D-82-6A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.262(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\n
-
-Server.263(<none>):
- -> \0\0\n\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u66ae\\u601d\\u6a59\\u6708\\u5728\\u76f4\\u64ad\\u95f422237\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u66ae\\u601d\\u6a59\\u6708\\u5728\\u76f4\\u64ad\\u95f422237\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u66ae\\u601d\\u6a59\\u6708\\u5728\\u76f4\\u64ad\\u95f422237\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/22237","roomid":22237,"real_roomid":22237,"giftId":107,"msgTips":0}
-
-Client.264(23-3B-12-63):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.265(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.266(DD-8F-A9-0B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.267(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.268(96-62-FB-38):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.269(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.270(7C-61-CB-65):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.271(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\t
-
-Client.272(43-9A-A1-5C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.273(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.274(18-9C-2C-19):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.275(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.276(5E-A6-A9-2C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.277(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.278(E1-2E-3F-EC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.279(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.280(<none>):
- -> \0\0.\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u522b\\u4eba\\u5bb6\\u7684\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u522b\\u4eba\\u5bb6\\u7684\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u522b\\u4eba\\u5bb6\\u7684\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/34180","roomid":34180,"real_roomid":34180,"giftId":106,"msgTips":0}
-
-Server.281(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"挥翔的金坷垃:?  在梦醒三生梦的:?直播间439:?内赠送:?3:?共46个","rnd":"1513050267","uid":17273366,"msg_text":"挥翔的金坷垃在梦醒三生梦的直播间439内赠送B坷垃共46个"}
-
-Server.282(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"靐:?  在心海-育碧的:?直播间464732:?内赠送:?1:?共4500个","rnd":"1513050074","uid":495617,"msg_text":"靐在心海-育碧的直播间464732内赠送辣条共4500个"}
-
-Client.283(46-5C-63-1E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.284(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.285(78-87-15-5A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.286(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.287(64-0C-CE-5C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.288(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.289(DB-1D-6C-88):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.290(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.291(7B-67-38-77):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.292(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.293(3B-8B-C6-7B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.294(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.295(A3-E3-1F-4E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.296(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.297(06-BB-EA-BC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.298(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.299(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u4f1a\\u505a\\u72d7\\u8089\\u706b\\u9505\\u7684\\u90fd\\u662f\\u597d\\u53a8\\u5b50\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u4f1a\\u505a\\u72d7\\u8089\\u706b\\u9505\\u7684\\u90fd\\u662f\\u597d\\u53a8\\u5b50\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u4f1a\\u505a\\u72d7\\u8089\\u706b\\u9505\\u7684\\u90fd\\u662f\\u597d\\u53a8\\u5b50\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/3742025","roomid":3742025,"real_roomid":3742025,"giftId":106,"msgTips":0}
-
-Client.300(47-F9-D0-F9):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.301(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.302(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u7cfb\\u7edf\\u516c\\u544a\\uff1a\\u8bc4\\u8bba\\u7559\\u8a00\\u7adf\\u80fd\\u9886\\u53d6\\u4e3a\\u6240\\u6b32\\u4e3a\\u5934\\u8854\\uff1f\\u70b9\\u51fb\\u67e5\\u770b\\uff01","rep":1,"url":"http:\\/\\/live.bilibili.com\\/pages\\/1703\\/BLS-2017.html#\\/zone"}
-
-Client.303(90-EE-80-B6):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.304(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.305(E2-BD-BA-54):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.306(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.307(F2-7D-CA-44):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.308(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.309(A1-52-C9-BA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.310(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.311(A9-94-91-F2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.312(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.313(48-B9-9C-90):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.314(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.315(F8-CC-8E-FB):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.316(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.317(C9-96-7C-FC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.318(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.319(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"二次元的小黑君:?  在裕刺Fy的:?直播间447:?内赠送:?105:?共225个","rnd":"750772303","uid":29226318,"msg_text":"二次元的小黑君在裕刺Fy的直播间447内赠送火力票共225个"}
-
-Client.320(6A-B5-3D-EF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.321(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.322(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"WELCOME","data":{"uid":135236155,"uname":"\\u8001\\u519c\\u607c\\u6012\\u95f9\\u8001\\u6d53","isadmin":0,"vip":1},"roomid":390480}
-
-Client.323(DA-22-6E-E7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.324(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.325(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":1,"uname":"\\u8001\\u519c\\u607c\\u6012\\u95f9\\u8001\\u6d53","rcost":2506027,"uid":135236155,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i1.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i1.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513051491,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"1048724515","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"","biz_source":"live","metadata":"","remain":0,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":0,"change":0,"progress":{"now":1000,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":0,"max":5000}}},"addFollow":0}}
-
-Server.326(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SEND_GIFT","data":{"giftName":"\\u8fa3\\u6761","num":6,"uname":"\\u8001\\u519c\\u607c\\u6012\\u95f9\\u8001\\u6d53","rcost":2506033,"uid":135236155,"top_list":[{"uid":1650868,"uname":"M-\\u4e9a\\u7d72\\u5a1c","face":"http://i0.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":1,"score":3190600,"guard_level":2,"isSelf":0},{"uid":82514842,"uname":"\\u6e21\\u52ab\\u4e2d\\u7684\\u4e0a\\u5343\\u4e07\\u4e2a\\u57fa\\u4f6c","face":"http://i1.hdslb.com/bfs/face/82fd93862c31e746d79b2cf62098ec809f6bfa78.jpg","rank":2,"score":1199999,"guard_level":3,"isSelf":0},{"uid":26604267,"uname":"\\u55b5\\u4e36\\u5929\\u7a7a\\u5fae\\u6674","face":"http://static.hdslb.com/images/member/noface.gif","rank":3,"score":762800,"guard_level":3,"isSelf":0}],"timestamp":1513051495,"giftId":1,"giftType":0,"action":"\\u5582\\u98df","super":0,"price":100,"rnd":"571279427","newMedal":0,"newTitle":0,"medal":[],"title":"","beatId":"","biz_source":"live","metadata":"","remain":0,"gold":0,"silver":0,"eventScore":0,"eventNum":0,"smalltv_msg":[],"specialGift":null,"notice_msg":[],"capsule":{"normal":{"coin":0,"change":0,"progress":{"now":1600,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":0,"max":5000}}},"addFollow":0}}
-
-Client.327(E4-7F-F8-2A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.328(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.329(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"info":[[0,1,25,16777215,1513051516,493268701,0,"850254eb",0],"这是什么",[135236155,"老农恼怒闹老浓",0,1,0,10000,1],[1,"乔帮主","苏乔是个小太阳",438,6406234,""],[6,0,9868950,">50000"],["title-111-1","title-111-1"],0,0],"cmd":"DANMU_MSG"}
-
-Client.330(8B-A9-7A-0E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.331(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.332(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"红舞蝶依:?  在鸟帝-梅之寒的:?直播间3422828:?内赠送:?1:?共4500个","rnd":"1863185834","uid":1286258,"msg_text":"红舞蝶依在鸟帝-梅之寒的直播间3422828内赠送辣条共4500个"}
-
-Client.333(EB-1B-CD-C0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.334(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.335(A7-46-C5-31):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.336(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.337(87-8F-9C-13):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.338(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.339(54-26-72-42):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.340(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.341(B5-C1-ED-1E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.342(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.343(49-4D-42-9F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.344(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.345(60-29-52-F4):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.346(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.347(57-DB-7A-E5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.348(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.349(F3-B0-1A-E9):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.350(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.351(8E-7F-2D-9F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.352(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.353(BE-9D-ED-15):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.354(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.355(01-4C-2D-0C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.356(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.357(D3-FE-19-3C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.358(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.359(82-5D-28-A4):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.360(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.361(0B-22-47-07):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.362(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.363(3E-E5-AA-41):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.364(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.365(13-4D-5F-48):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.366(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.367(D8-F7-F4-58):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.368(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.369(EF-99-55-61):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.370(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.371(78-13-1B-11):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.372(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.373(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"MarkeloffT\\u5728\\u76f4\\u64ad\\u95f497835\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"MarkeloffT\\u5728\\u76f4\\u64ad\\u95f497835\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"MarkeloffT\\u5728\\u76f4\\u64ad\\u95f497835\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/97835","roomid":97835,"real_roomid":97835,"giftId":106,"msgTips":0}
-
-Client.374(C1-2A-B6-11):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.375(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.376(0E-49-9D-EE):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.377(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.378(54-03-78-AD):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.379(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.380(49-81-5D-4E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.381(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.382(BD-C2-5E-97):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.383(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.384(55-67-C9-7A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.385(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.386(AE-9E-6C-74):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.387(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.388(EA-2F-58-F3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.389(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.390(8B-00-57-0C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.391(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.392(E5-09-A7-13):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.393(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.394(A4-52-48-62):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.395(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.396(20-39-33-0E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.397(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.398(C8-64-10-F7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.399(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.400(AA-92-8A-B7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.401(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.402(C4-78-6B-2F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.403(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.404(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"Aniki三叔:?  在速报游戏的:?直播间5985622:?内赠送:?105:?共225个","rnd":"1513052304","uid":234052354,"msg_text":"Aniki三叔在速报游戏的直播间5985622内赠送火力票共225个"}
-
-Client.405(90-F2-23-F9):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.406(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.407(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"Aniki\\u4e09\\u53d4\\u5728\\u76f4\\u64ad\\u95f45985622\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"Aniki\\u4e09\\u53d4\\u5728\\u76f4\\u64ad\\u95f45985622\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"Aniki\\u4e09\\u53d4\\u5728\\u76f4\\u64ad\\u95f45985622\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/5985622","roomid":5985622,"real_roomid":5985622,"giftId":107,"msgTips":0}
-
-Client.408(42-F4-42-01):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.409(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.410(8C-6A-E2-05):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.411(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.412(6F-B9-5D-29):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.413(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\n
-
-Client.414(2C-C7-98-4C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.415(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.416(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u7487\\u54a9\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u7487\\u54a9\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u7487\\u54a9\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1533925","roomid":1533925,"real_roomid":1533925,"giftId":107,"msgTips":0}
-
-Client.417(15-13-12-64):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.418(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.419(FC-47-3F-7F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.420(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.421(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"Caodan:?  在扶她娘娘的:?直播间15678:?内赠送:?6:?共450个","rnd":"1513052571","uid":138594,"msg_text":"Caodan在扶她娘娘的直播间15678内赠送亿圆共450个"}
-
-Client.422(71-81-D7-1E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.423(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.424(5D-22-35-DA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.425(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.426(84-40-13-E5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.427(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.428(<none>):
- -> \0\0L\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u8001\\u767d\\u662f\\u5c0f\\u4ed9\\u5973\\u5440\\u5728\\u76f4\\u64ad\\u95f41569975\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u8001\\u767d\\u662f\\u5c0f\\u4ed9\\u5973\\u5440\\u5728\\u76f4\\u64ad\\u95f41569975\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u8001\\u767d\\u662f\\u5c0f\\u4ed9\\u5973\\u5440\\u5728\\u76f4\\u64ad\\u95f41569975\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1569975","roomid":1569975,"real_roomid":1569975,"giftId":106,"msgTips":0}
-
-Client.429(C5-F8-33-2B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.430(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.431(58-74-89-4C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.432(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.433(26-3E-3B-55):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.434(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.435(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u9c7c\\u9999\\u5728\\u76f4\\u64ad\\u95f4869069\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u9c7c\\u9999\\u5728\\u76f4\\u64ad\\u95f4869069\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u9c7c\\u9999\\u5728\\u76f4\\u64ad\\u95f4869069\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/869069","roomid":869069,"real_roomid":869069,"giftId":107,"msgTips":0}
-
-Server.436(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u7cfb\\u7edf\\u516c\\u544a\\uff1a\\u76f4\\u64ad2017\\u5e74\\u5ea6\\u56de\\u9988\\uff0c\\u505a\\u4efb\\u52a1\\u9886\\u5956\\u52b1\\uff01","rep":1,"url":"https:\\/\\/live.bilibili.com\\/pages\\/1703\\/2017livethx.html"}
-
-Server.437(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"瑟瑟酱:?  在逐风灵的:?直播间6403818:?内赠送:?105:?共365个","rnd":"0","uid":450501,"msg_text":"瑟瑟酱在逐风灵的直播间6403818内赠送火力票共365个"}
-
-Client.438(73-2C-3F-60):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.439(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.440(59-0C-C4-67):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.441(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.442(98-EC-8A-B3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.443(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.444(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u6708\\u4e0b\\u67af\\u9aa8\\u767d\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u6708\\u4e0b\\u67af\\u9aa8\\u767d\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u6708\\u4e0b\\u67af\\u9aa8\\u767d\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/34180","roomid":34180,"real_roomid":34180,"giftId":106,"msgTips":0}
-
-Client.445(8D-FD-ED-52):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.446(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.447(41-13-3D-5A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.448(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.449(4B-AC-AF-D0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.450(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.451(CF-CA-23-97):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.452(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.453(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"睡不醒的莉莉:?  在流萤Zz的:?直播间1205:?内赠送:?6:?共522个","rnd":"1513053186","uid":1927852,"msg_text":"睡不醒的莉莉在流萤Zz的直播间1205内赠送亿圆共522个"}
-
-Client.454(38-52-18-63):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.455(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.456(3D-84-42-ED):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.457(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.458(8A-46-A6-F9):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.459(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.460(AA-DF-35-F3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.461(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.462(83-DB-13-58):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.463(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.464(32-14-8D-3C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.465(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.466(6E-ED-39-A5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.467(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.468(<none>):
- -> \0\0^\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u88ab\\u5742\\u672cbuff\\u7167\\u8000\\u7684\\u5b69\\u7eb8\\u5728\\u76f4\\u64ad\\u95f473945\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u88ab\\u5742\\u672cbuff\\u7167\\u8000\\u7684\\u5b69\\u7eb8\\u5728\\u76f4\\u64ad\\u95f473945\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u88ab\\u5742\\u672cbuff\\u7167\\u8000\\u7684\\u5b69\\u7eb8\\u5728\\u76f4\\u64ad\\u95f473945\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/73945","roomid":73945,"real_roomid":73945,"giftId":106,"msgTips":0}
-
-Client.469(C2-8E-8F-FE):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.470(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.471(62-0A-BA-BD):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.472(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.473(75-CD-42-D1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.474(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.475(0F-63-B7-03):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.476(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\n
-
-Client.477(6A-BE-73-E5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.478(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.479(51-87-C4-55):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.480(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.481(DC-72-5E-31):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.482(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.483(26-08-D9-DD):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.484(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.485(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"一只小喵西ざ:?  在奈さま的:?直播间155:?内赠送:?1:?共4500个","rnd":"1027382708","uid":19369243,"msg_text":"一只小喵西ざ在奈さま的直播间155内赠送辣条共4500个"}
-
-Client.486(C2-54-83-5E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.487(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.488(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"夜幕凉叹:?  在綾音~的:?直播间92450:?内赠送:?105:?共225个","rnd":"0","uid":186242147,"msg_text":"夜幕凉叹在綾音~的直播间92450内赠送火力票共225个"}
-
-Client.489(0F-00-84-33):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.490(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.491(A8-CB-CA-5B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.492(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.493(16-B6-B6-AC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.494(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.495(<none>):
- -> \0\0\0|\0\0\0\0\0\0\0\0\0\0{"cmd":"WELCOME","data":{"uid":252953216,"uname":"\\u67d2\\u5b50\\u9716","isadmin":0,"svip":1},"roomid":390480}
-
-Client.496(FB-CF-CD-67):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.497(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.498(87-9E-49-E7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.499(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.500(AD-E1-CD-19):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.501(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.502(16-5A-C2-82):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.503(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.504(FB-3F-B8-95):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.505(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.506(DF-A5-62-96):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.507(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.508(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"少爷naive:?  在蓝色naive的:?直播间303:?内赠送:?1:?共4500个","rnd":"1513053333","uid":6993347,"msg_text":"少爷naive在蓝色naive的直播间303内赠送辣条共4500个"}
-
-Client.509(DD-C2-89-07):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.510(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.511(01-47-B1-EE):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.512(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.513(8B-F4-F9-47):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.514(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.515(<none>):
- -> \0\0:\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u732b\\u4e0d\\u5403\\u8292\\u679c\\u3081\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u732b\\u4e0d\\u5403\\u8292\\u679c\\u3081\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u732b\\u4e0d\\u5403\\u8292\\u679c\\u3081\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/3151254","roomid":3151254,"real_roomid":3151254,"giftId":107,"msgTips":0}
-
-Client.516(F9-1A-0F-5F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.517(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.518(95-91-98-77):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.519(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.520(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u8001\\u516cTV\\u5728\\u76f4\\u64ad\\u95f425032\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u8001\\u516cTV\\u5728\\u76f4\\u64ad\\u95f425032\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u8001\\u516cTV\\u5728\\u76f4\\u64ad\\u95f425032\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/25032","roomid":25032,"real_roomid":25032,"giftId":107,"msgTips":0}
-
-Client.521(ED-5D-57-5B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.522(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.523(4C-4A-E7-82):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.524(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.525(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"骑着皮皮虾的皮皮鸭:?  在biubiu喵小白的:?直播间547789:?内赠送:?105:?共366个","rnd":"1513053892","uid":264192381,"msg_text":"骑着皮皮虾的皮皮鸭在biubiu喵小白的直播间547789内赠送火力票共366个"}
-
-Client.526(73-D9-76-D2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.527(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.528(8C-64-0C-88):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.529(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.530(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"东线酱油众:?  在杆菌无敌的:?直播间246:?内赠送:?105:?共225个","rnd":"1513049932","uid":10448693,"msg_text":"东线酱油众在杆菌无敌的直播间246内赠送火力票共225个"}
-
-Client.531(FC-76-BB-51):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.532(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.533(EF-07-B7-50):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.534(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.535(CE-4B-74-C1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.536(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.537(FB-D8-CB-48):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.538(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.539(5D-1F-0D-42):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.540(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.541(5D-EC-A3-E1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.542(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\t
-
-Client.543(0C-17-1D-59):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.544(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.545(F5-52-A9-F3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.546(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.547(44-61-14-7D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.548(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.549(<none>):
- -> \0\0^\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5929\\u9009\\u4e4b\\u4eba\\u5965\\u7279\\u65af\\u745e\\u5728\\u76f4\\u64ad\\u95f44190415\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5929\\u9009\\u4e4b\\u4eba\\u5965\\u7279\\u65af\\u745e\\u5728\\u76f4\\u64ad\\u95f44190415\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5929\\u9009\\u4e4b\\u4eba\\u5965\\u7279\\u65af\\u745e\\u5728\\u76f4\\u64ad\\u95f44190415\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/4190415","roomid":4190415,"real_roomid":4190415,"giftId":106,"msgTips":0}
-
-Client.550(A2-85-2C-A8):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.551(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.552(B1-C2-83-A2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.553(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.554(92-3C-CF-7E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.555(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.556(6F-AC-BA-F2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.557(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.558(DB-5A-2E-FC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.559(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.560(94-21-C4-48):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.561(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.562(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u3010\\u4e09\\u670827\\u3011:?\\u5728\\u76f4\\u64ad\\u95f4:?\\u301050570\\u3011:?\\u8d60\\u9001 \\u5c0f\\u7535\\u89c6\\u4e00\\u4e2a\\uff0c\\u8bf7\\u524d\\u5f80\\u62bd\\u5956","msg_text":"\\u3010\\u4e09\\u670827\\u3011:?\\u5728\\u76f4\\u64ad\\u95f4:?\\u301050570\\u3011:?\\u8d60\\u9001 \\u5c0f\\u7535\\u89c6\\u4e00\\u4e2a\\uff0c\\u8bf7\\u524d\\u5f80\\u62bd\\u5956","rep":1,"styleType":2,"url":"http:\\/\\/live.bilibili.com\\/50570","roomid":50570,"real_roomid":50570,"rnd":1513054541,"tv_id":"31542"}
-
-Client.563(B5-57-38-16):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.564(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.565(4D-3D-A6-A4):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.566(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.567(34-4D-BF-7D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.568(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.569(EF-D7-16-17):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.570(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.571(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u7cfb\\u7edf\\u516c\\u544a\\uff1a\\u8bc4\\u8bba\\u7559\\u8a00\\u7adf\\u80fd\\u9886\\u53d6\\u4e3a\\u6240\\u6b32\\u4e3a\\u5934\\u8854\\uff1f\\u70b9\\u51fb\\u67e5\\u770b\\uff01","rep":1,"url":"http:\\/\\/live.bilibili.com\\/pages\\/1703\\/BLS-2017.html#\\/zone"}
-
-Client.572(42-07-AE-D6):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.573(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.574(4D-F0-16-99):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.575(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.576(B5-4C-06-9D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.577(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.578(A5-46-EF-06):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.579(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.580(80-7A-6A-98):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.581(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.582(74-34-B2-BE):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.583(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.584(63-D1-30-EA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.585(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.586(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"三月27:?  在重泉的:?直播间50570:?内赠送:?6:?共450个","rnd":"1513054541","uid":860316,"msg_text":"三月27在重泉的直播间50570内赠送亿圆共450个"}
-
-Server.587(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"三月27:?  在重泉的:?直播间50570:?内赠送:?6:?共450个","rnd":"1513054541","uid":860316,"msg_text":"三月27在重泉的直播间50570内赠送亿圆共450个"}
-
-Client.588(F0-8B-B9-21):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.589(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.590(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/34180","roomid":34180,"real_roomid":34180,"giftId":107,"msgTips":0}
-
-Server.591(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u82bd\\u82bd\\u5821\\u5728\\u76f4\\u64ad\\u95f41035273\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u82bd\\u82bd\\u5821\\u5728\\u76f4\\u64ad\\u95f41035273\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u82bd\\u82bd\\u5821\\u5728\\u76f4\\u64ad\\u95f41035273\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1035273","roomid":1035273,"real_roomid":1035273,"giftId":107,"msgTips":0}
-
-Server.592(<none>):
- -> \0\0(\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5976\\u9177\\u8354\\u679d\\u3086\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5976\\u9177\\u8354\\u679d\\u3086\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5976\\u9177\\u8354\\u679d\\u3086\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/3151254","roomid":3151254,"real_roomid":3151254,"giftId":107,"msgTips":0}
-
-Client.593(66-8C-EA-68):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.594(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.595(46-34-8F-F6):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.596(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.597(9E-C8-A8-11):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.598(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.599(<none>):
- -> \0\0^\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u6211\\u662f\\u6f47\\u6f47\\u6f47\\u6f47\\u6f47\\u6f47\\u5728\\u76f4\\u64ad\\u95f44857371\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u6211\\u662f\\u6f47\\u6f47\\u6f47\\u6f47\\u6f47\\u6f47\\u5728\\u76f4\\u64ad\\u95f44857371\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u6211\\u662f\\u6f47\\u6f47\\u6f47\\u6f47\\u6f47\\u6f47\\u5728\\u76f4\\u64ad\\u95f44857371\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/4857371","roomid":4857371,"real_roomid":4857371,"giftId":106,"msgTips":0}
-
-Client.600(E0-06-57-89):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.601(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.602(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/34180","roomid":34180,"real_roomid":34180,"giftId":107,"msgTips":0}
-
-Client.603(52-58-44-28):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.604(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.605(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u3010\\u4f55\\u4ee5\\u741b\\u4e0a\\u3011:?\\u5728\\u76f4\\u64ad\\u95f4:?\\u3010422\\u3011:?\\u8d60\\u9001 \\u5c0f\\u7535\\u89c6\\u4e00\\u4e2a\\uff0c\\u8bf7\\u524d\\u5f80\\u62bd\\u5956","msg_text":"\\u3010\\u4f55\\u4ee5\\u741b\\u4e0a\\u3011:?\\u5728\\u76f4\\u64ad\\u95f4:?\\u3010422\\u3011:?\\u8d60\\u9001 \\u5c0f\\u7535\\u89c6\\u4e00\\u4e2a\\uff0c\\u8bf7\\u524d\\u5f80\\u62bd\\u5956","rep":1,"styleType":2,"url":"http:\\/\\/live.bilibili.com\\/422","roomid":422,"real_roomid":333048,"rnd":689215134,"tv_id":"31543"}
-
-Server.606(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"猥琐的蜀黍:?  在鬼葱p的:?直播间362:?内赠送:?105:?共256个","rnd":"1513054561","uid":114628,"msg_text":"猥琐的蜀黍在鬼葱p的直播间362内赠送火力票共256个"}
-
-Client.607(0B-41-66-73):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.608(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.609(10-95-00-58):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.610(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.611(18-C0-5C-7B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.612(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.613(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5c0f\\u53ef\\u4e50o3o\\u5728\\u76f4\\u64ad\\u95f466511\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5c0f\\u53ef\\u4e50o3o\\u5728\\u76f4\\u64ad\\u95f466511\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5c0f\\u53ef\\u4e50o3o\\u5728\\u76f4\\u64ad\\u95f466511\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/66511","roomid":66511,"real_roomid":66511,"giftId":107,"msgTips":0}
-
-Client.614(84-19-2B-35):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.615(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.616(DC-D5-40-6D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.617(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.618(E8-E1-8D-10):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.619(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.620(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u7ea2\\u53d1\\u6770\\u514b\\u4e36\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/34180","roomid":34180,"real_roomid":34180,"giftId":107,"msgTips":0}
-
-Client.621(AC-4E-63-4B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.622(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.623(79-FB-DF-CF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.624(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.625(66-E0-88-2B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.626(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.627(AE-C4-8A-61):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.628(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.629(CC-30-79-BB):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.630(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.631(80-18-77-D2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.632(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.633(<none>):
- -> \0\0(\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u65e0\\u5948\\u585e\\u7a46\\u5c14\\u5728\\u76f4\\u64ad\\u95f45948246\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u65e0\\u5948\\u585e\\u7a46\\u5c14\\u5728\\u76f4\\u64ad\\u95f45948246\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u65e0\\u5948\\u585e\\u7a46\\u5c14\\u5728\\u76f4\\u64ad\\u95f45948246\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/5948246","roomid":5948246,"real_roomid":5948246,"giftId":106,"msgTips":0}
-
-Client.634(E0-BE-91-06):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.635(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.636(18-1B-6D-24):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.637(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.638(A9-4B-3C-E0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.639(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.640(E8-73-4D-AF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.641(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.642(27-F9-8E-90):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.643(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.644(49-2F-7C-DC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.645(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.646(D7-54-33-3D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.647(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.648(E2-68-52-4E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.649(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.650(91-92-FB-C4):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.651(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.652(21-E5-AD-8B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.653(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.654(3F-BE-3F-BF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.655(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.656(BD-FB-F0-1A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.657(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.658(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"森罗の夜:?  在女污Mika的:?直播间1261070:?内赠送:?105:?共225个","rnd":"1513048037","uid":639540,"msg_text":"森罗の夜在女污Mika的直播间1261070内赠送火力票共225个"}
-
-Client.659(11-1E-C8-85):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.660(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.661(C3-7F-7D-5C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.662(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.663(3A-71-9C-E1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.664(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.665(EE-68-2E-E2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.666(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.667(B2-3E-AB-95):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.668(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.669(EA-2C-97-9D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.670(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.671(A3-F4-09-59):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.672(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.673(B8-9E-EE-1E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.674(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.675(74-F6-20-2D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.676(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.677(50-45-30-19):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.678(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.679(75-78-FF-67):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.680(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.681(67-6F-71-41):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.682(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.683(<none>):
- -> \0\04\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5c31\\u7231\\u5403\\u83dc\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f4573893\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5c31\\u7231\\u5403\\u83dc\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f4573893\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5c31\\u7231\\u5403\\u83dc\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f4573893\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/573893","roomid":573893,"real_roomid":573893,"giftId":106,"msgTips":0}
-
-Client.684(F2-A1-CE-BE):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.685(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.686(<none>):
- -> \0\04\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5c31\\u7231\\u5403\\u83dc\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f4573893\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5c31\\u7231\\u5403\\u83dc\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f4573893\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5c31\\u7231\\u5403\\u83dc\\u5305\\u5b50\\u5728\\u76f4\\u64ad\\u95f4573893\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/573893","roomid":573893,"real_roomid":573893,"giftId":106,"msgTips":0}
-
-Client.687(A9-36-51-6A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.688(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\n
-
-Client.689(10-F8-93-34):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.690(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.691(<none>):
- -> \0\0L\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u4e00\\u74f6\\u751c\\u9152\\u4e00\\u53ea\\u679c\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u4e00\\u74f6\\u751c\\u9152\\u4e00\\u53ea\\u679c\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u4e00\\u74f6\\u751c\\u9152\\u4e00\\u53ea\\u679c\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1533925","roomid":1533925,"real_roomid":1533925,"giftId":107,"msgTips":0}
-
-Client.692(E5-D0-A0-BC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.693(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.694(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u996d\\u996d\\u5148\\u751f\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u996d\\u996d\\u5148\\u751f\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u996d\\u996d\\u5148\\u751f\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1533925","roomid":1533925,"real_roomid":1533925,"giftId":106,"msgTips":0}
-
-Server.695(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"ZYF507\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"ZYF507\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"ZYF507\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1533925","roomid":1533925,"real_roomid":1533925,"giftId":106,"msgTips":0}
-
-Client.696(B9-EE-18-5F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.697(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.698(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5c0f\\u5fb7\\u516c\\u7235\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5c0f\\u5fb7\\u516c\\u7235\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5c0f\\u5fb7\\u516c\\u7235\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1533925","roomid":1533925,"real_roomid":1533925,"giftId":106,"msgTips":0}
-
-Client.699(4B-CF-5B-8C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.700(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.701(42-B4-BA-9E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.702(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.703(73-D1-44-A0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.704(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.705(B6-75-F9-2A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.706(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.707(ED-AD-90-71):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.708(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.709(16-E8-6F-8C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.710(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.711(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u7cfb\\u7edf\\u516c\\u544a\\uff1a\\u76f4\\u64ad2017\\u5e74\\u5ea6\\u56de\\u9988\\uff0c\\u505a\\u4efb\\u52a1\\u9886\\u5956\\u52b1\\uff01","rep":1,"url":"https:\\/\\/live.bilibili.com\\/pages\\/1703\\/2017livethx.html"}
-
-Client.712(B6-3E-4C-18):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.713(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.714(11-C4-E4-41):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.715(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.716(B9-6F-0E-0F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.717(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.718(D9-27-B5-E1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.719(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.720(AD-71-65-B5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.721(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.722(96-AF-93-8B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.723(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.724(34-E7-25-93):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.725(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.726(08-9F-5D-01):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.727(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.728(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"Pose\\u67d2\\u6708\\u5728\\u76f4\\u64ad\\u95f422237\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"Pose\\u67d2\\u6708\\u5728\\u76f4\\u64ad\\u95f422237\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"Pose\\u67d2\\u6708\\u5728\\u76f4\\u64ad\\u95f422237\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/22237","roomid":22237,"real_roomid":22237,"giftId":107,"msgTips":0}
-
-Client.729(FC-73-E3-AF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.730(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.731(5A-BB-EF-98):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.732(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.733(95-59-F7-24):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.734(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.735(42-0D-44-56):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.736(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.737(<none>):
- -> \0\0L\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u6625\\u56f0\\u79cb\\u4e4f\\u4f38\\u61d2\\u8170\\u5728\\u76f4\\u64ad\\u95f42862960\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u6625\\u56f0\\u79cb\\u4e4f\\u4f38\\u61d2\\u8170\\u5728\\u76f4\\u64ad\\u95f42862960\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u6625\\u56f0\\u79cb\\u4e4f\\u4f38\\u61d2\\u8170\\u5728\\u76f4\\u64ad\\u95f42862960\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/2862960","roomid":2862960,"real_roomid":2862960,"giftId":106,"msgTips":0}
-
-Client.738(4F-93-3D-91):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.739(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.740(9E-FC-ED-C5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.741(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.742(68-86-07-44):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.743(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.744(15-F0-6C-8F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.745(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.746(A2-23-9E-32):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.747(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.748(C9-81-D2-E8):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.749(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.750(FA-01-48-BA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.751(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.752(61-DA-E9-AF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.753(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.754(F0-D0-BB-C2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.755(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.756(5C-0E-55-A9):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.757(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.758(28-E1-40-96):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.759(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.760(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"Pose柒月:?  在暮思橙月的:?直播间531:?内赠送:?6:?共450个","rnd":"2112680406","uid":2259385,"msg_text":"Pose柒月在暮思橙月的直播间531内赠送亿圆共450个"}
-
-Client.761(1E-F0-DD-21):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.762(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.763(E2-6D-63-45):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.764(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.765(58-9A-F5-E6):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.766(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.767(61-99-1D-B0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.768(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.769(46-8F-D8-88):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.770(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.771(FB-33-F6-3B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.772(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.773(D2-A0-1C-34):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.774(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.775(7C-2B-93-74):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.776(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.777(60-BF-C5-69):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.778(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.779(B1-AD-58-F1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.780(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.781(55-BF-58-FD):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.782(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.783(31-08-39-AF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.784(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.785(E8-4D-4D-0E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.786(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.787(95-A0-36-A3):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.788(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.789(F4-8E-B9-17):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.790(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.791(08-00-08-DE):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.792(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.793(52-D7-05-18):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.794(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.795(A5-17-BA-99):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.796(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.797(30-13-EB-DC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.798(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.799(A8-33-93-9B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.800(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.801(B7-42-6D-C0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.802(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.803(E2-89-7B-8A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.804(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.805(10-94-E6-E2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.806(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.807(AF-35-C1-66):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.808(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\t
-
-Server.809(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"bestpigs\\u5728\\u76f4\\u64ad\\u95f41250611\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"bestpigs\\u5728\\u76f4\\u64ad\\u95f41250611\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"bestpigs\\u5728\\u76f4\\u64ad\\u95f41250611\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1250611","roomid":1250611,"real_roomid":1250611,"giftId":106,"msgTips":0}
-
-Client.810(10-AE-49-22):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.811(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.812(33-70-B1-93):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.813(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.814(86-BF-25-6F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.815(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.816(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u987e\\u4e0d\\u4e0d\\u5728\\u76f4\\u64ad\\u95f445827\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u987e\\u4e0d\\u4e0d\\u5728\\u76f4\\u64ad\\u95f445827\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u987e\\u4e0d\\u4e0d\\u5728\\u76f4\\u64ad\\u95f445827\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/45827","roomid":45827,"real_roomid":45827,"giftId":107,"msgTips":0}
-
-Client.817(39-39-8C-9C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.818(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.819(DE-7B-06-FB):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.820(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.821(8E-E5-DE-AE):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.822(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.823(B1-42-20-D6):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.824(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.825(54-E5-8C-91):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.826(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.827(4A-0C-DF-EC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.828(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.829(14-9F-BE-D1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.830(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.831(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"Team灬板砖:?  在伊吹小秋的:?直播间48948:?内赠送:?105:?共365个","rnd":"0","uid":19103457,"msg_text":"Team灬板砖在伊吹小秋的直播间48948内赠送火力票共365个"}
-
-Client.832(F7-01-6C-0A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.833(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.834(A7-6C-76-C1):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.835(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.836(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u3010\\u8001\\u82cf\\u9165\\u3011:?\\u5728\\u76f4\\u64ad\\u95f4:?\\u3010697733\\u3011:?\\u8d60\\u9001 \\u5c0f\\u7535\\u89c6\\u4e00\\u4e2a\\uff0c\\u8bf7\\u524d\\u5f80\\u62bd\\u5956","msg_text":"\\u3010\\u8001\\u82cf\\u9165\\u3011:?\\u5728\\u76f4\\u64ad\\u95f4:?\\u3010697733\\u3011:?\\u8d60\\u9001 \\u5c0f\\u7535\\u89c6\\u4e00\\u4e2a\\uff0c\\u8bf7\\u524d\\u5f80\\u62bd\\u5956","rep":1,"styleType":2,"url":"http:\\/\\/live.bilibili.com\\/697733","roomid":697733,"real_roomid":697733,"rnd":1513057634,"tv_id":"31544"}
-
-Client.837(D8-6A-1C-C0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.838(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.839(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"一块帅气的饼干:?  在肉肉小喵酱的:?直播间2488251:?内赠送:?105:?共225个","rnd":"1513058126","uid":18934026,"msg_text":"一块帅气的饼干在肉肉小喵酱的直播间2488251内赠送火力票共225个"}
-
-Server.840(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_MSG","msg":"\\u7cfb\\u7edf\\u516c\\u544a\\uff1a\\u8bc4\\u8bba\\u7559\\u8a00\\u7adf\\u80fd\\u9886\\u53d6\\u4e3a\\u6240\\u6b32\\u4e3a\\u5934\\u8854\\uff1f\\u70b9\\u51fb\\u67e5\\u770b\\uff01","rep":1,"url":"http:\\/\\/live.bilibili.com\\/pages\\/1703\\/BLS-2017.html#\\/zone"}
-
-Client.841(FB-2A-3B-8A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.842(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.843(<none>):
- -> \0\0L\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u82e5\\u6709\\u6765\\u4e16\\u522b\\u7528\\u60c5\\u5728\\u76f4\\u64ad\\u95f47306993\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u82e5\\u6709\\u6765\\u4e16\\u522b\\u7528\\u60c5\\u5728\\u76f4\\u64ad\\u95f47306993\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u82e5\\u6709\\u6765\\u4e16\\u522b\\u7528\\u60c5\\u5728\\u76f4\\u64ad\\u95f47306993\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/7306993","roomid":7306993,"real_roomid":7306993,"giftId":107,"msgTips":0}
-
-Client.844(A9-7A-85-8A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.845(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.846(BE-48-6D-42):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.847(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.848(6A-C6-AC-B4):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.849(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.850(C5-E9-24-34):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.851(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.852(5D-B4-EA-88):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.853(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.854(64-34-A6-77):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.855(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.856(<none>):
- -> \0\0L\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u6797\\u53d1\\u53d1\\u7231\\u6797\\u5c0f\\u5154\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u6797\\u53d1\\u53d1\\u7231\\u6797\\u5c0f\\u5154\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u6797\\u53d1\\u53d1\\u7231\\u6797\\u5c0f\\u5154\\u5728\\u76f4\\u64ad\\u95f43151254\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/3151254","roomid":3151254,"real_roomid":3151254,"giftId":106,"msgTips":0}
-
-Client.857(FC-7B-DB-39):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.858(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.859(F2-02-06-74):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.860(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.861(52-95-B5-86):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.862(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.863(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u8001\\u82cf\\u9165\\u5728\\u76f4\\u64ad\\u95f4697733\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u8001\\u82cf\\u9165\\u5728\\u76f4\\u64ad\\u95f4697733\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u8001\\u82cf\\u9165\\u5728\\u76f4\\u64ad\\u95f4697733\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/697733","roomid":697733,"real_roomid":697733,"giftId":106,"msgTips":0}
-
-Client.864(62-EC-4F-B5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.865(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.866(CA-7F-26-D9):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.867(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.868(0D-86-68-6E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.869(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.870(26-15-F1-93):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.871(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.872(A1-5F-A3-73):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.873(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.874(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"装甲航母级光辉:?  在轻十月的:?直播间503:?内赠送:?105:?共366个","rnd":"1513058329","uid":19483905,"msg_text":"装甲航母级光辉在轻十月的直播间503内赠送火力票共366个"}
-
-Client.875(C3-DA-A8-72):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.876(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.877(4B-69-45-0C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.878(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.879(13-AE-4A-19):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.880(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.881(35-6D-4F-5E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.882(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.883(C9-A6-F9-60):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.884(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.885(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u6797\\u6e0ai\\u5728\\u76f4\\u64ad\\u95f41313366\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u6797\\u6e0ai\\u5728\\u76f4\\u64ad\\u95f41313366\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u6797\\u6e0ai\\u5728\\u76f4\\u64ad\\u95f41313366\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1313366","roomid":1313366,"real_roomid":1313366,"giftId":107,"msgTips":0}
-
-Client.886(A6-2D-DA-57):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.887(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.888(23-CF-52-01):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.889(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.890(D4-7C-2F-DF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.891(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.892(AF-D6-F6-50):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.893(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.894(EA-F3-5B-1C):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.895(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.896(D8-76-0C-47):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.897(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.898(2C-D8-E8-3F):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.899(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.900(A1-3B-F1-1E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.901(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.902(75-9C-4C-31):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.903(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.904(<none>):
- -> \0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u591c\\u8272Aro\\u5728\\u76f4\\u64ad\\u95f41819380\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u591c\\u8272Aro\\u5728\\u76f4\\u64ad\\u95f41819380\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u591c\\u8272Aro\\u5728\\u76f4\\u64ad\\u95f41819380\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1819380","roomid":1819380,"real_roomid":1819380,"giftId":107,"msgTips":0}
-
-Client.905(49-96-5F-D9):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.906(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.907(14-88-6C-8B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.908(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.909(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u706f\\u6ce1\\u65e5\\u5e38\\u5728\\u76f4\\u64ad\\u95f4541762\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u706f\\u6ce1\\u65e5\\u5e38\\u5728\\u76f4\\u64ad\\u95f4541762\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u706f\\u6ce1\\u65e5\\u5e38\\u5728\\u76f4\\u64ad\\u95f4541762\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/541762","roomid":541762,"real_roomid":541762,"giftId":106,"msgTips":0}
-
-Client.910(65-2B-B0-05):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.911(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.912(BB-ED-F5-F7):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.913(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.914(7B-AB-34-EC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.915(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.916(16-02-FE-35):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.917(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.918(56-15-31-54):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.919(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.920(C8-96-83-46):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.921(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.922(26-64-40-2A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.923(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.924(27-72-F5-28):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.925(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.926(78-42-95-DF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.927(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.928(49-8B-24-15):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.929(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.930(2C-80-6C-63):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.931(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.932(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u5c0f\\u5fb7\\u516c\\u7235\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u5c0f\\u5fb7\\u516c\\u7235\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u5c0f\\u5fb7\\u516c\\u7235\\u5728\\u76f4\\u64ad\\u95f41533925\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/1533925","roomid":1533925,"real_roomid":1533925,"giftId":106,"msgTips":0}
-
-Client.933(2D-1D-E4-05):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.934(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.935(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"adrenalineう:?  在鬼术半邪的:?直播间2059094:?内赠送:?105:?共225个","rnd":"609386449","uid":174384788,"msg_text":"adrenalineう在鬼术半邪的直播间2059094内赠送火力票共225个"}
-
-Client.936(35-0F-F6-E5):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.937(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.938(F3-98-E8-0E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.939(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.940(44-10-30-1A):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.941(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.942(17-36-94-BB):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.943(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.944(F1-0C-CF-B2):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.945(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.946(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"Leogong:?  在小熊茉莉的:?直播间177:?内赠送:?105:?共300个","rnd":"1513059808","uid":745615,"msg_text":"Leogong在小熊茉莉的直播间177内赠送火力票共300个"}
-
-Client.947(6A-3C-53-3D):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.948(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.949(76-45-5F-1B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.950(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.951(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"二条恭一:?  在爱吃辣条的BABA的:?直播间541762:?内赠送:?6:?共450个","rnd":"8207409","uid":3298755,"msg_text":"二条恭一在爱吃辣条的BABA的直播间541762内赠送亿圆共450个"}
-
-Client.952(26-0A-FD-8E):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.953(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0\n
-
-Server.954(<none>):
- -> \0\0"\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u7fbd\\u7eef\\u7eef\\u7eef\\u7eef\\u5728\\u76f4\\u64ad\\u95f4970068\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u7fbd\\u7eef\\u7eef\\u7eef\\u7eef\\u5728\\u76f4\\u64ad\\u95f4970068\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u7fbd\\u7eef\\u7eef\\u7eef\\u7eef\\u5728\\u76f4\\u64ad\\u95f4970068\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/970068","roomid":970068,"real_roomid":970068,"giftId":106,"msgTips":0}
-
-Client.955(B8-BC-9D-8B):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.956(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.957(66-73-8E-AF):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.958(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.959(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"二条恭一:?  在爱吃辣条的BABA的:?直播间541762:?内赠送:?1:?共4500个","rnd":"21554476","uid":3298755,"msg_text":"二条恭一在爱吃辣条的BABA的直播间541762内赠送辣条共4500个"}
-
-Client.960(E2-0B-27-CC):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.961(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.962(CF-80-1C-80):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.963(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.964(<none>):
- -> \0\0\0�\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"无聊小Boy:?  在莓可酱w的:?直播间516:?内赠送:?1:?共5720个","rnd":"909582626","uid":226756066,"msg_text":"无聊小Boy在莓可酱w的直播间516内赠送辣条共5720个"}
-
-Client.965(B9-65-7B-F0):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.966(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Client.967(8C-81-52-25):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.968(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-Server.969(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u4e16\\u754c\\u7b2c\\u4e00B\\u541b\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u4e16\\u754c\\u7b2c\\u4e00B\\u541b\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u4e16\\u754c\\u7b2c\\u4e00B\\u541b\\u5728\\u76f4\\u64ad\\u95f434180\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/34180","roomid":34180,"real_roomid":34180,"giftId":106,"msgTips":0}
-
-Server.970(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0{"cmd":"SYS_GIFT","msg":"\\u53bb\\u517b\\u732a\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","msg_text":"\\u53bb\\u517b\\u732a\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","tips":"\\u53bb\\u517b\\u732a\\u5728\\u76f4\\u64ad\\u95f43742025\\u706b\\u529b\\u5168\\u5f00\\uff0c\\u55e8\\u7ffb\\u5168\\u573a\\uff0c\\u901f\\u53bb\\u56f4\\u89c2\\uff0c\\u8fd8\\u80fd\\u514d\\u8d39\\u9886\\u53d6\\u706b\\u529b\\u7968\\uff01","url":"http:\\/\\/live.bilibili.com\\/3742025","roomid":3742025,"real_roomid":3742025,"giftId":106,"msgTips":0}
-
-Client.971(74-1C-2C-AA):
- -> \0\0\0\0\0\0\0\0\0\0\0[object Object]
-
-Server.972(<none>):
- -> \0\0\0\0\0\0\0\0\0\0\0\0\0\0
-
-():
- -> 
-
