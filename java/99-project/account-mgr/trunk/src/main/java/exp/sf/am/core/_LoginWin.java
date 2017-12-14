@@ -265,4 +265,10 @@ public class _LoginWin extends MainWindow {
 		});
 	}
 	
+	@Override
+	protected void beforeExit() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

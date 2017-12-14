@@ -241,4 +241,11 @@ public class _AccountListWin extends MainWindow {
 		}
 		
 	}
+
+	@Override
+	protected void beforeExit() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }
