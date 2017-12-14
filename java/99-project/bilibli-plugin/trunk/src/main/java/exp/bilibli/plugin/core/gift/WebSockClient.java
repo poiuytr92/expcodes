@@ -17,6 +17,7 @@ import exp.bilibli.plugin.bean.ldm.Frame;
 import exp.bilibli.plugin.envm.BiliCmd;
 import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.BinaryData;
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -109,6 +110,7 @@ public class WebSockClient extends WebSocketClient {
 			
 		} else if(BinaryData.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.info("websocket连接成功确认");
+			UIUtils.log("入侵B站后台成功, 正在暗中观察...");
 			
 		} else {
 			String msg = new String(buff);
@@ -131,6 +133,7 @@ public class WebSockClient extends WebSocketClient {
 			if(StrUtils.isNotEmpty(roomId)) {
 				GiftRoomMgr.getInstn().add(roomId);
 				log.info("直播间 [{}] 正在小电视抽奖中!!!", roomId);
+				UIUtils.notify("直播间 [", roomId, "] 正在小电视抽奖中!!!");
 				
 			} else {
 				// Undo: 系统公告
@@ -142,10 +145,12 @@ public class WebSockClient extends WebSocketClient {
 			if(StrUtils.isNotEmpty(roomId)) {
 				GiftRoomMgr.getInstn().add(roomId);
 				log.info("直播间 [{}] 正在高能抽奖中!!!", roomId);
+				UIUtils.notify("直播间 [", roomId, "] 正在高能抽奖中!!!");
 				
 			} else {
 				String msgText = JsonUtils.getStr(msg, BiliCmdAtrbt.msg_text);
 				log.info("全频道公告: {}", msgText);
+				UIUtils.notify("全频道公告: ", msgText);
 			}
 			
 		} else if(BiliCmd.WELCOME_GUARD.equals(cmd)) {
@@ -180,11 +185,13 @@ public class WebSockClient extends WebSocketClient {
 	public void onClose(int code, String reason, boolean remote) {
 		log.info("websocket连接正在断开: [错误码:{}] [发起人:{}] [原因:{}]", 
 				code, (remote ? "server" : "client"), reason);
+		UIUtils.log("与B站的后台连接已断开");
 	}
 
 	@Override
 	public void onError(Exception e) {
 		log.error("websocket连接异常", e);
+		UIUtils.log("与B站的后台连接发生异常");
 	}
 
 }

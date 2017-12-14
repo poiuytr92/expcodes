@@ -1,5 +1,6 @@
 package exp.bilibli.plugin.core.gift;
 
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.utils.other.StrUtils;
 
@@ -29,6 +30,9 @@ public class GiftRoomMgr {
 	
 	public void add(String roomId) {
 		roomIds.add(roomId);
+		
+		// FIXME
+		UIUtils.statistics("已参与直播间 [", roomId, "] 的抽奖.");
 	}
 	
 	public String get() {

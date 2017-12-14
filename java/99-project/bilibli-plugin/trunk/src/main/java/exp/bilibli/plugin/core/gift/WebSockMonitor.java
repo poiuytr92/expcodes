@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.ldm.Frame;
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.thread.LoopThread;
 
@@ -65,6 +66,7 @@ public class WebSockMonitor extends LoopThread {
 				isOk = true;
 				
 				log.info("连接/重连到websocket成功: [{}]", WS_URL);
+				UIUtils.log("正在尝试入侵B站后台...");
 			}
 		} catch (Exception e) {
 			log.error("连接到websocket失败: [{}]", WS_URL, e);
