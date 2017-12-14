@@ -1,0 +1,51 @@
+<div class="chat-item danmaku-item guard-danmaku guard-level-2"
+	data-uname="M-亚絲娜" data-uid="1650868" data-danmaku="任性">
+	<a class="outlink"
+		href="//link.bilibili.com/p/center/index#/voyager?ruid=20872515&amp;guard_level=2"
+		target="_blank" title="提督大人 (=・ω・=)">
+		<i
+			class="guard-icon dp-i-block v-middle bg-center bg-no-repeat guard-level-2"></i>
+	</a>
+	<a
+		href="//link.bilibili.com/p/center/index#/user-center/my-info/operation?vip=true"
+		target="_blank">
+		<i class="vip-icon svg-icon vip-year-color" title="不来当一发老爷么？(=・ω・=)"></i>
+	</a>
+	<div class="fans-medal-item-ctnr dp-i-block p-relative v-middle"
+		title="这是 TA 的粉丝勋章 (●'◡'●)ﾉ♥">
+		<div class="fans-medal-item level-16">
+			<span class="label">高达</span>
+			<span class="level">16</span>
+			<div class="hover-panel a-scale-in-ease">
+				<a class="out-link" href="/51108" target="_blank">
+					<span class="content">勋章主播：M斯文败类</span>
+				</a>
+			</div>
+		</div>
+	</div>
+	<div class="title-label dp-i-block p-relative v-middle">
+		<img src="//s1.hdslb.com/bfs/static/blive/live-assets/title/29-1.png"
+			style="display: inline-block; vertical-align: middle; height: 20px;" />
+		<div class="hover-panel a-scale-in-ease">
+			<span style="color: #000">活动头衔</span>
+			<br />
+			<a class="out-link" title="点击查看所有直播头衔 (●'◡'●)ﾉ♥"
+				href="//link.bilibili.com/p/center/index#/user-center/wearing-center/library"
+				target="_blank">查看详情</a>
+		</div>
+	</div>
+	<div class="user-level-icon lv-43 dp-i-block p-relative v-middle"
+		title="这是 TA 的用户等级 =‿=✧">
+		UL 43
+		<div class="hover-panel t-left a-scale-in-ease">
+			<span>用户等级：43</span>
+			<br />
+			<a class="bili-link" href="//live.bilibili.com/p/eden/rank#/childnav/level/0"
+				target="_blank">
+				<span>用户排名：4980</span>
+			</a>
+		</div>
+	</div>
+	<span class="user-name v-middle pointer open-menu">M-亚絲娜 : </span>
+	<span class="danmaku-content v-middle pointer ts-dot-2 open-menu">任性</span>
+</div>
