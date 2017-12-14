@@ -145,7 +145,53 @@ package exp.bilibli.plugin.envm;
   }
 }
 
-
+// 直播间弹幕消息
+{
+  "info": [
+    [
+      0,
+      1,
+      25,
+      16772431,
+      1513270027,
+      "1513257498",
+      0,
+      "53d7c7bc",
+      0
+    ],
+    "test",
+    [
+      1650868,
+      "M-亚絲娜",
+      0,
+      1,
+      1,
+      10000,
+      1
+    ],
+    [
+      16,
+      "高达",
+      "M斯文败类",
+      "51108",
+      16746162,
+      ""
+    ],
+    [
+      43,
+      0,
+      16746162,
+      4967
+    ],
+    [
+      "task-year",
+      "title-29-1"
+    ],
+    2,
+    2
+  ],
+  "cmd": "DANMU_MSG"
+}
 */
 
 public class BiliCmd {
@@ -161,5 +207,7 @@ public class BiliCmd {
 	
 	/** 欢迎消息 */
 	public final static String WELCOME_GUARD = "WELCOME_GUARD";
+	
+	public final static String DANMU_MSG = "DANMU_MSG";
 	
 }

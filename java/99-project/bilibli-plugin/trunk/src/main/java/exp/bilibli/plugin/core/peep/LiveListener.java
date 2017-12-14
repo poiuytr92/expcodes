@@ -8,6 +8,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibli.plugin.AppUI;
 import exp.bilibli.plugin.bean.ldm.BrowserDriver;
 import exp.bilibli.plugin.core.site.LoginMgr;
 import exp.libs.utils.other.StrUtils;
@@ -52,6 +53,7 @@ public class LiveListener extends LoopThread {
 		for(WebElement chatItem : chatItems) {
 			UserMgr.getInstn().analyse(chatItem);
 		}
+		AppUI.getInstn().updateChatDatas();
 		browser.refresh(driver);	// FIXME： 目前刷新就是休眠功能
 	}
 
@@ -61,8 +63,11 @@ public class LiveListener extends LoopThread {
 		log.info("{} 已停止", getName());
 	}
 	
-	public void resetLive(String liveURL) {
-		this.liveURL = (StrUtils.isEmpty(liveURL) ? DEFAULT_LIVE_URL : liveURL);
+	public void linkToLive(String liveURL) {
+		if(!this.liveURL.equals(liveURL)) {
+			this.liveURL = (StrUtils.isEmpty(liveURL) ? DEFAULT_LIVE_URL : liveURL);
+			driver.navigate().to(this.liveURL);
+		}
 	}
 	
 }

@@ -5,7 +5,7 @@ import exp.libs.utils.other.StrUtils;
 
 public class UIUtils {
 
-	private UIUtils() {}
+	protected UIUtils() {}
 	
 	public static void log(Object... msgs) {
 		log(StrUtils.concat(msgs));

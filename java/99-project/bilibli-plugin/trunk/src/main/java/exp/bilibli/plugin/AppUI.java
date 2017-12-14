@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 
 import exp.bilibli.plugin.core.gift.WebSockMonitor;
 import exp.bilibli.plugin.core.peep.LiveListener;
+import exp.bilibli.plugin.core.peep.UserMgr;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.NormTable;
@@ -84,6 +85,7 @@ public class AppUI extends MainWindow {
 		
 		this.httpTF = new JTextField("http://live.bilibili.com/438");
 		this.userTable = new _UserTable();
+		this.liveListener = new LiveListener();
 		
 		this.lotteryCnt = 0;
 		this.lotteryLabel = new JLabel(" 00000 ");
@@ -169,15 +171,17 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				WebSockMonitor.getInstn()._start();	// 连接B站后台
-				
 				String liveURL = httpTF.getText();
+				liveListener.linkToLive(liveURL);	// 连接B站前台直播间
+				liveListener._start();
+				WebSockMonitor.getInstn()._start();	// 连接B站后台
 			}
 		});
 	}
 	
 	@Override
 	protected void beforeExit() {
+		liveListener._stop();
 		WebSockMonitor.getInstn()._stop();
 		
 		// FIXME: planjs浏览器进程不会自动退出
@@ -207,7 +211,9 @@ public class AppUI extends MainWindow {
 		lotteryLabel.setText(StrUtils.concat(" ", cnt, " "));
 	}
 	
-	
+	public void updateChatDatas() {
+		userTable.reflash(UserMgr.getInstn().getChatMsgs());
+	}
 	
 	
 	
