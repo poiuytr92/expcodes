@@ -424,4 +424,15 @@ public class SwingUtils {
 		}
 	}
 	
+	/**
+	 * 令文本区的光标移动到最后.
+	 *   每次更新文本区的内容后调用此方法, 会有文本区自动滚动到末端的效果.
+	 * @param textArea 文本区
+	 */
+	public static void toEnd(JTextArea textArea) {
+		if(textArea != null) {
+			textArea.setCaretPosition(textArea.getText().length());
+		}
+	}
+	
 }
