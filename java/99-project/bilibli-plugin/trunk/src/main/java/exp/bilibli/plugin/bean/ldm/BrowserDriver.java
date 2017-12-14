@@ -2,6 +2,7 @@ package exp.bilibli.plugin.bean.ldm;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -67,6 +68,9 @@ final public class BrowserDriver {
 			capabilities.setCapability("loadImages", false);
 			capabilities.setCapability("localToRemoteUrlAccessEnabled", true);
 			
+			// 假装是谷歌，避免被反爬
+			capabilities.setCapability("userAgent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36");
+			
 		} else if(Chrome.equals(driverName)) {
 			Map<String, Object> defaultContentSettings = new HashMap<String, Object>();
 			defaultContentSettings.put("images", 2);	// 不显示图片, 不知为何不生效
@@ -87,6 +91,10 @@ final public class BrowserDriver {
 	}
 	
 	public WebDriver getWebDriver() {
+		return getWebDriver(5);
+	}
+	
+	public WebDriver getWebDriver(long waitElementSecond) {
 		WebDriver webDriver = null;
 		if(PhantomJS.equals(driverName)) {
 			webDriver = new PhantomJSDriver(getCapabilities());
@@ -97,6 +105,10 @@ final public class BrowserDriver {
 		} else {
 			webDriver = new HtmlUnitDriver(true);
 		}
+		
+		// 隐式等待期望的元素出现，最长等waitElementSecond秒
+		webDriver.manage().timeouts().
+			implicitlyWait(waitElementSecond, TimeUnit.SECONDS);	
 		return webDriver;
 	}
 	
