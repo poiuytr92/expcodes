@@ -1,5 +1,6 @@
 package exp.libs.warp.net.http;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
@@ -10,6 +11,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpConnectionManager;
@@ -21,8 +24,10 @@ import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import Decoder.BASE64Decoder;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CharsetUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.io.IOUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
@@ -267,5 +272,35 @@ public class HttpUtils {
 		}
 		return isOk;
 	}
+	
+	/**
+	 * 保存Base64编码的图片数据到本地
+	 * @param imgUrl 图片编码地址，格式形如   data:image/png;base64,base64编码的图片数据
+	 * @param saveDir 希望保存的图片目录
+	 * @param imgName 希望保存的图片名称（不含后缀，后缀通过编码自动解析）
+	 * @return true:保存成功; false:保存失败
+	 */
+	public static boolean convertBase64Img(String imgUrl, 
+			String saveDir, String imgName) {
+		boolean isOk = false;
+		Pattern ptn = Pattern.compile("data:image/([^;]+);base64,(.*)");  
+        Matcher mth = ptn.matcher(imgUrl);      
+        if(mth.find()) {
+        	String ext = mth.group(1);	// 图片后缀
+        	String base64Data = mth.group(2);	// 图片数据
+            String savePath = StrUtils.concat(saveDir, "/", imgName, ".", ext);
+            
+            try {
+            	BASE64Decoder decoder = new BASE64Decoder();
+            	byte[] bytes = decoder.decodeBuffer(base64Data);  
+                FileUtils.writeByteArrayToFile(new File(savePath), bytes, false);
+                isOk = true;
+                
+            } catch (Exception e) {  
+                e.printStackTrace();  
+            }         
+        }     
+        return isOk;  
+    }  
 	
 }

@@ -53,6 +53,24 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
+	 * 检查目录是否为空
+	 * @param dirPath 目录路径
+	 * @return true:空或不存在; false:存在且非空
+	 */
+	public static boolean isEmpty(String dirPath) {
+		return (dirPath == null || isEmpty(new File(dirPath)));
+	}
+	
+	/**
+	 * 检查目录是否为空
+	 * @param dir 目录
+	 * @return true:空或不存在; false:存在且非空
+	 */
+	public static boolean isEmpty(File dir) {
+		return (!exists(dir) || dir.listFiles().length <= 0);
+	}
+	
+	/**
 	 * 测试文件类型是否为[文件]
 	 * @param filePath 文件路径
 	 * @return true:是; false:否

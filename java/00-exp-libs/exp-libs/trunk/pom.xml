@@ -227,6 +227,12 @@
 	      <version>3.3</version>
 	    </dependency>
 	    
+	    <dependency>
+		  <groupId>sun.misc</groupId>
+		  <artifactId>base64</artifactId>
+		  <version>1.0</version>
+		</dependency>
+	    
 	    <!-- sftp -->
 	    <dependency>
 	      <groupId>jsch</groupId>
