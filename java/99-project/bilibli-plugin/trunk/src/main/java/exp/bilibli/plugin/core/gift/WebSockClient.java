@@ -106,7 +106,7 @@ public class WebSockClient extends WebSocketClient {
 		String hex = BODHUtils.toHex(buff);
 		
 		if(hex.startsWith(BinaryData.SERVER_HB_CONFIRM)) {
-			log.debug("websocket连接保活确认");
+			log.info("websocket连接保活确认");
 			
 		} else if(BinaryData.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.info("websocket连接成功确认");

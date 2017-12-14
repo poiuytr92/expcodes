@@ -23,9 +23,9 @@ import exp.libs.warp.net.http.HttpUtils;
  * 之后登陆通过cookie, 以回避校验码问题.
  * </PRE>
  */
-public class BiliLogin {
+public class BiliPageMgr {
 
-	private final static Logger log = LoggerFactory.getLogger(BiliLogin.class);
+	private final static Logger log = LoggerFactory.getLogger(BiliPageMgr.class);
 	
 	/** B站登陆页面 */
 	private final static String LOGIN_URL = "https://passport.bilibili.com/login";
@@ -47,18 +47,18 @@ public class BiliLogin {
 	
 	private WebDriver driver;
 	
-	private static volatile BiliLogin instance;
+	private static volatile BiliPageMgr instance;
 	
-	private BiliLogin() {
+	private BiliPageMgr() {
 		this.browser = BrowserDriver.PHANTOMJS;
 		this.driver = browser.getWebDriver(WAIT_ELEMENT_TIME);
 	}
 	
-	public static BiliLogin getInstn() {
+	public static BiliPageMgr getInstn() {
 		if(instance == null) {
-			synchronized (BiliLogin.class) {
+			synchronized (BiliPageMgr.class) {
 				if(instance == null) {
-					instance = new BiliLogin();
+					instance = new BiliPageMgr();
 				}
 			}
 		}

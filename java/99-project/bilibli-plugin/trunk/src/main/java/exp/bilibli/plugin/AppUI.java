@@ -13,6 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import exp.bilibli.plugin.core.gift.WebSockMonitor;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -24,7 +25,7 @@ public class AppUI extends MainWindow {
 	private static final long serialVersionUID = 2097374309672044616L;
 
 	private final static String[] HEADER = {
-		"ID", "称号", "勋章", "等级", "昵称", "行为"
+		"ID", "头衔", "勋章", "等级", "昵称", "行为"
 	};
 	
 	private JButton linkBtn;
@@ -44,6 +45,8 @@ public class AppUI extends MainWindow {
 	private JTextArea sttcTA;
 	
 	private int lotteryCnt;
+	
+	private JLabel lotteryLabel;
 	
 	private static volatile AppUI instance;
 	
@@ -76,9 +79,11 @@ public class AppUI extends MainWindow {
 		notifyTA.setEditable(false);
 		sttcTA.setEditable(false);
 		
-		this.lotteryCnt = 0;
 		this.httpTF = new JTextField("http://live.bilibili.com/438");
 		this.userTable = new _UserTable();
+		
+		this.lotteryCnt = 0;
+		this.lotteryLabel = new JLabel(" 00000 ");
 	}
 
 	@Override
@@ -146,8 +151,12 @@ public class AppUI extends MainWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel, " 抽奖统计 ");
 		panel.add(SwingUtils.addAutoScroll(sttcTA), BorderLayout.CENTER);
-		panel.add(SwingUtils.getPairsPanel("自动参与抽奖次数", 
-				new JLabel(" " + lotteryCnt + " ")), BorderLayout.SOUTH);
+		
+		JPanel sumPanel = new JPanel(new BorderLayout()); {
+			sumPanel.add(SwingUtils.getPairsPanel("自动参与抽奖次数累计", lotteryLabel), 
+					BorderLayout.EAST);
+		}
+		panel.add(sumPanel, BorderLayout.SOUTH);
 		return panel;
 	}
 
@@ -157,7 +166,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				WebSockMonitor.getInstn()._start();
+				WebSockMonitor.getInstn()._start();	// 连接B站后台
 			}
 		});
 	}
@@ -167,11 +176,6 @@ public class AppUI extends MainWindow {
 		WebSockMonitor.getInstn()._stop();
 		
 		// FIXME: planjs浏览器进程不会自动退出
-	}
-	
-	
-	public void addLotteryCnt() {
-		lotteryCnt++;
 	}
 	
 	public void toConsole(String msg) {
@@ -191,6 +195,13 @@ public class AppUI extends MainWindow {
 		sttcTA.append("\r\n");
 		SwingUtils.toEnd(sttcTA);
 	}
+	
+	public void updateLotteryCnt() {
+		lotteryCnt++;
+		String cnt = StrUtils.leftPad(String.valueOf(lotteryCnt), '0', 5);
+		lotteryLabel.setText(StrUtils.concat(" ", cnt, " "));
+	}
+	
 	
 	
 	

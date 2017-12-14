@@ -32,7 +32,7 @@ public class UIUtils {
 	public static void statistics(String msg) {
 		msg = StrUtils.concat(TimeUtils.getCurTime(), msg);
 		AppUI.getInstn().toStatistics(msg);
-		AppUI.getInstn().addLotteryCnt();
+		AppUI.getInstn().updateLotteryCnt();
 	}
 	
 }
