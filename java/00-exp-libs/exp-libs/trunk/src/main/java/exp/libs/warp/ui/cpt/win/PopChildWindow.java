@@ -39,4 +39,10 @@ public abstract class PopChildWindow extends _SwingWindow {
 		return false;
 	}
 	
+	@Deprecated
+	@Override
+	protected final void beforeExit() {
+		// Undo
+	}
+	
 }

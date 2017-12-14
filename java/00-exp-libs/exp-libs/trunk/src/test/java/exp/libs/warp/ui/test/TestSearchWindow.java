@@ -50,4 +50,10 @@ public class TestSearchWindow extends MainWindow {
 		
 	}
 
+	@Override
+	protected void beforeExit() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 }

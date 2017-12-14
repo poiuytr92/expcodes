@@ -136,6 +136,7 @@ abstract class _SwingWindow extends JFrame {
 				public void windowClosing(WindowEvent e) {
 					if(SwingUtils.confirm("Exit ?")) {
 						_hide();
+						beforeExit();
 						System.exit(0);
 					}
 				}
@@ -189,4 +190,10 @@ abstract class _SwingWindow extends JFrame {
 	 */
 	protected abstract void setComponentsListener(final JPanel rootPanel);
 
+	
+	/**
+	 * 关闭界面前行为(仅主窗口模式会触发)
+	 */
+	protected abstract void beforeExit();
+	
 }

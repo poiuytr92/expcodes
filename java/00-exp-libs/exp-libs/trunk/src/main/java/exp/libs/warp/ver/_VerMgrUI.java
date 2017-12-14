@@ -307,6 +307,11 @@ class _VerMgrUI extends MainWindow {
 		});
 	}
 	
+	@Override
+	protected void beforeExit() {
+		// Undo
+	}
+	
 	/**
 	 * 保存项目信息
 	 * @return
@@ -491,4 +496,5 @@ class _VerMgrUI extends MainWindow {
 		}
 		
 	}
+
 }
