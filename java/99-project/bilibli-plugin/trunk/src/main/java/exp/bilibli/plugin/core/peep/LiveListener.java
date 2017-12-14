@@ -32,11 +32,11 @@ public class LiveListener extends LoopThread {
 	
 	private String liveURL;
 	
-	public LiveListener(String liveURL) {
+	public LiveListener() {
 		super("直播间监听器");
 		this.browser = BrowserDriver.PHANTOMJS;
 		this.driver = browser.getWebDriver(WAIT_ELEMENT_TIME);
-		this.liveURL = (StrUtils.isEmpty(liveURL) ? DEFAULT_LIVE_URL : liveURL);
+		this.liveURL = DEFAULT_LIVE_URL;
 	}
 
 	@Override
@@ -59,6 +59,10 @@ public class LiveListener extends LoopThread {
 	protected void _after() {
 		browser.close(driver);
 		log.info("{} 已停止", getName());
+	}
+	
+	public void resetLive(String liveURL) {
+		this.liveURL = (StrUtils.isEmpty(liveURL) ? DEFAULT_LIVE_URL : liveURL);
 	}
 	
 }

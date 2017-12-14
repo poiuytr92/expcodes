@@ -13,6 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import exp.bilibli.plugin.core.gift.WebSockMonitor;
+import exp.bilibli.plugin.core.peep.LiveListener;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.NormTable;
@@ -36,8 +37,6 @@ public class AppUI extends MainWindow {
 	
 	private JTextField httpTF;
 	
-	private _UserTable userTable;
-	
 	private JTextArea consoleTA;
 	
 	private JTextArea notifyTA;
@@ -47,6 +46,10 @@ public class AppUI extends MainWindow {
 	private int lotteryCnt;
 	
 	private JLabel lotteryLabel;
+	
+	private _UserTable userTable;
+	
+	private LiveListener liveListener;
 	
 	private static volatile AppUI instance;
 	
@@ -167,6 +170,8 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				WebSockMonitor.getInstn()._start();	// 连接B站后台
+				
+				String liveURL = httpTF.getText();
 			}
 		});
 	}
