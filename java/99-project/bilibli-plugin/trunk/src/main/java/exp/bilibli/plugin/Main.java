@@ -1,6 +1,5 @@
 package exp.bilibli.plugin;
 
-import exp.bilibli.plugin.core.gift.WebSockMonitor;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 
@@ -21,8 +20,6 @@ public class Main {
 		LogUtils.loadLogBackConfig();
 		BeautyEyeUtils.init();
 		AppUI.getInstn();
-		
-//		WebSockMonitor.getInstn()._start();
 	}
 	
 	

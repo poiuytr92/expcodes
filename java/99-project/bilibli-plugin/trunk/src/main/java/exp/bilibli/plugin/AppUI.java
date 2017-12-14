@@ -165,6 +165,8 @@ public class AppUI extends MainWindow {
 	@Override
 	protected void beforeExit() {
 		WebSockMonitor.getInstn()._stop();
+		
+		// FIXME: planjs浏览器进程不会自动退出
 	}
 	
 	
