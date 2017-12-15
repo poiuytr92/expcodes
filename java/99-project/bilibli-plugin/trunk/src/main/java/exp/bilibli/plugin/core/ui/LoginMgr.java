@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.core.site;
+package exp.bilibli.plugin.core.ui;
 
 import java.io.File;
 

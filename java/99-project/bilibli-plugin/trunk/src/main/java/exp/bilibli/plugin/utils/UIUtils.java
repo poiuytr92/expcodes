@@ -1,6 +1,6 @@
 package exp.bilibli.plugin.utils;
 
-import exp.bilibli.plugin.AppUI;
+import exp.bilibli.plugin.core.ui.AppUI;
 import exp.libs.utils.other.StrUtils;
 
 public class UIUtils {

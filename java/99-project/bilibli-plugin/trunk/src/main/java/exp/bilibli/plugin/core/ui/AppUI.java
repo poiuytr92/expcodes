@@ -1,4 +1,4 @@
-package exp.bilibli.plugin;
+package exp.bilibli.plugin.core.ui;
 
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
@@ -13,7 +13,6 @@ import javax.swing.JTextField;
 
 import exp.bilibli.plugin.core.gift.RoomMgr;
 import exp.bilibli.plugin.core.gift.WebSockClient;
-import exp.bilibli.plugin.core.site.LoginMgr;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
