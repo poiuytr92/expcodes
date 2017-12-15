@@ -24,7 +24,7 @@ import exp.libs.warp.net.http.HttpUtils;
  * 之后登陆通过cookie, 以回避校验码问题.
  * </PRE>
  */
-public class LoginMgr {
+class LoginMgr {
 
 	private final static Logger log = LoggerFactory.getLogger(LoginMgr.class);
 	
@@ -56,7 +56,7 @@ public class LoginMgr {
 		this.isLoading = false;
 	}
 	
-	public static LoginMgr getInstn() {
+	protected static LoginMgr getInstn() {
 		if(instance == null) {
 			synchronized (LoginMgr.class) {
 				if(instance == null) {
@@ -67,35 +67,15 @@ public class LoginMgr {
 		return instance;
 	}
 	
-	public BrowserDriver getBrowser() {
+	protected BrowserDriver getBrowser() {
 		return browser;
 	}
 
-	public WebDriver getDriver() {
+	protected WebDriver getDriver() {
 		return driver;
 	}
 	
-	@Deprecated
-	public boolean login() {
-		boolean isOk = false;
-		
-		// 首次登陆: 使用二维码扫码登陆
-		if(FileUtils.isEmpty(COOKIE_DIR)) {
-			isOk = loginByQrcode();
-			
-		// 二次登陆: 通过cookies登陆
-		} else {
-			isOk = loginByCookies();
-			
-			// 若cookies登陆失败(可能是已过期或被篡改过文件), 则使用二维码重新登陆
-			if(isOk == false) {
-				isOk = loginByQrcode();
-			}
-		}
-		return isOk;
-	}
-	
-	public boolean loginByQrcode() {
+	protected boolean loginByQrcode() {
 		if(isLoading == true) {
 			return false;
 		}
@@ -125,7 +105,7 @@ public class LoginMgr {
 	}
 	
 	// 扫码登陆成功后，切到主页，保存当前cookies到本地
-	public boolean saveCookies() {
+	protected boolean saveCookies() {
 		boolean isOk = false;
 		driver.navigate().to(HOME_URL);
 		if(driver.manage().getCookies().size() > 0) {
@@ -144,7 +124,7 @@ public class LoginMgr {
 		return isOk;
 	}
 	
-	public boolean loginByCookies() {
+	protected boolean loginByCookies() {
 		boolean isOk = false;
 		if(FileUtils.isEmpty(COOKIE_DIR)) {
 			return isOk;
@@ -174,13 +154,13 @@ public class LoginMgr {
 	 * 	若已登陆成功,会自动跳转到首页; 否则会停留在登陆页面
 	 * @return true: 登陆成功; false:登陆失败
 	 */
-	public boolean checkLogin() {
+	private boolean checkLogin() {
 		driver.navigate().to(LOGIN_URL);
 		ThreadUtils.tSleep(2000);	// 等待2秒以确认是否会发生跳转
 		return !(driver.getCurrentUrl().startsWith(LOGIN_URL));
 	}
 	
-	public boolean isLoading() {
+	protected boolean isLoading() {
 		return isLoading;
 	}
 	

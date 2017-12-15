@@ -102,5 +102,4 @@ class QrcodeUI extends PopChildWindow {
 		}
 	}
 	
-	
 }
