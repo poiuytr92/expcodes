@@ -37,9 +37,9 @@ public class LoginMgr {
 	
 	private final static String COOKIE_DIR = "./data/cookies";
 	
-	private final static String IMG_DIR = "./data/img";
+	public final static String IMG_DIR = "./data/img";
 	
-	private final static String IMG_NAME = "qrcode";
+	public final static String IMG_NAME = "qrcode";
 	
 	private BrowserDriver browser;
 	
@@ -91,12 +91,15 @@ public class LoginMgr {
 	}
 	
 	// FIXME: 需要通过界面交互
+	// FIXME: 每分钟刷新一次图片
+	// 打开登陆页面, 获取登陆二维码
 	private boolean loginByQrcode() {
 		FileUtils.delete(COOKIE_DIR);
 		FileUtils.createDir(COOKIE_DIR);
 		
-		// FIXME: 每分钟刷新一次图片
-		// 打开登陆页面, 获取登陆二维码
+		log.info("正在下载登陆二维码, 稍后请打开 [哔哩哔哩动画手机客户端APP] 扫码登陆...");
+		
+		
 		driver.get(LOGIN_URL);
 		WebElement img = driver.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
 		String imgUrl = img.getAttribute("src");

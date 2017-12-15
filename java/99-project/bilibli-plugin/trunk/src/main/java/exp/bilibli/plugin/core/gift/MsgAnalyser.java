@@ -26,7 +26,8 @@ public class MsgAnalyser {
 	private final static String[] ADJ = {
 		"小心翼翼地", "不知羞耻地", "低调地", "无节操地", "装模作样地", "含羞嗒嗒地", "不分尊卑地", 
 		"忧郁地", "biubiubiu地", "以迅雷不及企鹅旋风之势地", "脱了裤子以为很安全地", "有痔无恐地", 
-		"大模尸样地", "装聋作哑地", "自以为是地", "我行我素地", "傲视群雌地", "一人之下被万人上地"
+		"大模尸样地", "装聋作哑地", "自以为是地", "我行我素地", "傲视群雌地", "一人之下被万人上地", 
+		"丧心病狂地", "三妻四妾地"
 	};
 	
 	protected MsgAnalyser() {}
@@ -102,7 +103,7 @@ public class MsgAnalyser {
 	}
 	
 	private static void toDo(SysGift msgBean) {
-		String msg = StrUtils.concat("礼物公告: ", msgBean.getMsgText());
+		String msg = StrUtils.concat("礼物公告：", msgBean.getMsgText());
 		UIUtils.notify(msg);
 		log.info(msg);
 	}

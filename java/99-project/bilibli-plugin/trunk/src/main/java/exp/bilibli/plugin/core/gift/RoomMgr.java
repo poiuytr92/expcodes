@@ -17,7 +17,7 @@ public class RoomMgr {
 
 	private final static String LIVE_URL_PREFIX = "http://live.bilibili.com/";
 	
-	private final static String ROOM_ID_PATH = "./lib/room/roomids.dat";
+	private final static String ROOM_ID_PATH = "./data/room/roomids.dat";
 	
 	/**
 	 * 房间号（前端用）到 真实房号（后台用）的映射
@@ -50,7 +50,7 @@ public class RoomMgr {
 	public void add(String roomId) {
 		roomIds.add(roomId);
 		
-		// FIXME
+		// FIXME 连续抽奖合并
 		UIUtils.statistics("已参与直播间 [", roomId, "] 的抽奖.");
 	}
 	

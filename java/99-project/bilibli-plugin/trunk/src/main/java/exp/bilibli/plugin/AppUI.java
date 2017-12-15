@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import exp.bilibli.plugin.core.gift.RoomMgr;
 import exp.bilibli.plugin.core.gift.WebSockClient;
+import exp.bilibli.plugin.core.site.LoginMgr;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -199,6 +200,16 @@ public class AppUI extends MainWindow {
 				
 				ThreadUtils.tSleep(500);
 			}
+		});
+		
+		
+		loginBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				LoginMgr.getInstn().login();
+			}
+			
 		});
 	}
 	
