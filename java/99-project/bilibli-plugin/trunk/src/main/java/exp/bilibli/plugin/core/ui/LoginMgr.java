@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.ldm.BrowserDriver;
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ObjUtils;
@@ -100,6 +101,7 @@ public class LoginMgr {
 		}
 		
 		log.info("正在下载登陆二维码...");
+		UIUtils.log("正在下载登陆二维码...");
 		isLoading = true;
 		
 		FileUtils.delete(COOKIE_DIR);
@@ -117,6 +119,7 @@ public class LoginMgr {
 		} else {
 			log.info("登陆二维码下载失败.");
 		}
+		UIUtils.log("下载登陆二维码", (isOk ? "成功" : "失败"));
 		isLoading = false;
 		return isOk;
 	}

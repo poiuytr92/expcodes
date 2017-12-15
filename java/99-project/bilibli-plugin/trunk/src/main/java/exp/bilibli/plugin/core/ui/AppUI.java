@@ -13,6 +13,7 @@ import javax.swing.JTextField;
 
 import exp.bilibli.plugin.core.gift.RoomMgr;
 import exp.bilibli.plugin.core.gift.WebSockClient;
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -209,13 +210,17 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				UIUtils.log("正在连接登陆服务器, 请稍后...");
 				SwingUtils.info("正在连接登陆服务器, 过程会受网络质量影响...");
 				
 				if(LoginMgr.getInstn().loginByCookies()) {
-					SwingUtils.info("您曾经登陆过, 可直接使用本插件所有功能   ");
 					disableLogin();
+					UIUtils.log("登陆成功");
+					SwingUtils.info("您曾经登陆过, 可直接使用本插件所有功能   ");
 					
 				} else {
+					UIUtils.log("本插件只能使用 [哔哩哔哩动画手机客户端] 扫码登陆");
+					
 					if(SwingUtils.confirm("请打开 [哔哩哔哩动画手机客户端] 准备扫码登陆   ")) {
 						qrcodeUI._view();
 						

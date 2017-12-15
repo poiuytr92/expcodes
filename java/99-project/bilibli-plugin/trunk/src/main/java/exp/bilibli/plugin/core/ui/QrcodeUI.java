@@ -10,6 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
@@ -73,12 +74,17 @@ class QrcodeUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				UIUtils.log("正在保存登陆信息...");
+				
 				if(LoginMgr.getInstn().saveCookies()) {
 					AppUI.getInstn().disableLogin();
-					SwingUtils.info("已保存登陆信息, 下次使用无需登陆   ");
 					_hide();
 					
+					UIUtils.log("保存登陆信息成功");
+					SwingUtils.info("已保存登陆信息, 下次使用无需登陆   ");
+					
 				} else {
+					UIUtils.log("本次登陆失败, 请刷新二维码重试");
 					SwingUtils.warn("本次登陆失败, 请刷新二维码重试   ");
 				}
 			}
