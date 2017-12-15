@@ -7,6 +7,15 @@ public class UIUtils {
 
 	protected UIUtils() {}
 	
+	public static void chat(Object... msgs) {
+		chat(StrUtils.concat(msgs));
+	}
+	
+	public static void chat(String msg) {
+		msg = StrUtils.concat(TimeUtils.getCurTime(), msg);
+		AppUI.getInstn().toChat(msg);
+	}
+	
 	public static void log(Object... msgs) {
 		log(StrUtils.concat(msgs));
 	}

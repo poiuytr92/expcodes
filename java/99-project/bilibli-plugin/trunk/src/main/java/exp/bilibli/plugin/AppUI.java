@@ -8,16 +8,12 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import exp.bilibli.plugin.core.gift.WebSockMonitor;
-import exp.bilibli.plugin.core.peep.LiveListener;
-import exp.bilibli.plugin.core.peep.UserMgr;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
-import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
 
@@ -26,6 +22,10 @@ public class AppUI extends MainWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = 2097374309672044616L;
 
+	private static final int WIDTH = 1000;
+	
+	private static final int HEIGHT = 600;
+	
 	private final static String[] HEADER = {
 		"ID", "头衔", "勋章", "等级", "昵称", "行为"
 	};
@@ -38,6 +38,8 @@ public class AppUI extends MainWindow {
 	
 	private JTextField httpTF;
 	
+	private JTextArea chatTA;
+	
 	private JTextArea consoleTA;
 	
 	private JTextArea notifyTA;
@@ -48,14 +50,10 @@ public class AppUI extends MainWindow {
 	
 	private JLabel lotteryLabel;
 	
-	private _UserTable userTable;
-	
-	private LiveListener liveListener;
-	
 	private static volatile AppUI instance;
 	
 	private AppUI() {
-		super("Bilibili插件姬 - By 亚絲娜", 1000, 600);
+		super("Bilibili插件姬 - By 亚絲娜", WIDTH, HEIGHT);
 	}
 	
 	public static AppUI getInstn() {
@@ -71,21 +69,21 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
+		this.httpTF = new JTextField("http://live.bilibili.com/438");
+		
 		this.linkBtn = new JButton("连接直播间");
 		this.lotteryBtn = new JButton("发起抽奖");
 		this.loginBtn = new JButton("扫码登陆");
 		
+		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(6, 10);
 		this.notifyTA = new JTextArea(1, 40);
 		this.sttcTA = new JTextArea(5, 40);
 		
+		chatTA.setEditable(false);
 		consoleTA.setEditable(false);
 		notifyTA.setEditable(false);
 		sttcTA.setEditable(false);
-		
-		this.httpTF = new JTextField("http://live.bilibili.com/438");
-		this.userTable = new _UserTable();
-		this.liveListener = new LiveListener();
 		
 		this.lotteryCnt = 0;
 		this.lotteryLabel = new JLabel(" 00000 ");
@@ -116,8 +114,8 @@ public class AppUI extends MainWindow {
 	
 	private JPanel _getUserPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
-		SwingUtils.addBorder(panel, "在线用户");
-		panel.add(SwingUtils.addAutoScroll(userTable), BorderLayout.CENTER);
+		SwingUtils.addBorder(panel, "直播间信息");
+		panel.add(SwingUtils.addAutoScroll(chatTA), BorderLayout.CENTER);
 		return panel;
 	}
 	
@@ -147,7 +145,7 @@ public class AppUI extends MainWindow {
 	
 	private JPanel _getNotifyPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
-		SwingUtils.addBorder(panel, " 礼物公告 ");
+		SwingUtils.addBorder(panel, " 系统公告 ");
 		panel.add(SwingUtils.addAutoScroll(notifyTA), BorderLayout.CENTER);
 		return panel;
 	}
@@ -172,8 +170,6 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String liveURL = httpTF.getText();
-				liveListener.linkToLive(liveURL);	// 连接B站前台直播间
-				liveListener._start();
 				WebSockMonitor.getInstn()._start();	// 连接B站后台
 			}
 		});
@@ -181,10 +177,15 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void beforeExit() {
-		liveListener._stop();
 		WebSockMonitor.getInstn()._stop();
 		
 		// FIXME: planjs浏览器进程不会自动退出
+	}
+	
+	public void toChat(String msg) {
+		chatTA.append(msg);
+		chatTA.append("\r\n");
+		SwingUtils.toEnd(chatTA);
 	}
 	
 	public void toConsole(String msg) {
@@ -210,29 +211,5 @@ public class AppUI extends MainWindow {
 		String cnt = StrUtils.leftPad(String.valueOf(lotteryCnt), '0', 5);
 		lotteryLabel.setText(StrUtils.concat(" ", cnt, " "));
 	}
-	
-	public void updateChatDatas() {
-		userTable.reflash(UserMgr.getInstn().getChatMsgs());
-	}
-	
-	
-	
-	private class _UserTable extends NormTable {
-
-		/** serialVersionUID */
-		private static final long serialVersionUID = -3457133356274208383L;
-
-		private _UserTable() {
-			super(HEADER, 100);
-		}
-		
-		@Override
-		protected void initRightBtnPopMenu(JPopupMenu popMenu) {
-			// TODO Auto-generated method stub
-			
-		}
-		
-	}
-	
 	
 }

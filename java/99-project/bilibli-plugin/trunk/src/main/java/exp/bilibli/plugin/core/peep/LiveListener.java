@@ -53,7 +53,7 @@ public class LiveListener extends LoopThread {
 		for(WebElement chatItem : chatItems) {
 			UserMgr.getInstn().analyse(chatItem);
 		}
-		AppUI.getInstn().updateChatDatas();
+//		AppUI.getInstn().updateChatDatas();
 		browser.refresh(driver);	// FIXME： 目前刷新就是休眠功能
 	}
 

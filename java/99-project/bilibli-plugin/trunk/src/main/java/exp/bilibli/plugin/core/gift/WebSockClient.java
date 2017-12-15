@@ -14,14 +14,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.ldm.Frame;
-import exp.bilibli.plugin.envm.BiliCmd;
-import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.BinaryData;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 
 public class WebSockClient extends WebSocketClient {
@@ -104,6 +101,7 @@ public class WebSockClient extends WebSocketClient {
 	public void onMessage(ByteBuffer byteBuffer) {
 		byte[] buff = byteBuffer.array();
 		String hex = BODHUtils.toHex(buff);
+		log.info("接收到推送消息: {}", hex);
 		
 		if(hex.startsWith(BinaryData.SERVER_HB_CONFIRM)) {
 			log.info("websocket连接保活确认");
@@ -118,64 +116,15 @@ public class WebSockClient extends WebSocketClient {
 			
 			if(JsonUtils.isVaild(sJson)) {
 				JSONObject json = JSONObject.fromObject(sJson);
-				if(!handle(json)) {
+				if(!MsgAnalyser.toMsgBean(json)) {
 					log.info("接收到未识别的 [ByteBuffer] 类型数据: {}", hex);
 				}
+			} else {
+				log.info("接收到未识别的 [ByteBuffer] 类型数据: {}", hex);
 			}
 		}
     }
 	
-	private boolean handle(JSONObject msg) {
-		boolean isOk = true;
-		String cmd = JsonUtils.getStr(msg, BiliCmdAtrbt.cmd);
-		if(BiliCmd.SYS_MSG.equals(cmd)) {
-			String roomId = getRoomId(msg);
-			if(StrUtils.isNotEmpty(roomId)) {
-				GiftRoomMgr.getInstn().add(roomId);
-				log.info("直播间 [{}] 正在小电视抽奖中!!!", roomId);
-				UIUtils.notify("直播间 [", roomId, "] 正在小电视抽奖中!!!");
-				
-			} else {
-				// Undo: 系统公告
-				isOk = false;
-			}
-			
-		} else if(BiliCmd.SYS_GIFT.equals(cmd)) {
-			String roomId = getRoomId(msg);
-			if(StrUtils.isNotEmpty(roomId)) {
-				GiftRoomMgr.getInstn().add(roomId);
-				log.info("直播间 [{}] 正在高能抽奖中!!!", roomId);
-				UIUtils.notify("直播间 [", roomId, "] 正在高能抽奖中!!!");
-				
-			} else {
-				String msgText = JsonUtils.getStr(msg, BiliCmdAtrbt.msg_text);
-				log.info("全频道公告: {}", msgText);
-				UIUtils.notify("全频道公告: ", msgText);
-			}
-			
-		} else if(BiliCmd.WELCOME_GUARD.equals(cmd)) {
-			// Undo 被监听的直播间送过来的欢迎舰长/老爷进入直播间的消息
-			isOk = false;
-						
-		} else if(BiliCmd.SEND_GIFT.equals(cmd)) {
-			// Undo 被监听的直播间送过来的投喂消息
-			isOk = false;
-			
-		} else {
-			// Undo 其他跟刷礼物无关的消息
-			isOk = false;
-		}
-		return isOk;
-	}
-	
-	private String getRoomId(JSONObject msg) {
-		String roomId = JsonUtils.getStr(msg, BiliCmdAtrbt.real_roomid);
-		if(StrUtils.isEmpty(roomId)) {
-			roomId = JsonUtils.getStr(msg, BiliCmdAtrbt.roomid);
-		}
-		return roomId;
-	}
-
 	@Override
     public void onFragment(Framedata framedata) {
 		log.debug("接收到 [Framedata] 类型数据: {}", framedata.toString());
