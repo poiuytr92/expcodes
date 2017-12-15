@@ -1,146 +1,106 @@
 package exp.bilibli.plugin.core.gift;
 
 import java.net.URI;
-import java.nio.ByteBuffer;
 
-import net.sf.json.JSONObject;
-
-import org.java_websocket.WebSocketImpl;
-import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
-import org.java_websocket.framing.Framedata;
-import org.java_websocket.handshake.ServerHandshake;
+import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.ldm.Frame;
-import exp.bilibli.plugin.envm.BinaryData;
 import exp.bilibli.plugin.utils.UIUtils;
-import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.verify.RegexUtils;
+import exp.libs.warp.thread.LoopThread;
 
-public class WebSockClient extends WebSocketClient {
+public class WebSockClient extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockClient.class);
 	
-	private final static String RGX_JSON = "[^{]*(.*)";
+	private final static int DEFAULT_ROOM_ID = 390480;
 	
-	/** 连接超时 */
-	private final static long CONN_TIMEOUT = 10000;
+	// FIXME 可配
+	private final static String WS_URL = 
+			"ws://broadcastlv.chat.bilibili.com:2244/sub";
 	
-	public WebSockClient(URI serverURI, Draft draft) {
-		this(serverURI, draft, 0, false);
+	private final static Draft DRAFT = new Draft_6455();
+	
+	/** B站维持websocket的心跳间隔是30秒 */
+	private final static long HB_TIME = 30000;
+	
+	private final static long SLEEP_TIME = 1000;
+	
+	private WebSockSession session;
+	
+	private int roomId;
+	
+	public WebSockClient() {
+		super("websocket连接监控线程");
+		this.roomId = DEFAULT_ROOM_ID;
 	}
 	
-	/**
-	 * 
-	 * @param serverUri
-	 * @param draft WebSocket协议版本
-	 * 				WebSocket协议说明可查看 http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
-	 * 				通过打开调试开关 WebSocketImpl.DEBUG = true 可以知道服务端的协议版本
-	 * 				Draft_6455 为最新的WebSocket协议版本
-	 * @param timeout 本地连接保活超时（0不生效，默认60，即60秒后自动断开）
-	 * @param debug 调试模式
-	 */
-	public WebSockClient(URI serverURI, Draft draft, int timeout, boolean debug) {
-		super(serverURI, draft);
-		setTimeout(timeout);
-		debug(debug);
-	}
-	
-	public void setTimeout(int timeout) {
-		setConnectionLostTimeout(timeout);
-	}
-	
-	public void debug(boolean open) {
-		WebSocketImpl.DEBUG = open;
-	}
-	
-	@Deprecated
 	@Override
-	public void connect() {
-		// Undo
+	protected void _before() {
+		log.info("{} 已启动", getName());
 	}
 
-	public boolean conn() {
-		boolean isOk = false;
-		super.connect();
+	@Override
+	protected void _loopRun() {
+		while(!conn()) {
+			ThreadUtils.tSleep(SLEEP_TIME);
+		}
 		
-		long bgnTime = System.currentTimeMillis();
-		do {
-			if(isOpen()) {
-				isOk = true;
-				break;
+		// B站的websocket需要每30秒发送一次心跳保活
+		session.send(Frame.C2S_HB());
+		_sleep(HB_TIME);
+	}
+
+	@Override
+	protected void _after() {
+		log.info("{} 已停止", getName());
+	}
+	
+	private boolean conn() {
+		if(session != null) {
+			if(session.isOpen()) {
+				return true;
+			} else {
+				close();
 			}
-			ThreadUtils.tSleep(1000);
-		} while(System.currentTimeMillis() - bgnTime <= CONN_TIMEOUT);
+		}
+		
+		boolean isOk = false;
+		try {
+			this.session = new WebSockSession(new URI(WS_URL), DRAFT);
+			if(session.conn()) {
+				session.send(Frame.C2S_CONN(roomId));	// B站的websocket连接成功后需要马上发送连接请求
+				isOk = true;
+				
+				log.info("连接/重连到websocket成功: [{}]", WS_URL);
+				UIUtils.log("正在尝试入侵直播间 [", roomId, "] 后台...");
+			}
+		} catch (Exception e) {
+			log.error("连接到websocket失败: [{}]", WS_URL, e);
+		}
 		return isOk;
 	}
 	
-	public void send(Frame frame) {
-		sendFrame(frame);
-	}
-	
-	public void send(byte[] bytes) {
-		send(new Frame(bytes));
-	}
-	
-	@Override
-	public void onOpen(ServerHandshake serverhandshake) {
-		log.info("正在连接websocket服务器...");
-	}
-
-	@Override
-	public void onMessage(String msg) {
-		log.debug("接收到 [String] 类型数据: {}", msg);
-	}
-	
-	@Override
-	public void onMessage(ByteBuffer byteBuffer) {
-		byte[] buff = byteBuffer.array();
-		String hex = BODHUtils.toHex(buff);
-		log.info("接收到推送消息: {}", hex);
-		
-		if(hex.startsWith(BinaryData.SERVER_HB_CONFIRM)) {
-			log.info("websocket连接保活确认");
-			
-		} else if(BinaryData.SERVER_CONN_CONFIRM.equals(hex)) {
-			log.info("websocket连接成功确认");
-			UIUtils.log("入侵B站后台成功, 正在暗中观察...");
-			
-		} else {
-			String msg = new String(buff);
-			String sJson = RegexUtils.findFirst(msg, RGX_JSON);
-			
-			if(JsonUtils.isVaild(sJson)) {
-				JSONObject json = JSONObject.fromObject(sJson);
-				if(!MsgAnalyser.toMsgBean(json)) {
-					log.info("接收到未识别的 [ByteBuffer] 类型数据: {}", hex);
-				}
-			} else {
-				log.info("接收到未识别的 [ByteBuffer] 类型数据: {}", hex);
-			}
+	private void close() {
+		if(session != null) {
+			session.send(Frame.C2S_CLOSE());	// 断开连接前通知服务端断开
+			session.close();
 		}
-    }
-	
-	@Override
-    public void onFragment(Framedata framedata) {
-		log.debug("接收到 [Framedata] 类型数据: {}", framedata.toString());
-    }
-	
-	@Override
-	public void onClose(int code, String reason, boolean remote) {
-		log.info("websocket连接正在断开: [错误码:{}] [发起人:{}] [原因:{}]", 
-				code, (remote ? "server" : "client"), reason);
-		UIUtils.log("与B站的后台连接已断开");
 	}
-
-	@Override
-	public void onError(Exception e) {
-		log.error("websocket连接异常", e);
-		UIUtils.log("与B站的后台连接发生异常");
+	
+	public void relink(int roomId) {
+		reset(roomId);
+		close();
 	}
-
+	
+	public void reset(int roomId) {
+		if(roomId <= 0 || roomId == this.roomId) {
+			return;
+		}
+		this.roomId = roomId;
+	}
+	
 }

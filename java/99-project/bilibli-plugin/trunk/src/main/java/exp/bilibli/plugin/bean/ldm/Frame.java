@@ -2,10 +2,14 @@ package exp.bilibli.plugin.bean.ldm;
 
 import java.nio.ByteBuffer;
 
+import net.sf.json.JSONObject;
+
 import org.java_websocket.framing.Framedata;
 
+import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.BinaryData;
 import exp.libs.utils.num.BODHUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -81,8 +85,14 @@ public class Frame implements Framedata {
 		
 	}
 
-	public static Frame C2S_CONN() {
-		return new Frame(BinaryData.CLIENT_CONNECT);
+	// {"uid":0,"roomid":390480,"protover":1}
+	public static Frame C2S_CONN(int roomId) {
+		JSONObject json = new JSONObject();
+		json.put(BiliCmdAtrbt.uid, 0);
+		json.put(BiliCmdAtrbt.roomid, roomId);
+		json.put(BiliCmdAtrbt.protover, 1);
+		String hex = BODHUtils.toHex(json.toString().getBytes());
+		return new Frame(StrUtils.concat(BinaryData.CLIENT_CONN_PREFIX, hex));
 	}
 	
 	public static Frame C2S_CLOSE() {

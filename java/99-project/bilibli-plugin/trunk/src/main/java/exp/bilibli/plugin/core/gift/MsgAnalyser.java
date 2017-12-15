@@ -88,9 +88,8 @@ public class MsgAnalyser {
 	}
 	
 	private static void toDo(SysMsg msgBean) {
-		String msg = StrUtils.concat("系统公告: ", msgBean.getMsg());
-		UIUtils.notify(msg);
-		log.info(msg);
+		UIUtils.notify(msgBean.getMsg());	// 系统公告的消息体里面自带了 [系统公告: ]
+		log.info(msgBean.getMsg());
 	}
 	
 	private static void toDo(TvLottery msgBean) {
@@ -98,7 +97,8 @@ public class MsgAnalyser {
 		UIUtils.notify(msg);
 		log.info(msg);
 		
-		GiftRoomMgr.getInstn().add(msgBean.ROOM_ID());
+		RoomMgr.getInstn().add(msgBean.ROOM_ID());
+		RoomMgr.getInstn().add(msgBean.getRoomId(), msgBean.getRealRoomId());
 	}
 	
 	private static void toDo(SysGift msgBean) {
@@ -112,7 +112,8 @@ public class MsgAnalyser {
 		UIUtils.notify(msg);
 		log.info(msg);
 		
-		GiftRoomMgr.getInstn().add(msgBean.ROOM_ID());
+		RoomMgr.getInstn().add(msgBean.ROOM_ID());
+		RoomMgr.getInstn().add(msgBean.getRoomId(), msgBean.getRealRoomId());
 	}
 	
 	private static void toDo(WelcomeMsg msgBean) {

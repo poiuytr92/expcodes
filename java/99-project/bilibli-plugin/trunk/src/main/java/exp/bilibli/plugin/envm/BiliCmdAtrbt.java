@@ -51,4 +51,6 @@ public class BiliCmdAtrbt {
 	
 	public final static String tv_id = "tv_id";
 	
+	public final static String protover = "protover";
+	
 }

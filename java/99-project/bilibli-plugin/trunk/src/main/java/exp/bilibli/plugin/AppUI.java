@@ -11,7 +11,10 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import exp.bilibli.plugin.core.gift.WebSockMonitor;
+import exp.bilibli.plugin.core.gift.RoomMgr;
+import exp.bilibli.plugin.core.gift.WebSockClient;
+import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -26,10 +29,6 @@ public class AppUI extends MainWindow {
 	
 	private static final int HEIGHT = 600;
 	
-	private final static String[] HEADER = {
-		"ID", "头衔", "勋章", "等级", "昵称", "行为"
-	};
-	
 	private JButton linkBtn;
 	
 	private JButton lotteryBtn;
@@ -37,6 +36,8 @@ public class AppUI extends MainWindow {
 	private JButton loginBtn;
 	
 	private JTextField httpTF;
+	
+	private JTextField ridTF;
 	
 	private JTextArea chatTA;
 	
@@ -49,6 +50,8 @@ public class AppUI extends MainWindow {
 	private int lotteryCnt;
 	
 	private JLabel lotteryLabel;
+	
+	private WebSockClient wsClient;
 	
 	private static volatile AppUI instance;
 	
@@ -69,7 +72,12 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.httpTF = new JTextField("http://live.bilibili.com/438");
+		this.httpTF = new JTextField("http://live.bilibili.com/");
+		this.ridTF = new JTextField("438", 15);
+		
+		// FIXME 暂时不允许修改，似乎每个直播间的请求信息都不一样
+		httpTF.setEditable(false);
+		ridTF.setEditable(false);
 		
 		this.linkBtn = new JButton("连接直播间");
 		this.lotteryBtn = new JButton("发起抽奖");
@@ -87,6 +95,8 @@ public class AppUI extends MainWindow {
 		
 		this.lotteryCnt = 0;
 		this.lotteryLabel = new JLabel(" 00000 ");
+		
+		this.wsClient = new WebSockClient();
 	}
 
 	@Override
@@ -108,7 +118,12 @@ public class AppUI extends MainWindow {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		SwingUtils.addBorder(panel);
 		panel.add(SwingUtils.getHGridPanel(linkBtn, lotteryBtn), 0);
-		panel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), 1);
+		
+		JPanel livePanel = new JPanel(new BorderLayout()); {
+			livePanel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), BorderLayout.CENTER);
+			livePanel.add(SwingUtils.getPairsPanel("房间号", ridTF), BorderLayout.EAST);
+		}
+		panel.add(livePanel, 1);
 		return panel;
 	}
 	
@@ -125,8 +140,6 @@ public class AppUI extends MainWindow {
 		panel.add(SwingUtils.addAutoScroll(consoleTA), BorderLayout.CENTER);
 		return panel;
 	}
-	
-	
 	
 	private JPanel getRightPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
@@ -169,15 +182,29 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String liveURL = httpTF.getText();
-				WebSockMonitor.getInstn()._start();	// 连接B站后台
+				int roomId = NumUtils.toInt(ridTF.getText().trim(), 0);
+				roomId = RoomMgr.getInstn().getRealRoomId(roomId);
+				if(roomId <= 0) {
+					SwingUtils.warn("直播间地址无效");
+					return;
+				}
+				
+				if(!wsClient.isRun()) {
+					wsClient.reset(roomId);
+					wsClient._start();
+					
+				} else {
+					wsClient.relink(roomId);
+				}
+				
+				ThreadUtils.tSleep(500);
 			}
 		});
 	}
 	
 	@Override
 	protected void beforeExit() {
-		WebSockMonitor.getInstn()._stop();
+		wsClient._stop();
 		
 		// FIXME: planjs浏览器进程不会自动退出
 	}
