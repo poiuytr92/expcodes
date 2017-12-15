@@ -45,11 +45,14 @@ public class LoginMgr {
 	
 	private WebDriver driver;
 	
+	private boolean isLoading;
+	
 	private static volatile LoginMgr instance;
 	
 	private LoginMgr() {
 		this.browser = BrowserDriver.PHANTOMJS;
 		this.driver = browser.getWebDriver(WAIT_ELEMENT_TIME);
+		this.isLoading = false;
 	}
 	
 	public static LoginMgr getInstn() {
@@ -71,6 +74,7 @@ public class LoginMgr {
 		return driver;
 	}
 	
+	@Deprecated
 	public boolean login() {
 		boolean isOk = false;
 		
@@ -90,29 +94,36 @@ public class LoginMgr {
 		return isOk;
 	}
 	
-	// FIXME: 需要通过界面交互
-	// FIXME: 每分钟刷新一次图片
-	// 打开登陆页面, 获取登陆二维码
-	private boolean loginByQrcode() {
+	public boolean loginByQrcode() {
+		if(isLoading == true) {
+			return false;
+		}
+		
+		log.info("正在下载登陆二维码...");
+		isLoading = true;
+		
 		FileUtils.delete(COOKIE_DIR);
 		FileUtils.createDir(COOKIE_DIR);
 		
-		log.info("正在下载登陆二维码, 稍后请打开 [哔哩哔哩动画手机客户端APP] 扫码登陆...");
-		
-		
-		driver.get(LOGIN_URL);
+		driver.navigate().to(LOGIN_URL);
 		WebElement img = driver.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
 		String imgUrl = img.getAttribute("src");
 		boolean isOk = HttpUtils.convertBase64Img(imgUrl, IMG_DIR, IMG_NAME);
-		if(isOk == true) {
-			System.out.println("登陆二维码图片保存:" + isOk);
-			
-			System.out.println("等待登陆");
-			ThreadUtils.tSleep(30000);
-			System.out.println("登陆成功，正在切换页面");	// FIXME: 可改成让用户扫码后确认
-		}
 		
-		// 扫码登陆成功后，切到主页，保存当前cookies到本地
+		if(isOk == true) {
+			log.info("登陆二维码下载成功, 请打开 [哔哩哔哩动画手机客户端] 扫码登陆...");
+			AppUI.getInstn().updateQrcode();
+			
+		} else {
+			log.info("登陆二维码下载失败.");
+		}
+		isLoading = false;
+		return isOk;
+	}
+	
+	// 扫码登陆成功后，切到主页，保存当前cookies到本地
+	public boolean saveCookies() {
+		boolean isOk = false;
 		driver.navigate().to(HOME_URL);
 		if(driver.manage().getCookies().size() > 0) {
 			isOk = true;
@@ -130,8 +141,11 @@ public class LoginMgr {
 		return isOk;
 	}
 	
-	private boolean loginByCookies() {
+	public boolean loginByCookies() {
 		boolean isOk = false;
+		if(FileUtils.isEmpty(COOKIE_DIR)) {
+			return isOk;
+		}
 		driver.manage().deleteAllCookies();
 		
 		File dir = new File(COOKIE_DIR);
@@ -152,9 +166,19 @@ public class LoginMgr {
 		return isOk;
 	}
 	
-	private boolean checkLogin() {
-		// 通过检测页面是否存在登陆后的标识, 判断是否真正登陆成功
-		return true;
+	/**
+	 * 通过再次打开登陆页面，根据是否会发生跳转判断是否登陆成功.
+	 * 	若已登陆成功,会自动跳转到首页; 否则会停留在登陆页面
+	 * @return true: 登陆成功; false:登陆失败
+	 */
+	public boolean checkLogin() {
+		driver.navigate().to(LOGIN_URL);
+		ThreadUtils.tSleep(2000);	// 等待2秒以确认是否会发生跳转
+		return !(driver.getCurrentUrl().startsWith(LOGIN_URL));
+	}
+	
+	public boolean isLoading() {
+		return isLoading;
 	}
 	
 }

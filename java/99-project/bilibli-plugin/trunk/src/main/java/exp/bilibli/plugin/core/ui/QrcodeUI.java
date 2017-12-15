@@ -32,8 +32,8 @@ class QrcodeUI extends PopChildWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.reflashBtn = new JButton("刷新图案");
-		this.finishBtn = new JButton("扫描登陆后请点我");
+		this.reflashBtn = new JButton("刷新二维码");
+		this.finishBtn = new JButton("扫码登陆后请点我");
 		this.imgLabel = new JLabel(new ImageIcon(TIPS_PATH));
 	}
 
@@ -52,7 +52,35 @@ class QrcodeUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				updateQrcode();
+				if(LoginMgr.getInstn().isLoading()) {
+					SwingUtils.warn("正在下载二维码, 请稍后再刷新...");
+					
+				} else {
+					
+					SwingUtils.warn("正在刷新二维码, 请稍后...");
+					if(!LoginMgr.getInstn().loginByQrcode()) {
+						SwingUtils.warn("刷新二维码失败   ");
+						
+					} else {
+						SwingUtils.info("二维码已刷新   ");
+					}
+				}
+			}
+		});
+		
+		
+		finishBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(LoginMgr.getInstn().saveCookies()) {
+					AppUI.getInstn().disableLogin();
+					SwingUtils.info("已保存登陆信息, 下次使用无需登陆   ");
+					_hide();
+					
+				} else {
+					SwingUtils.warn("本次登陆失败, 请刷新二维码重试   ");
+				}
 			}
 		});
 	}

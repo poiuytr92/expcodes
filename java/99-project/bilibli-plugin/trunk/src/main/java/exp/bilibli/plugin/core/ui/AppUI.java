@@ -53,6 +53,8 @@ public class AppUI extends MainWindow {
 	
 	private WebSockClient wsClient;
 	
+	private QrcodeUI qrcodeUI;
+	
 	private static volatile AppUI instance;
 	
 	private AppUI() {
@@ -81,7 +83,7 @@ public class AppUI extends MainWindow {
 		
 		this.linkBtn = new JButton("连接直播间");
 		this.lotteryBtn = new JButton("发起抽奖");
-		this.loginBtn = new JButton("扫码登陆");
+		this.loginBtn = new JButton("扫码登陆 (可激活 自动刷抽奖礼物 功能)");
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(6, 10);
@@ -97,6 +99,7 @@ public class AppUI extends MainWindow {
 		this.lotteryLabel = new JLabel(" 00000 ");
 		
 		this.wsClient = new WebSockClient();
+		this.qrcodeUI = new QrcodeUI();
 	}
 
 	@Override
@@ -117,7 +120,7 @@ public class AppUI extends MainWindow {
 	private JPanel _getLinkPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		SwingUtils.addBorder(panel);
-		panel.add(SwingUtils.getHGridPanel(linkBtn, lotteryBtn), 0);
+		panel.add(SwingUtils.getHGridPanel(linkBtn/*, lotteryBtn*/), 0);
 		
 		JPanel livePanel = new JPanel(new BorderLayout()); {
 			livePanel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), BorderLayout.CENTER);
@@ -206,7 +209,28 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				LoginMgr.getInstn().login();
+				SwingUtils.info("正在连接登陆服务器, 过程会受网络质量影响...");
+				
+				if(LoginMgr.getInstn().loginByCookies()) {
+					SwingUtils.info("您曾经登陆过, 可直接使用本插件所有功能   ");
+					disableLogin();
+					
+				} else {
+					if(SwingUtils.confirm("请打开 [哔哩哔哩动画手机客户端] 准备扫码登陆   ")) {
+						qrcodeUI._view();
+						
+						SwingUtils.warn("正在下载二维码, 请稍后...");
+						if(!LoginMgr.getInstn().loginByQrcode()) {
+							SwingUtils.warn("下载二维码失败   ");
+							
+						} else {
+							SwingUtils.info("二维码已刷新   ");
+						}
+						
+					} else {
+						SwingUtils.warn("暂不支持其他登陆方式   ");
+					}
+				}
 			}
 			
 		});
@@ -247,6 +271,14 @@ public class AppUI extends MainWindow {
 		lotteryCnt++;
 		String cnt = StrUtils.leftPad(String.valueOf(lotteryCnt), '0', 5);
 		lotteryLabel.setText(StrUtils.concat(" ", cnt, " "));
+	}
+	
+	public void updateQrcode() {
+		qrcodeUI.updateQrcode();
+	}
+	
+	protected void disableLogin() {
+		loginBtn.setEnabled(false);
 	}
 	
 }
