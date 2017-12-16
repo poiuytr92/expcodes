@@ -183,7 +183,7 @@ public class LoginMgr extends LoopThread {
 	 */
 	private boolean checkIsLogin() {
 		driver.navigate().to(LOGIN_URL);
-		ThreadUtils.tSleep(LOOP_TIME);	// 等待2秒以确认是否会发生跳转
+		ThreadUtils.tSleep(LOOP_TIME);	// 等待以确认是否会发生跳转
 		return isSwitch();
 	}
 	
