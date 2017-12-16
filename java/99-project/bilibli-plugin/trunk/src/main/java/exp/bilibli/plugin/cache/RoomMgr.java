@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.core.gift;
+package exp.bilibli.plugin.cache;
 
 import java.util.HashMap;
 import java.util.Iterator;

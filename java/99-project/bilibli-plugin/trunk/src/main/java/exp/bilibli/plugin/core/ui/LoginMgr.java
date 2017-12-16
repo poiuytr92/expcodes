@@ -9,7 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibli.plugin.bean.ldm.BrowserDriver;
+import exp.bilibli.plugin.cache.BrowserMgr;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ObjUtils;
@@ -24,7 +24,7 @@ import exp.libs.warp.thread.LoopThread;
  * 之后登陆通过cookie, 以回避校验码问题.
  * </PRE>
  */
-public class LoginMgr extends LoopThread {
+class LoginMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(LoginMgr.class);
 	
@@ -49,8 +49,6 @@ public class LoginMgr extends LoopThread {
 	
 	private int loopCnt;
 	
-	private BrowserDriver browser;
-	
 	private WebDriver driver;
 	
 	private boolean isLogined;
@@ -58,14 +56,13 @@ public class LoginMgr extends LoopThread {
 	private static volatile LoginMgr instance;
 	
 	private LoginMgr() {
-		super("页面登陆管理器");
-		this.browser = BrowserDriver.PHANTOMJS;
-		this.driver = browser.getWebDriver();
+		super("登陆二维码刷新器");
+		this.driver = BrowserMgr.getInstn().getDriver();
 		this.loopCnt = LOOP_CNT;
 		this.isLogined = false;
 	}
 	
-	public static LoginMgr getInstn() {
+	protected static LoginMgr getInstn() {
 		if(instance == null) {
 			synchronized (LoginMgr.class) {
 				if(instance == null) {
@@ -76,16 +73,10 @@ public class LoginMgr extends LoopThread {
 		return instance;
 	}
 	
-	public BrowserDriver getBrowser() {
-		return browser;
-	}
-
-	public WebDriver getDriver() {
-		return driver;
-	}
-	
 	@Override
 	protected void _before() {
+		log.info("{} 已启动", getName());
+		
 		driver.navigate().to(LOGIN_URL);	// 打开登陆页面
 		isLogined = loginByCookies();		// 轮询二维码前先尝试cookies登陆
 		
@@ -113,8 +104,6 @@ public class LoginMgr extends LoopThread {
 			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
 			isLogined = isSwitch();
 		}
-		log.info("curPage:{}", driver.getCurrentUrl());
-		log.info("cookies:{}", driver.manage().getCookies().size());
 		
 		AppUI.getInstn().updateQrcodeTime(LOOP_CNT - (loopCnt++));
 		_sleep(LOOP_TIME);
@@ -124,6 +113,7 @@ public class LoginMgr extends LoopThread {
 	protected void _after() {
 		AppUI.getInstn().disableLogin();
 		saveCookies();
+		log.info("{} 已停止", getName());
 	}
 	
 	private boolean loginByCookies() {

@@ -12,6 +12,7 @@ import exp.bilibli.plugin.bean.pdm.SysGift;
 import exp.bilibli.plugin.bean.pdm.SysMsg;
 import exp.bilibli.plugin.bean.pdm.TvLottery;
 import exp.bilibli.plugin.bean.pdm.WelcomeMsg;
+import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.envm.BiliCmd;
 import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.utils.UIUtils;

@@ -12,40 +12,40 @@ import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibli.plugin.envm.WebDriverType;
 import exp.libs.utils.os.CmdUtils;
-import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 
 final public class BrowserDriver {
 
 	private final static Logger log = LoggerFactory.getLogger(BrowserDriver.class);
 	
-	private final static String DRIVER_DIR = "./lib/driver/";
+	private final static long WAIT_ELEMENT_TIME = 5;
 	
-	// JS属于内存浏览器，对JQuery支持不好
-	private final static String PhantomJS = "phantomjs-driver.exe";
-	public final static BrowserDriver PHANTOMJS = new BrowserDriver(PhantomJS);
+	private WebDriverType type;
 	
-	// chrom属于真实浏览器，对JS、JQuery支持很好，但是无法正常关闭进行，必须通过命令行关闭
-	private final static String Chrome = "chrome-driver.exe";
-	public final static BrowserDriver CHROME = new BrowserDriver(Chrome);
+	private WebDriver webDriver;
 	
-	private final static String HtmlUnit = "HtmlUnit";
-	public final static BrowserDriver HTMLUTIL = new BrowserDriver(HtmlUnit);
-	
-	private String driverName;
-	
-	private BrowserDriver(String driverName) {
-		this.driverName = driverName;
-		init();
+	public BrowserDriver(WebDriverType type) {
+		this(type, WAIT_ELEMENT_TIME);
 	}
 	
-	private void init() {
+	public BrowserDriver(WebDriverType type, long waitElementSecond) {
+		this.type = type;
+		waitElementSecond = (waitElementSecond <= 0 ? 
+				WAIT_ELEMENT_TIME : waitElementSecond);
+		
+		initProperty();
+		initWebDriver();
+		setWaitElementTime(waitElementSecond);
+	}
+	
+	private void initProperty() {
 		String property = "";
-		if(PhantomJS.equals(driverName)) {
+		if(WebDriverType.PHANTOMJS == type) {
 			property = "phantomjs.binary.path";
 			
-		} else if(Chrome.equals(driverName)) {
+		} else if(WebDriverType.CHROME == type) {
 			property = "webdriver.chrome.driver";
 			
 		} else {
@@ -53,7 +53,19 @@ final public class BrowserDriver {
 		}
 		
 		if(StrUtils.isNotEmpty(property)) {
-			System.setProperty(property, StrUtils.concat(DRIVER_DIR, driverName));
+			System.setProperty(property, type.DRIVER_PATH());
+		}
+	}
+	
+	public void initWebDriver() {
+		if(WebDriverType.PHANTOMJS == type) {
+			this.webDriver = new PhantomJSDriver(getCapabilities());
+			
+		} else if(WebDriverType.CHROME == type) {
+			this.webDriver = new ChromeDriver(getCapabilities());
+			
+		} else {
+			this.webDriver = new HtmlUnitDriver(true);
 		}
 	}
 	
@@ -61,7 +73,7 @@ final public class BrowserDriver {
 	private DesiredCapabilities getCapabilities() {
 		DesiredCapabilities capabilities = null;
 		
-		if(PhantomJS.equals(driverName)) {
+		if(WebDriverType.PHANTOMJS == type) {
 			capabilities = DesiredCapabilities.phantomjs();
 			capabilities.setJavascriptEnabled(true);
 			capabilities.setCapability("XSSAuditingEnabled", true);
@@ -71,7 +83,7 @@ final public class BrowserDriver {
 			// 假装是谷歌，避免被反爬
 			capabilities.setCapability("userAgent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36");
 			
-		} else if(Chrome.equals(driverName)) {
+		} else if(WebDriverType.CHROME == type) {
 			Map<String, Object> defaultContentSettings = new HashMap<String, Object>();
 			defaultContentSettings.put("images", 2);	// 不显示图片, 不知为何不生效
 
@@ -90,59 +102,40 @@ final public class BrowserDriver {
 		return capabilities;
 	}
 	
-	public WebDriver getWebDriver() {
-		return getWebDriver(5);
-	}
-	
-	public WebDriver getWebDriver(long waitElementSecond) {
-		WebDriver webDriver = null;
-		if(PhantomJS.equals(driverName)) {
-			webDriver = new PhantomJSDriver(getCapabilities());
-			
-		} else if(Chrome.equals(driverName)) {
-			webDriver = new ChromeDriver(getCapabilities());
-			
-		} else {
-			webDriver = new HtmlUnitDriver(true);
-		}
-		
-		// 隐式等待期望的元素出现，最长等waitElementSecond秒
-		webDriver.manage().timeouts().
-			implicitlyWait(waitElementSecond, TimeUnit.SECONDS);	
+	public WebDriver getDriver() {
 		return webDriver;
 	}
 	
-	public void refresh(WebDriver webDriver) {
-		if(webDriver == null) {
-			return;
-		}
-		
-		// PhantomJS浏览器不会持续执行JS脚本，只能刷新页面实现
-		if(PhantomJS.equals(driverName)) {
-			ThreadUtils.tSleep(10000);
-//			webDriver.navigate().refresh();	// FIXME:刷新会报错???
-			
-		} else if(Chrome.equals(driverName)) {
-			ThreadUtils.tSleep(5000);
-			// Undo 
-			
-		} else {
-			ThreadUtils.tSleep(5000);
-			// Undo 
-		}
+	public void open(String url) {
+		webDriver.navigate().to(url);
 	}
 	
-	public void close(WebDriver webDriver) {
-		if(webDriver == null) {
-			return;
-		}
-		
-		if(PhantomJS.equals(driverName)) {
-			CmdUtils.kill(driverName);
+	/**
+	 * 隐式等待期望的元素出现
+	 * @param second 最长的等待秒数
+	 */
+	public void setWaitElementTime(long second) {
+		webDriver.manage().timeouts().implicitlyWait(second, TimeUnit.SECONDS);	
+	}
+	
+	/**
+	 * 刷新页面
+	 */
+	public void refresh() {
+		webDriver.navigate().refresh();
+	}
+	
+	/**
+	 * 关闭浏览器
+	 */
+	public void close() {
+		// FXIME: 正常退出的方法？？？
+		if(WebDriverType.PHANTOMJS == type) {
+			CmdUtils.kill(type.DRIVER_NAME());
 			
 		// Chrome 浏览器进程需要用系统命令终止
-		} else if(Chrome.equals(driverName)) {
-			CmdUtils.kill(driverName);
+		} else if(WebDriverType.CHROME == type) {
+			CmdUtils.kill(type.DRIVER_NAME());
 			
 		} else {
 			// Undo

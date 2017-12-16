@@ -11,7 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import exp.bilibli.plugin.core.gift.RoomMgr;
+import exp.bilibli.plugin.cache.BrowserMgr;
+import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.gift.WebSockClient;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
@@ -227,8 +228,8 @@ public class AppUI extends MainWindow {
 	@Override
 	protected void beforeExit() {
 		wsClient._stop();
-		
-		// FIXME: planjs浏览器进程不会自动退出
+		LoginMgr.getInstn()._stop();
+		BrowserMgr.getInstn().close();	// FIXME: planjs浏览器进程不会自动退出
 	}
 	
 	public void toChat(String msg) {
