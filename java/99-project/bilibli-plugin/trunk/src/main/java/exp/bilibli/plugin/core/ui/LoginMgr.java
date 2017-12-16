@@ -24,7 +24,7 @@ import exp.libs.warp.thread.LoopThread;
  * 之后登陆通过cookie, 以回避校验码问题.
  * </PRE>
  */
-class LoginMgr extends LoopThread {
+public class LoginMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(LoginMgr.class);
 	
@@ -65,7 +65,7 @@ class LoginMgr extends LoopThread {
 		this.isLogined = false;
 	}
 	
-	protected static LoginMgr getInstn() {
+	public static LoginMgr getInstn() {
 		if(instance == null) {
 			synchronized (LoginMgr.class) {
 				if(instance == null) {
@@ -76,11 +76,11 @@ class LoginMgr extends LoopThread {
 		return instance;
 	}
 	
-	protected BrowserDriver getBrowser() {
+	public BrowserDriver getBrowser() {
 		return browser;
 	}
 
-	protected WebDriver getDriver() {
+	public WebDriver getDriver() {
 		return driver;
 	}
 	
