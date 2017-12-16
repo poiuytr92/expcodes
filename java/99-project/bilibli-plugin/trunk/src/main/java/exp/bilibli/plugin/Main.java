@@ -20,6 +20,7 @@ public class Main {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		BeautyEyeUtils.init();
+		
 		AppUI.getInstn();
 	}
 	

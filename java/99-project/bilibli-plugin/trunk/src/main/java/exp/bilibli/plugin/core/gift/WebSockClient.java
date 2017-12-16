@@ -29,6 +29,10 @@ public class WebSockClient extends LoopThread {
 	
 	private final static long SLEEP_TIME = 1000;
 	
+	private final static int LOOP_CNT = (int) (HB_TIME / SLEEP_TIME);
+	
+	private int loopCnt;
+	
 	private WebSockSession session;
 	
 	private int roomId;
@@ -36,6 +40,7 @@ public class WebSockClient extends LoopThread {
 	public WebSockClient() {
 		super("websocket连接监控线程");
 		this.roomId = DEFAULT_ROOM_ID;
+		this.loopCnt = LOOP_CNT;
 	}
 	
 	@Override
@@ -50,8 +55,13 @@ public class WebSockClient extends LoopThread {
 		}
 		
 		// B站的websocket需要每30秒发送一次心跳保活
-		session.send(Frame.C2S_HB());
-		_sleep(HB_TIME);
+		if(loopCnt >= LOOP_CNT) {
+			loopCnt = 0;
+			session.send(Frame.C2S_HB());
+		}
+		
+		_sleep(SLEEP_TIME);
+		loopCnt++;
 	}
 
 	@Override

@@ -140,7 +140,7 @@ class WebSockSession extends WebSocketClient {
 	@Override
 	public void onError(Exception e) {
 		log.error("websocket连接异常", e);
-		UIUtils.log("与直播间的连接发生异常");
+		UIUtils.log("与直播间的连接已断开");
 	}
 
 }

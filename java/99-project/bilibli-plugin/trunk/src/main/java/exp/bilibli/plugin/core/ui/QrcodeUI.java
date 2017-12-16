@@ -1,16 +1,16 @@
 package exp.bilibli.plugin.core.ui;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.File;
 
 import javax.swing.ImageIcon;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-import exp.bilibli.plugin.utils.UIUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
@@ -21,84 +21,56 @@ class QrcodeUI extends PopChildWindow {
 
 	private final static String TIPS_PATH = LoginMgr.IMG_DIR.concat("/tips.png");
 	
-	private JButton reflashBtn;
-	
-	private JButton finishBtn;
-	
 	private JLabel imgLabel;
 	
+	private JLabel timeLabel;
+	
 	protected QrcodeUI() {
-		super("登陆二维码", 300, 350);
+		super("手机B站APP扫码登陆", 300, 320);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.reflashBtn = new JButton("刷新二维码");
-		this.finishBtn = new JButton("扫码登陆后请点我");
 		this.imgLabel = new JLabel(new ImageIcon(TIPS_PATH));
+		this.timeLabel = new JLabel("正在更新二维码...");
+		timeLabel.setForeground(Color.RED);
 	}
 
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
 		rootPanel.add(imgLabel, BorderLayout.CENTER);
-		
-		JPanel btnPanel = SwingUtils.getHFlowPanel(new JLabel(" "), 
-				reflashBtn, new JLabel(" "), finishBtn, new JLabel(" "));
+		JPanel btnPanel = SwingUtils.getHFlowPanel(
+				new JLabel(" "), timeLabel, new JLabel(" "));
 		rootPanel.add(btnPanel, BorderLayout.SOUTH);
 	}
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
-		reflashBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(LoginMgr.getInstn().isLoading()) {
-					SwingUtils.warn("正在下载二维码, 请稍后再刷新...");
-					
-				} else {
-					
-					SwingUtils.warn("正在刷新二维码, 请稍后...");
-					if(!LoginMgr.getInstn().loginByQrcode()) {
-						SwingUtils.warn("刷新二维码失败   ");
-						
-					} else {
-						SwingUtils.info("二维码已刷新   ");
-					}
-				}
-			}
-		});
-		
-		
-		finishBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				UIUtils.log("正在保存登陆信息...");
-				
-				if(LoginMgr.getInstn().saveCookies()) {
-					AppUI.getInstn().disableLogin();
-					_hide();
-					
-					UIUtils.log("保存登陆信息成功");
-					SwingUtils.info("已保存登陆信息, 下次使用无需登陆   ");
-					
-				} else {
-					UIUtils.log("本次登陆失败, 请刷新二维码重试");
-					SwingUtils.warn("本次登陆失败, 请刷新二维码重试   ");
-				}
-			}
-		});
+		// Undo
 	}
 
-	protected void updateQrcode() {
+	protected void updateImg() {
 		File dir = new File(LoginMgr.IMG_DIR);
 		File[] files = dir.listFiles();
 		for(File file : files) {
 			if(file.getName().contains(LoginMgr.IMG_NAME)) {
-				ImageIcon img = new ImageIcon(file.getPath());
-				imgLabel.setIcon(img);
+				
+				// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图片
+				// 因为这种方式会因为图片路径没有变化, 而不去更新缓存, 导致显示的二维码一直不变
+				Image img = Toolkit.getDefaultToolkit().createImage(file.getPath());
+				imgLabel.setIcon(new ImageIcon(img));
+				break;
 			}
+		}
+	}
+	
+	protected void updateTime(int time) {
+		if(time < 0) {
+			timeLabel.setText("正在更新二维码...");
+			
+		} else {
+			String sTime = StrUtils.leftPad(String.valueOf(time), '0', 3);
+			timeLabel.setText(StrUtils.concat("有效时间 : ", sTime, " 秒"));
 		}
 	}
 	

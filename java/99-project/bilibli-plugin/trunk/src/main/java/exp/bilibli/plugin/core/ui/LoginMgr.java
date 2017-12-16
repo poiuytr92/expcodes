@@ -10,12 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.ldm.BrowserDriver;
-import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.warp.thread.LoopThread;
 
 /**
  * 
@@ -24,7 +24,7 @@ import exp.libs.warp.net.http.HttpUtils;
  * 之后登陆通过cookie, 以回避校验码问题.
  * </PRE>
  */
-class LoginMgr {
+class LoginMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(LoginMgr.class);
 	
@@ -34,26 +34,35 @@ class LoginMgr {
 	/** B站主页 */
 	private final static String HOME_URL = "https://www.bilibili.com/";
 	
-	private final static long WAIT_ELEMENT_TIME = 30;
-	
 	private final static String COOKIE_DIR = "./data/cookies";
 	
-	public final static String IMG_DIR = "./data/img";
+	protected final static String IMG_DIR = "./data/img";
 	
-	public final static String IMG_NAME = "qrcode";
+	protected final static String IMG_NAME = "qrcode";
+	
+	/** B站二维码有效时间是180s, 这里设置120s, 避免边界问题 */
+	private final static long UPDATE_TIME = 120000;
+	
+	private final static long LOOP_TIME = 1000;
+	
+	private final static int LOOP_CNT = (int) (UPDATE_TIME / LOOP_TIME);
+	
+	private int loopCnt;
 	
 	private BrowserDriver browser;
 	
 	private WebDriver driver;
 	
-	private boolean isLoading;
+	private boolean isLogined;
 	
 	private static volatile LoginMgr instance;
 	
 	private LoginMgr() {
+		super("页面登陆管理器");
 		this.browser = BrowserDriver.PHANTOMJS;
-		this.driver = browser.getWebDriver(WAIT_ELEMENT_TIME);
-		this.isLoading = false;
+		this.driver = browser.getWebDriver();
+		this.loopCnt = LOOP_CNT;
+		this.isLogined = false;
 	}
 	
 	protected static LoginMgr getInstn() {
@@ -75,62 +84,56 @@ class LoginMgr {
 		return driver;
 	}
 	
-	protected boolean loginByQrcode() {
-		if(isLoading == true) {
-			return false;
+	@Override
+	protected void _before() {
+		driver.navigate().to(LOGIN_URL);	// 打开登陆页面
+		isLogined = loginByCookies();		// 轮询二维码前先尝试cookies登陆
+		
+		if(isLogined == false) {
+			FileUtils.delete(COOKIE_DIR);
+			FileUtils.createDir(COOKIE_DIR);
 		}
-		
-		log.info("正在下载登陆二维码...");
-		UIUtils.log("正在下载登陆二维码...");
-		isLoading = true;
-		
-		FileUtils.delete(COOKIE_DIR);
-		FileUtils.createDir(COOKIE_DIR);
-		
-		driver.navigate().to(LOGIN_URL);
-		WebElement img = driver.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
-		String imgUrl = img.getAttribute("src");
-		boolean isOk = HttpUtils.convertBase64Img(imgUrl, IMG_DIR, IMG_NAME);
-		
-		if(isOk == true) {
-			log.info("登陆二维码下载成功, 请打开 [哔哩哔哩动画手机客户端] 扫码登陆...");
-			AppUI.getInstn().updateQrcode();
+	}
+
+	@Override
+	protected void _loopRun() {
+		if(isLogined == true) {
+			_stop();	// 若登陆成功则退出轮询
 			
 		} else {
-			log.info("登陆二维码下载失败.");
-		}
-		UIUtils.log("下载登陆二维码", (isOk ? "成功" : "失败"));
-		isLoading = false;
-		return isOk;
-	}
-	
-	// 扫码登陆成功后，切到主页，保存当前cookies到本地
-	protected boolean saveCookies() {
-		boolean isOk = false;
-		driver.navigate().to(HOME_URL);
-		if(driver.manage().getCookies().size() > 0) {
-			isOk = true;
-			int idx = 0;
-			for(Cookie cookie : driver.manage().getCookies()) {
-				String sIDX = StrUtils.leftPad(String.valueOf(idx++), '0', 2);
-				String savePath = StrUtils.concat(COOKIE_DIR, "/cookie-", sIDX, ".dat");
-				isOk &= ObjUtils.toSerializable(cookie, savePath);
+			
+			// 每30秒更新一次登陆二维码
+			if(loopCnt >= LOOP_CNT) {
+				if(downloadQrcode()) {
+					loopCnt = 0;
+					AppUI.getInstn().updateQrcode();
+				}
 			}
+			
+			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
+			isLogined = isSwitch();
 		}
+		log.info("curPage:{}", driver.getCurrentUrl());
+		log.info("cookies:{}", driver.manage().getCookies().size());
 		
-		if(isOk = true) {
-			isOk = checkLogin();
-		}
-		return isOk;
+		AppUI.getInstn().updateQrcodeTime(LOOP_CNT - (loopCnt++));
+		_sleep(LOOP_TIME);
+	}
+
+	@Override
+	protected void _after() {
+		AppUI.getInstn().disableLogin();
+		saveCookies();
 	}
 	
-	protected boolean loginByCookies() {
+	private boolean loginByCookies() {
 		boolean isOk = false;
 		if(FileUtils.isEmpty(COOKIE_DIR)) {
 			return isOk;
 		}
 		driver.manage().deleteAllCookies();
 		
+		isOk = true;
 		File dir = new File(COOKIE_DIR);
 		File[] files = dir.listFiles();
 		for(File file : files) {
@@ -140,13 +143,37 @@ class LoginMgr {
 				
 			} catch(Exception e) {
 				log.error("加载cookie失败: {}", file.getPath(), e);
+				isOk = false;
+				break;
 			}
 		}
 		
-		if(driver.manage().getCookies().size() > 0) {
-			isOk = checkLogin();
+		if(isOk == true) {
+			isOk = checkIsLogin();
 		}
 		return isOk;
+	}
+	
+	private boolean downloadQrcode() {
+		log.info("正在更新登陆二维码...");
+		driver.navigate().to(LOGIN_URL);
+		WebElement img = driver.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
+		String imgUrl = img.getAttribute("src");
+		boolean isOk = HttpUtils.convertBase64Img(imgUrl, IMG_DIR, IMG_NAME);
+		log.info("更新登陆二维码{}", (isOk ? "成功, 请打开 [哔哩哔哩手机客户端] 扫码登陆..." : "失败"));
+		return isOk;
+	}
+	
+	// 扫码登陆成功后，保存当前cookies到本地
+	private void saveCookies() {
+		if(isLogined == true) {
+			int idx = 0;
+			for(Cookie cookie : driver.manage().getCookies()) {
+				String sIDX = StrUtils.leftPad(String.valueOf(idx++), '0', 2);
+				String savePath = StrUtils.concat(COOKIE_DIR, "/cookie-", sIDX, ".dat");
+				ObjUtils.toSerializable(cookie, savePath);
+			}
+		}
 	}
 	
 	/**
@@ -154,14 +181,18 @@ class LoginMgr {
 	 * 	若已登陆成功,会自动跳转到首页; 否则会停留在登陆页面
 	 * @return true: 登陆成功; false:登陆失败
 	 */
-	private boolean checkLogin() {
+	private boolean checkIsLogin() {
 		driver.navigate().to(LOGIN_URL);
-		ThreadUtils.tSleep(2000);	// 等待2秒以确认是否会发生跳转
-		return !(driver.getCurrentUrl().startsWith(LOGIN_URL));
+		ThreadUtils.tSleep(LOOP_TIME);	// 等待2秒以确认是否会发生跳转
+		return isSwitch();
 	}
 	
-	protected boolean isLoading() {
-		return isLoading;
+	/**
+	 * 检查页面是否发生了跳转
+	 * @return
+	 */
+	private boolean isSwitch() {
+		return !driver.getCurrentUrl().startsWith(LOGIN_URL);
 	}
 	
 }
