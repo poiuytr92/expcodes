@@ -9,8 +9,6 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.envm.WebDriverType;
 import exp.libs.utils.os.CmdUtils;
@@ -18,8 +16,6 @@ import exp.libs.utils.other.StrUtils;
 
 final public class BrowserDriver {
 
-	private final static Logger log = LoggerFactory.getLogger(BrowserDriver.class);
-	
 	private final static long WAIT_ELEMENT_TIME = 5;
 	
 	private WebDriverType type;
@@ -129,23 +125,13 @@ final public class BrowserDriver {
 	 * 关闭浏览器
 	 */
 	public void close() {
-		// FXIME: 正常退出的方法？？？
-		if(WebDriverType.PHANTOMJS == type) {
-			CmdUtils.kill(type.DRIVER_NAME());
-			
-		// Chrome 浏览器进程需要用系统命令终止
-		} else if(WebDriverType.CHROME == type) {
-			CmdUtils.kill(type.DRIVER_NAME());
-			
-		} else {
-			// Undo
-		}
-		
 		try {
-			webDriver.close();
-		} catch(Throwable e) {
-			log.error("关闭浏览器失败.", e);
-		}
+			webDriver.close();	// 大部分浏览器驱动结束进程的方法
+			webDriver.quit();	// phantomjs浏览器结束进程的方法
+		} catch(Throwable e) {}
+		
+		// 以防万一, 使用系统命令杀掉驱动进程 （Chrome只能通过此方法）
+		CmdUtils.kill(type.DRIVER_NAME());
 	}
 	
 }

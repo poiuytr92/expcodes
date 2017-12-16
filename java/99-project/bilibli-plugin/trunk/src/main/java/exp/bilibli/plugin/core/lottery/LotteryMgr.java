@@ -10,13 +10,12 @@ public class LotteryMgr extends LoopThread {
 	private final static Logger log = LoggerFactory.getLogger(LotteryMgr.class);
 	
 	protected LotteryMgr() {
-		super("抽奖姬");
+		super("自动抽奖姬");
 	}
 
 	@Override
 	protected void _before() {
-		// TODO Auto-generated method stub
-		
+		log.info("{} 已启动", getName());
 	}
 
 	@Override
@@ -27,8 +26,7 @@ public class LotteryMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		// TODO Auto-generated method stub
-		
+		log.info("{} 已停止", getName());
 	}
 
 }
