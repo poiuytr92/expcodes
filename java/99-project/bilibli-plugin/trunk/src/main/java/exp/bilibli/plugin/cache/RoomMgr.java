@@ -13,6 +13,9 @@ import exp.libs.warp.io.flow.FileFlowReader;
 
 public class RoomMgr {
 
+	/**
+	 * 记录房间号（前端用）到 真实房号（后台用）的映射
+	 */
 	private final static String ROOM_ID_PATH = "./data/room/roomids.dat";
 	
 	/**
@@ -20,17 +23,20 @@ public class RoomMgr {
 	 * real_room_id/room_id -> real_room_id
 	 * 
 	 * 连接websocket后台只能用real_room_id,
-	 * room_id 是签约主播才有的房间号, 若通过real_room_id打开页面，会自动修正为room_id
+	 * room_id 是签约主播才有的房间号, 若通过real_room_id打开页面，会自动修正为room_id.
+	 * 
+	 * 目前数据来源是房间抽奖时推送过来的通知消息.
 	 */
 	private Map<Integer, Integer> realRoomIds;
 	
-	private PCQueue<String> roomIds;
+	/** 按时序记录的可以抽奖礼物房间号 */
+	private PCQueue<String> giftRoomIds;
 	
 	private static volatile RoomMgr instance;
 	
 	private RoomMgr() {
 		this.realRoomIds = new HashMap<Integer, Integer>();
-		this.roomIds = new PCQueue<String>(1024);
+		this.giftRoomIds = new PCQueue<String>(1024);
 		
 		readRoomIds();
 	}
@@ -46,23 +52,48 @@ public class RoomMgr {
 		return instance;
 	}
 	
-	public void add(String roomId) {
-		roomIds.add(roomId);
+	/**
+	 * 添加礼物房间号
+	 * @param roomId 礼物房间号
+	 */
+	public void addGiftRoom(String roomId) {
+		giftRoomIds.add(roomId);
 	}
 	
-	public String get() {
-		return roomIds.getQuickly();
+	/**
+	 * 获取礼物房间号
+	 * @return 若无房间号则马上返回null
+	 */
+	public String getGiftRoom() {
+		return giftRoomIds.getQuickly();
 	}
 	
-	public void clear() {
-		roomIds.clear();
+	/**
+	 * 清空礼物房间记录
+	 */
+	public void clearGiftRooms() {
+		giftRoomIds.clear();
 	}
 	
-	public void add(String roomId, String readRoomId) {
-		add(NumUtils.toInt(roomId, 0), NumUtils.toInt(readRoomId, 0));
+	/**
+	 * 关联 房间号 与 真实房间号
+	 * @param roomId 房间号（限签约主播）
+	 * @param readRoomId 真实房间号（签约主播 与 非签约主播 均拥有）
+	 */
+	public void relate(String roomId, String readRoomId) {
+		relate(NumUtils.toInt(roomId, 0), NumUtils.toInt(readRoomId, 0));
 	}
 	
-	public void add(int roomId, int readRoomId) {
+	/**
+	 * 关联 房间号 与 真实房间号
+	 * @param roomId 房间号（限签约主播）
+	 * @param readRoomId 真实房间号（签约主播 与 非签约主播 均拥有）
+	 */
+	public void relate(int roomId, int readRoomId) {
+		if(getRealRoomId(roomId) > 0) {
+			return;
+		}
+		
 		if(roomId <= 0 && readRoomId <= 0) {
 			return;
 			
@@ -80,10 +111,20 @@ public class RoomMgr {
 		writeRoomIds();
 	}
 	
+	/**
+	 * 提取真实房间号
+	 * @param roomId 房间号（限签约主播）
+	 * @return 真实房间号（签约主播 与 非签约主播 均拥有）, 若未收集到该房间则返回0
+	 */
 	public int getRealRoomId(String roomId) {
 		return getRealRoomId(NumUtils.toInt(roomId, 0));
 	}
 	
+	/**
+	 * 提取真实房间号
+	 * @param roomId 房间号（限签约主播）
+	 * @return 真实房间号（签约主播 与 非签约主播 均拥有）, 若未收集到该房间则返回0
+	 */
 	public int getRealRoomId(int roomId) {
 		int realRoomId = 0;
 		Integer rrId = realRoomIds.get(roomId);
@@ -93,6 +134,9 @@ public class RoomMgr {
 		return realRoomId;
 	}
 	
+	/**
+	 * 从外存读取真实房号记录
+	 */
 	private void readRoomIds() {
 		FileFlowReader ffr = new FileFlowReader(ROOM_ID_PATH, Charset.ISO);
 		while(ffr.hasNextLine()) {
@@ -104,6 +148,9 @@ public class RoomMgr {
 		}
 	}
 	
+	/**
+	 * 把内存的真实房号记录保存到外存
+	 */
 	private void writeRoomIds() {
 		StringBuilder sb = new StringBuilder();
 		Iterator<Integer> keyIts = realRoomIds.keySet().iterator();

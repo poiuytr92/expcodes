@@ -99,8 +99,8 @@ public class MsgAnalyser {
 		UIUtils.notify(msg);
 		log.info(msg);
 		
-		RoomMgr.getInstn().add(msgBean.ROOM_ID());
-		RoomMgr.getInstn().add(msgBean.getRoomId(), msgBean.getRealRoomId());
+		RoomMgr.getInstn().addGiftRoom(msgBean.ROOM_ID());
+		RoomMgr.getInstn().relate(msgBean.getRoomId(), msgBean.getRealRoomId());
 	}
 	
 	private static void toDo(SysGift msgBean) {
@@ -114,8 +114,8 @@ public class MsgAnalyser {
 		UIUtils.notify(msg);
 		log.info(msg);
 		
-		RoomMgr.getInstn().add(msgBean.ROOM_ID());
-		RoomMgr.getInstn().add(msgBean.getRoomId(), msgBean.getRealRoomId());
+		RoomMgr.getInstn().addGiftRoom(msgBean.ROOM_ID());
+		RoomMgr.getInstn().relate(msgBean.getRoomId(), msgBean.getRealRoomId());
 	}
 	
 	private static void toDo(WelcomeMsg msgBean) {

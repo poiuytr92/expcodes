@@ -66,12 +66,12 @@ class LotteryMgr extends LoopThread {
 	protected void _before() {
 		log.info("{} 已启动", getName());
 		driver.navigate().to(LIVE_URL_PREFIX);
-		RoomMgr.getInstn().clear();
+		RoomMgr.getInstn().clearGiftRooms();
 	}
 
 	@Override
 	protected void _loopRun() {
-		String roomId = RoomMgr.getInstn().get();
+		String roomId = RoomMgr.getInstn().getGiftRoom();
 		
 		// 保持页面一段时间后刷新, 避免被管理器终止进程
 		if(roomId == null) {
