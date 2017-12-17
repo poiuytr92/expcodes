@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.core.gift;
+package exp.bilibli.plugin.core.back;
 
 import java.net.URI;
 

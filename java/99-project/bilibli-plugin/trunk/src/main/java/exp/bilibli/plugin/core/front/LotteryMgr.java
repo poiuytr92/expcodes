@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.core.lottery;
+package exp.bilibli.plugin.core.front;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,7 +15,7 @@ import exp.bilibli.plugin.utils.WebUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
 
-public class LotteryMgr extends LoopThread {
+class LotteryMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(LotteryMgr.class);
 	
@@ -51,7 +51,7 @@ public class LotteryMgr extends LoopThread {
 		this.loopCnt = 0;
 	}
 	
-	public static LotteryMgr getInstn() {
+	protected static LotteryMgr getInstn() {
 		if(instance == null) {
 			synchronized (LotteryMgr.class) {
 				if(instance == null) {

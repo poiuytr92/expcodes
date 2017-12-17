@@ -3,7 +3,7 @@ package exp.bilibli.plugin.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibli.plugin.core.ui.AppUI;
+import exp.bilibli.plugin.core.front.AppUI;
 import exp.libs.utils.other.StrUtils;
 
 public class UIUtils {

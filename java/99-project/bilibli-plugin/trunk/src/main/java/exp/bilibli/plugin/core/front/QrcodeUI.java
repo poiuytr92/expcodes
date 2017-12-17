@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.core.ui;
+package exp.bilibli.plugin.core.front;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.core.gift;
+package exp.bilibli.plugin.core.back;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.ldm.Frame;
-import exp.bilibli.plugin.envm.BinaryData;
+import exp.bilibli.plugin.envm.Binary;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
@@ -103,10 +103,10 @@ class WebSockSession extends WebSocketClient {
 		String hex = BODHUtils.toHex(buff);
 		log.info("接收到推送消息: {}", hex);
 		
-		if(hex.startsWith(BinaryData.SERVER_HB_CONFIRM)) {
+		if(hex.startsWith(Binary.SERVER_HB_CONFIRM)) {
 			log.info("websocket连接保活确认");
 			
-		} else if(BinaryData.SERVER_CONN_CONFIRM.equals(hex)) {
+		} else if(Binary.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.info("websocket连接成功确认");
 			UIUtils.log("入侵直播间成功, 正在暗中观察...");
 			

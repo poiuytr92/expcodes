@@ -1,4 +1,4 @@
-package exp.bilibli.plugin.core.ui;
+package exp.bilibli.plugin.core.front;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -14,8 +14,7 @@ import javax.swing.JTextField;
 
 import exp.bilibli.plugin.cache.BrowserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
-import exp.bilibli.plugin.core.gift.WebSockClient;
-import exp.bilibli.plugin.core.lottery.LotteryMgr;
+import exp.bilibli.plugin.core.back.WebSockClient;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -81,7 +80,6 @@ public class AppUI extends MainWindow {
 		this.httpTF = new JTextField("http://live.bilibili.com/");
 		this.ridTF = new JTextField("438", 15);
 		httpTF.setEditable(false);
-		ridTF.setEditable(false);	// FIXME 暂时不允许修改，似乎每个直播间的请求信息都不一样
 		
 		this.linkBtn = new JButton("连接直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("发起抽奖");
