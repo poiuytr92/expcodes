@@ -12,7 +12,9 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.envm.WebDriverType;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -86,7 +88,8 @@ final public class BrowserDriver {
 			capabilities = DesiredCapabilities.phantomjs();
 			capabilities.setJavascriptEnabled(true);
 			capabilities.setCapability(PAGE_SETTINGS.concat("XSSAuditingEnabled"), true);
-			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), false);
+			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), 
+					FileUtils.isEmpty(Config.getInstn().COOKIE_DIR()));	// 首次登陆时需要扫描二维码，此时需要下载图片
 			capabilities.setCapability(PAGE_SETTINGS.concat("localToRemoteUrlAccessEnabled"), true);
 			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), // 假装是谷歌，避免被反爬   （浏览器头可以用Fiddler抓包抓到）
 					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
