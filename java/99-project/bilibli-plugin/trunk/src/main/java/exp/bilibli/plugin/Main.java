@@ -22,13 +22,13 @@ public class Main {
 		LogUtils.loadLogBackConfig();
 		BeautyEyeUtils.init();
 		
-		String code = SwingUtils.input("请输入注册码");
-		if(code.matches("[a-zA-Z]\\d[a-zA-Z]\\d")) {
+//		String code = SwingUtils.input("请输入注册码");
+//		if(code.matches("[a-zA-Z]\\d[a-zA-Z]\\d")) {
 			AppUI.getInstn();
 			
-		} else {
-			SwingUtils.warn("未授权用户");
-		}
+//		} else {
+//			SwingUtils.warn("未授权用户");
+//		}
 	}
 	
 	

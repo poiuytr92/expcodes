@@ -31,6 +31,8 @@ class LotteryMgr extends LoopThread {
 	
 	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
 	
+	private final static String HOME_URL = Config.getInstn().HOME_URL();
+	
 	private final static long SLEEP_TIME = 1000;
 	
 	/** phantomjs浏览器每一段时间要刷新一下, 否则会被释放掉 */
@@ -69,13 +71,32 @@ class LotteryMgr extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		driver.navigate().to(LIVE_URL);
+		driver.navigate().to(HOME_URL);
 		RoomMgr.getInstn().clearGiftRooms();
 	}
 
 	@Override
 	protected void _loopRun() {
 		String roomId = RoomMgr.getInstn().getGiftRoom();
+		try {
+			toLottery(roomId);	// 参与直播间抽奖
+			
+		} catch(Exception e) {
+			log.error("在直播间 [{}] 抽奖异常", roomId, e);
+			
+			// 重开浏览器
+			driver = BrowserMgr.getInstn().reCreate(false).getDriver();
+			driver.navigate().to(HOME_URL);
+		}
+		_sleep(SLEEP_TIME);	// 避免连续抽奖时，过频点击导致页面抽奖器无反应
+	}
+
+	@Override
+	protected void _after() {
+		log.info("{} 已停止", getName());
+	}
+	
+	private void toLottery(String roomId) {
 		
 		// 保持页面一段时间后刷新, 避免被管理器终止进程
 		if(roomId == null) {
@@ -92,13 +113,8 @@ class LotteryMgr extends LoopThread {
 			_sleep(SLEEP_TIME);
 			log.info("参与直播间 [{}] 抽奖{}", roomId, 
 					(lottery(roomId) ? "成功" : "失败"));
+			driver.navigate().to(HOME_URL);	// 马上跳回去首页, 避免接收太多直播间数据
 		}
-		_sleep(SLEEP_TIME);	// 避免连续抽奖时，过频点击导致页面抽奖器无反应
-	}
-
-	@Override
-	protected void _after() {
-		log.info("{} 已停止", getName());
 	}
 	
 	private boolean lottery(String roomId) {

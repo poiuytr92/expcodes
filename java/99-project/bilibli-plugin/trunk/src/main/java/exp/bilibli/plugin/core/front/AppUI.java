@@ -271,7 +271,7 @@ public class AppUI extends MainWindow {
 		
 		LoginMgr.getInstn()._stop();	
 		LotteryMgr.getInstn()._stop();
-		BrowserMgr.getInstn().close();
+		BrowserMgr.getInstn().quit();
 	}
 	
 	

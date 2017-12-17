@@ -12,9 +12,7 @@ import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.envm.WebDriverType;
-import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -37,16 +35,16 @@ final public class BrowserDriver {
 	private WebDriver webDriver;
 	
 	public BrowserDriver(WebDriverType type) {
-		this(type, DEFAULT_WAIT_ELEMENT_TIME);
+		this(type, false, DEFAULT_WAIT_ELEMENT_TIME);
 	}
 	
-	public BrowserDriver(WebDriverType type, long waitElementSecond) {
+	public BrowserDriver(WebDriverType type, boolean loadImages, long waitElementSecond) {
 		this.type = type;
 		waitElementSecond = (waitElementSecond <= 0 ? 
 				DEFAULT_WAIT_ELEMENT_TIME : waitElementSecond);
 		
 		initProperty();
-		initWebDriver();
+		initWebDriver(loadImages);
 		setWaitElementTime(waitElementSecond);
 	}
 	
@@ -67,12 +65,12 @@ final public class BrowserDriver {
 		}
 	}
 	
-	public void initWebDriver() {
+	public void initWebDriver(boolean loadImages) {
 		if(WebDriverType.PHANTOMJS == type) {
-			this.webDriver = new PhantomJSDriver(getCapabilities());
+			this.webDriver = new PhantomJSDriver(getCapabilities(loadImages));
 			
 		} else if(WebDriverType.CHROME == type) {
-			this.webDriver = new ChromeDriver(getCapabilities());
+			this.webDriver = new ChromeDriver(getCapabilities(loadImages));
 			
 		} else {
 			this.webDriver = new HtmlUnitDriver(true);
@@ -80,7 +78,7 @@ final public class BrowserDriver {
 	}
 	
 	// {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
-	private DesiredCapabilities getCapabilities() {
+	private DesiredCapabilities getCapabilities(boolean loadImages) {
 		DesiredCapabilities capabilities = null;
 		
 		if(WebDriverType.PHANTOMJS == type) {
@@ -88,8 +86,7 @@ final public class BrowserDriver {
 			capabilities = DesiredCapabilities.phantomjs();
 			capabilities.setJavascriptEnabled(true);
 			capabilities.setCapability(PAGE_SETTINGS.concat("XSSAuditingEnabled"), true);
-			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), 
-					FileUtils.isEmpty(Config.getInstn().COOKIE_DIR()));	// 首次登陆时需要扫描二维码，此时需要下载图片
+			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), loadImages);
 			capabilities.setCapability(PAGE_SETTINGS.concat("localToRemoteUrlAccessEnabled"), true);
 			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), // 假装是谷歌，避免被反爬   （浏览器头可以用Fiddler抓包抓到）
 					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
@@ -103,7 +100,7 @@ final public class BrowserDriver {
 
 			capabilities = DesiredCapabilities.chrome();
 			capabilities.setJavascriptEnabled(true);
-			capabilities.setCapability("loadImages", false);
+			capabilities.setCapability("loadImages", loadImages);
 			capabilities.setCapability("chrome.prefs", profile);
 			
 		} else {
@@ -137,12 +134,20 @@ final public class BrowserDriver {
 	}
 	
 	/**
-	 * 关闭浏览器
+	 * 关闭当前页面
 	 */
 	public void close() {
 		try {
-			webDriver.close();	// 大部分浏览器驱动结束进程的方法
-			webDriver.quit();	// phantomjs浏览器结束进程的方法
+			webDriver.close();
+		} catch(Throwable e) {}
+	}
+	
+	/**
+	 * 关闭浏览器
+	 */
+	public void quit() {
+		try {
+			webDriver.quit();	// 大部分浏览器驱动结束进程的方法
 		} catch(Throwable e) {}
 		
 		// 以防万一, 使用系统命令杀掉驱动进程 （Chrome只能通过此方法）

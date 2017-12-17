@@ -1,6 +1,8 @@
 package exp.bilibli.plugin.core.front;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
@@ -112,6 +114,8 @@ class LoginMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
+		replaceDriver();	// 把加载图片的driver替换成不加载图片的driver
+		
 		AppUI.getInstn().markLogin();	// 在界面标记已登陆
 		saveCookies();	// 保存最后一次登录的cookies
 		log.info("{} 已停止", getName());
@@ -144,6 +148,7 @@ class LoginMgr extends LoopThread {
 		String imgUrl = img.getAttribute("src");
 		boolean isOk = HttpUtils.convertBase64Img(imgUrl, IMG_DIR, IMG_NAME);
 		log.info("更新登陆二维码{}", (isOk ? "成功, 请打开 [哔哩哔哩手机客户端] 扫码登陆..." : "失败"));
+		_sleep(LOOP_TIME * 30);
 		return isOk;
 	}
 	
@@ -176,6 +181,19 @@ class LoginMgr extends LoopThread {
 	 */
 	private boolean isSwitch() {
 		return !driver.getCurrentUrl().startsWith(LOGIN_URL);
+	}
+	
+	/**
+	 * 由于登陆时是需要下载二维码图片的，因此最开始的driver是加载图片的。
+	 * 登陆成功后，切换成不加载图片的driver，以后用cookies登陆
+	 */
+	private void replaceDriver() {
+		Set<Cookie> cookies = new HashSet<Cookie>(driver.manage().getCookies());
+		driver = BrowserMgr.getInstn().reCreate(false).getDriver();
+		driver.navigate().to(LOGIN_URL);
+		for(Cookie cookie : cookies) {
+			driver.manage().addCookie(cookie);
+		}
 	}
 	
 }

@@ -21,8 +21,7 @@ public class BrowserMgr {
 	private static volatile BrowserMgr instance;
 	
 	private BrowserMgr() {
-		this.browser = new BrowserDriver(WebDriverType.PHANTOMJS, 
-				Config.getInstn().WAIT_ELEMENT_TIME());
+		reCreate(true);
 	}
 	
 	public static BrowserMgr getInstn() {
@@ -36,12 +35,33 @@ public class BrowserMgr {
 		return instance;
 	}
 	
+	public BrowserDriver reCreate(boolean loadImages) {
+		quit();
+		browser = new BrowserDriver(WebDriverType.PHANTOMJS, loadImages, 
+				Config.getInstn().WAIT_ELEMENT_TIME());
+		return browser;
+	}
+	
 	public BrowserDriver getBrowser() {
 		return browser;
 	}
 
+	/**
+	 * 关闭当前页面
+	 */
 	public void close() {
-		browser.close();
+		if(browser != null) {
+			browser.close();
+		}
+	}
+	
+	/**
+	 * 退出浏览器
+	 */
+	public void quit() {
+		if(browser != null) {
+			browser.quit();
+		}
 	}
 	
 }
