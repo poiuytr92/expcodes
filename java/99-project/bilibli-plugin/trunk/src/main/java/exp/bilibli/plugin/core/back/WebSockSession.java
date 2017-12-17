@@ -101,7 +101,7 @@ class WebSockSession extends WebSocketClient {
 	public void onMessage(ByteBuffer byteBuffer) {
 		byte[] buff = byteBuffer.array();
 		String hex = BODHUtils.toHex(buff);
-		log.info("接收到推送消息: {}", hex);
+		log.debug("接收到推送消息: {}", hex);
 		
 		if(hex.startsWith(Binary.SERVER_HB_CONFIRM)) {
 			log.info("websocket连接保活确认");
@@ -117,10 +117,10 @@ class WebSockSession extends WebSocketClient {
 			if(JsonUtils.isVaild(sJson)) {
 				JSONObject json = JSONObject.fromObject(sJson);
 				if(!MsgAnalyser.toMsgBean(json)) {
-					log.info("接收到未识别的 [ByteBuffer] 类型数据: {}", hex);
+					log.info("无效的推送消息: {}", hex);
 				}
 			} else {
-				log.info("接收到未识别的 [ByteBuffer] 类型数据: {}", hex);
+				log.info("无效的推送消息: {}", hex);
 			}
 		}
     }

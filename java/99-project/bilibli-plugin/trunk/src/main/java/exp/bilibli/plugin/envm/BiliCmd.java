@@ -6,9 +6,17 @@ public class BiliCmd {
 	/** 未知消息 */
 	public final static BiliCmd UNKNOW = new BiliCmd("UNKNOW");
 	
-	/** 欢迎消息 */
+	/** 欢迎老爷消息 */
+	private final static String _WELCOME = "WELCOME";
+	public final static BiliCmd WELCOME = new BiliCmd(_WELCOME);
+	
+	/** 欢迎船员消息 */
 	private final static String _WELCOME_GUARD = "WELCOME_GUARD";
 	public final static BiliCmd WELCOME_GUARD = new BiliCmd(_WELCOME_GUARD);
+	
+	/** 新船员上船消息 */
+	private final static String _GUARD_BUY = "GUARD_BUY";
+	public final static BiliCmd GUARD_BUY = new BiliCmd(_GUARD_BUY);
 	
 	/** 系统消息：小电视抽奖、全频道公告等 */
 	private final static String _SYS_MSG = "SYS_MSG";
@@ -38,8 +46,14 @@ public class BiliCmd {
 	
 	public static BiliCmd toCmd(String cmd) {
 		BiliCmd biliCMD = UNKNOW;
-		if(_WELCOME_GUARD.equals(cmd)) {
+		if(_WELCOME.equals(cmd)) {
+			biliCMD = WELCOME;
+			
+		} else if(_WELCOME_GUARD.equals(cmd)) {
 			biliCMD = WELCOME_GUARD;
+			
+		} else if(_GUARD_BUY.equals(cmd)) {
+			biliCMD = GUARD_BUY;
 			
 		} else if(_SYS_MSG.equals(cmd)) {
 			biliCMD = SYS_MSG;

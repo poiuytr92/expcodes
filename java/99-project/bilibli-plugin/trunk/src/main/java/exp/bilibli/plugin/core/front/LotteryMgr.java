@@ -7,7 +7,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibli.plugin.bean.ldm.BrowserDriver;
 import exp.bilibli.plugin.cache.BrowserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.utils.UIUtils;
@@ -15,6 +14,16 @@ import exp.bilibli.plugin.utils.WebUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
 
+/**
+ * <PRE>
+ * 全平台抽奖管理器（小电视/高能礼物）
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class LotteryMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(LotteryMgr.class);
@@ -32,22 +41,16 @@ class LotteryMgr extends LoopThread {
 	
 	private int loopCnt;
 	
-	private BrowserDriver browser;
-	
 	private WebDriver driver;
 	
 	private Actions action;
-	
-	private String lastRoomId;
 	
 	private static volatile LotteryMgr instance;
 	
 	private LotteryMgr() {
 		super("自动抽奖姬");
-		this.browser = BrowserMgr.getInstn().getBrowser();
-		this.driver = browser.getDriver();
+		this.driver = BrowserMgr.getInstn().getBrowser().getDriver();
 		this.action = new Actions(driver);
-		this.lastRoomId = "";
 		this.loopCnt = 0;
 	}
 	
@@ -73,6 +76,8 @@ class LotteryMgr extends LoopThread {
 	protected void _loopRun() {
 		String roomId = RoomMgr.getInstn().getGiftRoom();
 		
+		// FIXME： 关掉浏览器重开，以释放内存
+		
 		// 保持页面一段时间后刷新, 避免被管理器终止进程
 		if(roomId == null) {
 			if(loopCnt++ >= LOOP_CNT) {
@@ -81,16 +86,13 @@ class LotteryMgr extends LoopThread {
 				log.info("页面心跳保活...");
 			}
 			
-			
 		// 若上一次的抽奖也是同样的房间, 则不再切换页面（以优化连续抽奖的情况）
 		} else {
-			if(!lastRoomId.equals(roomId)) {
-				lastRoomId = roomId;
-				String url = StrUtils.concat(LIVE_URL_PREFIX, roomId);
-				driver.navigate().to(url);
-				_sleep(SLEEP_TIME);
-			}
-			log.info("参与直播间 [{}] 抽奖{}", roomId, (lottery() ? "成功" : "失败"));
+			String url = StrUtils.concat(LIVE_URL_PREFIX, roomId);
+			driver.navigate().to(url);
+			_sleep(SLEEP_TIME);
+			log.info("参与直播间 [{}] 抽奖{}", roomId, 
+					(lottery(roomId) ? "成功" : "失败"));
 		}
 		_sleep(SLEEP_TIME);	// 避免连续抽奖时，过频点击导致页面抽奖器无反应
 	}
@@ -100,19 +102,20 @@ class LotteryMgr extends LoopThread {
 		log.info("{} 已停止", getName());
 	}
 	
-	private boolean lottery() {
+	private boolean lottery(String roomId) {
 		boolean isOk = false;
 		try {
 			if(_lottery()) {
-				UIUtils.statistics("成功: 抽奖直播间 [", lastRoomId, "]");
+				UIUtils.statistics("成功: 抽奖直播间 [", roomId, "]");
 				UIUtils.updateLotteryCnt();
+				isOk = true;
 				
 			} else {
-				UIUtils.statistics("超时: 抽奖直播间 [", lastRoomId, "]");
+				UIUtils.statistics("超时: 抽奖直播间 [", roomId, "]");
 			}
 			
 		} catch(Throwable e) {
-			UIUtils.statistics("辣鸡服务器poorguy了: 抽奖直播间 [", lastRoomId, "] ");
+			UIUtils.statistics("辣鸡服务器poorguy了: 抽奖直播间 [", roomId, "] ");
 		}
 		return isOk;
 	}
@@ -123,13 +126,26 @@ class LotteryMgr extends LoopThread {
 		By element = By.className("lottery-box");
 		if(WebUtils.exist(driver, element)) {
 			WebElement lotteryBox = vm.findElement(element);
-			action.click(lotteryBox).perform();	// 点击并提交（抽奖）
-			_sleep(SLEEP_TIME);	// 等待抽奖结果
-			
 			WebElement rst = lotteryBox.findElement(By.className("next-loading"));
-			isOk = rst.getText().contains("参与成功");
+			
+			isOk = _clickArea(lotteryBox, rst);
+			if(isOk == false) {	// 重试一次
+				isOk = _clickArea(lotteryBox, rst);
+			}
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 点击抽奖区域
+	 * @param lotteryBox
+	 * @param rst
+	 * @return
+	 */
+	private boolean _clickArea(WebElement lotteryBox, WebElement rst) {
+		action.click(lotteryBox).perform();	// 点击并提交（抽奖）
+		_sleep(SLEEP_TIME);	// 等待抽奖结果
+		return rst.getText().contains("参与成功");
 	}
 
 }

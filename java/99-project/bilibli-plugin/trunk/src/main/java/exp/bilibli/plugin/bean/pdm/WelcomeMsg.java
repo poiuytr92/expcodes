@@ -9,13 +9,27 @@ import exp.libs.utils.format.JsonUtils;
  * 
  * <PRE>
  * 
-	老爷/提督/总督进入直播间欢迎消息：
+	管理员/老爷进入直播间欢迎消息:
 	{
-	  "cmd": "WELCOME_GUARD",
+	  "cmd": "WELCOME",
 	  "data": {
-	    "uid": 1650868,
-	    "username": "M-亚絲娜",
-	    "guard_level": "2"
+	    "uid": 210940623,
+	    "uname": "\u4e1d\u4e1d-",
+	    "isadmin": 0,
+	    "svip": 1		// 年费 （年费和月费只会出现一个）
+	    "vip":1			// 月费（年费和月费只会出现一个）
+	  },
+	  "roomid": 390480
+	}
+	
+	{
+	  "cmd": "WELCOME",
+	  "data": {
+	    "uid": 56395161,
+	    "uname": "肉圆滚滚艹",
+	    "is_admin": false,
+	    "svip": 1
+	    "vip":1			// 月费（年费和月费只会出现一个）
 	  }
 	}
  * </PRE>
@@ -25,31 +39,51 @@ import exp.libs.utils.format.JsonUtils;
  */
 public class WelcomeMsg extends _Msg {
 
-	private final static String[] GUARD = {
-		"平民", "总督", "提督", "舰长"
+	private final static String[] VIPS = {
+		"老爷", "月费老爷", "年费老爷", "管理员", 
 	};
 	
 	private String uid;
 	
 	private String username;
 	
-	private int guardLevel;
+	private boolean isAdmin;
 	
-	private String guardDesc;
+	private int vipLevel;
+	
+	private String vipDesc;
 	
 	public WelcomeMsg(JSONObject json) {
 		super(json);
-		this.cmd = BiliCmd.WELCOME_GUARD;
+		this.cmd = BiliCmd.WELCOME;
 	}
 	
 	@Override
 	protected void analyse(JSONObject json) {
 		JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data); {
 			this.uid = JsonUtils.getStr(data, BiliCmdAtrbt.uid);
-			this.username = JsonUtils.getStr(data, BiliCmdAtrbt.username);
-			this.guardLevel = JsonUtils.getInt(data, BiliCmdAtrbt.guard_level, 0);
-			guardLevel = (guardLevel >= GUARD.length ? 0 : guardLevel);
-			this.guardDesc = GUARD[guardLevel];
+			this.username = JsonUtils.getStr(data, BiliCmdAtrbt.uname);
+			
+			this.isAdmin = JsonUtils.getBool(data, BiliCmdAtrbt.is_admin, false);
+			if(isAdmin == false) {
+				isAdmin = (JsonUtils.getInt(data, BiliCmdAtrbt.isadmin, 0) != 0);
+				if(isAdmin == true) {
+					vipLevel = 3;	// 管理员
+				}
+			} else {
+				vipLevel = 3;	// 管理员
+			}
+			
+			if(isAdmin == false) {
+				vipLevel = JsonUtils.getInt(data, BiliCmdAtrbt.svip, 0);
+				if(vipLevel > 0) {
+					vipLevel = 2;	// 年费
+					
+				} else {
+					vipLevel = JsonUtils.getInt(data, BiliCmdAtrbt.vip, 0);
+				}
+			}
+			this.vipDesc = VIPS[vipLevel];
 		}
 	}
 
@@ -61,12 +95,12 @@ public class WelcomeMsg extends _Msg {
 		return username;
 	}
 
-	public int getGuardLevel() {
-		return guardLevel;
+	public int getVipLevel() {
+		return vipLevel;
 	}
 
-	public String getGuardDesc() {
-		return guardDesc;
+	public String getVipDesc() {
+		return vipDesc;
 	}
 
 }

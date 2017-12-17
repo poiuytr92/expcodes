@@ -7,11 +7,14 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.pdm.ChatMsg;
 import exp.bilibli.plugin.bean.pdm.EnergyLottery;
+import exp.bilibli.plugin.bean.pdm.GuardBuyMsg;
 import exp.bilibli.plugin.bean.pdm.SendGift;
 import exp.bilibli.plugin.bean.pdm.SysGift;
 import exp.bilibli.plugin.bean.pdm.SysMsg;
 import exp.bilibli.plugin.bean.pdm.TvLottery;
+import exp.bilibli.plugin.bean.pdm.WelcomeGuardMsg;
 import exp.bilibli.plugin.bean.pdm.WelcomeMsg;
+import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.envm.BiliCmd;
 import exp.bilibli.plugin.envm.BiliCmdAtrbt;
@@ -60,8 +63,14 @@ public class MsgAnalyser {
 				toDo(new SysGift(json));
 			}
 			
-		} else if(biliCmd == BiliCmd.WELCOME_GUARD) {
+		} else if(biliCmd == BiliCmd.WELCOME) {
 			toDo(new WelcomeMsg(json));
+			
+		} else if(biliCmd == BiliCmd.WELCOME_GUARD) {
+			toDo(new WelcomeGuardMsg(json));
+			
+		} else if(biliCmd == BiliCmd.GUARD_BUY) {
+			toDo(new GuardBuyMsg(json));
 			
 		} else {
 			isOk = false;
@@ -77,6 +86,8 @@ public class MsgAnalyser {
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
+		
+		OnlineUserMgr.getInstn().add(msgBean.getUsername());
 	}
 	
 	private static void toDo(SendGift msgBean) {
@@ -87,6 +98,8 @@ public class MsgAnalyser {
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
+		
+		OnlineUserMgr.getInstn().add(msgBean.getUname());
 	}
 	
 	private static void toDo(SysMsg msgBean) {
@@ -120,8 +133,26 @@ public class MsgAnalyser {
 	
 	private static void toDo(WelcomeMsg msgBean) {
 		String msg = StrUtils.concat(
+				"[", msgBean.getUid(), "][", msgBean.getVipDesc(), "][", 
+				msgBean.getUsername(), "] ", _getAdj(), "溜进了直播间"
+		);
+		UIUtils.chat(msg);
+		log.info(msg);
+	}
+	
+	private static void toDo(WelcomeGuardMsg msgBean) {
+		String msg = StrUtils.concat(
 				"[", msgBean.getUid(), "][", msgBean.getGuardDesc(), "][", 
 				msgBean.getUsername(), "] ", _getAdj(), "溜进了直播间"
+		);
+		UIUtils.chat(msg);
+		log.info(msg);
+	}
+	
+	private static void toDo(GuardBuyMsg msgBean) {
+		String msg = StrUtils.concat(
+				"[", msgBean.getUid(), "][", msgBean.getGuardDesc(), "][", 
+				msgBean.getUsername(), "] ", _getAdj(), "上了贼船"
 		);
 		UIUtils.chat(msg);
 		log.info(msg);

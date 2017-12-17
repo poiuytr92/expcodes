@@ -21,12 +21,16 @@ class QrcodeUI extends PopChildWindow {
 
 	private final static String TIPS_PATH = LoginMgr.IMG_DIR.concat("/tips.png");
 	
+	private static final int WIDTH = 300;
+	
+	private static final int HEIGHT = 320;
+	
 	private JLabel imgLabel;
 	
 	private JLabel timeLabel;
 	
 	protected QrcodeUI() {
-		super("手机B站APP扫码登陆", 300, 320);
+		super("B站手机APP扫码登陆", WIDTH, HEIGHT);
 	}
 	
 	@Override

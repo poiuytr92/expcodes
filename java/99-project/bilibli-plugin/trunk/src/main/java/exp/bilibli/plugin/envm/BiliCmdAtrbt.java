@@ -53,4 +53,12 @@ public class BiliCmdAtrbt {
 	
 	public final static String protover = "protover";
 	
+	public final static String isadmin = "isadmin";
+	
+	public final static String is_admin = "is_admin";
+	
+	public final static String svip = "svip";
+	
+	public final static String vip = "vip";
+	
 }

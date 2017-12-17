@@ -13,6 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import exp.bilibli.plugin.cache.BrowserMgr;
+import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.WebSockClient;
 import exp.bilibli.plugin.utils.UIUtils;
@@ -56,6 +57,8 @@ public class AppUI extends MainWindow {
 	
 	private WebSockClient wsClient;
 	
+	private LotteryUI lotteryUI;
+	
 	private QrcodeUI qrcodeUI;
 	
 	private static volatile AppUI instance;
@@ -81,9 +84,9 @@ public class AppUI extends MainWindow {
 		this.ridTF = new JTextField("438", 15);
 		httpTF.setEditable(false);
 		
-		this.linkBtn = new JButton("连接直播间 (无需登陆)");
-		this.lotteryBtn = new JButton("发起抽奖");
-		this.loginBtn = new JButton("扫码登陆 (可自动刷抽奖礼物)");
+		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
+		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
+		this.loginBtn = new JButton("扫码登陆 (可自动参与全平台抽奖)");
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
@@ -102,6 +105,7 @@ public class AppUI extends MainWindow {
 		lotteryLabel.setForeground(Color.RED);
 		
 		this.wsClient = new WebSockClient();
+		this.lotteryUI = new LotteryUI();
 		this.qrcodeUI = new QrcodeUI();
 	}
 
@@ -123,7 +127,7 @@ public class AppUI extends MainWindow {
 	private JPanel _getLinkPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		SwingUtils.addBorder(panel);
-		panel.add(SwingUtils.getHGridPanel(linkBtn/*, lotteryBtn*/), 0);
+		panel.add(SwingUtils.getHGridPanel(linkBtn, lotteryBtn), 0);
 		
 		JPanel livePanel = new JPanel(new BorderLayout()); {
 			livePanel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), BorderLayout.CENTER);
@@ -203,7 +207,19 @@ public class AppUI extends MainWindow {
 					wsClient.relink(roomId);
 				}
 				
-				ThreadUtils.tSleep(1000);
+				OnlineUserMgr.getInstn().clear(); // 重连直播间时清空在线用户列表
+				ThreadUtils.tSleep(500);	// 避免连续点击
+			}
+		});
+		
+		
+		lotteryBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				lotteryUI.refreshUsers();
+				lotteryUI._view();
+				ThreadUtils.tSleep(500);	// 避免连续点击
 			}
 		});
 		
@@ -229,9 +245,11 @@ public class AppUI extends MainWindow {
 	@Override
 	protected void beforeExit() {
 		wsClient._stop();
-		LoginMgr.getInstn()._stop();
+		lotteryUI.clear();
+		
+		LoginMgr.getInstn()._stop();	// FIXME: 没有启动时也会把浏览器先打开再关闭
 		LotteryMgr.getInstn()._stop();
-		BrowserMgr.getInstn().close();	// FIXME: planjs浏览器进程不会自动退出
+		BrowserMgr.getInstn().close();
 	}
 	
 	public void toChat(String msg) {
@@ -252,7 +270,6 @@ public class AppUI extends MainWindow {
 		SwingUtils.toEnd(notifyTA);
 	}
 	
-	// FIXME: 添加失败次数
 	public void toStatistics(String msg) {
 		if(!loginBtn.isEnabled()) {	// 登陆按钮被禁用, 说明登陆成功
 			sttcTA.append(msg);
@@ -286,10 +303,11 @@ public class AppUI extends MainWindow {
 		LotteryMgr.getInstn()._start();
 		
 		UIUtils.log("登陆成功 (仅首次登陆需要扫码)");
-		SwingUtils.info("登陆成功 (仅首次登陆需要扫码)");
+		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
+		SwingUtils.info("登陆成功 (已激活全平台自动抽奖机能)");
 	}
 	
-	private String getUrl() {
+	protected String getUrl() {
 		return StrUtils.concat(httpTF.getText(), ridTF.getText());
 	}
 	
