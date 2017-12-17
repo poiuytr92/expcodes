@@ -37,7 +37,7 @@ class LotteryMgr extends LoopThread {
 	
 	private final static long LOOP_TIME = 1000;
 	
-	private final static int LOOP_CNT = (int) (REFRESH_TIME / LOOP_TIME);
+	private final static int LOOP_LIMIT = (int) (REFRESH_TIME / LOOP_TIME);
 	
 	private int loopCnt;
 	
@@ -76,11 +76,9 @@ class LotteryMgr extends LoopThread {
 	protected void _loopRun() {
 		String roomId = RoomMgr.getInstn().getGiftRoom();
 		
-		// FIXME： 关掉浏览器重开，以释放内存
-		
 		// 保持页面一段时间后刷新, 避免被管理器终止进程
 		if(roomId == null) {
-			if(loopCnt++ >= LOOP_CNT) {
+			if(loopCnt++ >= LOOP_LIMIT) {
 				loopCnt = 0;
 				driver.navigate().refresh();
 				log.info("页面心跳保活...");

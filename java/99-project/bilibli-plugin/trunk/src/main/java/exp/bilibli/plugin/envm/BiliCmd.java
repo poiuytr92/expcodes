@@ -1,6 +1,16 @@
 package exp.bilibli.plugin.envm;
 
 
+/**
+ * <PRE>
+ * B站Json交互报文命令类型
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class BiliCmd {
 	
 	/** 未知消息 */

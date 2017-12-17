@@ -23,6 +23,16 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * B站json命令报文解析器
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class MsgAnalyser {
 
 	private final static Logger log = LoggerFactory.getLogger(MsgAnalyser.class);

@@ -362,23 +362,13 @@
 						</goals>
 						<configuration>
 							<target>
-								<echo>拷贝数据库脚本</echo>
-								<copy todir="${release.dir}/script">
-									<fileset dir="script"></fileset>
+								<echo>拷贝资源数据</echo>
+								<copy todir="${release.dir}/data">
+									<fileset dir="data"></fileset>
 								</copy>
 								<echo>拷贝项目配置文件</echo>
 								<copy todir="${release.dir}/conf">
 									<fileset dir="conf" />
-								</copy>
-								<echo>拷贝文档</echo>
-								<copy todir="${release.dir}/doc/04_维护文档">
-									<fileset dir="doc/04_维护文档"></fileset>
-								</copy>
-								<copy todir="${release.dir}/doc/06_使用文档">
-									<fileset dir="doc/06_使用文档"></fileset>
-								</copy>
-								<copy todir="${release.dir}/doc/07_演示文档">
-									<fileset dir="doc/07_演示文档"></fileset>
 								</copy>
 							</target>
 						</configuration>

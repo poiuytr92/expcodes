@@ -18,9 +18,9 @@ import exp.libs.utils.format.JsonUtils;
 		"msg_text": "茕茕茕茕孑立丶在裕刺Fy的直播间447内赠送火力票共367个"
 	}
  * </PRE>
- * 
- * @author Administrator
- * @date 2017年12月15日
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class SysGift extends _Msg {
 

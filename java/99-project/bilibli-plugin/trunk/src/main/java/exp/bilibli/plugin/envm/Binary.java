@@ -25,6 +25,17 @@ PayloadString:	03-E9
 Masking:	AD-73-35-23
 
  */
+
+/**
+ * <PRE>
+ * WebSocket交互Binary数据帧
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Binary {
 
 	/** 房间号长度 */

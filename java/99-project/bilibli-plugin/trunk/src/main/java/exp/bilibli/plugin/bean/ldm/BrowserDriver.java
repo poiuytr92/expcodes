@@ -16,6 +16,16 @@ import exp.bilibli.plugin.envm.WebDriverType;
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 浏览器驱动
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 final public class BrowserDriver {
 
 	private final static long WAIT_ELEMENT_TIME = 5;

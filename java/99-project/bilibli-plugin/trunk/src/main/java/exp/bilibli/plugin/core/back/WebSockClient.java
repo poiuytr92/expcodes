@@ -12,6 +12,16 @@ import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.thread.LoopThread;
 
+/**
+ * <PRE>
+ * websocket客户端
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class WebSockClient extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockClient.class);

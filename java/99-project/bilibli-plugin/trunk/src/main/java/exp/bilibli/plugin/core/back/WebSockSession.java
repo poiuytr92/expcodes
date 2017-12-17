@@ -21,6 +21,16 @@ import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.verify.RegexUtils;
 
+/**
+ * <PRE>
+ * websocket会话
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class WebSockSession extends WebSocketClient {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockSession.class);

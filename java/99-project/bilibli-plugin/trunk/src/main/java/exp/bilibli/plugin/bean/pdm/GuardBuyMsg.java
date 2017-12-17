@@ -21,9 +21,9 @@ import exp.libs.utils.format.JsonUtils;
 	  "roomid": "390480"
 	}
  * </PRE>
- * 
- * @author Administrator
- * @date 2017年12月15日
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class GuardBuyMsg extends WelcomeGuardMsg {
 

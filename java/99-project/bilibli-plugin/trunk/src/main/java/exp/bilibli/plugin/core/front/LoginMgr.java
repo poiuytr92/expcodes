@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.cache.BrowserMgr;
-import exp.bilibli.plugin.utils.WebUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ObjUtils;
@@ -19,11 +18,14 @@ import exp.libs.warp.net.http.HttpUtils;
 import exp.libs.warp.thread.LoopThread;
 
 /**
- * 
  * <PRE>
- * 首次登陆通过APP客户端扫码, 然后保存cookie信息.
- * 之后登陆通过cookie, 以回避校验码问题.
+ * 登陆管理器
  * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 class LoginMgr extends LoopThread {
 
@@ -34,9 +36,6 @@ class LoginMgr extends LoopThread {
 	
 	/** B站主页 */
 	private final static String HOME_URL = "https://www.bilibili.com/";
-	
-	/** 任意直播间地址 */
-	private final static String LIVE_URL = "http://live.bilibili.com/438";
 	
 	private final static String COOKIE_DIR = "./data/cookies";
 	
@@ -179,20 +178,6 @@ class LoginMgr extends LoopThread {
 	 */
 	private boolean isSwitch() {
 		return !driver.getCurrentUrl().startsWith(LOGIN_URL);
-	}
-	
-	/**
-	 * 切到任意直播间, 把第一次打开时的操作提示屏蔽掉
-	 */
-	private void skipUpgrapTips() {
-		driver.navigate().to(LIVE_URL);
-		
-		By upgrade = By.className("upgrade-intro-component");
-		if(WebUtils.exist(driver, upgrade)) {
-			WebElement upgrapTips = driver.findElement(upgrade);
-			WebElement skipBtn = upgrapTips.findElement(By.className("skip"));
-			skipBtn.click();
-		}
 	}
 	
 }

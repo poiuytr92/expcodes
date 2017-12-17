@@ -2,7 +2,16 @@ package exp.bilibli.plugin.envm;
 
 
 
-
+/**
+ * <PRE>
+ * B站Json交互报文字段属性
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class BiliCmdAtrbt {
 
 	public final static String cmd = "cmd";

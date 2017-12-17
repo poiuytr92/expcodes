@@ -24,6 +24,16 @@ import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
 
+/**
+ * <PRE>
+ * 主应用程序窗口
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class AppUI extends MainWindow {
 
 	/** serialVersionUID */
@@ -60,6 +70,8 @@ public class AppUI extends MainWindow {
 	private LotteryUI lotteryUI;
 	
 	private QrcodeUI qrcodeUI;
+	
+	private boolean isRunning;
 	
 	private static volatile AppUI instance;
 	
@@ -107,6 +119,8 @@ public class AppUI extends MainWindow {
 		this.wsClient = new WebSockClient();
 		this.lotteryUI = new LotteryUI();
 		this.qrcodeUI = new QrcodeUI();
+		
+		this.isRunning = false;
 	}
 
 	@Override
@@ -192,6 +206,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				isRunning = true;
 				int roomId = NumUtils.toInt(ridTF.getText().trim(), 0);
 				roomId = RoomMgr.getInstn().getRealRoomId(roomId);
 				if(roomId <= 0) {
@@ -217,6 +232,8 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				isRunning = true;
+				
 				lotteryUI.refreshUsers();
 				lotteryUI._view();
 				ThreadUtils.tSleep(500);	// 避免连续点击
@@ -228,6 +245,7 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				isRunning = true;
 				qrcodeUI._view();
 				
 				if(LoginMgr.getInstn().isRun() == false) {
@@ -244,13 +262,18 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void beforeExit() {
+		if(isRunning == false) {
+			return;	// 避免没有启动过浏览器直接关闭时, 也会把浏览器先打开再关闭
+		}
+		
 		wsClient._stop();
 		lotteryUI.clear();
 		
-		LoginMgr.getInstn()._stop();	// FIXME: 没有启动时也会把浏览器先打开再关闭
+		LoginMgr.getInstn()._stop();	
 		LotteryMgr.getInstn()._stop();
 		BrowserMgr.getInstn().close();
 	}
+	
 	
 	public void toChat(String msg) {
 		chatTA.append(msg);
