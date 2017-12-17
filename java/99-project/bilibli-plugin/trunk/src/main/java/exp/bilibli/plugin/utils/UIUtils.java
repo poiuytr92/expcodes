@@ -47,6 +47,9 @@ public class UIUtils {
 	public static void statistics(String msg) {
 		msg = StrUtils.concat(TimeUtils.getCurTime(), msg);
 		AppUI.getInstn().toStatistics(msg);
+	}
+	
+	public static void updateLotteryCnt() {
 		AppUI.getInstn().updateLotteryCnt();
 	}
 	

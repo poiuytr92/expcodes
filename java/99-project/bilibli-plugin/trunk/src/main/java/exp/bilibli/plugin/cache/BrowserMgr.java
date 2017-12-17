@@ -1,7 +1,5 @@
 package exp.bilibli.plugin.cache;
 
-import org.openqa.selenium.WebDriver;
-
 import exp.bilibli.plugin.bean.ldm.BrowserDriver;
 import exp.bilibli.plugin.envm.WebDriverType;
 
@@ -26,14 +24,14 @@ public class BrowserMgr {
 		return instance;
 	}
 	
+	public void open(String url) {
+		browser.open(url);
+	}
+	
 	public BrowserDriver getBrowser() {
 		return browser;
 	}
 
-	public WebDriver getDriver() {
-		return browser.getDriver();
-	}
-	
 	public void close() {
 		browser.close();
 	}

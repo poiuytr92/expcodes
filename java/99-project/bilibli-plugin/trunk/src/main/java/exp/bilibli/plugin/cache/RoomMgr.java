@@ -4,24 +4,23 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.io.flow.FileFlowReader;
 
 
 public class RoomMgr {
 
-	private final static String LIVE_URL_PREFIX = "http://live.bilibili.com/";
-	
 	private final static String ROOM_ID_PATH = "./data/room/roomids.dat";
 	
 	/**
 	 * 房间号（前端用）到 真实房号（后台用）的映射
 	 * real_room_id/room_id -> real_room_id
+	 * 
+	 * 连接websocket后台只能用real_room_id,
+	 * room_id 是签约主播才有的房间号, 若通过real_room_id打开页面，会自动修正为room_id
 	 */
 	private Map<Integer, Integer> realRoomIds;
 	
@@ -49,17 +48,14 @@ public class RoomMgr {
 	
 	public void add(String roomId) {
 		roomIds.add(roomId);
-		
-		// FIXME 连续抽奖合并
-		UIUtils.statistics("已参与直播间 [", roomId, "] 的抽奖.");
 	}
 	
 	public String get() {
-		return StrUtils.concat(LIVE_URL_PREFIX, roomIds.get());
+		return roomIds.getQuickly();
 	}
 	
-	public int size() {
-		return roomIds.size();
+	public void clear() {
+		roomIds.clear();
 	}
 	
 	public void add(String roomId, String readRoomId) {

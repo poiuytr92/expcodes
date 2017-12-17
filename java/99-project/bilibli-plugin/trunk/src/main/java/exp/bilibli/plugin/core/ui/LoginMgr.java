@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.cache.BrowserMgr;
+import exp.bilibli.plugin.utils.WebUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ObjUtils;
@@ -34,6 +35,9 @@ class LoginMgr extends LoopThread {
 	/** B站主页 */
 	private final static String HOME_URL = "https://www.bilibili.com/";
 	
+	/** 任意直播间地址 */
+	private final static String LIVE_URL = "http://live.bilibili.com/438";
+	
 	private final static String COOKIE_DIR = "./data/cookies";
 	
 	protected final static String IMG_DIR = "./data/img";
@@ -57,7 +61,7 @@ class LoginMgr extends LoopThread {
 	
 	private LoginMgr() {
 		super("登陆二维码刷新器");
-		this.driver = BrowserMgr.getInstn().getDriver();
+		this.driver = BrowserMgr.getInstn().getBrowser().getDriver();
 		this.loopCnt = LOOP_CNT;
 		this.isLogined = false;
 	}
@@ -111,19 +115,17 @@ class LoginMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		AppUI.getInstn().disableLogin();
-		saveCookies();
+		AppUI.getInstn().markLogin();	// 在界面标记已登陆
+		saveCookies();	// 保存最后一次登录的cookies
 		log.info("{} 已停止", getName());
 	}
 	
 	private boolean loginByCookies() {
-		boolean isOk = false;
 		if(FileUtils.isEmpty(COOKIE_DIR)) {
-			return isOk;
+			return false;
 		}
 		driver.manage().deleteAllCookies();
 		
-		isOk = true;
 		File dir = new File(COOKIE_DIR);
 		File[] files = dir.listFiles();
 		for(File file : files) {
@@ -133,15 +135,9 @@ class LoginMgr extends LoopThread {
 				
 			} catch(Exception e) {
 				log.error("加载cookie失败: {}", file.getPath(), e);
-				isOk = false;
-				break;
 			}
 		}
-		
-		if(isOk == true) {
-			isOk = checkIsLogin();
-		}
-		return isOk;
+		return checkIsLogin();
 	}
 	
 	private boolean downloadQrcode() {
@@ -183,6 +179,20 @@ class LoginMgr extends LoopThread {
 	 */
 	private boolean isSwitch() {
 		return !driver.getCurrentUrl().startsWith(LOGIN_URL);
+	}
+	
+	/**
+	 * 切到任意直播间, 把第一次打开时的操作提示屏蔽掉
+	 */
+	private void skipUpgrapTips() {
+		driver.navigate().to(LIVE_URL);
+		
+		By upgrade = By.className("upgrade-intro-component");
+		if(WebUtils.exist(driver, upgrade)) {
+			WebElement upgrapTips = driver.findElement(upgrade);
+			WebElement skipBtn = upgrapTips.findElement(By.className("skip"));
+			skipBtn.click();
+		}
 	}
 	
 }

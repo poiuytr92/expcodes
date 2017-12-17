@@ -6,8 +6,10 @@ import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeDriverService;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import exp.bilibli.plugin.envm.WebDriverType;
@@ -39,10 +41,10 @@ final public class BrowserDriver {
 	private void initProperty() {
 		String property = "";
 		if(WebDriverType.PHANTOMJS == type) {
-			property = "phantomjs.binary.path";
+			property = PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY;
 			
 		} else if(WebDriverType.CHROME == type) {
-			property = "webdriver.chrome.driver";
+			property = ChromeDriverService.CHROME_DRIVER_EXE_PROPERTY;
 			
 		} else {
 			// Undo
@@ -70,14 +72,14 @@ final public class BrowserDriver {
 		DesiredCapabilities capabilities = null;
 		
 		if(WebDriverType.PHANTOMJS == type) {
+			final String PAGE_SETTINGS = PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX;
 			capabilities = DesiredCapabilities.phantomjs();
 			capabilities.setJavascriptEnabled(true);
-			capabilities.setCapability("XSSAuditingEnabled", true);
-			capabilities.setCapability("loadImages", false);
-			capabilities.setCapability("localToRemoteUrlAccessEnabled", true);
-			
-			// 假装是谷歌，避免被反爬
-			capabilities.setCapability("userAgent", "Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36");
+			capabilities.setCapability(PAGE_SETTINGS.concat("XSSAuditingEnabled"), true);
+			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), false);
+			capabilities.setCapability(PAGE_SETTINGS.concat("localToRemoteUrlAccessEnabled"), true);
+			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), // 假装是谷歌，避免被反爬   （浏览器头可以用Fiddler抓包抓到）
+					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
 			
 		} else if(WebDriverType.CHROME == type) {
 			Map<String, Object> defaultContentSettings = new HashMap<String, Object>();

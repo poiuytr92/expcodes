@@ -1,6 +1,7 @@
 package exp.bilibli.plugin.core.ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,6 +15,7 @@ import javax.swing.JTextField;
 import exp.bilibli.plugin.cache.BrowserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.gift.WebSockClient;
+import exp.bilibli.plugin.core.lottery.LotteryMgr;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -78,20 +80,20 @@ public class AppUI extends MainWindow {
 	protected void initComponents(Object... args) {
 		this.httpTF = new JTextField("http://live.bilibili.com/");
 		this.ridTF = new JTextField("438", 15);
-		
-		// FIXME 暂时不允许修改，似乎每个直播间的请求信息都不一样
 		httpTF.setEditable(false);
-		ridTF.setEditable(false);
+		ridTF.setEditable(false);	// FIXME 暂时不允许修改，似乎每个直播间的请求信息都不一样
 		
 		this.linkBtn = new JButton("连接直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("发起抽奖");
 		this.loginBtn = new JButton("扫码登陆 (可自动刷抽奖礼物)");
+		linkBtn.setForeground(Color.BLACK);
+		lotteryBtn.setForeground(Color.BLACK);
+		loginBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
-		this.consoleTA = new JTextArea(6, 10);
+		this.consoleTA = new JTextArea(8, 10);
 		this.notifyTA = new JTextArea(1, 40);
-		this.sttcTA = new JTextArea(5, 40);
-		
+		this.sttcTA = new JTextArea(7, 40);
 		chatTA.setEditable(false);
 		consoleTA.setEditable(false);
 		notifyTA.setEditable(false);
@@ -99,6 +101,7 @@ public class AppUI extends MainWindow {
 		
 		this.lotteryCnt = 0;
 		this.lotteryLabel = new JLabel(" 00000 ");
+		lotteryLabel.setForeground(Color.RED);
 		
 		this.wsClient = new WebSockClient();
 		this.qrcodeUI = new QrcodeUI();
@@ -202,7 +205,7 @@ public class AppUI extends MainWindow {
 					wsClient.relink(roomId);
 				}
 				
-				ThreadUtils.tSleep(500);
+				ThreadUtils.tSleep(1000);
 			}
 		});
 		
@@ -229,6 +232,7 @@ public class AppUI extends MainWindow {
 	protected void beforeExit() {
 		wsClient._stop();
 		LoginMgr.getInstn()._stop();
+		LotteryMgr.getInstn()._stop();
 		BrowserMgr.getInstn().close();	// FIXME: planjs浏览器进程不会自动退出
 	}
 	
@@ -250,6 +254,7 @@ public class AppUI extends MainWindow {
 		SwingUtils.toEnd(notifyTA);
 	}
 	
+	// FIXME: 添加失败次数
 	public void toStatistics(String msg) {
 		if(!loginBtn.isEnabled()) {	// 登陆按钮被禁用, 说明登陆成功
 			sttcTA.append(msg);
@@ -274,12 +279,20 @@ public class AppUI extends MainWindow {
 		qrcodeUI.updateTime(time);
 	}
 	
-	protected void disableLogin() {
+	/**
+	 * 标记已登陆成功
+	 */
+	protected void markLogin() {
 		loginBtn.setEnabled(false);
 		qrcodeUI._hide();
+		LotteryMgr.getInstn()._start();
 		
 		UIUtils.log("登陆成功 (仅首次登陆需要扫码)");
 		SwingUtils.info("登陆成功 (仅首次登陆需要扫码)");
+	}
+	
+	private String getUrl() {
+		return StrUtils.concat(httpTF.getText(), ridTF.getText());
 	}
 	
 }
