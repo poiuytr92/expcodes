@@ -9,6 +9,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.BrowserMgr;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -32,14 +33,11 @@ class LoginMgr extends LoopThread {
 	private final static Logger log = LoggerFactory.getLogger(LoginMgr.class);
 	
 	/** B站登陆页面 */
-	private final static String LOGIN_URL = "https://passport.bilibili.com/login";
+	private final static String LOGIN_URL = Config.getInstn().LOGIN_URL();
 	
-	/** B站主页 */
-	private final static String HOME_URL = "https://www.bilibili.com/";
+	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
-	private final static String COOKIE_DIR = "./data/cookies";
-	
-	protected final static String IMG_DIR = "./data/img";
+	protected final static String IMG_DIR = Config.getInstn().IMG_DIR();
 	
 	protected final static String IMG_NAME = "qrcode";
 	

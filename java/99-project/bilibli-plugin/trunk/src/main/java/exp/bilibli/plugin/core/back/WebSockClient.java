@@ -7,6 +7,7 @@ import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.ldm.Frame;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -28,9 +29,7 @@ public class WebSockClient extends LoopThread {
 	
 	private final static int DEFAULT_ROOM_ID = 390480;
 	
-	// FIXME 可配
-	private final static String WS_URL = 
-			"ws://broadcastlv.chat.bilibili.com:2244/sub";
+	private final static String WS_URL = Config.getInstn().WS_URL();
 	
 	private final static Draft DRAFT = new Draft_6455();
 	

@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import exp.bilibli.plugin.Config;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
@@ -23,10 +24,8 @@ import exp.libs.warp.io.flow.FileFlowReader;
  */
 public class RoomMgr {
 
-	/**
-	 * 记录房间号（前端用）到 真实房号（后台用）的映射
-	 */
-	private final static String ROOM_ID_PATH = "./data/room/roomids.dat";
+	/** 记录房间号（前端用）到 真实房号（后台用）的映射 */
+	private final static String ROOM_PATH = Config.getInstn().ROOM_PATH();
 	
 	/**
 	 * 房间号（前端用）到 真实房号（后台用）的映射
@@ -148,7 +147,7 @@ public class RoomMgr {
 	 * 从外存读取真实房号记录
 	 */
 	private void readRoomIds() {
-		FileFlowReader ffr = new FileFlowReader(ROOM_ID_PATH, Charset.ISO);
+		FileFlowReader ffr = new FileFlowReader(ROOM_PATH, Charset.ISO);
 		while(ffr.hasNextLine()) {
 			String line = ffr.readLine().trim();
 			String[] kv = line.split("=");
@@ -169,7 +168,7 @@ public class RoomMgr {
 			Integer val = realRoomIds.get(key);
 			sb.append(key).append("=").append(val).append("\r\n");
 		}
-		FileUtils.write(ROOM_ID_PATH, sb.toString(), Charset.ISO, false);
+		FileUtils.write(ROOM_PATH, sb.toString(), Charset.ISO, false);
 	}
 	
 }

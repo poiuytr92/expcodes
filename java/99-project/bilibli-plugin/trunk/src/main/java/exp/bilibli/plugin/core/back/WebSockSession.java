@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 import exp.bilibli.plugin.bean.ldm.Frame;
 import exp.bilibli.plugin.envm.Binary;
 import exp.bilibli.plugin.utils.UIUtils;
+import exp.libs.envm.Charset;
+import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -121,7 +123,7 @@ class WebSockSession extends WebSocketClient {
 			UIUtils.log("入侵直播间成功, 正在暗中观察...");
 			
 		} else {
-			String msg = new String(buff);
+			String msg = CharsetUtils.toStr(buff, Charset.UTF8);
 			String sJson = RegexUtils.findFirst(msg, RGX_JSON);
 			
 			if(JsonUtils.isVaild(sJson)) {

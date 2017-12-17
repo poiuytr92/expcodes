@@ -1,5 +1,6 @@
 package exp.bilibli.plugin.cache;
 
+import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.ldm.BrowserDriver;
 import exp.bilibli.plugin.envm.WebDriverType;
 
@@ -15,15 +16,13 @@ import exp.bilibli.plugin.envm.WebDriverType;
  */
 public class BrowserMgr {
 
-	// FIXME: 配置文件设置等待时间
-	private final static long WAIT_ELEMENT_TIME = 10;
-	
 	private BrowserDriver browser;
 	
 	private static volatile BrowserMgr instance;
 	
 	private BrowserMgr() {
-		this.browser = new BrowserDriver(WebDriverType.PHANTOMJS, WAIT_ELEMENT_TIME);
+		this.browser = new BrowserDriver(WebDriverType.PHANTOMJS, 
+				Config.getInstn().WAIT_ELEMENT_TIME());
 	}
 	
 	public static BrowserMgr getInstn() {

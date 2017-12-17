@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import exp.bilibli.plugin.Config;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
@@ -29,7 +30,7 @@ class QrcodeUI extends PopChildWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = 3032128610929327304L;
 
-	private final static String TIPS_PATH = LoginMgr.IMG_DIR.concat("/tips.png");
+	private final static String TIPS_PATH = Config.getInstn().IMG_DIR().concat("/tips.png");
 	
 	private static final int WIDTH = 300;
 	

@@ -1,5 +1,6 @@
 package exp.bilibli.plugin.envm;
 
+import exp.bilibli.plugin.Config;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -14,7 +15,7 @@ import exp.libs.utils.other.StrUtils;
  */
 public class WebDriverType {
 
-	private final static String DRIVER_DIR = "./data/driver/";
+	private final static String DRIVER_DIR = Config.getInstn().DRIVER_DIR();
 	
 	// JS属于内存浏览器，对JQuery支持不好
 	private final static String PhantomJS = "phantomjs-driver.exe";

@@ -28,20 +28,20 @@ import exp.libs.utils.other.StrUtils;
  */
 final public class BrowserDriver {
 
-	private final static long WAIT_ELEMENT_TIME = 5;
+	private final static long DEFAULT_WAIT_ELEMENT_TIME = 5;
 	
 	private WebDriverType type;
 	
 	private WebDriver webDriver;
 	
 	public BrowserDriver(WebDriverType type) {
-		this(type, WAIT_ELEMENT_TIME);
+		this(type, DEFAULT_WAIT_ELEMENT_TIME);
 	}
 	
 	public BrowserDriver(WebDriverType type, long waitElementSecond) {
 		this.type = type;
 		waitElementSecond = (waitElementSecond <= 0 ? 
-				WAIT_ELEMENT_TIME : waitElementSecond);
+				DEFAULT_WAIT_ELEMENT_TIME : waitElementSecond);
 		
 		initProperty();
 		initWebDriver();

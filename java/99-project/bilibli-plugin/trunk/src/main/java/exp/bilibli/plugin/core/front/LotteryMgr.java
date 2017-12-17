@@ -7,6 +7,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.BrowserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.utils.UIUtils;
@@ -28,7 +29,7 @@ class LotteryMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(LotteryMgr.class);
 	
-	private final static String LIVE_URL_PREFIX = "http://live.bilibili.com/";
+	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
 	
 	private final static long SLEEP_TIME = 1000;
 	
@@ -68,7 +69,7 @@ class LotteryMgr extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		driver.navigate().to(LIVE_URL_PREFIX);
+		driver.navigate().to(LIVE_URL);
 		RoomMgr.getInstn().clearGiftRooms();
 	}
 
@@ -86,7 +87,7 @@ class LotteryMgr extends LoopThread {
 			
 		// 若上一次的抽奖也是同样的房间, 则不再切换页面（以优化连续抽奖的情况）
 		} else {
-			String url = StrUtils.concat(LIVE_URL_PREFIX, roomId);
+			String url = StrUtils.concat(LIVE_URL, roomId);
 			driver.navigate().to(url);
 			_sleep(SLEEP_TIME);
 			log.info("参与直播间 [{}] 抽奖{}", roomId, 
