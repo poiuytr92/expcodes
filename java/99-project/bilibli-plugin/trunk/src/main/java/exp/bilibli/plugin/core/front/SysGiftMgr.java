@@ -137,9 +137,6 @@ class SysGiftMgr extends LoopThread {
 	}
 	
 	private boolean _lottery() {
-		log.info("cookies:{}", Browser.backupCookies().size());
-		Browser.screenshot("./log/lbox.png");
-		
 		boolean isOk = false;
 		WebElement vm = Browser.findElement(By.id("chat-popup-area-vm"));
 		By element = By.className("lottery-box");

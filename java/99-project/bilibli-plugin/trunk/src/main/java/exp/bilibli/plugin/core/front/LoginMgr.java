@@ -1,10 +1,6 @@
 package exp.bilibli.plugin.core.front;
 
-import java.io.File;
-import java.util.Set;
-
 import org.openqa.selenium.By;
-import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +9,6 @@ import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.ObjUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpUtils;
 import exp.libs.warp.thread.LoopThread;
 
@@ -46,7 +40,7 @@ class LoginMgr extends LoopThread {
 	
 	private final static long LOOP_TIME = 1000;
 	
-	private final static int LOOP_CNT = (int) (UPDATE_TIME / LOOP_TIME);
+	private final static int LOOP_LIMIT = (int) (UPDATE_TIME / LOOP_TIME);
 	
 	private int loopCnt;
 	
@@ -56,7 +50,7 @@ class LoginMgr extends LoopThread {
 	
 	private LoginMgr() {
 		super("登陆二维码刷新器");
-		this.loopCnt = LOOP_CNT;
+		this.loopCnt = LOOP_LIMIT;
 		this.isLogined = false;
 	}
 	
@@ -92,7 +86,7 @@ class LoginMgr extends LoopThread {
 		} else {
 			
 			// 在二维码失效前更新
-			if(loopCnt >= LOOP_CNT) {
+			if(loopCnt >= LOOP_LIMIT) {
 				if(downloadQrcode()) {
 					loopCnt = 0;
 					AppUI.getInstn().updateQrcode();
@@ -103,7 +97,7 @@ class LoginMgr extends LoopThread {
 			isLogined = isSwitch();
 		}
 		
-		AppUI.getInstn().updateQrcodeTime(LOOP_CNT - (loopCnt++));
+		AppUI.getInstn().updateQrcodeTime(LOOP_LIMIT - (loopCnt++));
 		_sleep(LOOP_TIME);
 	}
 
@@ -116,6 +110,9 @@ class LoginMgr extends LoopThread {
 		log.info("{} 已停止", getName());
 	}
 	
+	public static void main(String[] args) {
+		LoginMgr.getInstn()._start();
+	}
 	/**
 	 * 从外存读取上次登陆成功的cookies
 	 * @return
@@ -125,13 +122,7 @@ class LoginMgr extends LoopThread {
 			return false;
 		}
 		Browser.clearCookies();
-		
-		File dir = new File(COOKIE_DIR);
-		File[] files = dir.listFiles();
-		for(File file : files) {
-			Cookie cookie = (Cookie) ObjUtils.unSerializable(file.getPath());
-			Browser.addCookie(cookie);
-		}
+		Browser.recoveryCookies();
 		return checkIsLogin();
 	}
 	
@@ -157,13 +148,7 @@ class LoginMgr extends LoopThread {
 	 */
 	private void saveCookies() {
 		if(isLogined == true) {
-			int idx = 0;
-			Set<Cookie> cookies = Browser.backupCookies();
-			for(Cookie cookie : cookies) {
-				String sIDX = StrUtils.leftPad(String.valueOf(idx++), '0', 2);
-				String savePath = StrUtils.concat(COOKIE_DIR, "/cookie-", sIDX, ".dat");
-				ObjUtils.toSerializable(cookie, savePath);
-			}
+			Browser.backupCookies();
 		}
 	}
 	

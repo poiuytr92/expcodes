@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import exp.bilibli.plugin.Config;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
@@ -30,6 +31,8 @@ class QrcodeUI extends PopChildWindow {
 	/** serialVersionUID */
 	private final static long serialVersionUID = 3032128610929327304L;
 
+	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
+	
 	private final static String TIPS_PATH = Config.getInstn().IMG_DIR().concat("/tips.png");
 	
 	private final static int WIDTH = 300;
@@ -47,7 +50,8 @@ class QrcodeUI extends PopChildWindow {
 	@Override
 	protected void initComponents(Object... args) {
 		this.imgLabel = new JLabel(new ImageIcon(TIPS_PATH));
-		this.timeLabel = new JLabel("正在更新二维码...");
+		this.timeLabel = new JLabel(FileUtils.isEmpty(COOKIE_DIR) ? 
+				"正在更新二维码..." : "正在尝试自动登录...");
 		timeLabel.setForeground(Color.RED);
 	}
 

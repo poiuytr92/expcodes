@@ -1,6 +1,6 @@
 package exp.bilibli.plugin.cache;
 
-import java.util.HashSet;
+import java.io.File;
 import java.util.Set;
 
 import org.openqa.selenium.By;
@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.ldm.BrowserDriver;
 import exp.bilibli.plugin.envm.WebDriverType;
+import exp.libs.utils.other.ObjUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -23,6 +25,8 @@ import exp.bilibli.plugin.envm.WebDriverType;
  */
 public class Browser {
 
+	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
+	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
 	
 	private BrowserDriver browser;
@@ -94,7 +98,6 @@ public class Browser {
 	 */
 	private void _quit() {
 		if(browser != null) {
-			backupCookies();
 			browser.quit();
 			browser = null;
 		}
@@ -126,12 +129,20 @@ public class Browser {
 		return (browser == null ? false : browser.addCookie(cookie));
 	}
 	
-	public static Set<Cookie> backupCookies() {
-		return INSTN()._backupCookies();
+	public static void backupCookies() {
+		INSTN()._backupCookies();
 	}
 	
-	private Set<Cookie> _backupCookies() {
-		return (browser == null ? new HashSet<Cookie>() : browser.backupCookies());
+	private void _backupCookies() {
+		if(browser != null) {
+			int idx = 0;
+			Set<Cookie> cookies = browser.getCookies();
+			for(Cookie cookie : cookies) {
+				String sIDX = StrUtils.leftPad(String.valueOf(idx++), '0', 2);
+				String savePath = StrUtils.concat(COOKIE_DIR, "/cookie-", sIDX, ".dat");
+				ObjUtils.toSerializable(cookie, savePath);
+			}
+		}
 	}
 	
 	public static int recoveryCookies() {
@@ -139,7 +150,18 @@ public class Browser {
 	}
 	
 	private int _recoveryCookies() {
-		return (browser == null ? 0 : browser.recoveryCookies());
+		int cnt = 0;
+		if(browser != null) {
+			File dir = new File(COOKIE_DIR);
+			File[] files = dir.listFiles();
+			for(File file : files) {
+				try {
+					Cookie cookie = (Cookie) ObjUtils.unSerializable(file.getPath());
+					cnt += (browser.addCookie(cookie) ? 1 : 0);
+				} catch(Throwable e) {}
+			}
+		}
+		return cnt;
 	}
 	
 	public static boolean existElement(By by) {
