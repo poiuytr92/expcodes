@@ -270,7 +270,7 @@ public class AppUI extends MainWindow {
 		lotteryUI.clear();
 		
 		LoginMgr.getInstn()._stop();	
-		LotteryMgr.getInstn()._stop();
+		SysGiftMgr.getInstn()._stop();
 		BrowserMgr.getInstn().quit();
 	}
 	
@@ -323,7 +323,7 @@ public class AppUI extends MainWindow {
 	protected void markLogin() {
 		loginBtn.setEnabled(false);
 		qrcodeUI._hide();
-		LotteryMgr.getInstn()._start();
+		SysGiftMgr.getInstn()._start();
 		
 		UIUtils.log("登陆成功 (仅首次登陆需要扫码)");
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");

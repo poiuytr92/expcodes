@@ -17,7 +17,7 @@ import exp.libs.warp.thread.LoopThread;
 
 /**
  * <PRE>
- * 全平台抽奖管理器（小电视/高能礼物）
+ * 全平台礼物抽奖管理器（小电视/高能礼物）
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -25,9 +25,9 @@ import exp.libs.warp.thread.LoopThread;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class LotteryMgr extends LoopThread {
+class SysGiftMgr extends LoopThread {
 
-	private final static Logger log = LoggerFactory.getLogger(LotteryMgr.class);
+	private final static Logger log = LoggerFactory.getLogger(SysGiftMgr.class);
 	
 	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
 	
@@ -48,20 +48,20 @@ class LotteryMgr extends LoopThread {
 	
 	private Actions action;
 	
-	private static volatile LotteryMgr instance;
+	private static volatile SysGiftMgr instance;
 	
-	private LotteryMgr() {
+	private SysGiftMgr() {
 		super("自动抽奖姬");
 		this.driver = BrowserMgr.getInstn().getBrowser().getDriver();
 		this.action = new Actions(driver);
 		this.loopCnt = 0;
 	}
 	
-	protected static LotteryMgr getInstn() {
+	protected static SysGiftMgr getInstn() {
 		if(instance == null) {
-			synchronized (LotteryMgr.class) {
+			synchronized (SysGiftMgr.class) {
 				if(instance == null) {
-					instance = new LotteryMgr();
+					instance = new SysGiftMgr();
 				}
 			}
 		}
