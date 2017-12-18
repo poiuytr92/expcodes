@@ -13,6 +13,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import exp.bilibli.plugin.cache.Browser;
+import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.WebSockClient;
@@ -113,7 +114,7 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.chatTF = new JTextField();
+		this.chatTF = new JTextField("限制长度");
 		this.httpTF = new JTextField("http://live.bilibili.com/");
 		this.ridTF = new JTextField("438", 15);
 		httpTF.setEditable(false);
@@ -291,7 +292,19 @@ public class AppUI extends MainWindow {
 					UIUtils.log("正在下载登陆二维码, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
 				}
 			}
+		});
+		
+		
+		sendBtn.addActionListener(new ActionListener() {
 			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String msg = chatTF.getText();
+				if(StrUtils.isNotEmpty(msg)) {
+					ChatMgr.getInstn().addMsg(msg);
+					chatTF.setText("");
+				}
+			}
 		});
 	}
 	

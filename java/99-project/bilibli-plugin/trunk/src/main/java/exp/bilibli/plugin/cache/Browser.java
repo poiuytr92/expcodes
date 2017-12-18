@@ -28,6 +28,8 @@ public class Browser {
 
 	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
+	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
+	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
 	
 	private BrowserDriver browser;
@@ -237,6 +239,39 @@ public class Browser {
 		if(browser != null) {
 			browser.screenshot(imgPath);
 		}
+	}
+	
+	public static boolean toLiveChat(String msg) {
+		return INSTN()._toLiveChat(msg);
+	}
+	
+	/**
+	 * 向直播间发送一条消息
+	 * @param msg 消息
+	 * @return 是否发送成功
+	 */
+	private boolean _toLiveChat(String msg) {
+		boolean isOk = false;
+		if(browser == null || !browser.getCurURL().startsWith(LIVE_URL)) {
+			return isOk;
+		}
+		
+		WebElement ctrl = Browser.findElement(By.className("chat-control-panel-vm"));
+		if(ctrl != null) {
+			isOk = true;
+			
+			WebElement input = ctrl.findElement(By.className("chat-input-ctnr"));
+			WebElement textarea = input.findElement(By.tagName("textarea"));
+			textarea.sendKeys(msg);
+			
+			
+			Browser.screenshot("./log.33.png");
+			
+//			WebElement button = ctrl.findElement(By.className("bottom-actions"));
+//			WebElement btn = button.findElement(By.tagName("button"));
+//			Browser.click(btn);
+		}
+		return isOk;
 	}
 	
 }

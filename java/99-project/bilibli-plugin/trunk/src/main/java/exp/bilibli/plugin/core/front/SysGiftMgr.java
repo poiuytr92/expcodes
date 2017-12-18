@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
+import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.other.StrUtils;
@@ -89,10 +90,14 @@ class SysGiftMgr extends LoopThread {
 	}
 	
 	private void toLottery(String roomId) {
-		
-		// 长时间无抽奖, 关闭页面, 释放缓存
 		if(roomId == null) {
-			if(loopCnt++ >= LOOP_LIMIT) {
+			
+			// 利用抽奖的闲暇时间发言
+			String msg = ChatMgr.getInstn().getMsg();
+			if(msg != null) {
+				sendMsgToLive(msg);
+				
+			} else if(loopCnt++ >= LOOP_LIMIT) {
 				loopCnt = 0;
 				log.info("{} 活动中...", getName());
 				Browser.close(); // 长时间无抽奖，则关闭当前页面(若是最后一个页面则会退出浏览器)
@@ -118,6 +123,14 @@ class SysGiftMgr extends LoopThread {
 		}
 	}
 	
+	private void sendMsgToLive(String msg) {
+		String liveUrl = AppUI.getInstn().getLiveUrl();
+		if(!liveUrl.equals(Browser.getCurURL())) {
+			Browser.open(liveUrl);
+		}
+		Browser.toLiveChat(msg);
+	}
+
 	private boolean lottery(String roomId) {
 		boolean isOk = false;
 		try {
