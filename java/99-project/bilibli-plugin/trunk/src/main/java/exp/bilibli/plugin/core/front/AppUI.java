@@ -122,8 +122,8 @@ public class AppUI extends MainWindow {
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.loginBtn = new JButton("扫码登陆 (可自动参与全平台抽奖)");
 		this.sendBtn = new JButton("发言");
-		this.thxBtn = new JButton("自动答谢");
-		this.nightBtn = new JButton("自动晚安");
+		this.thxBtn = new JButton("答谢姬");
+		this.nightBtn = new JButton("晚安姬");
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
