@@ -1,17 +1,14 @@
 package exp.bilibli.plugin.core.front;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.Config;
-import exp.bilibli.plugin.cache.BrowserMgr;
+import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.utils.UIUtils;
-import exp.bilibli.plugin.utils.WebUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
 
@@ -42,19 +39,18 @@ class SysGiftMgr extends LoopThread {
 	
 	private final static int LOOP_LIMIT = (int) (REFRESH_TIME / LOOP_TIME);
 	
+	private final static int LOTTERY_LIMIT = Config.getInstn().CLEAR_CACHE_CYCLE();
+	
 	private int loopCnt;
 	
-	private WebDriver driver;
-	
-	private Actions action;
+	private int lotteryCnt;
 	
 	private static volatile SysGiftMgr instance;
 	
 	private SysGiftMgr() {
 		super("自动抽奖姬");
-		this.driver = BrowserMgr.getInstn().getBrowser().getDriver();
-		this.action = new Actions(driver);
 		this.loopCnt = 0;
+		this.lotteryCnt = 0;
 	}
 	
 	protected static SysGiftMgr getInstn() {
@@ -71,7 +67,7 @@ class SysGiftMgr extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		driver.navigate().to(HOME_URL);
+		Browser.open(HOME_URL);
 		RoomMgr.getInstn().clearGiftRooms();
 	}
 
@@ -83,10 +79,7 @@ class SysGiftMgr extends LoopThread {
 			
 		} catch(Exception e) {
 			log.error("在直播间 [{}] 抽奖异常", roomId, e);
-			
-			// 重开浏览器
-			driver = BrowserMgr.getInstn().reCreate(false).getDriver();
-			driver.navigate().to(HOME_URL);
+			Browser.reset(false);	// 重启浏览器
 		}
 		_sleep(SLEEP_TIME);	// 避免连续抽奖时，过频点击导致页面抽奖器无反应
 	}
@@ -98,22 +91,29 @@ class SysGiftMgr extends LoopThread {
 	
 	private void toLottery(String roomId) {
 		
-		// 保持页面一段时间后刷新, 避免被管理器终止进程
+		// 长时间无抽奖, 关闭页面, 释放缓存
 		if(roomId == null) {
 			if(loopCnt++ >= LOOP_LIMIT) {
 				loopCnt = 0;
-				driver.navigate().refresh();
-				log.info("页面心跳保活...");
+				log.info("{} 活动中...", getName());
+				Browser.quit();
 			}
 			
-		// 若上一次的抽奖也是同样的房间, 则不再切换页面（以优化连续抽奖的情况）
+		// 打开直播间抽奖
 		} else {
 			String url = StrUtils.concat(LIVE_URL, roomId);
-			driver.navigate().to(url);
+			Browser.open(url);	// 打开直播间
 			_sleep(SLEEP_TIME);
-			log.info("参与直播间 [{}] 抽奖{}", roomId, 
-					(lottery(roomId) ? "成功" : "失败"));
-			driver.navigate().to(HOME_URL);	// 马上跳回去首页, 避免接收太多直播间数据
+			log.info("参与直播间 [{}] 抽奖{}", roomId, (lottery(roomId) ? "成功" : "失败"));
+			
+			if(lotteryCnt++ >= LOTTERY_LIMIT) {
+				lotteryCnt = 0;
+				Browser.quit();	// 连续抽奖超过一定次数, 关闭浏览器释放缓存
+				UIUtils.log("已释放无效的内存空间");
+				
+			} else {
+				Browser.open(HOME_URL);	// 马上跳回去首页, 避免接收太多直播间数据
+			}
 		}
 	}
 	
@@ -130,21 +130,26 @@ class SysGiftMgr extends LoopThread {
 			}
 			
 		} catch(Throwable e) {
-			UIUtils.statistics("辣鸡服务器poorguy了: 抽奖直播间 [", roomId, "] ");
+			UIUtils.statistics("挤不进去: 抽奖直播间 [", roomId, "] ");
+			UIUtils.log("辣鸡B站炸了, 正在重连...");
 		}
 		return isOk;
 	}
 	
 	private boolean _lottery() {
+		log.info("cookies:{}", Browser.backupCookies().size());
+		Browser.screenshot("./log/lbox.png");
+		
 		boolean isOk = false;
-		WebElement vm = driver.findElement(By.id("chat-popup-area-vm"));
+		WebElement vm = Browser.findElement(By.id("chat-popup-area-vm"));
 		By element = By.className("lottery-box");
-		if(WebUtils.exist(driver, element)) {
+		if(Browser.existElement(element)) {
 			WebElement lotteryBox = vm.findElement(element);
 			WebElement rst = lotteryBox.findElement(By.className("next-loading"));
 			
 			isOk = _clickArea(lotteryBox, rst);
 			if(isOk == false) {	// 重试一次
+				_sleep(SLEEP_TIME);
 				isOk = _clickArea(lotteryBox, rst);
 			}
 		}
@@ -158,7 +163,7 @@ class SysGiftMgr extends LoopThread {
 	 * @return
 	 */
 	private boolean _clickArea(WebElement lotteryBox, WebElement rst) {
-		action.click(lotteryBox).perform();	// 点击并提交（抽奖）
+		Browser.click(lotteryBox);	// 点击抽奖
 		_sleep(SLEEP_TIME);	// 等待抽奖结果
 		return rst.getText().contains("参与成功");
 	}

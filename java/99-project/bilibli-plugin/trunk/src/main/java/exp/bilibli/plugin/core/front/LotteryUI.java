@@ -32,15 +32,15 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  */
 class LotteryUI extends PopChildWindow {
 
-	private static final long serialVersionUID = -4322589966897649896L;
+	private final static long serialVersionUID = -4322589966897649896L;
 
-	private static final int WIDTH = 800;
+	private final static int WIDTH = 800;
 	
-	private static final int HEIGHT = 400;
+	private final static int HEIGHT = 400;
 	
-	private static final int ROW = 10;
+	private final static int ROW = 10;
 	
-	private static final int COL = 4;
+	private final static int COL = 4;
 	
 	private List<String> users;
 	

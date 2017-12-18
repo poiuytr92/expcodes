@@ -1,18 +1,16 @@
 package exp.bilibli.plugin.core.front;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.Config;
-import exp.bilibli.plugin.cache.BrowserMgr;
+import exp.bilibli.plugin.cache.Browser;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ObjUtils;
@@ -52,15 +50,12 @@ class LoginMgr extends LoopThread {
 	
 	private int loopCnt;
 	
-	private WebDriver driver;
-	
 	private boolean isLogined;
 	
 	private static volatile LoginMgr instance;
 	
 	private LoginMgr() {
 		super("登陆二维码刷新器");
-		this.driver = BrowserMgr.getInstn().getBrowser().getDriver();
 		this.loopCnt = LOOP_CNT;
 		this.isLogined = false;
 	}
@@ -79,9 +74,9 @@ class LoginMgr extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		
-		driver.navigate().to(LOGIN_URL);	// 打开登陆页面
-		isLogined = loginByCookies();		// 轮询二维码前先尝试cookies登陆
+		Browser.reset(true);			// 使用加载图片的浏览器（首次登陆需要扫描二维码图片）
+		Browser.open(LOGIN_URL);		// 打开登陆页面
+		isLogined = loginByCookies();	// 轮询二维码前先尝试cookies登陆
 		
 		if(isLogined == false) {
 			FileUtils.delete(COOKIE_DIR);
@@ -96,7 +91,7 @@ class LoginMgr extends LoopThread {
 			
 		} else {
 			
-			// 每30秒更新一次登陆二维码
+			// 在二维码失效前更新
 			if(loopCnt >= LOOP_CNT) {
 				if(downloadQrcode()) {
 					loopCnt = 0;
@@ -114,49 +109,57 @@ class LoginMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		replaceDriver();	// 把加载图片的driver替换成不加载图片的driver
+		saveCookies();	// 保存登录成功的cookies到外存, 以备下次使用
+		Browser.reset(false);	// 重置为无需加载图片的浏览器
 		
 		AppUI.getInstn().markLogin();	// 在界面标记已登陆
-		saveCookies();	// 保存最后一次登录的cookies
 		log.info("{} 已停止", getName());
 	}
 	
+	/**
+	 * 从外存读取上次登陆成功的cookies
+	 * @return
+	 */
 	private boolean loginByCookies() {
 		if(FileUtils.isEmpty(COOKIE_DIR)) {
 			return false;
 		}
-		driver.manage().deleteAllCookies();
+		Browser.clearCookies();
 		
 		File dir = new File(COOKIE_DIR);
 		File[] files = dir.listFiles();
 		for(File file : files) {
-			try {
-				Cookie cookie = (Cookie) ObjUtils.unSerializable(file.getPath());
-				driver.manage().addCookie(cookie);
-				
-			} catch(Exception e) {
-				log.error("加载cookie失败: {}", file.getPath(), e);
-			}
+			Cookie cookie = (Cookie) ObjUtils.unSerializable(file.getPath());
+			Browser.addCookie(cookie);
 		}
 		return checkIsLogin();
 	}
 	
+	/**
+	 * 下载登陆二维码
+	 * @return
+	 */
 	private boolean downloadQrcode() {
+		boolean isOk = false;
 		log.info("正在更新登陆二维码...");
-		driver.navigate().to(LOGIN_URL);
-		WebElement img = driver.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
-		String imgUrl = img.getAttribute("src");
-		boolean isOk = HttpUtils.convertBase64Img(imgUrl, IMG_DIR, IMG_NAME);
-		log.info("更新登陆二维码{}", (isOk ? "成功, 请打开 [哔哩哔哩手机客户端] 扫码登陆..." : "失败"));
-		_sleep(LOOP_TIME * 30);
+		Browser.open(LOGIN_URL);
+		WebElement img = Browser.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
+		if(img != null) {
+			String imgUrl = img.getAttribute("src");
+			isOk = HttpUtils.convertBase64Img(imgUrl, IMG_DIR, IMG_NAME);
+			log.info("更新登陆二维码{}", (isOk ? "成功, 请打开 [哔哩哔哩手机客户端] 扫码登陆..." : "失败"));
+		}
 		return isOk;
 	}
 	
-	// 扫码登陆成功后，保存当前cookies到本地
+	/**
+	 * 保存当前cookies到本地
+	 */
 	private void saveCookies() {
 		if(isLogined == true) {
 			int idx = 0;
-			for(Cookie cookie : driver.manage().getCookies()) {
+			Set<Cookie> cookies = Browser.backupCookies();
+			for(Cookie cookie : cookies) {
 				String sIDX = StrUtils.leftPad(String.valueOf(idx++), '0', 2);
 				String savePath = StrUtils.concat(COOKIE_DIR, "/cookie-", sIDX, ".dat");
 				ObjUtils.toSerializable(cookie, savePath);
@@ -170,7 +173,7 @@ class LoginMgr extends LoopThread {
 	 * @return true: 登陆成功; false:登陆失败
 	 */
 	private boolean checkIsLogin() {
-		driver.navigate().to(LOGIN_URL);
+		Browser.open(LOGIN_URL);
 		ThreadUtils.tSleep(LOOP_TIME);	// 等待以确认是否会发生跳转
 		return isSwitch();
 	}
@@ -180,20 +183,7 @@ class LoginMgr extends LoopThread {
 	 * @return
 	 */
 	private boolean isSwitch() {
-		return !driver.getCurrentUrl().startsWith(LOGIN_URL);
-	}
-	
-	/**
-	 * 由于登陆时是需要下载二维码图片的，因此最开始的driver是加载图片的。
-	 * 登陆成功后，切换成不加载图片的driver，以后用cookies登陆
-	 */
-	private void replaceDriver() {
-		Set<Cookie> cookies = new HashSet<Cookie>(driver.manage().getCookies());
-		driver = BrowserMgr.getInstn().reCreate(false).getDriver();
-		driver.navigate().to(LOGIN_URL);
-		for(Cookie cookie : cookies) {
-			driver.manage().addCookie(cookie);
-		}
+		return !Browser.getCurURL().startsWith(LOGIN_URL);
 	}
 	
 }

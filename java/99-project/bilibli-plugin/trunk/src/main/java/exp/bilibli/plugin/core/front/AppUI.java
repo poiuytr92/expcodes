@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import exp.bilibli.plugin.cache.BrowserMgr;
+import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.WebSockClient;
@@ -37,11 +37,11 @@ import exp.libs.warp.ui.cpt.win.MainWindow;
 public class AppUI extends MainWindow {
 
 	/** serialVersionUID */
-	private static final long serialVersionUID = 2097374309672044616L;
+	private final static long serialVersionUID = 2097374309672044616L;
 
-	private static final int WIDTH = 1000;
+	private final static int WIDTH = 1000;
 	
-	private static final int HEIGHT = 600;
+	private final static int HEIGHT = 600;
 	
 	private JButton linkBtn;
 	
@@ -271,7 +271,7 @@ public class AppUI extends MainWindow {
 		
 		LoginMgr.getInstn()._stop();	
 		SysGiftMgr.getInstn()._stop();
-		BrowserMgr.getInstn().quit();
+		Browser.quit();
 	}
 	
 	

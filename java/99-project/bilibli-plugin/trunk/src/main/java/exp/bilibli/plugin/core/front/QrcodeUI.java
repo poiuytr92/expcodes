@@ -28,13 +28,13 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
 class QrcodeUI extends PopChildWindow {
 
 	/** serialVersionUID */
-	private static final long serialVersionUID = 3032128610929327304L;
+	private final static long serialVersionUID = 3032128610929327304L;
 
 	private final static String TIPS_PATH = Config.getInstn().IMG_DIR().concat("/tips.png");
 	
-	private static final int WIDTH = 300;
+	private final static int WIDTH = 300;
 	
-	private static final int HEIGHT = 320;
+	private final static int HEIGHT = 320;
 	
 	private JLabel imgLabel;
 	

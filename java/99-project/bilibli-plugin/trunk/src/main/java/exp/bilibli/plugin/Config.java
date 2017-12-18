@@ -73,5 +73,9 @@ public class Config {
 	public int WAIT_ELEMENT_TIME() {
 		return xConf.getInt("/config/app/waitElementTime");
 	}
+	
+	public int CLEAR_CACHE_CYCLE() {
+		return xConf.getInt("/config/app/clearCacheCycle");
+	}
 		
 }
