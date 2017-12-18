@@ -49,11 +49,19 @@ public class AppUI extends MainWindow {
 	
 	private JButton loginBtn;
 	
+	private JButton sendBtn;
+	
+	private JButton thxBtn;
+	
+	private JButton nightBtn;
+	
 	private JTextField httpTF;
 	
 	private JTextField ridTF;
 	
 	private JTextArea chatTA;
+	
+	private JTextField chatTF;
 	
 	private JTextArea consoleTA;
 	
@@ -105,6 +113,7 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
+		this.chatTF = new JTextField();
 		this.httpTF = new JTextField("http://live.bilibili.com/");
 		this.ridTF = new JTextField("438", 15);
 		httpTF.setEditable(false);
@@ -112,9 +121,15 @@ public class AppUI extends MainWindow {
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.loginBtn = new JButton("扫码登陆 (可自动参与全平台抽奖)");
+		this.sendBtn = new JButton("发言");
+		this.thxBtn = new JButton("自动答谢");
+		this.nightBtn = new JButton("自动晚安");
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
+		sendBtn.setForeground(Color.BLACK);
+		thxBtn.setForeground(Color.BLACK);
+		nightBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -146,7 +161,7 @@ public class AppUI extends MainWindow {
 	private JPanel getLeftPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(_getLinkPanel(), BorderLayout.NORTH);
-		panel.add(_getUserPanel(), BorderLayout.CENTER);
+		panel.add(_getLivePanel(), BorderLayout.CENTER);
 		panel.add(_getConsolePanel(), BorderLayout.SOUTH);
 		return panel;
 	}
@@ -164,10 +179,18 @@ public class AppUI extends MainWindow {
 		return panel;
 	}
 	
-	private JPanel _getUserPanel() {
+	private JPanel _getLivePanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel, "直播间信息");
 		panel.add(SwingUtils.addAutoScroll(chatTA), BorderLayout.CENTER);
+		panel.add(_getChatPanel(), BorderLayout.SOUTH);
+		return panel;
+	}
+	
+	private JPanel _getChatPanel() {
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.add(chatTF, BorderLayout.CENTER);
+		panel.add(SwingUtils.getHGridPanel(sendBtn, thxBtn, nightBtn), BorderLayout.EAST);
 		return panel;
 	}
 	
