@@ -67,7 +67,6 @@ class SysGiftMgr extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		Browser.open(HOME_URL);
 		RoomMgr.getInstn().clearGiftRooms();
 	}
 
@@ -79,7 +78,7 @@ class SysGiftMgr extends LoopThread {
 			
 		} catch(Exception e) {
 			log.error("在直播间 [{}] 抽奖异常", roomId, e);
-			Browser.reset(false);	// 重启浏览器
+			Browser.quit();
 		}
 		_sleep(SLEEP_TIME);	// 避免连续抽奖时，过频点击导致页面抽奖器无反应
 	}
@@ -102,17 +101,19 @@ class SysGiftMgr extends LoopThread {
 		// 打开直播间抽奖
 		} else {
 			String url = StrUtils.concat(LIVE_URL, roomId);
-			Browser.open(url);	// 打开直播间
+			Browser.open(url);	// 打开直播间(若浏览器已关闭会先打开)
 			_sleep(SLEEP_TIME);
 			log.info("参与直播间 [{}] 抽奖{}", roomId, (lottery(roomId) ? "成功" : "失败"));
 			
+			// 连续抽奖超过一定次数, 重启浏览器释放缓存
 			if(lotteryCnt++ >= LOTTERY_LIMIT) {
 				lotteryCnt = 0;
-				Browser.quit();	// 连续抽奖超过一定次数, 关闭浏览器释放缓存
+				Browser.quit();
 				UIUtils.log("已释放无效的内存空间");
 				
+			// 抽奖后马上跳回去首页, 避免接收太多直播间数据浪费内存
 			} else {
-				Browser.open(HOME_URL);	// 马上跳回去首页, 避免接收太多直播间数据
+				Browser.open(HOME_URL);	
 			}
 		}
 	}

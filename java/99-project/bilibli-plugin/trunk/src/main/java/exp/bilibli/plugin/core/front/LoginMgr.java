@@ -103,16 +103,14 @@ class LoginMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		saveCookies();	// 保存登录成功的cookies到外存, 以备下次使用
+		skipUpdradeTips();		// 跳过B站的升级教程（该教程若不屏蔽会妨碍点击抽奖）
+		saveCookies();			// 保存登录成功的cookies到外存, 以备下次使用
 		Browser.reset(false);	// 重置为无需加载图片的浏览器
 		
 		AppUI.getInstn().markLogin();	// 在界面标记已登陆
 		log.info("{} 已停止", getName());
 	}
 	
-	public static void main(String[] args) {
-		LoginMgr.getInstn()._start();
-	}
 	/**
 	 * 从外存读取上次登陆成功的cookies
 	 * @return
@@ -171,4 +169,16 @@ class LoginMgr extends LoopThread {
 		return !Browser.getCurURL().startsWith(LOGIN_URL);
 	}
 	
+	/**
+	 * 切到当前直播间, 把第一次打开直播室时的升级教程提示屏蔽掉
+	 */
+	private void skipUpdradeTips() {
+		Browser.open(AppUI.getInstn().getLiveUrl());
+		By upgrade = By.className("upgrade-intro-component");
+		if(Browser.existElement(upgrade)) {
+			WebElement upgrapTips = Browser.findElement(upgrade);
+			WebElement skipBtn = upgrapTips.findElement(By.className("skip"));
+			skipBtn.click();
+		}
+	}
 }

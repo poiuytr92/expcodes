@@ -342,7 +342,7 @@ public class AppUI extends MainWindow {
 		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 	}
 	
-	protected String getUrl() {
+	protected String getLiveUrl() {
 		return StrUtils.concat(httpTF.getText(), ridTF.getText());
 	}
 	

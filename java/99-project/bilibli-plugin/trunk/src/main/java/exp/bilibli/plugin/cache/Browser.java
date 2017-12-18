@@ -47,6 +47,10 @@ public class Browser {
 		return instance;
 	}
 	
+	public static void reset() {
+		INSTN()._reset(true);
+	}
+	
 	public static void reset(boolean loadImages) {
 		INSTN()._reset(loadImages);
 	}
