@@ -95,7 +95,7 @@ class SysGiftMgr extends LoopThread {
 			if(loopCnt++ >= LOOP_LIMIT) {
 				loopCnt = 0;
 				log.info("{} 活动中...", getName());
-				Browser.quit();
+				Browser.close(); // 长时间无抽奖，则关闭当前页面(若是最后一个页面则会退出浏览器)
 			}
 			
 		// 打开直播间抽奖

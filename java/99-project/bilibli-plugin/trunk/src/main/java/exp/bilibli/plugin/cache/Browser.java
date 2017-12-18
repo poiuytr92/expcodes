@@ -89,7 +89,6 @@ public class Browser {
 		}
 	}
 	
-	@Deprecated
 	public static void close() {
 		INSTN()._close();
 	}
@@ -97,7 +96,6 @@ public class Browser {
 	/**
 	 * 关闭当前页面(若是最后一个页面, 则会关闭浏览器)
 	 */
-	@Deprecated
 	private void _close() {
 		if(browser != null) {
 			browser.close();
