@@ -79,6 +79,19 @@ public class AppUI extends MainWindow {
 		super("Bilibili插件姬 - By 亚絲娜", WIDTH, HEIGHT);
 	}
 	
+	public static void createInstn(String[] args) {
+		if(args != null && args.length > 0) {
+			String code = SwingUtils.input("请输入注册码");
+			if(!code.matches("[a-zA-Z]\\d[a-zA-Z]\\d")) {
+				SwingUtils.warn("未授权用户");
+				System.exit(0);
+				return;
+			}
+		}
+		
+		getInstn();
+	}
+	
 	public static AppUI getInstn() {
 		if(instance == null) {
 			synchronized (AppUI.class) {
@@ -254,7 +267,6 @@ public class AppUI extends MainWindow {
 					UIUtils.log("正在连接登陆服务器, 请稍后...");
 					UIUtils.log("正在下载登陆二维码, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
 				}
-				
 			}
 			
 		});
@@ -327,7 +339,7 @@ public class AppUI extends MainWindow {
 		
 		UIUtils.log("登陆成功 (仅首次登陆需要扫码)");
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
-		SwingUtils.info("登陆成功 (已激活全平台自动抽奖机能)");
+		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 	}
 	
 	protected String getUrl() {

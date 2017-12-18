@@ -52,15 +52,39 @@
 		</dependency>
 		
 		<dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>2.53.0</version>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>2.53.0</version>
+          <exclusions>
+            <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-firefox-driver</artifactId>
+	        </exclusion>
+	        <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-ie-driver</artifactId>
+	        </exclusion>
+	        <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-safari-driver</artifactId>
+	        </exclusion>
+	        <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-edge-driver</artifactId>
+	        </exclusion>
+	      </exclusions>
         </dependency>
         
         <dependency>
 		  <groupId>com.codeborne</groupId>
 		  <artifactId>phantomjsdriver</artifactId>
 		  <version>1.2.1</version>
+		  <exclusions>
+            <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-java</artifactId>
+	        </exclusion>
+	      </exclusions>
 		</dependency>
 		
 		<dependency>
@@ -298,7 +322,7 @@
 						
 						<!-- 保持[Bean类]不变（若框架对 Bean中的内容做了反射处理，则必须保持不变） -->
 						<!-- 按实际项目修正 -->
-						<option>-keep class exp.bilibli.plugin.bean.** { *;}</option>
+						<!-- option>-keep class exp.bilibli.plugin.bean.** { *;}</option -->
 						
 						<!-- 保持[所有入口方法]不变 -->
 						<!-- 固定不变 -->
@@ -399,7 +423,7 @@
 							<xmx>64m</xmx>
 							<jdkParams></jdkParams>
 							<noVerJarRegex>exp-?libs-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
-							<proguard>false</proguard>  <!-- 是否使用混淆包(需配置混淆打包插件) -->
+							<proguard>true</proguard>  <!-- 是否使用混淆包(需配置混淆打包插件) -->
 						</configuration>
 					</execution>
 				</executions>

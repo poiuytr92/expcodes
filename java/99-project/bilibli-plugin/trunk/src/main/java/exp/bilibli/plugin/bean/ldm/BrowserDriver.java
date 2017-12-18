@@ -168,6 +168,10 @@ final public class BrowserDriver {
 		return webDriver.getCurrentUrl();
 	}
 	
+	public String getPageSource() {
+		return webDriver.getPageSource();
+	}
+	
 	public void clearCookies() {
 		webDriver.manage().deleteAllCookies();
 	}

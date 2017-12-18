@@ -1,6 +1,7 @@
 package exp.bilibli.plugin.cache;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Set;
 
 import org.openqa.selenium.By;
@@ -68,10 +69,20 @@ public class Browser {
 	}
 	
 	private void _open(String url) {
-		if(browser == null ){
+		if(browser == null){
 			_reset(false);
 		}
 		browser.open(url);
+	}
+	
+	public static void refresh() {
+		INSTN()._refresh();
+	}
+	
+	private void _refresh() {
+		if(browser != null){
+			browser.refresh();
+		}
 	}
 	
 	@Deprecated
@@ -111,6 +122,14 @@ public class Browser {
 		return (browser == null ? "" : browser.getCurURL());
 	}
 	
+	public static String getPageSource() {
+		return INSTN()._getPageSource();
+	}
+	
+	private String _getPageSource() {
+		return (browser == null ? "" : browser.getPageSource());
+	}
+	
 	public static void clearCookies() {
 		INSTN()._clearCookies();
 	}
@@ -127,6 +146,14 @@ public class Browser {
 	
 	private boolean _addCookie(Cookie cookie) {
 		return (browser == null ? false : browser.addCookie(cookie));
+	}
+	
+	public static Set<Cookie> getCookies() {
+		return INSTN()._getCookies();
+	}
+	
+	private Set<Cookie> _getCookies() {
+		return (browser == null ? new HashSet<Cookie>() : browser.getCookies());
 	}
 	
 	public static void backupCookies() {
