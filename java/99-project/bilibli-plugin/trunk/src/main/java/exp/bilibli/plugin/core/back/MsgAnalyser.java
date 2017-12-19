@@ -169,8 +169,7 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(WelcomeMsg msgBean) {
-		String msg = StrUtils.concat(
-				"[", msgBean.getUid(), "][", msgBean.getVipDesc(), "][", 
+		String msg = StrUtils.concat("[", msgBean.getVipDesc(), "][", 
 				msgBean.getUsername(), "] ", KeywordMgr.getAdj(), "溜进了直播间"
 		);
 		UIUtils.chat(msg);
