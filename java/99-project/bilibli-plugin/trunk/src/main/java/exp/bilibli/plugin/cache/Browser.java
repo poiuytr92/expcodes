@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import exp.bilibli.plugin.Config;
@@ -49,8 +50,8 @@ public class Browser {
 		return instance;
 	}
 	
-	public static void reset() {
-		INSTN()._reset(true);
+	public static void init(boolean loadImages) {
+		INSTN()._reset(loadImages);
 	}
 	
 	public static void reset(boolean loadImages) {
@@ -91,18 +92,18 @@ public class Browser {
 		}
 	}
 	
-	public static void close() {
-		INSTN()._close();
-	}
-	
-	/**
-	 * 关闭当前页面(若是最后一个页面, 则会关闭浏览器)
-	 */
-	private void _close() {
-		if(browser != null) {
-			browser.close();
-		}
-	}
+//	public static void close() {
+//		INSTN()._close();
+//	}
+//	
+//	/**
+//	 * 关闭当前页面(若是最后一个页面, 则会关闭浏览器)
+//	 */
+//	private void _close() {
+//		if(browser != null) {
+//			browser.close();
+//		}
+//	}
 	
 	public static void quit() {
 		INSTN()._quit();
@@ -256,20 +257,23 @@ public class Browser {
 			return isOk;
 		}
 		
-		WebElement ctrl = Browser.findElement(By.className("chat-control-panel-vm"));
+//		String js = "var danmu=document.getElementsByTagName('textarea'); danmu.value='" + msg + "';";
+//		((JavascriptExecutor) browser.getDriver()).executeScript(js);
+		
+		WebElement ctrl = findElement(By.id("chat-control-panel-vm"));
 		if(ctrl != null) {
 			isOk = true;
-			
 			WebElement input = ctrl.findElement(By.className("chat-input-ctnr"));
 			WebElement textarea = input.findElement(By.tagName("textarea"));
+//			browser.send(textarea, msg);
+			textarea.clear();
 			textarea.sendKeys(msg);
-			
-			
-			Browser.screenshot("./log.33.png");
+			textarea.sendKeys(Keys.ENTER);	// 按下回车
+			textarea.sendKeys(Keys.NULL);	// 释放回车
 			
 //			WebElement button = ctrl.findElement(By.className("bottom-actions"));
 //			WebElement btn = button.findElement(By.tagName("button"));
-//			Browser.click(btn);
+//			btn.click();
 		}
 		return isOk;
 	}

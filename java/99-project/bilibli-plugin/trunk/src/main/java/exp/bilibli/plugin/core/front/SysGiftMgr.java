@@ -46,12 +46,15 @@ class SysGiftMgr extends LoopThread {
 	
 	private int lotteryCnt;
 	
+	private String lastRoomId;
+	
 	private static volatile SysGiftMgr instance;
 	
 	private SysGiftMgr() {
-		super("自动抽奖姬");
+		super("Web行为模拟器");
 		this.loopCnt = 0;
 		this.lotteryCnt = 0;
+		this.lastRoomId = "";
 	}
 	
 	protected static SysGiftMgr getInstn() {
@@ -73,15 +76,13 @@ class SysGiftMgr extends LoopThread {
 
 	@Override
 	protected void _loopRun() {
-		String roomId = RoomMgr.getInstn().getGiftRoom();
 		try {
-			toLottery(roomId);	// 参与直播间抽奖
-			
+			toDo();
 		} catch(Exception e) {
-			log.error("在直播间 [{}] 抽奖异常", roomId, e);
+			log.error("模拟Web操作异常, 自动重启Web驱动", e);
 			Browser.quit();
 		}
-		_sleep(SLEEP_TIME);	// 避免连续抽奖时，过频点击导致页面抽奖器无反应
+		_sleep(SLEEP_TIME);
 	}
 
 	@Override
@@ -89,49 +90,57 @@ class SysGiftMgr extends LoopThread {
 		log.info("{} 已停止", getName());
 	}
 	
-	private void toLottery(String roomId) {
-		if(roomId == null) {
+	/**
+	 * 模拟web行为
+	 */
+	private void toDo() {
+		
+		// 参与直播间抽奖
+		String roomId = RoomMgr.getInstn().getGiftRoom();
+		if(roomId != null) {
+			toLottery(roomId);
 			
-			// 利用抽奖的闲暇时间发言
+		} else {
+			
+			// 并非短时间内的连续抽奖, 重置上次抽奖的房间号
+			lastRoomId = "";
+			
+			// 利用抽奖间歇参与直播间发言
 			String msg = ChatMgr.getInstn().getMsg();
 			if(msg != null) {
-				sendMsgToLive(msg);
+				toChat(msg);
 				
-			} else if(loopCnt++ >= LOOP_LIMIT) {
-				loopCnt = 0;
-				log.info("{} 活动中...", getName());
-				Browser.close(); // 长时间无抽奖，则关闭当前页面(若是最后一个页面则会退出浏览器)
-			}
-			
-		// 打开直播间抽奖
-		} else {
-			String url = StrUtils.concat(LIVE_URL, roomId);
-			Browser.open(url);	// 打开直播间(若浏览器已关闭会先打开)
-			_sleep(SLEEP_TIME);
-			log.info("参与直播间 [{}] 抽奖{}", roomId, (lottery(roomId) ? "成功" : "失败"));
-			
-			// 连续抽奖超过一定次数, 重启浏览器释放缓存
-			if(lotteryCnt++ >= LOTTERY_LIMIT) {
-				lotteryCnt = 0;
-				Browser.quit();
-				UIUtils.log("已释放无效的内存空间");
-				
-			// 抽奖后马上跳回去首页, 避免接收太多直播间数据浪费内存
+			// 长时间无操作则休眠
 			} else {
-				Browser.open(HOME_URL);	
+				toSleep();
 			}
 		}
 	}
 	
-	private void sendMsgToLive(String msg) {
-		String liveUrl = AppUI.getInstn().getLiveUrl();
-		if(!liveUrl.equals(Browser.getCurURL())) {
-			Browser.open(liveUrl);
+	private void toLottery(String roomId) {
+		if(lastRoomId.equals(roomId)) {
+			// Undo: 若上次房间号与当前房间号一致, 则不再重复打开页面(加速连续抽奖)
+		} else {
+			String url = StrUtils.concat(LIVE_URL, roomId);
+			Browser.open(url);	// 打开直播间(若浏览器已关闭会先打开)
+			_sleep(SLEEP_TIME);
 		}
-		Browser.toLiveChat(msg);
+		boolean isOk = _lottery(roomId);
+		log.info("参与直播间 [{}] 抽奖{}", roomId, (isOk ? "成功" : "失败"));
+		
+		// 连续抽奖超过一定次数, 重启浏览器释放缓存
+		if(lotteryCnt++ >= LOTTERY_LIMIT) {
+			lotteryCnt = 0;
+			Browser.quit();
+			UIUtils.log("已释放无效的内存空间");
+			
+		// 抽奖后马上跳回去首页, 避免接收太多直播间数据浪费内存
+		} else {
+			Browser.open(HOME_URL);	
+		}
 	}
-
-	private boolean lottery(String roomId) {
+	
+	private boolean _lottery(String roomId) {
 		boolean isOk = false;
 		try {
 			if(_lottery()) {
@@ -179,4 +188,30 @@ class SysGiftMgr extends LoopThread {
 		return rst.getText().contains("参与成功");
 	}
 
+	/**
+	 * 参与聊天室发言
+	 * @param msg
+	 */
+	private void toChat(String msg) {
+		
+		// 若当前页面不是所监听的聊天室, 则跳转到所监听的聊天室
+		String liveUrl = AppUI.getInstn().getLiveUrl();
+		if(!liveUrl.equals(Browser.getCurURL())) {
+			Browser.open(liveUrl);
+		}
+		
+		// 参与聊天室发言
+		Browser.toLiveChat(msg);
+	}
+	
+	/**
+	 * 计数器累计达到一个心跳周期后, 关闭浏览器(等待有其他事件时再自动重启)
+	 */
+	private void toSleep() {
+		if(loopCnt++ >= LOOP_LIMIT) {
+			loopCnt = 0;
+			log.info("{} 活动中...", getName());
+			Browser.quit();
+		}
+	}
 }

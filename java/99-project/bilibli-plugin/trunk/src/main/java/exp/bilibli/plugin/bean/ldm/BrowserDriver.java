@@ -1,14 +1,13 @@
 package exp.bilibli.plugin.bean.ldm;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -86,42 +85,45 @@ final public class BrowserDriver {
 			this.webDriver = new ChromeDriver(getCapabilities(loadImages));
 			
 		} else {
-			this.webDriver = new HtmlUnitDriver(true);
+			this.webDriver = new HtmlUnitDriver(getCapabilities(loadImages));
 		}
 		this.action = new Actions(webDriver);
 	}
 	
-	// {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
 	private DesiredCapabilities getCapabilities(boolean loadImages) {
 		DesiredCapabilities capabilities = null;
 		
 		if(WebDriverType.PHANTOMJS == type) {
-			final String PAGE_SETTINGS = PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX;
 			capabilities = DesiredCapabilities.phantomjs();
 			capabilities.setJavascriptEnabled(true);	// 执行页面js脚本
+			
+			final String PAGE_SETTINGS = PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX;
 			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), loadImages);		// 加载图片
 			capabilities.setCapability(PAGE_SETTINGS.concat("XSSAuditingEnabled"), false);	// 跨域请求监控
 			capabilities.setCapability(PAGE_SETTINGS.concat("localToRemoteUrlAccessEnabled"), false);	// 本地资源是否可以访问远程URL
 			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), // 用户代理（浏览器头标识）: 假装是谷歌，避免被反爬   （浏览器头可以用Fiddler抓包抓到）
 					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
 			
+//			final String HERDER = PhantomJSDriverService.PHANTOMJS_PAGE_CUSTOMHEADERS_PREFIX;
+//			capabilities.setCapability(HERDER.concat("Accept"), "application/json, text/javascript, */*; q=0.01");
+//			capabilities.setCapability(HERDER.concat("Content-Type"), "application/x-www-form-urlencoded; charset=UTF-8");
+//			capabilities.setCapability(HERDER.concat("Accept-Encoding"), "gzip, deflate, br");
+//			capabilities.setCapability(HERDER.concat("Accept-Language"), "zh-CN,zh;q=0.8");
+			
 		} else if(WebDriverType.CHROME == type) {
-			Map<String, Object> defaultContentSettings = new HashMap<String, Object>();
-			defaultContentSettings.put("images", 2);	// 不显示图片, 不知为何不生效
-
-			Map<String, Object> profile = new HashMap<String, Object>();
-			profile.put("profile.default_content_settings", defaultContentSettings);
-
 			capabilities = DesiredCapabilities.chrome();
 			capabilities.setJavascriptEnabled(true);
 			capabilities.setCapability("loadImages", loadImages);
-			capabilities.setCapability("chrome.prefs", profile);
 			
 		} else {
 			capabilities = DesiredCapabilities.htmlUnit();
 			capabilities.setJavascriptEnabled(true);
 		}
 		return capabilities;
+	}
+	
+	public WebDriver getDriver() {
+		return webDriver;
 	}
 	
 	public void open(String url) {
@@ -198,10 +200,13 @@ final public class BrowserDriver {
 		return element;
 	}
 
-	public void click(WebElement element) {
-		action.click(element).perform();	// 点击并提交
+	public void click(WebElement button) {
+		action.click(button).perform();	// 点击并提交
 	}
 	
+	public void send(WebElement form, String msg) {
+		action.sendKeys(form, msg, Keys.ENTER, Keys.NULL).perform();
+	}
 	
 	/**
 	 * 对浏览器的当前页面截图
