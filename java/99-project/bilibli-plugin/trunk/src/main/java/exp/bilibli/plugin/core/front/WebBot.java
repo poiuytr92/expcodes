@@ -46,7 +46,11 @@ class WebBot extends LoopThread {
 	
 	private final static int LOTTERY_LIMIT = Config.getInstn().CLEAR_CACHE_CYCLE();
 	
+	private final static int TIP_LIMIT = 10;
+	
 	private int loopCnt;
+	
+	private int tipCnt;
 	
 	private int lotteryCnt;
 	
@@ -55,6 +59,7 @@ class WebBot extends LoopThread {
 	private WebBot() {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
+		this.tipCnt = 0;
 		this.lotteryCnt = 0;
 	}
 	
@@ -203,9 +208,16 @@ class WebBot extends LoopThread {
 	 */
 	private void toSleep() {
 		if(loopCnt++ >= LOOP_LIMIT) {
+			tipCnt++;
 			loopCnt = 0;
-			log.info("{} 活动中...", getName());
 			Browser.quit();
+			log.info("{} 活动中...", getName());
+		}
+		
+		if(tipCnt >= TIP_LIMIT) {
+			tipCnt = 0;
+			UIUtils.log("[亚絲娜] 享有本软件完全的著作权");
+			UIUtils.log("未经许可, 禁止擅自用于商业用途, 违者必究");
 		}
 	}
 }
