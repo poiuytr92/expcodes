@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibli.plugin.bean.pdm.ChatMsg;
 import exp.bilibli.plugin.bean.pdm.EnergyLottery;
 import exp.bilibli.plugin.bean.pdm.GuardBuyMsg;
+import exp.bilibli.plugin.bean.pdm.LiveMsg;
 import exp.bilibli.plugin.bean.pdm.SendGift;
 import exp.bilibli.plugin.bean.pdm.SysGift;
 import exp.bilibli.plugin.bean.pdm.SysMsg;
@@ -75,6 +76,9 @@ public class MsgAnalyser {
 			
 		} else if(biliCmd == BiliCmd.GUARD_BUY) {
 			toDo(new GuardBuyMsg(json));
+			
+		} else if(biliCmd == BiliCmd.LIVE) {
+			toDo(new LiveMsg(json));
 			
 		} else {
 			isOk = false;
@@ -202,6 +206,16 @@ public class MsgAnalyser {
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
 	}
 
+	/**
+	 * 开播通知
+	 * @param msgBean
+	 */
+	private static void toDo(LiveMsg msgBean) {
+		String msg = StrUtils.concat("您特别关注的直播间 [", msgBean.getRoomId(), "] 开播啦!!!");
+		UIUtils.chat(msg);
+		log.info(msg);
+	}
+	
 	/**
 	 * 获取抽奖房间号
 	 * @param json

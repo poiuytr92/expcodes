@@ -44,6 +44,10 @@ public class BiliCmd {
 	private final static String _DANMU_MSG = "DANMU_MSG";
 	public final static BiliCmd DANMU_MSG = new BiliCmd(_DANMU_MSG);
 	
+	/** 开播通知消息 */
+	private final static String _LIVE = "LIVE";
+	public final static BiliCmd LIVE = new BiliCmd(_LIVE);
+	
 	private String cmd;
 	
 	private BiliCmd(String cmd) {
@@ -76,6 +80,9 @@ public class BiliCmd {
 			
 		} else if(_DANMU_MSG.equals(cmd)) {
 			biliCMD = DANMU_MSG;
+		
+		} else if(_LIVE.equals(cmd)) {
+			biliCMD = LIVE;
 			
 		}
 		return biliCMD;
