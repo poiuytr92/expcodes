@@ -7,10 +7,18 @@ public class ChatMgr {
 	/** 按时序记录待发送的消息 */
 	private PCQueue<String> chatMsgs;
 	
+	/** 自动答谢 */
+	private boolean autoThankYou;
+	
+	/** 自动晚安 */
+	private boolean autoGoodNight;
+	
 	private static volatile ChatMgr instance;
 	
 	private ChatMgr() {
 		this.chatMsgs = new PCQueue<String>(1024);
+		this.autoThankYou = false;
+		this.autoGoodNight = false;
 	}
 	
 	public static ChatMgr getInstn() {
@@ -34,6 +42,22 @@ public class ChatMgr {
 	
 	public void clear() {
 		chatMsgs.clear();
+	}
+	
+	public void setAutoThankYou() {
+		autoThankYou = !autoThankYou;
+	}
+	
+	public boolean isAutoThankYou() {
+		return autoThankYou;
+	}
+	
+	public void setAutoGoodNight() {
+		autoGoodNight = !autoGoodNight;
+	}
+	
+	public boolean isAutoGoodNight() {
+		return autoGoodNight;
 	}
 	
 }

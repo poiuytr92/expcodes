@@ -124,6 +124,8 @@ class WebBot extends LoopThread {
 	private void toLottery(String roomId) {
 		if(lastRoomId.equals(roomId)) {
 			// Undo: 若上次房间号与当前房间号一致, 则不再重复打开页面(加速连续抽奖)
+			_sleep(SLEEP_TIME);
+			
 		} else {
 			String url = StrUtils.concat(LIVE_URL, roomId);
 			Browser.open(url);	// 打开直播间(若浏览器已关闭会先打开)

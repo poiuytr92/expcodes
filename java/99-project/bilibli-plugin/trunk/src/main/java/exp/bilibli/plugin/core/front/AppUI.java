@@ -12,6 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
+
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
@@ -21,6 +23,7 @@ import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
@@ -260,7 +263,7 @@ public class AppUI extends MainWindow {
 				}
 				
 				OnlineUserMgr.getInstn().clear(); // 重连直播间时清空在线用户列表
-				ThreadUtils.tSleep(500);	// 避免连续点击
+				ThreadUtils.tSleep(200);	// 避免连续点击
 			}
 		});
 		
@@ -304,6 +307,42 @@ public class AppUI extends MainWindow {
 					ChatMgr.getInstn().addMsg(msg);
 					chatTF.setText("");
 				}
+			}
+		});
+		
+		
+		thxBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ChatMgr.getInstn().setAutoThankYou();
+				if(ChatMgr.getInstn().isAutoThankYou()) {
+					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, thxBtn);
+					UIUtils.log("[自动答谢姬] 已开启");
+					
+				} else {
+					BeautyEyeUtils.setButtonStyle(NormalColor.normal, thxBtn);
+					UIUtils.log("[自动答谢姬] 已关闭");
+				}
+				ThreadUtils.tSleep(100);
+			}
+		});
+		
+		
+		nightBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ChatMgr.getInstn().setAutoGoodNight();
+				if(ChatMgr.getInstn().isAutoGoodNight()) {
+					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, nightBtn);
+					UIUtils.log("[自动晚安姬] 已开启");
+					
+				} else {
+					BeautyEyeUtils.setButtonStyle(NormalColor.normal, nightBtn);
+					UIUtils.log("[自动晚安姬] 已关闭");
+				}
+				ThreadUtils.tSleep(100);
 			}
 		});
 	}
