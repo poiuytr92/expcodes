@@ -318,7 +318,7 @@ public class AppUI extends MainWindow {
 		lotteryUI.clear();
 		
 		LoginMgr.getInstn()._stop();	
-		SysGiftMgr.getInstn()._stop();
+		WebBot.getInstn()._stop();
 		Browser.quit();
 	}
 	
@@ -371,7 +371,7 @@ public class AppUI extends MainWindow {
 	protected void markLogin() {
 		loginBtn.setEnabled(false);
 		qrcodeUI._hide();
-		SysGiftMgr.getInstn()._start();
+		WebBot.getInstn()._start();
 		
 		UIUtils.log("登陆成功 (仅首次登陆需要扫码)");
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");

@@ -15,7 +15,11 @@ import exp.libs.warp.thread.LoopThread;
 
 /**
  * <PRE>
- * 全平台礼物抽奖管理器（小电视/高能礼物）
+ * Web行为模拟器（仿真机器人）
+ * 
+ * 	主要功能:
+ *   1.全平台礼物抽奖管理器（小电视/高能礼物）
+ *   2.自动聊天
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -23,9 +27,9 @@ import exp.libs.warp.thread.LoopThread;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class SysGiftMgr extends LoopThread {
+class WebBot extends LoopThread {
 
-	private final static Logger log = LoggerFactory.getLogger(SysGiftMgr.class);
+	private final static Logger log = LoggerFactory.getLogger(WebBot.class);
 	
 	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
 	
@@ -33,7 +37,7 @@ class SysGiftMgr extends LoopThread {
 	
 	private final static long SLEEP_TIME = 1000;
 	
-	/** phantomjs浏览器每一段时间要刷新一下, 否则会被释放掉 */
+	/** 浏览器非活动时的保持时间 */
 	private final static long REFRESH_TIME = 60000;
 	
 	private final static long LOOP_TIME = 1000;
@@ -48,20 +52,20 @@ class SysGiftMgr extends LoopThread {
 	
 	private String lastRoomId;
 	
-	private static volatile SysGiftMgr instance;
+	private static volatile WebBot instance;
 	
-	private SysGiftMgr() {
+	private WebBot() {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
 		this.lotteryCnt = 0;
 		this.lastRoomId = "";
 	}
 	
-	protected static SysGiftMgr getInstn() {
+	protected static WebBot getInstn() {
 		if(instance == null) {
-			synchronized (SysGiftMgr.class) {
+			synchronized (WebBot.class) {
 				if(instance == null) {
-					instance = new SysGiftMgr();
+					instance = new WebBot();
 				}
 			}
 		}
