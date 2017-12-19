@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.ldm.BrowserDriver;
 import exp.bilibli.plugin.envm.WebDriverType;
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -254,6 +255,12 @@ public class Browser {
 	private boolean _toLiveChat(String msg) {
 		boolean isOk = false;
 		if(browser == null || !browser.getCurURL().startsWith(LIVE_URL)) {
+			return isOk;
+		}
+		
+		// FIXME 暂时无法发送到服务器
+		if(true) {
+			UIUtils.chat("F:", msg);
 			return isOk;
 		}
 		

@@ -302,6 +302,11 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!isLogin()) {
+					SwingUtils.warn("您是个有身份的人~ 先登录才能发言哦~");
+					return;
+				}
+				
 				String msg = chatTF.getText();
 				if(StrUtils.isNotEmpty(msg)) {
 					ChatMgr.getInstn().addMsg(msg);
@@ -315,6 +320,11 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!isLogin()) {
+					SwingUtils.warn("您是个有身份的人~ 先登录才能答谢哦~");
+					return;
+				}
+				
 				ChatMgr.getInstn().setAutoThankYou();
 				if(ChatMgr.getInstn().isAutoThankYou()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, thxBtn);
@@ -333,6 +343,11 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!isLogin()) {
+					SwingUtils.warn("您是个有身份的人~ 先登录才能晚安哦~");
+					return;
+				}
+				
 				ChatMgr.getInstn().setAutoGoodNight();
 				if(ChatMgr.getInstn().isAutoGoodNight()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, nightBtn);
@@ -415,6 +430,10 @@ public class AppUI extends MainWindow {
 		UIUtils.log("登陆成功 (仅首次登陆需要扫码)");
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
 		SwingUtils.info("登陆成功 (自动抽奖已激活)");
+	}
+	
+	private boolean isLogin() {
+		return !loginBtn.isEnabled();
 	}
 	
 	protected String getLiveUrl() {

@@ -14,6 +14,7 @@ import exp.bilibli.plugin.bean.pdm.SysMsg;
 import exp.bilibli.plugin.bean.pdm.TvLottery;
 import exp.bilibli.plugin.bean.pdm.WelcomeGuardMsg;
 import exp.bilibli.plugin.bean.pdm.WelcomeMsg;
+import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.envm.BiliCmd;
@@ -98,17 +99,17 @@ public class MsgAnalyser {
 		log.info(msg);
 		
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
+		ChatMgr.getInstn().addNight(msgBean.getUsername(), msgBean.getMsg());
 	}
 	
 	private static void toDo(SendGift msgBean) {
 		String msg = StrUtils.concat(
-				"[", msgBean.getUid(), "][", msgBean.getUname(), "] ", 
-				_getAdj(), msgBean.getAction(), 
-				" [", msgBean.getGiftName(), "] x", msgBean.getNum()
+				"感谢 [", msgBean.getUname(), "] ", _getAdj(), 
+				msgBean.getAction(), "的 [", msgBean.getGiftName(), 
+				"] x", msgBean.getNum()
 		);
-		UIUtils.chat(msg);
 		log.info(msg);
-		
+		ChatMgr.getInstn().addThxGift(msg);
 		OnlineUserMgr.getInstn().add(msgBean.getUname());
 	}
 	
@@ -161,11 +162,12 @@ public class MsgAnalyser {
 	
 	private static void toDo(GuardBuyMsg msgBean) {
 		String msg = StrUtils.concat(
-				"[", msgBean.getUid(), "][", msgBean.getGuardDesc(), "][", 
+				"感谢 [", msgBean.getUid(), "][", msgBean.getGuardDesc(), "][", 
 				msgBean.getUsername(), "] ", _getAdj(), "上了贼船"
 		);
-		UIUtils.chat(msg);
 		log.info(msg);
+		ChatMgr.getInstn().addThxGuard(msg);
+		OnlineUserMgr.getInstn().add(msgBean.getUsername());
 	}
 
 	
