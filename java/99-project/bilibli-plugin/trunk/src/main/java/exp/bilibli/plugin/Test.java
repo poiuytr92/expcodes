@@ -8,7 +8,7 @@ public class Test {
 
 	public static void main(String[] args) {
 		Browser.init(false);
-		Browser.open("http://live.bilibili.com/51108");
+		Browser.open("http://live.bilibili.com/269706");
 		
 		ThreadUtils.tSleep(5000);
 		Browser.screenshot("./log/1.png");

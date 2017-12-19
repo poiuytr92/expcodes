@@ -5,6 +5,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -46,6 +48,8 @@ public class AppUI extends MainWindow {
 	private final static int WIDTH = 1000;
 	
 	private final static int HEIGHT = 600;
+	
+	private final static int CHAT_LIMIT = 20;
 	
 	private JButton linkBtn;
 	
@@ -117,9 +121,10 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.chatTF = new JTextField("限制长度");
+		this.chatTF = new JTextField();
 		this.httpTF = new JTextField("http://live.bilibili.com/");
 		this.ridTF = new JTextField("438", 15);
+		chatTF.setToolTipText("内容长度限制: 20");
 		httpTF.setEditable(false);
 		
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
@@ -242,6 +247,16 @@ public class AppUI extends MainWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
+		setLinkBtnListener();
+		setLotteryBtnListener();
+		setLoginBtnListener();
+		setSendBtnListener();
+		setThxBtnListener();
+		setNightBtnListener();
+		setChatTFListener();
+	}
+
+	private void setLinkBtnListener() {
 		linkBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -266,8 +281,9 @@ public class AppUI extends MainWindow {
 				ThreadUtils.tSleep(200);	// 避免连续点击
 			}
 		});
-		
-		
+	}
+	
+	private void setLotteryBtnListener() {
 		lotteryBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -279,8 +295,9 @@ public class AppUI extends MainWindow {
 				ThreadUtils.tSleep(500);	// 避免连续点击
 			}
 		});
-		
-		
+	}
+	
+	private void setLoginBtnListener() {
 		loginBtn.addActionListener(new ActionListener() {
 
 			@Override
@@ -296,8 +313,9 @@ public class AppUI extends MainWindow {
 				}
 			}
 		});
-		
-		
+	}
+	
+	private void setSendBtnListener() {
 		sendBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -314,8 +332,9 @@ public class AppUI extends MainWindow {
 				}
 			}
 		});
-		
-		
+	}
+	
+	private void setThxBtnListener() {
 		thxBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -337,8 +356,9 @@ public class AppUI extends MainWindow {
 				ThreadUtils.tSleep(100);
 			}
 		});
-		
-		
+	}
+	
+	private void setNightBtnListener() {
 		nightBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -358,6 +378,31 @@ public class AppUI extends MainWindow {
 					UIUtils.log("[自动晚安姬] 已关闭");
 				}
 				ThreadUtils.tSleep(100);
+			}
+		});
+	}
+	
+	private void setChatTFListener() {
+		chatTF.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(chatTF.getText().length() > CHAT_LIMIT) {
+					e.consume(); // 销毁新输入的字符，限制长度
+				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyChar() == KeyEvent.VK_ENTER) {
+					sendBtn.doClick();// 监听到回车键则触发发送按钮
+				}
 			}
 		});
 	}
@@ -432,6 +477,10 @@ public class AppUI extends MainWindow {
 		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 	}
 	
+	/**
+	 * 确认是否已登录
+	 * @return
+	 */
 	private boolean isLogin() {
 		return !loginBtn.isEnabled();
 	}

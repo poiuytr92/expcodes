@@ -258,11 +258,11 @@ public class Browser {
 			return isOk;
 		}
 		
-		// FIXME 暂时无法发送到服务器
-		if(true) {
-			UIUtils.chat(msg + " -- offline");
-			return isOk;
-		}
+//		// FIXME 暂时无法发送到服务器
+//		if(true) {
+//			UIUtils.chat(msg + " -- offline");
+//			return isOk;
+//		}
 		
 //		String js = "var danmu=document.getElementsByTagName('textarea'); danmu.value='" + msg + "';";
 //		((JavascriptExecutor) browser.getDriver()).executeScript(js);
