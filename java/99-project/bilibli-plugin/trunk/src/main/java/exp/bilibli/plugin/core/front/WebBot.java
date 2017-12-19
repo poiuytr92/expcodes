@@ -50,15 +50,12 @@ class WebBot extends LoopThread {
 	
 	private int lotteryCnt;
 	
-	private String lastRoomId;
-	
 	private static volatile WebBot instance;
 	
 	private WebBot() {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
 		this.lotteryCnt = 0;
-		this.lastRoomId = "";
 	}
 	
 	protected static WebBot getInstn() {
@@ -106,9 +103,6 @@ class WebBot extends LoopThread {
 			
 		} else {
 			
-			// 并非短时间内的连续抽奖, 重置上次抽奖的房间号
-			lastRoomId = "";
-			
 			// 利用抽奖间歇参与直播间发言
 			String msg = ChatMgr.getInstn().getMsg();
 			if(msg != null) {
@@ -122,15 +116,9 @@ class WebBot extends LoopThread {
 	}
 	
 	private void toLottery(String roomId) {
-		if(lastRoomId.equals(roomId)) {
-			// Undo: 若上次房间号与当前房间号一致, 则不再重复打开页面(加速连续抽奖)
-			_sleep(SLEEP_TIME);
-			
-		} else {
-			String url = StrUtils.concat(LIVE_URL, roomId);
-			Browser.open(url);	// 打开直播间(若浏览器已关闭会先打开)
-			_sleep(SLEEP_TIME);
-		}
+		String url = StrUtils.concat(LIVE_URL, roomId);
+		Browser.open(url);	// 打开直播间(若浏览器已关闭会先打开)
+		_sleep(SLEEP_TIME);
 		boolean isOk = _lottery(roomId);
 		log.info("参与直播间 [{}] 抽奖{}", roomId, (isOk ? "成功" : "失败"));
 		
@@ -160,7 +148,7 @@ class WebBot extends LoopThread {
 			
 		} catch(Throwable e) {
 			UIUtils.statistics("挤不进去: 抽奖直播间 [", roomId, "] ");
-			UIUtils.log("辣鸡B站炸了, 正在重连...");
+			UIUtils.log("辣鸡B站炸了, 尝试重连...");
 		}
 		return isOk;
 	}

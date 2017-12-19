@@ -8,11 +8,11 @@ public class Test {
 
 	public static void main(String[] args) {
 		Browser.init(false);
-		Browser.open("http://live.bilibili.com/438");
+		Browser.open("http://live.bilibili.com/51108");
 		
 		ThreadUtils.tSleep(5000);
 		Browser.screenshot("./log/1.png");
-		Browser.toLiveChat("下午好");
+		Browser.toLiveChat("晚上好");
 		
 		ThreadUtils.tSleep(5000);
 		Browser.screenshot("./log/3.png");

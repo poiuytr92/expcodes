@@ -1,16 +1,13 @@
 package exp.bilibli.plugin.cache;
 
-import exp.bilibli.plugin.utils.UIUtils;
+import exp.bilibli.plugin.bean.pdm.SendGift;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 
 public class ChatMgr {
 
 	private final static String NIGHT_KEY = "晚安^o^";
-	
-	private final static String[] NIGHT_KEYS = {
-		"晚安", "好梦", "早点休息", "我先睡了", "我先睡觉了"
-	};
 	
 	/** 按时序记录待发送的消息 */
 	private PCQueue<String> chatMsgs;
@@ -44,23 +41,33 @@ public class ChatMgr {
 		chatMsgs.add(msg);
 	}
 	
-	public void addThxGift(String msg) {
+	public void addThxGift(SendGift msgBean) {
 		if(!isAutoThankYou()) {
-			UIUtils.chat(msg);
-			
-		} else {
-			// FIXME 压缩数量
-			addMsg(msg);
+			return;
 		}
+		
+		// 小于1个的辣条或亿圆就不感谢了，避免刷屏
+		int num = NumUtils.toInt(msgBean.getNum(), 0);
+		if(num <= 1) {
+			if("辣条".equals(msgBean.getGiftName()) || 
+					"亿圆".equals(msgBean.getGiftName())) {
+				return;
+			}
+		}
+		
+		String msg = StrUtils.concat(
+				"感谢 [", msgBean.getUname(), "] ", KeywordMgr.getAdj(), 
+				msgBean.getAction(), " [", msgBean.getGiftName(), 
+				"] x", msgBean.getNum());
+		addMsg(msg);
 	}
 	
 	public void addThxGuard(String msg) {
 		if(!isAutoThankYou()) {
-			UIUtils.chat(msg);
-			
-		} else {
-			addMsg(msg);
+			return;
 		}
+		
+		addMsg("感谢 ".concat(msg));
 	}
 
 	public void addNight(String username, String msg) {
@@ -68,11 +75,8 @@ public class ChatMgr {
 			return;
 		}
 		
-		for(String key : NIGHT_KEYS) {
-			if(msg.contains(key)) {
-				addMsg(StrUtils.concat(NIGHT_KEY, " [", username, "]"));
-				break;
-			}
+		if(KeywordMgr.containsNight(msg)) {
+			addMsg(StrUtils.concat(NIGHT_KEY, ", ", username));
 		}
 	}
 	

@@ -25,8 +25,6 @@ public class Version {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
-		
-		// FIXME: 连续抽奖优化
 	}
 	
 }

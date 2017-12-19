@@ -19,5 +19,18 @@
         <waitElementTime caption="页面元素加载等待时间(s)">10</waitElementTime>
         <clearCacheCycle caption="清理内存周期(每抽奖N次清理一次)">10</clearCacheCycle>
     </app>
+    
+    <keywords caption="关键词集">
+      <adjs caption="形容词集">
+        ,小心翼翼地,不知羞耻地,低调地,无节操地,装模作样地,含羞嗒嗒地,不分尊卑地
+        ,忧郁地,biubiubiu地,以迅雷不及企鹅旋风之势地,脱了裤子以为很安全地,有痔无恐地
+        ,大模尸样地,装聋作哑地,自以为是地,我行我素地,傲视群雌地,一人之下被万人上地
+        ,丧心病狂地,三妾四妻地
+      </adjs>
+      
+      <nights caption="晚安词集">
+        ,晚安,好梦,早点休息,我先睡了,我先睡觉了,早点睡吧
+      </nights>
+    </keywords>
    
 </config>

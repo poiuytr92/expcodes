@@ -260,7 +260,7 @@ public class Browser {
 		
 		// FIXME 暂时无法发送到服务器
 		if(true) {
-			UIUtils.chat("F:", msg);
+			UIUtils.chat(msg + " -- offline");
 			return isOk;
 		}
 		

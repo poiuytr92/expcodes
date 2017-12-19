@@ -77,5 +77,13 @@ public class Config {
 	public int CLEAR_CACHE_CYCLE() {
 		return xConf.getInt("/config/app/clearCacheCycle");
 	}
+	
+	public String ADJS() {
+		return xConf.getVal("/config/keywords/adjs");
+	}
+	
+	public String NIGHTS() {
+		return xConf.getVal("/config/keywords/nights");
+	}
 		
 }
