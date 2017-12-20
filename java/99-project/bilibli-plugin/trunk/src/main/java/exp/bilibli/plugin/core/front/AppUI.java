@@ -469,7 +469,7 @@ public class AppUI extends MainWindow {
 	 * 标记已登陆成功
 	 */
 	protected void markLogin() {
-		loginBtn.setEnabled(false);
+		loginBtn.setEnabled(false);	// 标识已登陆
 		qrcodeUI._hide();
 		WebBot.getInstn()._start();
 		

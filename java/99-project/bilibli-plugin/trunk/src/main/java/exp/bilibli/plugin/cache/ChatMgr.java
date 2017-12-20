@@ -5,6 +5,16 @@ import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 在线聊天管理器
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class ChatMgr {
 
 	private final static String NIGHT_KEY = "晚安^o^";
