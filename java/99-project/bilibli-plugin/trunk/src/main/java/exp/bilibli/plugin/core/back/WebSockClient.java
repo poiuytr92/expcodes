@@ -80,7 +80,7 @@ public class WebSockClient extends LoopThread {
 	
 	private boolean conn() {
 		if(session != null) {
-			if(session.isOpen()) {
+			if(session.isConn()) {
 				return true;
 			} else {
 				close();

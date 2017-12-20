@@ -42,6 +42,8 @@ class WebSockSession extends WebSocketClient {
 	/** 连接超时 */
 	private final static long CONN_TIMEOUT = 10000;
 	
+	private boolean isClosed;
+	
 	protected WebSockSession(URI serverURI, Draft draft) {
 		this(serverURI, draft, 0, false);
 	}
@@ -60,6 +62,7 @@ class WebSockSession extends WebSocketClient {
 		super(serverURI, draft);
 		setTimeout(timeout);
 		debug(debug);
+		this.isClosed = true;
 	}
 	
 	public void setTimeout(int timeout) {
@@ -83,12 +86,22 @@ class WebSockSession extends WebSocketClient {
 		long bgnTime = System.currentTimeMillis();
 		do {
 			if(isOpen()) {
+				isClosed = false;
 				isOk = true;
 				break;
 			}
 			ThreadUtils.tSleep(1000);
 		} while(System.currentTimeMillis() - bgnTime <= CONN_TIMEOUT);
 		return isOk;
+	}
+	
+	public void close() {
+		super.close();
+		isClosed = true;
+	}
+	
+	public boolean isConn() {
+		return (isOpen() && !isClosed);
 	}
 	
 	public void send(Frame frame) {
@@ -144,15 +157,17 @@ class WebSockSession extends WebSocketClient {
 	
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
+		isClosed = true;
 		log.info("websocket连接正在断开: [错误码:{}] [发起人:{}] [原因:{}]", 
 				code, (remote ? "server" : "client"), reason);
-		UIUtils.log("与直播间的连接已断开");
+		UIUtils.log("与直播间的连接已断开 (Reason:", (remote ? "server" : "client"), ")");
 	}
 
 	@Override
 	public void onError(Exception e) {
+		isClosed = true;
 		log.error("websocket连接异常", e);
-		UIUtils.log("与直播间的连接已断开");
+		UIUtils.log("与直播间的连接已断开 (Reason:", e.getMessage(), ")");
 	}
 
 }
