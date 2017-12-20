@@ -35,24 +35,29 @@ class WebBot extends LoopThread {
 	
 	private final static String HOME_URL = Config.getInstn().HOME_URL();
 	
+	/** 浏览器非活动时的保持时间 */
+	private final static long KEEP_TIME = 60000;
+	
+	/** 单次浏览器行为的轮询间隔 */
 	private final static long SLEEP_TIME = 1000;
 	
-	/** 浏览器非活动时的保持时间 */
-	private final static long REFRESH_TIME = 60000;
+	/** 累计的行为周期(达到周期则关闭浏览器, 避免内存占用过大) */
+	private final static int LOOP_LIMIT = (int) (KEEP_TIME / SLEEP_TIME);
 	
-	private final static long LOOP_TIME = 1000;
-	
-	private final static int LOOP_LIMIT = (int) (REFRESH_TIME / LOOP_TIME);
-	
+	/** 浏览器打开后限制可以抽奖的次数(超过次数则关闭浏览器, 避免内存占用过大) */
 	private final static int LOTTERY_LIMIT = Config.getInstn().CLEAR_CACHE_CYCLE();
 	
-	private final static int TIP_LIMIT = 10;
+	/** 累计60次空闲, 则打印版本信息提示 */
+	private final static int TIP_LIMIT = 60;
 	
+	/** 行为轮询次数 */
 	private int loopCnt;
 	
-	private int tipCnt;
-	
+	/** 抽奖累计次数 */
 	private int lotteryCnt;
+	
+	/** 提示累计次数 */
+	private int tipCnt;
 	
 	private static volatile WebBot instance;
 	
@@ -74,6 +79,11 @@ class WebBot extends LoopThread {
 		return instance;
 	}
 
+	private void closeBrowser() {
+		Browser.quit();
+		lotteryCnt = 0;	// 关闭浏览器后则重置这个浏览器累计的抽奖次数
+	}
+	
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
@@ -86,7 +96,7 @@ class WebBot extends LoopThread {
 			toDo();
 		} catch(Exception e) {
 			log.error("模拟Web操作异常, 自动重启Web驱动", e);
-			Browser.quit();
+			closeBrowser();
 		}
 		_sleep(SLEEP_TIME);
 	}
@@ -129,8 +139,7 @@ class WebBot extends LoopThread {
 		
 		// 连续抽奖超过一定次数, 重启浏览器释放缓存
 		if(lotteryCnt++ >= LOTTERY_LIMIT) {
-			lotteryCnt = 0;
-			Browser.quit();
+			closeBrowser();
 			UIUtils.log("已释放无效的内存空间");
 			
 		// 若无后续抽奖则马上跳回去首页, 避免接收太多直播间数据浪费内存
@@ -210,7 +219,7 @@ class WebBot extends LoopThread {
 		if(loopCnt++ >= LOOP_LIMIT) {
 			tipCnt++;
 			loopCnt = 0;
-			Browser.quit();
+			closeBrowser();
 			log.info("{} 活动中...", getName());
 		}
 		
@@ -219,4 +228,5 @@ class WebBot extends LoopThread {
 			UIUtils.printVersionInfo();
 		}
 	}
+	
 }
