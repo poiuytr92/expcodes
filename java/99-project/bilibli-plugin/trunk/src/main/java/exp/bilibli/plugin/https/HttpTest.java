@@ -221,7 +221,7 @@ public class HttpTest {
 		connection.setRequestProperty("Referer", "http://live.bilibili.com/390480");	// 来源
 		
 		// cookie作为字符串时，不能直接append，每个都得加上"; " ，然后把最后一个去掉，看看chrome或Firefox的消息头就知道了。
-		connection.setRequestProperty("Cookie", /*"Cookie: " +*/ 	// 可能需要加???
+		connection.setRequestProperty("Cookie", 
 		"fts=1513650651; _cnt_notify=34; sid=6zdr4xli; DedeUserID__ckMd5=686caa22740f2663; SESSDATA=e6e4328c%2C1513821274%2Cd3b08aee; DedeUserID=1650868; LIVE_BUVID=AUTO7815136506667388; buvid3=9DCA74AB-E181-4BA0-B310-3E46E027CB1623668infoc; bili_jct=a6c32a1350e9f1592b4898846f1dbf4a; _cnt_pm=0; finger=540129ae; LIVE_PLAYER_TYPE=1");
 
 		return connection;

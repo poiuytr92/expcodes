@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
@@ -34,11 +33,18 @@ public class Browser {
 	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
 	
+	private String uid;
+	
+	private String sCookies;
+	
 	private BrowserDriver browser;
 	
 	private static volatile Browser instance;
 	
-	private Browser() {}
+	private Browser() {
+		this.uid = "";
+		this.sCookies = "";
+	}
 	
 	private static Browser INSTN() {
 		if(instance == null) {
@@ -277,7 +283,6 @@ public class Browser {
 			textarea.sendKeys(msg);
 			textarea.sendKeys(Keys.ENTER);	// 按下回车
 			textarea.sendKeys(Keys.NULL);	// 释放回车
-			
 			
 //			WebElement button = ctrl.findElement(By.className("bottom-actions"));
 //			WebElement btn = button.findElement(By.tagName("button"));

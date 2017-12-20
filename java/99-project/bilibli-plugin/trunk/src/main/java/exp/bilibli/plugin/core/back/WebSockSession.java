@@ -126,7 +126,7 @@ class WebSockSession extends WebSocketClient {
 	public void onMessage(ByteBuffer byteBuffer) {
 		byte[] buff = byteBuffer.array();
 		String hex = BODHUtils.toHex(buff);
-		log.debug("接收到推送消息: {}", hex);
+		log.info("接收到推送消息: {}", hex);
 		
 		if(hex.startsWith(Binary.SERVER_HB_CONFIRM)) {
 			log.info("websocket连接保活确认");
