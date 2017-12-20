@@ -162,7 +162,7 @@ public class RandomUtils {
 	 * @return 返回随机数范围 [0,scope)
 	 */
 	public static int randomInt(int scope) {
-		return random.nextInt(scope);
+		return (scope <= 0 ? 0 : random.nextInt(scope));
 	}
 	
 	/**
