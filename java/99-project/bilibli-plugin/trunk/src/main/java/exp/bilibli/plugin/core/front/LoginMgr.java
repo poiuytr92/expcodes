@@ -109,8 +109,8 @@ class LoginMgr extends LoopThread {
 	@Override
 	protected void _after() {
 		UIUtils.log("正在保存cookies(下次登陆可无需扫码)");
-		saveCookies();			// 保存登录成功的cookies到外存, 以备下次使用
-//		Browser.reset(false);	// 重置为无需加载图片的浏览器(可延迟启动)
+		Browser.backupCookies();	// 保存登录成功的cookies到外存, 以备下次使用
+		Browser.quit();	// 退出浏览器(此浏览器是加载图片的, 不加载图片的浏览器后面再延迟启动)
 		
 		AppUI.getInstn().markLogin();	// 在界面标记已登陆
 		log.info("{} 已停止", getName());
@@ -144,15 +144,6 @@ class LoginMgr extends LoopThread {
 			log.info("更新登陆二维码{}", (isOk ? "成功, 请打开 [哔哩哔哩手机客户端] 扫码登陆..." : "失败"));
 		}
 		return isOk;
-	}
-	
-	/**
-	 * 保存当前cookies到本地
-	 */
-	private void saveCookies() {
-		if(isLogined == true) {
-			Browser.backupCookies();
-		}
 	}
 	
 	/**

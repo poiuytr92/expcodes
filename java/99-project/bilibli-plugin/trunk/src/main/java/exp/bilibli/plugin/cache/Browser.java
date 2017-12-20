@@ -12,7 +12,6 @@ import org.openqa.selenium.WebElement;
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.ldm.BrowserDriver;
 import exp.bilibli.plugin.envm.WebDriverType;
-import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
 
