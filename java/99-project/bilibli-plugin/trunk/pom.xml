@@ -315,7 +315,7 @@
 						<!-- option>-keepattributes SourceFile</option -->
 						
 						<!-- 保留[行号] --><!-- 按实际项目切换 -->
-						<option>-keepattributes LineNumberTable</option>
+						<!-- option>-keepattributes LineNumberTable</option -->
 						
 						<!-- 保留[注释] --><!-- 按实际项目切换 -->
 						<!-- option>-keepattributes *Annotation*</option -->
