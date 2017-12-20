@@ -1,7 +1,6 @@
 package exp.bilibli.plugin.bean.ldm;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -18,8 +17,10 @@ import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.envm.WebDriverType;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.CmdUtils;
@@ -96,13 +97,14 @@ final public class BrowserDriver {
 		if(WebDriverType.PHANTOMJS == type) {
 			capabilities = DesiredCapabilities.phantomjs();
 			capabilities.setJavascriptEnabled(true);	// 执行页面js脚本
+			capabilities.setCapability(CapabilityType.ACCEPT_SSL_CERTS, true);	// SSL证书支持
 			
 			final String PAGE_SETTINGS = PhantomJSDriverService.PHANTOMJS_PAGE_SETTINGS_PREFIX;
 			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), loadImages);		// 加载图片
 			capabilities.setCapability(PAGE_SETTINGS.concat("XSSAuditingEnabled"), false);	// 跨域请求监控
 			capabilities.setCapability(PAGE_SETTINGS.concat("localToRemoteUrlAccessEnabled"), false);	// 本地资源是否可以访问远程URL
-			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), // 用户代理（浏览器头标识）: 假装是谷歌，避免被反爬   （浏览器头可以用Fiddler抓包抓到）
-					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36");
+			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), Config.USER_AGENT);	// 伪装浏览器
+			
 			
 //			final String HERDER = PhantomJSDriverService.PHANTOMJS_PAGE_CUSTOMHEADERS_PREFIX;
 //			capabilities.setCapability(HERDER.concat("Accept"), "application/json, text/javascript, */*; q=0.01");
@@ -189,7 +191,7 @@ final public class BrowserDriver {
 	}
 	
 	public Set<Cookie> getCookies() {
-		return new HashSet<Cookie>(webDriver.manage().getCookies());
+		return webDriver.manage().getCookies();
 	}
 	
 	public WebElement findElement(By by) {

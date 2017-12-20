@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
@@ -277,11 +278,43 @@ public class Browser {
 			textarea.sendKeys(Keys.ENTER);	// 按下回车
 			textarea.sendKeys(Keys.NULL);	// 释放回车
 			
+			
 //			WebElement button = ctrl.findElement(By.className("bottom-actions"));
 //			WebElement btn = button.findElement(By.tagName("button"));
 //			btn.click();
 		}
 		return isOk;
+	}
+	
+	public static String printCookies() {
+		return INSTN()._printCookies();
+	}
+	
+	/**
+	 * Cookie: 
+	 * DedeUserID=31796320; 
+	 * DedeUserID__ckMd5=7a2868581681a219; 
+	 * JSESSIONID=C3FB41FD0469F79CCA68F21B0D49CCD0; 
+	 * SESSDATA=b21f4571%2C1516346159%2C790f3250; 
+	 * bili_jct=2eec061dc11ee2ff6474b678f8bd3882; 
+	 * sid=b6lege44\r\n
+	 */
+	private String _printCookies() {
+		StringBuilder sb = new StringBuilder();
+		Set<Cookie> cookies = browser.getCookies();
+		for(Cookie cookie : cookies) {
+//			System.out.println("name=" + cookie.getName());
+//			System.out.println("value=" + cookie.getValue());
+			sb.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
+//			System.out.println("domain=" + cookie.getDomain());
+//			System.out.println("path=" + cookie.getPath());
+//			System.out.println("expiry=" + cookie.getExpiry());
+//			System.out.println("====");
+		}
+		if(sb.length() > 0) {
+			sb.setLength(sb.length() - 2);
+		}
+		return sb.toString();
 	}
 	
 }

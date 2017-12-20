@@ -9,17 +9,21 @@ public class Test {
 	public static void main(String[] args) {
 		Browser.init(false);
 		Browser.open("http://live.bilibili.com/269706");
+		System.out.println(Browser.printCookies());
 		
-		ThreadUtils.tSleep(5000);
-		Browser.screenshot("./log/1.png");
-		Browser.toLiveChat("晚上好");
 		
-		ThreadUtils.tSleep(5000);
-		Browser.screenshot("./log/3.png");
-		
-		System.out.println("finish");
-		
+//		ThreadUtils.tSleep(5000);
+//		Browser.screenshot("./log/1.png");
+//		Browser.toLiveChat("晚上好");
+//		
+//		ThreadUtils.tSleep(5000);
+//		Browser.screenshot("./log/3.png");
+//		
+//		System.out.println("finish");
+//		
 		Browser.quit();
+//		
+//		System.out.println(System.currentTimeMillis());
 	}
 	
 }

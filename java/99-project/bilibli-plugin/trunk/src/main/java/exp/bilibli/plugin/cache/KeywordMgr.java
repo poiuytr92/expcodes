@@ -66,6 +66,10 @@ public class KeywordMgr {
 	}
 	
 	private String _getAdj() {
+		if(adjs.size() <= 0) {
+			return "";
+		}
+		
 		int idx = RandomUtils.randomInt(adjs.size());
 		return adjs.get(idx);
 	}
