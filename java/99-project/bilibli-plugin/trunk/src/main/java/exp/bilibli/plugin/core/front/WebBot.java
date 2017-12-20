@@ -132,7 +132,7 @@ class WebBot extends LoopThread {
 	
 	private void toLottery(String roomId) {
 		String url = StrUtils.concat(LIVE_URL, roomId);
-		Browser.open(url);	// 打开直播间(若浏览器已关闭会先打开)
+		Browser.open(url);	// 打开/重开直播间(可屏蔽上一次抽奖结果提示)
 		_sleep(SLEEP_TIME);
 		boolean isOk = _lottery(roomId);
 		log.info("参与直播间 [{}] 抽奖{}", roomId, (isOk ? "成功" : "失败"));
