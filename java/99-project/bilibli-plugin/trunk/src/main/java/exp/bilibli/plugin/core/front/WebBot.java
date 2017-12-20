@@ -133,9 +133,9 @@ class WebBot extends LoopThread {
 			Browser.quit();
 			UIUtils.log("已释放无效的内存空间");
 			
-		// 抽奖后马上跳回去首页, 避免接收太多直播间数据浪费内存
-		} else {
-			Browser.open(HOME_URL);	
+		// 若无后续抽奖则马上跳回去首页, 避免接收太多直播间数据浪费内存
+		} else if(RoomMgr.getInstn().getGiftRoomCount() <= 0){
+			Browser.open(HOME_URL);
 		}
 	}
 	
@@ -216,8 +216,7 @@ class WebBot extends LoopThread {
 		
 		if(tipCnt >= TIP_LIMIT) {
 			tipCnt = 0;
-			UIUtils.log("[亚絲娜] 享有本软件完全的著作权");
-			UIUtils.log("未经许可, 禁止擅自用于商业用途, 违者必究");
+			UIUtils.printVersionInfo();
 		}
 	}
 }

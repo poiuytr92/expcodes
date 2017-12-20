@@ -78,6 +78,14 @@ public class RoomMgr {
 	}
 	
 	/**
+	 * 获取剩余的礼物房数量
+	 * @return
+	 */
+	public int getGiftRoomCount() {
+		return giftRoomIds.size();
+	}
+	
+	/**
 	 * 清空礼物房间记录
 	 */
 	public void clearGiftRooms() {

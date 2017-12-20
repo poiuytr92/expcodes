@@ -158,6 +158,7 @@ public class AppUI extends MainWindow {
 		this.qrcodeUI = new QrcodeUI();
 		
 		this.isRunning = false;
+		printVersionInfo();
 	}
 
 	@Override
@@ -472,7 +473,7 @@ public class AppUI extends MainWindow {
 		qrcodeUI._hide();
 		WebBot.getInstn()._start();
 		
-		UIUtils.log("登陆成功 (仅首次登陆需要扫码)");
+		UIUtils.log("登陆成功");
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
 		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 	}
@@ -487,6 +488,13 @@ public class AppUI extends MainWindow {
 	
 	protected String getLiveUrl() {
 		return StrUtils.concat(httpTF.getText(), ridTF.getText());
+	}
+	
+	public void printVersionInfo() {
+		toConsole("****************************************");
+		toConsole(" [亚絲娜] 享有本软件完全的著作权");
+		toConsole(" 未经许可, 严禁擅自用于商业用途, 违者必究");
+		toConsole("****************************************");
 	}
 	
 }

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpUtils;
@@ -95,6 +96,10 @@ class LoginMgr extends LoopThread {
 			
 			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
 			isLogined = isSwitch();
+			if(isLogined == true) {
+				UIUtils.log("扫码成功, 正在屏蔽B站拦截脚本...");
+				skipUpdradeTips();	// 跳过B站的升级教程（该教程若不屏蔽会妨碍点击抽奖）
+			}
 		}
 		
 		AppUI.getInstn().updateQrcodeTime(LOOP_LIMIT - (loopCnt++));
@@ -103,9 +108,9 @@ class LoginMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		skipUpdradeTips();		// 跳过B站的升级教程（该教程若不屏蔽会妨碍点击抽奖）
+		UIUtils.log("正在保存cookies(下次登陆可无需扫码)");
 		saveCookies();			// 保存登录成功的cookies到外存, 以备下次使用
-		Browser.reset(false);	// 重置为无需加载图片的浏览器
+//		Browser.reset(false);	// 重置为无需加载图片的浏览器(可延迟启动)
 		
 		AppUI.getInstn().markLogin();	// 在界面标记已登陆
 		log.info("{} 已停止", getName());

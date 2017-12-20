@@ -63,4 +63,8 @@ public class UIUtils {
 		AppUI.getInstn().updateLotteryCnt();
 	}
 	
+	public static void printVersionInfo() {
+		AppUI.getInstn().printVersionInfo();
+	}
+	
 }
