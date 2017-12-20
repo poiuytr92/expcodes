@@ -69,7 +69,7 @@ class LoginMgr extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		Browser.reset(true);			// 使用加载图片的浏览器（首次登陆需要扫描二维码图片）
+		Browser.init(true);				// 使用加载图片的浏览器（首次登陆需要扫描二维码图片）
 		Browser.open(LOGIN_URL);		// 打开登陆页面
 		isLogined = loginByCookies();	// 轮询二维码前先尝试cookies登陆
 		

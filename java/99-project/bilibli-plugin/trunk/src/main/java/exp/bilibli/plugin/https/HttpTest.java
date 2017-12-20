@@ -60,8 +60,11 @@ public class HttpTest {
 		param.put("msg", "测试发言哈哈");
 		param.put("color", "16772431");
 		param.put("roomid", "269706");
-		String aa = doPost("https://api.live.bilibili.com/msg/send", param, 3000, 3000);
-		System.out.println(aa);
+		String rst = getUrl(param, DEFAULT_CHARSET);
+		System.out.println(rst);
+		
+//		String aa = doPost("https://api.live.bilibili.com/msg/send", param, 3000, 3000);
+//		System.out.println(aa);
 	}
 
 	/**
@@ -227,6 +230,8 @@ public class HttpTest {
 		return connection;
 	}
 
+	
+	
 	/**
 	 * @Title: getUrl
 	 * @Description: doGet发送请求时拼接的URL

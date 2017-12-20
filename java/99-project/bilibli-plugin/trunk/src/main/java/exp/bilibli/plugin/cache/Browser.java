@@ -6,7 +6,6 @@ import java.util.Set;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
 import exp.bilibli.plugin.Config;
@@ -29,12 +28,14 @@ public class Browser {
 
 	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
-	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
-	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
 	
+	private final static String UID_KEY = "DedeUserID";
+	
+	/** 当前登陆用户的ID */
 	private String uid;
 	
+	/** 当前登陆用户的cookies，供https接口用 */
 	private String sCookies;
 	
 	private BrowserDriver browser;
@@ -56,6 +57,23 @@ public class Browser {
 		}
 		return instance;
 	}
+	
+	public static String UID() {
+		return INSTN()._UID();
+	}
+	
+	private String _UID() {
+		return uid;
+	}
+
+	public static String COOKIES() {
+		return INSTN()._COOKIES();
+	}
+	
+	private String _COOKIES() {
+		return sCookies;
+	}
+
 	
 	public static void init(boolean loadImages) {
 		INSTN()._reset(loadImages);
@@ -175,11 +193,25 @@ public class Browser {
 	private void _backupCookies() {
 		if(browser != null) {
 			int idx = 0;
+			StringBuilder cookieInfo = new StringBuilder();	
+			
 			Set<Cookie> cookies = browser.getCookies();
 			for(Cookie cookie : cookies) {
 				String sIDX = StrUtils.leftPad(String.valueOf(idx++), '0', 2);
 				String savePath = StrUtils.concat(COOKIE_DIR, "/cookie-", sIDX, ".dat");
-				ObjUtils.toSerializable(cookie, savePath);
+				ObjUtils.toSerializable(cookie, savePath);	// 序列化到外存， 供下次启动用
+				
+				// 供后台HTTPS协议用
+				cookieInfo.append(cookie.getName()).append("=");
+				cookieInfo.append(cookie.getValue()).append("; ");
+				if(UID_KEY.equals(cookie.getName())) {
+					this.uid = cookie.getValue();
+				}
+			}
+			
+			if(idx > 0) {
+				cookieInfo.setLength(cookieInfo.length() - 2);
+				this.sCookies = cookieInfo.toString();
 			}
 		}
 	}
@@ -248,78 +280,5 @@ public class Browser {
 			browser.screenshot(imgPath);
 		}
 	}
-	
-	public static boolean toLiveChat(String msg) {
-		return INSTN()._toLiveChat(msg);
-	}
-	
-	/**
-	 * 向直播间发送一条消息
-	 * @param msg 消息
-	 * @return 是否发送成功
-	 */
-	private boolean _toLiveChat(String msg) {
-		boolean isOk = false;
-		if(browser == null || !browser.getCurURL().startsWith(LIVE_URL)) {
-			return isOk;
-		}
-		
-//		// FIXME 暂时无法发送到服务器
-//		if(true) {
-//			UIUtils.chat(msg + " -- offline");
-//			return isOk;
-//		}
-		
-//		String js = "var danmu=document.getElementsByTagName('textarea'); danmu.value='" + msg + "';";
-//		((JavascriptExecutor) browser.getDriver()).executeScript(js);
-		
-		WebElement ctrl = findElement(By.id("chat-control-panel-vm"));
-		if(ctrl != null) {
-			isOk = true;
-			WebElement input = ctrl.findElement(By.className("chat-input-ctnr"));
-			WebElement textarea = input.findElement(By.tagName("textarea"));
-//			browser.send(textarea, msg);
-			textarea.clear();
-			textarea.sendKeys(msg);
-			textarea.sendKeys(Keys.ENTER);	// 按下回车
-			textarea.sendKeys(Keys.NULL);	// 释放回车
-			
-//			WebElement button = ctrl.findElement(By.className("bottom-actions"));
-//			WebElement btn = button.findElement(By.tagName("button"));
-//			btn.click();
-		}
-		return isOk;
-	}
-	
-	public static String printCookies() {
-		return INSTN()._printCookies();
-	}
-	
-	/**
-	 * Cookie: 
-	 * DedeUserID=31796320; 
-	 * DedeUserID__ckMd5=7a2868581681a219; 
-	 * JSESSIONID=C3FB41FD0469F79CCA68F21B0D49CCD0; 
-	 * SESSDATA=b21f4571%2C1516346159%2C790f3250; 
-	 * bili_jct=2eec061dc11ee2ff6474b678f8bd3882; 
-	 * sid=b6lege44\r\n
-	 */
-	private String _printCookies() {
-		StringBuilder sb = new StringBuilder();
-		Set<Cookie> cookies = browser.getCookies();
-		for(Cookie cookie : cookies) {
-//			System.out.println("name=" + cookie.getName());
-//			System.out.println("value=" + cookie.getValue());
-			sb.append(cookie.getName()).append("=").append(cookie.getValue()).append("; ");
-//			System.out.println("domain=" + cookie.getDomain());
-//			System.out.println("path=" + cookie.getPath());
-//			System.out.println("expiry=" + cookie.getExpiry());
-//			System.out.println("====");
-		}
-		if(sb.length() > 0) {
-			sb.setLength(sb.length() - 2);
-		}
-		return sb.toString();
-	}
-	
+
 }

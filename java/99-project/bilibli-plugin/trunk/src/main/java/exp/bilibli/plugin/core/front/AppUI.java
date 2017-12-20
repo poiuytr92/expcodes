@@ -490,6 +490,10 @@ public class AppUI extends MainWindow {
 		return StrUtils.concat(httpTF.getText(), ridTF.getText());
 	}
 	
+	public String getRoomId() {
+		return ridTF.getText();
+	}
+	
 	public void printVersionInfo() {
 		toConsole("**********************************************************");
 		toConsole(" [亚絲娜] 享有本软件的完全著作权");

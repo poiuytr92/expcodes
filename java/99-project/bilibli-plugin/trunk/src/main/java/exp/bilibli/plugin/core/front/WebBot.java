@@ -9,6 +9,9 @@ import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
+import exp.bilibli.plugin.core.back.HttpsMsgSender;
+import exp.bilibli.plugin.envm.ChatColor;
+import exp.bilibli.plugin.https.HttpsUtils;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -209,7 +212,8 @@ class WebBot extends LoopThread {
 		}
 		
 		// 参与聊天室发言
-		Browser.toLiveChat(msg);
+		String roomId = AppUI.getInstn().getRoomId();
+		HttpsMsgSender.sendChat(msg, Browser.COOKIES(), roomId, ChatColor.GOLDEN);
 	}
 	
 	/**

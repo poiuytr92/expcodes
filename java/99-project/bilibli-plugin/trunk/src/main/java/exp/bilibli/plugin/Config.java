@@ -54,6 +54,14 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/live");
 	}
 	
+	public String CHAT_URL() {
+		return xConf.getVal("/config/biliUrls/chat");
+	}
+	
+	public String SSL_URL() {
+		return xConf.getVal("/config/biliUrls/ssl");
+	}
+	
 	public String WS_URL() {
 		return xConf.getVal("/config/biliUrls/ws");
 	}

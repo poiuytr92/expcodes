@@ -5,7 +5,9 @@
         <home caption="首页"><![CDATA[https://www.bilibili.com/]]></home>
         <login caption="登陆页"><![CDATA[https://passport.bilibili.com/login]]></login>
         <live caption="直播页"><![CDATA[http://live.bilibili.com/]]></live>
-        <ws caption="websocket"><![CDATA[ws://broadcastlv.chat.bilibili.com:2244/sub]]></ws>
+        <chat caption="版聊HTTPS服务器"><![CDATA[https://api.live.bilibili.com/msg/send]]></chat>
+        <ssl caption="SSL主机"><![CDATA[api.live.bilibili.com]]></ssl>
+        <ws caption="消息推送websocket服务器"><![CDATA[ws://broadcastlv.chat.bilibili.com:2244/sub]]></ws>
     </biliUrls>
     
     <files caption="本地文件位置">
@@ -29,7 +31,7 @@
       </adjs>
       
       <nights caption="晚安词集">
-        ,晚安,好梦,早点休息,我先睡了,我先睡觉了,早点睡吧
+        ,晚安,好梦,早点休息,我先睡了,我先睡觉了,早点睡吧,睡觉,撤了
       </nights>
     </keywords>
    

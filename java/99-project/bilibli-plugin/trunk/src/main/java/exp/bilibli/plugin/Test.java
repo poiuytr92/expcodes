@@ -9,7 +9,7 @@ public class Test {
 	public static void main(String[] args) {
 		Browser.init(false);
 		Browser.open("http://live.bilibili.com/269706");
-		System.out.println(Browser.printCookies());
+//		System.out.println(Browser.printCookies());
 		
 		
 //		ThreadUtils.tSleep(5000);

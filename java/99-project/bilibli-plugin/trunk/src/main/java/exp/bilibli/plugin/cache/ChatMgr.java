@@ -17,6 +17,8 @@ import exp.libs.utils.other.StrUtils;
  */
 public class ChatMgr {
 
+	// FIXME 记录已经晚安过的人
+	
 	private final static String NIGHT_KEY = "晚安^o^";
 	
 	/** 按时序记录待发送的消息 */
