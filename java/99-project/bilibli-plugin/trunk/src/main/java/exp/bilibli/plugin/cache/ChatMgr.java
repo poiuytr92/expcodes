@@ -113,7 +113,8 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	private void init() {
-		List<String> lines = FileUtils.readLines(Config.getInstn().CALL_PATH());
+		List<String> lines = FileUtils.readLines(
+				Config.getInstn().CALL_PATH(), Config.DEFAULT_CHARSET);
 		for(String line : lines) {
 			line = line.trim();
 			if(StrUtils.isNotEmpty(line)) {

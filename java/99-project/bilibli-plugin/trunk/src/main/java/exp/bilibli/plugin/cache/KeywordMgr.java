@@ -47,7 +47,8 @@ public class KeywordMgr {
 	}
 	
 	private void init() {
-		List<String> adjLines = FileUtils.readLines(Config.getInstn().ADJ_PATH());
+		List<String> adjLines = FileUtils.readLines(
+				Config.getInstn().ADJ_PATH(), Config.DEFAULT_CHARSET);
 		for(String line : adjLines) {
 			line = line.trim();
 			if(StrUtils.isNotEmpty(line)) {
@@ -55,7 +56,8 @@ public class KeywordMgr {
 			}
 		}
 		
-		List<String> nightLines = FileUtils.readLines(Config.getInstn().NIGHT_PATH());
+		List<String> nightLines = FileUtils.readLines(
+				Config.getInstn().NIGHT_PATH(), Config.DEFAULT_CHARSET);
 		for(String line : nightLines) {
 			line = line.trim();
 			if(StrUtils.isNotEmpty(line)) {
