@@ -22,6 +22,7 @@ import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.core.back.WebSockClient;
+import exp.bilibli.plugin.envm.ChatColor;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -63,6 +64,8 @@ public class AppUI extends MainWindow {
 	
 	private JButton sendBtn;
 	
+	private JButton colorBtn;
+	
 	private JButton thxBtn;
 	
 	private JButton nightBtn;
@@ -92,6 +95,10 @@ public class AppUI extends MainWindow {
 	private LotteryUI lotteryUI;
 	
 	private QrcodeUI qrcodeUI;
+	
+	private ColorUI colorUI;
+	
+	private ChatColor curChatColor;
 	
 	private boolean isRunning;
 	
@@ -141,6 +148,7 @@ public class AppUI extends MainWindow {
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.loginBtn = new JButton("扫码登陆 (可自动参与全平台抽奖)");
 		this.sendBtn = new JButton("发言");
+		this.colorBtn = new JButton("●");
 		this.thxBtn = new JButton("答谢姬");
 		this.nightBtn = new JButton("晚安姬");
 		this.callBtn = new JButton("小call姬");
@@ -148,6 +156,7 @@ public class AppUI extends MainWindow {
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
+		colorBtn.setForeground(ChatColor.BLUE.COLOR());
 		thxBtn.setForeground(Color.BLACK);
 		nightBtn.setForeground(Color.BLACK);
 		callBtn.setForeground(Color.BLACK);
@@ -168,6 +177,8 @@ public class AppUI extends MainWindow {
 		this.wsClient = new WebSockClient();
 		this.lotteryUI = new LotteryUI();
 		this.qrcodeUI = new QrcodeUI();
+		this.colorUI = new ColorUI();
+		this.curChatColor = ChatColor.WHITE;
 		
 		this.isRunning = false;
 		printVersionInfo();
@@ -178,7 +189,6 @@ public class AppUI extends MainWindow {
 		rootPanel.add(getLeftPanel(), BorderLayout.CENTER);
 		rootPanel.add(getRightPanel(), BorderLayout.EAST);
 	}
-	
 	
 	private JPanel getLeftPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
@@ -212,7 +222,8 @@ public class AppUI extends MainWindow {
 	private JPanel _getChatPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(chatTF, BorderLayout.CENTER);
-		panel.add(SwingUtils.getHGridPanel(sendBtn, 
+		panel.add(SwingUtils.getHGridPanel(
+				SwingUtils.getEBorderPanel(sendBtn, colorBtn), 
 				thxBtn, nightBtn, callBtn), BorderLayout.EAST);
 		return panel;
 	}
@@ -265,6 +276,7 @@ public class AppUI extends MainWindow {
 		setLotteryBtnListener();
 		setLoginBtnListener();
 		setSendBtnListener();
+		setColorBtnListener();
 		setThxBtnListener();
 		setCallBtnListener();
 		setNightBtnListener();
@@ -343,9 +355,19 @@ public class AppUI extends MainWindow {
 				String msg = chatTF.getText();
 				String roomId = getRoomId();
 				if(StrUtils.isNotEmpty(msg, roomId)) {
-					MsgSender.sendChat(msg, roomId);
+					MsgSender.sendChat(msg, curChatColor, roomId);
 					chatTF.setText("");
 				}
+			}
+		});
+	}
+	
+	private void setColorBtnListener() {
+		colorBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				colorUI._view();
 			}
 		});
 	}
@@ -416,6 +438,7 @@ public class AppUI extends MainWindow {
 				if(!isLogin()) {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [晚安姬] 哦~");
 					return;
+					
 				} else if(IS_ADMIN == false) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [晚安姬] 哦~");
 					return;
@@ -562,6 +585,15 @@ public class AppUI extends MainWindow {
 	 */
 	public String getRoomId() {
 		return ridTF.getText();
+	}
+	
+	/**
+	 * 更新弹幕颜色
+	 * @param color
+	 */
+	protected void updateChatColor(ChatColor color) {
+		this.curChatColor = color;
+		this.colorBtn.setForeground(color.COLOR());
 	}
 	
 	/**

@@ -53,30 +53,30 @@ public class MsgSender {
 	/**
 	 * 发送弹幕消息
 	 * @param msg 弹幕消息
-	 * @param chatColor 弹幕颜色
+	 * @param color 弹幕颜色
 	 * @param roomId 目标直播间
 	 * @return
 	 */
-	public static boolean sendChat(String msg, String chatColor, String roomId) {
-		return sendChat(msg, chatColor, roomId, Browser.COOKIES());
+	public static boolean sendChat(String msg, ChatColor color, String roomId) {
+		return sendChat(msg, color, roomId, Browser.COOKIES());
 	}
 
 	/**
 	 * 发送弹幕消息
 	 * @param msg 弹幕消息
-	 * @param chatColor 弹幕颜色
+	 * @param color 弹幕颜色
 	 * @param roomId 目标直播间房号
 	 * @param cookies 发送用户的cookies
 	 * @return
 	 */
-	public static boolean sendChat(String msg, String chatColor, 
+	public static boolean sendChat(String msg, ChatColor color, 
 			String roomId, String cookies) {
 		boolean isOk = false;
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = toRequestParams(msg, sRoomId, chatColor);
+			Map<String, String> requestParams = toRequestParams(msg, sRoomId, color.CODE());
 			String response = HttpsUtils.doPost(CHAT_URL, headParams, requestParams);
 			isOk = analyse(response);
 		}
@@ -113,11 +113,11 @@ public class MsgSender {
 	 * @return
 	 */
 	private static Map<String, String> toRequestParams(
-			String msg, String realRoomId, String chatColor) {
+			String msg, String realRoomId, String color) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("rnd", String.valueOf(System.currentTimeMillis() / 1000));	// 时间戳
 		params.put("msg", msg);		// 弹幕内容
-		params.put("color", chatColor);	// 弹幕颜色
+		params.put("color", color);	// 弹幕颜色
 		params.put("roomid", realRoomId);	// 接收消息的房间号
 		params.put("fontsize", "25");
 		params.put("mode", "1");
