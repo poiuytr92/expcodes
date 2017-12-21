@@ -176,13 +176,13 @@ public class ChatMgr extends LoopThread {
 		
 		String msg = "";
 		if(hour >= 6 && hour < 12) {
-			msg = "早上好";
+			msg = "滴~学生卡O(∩_∩)O 早上好";
 			
 		} else if(hour >= 12 && hour < 18) {
-			msg = "下午好";
+			msg = "滴~老人卡O(∩_∩)O 下午好";
 			
 		} else if(hour >= 18 && hour < 24) {
-			msg = "晚上好";
+			msg = "滴~银行卡O(∩_∩)O 晚上好";
 			
 		} else {
 			msg = "凌晨还在浪吗?";
@@ -322,7 +322,7 @@ public class ChatMgr extends LoopThread {
 	 * 定时打call
 	 */
 	private void toCall() {
-		if(ListUtils.isEmpty(callMsgs)) {
+		if(!isAutoCall() || ListUtils.isEmpty(callMsgs)) {
 			return;
 		}
 		
