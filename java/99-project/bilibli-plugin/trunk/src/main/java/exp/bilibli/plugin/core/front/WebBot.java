@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.RoomMgr;
+import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -114,7 +115,8 @@ class WebBot extends LoopThread {
 		// 参与直播间抽奖
 		String roomId = RoomMgr.getInstn().getGiftRoom();
 		if(roomId != null) {
-			toLottery(roomId);
+			toLotteryByHttp(roomId);
+//			toLotteryByBrowser(roomId);
 			
 		// 长时间无操作则休眠
 		} else {
@@ -122,7 +124,20 @@ class WebBot extends LoopThread {
 		}
 	}
 	
-	private void toLottery(String roomId) {
+	/**
+	 * 通过底层HTTP协议参与抽奖
+	 * @param roomId
+	 */
+	private void toLotteryByHttp(String roomId) {
+		boolean isOk = MsgSender.lottery(roomId);
+		log.info("参与直播间 [{}] 抽奖{}", roomId, (isOk ? "成功" : "失败"));
+	}
+	
+	/**
+	 * 通过模拟浏览器行为参与抽奖
+	 * @param roomId
+	 */
+	private void toLotteryByBrowser(String roomId) {
 		String url = StrUtils.concat(LIVE_URL, roomId);
 		Browser.open(url);	// 打开/重开直播间(可屏蔽上一次抽奖结果提示)
 		_sleep(SLEEP_TIME);

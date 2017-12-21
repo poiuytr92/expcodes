@@ -39,6 +39,8 @@ public class ChatMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(ChatMgr.class);
 	
+	private final static String NOTICE_KEY = "【公告】";
+	
 	private final static String NIGHT_KEY = "晚安^o^";
 	
 	/** 同一时间可以感谢的最大用户数（避免刷屏） */
@@ -51,7 +53,7 @@ public class ChatMgr extends LoopThread {
 	private final static long THX_TIME = 10000;
 	
 	/** 自动打call周期 */
-	private final static long CALL_TIME = 60000;
+	private final static long CALL_TIME = 180000;
 	
 	/** 检测待发送消息间隔 */
 	private final static long SLEEP_TIME = 1000;
@@ -154,7 +156,7 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		MsgSender.sendChat("感谢 ".concat(msg));
+		MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, "感谢 ", msg));
 	}
 
 	public void addNight(String username, String msg) {
@@ -259,8 +261,8 @@ public class ChatMgr extends LoopThread {
 		// 若短时间内投喂用户过多, 则不逐一感谢, 避免刷屏
 		int userNum = tmp.keySet().size();
 		if(userNum >= THX_USER_LIMIT) {
-			String msg = StrUtils.concat("感谢前面 [", userNum, 
-					"] 个小伙伴的投喂, 喜欢请关注O(∩_∩)O");
+			String msg = StrUtils.concat(NOTICE_KEY, "感谢前面[", userNum, 
+					"]个大佬的投喂,喜欢请关注O(∩_∩)O");
 			MsgSender.sendChat(msg);
 			
 		// 分别合并每个用户的投喂礼物再感谢
@@ -295,8 +297,8 @@ public class ChatMgr extends LoopThread {
 				String giftName = giftIts.next();
 				Integer num = gifts.get(giftName);
 				if(num != null && num > 0) {
-					String msg = StrUtils.concat("感谢 [", username, "] ", 
-							KeywordMgr.getAdj(), "投喂了", num, "个 [", giftName, "]");
+					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
+							KeywordMgr.getAdj(), "投喂", num, "个[", giftName, "]");
 					MsgSender.sendChat(msg);
 				}
 			}
@@ -311,8 +313,8 @@ public class ChatMgr extends LoopThread {
 			}
 			sb.setLength(sb.length() - 1);
 			
-			String msg = StrUtils.concat("感谢 [", username, "] ", 
-					KeywordMgr.getAdj(), "投喂了 [", sb.toString(), "]");
+			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
+					KeywordMgr.getAdj(), "投喂[", sb.toString(), "]");
 			MsgSender.sendChat(msg);
 		}
 		
@@ -328,7 +330,7 @@ public class ChatMgr extends LoopThread {
 		}
 		
 		int idx = RandomUtils.randomInt(callMsgs.size());
-		String msg = callMsgs.get(idx);
+		String msg = NOTICE_KEY.concat(callMsgs.get(idx));
 		MsgSender.sendChat(msg);
 	}
 	

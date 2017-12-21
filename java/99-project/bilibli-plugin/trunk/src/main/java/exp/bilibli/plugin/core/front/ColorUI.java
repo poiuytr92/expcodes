@@ -16,9 +16,9 @@ public class ColorUI extends PopChildWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5691969159309932864L;
 
-	private final static int WIDTH = 400;
+	private final static int WIDTH = 440;
 	
-	private final static int HEIGHT = 110;
+	private final static int HEIGHT = 120;
 	
 	private JButton whiteBtn;
 	

@@ -592,8 +592,9 @@ public class AppUI extends MainWindow {
 	 * @param color
 	 */
 	protected void updateChatColor(ChatColor color) {
-		this.curChatColor = color;
-		this.colorBtn.setForeground(color.COLOR());
+		curChatColor = color;
+		colorBtn.setForeground(color.COLOR());
+		colorUI._hide();
 	}
 	
 	/**

@@ -72,4 +72,6 @@ public class BiliCmdAtrbt {
 	
 	public final static String code = "code";
 	
+	public final static String raffleId = "raffleId";
+	
 }

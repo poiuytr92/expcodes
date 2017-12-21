@@ -61,6 +61,14 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/chat");
 	}
 	
+	public String CHECK_URL() {
+		return xConf.getVal("/config/biliUrls/check");
+	}
+	
+	public String JOIN_URL() {
+		return xConf.getVal("/config/biliUrls/join");
+	}
+	
 	public String SSL_URL() {
 		return xConf.getVal("/config/biliUrls/ssl");
 	}
