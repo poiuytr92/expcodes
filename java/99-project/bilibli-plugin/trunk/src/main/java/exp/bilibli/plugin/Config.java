@@ -85,6 +85,18 @@ public class Config {
 		return xConf.getVal("/config/files/room");
 	}
 	
+	public String ADJ_PATH() {
+		return xConf.getVal("/config/files/adjs");
+	}
+	
+	public String NIGHT_PATH() {
+		return xConf.getVal("/config/files/nights");
+	}
+		
+	public String CALL_PATH() {
+		return xConf.getVal("/config/files/calls");
+	}
+	
 	public int WAIT_ELEMENT_TIME() {
 		return xConf.getInt("/config/app/waitElementTime");
 	}
@@ -93,12 +105,4 @@ public class Config {
 		return xConf.getInt("/config/app/clearCacheCycle");
 	}
 	
-	public String ADJS() {
-		return xConf.getVal("/config/keywords/adjs");
-	}
-	
-	public String NIGHTS() {
-		return xConf.getVal("/config/keywords/nights");
-	}
-		
 }

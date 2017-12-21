@@ -7,10 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
-import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
-import exp.bilibli.plugin.core.back.MsgSender;
-import exp.bilibli.plugin.envm.ChatColor;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -21,7 +18,8 @@ import exp.libs.warp.thread.LoopThread;
  * 
  * 	主要功能:
  *   1.全平台礼物抽奖管理器（小电视/高能礼物）
- *   2.自动聊天
+ *   2.打印版权信息
+ *   3.浏览器保活
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -118,17 +116,9 @@ class WebBot extends LoopThread {
 		if(roomId != null) {
 			toLottery(roomId);
 			
+		// 长时间无操作则休眠
 		} else {
-			
-			// 利用抽奖间歇参与直播间发言
-			String msg = ChatMgr.getInstn().getMsg();
-			if(msg != null) {
-				toChat(msg);
-				
-			// 长时间无操作则休眠
-			} else {
-				toSleep();
-			}
+			toSleep();
 		}
 	}
 	
@@ -198,23 +188,6 @@ class WebBot extends LoopThread {
 		return rst.getText().contains("参与成功");
 	}
 
-	/**
-	 * 参与聊天室发言
-	 * @param msg
-	 */
-	private void toChat(String msg) {
-		
-		// 若当前页面不是所监听的聊天室, 则跳转到所监听的聊天室
-		String liveUrl = AppUI.getInstn().getLiveUrl();
-		if(!liveUrl.equals(Browser.getCurURL())) {
-			Browser.open(liveUrl);
-		}
-		
-		// 参与聊天室发言
-		String roomId = AppUI.getInstn().getRoomId();
-		MsgSender.sendChat(msg, Browser.COOKIES(), roomId, ChatColor.GOLDEN);
-	}
-	
 	/**
 	 * 计数器累计达到一个心跳周期后, 关闭浏览器(等待有其他事件时再自动重启)
 	 */

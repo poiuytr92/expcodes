@@ -15,24 +15,14 @@
         <img caption="登陆二维码缓存"><![CDATA[./data/img]]></img>
         <driver caption="web驱动器"><![CDATA[./data/driver/]]></driver>
         <room caption="房间号缓存"><![CDATA[./data/room/roomids.dat]]></room>
+        <adjs caption="形容词库"><![CDATA[./data/msg/adjs.dat]]></adjs>
+        <nights caption="晚安敏感词库"><![CDATA[./data/msg/nights.dat]]></nights>
+        <calls caption="公告屏语录"><![CDATA[./data/msg/calls.dat]]></calls>
     </files>
     
     <app caption="应用配置">
         <waitElementTime caption="页面元素加载等待时间(s)">10</waitElementTime>
         <clearCacheCycle caption="清理内存周期(每抽奖N次清理一次)">10</clearCacheCycle>
     </app>
-    
-    <keywords caption="关键词集">
-      <adjs caption="形容词集">
-        ,小心翼翼地,不知羞耻地,低调地,无节操地,装模作样地,含羞嗒嗒地,不分尊卑地
-        ,忧郁地,biubiubiu地,以迅雷不及企鹅旋风之势地,脱了裤子以为很安全地,有痔无恐地
-        ,大模尸样地,装聋作哑地,自以为是地,我行我素地,傲视群雌地,一人之下被万人上地
-        ,丧心病狂地,三妾四妻地
-      </adjs>
-      
-      <nights caption="晚安词集">
-        ,晚安,好梦,早点休息,我先睡了,我先睡觉了,早点睡吧,睡觉,撤了
-      </nights>
-    </keywords>
    
 </config>

@@ -52,6 +52,9 @@ public class AppUI extends MainWindow {
 	
 	private final static int CHAT_LIMIT = 20;
 	
+	/** 是否为管理员使用的版本 */
+	private static boolean IS_ADMIN;
+	
 	private JButton linkBtn;
 	
 	private JButton lotteryBtn;
@@ -63,6 +66,8 @@ public class AppUI extends MainWindow {
 	private JButton thxBtn;
 	
 	private JButton nightBtn;
+	
+	private JButton callBtn;
 	
 	private JTextField httpTF;
 	
@@ -104,6 +109,10 @@ public class AppUI extends MainWindow {
 				System.exit(0);
 				return;
 			}
+			IS_ADMIN = false;
+			
+		} else {
+			IS_ADMIN = true;
 		}
 		
 		getInstn();
@@ -134,12 +143,14 @@ public class AppUI extends MainWindow {
 		this.sendBtn = new JButton("发言");
 		this.thxBtn = new JButton("答谢姬");
 		this.nightBtn = new JButton("晚安姬");
+		this.callBtn = new JButton("小call姬");
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
 		thxBtn.setForeground(Color.BLACK);
 		nightBtn.setForeground(Color.BLACK);
+		callBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -201,7 +212,8 @@ public class AppUI extends MainWindow {
 	private JPanel _getChatPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(chatTF, BorderLayout.CENTER);
-		panel.add(SwingUtils.getHGridPanel(sendBtn, thxBtn, nightBtn), BorderLayout.EAST);
+		panel.add(SwingUtils.getHGridPanel(sendBtn, 
+				thxBtn, nightBtn, callBtn), BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -254,6 +266,7 @@ public class AppUI extends MainWindow {
 		setLoginBtnListener();
 		setSendBtnListener();
 		setThxBtnListener();
+		setCallBtnListener();
 		setNightBtnListener();
 		setChatTFListener();
 	}
@@ -343,18 +356,52 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogin()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能答谢哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [答谢姬] 哦~");
+					return;
+					
+				} else if(IS_ADMIN == false) {
+					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [答谢姬] 哦~");
 					return;
 				}
+				ChatMgr.getInstn()._start();
 				
 				ChatMgr.getInstn().setAutoThankYou();
 				if(ChatMgr.getInstn().isAutoThankYou()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, thxBtn);
-					UIUtils.log("[自动答谢姬] 已开启");
+					UIUtils.log("[答谢姬] 被召唤成功O(∩_∩)O");
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, thxBtn);
-					UIUtils.log("[自动答谢姬] 已关闭");
+					UIUtils.log("[答谢姬] 被封印啦/(ㄒoㄒ)/");
+				}
+				ThreadUtils.tSleep(100);
+			}
+		});
+	}
+	
+	private void setCallBtnListener() {
+		callBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!isLogin()) {
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [小call姬] 哦~");
+					return;
+					
+				} else if(IS_ADMIN == false) {
+					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [小call姬] 哦~");
+					return;
+				}
+				ChatMgr.getInstn()._start();
+				
+				ChatMgr.getInstn().setAutoCall();
+				if(ChatMgr.getInstn().isAutoCall()) {
+					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, callBtn);
+					UIUtils.log("[小call姬] 被召唤成功O(∩_∩)O");
+					
+				} else {
+					BeautyEyeUtils.setButtonStyle(NormalColor.normal, callBtn);
+					UIUtils.log("[小call姬] 被封印啦/(ㄒoㄒ)/");
 				}
 				ThreadUtils.tSleep(100);
 			}
@@ -367,18 +414,21 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogin()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能晚安哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [晚安姬] 哦~");
+					return;
+				} else if(IS_ADMIN == false) {
+					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [晚安姬] 哦~");
 					return;
 				}
 				
 				ChatMgr.getInstn().setAutoGoodNight();
 				if(ChatMgr.getInstn().isAutoGoodNight()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, nightBtn);
-					UIUtils.log("[自动晚安姬] 已开启");
+					UIUtils.log("[晚安姬] 被召唤成功O(∩_∩)O");
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, nightBtn);
-					UIUtils.log("[自动晚安姬] 已关闭");
+					UIUtils.log("[晚安姬] 被封印啦/(ㄒoㄒ)/");
 				}
 				ThreadUtils.tSleep(100);
 			}
@@ -397,8 +447,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void keyReleased(KeyEvent e) {
-				// TODO Auto-generated method stub
-				
+				// Undo
 			}
 			
 			@Override
@@ -419,6 +468,7 @@ public class AppUI extends MainWindow {
 		wsClient._stop();
 		lotteryUI.clear();
 		
+		ChatMgr.getInstn()._stop();
 		LoginMgr.getInstn()._stop();	
 		WebBot.getInstn()._stop();
 		Browser.quit();
@@ -451,6 +501,9 @@ public class AppUI extends MainWindow {
 		}
 	}
 	
+	/**
+	 * 更新抽奖成功次数
+	 */
 	public void updateLotteryCnt() {
 		if(!loginBtn.isEnabled()) {	// 登陆按钮被禁用, 说明登陆成功
 			lotteryCnt++;
@@ -459,10 +512,17 @@ public class AppUI extends MainWindow {
 		}
 	}
 	
+	/**
+	 * 更新二维码图片
+	 */
 	public void updateQrcode() {
 		qrcodeUI.updateImg();
 	}
 	
+	/**
+	 * 更新二维码有效时间
+	 * @param time
+	 */
 	public void updateQrcodeTime(int time) {
 		qrcodeUI.updateTime(time);
 	}
@@ -488,14 +548,25 @@ public class AppUI extends MainWindow {
 		return !loginBtn.isEnabled();
 	}
 	
+	/**
+	 * 获取当前监听的直播间地址
+	 * @return
+	 */
 	protected String getLiveUrl() {
 		return StrUtils.concat(httpTF.getText(), ridTF.getText());
 	}
 	
+	/**
+	 * 获取当前监听的直播房间号
+	 * @return
+	 */
 	public String getRoomId() {
 		return ridTF.getText();
 	}
 	
+	/**
+	 * 打印授权版本信息
+	 */
 	public void printVersionInfo() {
 		toConsole("**********************************************************");
 		toConsole(" [亚絲娜] 享有本软件的完全著作权");

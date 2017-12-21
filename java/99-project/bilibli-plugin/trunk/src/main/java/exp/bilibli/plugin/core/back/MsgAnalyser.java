@@ -37,9 +37,6 @@ import exp.libs.utils.other.StrUtils;
  */
 public class MsgAnalyser {
 
-	/**
-	 * 
-	 */
 	private final static Logger log = LoggerFactory.getLogger(MsgAnalyser.class);
 	
 	protected MsgAnalyser() {}
@@ -111,9 +108,8 @@ public class MsgAnalyser {
 	 */
 	private static void toDo(SendGift msgBean) {
 		String msg = StrUtils.concat(
-				"[", msgBean.getUname(), "] ", KeywordMgr.getAdj(), 
-				msgBean.getAction(), " [", msgBean.getGiftName(), 
-				"] x", msgBean.getNum()
+				"[", msgBean.getUname(), "] ", msgBean.getAction(), 
+				" [", msgBean.getGiftName(), "] x", msgBean.getNum()
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
@@ -213,9 +209,11 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(LiveMsg msgBean) {
-		String msg = StrUtils.concat("您特别关注的直播间 [", msgBean.getRoomId(), "] 开播啦!!!");
+		String msg = StrUtils.concat("您关注的直播间 [", msgBean.getRoomId(), "] 开播啦!!!");
 		UIUtils.chat(msg);
 		log.info(msg);
+		
+		ChatMgr.getInstn().helloLive(msgBean.getRoomId());
 	}
 	
 	/**

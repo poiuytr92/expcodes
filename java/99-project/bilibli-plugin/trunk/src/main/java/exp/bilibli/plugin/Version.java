@@ -25,10 +25,6 @@ public class Version {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
-		// FIXME: 开播时，根据时间打招呼
-		// 定时弹幕： 没关注的。。喜欢主播的
-		// 打call
-		// 注释生成器
 	}
 	
 }

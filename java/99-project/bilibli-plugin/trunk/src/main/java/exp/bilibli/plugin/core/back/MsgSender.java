@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.RoomMgr;
+import exp.bilibli.plugin.core.front.AppUI;
 import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.ChatColor;
 import exp.bilibli.plugin.utils.UIUtils;
@@ -32,18 +33,28 @@ public class MsgSender {
 	/**
 	 * 发送弹幕消息
 	 * @param msg 弹幕消息
-	 * @param realRoomId 目标直播间
+	 * @return
+	 */
+	public static boolean sendChat(String msg) {
+		String roomId = AppUI.getInstn().getRoomId();
+		return sendChat(msg, roomId);
+	}
+	
+	/**
+	 * 发送弹幕消息
+	 * @param msg 弹幕消息
+	 * @param roomId 目标直播间
 	 * @return
 	 */
 	public static boolean sendChat(String msg, String roomId) {
-		return sendChat(msg, ChatColor.WHITE, roomId, Browser.COOKIES());
+		return sendChat(msg, ChatColor.WHITE, roomId);
 	}
 	
 	/**
 	 * 发送弹幕消息
 	 * @param msg 弹幕消息
 	 * @param chatColor 弹幕颜色
-	 * @param realRoomId 目标直播间
+	 * @param roomId 目标直播间
 	 * @return
 	 */
 	public static boolean sendChat(String msg, String chatColor, String roomId) {

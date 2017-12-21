@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import exp.bilibli.plugin.Config;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -46,17 +47,19 @@ public class KeywordMgr {
 	}
 	
 	private void init() {
-		String[] adjs = Config.getInstn().ADJS().split(",");
-		for(String adj : adjs) {
-			if(StrUtils.isNotEmpty(adj)) {
-				this.adjs.add(adj);
+		List<String> adjLines = FileUtils.readLines(Config.getInstn().ADJ_PATH());
+		for(String line : adjLines) {
+			line = line.trim();
+			if(StrUtils.isNotEmpty(line)) {
+				adjs.add(line);
 			}
 		}
 		
-		String[] nights = Config.getInstn().NIGHTS().split(",");
-		for(String night : nights) {
-			if(StrUtils.isNotEmpty(night)) {
-				this.nights.add(night);
+		List<String> nightLines = FileUtils.readLines(Config.getInstn().NIGHT_PATH());
+		for(String line : nightLines) {
+			line = line.trim();
+			if(StrUtils.isNotEmpty(line)) {
+				nights.add(line);
 			}
 		}
 	}
