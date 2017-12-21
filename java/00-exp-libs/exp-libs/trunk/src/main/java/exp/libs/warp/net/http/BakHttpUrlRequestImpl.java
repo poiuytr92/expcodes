@@ -19,7 +19,7 @@ import org.apache.commons.httpclient.methods.PostMethod;
  * @author xiaolin
  * HTTP 请求接口实现类
  */
-public class HttpUrlRequestImpl implements HttpUrlRequest {
+public class BakHttpUrlRequestImpl implements BakHttpUrlRequest {
 	/**
 	 * 请求客户端
 	 */

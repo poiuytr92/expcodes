@@ -11,7 +11,7 @@ import org.apache.commons.httpclient.HttpClient;
  * @author xiaolin
  * HTTP 请求接口类
  */
-public interface HttpUrlRequest {
+public interface BakHttpUrlRequest {
        
 	/**
 	 * 请求连接GET方法
