@@ -30,11 +30,6 @@ public class Browser {
 	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
 	
-	private final static String UID_KEY = "DedeUserID";
-	
-	/** 当前登陆用户的ID */
-	private String uid;
-	
 	/** 当前登陆用户的cookies，供https接口用 */
 	private String sCookies;
 	
@@ -43,7 +38,6 @@ public class Browser {
 	private static volatile Browser instance;
 	
 	private Browser() {
-		this.uid = "";
 		this.sCookies = "";
 	}
 	
@@ -58,14 +52,6 @@ public class Browser {
 		return instance;
 	}
 	
-	public static String UID() {
-		return INSTN()._UID();
-	}
-	
-	private String _UID() {
-		return uid;
-	}
-
 	public static String COOKIES() {
 		return INSTN()._COOKIES();
 	}
@@ -204,9 +190,6 @@ public class Browser {
 				// 供后台HTTPS协议用
 				cookieInfo.append(cookie.getName()).append("=");
 				cookieInfo.append(cookie.getValue()).append("; ");
-				if(UID_KEY.equals(cookie.getName())) {
-					this.uid = cookie.getValue();
-				}
 			}
 			
 			if(idx > 0) {

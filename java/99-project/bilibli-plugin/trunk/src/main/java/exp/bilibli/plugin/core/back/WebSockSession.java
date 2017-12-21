@@ -13,10 +13,10 @@ import org.java_websocket.handshake.ServerHandshake;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.ldm.Frame;
 import exp.bilibli.plugin.envm.Binary;
 import exp.bilibli.plugin.utils.UIUtils;
-import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
@@ -136,7 +136,7 @@ class WebSockSession extends WebSocketClient {
 			UIUtils.log("入侵直播间成功, 正在暗中观察...");
 			
 		} else {
-			String msg = CharsetUtils.toStr(buff, Charset.UTF8);
+			String msg = CharsetUtils.toStr(buff, Config.DEFAULT_CHARSET);
 			String sJson = RegexUtils.findFirst(msg, RGX_JSON);
 			
 			if(JsonUtils.isVaild(sJson)) {

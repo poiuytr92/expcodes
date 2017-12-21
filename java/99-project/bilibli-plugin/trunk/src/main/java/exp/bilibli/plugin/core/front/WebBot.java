@@ -9,9 +9,8 @@ import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
-import exp.bilibli.plugin.core.back.HttpsMsgSender;
+import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.envm.ChatColor;
-import exp.bilibli.plugin.https.HttpsUtils;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -165,7 +164,7 @@ class WebBot extends LoopThread {
 			
 		} catch(Throwable e) {
 			UIUtils.statistics("挤不进去: 抽奖直播间 [", roomId, "] ");
-			UIUtils.log("辣鸡B站炸了, 尝试重连...");
+			UIUtils.log("辣鸡B站炸了, 自动重连");
 		}
 		return isOk;
 	}
@@ -213,7 +212,7 @@ class WebBot extends LoopThread {
 		
 		// 参与聊天室发言
 		String roomId = AppUI.getInstn().getRoomId();
-		HttpsMsgSender.sendChat(msg, Browser.COOKIES(), roomId, ChatColor.GOLDEN);
+		MsgSender.sendChat(msg, Browser.COOKIES(), roomId, ChatColor.GOLDEN);
 	}
 	
 	/**

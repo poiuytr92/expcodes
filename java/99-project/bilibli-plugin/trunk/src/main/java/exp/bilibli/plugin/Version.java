@@ -28,6 +28,7 @@ public class Version {
 		// FIXME: 开播时，根据时间打招呼
 		// 定时弹幕： 没关注的。。喜欢主播的
 		// 打call
+		// 注释生成器
 	}
 	
 }

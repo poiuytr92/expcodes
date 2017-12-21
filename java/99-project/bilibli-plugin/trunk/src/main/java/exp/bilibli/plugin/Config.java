@@ -1,5 +1,6 @@
 package exp.bilibli.plugin;
 
+import exp.libs.envm.Charset;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
 
@@ -15,6 +16,8 @@ import exp.libs.warp.conf.xml.XConfigFactory;
  * @since     jdk版本：jdk1.6
  */
 public class Config {
+	
+	public final static String DEFAULT_CHARSET = Charset.UTF8;
 	
 	/** 用户代理（浏览器头标识）: 假装是谷歌，避免被反爬   （浏览器头可以用Fiddler抓包抓到）*/
 	public final static String USER_AGENT = 

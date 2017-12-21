@@ -1,10 +1,10 @@
-package exp.bilibli.plugin;
+package exp.bilibli.plugin.core.back;
 
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 
-public class TestRecvMsg {
+public class TestMsgReceiver {
 
 	public static void main(String[] args) {
 		String hex = "0000001400100001000000030000000100000008";
@@ -20,4 +20,5 @@ public class TestRecvMsg {
 		String sJson = RegexUtils.findFirst(msg, "[^{]*(.*)");
 		System.out.println(sJson);
 	}
+	
 }

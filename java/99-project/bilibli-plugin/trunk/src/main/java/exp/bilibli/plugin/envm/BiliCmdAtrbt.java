@@ -70,4 +70,6 @@ public class BiliCmdAtrbt {
 	
 	public final static String vip = "vip";
 	
+	public final static String code = "code";
+	
 }
