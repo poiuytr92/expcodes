@@ -20,6 +20,7 @@ import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
+import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.core.back.WebSockClient;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
@@ -327,8 +328,9 @@ public class AppUI extends MainWindow {
 				}
 				
 				String msg = chatTF.getText();
-				if(StrUtils.isNotEmpty(msg)) {
-					ChatMgr.getInstn().addMsg(msg);
+				String roomId = getRoomId();
+				if(StrUtils.isNotEmpty(msg, roomId)) {
+					MsgSender.sendChat(msg, roomId);
 					chatTF.setText("");
 				}
 			}

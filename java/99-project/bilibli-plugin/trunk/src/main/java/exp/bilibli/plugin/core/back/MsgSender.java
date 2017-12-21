@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibli.plugin.Config;
+import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.ChatColor;
@@ -28,11 +29,37 @@ public class MsgSender {
 	
 	protected MsgSender() {}
 	
-	public static boolean sendChat(String msg, String cookies, String realRoomId) {
-		return sendChat(msg, cookies, realRoomId, ChatColor.WHITE);
+	/**
+	 * 发送弹幕消息
+	 * @param msg 弹幕消息
+	 * @param realRoomId 目标直播间
+	 * @return
+	 */
+	public static boolean sendChat(String msg, String roomId) {
+		return sendChat(msg, ChatColor.WHITE, roomId, Browser.COOKIES());
+	}
+	
+	/**
+	 * 发送弹幕消息
+	 * @param msg 弹幕消息
+	 * @param chatColor 弹幕颜色
+	 * @param realRoomId 目标直播间
+	 * @return
+	 */
+	public static boolean sendChat(String msg, String chatColor, String roomId) {
+		return sendChat(msg, chatColor, roomId, Browser.COOKIES());
 	}
 
-	public static boolean sendChat(String msg, String cookies, String roomId, String chatColor) {
+	/**
+	 * 发送弹幕消息
+	 * @param msg 弹幕消息
+	 * @param chatColor 弹幕颜色
+	 * @param roomId 目标直播间房号
+	 * @param cookies 发送用户的cookies
+	 * @return
+	 */
+	public static boolean sendChat(String msg, String chatColor, 
+			String roomId, String cookies) {
 		boolean isOk = false;
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
@@ -45,6 +72,12 @@ public class MsgSender {
 		return isOk;
 	}
 	
+	/**
+	 * 
+	 * @param cookies
+	 * @param realRoomId
+	 * @return
+	 */
 	private static Map<String, String> toHeadParams(String cookies, String realRoomId) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(HttpsUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
@@ -61,6 +94,13 @@ public class MsgSender {
 		return params;
 	}
 	
+	/**
+	 * 
+	 * @param msg
+	 * @param realRoomId
+	 * @param chatColor
+	 * @return
+	 */
 	private static Map<String, String> toRequestParams(
 			String msg, String realRoomId, String chatColor) {
 		Map<String, String> params = new HashMap<String, String>();

@@ -37,6 +37,9 @@ import exp.libs.utils.other.StrUtils;
  */
 public class MsgAnalyser {
 
+	/**
+	 * 
+	 */
 	private final static Logger log = LoggerFactory.getLogger(MsgAnalyser.class);
 	
 	protected MsgAnalyser() {}
