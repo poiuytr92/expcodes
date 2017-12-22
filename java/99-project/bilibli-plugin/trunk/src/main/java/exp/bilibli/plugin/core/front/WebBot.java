@@ -157,7 +157,6 @@ class WebBot extends LoopThread {
 		
 		// 后端抽奖过快， 需要限制， 不然连续抽奖时会取不到礼物编号
 		_sleep(SLEEP_TIME);
-		_sleep(SLEEP_TIME);
 	}
 	
 	/**
