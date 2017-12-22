@@ -622,6 +622,7 @@ public class AppUI extends MainWindow {
 		curChatColor = color;
 		colorBtn.setForeground(color.COLOR());
 		colorUI._hide();
+		UIUtils.log("当前弹幕颜色 [", curChatColor.ZH(), "]");
 	}
 	
 	public ChatColor getCurChatColor() {

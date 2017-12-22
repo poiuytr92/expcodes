@@ -65,7 +65,7 @@ class ModeUI extends PopChildWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				backMode = false;
-				UIUtils.log("已切换全平台抽奖模式 [浏览器-仿真抽奖]");
+				UIUtils.log("当前全平台抽奖模式 [浏览器-仿真抽奖]");
 				_hide();
 			}
 		});
@@ -75,7 +75,7 @@ class ModeUI extends PopChildWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				backMode = true;
-				UIUtils.log("已切换全平台抽奖模式 [服务器-注入抽奖]");
+				UIUtils.log("当前全平台抽奖模式 [服务器-注入抽奖]");
 				_hide();
 			}
 		});
