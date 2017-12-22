@@ -97,8 +97,8 @@ public class Config {
 		return xConf.getVal("/config/files/room");
 	}
 	
-	public String ADJ_PATH() {
-		return xConf.getVal("/config/files/adjs");
+	public String ADV_PATH() {
+		return xConf.getVal("/config/files/advs");
 	}
 	
 	public String NIGHT_PATH() {

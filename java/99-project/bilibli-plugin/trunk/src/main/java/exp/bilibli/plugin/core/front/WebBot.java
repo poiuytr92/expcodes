@@ -153,6 +153,9 @@ class WebBot extends LoopThread {
 			log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
 			UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
 		}
+		
+		// 后端抽奖过快， 需要限制， 不然连续抽奖时会取不到礼物编号
+		_sleep(SLEEP_TIME);
 	}
 	
 	/**

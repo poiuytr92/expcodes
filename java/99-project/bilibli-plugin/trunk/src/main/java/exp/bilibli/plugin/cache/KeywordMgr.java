@@ -22,14 +22,14 @@ import exp.libs.utils.other.StrUtils;
  */
 public class KeywordMgr {
 
-	private List<String> adjs;
+	private List<String> advs;
 	
 	private Set<String> nights;
 	
 	private static volatile KeywordMgr instance;
 	
 	private KeywordMgr() {
-		this.adjs = new ArrayList<String>();
+		this.advs = new ArrayList<String>();
 		this.nights = new HashSet<String>();
 		
 		init();
@@ -47,12 +47,12 @@ public class KeywordMgr {
 	}
 	
 	private void init() {
-		List<String> adjLines = FileUtils.readLines(
-				Config.getInstn().ADJ_PATH(), Config.DEFAULT_CHARSET);
-		for(String line : adjLines) {
+		List<String> advLines = FileUtils.readLines(
+				Config.getInstn().ADV_PATH(), Config.DEFAULT_CHARSET);
+		for(String line : advLines) {
 			line = line.trim();
 			if(StrUtils.isNotEmpty(line)) {
-				adjs.add(line);
+				advs.add(line);
 			}
 		}
 		
@@ -71,12 +71,12 @@ public class KeywordMgr {
 	}
 	
 	private String _getAdj() {
-		if(adjs.size() <= 0) {
+		if(advs.size() <= 0) {
 			return "";
 		}
 		
-		int idx = RandomUtils.randomInt(adjs.size());
-		return adjs.get(idx);
+		int idx = RandomUtils.randomInt(advs.size());
+		return advs.get(idx);
 	}
 	
 	public static boolean containsNight(String msg) {

@@ -18,7 +18,7 @@ class ModeUI extends PopChildWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5691969159309932864L;
 
-	private final static int WIDTH = 500;
+	private final static int WIDTH = 550;
 	
 	private final static int HEIGHT = 170;
 	

@@ -19,7 +19,7 @@
         <img caption="登陆二维码缓存"><![CDATA[./data/img]]></img>
         <driver caption="web驱动器"><![CDATA[./data/driver/]]></driver>
         <room caption="房间号缓存"><![CDATA[./data/room/roomids.dat]]></room>
-        <adjs caption="形容词库"><![CDATA[./data/msg/adjs.dat]]></adjs>
+        <advs caption="副词词库"><![CDATA[./data/msg/advs.dat]]></advs>
         <nights caption="晚安敏感词库"><![CDATA[./data/msg/nights.dat]]></nights>
         <calls caption="公告屏语录"><![CDATA[./data/msg/calls.dat]]></calls>
     </files>
