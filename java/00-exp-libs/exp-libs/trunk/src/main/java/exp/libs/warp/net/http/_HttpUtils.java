@@ -83,21 +83,27 @@ class _HttpUtils {
 			public final static String ORIGIN = "Origin";
 			public final static String REFERER = "Referer";
 			public final static String USER_AGENT = "User-Agent";
+			
+			public final static String CONTENT_ENCODING = "Content-Encoding";
 		}
 		
 		public class VAL {
 			
 			/** 请求POST的数据是xml */
-			public final static String CONTENT_TYPE_XML = 
+			public final static String POST_XML = 
 					"application/x-javascript text/xml; charset=";
 			
 			/** 请求POST的数据是json */
-			public final static String CONTENT_TYPE_JSON = 
+			public final static String POST_JSON = 
 					"application/x-javascript; charset=";
 			
 			/** 请求POST的数据是表单 */
-			public final static String CONTENT_TYPE_FORM = 
+			public final static String POST_FORM = 
 					"application/x-www-form-urlencoded; charset=";
+			
+			/** 响应数据编码: gizp */
+			public final static String GZIP = "gzip";
+			
 		}
 		
 	}
