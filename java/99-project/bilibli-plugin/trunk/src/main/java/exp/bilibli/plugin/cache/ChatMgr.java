@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.pdm.SendGift;
 import exp.bilibli.plugin.core.back.MsgSender;
+import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.num.RandomUtils;
@@ -156,7 +157,8 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, "感谢 ", msg));
+		MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, "感谢 ", msg), 
+				UIUtils.getCurChatColor());
 	}
 
 	public void addNight(String username, String msg) {
@@ -168,7 +170,7 @@ public class ChatMgr extends LoopThread {
 		
 		if(KeywordMgr.containsNight(msg)) {
 			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
-			MsgSender.sendChat(chatMsg);
+			MsgSender.sendChat(chatMsg, UIUtils.getCurChatColor());
 			nightedUsers.add(username);
 		}
 	}
@@ -263,7 +265,7 @@ public class ChatMgr extends LoopThread {
 		if(userNum >= THX_USER_LIMIT) {
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢前面[", userNum, 
 					"]个大佬的投喂,喜欢请关注O(∩_∩)O");
-			MsgSender.sendChat(msg);
+			MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 			
 		// 分别合并每个用户的投喂礼物再感谢
 		} else {
@@ -299,7 +301,7 @@ public class ChatMgr extends LoopThread {
 				if(num != null && num > 0) {
 					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
 							KeywordMgr.getAdj(), "投喂", num, "个[", giftName, "]");
-					MsgSender.sendChat(msg);
+					MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 				}
 			}
 			
@@ -331,7 +333,7 @@ public class ChatMgr extends LoopThread {
 		
 		int idx = RandomUtils.randomInt(callMsgs.size());
 		String msg = NOTICE_KEY.concat(callMsgs.get(idx));
-		MsgSender.sendChat(msg);
+		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 	}
 	
 }

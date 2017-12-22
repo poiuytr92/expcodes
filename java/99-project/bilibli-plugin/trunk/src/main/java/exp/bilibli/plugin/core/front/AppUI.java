@@ -624,6 +624,10 @@ public class AppUI extends MainWindow {
 		colorUI._hide();
 	}
 	
+	public ChatColor getCurChatColor() {
+		return curChatColor;
+	}
+	
 	/**
 	 * 打印授权版本信息
 	 */

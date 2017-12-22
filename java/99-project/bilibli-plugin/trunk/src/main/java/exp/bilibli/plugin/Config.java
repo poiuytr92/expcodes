@@ -69,6 +69,10 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/chat");
 	}
 	
+	public String SIGN_URL() {
+		return xConf.getVal("/config/biliUrls/sign");
+	}
+	
 	public String EG_CHECK_URL() {
 		return xConf.getVal("/config/biliUrls/egCheck");
 	}

@@ -90,6 +90,7 @@ class WebBot extends LoopThread {
 	protected void _before() {
 		log.info("{} 已启动", getName());
 		RoomMgr.getInstn().clearGiftRooms();
+		MsgSender.toSign();	// 自动签到
 	}
 
 	@Override

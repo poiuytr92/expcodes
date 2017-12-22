@@ -33,6 +33,8 @@ public class MsgSender {
 
 	private final static Logger log = LoggerFactory.getLogger(MsgSender.class);
 	
+	private final static String SIGN_URL = Config.getInstn().SIGN_URL();
+	
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
 	
 	private final static String EG_CHECK_URL = Config.getInstn().EG_CHECK_URL();
@@ -80,13 +82,58 @@ public class MsgSender {
 	}
 	
 	/**
+	 * 自动签到
+	 * @return
+	 */
+	public static void toSign() {
+		final String cookies = Browser.COOKIES();
+		final String roomId = UIUtils.getCurRoomId();
+		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
+		if(realRoomId > 0) {
+			String sRoomId = String.valueOf(realRoomId);
+			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
+			String response = HttpsUtils.doGet(SIGN_URL, headParams, null, Config.DEFAULT_CHARSET);
+			_analyseSignResponse(response);
+			
+		} else {
+			log.warn("自动签到失败: 无效的房间号");
+		}
+	}
+	
+	private static String _analyseSignResponse(String response) {
+		String errDesc = "";
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code != 0) {
+				errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("自动签到失败: {}", errDesc);
+			}
+		} catch(Exception e) {
+			log.error("自动签到失败: {}", response, e);
+		}
+		return errDesc;
+	}
+	
+	/**
 	 * 发送弹幕消息
 	 * @param msg 弹幕消息
 	 * @return
 	 */
 	public static boolean sendChat(String msg) {
-		String roomId = UIUtils.getCurRoomId();
+		final String roomId = UIUtils.getCurRoomId();
 		return sendChat(msg, roomId);
+	}
+	
+	/**
+	 * 
+	 * @param msg
+	 * @param color
+	 * @return
+	 */
+	public static boolean sendChat(String msg, ChatColor color) {
+		final String roomId = UIUtils.getCurRoomId();
+		return sendChat(msg, color, roomId);
 	}
 	
 	/**
@@ -299,7 +346,7 @@ public class MsgSender {
 				log.warn("参与抽奖失败: {}", errDesc);
 			}
 		} catch(Exception e) {
-			log.warn("参与抽奖失败: {}", response, e);
+			log.error("参与抽奖失败: {}", response, e);
 		}
 		return errDesc;
 	}

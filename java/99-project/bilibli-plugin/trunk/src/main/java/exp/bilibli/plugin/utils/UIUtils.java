@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.core.front.AppUI;
+import exp.bilibli.plugin.envm.ChatColor;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -69,6 +70,10 @@ public class UIUtils {
 	
 	public static String getCurRoomId() {
 		return AppUI.getInstn().getRoomId();
+	}
+	
+	public static ChatColor getCurChatColor() {
+		return AppUI.getInstn().getCurChatColor();
 	}
 	
 	public static boolean isBackLotteryMode() {
