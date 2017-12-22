@@ -40,22 +40,22 @@ class ModeUI extends PopChildWindow {
 	@Override
 	protected void initComponents(Object... args) {
 		ButtonGroup btnGroup = new ButtonGroup(); {
-			this.frontBtn = new JRadioButton("仿真抽奖 (默认模式, 模拟人工操作, 效率较低但兼容所有抽奖)");
-			this.backBtn =  new JRadioButton("注入抽奖 (效率较高, 但仅适用于小电视, 或当季度的高能抽奖)");
+			this.frontBtn = new JRadioButton("浏览器仿真抽奖 (模拟人工操作, 效率低, 适用所有全频道抽奖)");
+			this.backBtn =  new JRadioButton("服务器注入抽奖 (默认, 效率高, 仅适用小电视或当季高能抽奖)");
 			frontBtn.setForeground(Color.BLACK);
 			backBtn.setForeground(Color.BLACK);
 			
 			btnGroup.add(frontBtn);
 			btnGroup.add(backBtn);
 			
-			frontBtn.setSelected(true);
-			this.backMode = false;
+			backBtn.setSelected(true);
+			this.backMode = true;
 		}
 	}
 
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
-		rootPanel.add(SwingUtils.getVFlowPanel(frontBtn, backBtn), BorderLayout.CENTER);
+		rootPanel.add(SwingUtils.getVFlowPanel(backBtn, frontBtn), BorderLayout.CENTER);
 	}
 
 	@Override
