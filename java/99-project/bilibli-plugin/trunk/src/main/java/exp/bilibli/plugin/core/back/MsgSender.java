@@ -109,7 +109,7 @@ public class MsgSender {
 				
 			} else {
 				String errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("每日签到失败: {}", errDesc);
+				UIUtils.log("每日签到失败: ", errDesc);
 			}
 		} catch(Exception e) {
 			log.error("每日签到失败: {}", response, e);

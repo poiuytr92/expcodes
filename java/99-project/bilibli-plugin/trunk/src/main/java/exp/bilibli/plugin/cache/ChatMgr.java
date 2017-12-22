@@ -317,7 +317,7 @@ public class ChatMgr extends LoopThread {
 			
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
 					KeywordMgr.getAdj(), "投喂[", sb.toString(), "]");
-			MsgSender.sendChat(msg);
+			MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 		}
 		
 		gifts.clear();
