@@ -62,6 +62,8 @@ public class AppUI extends MainWindow {
 	
 	private JButton loginBtn;
 	
+	private JButton modeBtn;
+	
 	private JButton sendBtn;
 	
 	private JButton colorBtn;
@@ -95,6 +97,8 @@ public class AppUI extends MainWindow {
 	private LotteryUI lotteryUI;
 	
 	private QrcodeUI qrcodeUI;
+	
+	private ModeUI modeUI;
 	
 	private ColorUI colorUI;
 	
@@ -147,6 +151,7 @@ public class AppUI extends MainWindow {
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.loginBtn = new JButton("扫码登陆 (可自动参与全平台抽奖)");
+		this.modeBtn = new JButton("抽奖模式");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
 		this.thxBtn = new JButton("答谢姬");
@@ -155,6 +160,7 @@ public class AppUI extends MainWindow {
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
+		modeBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
 		thxBtn.setForeground(Color.BLACK);
@@ -177,6 +183,7 @@ public class AppUI extends MainWindow {
 		this.wsClient = new WebSockClient();
 		this.lotteryUI = new LotteryUI();
 		this.qrcodeUI = new QrcodeUI();
+		this.modeUI = new ModeUI();
 		this.colorUI = new ColorUI();
 		this.curChatColor = ChatColor.WHITE;
 		
@@ -247,6 +254,7 @@ public class AppUI extends MainWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
 		panel.add(loginBtn, BorderLayout.CENTER);
+		panel.add(modeBtn, BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -275,6 +283,7 @@ public class AppUI extends MainWindow {
 		setLinkBtnListener();
 		setLotteryBtnListener();
 		setLoginBtnListener();
+		setModeBtnListener();
 		setSendBtnListener();
 		setColorBtnListener();
 		setThxBtnListener();
@@ -338,6 +347,16 @@ public class AppUI extends MainWindow {
 					UIUtils.log("正在连接登陆服务器, 请稍后...");
 					UIUtils.log("正在下载登陆二维码, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
 				}
+			}
+		});
+	}
+	
+	private void setModeBtnListener() {
+		modeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				modeUI._view();
 			}
 		});
 	}
@@ -569,6 +588,14 @@ public class AppUI extends MainWindow {
 	 */
 	private boolean isLogin() {
 		return !loginBtn.isEnabled();
+	}
+	
+	/**
+	 * 是否为暗中抽奖模式
+	 * @return true:使用后台协议抽奖; false:模拟前端行为抽奖
+	 */
+	public boolean isBackLotteryMode() {
+		return modeUI.isBackMode();
 	}
 	
 	/**

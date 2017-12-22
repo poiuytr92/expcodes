@@ -13,9 +13,11 @@ import exp.libs.utils.num.BODHUtils;
  * 	注意数据帧是有时间戳的，即使内容相同，时间戳不匹配当前时间的话是无法发送出去的.
  *  所以数据帧只能在发送前new出来，不能提前构造好final常量.
  * </PRE>
- * 
- * @author Administrator
- * @date 2017年12月13日
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class Frame implements Framedata {
 

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.Config;
+import exp.bilibli.plugin.bean.ldm.LotteryRoom;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.MsgSender;
@@ -113,10 +114,14 @@ class WebBot extends LoopThread {
 	private void toDo() {
 		
 		// 参与直播间抽奖
-		String roomId = RoomMgr.getInstn().getGiftRoom();
-		if(roomId != null) {
-			toLotteryByHttp(roomId);
-//			toLotteryByBrowser(roomId);
+		LotteryRoom room = RoomMgr.getInstn().getGiftRoom();
+		if(room != null) {
+			if(UIUtils.isBackLotteryMode()) {	// 后台注入式抽奖
+				toLottery(room);
+				
+			} else {
+				toLottery(room.getRoomId());	// 前端仿真式抽奖
+			}
 			
 		// 长时间无操作则休眠
 		} else {
@@ -125,19 +130,36 @@ class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 通过底层HTTP协议参与抽奖
-	 * @param roomId
+	 * 通过后端注入服务器参与抽奖
+	 * @param room
 	 */
-	private void toLotteryByHttp(String roomId) {
-		boolean isOk = MsgSender.lottery(roomId);
-		log.info("参与直播间 [{}] 抽奖{}", roomId, (isOk ? "成功" : "失败"));
+	private void toLottery(LotteryRoom room) {
+		final String roomId = room.getRoomId();
+		final String tvId = room.getTvId();
+		
+		String errDesc = "";
+		if(StrUtils.isNotEmpty(room.getTvId())) {
+			errDesc = MsgSender.toTvLottery(roomId, tvId);
+		} else {
+			errDesc = MsgSender.toEgLottery(roomId);
+		}
+		
+		if(StrUtils.isEmpty(errDesc)) {
+			log.info("参与直播间 [{}] 抽奖成功", roomId);
+			UIUtils.statistics("成功: 抽奖直播间 [", roomId, "]");
+			UIUtils.updateLotteryCnt();
+			
+		} else {
+			log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
+			UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
+		}
 	}
 	
 	/**
-	 * 通过模拟浏览器行为参与抽奖
+	 * 通过前端模拟浏览器行为参与抽奖
 	 * @param roomId
 	 */
-	private void toLotteryByBrowser(String roomId) {
+	private void toLottery(String roomId) {
 		String url = StrUtils.concat(LIVE_URL, roomId);
 		Browser.open(url);	// 打开/重开直播间(可屏蔽上一次抽奖结果提示)
 		_sleep(SLEEP_TIME);

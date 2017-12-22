@@ -57,24 +57,28 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/live");
 	}
 	
-	public String CHAT_URL() {
-		return xConf.getVal("/config/biliUrls/chat");
-	}
-	
-	public String CHECK_URL() {
-		return xConf.getVal("/config/biliUrls/check");
-	}
-	
-	public String JOIN_URL() {
-		return xConf.getVal("/config/biliUrls/join");
-	}
-	
 	public String SSL_URL() {
 		return xConf.getVal("/config/biliUrls/ssl");
 	}
 	
 	public String WS_URL() {
 		return xConf.getVal("/config/biliUrls/ws");
+	}
+	
+	public String CHAT_URL() {
+		return xConf.getVal("/config/biliUrls/chat");
+	}
+	
+	public String EG_CHECK_URL() {
+		return xConf.getVal("/config/biliUrls/egCheck");
+	}
+	
+	public String EG_JOIN_URL() {
+		return xConf.getVal("/config/biliUrls/egJoin");
+	}
+	
+	public String TV_JOIN_URL() {
+		return xConf.getVal("/config/biliUrls/tvJoin");
 	}
 	
 	public String COOKIE_DIR() {

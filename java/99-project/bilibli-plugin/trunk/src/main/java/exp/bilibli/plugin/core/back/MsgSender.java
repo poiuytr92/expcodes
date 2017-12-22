@@ -1,16 +1,17 @@
 package exp.bilibli.plugin.core.back;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.RoomMgr;
-import exp.bilibli.plugin.core.front.AppUI;
 import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.ChatColor;
 import exp.bilibli.plugin.utils.UIUtils;
@@ -30,11 +31,15 @@ import exp.libs.warp.net.http.HttpsUtils;
  */
 public class MsgSender {
 
+	private final static Logger log = LoggerFactory.getLogger(MsgSender.class);
+	
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
 	
-	private final static String CHECK_URL = Config.getInstn().CHECK_URL();
+	private final static String EG_CHECK_URL = Config.getInstn().EG_CHECK_URL();
 	
-	private final static String JOIN_URL = Config.getInstn().JOIN_URL();
+	private final static String EG_JOIN_URL = Config.getInstn().EG_JOIN_URL();
+	
+	private final static String TV_JOIN_URL = Config.getInstn().TV_JOIN_URL();
 	
 	protected MsgSender() {}
 	
@@ -45,16 +50,25 @@ public class MsgSender {
 	 * @return
 	 */
 	private static Map<String, String> toPostHeadParams(String cookies, String realRoomId) {
-		Map<String, String> params = toGetHeadParams(cookies, realRoomId);
+		Map<String, String> params = new HashMap<String, String>();
+		params.put(HttpsUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
+		params.put(HttpsUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
+		params.put(HttpsUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		params.put(HttpsUtils.HEAD.KEY.CONNECTION, "keep-alive");
 		params.put(HttpsUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
-				HttpsUtils.HEAD.VAL.CONTENT_TYPE_FORM.concat(Config.DEFAULT_CHARSET));	
+				HttpsUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
+		params.put(HttpsUtils.HEAD.KEY.COOKIE, cookies);
+		params.put(HttpsUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
+		params.put(HttpsUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
+		params.put(HttpsUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
+		params.put(HttpsUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
 	
 	private static Map<String, String> toGetHeadParams(String cookies, String realRoomId) {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
+		params.put(HttpsUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
+		params.put(HttpsUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
 		params.put(HttpsUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
 		params.put(HttpsUtils.HEAD.KEY.CONNECTION, "keep-alive");
 		params.put(HttpsUtils.HEAD.KEY.COOKIE, cookies);
@@ -71,7 +85,7 @@ public class MsgSender {
 	 * @return
 	 */
 	public static boolean sendChat(String msg) {
-		String roomId = AppUI.getInstn().getRoomId();
+		String roomId = UIUtils.getCurRoomId();
 		return sendChat(msg, roomId);
 	}
 	
@@ -111,9 +125,9 @@ public class MsgSender {
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toPostHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = toChatRequestParams(msg, sRoomId, color.CODE());
-			String response = HttpsUtils.doPost(CHAT_URL, headParams, requestParams);
-			isOk = analyse(response);
+			Map<String, String> requestParams = _toChatRequestParams(msg, sRoomId, color.CODE());
+			String response = HttpsUtils.doPost(CHAT_URL, headParams, requestParams, Config.DEFAULT_CHARSET);
+			isOk = _analyseChatResponse(response);
 		}
 		return isOk;
 	}
@@ -125,7 +139,7 @@ public class MsgSender {
 	 * @param chatColor
 	 * @return
 	 */
-	private static Map<String, String> toChatRequestParams(
+	private static Map<String, String> _toChatRequestParams(
 			String msg, String realRoomId, String color) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("rnd", String.valueOf(System.currentTimeMillis() / 1000));	// 时间戳
@@ -142,7 +156,7 @@ public class MsgSender {
 	 * @param response  {"code":-101,"msg":"请先登录","data":[]}
 	 * @return
 	 */
-	private static boolean analyse(String response) {
+	private static boolean _analyseChatResponse(String response) {
 		boolean isOk = false;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -151,157 +165,143 @@ public class MsgSender {
 				isOk = true;
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				UIUtils.log("发送弹幕失败: ", reason);
+				UIUtils.log("发送弹幕失败: ", reason);	// FIXME
 			}
 		} catch(Exception e) {
-			UIUtils.log("发送弹幕失败: 服务器无响应");
+			UIUtils.log("发送弹幕失败: 服务器无响应");	// FIXME
 		}
 		return isOk;
 	}
 	
+	/**
+	 * 小电视抽奖
+	 * @param roomId
+	 * @param raffleId
+	 * @return
+	 */
+	public static String toTvLottery(String roomId, String raffleId) {
+		return joinLottery(TV_JOIN_URL, roomId, raffleId, Browser.COOKIES());
+	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	public static boolean lottery(String roomId) {
-		boolean isOk = false;
-		String raffleId = checkLottery(roomId, Browser.COOKIES());
+	/**
+	 * 高能礼物抽奖
+	 * @param roomId
+	 * @return
+	 */
+	public static String toEgLottery(String roomId) {
+		String errDesc = "";
+		final String cookies = Browser.COOKIES();
+		String raffleId = checkLottery(EG_CHECK_URL, roomId, cookies);
 		if(StrUtils.isNotEmpty(raffleId)) {
-			isOk = joinLottery(roomId, raffleId, Browser.COOKIES());
+			errDesc = joinLottery(EG_JOIN_URL, roomId, raffleId, cookies);
+		} else {
+			errDesc = "已超时";	// 提取礼物编号失败
 		}
-		return isOk;
+		return errDesc;
 	}
 	
-	public static String checkLottery(String roomId, String cookies) {
+	/**
+	 * 
+	 * @param url
+	 * @param roomId
+	 * @param cookies
+	 * @return
+	 */
+	private static String checkLottery(String url, String roomId, String cookies) {
 		String raffleId = "";
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = toLotteryRequestParams(sRoomId);
-			String response = HttpsUtils.doGet(CHECK_URL, headParams, requestParams);
-			raffleId = analyseCheck(response);
+			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId);
+			String response = HttpsUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+			raffleId = _getRaffleId(response);
 		}
 		return raffleId;
 	}
 	
-	private static Map<String, String> toLotteryRequestParams(String realRoomId) {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("roomid", realRoomId);	// 正在抽奖的房间号
-		return params;
+	/**
+	 * 
+	 * @param url
+	 * @param roomId
+	 * @param raffleId
+	 * @param cookies
+	 * @return
+	 */
+	private static String joinLottery(String url, String roomId, String raffleId, String cookies) {
+		String errDesc = "";
+		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
+		if(realRoomId > 0) {
+			String sRoomId = String.valueOf(realRoomId);
+			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
+			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId, raffleId);
+			String response = HttpsUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+			errDesc = _analyseLotteryResponse(response);
+		}
+		return errDesc;
 	}
 	
 	/**
-	 * {
-  "code": 0,
-  "msg": "success",
-  "message": "success",
-  "data": [
-    {
-      "raffleId": 46292,
-      "type": "openfire",
-      "from": "yiyo............",
-      "from_user": {
-        "uname": "yiyo............",
-        "face": "http://i0.hdslb.com/bfs/face/deca98f5c7eadab74cd4a8013eca41da078ef00d.jpg"
-      },
-      "time": 54,
-      "status": 1
-    }
-  ]
-}
-	 * @param response
+	 * 
+	 * @param response {"code":0,"msg":"success","message":"success","data":[{"raffleId":46506,"type":"openfire","from":"喵熊°","from_user":{"uname":"喵熊°","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg"},"time":60,"status":1},{"raffleId":46507,"type":"openfire","from":"喵熊°","from_user":{"uname":"喵熊°","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg"},"time":60,"status":1},{"raffleId":46508,"type":"openfire","from":"喵熊°","from_user":{"uname":"喵熊°","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg"},"time":60,"status":1},{"raffleId":46509,"type":"openfire","from":"喵熊°","from_user":{"uname":"喵熊°","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg"},"time":60,"status":1}]}
 	 * @return
 	 */
-	private static String analyseCheck(String response) {
-		System.out.println(response);
+	private static String _getRaffleId(String response) {
 		String raffleId = "";
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {
-				JSONArray array = JsonUtils.getArray(json, BiliCmdAtrbt.data);
-				JSONObject obj = array.getJSONObject(0);
+				Object data = json.get(BiliCmdAtrbt.data);
+				JSONObject obj = null;
+				if(data instanceof JSONArray) {
+					obj = ((JSONArray) data).getJSONObject(0);
+				} else {
+					obj = (JSONObject) data;
+				}
+				
 				raffleId = String.valueOf(JsonUtils.getInt(obj, BiliCmdAtrbt.raffleId, 0));
 				
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				UIUtils.log("抽签失败: ", reason);
+				log.warn("获取礼物编号失败: {}", reason);
 			}
 		} catch(Exception e) {
-			UIUtils.log("抽签失败: 服务器无响应");
-			e.printStackTrace();
+			log.error("获取礼物编号异常: {}", response, e);
 		}
 		return raffleId;
 	}
 	
-	
-	public static boolean joinLottery(String roomId, String raffleId, String cookies) {
-		boolean isOk = false;
-		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
-		if(realRoomId > 0) {
-			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = toLotteryRequestParams(sRoomId, raffleId);
-			String response = HttpsUtils.doGet(JOIN_URL, headParams, requestParams);
-			isOk = analyseJoin(response);
-		}
-		return isOk;
-	}
-	
-	private static Map<String, String> toLotteryRequestParams(String realRoomId, String raffleId) {
+	private static Map<String, String> _toLotteryRequestParams(String realRoomId) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put("roomid", realRoomId);	// 正在抽奖的房间号
-		params.put("raffleId", raffleId);	// 抽奖签号
 		return params;
 	}
 	
-	// {"code":0,"msg":"............","message":"............","data":{"23439558":"small","roomid":"40764","5599305":"small","558038":"small","86845000":"small","8582388":"small","4399471":"small","767530":"small","817458":"small","511589":"small","4799261":"small","14475718":"small","27880394":"small","time":55,"2142310":"small","44511314":"small","19729408":"small","19878806":"small","14881238":"small","11655829":"small","34810599":"small","15205065":"small","86515134":"small","23406718":"small","1323899":"small","raffleId":"46292","8536920":"small","31437943":"small","16293951":"small","3834215":"small","31470791":"small","76979807":"small","903874":"small","9008673":"small","face":"http://i0.hdslb.com/bfs/face/deca98f5c7eadab74cd4a8013eca41da078ef00d.jpg","102015208":"small","19123719":"small","20360157":"small","from":"yiyo............","77959868":"small","8042724":"small","7384826":"small","25480252":"small","20177919":"small","40573511":"small","11487015":"small","59812113":"small","13730008":"small","status":2,"31050298":"small","3076423":"small","1698233":"small","7294374":"small","31879634":"small","3392133":"small","type":"openfire","2322836":"small"}}
-	private static boolean analyseJoin(String response) {
-		boolean isOk = false;
+	private static Map<String, String> _toLotteryRequestParams(String realRoomId, String raffleId) {
+		Map<String, String> params = _toLotteryRequestParams(realRoomId);
+		params.put("raffleId", raffleId);	// 礼物编号
+		return params;
+	}
+	
+	/**
+	 * 
+	 * @param response {"code":0,"msg":"加入成功","message":"加入成功","data":{"3392133":"small","511589":"small","8536920":"small","raffleId":"46506","1275939":"small","20177919":"small","12768615":"small","1698233":"small","4986301":"small","102015208":"small","40573511":"small","4799261":"small","from":"喵熊°","time":59,"30430088":"small","558038":"small","5599305":"small","8068250":"small","16293951":"small","7294374":"small","type":"openfire","7384826":"small","2229668":"small","7828145":"small","2322836":"small","915804":"small","86845000":"small","3076423":"small","roomid":"97835","5979210":"small","16345975":"small","7151219":"small","1479304":"small","19123719":"small","29129155":"small","7913373":"small","17049098":"small","9008673":"small","23406718":"small","141718":"small","27880394":"small","942837":"small","107844643":"small","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg","31437943":"small","34810599":"small","102994056":"small","31470791":"small","26643554":"small","29080508":"small","14709391":"small","14530810":"small","46520094":"small","2142310":"small","status":2,"77959868":"small","76979807":"small"}}
+	 * @return
+	 */
+	private static String _analyseLotteryResponse(String response) {
+		String errDesc = "";
 		try {
-			System.out.println("en:" + URLEncoder.encode(response, Config.DEFAULT_CHARSET));
-			System.out.println("===");
-			System.out.println("de:" + URLDecoder.decode(response, Config.DEFAULT_CHARSET));
-			
-			
-			
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			if(code == 0) {
-				isOk = true;
-				
-			} else {
-				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				UIUtils.log("抽奖失败: ", reason);
+			if(code != 0) {
+				errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("参与抽奖失败: {}", errDesc);
 			}
 		} catch(Exception e) {
-			UIUtils.log("抽奖失败: 服务器无响应");
-			e.printStackTrace();
+			log.warn("参与抽奖失败: {}", response, e);
 		}
-		return isOk;
-	}
-	
-	private static Map<String, String> toHeadParams(String cookies, String realRoomId) {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate");
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,en,*");
-		params.put(HttpsUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		params.put(HttpsUtils.HEAD.KEY.COOKIE, cookies);
-		params.put(HttpsUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
-		params.put(HttpsUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
-		params.put(HttpsUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
-		params.put(HttpsUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
-		return params;
+		return errDesc;
 	}
 	
 }

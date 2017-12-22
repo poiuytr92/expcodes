@@ -5,11 +5,13 @@
         <home caption="首页"><![CDATA[https://www.bilibili.com/]]></home>
         <login caption="登陆页"><![CDATA[https://passport.bilibili.com/login]]></login>
         <live caption="直播页"><![CDATA[http://live.bilibili.com/]]></live>
-        <chat caption="版聊服务器"><![CDATA[https://api.live.bilibili.com/msg/send]]></chat>
-        <check caption="抽奖取签服务器"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/check]]></check>
-        <join caption="参加抽奖服务器"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/join]]></join>
         <ssl caption="SSL主机"><![CDATA[api.live.bilibili.com]]></ssl>
         <ws caption="消息推送websocket服务器"><![CDATA[ws://broadcastlv.chat.bilibili.com:2244/sub]]></ws>
+        <chat caption="版聊服务器"><![CDATA[https://api.live.bilibili.com/msg/send]]></chat>
+        
+        <egCheck caption="高能抽签服务器"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/check]]></egCheck>
+        <egJoin caption="高能抽奖服务器"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/join]]></egJoin>
+        <tvJoin caption="电视抽奖服务器"><![CDATA[http://api.live.bilibili.com/gift/v2/smalltv/join]]></tvJoin>
     </biliUrls>
     
     <files caption="本地文件位置">

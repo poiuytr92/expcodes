@@ -67,4 +67,12 @@ public class UIUtils {
 		AppUI.getInstn().printVersionInfo();
 	}
 	
+	public static String getCurRoomId() {
+		return AppUI.getInstn().getRoomId();
+	}
+	
+	public static boolean isBackLotteryMode() {
+		return AppUI.getInstn().isBackLotteryMode();
+	}
+	
 }

@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import exp.bilibli.plugin.Config;
+import exp.bilibli.plugin.bean.ldm.LotteryRoom;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
@@ -39,13 +40,13 @@ public class RoomMgr {
 	private Map<Integer, Integer> realRoomIds;
 	
 	/** 按时序记录的可以抽奖礼物房间号 */
-	private PCQueue<String> giftRoomIds;
+	private PCQueue<LotteryRoom> giftRoomIds;
 	
 	private static volatile RoomMgr instance;
 	
 	private RoomMgr() {
 		this.realRoomIds = new HashMap<Integer, Integer>();
-		this.giftRoomIds = new PCQueue<String>(1024);
+		this.giftRoomIds = new PCQueue<LotteryRoom>(128);
 		
 		readRoomIds();
 	}
@@ -62,18 +63,27 @@ public class RoomMgr {
 	}
 	
 	/**
-	 * 添加礼物房间号
+	 * 添加礼物房间
 	 * @param roomId 礼物房间号
 	 */
 	public void addGiftRoom(String roomId) {
-		giftRoomIds.add(roomId);
+		giftRoomIds.add(new LotteryRoom(roomId));
 	}
 	
 	/**
-	 * 获取礼物房间号
+	 * 添加小电视房间
+	 * @param roomId 小电视房间号
+	 * @param tvId 小电视编号
+	 */
+	public void addTvRoom(String roomId, String tvId) {
+		giftRoomIds.add(new LotteryRoom(roomId, tvId));
+	}
+	
+	/**
+	 * 获取抽奖房间
 	 * @return 若无房间号则马上返回null
 	 */
-	public String getGiftRoom() {
+	public LotteryRoom getGiftRoom() {
 		return giftRoomIds.getQuickly();
 	}
 	

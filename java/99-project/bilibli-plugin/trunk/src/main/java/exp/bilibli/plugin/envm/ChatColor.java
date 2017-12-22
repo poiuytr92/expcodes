@@ -25,15 +25,15 @@ public class ChatColor {
 	public final static ChatColor YELLOW = new ChatColor(
 			"yellow", "菊花黄", "16772431", 255, 237, 79);
 	
-	@Deprecated // 暂时未取到颜色编码
+	// FIXME 暂时未取到颜色编码
 	public final static ChatColor ORANGE = new ChatColor(
 			"orange", "柠檬橙", "??????", 255, 152, 0);
 	
-	@Deprecated // 暂时未取到颜色编码
+	// FIXME 暂时未取到颜色编码
 	public final static ChatColor PINK = new ChatColor(
 			"pink", "柠檬橙", "??????", 255, 115, 154);
 	
-	@Deprecated // 暂时未取到颜色编码
+	// FIXME 暂时未取到颜色编码
 	public final static ChatColor GOLD = new ChatColor(
 			"gold", "土豪金", "??????", 251, 254, 182);
 	

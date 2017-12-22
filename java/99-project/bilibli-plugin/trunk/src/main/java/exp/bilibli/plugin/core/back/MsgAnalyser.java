@@ -136,7 +136,7 @@ public class MsgAnalyser {
 		UIUtils.notify(msg);
 		log.info(msg);
 		
-		RoomMgr.getInstn().addGiftRoom(msgBean.ROOM_ID());
+		RoomMgr.getInstn().addTvRoom(msgBean.ROOM_ID(), msgBean.getTvId());
 		RoomMgr.getInstn().relate(msgBean.getRoomId(), msgBean.getRealRoomId());
 	}
 	
