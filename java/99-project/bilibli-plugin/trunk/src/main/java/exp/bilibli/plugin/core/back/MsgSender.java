@@ -100,19 +100,20 @@ public class MsgSender {
 		}
 	}
 	
-	private static String _analyseSignResponse(String response) {
-		String errDesc = "";
+	private static void _analyseSignResponse(String response) {
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			if(code != 0) {
-				errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("自动签到失败: {}", errDesc);
+			if(code == 0) {
+				UIUtils.log("每日签到成功");
+				
+			} else {
+				String errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("每日签到失败: {}", errDesc);
 			}
 		} catch(Exception e) {
-			log.error("自动签到失败: {}", response, e);
+			log.error("每日签到失败: {}", response, e);
 		}
-		return errDesc;
 	}
 	
 	/**
@@ -199,7 +200,7 @@ public class MsgSender {
 	}
 	
 	/**
-	 * FIXME
+	 * 
 	 * @param response  {"code":-101,"msg":"请先登录","data":[]}
 	 * @return
 	 */
@@ -212,10 +213,11 @@ public class MsgSender {
 				isOk = true;
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				UIUtils.log("发送弹幕失败: ", reason);	// FIXME
+				UIUtils.log("发送弹幕失败: ", reason);
 			}
 		} catch(Exception e) {
-			UIUtils.log("发送弹幕失败: 服务器无响应");	// FIXME
+			UIUtils.log("发送弹幕失败: 服务器无响应");
+			log.error("发送弹幕失败: {}", response, e);
 		}
 		return isOk;
 	}
