@@ -35,6 +35,9 @@ class _HttpUtils {
 	/** 默认编码 */
 	public final static String DEFAULT_CHARSET = Charset.UTF8;
 	
+	/** 默认下载路径 */
+	public final static String DEFAULT_DOWNLOAD_DIR = "./downloads/";
+	
 	/** 连接超时, 默认1分钟 */
 	public final static int CONN_TIMEOUT = 60000;
 

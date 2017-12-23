@@ -44,9 +44,6 @@ public class HttpUtils extends _HttpUtils {
 	/** 页面使用BASE64存储的图像信息正则 */
 	private final static String RGX_BASE64_IMG = "data:image/([^;]+);base64,(.*)";
 	
-	/** 默认下载路径 */
-	private final static String DEFAULT_DOWNLOAD_DIR = "./downloads/";
-	
 	/** 私有化构造函数 */
 	protected HttpUtils() {}
 	

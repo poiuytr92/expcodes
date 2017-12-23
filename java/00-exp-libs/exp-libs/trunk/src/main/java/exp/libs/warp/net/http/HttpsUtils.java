@@ -1,5 +1,8 @@
 package exp.libs.warp.net.http;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -8,6 +11,7 @@ import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
 import exp.libs.utils.encode.CharsetUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -175,7 +179,7 @@ public class HttpsUtils extends _HttpUtils {
 		String kvs = encodeRequests(requestParams, charset);	
 		url = url.concat(kvs);	// GET的参数是拼在url后面的
 		
-		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_POST,
+		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_GET,
 				headParams, connTimeout, readTimeout);
 		String response = responseAsString(conn, charset);
 		close(conn);
@@ -215,4 +219,97 @@ public class HttpsUtils extends _HttpUtils {
 		return response.toString();
 	}
 	
+	/**
+	 * 下载资源，适用于返回类型是非文本的响应
+	 * @param savePath
+	 * @param url
+	 * @param headParams
+	 * @param requestParams
+	 * @return
+	 */
+	public static boolean download(String savePath, String url, 
+			Map<String, String> headParams, Map<String, String> requestParams) {
+		return download(savePath, url, headParams, requestParams, 
+				CONN_TIMEOUT, CALL_TIMEOUT, DEFAULT_CHARSET);
+	}
+	
+	/**
+	 * 下载资源，适用于返回类型是非文本的响应
+	 * @param savePath
+	 * @param url
+	 * @param headParams
+	 * @param requestParams
+	 * @param connTimeout
+	 * @param readTimeout
+	 * @param charset
+	 * @return
+	 */
+	public static boolean download(String savePath, String url, 
+			Map<String, String> headParams, Map<String, String> requestParams, 
+			int connTimeout, int readTimeout, String charset) {
+		boolean isOk = false;
+		try {
+			isOk = _download(savePath, url, headParams, requestParams, 
+					connTimeout, readTimeout, charset);
+		} catch (Exception e) {
+			log.error("下载资源失败: {}", url, e);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 下载资源，适用于返回类型是非文本的响应
+	 * @param savePath
+	 * @param url
+	 * @param headParams
+	 * @param requestParams
+	 * @param connTimeout
+	 * @param readTimeout
+	 * @param charset
+	 * @return
+	 * @throws Exception
+	 */
+	public static boolean _download(String savePath, String url, 
+			Map<String, String> headParams, Map<String, String> requestParams, 
+			int connTimeout, int readTimeout, String charset) throws Exception {
+		String kvs = encodeRequests(requestParams, charset);	
+		url = url.concat(kvs);	// GET的参数是拼在url后面的
+		
+		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_GET,
+				headParams, connTimeout, readTimeout);
+		boolean isOk = responseAsRes(conn, savePath);
+		close(conn);
+		return isOk;
+	}
+	
+	/**
+	 * 提取HTTP/HTTPS连接的响应资源
+	 * @param conn
+	 * @param savePath
+	 * @return
+	 */
+	private static boolean responseAsRes(HttpURLConnection conn, String savePath) {
+		boolean isOk = false;
+		if(!isResponseOK(conn)) {
+			return isOk;
+		}
+		
+		File file = FileUtils.createFile(savePath);
+		try {
+			InputStream is = conn.getInputStream();
+			OutputStream os = new FileOutputStream(file); 
+			byte[] buff = new byte[1024]; 
+			int len = 0; 
+			while((len = is.read(buff)) != -1) {
+				os.write(buff, 0, len); 
+			} 
+			os.close(); 
+			is.close();
+			isOk = true;
+			
+		} catch (Exception e) {
+			log.error("提取HTTP响应资源失败", e);
+		} 
+		return isOk;
+	}
 }
