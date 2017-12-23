@@ -162,7 +162,7 @@ public class ChatMgr extends LoopThread {
 	}
 
 	public void addNight(String username, String msg) {
-		if(!isAutoThankYou() || 
+		if(!isAutoGoodNight() || 
 				msg.startsWith(NIGHT_KEY) ||		// 避免跟机器人对话
 				nightedUsers.contains(username)) { 	// 避免重复晚安
 			return;

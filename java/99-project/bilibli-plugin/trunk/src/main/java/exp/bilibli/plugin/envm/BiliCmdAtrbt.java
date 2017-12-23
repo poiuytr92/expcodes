@@ -74,4 +74,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String raffleId = "raffleId";
 	
+	public final static String time_start = "time_start";
+	
+	public final static String time_end = "time_end";
+	
 }

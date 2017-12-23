@@ -164,7 +164,7 @@ class WebBot extends LoopThread {
 				UIUtils.updateLotteryCnt(cnt);
 				
 			} else {
-				UIUtils.statistics("超时: 抽奖直播间 [", roomId, "]");
+				log.info("请勿重复操作: 抽奖直播间 [{}]", roomId);
 			}
 		}
 		

@@ -7,7 +7,7 @@ public class VerCodeUtils {
 
 	protected VerCodeUtils() {}
 	
-	public static int calculateImg(String verCodeImgPath) {
+	public static int calculateImage(String verCodeImgPath) {
 		return calculate(OCRUtils.jpgToTxt(verCodeImgPath));
 	}
 	
