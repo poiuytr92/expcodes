@@ -1,6 +1,7 @@
-package exp.bilibli.plugin.core.back;
+package exp.bilibli.plugin.core.back.test;
 
 import exp.bilibli.plugin.cache.Browser;
+import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.envm.ChatColor;
 
 public class TestMsgSender {
