@@ -17,8 +17,9 @@
     
     <files caption="本地文件位置">
         <cookies caption="页面cookies"><![CDATA[./data/cookies]]></cookies>
-        <img caption="登陆二维码缓存"><![CDATA[./data/img]]></img>
+        <img caption="图片缓存"><![CDATA[./data/img]]></img>
         <driver caption="web驱动器"><![CDATA[./data/driver/]]></driver>
+        <orc caption="图像识别库"><![CDATA[./data/ocr/tesseract]]></orc>
         <room caption="房间号缓存"><![CDATA[./data/room/roomids.dat]]></room>
         <advs caption="副词词库"><![CDATA[./data/msg/advs.dat]]></advs>
         <nights caption="晚安敏感词库"><![CDATA[./data/msg/nights.dat]]></nights>

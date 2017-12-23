@@ -19,6 +19,8 @@ public class Main {
 	
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
+		Config.getInstn();
+		
 		BeautyEyeUtils.init();
 		AppUI.createInstn(args);
 	}

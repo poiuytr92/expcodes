@@ -51,7 +51,7 @@ public class ChatMgr extends LoopThread {
 	private final static long SEND_TIME = 500;
 	
 	/** 自动感谢周期 */
-	private final static long THX_TIME = 10000;
+	private final static long THX_TIME = 15000;
 	
 	/** 自动打call周期 */
 	private final static long CALL_TIME = 180000;

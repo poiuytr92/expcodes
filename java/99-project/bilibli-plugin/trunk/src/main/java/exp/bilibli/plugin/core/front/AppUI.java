@@ -546,9 +546,9 @@ public class AppUI extends MainWindow {
 	/**
 	 * 更新抽奖成功次数
 	 */
-	public void updateLotteryCnt() {
-		if(!loginBtn.isEnabled()) {	// 登陆按钮被禁用, 说明登陆成功
-			lotteryCnt++;
+	public void updateLotteryCnt(int num) {
+		if(!loginBtn.isEnabled() && num > 0) {	// 登陆按钮被禁用, 说明登陆成功
+			lotteryCnt += num;
 			String cnt = StrUtils.leftPad(String.valueOf(lotteryCnt), '0', 5);
 			lotteryLabel.setText(StrUtils.concat(" ", cnt, " "));
 		}

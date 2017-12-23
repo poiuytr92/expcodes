@@ -1,5 +1,7 @@
 package exp.bilibli.plugin;
 
+import java.io.File;
+
 import exp.libs.envm.Charset;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
@@ -32,6 +34,8 @@ public class Config {
 	private Config() {
 		this.xConf = XConfigFactory.createConfig("biliConf");
 		xConf.loadConfFile(CONF_PATH);
+		
+		loadOcrDynamicLib();
 	}
 	
 	public static Config getInstn() {
@@ -43,6 +47,22 @@ public class Config {
 			}
 		}
 		return instance;
+	}
+	
+	private void loadOcrDynamicLib() {
+		File dir = new File("./data/ocr");
+		File[] dlls = dir.listFiles();
+		for(File file : dlls) {
+			if(file.getName().endsWith(".dll")) {
+				try {
+					System.loadLibrary(file.getPath().replace(".dll", ""));
+					
+				} catch(Exception e) {
+					System.err.println("加载DLL文件失败");
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 	
 	public String HOME_URL() {
@@ -95,6 +115,10 @@ public class Config {
 	
 	public String DRIVER_DIR() {
 		return xConf.getVal("/config/files/driver");
+	}
+	
+	public String ORC_DIR() {
+		return xConf.getVal("/config/files/orc");
 	}
 	
 	public String ROOM_PATH() {

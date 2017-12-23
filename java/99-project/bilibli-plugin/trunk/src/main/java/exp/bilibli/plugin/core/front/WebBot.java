@@ -37,6 +37,10 @@ class WebBot extends LoopThread {
 	
 	private final static String HOME_URL = Config.getInstn().HOME_URL();
 	
+	private final static String IMG_DIR = Config.getInstn().IMG_DIR();
+	
+	private final static String IMG_NAME = "vercode.jpg";
+	
 	/** 浏览器非活动时的保持时间 */
 	private final static long KEEP_TIME = 60000;
 	
@@ -138,21 +142,30 @@ class WebBot extends LoopThread {
 		final String roomId = room.getRoomId();
 		final String tvId = room.getTvId();
 		
-		String errDesc = "";
+		// 小电视抽奖
 		if(StrUtils.isNotEmpty(room.getTvId())) {
-			errDesc = MsgSender.toTvLottery(roomId, tvId);
-		} else {
-			errDesc = MsgSender.toEgLottery(roomId);
-		}
-		
-		if(StrUtils.isEmpty(errDesc)) {
-			log.info("参与直播间 [{}] 抽奖成功", roomId);
-			UIUtils.statistics("成功: 抽奖直播间 [", roomId, "]");
-			UIUtils.updateLotteryCnt();
+			String errDesc = MsgSender.toTvLottery(roomId, tvId);
+			if(StrUtils.isEmpty(errDesc)) {
+				log.info("参与直播间 [{}] 抽奖成功", roomId);
+				UIUtils.statistics("成功(小电视): 抽奖直播间 [", roomId, "]");
+				UIUtils.updateLotteryCnt();
+				
+			} else {
+				log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
+				UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
+			}
 			
+		// 高能抽奖
 		} else {
-			log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
-			UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
+			int cnt = MsgSender.toEgLottery(roomId);
+			if(cnt > 0) {
+				log.info("参与直播间 [{}] 抽奖成功(连击x{})", roomId, cnt);
+				UIUtils.statistics("成功(连击x", cnt, "): 抽奖直播间 [", roomId, "]");
+				UIUtils.updateLotteryCnt(cnt);
+				
+			} else {
+				UIUtils.statistics("超时: 抽奖直播间 [", roomId, "]");
+			}
 		}
 		
 		// 后端抽奖过快， 需要限制， 不然连续抽奖时会取不到礼物编号
@@ -226,7 +239,7 @@ class WebBot extends LoopThread {
 	private boolean _clickArea(WebElement lotteryBox, WebElement rst) {
 		Browser.click(lotteryBox);	// 点击抽奖
 		_sleep(SLEEP_TIME);	// 等待抽奖结果
-		return rst.getText().contains("参与成功");
+		return rst.getText().contains("成功");
 	}
 
 	/**

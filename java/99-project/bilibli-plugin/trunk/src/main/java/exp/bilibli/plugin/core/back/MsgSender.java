@@ -1,7 +1,11 @@
 package exp.bilibli.plugin.core.back;
 
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -16,6 +20,7 @@ import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.ChatColor;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpsUtils;
 
@@ -42,6 +47,9 @@ public class MsgSender {
 	private final static String EG_JOIN_URL = Config.getInstn().EG_JOIN_URL();
 	
 	private final static String TV_JOIN_URL = Config.getInstn().TV_JOIN_URL();
+	
+	/** 已抽奖过的礼物编号集 */
+	private final static Set<String> OT_RAFFLEIDS = new HashSet<String>();
 	
 	protected MsgSender() {}
 	
@@ -96,7 +104,7 @@ public class MsgSender {
 			_analyseSignResponse(response);
 			
 		} else {
-			log.warn("自动签到失败: 无效的房间号");
+			log.warn("自动签到失败: 无效的房间号 [{}]", roomId);
 		}
 	}
 	
@@ -176,6 +184,9 @@ public class MsgSender {
 			Map<String, String> requestParams = _toChatRequestParams(msg, sRoomId, color.CODE());
 			String response = HttpsUtils.doPost(CHAT_URL, headParams, requestParams, Config.DEFAULT_CHARSET);
 			isOk = _analyseChatResponse(response);
+			
+		} else {
+			log.warn("发送弹幕失败: 无效的房间号 [{}]", roomId);
 		}
 		return isOk;
 	}
@@ -237,16 +248,26 @@ public class MsgSender {
 	 * @param roomId
 	 * @return
 	 */
-	public static String toEgLottery(String roomId) {
-		String errDesc = "";
+	public static int toEgLottery(String roomId) {
+		int cnt = 0;
 		final String cookies = Browser.COOKIES();
-		String raffleId = checkLottery(EG_CHECK_URL, roomId, cookies);
-		if(StrUtils.isNotEmpty(raffleId)) {
-			errDesc = joinLottery(EG_JOIN_URL, roomId, raffleId, cookies);
-		} else {
-			errDesc = "已超时";	// 提取礼物编号失败
+		List<String> raffleIds = checkLottery(EG_CHECK_URL, roomId, cookies);
+		
+		if(ListUtils.isNotEmpty(raffleIds)) {
+			for(String raffleId : raffleIds) {
+				
+				if(!OT_RAFFLEIDS.contains(raffleIds)) {
+					OT_RAFFLEIDS.add(raffleId);
+					String errDesc = joinLottery(EG_JOIN_URL, roomId, raffleId, cookies);
+					if(StrUtils.isEmpty(errDesc)) {
+						cnt++;
+					} else {
+						log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
+					}
+				}
+			}
 		}
-		return errDesc;
+		return cnt;
 	}
 	
 	/**
@@ -256,17 +277,19 @@ public class MsgSender {
 	 * @param cookies
 	 * @return
 	 */
-	private static String checkLottery(String url, String roomId, String cookies) {
-		String raffleId = "";
+	private static List<String> checkLottery(String url, String roomId, String cookies) {
+		List<String> raffleIds = new LinkedList<String>();
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
 			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId);
 			String response = HttpsUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
-			raffleId = _getRaffleId(response);
+			raffleIds = _getRaffleId(response);
+		} else {
+			log.warn("获取礼物编号失败: 无效的房间号 [{}]", roomId);
 		}
-		return raffleId;
+		return raffleIds;
 	}
 	
 	/**
@@ -286,31 +309,31 @@ public class MsgSender {
 			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId, raffleId);
 			String response = HttpsUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
 			errDesc = _analyseLotteryResponse(response);
+		} else {
+			log.warn("参加抽奖失败: 无效的房间号 [{}]", roomId);
 		}
 		return errDesc;
 	}
 	
 	/**
-	 * 
+	 * FIXME 列表
 	 * @param response {"code":0,"msg":"success","message":"success","data":[{"raffleId":46506,"type":"openfire","from":"喵熊°","from_user":{"uname":"喵熊°","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg"},"time":60,"status":1},{"raffleId":46507,"type":"openfire","from":"喵熊°","from_user":{"uname":"喵熊°","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg"},"time":60,"status":1},{"raffleId":46508,"type":"openfire","from":"喵熊°","from_user":{"uname":"喵熊°","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg"},"time":60,"status":1},{"raffleId":46509,"type":"openfire","from":"喵熊°","from_user":{"uname":"喵熊°","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg"},"time":60,"status":1}]}
 	 * @return
 	 */
-	private static String _getRaffleId(String response) {
-		String raffleId = "";
+	private static List<String> _getRaffleId(String response) {
+		List<String> raffleIds = new LinkedList<String>();
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {
-				Object data = json.get(BiliCmdAtrbt.data);
-				JSONObject obj = null;
-				if(data instanceof JSONArray) {
-					obj = ((JSONArray) data).getJSONObject(0);
-				} else {
-					obj = (JSONObject) data;
+				JSONArray array = JsonUtils.getArray(json, BiliCmdAtrbt.data);
+				for(int i = 0; i < array.size(); i++) {
+					JSONObject obj = array.getJSONObject(i);
+					int raffleId = JsonUtils.getInt(obj, BiliCmdAtrbt.raffleId, 0);
+					if(raffleId > 0) {
+						raffleIds.add(String.valueOf(raffleId));
+					}
 				}
-				
-				raffleId = String.valueOf(JsonUtils.getInt(obj, BiliCmdAtrbt.raffleId, 0));
-				
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 				log.warn("获取礼物编号失败: {}", reason);
@@ -318,7 +341,7 @@ public class MsgSender {
 		} catch(Exception e) {
 			log.error("获取礼物编号异常: {}", response, e);
 		}
-		return raffleId;
+		return raffleIds;
 	}
 	
 	private static Map<String, String> _toLotteryRequestParams(String realRoomId) {
@@ -345,10 +368,10 @@ public class MsgSender {
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code != 0) {
 				errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("参与抽奖失败: {}", errDesc);
+				log.warn("参加抽奖失败: {}", errDesc);
 			}
 		} catch(Exception e) {
-			log.error("参与抽奖失败: {}", response, e);
+			log.error("参加抽奖失败: {}", response, e);
 		}
 		return errDesc;
 	}
