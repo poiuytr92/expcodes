@@ -78,4 +78,10 @@ public class BiliCmdAtrbt {
 	
 	public final static String time_end = "time_end";
 	
+	public final static String minute = "minute";
+	
+	public final static String times = "times";
+	
+	public final static String max_times = "max_times";
+	
 }

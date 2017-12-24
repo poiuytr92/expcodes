@@ -3,9 +3,9 @@ package exp.bilibli.plugin.utils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 
-public class VerCodeUtils {
+public class VercodeUtils {
 
-	protected VerCodeUtils() {}
+	protected VercodeUtils() {}
 	
 	public static int calculateImage(String verCodeImgPath) {
 		return calculate(OCRUtils.jpgToTxt(verCodeImgPath));

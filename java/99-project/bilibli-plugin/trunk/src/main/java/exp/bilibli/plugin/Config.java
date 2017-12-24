@@ -1,7 +1,5 @@
 package exp.bilibli.plugin;
 
-import java.io.File;
-
 import exp.libs.envm.Charset;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
@@ -34,8 +32,6 @@ public class Config {
 	private Config() {
 		this.xConf = XConfigFactory.createConfig("biliConf");
 		xConf.loadConfFile(CONF_PATH);
-		
-		loadOcrDynamicLib();
 	}
 	
 	public static Config getInstn() {
@@ -47,22 +43,6 @@ public class Config {
 			}
 		}
 		return instance;
-	}
-	
-	private void loadOcrDynamicLib() {
-		File dir = new File("./data/ocr");
-		File[] dlls = dir.listFiles();
-		for(File file : dlls) {
-			if(file.getName().endsWith(".dll")) {
-				try {
-					System.loadLibrary(file.getPath().replace(".dll", ""));
-					
-				} catch(Exception e) {
-					System.err.println("加载DLL文件失败");
-					e.printStackTrace();
-				}
-			}
-		}
 	}
 	
 	public String HOME_URL() {
@@ -93,6 +73,14 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/sign");
 	}
 	
+	public String STORM_CHECK_URL() {
+		return xConf.getVal("/config/biliUrls/stormCheck");
+	}
+	
+	public String STORM_JOIN_URL() {
+		return xConf.getVal("/config/biliUrls/stormJoin");
+	}
+	
 	public String EG_CHECK_URL() {
 		return xConf.getVal("/config/biliUrls/egCheck");
 	}
@@ -103,6 +91,18 @@ public class Config {
 	
 	public String TV_JOIN_URL() {
 		return xConf.getVal("/config/biliUrls/tvJoin");
+	}
+	
+	public String CHECK_TASK_URL() {
+		return xConf.getVal("/config/biliUrls/checkTask");
+	}
+	
+	public String VERCODE_URL() {
+		return xConf.getVal("/config/biliUrls/vercode");
+	}
+	
+	public String DO_TASK_URL() {
+		return xConf.getVal("/config/biliUrls/doTask");
 	}
 	
 	public String COOKIE_DIR() {
@@ -135,6 +135,10 @@ public class Config {
 		
 	public String CALL_PATH() {
 		return xConf.getVal("/config/files/calls");
+	}
+	
+	public String SIGN_ROOM_ID() {
+		return xConf.getVal("/config/app/signRoomId");
 	}
 	
 	public int WAIT_ELEMENT_TIME() {

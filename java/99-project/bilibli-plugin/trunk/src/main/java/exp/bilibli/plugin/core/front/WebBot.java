@@ -37,10 +37,6 @@ class WebBot extends LoopThread {
 	
 	private final static String HOME_URL = Config.getInstn().HOME_URL();
 	
-	private final static String IMG_DIR = Config.getInstn().IMG_DIR();
-	
-	private final static String IMG_NAME = "vercode.jpg";
-	
 	/** 浏览器非活动时的保持时间 */
 	private final static long KEEP_TIME = 60000;
 	
@@ -65,13 +61,17 @@ class WebBot extends LoopThread {
 	/** 提示累计次数 */
 	private int tipCnt;
 	
+	/** 执行下次日常任务的时间点 */
+	private long nextTaskTime;
+	
 	private static volatile WebBot instance;
 	
 	private WebBot() {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
-		this.tipCnt = 0;
 		this.lotteryCnt = 0;
+		this.tipCnt = 0;
+		this.nextTaskTime = System.currentTimeMillis();
 	}
 	
 	protected static WebBot getInstn() {
@@ -130,6 +130,7 @@ class WebBot extends LoopThread {
 			
 		// 长时间无操作则休眠
 		} else {
+			doDailyTasks();	// 不抽奖的时候抽空做日常小学数学任务
 			toSleep();
 		}
 	}
@@ -242,6 +243,20 @@ class WebBot extends LoopThread {
 		return rst.getText().contains("成功");
 	}
 
+	/**
+	 * 执行日常小学数学任务
+	 */
+	private void doDailyTasks() {
+		if(nextTaskTime <= 0 || nextTaskTime > System.currentTimeMillis()) {
+			return;
+		}
+		
+		nextTaskTime = MsgSender.doDailyTasks();
+		if(nextTaskTime <= 0) {
+			UIUtils.log("今日所有小学数学任务已完成");
+		}
+	}
+	
 	/**
 	 * 计数器累计达到一个心跳周期后, 关闭浏览器(等待有其他事件时再自动重启)
 	 */

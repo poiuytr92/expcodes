@@ -3,9 +3,9 @@ package exp.bilibli.plugin.utils.test;
 import java.io.File;
 
 import exp.bilibli.plugin.utils.OCRUtils;
-import exp.bilibli.plugin.utils.VerCodeUtils;
+import exp.bilibli.plugin.utils.VercodeUtils;
 
-public class TestVerCodeUtils {
+public class TestVercodeUtils {
 
 	public static void main(String[] args) {
 		File dir = new File("./src/test/java/exp/bilibli/plugin/utils/test/img");
@@ -13,7 +13,7 @@ public class TestVerCodeUtils {
 		for(File img : imgs) {
 			if(img.getName().endsWith(".jpg")) {
 				String expression = OCRUtils.jpgToTxt(img.getPath());
-				int rst = VerCodeUtils.calculate(expression);
+				int rst = VercodeUtils.calculate(expression);
 				System.out.println(img.getName() + " : " + expression + "=" + rst);
 			}
 		}

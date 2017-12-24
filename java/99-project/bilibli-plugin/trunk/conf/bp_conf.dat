@@ -10,9 +10,15 @@
         <chat caption="版聊服务器"><![CDATA[https://api.live.bilibili.com/msg/send]]></chat>
         <sign caption="签到服务器"><![CDATA[http://api.live.bilibili.com/sign/doSign]]></sign>
         
+        <stormCheck caption="风暴检测服务器"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/check]]></stormCheck>
+        <stormJoin caption="风暴抽奖服务器"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/join]]></stormJoin>
         <egCheck caption="高能抽签服务器"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/check]]></egCheck>
         <egJoin caption="高能抽奖服务器"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/join]]></egJoin>
         <tvJoin caption="电视抽奖服务器"><![CDATA[http://api.live.bilibili.com/gift/v2/smalltv/join]]></tvJoin>
+        
+        <checkTask caption="日常任务检测服务器"><![CDATA[http://api.live.bilibili.com/FreeSilver/getCurrentTask]]></checkTask>
+        <vercode caption="校验码服务器"><![CDATA[http://api.live.bilibili.com/freeSilver/getCaptcha]]></vercode>
+        <doTask caption="日常任务提交服务器"><![CDATA[http://api.live.bilibili.com/FreeSilver/getAward]]></doTask>
     </biliUrls>
     
     <files caption="本地文件位置">
@@ -27,6 +33,7 @@
     </files>
     
     <app caption="应用配置">
+        <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">51108</signRoomId>
         <waitElementTime caption="页面元素加载等待时间(s)">10</waitElementTime>
         <clearCacheCycle caption="清理内存周期(每抽奖N次清理一次)">10</clearCacheCycle>
     </app>
