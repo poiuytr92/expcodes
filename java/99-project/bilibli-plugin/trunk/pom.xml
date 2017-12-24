@@ -6,11 +6,11 @@
 	<!--项目基本信息(必填)-->
 	<groupId>exp.bilibli</groupId>
 	<artifactId>bilibli-plugin</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.4-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>哔哩哔哩插件姬</name>
-	<description>监视直播间、在线用户抽奖、全平台礼物自动挂机</description>
+	<description>直播间抽奖、自动挂机(礼物抽奖+日常)、自动答谢、晚安、打call</description>
 	<url>项目SVN路径(可选)</url>
 	<inceptionYear>工程的初始时间(可选)</inceptionYear>
 

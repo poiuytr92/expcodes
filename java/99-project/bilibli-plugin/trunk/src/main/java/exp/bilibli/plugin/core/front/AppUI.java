@@ -23,6 +23,7 @@ import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.core.back.WebSockClient;
 import exp.bilibli.plugin.envm.ChatColor;
+import exp.bilibli.plugin.utils.TimeUtils;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -117,6 +118,11 @@ public class AppUI extends MainWindow {
 			String code = SwingUtils.input("请输入注册码");
 			if(!code.matches("[a-zA-Z]\\d[a-zA-Z]\\d")) {
 				SwingUtils.warn("未授权用户");
+				System.exit(0);
+				return;
+				
+			} else if(!TimeUtils.timeInvalidity()) {
+				SwingUtils.warn("软件授权已过期");
 				System.exit(0);
 				return;
 			}
