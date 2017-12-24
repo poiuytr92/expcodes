@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" output="target/classes" path="src/main/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/classes" path="src/main/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="src/test/java">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry excluding="**" kind="src" output="target/test-classes" path="src/test/resources">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.maven.ide.eclipse.MAVEN2_CLASSPATH_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.m2e.MAVEN2_CLASSPATH_CONTAINER">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/apache-mime4j-0.6.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/bsh-2.0b4.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/cglib-nodep-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/commons-codec-1.10.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/commons-exec-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/commons-io-2.4.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/cssparser-0.9.16.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/gson-2.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/guava-19.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/hamcrest-core-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/hamcrest-library-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/htmlunit-2.18.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/htmlunit-core-js-2.17.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/httpclient-4.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/httpcore-4.4.3.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/httpmime-4.5.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/jcommander-1.48.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/jetty-io-9.2.12.v20150709.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/jetty-util-9.2.12.v20150709.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/jna-4.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/jna-platform-4.1.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/nekohtml-1.9.22.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/netty-3.5.7.Final.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/phantomjsdriver-1.2.1.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/sac-1.3.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/selenium-htmlunit-driver-2.47.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/selenium-java-2.53.0-srcs.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/selenium-java-2.53.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/serializer-2.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/testng-6.9.9.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/websocket-api-9.2.12.v20150709.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/websocket-client-9.2.12.v20150709.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/websocket-common-9.2.12.v20150709.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/xalan-2.7.2.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/xercesImpl-2.11.0.jar"/>
+	<classpathentry kind="lib" path="lib/selenium-java-2.53.0/xml-apis-1.4.01.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6">
+		<attributes>
+			<attribute name="maven.pomderived" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="target/classes"/>
+</classpath>
