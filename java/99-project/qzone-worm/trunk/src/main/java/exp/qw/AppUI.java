@@ -22,8 +22,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
 
-import exp.libs.utils.pub.NumUtils;
-import exp.libs.utils.pub.StrUtils;
+import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.qw.bean.BrowserDriver;
 import exp.qw.core.MoodWordAnalyzer;
 import exp.qw.utils.UIUtils;
@@ -215,9 +215,9 @@ public class AppUI extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String username = usernameTF.getText().trim();
-				String password = String.valueOf(passwordPF.getPassword());
-				String targetQQ = targetQQTF.getText().trim();
+				final String username = usernameTF.getText().trim();
+				final String password = String.valueOf(passwordPF.getPassword());
+				final String targetQQ = targetQQTF.getText().trim();
 				
 				if(StrUtils.isNotEmpty(username) && 
 						StrUtils.isNotEmpty(password) && 

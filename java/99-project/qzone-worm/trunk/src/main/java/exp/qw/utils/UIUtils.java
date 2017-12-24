@@ -3,8 +3,8 @@ package exp.qw.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.utils.pub.StrUtils;
-import exp.libs.utils.ui.BeautyEyeUtils;
+import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.qw.AppUI;
 
 public class UIUtils {

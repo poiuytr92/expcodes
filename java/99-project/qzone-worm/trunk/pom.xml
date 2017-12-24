@@ -38,9 +38,6 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
-		<ktjsdp.version>1.1.3.6</ktjsdp.version>
-		<catt.plugin.version>1.2.0.8</catt.plugin.version>
-		<waitmonitor.version>1.0.0.3</waitmonitor.version>
 	</properties>
 
 	<!-- 项目依赖 -->
@@ -49,7 +46,7 @@
 		<dependency>
 			<groupId>exp.libs</groupId>
 		    <artifactId>exp-libs</artifactId>
-		    <version>0.0.1-SNAPSHOT</version>
+		    <version>1.0-SNAPSHOT</version>
 		</dependency>
 		
 		<dependency>
@@ -106,42 +103,6 @@
 				</configuration>
 			</plugin>
 
-			<!-- 自动生成脚本插件:项目打包 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>catt-maven-plugin</artifactId>
-				<version>${catt.plugin.version}</version>
-				<executions>
-					<execution>
-						<id>catt-install</id>
-						<phase>install</phase>
-						<goals>
-							<goal>install</goal>
-						</goals>
-						<configuration>
-							<scriptType>lib</scriptType>
-							<mainClass>exp.blp.Main</mainClass>
-							<versionClass>com.catt.demo.Version</versionClass>
-							<charset>UTF-8</charset>
-							<xms>64m</xms>
-							<xmx>128m</xmx>
-							<linuxLibPath>./lib</linuxLibPath>
-							<winLibPath>.\lib</winLibPath>
-							<linuxCommonLibPath>/home/cattsoft/commonLib</linuxCommonLibPath>
-							<winCommonLibPath>D:\commonLib</winCommonLibPath>
-							<linuxMavenLibPath>/home/cattsoft/mavenRepository</linuxMavenLibPath>
-							<winMavenLibPath>D:\mavenRepository</winMavenLibPath>
-							<pathPrefixMode>2</pathPrefixMode>
-							<mainProVersion>false</mainProVersion>
-							<cpsMain>true</cpsMain>
-							<cpsAnt>false</cpsAnt>
-							<cpsCrypto>false</cpsCrypto>
-							<cpsAutodb>false</cpsAutodb>
-							<cpsStartcheck>false</cpsStartcheck>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 
 			<!-- Ant插件：项目部署文件复制 -->
 			<plugin>
