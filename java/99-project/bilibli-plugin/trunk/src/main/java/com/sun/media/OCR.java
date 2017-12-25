@@ -7,6 +7,16 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * <PRE>
+ * 图像文字识别工具
+ * </PRE>
+ * <B>PROJECT：</B> bilibli-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class OCR {
 	
 	private final static String CHARSET = "UTF-8";

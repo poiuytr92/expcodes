@@ -11,6 +11,7 @@ import java.awt.image.MemoryImageSource;
 import java.awt.image.PixelGrabber;
 
 public class ImageFilter {
+	
 	private BufferedImage image;
 
 	private int iw, ih;
