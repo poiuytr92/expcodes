@@ -20,21 +20,20 @@ int main(void) {
 
 		int surplus = 0;
 
-		if(4 * d <= s) {
-			surplus = -1;
-
-		} else if(4 * d > s) {
-			surplus = 3 * s - 9 * d;
-
-		} else if(3 * d > 2 * s) {
-			surplus = 6 * s - 6 * d;
-
-		} else if(2 * d > 3 * s) {
+		if(4 * s < d) {
+			surplus = 10 * s - 2 * d;
+			
+		} else if(3 * s < 2 * d) {
 			surplus = 8 * s - 4 * d;
 
-		} else if(d > 4 * s) {
-			surplus = 10 * s - 2 * d;
+		} else if(2 * s < 3 * d) {
+			surplus = 6 * s - 6 * d;
 
+		} else if(s < 4 * d) {
+			surplus = 3 * s - 9 * d;
+
+		} else {
+			surplus = -1;
 		}
 
 		if(surplus < 0) {
