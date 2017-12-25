@@ -129,10 +129,10 @@ class WebSockSession extends WebSocketClient {
 		log.debug("接收到推送消息: {}", hex);
 		
 		if(hex.startsWith(Binary.SERVER_HB_CONFIRM)) {
-			log.info("websocket连接保活确认");
+			log.debug("websocket连接保活确认");
 			
 		} else if(Binary.SERVER_CONN_CONFIRM.equals(hex)) {
-			log.info("websocket连接成功确认");
+			log.debug("websocket连接成功确认");
 			UIUtils.log("入侵直播间成功, 正在暗中观察...");
 			
 		} else {
