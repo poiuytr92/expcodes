@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -25,14 +26,35 @@ public class IOUtils {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(IOUtils.class);
 	
+	private final static int BUFFER_SIZE = 10240;
+	
 	/** 私有化构造函数 */
 	protected IOUtils() {}
+	
+	/**
+	 * 保存流式数据到字符串
+	 * @param is 流式数据读取器
+	 * @return 若保存失败则返回空字符串""
+	 */
+	public static String toStr(InputStreamReader is) {
+		StringBuilder sb = new StringBuilder();
+		try {
+			int len = 0;
+			char[] buffer = new char[BUFFER_SIZE];
+			while((len = is.read(buffer)) != -1) {
+				sb.append(buffer, 0, len);
+			}
+		} catch(Exception e) {
+			log.error("保存流式数据失败.", e);
+		}
+		return sb.toString();
+	}
 	
 	/**
 	 * 保存流式数据到文件
 	 * @param is 流式数据通道
 	 * @param savePath 保存文件位置
-	 * @return true:保存成功; false:保存是吧
+	 * @return true:保存成功; false:保存失败
 	 */
 	public static boolean toFile(InputStream is, String savePath) {
 		File saveFile = new File(savePath);
@@ -43,7 +65,7 @@ public class IOUtils {
 	 * 保存流式数据到文件
 	 * @param is 流式数据通道
 	 * @param saveFile 保存文件对象
-	 * @return true:保存成功; false:保存是吧
+	 * @return true:保存成功; false:保存失败
 	 */
 	public static boolean toFile(InputStream is, File saveFile) {
 		boolean isOk = false;
@@ -52,10 +74,10 @@ public class IOUtils {
 			FileOutputStream fos = null;
 			try {
 				fos = new FileOutputStream(saveFile);
-				byte[] buffer = new byte[10240];
-				int ch = 0;
-				while ((ch = is.read(buffer)) != -1) {
-					fos.write(buffer, 0, ch);
+				int len = 0;
+				byte[] buffer = new byte[BUFFER_SIZE];
+				while((len = is.read(buffer)) != -1) {
+					fos.write(buffer, 0, len);
 				}
 				fos.flush();
 				isOk = true;

@@ -31,7 +31,7 @@ import com.eviware.soapui.model.iface.Operation;
 import com.eviware.soapui.support.SoapUIException;
 
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.warp.net.http.HttpClientUtils;
 
 /**
  * <PRE>
@@ -274,7 +274,7 @@ public class WSClientUtils {
 			wsdlUrl = wsdlUrl.replace("?wsdl", "");
 		}
 		
-		HttpClient httpClient = HttpUtils.createHttpClient(connTimeOut, soTimeOut);
+		HttpClient httpClient = HttpClientUtils.createHttpClient(connTimeOut, soTimeOut);
 		PostMethod postMethod = new PostMethod(wsdlUrl);
 		try {
 			if (header) {
@@ -288,7 +288,7 @@ public class WSClientUtils {
 			
 		} finally {
 			postMethod.releaseConnection();
-			HttpUtils.close(httpClient);
+			HttpClientUtils.close(httpClient);
 		}
 		return responseXMLString;
 	}
