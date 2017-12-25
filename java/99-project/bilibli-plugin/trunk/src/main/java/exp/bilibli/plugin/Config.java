@@ -1,6 +1,11 @@
 package exp.bilibli.plugin;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import exp.libs.envm.Charset;
+import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
 
@@ -147,6 +152,29 @@ public class Config {
 	
 	public int CLEAR_CACHE_CYCLE() {
 		return xConf.getInt("/config/app/clearCacheCycle");
+	}
+	
+	/**
+	 * 设置默认房间号（每日签到用）
+	 * (房间勋章等级越高签到奖励越多)
+	 */
+	public boolean setSignRoomId(String roomId) {
+		boolean isOk = false;
+		final String REGEX = "(<signRoomId[^>]+>)[^<]*(</signRoomId>)";
+		if(StrUtils.isNotEmpty(roomId)) {
+			String xml = FileUtils.read(CONF_PATH, DEFAULT_CHARSET);
+			Pattern ptn = Pattern.compile(REGEX);
+			Matcher mth = ptn.matcher(xml);
+			if(mth.find()) {
+				String head = mth.group(1);
+				String tail = mth.group(2);
+				String txt = StrUtils.concat(head, roomId, tail);
+				xml = xml.replace(mth.group(0), txt);
+				
+				isOk = FileUtils.write(CONF_PATH, xml, DEFAULT_CHARSET, false);
+			}
+		}
+		return isOk;
 	}
 	
 }

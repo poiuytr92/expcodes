@@ -25,7 +25,8 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.HttpsUtils;
+import exp.libs.warp.net.http.HttpURLUtils;
+import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
@@ -79,31 +80,31 @@ public class MsgSender {
 	 */
 	private static Map<String, String> toPostHeadParams(String cookies, String realRoomId) {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		params.put(HttpsUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		params.put(HttpsUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
-				HttpsUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
-		params.put(HttpsUtils.HEAD.KEY.COOKIE, cookies);
-		params.put(HttpsUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
-		params.put(HttpsUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
-		params.put(HttpsUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
-		params.put(HttpsUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
+		params.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
+		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
+		params.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
+		params.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
+				HttpUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
+		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
+		params.put(HttpUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
+		params.put(HttpUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
+		params.put(HttpUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
+		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
 	
 	private static Map<String, String> toGetHeadParams(String cookies, String realRoomId) {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		params.put(HttpsUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		params.put(HttpsUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		params.put(HttpsUtils.HEAD.KEY.COOKIE, cookies);
-		params.put(HttpsUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
-		params.put(HttpsUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
-		params.put(HttpsUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
-		params.put(HttpsUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
+		params.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
+		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
+		params.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
+		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
+		params.put(HttpUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
+		params.put(HttpUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
+		params.put(HttpUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
+		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
 	
@@ -119,7 +120,7 @@ public class MsgSender {
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
-			String response = HttpsUtils.doGet(SIGN_URL, headParams, null, Config.DEFAULT_CHARSET);
+			String response = HttpURLUtils.doGet(SIGN_URL, headParams, null, Config.DEFAULT_CHARSET);
 			_analyseSignResponse(response);
 			
 		} else {
@@ -201,7 +202,7 @@ public class MsgSender {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toPostHeadParams(cookies, sRoomId);
 			Map<String, String> requestParams = _toChatRequestParams(msg, sRoomId, color.CODE());
-			String response = HttpsUtils.doPost(CHAT_URL, headParams, requestParams, Config.DEFAULT_CHARSET);
+			String response = HttpURLUtils.doPost(CHAT_URL, headParams, requestParams, Config.DEFAULT_CHARSET);
 			isOk = _analyseChatResponse(response);
 			
 		} else {
@@ -323,7 +324,7 @@ public class MsgSender {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
 			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId);
-			String response = HttpsUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+			String response = HttpURLUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
 			raffleIds = _getRaffleId(response);
 		} else {
 			log.warn("获取礼物编号失败: 无效的房间号 [{}]", roomId);
@@ -346,7 +347,7 @@ public class MsgSender {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
 			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId, raffleId);
-			String response = HttpsUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+			String response = HttpURLUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
 			errDesc = _analyseLotteryResponse(response);
 		} else {
 			log.warn("参加抽奖失败: 无效的房间号 [{}]", roomId);
@@ -477,7 +478,7 @@ public class MsgSender {
 	 */
 	private static DailyTask checkTask(Map<String, String> header) {
 		DailyTask task = DailyTask.NULL;
-		String response = HttpsUtils.doGet(CHECK_TASK_URL, header, null);
+		String response = HttpURLUtils.doGet(CHECK_TASK_URL, header, null);
 		
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -500,7 +501,7 @@ public class MsgSender {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("ts", String.valueOf(System.currentTimeMillis()));
 		
-		boolean isOk = HttpsUtils.download(VERCODE_PATH, VERCODE_URL, header, request);
+		boolean isOk = HttpURLUtils.downloadByGet(VERCODE_PATH, VERCODE_URL, header, request);
 		int answer = (isOk ? VercodeUtils.calculateImage(VERCODE_PATH) : 0);
 		return answer;
 	}
@@ -522,7 +523,7 @@ public class MsgSender {
 		request.put("time_start", String.valueOf(task.getBgnTime()));
 		request.put("end_time", String.valueOf(task.getEndTime()));
 		request.put("captcha", String.valueOf(answer));
-		String response = HttpsUtils.doGet(DO_TASK_URL, header, request);
+		String response = HttpURLUtils.doGet(DO_TASK_URL, header, request);
 		
 		boolean isOk = false;
 		try {

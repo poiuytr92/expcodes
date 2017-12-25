@@ -8,6 +8,16 @@ import com.sun.media.OCR;
 import exp.bilibli.plugin.Config;
 
 
+/**
+ * <PRE>
+ * 图像识别工具
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class OCRUtils {
 	
 	private final static Logger log = LoggerFactory.getLogger(UIUtils.class);
@@ -18,6 +28,11 @@ public class OCRUtils {
 	
 	protected OCRUtils() {}
 
+	/**
+	 * 把JPG图像识别成文本内容
+	 * @param jpgPath
+	 * @return
+	 */
 	public static String jpgToTxt(String jpgPath) {
 		String txt = "";
 		try {
@@ -29,7 +44,8 @@ public class OCRUtils {
 	}
 	
 	/**
-	 * 修正常见的识别错误的数字/符号, 提高识别率
+	 * 目前验证码图片只有 a+b 与 a-b 两种形式, 由于字体问题，某些数字会被固定识别错误, 
+	 *  此方法用于修正常见的识别错误的数字/符号, 提高识别率
 	 * @param txt
 	 * @return
 	 */
@@ -62,6 +78,11 @@ public class OCRUtils {
 		return revise;
 	}
 	
+	/**
+	 * 把PNG图像识别成文本内容
+	 * @param pngPath
+	 * @return
+	 */
 	public static String pngToTxt(String pngPath) {
 		String txt = "";
 		try {

@@ -16,6 +16,7 @@ import javax.swing.JTextField;
 
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
+import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
@@ -56,6 +57,8 @@ public class AppUI extends MainWindow {
 	
 	/** 是否为管理员使用的版本 */
 	private static boolean IS_ADMIN;
+	
+	private JButton defaultBtn;
 	
 	private JButton linkBtn;
 	
@@ -150,10 +153,11 @@ public class AppUI extends MainWindow {
 	protected void initComponents(Object... args) {
 		this.chatTF = new JTextField();
 		this.httpTF = new JTextField("http://live.bilibili.com/");
-		this.ridTF = new JTextField("438", 15);
+		this.ridTF = new JTextField(Config.getInstn().SIGN_ROOM_ID(), 15);
 		chatTF.setToolTipText("内容长度限制: 20");
 		httpTF.setEditable(false);
 		
+		this.defaultBtn = new JButton("★");
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.loginBtn = new JButton("扫码登陆 (可自动参与全平台抽奖)");
@@ -163,6 +167,8 @@ public class AppUI extends MainWindow {
 		this.thxBtn = new JButton("答谢姬");
 		this.nightBtn = new JButton("晚安姬");
 		this.callBtn = new JButton("小call姬");
+		defaultBtn.setToolTipText("设为默认");
+		defaultBtn.setForeground(Color.MAGENTA);
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
@@ -218,7 +224,9 @@ public class AppUI extends MainWindow {
 		
 		JPanel livePanel = new JPanel(new BorderLayout()); {
 			livePanel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), BorderLayout.CENTER);
-			livePanel.add(SwingUtils.getPairsPanel("房间号", ridTF), BorderLayout.EAST);
+			livePanel.add(SwingUtils.getEBorderPanel(
+					SwingUtils.getPairsPanel("房间号", ridTF), defaultBtn), 
+					BorderLayout.EAST);
 		}
 		panel.add(livePanel, 1);
 		return panel;
@@ -286,6 +294,7 @@ public class AppUI extends MainWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
+		setDefaultBtnListener();
 		setLinkBtnListener();
 		setLotteryBtnListener();
 		setLoginBtnListener();
@@ -296,6 +305,19 @@ public class AppUI extends MainWindow {
 		setCallBtnListener();
 		setNightBtnListener();
 		setChatTFListener();
+	}
+	
+	private void setDefaultBtnListener() {
+		defaultBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String roomId = ridTF.getText();
+				if(Config.getInstn().setSignRoomId(roomId)) {
+					SwingUtils.info("默认房间号变更为: ".concat(roomId));
+				}
+			}
+		});
 	}
 
 	private void setLinkBtnListener() {
