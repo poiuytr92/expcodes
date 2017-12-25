@@ -603,6 +603,7 @@ public class AppUI extends MainWindow {
 	protected void markLogin() {
 		loginBtn.setEnabled(false);	// 标识已登陆
 		qrcodeUI._hide();
+		linkBtn.doClick();	// 登陆后自动连接到当前直播间
 		WebBot.getInstn()._start();
 		
 		UIUtils.log("登陆成功");
