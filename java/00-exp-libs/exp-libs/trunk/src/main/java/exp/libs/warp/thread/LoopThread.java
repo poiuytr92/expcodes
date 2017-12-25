@@ -6,6 +6,21 @@ import org.slf4j.LoggerFactory;
 /**
  * <PRE>
  * 抽象循环线程（需继承使用）.
+ * 
+ * 使用示例:
+ * 
+ * 	DemoThread dt = new DemoThread();	// DemoThread 继承 LoopThread
+ *  DemoThread 需实现3个方法:
+ *    _before:	执行 _start() 后首先触发一次
+ *    _loopRun: 执行 _start() 后每1ms触发一次
+ *    _after:   执行 _stop()  后触发一次
+ * 
+ *  dt._start();	// 启动线程
+ *  dt._pause();	// 暂停线程
+ *  dt._resume();	// 唤醒线程
+ *  dt._stop();		// 停止线程
+ *  dt._join();		// 线程加塞（某些场景下在_stop后使用, 可令调用线程等待dt线程退出后再退出）
+ *  
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

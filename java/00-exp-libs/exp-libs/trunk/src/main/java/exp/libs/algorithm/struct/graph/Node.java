@@ -8,6 +8,16 @@ import java.util.Set;
 
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 拓扑图的节点模型
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-25
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Node {
 
 	public final static Node NULL = new Node(-1, "NULL");

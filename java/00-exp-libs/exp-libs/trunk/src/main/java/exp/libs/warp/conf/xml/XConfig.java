@@ -39,7 +39,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * 	String val = conf.getVal("pool");
  * 	int val = conf.getInt("iteratorMode");
  *  String val = conf.getAttribute("base@ftp", "hint");
- *  List<String> enums = conf.getEnums("enumTag");	// 枚举节点需要声明属性type="enum"
+ *  List&lt;String&gt; enums = conf.getEnums("enumTag");	// 枚举节点需要声明属性type="enum"
  * =========================================================
  * 
  * 格式定义:

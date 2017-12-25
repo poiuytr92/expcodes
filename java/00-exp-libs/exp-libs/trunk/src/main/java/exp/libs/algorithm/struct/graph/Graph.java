@@ -6,6 +6,16 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * <PRE>
+ * 拓扑图模型
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-25
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Graph {
 
 	/** 是否为有向图 */

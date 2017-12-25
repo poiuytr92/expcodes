@@ -6,6 +6,18 @@ import java.util.concurrent.TimeUnit;
 /**
  * <pre>
  * 线程池(回调值为Object).
+ * 
+ * 使用示例:
+ * 
+ *  final int taskNum = 10;
+ *  ThreadPool tp = new ThreadPool(taskNum);
+ *  
+ *  tp.execute(实现 Runnable接口 的线程对象);	// 把无回调值的线程注入线程池
+ *  Future&lt;Object&gt; rst = tp.submit(实现 Callable接口 的线程对象)	// 把有回调值的线程注入线程池
+ *  
+ *  tp.shutdown();		// 通知（但不强制）线程池内所有线程自行销毁
+ *  tp.isTerminated();	// 检查线程池内是否所有线程均已销毁
+ *  
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

@@ -11,6 +11,18 @@ import java.util.concurrent.TimeUnit;
 /**
  * <pre>
  * 线程池(自定义回调值类型).
+ * 
+ * 使用示例:
+ * 
+ *  final int taskNum = 10;
+ *  BaseThreadPool&lt;自定义泛型&gt; btp = new BaseThreadPool&lt;自定义泛型&gt;(taskNum);
+ *  
+ *  btp.execute(实现 Runnable接口 的线程对象);	// 把无回调值的线程注入线程池
+ *  Future&lt;自定义泛型&gt; rst = btp.submit(实现 Callable接口 的线程对象)	// 把有回调值的线程注入线程池
+ *  
+ *  btp.shutdown();		// 通知（但不强制）线程池内所有线程自行销毁
+ *  btp.isTerminated();	// 检查线程池内是否所有线程均已销毁
+ * 
  * </pre>	
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
