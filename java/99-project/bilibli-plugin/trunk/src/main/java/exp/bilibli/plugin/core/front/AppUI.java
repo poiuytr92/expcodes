@@ -24,7 +24,7 @@ import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.core.back.WebSockClient;
 import exp.bilibli.plugin.envm.ChatColor;
-import exp.bilibli.plugin.utils.TimeUtils;
+import exp.bilibli.plugin.utils.SafetyUtils;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -113,7 +113,7 @@ public class AppUI extends MainWindow {
 	private static volatile AppUI instance;
 	
 	private AppUI() {
-		super("Bilibili插件姬 - By 亚絲娜", WIDTH, HEIGHT);
+		super("哔哩哔哩插件姬 - By 亚絲娜", WIDTH, HEIGHT);
 	}
 	
 	public static void createInstn(String[] args) {
@@ -124,7 +124,7 @@ public class AppUI extends MainWindow {
 				System.exit(0);
 				return;
 				
-			} else if(!TimeUtils.timeInvalidity()) {
+			} else if(!SafetyUtils.timeInvalidity()) {
 				SwingUtils.warn("软件授权已过期");
 				System.exit(0);
 				return;
@@ -312,6 +312,11 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(IS_ADMIN == false) {
+					SwingUtils.warn("非主播用户没有这个技能哦::>_<::");
+					return;
+				}
+				
 				String roomId = ridTF.getText();
 				if(Config.getInstn().setSignRoomId(roomId)) {
 					SwingUtils.info("默认房间号变更为: ".concat(roomId));

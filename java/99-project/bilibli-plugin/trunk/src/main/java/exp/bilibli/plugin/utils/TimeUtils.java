@@ -21,12 +21,4 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 		return StrUtils.concat("[", time, "] ");
 	}
 	
-	/**
-	 * 检测软件释放在使用有效期内
-	 * @return
-	 */
-	public static boolean timeInvalidity() {
-		return (System.currentTimeMillis() < 1519690604379L);
-	}
-	
 }

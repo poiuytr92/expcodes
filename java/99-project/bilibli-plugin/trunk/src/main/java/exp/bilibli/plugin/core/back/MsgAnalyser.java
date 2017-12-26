@@ -213,6 +213,7 @@ public class MsgAnalyser {
 		log.info(msg);
 		
 		ChatMgr.getInstn().helloLive(msgBean.getRoomId());
+		UIUtils.notityLive(msgBean.getRoomId());
 	}
 	
 	/**
