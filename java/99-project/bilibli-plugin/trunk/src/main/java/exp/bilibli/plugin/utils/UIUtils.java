@@ -1,5 +1,7 @@
 package exp.bilibli.plugin.utils;
 
+import java.awt.Toolkit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,7 +88,8 @@ public class UIUtils {
 	}
 	
 	public static void notityLive(String roomId) {
-		new NoticeUI(roomId)._show();
+		new NoticeUI(roomId)._show();		// 右下角通知提示
+		Toolkit.getDefaultToolkit().beep();	// 蜂鸣音提示
 	}
 	
 }
