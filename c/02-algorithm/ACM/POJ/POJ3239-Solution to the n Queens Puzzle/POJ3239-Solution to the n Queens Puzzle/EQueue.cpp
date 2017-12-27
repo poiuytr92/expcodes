@@ -6,7 +6,7 @@ using namespace std;
 #define MAX 65536
 int Queen[N];
 int Evaluation[N];
-int main(void)
+int _main()
 {
     int sum=1;
     bool flag=true;
@@ -80,4 +80,5 @@ int main(void)
     }
     //cout<<sum;
     cout<<endl;
+	return 0;
 }
