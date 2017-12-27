@@ -56,10 +56,10 @@ public class TopoGraphUI extends PopChildWindow {
 	private final static int MAX_NODE_NUM = 32;
 	
 	/** 所绘制拓扑图的边长放大倍率 */
-	private final int MANIFICATION = 150;
+	private final static int MANIFICATION = 150;
 	
 	/** 归一化公式常量 */
-	private final double NORM_ARG = 2 / Math.PI * MANIFICATION;
+	private final static double NORM_ARG = 2 / Math.PI * MANIFICATION;
 	
 	/** 源端颜色 */
 	private final static Color COLOR_SRC = Color.BLUE;
