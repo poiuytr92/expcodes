@@ -116,28 +116,46 @@ public class AppUI extends MainWindow {
 		super("哔哩哔哩插件姬 - By 亚絲娜", WIDTH, HEIGHT);
 	}
 	
+	/**
+	 * 创建实例
+	 * @param args main入参
+	 */
 	public static void createInstn(String[] args) {
-		if(args != null && args.length > 0) {
-			String code = SwingUtils.input("请输入注册码");
-			if(!code.matches("[a-zA-Z]\\d[a-zA-Z]\\d")) {
-				SwingUtils.warn("未授权用户");
-				System.exit(0);
-				return;
-				
-			} else if(!SafetyUtils.timeInvalidity()) {
-				SwingUtils.warn("软件授权已过期");
-				System.exit(0);
-				return;
-			}
-			IS_ADMIN = false;
-			
-		} else {
-			IS_ADMIN = true;
-		}
-		
+		checkIdentity(args);
 		getInstn();
 	}
 	
+	/**
+	 * 身份校验
+	 * @param args main入参
+	 */
+	public static void checkIdentity(String[] args) {
+		IS_ADMIN = false;
+		
+		// 管理员: 无条件开启所有功能
+		if(args == null || args.length <= 0) {
+			IS_ADMIN = true;
+			
+		// 用户
+		} else {
+			String code = SwingUtils.input("请输入注册码");
+			String errMsg = SafetyUtils.checkAC(code);
+			if(StrUtils.isNotEmpty(errMsg)) {
+				SwingUtils.warn(errMsg);
+				System.exit(0);
+				
+			} else {
+				
+				// 主播用户在校验通过后开启所有功能
+				IS_ADMIN = (args.length > 1 ? true : false);
+			}
+		}
+	}
+	
+	/**
+	 * 获取单例
+	 * @return
+	 */
 	public static AppUI getInstn() {
 		if(instance == null) {
 			synchronized (AppUI.class) {
