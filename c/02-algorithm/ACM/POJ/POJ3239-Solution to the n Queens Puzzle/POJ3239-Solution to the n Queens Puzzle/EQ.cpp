@@ -1,4 +1,7 @@
 
+// 尝试使用启发式修补的解法，可惜收敛太慢
+
+
 #include <stdlib.h> 
 #include <time.h> 
 #include <iostream>
@@ -33,7 +36,7 @@ bool randBool();
 
 
 
-int main(void) {
+int __main(void) {
 	int n = 0;
 	while(cin >> n && n > 0) {
 		solveNQueue(n);

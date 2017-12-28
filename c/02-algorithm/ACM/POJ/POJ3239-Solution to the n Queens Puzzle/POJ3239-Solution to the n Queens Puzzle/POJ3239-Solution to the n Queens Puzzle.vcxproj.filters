@@ -18,5 +18,8 @@
     <ClCompile Include="POJ3239-Solution to the n Queens Puzzle.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="EQ.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

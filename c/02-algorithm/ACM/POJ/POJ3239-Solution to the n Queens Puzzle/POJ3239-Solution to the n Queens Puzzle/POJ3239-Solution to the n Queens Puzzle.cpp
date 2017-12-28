@@ -44,6 +44,8 @@
 	 第i个数为Ai，表示在第i行Ai列放一个皇后.
 	 子序列与子序列之间的数序是连续关系(无视中括号就可以了), 所有子序列内的递增值为2
 
+	 原理： http://penguin.ewu.edu/~trolfe/QueenLasVegas/Hoffman.pdf 
+
 */
 
 #include <iostream>
