@@ -347,8 +347,16 @@ public class MsgSender {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
 			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId, raffleId);
+			
 			String response = HttpURLUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
 			errDesc = _analyseLotteryResponse(response);
+			
+			// 系统繁忙哟，请再试一下吧
+			if(errDesc.contains("系统繁忙")) {
+				ThreadUtils.tSleep(1000);
+				response = HttpURLUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+				errDesc = _analyseLotteryResponse(response);
+			}
 		} else {
 			log.warn("参加抽奖失败: 无效的房间号 [{}]", roomId);
 		}
