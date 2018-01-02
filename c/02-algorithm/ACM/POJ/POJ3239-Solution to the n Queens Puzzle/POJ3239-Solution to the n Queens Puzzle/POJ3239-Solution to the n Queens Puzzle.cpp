@@ -32,22 +32,22 @@
 	 而目前网上流传的通解公式，则是为了便于编程，在坐标变换后得到的：
 	 变换坐标后的求解公式如下：
 	 ① 当m mod 6 != 2 且 m mod 6 != 3时：
-	   [2,4,6,8,...,m], [1,3,5,7,...,m-1]            (m为偶数)
-	   [2,4,6,8,...,m-1], [1,3,5,7,...,m-2], [m]     (m为奇数)
+	   (A1):[2,4,6,8,...,m], [1,3,5,7,...,m-1]            (m为偶)
+	   (A2):[2,4,6,8,...,m-1], [1,3,5,7,...,m-2], [m]     (m为奇)
 
 	 ② 当m mod 6 == 2 或 m mod 6 == 3时，
 	  令 n= m / 2 (m为偶数) 或 n = (m-1)/2 (m为奇数)
-       [n,n+2,n+4,...,m], [2,4,...,n-2], [n+3,n+5,...,m-1], [1,3,5,...,n+1]         (m为偶数,n为偶数)
-	   [n,n+2,n+4,...,m-1], [1,3,5,...,n-2], [n+3,...,m], [2,4,...,n+1]             (m为偶数,n为奇数)
-	   [n,n+2,n+4,...,m-1], [2,4,...,n-2], [n+3,n+5,...,m-2], [1,3,5,...,n+1], [m]  (m为奇数,n为偶数)
-	   [n,n+2,n+4,...,m-2], [1,3,5,...,n-2], [n+3,...,m-1], [2,4,...,n+1], [m]      (m为奇数,n为奇数)
+       (B1):[n,n+2,n+4,...,m], [2,4,...,n-2], [n+3,n+5,...,m-1], [1,3,5,...,n+1]        (m为偶,n为偶)
+	   (B2):[n,n+2,n+4,...,m-1], [1,3,5,...,n-2], [n+3,...,m], [2,4,...,n+1]            (m为偶,n为奇)
+	   (B3):[n,n+2,n+4,...,m-1], [2,4,...,n-2], [n+3,n+5,...,m-2], [1,3,5,...,n+1], [m] (m为奇,n为偶)
+	   (B4):[n,n+2,n+4,...,m-2], [1,3,5,...,n-2], [n+3,...,m-1], [2,4,...,n+1], [m]     (m为奇,n为奇)
 
-	 上面有六条解序列: 一行一个序列，中括号是我额外加上的，以便辨认子序列。
-	 
-	 第i个数为Ai，表示在第i行Ai列放一个皇后.
-	 子序列与子序列之间的数序是连续关系(无视中括号就可以了), 所有子序列内的递增值为2
-
+	 上面有六条解序列: 
+	   一行一个序列(中括号是我额外加上的，以便辨认子序列)
+	   第i个数为j，表示在第i行j列放一个皇后.
+	   子序列与子序列之间的数序是连续关系(无视中括号就可以了), 所有子序列内j的递增值为2
 */
+
 
 #include <iostream>
 using namespace std;
@@ -61,53 +61,62 @@ void print(int bgn, int end);
 
 
 int main(void) {
-	int n = 0;
-	while(cin >> n && n > 0) {
-		const int mod = n % 6;
-		const bool nOdd = (n % 2 == 1);
+	int m = 0;
+	while(cin >> m && m > 0) {
+		const int mod = m % 6;
+		const bool mOdd = (m % 2 == 1);
 
 		if(mod != 2 && mod != 3) {
-			if(nOdd == true) {
-				print(2, n - 1);
-				print(1, n);
 
+			// A2
+			if(mOdd == true) {
+				print(2, m - 1);
+				print(1, m);
+
+			// A1
 			} else {
-				print(2, n);
-				print(1, n - 1);
+				print(2, m);
+				print(1, m - 1);
 			}
 
 		} else {
-			int k = n / 2;
-			const bool kOdd = (k % 2 == 1);
+			int n = m / 2;
+			const bool nOdd = (n % 2 == 1);
 
-			if(nOdd == true) {
-				if(kOdd == true) {
-					print(k, n - 2);
-					print(1, k - 2);
-					print(k + 3, n - 1);
-					print(2, k + 1);
-					print(n, n);
+			if(mOdd == true) {
 
+				// B4
+				if(nOdd == true) {
+					print(n, m - 2);
+					print(1, n - 2);
+					print(n + 3, m - 1);
+					print(2, n + 1);
+					print(m, m);
+
+				// B3
 				} else {
-					print(k, n - 1);
-					print(2, k - 2);
-					print(k + 3, n - 2);
-					print(1, k + 1);
-					print(n, n);
+					print(n, m - 1);
+					print(2, n - 2);
+					print(n + 3, m - 2);
+					print(1, n + 1);
+					print(m, m);
 				}
 
 			} else {
-				if(kOdd == true) {
-					print(k, n - 1);
-					print(1, k - 2);
-					print(k + 3, n);
-					print(2, k + 1);
 
+				// B2
+				if(nOdd == true) {
+					print(n, m - 1);
+					print(1, n - 2);
+					print(n + 3, m);
+					print(2, n + 1);
+
+				// B1
 				} else {
-					print(k, n);
-					print(2, k - 2);
-					print(k + 3, n - 1);
-					print(1, k + 1);
+					print(n, m);
+					print(2, n - 2);
+					print(n + 3, m - 1);
+					print(1, n + 1);
 				}
 			}
 		}
