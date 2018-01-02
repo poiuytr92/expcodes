@@ -24,9 +24,11 @@
 
 	 
 	 这题还有用【构造法】（即通过分析问题潜在的数学规律直接得到解）的通解公式，时间复杂度为O(1)
-	 通解公式的来源是由E.J.Hoffman、J.C.Loessi、R.C.Moore三人在1969年发表的一篇数学论文：
-	 原理原文： http://penguin.ewu.edu/~trolfe/QueenLasVegas/Hoffman.pdf 
-	 原理译文（本人亲译）：
+	 通解公式的原理来源是由E.J.Hoffman、J.C.Loessi、R.C.Moore三人在1969年发表的一篇数学论文：
+	 英文原文： http://penguin.ewu.edu/~trolfe/QueenLasVegas/Hoffman.pdf 
+	 原文下载：http://download.csdn.net/download/lyy289065406/10184847
+	 中文译文（本人亲译）：http://blog.csdn.net/lyy289065406/article/details/78955101
+	 译文下载：http://download.csdn.net/download/lyy289065406/10184900
 
 
 	 而目前网上流传的通解公式，则是为了便于编程，在坐标变换后得到的：
