@@ -51,10 +51,10 @@ public class ChatMgr extends LoopThread {
 	private final static long SEND_TIME = 500;
 	
 	/** 自动感谢周期 */
-	private final static long THX_TIME = 20000;
+	private final static long THX_TIME = 30000;
 	
 	/** 自动打call周期 */
-	private final static long CALL_TIME = 90000;
+	private final static long CALL_TIME = 120000;
 	
 	/** 检测待发送消息间隔 */
 	private final static long SLEEP_TIME = 1000;
@@ -192,7 +192,7 @@ public class ChatMgr extends LoopThread {
 		long hour = ((System.currentTimeMillis() % 86400000) / 3600000);
 		hour = (hour + 8) % 24;	// 时差
 		
-		String card = ramdom(cards);
+		String card = RandomUtils.randomElement(cards);
 		String msg = "滴~".concat(card);
 		if(hour >= 6 && hour < 12) {
 			msg = msg.concat("早上好");
@@ -282,7 +282,7 @@ public class ChatMgr extends LoopThread {
 		int userNum = tmp.keySet().size();
 		if(userNum >= THX_USER_LIMIT) {
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢前面[", userNum, 
-					"]个大佬的投喂,喜欢请关注O(∩_∩)O");
+					"]个大佬的投喂d(´ω｀*)");
 			MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 			
 		// 分别合并每个用户的投喂礼物再感谢
@@ -349,13 +349,8 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		String msg = NOTICE_KEY.concat(ramdom(callMsgs));
+		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(callMsgs));
 		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
-	}
-	
-	private String ramdom(List<String> array) {
-		int idx = RandomUtils.randomInt(array.size());
-		return array.get(idx);
 	}
 	
 }
