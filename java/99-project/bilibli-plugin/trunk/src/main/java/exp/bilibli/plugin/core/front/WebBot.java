@@ -278,8 +278,6 @@ class WebBot extends LoopThread {
 	 */
 	private void resetDailyTasks() {
 		long now = System.currentTimeMillis();
-		System.out.println(now);
-		System.out.println(resetTaskTime);
 		if(nextTaskTime > 0 || (now - resetTaskTime <= DAY_UNIT)) {
 			return;
 		}

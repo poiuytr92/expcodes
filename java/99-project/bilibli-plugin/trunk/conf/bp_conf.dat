@@ -9,6 +9,7 @@
         <ws caption="消息推送websocket服务器"><![CDATA[ws://broadcastlv.chat.bilibili.com:2244/sub]]></ws>
         <chat caption="版聊服务器"><![CDATA[https://api.live.bilibili.com/msg/send]]></chat>
         <sign caption="签到服务器"><![CDATA[http://api.live.bilibili.com/sign/doSign]]></sign>
+        <account caption="账号信息服务器"><![CDATA[http://account.bilibili.com/home/userInfo]]></account>
         
         <stormCheck caption="风暴检测服务器"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/check]]></stormCheck>
         <stormJoin caption="风暴抽奖服务器"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/join]]></stormJoin>

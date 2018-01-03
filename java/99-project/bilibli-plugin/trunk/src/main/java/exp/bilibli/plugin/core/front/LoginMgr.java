@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
+import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -113,7 +114,7 @@ class LoginMgr extends LoopThread {
 		Browser.backupCookies();	// 保存登录成功的cookies到外存, 以备下次使用
 		Browser.quit();	// 退出浏览器(此浏览器是加载图片的, 不加载图片的浏览器后面再延迟启动)
 		
-		AppUI.getInstn().markLogin();	// 在界面标记已登陆
+		AppUI.getInstn().markLogin(MsgSender.queryUsername());	// 在界面标记已登陆
 		log.info("{} 已停止", getName());
 	}
 	

@@ -78,6 +78,10 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/sign");
 	}
 	
+	public String ACCOUNT_URL() {
+		return xConf.getVal("/config/biliUrls/account");
+	}
+	
 	public String STORM_CHECK_URL() {
 		return xConf.getVal("/config/biliUrls/stormCheck");
 	}

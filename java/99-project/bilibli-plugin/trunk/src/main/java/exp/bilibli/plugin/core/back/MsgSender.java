@@ -44,6 +44,8 @@ public class MsgSender {
 	
 	private final static long SLEEP_TIME = 1000;
 	
+	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
+	
 	private final static String SIGN_URL = Config.getInstn().SIGN_URL();
 	
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
@@ -95,17 +97,46 @@ public class MsgSender {
 	}
 	
 	private static Map<String, String> toGetHeadParams(String cookies, String realRoomId) {
+		Map<String, String> params = toGetHeadParams(cookies);
+		params.put(HttpUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
+		params.put(HttpUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
+		params.put(HttpUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
+		return params;
+	}
+	
+	private static Map<String, String> toGetHeadParams(String cookies) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
 		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
 		params.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
 		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
 		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
-		params.put(HttpUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
-		params.put(HttpUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
-		params.put(HttpUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
 		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
+	}
+	
+	/**
+	 * 查询账号信息
+	 * {"code":0,"status":true,"data":{"level_info":{"current_level":4,"current_min":4500,"current_exp":7480,"next_exp":10800},"bCoins":0,"coins":464,"face":"http:\/\/i2.hdslb.com\/bfs\/face\/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","nameplate_current":"http:\/\/i1.hdslb.com\/bfs\/face\/54f4c31ab9b1f1fa2c29dbbc967f66535699337e.png","pendant_current":"","uname":"M-\u4e9a\u7d72\u5a1c","userStatus":"","vipType":1,"vipStatus":1,"official_verify":-1,"pointBalance":0}}
+	 * @return username
+	 */
+	public static String queryUsername() {
+		final String cookies = Browser.COOKIES();
+		Map<String, String> headParams = toGetHeadParams(cookies);
+		String response = HttpURLUtils.doGet(ACCOUNT_URL, headParams, null, Config.DEFAULT_CHARSET);
+		
+		String username = "unknow";
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+				username = JsonUtils.getStr(data, BiliCmdAtrbt.uname);
+			}
+		} catch(Exception e) {
+			log.error("查询账号信息失败: {}", response, e);
+		}
+		return username;
 	}
 	
 	/**
@@ -302,7 +333,9 @@ public class MsgSender {
 					if(StrUtils.isEmpty(errDesc)) {
 						cnt++;
 					} else {
-						UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
+						if(!errDesc.contains("你已加入抽奖")) {
+							UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
+						}
 						log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
 					}
 				}

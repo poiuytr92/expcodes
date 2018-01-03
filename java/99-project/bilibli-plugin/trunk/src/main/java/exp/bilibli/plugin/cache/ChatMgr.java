@@ -42,7 +42,7 @@ public class ChatMgr extends LoopThread {
 	
 	private final static String NOTICE_KEY = "【公告】";
 	
-	private final static String NIGHT_KEY = "晚安(・ω<)";
+	private final static String NIGHT_KEY = "晚安(´▽`)ﾉ  ";
 	
 	/** 同一时间可以感谢的最大用户数（避免刷屏） */
 	private final static int THX_USER_LIMIT = 5;
@@ -51,10 +51,10 @@ public class ChatMgr extends LoopThread {
 	private final static long SEND_TIME = 500;
 	
 	/** 自动感谢周期 */
-	private final static long THX_TIME = 15000;
+	private final static long THX_TIME = 20000;
 	
 	/** 自动打call周期 */
-	private final static long CALL_TIME = 180000;
+	private final static long CALL_TIME = 90000;
 	
 	/** 检测待发送消息间隔 */
 	private final static long SLEEP_TIME = 1000;

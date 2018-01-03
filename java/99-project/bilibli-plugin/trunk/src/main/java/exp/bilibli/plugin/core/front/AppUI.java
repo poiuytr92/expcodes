@@ -623,13 +623,13 @@ public class AppUI extends MainWindow {
 	/**
 	 * 标记已登陆成功
 	 */
-	protected void markLogin() {
+	protected void markLogin(String username) {
 		loginBtn.setEnabled(false);	// 标识已登陆
 		qrcodeUI._hide();
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
 		WebBot.getInstn()._start();
 		
-		UIUtils.log("登陆成功");
+		UIUtils.log("登陆成功:".concat(username));
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
 		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 	}
