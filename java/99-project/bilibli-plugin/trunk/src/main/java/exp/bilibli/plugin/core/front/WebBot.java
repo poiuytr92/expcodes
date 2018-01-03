@@ -86,7 +86,7 @@ class WebBot extends LoopThread {
 		// 把上次任务重置时间设为为当天0点
 		resetTaskTime = resetTaskTime / DAY_UNIT * DAY_UNIT;
 		resetTaskTime -= HOUR_UNIT * HOUR_OFFSET;
-		resetTaskTime += 60000;	// 避免临界点时差, 后延5分钟
+		resetTaskTime += 300000;	// 避免临界点时差, 后延5分钟
 	}
 	
 	protected static WebBot getInstn() {
