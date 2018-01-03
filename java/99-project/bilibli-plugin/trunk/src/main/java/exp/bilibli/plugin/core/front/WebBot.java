@@ -37,6 +37,12 @@ class WebBot extends LoopThread {
 	
 	private final static String HOME_URL = Config.getInstn().HOME_URL();
 	
+	private final static long DAY_UNIT = 86400000L;
+	
+	private final static long HOUR_UNIT = 3600000L;
+	
+	private final static int HOUR_OFFSET = 8;
+	
 	/** 浏览器非活动时的保持时间 */
 	private final static long KEEP_TIME = 60000;
 	
@@ -64,6 +70,9 @@ class WebBot extends LoopThread {
 	/** 执行下次日常任务的时间点 */
 	private long nextTaskTime;
 	
+	/** 上次重置每日任务的时间点 */
+	private long resetTaskTime;
+	
 	private static volatile WebBot instance;
 	
 	private WebBot() {
@@ -72,6 +81,12 @@ class WebBot extends LoopThread {
 		this.lotteryCnt = 0;
 		this.tipCnt = 0;
 		this.nextTaskTime = System.currentTimeMillis();
+		this.resetTaskTime = System.currentTimeMillis();	
+		
+		// 把上次任务重置时间设为为当天0点
+		resetTaskTime = resetTaskTime / DAY_UNIT * DAY_UNIT;
+		resetTaskTime -= HOUR_UNIT * HOUR_OFFSET;
+		resetTaskTime += 60000;	// 避免临界点时差, 后延5分钟
 	}
 	
 	protected static WebBot getInstn() {
@@ -247,6 +262,7 @@ class WebBot extends LoopThread {
 	 * 执行日常小学数学任务
 	 */
 	private void doDailyTasks() {
+		resetDailyTasks();
 		if(nextTaskTime <= 0 || nextTaskTime > System.currentTimeMillis()) {
 			return;
 		}
@@ -254,6 +270,29 @@ class WebBot extends LoopThread {
 		nextTaskTime = MsgSender.doDailyTasks();
 		if(nextTaskTime <= 0) {
 			UIUtils.log("今日所有小学数学任务已完成");
+		}
+	}
+	
+	/**
+	 * 当跨天后，自动重置每日任务
+	 */
+	private void resetDailyTasks() {
+		long now = System.currentTimeMillis();
+		System.out.println(now);
+		System.out.println(resetTaskTime);
+		if(nextTaskTime > 0 || (now - resetTaskTime <= DAY_UNIT)) {
+			return;
+		}
+		
+		long hms = now % DAY_UNIT;	// 取时分秒
+		long hour = hms / HOUR_UNIT;	// 取小时
+		hour = (hour + HOUR_OFFSET) % 24;		// 校正时差
+		
+		// 凌晨时重置每日任务时间
+		if(hour == 0) {
+			resetTaskTime = now;
+			nextTaskTime = now;
+			MsgSender.toSign();	// 重新签到
 		}
 	}
 	

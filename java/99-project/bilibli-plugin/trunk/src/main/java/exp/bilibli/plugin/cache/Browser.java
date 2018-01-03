@@ -1,6 +1,7 @@
 package exp.bilibli.plugin.cache;
 
 import java.io.File;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,9 @@ public class Browser {
 	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
+	
+	/** 一个月的时间单位 */
+	private final static long MONTH_MILLIS = 86400000L * 30L;
 	
 	/** 当前登陆用户的cookies，供https接口用 */
 	private String sCookies;
@@ -170,6 +174,33 @@ public class Browser {
 	
 	private Set<Cookie> _getCookies() {
 		return (browser == null ? new HashSet<Cookie>() : browser.getCookies());
+	}
+	
+	public static void updateCookiesTime() {
+		setCookiesTime(MONTH_MILLIS);
+	}
+	
+	public static void setCookiesTime(long millis) {
+		INSTN()._setCookiesTime(millis);
+	}
+	
+	private void _setCookiesTime(long millis) {
+		if(browser != null) {
+			millis = (millis <= 0 ? MONTH_MILLIS : millis);	// 默认有效期为一个月
+			Date expiry = new Date(System.currentTimeMillis() + MONTH_MILLIS);
+			Set<Cookie> tCookies = new HashSet<Cookie>();	// 调整时间后的cookies
+			
+			Set<Cookie> cookies = browser.getCookies();
+			for(Cookie cookie : cookies) {
+				Cookie tCookie = new Cookie(cookie.getName(), cookie.getValue(), 
+						cookie.getDomain(), cookie.getPath(), expiry, 
+						cookie.isSecure(), cookie.isHttpOnly());
+				tCookies.add(tCookie);
+			}
+			
+			browser.clearCookies();
+			browser.addCookies(tCookies);
+		}
 	}
 	
 	public static void backupCookies() {

@@ -142,6 +142,10 @@ public class Config {
 		return xConf.getVal("/config/files/calls");
 	}
 	
+	public String CARD_PATH() {
+		return xConf.getVal("/config/files/cards");
+	}
+	
 	public String SIGN_ROOM_ID() {
 		return xConf.getVal("/config/app/signRoomId");
 	}
@@ -152,6 +156,10 @@ public class Config {
 	
 	public int CLEAR_CACHE_CYCLE() {
 		return xConf.getInt("/config/app/clearCacheCycle");
+	}
+	
+	public long COOKIE_TIME() {
+		return xConf.getLong("/config/app/cookieTime") * 1000;
 	}
 	
 	/**

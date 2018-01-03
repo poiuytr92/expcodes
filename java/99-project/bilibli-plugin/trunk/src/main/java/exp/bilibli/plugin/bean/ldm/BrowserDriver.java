@@ -190,6 +190,19 @@ final public class BrowserDriver {
 		return isOk;
 	}
 	
+	public boolean addCookies(Set<Cookie> cookies) {
+		boolean isOk = true;
+		if(cookies == null) {
+			isOk = false;
+			
+		} else {
+			for(Cookie cookie : cookies) {
+				isOk &= addCookie(cookie);
+			}
+		}
+		return isOk;
+	}
+	
 	public Set<Cookie> getCookies() {
 		return webDriver.manage().getCookies();
 	}

@@ -42,7 +42,7 @@ public class ChatMgr extends LoopThread {
 	
 	private final static String NOTICE_KEY = "【公告】";
 	
-	private final static String NIGHT_KEY = "晚安^o^";
+	private final static String NIGHT_KEY = "晚安(・ω<)";
 	
 	/** 同一时间可以感谢的最大用户数（避免刷屏） */
 	private final static int THX_USER_LIMIT = 5;
@@ -88,6 +88,9 @@ public class ChatMgr extends LoopThread {
 	/** 自动打call的候选列表 */
 	private List<String> callMsgs;
 	
+	/** 开播上车的卡片类型 */
+	private List<String> cards;
+	
 	private static volatile ChatMgr instance;
 	
 	private ChatMgr() {
@@ -100,6 +103,7 @@ public class ChatMgr extends LoopThread {
 		this.nightedUsers = new HashSet<String>();
 		this.userGifts = new LinkedHashMap<String, Map<String, Integer>>();
 		this.callMsgs = new ArrayList<String>();
+		this.cards = new ArrayList<String>();
 		
 		init();
 	}
@@ -116,12 +120,21 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	private void init() {
-		List<String> lines = FileUtils.readLines(
+		List<String> calls = FileUtils.readLines(
 				Config.getInstn().CALL_PATH(), Config.DEFAULT_CHARSET);
-		for(String line : lines) {
+		for(String line : calls) {
 			line = line.trim();
 			if(StrUtils.isNotEmpty(line)) {
-				callMsgs.add(line);
+				this.callMsgs.add(line);
+			}
+		}
+		
+		List<String> cards = FileUtils.readLines(
+				Config.getInstn().CARD_PATH(), Config.DEFAULT_CHARSET);
+		for(String line : cards) {
+			line = line.trim();
+			if(StrUtils.isNotEmpty(line)) {
+				this.cards.add(line);
 			}
 		}
 	}
@@ -179,18 +192,19 @@ public class ChatMgr extends LoopThread {
 		long hour = ((System.currentTimeMillis() % 86400000) / 3600000);
 		hour = (hour + 8) % 24;	// 时差
 		
-		String msg = "";
+		String card = ramdom(cards);
+		String msg = "滴~".concat(card);
 		if(hour >= 6 && hour < 12) {
-			msg = "滴~学生卡O(∩_∩)O 早上好";
+			msg = msg.concat("早上好");
 			
 		} else if(hour >= 12 && hour < 18) {
-			msg = "滴~老人卡O(∩_∩)O 下午好";
+			msg = msg.concat("下午好");
 			
 		} else if(hour >= 18 && hour < 24) {
-			msg = "滴~银行卡O(∩_∩)O 晚上好";
+			msg = msg.concat("晚上好");
 			
 		} else {
-			msg = "凌晨还在浪吗?";
+			msg = msg.concat("还在浪吗?");
 		}
 		MsgSender.sendChat(msg, roomId);
 	}
@@ -246,6 +260,10 @@ public class ChatMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
+		nightedUsers.clear();
+		userGifts.clear();
+		callMsgs.clear();
+		cards.clear();
 		log.info("{} 已停止", getName());
 	}
 	
@@ -331,9 +349,13 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		int idx = RandomUtils.randomInt(callMsgs.size());
-		String msg = NOTICE_KEY.concat(callMsgs.get(idx));
+		String msg = NOTICE_KEY.concat(ramdom(callMsgs));
 		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
+	}
+	
+	private String ramdom(List<String> array) {
+		int idx = RandomUtils.randomInt(array.size());
+		return array.get(idx);
 	}
 	
 }

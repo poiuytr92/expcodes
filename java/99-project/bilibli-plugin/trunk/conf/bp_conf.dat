@@ -30,12 +30,14 @@
         <advs caption="副词词库"><![CDATA[./data/msg/advs.dat]]></advs>
         <nights caption="晚安敏感词库"><![CDATA[./data/msg/nights.dat]]></nights>
         <calls caption="公告屏语录"><![CDATA[./data/msg/calls.dat]]></calls>
+        <cards caption="上车卡片类型"><![CDATA[./data/msg/cards.dat]]></cards>
     </files>
     
     <app caption="应用配置">
         <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">51108</signRoomId>
         <waitElementTime caption="页面元素加载等待时间(s)">10</waitElementTime>
         <clearCacheCycle caption="清理内存周期(每抽奖N次清理一次)">10</clearCacheCycle>
+        <cookieTime caption="cookie有效时间(秒)">2592000</cookieTime>
     </app>
    
 </config>

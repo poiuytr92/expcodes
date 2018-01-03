@@ -302,6 +302,7 @@ public class MsgSender {
 					if(StrUtils.isEmpty(errDesc)) {
 						cnt++;
 					} else {
+						UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
 						log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
 					}
 				}
