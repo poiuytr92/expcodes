@@ -1,7 +1,9 @@
 package exp.libs.utils.num;
 
+import java.util.List;
 import java.util.Random;
 
+import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -209,6 +211,20 @@ public class RandomUtils {
 	 */
 	public static boolean randomBoolean() {
 		return random.nextBoolean();
+	}
+	
+	/**
+	 * 随机获取队列中的某个元素
+	 * @param list 队列（建议使用ArrayList）
+	 * @return 队列中的元素, 若队列为空, 则返回null
+	 */
+	public static <E> E randomElement(List<E> list) {
+		E e = null;
+		if(ListUtils.isNotEmpty(list)) {
+			int idx = randomInt(list.size());
+			e = list.get(idx);
+		}
+		return e;
 	}
 	
 	/**
