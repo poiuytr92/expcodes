@@ -245,12 +245,14 @@ public class HttpUtils {
 		conn.setDoOutput(true);
 		
 		// 设置自定义请求头参数
-		Iterator<String> keyIts = headParams.keySet().iterator();
-		while(keyIts.hasNext()) {
-			String key = keyIts.next();
-			String val = headParams.get(key);
-			if(StrUtils.isNotEmpty(key, val)) {
-				conn.setRequestProperty(key, val);
+		if(headParams != null) {
+			Iterator<String> keyIts = headParams.keySet().iterator();
+			while(keyIts.hasNext()) {
+				String key = keyIts.next();
+				String val = headParams.get(key);
+				if(StrUtils.isNotEmpty(key, val)) {
+					conn.setRequestProperty(key, val);
+				}
 			}
 		}
 		return conn;
