@@ -111,7 +111,7 @@ bool iterateNQueue(int n) {
 
 			// 第r行中 [与第i行的皇后位置斜率为±1] 的格子受到攻击
 			if(PC >= 0 && PC < n) { attacks[PC]++; }
-			if(NC >= 0 && NC < n) { attacks[PC]++; }
+			if(NC >= 0 && NC < n) { attacks[NC]++; }
 		}
 
 		// 提取第r行中被攻击次数最小的格子
@@ -129,7 +129,7 @@ bool iterateNQueue(int n) {
 		}
 		pos[r] = c;	// 修正第r行的皇后位置
 
-		//delete attacks;
+		delete[] attacks;
 	}
 
 	// 判断修正后的n个皇后位置是否互不冲突
@@ -157,7 +157,7 @@ bool iterateNQueue(int n) {
 		cout << "Fail" << endl;
 	}
 
-	//delete pos;
+	delete[] pos;
 	return isOk;
 }
 
