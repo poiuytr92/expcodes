@@ -100,7 +100,9 @@ class LoginMgr extends LoopThread {
 			if(isLogined == true) {
 				UIUtils.log("扫码成功, 正在屏蔽B站拦截脚本...");
 				skipUpdradeTips();	// 跳过B站的升级教程（该教程若不屏蔽会妨碍点击抽奖）
-				Browser.setCookiesTime(Config.getInstn().COOKIE_TIME()); // 修正cookies有效时间
+				
+				// FIXME: 修改本地时间没用, 可能需要切换到帐密模式
+//				Browser.setCookiesTime(Config.getInstn().COOKIE_TIME()); // 修正cookies有效时间
 			}
 		}
 		

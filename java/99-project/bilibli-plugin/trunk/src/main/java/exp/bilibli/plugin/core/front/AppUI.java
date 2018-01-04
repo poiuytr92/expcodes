@@ -49,6 +49,11 @@ public class AppUI extends MainWindow {
 	/** serialVersionUID */
 	private final static long serialVersionUID = 2097374309672044616L;
 
+	/** 界面文本框最大缓存行数 */
+	private final static int MAX_LINE = 200;
+	
+	private final static String LINE_END = "\r\n";
+	
 	private final static int WIDTH = 1000;
 	
 	private final static int HEIGHT = 600;
@@ -73,6 +78,8 @@ public class AppUI extends MainWindow {
 	private JButton colorBtn;
 	
 	private JButton thxBtn;
+	
+	private JButton noticeBtn;
 	
 	private JButton nightBtn;
 	
@@ -183,6 +190,7 @@ public class AppUI extends MainWindow {
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
 		this.thxBtn = new JButton("答谢姬");
+		this.noticeBtn = new JButton("公告姬");
 		this.nightBtn = new JButton("晚安姬");
 		this.callBtn = new JButton("小call姬");
 		defaultBtn.setToolTipText("设为默认");
@@ -194,6 +202,7 @@ public class AppUI extends MainWindow {
 		sendBtn.setForeground(Color.BLACK);
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
 		thxBtn.setForeground(Color.BLACK);
+		noticeBtn.setForeground(Color.BLACK);
 		nightBtn.setForeground(Color.BLACK);
 		callBtn.setForeground(Color.BLACK);
 		
@@ -263,7 +272,7 @@ public class AppUI extends MainWindow {
 		panel.add(chatTF, BorderLayout.CENTER);
 		panel.add(SwingUtils.getHGridPanel(
 				SwingUtils.getEBorderPanel(sendBtn, colorBtn), 
-				thxBtn, nightBtn, callBtn), BorderLayout.EAST);
+				thxBtn, noticeBtn, callBtn, nightBtn), BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -320,8 +329,9 @@ public class AppUI extends MainWindow {
 		setSendBtnListener();
 		setColorBtnListener();
 		setThxBtnListener();
-		setCallBtnListener();
+		setnoticeBtnListener();
 		setNightBtnListener();
+		setCallBtnListener();
 		setChatTFListener();
 	}
 	
@@ -364,6 +374,7 @@ public class AppUI extends MainWindow {
 					wsClient.relink(roomId);
 				}
 				
+				chatTA.setText("");		// 清空版聊区
 				OnlineUserMgr.getInstn().clear(); // 重连直播间时清空在线用户列表
 				ThreadUtils.tSleep(200);	// 避免连续点击
 			}
@@ -471,6 +482,35 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
+	private void setnoticeBtnListener() {
+		noticeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!isLogin()) {
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [公告姬] 哦~");
+					return;
+					
+				} else if(IS_ADMIN == false) {
+					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [公告姬] 哦~");
+					return;
+				}
+				ChatMgr.getInstn()._start();
+				
+				ChatMgr.getInstn().setAutoNotice();
+				if(ChatMgr.getInstn().isAutoNotice()) {
+					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, noticeBtn);
+					UIUtils.log("[公告姬] 被召唤成功O(∩_∩)O");
+					
+				} else {
+					BeautyEyeUtils.setButtonStyle(NormalColor.normal, noticeBtn);
+					UIUtils.log("[公告姬] 被封印啦/(ㄒoㄒ)/");
+				}
+				ThreadUtils.tSleep(100);
+			}
+		});
+	}
+	
 	private void setCallBtnListener() {
 		callBtn.addActionListener(new ActionListener() {
 			
@@ -569,27 +609,43 @@ public class AppUI extends MainWindow {
 	
 	
 	public void toChat(String msg) {
+		if(StrUtils.count(chatTA.getText(), '\n') >= MAX_LINE) {
+			chatTA.setText("");
+		}
+		
 		chatTA.append(msg);
-		chatTA.append("\r\n");
+		chatTA.append(LINE_END);
 		SwingUtils.toEnd(chatTA);
 	}
 	
 	public void toConsole(String msg) {
+		if(StrUtils.count(consoleTA.getText(), '\n') >= MAX_LINE) {
+			consoleTA.setText("");
+		}
+		
 		consoleTA.append(msg);
-		consoleTA.append("\r\n");
+		consoleTA.append(LINE_END);
 		SwingUtils.toEnd(consoleTA);
 	}
 	
 	public void toNotify(String msg) {
+		if(StrUtils.count(notifyTA.getText(), '\n') >= MAX_LINE) {
+			notifyTA.setText("");
+		}
+		
 		notifyTA.append(msg);
-		notifyTA.append("\r\n");
+		notifyTA.append(LINE_END);
 		SwingUtils.toEnd(notifyTA);
 	}
 	
 	public void toStatistics(String msg) {
-		if(!loginBtn.isEnabled()) {	// 登陆按钮被禁用, 说明登陆成功
+		if(isLogin() == true) {
+			if(StrUtils.count(sttcTA.getText(), '\n') >= MAX_LINE) {
+				sttcTA.setText("");
+			}
+			
 			sttcTA.append(msg);
-			sttcTA.append("\r\n");
+			sttcTA.append(LINE_END);
 			SwingUtils.toEnd(sttcTA);
 		}
 	}

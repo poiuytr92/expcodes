@@ -151,6 +151,10 @@ public class Config {
 		return xConf.getVal("/config/files/cards");
 	}
 	
+	public String NOTICE_PATH() {
+		return xConf.getVal("/config/files/notices");
+	}
+	
 	public String SIGN_ROOM_ID() {
 		return xConf.getVal("/config/app/signRoomId");
 	}

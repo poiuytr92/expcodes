@@ -53,22 +53,32 @@ public class ChatMgr extends LoopThread {
 	/** 自动感谢周期 */
 	private final static long THX_TIME = 30000;
 	
+	/** 滚屏公告周期 */
+	private final static long NOTICE_TIME = 120000;
+	
 	/** 自动打call周期 */
-	private final static long CALL_TIME = 120000;
+	private final static long CALL_TIME = 180000;
 	
 	/** 检测待发送消息间隔 */
 	private final static long SLEEP_TIME = 1000;
 	
 	private final static int THX_LIMIT = (int) (THX_TIME / SLEEP_TIME);
 	
+	private final static int NOTICE_LIMIT = (int) (NOTICE_TIME / SLEEP_TIME);
+	
 	private final static int CALL_LIMIT = (int) (CALL_TIME / SLEEP_TIME);
 	
 	private int thxCnt;
+	
+	private int noticeCnt;
 	
 	private int callCnt;
 	
 	/** 自动答谢 */
 	private boolean autoThankYou;
+	
+	/** 自动公告 */
+	private boolean autoNotice;
 	
 	/** 自动打call */
 	private boolean autoCall;
@@ -85,6 +95,9 @@ public class ChatMgr extends LoopThread {
 	 */
 	private Map<String, Map<String, Integer>> userGifts;
 	
+	/** 滚屏公告的候选列表 */
+	private List<String> noticeMsgs;
+	
 	/** 自动打call的候选列表 */
 	private List<String> callMsgs;
 	
@@ -96,12 +109,15 @@ public class ChatMgr extends LoopThread {
 	private ChatMgr() {
 		super("自动发言姬");
 		this.thxCnt = 0;
+		this.noticeCnt = 0;
 		this.callCnt = 0;
 		this.autoThankYou = false;
+		this.autoNotice = false;
 		this.autoCall = false;
 		this.autoGoodNight = false;
 		this.nightedUsers = new HashSet<String>();
 		this.userGifts = new LinkedHashMap<String, Map<String, Integer>>();
+		this.noticeMsgs = new ArrayList<String>();
 		this.callMsgs = new ArrayList<String>();
 		this.cards = new ArrayList<String>();
 		
@@ -120,6 +136,15 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	private void init() {
+		List<String> notices = FileUtils.readLines(
+				Config.getInstn().NOTICE_PATH(), Config.DEFAULT_CHARSET);
+		for(String line : notices) {
+			line = line.trim();
+			if(StrUtils.isNotEmpty(line)) {
+				this.noticeMsgs.add(line);
+			}
+		}
+		
 		List<String> calls = FileUtils.readLines(
 				Config.getInstn().CALL_PATH(), Config.DEFAULT_CHARSET);
 		for(String line : calls) {
@@ -218,6 +243,14 @@ public class ChatMgr extends LoopThread {
 		return autoThankYou;
 	}
 	
+	public void setAutoNotice() {
+		autoNotice = !autoNotice;
+	}
+	
+	public boolean isAutoNotice() {
+		return autoNotice;
+	}
+	
 	public void setAutoCall() {
 		autoCall = !autoCall;
 	}
@@ -247,6 +280,12 @@ public class ChatMgr extends LoopThread {
 		if(thxCnt++ >= THX_LIMIT) {
 			thxCnt = 0;
 			toThxGift();
+		}
+		
+		// 定时公告
+		if(noticeCnt++ >= NOTICE_LIMIT) {
+			noticeCnt = 0;
+			toNotice();
 		}
 		
 		// 定时打call（支持主播公告）
@@ -339,6 +378,18 @@ public class ChatMgr extends LoopThread {
 		}
 		
 		gifts.clear();
+	}
+	
+	/**
+	 * 定时公告
+	 */
+	private void toNotice() {
+		if(!isAutoNotice() || ListUtils.isEmpty(noticeMsgs)) {
+			return;
+		}
+		
+		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(noticeMsgs));
+		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 	}
 	
 	/**
