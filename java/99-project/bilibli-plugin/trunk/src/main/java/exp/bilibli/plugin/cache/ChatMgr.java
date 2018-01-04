@@ -164,6 +164,22 @@ public class ChatMgr extends LoopThread {
 		}
 	}
 	
+	private void clearCache() {
+		nightedUsers.clear();
+		userGifts.clear();
+	}
+	
+	private void clearFiles() {
+		noticeMsgs.clear();
+		callMsgs.clear();
+		cards.clear();
+	}
+	
+	public void reload() {
+		clearFiles();
+		init();
+	}
+	
 	public void addThxGift(SendGift msgBean) {
 		if(!isAutoThankYou()) {
 			return;
@@ -299,10 +315,8 @@ public class ChatMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		nightedUsers.clear();
-		userGifts.clear();
-		callMsgs.clear();
-		cards.clear();
+		clearCache();
+		clearFiles();
 		log.info("{} 已停止", getName());
 	}
 	

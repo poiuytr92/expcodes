@@ -11,7 +11,7 @@ import exp.bilibli.plugin.envm.ChatColor;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
-class ColorUI extends PopChildWindow {
+class _ColorUI extends PopChildWindow {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5691969159309932864L;
@@ -40,7 +40,7 @@ class ColorUI extends PopChildWindow {
 	
 	private JButton goldBtn;
 	
-	protected ColorUI() {
+	protected _ColorUI() {
 		super("弹幕颜色", WIDTH, HEIGHT);
 	}
 	

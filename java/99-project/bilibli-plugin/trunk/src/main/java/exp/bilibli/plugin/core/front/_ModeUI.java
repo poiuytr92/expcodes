@@ -13,7 +13,7 @@ import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
-class ModeUI extends PopChildWindow {
+class _ModeUI extends PopChildWindow {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5691969159309932864L;
@@ -33,7 +33,7 @@ class ModeUI extends PopChildWindow {
 	 */
 	private boolean backMode;
 	
-	protected ModeUI() {
+	protected _ModeUI() {
 		super("全平台抽奖模式设置", WIDTH, HEIGHT);
 	}
 	

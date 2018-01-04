@@ -30,7 +30,7 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class LotteryUI extends PopChildWindow {
+class _LotteryUI extends PopChildWindow {
 
 	private final static long serialVersionUID = -4322589966897649896L;
 
@@ -56,7 +56,7 @@ class LotteryUI extends PopChildWindow {
 	
 	private NameViewer viewer;
 	
-	protected LotteryUI() {
+	protected _LotteryUI() {
 		super("直播间活跃用户抽奖", WIDTH, HEIGHT);
 	}
 	

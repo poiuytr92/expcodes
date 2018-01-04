@@ -26,7 +26,7 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class QrcodeUI extends PopChildWindow {
+class _QrcodeUI extends PopChildWindow {
 
 	/** serialVersionUID */
 	private final static long serialVersionUID = 3032128610929327304L;
@@ -43,7 +43,7 @@ class QrcodeUI extends PopChildWindow {
 	
 	private JLabel timeLabel;
 	
-	protected QrcodeUI() {
+	protected _QrcodeUI() {
 		super("B站手机APP扫码登陆", WIDTH, HEIGHT);
 	}
 	

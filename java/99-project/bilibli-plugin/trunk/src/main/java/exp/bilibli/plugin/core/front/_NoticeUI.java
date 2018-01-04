@@ -19,7 +19,7 @@ import exp.libs.warp.ui.cpt.win.NoticeWindow;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class NoticeUI extends NoticeWindow {
+public class _NoticeUI extends NoticeWindow {
 
 	/** serialVersionUID */
 	private static final long serialVersionUID = -7835582158711626274L;
@@ -30,7 +30,7 @@ public class NoticeUI extends NoticeWindow {
 	
 	private JEditorPane editor;
 	
-	public NoticeUI(String roomId) {
+	public _NoticeUI(String roomId) {
 		super("直播通知", WIDTH, HEIGHT, false, roomId);
 	}
 	

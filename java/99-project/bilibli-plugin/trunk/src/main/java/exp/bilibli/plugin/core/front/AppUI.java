@@ -54,7 +54,7 @@ public class AppUI extends MainWindow {
 	
 	private final static String LINE_END = "\r\n";
 	
-	private final static int WIDTH = 1000;
+	private final static int WIDTH = 1010;
 	
 	private final static int HEIGHT = 600;
 	
@@ -81,9 +81,13 @@ public class AppUI extends MainWindow {
 	
 	private JButton noticeBtn;
 	
+	private JButton eNoticeBtn;
+	
 	private JButton nightBtn;
 	
 	private JButton callBtn;
+	
+	private JButton eCallBtn;
 	
 	private JTextField httpTF;
 	
@@ -105,13 +109,13 @@ public class AppUI extends MainWindow {
 	
 	private WebSockClient wsClient;
 	
-	private LotteryUI lotteryUI;
+	private _LotteryUI lotteryUI;
 	
-	private QrcodeUI qrcodeUI;
+	private _QrcodeUI qrcodeUI;
 	
-	private ModeUI modeUI;
+	private _ModeUI modeUI;
 	
-	private ColorUI colorUI;
+	private _ColorUI colorUI;
 	
 	private ChatColor curChatColor;
 	
@@ -191,8 +195,10 @@ public class AppUI extends MainWindow {
 		this.colorBtn = new JButton("●");
 		this.thxBtn = new JButton("答谢姬");
 		this.noticeBtn = new JButton("公告姬");
+		this.eNoticeBtn = new JButton(">");
 		this.nightBtn = new JButton("晚安姬");
 		this.callBtn = new JButton("小call姬");
+		this.eCallBtn = new JButton(">");
 		defaultBtn.setToolTipText("设为默认");
 		defaultBtn.setForeground(Color.MAGENTA);
 		linkBtn.setForeground(Color.BLACK);
@@ -203,8 +209,10 @@ public class AppUI extends MainWindow {
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
 		thxBtn.setForeground(Color.BLACK);
 		noticeBtn.setForeground(Color.BLACK);
+		eNoticeBtn.setForeground(Color.BLACK);
 		nightBtn.setForeground(Color.BLACK);
 		callBtn.setForeground(Color.BLACK);
+		eCallBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -220,10 +228,10 @@ public class AppUI extends MainWindow {
 		lotteryLabel.setForeground(Color.RED);
 		
 		this.wsClient = new WebSockClient();
-		this.lotteryUI = new LotteryUI();
-		this.qrcodeUI = new QrcodeUI();
-		this.modeUI = new ModeUI();
-		this.colorUI = new ColorUI();
+		this.lotteryUI = new _LotteryUI();
+		this.qrcodeUI = new _QrcodeUI();
+		this.modeUI = new _ModeUI();
+		this.colorUI = new _ColorUI();
 		this.curChatColor = ChatColor.WHITE;
 		
 		this.isRunning = false;
@@ -263,16 +271,14 @@ public class AppUI extends MainWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel, "直播间信息");
 		panel.add(SwingUtils.addAutoScroll(chatTA), BorderLayout.CENTER);
-		panel.add(_getChatPanel(), BorderLayout.SOUTH);
+		panel.add(_getSendPanel(), BorderLayout.SOUTH);
 		return panel;
 	}
 	
-	private JPanel _getChatPanel() {
+	private JPanel _getSendPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(chatTF, BorderLayout.CENTER);
-		panel.add(SwingUtils.getHGridPanel(
-				SwingUtils.getEBorderPanel(sendBtn, colorBtn), 
-				thxBtn, noticeBtn, callBtn, nightBtn), BorderLayout.EAST);
+		panel.add(SwingUtils.getEBorderPanel(sendBtn, colorBtn), BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -280,7 +286,16 @@ public class AppUI extends MainWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel, "运行日志");
 		panel.add(SwingUtils.addAutoScroll(consoleTA), BorderLayout.CENTER);
+		panel.add(_getCtrlPanel(), BorderLayout.EAST);
 		return panel;
+	}
+	
+	private JPanel _getCtrlPanel() {
+		return SwingUtils.getVGridPanel(
+				thxBtn, 
+				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
+				SwingUtils.getEBorderPanel(callBtn, eCallBtn), 
+				nightBtn);
 	}
 	
 	private JPanel getRightPanel() {
@@ -329,10 +344,11 @@ public class AppUI extends MainWindow {
 		setSendBtnListener();
 		setColorBtnListener();
 		setThxBtnListener();
-		setnoticeBtnListener();
+		setNoticeBtnListener();
 		setNightBtnListener();
 		setCallBtnListener();
 		setChatTFListener();
+		setEditBtnListener();
 	}
 	
 	private void setDefaultBtnListener() {
@@ -482,7 +498,7 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
-	private void setnoticeBtnListener() {
+	private void setNoticeBtnListener() {
 		noticeBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -589,6 +605,36 @@ public class AppUI extends MainWindow {
 					sendBtn.doClick();// 监听到回车键则触发发送按钮
 				}
 			}
+		});
+	}
+	
+	private void setEditBtnListener() {
+		eNoticeBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(IS_ADMIN == false) {
+					return;
+				}
+				
+				new _EditorUI("公告姬", Config.getInstn().NOTICE_PATH())._view();
+				ThreadUtils.tSleep(100);
+			}
+			
+		});
+		
+		eCallBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(IS_ADMIN == false) {
+					return;
+				}
+				
+				new _EditorUI("打call姬", Config.getInstn().CALL_PATH())._view();
+				ThreadUtils.tSleep(100);
+			}
+			
 		});
 	}
 	

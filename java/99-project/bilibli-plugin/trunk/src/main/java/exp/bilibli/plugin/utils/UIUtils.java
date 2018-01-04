@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.core.front.AppUI;
-import exp.bilibli.plugin.core.front.NoticeUI;
+import exp.bilibli.plugin.core.front._NoticeUI;
 import exp.bilibli.plugin.envm.ChatColor;
 import exp.libs.utils.other.StrUtils;
 
@@ -88,7 +88,7 @@ public class UIUtils {
 	}
 	
 	public static void notityLive(String roomId) {
-		new NoticeUI(roomId)._show();		// 右下角通知提示
+		new _NoticeUI(roomId)._show();		// 右下角通知提示
 		Toolkit.getDefaultToolkit().beep();	// 蜂鸣音提示
 	}
 	
