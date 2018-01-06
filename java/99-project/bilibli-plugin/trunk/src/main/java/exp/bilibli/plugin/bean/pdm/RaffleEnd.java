@@ -32,14 +32,8 @@ import exp.libs.utils.format.JsonUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class RaffleEnd extends _Msg {
+public class RaffleEnd extends RaffleStart {
 
-	private String roomId;
-	
-	private String raffleId;
-	
-	private String from;
-	
 	private String winner;
 	
 	private String giftName;
@@ -53,29 +47,15 @@ public class RaffleEnd extends _Msg {
 	
 	@Override
 	protected void analyse(JSONObject json) {
-		this.roomId = JsonUtils.getStr(json, BiliCmdAtrbt.roomid);
+		super.analyse(json);
+		
 		JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data); {
-			this.raffleId = JsonUtils.getStr(data, BiliCmdAtrbt.raffleId);
-			this.from = JsonUtils.getStr(data, BiliCmdAtrbt.from);
-			
-			JSONObject win = JsonUtils.getObject(json, BiliCmdAtrbt.win); {
+			JSONObject win = JsonUtils.getObject(data, BiliCmdAtrbt.win); {
 				this.winner = JsonUtils.getStr(win, BiliCmdAtrbt.uname);
 				this.giftName = JsonUtils.getStr(win, BiliCmdAtrbt.giftName);
 				this.giftNum = JsonUtils.getStr(win, BiliCmdAtrbt.giftNum);
 			}
 		}
-	}
-
-	public String getRoomId() {
-		return roomId;
-	}
-
-	public String getRaffleId() {
-		return raffleId;
-	}
-
-	public String getFrom() {
-		return from;
 	}
 
 	public String getWinner() {

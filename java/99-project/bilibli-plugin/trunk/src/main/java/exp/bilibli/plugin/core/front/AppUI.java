@@ -55,7 +55,7 @@ public class AppUI extends MainWindow {
 	
 	private final static String LINE_END = "\r\n";
 	
-	private final static int WIDTH = 1010;
+	private final static int WIDTH = 1024;
 	
 	private final static int HEIGHT = 600;
 	

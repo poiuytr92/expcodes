@@ -27,11 +27,11 @@ import exp.libs.utils.format.JsonUtils;
  */
 public class RaffleStart extends _Msg {
 
-	private String roomId;
+	protected String roomId;
 	
-	private String raffleId;
+	protected String raffleId;
 	
-	private String from;
+	protected String from;
 	
 	public RaffleStart(JSONObject json) {
 		super(json);

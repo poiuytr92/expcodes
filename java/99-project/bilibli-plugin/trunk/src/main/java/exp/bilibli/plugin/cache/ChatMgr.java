@@ -122,6 +122,32 @@ public class ChatMgr extends LoopThread {
 		userGifts.clear();
 	}
 	
+	public boolean sendNotice(String msg) {
+		return MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, msg), 
+				UIUtils.getCurChatColor());
+	}
+	
+	public void helloLive(String roomId) {
+		long hour = ((System.currentTimeMillis() % 86400000) / 3600000);
+		hour = (hour + 8) % 24;	// 时差
+		
+		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
+		String msg = "滴~".concat(card);
+		if(hour >= 6 && hour < 12) {
+			msg = msg.concat("早上好");
+			
+		} else if(hour >= 12 && hour < 18) {
+			msg = msg.concat("下午好");
+			
+		} else if(hour >= 18 && hour < 24) {
+			msg = msg.concat("晚上好");
+			
+		} else {
+			msg = msg.concat("还在浪吗?");
+		}
+		MsgSender.sendChat(msg, roomId);
+	}
+	
 	public void addThxGift(SendGift msgBean) {
 		if(!isAutoThankYou()) {
 			return;
@@ -169,27 +195,6 @@ public class ChatMgr extends LoopThread {
 			MsgSender.sendChat(chatMsg, UIUtils.getCurChatColor());
 			nightedUsers.add(username);
 		}
-	}
-	
-	public void helloLive(String roomId) {
-		long hour = ((System.currentTimeMillis() % 86400000) / 3600000);
-		hour = (hour + 8) % 24;	// 时差
-		
-		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
-		String msg = "滴~".concat(card);
-		if(hour >= 6 && hour < 12) {
-			msg = msg.concat("早上好");
-			
-		} else if(hour >= 12 && hour < 18) {
-			msg = msg.concat("下午好");
-			
-		} else if(hour >= 18 && hour < 24) {
-			msg = msg.concat("晚上好");
-			
-		} else {
-			msg = msg.concat("还在浪吗?");
-		}
-		MsgSender.sendChat(msg, roomId);
 	}
 	
 	public void setAutoThankYou() {

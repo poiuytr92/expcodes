@@ -387,7 +387,7 @@ public class MsgSender {
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = (LotteryType.STORM != type ? 
+			Map<String, String> requestParams = (LotteryType.STORM == type ? 
 					_toStormRequestParams(sRoomId, raffleId) : 
 					_toLotteryRequestParams(sRoomId, raffleId));
 			

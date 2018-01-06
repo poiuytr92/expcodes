@@ -196,8 +196,11 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(RaffleStart msgBean) {
-		// TODO Auto-generated method stub
+		String msg = StrUtils.concat("感谢 [", msgBean.getFrom(), "] 的嗨翻全场!!!");
+		log.info(msg);
 		
+		ChatMgr.getInstn().sendNotice(msg);
+		RoomMgr.getInstn().addGiftRoom(msgBean.getRoomId());
 	}
 
 	/**
@@ -205,8 +208,11 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(RaffleEnd msgBean) {
-		// TODO Auto-generated method stub
+		String msg = StrUtils.concat("恭喜非酉[", msgBean.getWinner(), 
+				"]竟然抽到了[", msgBean.getGiftName(), "]x", msgBean.getGiftNum());
+		log.info(msg);
 		
+		ChatMgr.getInstn().sendNotice(msg);
 	}
 	
 	/**
