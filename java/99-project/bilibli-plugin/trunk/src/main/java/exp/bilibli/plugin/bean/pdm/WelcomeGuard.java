@@ -23,7 +23,7 @@ import exp.libs.utils.format.JsonUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class WelcomeGuardMsg extends _Msg {
+public class WelcomeGuard extends _Msg {
 
 	protected final static String[] GUARD = {
 		"平民", "总督", "提督", "舰长"
@@ -37,7 +37,7 @@ public class WelcomeGuardMsg extends _Msg {
 	
 	protected String guardDesc;
 	
-	public WelcomeGuardMsg(JSONObject json) {
+	public WelcomeGuard(JSONObject json) {
 		super(json);
 		this.cmd = BiliCmd.WELCOME_GUARD;
 	}

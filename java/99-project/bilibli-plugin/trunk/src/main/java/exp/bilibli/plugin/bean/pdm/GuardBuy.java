@@ -9,7 +9,7 @@ import exp.libs.utils.format.JsonUtils;
  * 
  * <PRE>
  * 
-	上船消息：
+	(直播间内)新船员上船消息
 	{
 	  "cmd": "GUARD_BUY",
 	  "data": {
@@ -25,11 +25,11 @@ import exp.libs.utils.format.JsonUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class GuardBuyMsg extends WelcomeGuardMsg {
+public class GuardBuy extends WelcomeGuard {
 
 	private int num;
 	
-	public GuardBuyMsg(JSONObject json) {
+	public GuardBuy(JSONObject json) {
 		super(json);
 		this.cmd = BiliCmd.GUARD_BUY;
 	}
