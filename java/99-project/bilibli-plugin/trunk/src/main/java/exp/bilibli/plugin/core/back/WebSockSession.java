@@ -137,7 +137,7 @@ class WebSockSession extends WebSocketClient {
 			
 		} else {
 			String msg = CharsetUtils.toStr(buff, Config.DEFAULT_CHARSET);
-			String sJson = RegexUtils.findFirst(msg, RGX_JSON);
+			String sJson = RegexUtils.findFirst(msg.substring(15), RGX_JSON);	// 消息的前16个字符为无效字符
 			
 			if(JsonUtils.isVaild(sJson)) {
 				JSONObject json = JSONObject.fromObject(sJson);

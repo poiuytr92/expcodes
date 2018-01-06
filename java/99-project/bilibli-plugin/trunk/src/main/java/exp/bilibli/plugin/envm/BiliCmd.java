@@ -85,6 +85,9 @@ public class BiliCmd {
 		} else if(_GUARD_BUY.equals(cmd)) {
 			biliCMD = GUARD_BUY;
 			
+		} else if(_GUARD_MSG.equals(cmd)) {
+			biliCMD = GUARD_MSG;
+			
 		} else if(_SYS_MSG.equals(cmd)) {
 			biliCMD = SYS_MSG;
 			
@@ -99,6 +102,15 @@ public class BiliCmd {
 		
 		} else if(_LIVE.equals(cmd)) {
 			biliCMD = LIVE;
+			
+		} else if(_SPECIAL_GIFT.equals(cmd)) {
+			biliCMD = SPECIAL_GIFT;
+			
+		} else if(_RAFFLE_START.equals(cmd)) {
+			biliCMD = RAFFLE_START;
+			
+		} else if(_RAFFLE_END.equals(cmd)) {
+			biliCMD = RAFFLE_END;
 			
 		}
 		return biliCMD;
