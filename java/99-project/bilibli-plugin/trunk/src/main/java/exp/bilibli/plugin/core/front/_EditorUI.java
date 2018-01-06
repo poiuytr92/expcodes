@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import exp.bilibli.plugin.Config;
-import exp.bilibli.plugin.cache.ChatMgr;
+import exp.bilibli.plugin.cache.MsgKwMgr;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -60,7 +60,7 @@ class _EditorUI extends PopChildWindow {
 			public void actionPerformed(ActionEvent e) {
 				String text = textTA.getText();
 				if(FileUtils.write(filePath, text, Config.DEFAULT_CHARSET, false)) {
-					ChatMgr.getInstn().reload();
+					MsgKwMgr.getInstn().reload();
 					SwingUtils.info("保存成功");
 					
 				} else {

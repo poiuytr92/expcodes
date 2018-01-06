@@ -19,6 +19,7 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.ChatMgr;
+import exp.bilibli.plugin.cache.MsgKwMgr;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.MsgSender;
@@ -650,6 +651,8 @@ public class AppUI extends MainWindow {
 		ChatMgr.getInstn()._stop();
 		LoginMgr.getInstn()._stop();	
 		WebBot.getInstn()._stop();
+		MsgKwMgr.getInstn().clear();
+		
 		Browser.quit();
 	}
 	

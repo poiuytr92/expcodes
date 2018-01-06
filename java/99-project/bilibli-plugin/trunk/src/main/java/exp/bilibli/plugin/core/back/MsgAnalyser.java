@@ -8,15 +8,19 @@ import org.slf4j.LoggerFactory;
 import exp.bilibli.plugin.bean.pdm.ChatMsg;
 import exp.bilibli.plugin.bean.pdm.EnergyLottery;
 import exp.bilibli.plugin.bean.pdm.GuardBuy;
+import exp.bilibli.plugin.bean.pdm.GuardMsg;
 import exp.bilibli.plugin.bean.pdm.LiveMsg;
+import exp.bilibli.plugin.bean.pdm.RaffleEnd;
+import exp.bilibli.plugin.bean.pdm.RaffleStart;
 import exp.bilibli.plugin.bean.pdm.SendGift;
+import exp.bilibli.plugin.bean.pdm.SpecialGift;
 import exp.bilibli.plugin.bean.pdm.SysGift;
 import exp.bilibli.plugin.bean.pdm.SysMsg;
 import exp.bilibli.plugin.bean.pdm.TvLottery;
 import exp.bilibli.plugin.bean.pdm.WelcomeGuard;
 import exp.bilibli.plugin.bean.pdm.WelcomeMsg;
 import exp.bilibli.plugin.cache.ChatMgr;
-import exp.bilibli.plugin.cache.KeywordMgr;
+import exp.bilibli.plugin.cache.MsgKwMgr;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.envm.BiliCmd;
@@ -68,6 +72,15 @@ public class MsgAnalyser {
 				toDo(new SysGift(json));
 			}
 			
+		} else if(biliCmd == BiliCmd.SPECIAL_GIFT) {
+			toDo(new SpecialGift(json));
+			
+		} else if(biliCmd == BiliCmd.RAFFLE_START) {
+			toDo(new RaffleStart(json));
+			
+		} else if(biliCmd == BiliCmd.RAFFLE_END) {
+			toDo(new RaffleEnd(json));
+			
 		} else if(biliCmd == BiliCmd.WELCOME) {
 			toDo(new WelcomeMsg(json));
 			
@@ -76,6 +89,9 @@ public class MsgAnalyser {
 			
 		} else if(biliCmd == BiliCmd.GUARD_BUY) {
 			toDo(new GuardBuy(json));
+			
+		} else if(biliCmd == BiliCmd.GUARD_MSG) {
+			toDo(new GuardMsg(json));
 			
 		} else if(biliCmd == BiliCmd.LIVE) {
 			toDo(new LiveMsg(json));
@@ -164,12 +180,42 @@ public class MsgAnalyser {
 	}
 	
 	/**
+	 * 特殊礼物：(直播间内)节奏风暴消息
+	 * @param msgBean
+	 */
+	private static void toDo(SpecialGift msgBean) {
+		String msg = StrUtils.concat("直播间 [", UIUtils.getCurRoomId(), "] 开启了节奏风暴!!!");
+		UIUtils.notify(msg);
+		log.info(msg);
+		
+		RoomMgr.getInstn().addStormRoom(UIUtils.getCurRoomId(), msgBean.getId());
+	}
+
+	/**
+	 * (直播间内)高能抽奖开始消息
+	 * @param msgBean
+	 */
+	private static void toDo(RaffleStart msgBean) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * (直播间内)高能抽奖结束消息
+	 * @param msgBean
+	 */
+	private static void toDo(RaffleEnd msgBean) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	/**
 	 * 欢迎老爷消息
 	 * @param msgBean
 	 */
 	private static void toDo(WelcomeMsg msgBean) {
 		String msg = StrUtils.concat("[", msgBean.getVipDesc(), "][", 
-				msgBean.getUsername(), "] ", KeywordMgr.getAdj(), "溜进了直播间"
+				msgBean.getUsername(), "] ", MsgKwMgr.getAdj(), "溜进了直播间"
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
@@ -181,20 +227,20 @@ public class MsgAnalyser {
 	 */
 	private static void toDo(WelcomeGuard msgBean) {
 		String msg = StrUtils.concat("[", msgBean.getGuardDesc(), "][", 
-				msgBean.getUsername(), "] ", KeywordMgr.getAdj(), "溜进了直播间"
+				msgBean.getUsername(), "] ", MsgKwMgr.getAdj(), "溜进了直播间"
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
 	}
 	
 	/**
-	 * 上船消息
+	 * (直播间内)新船员上船消息
 	 * @param msgBean
 	 */
 	private static void toDo(GuardBuy msgBean) {
 		String msg = StrUtils.concat(
 				"[", msgBean.getUid(), "][", msgBean.getGuardDesc(), "][", 
-				msgBean.getUsername(), "] ", KeywordMgr.getAdj(), "上了贼船"
+				msgBean.getUsername(), "] ", MsgKwMgr.getAdj(), "上了贼船"
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
@@ -203,6 +249,15 @@ public class MsgAnalyser {
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
 	}
 
+	/**
+	 * (全频道)登船消息
+	 * @param msgBean
+	 */
+	private static void toDo(GuardMsg msgBean) {
+		UIUtils.chat(msgBean.getMsg());
+		log.info(msgBean.getMsg());
+	}
+	
 	/**
 	 * 开播通知
 	 * @param msgBean

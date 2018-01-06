@@ -10,6 +10,7 @@ import exp.bilibli.plugin.bean.ldm.LotteryRoom;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.core.back.MsgSender;
+import exp.bilibli.plugin.envm.LotteryType;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -136,11 +137,14 @@ class WebBot extends LoopThread {
 		// 参与直播间抽奖
 		LotteryRoom room = RoomMgr.getInstn().getGiftRoom();
 		if(room != null) {
-			if(UIUtils.isBackLotteryMode()) {	// 后台注入式抽奖
+			
+			// 后台注入式抽奖
+			if(UIUtils.isBackLotteryMode()) {
 				toLottery(room);
 				
-			} else {
-				toLottery(room.getRoomId());	// 前端仿真式抽奖
+			// 前端仿真式抽奖
+			} else if(room.TYPE() != LotteryType.STORM) {	// 节奏风暴的抽奖位置不一样
+				toLottery(room.getRoomId());
 			}
 			
 		// 长时间无操作则休眠
@@ -156,14 +160,27 @@ class WebBot extends LoopThread {
 	 */
 	private void toLottery(LotteryRoom room) {
 		final String roomId = room.getRoomId();
-		final String tvId = room.getTvId();
+		final String raffleId = room.getRaffleId();
 		
 		// 小电视抽奖
-		if(StrUtils.isNotEmpty(room.getTvId())) {
-			String errDesc = MsgSender.toTvLottery(roomId, tvId);
+		if(room.TYPE() == LotteryType.TV) {
+			String errDesc = MsgSender.toTvLottery(roomId, raffleId);
 			if(StrUtils.isEmpty(errDesc)) {
 				log.info("参与直播间 [{}] 抽奖成功", roomId);
 				UIUtils.statistics("成功(小电视): 抽奖直播间 [", roomId, "]");
+				UIUtils.updateLotteryCnt();
+				
+			} else {
+				log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
+				UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
+			}
+			
+		// 节奏风暴抽奖
+		} else if(room.TYPE() == LotteryType.STORM) {
+			String errDesc = MsgSender.toStormLottery(roomId, raffleId);
+			if(StrUtils.isEmpty(errDesc)) {
+				log.info("参与直播间 [{}] 抽奖成功", roomId);
+				UIUtils.statistics("成功(节奏风暴): 抽奖直播间 [", roomId, "]");
 				UIUtils.updateLotteryCnt();
 				
 			} else {

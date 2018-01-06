@@ -1,22 +1,18 @@
 package exp.bilibli.plugin.cache;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.pdm.SendGift;
 import exp.bilibli.plugin.core.back.MsgSender;
 import exp.bilibli.plugin.utils.UIUtils;
-import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.ListUtils;
@@ -95,15 +91,6 @@ public class ChatMgr extends LoopThread {
 	 */
 	private Map<String, Map<String, Integer>> userGifts;
 	
-	/** 滚屏公告的候选列表 */
-	private List<String> noticeMsgs;
-	
-	/** 自动打call的候选列表 */
-	private List<String> callMsgs;
-	
-	/** 开播上车的卡片类型 */
-	private List<String> cards;
-	
 	private static volatile ChatMgr instance;
 	
 	private ChatMgr() {
@@ -117,11 +104,6 @@ public class ChatMgr extends LoopThread {
 		this.autoGoodNight = false;
 		this.nightedUsers = new HashSet<String>();
 		this.userGifts = new LinkedHashMap<String, Map<String, Integer>>();
-		this.noticeMsgs = new ArrayList<String>();
-		this.callMsgs = new ArrayList<String>();
-		this.cards = new ArrayList<String>();
-		
-		init();
 	}
 	
 	public static ChatMgr getInstn() {
@@ -135,49 +117,9 @@ public class ChatMgr extends LoopThread {
 		return instance;
 	}
 	
-	private void init() {
-		List<String> notices = FileUtils.readLines(
-				Config.getInstn().NOTICE_PATH(), Config.DEFAULT_CHARSET);
-		for(String line : notices) {
-			line = line.trim();
-			if(StrUtils.isNotEmpty(line)) {
-				this.noticeMsgs.add(line);
-			}
-		}
-		
-		List<String> calls = FileUtils.readLines(
-				Config.getInstn().CALL_PATH(), Config.DEFAULT_CHARSET);
-		for(String line : calls) {
-			line = line.trim();
-			if(StrUtils.isNotEmpty(line)) {
-				this.callMsgs.add(line);
-			}
-		}
-		
-		List<String> cards = FileUtils.readLines(
-				Config.getInstn().CARD_PATH(), Config.DEFAULT_CHARSET);
-		for(String line : cards) {
-			line = line.trim();
-			if(StrUtils.isNotEmpty(line)) {
-				this.cards.add(line);
-			}
-		}
-	}
-	
-	private void clearCache() {
+	private void clear() {
 		nightedUsers.clear();
 		userGifts.clear();
-	}
-	
-	private void clearFiles() {
-		noticeMsgs.clear();
-		callMsgs.clear();
-		cards.clear();
-	}
-	
-	public void reload() {
-		clearFiles();
-		init();
 	}
 	
 	public void addThxGift(SendGift msgBean) {
@@ -222,7 +164,7 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		if(KeywordMgr.containsNight(msg)) {
+		if(MsgKwMgr.containsNight(msg)) {
 			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
 			MsgSender.sendChat(chatMsg, UIUtils.getCurChatColor());
 			nightedUsers.add(username);
@@ -233,7 +175,7 @@ public class ChatMgr extends LoopThread {
 		long hour = ((System.currentTimeMillis() % 86400000) / 3600000);
 		hour = (hour + 8) % 24;	// 时差
 		
-		String card = RandomUtils.randomElement(cards);
+		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
 		String msg = "滴~".concat(card);
 		if(hour >= 6 && hour < 12) {
 			msg = msg.concat("早上好");
@@ -315,8 +257,7 @@ public class ChatMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		clearCache();
-		clearFiles();
+		clear();
 		log.info("{} 已停止", getName());
 	}
 	
@@ -371,7 +312,7 @@ public class ChatMgr extends LoopThread {
 				Integer num = gifts.get(giftName);
 				if(num != null && num > 0) {
 					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-							KeywordMgr.getAdj(), "投喂", num, "个[", giftName, "]");
+							MsgKwMgr.getAdj(), "投喂", num, "个[", giftName, "]");
 					MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 				}
 			}
@@ -387,7 +328,7 @@ public class ChatMgr extends LoopThread {
 			sb.setLength(sb.length() - 1);
 			
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-					KeywordMgr.getAdj(), "投喂[", sb.toString(), "]");
+					MsgKwMgr.getAdj(), "投喂[", sb.toString(), "]");
 			MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 		}
 		
@@ -398,11 +339,11 @@ public class ChatMgr extends LoopThread {
 	 * 定时公告
 	 */
 	private void toNotice() {
-		if(!isAutoNotice() || ListUtils.isEmpty(noticeMsgs)) {
+		if(!isAutoNotice() || ListUtils.isEmpty(MsgKwMgr.getNotices())) {
 			return;
 		}
 		
-		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(noticeMsgs));
+		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(MsgKwMgr.getNotices()));
 		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 	}
 	
@@ -410,11 +351,11 @@ public class ChatMgr extends LoopThread {
 	 * 定时打call
 	 */
 	private void toCall() {
-		if(!isAutoCall() || ListUtils.isEmpty(callMsgs)) {
+		if(!isAutoCall() || ListUtils.isEmpty(MsgKwMgr.getCalls())) {
 			return;
 		}
 		
-		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(callMsgs));
+		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(MsgKwMgr.getCalls()));
 		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 	}
 	

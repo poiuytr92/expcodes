@@ -6,6 +6,7 @@ import java.util.Map;
 
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.bean.ldm.LotteryRoom;
+import exp.bilibli.plugin.envm.LotteryType;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
@@ -63,11 +64,19 @@ public class RoomMgr {
 	}
 	
 	/**
-	 * 添加礼物房间
+	 * 添加高能礼物房间
 	 * @param roomId 礼物房间号
 	 */
 	public void addGiftRoom(String roomId) {
 		giftRoomIds.add(new LotteryRoom(roomId));
+	}
+	
+	/**
+	 * 添加节奏风暴礼物房间
+	 * @param roomId 礼物房间号
+	 */
+	public void addStormRoom(String roomId, String stormId) {
+		giftRoomIds.add(new LotteryRoom(roomId, stormId, LotteryType.STORM));
 	}
 	
 	/**
@@ -76,7 +85,7 @@ public class RoomMgr {
 	 * @param tvId 小电视编号
 	 */
 	public void addTvRoom(String roomId, String tvId) {
-		giftRoomIds.add(new LotteryRoom(roomId, tvId));
+		giftRoomIds.add(new LotteryRoom(roomId, tvId, LotteryType.TV));
 	}
 	
 	/**

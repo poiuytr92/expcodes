@@ -19,6 +19,7 @@ import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.ChatColor;
+import exp.bilibli.plugin.envm.LotteryType;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.bilibli.plugin.utils.VercodeUtils;
 import exp.libs.utils.format.JsonUtils;
@@ -291,7 +292,7 @@ public class MsgSender {
 	 * @return
 	 */
 	public static String toTvLottery(String roomId, String raffleId) {
-		return joinLottery(TV_JOIN_URL, roomId, raffleId, Browser.COOKIES());
+		return joinLottery(TV_JOIN_URL, roomId, raffleId, Browser.COOKIES(), LotteryType.TV);
 	}
 	
 	/**
@@ -299,8 +300,8 @@ public class MsgSender {
 	 * @param roomId
 	 * @return
 	 */
-	public static int toStormLottery(String roomId) {
-		return toLottery(roomId, STORM_CHECK_URL, STORM_JOIN_URL);
+	public static String toStormLottery(String roomId, String raffleId) {
+		return joinLottery(STORM_JOIN_URL, roomId, raffleId, Browser.COOKIES(), LotteryType.STORM);
 	}
 	
 	/**
@@ -313,7 +314,7 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 节奏风暴/高能礼物抽奖
+	 * 高能礼物抽奖
 	 * @param roomId
 	 * @param checkUrl
 	 * @param joinUrl
@@ -329,7 +330,7 @@ public class MsgSender {
 				
 				if(!OT_RAFFLEIDS.contains(raffleIds)) {
 					OT_RAFFLEIDS.add(raffleId);
-					String errDesc = joinLottery(joinUrl, roomId, raffleId, cookies);
+					String errDesc = joinLottery(joinUrl, roomId, raffleId, cookies, LotteryType.OTHER);
 					if(StrUtils.isEmpty(errDesc)) {
 						cnt++;
 					} else {
@@ -339,6 +340,10 @@ public class MsgSender {
 						log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
 					}
 				}
+			}
+			
+			if(OT_RAFFLEIDS.size() > 200) {
+				OT_RAFFLEIDS.clear();
 			}
 		}
 		return cnt;
@@ -372,23 +377,27 @@ public class MsgSender {
 	 * @param roomId
 	 * @param raffleId
 	 * @param cookies
+	 * @param type
 	 * @return
 	 */
-	private static String joinLottery(String url, String roomId, String raffleId, String cookies) {
+	private static String joinLottery(String url, String roomId, String raffleId, 
+			String cookies, LotteryType type) {
 		String errDesc = "";
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId, raffleId);
+			Map<String, String> requestParams = (LotteryType.STORM != type ? 
+					_toStormRequestParams(sRoomId, raffleId) : 
+					_toLotteryRequestParams(sRoomId, raffleId));
 			
-			String response = HttpURLUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+			String response = HttpURLUtils.doPost(url, headParams, requestParams, Config.DEFAULT_CHARSET);
 			errDesc = _analyseLotteryResponse(response);
 			
 			// 系统繁忙哟，请再试一下吧
 			if(errDesc.contains("系统繁忙")) {
 				ThreadUtils.tSleep(1000);
-				response = HttpURLUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+				response = HttpURLUtils.doPost(url, headParams, requestParams, Config.DEFAULT_CHARSET);
 				errDesc = _analyseLotteryResponse(response);
 			}
 		} else {
@@ -438,9 +447,22 @@ public class MsgSender {
 		return params;
 	}
 	
+	private static Map<String, String> _toStormRequestParams(String realRoomId, String raffleId) {
+		Map<String, String> params = _toLotteryRequestParams(realRoomId);
+		params.put("id", raffleId);	// 礼物编号
+		params.put("color", ChatColor.WHITE.CODE());
+		params.put("captcha_token", "");
+		params.put("captcha_phrase", "");
+		params.put("token", "");
+		params.put("csrf_token", "d15e5fbe89123bf8904a106f75e6527d");
+		return params;
+	}
+	
 	/**
 	 * 
-	 * @param response {"code":0,"msg":"加入成功","message":"加入成功","data":{"3392133":"small","511589":"small","8536920":"small","raffleId":"46506","1275939":"small","20177919":"small","12768615":"small","1698233":"small","4986301":"small","102015208":"small","40573511":"small","4799261":"small","from":"喵熊°","time":59,"30430088":"small","558038":"small","5599305":"small","8068250":"small","16293951":"small","7294374":"small","type":"openfire","7384826":"small","2229668":"small","7828145":"small","2322836":"small","915804":"small","86845000":"small","3076423":"small","roomid":"97835","5979210":"small","16345975":"small","7151219":"small","1479304":"small","19123719":"small","29129155":"small","7913373":"small","17049098":"small","9008673":"small","23406718":"small","141718":"small","27880394":"small","942837":"small","107844643":"small","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg","31437943":"small","34810599":"small","102994056":"small","31470791":"small","26643554":"small","29080508":"small","14709391":"small","14530810":"small","46520094":"small","2142310":"small","status":2,"77959868":"small","76979807":"small"}}
+	 * @param response 
+	 *   小电视     {"code":0,"msg":"加入成功","message":"加入成功","data":{"3392133":"small","511589":"small","8536920":"small","raffleId":"46506","1275939":"small","20177919":"small","12768615":"small","1698233":"small","4986301":"small","102015208":"small","40573511":"small","4799261":"small","from":"喵熊°","time":59,"30430088":"small","558038":"small","5599305":"small","8068250":"small","16293951":"small","7294374":"small","type":"openfire","7384826":"small","2229668":"small","7828145":"small","2322836":"small","915804":"small","86845000":"small","3076423":"small","roomid":"97835","5979210":"small","16345975":"small","7151219":"small","1479304":"small","19123719":"small","29129155":"small","7913373":"small","17049098":"small","9008673":"small","23406718":"small","141718":"small","27880394":"small","942837":"small","107844643":"small","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg","31437943":"small","34810599":"small","102994056":"small","31470791":"small","26643554":"small","29080508":"small","14709391":"small","14530810":"small","46520094":"small","2142310":"small","status":2,"77959868":"small","76979807":"small"}}
+	 *   节奏风暴 {"code":0,"msg":"","message":"","data":{"gift_id":39,"title":"节奏风暴","content":"<p>你是前 35 位跟风大师<br />恭喜你获得一个亿圆(7天有效期)</p>","mobile_content":"你是前 35 位跟风大师","gift_img":"http://static.hdslb.com/live-static/live-room/images/gift-section/gift-39.png?2017011901","gift_num":1,"gift_name":"亿圆"}}
 	 * @return
 	 */
 	private static String _analyseLotteryResponse(String response) {

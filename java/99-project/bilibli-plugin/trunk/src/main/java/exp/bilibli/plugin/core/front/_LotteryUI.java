@@ -191,6 +191,7 @@ class _LotteryUI extends PopChildWindow {
 		users.clear();
 		if(viewer != null) {
 			viewer._stop();
+			OnlineUserMgr.getInstn().clear();
 		}
 	}
 	

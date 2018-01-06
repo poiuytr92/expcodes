@@ -1,5 +1,7 @@
 package exp.bilibli.plugin.bean.ldm;
 
+import exp.bilibli.plugin.envm.LotteryType;
+
 /**
  * <PRE>
  * 抽奖房间
@@ -15,24 +17,32 @@ public class LotteryRoom {
 	/** 抽奖房间号 */
 	private String roomId;
 	
-	/** 小电视编号(只有是小电视房间时才有效) */
-	private String tvId;
+	/** 抽奖编号 */
+	private String raffleId;
+	
+	/** 抽奖类型 */
+	private LotteryType type;
 	
 	public LotteryRoom(String roomId) {
-		this(roomId, "");
+		this(roomId, "", LotteryType.OTHER);
 	}
 	
-	public LotteryRoom(String roomId, String tvId) {
+	public LotteryRoom(String roomId, String raffleId, LotteryType type) {
 		this.roomId = roomId;
-		this.tvId = (tvId == null ? "" : tvId);
+		this.raffleId = (raffleId == null ? "" : raffleId);
+		this.type = (type == null ? LotteryType.OTHER : type);
 	}
 
 	public String getRoomId() {
 		return roomId;
 	}
 
-	public String getTvId() {
-		return tvId;
+	public String getRaffleId() {
+		return raffleId;
 	}
 	
+	public LotteryType TYPE() {
+		return type;
+	}
+
 }
