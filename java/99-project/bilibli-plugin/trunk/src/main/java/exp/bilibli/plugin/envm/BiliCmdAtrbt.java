@@ -46,6 +46,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String giftName = "giftName";
 	
+	public final static String giftNum = "giftNum";
+	
 	public final static String num = "num";
 	
 	public final static String info = "info";
@@ -83,5 +85,11 @@ public class BiliCmdAtrbt {
 	public final static String times = "times";
 	
 	public final static String max_times = "max_times";
+	
+	public final static String id = "id";
+	
+	public final static String from = "from";
+	
+	public final static String win = "win";
 	
 }

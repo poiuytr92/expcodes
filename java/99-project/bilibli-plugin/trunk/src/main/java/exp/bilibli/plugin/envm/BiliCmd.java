@@ -24,9 +24,13 @@ public class BiliCmd {
 	private final static String _WELCOME_GUARD = "WELCOME_GUARD";
 	public final static BiliCmd WELCOME_GUARD = new BiliCmd(_WELCOME_GUARD);
 	
-	/** 新船员上船消息 */
+	/** (直播间内)新船员上船消息 */
 	private final static String _GUARD_BUY = "GUARD_BUY";
 	public final static BiliCmd GUARD_BUY = new BiliCmd(_GUARD_BUY);
+	
+	/** (全频道)登船消息 */
+	private final static String _GUARD_MSG = "GUARD_MSG";
+	public final static BiliCmd GUARD_MSG = new BiliCmd(_GUARD_MSG);
 	
 	/** 系统消息：小电视抽奖、全频道公告等 */
 	private final static String _SYS_MSG = "SYS_MSG";
@@ -47,6 +51,18 @@ public class BiliCmd {
 	/** 开播通知消息 */
 	private final static String _LIVE = "LIVE";
 	public final static BiliCmd LIVE = new BiliCmd(_LIVE);
+	
+	/** 特殊礼物：(直播间内)节奏风暴消息 */
+	private final static String _SPECIAL_GIFT = "SPECIAL_GIFT";
+	public final static BiliCmd SPECIAL_GIFT = new BiliCmd(_SPECIAL_GIFT);
+	
+	/** (直播间内)高能抽奖开始消息 */
+	private final static String _RAFFLE_START = "RAFFLE_START";
+	public final static BiliCmd RAFFLE_START = new BiliCmd(_RAFFLE_START);
+	
+	/** (直播间内)高能抽奖结束消息 */
+	private final static String _RAFFLE_END = "RAFFLE_END";
+	public final static BiliCmd RAFFLE_END = new BiliCmd(_RAFFLE_END);
 	
 	private String cmd;
 	

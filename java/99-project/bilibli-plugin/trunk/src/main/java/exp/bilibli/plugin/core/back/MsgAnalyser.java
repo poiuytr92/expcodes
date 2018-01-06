@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.bean.pdm.ChatMsg;
 import exp.bilibli.plugin.bean.pdm.EnergyLottery;
-import exp.bilibli.plugin.bean.pdm.GuardBuyMsg;
+import exp.bilibli.plugin.bean.pdm.GuardBuy;
 import exp.bilibli.plugin.bean.pdm.LiveMsg;
 import exp.bilibli.plugin.bean.pdm.SendGift;
 import exp.bilibli.plugin.bean.pdm.SysGift;
 import exp.bilibli.plugin.bean.pdm.SysMsg;
 import exp.bilibli.plugin.bean.pdm.TvLottery;
-import exp.bilibli.plugin.bean.pdm.WelcomeGuardMsg;
+import exp.bilibli.plugin.bean.pdm.WelcomeGuard;
 import exp.bilibli.plugin.bean.pdm.WelcomeMsg;
 import exp.bilibli.plugin.cache.ChatMgr;
 import exp.bilibli.plugin.cache.KeywordMgr;
@@ -72,10 +72,10 @@ public class MsgAnalyser {
 			toDo(new WelcomeMsg(json));
 			
 		} else if(biliCmd == BiliCmd.WELCOME_GUARD) {
-			toDo(new WelcomeGuardMsg(json));
+			toDo(new WelcomeGuard(json));
 			
 		} else if(biliCmd == BiliCmd.GUARD_BUY) {
-			toDo(new GuardBuyMsg(json));
+			toDo(new GuardBuy(json));
 			
 		} else if(biliCmd == BiliCmd.LIVE) {
 			toDo(new LiveMsg(json));
@@ -179,7 +179,7 @@ public class MsgAnalyser {
 	 * 欢迎船员消息
 	 * @param msgBean
 	 */
-	private static void toDo(WelcomeGuardMsg msgBean) {
+	private static void toDo(WelcomeGuard msgBean) {
 		String msg = StrUtils.concat("[", msgBean.getGuardDesc(), "][", 
 				msgBean.getUsername(), "] ", KeywordMgr.getAdj(), "溜进了直播间"
 		);
@@ -191,7 +191,7 @@ public class MsgAnalyser {
 	 * 上船消息
 	 * @param msgBean
 	 */
-	private static void toDo(GuardBuyMsg msgBean) {
+	private static void toDo(GuardBuy msgBean) {
 		String msg = StrUtils.concat(
 				"[", msgBean.getUid(), "][", msgBean.getGuardDesc(), "][", 
 				msgBean.getUsername(), "] ", KeywordMgr.getAdj(), "上了贼船"

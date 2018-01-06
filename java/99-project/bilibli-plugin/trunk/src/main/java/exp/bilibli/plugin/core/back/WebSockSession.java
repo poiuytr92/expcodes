@@ -37,7 +37,7 @@ class WebSockSession extends WebSocketClient {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockSession.class);
 	
-	private final static String RGX_JSON = "[^{]*(.*)";
+	private final static String RGX_JSON = "[^{]*([^\0]*)";
 	
 	/** 连接超时 */
 	private final static long CONN_TIMEOUT = 10000;
