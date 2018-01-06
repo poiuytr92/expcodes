@@ -26,7 +26,9 @@ import exp.libs.utils.other.StrUtils;
  * @since     jdk版本：jdk1.6
  */
 public class Browser {
-
+	
+	private final static String CSRF_KEY = "bili_jct";
+	
 	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
@@ -37,12 +39,16 @@ public class Browser {
 	/** 当前登陆用户的cookies，供https接口用 */
 	private String sCookies;
 	
+	/** 从cookies提取的csrf token */
+	private String csrf;
+	
 	private BrowserDriver browser;
 	
 	private static volatile Browser instance;
 	
 	private Browser() {
 		this.sCookies = "";
+		this.csrf = "";
 	}
 	
 	private static Browser INSTN() {
@@ -63,7 +69,14 @@ public class Browser {
 	private String _COOKIES() {
 		return sCookies;
 	}
-
+	
+	public static String CSRF() {
+		return INSTN()._CSRF();
+	}
+	
+	private String _CSRF() {
+		return csrf;
+	}
 	
 	public static void init(boolean loadImages) {
 		INSTN()._reset(loadImages);
@@ -221,6 +234,10 @@ public class Browser {
 				// 供后台HTTPS协议用
 				cookieInfo.append(cookie.getName()).append("=");
 				cookieInfo.append(cookie.getValue()).append("; ");
+				
+				if(CSRF_KEY.equals(cookie.getName())) {
+					this.csrf = cookie.getValue();
+				}
 			}
 			
 			if(idx > 0) {

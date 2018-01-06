@@ -454,7 +454,7 @@ public class MsgSender {
 		params.put("captcha_token", "");
 		params.put("captcha_phrase", "");
 		params.put("token", "");
-		params.put("csrf_token", "d15e5fbe89123bf8904a106f75e6527d");
+		params.put("csrf_token", Browser.CSRF());
 		return params;
 	}
 	
