@@ -80,7 +80,7 @@ public class RoomMgr {
 	 */
 	public void addStormRoom(String roomId, String stormId) {
 		
-		// 节奏风暴 因为对点击速度要求很高, 不放到抽奖队列排队, 直接抽奖
+		// 节奏风暴 因为对点击速度要求很高, 不放到抽奖房间队列排队, 直接抽奖
 //		giftRoomIds.add(new LotteryRoom(roomId, stormId, LotteryType.STORM));
 		
 		String errDesc = MsgSender.toStormLottery(roomId, stormId);
