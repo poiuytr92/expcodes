@@ -420,7 +420,7 @@ public class AppUI extends MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				isRunning = true;
 				
-				if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆", "帐密登陆")) {
+				if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1天)", "帐密登陆 (30天)")) {
 					_loginByQrcode();
 					
 				} else {

@@ -55,8 +55,24 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/home");
 	}
 	
+	public String LOGIN_HOST() {
+		return xConf.getVal("/config/biliUrls/loginHost");
+	}
+	
 	public String LOGIN_URL() {
 		return xConf.getVal("/config/biliUrls/login");
+	}
+	
+	public String MINI_LOGIN_URL() {
+		return xConf.getVal("/config/biliUrls/miniLogin");
+	}
+	
+	public String VCCODE_URL() {
+		return xConf.getVal("/config/biliUrls/vccode");
+	}
+	
+	public String RSA_URL() {
+		return xConf.getVal("/config/biliUrls/rsa");
 	}
 	
 	public String LIVE_URL() {
