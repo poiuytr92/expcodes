@@ -92,4 +92,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String win = "win";
 	
+	public final static String hash = "hash";
+	
+	public final static String key = "key";
+	
 }

@@ -1,5 +1,6 @@
 package exp.bilibli.plugin.core.back;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -10,6 +11,9 @@ import java.util.Set;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpMethod;
+import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,12 +24,15 @@ import exp.bilibli.plugin.cache.RoomMgr;
 import exp.bilibli.plugin.envm.BiliCmdAtrbt;
 import exp.bilibli.plugin.envm.ChatColor;
 import exp.bilibli.plugin.envm.LotteryType;
+import exp.bilibli.plugin.utils.RSAUtils;
+import exp.bilibli.plugin.utils.TimeUtils;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.bilibli.plugin.utils.VercodeUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
@@ -45,13 +52,17 @@ public class MsgSender {
 	
 	private final static long SLEEP_TIME = 1000;
 	
+	private final static String LOGIN_HOST = Config.getInstn().LOGIN_HOST();
+	
+	private final static String MINI_LOGIN_URL = Config.getInstn().MINI_LOGIN_URL();
+	
+	private final static String RSA_KEY_URL = Config.getInstn().RSA_URL();
+	
 	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
 	
 	private final static String SIGN_URL = Config.getInstn().SIGN_URL();
 	
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
-	
-	private final static String STORM_CHECK_URL = Config.getInstn().STORM_CHECK_URL();
 	
 	private final static String STORM_JOIN_URL = Config.getInstn().STORM_JOIN_URL();
 	
@@ -97,6 +108,18 @@ public class MsgSender {
 		return params;
 	}
 	
+	private static Map<String, String> toLoginHeadParams(String cookies) {
+		Map<String, String> params = toGetHeadParams(cookies);
+		params.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
+		return params;
+//		params.put(HttpUtils.HEAD.KEY.ACCEPT, "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
+//		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
+//		params.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8");
+//		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
+//		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
+//		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
+	}
+	
 	private static Map<String, String> toGetHeadParams(String cookies, String realRoomId) {
 		Map<String, String> params = toGetHeadParams(cookies);
 		params.put(HttpUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
@@ -115,6 +138,113 @@ public class MsgSender {
 		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
+	
+	/**
+	 * 从后台秘密通道登陆B站
+	 * @param username 账号
+	 * @param password 密码
+	 * @param vccode 验证码
+	 * @param vcCookies 与验证码配套的登陆用cookies
+	 * @return selenium浏览器用的Cookie (若为空集则登陆失败)
+	 */
+	public static List<Cookie> toLogin(String username, String password, 
+			String vccode, String vcCookies) {
+		List<Cookie> cookies = new LinkedList<Cookie>();
+		HttpClient client = new HttpClient();
+		
+		try {
+			// 从服务器获取RSA公钥(公钥是固定的)和随机hash码, 然后使用公钥对密码进行RSA加密
+			String sJson = client.doGet(RSA_KEY_URL, toLoginHeadParams(""), null);
+			JSONObject json = JSONObject.fromObject(sJson);
+			String hash = JsonUtils.getStr(json, BiliCmdAtrbt.hash);
+			String pubKey = JsonUtils.getStr(json, BiliCmdAtrbt.key);
+			password = RSAUtils.encrypt(hash.concat(password), pubKey);
+			
+			// 把验证码、验证码配套的cookies、账号、RSA加密后的密码 提交到登陆服务器
+			Map<String, String> head = toLoginHeadParams(vcCookies);
+			Map<String, String> request = _toLoginRequestParams(username, password, vccode);
+			sJson = client.doPost(MINI_LOGIN_URL, head, request);
+			
+//			{"code":0,"data":"https://passport.biligame.com/crossDomain?DedeUserID=31796320&DedeUserID__ckMd5=7a2868581681a219&Expires=2592000&SESSDATA=b21f4571%2C1517901333%2Cba70690c&bili_jct=7136e7aefb2385048cd77cc93ce25d56&gourl=https%3A%2F%2Fwww.bilibili.com"}
+			json = JSONObject.fromObject(sJson);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {	// 若登陆成功，则把返回的登陆cookies转化为selenium浏览器用的cookies
+				HttpMethod method = client.getHttpMethod();
+				if(method != null) {
+					Header[] outHeaders = method.getResponseHeaders();
+					for(Header outHeader : outHeaders) {
+						if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
+							Cookie cookie = toCookie(outHeader.getValue());
+							cookies.add(cookie);
+						}
+					}
+				}
+			}
+		} catch(Exception e) {
+			log.error("登陆失败", e);
+		}
+		client.close();
+		return cookies;
+	}
+	
+	private static Cookie toCookie(String cookie) {
+		String name = "";
+		String value = "";
+		String domain = "";
+		String path = "";
+		Date expiry = new Date();
+		boolean isSecure = false;
+		boolean isHttpOnly = false;
+		
+		String[] vals = cookie.split(";");
+		for(int i = 0; i < vals.length; i++) {
+			String[] kv = vals[i].split("=");
+			if(kv.length == 2) {
+				String key = kv[0].trim();
+				String val = kv[1].trim();
+				
+				if(i == 0) {
+					name = key;
+					value = val;
+					
+				} else {
+					if("Domain".equalsIgnoreCase(key)) {
+						domain = val;
+						
+					} else if("Path".equalsIgnoreCase(key)) {
+						path = val;
+						
+					} else if("Expires".equalsIgnoreCase(key)) {
+						expiry = TimeUtils.toDate(val);
+					}
+				}
+				
+			} else if(kv.length == 1){
+				String key = kv[0].trim();
+				if("Secure".equalsIgnoreCase(key)) {
+					isSecure = true;
+					
+				} else if("HttpOnly".equalsIgnoreCase(key)) {
+					isHttpOnly = true;
+				}
+			}
+		}
+		return new Cookie(name, value, domain, path, expiry, isSecure, isHttpOnly);
+	}
+	
+	private static Map<String, String> _toLoginRequestParams(
+			String username, String password, String vccode) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("cType", "2");
+		request.put("vcType", "1");	// 1:验证码校验方式;  2:二维码校验方式
+		request.put("captcha", vccode);	// 图片验证码
+		request.put("user", username);	// 账号（明文）
+		request.put("pwd", password);		// 密码（RSA公钥加密密文）
+		request.put("keep", "true");
+		request.put("gourl", "");	// 登录号跳转页面	http://www.bilibili.com/
+		return request;
+	}
+	
 	
 	/**
 	 * 查询账号信息

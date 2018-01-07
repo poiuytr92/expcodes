@@ -1,16 +1,28 @@
-package exp.bilibli.plugin.core.front;
+package exp.bilibli.plugin.cache;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpMethod;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibli.plugin.Config;
-import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.core.back.MsgSender;
+import exp.bilibli.plugin.core.front.AppUI;
 import exp.bilibli.plugin.utils.UIUtils;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.ListUtils;
+import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
+import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpUtils;
 import exp.libs.warp.thread.LoopThread;
 
@@ -24,18 +36,26 @@ import exp.libs.warp.thread.LoopThread;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class LoginMgr extends LoopThread {
+public class LoginMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(LoginMgr.class);
 	
 	/** B站登陆页面 */
 	private final static String LOGIN_URL = Config.getInstn().LOGIN_URL();
 	
+	private final static String VCCODE_URL = Config.getInstn().VCCODE_URL();
+	
 	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
-	protected final static String IMG_DIR = Config.getInstn().IMG_DIR();
+	public final static String IMG_DIR = Config.getInstn().IMG_DIR();
 	
-	protected final static String IMG_NAME = "qrcode";
+	private final static String VCCODE_PATH = IMG_DIR.concat("/vccode.jpg");
+	
+	public final static String QRIMG_NAME = "qrcode";
+	
+	private final static String SID = "sid";
+	
+	private final static String JSESSIONID = "JSESSIONID";
 	
 	/** B站二维码有效时间是180s, 这里设置120s, 避免边界问题 */
 	private final static long UPDATE_TIME = 120000;
@@ -56,7 +76,7 @@ class LoginMgr extends LoopThread {
 		this.isLogined = false;
 	}
 	
-	protected static LoginMgr getInstn() {
+	public static LoginMgr getInstn() {
 		if(instance == null) {
 			synchronized (LoginMgr.class) {
 				if(instance == null) {
@@ -100,9 +120,6 @@ class LoginMgr extends LoopThread {
 			if(isLogined == true) {
 				UIUtils.log("扫码成功, 正在屏蔽B站拦截脚本...");
 				skipUpdradeTips();	// 跳过B站的升级教程（该教程若不屏蔽会妨碍点击抽奖）
-				
-				// FIXME: 修改本地时间没用, 可能需要切换到帐密模式
-//				Browser.setCookiesTime(Config.getInstn().COOKIE_TIME()); // 修正cookies有效时间
 			}
 		}
 		
@@ -144,7 +161,7 @@ class LoginMgr extends LoopThread {
 		WebElement img = Browser.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
 		if(img != null) {
 			String imgUrl = img.getAttribute("src");
-			isOk = HttpUtils.convertBase64Img(imgUrl, IMG_DIR, IMG_NAME);
+			isOk = HttpUtils.convertBase64Img(imgUrl, IMG_DIR, QRIMG_NAME);
 			log.info("更新登陆二维码{}", (isOk ? "成功, 请打开 [哔哩哔哩手机客户端] 扫码登陆..." : "失败"));
 		}
 		return isOk;
@@ -181,4 +198,67 @@ class LoginMgr extends LoopThread {
 			skipBtn.click();
 		}
 	}
+	
+	
+	/**
+	 * 下载登陆用的验证码
+	 * @return 与该验证码配套的cookies
+	 */
+	public String downloadVccode() {
+		final String sid = StrUtils.concat(SID, "=", randomSID());
+		HttpClient client = new HttpClient();
+		
+		// 下载验证码图片（该验证码图片需要使用一个随机sid去请求）
+		Map<String, String> inHeaders = new HashMap<String, String>();
+		inHeaders.put(HttpUtils.HEAD.KEY.COOKIE, sid);
+		boolean isOk = client.downloadByGet(VCCODE_PATH, VCCODE_URL, inHeaders, null);
+		
+		// 服务端返回验证码的同时，会返回一个与之绑定的JSESSIONID
+		String jsessionId = "";
+		HttpMethod method = client.getHttpMethod();
+		if(isOk && method != null) {
+			Header outHeader = method.getResponseHeader(HttpUtils.HEAD.KEY.SET_COOKIE);
+			if(outHeader != null) {
+				jsessionId = RegexUtils.findFirst(outHeader.getValue(), 
+						StrUtils.concat("(", JSESSIONID, "=[^;]+)"));
+			}
+		}
+		
+		// SID与JSESSIONID绑定了该二维码图片, 在登陆时需要把这个信息一起POST
+		final String cookies = StrUtils.concat(sid, "; ", jsessionId);
+		client.close();
+		return cookies;
+	}
+	
+	/**
+	 * 生成随机SID (sid是由长度为8的由a-z0-9字符组成的字符串)
+	 * @return 随机SID
+	 */
+	private String randomSID() {
+		StringBuilder sid = new StringBuilder();
+		for(int i = 0; i < 8; i++) {	// sid长度为8
+			int n = RandomUtils.randomInt(36);	// a-z, 0-9
+			if(n < 26) {	// a-z
+				sid.append((char) (n + 'a'));
+				
+			} else {	// 0-9
+				n = n - 26;
+				sid.append((char) (n + '0'));
+			}
+		}
+		return sid.toString();
+	}
+	
+	public boolean toLogin(String username, String password, 
+			String vccode, String vcCookies) {
+		boolean isOk = false;
+		List<Cookie> cookies = MsgSender.toLogin(username, password, vccode, vcCookies);
+		isOk = ListUtils.isEmpty(cookies);
+		
+		// FIXME 保存转化
+		System.out.println(cookies.size());
+		
+		return isOk;
+	}
+	
 }

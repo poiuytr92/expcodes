@@ -197,6 +197,7 @@ public class Browser {
 		INSTN()._setCookiesTime(millis);
 	}
 	
+	// FIXME 只是修改了本地的有效时间, 实际上在服务端没效果的
 	private void _setCookiesTime(long millis) {
 		if(browser != null) {
 			millis = (millis <= 0 ? MONTH_MILLIS : millis);	// 默认有效期为一个月

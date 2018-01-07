@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import exp.bilibli.plugin.Config;
+import exp.bilibli.plugin.cache.LoginMgr;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -33,7 +34,7 @@ class _QrcodeUI extends PopChildWindow {
 
 	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
-	private final static String TIPS_PATH = Config.getInstn().IMG_DIR().concat("/tips.png");
+	private final static String TIPS_PATH = Config.getInstn().IMG_DIR().concat("/qrTips.png");
 	
 	private final static int WIDTH = 300;
 	
@@ -72,7 +73,7 @@ class _QrcodeUI extends PopChildWindow {
 		File dir = new File(LoginMgr.IMG_DIR);
 		File[] files = dir.listFiles();
 		for(File file : files) {
-			if(file.getName().contains(LoginMgr.IMG_NAME)) {
+			if(file.getName().contains(LoginMgr.QRIMG_NAME)) {
 				
 				// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图片
 				// 因为这种方式会因为图片路径没有变化, 而不去更新缓存, 导致显示的二维码一直不变

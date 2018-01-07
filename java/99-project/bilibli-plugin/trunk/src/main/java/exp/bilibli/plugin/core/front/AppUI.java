@@ -19,6 +19,7 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 import exp.bilibli.plugin.Config;
 import exp.bilibli.plugin.cache.Browser;
 import exp.bilibli.plugin.cache.ChatMgr;
+import exp.bilibli.plugin.cache.LoginMgr;
 import exp.bilibli.plugin.cache.MsgKwMgr;
 import exp.bilibli.plugin.cache.OnlineUserMgr;
 import exp.bilibli.plugin.cache.RoomMgr;
@@ -190,7 +191,7 @@ public class AppUI extends MainWindow {
 		this.defaultBtn = new JButton("★");
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
-		this.loginBtn = new JButton("扫码登陆 (可自动参与全平台抽奖)");
+		this.loginBtn = new JButton("扫码/帐密登陆 (可自动参与全平台抽奖)");
 		this.modeBtn = new JButton("抽奖模式");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
@@ -418,16 +419,36 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				isRunning = true;
-				qrcodeUI._view();
 				
-				if(LoginMgr.getInstn().isRun() == false) {
-					LoginMgr.getInstn()._start();
+				if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆", "帐密登陆")) {
+					_loginByQrcode();
 					
-					UIUtils.log("正在连接登陆服务器, 请稍后...");
-					UIUtils.log("正在下载登陆二维码, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
+				} else {
+					_loginByVccode();
 				}
 			}
 		});
+	}
+	
+	/**
+	 * 二维码扫码登陆
+	 */
+	private void _loginByQrcode() {
+		qrcodeUI._view();
+		
+		if(LoginMgr.getInstn().isRun() == false) {
+			LoginMgr.getInstn()._start();
+			
+			UIUtils.log("正在连接登陆服务器, 请稍后...");
+			UIUtils.log("正在下载登陆二维码, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
+		}
+	}
+	
+	/**
+	 * 验证码帐密登陆
+	 */
+	private void _loginByVccode() {
+		new _LoginUI()._view();
 	}
 	
 	private void setModeBtnListener() {
@@ -728,7 +749,7 @@ public class AppUI extends MainWindow {
 	/**
 	 * 标记已登陆成功
 	 */
-	protected void markLogin(String username) {
+	public void markLogin(String username) {
 		loginBtn.setEnabled(false);	// 标识已登陆
 		qrcodeUI._hide();
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
@@ -759,7 +780,7 @@ public class AppUI extends MainWindow {
 	 * 获取当前监听的直播间地址
 	 * @return
 	 */
-	protected String getLiveUrl() {
+	public String getLiveUrl() {
 		return StrUtils.concat(httpTF.getText(), ridTF.getText());
 	}
 	
