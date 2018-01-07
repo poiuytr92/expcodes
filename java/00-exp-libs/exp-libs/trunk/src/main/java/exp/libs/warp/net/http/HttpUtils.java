@@ -96,6 +96,7 @@ public class HttpUtils {
 			public final static String USER_AGENT = "User-Agent";
 			
 			public final static String CONTENT_ENCODING = "Content-Encoding";
+			public final static String SET_COOKIE = "Set-Cookie";
 		}
 		
 		public class VAL {

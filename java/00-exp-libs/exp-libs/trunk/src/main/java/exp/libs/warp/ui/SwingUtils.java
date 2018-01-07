@@ -394,6 +394,21 @@ public class SwingUtils {
 	}
 	
 	/**
+	 * 确认弹窗
+	 * @param msg 确认消息
+	 * @param yesBtnText [是(yes)] 按钮的文字
+	 * @param noBtnText [否(no)] 按钮的文字
+	 * @return true:是; false:否
+	 */
+	public static boolean confirm(String msg, String yesBtnText, String noBtnText) {
+		Object[] options = { yesBtnText, noBtnText };
+		int rst = JOptionPane.showOptionDialog(null, msg, "Tips", 
+				JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE, 
+				null, options, options[0]);
+		return (rst == 0); 
+	}
+	
+	/**
 	 * 输入弹窗
 	 * @param msg 提示消息
 	 * @return 输入内容

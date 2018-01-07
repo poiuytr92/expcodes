@@ -311,7 +311,7 @@ abstract class _SwingWindow extends JFrame {
 		
 		// 不重复询问
 		if(miniMode == UNINIT) {
-			miniMode = SwingUtils.confirm("To Tray (最小化到系统托盘) ?") ? 
+			miniMode = SwingUtils.confirm("请选择最小化模式 : " , "到系统托盘", "到任务栏") ? 
 					TO_TRAY : TO_MINI;
 		}
 		

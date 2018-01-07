@@ -9,6 +9,7 @@ import java.util.zip.GZIPInputStream;
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpMethod;
+import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
 import exp.libs.utils.io.IOUtils;
@@ -30,17 +31,33 @@ public class HttpClientUtils extends HttpUtils {
 	protected HttpClientUtils() {}
 	
 	/**
-	 * 添加请求头参数
+	 * 添加请求头参数参数
 	 * @param method
-	 * @param headParams
+	 * @param params
 	 */
-	private static void addHeader(HttpMethod method, Map<String, String> headParams) {
-		if(headParams != null) {
-			Iterator<String> keyIts = headParams.keySet().iterator();
+	private static void addParamsToHeader(HttpMethod method, Map<String, String> params) {
+		if(params != null) {
+			Iterator<String> keyIts = params.keySet().iterator();
 			while(keyIts.hasNext()) {
 				String key = keyIts.next();
-				String val = headParams.get(key);
+				String val = params.get(key);
 				method.addRequestHeader(key, val);
+			}
+		}
+	}
+	
+	/**
+	 * 添加post方法的请求参数
+	 * @param post
+	 * @param params
+	 */
+	private static void addParamsToBody(PostMethod post, Map<String, String> params) {
+		if(params != null) {
+			Iterator<String> keyIts = params.keySet().iterator();
+			while(keyIts.hasNext()) {
+				String key = keyIts.next();
+				String val = params.get(key);
+				post.addParameter(key, val);
 			}
 		}
 	}
@@ -110,17 +127,8 @@ public class HttpClientUtils extends HttpUtils {
 			Map<String, String> headParams, Map<String, String> requestParams, 
 			int connTimeout, int readTimeout, String charset) throws Exception {
 		PostMethod post = new PostMethod(url);
-		addHeader(post, headParams);
-		
-		// POST的请求参数是在结构体中发过去的
-		if(requestParams != null) {
-			Iterator<String> keyIts = requestParams.keySet().iterator();
-			while(keyIts.hasNext()) {
-				String key = keyIts.next();
-				String val = requestParams.get(key);
-				post.addParameter(key, val);
-			}
-		}
+		addParamsToHeader(post, headParams);
+		addParamsToBody(post, requestParams);	// POST的请求参数是在结构体中发过去的
 		
 		HttpClient client = createHttpClient(connTimeout, readTimeout);
 		int status = client.executeMethod(post);
@@ -198,8 +206,8 @@ public class HttpClientUtils extends HttpUtils {
 		String kvs = encodeRequests(requestParams, charset);	
 		url = url.concat(kvs);	// GET的参数是拼在url后面的
 		
-		PostMethod get = new PostMethod(url);
-		addHeader(get, headParams);
+		GetMethod get = new GetMethod(url);
+		addParamsToHeader(get, headParams);
 		
 		HttpClient client = createHttpClient(connTimeout, readTimeout);
 		int status = client.executeMethod(get);
@@ -271,6 +279,7 @@ public class HttpClientUtils extends HttpUtils {
 		try {
 			isOk = _downloadByPost(savePath, url, headParams, requestParams, 
 					connTimeout, readTimeout, charset);
+			
 		} catch (Exception e) {
 			log.error("下载资源失败: [{}]", url, e);
 		}
@@ -293,17 +302,8 @@ public class HttpClientUtils extends HttpUtils {
 			Map<String, String> headParams, Map<String, String> requestParams, 
 			int connTimeout, int readTimeout, String charset) throws Exception {
 		PostMethod post = new PostMethod(url);
-		addHeader(post, headParams);
-		
-		// POST的请求参数是在结构体中发过去的
-		if(requestParams != null) {
-			Iterator<String> keyIts = requestParams.keySet().iterator();
-			while(keyIts.hasNext()) {
-				String key = keyIts.next();
-				String val = requestParams.get(key);
-				post.addParameter(key, val);
-			}
-		}
+		addParamsToHeader(post, headParams);
+		addParamsToBody(post, requestParams);	// POST的请求参数是在结构体中发过去的
 		
 		HttpClient client = createHttpClient(connTimeout, readTimeout);
 		int status = client.executeMethod(post);
@@ -346,6 +346,7 @@ public class HttpClientUtils extends HttpUtils {
 		try {
 			isOk = _downloadByGet(savePath, url, headParams, requestParams, 
 					connTimeout, readTimeout, charset);
+			
 		} catch (Exception e) {
 			log.error("下载资源失败: [{}]", url, e);
 		}
@@ -370,8 +371,8 @@ public class HttpClientUtils extends HttpUtils {
 		String kvs = encodeRequests(requestParams, charset);	
 		url = url.concat(kvs);	// GET的参数是拼在url后面的
 		
-		PostMethod get = new PostMethod(url);
-		addHeader(get, headParams);
+		GetMethod get = new GetMethod(url);
+		addParamsToHeader(get, headParams);
 		
 		HttpClient client = createHttpClient(connTimeout, readTimeout);
 		int status = client.executeMethod(get);
