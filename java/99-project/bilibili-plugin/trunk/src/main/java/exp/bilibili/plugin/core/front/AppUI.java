@@ -153,9 +153,14 @@ public class AppUI extends MainWindow {
 		IS_ADMIN = false;
 		
 		// 管理员: 无条件开启所有功能
-		if((args == null || args.length <= 0) && 
-				FileUtils.exists("./doc/icon.ico")) {	// 发布的项目是不存在doc文件夹的, 避免管理员权限泄露
-			IS_ADMIN = true;
+		if(args == null || args.length <= 0) {	
+			if(FileUtils.exists("./doc/icon.ico")) {	// 发布的项目是不存在doc文件夹的, 避免管理员权限泄露
+				IS_ADMIN = true;
+				
+			} else {
+				SwingUtils.warn("很明显你是假的管理员");
+				System.exit(0);
+			}
 			
 		// 用户
 		} else {
@@ -200,7 +205,7 @@ public class AppUI extends MainWindow {
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.loginBtn = new JButton("扫码/帐密登陆 (自动全平台抽奖)");
-		this.clrBtn = new JButton("清除登陆信息");
+		this.clrBtn = new JButton("C");
 		this.modeBtn = new JButton("抽奖模式");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
@@ -489,11 +494,11 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(isLogined() == true) {
-					SwingUtils.warn("请不要在登陆状态下清除登陆信息");
+					SwingUtils.warn("请不要在登陆状态下 [清除登陆信息]");
 					return;
 				}
 				
-				if(SwingUtils.confirm("清除后, 下次需重新登陆, 继续吗 ?")) {
+				if(SwingUtils.confirm("[清除登陆信息] 后下次需重新登陆, 继续吗 ?")) {
 					if(LoginMgr.getInstn().clearCookies()) {
 						SwingUtils.info("清除登陆信息成功");
 						

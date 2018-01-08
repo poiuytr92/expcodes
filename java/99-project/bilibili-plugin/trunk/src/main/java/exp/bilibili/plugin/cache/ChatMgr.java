@@ -123,8 +123,14 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	public boolean sendNotice(String msg) {
-		return MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, msg), 
+		boolean isOk = false;
+		if(!isAutoThankYou()) {
+			return isOk;
+		}
+		
+		isOk = MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, msg), 
 				UIUtils.getCurChatColor());
+		return isOk;
 	}
 	
 	public void helloLive(String roomId) {
