@@ -19,7 +19,7 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * 浏览器驱动管理器
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com

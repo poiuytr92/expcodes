@@ -24,7 +24,7 @@ import exp.libs.warp.thread.LoopThread;
  *   2.打印版权信息
  *   3.浏览器保活
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com

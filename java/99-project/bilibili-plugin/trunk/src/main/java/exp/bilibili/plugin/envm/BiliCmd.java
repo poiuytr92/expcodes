@@ -5,7 +5,7 @@ package exp.bilibili.plugin.envm;
  * <PRE>
  * B站Json交互报文命令类型
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com

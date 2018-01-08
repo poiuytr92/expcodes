@@ -14,7 +14,7 @@ import exp.libs.warp.conf.xml.XConfigFactory;
  * <PRE>
  * 程序配置
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com

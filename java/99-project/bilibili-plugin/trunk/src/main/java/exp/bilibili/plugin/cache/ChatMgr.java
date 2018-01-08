@@ -26,7 +26,7 @@ import exp.libs.warp.thread.LoopThread;
  *  2.自动感谢投喂
  *  3.定时打call
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com

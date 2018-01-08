@@ -21,7 +21,7 @@ import exp.libs.warp.io.flow.FileFlowReader;
  * <PRE>
  * 直播房间管理器
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com

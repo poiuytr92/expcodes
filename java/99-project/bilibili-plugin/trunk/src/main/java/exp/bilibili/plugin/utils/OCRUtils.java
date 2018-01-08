@@ -12,7 +12,7 @@ import exp.bilibili.plugin.Config;
  * <PRE>
  * 图像识别工具
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com

@@ -21,7 +21,7 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * <PRE>
  * 登陆二维码展示界面
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com
