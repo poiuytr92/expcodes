@@ -17,7 +17,7 @@ public class TestSafetyUtils {
 	public static void main(String[] args) {
 		
 		// 生成授权码文件
-		int day = 60;
+		int day = 45;
 		System.out.println(SafetyUtils.certificateToFile(day));
 	}
 	

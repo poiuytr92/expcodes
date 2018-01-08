@@ -41,7 +41,7 @@ public class ChatMgr extends LoopThread {
 	private final static String NIGHT_KEY = "晚安(´▽`)ﾉ  ";
 	
 	/** 同一时间可以感谢的最大用户数（避免刷屏） */
-	private final static int THX_USER_LIMIT = 5;
+	private final static int THX_USER_LIMIT = 2;
 	
 	/** 发送消息间隔 */
 	private final static long SEND_TIME = 500;
