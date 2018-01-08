@@ -28,6 +28,7 @@ import exp.bilibili.plugin.core.back.WebSockClient;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -152,7 +153,8 @@ public class AppUI extends MainWindow {
 		IS_ADMIN = false;
 		
 		// 管理员: 无条件开启所有功能
-		if(args == null || args.length <= 0) {
+		if((args == null || args.length <= 0) && 
+				FileUtils.exists("./doc/icon.ico")) {	// 发布的项目是不存在doc文件夹的, 避免管理员权限泄露
 			IS_ADMIN = true;
 			
 		// 用户
