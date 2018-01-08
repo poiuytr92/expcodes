@@ -351,6 +351,7 @@ public class AppUI extends MainWindow {
 		setLinkBtnListener();
 		setLotteryBtnListener();
 		setLoginBtnListener();
+		setClrBtnListener();
 		setModeBtnListener();
 		setSendBtnListener();
 		setColorBtnListener();
@@ -478,6 +479,28 @@ public class AppUI extends MainWindow {
 				};
 			}.start();
 		}
+	}
+	
+	private void setClrBtnListener() {
+		clrBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(isLogined() == true) {
+					SwingUtils.warn("请不要在登陆状态下清除登陆信息");
+					return;
+				}
+				
+				if(SwingUtils.confirm("清除后, 下次需重新登陆, 继续吗 ?")) {
+					if(LoginMgr.getInstn().clearCookies()) {
+						SwingUtils.info("清除登陆信息成功");
+						
+					} else {
+						SwingUtils.info("清除登陆信息失败");
+					}
+				}
+			}
+		});
 	}
 	
 	private void setModeBtnListener() {
