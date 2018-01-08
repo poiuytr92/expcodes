@@ -124,12 +124,10 @@ public class ChatMgr extends LoopThread {
 	
 	public boolean sendNotice(String msg) {
 		boolean isOk = false;
-		if(!isAutoThankYou()) {
-			return isOk;
+		if(isAutoThankYou()) {
+			isOk = MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, msg), 
+					UIUtils.getCurChatColor());
 		}
-		
-		isOk = MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, msg), 
-				UIUtils.getCurChatColor());
 		return isOk;
 	}
 	
