@@ -113,6 +113,8 @@ public class AppUI extends MainWindow {
 	
 	private _LotteryUI lotteryUI;
 	
+	private _LoginUI loginUI;
+	
 	private _QrcodeUI qrcodeUI;
 	
 	private _ModeUI modeUI;
@@ -231,6 +233,7 @@ public class AppUI extends MainWindow {
 		
 		this.wsClient = new WebSockClient();
 		this.lotteryUI = new _LotteryUI();
+		this.loginUI = new _LoginUI();
 		this.qrcodeUI = new _QrcodeUI();
 		this.modeUI = new _ModeUI();
 		this.colorUI = new _ColorUI();
@@ -448,7 +451,15 @@ public class AppUI extends MainWindow {
 	 * 验证码帐密登陆
 	 */
 	private void _loginByVccode() {
-		new _LoginUI()._view();
+		new Thread() {
+			public void run() {
+				if(LoginMgr.getInstn().autoLogin()) {
+					LoginMgr.getInstn().saveLoginInfo();
+				} else {
+					loginUI._view();
+				}
+			};
+		}.start();
 	}
 	
 	private void setModeBtnListener() {
@@ -751,11 +762,12 @@ public class AppUI extends MainWindow {
 	 */
 	public void markLogin(String username) {
 		loginBtn.setEnabled(false);	// 标识已登陆
+		loginUI._hide();
 		qrcodeUI._hide();
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
 		WebBot.getInstn()._start();
 		
-		UIUtils.log("登陆成功:".concat(username));
+		UIUtils.log("欢迎肥来:".concat(username));
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
 		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 	}

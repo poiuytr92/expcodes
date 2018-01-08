@@ -90,14 +90,7 @@ public class LoginMgr extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		Browser.init(true);				// 使用加载图片的浏览器（首次登陆需要扫描二维码图片）
-		Browser.open(LOGIN_URL);		// 打开登陆页面
-		isLogined = loginByCookies();	// 轮询二维码前先尝试cookies登陆
-		
-		if(isLogined == false) {
-			FileUtils.delete(COOKIE_DIR);
-			FileUtils.createDir(COOKIE_DIR);
-		}
+		autoLogin();	// 尝试使用上一次登陆的cookies自动登陆
 	}
 
 	@Override
@@ -118,7 +111,6 @@ public class LoginMgr extends LoopThread {
 			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
 			isLogined = isSwitch();
 			if(isLogined == true) {
-				UIUtils.log("扫码成功, 正在屏蔽B站拦截脚本...");
 				skipUpdradeTips();	// 跳过B站的升级教程（该教程若不屏蔽会妨碍点击抽奖）
 			}
 		}
@@ -129,12 +121,24 @@ public class LoginMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		UIUtils.log("正在保存cookies(下次登陆可无需扫码)");
-		Browser.backupCookies();	// 保存登录成功的cookies到外存, 以备下次使用
-		Browser.quit();	// 退出浏览器(此浏览器是加载图片的, 不加载图片的浏览器后面再延迟启动)
-		
-		AppUI.getInstn().markLogin(MsgSender.queryUsername());	// 在界面标记已登陆
+		saveLoginInfo();	// 备份cookies
 		log.info("{} 已停止", getName());
+	}
+	
+	/**
+	 * 尝试使用cookies自动登陆
+	 */
+	public boolean autoLogin() {
+		UIUtils.log("正在尝试使用cookies自动登陆...");
+		Browser.init(true);				// 使用加载图片的浏览器（首次登陆需要扫描二维码图片/验证码图片）
+		Browser.open(LOGIN_URL);		// 打开登陆页面
+		isLogined = loginByCookies();	// 先尝试cookies登陆
+		
+		if(isLogined == false) {
+			FileUtils.delete(COOKIE_DIR);
+			FileUtils.createDir(COOKIE_DIR);
+		}
+		return isLogined;
 	}
 	
 	/**
@@ -190,6 +194,7 @@ public class LoginMgr extends LoopThread {
 	 * 切到当前直播间, 把第一次打开直播室时的升级教程提示屏蔽掉
 	 */
 	private void skipUpdradeTips() {
+		UIUtils.log("首次登陆成功, 正在屏蔽B站拦截脚本...");
 		Browser.open(AppUI.getInstn().getLiveUrl());
 		By upgrade = By.className("upgrade-intro-component");
 		if(Browser.existElement(upgrade)) {
@@ -199,6 +204,16 @@ public class LoginMgr extends LoopThread {
 		}
 	}
 	
+	/**
+	 * 保存登陆信息
+	 */
+	public void saveLoginInfo() {
+		UIUtils.log("正在保存cookies(用于下次自动登陆)");
+		Browser.backupCookies();	// 保存登录成功的cookies到外存, 以备下次使用
+		Browser.quit();	// 退出浏览器(此浏览器是加载图片的, 不加载图片的浏览器后面再延迟启动)
+		
+		AppUI.getInstn().markLogin(MsgSender.queryUsername());	// 在界面标记已登陆
+	}
 	
 	/**
 	 * 下载登陆用的验证码
@@ -253,11 +268,16 @@ public class LoginMgr extends LoopThread {
 			String vccode, String vcCookies) {
 		boolean isOk = false;
 		List<Cookie> cookies = MsgSender.toLogin(username, password, vccode, vcCookies);
-		isOk = ListUtils.isEmpty(cookies);
+		isOk = ListUtils.isNotEmpty(cookies);
 		
-		// FIXME 保存转化
-		System.out.println(cookies.size());
-		
+		if(isOk == true) {
+			Browser.open(LOGIN_URL);		// 打开登陆页面
+			for(Cookie cookie : cookies) {	// 把后台返回的coookie转移到前端浏览器
+				Browser.addCookie(cookie);
+			}
+			skipUpdradeTips();	// 跳过B站的升级教程（该教程若不屏蔽会妨碍点击抽奖）
+			saveLoginInfo();	// 备份cookies
+		}
 		return isOk;
 	}
 	

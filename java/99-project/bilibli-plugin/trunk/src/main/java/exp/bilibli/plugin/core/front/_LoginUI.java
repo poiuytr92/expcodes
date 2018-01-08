@@ -9,7 +9,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -143,10 +142,11 @@ public class _LoginUI extends PopChildWindow {
 					SwingUtils.warn("验证码不能为空");
 					
 				} else {
-					
-					LoginMgr.getInstn().toLogin(username, password, vccode, vcCookies);
-					
-					// FIXME: 登陆成功后查询用户名
+					boolean isOk = LoginMgr.getInstn().toLogin(
+							username, password, vccode, vcCookies);
+					if(isOk == false) {
+						SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
+					}
 				}
 			}
 		});
@@ -189,7 +189,6 @@ public class _LoginUI extends PopChildWindow {
 	
 	private void updateImg() {
 		vcCookies = LoginMgr.getInstn().downloadVccode();
-		System.out.println(vcCookies);
 		
 		// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图片
 		// 因为这种方式会因为图片路径没有变化, 而不去更新缓存, 导致显示的二维码一直不变
