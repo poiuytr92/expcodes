@@ -160,6 +160,7 @@ public class LoginMgr extends LoopThread {
 	 */
 	private boolean downloadQrcode() {
 		boolean isOk = false;
+		UIUtils.log("正在下载登陆二维码, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
 		log.info("正在更新登陆二维码...");
 		Browser.open(LOGIN_URL);
 		WebElement img = Browser.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
@@ -187,7 +188,8 @@ public class LoginMgr extends LoopThread {
 	 * @return
 	 */
 	private boolean isSwitch() {
-		return !Browser.getCurURL().startsWith(LOGIN_URL);
+		String curURL = Browser.getCurURL();
+		return (StrUtils.isNotEmpty(curURL) && !curURL.startsWith(LOGIN_URL));
 	}
 	
 	/**

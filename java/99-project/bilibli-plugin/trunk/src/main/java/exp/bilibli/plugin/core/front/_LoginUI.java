@@ -28,11 +28,6 @@ import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
 public class _LoginUI extends PopChildWindow {
-
-	public static void main(String[] args) {
-		BeautyEyeUtils.init();
-		new _LoginUI()._view();
-	}
 	
 	/** serialVersionUID */
 	private static final long serialVersionUID = -1752327112586227761L;
@@ -63,7 +58,7 @@ public class _LoginUI extends PopChildWindow {
 	private String vcCookies;
 	
 	protected _LoginUI() {
-		super("登陆", WIDTH, HIGH);
+		super("B站PC端帐密登陆", WIDTH, HIGH);
 	}
 	
 	@Override
@@ -85,7 +80,8 @@ public class _LoginUI extends PopChildWindow {
 		icon = new ImageIcon(modifySize(icon.getImage()));
 		this.imgLabel = new JLabel(icon);
 		
-		this.loginBtn = new JButton("登陆");
+		this.loginBtn = new JButton("登陆 哔哩哔哩");
+		BeautyEyeUtils.setButtonStyle(NormalColor.green, loginBtn);
 		loginBtn.setForeground(Color.BLACK);
 		this.vcCookies = "";
 	}
@@ -128,6 +124,8 @@ public class _LoginUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				loginBtn.setEnabled(false);
+				
 				String username = usernameTXT.getText();
 				String password = new String(passwordTXT.getPassword());
 				String vccode = vccodeTXT.getText();
@@ -146,8 +144,14 @@ public class _LoginUI extends PopChildWindow {
 							username, password, vccode, vcCookies);
 					if(isOk == false) {
 						SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
+						reflashBtn.doClick();
+						
+					} else {
+						_hide();
 					}
 				}
+				
+				loginBtn.setEnabled(true);
 			}
 		});
 		

@@ -73,6 +73,8 @@ public class AppUI extends MainWindow {
 	
 	private JButton loginBtn;
 	
+	private JButton clrBtn;
+	
 	private JButton modeBtn;
 	
 	private JButton sendBtn;
@@ -122,6 +124,8 @@ public class AppUI extends MainWindow {
 	private _ColorUI colorUI;
 	
 	private ChatColor curChatColor;
+	
+	private boolean isLogined;
 	
 	private boolean isRunning;
 	
@@ -193,7 +197,8 @@ public class AppUI extends MainWindow {
 		this.defaultBtn = new JButton("★");
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
-		this.loginBtn = new JButton("扫码/帐密登陆 (可自动参与全平台抽奖)");
+		this.loginBtn = new JButton("扫码/帐密登陆 (自动全平台抽奖)");
+		this.clrBtn = new JButton("清除登陆信息");
 		this.modeBtn = new JButton("抽奖模式");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
@@ -208,6 +213,7 @@ public class AppUI extends MainWindow {
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
+		clrBtn.setForeground(Color.BLACK);
 		modeBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
@@ -233,12 +239,12 @@ public class AppUI extends MainWindow {
 		
 		this.wsClient = new WebSockClient();
 		this.lotteryUI = new _LotteryUI();
-		this.loginUI = new _LoginUI();
 		this.qrcodeUI = new _QrcodeUI();
 		this.modeUI = new _ModeUI();
 		this.colorUI = new _ColorUI();
 		this.curChatColor = ChatColor.WHITE;
 		
+		this.isLogined = false;
 		this.isRunning = false;
 		printVersionInfo();
 	}
@@ -314,8 +320,8 @@ public class AppUI extends MainWindow {
 	private JPanel _getLoginPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
-		panel.add(loginBtn, BorderLayout.CENTER);
-		panel.add(modeBtn, BorderLayout.EAST);
+		panel.add(SwingUtils.getEBorderPanel(loginBtn, modeBtn), BorderLayout.CENTER);
+		panel.add(clrBtn, BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -421,8 +427,12 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				isRunning = true;
+				if(isLogined()) {
+					loginBtn.setEnabled(false);
+					return;
+				}
 				
+				isRunning = true;
 				if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1天)", "帐密登陆 (30天)")) {
 					_loginByQrcode();
 					
@@ -440,10 +450,8 @@ public class AppUI extends MainWindow {
 		qrcodeUI._view();
 		
 		if(LoginMgr.getInstn().isRun() == false) {
-			LoginMgr.getInstn()._start();
-			
 			UIUtils.log("正在连接登陆服务器, 请稍后...");
-			UIUtils.log("正在下载登陆二维码, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
+			LoginMgr.getInstn()._start();
 		}
 	}
 	
@@ -451,15 +459,25 @@ public class AppUI extends MainWindow {
 	 * 验证码帐密登陆
 	 */
 	private void _loginByVccode() {
-		new Thread() {
-			public void run() {
-				if(LoginMgr.getInstn().autoLogin()) {
-					LoginMgr.getInstn().saveLoginInfo();
-				} else {
-					loginUI._view();
-				}
-			};
-		}.start();
+		if(loginUI != null) {
+			loginUI._view();
+			
+		} else {
+			UIUtils.log("正在连接登陆服务器, 请稍后...");
+			new Thread() {
+				public void run() {
+					loginBtn.setEnabled(false);
+					if(LoginMgr.getInstn().autoLogin()) {
+						LoginMgr.getInstn().saveLoginInfo();
+						
+					} else {
+						loginBtn.setEnabled(true);
+						loginUI = new _LoginUI();
+						loginUI._view();
+					}
+				};
+			}.start();
+		}
 	}
 	
 	private void setModeBtnListener() {
@@ -477,7 +495,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!isLogin()) {
+				if(!isLogined()) {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能发言哦~");
 					return;
 				}
@@ -507,7 +525,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!isLogin()) {
+				if(!isLogined()) {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [答谢姬] 哦~");
 					return;
 					
@@ -536,7 +554,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!isLogin()) {
+				if(!isLogined()) {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [公告姬] 哦~");
 					return;
 					
@@ -565,7 +583,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!isLogin()) {
+				if(!isLogined()) {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [小call姬] 哦~");
 					return;
 					
@@ -594,7 +612,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(!isLogin()) {
+				if(!isLogined()) {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [晚安姬] 哦~");
 					return;
 					
@@ -694,8 +712,7 @@ public class AppUI extends MainWindow {
 			chatTA.setText("");
 		}
 		
-		chatTA.append(msg);
-		chatTA.append(LINE_END);
+		chatTA.append(msg.concat(LINE_END));
 		SwingUtils.toEnd(chatTA);
 	}
 	
@@ -704,8 +721,7 @@ public class AppUI extends MainWindow {
 			consoleTA.setText("");
 		}
 		
-		consoleTA.append(msg);
-		consoleTA.append(LINE_END);
+		consoleTA.append(msg.concat(LINE_END));
 		SwingUtils.toEnd(consoleTA);
 	}
 	
@@ -714,19 +730,17 @@ public class AppUI extends MainWindow {
 			notifyTA.setText("");
 		}
 		
-		notifyTA.append(msg);
-		notifyTA.append(LINE_END);
+		notifyTA.append(msg.concat(LINE_END));
 		SwingUtils.toEnd(notifyTA);
 	}
 	
 	public void toStatistics(String msg) {
-		if(isLogin() == true) {
+		if(isLogined() == true) {
 			if(StrUtils.count(sttcTA.getText(), '\n') >= MAX_LINE) {
 				sttcTA.setText("");
 			}
 			
-			sttcTA.append(msg);
-			sttcTA.append(LINE_END);
+			sttcTA.append(msg.concat(LINE_END));
 			SwingUtils.toEnd(sttcTA);
 		}
 	}
@@ -735,7 +749,7 @@ public class AppUI extends MainWindow {
 	 * 更新抽奖成功次数
 	 */
 	public void updateLotteryCnt(int num) {
-		if(!loginBtn.isEnabled() && num > 0) {	// 登陆按钮被禁用, 说明登陆成功
+		if(isLogined() && num > 0) {
 			lotteryCnt += num;
 			String cnt = StrUtils.leftPad(String.valueOf(lotteryCnt), '0', 5);
 			lotteryLabel.setText(StrUtils.concat(" ", cnt, " "));
@@ -761,8 +775,10 @@ public class AppUI extends MainWindow {
 	 * 标记已登陆成功
 	 */
 	public void markLogin(String username) {
-		loginBtn.setEnabled(false);	// 标识已登陆
-		loginUI._hide();
+		isLogined = true;
+		loginBtn.setEnabled(false);	
+		
+		if(loginUI != null) { loginUI._hide(); }
 		qrcodeUI._hide();
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
 		WebBot.getInstn()._start();
@@ -776,9 +792,9 @@ public class AppUI extends MainWindow {
 	 * 确认是否已登录
 	 * @return
 	 */
-	private boolean isLogin() {
-		return !loginBtn.isEnabled();
-	}
+	private boolean isLogined() {
+		return isLogined;
+	}	
 	
 	/**
 	 * 是否为暗中抽奖模式

@@ -169,15 +169,25 @@ final public class BrowserDriver {
 	}
 	
 	public String getCurURL() {
-		return webDriver.getCurrentUrl();
+		String url = "";
+		try {
+			url = webDriver.getCurrentUrl();
+		} catch(Throwable e) {}
+		return url;
 	}
 	
 	public String getPageSource() {
-		return webDriver.getPageSource();
+		String ps = "";
+		try {
+			ps = webDriver.getPageSource();
+		} catch(Throwable e) {}
+		return ps;
 	}
 	
 	public void clearCookies() {
-		webDriver.manage().deleteAllCookies();
+		try {
+			webDriver.manage().deleteAllCookies();
+		} catch(Throwable e) {}
 	}
 	
 	public boolean addCookie(Cookie cookie) {
