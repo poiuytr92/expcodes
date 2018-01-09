@@ -47,7 +47,7 @@ final public class VersionMgr {
 	 * 		[-m] 版本管理（UI界面）
 	 * @return 当前版本信息
 	 */
-	public static String exec(String[] args) {
+	public static String exec(String... args) {
 		return getInstn()._exec(args);
 	}
 	
@@ -57,7 +57,7 @@ final public class VersionMgr {
 	 * 		[-m] 版本管理（UI界面）
 	 * @return 当前版本信息
 	 */
-	private String _exec(String[] args) {
+	private String _exec(String... args) {
 		boolean manage = true;
 		if(args != null && args.length >= 1) {
 			manage = "-m".equals(args[0]);
