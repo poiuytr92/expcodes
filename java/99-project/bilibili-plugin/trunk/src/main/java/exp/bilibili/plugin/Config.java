@@ -79,7 +79,7 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/live");
 	}
 	
-	public String SSL_URL() {
+	public String SSL_HOST() {
 		return xConf.getVal("/config/biliUrls/ssl");
 	}
 	

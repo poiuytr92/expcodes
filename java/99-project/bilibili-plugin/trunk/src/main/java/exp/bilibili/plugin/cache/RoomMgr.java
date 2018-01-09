@@ -1,8 +1,10 @@
 package exp.bilibili.plugin.cache;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.LotteryRoom;
@@ -210,6 +212,10 @@ public class RoomMgr {
 			sb.append(key).append("=").append(val).append("\r\n");
 		}
 		FileUtils.write(ROOM_PATH, sb.toString(), Charset.ISO, false);
+	}
+	
+	public Set<Integer> getRealRoomIds() {
+		return new HashSet<Integer>(realRoomIds.values());
 	}
 	
 }

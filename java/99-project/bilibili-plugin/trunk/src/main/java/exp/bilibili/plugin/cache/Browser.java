@@ -1,7 +1,6 @@
 package exp.bilibili.plugin.cache;
 
 import java.io.File;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,10 +30,11 @@ public class Browser {
 	
 	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
-	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
+	private final static String COOKIE_NAME = "cookie";
 	
-	/** 一个月的时间单位 */
-	private final static long MONTH_MILLIS = 86400000L * 30L;
+	private final static String COOKIE_SUFFIX = ".dat";
+	
+	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
 	
 	/** 当前登陆用户的cookies，供https接口用 */
 	private String sCookies;
@@ -189,34 +189,6 @@ public class Browser {
 		return (browser == null ? new HashSet<Cookie>() : browser.getCookies());
 	}
 	
-	public static void updateCookiesTime() {
-		setCookiesTime(MONTH_MILLIS);
-	}
-	
-	public static void setCookiesTime(long millis) {
-		INSTN()._setCookiesTime(millis);
-	}
-	
-	// FIXME 只是修改了本地的有效时间, 实际上在服务端没效果的
-	private void _setCookiesTime(long millis) {
-		if(browser != null) {
-			millis = (millis <= 0 ? MONTH_MILLIS : millis);	// 默认有效期为一个月
-			Date expiry = new Date(System.currentTimeMillis() + MONTH_MILLIS);
-			Set<Cookie> tCookies = new HashSet<Cookie>();	// 调整时间后的cookies
-			
-			Set<Cookie> cookies = browser.getCookies();
-			for(Cookie cookie : cookies) {
-				Cookie tCookie = new Cookie(cookie.getName(), cookie.getValue(), 
-						cookie.getDomain(), cookie.getPath(), expiry, 
-						cookie.isSecure(), cookie.isHttpOnly());
-				tCookies.add(tCookie);
-			}
-			
-			browser.clearCookies();
-			browser.addCookies(tCookies);
-		}
-	}
-	
 	public static void backupCookies() {
 		INSTN()._backupCookies();
 	}
@@ -229,7 +201,7 @@ public class Browser {
 			Set<Cookie> cookies = browser.getCookies();
 			for(Cookie cookie : cookies) {
 				String sIDX = StrUtils.leftPad(String.valueOf(idx++), '0', 2);
-				String savePath = StrUtils.concat(COOKIE_DIR, "/cookie-", sIDX, ".dat");
+				String savePath = StrUtils.concat(COOKIE_DIR, "/", COOKIE_NAME, "-", sIDX, COOKIE_SUFFIX);
 				ObjUtils.toSerializable(cookie, savePath);	// 序列化到外存， 供下次启动用
 				
 				// 供后台HTTPS协议用
@@ -258,6 +230,10 @@ public class Browser {
 			File dir = new File(COOKIE_DIR);
 			File[] files = dir.listFiles();
 			for(File file : files) {
+				if(!file.getName().contains(COOKIE_NAME)) {
+					continue;
+				}
+				
 				try {
 					Cookie cookie = (Cookie) ObjUtils.unSerializable(file.getPath());
 					cnt += (browser.addCookie(cookie) ? 1 : 0);

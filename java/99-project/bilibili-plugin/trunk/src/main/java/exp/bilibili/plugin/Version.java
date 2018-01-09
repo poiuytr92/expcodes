@@ -25,6 +25,8 @@ public class Version {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
+		
+		// FIXME 检索页面限制版本、限制用户ID(用户名)、增加有效期
 	}
 	
 }

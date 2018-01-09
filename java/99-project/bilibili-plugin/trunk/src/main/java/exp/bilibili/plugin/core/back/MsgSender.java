@@ -52,6 +52,10 @@ public class MsgSender {
 	
 	private final static long SLEEP_TIME = 1000;
 	
+	private final static String SSL_HOST = Config.getInstn().SSL_HOST();
+	
+	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
+	
 	private final static String LOGIN_HOST = Config.getInstn().LOGIN_HOST();
 	
 	private final static String MINI_LOGIN_URL = Config.getInstn().MINI_LOGIN_URL();
@@ -101,9 +105,9 @@ public class MsgSender {
 		params.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
 				HttpUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
 		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
-		params.put(HttpUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
-		params.put(HttpUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
-		params.put(HttpUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
+		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
+		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
+		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(realRoomId));	// 发送/接收消息的直播间地址
 		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
@@ -112,19 +116,13 @@ public class MsgSender {
 		Map<String, String> params = toGetHeadParams(cookies);
 		params.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
 		return params;
-//		params.put(HttpUtils.HEAD.KEY.ACCEPT, "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8");
-//		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
-//		params.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8");
-//		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-//		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
-//		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 	}
 	
 	private static Map<String, String> toGetHeadParams(String cookies, String realRoomId) {
 		Map<String, String> params = toGetHeadParams(cookies);
-		params.put(HttpUtils.HEAD.KEY.HOST, Config.getInstn().SSL_URL());
-		params.put(HttpUtils.HEAD.KEY.ORIGIN, Config.getInstn().LIVE_URL());
-		params.put(HttpUtils.HEAD.KEY.REFERER, Config.getInstn().LIVE_URL().concat(realRoomId));	// 发送/接收消息的直播间地址
+		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
+		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
+		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(realRoomId));	// 发送/接收消息的直播间地址
 		return params;
 	}
 	
