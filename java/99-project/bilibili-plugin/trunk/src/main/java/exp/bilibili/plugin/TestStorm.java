@@ -17,6 +17,9 @@ public class TestStorm {
 
 	private final static Logger log = LoggerFactory.getLogger(TestStorm.class);
 	
+	// 每10分钟更新当前top50房间
+	// 只扫描那些
+	
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 //		Browser.init(false);
