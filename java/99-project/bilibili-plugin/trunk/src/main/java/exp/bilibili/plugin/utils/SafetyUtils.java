@@ -5,9 +5,15 @@ import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.warp.ver.VersionMgr;
 
 public class SafetyUtils {
 
+	// FIXME 加密
+	/** 软件授权页 */
+	private final static String URL = "https://lyy289065406.github.io/certificate/";
+	
 	/** 授权码正则 */
 	private final static String REGEX = "[a-zA-Z]\\d[a-zA-Z]\\d";
 	
@@ -115,4 +121,15 @@ public class SafetyUtils {
 		return NumUtils.toLong(CryptoUtils.deDES(certificate), 0);
 	}
 	
+	
+	public static void foo() {
+		String ps = HttpUtils.getPageSource(URL);
+		System.out.println(ps);
+	}
+	
+	public static void main(String[] args) {
+		foo();
+		String verInfo = VersionMgr.exec("-p");
+		System.err.println(verInfo);
+	}
 }
