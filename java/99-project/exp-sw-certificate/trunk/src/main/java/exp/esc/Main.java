@@ -1,5 +1,9 @@
 package exp.esc;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import exp.esc.core.Convertor;
 import exp.libs.utils.other.LogUtils;
 
 
@@ -15,8 +19,13 @@ import exp.libs.utils.other.LogUtils;
  */
 public class Main {
 	
+	private final static Logger log = LoggerFactory.getLogger(Config.class);
+	
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
+		
+		boolean isOk = Convertor.toPage(Config.getInstn().getApps());
+		log.info("生成软件验证页{}", (isOk ? "成功" : "失败"));
 	}
 	
 }

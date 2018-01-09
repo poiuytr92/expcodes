@@ -1,0 +1,68 @@
+[2018-01-09 21:43:25 175] [ERROR] [main] [_Config:96] - 加载文件失败: [./conf/esc_conf.dat].
+org.dom4j.DocumentException: Error on line 7 of document  : 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。 Nested exception: 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。
+	at org.dom4j.io.SAXReader.read(SAXReader.java:482) ~[dom4j-1.6.1.jar:1.6.1]
+	at org.dom4j.DocumentHelper.parseText(DocumentHelper.java:278) ~[dom4j-1.6.1.jar:1.6.1]
+	at exp.libs.warp.conf.xml._Config.loadConfFile(_Config.java:90) ~[classes/:na]
+	at exp.libs.warp.conf.xml.XConfig.loadConfFile(XConfig.java:282) [classes/:na]
+	at exp.esc.Config.<init>(Config.java:41) [classes/:na]
+	at exp.esc.Config.getInstn(Config.java:48) [classes/:na]
+	at exp.esc.Main.main(Main.java:27) [classes/:na]
+[2018-01-09 21:43:25 180] [ERROR] [main] [_Config:96] - 加载文件失败: [./conf/esc_conf.dat].
+org.dom4j.DocumentException: Error on line 7 of document  : 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。 Nested exception: 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。
+	at org.dom4j.io.SAXReader.read(SAXReader.java:482) ~[dom4j-1.6.1.jar:1.6.1]
+	at org.dom4j.DocumentHelper.parseText(DocumentHelper.java:278) ~[dom4j-1.6.1.jar:1.6.1]
+	at exp.libs.warp.conf.xml._Config.loadConfFile(_Config.java:90) ~[classes/:na]
+	at exp.libs.warp.conf.xml.XConfig.loadConfFile(XConfig.java:282) [classes/:na]
+	at exp.esc.Config.getApps(Config.java:59) [classes/:na]
+	at exp.esc.Main.main(Main.java:27) [classes/:na]
+[2018-01-09 21:43:56 951] [ERROR] [main] [_Config:96] - 加载文件失败: [./conf/esc_conf.dat].
+org.dom4j.DocumentException: Error on line 7 of document  : 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。 Nested exception: 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。
+	at org.dom4j.io.SAXReader.read(SAXReader.java:482) ~[dom4j-1.6.1.jar:1.6.1]
+	at org.dom4j.DocumentHelper.parseText(DocumentHelper.java:278) ~[dom4j-1.6.1.jar:1.6.1]
+	at exp.libs.warp.conf.xml._Config.loadConfFile(_Config.java:90) ~[classes/:na]
+	at exp.libs.warp.conf.xml.XConfig.loadConfFile(XConfig.java:282) [classes/:na]
+	at exp.esc.Config.<init>(Config.java:41) [classes/:na]
+	at exp.esc.Config.getInstn(Config.java:48) [classes/:na]
+	at exp.esc.Main.main(Main.java:27) [classes/:na]
+[2018-01-09 21:43:56 956] [ERROR] [main] [_Config:96] - 加载文件失败: [./conf/esc_conf.dat].
+org.dom4j.DocumentException: Error on line 7 of document  : 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。 Nested exception: 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。
+	at org.dom4j.io.SAXReader.read(SAXReader.java:482) ~[dom4j-1.6.1.jar:1.6.1]
+	at org.dom4j.DocumentHelper.parseText(DocumentHelper.java:278) ~[dom4j-1.6.1.jar:1.6.1]
+	at exp.libs.warp.conf.xml._Config.loadConfFile(_Config.java:90) ~[classes/:na]
+	at exp.libs.warp.conf.xml.XConfig.loadConfFile(XConfig.java:282) [classes/:na]
+	at exp.esc.Config.getApps(Config.java:59) [classes/:na]
+	at exp.esc.Main.main(Main.java:27) [classes/:na]
+[2018-01-09 21:45:54 321] [ERROR] [main] [_Config:96] - 加载文件失败: [./conf/esc_conf.xml].
+org.dom4j.DocumentException: Error on line 7 of document  : 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。 Nested exception: 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。
+	at org.dom4j.io.SAXReader.read(SAXReader.java:482) ~[dom4j-1.6.1.jar:1.6.1]
+	at org.dom4j.DocumentHelper.parseText(DocumentHelper.java:278) ~[dom4j-1.6.1.jar:1.6.1]
+	at exp.libs.warp.conf.xml._Config.loadConfFile(_Config.java:90) ~[classes/:na]
+	at exp.libs.warp.conf.xml.XConfig.loadConfFile(XConfig.java:282) [classes/:na]
+	at exp.esc.Config.<init>(Config.java:41) [classes/:na]
+	at exp.esc.Config.getInstn(Config.java:48) [classes/:na]
+	at exp.esc.Main.main(Main.java:27) [classes/:na]
+[2018-01-09 21:45:54 326] [ERROR] [main] [_Config:96] - 加载文件失败: [./conf/esc_conf.xml].
+org.dom4j.DocumentException: Error on line 7 of document  : 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。 Nested exception: 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。
+	at org.dom4j.io.SAXReader.read(SAXReader.java:482) ~[dom4j-1.6.1.jar:1.6.1]
+	at org.dom4j.DocumentHelper.parseText(DocumentHelper.java:278) ~[dom4j-1.6.1.jar:1.6.1]
+	at exp.libs.warp.conf.xml._Config.loadConfFile(_Config.java:90) ~[classes/:na]
+	at exp.libs.warp.conf.xml.XConfig.loadConfFile(XConfig.java:282) [classes/:na]
+	at exp.esc.Config.getApps(Config.java:59) [classes/:na]
+	at exp.esc.Main.main(Main.java:27) [classes/:na]
+[2018-01-09 21:47:25 315] [ERROR] [main] [_Config:96] - 加载文件失败: [./conf/esc_conf.xml].
+org.dom4j.DocumentException: Error on line 7 of document  : 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。 Nested exception: 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。
+	at org.dom4j.io.SAXReader.read(SAXReader.java:482) ~[dom4j-1.6.1.jar:1.6.1]
+	at org.dom4j.DocumentHelper.parseText(DocumentHelper.java:278) ~[dom4j-1.6.1.jar:1.6.1]
+	at exp.libs.warp.conf.xml._Config.loadConfFile(_Config.java:90) ~[classes/:na]
+	at exp.libs.warp.conf.xml.XConfig.loadConfFile(XConfig.java:282) [classes/:na]
+	at exp.esc.Config.<init>(Config.java:41) [classes/:na]
+	at exp.esc.Config.getInstn(Config.java:48) [classes/:na]
+	at exp.esc.Main.main(Main.java:27) [classes/:na]
+[2018-01-09 21:47:25 319] [ERROR] [main] [_Config:96] - 加载文件失败: [./conf/esc_conf.xml].
+org.dom4j.DocumentException: Error on line 7 of document  : 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。 Nested exception: 元素类型 "versions" 的结束标记必须以 '>' 分隔符结束。
+	at org.dom4j.io.SAXReader.read(SAXReader.java:482) ~[dom4j-1.6.1.jar:1.6.1]
+	at org.dom4j.DocumentHelper.parseText(DocumentHelper.java:278) ~[dom4j-1.6.1.jar:1.6.1]
+	at exp.libs.warp.conf.xml._Config.loadConfFile(_Config.java:90) ~[classes/:na]
+	at exp.libs.warp.conf.xml.XConfig.loadConfFile(XConfig.java:282) [classes/:na]
+	at exp.esc.Config.getApps(Config.java:59) [classes/:na]
+	at exp.esc.Main.main(Main.java:27) [classes/:na]
