@@ -80,12 +80,12 @@ public class Template {
 	
 	/**
 	 * 构造函数(默认文件内容编码为UTF-8)
-	 * @param filePath 文件路径, 支持：
+	 * @param tplFilePath 模板文件路径, 支持：
 	 * 					1. 磁盘文件路径, 如:	./src/main/resources/foo/bar/test.txt
 	 * 					2. jar包内文件路径, 如: /foo/bar/test.txt
 	 */
-	public Template(String filePath) {
-		this(filePath, DEFAULT_CHARSET);
+	public Template(String tplFilePath) {
+		this(tplFilePath, DEFAULT_CHARSET);
 	}
 	
 	/**

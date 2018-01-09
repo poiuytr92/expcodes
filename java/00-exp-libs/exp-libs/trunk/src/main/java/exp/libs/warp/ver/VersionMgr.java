@@ -45,17 +45,19 @@ final public class VersionMgr {
 	 * @param args 入口参数（win下默认为-m, linux下强制为-p）
 	 * 		[-p] 打印最后的版本信息（DOS界面）
 	 * 		[-m] 版本管理（UI界面）
+	 * @return 当前版本信息
 	 */
-	public static void exec(String[] args) {
-		getInstn()._exec(args);
+	public static String exec(String[] args) {
+		return getInstn()._exec(args);
 	}
 	
 	/**
 	 * @param args main函数入参: 
 	 * 		[-p] 打印最后的版本信息（DOS界面）
 	 * 		[-m] 版本管理（UI界面）
+	 * @return 当前版本信息
 	 */
-	private void _exec(String[] args) {
+	private String _exec(String[] args) {
 		boolean manage = true;
 		if(args != null && args.length >= 1) {
 			manage = "-m".equals(args[0]);
@@ -63,25 +65,28 @@ final public class VersionMgr {
 				manage = false;
 			}
 		}
-		
-		if(manage == true) {
-			manage();
-		} else {
-			print();
-		}
+		return (manage ? manage() : print());
 	}
 	
-	protected void manage() {
+	protected String manage() {
 		_VerMgrUI.getInstn()._view();
-		System.out.println(_VerMgrUI.getInstn().getCurVerInfo());
+		
+		String curVerInfo = _VerMgrUI.getInstn().getCurVerInfo();
+		System.out.println(curVerInfo);
+		return curVerInfo;
 	}
 	
-	protected void print() {
+	protected String print() {
+		String curVerInfo = "";
+		
 		if(_VerDBMgr.getInstn().initVerDB()) {
-			System.out.println(_VerDBMgr.getInstn().getCurVerInfo());
+			curVerInfo = _VerDBMgr.getInstn().getCurVerInfo();
+			System.out.println(curVerInfo);
+			
 		} else {
 			System.err.println("获取当前版本信息失败");
 		}
+		return curVerInfo;
 	}
 	
 }
