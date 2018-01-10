@@ -139,14 +139,6 @@ public class Config {
 		return xConf.getVal("/config/files/img");
 	}
 	
-	public String DRIVER_DIR() {
-		return xConf.getVal("/config/files/driver");
-	}
-	
-	public String ORC_DIR() {
-		return xConf.getVal("/config/files/orc");
-	}
-	
 	public String ROOM_PATH() {
 		return xConf.getVal("/config/files/room");
 	}
@@ -181,10 +173,6 @@ public class Config {
 	
 	public int CLEAR_CACHE_CYCLE() {
 		return xConf.getInt("/config/app/clearCacheCycle");
-	}
-	
-	public long COOKIE_TIME() {
-		return xConf.getLong("/config/app/cookieTime") * 1000;
 	}
 	
 	/**

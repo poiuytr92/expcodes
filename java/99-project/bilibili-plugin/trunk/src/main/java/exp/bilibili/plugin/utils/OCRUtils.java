@@ -5,8 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.media.OCR;
 
-import exp.bilibili.plugin.Config;
-
 
 /**
  * <PRE>
@@ -22,7 +20,7 @@ public class OCRUtils {
 	
 	private final static Logger log = LoggerFactory.getLogger(UIUtils.class);
 	
-	private final static String OCR_DIR = Config.getInstn().ORC_DIR();
+	private final static String OCR_DIR = "./conf/ocr/tesseract";
 	
 	private final static OCR _OCR = new OCR(OCR_DIR);
 	

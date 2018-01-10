@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.utils.test;
+package exp.bilibili.plugin.monitor;
 
 import exp.bilibili.plugin.utils.SafetyUtils;
 

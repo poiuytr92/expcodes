@@ -21,10 +21,10 @@ public class SafetyUtils {
 	private final static long DAY_MILLIS = 86400000L;
 	
 	/** 授权码文件 */
-	private final static String A_PATH = "./data/ac/authorization";
+	private final static String A_PATH = "./conf/ac/authorization";
 	
 	/** 授权时间证书 */
-	private final static String C_PATH = "./data/ac/certificate";
+	private final static String C_PATH = "./conf/ac/certificate";
 	
 	/** 私有化构造函数 */
 	protected SafetyUtils() {}
