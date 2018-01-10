@@ -361,44 +361,34 @@ public class ObjUtils {
 	public static Object invokeMethod(Object instnOrClazz, String methodName,
 			Object[] paramVals, Class[] valClazzs) {
 		if(instnOrClazz == null || StrUtils.isEmpty(methodName)) {
+			log.error("反射调用方法失败: [{}.{}()], 无效的类或方法.", 
+					instnOrClazz, methodName);
 			return null;
 		}
+		
 		Class clazz = (instnOrClazz instanceof Class ? 
 				(Class) instnOrClazz : instnOrClazz.getClass());
+		paramVals = (paramVals == null ? new Object[0] : paramVals);
+		Class[] valTypes = (valClazzs == null ? new Class[0] : valClazzs);
 		
-		Class[] valTypes = null;
-		if(paramVals != null && valClazzs != null) {
-			if(paramVals.length != valClazzs.length) {
-				log.error("反射调用方法失败: [{}.{}()], 入参与类型个数不一致.", 
+		if(paramVals.length > valTypes.length) {
+			if(valTypes.length <= 0) {
+				valTypes = new Class[paramVals.length];
+				for (int i = 0; i < paramVals.length; i++) {
+					valTypes[i] = (paramVals[i] != null ? 
+							paramVals[i].getClass() : Object.class);
+				}
+			} else {
+				log.error("反射调用方法失败: [{}.{}()], 入参与类型的个数不一致.", 
 						clazz, methodName);
 				return null;
-			} else {
-				valTypes = valClazzs;
-			}
-			
-		} else if(paramVals != null) {
-			valTypes = new Class[paramVals.length];
-			for (int i = 0; i < paramVals.length; i++) {
-				valTypes[i] = (paramVals[i] != null ? 
-						paramVals[i].getClass() : Object.class);
-			}
-			
-		} else if(valClazzs != null) {
-			valTypes = new Class[valClazzs.length];
-			for (int i = 0; i < valClazzs.length; i++) {
-				valTypes[i] = (valClazzs[i] != null ? 
-						valClazzs[i] : Object.class);
 			}
 		}
 		
 		Object result = null;
 		try {
 			Method method = clazz.getDeclaredMethod(methodName, valTypes);
-			method.setAccessible(true);	// 临时开放调用权限
-
-			if (paramVals == null && valTypes != null) {
-				paramVals = new Object[valTypes.length];
-			}
+			method.setAccessible(true);	// 临时开放调用权限(针对private方法)
 			result = method.invoke(instnOrClazz, paramVals);
 			
 		} catch (Exception e) {
