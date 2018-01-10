@@ -30,8 +30,6 @@
     <files caption="本地文件位置">
         <cookies caption="页面cookies"><![CDATA[./data/cookies]]></cookies>
         <img caption="图片缓存"><![CDATA[./data/img]]></img>
-        <driver caption="web驱动器"><![CDATA[./data/driver/]]></driver>
-        <orc caption="图像识别库"><![CDATA[./data/ocr/tesseract]]></orc>
         <room caption="房间号缓存"><![CDATA[./data/room/roomids.dat]]></room>
         <advs caption="副词词库"><![CDATA[./data/msg/advs.dat]]></advs>
         <nights caption="晚安敏感词库"><![CDATA[./data/msg/nights.dat]]></nights>
@@ -44,7 +42,6 @@
         <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">438</signRoomId>
         <waitElementTime caption="页面元素加载等待时间(s)">10</waitElementTime>
         <clearCacheCycle caption="清理内存周期(每抽奖N次清理一次)">10</clearCacheCycle>
-        <cookieTime caption="cookie有效时间(秒)">2592000</cookieTime>
     </app>
    
 </config>
