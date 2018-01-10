@@ -1,6 +1,15 @@
 package exp.bilibili.plugin.monitor;
 
+import java.util.Iterator;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentHelper;
+import org.dom4j.Element;
+
 import exp.libs.utils.encode.CryptoUtils;
+import exp.libs.utils.verify.RegexUtils;
+import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.warp.ver.VersionMgr;
 
 
 public class Monitor {
@@ -11,9 +20,13 @@ public class Monitor {
 		
 	private String appName;
 
-	private String appVersion = "";
+	private String appVersion;
 	
 	private static volatile Monitor instance;
+	
+	private Monitor() {
+		init();
+	}
 	
 	public static Monitor getInstn() {
 		if(instance == null) {
@@ -26,8 +39,41 @@ public class Monitor {
 		return instance;
 	}
 	
+	private void init() {
+		String verInfo =  VersionMgr.exec("-p");
+		this.appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
+		this.appVersion = RegexUtils.findFirst(verInfo, "版本号[ |]*([\\d|\\.]+)");
+	}
+	
+	@SuppressWarnings({ "unchecked" })
+	public boolean check() {
+		boolean isOk = false;
+		String source = HttpUtils.getPageSource(URL);
+		try {
+			Document doc = DocumentHelper.parseText(source);
+			Element html = doc.getRootElement();
+			Element body = html.element("body");
+			Element div = body.element("div").element("div");
+			Iterator<Element> tables = div.elementIterator();
+			while(tables.hasNext()) {
+				Element table = tables.next();
+				String name = table.attributeValue("id");
+				if(appName.equals(name)) {
+					System.out.println(table.asXML());
+					// FIXME
+					break;
+				}
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return isOk;
+	}
+	
 	public static void main(String[] args) {
-		System.out.println(URL);
+		Monitor.getInstn().check();
 	}
 	
 }

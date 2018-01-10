@@ -7,6 +7,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.cache.Browser;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.LogUtils;
@@ -22,14 +23,15 @@ public class TestStorm {
 	
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
-//		Browser.init(false);
-//		Browser.open(Config.getInstn().LOGIN_URL());
-//		Browser.recoveryCookies();
-//		Browser.backupCookies();
-//		final String cookies = Browser.COOKIES();
-//		Browser.quit();
+		Browser.init(false);
+		Browser.open(Config.getInstn().LOGIN_URL());
+		Browser.recoveryCookies();
+		Browser.backupCookies();
+		final String cookies = Browser.COOKIES();
+		System.out.println(cookies);
+		Browser.quit();
 		
-		final String cookies = "fts=1515473099; sid=5761i729; DedeUserID__ckMd5=7a2868581681a219; SESSDATA=b21f4571%2C1518065128%2Ca4a2c821; DedeUserID=31796320; LIVE_BUVID=AUTO1815154731332941; bili_jct=50d8d66fabbc3342e1266dbf8cc91f9e; buvid3=2A29CCC2-A148-4D18-BB26-9A0AD3AF3F4044870infoc; finger=540129ae; _dfcaptcha=51859f72f98239ffd4a3ccd051259b9f; LIVE_PLAYER_TYPE=1";
+//		final String cookies = "fts=1515566327; sid=i1ullm4k; DedeUserID__ckMd5=d1a0e260e1010310; SESSDATA=e764cf2a%2C1518158344%2Cbd05661e; DedeUserID=247056833; buvid3=A82B9293-C27E-4B59-8C14-A6B87C4EDC9531028infoc; bili_jct=17753d82b12a4306f50befd1de3de6a0; LIVE_BUVID=AUTO2815155663477917; finger=540129ae; _dfcaptcha=2735e43373995297a27f1d434756e4b1";
 		final String url = Config.getInstn().STORM_CHECK_URL();
 		Map<String, String> requests = new HashMap<String, String>();
 		
