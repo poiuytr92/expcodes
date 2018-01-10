@@ -435,6 +435,7 @@ public class ObjUtils {
 			oos.writeObject(o);
 			oos.flush();
 			oos.close();
+			isOk = true;
 			
 		} catch (Exception e) {
 			log.error("序列化对象到外存文件失败: [{}]", outFilePath, e);
