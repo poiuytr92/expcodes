@@ -26,6 +26,7 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.back.WebSockClient;
 import exp.bilibili.plugin.envm.ChatColor;
+import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.io.FileUtils;
@@ -62,9 +63,6 @@ public class AppUI extends MainWindow {
 	private final static int HEIGHT = 600;
 	
 	private final static int CHAT_LIMIT = 20;
-	
-	/** 是否为管理员使用的版本 */
-	private static boolean IS_ADMIN;
 	
 	private JButton defaultBtn;
 	
@@ -150,12 +148,11 @@ public class AppUI extends MainWindow {
 	 * @param args main入参
 	 */
 	public static void checkIdentity(String[] args) {
-		IS_ADMIN = false;
 		
 		// 管理员: 无条件开启所有功能
 		if(args == null || args.length <= 0) {	
 			if(FileUtils.exists("./doc/icon.ico")) {	// 发布的项目是不存在doc文件夹的, 避免管理员权限泄露
-				IS_ADMIN = true;
+				Config.setAdmin();
 				
 			} else {
 				SwingUtils.warn("很明显你是假的管理员");
@@ -173,7 +170,9 @@ public class AppUI extends MainWindow {
 			} else {
 				
 				// 主播用户在校验通过后开启所有功能
-				IS_ADMIN = (args.length > 1 ? true : false);
+				if(args.length > 1) {
+					Config.setAdmin();
+				}
 			}
 		}
 	}
@@ -375,7 +374,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(IS_ADMIN == false) {
+				if(Config.IS_ADMIN() == false) {
 					SwingUtils.warn("非主播用户没有这个技能哦::>_<::");
 					return;
 				}
@@ -494,7 +493,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(isLogined() == true) {
-					SwingUtils.warn("请不要在登陆状态下 [清除登陆信息]");
+					SwingUtils.warn("登陆状态下无法 [清除登陆信息]");
 					return;
 				}
 				
@@ -559,7 +558,7 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [答谢姬] 哦~");
 					return;
 					
-				} else if(IS_ADMIN == false) {
+				} else if(Config.IS_ADMIN() == false) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [答谢姬] 哦~");
 					return;
 				}
@@ -588,7 +587,7 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [公告姬] 哦~");
 					return;
 					
-				} else if(IS_ADMIN == false) {
+				} else if(Config.IS_ADMIN() == false) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [公告姬] 哦~");
 					return;
 				}
@@ -617,7 +616,7 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [小call姬] 哦~");
 					return;
 					
-				} else if(IS_ADMIN == false) {
+				} else if(Config.IS_ADMIN() == false) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [小call姬] 哦~");
 					return;
 				}
@@ -646,7 +645,7 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [晚安姬] 哦~");
 					return;
 					
-				} else if(IS_ADMIN == false) {
+				} else if(Config.IS_ADMIN() == false) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [晚安姬] 哦~");
 					return;
 				}
@@ -694,7 +693,7 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(IS_ADMIN == false) {
+				if(Config.IS_ADMIN() == false) {
 					return;
 				}
 				
@@ -708,7 +707,7 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(IS_ADMIN == false) {
+				if(Config.IS_ADMIN() == false) {
 					return;
 				}
 				
@@ -732,6 +731,7 @@ public class AppUI extends MainWindow {
 		LoginMgr.getInstn()._stop();	
 		WebBot.getInstn()._stop();
 		MsgKwMgr.getInstn().clear();
+		SafetyMonitor.getInstn()._stop();
 		
 		Browser.quit();
 	}

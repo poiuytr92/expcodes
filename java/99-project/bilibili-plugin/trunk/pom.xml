@@ -45,71 +45,6 @@
 	<!-- 项目依赖 -->
 	<dependencies>
 	
-	    <dependency>
-		  <groupId>com.sun.media</groupId>
-		  <artifactId>jai-imageio</artifactId>
-		  <version>1.1-alpha</version>
-		  <classifier>alpha</classifier>
-		</dependency>
-
-	    <dependency>
-		  <groupId>org.java-websocket</groupId>
-		  <artifactId>Java-WebSocket</artifactId>
-		  <version>1.3.4</version>
-		</dependency>
-		
-		<dependency>
-          <groupId>org.seleniumhq.selenium</groupId>
-          <artifactId>selenium-java</artifactId>
-          <version>2.53.0</version>
-          <exclusions>
-            <exclusion>
-	          <groupId>org.seleniumhq.selenium</groupId>
-	          <artifactId>selenium-chrome-driver</artifactId>
-	        </exclusion>
-            <exclusion>
-	          <groupId>org.seleniumhq.selenium</groupId>
-	          <artifactId>selenium-firefox-driver</artifactId>
-	        </exclusion>
-	        <exclusion>
-	          <groupId>org.seleniumhq.selenium</groupId>
-	          <artifactId>selenium-ie-driver</artifactId>
-	        </exclusion>
-	        <exclusion>
-	          <groupId>org.seleniumhq.selenium</groupId>
-	          <artifactId>selenium-safari-driver</artifactId>
-	        </exclusion>
-	        <exclusion>
-	          <groupId>org.seleniumhq.selenium</groupId>
-	          <artifactId>selenium-edge-driver</artifactId>
-	        </exclusion>
-	      </exclusions>
-        </dependency>
-        
-        <dependency>
-		  <groupId>com.codeborne</groupId>
-		  <artifactId>phantomjsdriver</artifactId>
-		  <version>1.2.1</version>
-		  <exclusions>
-            <exclusion>
-	          <groupId>org.seleniumhq.selenium</groupId>
-	          <artifactId>selenium-java</artifactId>
-	        </exclusion>
-	      </exclusions>
-		</dependency>
-		
-		<dependency>
-		  <groupId>org.seleniumhq.selenium</groupId>
-		  <artifactId>selenium-chrome-driver</artifactId>
-		  <version>2.44.0</version>
-		</dependency>
-
-		<dependency>
-		  <groupId>org.seleniumhq.selenium</groupId>
-		  <artifactId>selenium-htmlunit-driver</artifactId>
-		  <version>2.44.0</version>
-		</dependency>
-
 		<!-- 经验库 -->
     	<dependency>
 		  <groupId>exp.libs</groupId>
@@ -217,6 +152,81 @@
 	          <artifactId>soapui-xmlbeans</artifactId>
 	        </exclusion>
 	      </exclusions>
+		</dependency>
+		
+		<!-- 程序校验 -->
+		<dependency>
+			<groupId>exp.certificate</groupId>
+			<artifactId>exp-certificate</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
+		
+		<!-- OCR文字识别 -->
+		<dependency>
+		  <groupId>com.sun.media</groupId>
+		  <artifactId>jai-imageio</artifactId>
+		  <version>1.1-alpha</version>
+		  <classifier>alpha</classifier>
+		</dependency>
+
+		<!-- WEB-SOCKET -->
+	    <dependency>
+		  <groupId>org.java-websocket</groupId>
+		  <artifactId>Java-WebSocket</artifactId>
+		  <version>1.3.4</version>
+		</dependency>
+		
+		<!-- WEBKIT -->
+		<dependency>
+          <groupId>org.seleniumhq.selenium</groupId>
+          <artifactId>selenium-java</artifactId>
+          <version>2.53.0</version>
+          <exclusions>
+            <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-chrome-driver</artifactId>
+	        </exclusion>
+            <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-firefox-driver</artifactId>
+	        </exclusion>
+	        <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-ie-driver</artifactId>
+	        </exclusion>
+	        <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-safari-driver</artifactId>
+	        </exclusion>
+	        <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-edge-driver</artifactId>
+	        </exclusion>
+	      </exclusions>
+        </dependency>
+        
+        <dependency>
+		  <groupId>com.codeborne</groupId>
+		  <artifactId>phantomjsdriver</artifactId>
+		  <version>1.2.1</version>
+		  <exclusions>
+            <exclusion>
+	          <groupId>org.seleniumhq.selenium</groupId>
+	          <artifactId>selenium-java</artifactId>
+	        </exclusion>
+	      </exclusions>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.seleniumhq.selenium</groupId>
+		  <artifactId>selenium-chrome-driver</artifactId>
+		  <version>2.44.0</version>
+		</dependency>
+
+		<dependency>
+		  <groupId>org.seleniumhq.selenium</groupId>
+		  <artifactId>selenium-htmlunit-driver</artifactId>
+		  <version>2.44.0</version>
 		</dependency>
 		
 		<!-- 单元测试 -->

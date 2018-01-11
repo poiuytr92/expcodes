@@ -22,6 +22,9 @@ import exp.libs.warp.conf.xml.XConfigFactory;
  */
 public class Config {
 	
+	/** 是否为管理员使用的版本 */
+	private static boolean IS_ADMIN = false;
+	
 	public final static String DEFAULT_CHARSET = Charset.UTF8;
 	
 	/** 用户代理（浏览器头标识）: 假装是谷歌，避免被反爬   （浏览器头可以用Fiddler抓包抓到）*/
@@ -49,6 +52,14 @@ public class Config {
 			}
 		}
 		return instance;
+	}
+	
+	public static boolean IS_ADMIN() {
+		return IS_ADMIN;
+	}
+	
+	public static void setAdmin() {
+		IS_ADMIN = true;
 	}
 	
 	public String HOME_URL() {

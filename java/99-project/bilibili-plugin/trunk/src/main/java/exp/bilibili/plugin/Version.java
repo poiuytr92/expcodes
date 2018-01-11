@@ -25,19 +25,6 @@ public class Version {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
-		
-		// 友爱社签到升级
-		
-		// FIXME 检索页面限制版本、限制用户ID(用户名)、增加有效期
-		
-		// 有效的版本号可以有多个，用于作为全局开关限制所有人
-		// 若版本号有效：
-			// 若公版时间未过期，则可用
-			// 否则若私人时间未过期，则可用
-			// 都则不可用
-		
-		// 否则所有人不可用
-		
 	}
 	
 }

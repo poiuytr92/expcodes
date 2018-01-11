@@ -110,7 +110,7 @@ public class SafetyUtils {
 	 * 从文件还原授权时间
 	 * @return 授权截止时间
 	 */
-	private static long fileToCertificate() {
+	public static long fileToCertificate() {
 		String certificate = FileUtils.read(C_PATH, Charset.ISO);
 		return NumUtils.toLong(CryptoUtils.deDES(certificate), 0);
 	}

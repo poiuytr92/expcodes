@@ -4,7 +4,7 @@ import exp.bilibili.plugin.utils.SafetyUtils;
 
 /**
  * <PRE>
- * 生成授权码文件
+ * 生成授权信息
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -12,13 +12,19 @@ import exp.bilibili.plugin.utils.SafetyUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class TestSafetyUtils {
+public class GenerateSafetyInfo {
 
 	public static void main(String[] args) {
-		
-		// 生成授权码文件
-		int day = 45;
-		System.out.println(SafetyUtils.certificateToFile(day));
+		updatePrivateTime();
+	}
+	
+	/**
+	 * 更新对私授权时间
+	 */
+	public static void updatePrivateTime() {
+		int day = 35;	// 授权时间(从当前开始往后推N天)
+		String code = SafetyUtils.certificateToFile(day);	// 授权码
+		System.out.println(code);
 	}
 	
 }

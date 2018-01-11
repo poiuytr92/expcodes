@@ -68,12 +68,15 @@ public class LoginMgr extends LoopThread {
 	
 	private boolean isLogined;
 	
+	private String loginUser;
+	
 	private static volatile LoginMgr instance;
 	
 	private LoginMgr() {
 		super("登陆二维码刷新器");
 		this.loopCnt = LOOP_LIMIT;
 		this.isLogined = false;
+		this.loginUser = "";
 	}
 	
 	public static LoginMgr getInstn() {
@@ -85,6 +88,10 @@ public class LoginMgr extends LoopThread {
 			}
 		}
 		return instance;
+	}
+	
+	public String getLoginUser() {
+		return loginUser;
 	}
 	
 	@Override
@@ -219,7 +226,8 @@ public class LoginMgr extends LoopThread {
 		Browser.backupCookies();	// 保存登录成功的cookies到外存, 以备下次使用
 		Browser.quit();	// 退出浏览器(此浏览器是加载图片的, 不加载图片的浏览器后面再延迟启动)
 		
-		AppUI.getInstn().markLogin(MsgSender.queryUsername());	// 在界面标记已登陆
+		loginUser = MsgSender.queryUsername();	// 获取当前登陆的用户名
+		AppUI.getInstn().markLogin(loginUser);	// 在界面标记已登陆
 	}
 	
 	/**

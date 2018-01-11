@@ -1,4 +1,4 @@
-package exp.bilibili.plugin;
+package exp.bilibili.plugin.cache;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,8 +7,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.cache.Browser;
-import exp.bilibili.plugin.cache.RoomMgr;
+import exp.bilibili.plugin.Config;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
