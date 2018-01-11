@@ -20,6 +20,8 @@ import exp.libs.utils.os.ThreadUtils;
 @SuppressWarnings({ "serial", "restriction" })
 public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 
+	private Thread _this;
+	
 	protected NoticeWindow() {
 		super("NoticeWindow");
 	}
@@ -55,7 +57,9 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 	 */
 	public void _show() {
 		_view();	// 显示通知消息
-		new Thread(this).start();	// 渐隐窗体
+		
+		_this = new Thread(this);
+		_this.start();	// 渐隐窗体
 	}
 	
 	@Override
@@ -73,6 +77,19 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 		}
 		
 		_hide();	// 销毁窗体
+	}
+	
+	/**
+	 * 阻塞等待渐隐关闭过程
+	 */
+	public void _join() {
+		if(_this == null) {
+			return;
+		}
+		
+		try {
+			_this.join();
+		} catch (Exception e) {}
 	}
 	
 }
