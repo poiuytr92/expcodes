@@ -1,0 +1,42 @@
+Request URL:http://api.live.bilibili.com/activity/v1/task/receive_award
+Request Method:POST
+Status Code:200 OK
+Remote Address:36.248.28.7:80
+Response Headers
+view source
+Access-Control-Allow-Credentials:true
+Access-Control-Allow-Headers:Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type
+Access-Control-Allow-Methods:GET,POST,OPTIONS
+Access-Control-Allow-Origin:http://link.bilibili.com
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Length:42
+Content-Type:application/json
+Date:Thu, 11 Jan 2018 12:08:38 GMT
+Expires:Thu, 11 Jan 2018 12:08:37 GMT
+L:v
+Server:swoole-http-server
+Set-Cookie:l=v
+X-Cache:BYPASS from cn-fjfz-cu-w-02.hdslb.com
+X-Trace-Id:af519ba6cc3aedf
+Request Headers
+view source
+Accept:application/json, text/plain, */*
+Accept-Encoding:gzip, deflate
+Accept-Language:zh-CN,zh;q=0.8,en;q=0.6
+Connection:keep-alive
+Content-Length:69
+Content-Type:application/x-www-form-urlencoded; charset=UTF-8
+Cookie:sid=8elb18h6; fts=1503182043; UM_distinctid=15e190d0c1199-043296bc4d1c16-414a0229-1fa400-15e190d0c12148; pgv_pvi=5198061568; rpdid=oqqsioskoqdoswkxsqqxw; LIVE_BUVID=58c76905d29d011b993b790132f9742e; LIVE_BUVID__ckMd5=47f66bfea6569d8a; biliMzIsnew=1; biliMzTs=0; buvid3=D7D00281-D075-4E98-9FA1-80F6AEA8AE5826553infoc; DedeUserID=1650868; DedeUserID__ckMd5=686caa22740f2663; SESSDATA=e6e4328c%2C1515942922%2C298a243b; bili_jct=d15e5fbe89123bf8904a106f75e6527d; _qddaz=QD.2wiuv2.u684hf.jbdtvvxc; user_face=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Fface%2Fbbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg; finger=81df3ec0; im_seqno_1650868=12433; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1515600384,1515602456,1515605843,1515670087; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1515672471; _dfcaptcha=23b23cec8c0c1ec5898b88d237e35fec
+Host:api.live.bilibili.com
+Origin:http://link.bilibili.com
+Referer:http://link.bilibili.com/p/center/index
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+Form Data
+view source
+view URL encoded
+task_id:double_watch_task
+csrf_token:d15e5fbe89123bf8904a106f75e6527d
+
+
+{"code":0,"msg":"","message":"","data":[]}

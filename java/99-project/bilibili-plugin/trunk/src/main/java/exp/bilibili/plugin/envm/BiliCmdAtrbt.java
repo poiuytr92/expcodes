@@ -96,4 +96,6 @@ public class BiliCmdAtrbt {
 	
 	public final static String key = "key";
 	
+	public final static String hasJoin = "hasJoin";
+	
 }

@@ -90,6 +90,10 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/live");
 	}
 	
+	public String LIVE_LIST_URL() {
+		return xConf.getVal("/config/biliUrls/livelist");
+	}
+	
 	public String SSL_HOST() {
 		return xConf.getVal("/config/biliUrls/ssl");
 	}

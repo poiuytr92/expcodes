@@ -1,0 +1,539 @@
+<!--
+    Bilibili Live Area By LancerComet at 14:19, 2016.05.06.
+    # Carry Your World #
+    ---
+    分区列表页.
+-->
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+    <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+<meta name="renderer" content="webkit">
+<link rel="shortcut icon" href="//www.bilibili.com/favicon.ico">
+<meta name="description" content="哔哩哔哩（bilibili）直播是国内首家关注 ACG 直播的互动平台。它不一定最宅，但一定宅得最萌；不一定最污，但是一定污得最优雅。游戏，手办绘画，Cos 等想了解二次元的你一定不能错过 bilibili 直播。弹幕，礼物，道具，活动多种玩法，bilibili 直播让您拉进与小伙伴们之间的距离。">
+<meta name="keywords" content="直播,B站,生放送,bilibili,哔哩哔哩,哔哩哔哩直播,B站直播,热门游戏直播,游戏直播,高清游戏直播,电子竞技直播,lol直播,cf直播,dota2直播,美女直播,弹幕,字幕,动漫,动漫音乐,游戏">
+<meta name="application-name" content="哔哩哔哩生放送"/>
+<meta name="theme-color" content="#4393E2">
+<meta name="msapplication-TileColor" content="#4393E2">
+    <title>哔哩哔哩直播-分区:全部直播</title>
+    <!--[if lt IE 9]>
+        <script src="http://static.hdslb.com/live-static/libs/html5shiv/html5-r29.min.js"></script>
+    <![endif]-->
+    <link rel="stylesheet" href="http://static.hdslb.com/live-static/live-area/live-area.bundle.min.css?20171116172700">
+    <script type="text/javascript" src="http://static.hdslb.com/live-static/common/javascripts/mobile-jumping.js?20171116172700"></script>
+    <script>
+        LIVE_AREA = "all";
+        var $_SENDREC_AREA = "all";
+    </script>
+</head>
+
+<body class="live-area-body top-nav-light-theme">
+
+    <!-- Top Nav. | 顶部导航. -->
+    <div class="live-top-nav-ctnr no-hidden" ms-controller="liveTopNavCtrl" ms-class="no-opacity:!topNavOpacity.status" ms-class-1="transition-dot-4: loadFinished">
+
+    <!-- Top Nav body in the middle. | 顶部导航条居中本体. -->
+    <div class="live-top-nav p-relative m-auto clear-float">
+
+        <!-- 左侧部分: Logo, Link item. -->
+        <div class="left-part float-left">
+            <div class="live-left-nav-menu" data-status="menu"></div>
+            <a href="/"><div class="nav-logo dp-inline-block"></div></a>
+            <div class="nav-link-ctnr dp-inline-block">
+                <div class="nav-link-item area-navigator" ms-mouseenter="topNavOpacity.disable" ms-mouseleave="topNavOpacity.enable">
+                    <a href="/" class="link-color"><div class="content-ctnr"><i class="live-icon live-site"></i><span>直播</span></div></a>
+                    <div class="live-top-nav-panel live-top-hover-panel" ms-class="no-opacity:!topNavOpacity.status">
+                        <a href="http://live.bilibili.com/subject"><div class="nav-item"><i class="live-top-nav-icon moe"></i>推荐主播</div></a>
+                        <a href="http://live.bilibili.com/pages/area/draw"><div class="nav-item"><i class="live-top-nav-icon draw"></i>绘画专区</div></a>
+                        <a href="http://live.bilibili.com/pages/area/ent"><div class="nav-item"><i class="live-top-nav-icon sing-dance"></i>唱见舞见</div></a>
+                        <a href="http://live.bilibili.com/pages/area/ent"><div class="nav-item"><i class="live-top-nav-icon otaku"></i>御宅文化</div></a>
+                        <a href="http://live.bilibili.com/pages/area/ent"><div class="nav-item"><i class="live-top-nav-icon ent-life"></i>生活娱乐</div></a>
+                        <a href="http://live.bilibili.com/single"><div class="nav-item"><i class="live-top-nav-icon game-single"></i>单机联机</div></a>
+                        <a href="http://live.bilibili.com/online"><div class="nav-item"><i class="live-top-nav-icon game-online"></i>网络游戏</div></a>
+                        <a href="http://live.bilibili.com/e-sports"><div class="nav-item"><i class="live-top-nav-icon e-sport"></i>电子竞技</div></a>
+                        <a href="http://live.bilibili.com/mobile-game"><div class="nav-item"><i class="live-top-nav-icon mobile-game"></i>手游直播</div></a>
+                        <a href="http://live.bilibili.com/pages/area/ent"><div class="nav-item"><i class="live-top-nav-icon movie"></i>映评馆</div></a>
+                        <a href="http://live.bilibili.com/round"><div class="nav-item"><i class="live-top-nav-icon round"></i>视频轮播</div></a>
+                        <a href="http://live.bilibili.com/all"><div class="nav-item full-size">热门直播</div></a>
+                    </div>
+                </div>
+                <a href="http://www.bilibili.com" target="_blank">
+                    <div class="nav-link-item">
+                        <i class="live-icon main-site"></i>
+                        <span>主站</span>
+                    </div>
+                </a>
+                <a href="http://live.bilibili.com/p/eden/rank" target="_blank">
+                    <div class="nav-link-item">
+                        <i class="live-icon rank"></i>
+                        <span>排行榜</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 右侧部分: Search, User Panel, Button -->
+        <div class="right-part float-right clear-float">
+
+            <!-- Download Link. | 下载链接. -->
+                <div class="download-link p-relative float-left">
+                    <i class="live-icon download v-middle"></i>
+                    <span class="v-middle">下载</span>
+
+                    <!-- Hover 面板. -->
+                    <div class="hover-panel live-hover-panel arrow-top p-absolute scale-in-ease">
+                        <a href="//link.bilibili.com/p/eden/download" target="_blank">
+                            <button class="live-btn live-hime-ios default w-100">bilibili link</button>
+                        </a>
+                        <div class="qr-code p-absolute move-in-right" data-type="liveHimeIOS">
+                            <a href="//link.bilibili.com/p/eden/download" target="_blank">
+                                <img src="//static.hdslb.com/live-static/common/images/qrcode/link-app.png" alt="download-code"/>
+                            </a>
+                        </div>
+                        <a href="//live.bilibili.com/liveHime" target="_blank">
+                            <button class="live-btn bilibili-app default w-100">bilibili直播姬</button>
+                        </a>
+                        <div data-type="bilibiliAPP">
+
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Search Bar. -->
+            <div class="search-bar-ctnr dp-inline-block">
+                <form action="//search.bilibili.com/live" name="search-form" id="top-nav-search-form" target="_blank">
+                    <input type="text" name="keyword" class="top-nav-input" id="top-nav-search" title="搜索房间或播主" aria-label="搜索房间或播主" placeholder="搜索房间或播主..." maxlength="50" role="textbox">
+                    <input type="hidden" name="from_source" value="livetop_search">
+                    <button type="submit" id="top-nav-submit" class="top-nav-submit" aria-label="搜索房间或播主" title="_(:3 」∠)_" role="search">
+                        <i class="live-icon search"></i>
+                    </button>
+                    <div class="top-nav-search-checklen pointer"></div>
+                </form>
+            </div>
+
+
+            <div class="user-content float-right">
+                <!-- User Login Button. | 登录按钮. -->
+                <div class="user-login-btns-ctrl dp-inline-block clear-float v-top float-right" ms-if="!logined">
+                    <div class="blue-btn-ctnr float-left">
+                        <a class="top-nav-login-btn first" href="https://secure.bilibili.com/login?sns=qq" target="_blank"><i class="live-icon qq"></i></a>
+                        <a class="top-nav-login-btn middle" href="https://secure.bilibili.com/login?sns=weibo" target="_blank"><i class="live-icon weibo"></i></a>
+                        <a class="top-nav-login-btn last" href="javascript: void(0)" ms-click="liveLogin">登录</a>
+                        <a class="top-nav-login-btn register" href="http://www.bilibili.com/register">注册</a>
+                    </div>
+                </div>
+
+                <!-- Logged In Doms Container. | 已登录节点. -->
+                <div class="user-logined-panel-ctnr float-right dp-none" ms-if="logined" ms-class="force-show: logined">
+
+                    <!-- User Info Panel. | 用户信息面板. -->
+                    <div class="user-avatar dp-inline-block" ms-mouseenter="userPanel.mouseEnter" ms-mouseleave="userPanel.mouseLeave">
+
+                        <!-- User Avatar Image. -->
+                        <a href="//link.bilibili.com/p/center/index" target="_blank" class="user-avatar-link" title="点击进入直播中心  (=・ω・=)" aria-label="进入直播个人中心" role="button">
+                            <div id="top-nav-user-avatar" class="user-avatar-image transition-dot-4" ms-css-background-image="panelData.avatar" ms-class="active:userPanel.visibility"></div>
+                        </a>
+
+                        <!-- Msg Hinter. -->
+                        <div id="top-nav-msg-hinter" class="msg-hinter" ms-visible="userPanel.unreadMsg"></div>
+
+                        <!-- Info Panel. -->
+                        <div id="top-nav-user-panel" class="user-avatar-info-panel live-top-hover-panel transition-1 dp-none" ms-visible="userPanel.visibility" ms-class-1="no-opacity:!topNavOpacity.status">
+
+                            <!-- Username. -->
+                            <div class="section-block username-info text-center">
+                                <h4 class="username-text-ctnr">
+                                    <span class="username-text" ms-text="panelData.username"></span>
+                                    <a ms-attr-href="[[panelData.vipIconLink]]" target="_blank" ms-click="userPanel.vipIconClick">
+                                        <i class="live-icon vip-icon p-absolute" ms-class="vip-gray:!panelData.isVip" ms-class-1="vip-color:panelData.isVip" ms-class-2="year:panelData.isSVip" ms-class-3="month:panelData.isVip && !panelData.isSVip"></i>
+                                    </a>
+                                </h4>
+                            </div>
+
+                            <!-- User Level. -->
+                            <div class="section-block user-level text-center" ms-class="on-hover:levelPanel.onhover" ms-mouseenter="levelPanel.mouseEnter" ms-mouseleave="levelPanel.mouseLeave">
+                                <div class="user-level-item user-current-level" ms-text="panelData.userLevel.current">--</div>
+                                <div class="user-level-item level-progress">
+                                    <div class="progress-bar transition-dot-4" ms-data-progress="panelData.userLevel.progressData" ms-css-width="panelData.userLevel.progress"></div>
+                                </div>
+                                <div class="user-level-item user-next-level" ms-text="panelData.userLevel.next">--</div>
+
+                                <!-- Level Hint Panel. -->
+                                <div class="level-hint-panel" ms-class="no-opacity:!topNavOpacity.status">
+                                    <p>当前等级：<span class="user-current-level" ms-text="panelData.userLevel.current">--</span></p>
+                                    <p>当前排名：<span class="user-current-ranking" ms-text="panelData.ranking">--</span></p>
+                                    <p>升级还需经验：<span class="user-rest-experience" ms-text="panelData.restExperience">--</span></p>
+                                    <hr>
+                                    <p class="level-description">经验值通过投喂道具、观看直播时长提升。每1个瓜子提升1点经验，每5分钟提升3000点经验；老爷身份，在观看直播时经验翻1倍。</p>
+                                    <p class="text-center more-info">
+                                        <a href="/news/detail/52" target="_blank" class="detail-link no-decoration transition-dot-2 active-no-transition">查看等级说明</a>
+                                    </p>
+                                </div>
+
+                            </div>
+
+                            <!-- Seeds Info. -->
+                            <div class="section-block seeds-info">
+                                <p class="text-node"><i class="live-icon gold-seed"></i><span>金瓜子：</span><span class="seed-gold-text" ms-text="panelData.seeds.gold" ms-data-seed-gold="panelData.seeds.gold">--</span></p>
+                                <p class="text-node"><i class="live-icon silver-seed"></i><span>银瓜子：</span><span class="seed-silver-text" ms-text="panelData.seeds.silver" ms-data-seed-silver="panelData.seeds.silver">--</span></p>
+                                <p class="text-node"><i class="live-icon achieve-seed"></i><span>成就值：</span><span class="seed-achieve-text" ms-text="panelData.seeds.achieve" ms-data-seed-achieve="panelData.seeds.achieve">--</span></p>
+                            </div>
+
+                            <hr class="section-block">
+
+                            <!-- Links. -->
+                            <div class="section-block link-ctnr">
+                                <a href="//link.bilibili.com/p/center/index" class="link-item" target="_blank"><i class="live-icon live-center"></i>直播中心</a>
+                                <a href="http://message.bilibili.com" id="my-message-button" class="link-item" target="_blank" ms-click="userPanel.msgClick"><i class="live-icon notify"></i>
+                                    <span>消息</span>
+                                    <span class="unread-msg-count active" ms-class="active:userPanel.unreadMsg" ms-visible="userPanel.unreadMsg" ms-text="userPanel.unreadMsgCount" ms-data-unread-msg="userPanel.unreadMsgCount">--</span>
+                                </a>
+                            </div>
+
+                            <!-- Logout Button. -->
+                            <div class="section-block logout-btn">
+                                <a href="https://account.bilibili.com/login?act=exit" id="top-nav-logout-link" class="link-item full" ms-click="clearAvatar">退出</a>
+                            </div>
+
+                            <!-- Loading Progress. -->
+                            <div class="loading-progress" ms-if="userPanel.showProgress" role="progressbar" title="你发现了神秘小电视 (⁄ ⁄•⁄ω⁄•⁄ ⁄)">
+                                <div class="progress-picture"></div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Do Live Button. | 我要直播按钮. -->
+                    <div class="live-action-btn-ctnr">
+                        <a href="javascript:void(0)" ms-click="enterMyRoom" target="_self" class="live-action-btn dp-inline-block transition-dot-2" aria-label="我要直播" title="进入我的直播间 (=・ω・=)" role="button">
+                            <div><i class="live-icon broadcast"></i></div>
+                            <div>我要直播</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- Main Content. | 主体容器. -->
+    <div class="live-area-main-ctnr m-auto">
+
+        <!-- Header Section. | 头部节点. -->
+        <header id="header-section" class="header-section" ms-controller="headerCtrl">
+            <div class="f-clear">
+                <!--　标题容器.　-->
+                <div class="title-row f-left" ms-if="areaTitle">
+                    <div class="area-title" ms-text="areaTitle"></div>
+                    <span class="dynamic-count" ms-visible="liveArea !== 'round'" ms-text="onLiveCount" ms-attr-title="结果相关约[[onLiveCount]]个正在直播">--</span>
+                </div>
+
+                <!-- 标签容器. -->
+                <div class="tags-ctnr dp-none f-right" ms-visible="liveArea !== 'all' && liveArea !== 'subject' && liveArea !== 'round'">
+                    <ul class="tags-list p-relative f-clear">
+                        <li class="live-tag active">全部标签</li>
+                        <a ms-repeat-item="tagList" ms-attr-href="'//search.bilibili.com/live?from_source=livelist_tag&keyword=' + item" target="_blank"><li class="live-tag" ms-text="item" ms-class="active: selectedTag === item"></li></a>
+                    </ul>
+                    <div class="loading-progress" role="progress" ms-visible="showProgress">
+                        <div class="progress-picture"></div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Ad Banner. | 广告位. -->
+            <a ms-attr-href="liveAD.link" target="_blank" ms-visible="liveAD.link || liveAD.image"><div class="live-ad-full" ms-css-background-image="'url(' + liveAD.image + ')'"></div></a>
+        </header>
+
+        <!-- Green hand Anchor. | 新人主播. -->
+        <section id="green-hands-section" class="green-hands-section main-section move-in-left" ms-controller="greenHandsCtrl" ms-visible="liveArea !== 'subject' && liveArea !== 'round'">
+
+            <div class="title-row f-clear none-select">
+                <h2 class="section-title f-left">新人主播</h2>
+                <div class="section-refresher move-in-left f-right" role="button" ms-click="refreshList" ms-visible="allowCtrl && !hideRefreshBtn">
+                    <a class="bili-link">换一批<i class="live-icon-small refresh-sm"></i></a>
+                </div>
+            </div>
+
+            <ul class="video-list f-clear" role="list">
+                <a class="move-in-left" ms-click="sendrec(item.link)" ms-repeat-item="roomList" ms-attr-href="item.link ? item.link : 'javascript: void(0)'" ms-attr-target="item.link ? '_blank' : void(0)">
+                    <li class="video-list-item" ms-class="index-[[$index + 1]]" ms-class-1="no-hover: !item.link">
+                        <div class="video-preview move-in-left" ms-css-background-image="item.cover ? 'url(' + bfsImgLink(item.cover) + ')' : void(0)">
+                            <div class="hover-panel w-100 h-100 p-absolute p-zero">
+                                <div class="bg-merge w-100 b-circle p-absolute p-zero ts-dot-6"></div>
+                                <div class="avatar b-circle p-absolute bg-cover" ms-css-background-image="item.face ? 'url(' + item.face + ')' : void(0)">
+                                    <i class="live-icon on-live p-absolute"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="video-title" ms-attr-title="item.title" ms-text="item.title" ms-visible="item.title"></h5>
+                        <div class="anchor-info-ctnr">
+                            <span class="anchor-name" ms-visible="item.uname">
+                                <span ms-attr-title="item.uname" ms-text="item.uname"></span>
+                            </span>
+
+                            <span class="viewers-count" ms-visible="typeof item.online !== 'undefined'">
+                                <i class="live-icon-small anchor2"></i>
+                                <span ms-text="item.online">0</span>
+                            </span>
+
+
+                        </div>
+                    </li>
+                </a>
+                <div class="loading-progress" role="progress" ms-visible="showProgress">
+                    <div class="progress-picture"></div>
+                </div>
+            </ul>
+
+        </section>
+
+        <!-- Recommendation. | 推荐主播. -->
+        <section id="area-recommendation-section" class="area-recommendation-section main-section move-in-left" ms-controller="recommendCtrl" ms-visible="liveArea !== 'subject' && liveArea !== 'round'">
+
+            <div class="title-row f-clear none-select">
+                <h2 class="section-title f-left area-recommendation">专区推荐</h2>
+                <div class="section-refresher f-right dp-none move-in-left" role="button" ms-click="refreshList" ms-visible="allowCtrl && dynamic.displayCount > 0">
+                    <a class="bili-link">有 <span class="live-count-text motion cyan-text" ms-text="dynamic.displayCount"></span> 条新动态<i class="live-icon-small refresh-sm"></i></a>
+                </div>
+            </div>
+
+            <ul class="video-list p-relative f-clear" role="list">
+                <a class="move-in-left" ms-click="sendrec(item.link)" ms-repeat-item="roomList" ms-attr-href="item.link ? item.link : 'javascript: void(0)'" ms-attr-target="item.link ? '_blank' : void(0)">
+                    <li class="video-list-item" ms-class="index-[[$index + 1]]" ms-class-1="no-hover: !item.link">
+                        <div class="video-preview move-in-left" ms-css-background-image="item.cover ? 'url(' + bfsImgLink(item.cover) + ')' : void(0)">
+                            <div class="hover-panel w-100 h-100 p-absolute p-zero">
+                                <div class="bg-merge w-100 b-circle p-absolute p-zero ts-dot-6"></div>
+                                <div class="avatar b-circle p-absolute bg-cover" ms-css-background-image="item.face ? 'url(' + item.face + ')' : void(0)">
+                                    <i class="live-icon on-live p-absolute"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="video-title" ms-attr-title="item.title" ms-text="item.title" ms-visible="item.title"></h5>
+                        <div class="anchor-info-ctnr">
+                            <span class="anchor-name" ms-visible="item.uname">
+                                <span ms-attr-title="item.uname" ms-text="item.uname"></span>
+                            </span>
+
+                            <span class="viewers-count" ms-visible="typeof item.online !== 'undefined'">
+                                <i class="live-icon-small anchor2"></i>
+                                <span ms-text="item.online">0</span>
+                            </span>
+
+
+
+                        </div>
+
+                        <div class="live-title-icon" ms-class="[[item.masterTitle]]" ms-if="item.masterTitle"></div>
+                    </li>
+                </a>
+
+                <div class="loading-progress" role="progress" ms-visible="showProgress">
+                    <div class="progress-picture"></div>
+                </div>
+            </ul>
+
+        </section>
+
+        <!-- Room List. | 房间列表. -->
+        <section id="room-list-section" class="room-list-section main-section" ms-controller="roomListCtrl">
+
+            <div class="title-row none-select p-relative" ms-visible="liveArea !== 'round'">
+                <div class="f-clear">
+                    <div class="f-left">
+                        <div class="list-tab" role="tab" ms-visible="liveArea === 'all'" ms-class="active: hinterPosition === 0" ms-click="tabChange('recommend', 0)">推荐直播</div>
+                        <div class="list-tab" role="tab" ms-class="active: hinterPosition === 1" ms-click="tabChange('online', 1)">人气直播</div>
+                        <div class="list-tab" role="tab" ms-class="active: hinterPosition === 2" ms-click="tabChange('live_time', 2)">最新开播</div>
+                        <!--<div class="list-tab dp-none" role="tab" ms-visible="liveArea == 'all'" ms-class="active: hinterPosition === 2" ms-click="tabChange('round_room', 2)">视频轮播</div>-->
+                    </div>
+                    <div class="f-right" ms-visible="hinterPosition != 2">
+                        <div class="mode-changer active cover" role="button" title="点击查看封面图~" ms-click="changeMode(1)" ms-class="active: modeNow === 1">封面图</div>
+                        <div class="mode-changer key-frame" role="button" title="点击查看关键帧~" ms-click="changeMode(2)" ms-class="active: modeNow === 2">关键帧</div>
+                    </div>
+                </div>
+            </div>
+
+            <ul class="video-list p-relative f-clear" role="list" style="padding: 20px 0 10px">
+                <a class="move-in-left" ms-click="sendrec(item.link)" ms-repeat-item="roomList" ms-attr-href="item.link" target="_blank">
+                    <li class="video-list-item">
+                        
+                        <div class="video-preview move-in-left" ms-css-background-image="hinterPosition === 2 ? 'url(' + bfsImgLink(item.user_cover) + ')' : (item.user_cover ? (modeNow === 1 ? 'url(' + bfsImgLink(item.user_cover) + ')' : 'url(' + bfsImgLink(item.system_cover) + ')') : void(0))">
+                            <div ms-if="item.roomid" class="hover-panel w-100 h-100 p-absolute p-zero">
+                                <div class="bg-merge w-100 b-circle p-absolute p-zero ts-dot-6"></div>
+                                <div class="avatar b-circle p-absolute bg-cover" ms-css-background-image="item.face ? 'url(' + item.face + ')' : void(0)">
+                                    <i class="live-icon on-live p-absolute"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <h5 class="video-title" ms-attr-title="item.title" ms-text="item.title"></h5>
+                        <div class="anchor-info-ctnr">
+                            <span class="anchor-name">
+                                <span ms-attr-title="item.uname" ms-text="item.uname"></span>
+                            </span>
+
+                            <span class="viewers-count" ms-visible="liveArea !== 'round'">
+                                <i class="live-icon-small anchor2"></i>
+                                <span ms-text="item.online">0</span>
+                            </span>
+
+
+                        </div>
+                        <div class="live-title-icon" ms-class="[[item.masterTitle]]" ms-if="item.masterTitle"></div>
+                        <div class="live-week-icon"  ms-if="!item.masterTitle && item.weekRank"></div>
+                    </li>
+                </a>
+                <div class="loading-progress" role="progress" ms-visible="showProgress">
+                    <div class="progress-picture"></div>
+                </div>
+            </ul>
+
+            <div class="more-loading p-relative none-select">
+                <div class="loading-btn" role="button" ms-click="loadMoreRoom">
+                    <span>载入更多直播间</span><span ms-text="loadMoreBtn.progressText"></span>
+                    <i class="live-icon refresh gray v-bottom"></i>
+                </div>
+                <div class="loading-img" ms-visible="roomListInLoading"></div>
+                <div class="no-more-result fade-in" ms-visible="noMoreResult">
+                    <p class="hint-text move-in-bottom">已经木有更多结果惹~</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Right Toolbar. | 右侧工具栏. -->
+        
+
+        <!-- Sign up. | 签到弹窗. -->
+        <!-- 签到抽奖弹窗 -->
+<div id="live-sign-up-popup" class="live-popup-panel dp-none" ms-visible="popupStatus" ms-controller="signUpPopupCtrl">
+    <div class="body-merge"></div>
+    <div class="panel-content" style="width: 350px">
+        <!-- 签到按钮 -->
+        <div class="clear-float">
+            <!-- 未签到 -->
+            <div class="text-center" style="margin-top: 10px" ms-visible="!signUpStatus">
+                <button class="live-btn default" ms-click="doSign($event)">签 到</button>
+            </div>
+            <!-- 已签到 -->
+            <p ms-visible="signUpStatus">今日签到已获得：</p>
+            <p ms-visible="signUpStatus" ms-text="signInData.text" class="text-center" style="font-size: 16px; color: #ff8e29;"></p>
+        </div>
+        <!-- 签到进度条 -->
+        <div class="clear-float progress">
+            <span><span ms-text="signInData.curMonth"></span>月累计签到</span>
+            <div class="progress-bar-wrap"><div class="progress-data" ms-css-width="signInData.hadSignDays / signInData.allDays * 100 + '%'"></div></div>
+            <span><span ms-text="signInData.hadSignDays">0</span>/<span ms-text="signInData.allDays">0</span></span>
+        </div>
+        <!-- 签到进度 -->
+        <ul class="clear-float rewards-list">
+            <li class="rewards-item"><i class="rewards-item-1" ms-class="finish: signInData.hadSignDays >= 5"></i>第5天</li>
+            <li class="rewards-item"><i class="rewards-item-2" ms-class="finish: signInData.hadSignDays >= 10"></i>第10天</li>
+            <li class="rewards-item"><i class="rewards-item-3" ms-class="finish: signInData.hadSignDays >= 20"></i>第20天</li>
+            <li class="rewards-item"><i class="rewards-item-4" ms-class="finish: signInData.hadSignDays >= signInData.allDays"></i>月全勤</li>
+        </ul>
+        <div class="close-btn close right-top" ms-click="closePopup">X</div>
+    </div>
+</div>
+
+
+    </div>
+
+    <!-- Footer. | Footer 节点. -->
+    <div class="live-footer p-relative">
+    <div class="footer-cntr m-auto transition-dot-4">
+        <div class="live-footer-links clear-float">
+            <dl>
+                <dt>Bilibili</dt>
+                <dd><a href="http://www.bilibili.com/html/aboutUs.html" target="_blank">关于我们</a></dd>
+                <dd><a href="http://www.bilibili.com/html/friends-links.html" target="_blank">友情链接</a></dd>
+                <dd><a href="https://shop163539432.taobao.com" target="_blank">官方淘宝店</a></dd>
+                <dd><a href="http://www.bilibili.com/html/contact.html" target="_blank">联系我们</a></dd>
+                <dd><a href="http://www.bilibili.com/html/join.html" target="_blank">加入我们</a></dd>
+            </dl>
+            <dl>
+                <dt>直播</dt>
+                <dd><a href="//link.bilibili.com/p/help/index#/" target="_blank">直播帮助中心</a></dd>
+                <dd><a href="//link.bilibili.com/p/help/index#/tools-tutorial" target="_blank">直播姬使用教程</a></dd>
+                <dd><a href="//link.bilibili.com/p/help/index#/contact" target="_blank">联系客服</a></dd>
+                <dd><a href="http://live.bilibili.com/liveHime" target="_blank">直播姬下载</a></dd>
+                <dd><a href="http://live.bilibili.com/news/detail/37" target="_blank">直播招聘公告</a></dd>
+            </dl>
+            <dl>
+                <dt>传送门</dt>
+                <dd><a href="http://www.bilibili.com/video/av120040/" target="_blank">高级弹幕</a></dd>
+                <dd><a href="http://www.bilibili.com/html/cele.html" target="_blank">名人堂</a></dd>
+                <dd><a href="http://www.bilibili.com/lottery" target="_blank">活动专题页</a></dd>
+                <dd><a href="http://comic.qq.com/news/" target="_blank">资讯</a></dd>
+                <dd><a href="http://h.bilibili.com/wallpaper?action=list" target="_blank">壁纸站</a></dd>
+                <dd><a href="https://account.bilibili.com/answer/addq" target="_blank">分院帽计划</a></dd>
+            </dl>
+        </div>
+        <div class="live-footer-info clear-float">
+            <div class="live-footer-left">
+                <div class="partner-banner">
+                    <img src="//static.hdslb.com/images/v2images/footpic.gif" alt="合作机构" class="partner-logo"/>
+                </div>
+                <div class="icp-info">
+                    <div class="info-group">
+                        <p>广播电视节目制作经营许可证: (沪) 字第1248号</p>
+                        <p>网络文化经营许可证: 沪网文[2013]0480-056号</p>
+                        <p>信息网络传播视听节目许可证: 0910417</p>
+                    </div>
+                    <div class="info-group">
+                        <p>互联网ICP备案: 沪ICP备13002172号-3</p>
+                        <p>沪ICP证: 沪B2-20100043</p>
+                        <p><a href="http://jb.ccm.gov.cn/" target="_blank">12318全国文化市场举报网站</a></p>
+                        <p><a href="http://www.shjbzx.cn/ " target="_blank">上海市互联网违法和不良信息举报中心</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="live-footer-right">
+                <div class="icon-item mobile-item">
+                    <a href="http://live.bilibili.com/liveHime#ios" target="_blank">
+                        <div class="icon-img-item mobile-icon"></div>
+                        <p class="icon-text">直播姬</p>
+                        <div class="qr-code" style="left:5px">
+                            <img style="width:100px;height:100px;" src="//static.hdslb.com/live-static/common/images/qrcode/live-hime-qrcode.png" alt="cellphone-app-qrcode"/>
+                        </div>
+                    </a>
+                </div>
+                <div class="icon-item weibo-item">
+                    <a href="http://weibo.com/u/5245903632" target="_blank">
+                        <div class="icon-img-item weibo-icon"></div>
+                        <p class="icon-text">新浪微博</p>
+                        <div class="qr-code">
+                            <img src="//static.hdslb.com/live-static/common/images/footer/weibo-qrcode.png" alt="weibo-qrcode"/>
+                        </div>
+                    </a>
+                </div>
+                <div class="icon-item wechat-item">
+                    <div class="icon-img-item wechat-icon"></div>
+                    <p class="icon-text">官方微信</p>
+                    <div class="qr-code">
+                        <img src="//static.hdslb.com/live-static/common/images/footer/weixin-qrcode.png" alt="wechat-qrcode"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Scripts Requirement. | 脚本引用. -->
+    <div class="script-requirement">
+        <script src="http://static.hdslb.com/live-static/libs/jquery/jquery-1.11.3.min.js"></script>
+        <script src="http://static.hdslb.com/live-static/libs/avalon/avalon-1.5.5.shim.min.js"></script>
+        <script src="http://static.hdslb.com/live-static/live-area/live-area.bundle.min.js?20171116172700"></script>
+        <script src="//www.bilibili.com/plus/widget/ajaxGetCaptchaKey.php?js" defer></script>
+        <script src="https://static-s.bilibili.com/account/bili_quick_login.js" defer></script>
+        <script type="text/javascript" src="http://static.hdslb.com/live-static/analytics/area-analytics.min.js?20171116172700" charset="UTF-8"></script>
+        </script>
+    </div>
+
+</body>
+
+</html>
