@@ -26,10 +26,12 @@ import exp.libs.warp.thread.LoopThread;
  */
 public class StormScanner extends LoopThread {
 
-	// 每10分钟更新当前top50房间
-		// 只扫描那些
+	// 每10分钟更新当前top50房间, 只扫描那些
 	
 	private final static Logger log = LoggerFactory.getLogger(StormScanner.class);
+	
+	/** 扫描用的cookie（全平台扫描类似DDOS攻击，尽量不要用大号） */
+	private String scanCookie;
 	
 	/** 是否扫描 */
 	private boolean scan;
@@ -39,6 +41,7 @@ public class StormScanner extends LoopThread {
 	protected StormScanner() {
 		super("节奏风暴扫描器");
 		
+		this.scanCookie = Browser.COOKIES();
 		this.scan = false;
 	}
 
