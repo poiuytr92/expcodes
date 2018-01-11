@@ -510,6 +510,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
+				StormScanner.getInstn()._start();
 				StormScanner.getInstn().setScan();
 				if(StormScanner.getInstn().isScan()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, callBtn);
@@ -764,6 +765,7 @@ public class AppUI extends MainWindow {
 		wsClient._stop();
 		lotteryUI.clear();
 		
+		StormScanner.getInstn()._stop();
 		ChatMgr.getInstn()._stop();
 		LoginMgr.getInstn()._stop();	
 		WebBot.getInstn()._stop();

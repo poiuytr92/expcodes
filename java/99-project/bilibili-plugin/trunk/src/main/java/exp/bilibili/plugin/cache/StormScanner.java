@@ -8,11 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.core.front._LoginUI;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 import exp.libs.warp.thread.LoopThread;
+import exp.libs.warp.ui.SwingUtils;
 
 /**
  * <PRE>
@@ -60,7 +62,12 @@ public class StormScanner extends LoopThread {
 	protected void _before() {
 		log.info("{} 已启动", getName());
 		
-		// FIXME 在before提示使用马甲号
+		if(SwingUtils.confirm("是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
+			
+			_LoginUI loginUI = new _LoginUI();
+			loginUI._view();
+			// FIXME: 马甲号的cookies也保留
+		}
 	}
 
 	@Override

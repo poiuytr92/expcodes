@@ -67,7 +67,7 @@ public class _LoginUI extends PopChildWindow {
 	/** 与验证码配套的登陆用cookie */
 	private String vcCookies;
 	
-	protected _LoginUI() {
+	public _LoginUI() {
 		super("B站PC端帐密登陆", WIDTH, HIGH);
 	}
 	
