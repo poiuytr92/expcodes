@@ -201,40 +201,6 @@ public class ChatMgr extends LoopThread {
 		}
 	}
 	
-	public void setAutoThankYou() {
-		autoThankYou = !autoThankYou;
-		userGifts.clear();	// 切换状态时, 清空已投喂的礼物列表
-	}
-	
-	public boolean isAutoThankYou() {
-		return autoThankYou;
-	}
-	
-	public void setAutoNotice() {
-		autoNotice = !autoNotice;
-	}
-	
-	public boolean isAutoNotice() {
-		return autoNotice;
-	}
-	
-	public void setAutoCall() {
-		autoCall = !autoCall;
-	}
-	
-	public boolean isAutoCall() {
-		return autoCall;
-	}
-	
-	public void setAutoGoodNight() {
-		autoGoodNight = !autoGoodNight;
-		nightedUsers.clear();	// 切换状态时, 清空已晚安的用户列表
-	}
-	
-	public boolean isAutoGoodNight() {
-		return autoGoodNight;
-	}
-
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
@@ -283,7 +249,7 @@ public class ChatMgr extends LoopThread {
 		
 		// 若短时间内投喂用户过多, 则不逐一感谢, 避免刷屏
 		int userNum = tmp.keySet().size();
-		if(userNum >= THX_USER_LIMIT) {
+		if(userNum > THX_USER_LIMIT) {
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢前面[", userNum, 
 					"]个大佬的投喂d(´ω｀*)");
 			MsgSender.sendChat(msg, UIUtils.getCurChatColor());
@@ -366,6 +332,40 @@ public class ChatMgr extends LoopThread {
 		
 		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(MsgKwMgr.getCalls()));
 		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
+	}
+	
+	public void setAutoThankYou() {
+		autoThankYou = !autoThankYou;
+		userGifts.clear();	// 切换状态时, 清空已投喂的礼物列表
+	}
+	
+	public boolean isAutoThankYou() {
+		return autoThankYou;
+	}
+	
+	public void setAutoNotice() {
+		autoNotice = !autoNotice;
+	}
+	
+	public boolean isAutoNotice() {
+		return autoNotice;
+	}
+	
+	public void setAutoCall() {
+		autoCall = !autoCall;
+	}
+	
+	public boolean isAutoCall() {
+		return autoCall;
+	}
+	
+	public void setAutoGoodNight() {
+		autoGoodNight = !autoGoodNight;
+		nightedUsers.clear();	// 切换状态时, 清空已晚安的用户列表
+	}
+	
+	public boolean isAutoGoodNight() {
+		return autoGoodNight;
 	}
 	
 }

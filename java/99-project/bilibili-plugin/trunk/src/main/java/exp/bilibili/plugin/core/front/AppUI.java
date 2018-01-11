@@ -23,6 +23,7 @@ import exp.bilibili.plugin.cache.LoginMgr;
 import exp.bilibili.plugin.cache.MsgKwMgr;
 import exp.bilibili.plugin.cache.OnlineUserMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
+import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.back.WebSockClient;
 import exp.bilibili.plugin.envm.ChatColor;
@@ -53,6 +54,9 @@ public class AppUI extends MainWindow {
 	/** serialVersionUID */
 	private final static long serialVersionUID = 2097374309672044616L;
 
+	/** 避免连续点击按钮的锁定时间 */
+	private final static long LOCK_TIME = 100;
+	
 	/** 界面文本框最大缓存行数 */
 	private final static int MAX_LINE = 200;
 	
@@ -72,9 +76,11 @@ public class AppUI extends MainWindow {
 	
 	private JButton loginBtn;
 	
-	private JButton clrBtn;
+	private JButton stormBtn;
 	
 	private JButton modeBtn;
+	
+	private JButton clrBtn;
 	
 	private JButton sendBtn;
 	
@@ -204,8 +210,9 @@ public class AppUI extends MainWindow {
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.loginBtn = new JButton("扫码/帐密登陆 (自动全平台抽奖)");
+		this.stormBtn = new JButton("节奏风暴扫描");
+		this.modeBtn = new JButton("M");
 		this.clrBtn = new JButton("C");
-		this.modeBtn = new JButton("抽奖模式");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
 		this.thxBtn = new JButton("答谢姬");
@@ -219,8 +226,9 @@ public class AppUI extends MainWindow {
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
-		clrBtn.setForeground(Color.BLACK);
+		stormBtn.setForeground(Color.BLACK);
 		modeBtn.setForeground(Color.BLACK);
+		clrBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
 		thxBtn.setForeground(Color.BLACK);
@@ -326,8 +334,8 @@ public class AppUI extends MainWindow {
 	private JPanel _getLoginPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
-		panel.add(SwingUtils.getEBorderPanel(loginBtn, modeBtn), BorderLayout.CENTER);
-		panel.add(clrBtn, BorderLayout.EAST);
+		panel.add(SwingUtils.getEBorderPanel(loginBtn, stormBtn), BorderLayout.CENTER);
+		panel.add(SwingUtils.getHGridPanel(modeBtn, clrBtn), BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -357,8 +365,9 @@ public class AppUI extends MainWindow {
 		setLinkBtnListener();
 		setLotteryBtnListener();
 		setLoginBtnListener();
-		setClrBtnListener();
+		setStormBtnListener();
 		setModeBtnListener();
+		setClrBtnListener();
 		setSendBtnListener();
 		setColorBtnListener();
 		setThxBtnListener();
@@ -410,7 +419,7 @@ public class AppUI extends MainWindow {
 				
 				chatTA.setText("");		// 清空版聊区
 				OnlineUserMgr.getInstn().clear(); // 重连直播间时清空在线用户列表
-				ThreadUtils.tSleep(200);	// 避免连续点击
+				lockBtn();
 			}
 		});
 	}
@@ -424,7 +433,7 @@ public class AppUI extends MainWindow {
 				
 				lotteryUI.refreshUsers();
 				lotteryUI._view();
-				ThreadUtils.tSleep(500);	// 避免连续点击
+				lockBtn();
 			}
 		});
 	}
@@ -487,6 +496,44 @@ public class AppUI extends MainWindow {
 		}
 	}
 	
+	private void setStormBtnListener() {
+		stormBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!isLogined()) {
+					SwingUtils.warn("登陆后才能使用此功能");
+					return;
+					
+				} else if(Config.IS_ADMIN() == false) {
+					SwingUtils.warn("此功能存在风险, 不对普通用户开放");
+					return;
+				}
+				
+				StormScanner.getInstn().setScan();
+				if(StormScanner.getInstn().isScan()) {
+					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, callBtn);
+					UIUtils.log("[全平台节奏风暴扫描] 已启动");
+					
+				} else {
+					BeautyEyeUtils.setButtonStyle(NormalColor.normal, callBtn);
+					UIUtils.log("[全平台节奏风暴扫描] 已停止");
+				}
+				lockBtn();
+			}
+		});
+	}
+	
+	private void setModeBtnListener() {
+		modeBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				modeUI._view();
+			}
+		});
+	}
+	
 	private void setClrBtnListener() {
 		clrBtn.addActionListener(new ActionListener() {
 			
@@ -505,16 +552,6 @@ public class AppUI extends MainWindow {
 						SwingUtils.info("清除登陆信息失败");
 					}
 				}
-			}
-		});
-	}
-	
-	private void setModeBtnListener() {
-		modeBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				modeUI._view();
 			}
 		});
 	}
@@ -573,7 +610,7 @@ public class AppUI extends MainWindow {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, thxBtn);
 					UIUtils.log("[答谢姬] 被封印啦/(ㄒoㄒ)/");
 				}
-				ThreadUtils.tSleep(100);
+				lockBtn();
 			}
 		});
 	}
@@ -602,7 +639,7 @@ public class AppUI extends MainWindow {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, noticeBtn);
 					UIUtils.log("[公告姬] 被封印啦/(ㄒoㄒ)/");
 				}
-				ThreadUtils.tSleep(100);
+				lockBtn();
 			}
 		});
 	}
@@ -631,7 +668,7 @@ public class AppUI extends MainWindow {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, callBtn);
 					UIUtils.log("[小call姬] 被封印啦/(ㄒoㄒ)/");
 				}
-				ThreadUtils.tSleep(100);
+				lockBtn();
 			}
 		});
 	}
@@ -659,7 +696,7 @@ public class AppUI extends MainWindow {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, nightBtn);
 					UIUtils.log("[晚安姬] 被封印啦/(ㄒoㄒ)/");
 				}
-				ThreadUtils.tSleep(100);
+				lockBtn();
 			}
 		});
 	}
@@ -698,7 +735,7 @@ public class AppUI extends MainWindow {
 				}
 				
 				new _EditorUI("公告姬", Config.getInstn().NOTICE_PATH())._view();
-				ThreadUtils.tSleep(100);
+				lockBtn();
 			}
 			
 		});
@@ -712,7 +749,7 @@ public class AppUI extends MainWindow {
 				}
 				
 				new _EditorUI("打call姬", Config.getInstn().CALL_PATH())._view();
-				ThreadUtils.tSleep(100);
+				lockBtn();
 			}
 			
 		});
@@ -878,6 +915,13 @@ public class AppUI extends MainWindow {
 	
 	public ChatColor getCurChatColor() {
 		return curChatColor;
+	}
+	
+	/**
+	 * 瞬时锁定按钮，避免连续点击
+	 */
+	private void lockBtn() {
+		ThreadUtils.tSleep(LOCK_TIME);
 	}
 	
 	/**

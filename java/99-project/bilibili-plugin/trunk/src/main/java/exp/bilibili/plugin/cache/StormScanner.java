@@ -12,6 +12,7 @@ import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.warp.thread.LoopThread;
 
 /**
  * <PRE>
@@ -23,12 +24,64 @@ import exp.libs.warp.net.http.HttpUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class StormScanner {
+public class StormScanner extends LoopThread {
 
+	// 每10分钟更新当前top50房间
+		// 只扫描那些
+	
 	private final static Logger log = LoggerFactory.getLogger(StormScanner.class);
 	
-	// 每10分钟更新当前top50房间
-	// 只扫描那些
+	/** 是否扫描 */
+	private boolean scan;
+	
+	private static volatile StormScanner instance;
+	
+	protected StormScanner() {
+		super("节奏风暴扫描器");
+		
+		this.scan = false;
+	}
+
+	public static StormScanner getInstn() {
+		if(instance == null) {
+			synchronized (StormScanner.class) {
+				if(instance == null) {
+					instance = new StormScanner();
+				}
+			}
+		}
+		return instance;
+	}
+	
+	@Override
+	protected void _before() {
+		log.info("{} 已启动", getName());
+		
+		// FIXME 在before提示使用马甲号
+	}
+
+	@Override
+	protected void _loopRun() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void _after() {
+		log.info("{} 已停止", getName());
+	}
+	
+	public boolean isScan() {
+		return scan;
+	}
+
+	public void setScan() {
+		scan = !scan;
+	}
+
+	
+	
+	
 	
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
@@ -80,6 +133,6 @@ public class StormScanner {
 		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
-	
+
 	
 }
