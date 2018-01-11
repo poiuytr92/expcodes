@@ -218,7 +218,7 @@ public class StormScanner extends LoopThread {
 			return;
 		}
 		
-		String msg = StrUtils.concat("直播间 [", roomId, "] 开启了节奏风暴x", raffleIds.size(), " !!!");
+		String msg = StrUtils.concat("直播间 [", roomId, "] 开启了节奏风暴 [x", raffleIds.size(), "] !!!");
 		UIUtils.notify(msg);
 		
 		for(String raffleId : raffleIds) {
