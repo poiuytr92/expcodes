@@ -13,9 +13,19 @@ import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
-public class TestStorm {
+/**
+ * <PRE>
+ * 节奏风暴扫描器
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-11
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+public class StormScanner {
 
-	private final static Logger log = LoggerFactory.getLogger(TestStorm.class);
+	private final static Logger log = LoggerFactory.getLogger(StormScanner.class);
 	
 	// 每10分钟更新当前top50房间
 	// 只扫描那些
