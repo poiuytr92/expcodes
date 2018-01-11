@@ -811,15 +811,30 @@ public class AppUI extends MainWindow {
 		if(loginUI != null) { loginUI._hide(); }
 		qrcodeUI._hide();
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
-		WebBot.getInstn()._start();
+		WebBot.getInstn()._start();	// 启动仿真机器人
 		
-		UIUtils.log("欢迎肥来:".concat(username));
+		updateTitle(username);
+		UIUtils.log("欢迎肥来: ".concat(username));
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
 		SwingUtils.info("登陆成功 (自动抽奖已激活)");
+		
+		// 开始监控软件授权
+		SafetyMonitor.getInstn()._start();
 	}
 	
 	/**
-	 * 确认是否已登录
+	 * 更新软件标题
+	 * @param username 用户名
+	 */
+	private void updateTitle(String username) {
+		String title = StrUtils.concat(getTitle(), "    (登陆用户 : ", username, ")");
+		setTitle(title);
+		
+		// FIXME： 再下个版本增加授权时间
+	}
+	
+	/**
+	 * 检查是否已登录
 	 * @return
 	 */
 	private boolean isLogined() {
