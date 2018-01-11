@@ -94,8 +94,12 @@ public class StormScanner extends LoopThread {
 
 	@Override
 	protected void _loopRun() {
-		reflashLives();
-		checkStorm();
+		
+		if(isScan() == true) {
+			reflashLives();
+			checkStorm();
+		}
+		
 		_sleep(1000);
 	}
 
@@ -144,7 +148,12 @@ public class StormScanner extends LoopThread {
 			for(int i = 0 ; i < data.size(); i++) {
 				JSONObject room = data.getJSONObject(i);
 				String roomId = JsonUtils.getStr(room, BiliCmdAtrbt.roomid);
-				roomIds.add(roomId);	// FIXME 可以顺便更新 房间长短号映射
+				roomIds.add(roomId);
+				
+				// 顺便关联房间号(短号)与真实房号(长号)
+				String shortId = JsonUtils.getStr(room, BiliCmdAtrbt.short_id);
+				shortId = (StrUtils.isEmpty(shortId) ? roomId : shortId);
+				RoomMgr.getInstn().relate(shortId, roomId);
 			}
 		} catch(Exception e) {
 			log.error("提取人气直播房间号失败: {}", response, e);
@@ -163,7 +172,7 @@ public class StormScanner extends LoopThread {
 			
 			List<String> raffleIds = getRaffleIds(roomId, response);
 			joinStorm(roomId, raffleIds);
-			ThreadUtils.tSleep(10);
+			ThreadUtils.tSleep(50);	// FIXME: 间隔
 		}
 		client.close();
 	}
@@ -184,6 +193,7 @@ public class StormScanner extends LoopThread {
 				if(0 == JsonUtils.getInt(room, BiliCmdAtrbt.hasJoin, -1)) {
 					raffleIds.add(JsonUtils.getStr(room, BiliCmdAtrbt.id));
 					
+					log.info("debug节奏风暴:{}", response);
 				}
 						
 			} else if(data instanceof JSONArray) {
@@ -192,6 +202,8 @@ public class StormScanner extends LoopThread {
 					JSONObject room = array.getJSONObject(i);
 					if(0 == JsonUtils.getInt(room, BiliCmdAtrbt.hasJoin, -1)) {
 						raffleIds.add(JsonUtils.getStr(room, BiliCmdAtrbt.id));
+						
+						log.info("debug节奏风暴:{}", response);
 					}
 				}
 			}

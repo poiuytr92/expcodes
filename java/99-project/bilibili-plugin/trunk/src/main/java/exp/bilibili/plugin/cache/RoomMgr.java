@@ -129,8 +129,8 @@ public class RoomMgr {
 	
 	/**
 	 * 关联 房间号 与 真实房间号
-	 * @param roomId 房间号（限签约主播）
-	 * @param readRoomId 真实房间号（签约主播 与 非签约主播 均拥有）
+	 * @param roomId 房间号（限签约主播,短号）
+	 * @param readRoomId 真实房间号（签约主播 与 非签约主播 均拥有,长号）
 	 */
 	public void relate(String roomId, String readRoomId) {
 		relate(NumUtils.toInt(roomId, 0), NumUtils.toInt(readRoomId, 0));

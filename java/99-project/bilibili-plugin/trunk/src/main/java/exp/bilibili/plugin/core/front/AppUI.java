@@ -509,15 +509,15 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("此功能存在风险, 不对普通用户开放");
 					return;
 				}
-				
 				StormScanner.getInstn()._start();
+				
 				StormScanner.getInstn().setScan();
 				if(StormScanner.getInstn().isScan()) {
-					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, callBtn);
+					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, stormBtn);
 					UIUtils.log("[全平台节奏风暴扫描] 已启动");
 					
 				} else {
-					BeautyEyeUtils.setButtonStyle(NormalColor.normal, callBtn);
+					BeautyEyeUtils.setButtonStyle(NormalColor.normal, stormBtn);
 					UIUtils.log("[全平台节奏风暴扫描] 已停止");
 				}
 				lockBtn();

@@ -18,6 +18,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String real_roomid = "real_roomid";
 	
+	public final static String short_id = "short_id";
+	
 	public final static String roomid = "roomid";
 	
 	public final static String msg_text = "msg_text";
