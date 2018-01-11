@@ -31,7 +31,7 @@ import exp.libs.utils.other.StrUtils;
 public class JarUtils {
 
 	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(FileUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(JarUtils.class);
 	
 	/** 私有化构造函数 */
 	protected JarUtils() {}
@@ -123,12 +123,7 @@ public class JarUtils {
 		} catch (Exception e) {
 			log.error("复制文件失败: 从 [{}] 到 [{}].", packagePath, snkPath, e);
 		}
-		
-		try {
-			is.close();
-		} catch (Exception e) {
-			log.error("读取Jar内文件异常: 关闭IO流失败.", e);
-		}
+		IOUtils.close(is);
 		return isOk;
 	}
 	
@@ -156,12 +151,7 @@ public class JarUtils {
 		} catch (Exception e) {
 			log.error("读取Jar内文件失败: ", packagePath, e);
 		}
-		
-		try {
-			is.close();
-		} catch (Exception e) {
-			log.error("读取Jar内文件异常: 关闭IO流失败.", e);
-		}
+		IOUtils.close(is);
 		return str;
 	}
 	
