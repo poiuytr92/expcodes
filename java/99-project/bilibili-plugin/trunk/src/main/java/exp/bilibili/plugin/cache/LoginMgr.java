@@ -143,7 +143,9 @@ public class LoginMgr extends LoopThread {
 		Browser.init(true);				// 使用加载图片的浏览器（首次登陆需要扫描二维码图片/验证码图片）
 		Browser.open(LOGIN_URL);		// 打开登陆页面
 		isLogined = loginByCookies();	// 先尝试cookies登陆
-		clearCookies();
+		if(isLogined == false) {
+			clearCookies();
+		}
 		return isLogined;
 	}
 	
@@ -156,10 +158,8 @@ public class LoginMgr extends LoopThread {
 	
 	public boolean clearCookies() {
 		boolean isOk = true;
-		if(isLogined == false) {
-			isOk &= FileUtils.delete(COOKIE_DIR);
-			isOk &= (FileUtils.createDir(COOKIE_DIR) != null);
-		}
+		isOk &= FileUtils.delete(COOKIE_DIR);
+		isOk &= (FileUtils.createDir(COOKIE_DIR) != null);
 		return isOk;
 	}
 	
