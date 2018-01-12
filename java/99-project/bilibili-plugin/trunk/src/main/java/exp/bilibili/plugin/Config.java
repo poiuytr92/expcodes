@@ -114,6 +114,18 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/account");
 	}
 	
+	public String ASSN_URL() {
+		return xConf.getVal("/config/biliUrls/assn");
+	}
+	
+	public String LINK_HOST() {
+		return xConf.getVal("/config/biliUrls/linkHost");
+	}
+	
+	public String LINK_URL() {
+		return xConf.getVal("/config/biliUrls/link");
+	}
+	
 	public String STORM_CHECK_URL() {
 		return xConf.getVal("/config/biliUrls/stormCheck");
 	}

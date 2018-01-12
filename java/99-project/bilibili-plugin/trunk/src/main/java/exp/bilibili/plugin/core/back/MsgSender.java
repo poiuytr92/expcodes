@@ -67,6 +67,12 @@ public class MsgSender {
 	
 	private final static String SIGN_URL = Config.getInstn().SIGN_URL();
 	
+	private final static String ASSN_URL = Config.getInstn().ASSN_URL();
+	
+	private final static String LINK_HOST = Config.getInstn().LINK_HOST();
+	
+	private final static String LINK_URL = Config.getInstn().LINK_URL();
+	
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
 	
 	private final static String LIVE_LIST_URL = Config.getInstn().LIVE_LIST_URL();
@@ -105,6 +111,19 @@ public class MsgSender {
 	 * @return
 	 */
 	private static Map<String, String> toPostHeadParams(String cookies, String realRoomId) {
+		Map<String, String> params = toPostHeadParams(cookies);
+		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
+		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
+		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(realRoomId));	// 发送/接收消息的直播间地址
+		return params;
+	}
+	
+	/**
+	 * 生成POST方法的请求头参数
+	 * @param cookies
+	 * @return
+	 */
+	private static Map<String, String> toPostHeadParams(String cookies) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
 		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
@@ -113,9 +132,6 @@ public class MsgSender {
 		params.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
 				HttpUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
 		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
-		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
-		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
-		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(realRoomId));	// 发送/接收消息的直播间地址
 		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
@@ -172,9 +188,9 @@ public class MsgSender {
 			password = RSAUtils.encrypt(hash.concat(password), pubKey);
 			
 			// 把验证码、验证码配套的cookies、账号、RSA加密后的密码 提交到登陆服务器
-			Map<String, String> head = _toLoginHeadParams(vcCookies);
-			Map<String, String> request = _toLoginRequestParams(username, password, vccode);
-			sJson = client.doPost(MINI_LOGIN_URL, head, request);
+			Map<String, String> headers = _toLoginHeadParams(vcCookies);
+			Map<String, String> requests = _toLoginRequestParams(username, password, vccode);
+			sJson = client.doPost(MINI_LOGIN_URL, headers, requests);
 			
 //			{"code":0,"data":"https://passport.biligame.com/crossDomain?DedeUserID=31796320&DedeUserID__ckMd5=7a2868581681a219&Expires=2592000&SESSDATA=b21f4571%2C1517901333%2Cba70690c&bili_jct=7136e7aefb2385048cd77cc93ce25d56&gourl=https%3A%2F%2Fwww.bilibili.com"}
 			json = JSONObject.fromObject(sJson);
@@ -218,15 +234,15 @@ public class MsgSender {
 	 */
 	private static Map<String, String> _toLoginRequestParams(
 			String username, String password, String vccode) {
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("cType", "2");
-		request.put("vcType", "1");		// 1:验证码校验方式;  2:二维码校验方式
-		request.put("captcha", vccode);	// 图片验证码
-		request.put("user", username);	// 账号（明文）
-		request.put("pwd", password);	// 密码（RSA公钥加密密文）
-		request.put("keep", "true");
-		request.put("gourl", HOME_URL);	// 登录后的跳转页面
-		return request;
+		Map<String, String> requests = new HashMap<String, String>();
+		requests.put("cType", "2");
+		requests.put("vcType", "1");		// 1:验证码校验方式;  2:二维码校验方式
+		requests.put("captcha", vccode);	// 图片验证码
+		requests.put("user", username);	// 账号（明文）
+		requests.put("pwd", password);	// 密码（RSA公钥加密密文）
+		requests.put("keep", "true");
+		requests.put("gourl", HOME_URL);	// 登录后的跳转页面
+		return requests;
 	}
 	
 	/**
@@ -286,8 +302,8 @@ public class MsgSender {
 	 */
 	public static String queryUsername() {
 		final String cookies = Browser.COOKIES();
-		Map<String, String> headParams = toGetHeadParams(cookies);
-		String response = HttpURLUtils.doGet(ACCOUNT_URL, headParams, null, Config.DEFAULT_CHARSET);
+		Map<String, String> headers = toGetHeadParams(cookies);
+		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null, Config.DEFAULT_CHARSET);
 		
 		String username = "unknow";
 		try {
@@ -304,7 +320,7 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 自动签到
+	 * 每日签到
 	 * @return
 	 */
 	public static void toSign() {
@@ -314,8 +330,8 @@ public class MsgSender {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
-			String response = HttpURLUtils.doGet(SIGN_URL, headParams, null, Config.DEFAULT_CHARSET);
+			Map<String, String> headers = toGetHeadParams(cookies, sRoomId);
+			String response = HttpURLUtils.doGet(SIGN_URL, headers, null, Config.DEFAULT_CHARSET);
 			_analyseSignResponse(response);
 			
 		} else {
@@ -337,6 +353,53 @@ public class MsgSender {
 		} catch(Exception e) {
 			log.error("每日签到失败: {}", response, e);
 		}
+	}
+	
+	/**
+	 * 友爱社签到
+	 * @return 是否需要持续测试签到
+	 */
+	public static boolean toAssn() {
+		Map<String, String> headers = toPostHeadParams(Browser.COOKIES());
+		headers.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
+		headers.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOST);
+		headers.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL);
+		
+		Map<String, String> requests = new HashMap<String, String>();
+		requests.put("task_id", "double_watch_task");
+		requests.put("csrf_token", Browser.CSRF());
+		
+		String response = HttpURLUtils.doPost(ASSN_URL, headers, requests);
+		return _analyseAssnResponse(response);
+	}
+	
+	/**
+	 * 
+	 * @param response  {"code":0,"msg":"","message":"","data":[]}
+	 * @return
+	 */
+	private static boolean _analyseAssnResponse(String response) {
+		log.info(response);
+		boolean goOn = true;
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				goOn = false;	// 已签到成功，不需要继续签到
+				
+			} else {
+				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				if(reason.contains("已领取")) {
+					goOn = false;	// 已签到过，不需要继续签到
+					
+				} else {
+					log.warn("友爱社签到失败: {}", reason);
+				}
+			}
+		} catch(Exception e) {
+			log.error("友爱社签到失败: {}", response, e);
+		}
+		return goOn;
 	}
 	
 	/**
@@ -395,9 +458,9 @@ public class MsgSender {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headParams = toPostHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = _toChatRequestParams(msg, sRoomId, color.CODE());
-			String response = HttpURLUtils.doPost(CHAT_URL, headParams, requestParams, Config.DEFAULT_CHARSET);
+			Map<String, String> headers = toPostHeadParams(cookies, sRoomId);
+			Map<String, String> requests = _toChatRequestParams(msg, sRoomId, color.CODE());
+			String response = HttpURLUtils.doPost(CHAT_URL, headers, requests, Config.DEFAULT_CHARSET);
 			isOk = _analyseChatResponse(response);
 			
 		} else {
@@ -664,9 +727,9 @@ public class MsgSender {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = _toLotteryRequestParams(sRoomId);
-			String response = HttpURLUtils.doGet(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+			Map<String, String> headers = toGetHeadParams(cookies, sRoomId);
+			Map<String, String> requests = _toLotteryRequestParams(sRoomId);
+			String response = HttpURLUtils.doGet(url, headers, requests, Config.DEFAULT_CHARSET);
 			raffleIds = _getRaffleId(response);
 		} else {
 			log.warn("获取礼物编号失败: 无效的房间号 [{}]", roomId);
@@ -689,18 +752,18 @@ public class MsgSender {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headParams = toGetHeadParams(cookies, sRoomId);
-			Map<String, String> requestParams = (LotteryType.STORM == type ? 
+			Map<String, String> headers = toGetHeadParams(cookies, sRoomId);
+			Map<String, String> requests = (LotteryType.STORM == type ? 
 					_toStormRequestParams(sRoomId, raffleId) : 
 					_toLotteryRequestParams(sRoomId, raffleId));
 			
-			String response = HttpURLUtils.doPost(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+			String response = HttpURLUtils.doPost(url, headers, requests, Config.DEFAULT_CHARSET);
 			errDesc = _analyseLotteryResponse(response);
 			
 			// 系统繁忙哟，请再试一下吧
 			if(errDesc.contains("系统繁忙")) {
 				ThreadUtils.tSleep(1000);
-				response = HttpURLUtils.doPost(url, headParams, requestParams, Config.DEFAULT_CHARSET);
+				response = HttpURLUtils.doPost(url, headers, requests, Config.DEFAULT_CHARSET);
 				errDesc = _analyseLotteryResponse(response);
 			}
 		} else {

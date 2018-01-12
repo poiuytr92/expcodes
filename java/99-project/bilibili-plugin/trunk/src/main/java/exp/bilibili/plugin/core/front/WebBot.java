@@ -68,6 +68,9 @@ class WebBot extends LoopThread {
 	/** 提示累计次数 */
 	private int tipCnt;
 	
+	/** 是否需要签到友爱社 */
+	private boolean signAssn;
+	
 	/** 执行下次日常任务的时间点 */
 	private long nextTaskTime;
 	
@@ -81,8 +84,9 @@ class WebBot extends LoopThread {
 		this.loopCnt = 0;
 		this.lotteryCnt = 0;
 		this.tipCnt = 0;
+		this.signAssn = true;
 		this.nextTaskTime = System.currentTimeMillis();
-		this.resetTaskTime = System.currentTimeMillis();	
+		this.resetTaskTime = System.currentTimeMillis();
 		
 		// 把上次任务重置时间设为为当天0点
 		resetTaskTime = resetTaskTime / DAY_UNIT * DAY_UNIT;
@@ -147,10 +151,11 @@ class WebBot extends LoopThread {
 				toLottery(room.getRoomId());
 			}
 			
-		// 长时间无操作则休眠
+		// 长时间无抽奖操作则做其他事情
 		} else {
-			doDailyTasks();	// 不抽奖的时候抽空做日常小学数学任务
-			toSleep();
+			toSignAssn();	// 友爱社签到
+			doDailyTasks();	// 日常小学数学任务
+			toSleep();		// 休眠
 		}
 	}
 	
@@ -266,6 +271,18 @@ class WebBot extends LoopThread {
 		return rst.getText().contains("成功");
 	}
 
+	private void toSignAssn() {
+		if(signAssn == false) {
+			return;
+		}
+		
+		boolean isGoOn = MsgSender.toAssn();
+		if(isGoOn == false) {
+			signAssn = false;
+			UIUtils.log("今天已在友爱社签到");
+		}
+	}
+	
 	/**
 	 * 执行日常小学数学任务
 	 */
@@ -277,7 +294,7 @@ class WebBot extends LoopThread {
 		
 		nextTaskTime = MsgSender.doDailyTasks();
 		if(nextTaskTime <= 0) {
-			UIUtils.log("今日所有小学数学任务已完成");
+			UIUtils.log("今天所有小学数学任务已完成");
 		}
 	}
 	
@@ -298,7 +315,8 @@ class WebBot extends LoopThread {
 		if(hour == 0) {
 			resetTaskTime = now;
 			nextTaskTime = now;
-			MsgSender.toSign();	// 重新签到
+			MsgSender.toSign();	// 重新每日签到
+			signAssn = true;	// 标记友爱社可以签到
 		}
 	}
 	
