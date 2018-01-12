@@ -13,6 +13,7 @@ import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.io.flow.FileFlowReader;
 
 /**
@@ -264,21 +265,46 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * 删除文件/目录(包括子文件/子目录)
+	 * @param path 文件/目录路径
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
+	public static boolean delete(String path, String filterRegex) {
+		return delete(new File(path), filterRegex);
+	}
+	
+	/**
+	 * 删除文件/目录(包括子文件/子目录)
 	 * @param file 文件/目录
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean delete(File file) {
+		return delete(file, "");
+	}
+	
+	/**
+	 * 删除文件/目录(包括子文件/子目录)
+	 * @param file 文件/目录
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
+	public static boolean delete(File file, String filterRegex) {
 		boolean isOk = true;
 		if(file.exists()) {
 			if(file.isFile()) {
-				isOk &= file.delete();
+				if(!RegexUtils.matches(file.getName(), filterRegex)) {
+					isOk &= file.delete();
+				}
 				
 			} else if(file.isDirectory()) {
 				File[] files = file.listFiles();
 				for(File f : files) {
-					isOk &= delete(f);
+					isOk &= delete(f, filterRegex);
 				}
-				isOk &= file.delete();
+				
+				if(!RegexUtils.matches(file.getName(), filterRegex)) {
+					isOk &= file.delete();
+				}
 			}
 		}
 		return isOk;

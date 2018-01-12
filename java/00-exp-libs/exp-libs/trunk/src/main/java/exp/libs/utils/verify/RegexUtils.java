@@ -31,7 +31,7 @@ public class RegexUtils {
 	 */
 	public static boolean matches(String str, String regex) {
 		boolean isMatch = false;
-		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
+		if(StrUtils.isNotEmpty(str, regex)) {
 			isMatch = Pattern.compile(regex).matcher(str).matches();
 		}
 		return isMatch;
