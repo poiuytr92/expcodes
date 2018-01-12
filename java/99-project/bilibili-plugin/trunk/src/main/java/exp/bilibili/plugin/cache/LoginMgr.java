@@ -16,6 +16,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.front.AppUI;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -45,13 +46,15 @@ public class LoginMgr extends LoopThread {
 	
 	private final static String VCCODE_URL = Config.getInstn().VCCODE_URL();
 	
-	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
-	
 	public final static String IMG_DIR = Config.getInstn().IMG_DIR();
 	
 	private final static String VCCODE_PATH = IMG_DIR.concat("/vccode.jpg");
 	
 	public final static String QRIMG_NAME = "qrcode";
+	
+	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
+	
+	public final static String MINI_COOKIE_PATH = "./data/cookie-mini.dat";
 	
 	private final static String SID = "sid";
 	
@@ -144,6 +147,13 @@ public class LoginMgr extends LoopThread {
 		return isLogined;
 	}
 	
+	public boolean clearAllCookies() {
+		boolean isOk = true;
+		isOk &= clearCookies();
+		isOk &= clearMiniCookie();
+		return isOk;
+	}
+	
 	public boolean clearCookies() {
 		boolean isOk = true;
 		if(isLogined == false) {
@@ -151,6 +161,10 @@ public class LoginMgr extends LoopThread {
 			isOk &= (FileUtils.createDir(COOKIE_DIR) != null);
 		}
 		return isOk;
+	}
+	
+	public boolean clearMiniCookie() {
+		return FileUtils.delete(MINI_COOKIE_PATH);
 	}
 	
 	/**
@@ -279,6 +293,15 @@ public class LoginMgr extends LoopThread {
 		return sid.toString();
 	}
 	
+	/**
+	 * 使用帐密+验证码的方式登录(用于登录主号, 即获取收益的账号)
+	 * 	并把登录cookies同时转存到selenium浏览器
+	 * @param username
+	 * @param password
+	 * @param vccode
+	 * @param vcCookies
+	 * @return
+	 */
 	public boolean toLogin(String username, String password, 
 			String vccode, String vcCookies) {
 		boolean isOk = false;
@@ -294,6 +317,34 @@ public class LoginMgr extends LoopThread {
 			saveLoginInfo();	// 备份cookies
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 使用帐密+验证码的方式登录(用于登录小号, 即用于扫描等行为的账号)
+	 *  并把登录cookies同时转存到文件以备用
+	 * @param username
+	 * @param password
+	 * @param vccode
+	 * @param vcCookies
+	 * @return
+	 */
+	public String toLoginMini(String username, String password, 
+			String vccode, String vcCookies) {
+		String miniCookie = "";
+		List<Cookie> cookies =  MsgSender.toLogin(username, password, vccode, vcCookies);
+		if(ListUtils.isNotEmpty(cookies)) {
+			StringBuilder kvs = new StringBuilder();
+			for(Cookie cookie : cookies) {
+				kvs.append(cookie.getName()).append("=");
+				kvs.append(cookie.getValue()).append("; ");
+			}
+			kvs.setLength(kvs.length() - 2);
+			miniCookie = kvs.toString();
+			
+			// 转存外存
+			FileUtils.write(MINI_COOKIE_PATH, miniCookie, Charset.ISO, false);
+		}
+		return miniCookie;
 	}
 	
 }

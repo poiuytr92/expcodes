@@ -10,6 +10,7 @@ import exp.bilibili.plugin.bean.pdm.EnergyLottery;
 import exp.bilibili.plugin.bean.pdm.GuardBuy;
 import exp.bilibili.plugin.bean.pdm.GuardMsg;
 import exp.bilibili.plugin.bean.pdm.LiveMsg;
+import exp.bilibili.plugin.bean.pdm.Preparing;
 import exp.bilibili.plugin.bean.pdm.RaffleEnd;
 import exp.bilibili.plugin.bean.pdm.RaffleStart;
 import exp.bilibili.plugin.bean.pdm.SendGift;
@@ -95,6 +96,9 @@ public class MsgAnalyser {
 			
 		} else if(biliCmd == BiliCmd.LIVE) {
 			toDo(new LiveMsg(json));
+			
+		} else if(biliCmd == BiliCmd.PREPARING) {
+			toDo(new Preparing(json));
 			
 		} else {
 			isOk = false;
@@ -275,6 +279,16 @@ public class MsgAnalyser {
 		
 		ChatMgr.getInstn().helloLive(msgBean.getRoomId());
 		UIUtils.notityLive(msgBean.getRoomId());
+	}
+	
+	/**
+	 * 关播通知
+	 * @param msgBean
+	 */
+	private static void toDo(Preparing preparing) {
+		String msg = StrUtils.concat("直播间 [", preparing.getRoomId(), "] 主播已下线.");
+		UIUtils.chat(msg);
+		log.info(msg);
 	}
 	
 	/**

@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -30,6 +32,7 @@ import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -488,7 +491,7 @@ public class AppUI extends MainWindow {
 						
 					} else {
 						loginBtn.setEnabled(true);
-						loginUI = new _LoginUI();
+						loginUI = new _LoginUI(false);
 						loginUI._view();
 					}
 				};
@@ -509,20 +512,71 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("此功能存在风险, 不对普通用户开放");
 					return;
 				}
-				StormScanner.getInstn()._start();
 				
-				StormScanner.getInstn().setScan();
-				if(StormScanner.getInstn().isScan()) {
-					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, stormBtn);
-					UIUtils.log("[全平台节奏风暴扫描] 已启动");
+				// 扫描器线程未启动，则触发登录马甲流程
+				if(!StormScanner.getInstn().isRun()) {
+					_loginMini();
 					
+				// 扫描器线程已启动，则纯粹切换扫描状态
 				} else {
-					BeautyEyeUtils.setButtonStyle(NormalColor.normal, stormBtn);
-					UIUtils.log("[全平台节奏风暴扫描] 已停止");
+					StormScanner.getInstn().setScan();
+					if(StormScanner.getInstn().isScan()) {
+						BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, stormBtn);
+						UIUtils.log("[全平台节奏风暴扫描] 已启动");
+						
+					} else {
+						BeautyEyeUtils.setButtonStyle(NormalColor.normal, stormBtn);
+						UIUtils.log("[全平台节奏风暴扫描] 已停止");
+					}
 				}
 				lockBtn();
 			}
 		});
+	}
+	
+	/**
+	 * 登录马甲(用于扫描全平台节奏风暴)
+	 */
+	private void _loginMini() {
+		
+		// 使用马甲号登录
+		if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
+			
+			// 未登录过马甲号, 则登录一个马甲号
+			if(StrUtils.isEmpty(FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO))) {
+				_LoginUI miniLogin = new _LoginUI(true);
+				
+				miniLogin.addWindowListener(new WindowAdapter() {
+					
+					@Override
+					public void windowClosed(WindowEvent e) {
+						if(StrUtils.isEmpty(FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO))) {
+							SwingUtils.warn("登录马甲失败, 终止扫描节奏风暴");
+							
+						// 使用新登录的马甲号(节奏风暴扫描器启动后会在内部识别)
+						} else {
+							_startStormScanner();
+						}
+					}
+				});
+				miniLogin._view();
+				
+			// 使用上次的马甲号(节奏风暴扫描器启动后会在内部识别)
+			} else {
+				_startStormScanner();
+			}
+			
+		// 使用主号登录(节奏风暴扫描器启动后会在内部识别)
+		} else {
+			LoginMgr.getInstn().clearMiniCookie();
+			_startStormScanner();
+		}
+	}
+	
+	private void _startStormScanner() {
+		StormScanner.getInstn()._start();
+		stormBtn.doClick();
+		lockBtn();
 	}
 	
 	private void setModeBtnListener() {
@@ -540,13 +594,8 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(isLogined() == true) {
-					SwingUtils.warn("登陆状态下无法 [清除登陆信息]");
-					return;
-				}
-				
 				if(SwingUtils.confirm("[清除登陆信息] 后下次需重新登陆, 继续吗 ?")) {
-					if(LoginMgr.getInstn().clearCookies()) {
+					if(LoginMgr.getInstn().clearAllCookies()) {
 						SwingUtils.info("清除登陆信息成功");
 						
 					} else {

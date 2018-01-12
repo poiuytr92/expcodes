@@ -7,9 +7,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.core.back.MsgSender;
+import exp.libs.envm.Charset;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.ListUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
-import exp.libs.warp.ui.SwingUtils;
 
 /**
  * <PRE>
@@ -35,6 +37,15 @@ public class StormScanner extends LoopThread {
 	/** 扫描每个房间的间隔(FIXME 频率需要控制，太快可能被查出来，太慢成功率太低) */
 	private final static long SCAN_INTERVAL = 50;
 	
+	/** 刷新人气直播间时间 */
+	private final static long REFLASH_TIME = 60000;
+	
+	private final static long LOOP_TIME = 1000;
+	
+	private final static int LOOP_LIMIT = (int) (REFLASH_TIME / LOOP_TIME);
+	
+	private int loopCnt;
+	
 	/** 扫描用的cookie（全平台扫描类似DDOS攻击，尽量不要用大号） */
 	private String scanCookie;
 	
@@ -48,8 +59,9 @@ public class StormScanner extends LoopThread {
 	protected StormScanner() {
 		super("节奏风暴扫描器");
 		
-//		this.scanCookie = Browser.COOKIES();
-		this.scanCookie = "fts=1515566327; sid=i1ullm4k; DedeUserID__ckMd5=d1a0e260e1010310; SESSDATA=e764cf2a%2C1518158344%2Cbd05661e; DedeUserID=247056833; buvid3=A82B9293-C27E-4B59-8C14-A6B87C4EDC9531028infoc; bili_jct=17753d82b12a4306f50befd1de3de6a0; LIVE_BUVID=AUTO2815155663477917; finger=540129ae; _dfcaptcha=118ac0b938e70b640764ccde26b8e63b";
+		this.loopCnt = LOOP_LIMIT;
+		this.scanCookie = FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO);
+		scanCookie = (StrUtils.isEmpty(scanCookie) ? Browser.COOKIES() : scanCookie.trim());
 		this.scan = false;
 		this.hotRoomId = new LinkedList<String>();
 	}
@@ -68,23 +80,18 @@ public class StormScanner extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		
-		if(SwingUtils.confirm("是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
-			
-//			_LoginUI loginUI = new _LoginUI();
-//			loginUI._view();
-			// FIXME: 马甲号的cookies也保留
-		}
 	}
 
 	@Override
 	protected void _loopRun() {
-		
 		if(isScan() == true) {
-			reflashHotLives();
+			if(loopCnt++ >= LOOP_LIMIT) {
+				loopCnt = 0;
+				reflashHotLives();
+			}
 			sancAndJoinStorm();
 		}
-		_sleep(1000);
+		_sleep(LOOP_TIME);
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import exp.bilibili.plugin.bean.ldm.BrowserDriver;
 import exp.bilibili.plugin.envm.WebDriverType;
 import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
 
 /**
  * <PRE>
@@ -33,6 +34,8 @@ public class Browser {
 	private final static String COOKIE_NAME = "cookie";
 	
 	private final static String COOKIE_SUFFIX = ".dat";
+	
+	private final static String COOKIE_REGEX = StrUtils.concat(COOKIE_NAME, "-\\d+", COOKIE_SUFFIX);
 	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
 	
@@ -196,7 +199,7 @@ public class Browser {
 	private void _backupCookies() {
 		if(browser != null) {
 			int idx = 0;
-			StringBuilder cookieInfo = new StringBuilder();	
+			StringBuilder kvs = new StringBuilder();	
 			
 			Set<Cookie> cookies = browser.getCookies();
 			for(Cookie cookie : cookies) {
@@ -205,8 +208,8 @@ public class Browser {
 				ObjUtils.toSerializable(cookie, savePath);	// 序列化到外存， 供下次启动用
 				
 				// 供后台HTTPS协议用
-				cookieInfo.append(cookie.getName()).append("=");
-				cookieInfo.append(cookie.getValue()).append("; ");
+				kvs.append(cookie.getName()).append("=");
+				kvs.append(cookie.getValue()).append("; ");
 				
 				if(CSRF_KEY.equals(cookie.getName())) {
 					this.csrf = cookie.getValue();
@@ -214,8 +217,8 @@ public class Browser {
 			}
 			
 			if(idx > 0) {
-				cookieInfo.setLength(cookieInfo.length() - 2);
-				this.sCookies = cookieInfo.toString();
+				kvs.setLength(kvs.length() - 2);
+				this.sCookies = kvs.toString();
 			}
 		}
 	}
@@ -230,7 +233,7 @@ public class Browser {
 			File dir = new File(COOKIE_DIR);
 			File[] files = dir.listFiles();
 			for(File file : files) {
-				if(!file.getName().contains(COOKIE_NAME)) {
+				if(!RegexUtils.matches(file.getName(), COOKIE_REGEX)) {
 					continue;
 				}
 				

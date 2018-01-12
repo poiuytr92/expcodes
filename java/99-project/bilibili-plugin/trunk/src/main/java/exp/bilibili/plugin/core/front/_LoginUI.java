@@ -67,12 +67,25 @@ public class _LoginUI extends PopChildWindow {
 	/** 与验证码配套的登陆用cookie */
 	private String vcCookies;
 	
-	public _LoginUI() {
-		super("B站PC端帐密登陆", WIDTH, HIGH);
+	/** 是否用于登录马甲号 */
+	private boolean isMini;
+	
+	/**
+	 * 
+	 * @param isMini 是否用于登录马甲号
+	 */
+	public _LoginUI(boolean isMini) {
+		super("B站PC端帐密登陆", WIDTH, HIGH, false, isMini);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
+		if(args != null && args.length > 0) {
+			this.isMini = (Boolean) args[0];
+		} else {
+			this.isMini = false;
+		}
+		
 		this.usernameTXT = new JTextField();
 		this.passwordTXT = new JPasswordField();
 		SwingUtils.hide(passwordTXT);
@@ -94,6 +107,10 @@ public class _LoginUI extends PopChildWindow {
 		BeautyEyeUtils.setButtonStyle(NormalColor.green, loginBtn);
 		loginBtn.setForeground(Color.BLACK);
 		this.vcCookies = "";
+	}
+	
+	private Image modifySize(Image img) {
+		return img.getScaledInstance(100, 25, Image.SCALE_FAST);
 	}
 
 	@Override
@@ -129,42 +146,6 @@ public class _LoginUI extends PopChildWindow {
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
 		
-		// 设置登陆按钮监听
-		loginBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				loginBtn.setEnabled(false);
-				
-				String username = usernameTXT.getText();
-				String password = new String(passwordTXT.getPassword());
-				String vccode = vccodeTXT.getText();
-				
-				if(StrUtils.isEmpty(username)) {
-					SwingUtils.warn("账号不能为空");
-					
-				} else if(StrUtils.isEmpty(password)) {
-					SwingUtils.warn("密码不能为空");
-					
-				} else if(StrUtils.isEmpty(vccode)) {
-					SwingUtils.warn("验证码不能为空");
-					
-				} else {
-					boolean isOk = LoginMgr.getInstn().toLogin(
-							username, password, vccode, vcCookies);
-					if(isOk == false) {
-						SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
-						reflashBtn.doClick();
-						
-					} else {
-						_hide();
-					}
-				}
-				
-				loginBtn.setEnabled(true);
-			}
-		});
-		
 		// 设置密码可视按钮监听
 		viewBtn.addMouseListener(new MouseListener() {
 			
@@ -188,6 +169,34 @@ public class _LoginUI extends PopChildWindow {
 			public void mouseClicked(MouseEvent e) {}
 			
 		});
+				
+		// 设置登陆按钮监听
+		loginBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				loginBtn.setEnabled(false);
+				
+				String username = usernameTXT.getText();
+				String password = new String(passwordTXT.getPassword());
+				String vccode = vccodeTXT.getText();
+				
+				if(StrUtils.isEmpty(username)) {
+					SwingUtils.warn("账号不能为空");
+					
+				} else if(StrUtils.isEmpty(password)) {
+					SwingUtils.warn("密码不能为空");
+					
+				} else if(StrUtils.isEmpty(vccode)) {
+					SwingUtils.warn("验证码不能为空");
+					
+				} else {
+					toLogin(username, password, vccode);
+				}
+				
+				loginBtn.setEnabled(true);
+			}
+		});
 		
 		// 设置二维码刷新按钮监听
 		reflashBtn.addActionListener(new ActionListener() {
@@ -198,20 +207,35 @@ public class _LoginUI extends PopChildWindow {
 				ThreadUtils.tSleep(200);
 			}
 		});
-				
+	}
+	
+	private void toLogin(String username, String password, String vccode) {
+		boolean isOk = false;
+		if(isMini == true) {
+			isOk = StrUtils.isNotEmpty(LoginMgr.getInstn().toLoginMini(
+					username, password, vccode, vcCookies));
+			
+		} else {
+			isOk = LoginMgr.getInstn().toLogin(
+					username, password, vccode, vcCookies);
+		}
+		
+		if(isOk == false) {
+			SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
+			reflashBtn.doClick();
+			
+		} else {
+			_hide();
+		}
 	}
 	
 	private void updateImg() {
-		vcCookies = LoginMgr.getInstn().downloadVccode();
+		this.vcCookies = LoginMgr.getInstn().downloadVccode();
 		
 		// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图片
 		// 因为这种方式会因为图片路径没有变化, 而不去更新缓存, 导致显示的二维码一直不变
 		Image img = Toolkit.getDefaultToolkit().createImage(VCIMG_PATH);
 		imgLabel.setIcon(new ImageIcon(modifySize(img)));
 	}
-	
-	private Image modifySize(Image img) {
-		return img.getScaledInstance(100, 25, Image.SCALE_FAST);
-	}
-	
+
 }

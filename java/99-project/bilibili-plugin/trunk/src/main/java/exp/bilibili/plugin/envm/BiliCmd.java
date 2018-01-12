@@ -52,6 +52,10 @@ public class BiliCmd {
 	private final static String _LIVE = "LIVE";
 	public final static BiliCmd LIVE = new BiliCmd(_LIVE);
 	
+	/** 关播通知消息 */
+	private final static String _PREPARING = "PREPARING";
+	public final static BiliCmd PREPARING = new BiliCmd(_PREPARING);
+	
 	/** 特殊礼物：(直播间内)节奏风暴消息 */
 	private final static String _SPECIAL_GIFT = "SPECIAL_GIFT";
 	public final static BiliCmd SPECIAL_GIFT = new BiliCmd(_SPECIAL_GIFT);
@@ -102,6 +106,9 @@ public class BiliCmd {
 		
 		} else if(_LIVE.equals(cmd)) {
 			biliCMD = LIVE;
+			
+		} else if(_PREPARING.equals(cmd)) {
+			biliCMD = PREPARING;
 			
 		} else if(_SPECIAL_GIFT.equals(cmd)) {
 			biliCMD = SPECIAL_GIFT;
