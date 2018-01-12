@@ -379,7 +379,6 @@ public class MsgSender {
 	 * @return
 	 */
 	private static boolean _analyseAssnResponse(String response) {
-		log.info(response);
 		boolean goOn = true;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -393,7 +392,7 @@ public class MsgSender {
 					goOn = false;	// 已签到过，不需要继续签到
 					
 				} else {
-					log.warn("友爱社签到失败: {}", reason);
+					log.debug("友爱社签到失败: {}", reason);
 				}
 			}
 		} catch(Exception e) {

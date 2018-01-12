@@ -53,7 +53,7 @@ public class ChatMgr extends LoopThread {
 	private final static long NOTICE_TIME = 120000;
 	
 	/** 自动打call周期 */
-	private final static long CALL_TIME = 180000;
+	private final static long CALL_TIME = 15000;
 	
 	/** 检测待发送消息间隔 */
 	private final static long SLEEP_TIME = 1000;
@@ -330,7 +330,7 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(MsgKwMgr.getCalls()));
+		String msg = RandomUtils.randomElement(MsgKwMgr.getCalls());
 		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 	}
 	

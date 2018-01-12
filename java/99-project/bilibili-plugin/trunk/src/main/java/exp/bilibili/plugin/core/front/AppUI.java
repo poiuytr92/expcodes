@@ -915,7 +915,7 @@ public class AppUI extends MainWindow {
 	 * @param username 用户名
 	 */
 	private void updateTitle(String username) {
-		String title = StrUtils.concat(getTitle(), "    (登陆用户 : ", username, ")");
+		String title = StrUtils.concat(getTitle(), "    [登陆用户 : ", username, "]");
 		setTitle(title);
 		
 		// FIXME： 再下个版本增加授权时间
