@@ -214,8 +214,8 @@ public class AppUI extends MainWindow {
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.loginBtn = new JButton("扫码/帐密登陆 (自动全平台抽奖)");
 		this.stormBtn = new JButton("节奏风暴扫描");
-		this.modeBtn = new JButton("M");
-		this.clrBtn = new JButton("C");
+		this.modeBtn = new JButton("模");
+		this.clrBtn = new JButton("清");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
 		this.thxBtn = new JButton("答谢姬");
