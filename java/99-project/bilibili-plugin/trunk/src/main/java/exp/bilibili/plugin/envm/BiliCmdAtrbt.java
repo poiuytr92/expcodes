@@ -100,4 +100,6 @@ public class BiliCmdAtrbt {
 	
 	public final static String hasJoin = "hasJoin";
 	
+	public final static String online = "online";
+	
 }

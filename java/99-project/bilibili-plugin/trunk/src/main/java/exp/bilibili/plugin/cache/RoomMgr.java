@@ -10,12 +10,10 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.LotteryRoom;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.LotteryType;
-import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.io.flow.FileFlowReader;
 
 
@@ -85,14 +83,7 @@ public class RoomMgr {
 		// 节奏风暴 因为对点击速度要求很高, 不放到抽奖房间队列排队, 直接抽奖
 //		giftRoomIds.add(new LotteryRoom(roomId, stormId, LotteryType.STORM));
 		
-		String errDesc = MsgSender.toStormLottery(roomId, stormId);
-		if(StrUtils.isEmpty(errDesc)) {
-			UIUtils.statistics("成功(节奏风暴): 抽奖直播间 [", roomId, "]");
-			UIUtils.updateLotteryCnt();
-			
-		} else {
-			UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
-		}
+		MsgSender.toStormLottery(roomId, stormId);
 	}
 	
 	/**

@@ -177,16 +177,7 @@ class WebBot extends LoopThread {
 			
 		// 节奏风暴抽奖
 		} else if(room.TYPE() == LotteryType.STORM) {
-			String errDesc = MsgSender.toStormLottery(roomId, raffleId);
-			if(StrUtils.isEmpty(errDesc)) {
-				log.info("参与直播间 [{}] 抽奖成功", roomId);
-				UIUtils.statistics("成功(节奏风暴): 抽奖直播间 [", roomId, "]");
-				UIUtils.updateLotteryCnt();
-				
-			} else {
-				log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
-				UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
-			}
+			MsgSender.toStormLottery(roomId, raffleId);
 			
 		// 高能抽奖
 		} else {
