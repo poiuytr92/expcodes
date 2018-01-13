@@ -14,7 +14,6 @@ import exp.libs.utils.time.TimeUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpUtils;
 import exp.libs.warp.thread.LoopThread;
-import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ver.VersionMgr;
 
 /**
@@ -29,11 +28,6 @@ import exp.libs.warp.ver.VersionMgr;
  */
 public class SafetyMonitor extends LoopThread {
 
-	public static void main(String[] args) {
-		BeautyEyeUtils.init();
-		SafetyMonitor.getInstn()._start();
-	}
-	
 	private final static Logger log = LoggerFactory.getLogger(SafetyMonitor.class);
 	
 	/** 软件授权页 */

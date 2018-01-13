@@ -33,8 +33,8 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	}
 	
 	/**
-	 * 
-	 * @param expires Tue, 06-Feb-2018 11:54:42 GMT
+	 * 把cookie中的有效时间转换为日期
+	 * @param expires 有效时间,格式如: Tue, 06-Feb-2018 11:54:42 GMT
 	 * @return
 	 */
 	public static Date toDate(String expires) {
@@ -47,6 +47,15 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 			log.error("转换时间失败: {}", expires, e);
 		}
 		return date;
+	}
+	
+	/**
+	 * 检查当前时间是否为晚上(18:00~24:00)
+	 * @return
+	 */
+	public static boolean isNight() {
+		int hour = TimeUtils.getCurHour(8);	// 中国8小时时差
+		return (hour >= 18 && hour < 24);
 	}
 	
 }

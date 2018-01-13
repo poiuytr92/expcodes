@@ -1,10 +1,15 @@
 package exp.bilibili.plugin;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import exp.bilibili.plugin.cache.RoomMgr;
+import exp.bilibili.plugin.envm.Level;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
@@ -22,8 +27,8 @@ import exp.libs.warp.conf.xml.XConfigFactory;
  */
 public class Config {
 	
-	/** 是否为管理员使用的版本 */
-	private static boolean IS_ADMIN = false;
+	/** 使用者的权限等级 */
+	public static int LEVEL = Level.USER;
 	
 	public final static String DEFAULT_CHARSET = Charset.UTF8;
 	
@@ -32,7 +37,11 @@ public class Config {
 //			"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 	
-	private final static String CONF_PATH = "./conf/bp_conf.dat";
+	private final static String APP_PATH = "/exp/bilibili/plugin/bp_conf.dat";
+	
+	private final static String USER_PATH = "./conf/bp_conf.xml";
+	
+	public Set<Integer> tabuAutoRoomIds;
 	
 	private static volatile Config instance;
 	
@@ -40,7 +49,12 @@ public class Config {
 	
 	private Config() {
 		this.xConf = XConfigFactory.createConfig("biliConf");
-		xConf.loadConfFile(CONF_PATH);
+		xConf.loadConfFileInJar(APP_PATH);
+		xConf.loadConfFile(USER_PATH);
+		
+		this.tabuAutoRoomIds = new HashSet<Integer>();
+		readTabuAutoRoomIds();
+		System.out.println(tabuAutoRoomIds);
 	}
 	
 	public static Config getInstn() {
@@ -52,14 +66,6 @@ public class Config {
 			}
 		}
 		return instance;
-	}
-	
-	public static boolean IS_ADMIN() {
-		return IS_ADMIN;
-	}
-	
-	public static void setAdmin() {
-		IS_ADMIN = true;
 	}
 	
 	public String HOME_URL() {
@@ -194,6 +200,11 @@ public class Config {
 		return xConf.getVal("/config/app/signRoomId");
 	}
 	
+	public boolean isTabuAutoChat(String roomId) {
+		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
+		return (realRoomId > 0 ? tabuAutoRoomIds.contains(realRoomId) : false);
+	}
+	
 	public int WAIT_ELEMENT_TIME() {
 		return xConf.getInt("/config/app/waitElementTime");
 	}
@@ -210,7 +221,7 @@ public class Config {
 		boolean isOk = false;
 		final String REGEX = "(<signRoomId[^>]+>)[^<]*(</signRoomId>)";
 		if(StrUtils.isNotEmpty(roomId)) {
-			String xml = FileUtils.read(CONF_PATH, DEFAULT_CHARSET);
+			String xml = FileUtils.read(USER_PATH, DEFAULT_CHARSET);
 			Pattern ptn = Pattern.compile(REGEX);
 			Matcher mth = ptn.matcher(xml);
 			if(mth.find()) {
@@ -219,10 +230,20 @@ public class Config {
 				String txt = StrUtils.concat(head, roomId, tail);
 				xml = xml.replace(mth.group(0), txt);
 				
-				isOk = FileUtils.write(CONF_PATH, xml, DEFAULT_CHARSET, false);
+				isOk = FileUtils.write(USER_PATH, xml, DEFAULT_CHARSET, false);
 			}
 		}
 		return isOk;
 	}
 	
+	private void readTabuAutoRoomIds() {
+		String tabu = xConf.getVal("/config/app/tabuAutoRoomIds");
+		String[] roomIds = tabu.split(",");
+		for(String roomId : roomIds) {
+			roomId = roomId.trim();
+			if(StrUtils.isNotEmpty(roomId)) {
+				tabuAutoRoomIds.add(NumUtils.toInt(roomId, 0));
+			}
+		}
+	}
 }

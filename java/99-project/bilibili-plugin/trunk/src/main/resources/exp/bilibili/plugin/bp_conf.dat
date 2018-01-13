@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<config hint="常用配置（覆写全量配置文件的对应项）">
+<config hint="全量配置">
   
     <biliUrls caption="B站URL">
         <home caption="首页"><![CDATA[https://www.bilibili.com/]]></home>
@@ -44,9 +44,10 @@
     </files>
     
     <app caption="应用配置">
-        <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">438</signRoomId>
+        <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">51108</signRoomId>
+        <tabuAutoRoomIds caption="禁止自动发言房间号(需为真实房号)">51108,390480</tabuAutoRoomIds>
         <waitElementTime caption="页面元素加载等待时间(s)">10</waitElementTime>
         <clearCacheCycle caption="清理内存周期(每抽奖N次清理一次)">10</clearCacheCycle>
     </app>
-   
+    
 </config>

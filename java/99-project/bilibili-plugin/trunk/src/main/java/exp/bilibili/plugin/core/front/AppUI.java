@@ -29,12 +29,12 @@ import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.back.WebSockClient;
 import exp.bilibili.plugin.envm.ChatColor;
+import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
@@ -161,7 +161,7 @@ public class AppUI extends MainWindow {
 		// 管理员: 无条件开启所有功能
 		if(args == null || args.length <= 0) {	
 			if(FileUtils.exists("./doc/icon.ico")) {	// 发布的项目是不存在doc文件夹的, 避免管理员权限泄露
-				Config.setAdmin();
+				Config.LEVEL = Level.ADMIN;
 				
 			} else {
 				SwingUtils.warn("很明显你是假的管理员");
@@ -176,12 +176,8 @@ public class AppUI extends MainWindow {
 				SwingUtils.warn(errMsg);
 				System.exit(0);
 				
-			} else {
-				
-				// 主播用户在校验通过后开启所有功能
-				if(args.length > 1) {
-					Config.setAdmin();
-				}
+			} else if(args.length > 1) {
+				Config.LEVEL = Level.UPLIVE;
 			}
 		}
 	}
@@ -212,7 +208,7 @@ public class AppUI extends MainWindow {
 		this.defaultBtn = new JButton("★");
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
-		this.loginBtn = new JButton("扫码/帐密登陆 (自动全平台抽奖)");
+		this.loginBtn = new JButton("扫码/帐密登陆 (自动抽奖)");
 		this.stormBtn = new JButton("节奏风暴扫描");
 		this.modeBtn = new JButton("模");
 		this.clrBtn = new JButton("清");
@@ -244,7 +240,7 @@ public class AppUI extends MainWindow {
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
 		this.notifyTA = new JTextArea(1, 40);
-		this.sttcTA = new JTextArea(7, 40);
+		this.sttcTA = new JTextArea(10, 40);
 		chatTA.setEditable(false);
 		consoleTA.setEditable(false);
 		notifyTA.setEditable(false);
@@ -386,13 +382,20 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Config.IS_ADMIN() == false) {
+				if(Config.LEVEL < Level.UPLIVE) {
 					SwingUtils.warn("非主播用户没有这个技能哦::>_<::");
 					return;
 				}
 				
-				String roomId = ridTF.getText();
+				String roomId = getRoomId();
+				int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
+				if(realRoomId <= 0) {
+					SwingUtils.warn("直播间房号无效/未收录");
+					return;
+				}
+				
 				if(Config.getInstn().setSignRoomId(roomId)) {
+					linkBtn.doClick();
 					SwingUtils.info("默认房间号变更为: ".concat(roomId));
 				}
 			}
@@ -405,10 +408,9 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				isRunning = true;
-				int roomId = NumUtils.toInt(ridTF.getText().trim(), 0);
-				roomId = RoomMgr.getInstn().getRealRoomId(roomId);
+				int roomId = RoomMgr.getInstn().getRealRoomId(getRoomId());
 				if(roomId <= 0) {
-					SwingUtils.warn("直播间地址无效");
+					SwingUtils.warn("直播间房号无效/未收录");
 					return;
 				}
 				
@@ -508,7 +510,7 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("登陆后才能使用此功能");
 					return;
 					
-				} else if(Config.IS_ADMIN() == false) {
+				} else if(Config.LEVEL < Level.UPLIVE) {
 					SwingUtils.warn("此功能存在风险, 不对普通用户开放");
 					return;
 				}
@@ -645,12 +647,17 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [答谢姬] 哦~");
 					return;
 					
-				} else if(Config.IS_ADMIN() == false) {
+				} else if(Config.LEVEL < Level.UPLIVE) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [答谢姬] 哦~");
 					return;
+					
+				} else if(Config.LEVEL < Level.ADMIN && 
+						Config.getInstn().isTabuAutoChat(getRoomId())) {
+					SwingUtils.warn("您未被授权在此直播间使用姬气人哦~");
+					return;
 				}
-				ChatMgr.getInstn()._start();
 				
+				ChatMgr.getInstn()._start();
 				ChatMgr.getInstn().setAutoThankYou();
 				if(ChatMgr.getInstn().isAutoThankYou()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, thxBtn);
@@ -674,12 +681,17 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [公告姬] 哦~");
 					return;
 					
-				} else if(Config.IS_ADMIN() == false) {
+				} else if(Config.LEVEL < Level.UPLIVE) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [公告姬] 哦~");
 					return;
+					
+				} else if(Config.LEVEL < Level.ADMIN && 
+						Config.getInstn().isTabuAutoChat(getRoomId())) {
+					SwingUtils.warn("您未被授权在此直播间使用姬气人哦~");
+					return;
 				}
-				ChatMgr.getInstn()._start();
 				
+				ChatMgr.getInstn()._start();
 				ChatMgr.getInstn().setAutoNotice();
 				if(ChatMgr.getInstn().isAutoNotice()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, noticeBtn);
@@ -703,12 +715,18 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [小call姬] 哦~");
 					return;
 					
-				} else if(Config.IS_ADMIN() == false) {
+				} else if(Config.LEVEL < Level.UPLIVE) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [小call姬] 哦~");
 					return;
+					
+				} else if(Config.LEVEL < Level.ADMIN && 
+						Config.getInstn().isTabuAutoChat(getRoomId())) {
+					SwingUtils.warn("您未被授权在此直播间使用姬气人哦~");
+					return;
+					
 				}
-				ChatMgr.getInstn()._start();
 				
+				ChatMgr.getInstn()._start();
 				ChatMgr.getInstn().setAutoCall();
 				if(ChatMgr.getInstn().isAutoCall()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, callBtn);
@@ -732,11 +750,17 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [晚安姬] 哦~");
 					return;
 					
-				} else if(Config.IS_ADMIN() == false) {
+				} else if(Config.LEVEL < Level.UPLIVE) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [晚安姬] 哦~");
+					return;
+					
+				} else if(Config.LEVEL < Level.ADMIN && 
+						Config.getInstn().isTabuAutoChat(getRoomId())) {
+					SwingUtils.warn("您未被授权在此直播间使用姬气人哦~");
 					return;
 				}
 				
+				ChatMgr.getInstn()._start();
 				ChatMgr.getInstn().setAutoGoodNight();
 				if(ChatMgr.getInstn().isAutoGoodNight()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, nightBtn);
@@ -780,7 +804,7 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Config.IS_ADMIN() == false) {
+				if(Config.LEVEL < Level.UPLIVE) {
 					return;
 				}
 				
@@ -794,7 +818,7 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Config.IS_ADMIN() == false) {
+				if(Config.LEVEL < Level.UPLIVE) {
 					return;
 				}
 				
@@ -950,7 +974,7 @@ public class AppUI extends MainWindow {
 	 * @return
 	 */
 	public String getRoomId() {
-		return ridTF.getText();
+		return ridTF.getText().trim();
 	}
 	
 	/**

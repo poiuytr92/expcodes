@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.bean.pdm.SendGift;
 import exp.bilibili.plugin.core.back.MsgSender;
+import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.num.RandomUtils;
@@ -24,7 +25,8 @@ import exp.libs.warp.thread.LoopThread;
  * 在线聊天管理器:
  *  1.自动晚安
  *  2.自动感谢投喂
- *  3.定时打call
+ *  3.定时公告
+ *  4.定时打call
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -132,11 +134,10 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	public void helloLive(String roomId) {
-		long hour = ((System.currentTimeMillis() % 86400000) / 3600000);
-		hour = (hour + 8) % 24;	// 时差
-		
 		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
 		String msg = "滴~".concat(card);
+		
+		int hour = TimeUtils.getCurHour(8);	// 中国8小时时差
 		if(hour >= 6 && hour < 12) {
 			msg = msg.concat("早上好");
 			

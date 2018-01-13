@@ -526,7 +526,8 @@ public class MsgSender {
 		
 		List<String> roomIds = new LinkedList<String>();
 		HttpClient client = new HttpClient();
-		for(int page = 1; page <= MAX_PAGES; page++) {
+		int pageOffset = TimeUtils.isNight() ? 1 : 0;	// 当为晚上时, 不选择首页房间(抢风暴成功率太低)
+		for(int page = 1 + pageOffset; page <= MAX_PAGES + pageOffset; page++) {
 			request.put("page", String.valueOf(page));
 			String response = client.doGet(LIVE_LIST_URL, header, request);
 			roomIds.addAll(_analyseTopLiveResponse(response, MIN_ONLINE));
