@@ -122,7 +122,7 @@ class WebBot extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		RoomMgr.getInstn().clearGiftRooms();
+//		RoomMgr.getInstn().clearGiftRooms();	// 可以尝试对登录前的抽奖房间抽奖, 不一定要清空
 		MsgSender.toSign();	// 自动签到
 	}
 

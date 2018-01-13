@@ -1,13 +1,21 @@
 package exp.bilibili.plugin.monitor;
 
+import java.util.Date;
+
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.cache.LoginMgr;
+import exp.bilibili.plugin.core.back.MsgSender;
+import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.certificate.bean.App;
 import exp.certificate.core.Convertor;
 import exp.libs.utils.encode.CryptoUtils;
+import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
@@ -30,9 +38,13 @@ public class SafetyMonitor extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(SafetyMonitor.class);
 	
-	/** 软件授权页 */
-	private final static String URL = CryptoUtils.deDES(
+	/** 软件授权页(Github) */
+	private final static String GITHUB_URL = CryptoUtils.deDES(
 			"610BEF99CF948F0DB1542314AC977291892B30802EC5BF3B2DCDD5538D66DDA67467CE4082C2D0BC56227128E753555C");
+	
+	/** 软件授权页(Bilibili-备用) */
+	private final static String BILIBILI_URL = CryptoUtils.deDES(
+			"EECD1D519FEBFDE5EF68693278F5849E8068123647103E9D1644539B452D8DE870DD36BBCFE2C2A8E5A16D58A0CA752D3D715AF120F89F10990A854A386B95631E7C60D1CFD77605");
 	
 	/** 免检原因 */
 	private final static String UNCHECK_CAUSE = "UNCHECK";
@@ -94,15 +106,20 @@ public class SafetyMonitor extends LoopThread {
 		_sleep(LOOP_TIME);
 		
 		try {
-			if(check() == false) {
+			if(checkByGitHub() == false) {
 				_stop();
 			}
 		} catch(Exception e) {
 			log.error("{} 异常", getName(), e);
 			
 			if(++noResponseCnt >= NO_RESPONSE_LIMIT) {
-				cause = "监控异常, 无法确认授权信息";
-				_stop();
+				if(checkByBilibili() == true) {
+					noResponseCnt = 0;
+					
+				} else {
+					cause = "监控异常, 无法确认授权信息";
+					_stop();
+				}
 			}
 		}
 	}
@@ -124,44 +141,125 @@ public class SafetyMonitor extends LoopThread {
 	}
 	
 	/**
-	 * 软件授权校验
+	 * 软件授权校验（通过GitHub授权页）
 	 * @return 是否继续校验
 	 */
-	private boolean check() {
+	private boolean checkByGitHub() {
 		boolean isContinue = true;
 		if(++loopCnt >= LOOP_LIMIT) {
 			loopCnt = 0;
 			
-			String pageSource = HttpUtils.getPageSource(URL);
-			App app = Convertor.toApp(pageSource, appName);
+			String pageSource = HttpUtils.getPageSource(GITHUB_URL);
+			App app = Convertor.toApp(pageSource, appName);	// 提取软件授权信息
 			if(app == null) {
 				if(++noResponseCnt >= NO_RESPONSE_LIMIT) {
-					cause = "网络异常, 无法确认授权信息";
-					isContinue = false;
+					if(checkByBilibili() == true) {	// Github可能网络不通, 转B站校验
+						noResponseCnt = 0;
+						
+					} else {
+						cause = "网络异常, 无法确认授权信息";
+						isContinue = false;
+					}
 				}
-				
 			} else {
 				noResponseCnt = 0;
-				
-				if(checkInWhitelist(app.getWhitelist())) {
-					cause = UNCHECK_CAUSE;	// 白名单用户, 启动后则免检
-					isContinue = false;
-					
-				} else if(!checkVersions(app.getVersions())) {
-					cause = "版本已失效";
-					isContinue = false;
-					
-				} else if(!checkNotInBlacklist(app.getBlacklist())) {
-					cause = "孩子, 你被管理员关小黑屋了";
-					isContinue = false;
-					
-				} else if(!checkInTime(app.getTime())) {
-					cause = "授权已过期";
-					isContinue = false;
-				}
+				isContinue = check(app);
 			}
 		}
 		return isContinue;
+	}
+	
+	/**
+	 * 软件授权校验（通过Bilibili授权信息-作为备用校验）
+	 * @return 是否继续校验
+	 */
+	private boolean checkByBilibili() {
+		boolean isOk = false;
+		String response = MsgSender.queryCertTags(BILIBILI_URL);
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			
+			if(code == 0) {
+				JSONArray data = JsonUtils.getArray(json, BiliCmdAtrbt.data);
+				App app = _toApp(data);	// 生成软件授权信息
+				if(app != null) {
+					isOk = check(app);
+				}
+			}
+		} catch(Exception e) {
+			log.error("从B站提取应用 [{}] 信息失败", appName, e);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 生成软件授权信息
+	 * @param data
+	 * @return
+	 */
+	private App _toApp(JSONArray data) {
+		App app = null;
+		if(data == null || data.size() <= 0) {
+			return app;
+		}
+		
+		String versions = "";
+		String time = "";
+		StringBuilder blacklist = new StringBuilder();
+		StringBuilder whitelist = new StringBuilder();
+		
+		for(int i = 0; i < data.size(); i++) {
+			String tag = data.getString(i).trim();
+			if(StrUtils.isEmpty(tag)) {
+				continue;
+				
+			} else if(tag.startsWith("V:")) {
+				versions = tag.replace("V:", "");
+				
+			} else if(tag.startsWith("T:")) {
+				time = tag.replace("T:", "");
+				Date date = TimeUtils.toDate(time, "yyyyMMdd");
+				time = TimeUtils.toStr(date);
+				
+			} else if(tag.startsWith("B:")) {
+				blacklist.append(tag.replace("B:", "")).append(",");
+				
+			} else if(tag.startsWith("W:")) {
+				whitelist.append(tag.replace("W:", "")).append(",");
+			}
+		}
+		
+		if(blacklist.length() > 0) { blacklist.setLength(blacklist.length() - 1); }
+		if(whitelist.length() > 0) { whitelist.setLength(whitelist.length() - 1); }
+		app = new App(appName, versions, time, blacklist.toString(), whitelist.toString());
+		return app;
+	}
+	
+	/**
+	 * 校验当前软件是否匹配授权信息
+	 * @param app 软件授权信息
+	 * @return true:匹配; false:不匹配
+	 */
+	private boolean check(App app) {
+		boolean isOk = true;
+		if(checkInWhitelist(app.getWhitelist())) {
+			cause = UNCHECK_CAUSE;	// 白名单用户, 启动后则免检
+			isOk = false;
+			
+		} else if(!checkVersions(app.getVersions())) {
+			cause = "版本已失效";
+			isOk = false;
+			
+		} else if(!checkNotInBlacklist(app.getBlacklist())) {
+			cause = "孩子, 你被管理员关小黑屋了";
+			isOk = false;
+			
+		} else if(!checkInTime(app.getTime())) {
+			cause = "授权已过期";
+			isOk = false;
+		}
+		return isOk;
 	}
 	
 	/**

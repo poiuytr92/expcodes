@@ -362,8 +362,8 @@ public class MsgSender {
 	public static boolean toAssn() {
 		Map<String, String> headers = toPostHeadParams(Browser.COOKIES());
 		headers.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
-		headers.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOST);
-		headers.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL);
+		headers.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
+		headers.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/center/index"));
 		
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("task_id", "double_watch_task");
@@ -571,20 +571,25 @@ public class MsgSender {
 	 */
 	public static int scanStorms(String cookies, 
 			List<String> roomIds, long scanInterval) {
-		int cnt = 0;
+		int sum = 0;
 		HttpClient client = new HttpClient();
 		Map<String, String> requests = new HashMap<String, String>();
 		for(String roomId : roomIds) {
 			requests.put("roomid", roomId);
 			Map<String, String> headers = toGetHeadParams(cookies, roomId);
-			String response = client.doGet(STORM_CHECK_URL, headers, requests);
 			
-			List<String> raffleIds = _getStormIds(roomId, response);
-			cnt += _joinStorms(roomId, raffleIds);
+			int cnt = 0;
+			do {
+				cnt = 0;
+				String response = client.doGet(STORM_CHECK_URL, headers, requests);
+				List<String> raffleIds = _getStormIds(roomId, response);
+				cnt = _joinStorms(roomId, raffleIds);
+				sum += cnt;
+			} while(cnt > 0);	// 对于存在节奏风暴的房间, 再扫描一次(可能有人连续送节奏风暴)
 			ThreadUtils.tSleep(scanInterval);
 		}
 		client.close();
-		return cnt;
+		return sum;
 	}
 	
 	/**
@@ -968,6 +973,20 @@ public class MsgSender {
 			log.error("执行日常任务失败: {}", response, e);
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 获取B站link中心针对本插件的授权校验标签
+	 * @param BILIBILI_URL B站link中心
+	 * @return {"code":0,"msg":"OK","message":"OK","data":["W:M-亚絲娜","B:","T:20180301","V:2.0"]}
+	 */
+	public static String queryCertTags(final String BILIBILI_URL) {
+		Map<String, String> headers = toGetHeadParams("");
+		headers.put(HttpUtils.HEAD.KEY.HOST, LINK_HOST);
+		headers.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
+		headers.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/world/index"));
+		
+		return HttpURLUtils.doGet(BILIBILI_URL, headers, null);
 	}
 	
 }

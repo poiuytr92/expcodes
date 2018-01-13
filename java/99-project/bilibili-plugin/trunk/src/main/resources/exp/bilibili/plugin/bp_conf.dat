@@ -17,8 +17,8 @@
         <sign caption="签到服务器"><![CDATA[http://api.live.bilibili.com/sign/doSign]]></sign>
         <account caption="账号信息服务器"><![CDATA[http://account.bilibili.com/home/userInfo]]></account>
         <assn caption="友爱社签到服务器"><![CDATA[http://api.live.bilibili.com/activity/v1/task/receive_award]]></assn>
-        <linkHost caption="直播中心主机"><![CDATA[http://link.bilibili.com]]></linkHost>
-        <link caption="直播中心服务器"><![CDATA[http://link.bilibili.com/p/center/index]]></link>
+        <linkHost caption="直播中心主机"><![CDATA[api.vc.bilibili.com]]></linkHost>
+        <link caption="直播中心服务器"><![CDATA[http://link.bilibili.com]]></link>
         
         
         <stormCheck caption="风暴检测服务器"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/check]]></stormCheck>

@@ -54,7 +54,6 @@ public class Config {
 		
 		this.tabuAutoRoomIds = new HashSet<Integer>();
 		readTabuAutoRoomIds();
-		System.out.println(tabuAutoRoomIds);
 	}
 	
 	public static Config getInstn() {

@@ -28,6 +28,9 @@ public class StormScanner extends LoopThread {
 	// 每10分钟更新当前top50房间, 只扫描那些
 	private final static Logger log = LoggerFactory.getLogger(StormScanner.class);
 	
+	/** 此为风险行为，不过频扫描 */
+	private final static int SLEEP_LIMIT = 2000;
+	
 	/** 最大的查询分页(每页最多30个房间): 每页30个房间 */
 	private final static int MAX_PAGES = 2;
 	
@@ -37,13 +40,10 @@ public class StormScanner extends LoopThread {
 	/** 扫描每个房间的间隔(FIXME 频率需要控制，太快可能被查出来，太慢成功率太低) */
 	private final static long SCAN_INTERVAL = 50;
 	
-	/** 刷新人气直播间时间 */
-	private final static long REFLASH_TIME = 60000;
+	/** 每轮询N次所有房间，则刷新房间列表 */
+	private final static int LOOP_LIMIT = 10;
 	
-	private final static long LOOP_TIME = 1000;
-	
-	private final static int LOOP_LIMIT = (int) (REFLASH_TIME / LOOP_TIME);
-	
+	/** 轮询所有房间次数 */
 	private int loopCnt;
 	
 	/** 扫描用的cookie（全平台扫描类似DDOS攻击，尽量不要用大号） */
@@ -91,7 +91,7 @@ public class StormScanner extends LoopThread {
 			}
 			sancAndJoinStorm();
 		}
-		_sleep(LOOP_TIME);
+		_sleep(SLEEP_LIMIT);
 	}
 
 	@Override
