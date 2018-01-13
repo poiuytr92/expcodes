@@ -71,6 +71,10 @@ public class UIUtils {
 		AppUI.getInstn().updateLotteryCnt(num);
 	}
 	
+	public static boolean isLogined() {
+		return AppUI.getInstn().isLogined();
+	}
+	
 	public static void printVersionInfo() {
 		AppUI.getInstn().printVersionInfo();
 	}

@@ -131,6 +131,14 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/link");
 	}
 	
+	public String MSG_HOST() {
+		return xConf.getVal("/config/biliUrls/msgHost");
+	}
+	
+	public String MSG_URL() {
+		return xConf.getVal("/config/biliUrls/msg");
+	}
+	
 	public String STORM_CHECK_URL() {
 		return xConf.getVal("/config/biliUrls/stormCheck");
 	}
@@ -202,6 +210,10 @@ public class Config {
 	public boolean isTabuAutoChat(String roomId) {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		return (realRoomId > 0 ? tabuAutoRoomIds.contains(realRoomId) : false);
+	}
+	
+	public String ACTIVITY_ROOM_ID() {
+		return xConf.getVal("/config/app/activityRoomId");
 	}
 	
 	public int WAIT_ELEMENT_TIME() {

@@ -20,12 +20,14 @@ import exp.bilibili.plugin.bean.pdm.SysMsg;
 import exp.bilibili.plugin.bean.pdm.TvLottery;
 import exp.bilibili.plugin.bean.pdm.WelcomeGuard;
 import exp.bilibili.plugin.bean.pdm.WelcomeMsg;
+import exp.bilibili.plugin.cache.ActivityMgr;
 import exp.bilibili.plugin.cache.ChatMgr;
 import exp.bilibili.plugin.cache.MsgKwMgr;
 import exp.bilibili.plugin.cache.OnlineUserMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmd;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
+import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.other.StrUtils;
@@ -120,6 +122,7 @@ public class MsgAnalyser {
 		
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
 		ChatMgr.getInstn().addNight(msgBean.getUsername(), msgBean.getMsg());
+		ActivityMgr.getInstn().add(msgBean);
 	}
 	
 	/**
@@ -136,6 +139,7 @@ public class MsgAnalyser {
 		
 		ChatMgr.getInstn().addThxGift(msgBean);
 		OnlineUserMgr.getInstn().add(msgBean.getUname());
+		ActivityMgr.getInstn().add(msgBean);
 	}
 	
 	/**
@@ -248,15 +252,16 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(GuardBuy msgBean) {
-		String msg = StrUtils.concat(
-				"[", msgBean.getUid(), "][", msgBean.getGuardDesc(), "][", 
-				msgBean.getUsername(), "] ", MsgKwMgr.getAdj(), "上了贼船"
+		String msg = StrUtils.concat("[", msgBean.getGuardDesc(), "][", 
+				msgBean.getUsername(), "] ", MsgKwMgr.getAdj(), "上了贼船,活跃+",
+				ActivityMgr.showCost(msgBean.getGuardDesc(), 1)
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
 		
 		ChatMgr.getInstn().addThxGuard(msg);
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
+		ActivityMgr.getInstn().add(msgBean);
 	}
 
 	/**

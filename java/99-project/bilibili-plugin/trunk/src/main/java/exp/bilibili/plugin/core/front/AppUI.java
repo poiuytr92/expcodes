@@ -19,6 +19,7 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.cache.ActivityMgr;
 import exp.bilibili.plugin.cache.Browser;
 import exp.bilibili.plugin.cache.ChatMgr;
 import exp.bilibili.plugin.cache.LoginMgr;
@@ -843,6 +844,7 @@ public class AppUI extends MainWindow {
 		LoginMgr.getInstn()._stop();	
 		WebBot.getInstn()._stop();
 		MsgKwMgr.getInstn().clear();
+		ActivityMgr.getInstn().save();
 		SafetyMonitor.getInstn()._stop();
 		
 		Browser.quit();
@@ -949,7 +951,7 @@ public class AppUI extends MainWindow {
 	 * 检查是否已登录
 	 * @return
 	 */
-	private boolean isLogined() {
+	public boolean isLogined() {
 		return isLogined;
 	}	
 	

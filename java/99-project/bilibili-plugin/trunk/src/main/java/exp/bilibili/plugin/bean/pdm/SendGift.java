@@ -113,7 +113,7 @@ public class SendGift extends _Msg {
 	
 	private String giftName;
 	
-	private String num;
+	private int num;
 	
 	public SendGift(JSONObject json) {
 		super(json);
@@ -128,7 +128,7 @@ public class SendGift extends _Msg {
 			this.timestamp = JsonUtils.getStr(data, BiliCmdAtrbt.timestamp);
 			this.action = JsonUtils.getStr(data, BiliCmdAtrbt.action);
 			this.giftName = JsonUtils.getStr(data, BiliCmdAtrbt.giftName);
-			this.num = JsonUtils.getStr(data, BiliCmdAtrbt.num);
+			this.num = JsonUtils.getInt(data, BiliCmdAtrbt.num, 0);
 		}
 	}
 	
@@ -152,7 +152,7 @@ public class SendGift extends _Msg {
 		return giftName;
 	}
 
-	public String getNum() {
+	public int getNum() {
 		return num;
 	}
 	

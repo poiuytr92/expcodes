@@ -12,9 +12,9 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.bean.pdm.SendGift;
 import exp.bilibili.plugin.core.back.MsgSender;
+import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
@@ -154,12 +154,7 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	public void addThxGift(SendGift msgBean) {
-		if(!isAutoThankYou()) {
-			return;
-		}
-		
-		int num = NumUtils.toInt(msgBean.getNum(), 0);
-		if(num <= 0) {
+		if(!isAutoThankYou() || msgBean.getNum() <= 0) {
 			return;
 		}
 		
@@ -175,7 +170,7 @@ public class ChatMgr extends LoopThread {
 			
 			Integer sum = gifts.get(giftName);
 			sum = (sum == null ? 0 : sum);
-			gifts.put(giftName, (sum + num));
+			gifts.put(giftName, (sum + msgBean.getNum()));
 		}
 	}
 	
@@ -287,24 +282,27 @@ public class ChatMgr extends LoopThread {
 				String giftName = giftIts.next();
 				Integer num = gifts.get(giftName);
 				if(num != null && num > 0) {
+					int cost = ActivityMgr.showCost(giftName, num);
 					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-							MsgKwMgr.getAdj(), "投喂", num, "个[", giftName, "]");
+							MsgKwMgr.getAdj(), "投喂", num, "个[", giftName, "],活跃+", cost);
 					MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 				}
 			}
 			
 		// 多个礼物多份
 		} else {
+			int cost = 0;
 			StringBuilder sb = new StringBuilder();
 			Iterator<String> giftIts = gifts.keySet().iterator();
 			while(giftIts.hasNext()) {
 				String giftName = giftIts.next();
 				sb.append(giftName).append(",");
+				cost += ActivityMgr.showCost(giftName, gifts.get(giftName));
 			}
 			sb.setLength(sb.length() - 1);
 			
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-					MsgKwMgr.getAdj(), "投喂[", sb.toString(), "]");
+					MsgKwMgr.getAdj(), "投喂[", sb.toString(), "],活跃+", cost);
 			MsgSender.sendChat(msg, UIUtils.getCurChatColor());
 		}
 		
