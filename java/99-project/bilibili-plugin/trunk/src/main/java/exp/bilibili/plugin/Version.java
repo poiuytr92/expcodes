@@ -25,6 +25,8 @@ public class Version {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
+		
+		// TODO: 活跃度排行榜
 	}
 	
 }
