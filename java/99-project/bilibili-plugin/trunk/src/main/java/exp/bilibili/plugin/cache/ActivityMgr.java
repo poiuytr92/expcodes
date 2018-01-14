@@ -285,11 +285,21 @@ public class ActivityMgr {
 			activity.setRoomid(ROOM_ID);
 			activitys.add(activity);
 		}
+		
+		boolean isOk = _truncate();
+		isOk &= _saveAll(activitys);
+		log.info("更新直播间 [{}] 的活跃值{}", ROOM_ID, (isOk ? "成功" : "失败"));
+		
 		users.clear();
 		costs.clear();
-		
-		boolean isOk = _saveAll(activitys);
-		log.info("更新直播间 [{}] 的活跃值{}", ROOM_ID, (isOk ? "成功" : "失败"));
+	}
+	
+	private static boolean _truncate() {
+		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID);
+		Connection conn = SqliteUtils.getConnByJDBC(DS);
+		boolean isOk = TActivity.delete(conn, where);
+		SqliteUtils.close(conn);
+		return isOk;
 	}
 	
 	private static boolean _saveAll(List<TActivity> activitys) {
@@ -298,14 +308,12 @@ public class ActivityMgr {
 		SqliteUtils.setAutoCommit(conn, false);
 		try {
 			for(TActivity activity : activitys) {
-				String where = StrUtils.concat(
-						TActivity.getRoomid$CN(), " = ", activity.getRoomid(), 
-						" AND ", TActivity.getUid$CN(), " = '", activity.getUid(), "'");
-				isOk &= TActivity.update(conn, activity, where);
+				isOk &= TActivity.insert(conn, activity);
 			}
 			conn.commit();
 			
 		} catch(Exception e) {
+			log.info("更新直播间 [{}] 的活跃值异常", ROOM_ID, e);
 			isOk = false;
 		}
 		
