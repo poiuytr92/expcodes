@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.bean.pdm.SendGift;
 import exp.bilibili.plugin.core.back.MsgSender;
-import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.RandomUtils;

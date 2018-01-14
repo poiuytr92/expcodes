@@ -134,6 +134,8 @@ public class AppUI extends MainWindow {
 	
 	private ChatColor curChatColor;
 	
+	private String loginUser;
+	
 	private boolean isLogined;
 	
 	private boolean isRunning;
@@ -258,6 +260,7 @@ public class AppUI extends MainWindow {
 		this.colorUI = new _ColorUI();
 		this.curChatColor = ChatColor.WHITE;
 		
+		this.loginUser = "";
 		this.isLogined = false;
 		this.isRunning = false;
 		printVersionInfo();
@@ -654,7 +657,7 @@ public class AppUI extends MainWindow {
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
 						Config.getInstn().isTabuAutoChat(getRoomId())) {
-					SwingUtils.warn("您未被授权在此直播间使用姬气人哦~");
+					SwingUtils.warn("您未被授权在此直播间使用 [答谢姬] 哦~");
 					return;
 				}
 				
@@ -688,7 +691,7 @@ public class AppUI extends MainWindow {
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
 						Config.getInstn().isTabuAutoChat(getRoomId())) {
-					SwingUtils.warn("您未被授权在此直播间使用姬气人哦~");
+					SwingUtils.warn("您未被授权在此直播间使用 [公告姬] 哦~");
 					return;
 				}
 				
@@ -715,16 +718,6 @@ public class AppUI extends MainWindow {
 				if(!isLogined()) {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [小call姬] 哦~");
 					return;
-					
-				} else if(Config.LEVEL < Level.UPLIVE) {
-					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [小call姬] 哦~");
-					return;
-					
-				} else if(Config.LEVEL < Level.ADMIN && 
-						Config.getInstn().isTabuAutoChat(getRoomId())) {
-					SwingUtils.warn("您未被授权在此直播间使用姬气人哦~");
-					return;
-					
 				}
 				
 				ChatMgr.getInstn()._start();
@@ -757,7 +750,7 @@ public class AppUI extends MainWindow {
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
 						Config.getInstn().isTabuAutoChat(getRoomId())) {
-					SwingUtils.warn("您未被授权在此直播间使用姬气人哦~");
+					SwingUtils.warn("您未被授权在此直播间使用 [晚安姬] 哦~");
 					return;
 				}
 				
@@ -819,10 +812,6 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Config.LEVEL < Level.UPLIVE) {
-					return;
-				}
-				
 				new _EditorUI("打call姬", Config.getInstn().CALL_PATH())._view();
 				lockBtn();
 			}
@@ -919,6 +908,7 @@ public class AppUI extends MainWindow {
 	 * 标记已登陆成功
 	 */
 	public void markLogin(String username) {
+		loginUser = username;
 		isLogined = true;
 		loginBtn.setEnabled(false);	
 		
@@ -927,8 +917,8 @@ public class AppUI extends MainWindow {
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
 		WebBot.getInstn()._start();	// 启动仿真机器人
 		
-		updateTitle(username);
-		UIUtils.log("欢迎肥来: ".concat(username));
+		updateTitle("0000-00-00");
+		UIUtils.log("欢迎肥来: ".concat(loginUser));
 		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
 		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 		
@@ -937,14 +927,13 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 更新软件标题
-	 * @param username 用户名
+	 * 更新软件标题(用户名+授权时间)
 	 */
-	private void updateTitle(String username) {
-		String title = StrUtils.concat(getTitle(), "    [登陆用户 : ", username, "]");
+	public void updateTitle(String certificateTime) {
+		String title = StrUtils.concat(getTitle().replaceFirst("    \\[.*", ""), 
+				"    [登陆用户 : ", loginUser, 
+				"] [授权到期: ", certificateTime, "]");
 		setTitle(title);
-		
-		// FIXME： 再下个版本增加授权时间
 	}
 	
 	/**

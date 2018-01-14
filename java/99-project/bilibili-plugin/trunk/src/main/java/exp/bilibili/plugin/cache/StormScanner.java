@@ -25,7 +25,6 @@ import exp.libs.warp.thread.LoopThread;
  */
 public class StormScanner extends LoopThread {
 
-	// 每10分钟更新当前top50房间, 只扫描那些
 	private final static Logger log = LoggerFactory.getLogger(StormScanner.class);
 	
 	/** 此为风险行为，不过频扫描 */

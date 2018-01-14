@@ -75,6 +75,10 @@ public class UIUtils {
 		return AppUI.getInstn().isLogined();
 	}
 	
+	public static void updateAppTitle(String certificateTime) {
+		AppUI.getInstn().updateTitle(certificateTime);
+	}
+	
 	public static void printVersionInfo() {
 		AppUI.getInstn().printVersionInfo();
 	}

@@ -12,6 +12,7 @@ import exp.bilibili.plugin.cache.LoginMgr;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.SafetyUtils;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.certificate.bean.App;
 import exp.certificate.core.Convertor;
 import exp.libs.utils.encode.CryptoUtils;
@@ -71,6 +72,8 @@ public class SafetyMonitor extends LoopThread {
 
 	private String appVersion;
 	
+	private String certificateTime;
+	
 	private static volatile SafetyMonitor instance;
 	
 	private SafetyMonitor() {
@@ -83,6 +86,7 @@ public class SafetyMonitor extends LoopThread {
 		String verInfo =  VersionMgr.exec("-p");
 		this.appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
 		this.appVersion = RegexUtils.findFirst(verInfo, "版本号[ |]*([\\d|\\.]+)");
+		updateCertificateTime(SafetyUtils.fileToCertificate());
 	}
 	
 	public static SafetyMonitor getInstn() {
@@ -165,6 +169,9 @@ public class SafetyMonitor extends LoopThread {
 				noResponseCnt = 0;
 				isContinue = check(app);
 			}
+			
+			updateCertificateTime(app);	// 更新授权时间
+			UIUtils.updateAppTitle(certificateTime); // 把授权时间更新到标题
 		}
 		return isContinue;
 	}
@@ -323,7 +330,26 @@ public class SafetyMonitor extends LoopThread {
 		long now = System.currentTimeMillis();
 		long publicTime = TimeUtils.toMillis(time);
 		long privateTime = SafetyUtils.fileToCertificate();
+		
+		// 更新授权时间
+		long maxTime = (publicTime > privateTime ? publicTime : privateTime);
+		updateCertificateTime(maxTime);
+		
 		return !(now > publicTime && now > privateTime);
 	}
-
+	
+	/**
+	 * 更新授权时间
+	 */
+	private void updateCertificateTime(long millis) {
+		this.certificateTime = TimeUtils.toStr(millis, "yyyy-MM-dd");
+	}
+	
+	/**
+	 * 更新授权时间
+	 */
+	private void updateCertificateTime(App app) {
+		checkInTime(app.getTime());
+	}
+	
 }
