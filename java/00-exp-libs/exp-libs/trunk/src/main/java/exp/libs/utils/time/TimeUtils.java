@@ -96,12 +96,12 @@ public class TimeUtils {
 	 * @return 指定格式字符串
 	 */
 	public static String toStr(Date date, String format) {
-		String ymdhms = DEFAULT_TIME;
+		String sDate = DEFAULT_TIME;
 		if(date != null) {
 			SimpleDateFormat sdf = new SimpleDateFormat(format);
-			ymdhms = sdf.format(date);
+			sDate = sdf.format(date);
 		}
-		return ymdhms;
+		return sDate;
 	}
 	
 	/**
@@ -129,13 +129,23 @@ public class TimeUtils {
 	 * @return Date时间 (转换失败则返回起始时间 1970-1-1 08:00:00)
 	 */
 	public static Date toDate(String ymdhms) {
-		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_YMDHMS);
+		return toDate(ymdhms, FORMAT_YMDHMS);
+	}
+	
+	/**
+	 * 把[format格式字符串]转换为[Date时间]
+	 * @param sDate 时间字符串
+	 * @param format 时间字符串格式
+	 * @return Date时间 (转换失败则返回起始时间 1970-1-1 08:00:00)
+	 */
+	public static Date toDate(String sDate, String format) {
+		SimpleDateFormat sdf = new SimpleDateFormat(format);
 		Date date = null;
 		try {
-			date = sdf.parse(ymdhms);
+			date = sdf.parse(sDate);
 		} catch (Exception e) {
 			date = new Date(0);
-			log.error("转换 [{}] 为日期类型失败.", ymdhms, e);
+			log.error("转换 [{}] 为日期类型失败.", sDate, e);
 		}
 		return date;
 	}
@@ -165,6 +175,17 @@ public class TimeUtils {
 	 */
 	public static long toMillis(String ymdhms) {
 		Date date = toDate(ymdhms);
+		return (date == null ? 0 : date.getTime());
+	}
+	
+	/**
+	 * 把[format格式字符串]转换为[毫秒时间]
+	 * @param sDate 时间字符串
+	 * @param format 时间字符串格式
+	 * @return 毫秒时间
+	 */
+	public static long toMillis(String sData, String format) {
+		Date date = toDate(sData, format);
 		return (date == null ? 0 : date.getTime());
 	}
 	
@@ -299,6 +320,17 @@ public class TimeUtils {
 		}
 		millisTime = NumUtils.max(millisTime, minMillisTime);
 		return millisTime;
+	}
+	
+	/**
+	 * 获取当前的小时值
+	 * @param offset 时差值
+	 * @return 当前小时
+	 */
+	public static int getCurHour(int offset) {
+		long hour = ((System.currentTimeMillis() % 86400000) / 3600000);
+		hour = (hour + offset + 24) % 24;	// 时差
+		return (int) hour;
 	}
 	
 }
