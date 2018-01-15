@@ -54,7 +54,7 @@ public class SafetyMonitor extends LoopThread {
 	private final static int NO_RESPONSE_LIMIT = 3;
 	
 	/** 校验授权间隔 */
-	private final static long CHECK_TIME = 5000;
+	private final static long CHECK_TIME = 120000;
 	
 	/** 线程轮询间隔 */
 	private final static long LOOP_TIME = 1000;
