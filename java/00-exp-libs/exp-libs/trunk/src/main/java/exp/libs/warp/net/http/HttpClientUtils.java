@@ -16,12 +16,12 @@ import exp.libs.utils.io.IOUtils;
 
 /**
  * <PRE>
- * HTTP工具(无需cookie登陆页面的操作)
+ * HTTP-Client工具(apache工具)
  * </PRE>
  * 
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
+ * @version   1.0 2017-12-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

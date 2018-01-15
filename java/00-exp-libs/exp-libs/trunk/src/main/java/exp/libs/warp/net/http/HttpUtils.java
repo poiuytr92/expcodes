@@ -38,6 +38,17 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 
+/**
+ * <PRE>
+ * HTTP工具
+ * </PRE>
+ * 
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-21
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class HttpUtils {
 
 	/** 日志器 */

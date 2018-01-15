@@ -19,6 +19,18 @@ import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.io.IOUtils;
 import exp.libs.warp.net.http.HttpUtils.HEAD;
 
+/**
+ * <PRE>
+ * 封装了Apache-HttpClient.
+ *  可以保持连接对象, 并介入获取连接过程中的请求/响应参数
+ * </PRE>
+ * 
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-21
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _HttpClient {
 
 	/** 日志器 */

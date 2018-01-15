@@ -14,7 +14,7 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * HTTPS工具(可能需要cookie登陆页面的操作)
+ * HTTP-URL工具(原生工具)
  * </PRE>
  * 
  * <B>PROJECT：</B> exp-libs
