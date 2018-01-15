@@ -45,7 +45,7 @@ public class ActivityMgr {
 	
 	private final static String ENV_DB_SCRIPT = "/exp/bilibili/plugin/bean/pdm/BP-DB.sql";
 	
-	private final static String ENV_DB_DIR = "./conf/";
+	private final static String ENV_DB_DIR = "./data/";
 	
 	private final static String ENV_DB_NAME = ".BP";
 	
