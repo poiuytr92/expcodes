@@ -252,13 +252,8 @@ public class ActivityMgr {
 	
 	private static List<TActivity> _queryAll() {
 		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID);
-		Connection conn = SqliteUtils.getConn(DS);
-		List<TActivity> activitys = null;
-		try {
-			activitys = TActivity.querySome(conn, where);
-		} catch(Exception e) {
-			activitys = new LinkedList<TActivity>();
-		}
+		Connection conn = SqliteUtils.getConnByJDBC(DS);
+		List<TActivity> activitys = TActivity.querySome(conn, where);
 		SqliteUtils.close(conn);
 		return activitys;
 	}
@@ -267,8 +262,8 @@ public class ActivityMgr {
 	 * 更新保存活跃值
 	 */
 	public void save() {
-		if(Config.LEVEL < Level.ADMIN) {
-			return;	// 仅管理员可以操作
+		if(users.size() <= 0 || costs.size() <= 0) {
+			return;
 		}
 		
 		List<TActivity> activitys = new LinkedList<TActivity>();
@@ -313,7 +308,7 @@ public class ActivityMgr {
 			conn.commit();
 			
 		} catch(Exception e) {
-			log.info("更新直播间 [{}] 的活跃值异常", ROOM_ID, e);
+			log.error("更新直播间 [{}] 的活跃值异常", ROOM_ID, e);
 			isOk = false;
 		}
 		
