@@ -226,7 +226,6 @@ public class HttpUtils {
 			HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
 			httpsConn.setSSLSocketFactory(ssl.getSocketFactory());
 			httpsConn.setHostnameVerifier(new HostnameVerifier() {
-
 				public boolean verify(String hostname, SSLSession session) {
 					return true;
 				}
