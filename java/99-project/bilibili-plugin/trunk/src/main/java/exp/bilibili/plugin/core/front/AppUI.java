@@ -833,8 +833,8 @@ public class AppUI extends MainWindow {
 		LoginMgr.getInstn()._stop();	
 		WebBot.getInstn()._stop();
 		MsgKwMgr.getInstn().clear();
-		ActivityMgr.getInstn().save();
 		SafetyMonitor.getInstn()._stop();
+		ActivityMgr.getInstn().save();
 		
 		Browser.quit();
 	}
