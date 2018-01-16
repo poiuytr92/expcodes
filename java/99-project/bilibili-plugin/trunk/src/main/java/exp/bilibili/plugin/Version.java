@@ -27,6 +27,7 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO: 活跃度排行榜
+		// 公告判定之前最近弹幕有没有公告
 	}
 	
 }
