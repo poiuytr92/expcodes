@@ -81,7 +81,7 @@ public class StormScanner extends LoopThread {
 		this.scanCookie = FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO);
 		scanCookie = (StrUtils.isEmpty(scanCookie) ? Browser.COOKIES() : scanCookie.trim());
 		this.scan = false;
-		this.activeMode = false;	// FIXME
+		this.activeMode = true;	// FIXME
 		this.hotRoomIds = new HashSet<String>();
 		this.hotRoomLinks = new HashMap<String, WebSockClient>();
 	}
