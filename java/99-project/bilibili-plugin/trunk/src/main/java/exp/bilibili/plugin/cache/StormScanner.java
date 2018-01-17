@@ -190,7 +190,7 @@ public class StormScanner extends LoopThread {
 			
 			WebSockClient wsc = hotRoomLinks.get(roomId);
 			if(wsc == null) {
-				wsc = new WebSockClient(true);
+				wsc = new WebSockClient(realRoomId, true);
 				wsc.reset(realRoomId);
 				wsc._start();
 				hotRoomLinks.put(roomId, wsc);

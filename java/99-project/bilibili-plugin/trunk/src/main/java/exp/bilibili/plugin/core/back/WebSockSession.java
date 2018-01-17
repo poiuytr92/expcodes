@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.Frame;
+import exp.bilibili.plugin.bean.pdm.SpecialGift;
+import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmd;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.Binary;
@@ -23,6 +25,7 @@ import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 
 /**
@@ -44,16 +47,18 @@ class WebSockSession extends WebSocketClient {
 	/** 连接超时 */
 	private final static long CONN_TIMEOUT = 10000;
 	
+	private int roomId;
+	
 	private boolean onlyStorm;
 	
 	private boolean isClosed;
 	
 	protected WebSockSession(URI serverURI, Draft draft) {
-		this(serverURI, draft, 0, false, false);
+		this(serverURI, draft, 0, Config.DEFAULT_ROOM_ID, false, false);
 	}
 	
-	protected WebSockSession(URI serverURI, Draft draft, boolean onlyStorm) {
-		this(serverURI, draft, 0, onlyStorm, false);
+	protected WebSockSession(URI serverURI, Draft draft, int roomId, boolean onlyStorm) {
+		this(serverURI, draft, 0, roomId, onlyStorm, false);
 	}
 	
 	/**
@@ -64,14 +69,16 @@ class WebSockSession extends WebSocketClient {
 	 * 				通过打开调试开关 WebSocketImpl.DEBUG = true 可以知道服务端的协议版本
 	 * 				Draft_6455 为最新的WebSocket协议版本
 	 * @param timeout 本地连接保活超时（0不生效，默认60，即60秒后自动断开）
+	 * @param roomId 所连接的房间号
 	 * @param onlyStorm 仅用于监听节奏风暴
 	 * @param debug 调试模式
 	 */
 	protected WebSockSession(URI serverURI, Draft draft, int timeout, 
-			boolean onlyStorm, boolean debug) {
+			int roomId, boolean onlyStorm, boolean debug) {
 		super(serverURI, draft);
 		setTimeout(timeout);
 		debug(debug);
+		this.roomId = roomId;
 		this.onlyStorm = onlyStorm;
 		this.isClosed = true;
 	}
@@ -158,7 +165,7 @@ class WebSockSession extends WebSocketClient {
 				
 				if(onlyStorm == true) {
 					if(BiliCmd.SPECIAL_GIFT == biliCmd) {
-						MsgAnalyser.toMsgBean(biliCmd, json);
+						toStorm(json);
 					} else {
 						// Undo 节奏风暴模式下，无视其他消息
 					}
@@ -170,6 +177,15 @@ class WebSockSession extends WebSocketClient {
 			}
 		}
     }
+	
+	private void toStorm(JSONObject json) {
+		SpecialGift storm = new SpecialGift(json);
+		String msg = StrUtils.concat("直播间 [", roomId, "] 开启了节奏风暴!!!");
+		UIUtils.notify(msg);
+		log.info(msg);
+		
+		RoomMgr.getInstn().addStormRoom(String.valueOf(roomId), storm.getId());
+	}
 	
 	@Override
     public void onFragment(Framedata framedata) {

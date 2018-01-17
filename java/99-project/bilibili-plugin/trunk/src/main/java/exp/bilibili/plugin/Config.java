@@ -41,6 +41,8 @@ public class Config {
 	
 	private final static String USER_PATH = "./conf/bp_conf.xml";
 	
+	public final static int DEFAULT_ROOM_ID = 390480;
+	
 	public Set<Integer> tabuAutoRoomIds;
 	
 	private static volatile Config instance;
