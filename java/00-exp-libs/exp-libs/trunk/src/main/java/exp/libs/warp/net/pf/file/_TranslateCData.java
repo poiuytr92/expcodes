@@ -224,7 +224,7 @@ class _TranslateCData extends Thread {
 	 */
 	private String _getRecvFilePath() {
 		String recvFileName = _SRFileMgr.toFileName(sessionId, type, snkIP, snkPort);
-		srFileMgr.addSendTabu(recvFileName);
+		srFileMgr.addRecvTabu(recvFileName);
 		
 		String recvFilePath = PathUtils.combine(srFileMgr.getSendDir(), recvFileName);
 		return recvFilePath;
