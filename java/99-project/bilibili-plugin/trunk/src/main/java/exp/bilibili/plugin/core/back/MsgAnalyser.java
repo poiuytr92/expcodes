@@ -27,7 +27,6 @@ import exp.bilibili.plugin.cache.OnlineUserMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmd;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
-import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.other.StrUtils;
@@ -48,11 +47,8 @@ public class MsgAnalyser {
 	
 	protected MsgAnalyser() {}
 	
-	public static boolean toMsgBean(JSONObject json) {
+	public static boolean toMsgBean(BiliCmd biliCmd, JSONObject json) {
 		boolean isOk = true;
-		String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
-		BiliCmd biliCmd = BiliCmd.toCmd(cmd);
-		
 		if(biliCmd == BiliCmd.DANMU_MSG) {
 			toDo(new ChatMsg(json));
 			
