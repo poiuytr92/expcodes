@@ -229,7 +229,7 @@ public class ListUtils {
 	}
 
 	/**
-	 * 求两个集合的差集
+	 * 求两个集合的差集(c1-c2)
 	 * @param c1  集合1
 	 * @param c2  集合2
 	 * @return 差集

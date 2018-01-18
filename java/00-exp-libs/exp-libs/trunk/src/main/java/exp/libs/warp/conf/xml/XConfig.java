@@ -260,26 +260,30 @@ public class XConfig implements Runnable, _IConfig {
 	 * <PRE>
 	 * 加载多个配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
+	 * 
+	 * 该方法会自动判断当前是否通过tomcat启动，若是则自动切换到loadConfFilesByTomcat
 	 * </PRE>
-	 * @param confFilxPaths 配置文件路径
+	 * @param confFilePaths 配置文件路径集, 形如: ./conf/config.xml
 	 * @return true:全部加载成功; false:存在加载失败
 	 */
 	@Override
-	public boolean loadConfFiles(String[] confFilxPaths) {
-		return config.loadConfFiles(confFilxPaths);
+	public boolean loadConfFiles(String... confFilePaths) {
+		return config.loadConfFiles(confFilePaths);
 	}
 
 	/**
 	 * <PRE>
 	 * 加载配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
+	 * 
+	 * 该方法会自动判断当前是否通过tomcat启动，若是则自动切换到loadConfFileByTomcat
 	 * </PRE>
-	 * @param confFilxPath 配置文件路径
+	 * @param confFilePath 配置文件路径, 形如: ./conf/config.xml
 	 * @return 若为null则加载失败; 否则为配置文件的根节点
 	 */
 	@Override
-	public Element loadConfFile(String confFilxPath) {
-		return config.loadConfFile(confFilxPath);
+	public Element loadConfFile(String confFilePath) {
+		return config.loadConfFile(confFilePath);
 	}
 
 	/**
@@ -287,12 +291,12 @@ public class XConfig implements Runnable, _IConfig {
 	 * 加载多个jar内配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
-	 * @param confFilxPaths 配置文件路径
+	 * @param confFilePaths 配置文件路径集, 形如: /foo/bar/config.xml
 	 * @return true:全部加载成功; false:存在加载失败
 	 */
 	@Override
-	public boolean loadConfFilesInJar(String[] confFilxPaths) {
-		return config.loadConfFilesInJar(confFilxPaths);
+	public boolean loadConfFilesInJar(String... confFilePaths) {
+		return config.loadConfFilesInJar(confFilePaths);
 	}
 
 	/**
@@ -300,12 +304,46 @@ public class XConfig implements Runnable, _IConfig {
 	 * 加载jar内配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
-	 * @param confFilxPath 配置文件路径
+	 * @param confFilePath 配置文件路径, 形如: /foo/bar/config.xml
 	 * @return 若为null则加载失败; 否则为配置文件的根节点
 	 */
 	@Override
-	public Element loadConfFileInJar(String confFilxPath) {
-		return config.loadConfFileInJar(confFilxPath);
+	public Element loadConfFileInJar(String confFilePath) {
+		return config.loadConfFileInJar(confFilePath);
+	}
+	
+	/**
+	 * <PRE>
+	 * 加载多个配置文件(程序以tomcat启动时使用此方法).
+	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
+	 * 
+	 * 该方法会自动判断当前是否通过tomcat启动，若否则自动切换到loadConfFiles
+	 * </PRE>
+	 * @param confFilePaths 配置文件路径集, 形如: ./conf/config.xml
+	 * 			方法内会自动在配置文件路径前拼接前缀： %tomcat%/%wepapp%/%project%/classes
+	 * 			若拼接前缀后找不到配置文件, 会修正前缀为：%tomcat%/%wepapp%/%project%
+	 * @return true:全部加载成功; false:存在加载失败
+	 */
+	@Override
+	public boolean loadConfFilesByTomcat(String... confFilePaths) {
+		return config.loadConfFilesByTomcat(confFilePaths);
+	}
+
+	/**
+	 * <PRE>
+	 * 加载配置文件(程序以tomcat启动时使用此方法).
+	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
+	 * 
+	 * 该方法会自动判断当前是否通过tomcat启动，若否则自动切换到loadConfFile
+	 * </PRE>
+	 * @param confFilePath 配置文件路径, 形如: ./conf/config.xml
+	 * 			方法内会自动在配置文件路径前拼接前缀： %tomcat%/%wepapp%/%project%/classes
+	 * 			若拼接前缀后找不到配置文件, 会修正前缀为：%tomcat%/%wepapp%/%project%
+	 * @return 若为null则加载失败; 否则为配置文件的根节点
+	 */
+	@Override
+	public Element loadConfFileByTomcat(String confFilePath) {
+		return config.loadConfFileByTomcat(confFilePath);
 	}
 
 	/**

@@ -30,6 +30,15 @@ public final class OSUtils {
 	protected static String OS_ENCODING = 
 			System.getProperty("sun.jnu.encoding").toUpperCase();
 	
+	/**
+	 * 程序入口命令.
+	 *  用于判断程序运行环境：
+	 *  1.通过tomcat运行的J2EE项目为固定值 org.apache.catalina.startup.Bootstrap start
+	 *  2.通过main运行的J2SE项目为main入口类的类名
+	 */
+	protected static String RUN_EVN = 
+			System.getProperty("sun.java.command");
+	
 	/** 私有化构造函数 */
 	protected OSUtils() {}
 	
@@ -92,6 +101,14 @@ public final class OSUtils {
 	 */
 	public static String getSysEncoding() {
 		return OS_ENCODING;
+	}
+	
+	/**
+	 * 检查当前程序是否通过tomcat启动
+	 * @return true:通过tomcat启动; false:通过main启动
+	 */
+	public static boolean isRunByTomcat() {
+		return "org.apache.catalina.startup.Bootstrap start".equals(RUN_EVN);
 	}
 	
 	/**

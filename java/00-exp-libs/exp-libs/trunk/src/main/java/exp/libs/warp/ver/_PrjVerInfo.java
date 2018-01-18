@@ -29,7 +29,7 @@ import exp.libs.warp.ui.layout.VFlowLayout;
  * @since     jdk版本：jdk1.6
  */
 class _PrjVerInfo {
-
+	
 	private final static String[] API_ITEMS = new String[] {
 		"DB", "SOCKET", "WS", "CORBA", "FTP", "OTHER"
 	};

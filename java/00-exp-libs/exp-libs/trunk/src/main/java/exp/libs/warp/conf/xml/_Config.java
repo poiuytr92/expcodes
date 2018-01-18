@@ -17,7 +17,9 @@ import exp.libs.utils.format.XmlUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.io.JarUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.BoolUtils;
+import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.jms.mq.bean.JmsBean;
@@ -62,75 +64,127 @@ class _Config implements _IConfig {
 	}
 	
 	@Override
-	public boolean loadConfFiles(String[] confFilxPaths) {
-		if(confFilxPaths == null) {
+	public boolean loadConfFiles(String... confFilePaths) {
+		if(confFilePaths == null) {
 			return false;
 		}
 		
 		boolean isOk = true;
-		for(String confFilxPath : confFilxPaths) {
-			if(StrUtils.isNotEmpty(confFilxPath)) {
-				isOk &= (loadConfFile(confFilxPath) != null);
+		for(String confFilePath : confFilePaths) {
+			if(StrUtils.isNotEmpty(confFilePath)) {
+				isOk &= (loadConfFile(confFilePath) != null);
 			}
 		}
 		return isOk;
 	}
 
 	@Override
-	public Element loadConfFile(String confFilxPath) {
-		if(confFilxPath == null) {
+	public Element loadConfFile(String confFilePath) {
+		if(confFilePath == null) {
 			return null;
+			
+		} else if(OSUtils.isRunByTomcat()) {
+			return loadConfFileByTomcat(confFilePath);
 		}
 		
 		Element root = null;
 		try {
-			File confFile = new File(confFilxPath);
+			File confFile = new File(confFilePath);
 			String charset = XmlUtils.getCharset(confFile);
 			String xml = FileUtils.readFileToString(confFile, charset);
 			Document doc = DocumentHelper.parseText(xml);
 			root = doc.getRootElement();
 			xTree.update(root);
-			confFiles.add(new String[] { confFilxPath, DISK_FILE });
+			confFiles.add(new String[] { confFilePath, DISK_FILE });
 			
 		} catch (Exception e) {
-			log.error("加载文件失败: [{}].", confFilxPath, e);
+			log.error("加载文件失败: [{}].", confFilePath, e);
 		}
 		return root;
 	}
 	
 	@Override
-	public boolean loadConfFilesInJar(String[] confFilxPaths) {
-		if(confFilxPaths == null) {
+	public boolean loadConfFilesInJar(String... confFilePaths) {
+		if(confFilePaths == null) {
 			return false;
 		}
 		
 		boolean isOk = true;
-		for(String confFilxPath : confFilxPaths) {
-			if(StrUtils.isNotEmpty(confFilxPath)) {
-				isOk &= (loadConfFileInJar(confFilxPath) != null);
+		for(String confFilePath : confFilePaths) {
+			if(StrUtils.isNotEmpty(confFilePath)) {
+				isOk &= (loadConfFileInJar(confFilePath) != null);
 			}
 		}
 		return isOk;
 	}
 	
 	@Override
-	public Element loadConfFileInJar(String confFilxPath) {
-		if(confFilxPath == null) {
+	public Element loadConfFileInJar(String confFilePath) {
+		if(confFilePath == null) {
 			return null;
 		}
 		
 		Element root = null;
 		try {
-			String content = JarUtils.read(confFilxPath, Charset.ISO);
+			String content = JarUtils.read(confFilePath, Charset.ISO);
 			String charset = XmlUtils.getCharset(content);
-			String xml = JarUtils.read(confFilxPath, charset);
+			String xml = JarUtils.read(confFilePath, charset);
 			Document doc = DocumentHelper.parseText(xml);
 			root = doc.getRootElement();
 			xTree.update(root);
-			confFiles.add(new String[] { confFilxPath, JAR_FILE });
+			confFiles.add(new String[] { confFilePath, JAR_FILE });
 			
 		} catch (Exception e) {
-			log.error("加载文件失败: [{}].", confFilxPath, e);
+			log.error("加载文件失败: [{}].", confFilePath, e);
+		}
+		return root;
+	}
+	
+	@Override
+	public boolean loadConfFilesByTomcat(String... confFilePaths) {
+		if(confFilePaths == null) {
+			return false;
+		}
+		
+		boolean isOk = true;
+		for(String confFilePath : confFilePaths) {
+			if(StrUtils.isNotEmpty(confFilePath)) {
+				isOk &= (loadConfFileByTomcat(confFilePath) != null);
+			}
+		}
+		return isOk;
+	}
+	
+	@Override
+	public Element loadConfFileByTomcat(String confFilePath) {
+		if(confFilePath == null) {
+			return null;
+			
+		} else if(!OSUtils.isRunByTomcat()) {
+			return loadConfFile(confFilePath);
+		}
+		
+		// 修正配置文件位置
+		File dir = new File(PathUtils.getProjectCompilePath());
+		String path = PathUtils.combine(dir.getAbsolutePath(), confFilePath);	// classes目录优先
+		if(!FileUtils.exists(path)) {	// 若classes目录下不存在该文件, 则找上一层目录
+			path = PathUtils.combine(dir.getParentFile().getAbsolutePath(), confFilePath);
+		}
+		confFilePath = path;
+		
+		// 加载配置文件
+		Element root = null;
+		try {
+			File confFile = new File(confFilePath);
+			String charset = XmlUtils.getCharset(confFile);
+			String xml = FileUtils.readFileToString(confFile, charset);
+			Document doc = DocumentHelper.parseText(xml);
+			root = doc.getRootElement();
+			xTree.update(root);
+			confFiles.add(new String[] { confFilePath, DISK_FILE });
+			
+		} catch (Exception e) {
+			log.error("加载文件失败: [{}].", confFilePath, e);
 		}
 		return root;
 	}

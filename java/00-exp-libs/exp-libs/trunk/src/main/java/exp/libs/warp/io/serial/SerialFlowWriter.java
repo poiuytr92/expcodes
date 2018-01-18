@@ -28,11 +28,8 @@ import exp.libs.utils.other.StrUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class SerialFlowWriter {
+public class SerialFlowWriter extends _SerialFlow {
 
-	/** 默认序列化文件位置 */
-	private final static String DEFAULT_FILEPATH = "./serializable.dat";
-	
 	/** 序列化文件 */
 	private File file;
 	

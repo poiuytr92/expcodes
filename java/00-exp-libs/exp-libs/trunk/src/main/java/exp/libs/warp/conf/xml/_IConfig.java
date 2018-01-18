@@ -19,13 +19,17 @@ interface _IConfig {
 	
 	public String NAME();
 	
-	public boolean loadConfFiles(String[] confFilePaths);
+	public boolean loadConfFiles(String... confFilePaths);
 	
 	public Element loadConfFile(String confFilePath);
 	
-	public boolean loadConfFilesInJar(String[] confFilePaths);
+	public boolean loadConfFilesInJar(String... confFilePaths);
 	
 	public Element loadConfFileInJar(String confFilePath);
+	
+	public boolean loadConfFilesByTomcat(String... confFilePaths);
+	
+	public Element loadConfFileByTomcat(String confFilePath);
 	
 	public String getVal(String ePath);
 	

@@ -11,6 +11,8 @@ import exp.libs.envm.DBType;
 import exp.libs.utils.format.ESCUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.io.JarUtils;
+import exp.libs.utils.os.OSUtils;
+import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
@@ -34,7 +36,9 @@ public class _VerDBMgr {
 	private final static String VER_DB = RES_DIR.concat("/").concat(DB_NAME);
 	
 	/** 临时版本库位置（仅用于查看版本信息） */
-	private final static String TMP_VER_DB = "./conf/".concat(DB_NAME);
+	private final static String TMP_VER_DB = OSUtils.isRunByTomcat() ? 
+			PathUtils.getProjectCompilePath().concat("/").concat(DB_NAME) : 
+			"./conf/".concat(DB_NAME);
 	
 	/** 版本信息文件的数据源 */
 	private DataSourceBean ds;
@@ -77,7 +81,13 @@ public class _VerDBMgr {
 		
 		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
 		if(!SqliteUtils.testConn(ds)) {
-			JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
+			
+			if(!OSUtils.isRunByTomcat()) {
+				JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
+			} else {
+				// Undo 当程序运行在Tomcat时, 会自动把版本库拷贝到classes目录下, 无需再拷贝
+			}
+			
 			FileUtils.hide(TMP_VER_DB);
 			ds.setName(TMP_VER_DB);
 		}

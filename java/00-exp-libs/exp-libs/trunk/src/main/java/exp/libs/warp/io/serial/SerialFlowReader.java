@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -28,14 +25,8 @@ import exp.libs.utils.other.StrUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class SerialFlowReader {
+public class SerialFlowReader extends _SerialFlow {
 
-	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(SerialFlowReader.class);
-	
-	/** 默认序列化文件位置 */
-	private final static String DEFAULT_FILEPATH = "./serializable.dat";
-	
 	/** 序列化文件 */
 	private File file;
 	
