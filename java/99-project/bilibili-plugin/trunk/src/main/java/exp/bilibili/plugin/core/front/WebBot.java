@@ -53,12 +53,6 @@ class WebBot extends LoopThread {
 	/** 累计的行为周期(达到周期则关闭浏览器, 避免内存占用过大) */
 	private final static int LOOP_LIMIT = (int) (KEEP_TIME / SLEEP_TIME);
 	
-	/** 测试有爱社签到间隔 */
-	private final static long ASSN_TIME = 60000;
-	
-	/** 有爱社签到行为周期 */
-	private final static int ASSN_LIMIT = (int) (ASSN_TIME / SLEEP_TIME);
-	
 	/** 浏览器打开后限制可以抽奖的次数(超过次数则关闭浏览器, 避免内存占用过大) */
 	private final static int LOTTERY_LIMIT = Config.getInstn().CLEAR_CACHE_CYCLE();
 	
@@ -74,11 +68,6 @@ class WebBot extends LoopThread {
 	/** 提示累计次数 */
 	private int tipCnt;
 	
-	/** 是否需要签到友爱社 */
-	private boolean signAssn;
-	
-	private int assnCnt;
-	
 	/** 执行下次日常任务的时间点 */
 	private long nextTaskTime;
 	
@@ -92,8 +81,6 @@ class WebBot extends LoopThread {
 		this.loopCnt = 0;
 		this.lotteryCnt = 0;
 		this.tipCnt = 0;
-		this.assnCnt = 0;
-		this.signAssn = true;
 		this.nextTaskTime = System.currentTimeMillis();
 		this.resetTaskTime = System.currentTimeMillis();
 		
@@ -162,7 +149,6 @@ class WebBot extends LoopThread {
 			
 		// 长时间无抽奖操作则做其他事情
 		} else {
-			toSignAssn();	// 友爱社签到
 			doDailyTasks();	// 日常小学数学任务
 			toSleep();		// 休眠
 		}
@@ -280,19 +266,6 @@ class WebBot extends LoopThread {
 		return rst.getText().contains("成功");
 	}
 
-	private void toSignAssn() {
-		if(signAssn == false || (assnCnt++ <= ASSN_LIMIT)) {
-			return;
-		}
-		assnCnt = 0;
-		
-		boolean isGoOn = MsgSender.toAssn();
-		if(isGoOn == false) {
-			signAssn = false;
-			UIUtils.log("今天已在友爱社签到");
-		}
-	}
-	
 	/**
 	 * 执行日常小学数学任务
 	 */
@@ -326,7 +299,6 @@ class WebBot extends LoopThread {
 			resetTaskTime = now;
 			nextTaskTime = now;
 			MsgSender.toSign();	// 重新每日签到
-			signAssn = true;	// 标记友爱社可以签到
 		}
 	}
 	
