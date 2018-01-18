@@ -36,6 +36,10 @@ public class Gift {
 	
 	public final static Gift GOVERNOR = new Gift("总督", 19998000);
 	
+	public final static Gift LANTERN = new Gift("红灯笼", 2000);
+	
+	public final static Gift SQUIB = new Gift("小爆竹", 2000);
+	
 	/** 礼物名称 */
 	private String name;
 	
@@ -93,6 +97,11 @@ public class Gift {
 		} else if(GOVERNOR.NAME().equals(giftName)) {
 			cost = GOVERNOR.COST();
 			
+		} else if(LANTERN.NAME().equals(giftName)) {
+			cost = LANTERN.COST();
+			
+		} else if(SQUIB.NAME().equals(giftName)) {
+			cost = SQUIB.COST();
 		}
 		return cost;
 	}
