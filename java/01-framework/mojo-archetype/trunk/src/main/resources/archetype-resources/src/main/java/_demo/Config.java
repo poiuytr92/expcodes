@@ -6,15 +6,15 @@ package ${package}._demo;
 import java.util.List;
 import java.util.Map;
 
-import exp.libs.envm.Charset;
-import exp.libs.warp.conf.xml.XConfig;
-import exp.libs.warp.conf.xml.XConfigFactory;
-import exp.libs.warp.db.sql.bean.DataSourceBean;
-import exp.libs.warp.net.sock.bean.SocketBean;
+import com.kt.explibs.envm.Charset;
+import com.kt.explibs.warp.conf.xml.XConfig;
+import com.kt.explibs.warp.conf.xml.XConfigFactory;
+import com.kt.explibs.warp.db.sql.bean.DataSourceBean;
+import com.kt.explibs.warp.net.sock.bean.SocketBean;
 
 /**
  * <PRE>
- * XML配置加载器 [exp.libs.warp.conf.xml.XConfig.class] 使用参考.
+ * XML配置加载器 [com.kt.explibs.warp.conf.xml.XConfig] 使用参考.
  * </PRE>
  * <B>项    目：</B> xxxxxxx
  * <B>技术支持：</B> xxxxxxx
@@ -42,7 +42,7 @@ public class Config {
 	private static volatile Config instance;
 	
 	private Config() {
-		this.xConf = XConfigFactory.createConfig("MSTP");
+		this.xConf = XConfigFactory.createConfig("EXP-DEMO");
 		xConf.loadConfFile(APP_CONF);	// 先加载全量配置文件
 		xConf.loadConfFile(USE_CONF);	// 使用工程配置文件覆盖全量配置中同位置配置项
 	}
