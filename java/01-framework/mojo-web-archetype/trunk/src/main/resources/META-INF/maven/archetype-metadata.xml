@@ -69,7 +69,7 @@
 	</fileSets>
 	<requiredProperties>
 		<requiredProperty key="groupId">
-			<defaultValue>com.catt</defaultValue>
+			<defaultValue>exp.mvn</defaultValue>
 		</requiredProperty>
 	</requiredProperties>
 </archetype-descriptor>
