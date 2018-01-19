@@ -117,8 +117,9 @@ public class MsgAnalyser {
 		log.info(msg);
 		
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
-		ChatMgr.getInstn().addNight(msgBean.getUsername(), msgBean.getMsg());
 		ActivityMgr.getInstn().add(msgBean);
+		ChatMgr.getInstn().addNight(msgBean.getUsername(), msgBean.getMsg());
+		ChatMgr.getInstn().countChatCnt(msgBean.getUsername());
 	}
 	
 	/**
@@ -203,7 +204,7 @@ public class MsgAnalyser {
 		String msg = StrUtils.concat("感谢 [", msgBean.getFrom(), "] 的嗨翻全场!!!");
 		log.info(msg);
 		
-		ChatMgr.getInstn().sendNotice(msg);
+		ChatMgr.getInstn().sendThxEnergy(msg);
 		RoomMgr.getInstn().addGiftRoom(msgBean.getRoomId());
 	}
 
@@ -216,7 +217,7 @@ public class MsgAnalyser {
 				"]竟然抽到了[", msgBean.getGiftName(), "]x", msgBean.getGiftNum());
 		log.info(msg);
 		
-		ChatMgr.getInstn().sendNotice(msg);
+		ChatMgr.getInstn().sendThxEnergy(msg);
 	}
 	
 	/**
@@ -254,8 +255,8 @@ public class MsgAnalyser {
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
-		
-		ChatMgr.getInstn().addThxGuard(msg);
+			
+		ChatMgr.getInstn().sendThxGuard(msg);
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
 		ActivityMgr.getInstn().add(msgBean);
 	}

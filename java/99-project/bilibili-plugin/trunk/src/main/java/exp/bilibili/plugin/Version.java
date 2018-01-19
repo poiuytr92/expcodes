@@ -27,7 +27,6 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO: 活跃度排行榜
-		// 公告判定之前最近弹幕有没有公告
 		// 节奏风暴并发(监听模式:成功率高,资源多 + 扫描模式:成功率低,资源少)
 		// 登录验证码放大
 		// win10支持

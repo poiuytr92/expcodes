@@ -25,7 +25,7 @@ import exp.libs.warp.thread.LoopThread;
  *  1.自动晚安
  *  2.自动感谢投喂
  *  3.定时公告
- *  4.定时打call
+ *  4.自动打call
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -36,6 +36,9 @@ import exp.libs.warp.thread.LoopThread;
 public class ChatMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(ChatMgr.class);
+	
+	/** 同屏可以显示的最大发言数 */
+	private final static int SCREEN_CHAT_LIMT = 10;
 	
 	private final static String NOTICE_KEY = "【公告】";
 	
@@ -92,6 +95,12 @@ public class ChatMgr extends LoopThread {
 	 */
 	private Map<String, Map<String, Integer>> userGifts;
 	
+	/**
+	 * 发言计数器(主要针对定时公告和自动打call)
+	 * 	当同屏存在自己的发言时，则取消本次自动发言，避免刷屏.
+	 */
+	private int chatCnt;
+	
 	private static volatile ChatMgr instance;
 	
 	private ChatMgr() {
@@ -99,6 +108,7 @@ public class ChatMgr extends LoopThread {
 		this.thxCnt = 0;
 		this.noticeCnt = 0;
 		this.callCnt = 0;
+		this.chatCnt = 0;
 		this.autoThankYou = false;
 		this.autoNotice = false;
 		this.autoCall = false;
@@ -121,79 +131,6 @@ public class ChatMgr extends LoopThread {
 	private void clear() {
 		nightedUsers.clear();
 		userGifts.clear();
-	}
-	
-	public boolean sendNotice(String msg) {
-		boolean isOk = false;
-		if(isAutoThankYou()) {
-			isOk = MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, msg), 
-					UIUtils.getCurChatColor());
-		}
-		return isOk;
-	}
-	
-	public void helloLive(int roomId) {
-		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
-		String msg = "滴~".concat(card);
-		
-		int hour = TimeUtils.getCurHour(8);	// 中国8小时时差
-		if(hour >= 6 && hour < 12) {
-			msg = msg.concat("早上好");
-			
-		} else if(hour >= 12 && hour < 18) {
-			msg = msg.concat("下午好");
-			
-		} else if(hour >= 18 && hour < 24) {
-			msg = msg.concat("晚上好");
-			
-		} else {
-			msg = msg.concat("还在浪吗?");
-		}
-		MsgSender.sendChat(msg, roomId);
-	}
-	
-	public void addThxGift(SendGift msgBean) {
-		if(!isAutoThankYou() || msgBean.getNum() <= 0) {
-			return;
-		}
-		
-		String username = msgBean.getUname();
-		String giftName = msgBean.getGiftName();
-		
-		synchronized (userGifts) {
-			Map<String, Integer> gifts = userGifts.get(username);
-			if(gifts == null) {
-				gifts = new HashMap<String, Integer>();
-				userGifts.put(username, gifts);
-			}
-			
-			Integer sum = gifts.get(giftName);
-			sum = (sum == null ? 0 : sum);
-			gifts.put(giftName, (sum + msgBean.getNum()));
-		}
-	}
-	
-	public void addThxGuard(String msg) {
-		if(!isAutoThankYou()) {
-			return;
-		}
-		
-		MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, "感谢 ", msg), 
-				UIUtils.getCurChatColor());
-	}
-
-	public void addNight(String username, String msg) {
-		if(!isAutoGoodNight() || 
-				msg.startsWith(NIGHT_KEY) ||		// 避免跟机器人对话
-				nightedUsers.contains(username)) { 	// 避免重复晚安
-			return;
-		}
-		
-		if(MsgKwMgr.containsNight(msg)) {
-			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
-			MsgSender.sendChat(chatMsg, UIUtils.getCurChatColor());
-			nightedUsers.add(username);
-		}
 	}
 	
 	@Override
@@ -229,6 +166,101 @@ public class ChatMgr extends LoopThread {
 	protected void _after() {
 		clear();
 		log.info("{} 已停止", getName());
+	}
+	
+	/**
+	 * 开播打招呼
+	 * @param roomId
+	 */
+	public void helloLive(int roomId) {
+		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
+		String msg = "滴~".concat(card);
+		
+		int hour = TimeUtils.getCurHour(8);	// 中国8小时时差
+		if(hour >= 6 && hour < 12) {
+			msg = msg.concat("早上好");
+			
+		} else if(hour >= 12 && hour < 18) {
+			msg = msg.concat("下午好");
+			
+		} else if(hour >= 18 && hour < 24) {
+			msg = msg.concat("晚上好");
+			
+		} else {
+			msg = msg.concat("还在浪吗?");
+		}
+		MsgSender.sendChat(msg, roomId);
+	}
+	
+	/**
+	 * 自动晚安
+	 * @param username
+	 * @param msg
+	 */
+	public void addNight(String username, String msg) {
+		if(!isAutoGoodNight() || 
+				msg.startsWith(NIGHT_KEY) ||		// 避免跟机器人对话
+				nightedUsers.contains(username)) { 	// 避免重复晚安
+			return;
+		}
+		
+		if(MsgKwMgr.containsNight(msg)) {
+			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
+			MsgSender.sendChat(chatMsg, UIUtils.getCurChatColor());
+			nightedUsers.add(username);
+		}
+	}
+	
+	/**
+	 * 房间内高能礼物感谢与中奖祝贺
+	 * @param msg
+	 * @return
+	 */
+	public boolean sendThxEnergy(String msg) {
+		boolean isOk = false;
+		if(isAutoThankYou()) {
+			isOk = MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, msg), 
+					UIUtils.getCurChatColor());
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 感谢上船
+	 * @param msg
+	 */
+	public void sendThxGuard(String msg) {
+		if(!isAutoThankYou()) {
+			return;
+		}
+		
+		MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, "感谢 ", msg), 
+				UIUtils.getCurChatColor());
+	}
+	
+	/**
+	 * 添加到投喂感谢列表
+	 * @param msgBean
+	 */
+	public void addThxGift(SendGift msgBean) {
+		if(!isAutoThankYou() || msgBean.getNum() <= 0) {
+			return;
+		}
+		
+		String username = msgBean.getUname();
+		String giftName = msgBean.getGiftName();
+		
+		synchronized (userGifts) {
+			Map<String, Integer> gifts = userGifts.get(username);
+			if(gifts == null) {
+				gifts = new HashMap<String, Integer>();
+				userGifts.put(username, gifts);
+			}
+			
+			Integer sum = gifts.get(giftName);
+			sum = (sum == null ? 0 : sum);
+			gifts.put(giftName, (sum + msgBean.getNum()));
+		}
 	}
 	
 	/**
@@ -312,7 +344,8 @@ public class ChatMgr extends LoopThread {
 	 * 定时公告
 	 */
 	private void toNotice() {
-		if(!isAutoNotice() || ListUtils.isEmpty(MsgKwMgr.getNotices())) {
+		if(!isAutoNotice() || !allowAutoChat() || 
+				ListUtils.isEmpty(MsgKwMgr.getNotices())) {
 			return;
 		}
 		
@@ -324,7 +357,8 @@ public class ChatMgr extends LoopThread {
 	 * 定时打call
 	 */
 	private void toCall() {
-		if(!isAutoCall() || ListUtils.isEmpty(MsgKwMgr.getCalls())) {
+		if(!isAutoCall() || !allowAutoChat() || 
+				ListUtils.isEmpty(MsgKwMgr.getCalls())) {
 			return;
 		}
 		
@@ -364,6 +398,31 @@ public class ChatMgr extends LoopThread {
 	
 	public boolean isAutoGoodNight() {
 		return autoGoodNight;
+	}
+	
+	/**
+	 * 计算登陆用户的发言次数
+	 * @param chatUser 当前发言用户
+	 */
+	public void countChatCnt(String chatUser) {
+		
+		// 当是登陆用户发言时, 清空计数器
+		if(LoginMgr.getInstn().getLoginUser().equals(chatUser)) {
+			chatCnt = 0;
+			
+		// 当是其他用户发言时, 计数器+1
+		} else {
+			chatCnt++;
+		}
+	}
+	
+	/**
+	 * 是否允许自动发言:
+	 * 	当距离上一次发言超过同屏显示限制时，则允许自动发言
+	 * @return
+	 */
+	private boolean allowAutoChat() {
+		return chatCnt >= SCREEN_CHAT_LIMT;
 	}
 	
 }
