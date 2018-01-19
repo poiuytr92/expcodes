@@ -3,7 +3,6 @@ package exp.bilibili.plugin.bean.pdm;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.other.StrUtils;
 
 /**
  * 
@@ -33,9 +32,9 @@ public class TvLottery extends SysMsg {
 	
 	private String styleType;
 	
-	private String roomId;
+	private int roomId;
 	
-	private String realRoomId;
+	private int realRoomId;
 	
 	private String rnd;
 	
@@ -45,9 +44,9 @@ public class TvLottery extends SysMsg {
 		super(json);
 	}
 
-	public String ROOM_ID() {
-		String id = getRealRoomId();
-		return (StrUtils.isEmpty(id) ? getRoomId() : id);
+	public int ROOM_ID() {
+		int id = getRealRoomId();
+		return (id <= 0 ? getRoomId() : id);
 	}
 	
 	@Override
@@ -55,8 +54,8 @@ public class TvLottery extends SysMsg {
 		super.analyse(json);
 		this.msgText = JsonUtils.getStr(json, BiliCmdAtrbt.msg_text);
 		this.styleType = JsonUtils.getStr(json, BiliCmdAtrbt.styleType);
-		this.roomId = JsonUtils.getStr(json, BiliCmdAtrbt.roomid);
-		this.realRoomId = JsonUtils.getStr(json, BiliCmdAtrbt.real_roomid);
+		this.roomId = JsonUtils.getInt(json, BiliCmdAtrbt.roomid, 0);
+		this.realRoomId = JsonUtils.getInt(json, BiliCmdAtrbt.real_roomid, 0);
 		this.rnd = JsonUtils.getStr(json, BiliCmdAtrbt.rnd);
 		this.tvId = JsonUtils.getStr(json, BiliCmdAtrbt.tv_id);
 	}
@@ -69,11 +68,11 @@ public class TvLottery extends SysMsg {
 		return styleType;
 	}
 
-	public String getRoomId() {
+	public int getRoomId() {
 		return roomId;
 	}
 
-	public String getRealRoomId() {
+	public int getRealRoomId() {
 		return realRoomId;
 	}
 

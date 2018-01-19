@@ -32,6 +32,7 @@ public class Version {
 		// 登录验证码放大
 		// win10支持
 		// 批量挂机
+		// 优化登陆
 	}
 	
 }

@@ -83,8 +83,8 @@ public class UIUtils {
 		AppUI.getInstn().printVersionInfo();
 	}
 	
-	public static String getCurRoomId() {
-		return AppUI.getInstn().getRoomId();
+	public static int getCurRoomId() {
+		return AppUI.getInstn().getCurRoomId();
 	}
 	
 	public static ChatColor getCurChatColor() {
@@ -95,7 +95,7 @@ public class UIUtils {
 		return AppUI.getInstn().isBackLotteryMode();
 	}
 	
-	public static void notityLive(String roomId) {
+	public static void notityLive(int roomId) {
 		new _NoticeUI(roomId)._show();		// 右下角通知提示
 		Toolkit.getDefaultToolkit().beep();	// 蜂鸣音提示
 	}

@@ -205,17 +205,17 @@ public class Config {
 		return xConf.getVal("/config/files/notices");
 	}
 	
-	public String SIGN_ROOM_ID() {
-		return xConf.getVal("/config/app/signRoomId");
+	public int SIGN_ROOM_ID() {
+		return xConf.getInt("/config/app/signRoomId");
 	}
 	
-	public boolean isTabuAutoChat(String roomId) {
+	public boolean isTabuAutoChat(int roomId) {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		return (realRoomId > 0 ? tabuAutoRoomIds.contains(realRoomId) : false);
 	}
 	
-	public String ACTIVITY_ROOM_ID() {
-		return xConf.getVal("/config/app/activityRoomId");
+	public int ACTIVITY_ROOM_ID() {
+		return xConf.getInt("/config/app/activityRoomId");
 	}
 	
 	public int WAIT_ELEMENT_TIME() {
@@ -230,10 +230,10 @@ public class Config {
 	 * 设置默认房间号（每日签到用）
 	 * (房间勋章等级越高签到奖励越多)
 	 */
-	public boolean setSignRoomId(String roomId) {
+	public boolean setSignRoomId(int roomId) {
 		boolean isOk = false;
 		final String REGEX = "(<signRoomId[^>]+>)[^<]*(</signRoomId>)";
-		if(StrUtils.isNotEmpty(roomId)) {
+		if(roomId > 0) {
 			String xml = FileUtils.read(USER_PATH, DEFAULT_CHARSET);
 			Pattern ptn = Pattern.compile(REGEX);
 			Matcher mth = ptn.matcher(xml);

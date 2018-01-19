@@ -188,11 +188,11 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(SpecialGift msgBean) {
-		String msg = StrUtils.concat("直播间 [", UIUtils.getCurRoomId(), "] 开启了节奏风暴!!!");
+		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 开启了节奏风暴!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
-		RoomMgr.getInstn().addStormRoom(UIUtils.getCurRoomId(), msgBean.getId());
+		RoomMgr.getInstn().addStormRoom(msgBean.getRoomId(), msgBean.getRaffleId());
 	}
 
 	/**

@@ -27,7 +27,7 @@ import exp.libs.utils.format.JsonUtils;
  */
 public class RaffleStart extends _Msg {
 
-	protected String roomId;
+	protected int roomId;
 	
 	protected String raffleId;
 	
@@ -40,14 +40,14 @@ public class RaffleStart extends _Msg {
 	
 	@Override
 	protected void analyse(JSONObject json) {
-		this.roomId = JsonUtils.getStr(json, BiliCmdAtrbt.roomid);
+		this.roomId = JsonUtils.getInt(json, BiliCmdAtrbt.roomid, 0);
 		JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data); {
 			this.raffleId = JsonUtils.getStr(data, BiliCmdAtrbt.raffleId);
 			this.from = JsonUtils.getStr(data, BiliCmdAtrbt.from);
 		}
 	}
 
-	public String getRoomId() {
+	public int getRoomId() {
 		return roomId;
 	}
 

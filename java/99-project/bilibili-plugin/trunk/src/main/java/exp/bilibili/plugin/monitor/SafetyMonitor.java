@@ -43,6 +43,10 @@ public class SafetyMonitor extends LoopThread {
 	private final static String GITHUB_URL = CryptoUtils.deDES(
 			"610BEF99CF948F0DB1542314AC977291892B30802EC5BF3B2DCDD5538D66DDA67467CE4082C2D0BC56227128E753555C");
 	
+	/** 软件授权页(Gitee) */
+	private final static String GITEE_URL = CryptoUtils.deDES(
+			"4C3B7319D21E23D468926AD72569DDF8408E193F3B526A6F5EE2A5699BCCA673DC22BC762A1F149B03E39422823B4BF0");
+	
 	/** 软件授权页(Bilibili-备用) */
 	private final static String BILIBILI_URL = CryptoUtils.deDES(
 			"EECD1D519FEBFDE5EF68693278F5849E8068123647103E9D1644539B452D8DE870DD36BBCFE2C2A8E5A16D58A0CA752D3D715AF120F89F10990A854A386B95631E7C60D1CFD77605");
@@ -110,7 +114,7 @@ public class SafetyMonitor extends LoopThread {
 		_sleep(LOOP_TIME);
 		
 		try {
-			if(checkByGitHub() == false) {
+			if(checkByGit() == false) {
 				_stop();
 			}
 		} catch(Exception e) {
@@ -145,19 +149,24 @@ public class SafetyMonitor extends LoopThread {
 	}
 	
 	/**
-	 * 软件授权校验（通过GitHub授权页）
+	 * 软件授权校验（通过GitHub/Gitee授权页）
 	 * @return 是否继续校验
 	 */
-	private boolean checkByGitHub() {
+	private boolean checkByGit() {
 		boolean isContinue = true;
 		if(++loopCnt >= LOOP_LIMIT) {
 			loopCnt = 0;
 			
-			String pageSource = HttpUtils.getPageSource(GITHUB_URL);
+			// 先尝试用Gitee(国内)获取授权页, 若失败则从GitHub(国际)获取授权页
+			String pageSource = HttpUtils.getPageSource(GITEE_URL);
+			if(StrUtils.isEmpty(pageSource)) {
+				pageSource = HttpUtils.getPageSource(GITHUB_URL);
+			}
+			
 			App app = Convertor.toApp(pageSource, appName);	// 提取软件授权信息
 			if(app == null) {
 				if(++noResponseCnt >= NO_RESPONSE_LIMIT) {
-					if(checkByBilibili() == true) {	// Github可能网络不通, 转B站校验
+					if(checkByBilibili() == true) {	// Github或Gitee网络不通时, 转B站校验
 						noResponseCnt = 0;
 						
 					} else {

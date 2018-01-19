@@ -15,8 +15,6 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.Frame;
-import exp.bilibili.plugin.bean.pdm.SpecialGift;
-import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmd;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.Binary;
@@ -25,7 +23,6 @@ import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 
 /**
@@ -162,10 +159,13 @@ class WebSockSession extends WebSocketClient {
 				JSONObject json = JSONObject.fromObject(sJson);
 				String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
 				BiliCmd biliCmd = BiliCmd.toCmd(cmd);
+				if(BiliCmd.SPECIAL_GIFT == biliCmd) {
+					json.put(BiliCmdAtrbt.roomid, roomId);
+				}
 				
 				if(onlyStorm == true) {
 					if(BiliCmd.SPECIAL_GIFT == biliCmd) {
-						toStorm(json);
+						MsgAnalyser.toMsgBean(biliCmd, json);
 					} else {
 						// Undo 节奏风暴模式下，无视其他消息
 					}
@@ -177,15 +177,6 @@ class WebSockSession extends WebSocketClient {
 			}
 		}
     }
-	
-	private void toStorm(JSONObject json) {
-		SpecialGift storm = new SpecialGift(json);
-		String msg = StrUtils.concat("直播间 [", roomId, "] 开启了节奏风暴!!!");
-		UIUtils.notify(msg);
-		log.info(msg);
-		
-		RoomMgr.getInstn().addStormRoom(String.valueOf(roomId), storm.getId());
-	}
 	
 	@Override
     public void onFragment(Framedata framedata) {

@@ -13,7 +13,6 @@ import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.back.WebSockClient;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -64,13 +63,13 @@ public class StormScanner extends LoopThread {
 	private boolean activeMode;
 	
 	/** 人气房间号(真实房号, 即长号) */
-	private Set<String> hotRoomIds;
+	private Set<Integer> hotRoomIds;
 	
 	/**
 	 * 人气房间的WebSocket连接
 	 * 真实房号 -> webSocket连接
 	 */
-	private Map<String, WebSockClient> hotRoomLinks;
+	private Map<Integer, WebSockClient> hotRoomLinks;
 	
 	private static volatile StormScanner instance;
 	
@@ -82,8 +81,8 @@ public class StormScanner extends LoopThread {
 		scanCookie = (StrUtils.isEmpty(scanCookie) ? Browser.COOKIES() : scanCookie.trim());
 		this.scan = false;
 		this.activeMode = true;	// FIXME
-		this.hotRoomIds = new HashSet<String>();
-		this.hotRoomLinks = new HashMap<String, WebSockClient>();
+		this.hotRoomIds = new HashSet<Integer>();
+		this.hotRoomLinks = new HashMap<Integer, WebSockClient>();
 	}
 
 	public static StormScanner getInstn() {
@@ -141,7 +140,7 @@ public class StormScanner extends LoopThread {
 	 * @return
 	 */
 	public boolean reflashHotLives() {
-		List<String> roomIds = MsgSender.queryTopLiveRoomIds(
+		List<Integer> roomIds = MsgSender.queryTopLiveRoomIds(
 				scanCookie, MAX_PAGES, MIN_ONLINE);
 		if(ListUtils.isNotEmpty(roomIds)) {
 			hotRoomIds.clear();
@@ -170,8 +169,8 @@ public class StormScanner extends LoopThread {
 	public void listnAndJoinStorm() {
 		
 		// 移除非热门房间的webSocket连接
-		Set<String> invailds = ListUtils.subtraction(hotRoomLinks.keySet(), hotRoomIds);
-		for(String roomId : invailds) {
+		Set<Integer> invailds = ListUtils.subtraction(hotRoomLinks.keySet(), hotRoomIds);
+		for(Integer roomId : invailds) {
 			WebSockClient wsc = hotRoomLinks.remove(roomId);
 			if(wsc != null) {
 				wsc._stop();
@@ -182,21 +181,20 @@ public class StormScanner extends LoopThread {
 		
 		
 		// 更新热门房间的webSocket连接
-		for(String roomId : hotRoomIds) {
-			int realRoomId = NumUtils.toInt(roomId, -1);
-			if(realRoomId < 0) {
+		for(Integer roomId : hotRoomIds) {
+			if(roomId < 0) {
 				continue;
 			}
 			
 			WebSockClient wsc = hotRoomLinks.get(roomId);
 			if(wsc == null) {
-				wsc = new WebSockClient(realRoomId, true);
-				wsc.reset(realRoomId);
+				wsc = new WebSockClient(roomId, true);
+				wsc.reset(roomId);
 				wsc._start();
 				hotRoomLinks.put(roomId, wsc);
 				
 			} else if(wsc.isClosed()) {
-				wsc.relink(realRoomId);
+				wsc.relink(roomId);
 			}
 		}
 		log.info("已监听 [{}] 个热门房间的节奏风暴", hotRoomLinks.size());

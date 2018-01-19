@@ -1,9 +1,8 @@
 package exp.bilibili.plugin.bean.pdm;
 
+import net.sf.json.JSONObject;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.other.StrUtils;
-import net.sf.json.JSONObject;
 
 /**
  * 
@@ -32,9 +31,9 @@ public class EnergyLottery extends SysGift {
 	
 	private String url;
 	
-	private String roomId;
+	private int roomId;
 	
-	private String realRoomId;
+	private int realRoomId;
 	
 	private String giftId;
 	
@@ -44,9 +43,9 @@ public class EnergyLottery extends SysGift {
 		super(json);
 	}
 
-	public String ROOM_ID() {
-		String id = getRealRoomId();
-		return (StrUtils.isEmpty(id) ? getRoomId() : id);
+	public int ROOM_ID() {
+		int id = getRealRoomId();
+		return (id <= 0 ? getRoomId() : id);
 	}
 	
 	@Override
@@ -54,8 +53,8 @@ public class EnergyLottery extends SysGift {
 		super.analyse(json);
 		this.tips = JsonUtils.getStr(json, BiliCmdAtrbt.tips);
 		this.url = JsonUtils.getStr(json, BiliCmdAtrbt.url);
-		this.roomId = JsonUtils.getStr(json, BiliCmdAtrbt.roomid);
-		this.realRoomId = JsonUtils.getStr(json, BiliCmdAtrbt.real_roomid);
+		this.roomId = JsonUtils.getInt(json, BiliCmdAtrbt.roomid, 0);
+		this.realRoomId = JsonUtils.getInt(json, BiliCmdAtrbt.real_roomid, 0);
 		this.giftId = JsonUtils.getStr(json, BiliCmdAtrbt.giftId);
 		this.msgTips = JsonUtils.getStr(json, BiliCmdAtrbt.msgTips);
 	}
@@ -68,11 +67,11 @@ public class EnergyLottery extends SysGift {
 		return url;
 	}
 
-	public String getRoomId() {
+	public int getRoomId() {
 		return roomId;
 	}
 
-	public String getRealRoomId() {
+	public int getRealRoomId() {
 		return realRoomId;
 	}
 

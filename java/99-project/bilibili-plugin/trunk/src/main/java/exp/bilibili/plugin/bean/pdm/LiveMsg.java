@@ -21,7 +21,7 @@ import net.sf.json.JSONObject;
  */
 public class LiveMsg extends _Msg {
 
-	private String roomId;
+	private int roomId;
 	
 	public LiveMsg(JSONObject json) {
 		super(json);
@@ -30,10 +30,10 @@ public class LiveMsg extends _Msg {
 	
 	@Override
 	protected void analyse(JSONObject json) {
-		this.roomId = JsonUtils.getStr(json, BiliCmdAtrbt.roomid);
+		this.roomId = JsonUtils.getInt(json, BiliCmdAtrbt.roomid, 0);
 	}
 
-	public String getRoomId() {
+	public int getRoomId() {
 		return roomId;
 	}
 

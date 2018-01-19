@@ -7,9 +7,9 @@ import exp.bilibili.plugin.envm.ChatColor;
 public class TestMsgSender {
 
 	public static void main(String[] args) {
-		final String roomId = "269706";
+		final int roomId = 390480;
 		Browser.init(false);
-		Browser.open("http://live.bilibili.com/".concat(roomId));
+		Browser.open("http://live.bilibili.com/".concat(String.valueOf(roomId)));
 		Browser.backupCookies();
 		System.out.println(Browser.COOKIES());
 		

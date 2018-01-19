@@ -30,7 +30,7 @@ public class _NoticeUI extends NoticeWindow {
 	
 	private JEditorPane editor;
 	
-	public _NoticeUI(String roomId) {
+	public _NoticeUI(int roomId) {
 		super("直播通知", WIDTH, HEIGHT, false, roomId);
 	}
 	
@@ -41,7 +41,7 @@ public class _NoticeUI extends NoticeWindow {
 		editor.setContentType("text/html");	// 将编辑框设置为支持html的编辑格式
 		
 		if(args != null && args.length > 0) {
-			String roomId = (String) args[0];
+			Integer roomId = (Integer) args[0];
 			editor.setText(getNoticeText(roomId));
 		}
 	}
@@ -57,7 +57,7 @@ public class _NoticeUI extends NoticeWindow {
 		
 	}
 	
-	private String getNoticeText(String roomId) {
+	private String getNoticeText(int roomId) {
 		String text = StrUtils.concat(
 				"<html>", 
 					"<body>", 

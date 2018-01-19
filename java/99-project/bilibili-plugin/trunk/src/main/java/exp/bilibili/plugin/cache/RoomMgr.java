@@ -70,7 +70,7 @@ public class RoomMgr {
 	 * 添加高能礼物房间
 	 * @param roomId 礼物房间号
 	 */
-	public void addGiftRoom(String roomId) {
+	public void addGiftRoom(int roomId) {
 		giftRoomIds.add(new LotteryRoom(roomId));
 	}
 	
@@ -78,7 +78,7 @@ public class RoomMgr {
 	 * 添加节奏风暴礼物房间
 	 * @param roomId 礼物房间号
 	 */
-	public void addStormRoom(String roomId, String stormId) {
+	public void addStormRoom(int roomId, String stormId) {
 		
 		// 节奏风暴 因为对点击速度要求很高, 不放到抽奖房间队列排队, 直接抽奖
 //		giftRoomIds.add(new LotteryRoom(roomId, stormId, LotteryType.STORM));
@@ -91,7 +91,7 @@ public class RoomMgr {
 	 * @param roomId 小电视房间号
 	 * @param tvId 小电视编号
 	 */
-	public void addTvRoom(String roomId, String tvId) {
+	public void addTvRoom(int roomId, String tvId) {
 		giftRoomIds.add(new LotteryRoom(roomId, tvId, LotteryType.TV));
 	}
 	
@@ -120,15 +120,6 @@ public class RoomMgr {
 	
 	/**
 	 * 关联 房间号 与 真实房间号
-	 * @param roomId 房间号（限签约主播,短号）
-	 * @param readRoomId 真实房间号（签约主播 与 非签约主播 均拥有,长号）
-	 */
-	public void relate(String roomId, String readRoomId) {
-		relate(NumUtils.toInt(roomId, 0), NumUtils.toInt(readRoomId, 0));
-	}
-	
-	/**
-	 * 关联 房间号 与 真实房间号
 	 * @param roomId 房间号（限签约主播）
 	 * @param readRoomId 真实房间号（签约主播 与 非签约主播 均拥有）
 	 */
@@ -152,15 +143,6 @@ public class RoomMgr {
 		}
 		
 		writeRoomIds();
-	}
-	
-	/**
-	 * 提取真实房间号
-	 * @param roomId 房间号（限签约主播）
-	 * @return 真实房间号（签约主播 与 非签约主播 均拥有）, 若未收集到该房间则返回0
-	 */
-	public int getRealRoomId(String roomId) {
-		return getRealRoomId(NumUtils.toInt(roomId, 0));
 	}
 	
 	/**

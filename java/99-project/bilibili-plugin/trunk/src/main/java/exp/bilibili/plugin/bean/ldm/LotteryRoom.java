@@ -1,6 +1,7 @@
 package exp.bilibili.plugin.bean.ldm;
 
 import exp.bilibili.plugin.envm.LotteryType;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -15,7 +16,7 @@ import exp.bilibili.plugin.envm.LotteryType;
 public class LotteryRoom {
 
 	/** 抽奖房间号 */
-	private String roomId;
+	private int roomId;
 	
 	/** 抽奖编号 */
 	private String raffleId;
@@ -23,17 +24,17 @@ public class LotteryRoom {
 	/** 抽奖类型 */
 	private LotteryType type;
 	
-	public LotteryRoom(String roomId) {
+	public LotteryRoom(int roomId) {
 		this(roomId, "", LotteryType.OTHER);
 	}
 	
-	public LotteryRoom(String roomId, String raffleId, LotteryType type) {
+	public LotteryRoom(int roomId, String raffleId, LotteryType type) {
 		this.roomId = roomId;
-		this.raffleId = (raffleId == null ? "" : raffleId);
+		this.raffleId = (StrUtils.isEmpty(raffleId) ? "" : raffleId);
 		this.type = (type == null ? LotteryType.OTHER : type);
 	}
 
-	public String getRoomId() {
+	public int getRoomId() {
 		return roomId;
 	}
 

@@ -54,7 +54,7 @@ public class ChatMgr extends LoopThread {
 	private final static long NOTICE_TIME = 300000;
 	
 	/** 自动打call周期 */
-	private final static long CALL_TIME = 20000;
+	private final static long CALL_TIME = 30000;
 	
 	/** 检测待发送消息间隔 */
 	private final static long SLEEP_TIME = 1000;
@@ -132,7 +132,7 @@ public class ChatMgr extends LoopThread {
 		return isOk;
 	}
 	
-	public void helloLive(String roomId) {
+	public void helloLive(int roomId) {
 		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
 		String msg = "滴~".concat(card);
 		
