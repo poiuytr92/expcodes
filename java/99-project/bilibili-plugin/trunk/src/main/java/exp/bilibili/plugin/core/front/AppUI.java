@@ -514,10 +514,6 @@ public class AppUI extends MainWindow {
 				if(!isLogined()) {
 					SwingUtils.warn("登陆后才能使用此功能");
 					return;
-					
-				} else if(Config.LEVEL < Level.UPLIVE) {
-					SwingUtils.warn("此功能存在风险, 不对普通用户开放");
-					return;
 				}
 				
 				// 扫描器线程未启动，则触发登录马甲流程

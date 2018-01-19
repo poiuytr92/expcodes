@@ -110,7 +110,7 @@ public class _LoginUI extends PopChildWindow {
 	}
 	
 	private Image modifySize(Image img) {
-		return img.getScaledInstance(100, 25, Image.SCALE_FAST);
+		return img.getScaledInstance(130, 35, Image.SCALE_FAST);
 	}
 
 	@Override

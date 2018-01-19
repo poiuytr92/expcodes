@@ -2,6 +2,7 @@ package exp.bilibili.plugin.cache;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -40,6 +41,9 @@ public class StormScanner extends LoopThread {
 	/** 最少在线人数达标的房间才扫描 */
 	private final static int MIN_ONLINE = 3000;
 	
+	/** 使用websocket直接监听的房间(相对耗资源, 暂时针对TOP-10) */
+	private final static int TOP = 10;
+	
 	/** 扫描每个房间的间隔(风险行为， 频率需要控制，太快可能被查出来，太慢成功率太低) */
 	private final static long SCAN_INTERVAL = 50;
 	
@@ -55,18 +59,11 @@ public class StormScanner extends LoopThread {
 	/** 总开关：是否扫描房间 */
 	private boolean scan;
 	
-	/**
-	 * 是否使用主动扫描模式:
-	 * 	主动扫描模式：使用马甲号轮询前N个热门房间是否存在节奏风暴, 消耗本地资源少, 频繁请求服务器, 命中率低
-	 *  被动监听模式：使用N个webSocket连接到N个热门房间, 消耗本地资源多, 由服务器推送节奏风暴, 命中率高
-	 */
-	private boolean activeMode;
-	
 	/** 人气房间号(真实房号, 即长号) */
-	private Set<Integer> hotRoomIds;
+	private List<Integer> hotRoomIds;
 	
 	/**
-	 * 人气房间的WebSocket连接
+	 * TOP人气房间的WebSocket连接
 	 * 真实房号 -> webSocket连接
 	 */
 	private Map<Integer, WebSockClient> hotRoomLinks;
@@ -80,9 +77,8 @@ public class StormScanner extends LoopThread {
 		this.scanCookie = FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO);
 		scanCookie = (StrUtils.isEmpty(scanCookie) ? Browser.COOKIES() : scanCookie.trim());
 		this.scan = false;
-		this.activeMode = true;	// FIXME
-		this.hotRoomIds = new HashSet<Integer>();
-		this.hotRoomLinks = new HashMap<Integer, WebSockClient>();
+		this.hotRoomIds = new LinkedList<Integer>();
+		this.hotRoomLinks = new HashMap<Integer, WebSockClient>(TOP);
 	}
 
 	public static StormScanner getInstn() {
@@ -116,16 +112,12 @@ public class StormScanner extends LoopThread {
 				loopCnt = 0;
 				reflashHotLives();
 				
-				// 被动监听模式: 在刷新直播间列表的同时更新websocket连接
-				if(activeMode == false) {
-					listnAndJoinStorm();
-				}
+				// 被动监听模式: 在刷新直播间列表的同时更新websocket连接(针对TOP10房间)
+				listnAndJoinStorm();
 			}
 			
-			// 主动扫描模式: 在刷新直播间列表之前尽可能扫描每一个直播间
-			if(activeMode == true) {
-				sancAndJoinStorm();
-			}
+			// 主动扫描模式: 在刷新直播间列表之前尽可能扫描每一个直播间(针对其他房间)
+			sancAndJoinStorm();
 		}
 		_sleep(SLEEP_LIMIT);
 	}
@@ -151,37 +143,30 @@ public class StormScanner extends LoopThread {
 	}
 	
 	/**
-	 * 扫描并加入节奏风暴抽奖
-	 */
-	public void sancAndJoinStorm() {
-		int cnt = MsgSender.scanStorms(scanCookie, hotRoomIds, SCAN_INTERVAL);
-		if(cnt > 0) {
-			log.info("参与节奏风暴抽奖成功(连击x{})", cnt);
-		}
-	}
-	
-	/**
-	 * 监听并加入节奏风暴抽奖
+	 * 监听并加入TOP房间的节奏风暴抽奖
 	 *  (严格来说只需要维持N个房间的WebSocket连接即可, 抽奖会通过事件自动触发)
-	 *  
-	 *  FIXME: 异常：抽奖的是当前界面的直播间，而非连接所属的直播间
 	 */
 	public void listnAndJoinStorm() {
 		
-		// 移除非热门房间的webSocket连接
-		Set<Integer> invailds = ListUtils.subtraction(hotRoomLinks.keySet(), hotRoomIds);
+		// 提取TOP房间
+		Set<Integer> tops = new HashSet<Integer>();
+		int size = (hotRoomIds.size() >= TOP ? TOP : hotRoomIds.size());
+		for(int i = 0; i < size; i++) {
+			tops.add(hotRoomIds.remove(0));
+		}
+		
+		// 移除已经不是TOP房间的webSocket连接
+		Set<Integer> invailds = ListUtils.subtraction(hotRoomLinks.keySet(), tops);
 		for(Integer roomId : invailds) {
 			WebSockClient wsc = hotRoomLinks.remove(roomId);
 			if(wsc != null) {
 				wsc._stop();
 			}
 		}
-		log.info("已放弃监听 [{}] 个过气房间的节奏风暴", invailds.size());
 		invailds.clear();
 		
-		
 		// 更新热门房间的webSocket连接
-		for(Integer roomId : hotRoomIds) {
+		for(Integer roomId : tops) {
 			if(roomId < 0) {
 				continue;
 			}
@@ -197,6 +182,18 @@ public class StormScanner extends LoopThread {
 				wsc.relink(roomId);
 			}
 		}
-		log.info("已监听 [{}] 个热门房间的节奏风暴", hotRoomLinks.size());
+		
+		log.info("已重点监听 [Top {}] 直播间的节奏风暴.", TOP);
 	}
+	
+	/**
+	 * 扫描并加入其他热门房间的节奏风暴抽奖
+	 */
+	public void sancAndJoinStorm() {
+		int cnt = MsgSender.scanStorms(scanCookie, hotRoomIds, SCAN_INTERVAL);
+		if(cnt > 0) {
+			log.info("参与节奏风暴抽奖成功(连击x{})", cnt);
+		}
+	}
+	
 }

@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -575,7 +574,7 @@ public class MsgSender {
 	 * 扫描节奏风暴
 	 */
 	public static int scanStorms(String cookies, 
-			Set<Integer> roomIds, long scanInterval) {
+			List<Integer> roomIds, long scanInterval) {
 		int sum = 0;
 		HttpClient client = new HttpClient();
 		Map<String, String> requests = new HashMap<String, String>();
