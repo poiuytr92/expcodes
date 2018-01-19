@@ -40,7 +40,7 @@ public final class OSUtils {
 			System.getProperty("sun.java.command");
 	
 	private final static boolean RUN_BY_TOMCAT = 
-			RUN_EVN.startsWith(" org.apache.catalina.startup.Bootstrap");
+			RUN_EVN.startsWith("org.apache.catalina.startup.Bootstrap");
 	
 	/** 私有化构造函数 */
 	protected OSUtils() {}
