@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
-import com.kt.explibs.warp.db.sql.DBUtils;
-import com.kt.explibs.warp.db.sql.bean.DataSourceBean;
+import exp.libs.warp.db.sql.DBUtils;
+import exp.libs.warp.db.sql.bean.DataSourceBean;
 import ${package}._demo.Config;
 
 /**

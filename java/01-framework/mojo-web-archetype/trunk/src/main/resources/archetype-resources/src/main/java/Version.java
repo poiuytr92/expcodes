@@ -3,8 +3,7 @@
 #set( $symbol_escape = '\' )
 package ${package};
 
-import com.kt.explibs.utils.other.LogUtils;
-import com.kt.explibs.warp.ver.VersionMgr;
+import exp.libs.warp.ver.VersionMgr;
 
 /**
  * <PRE>
