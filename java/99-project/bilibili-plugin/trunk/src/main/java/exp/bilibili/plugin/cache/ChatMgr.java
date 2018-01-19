@@ -108,7 +108,7 @@ public class ChatMgr extends LoopThread {
 		this.thxCnt = 0;
 		this.noticeCnt = 0;
 		this.callCnt = 0;
-		this.chatCnt = 0;
+		this.chatCnt = SCREEN_CHAT_LIMT;
 		this.autoThankYou = false;
 		this.autoNotice = false;
 		this.autoCall = false;
