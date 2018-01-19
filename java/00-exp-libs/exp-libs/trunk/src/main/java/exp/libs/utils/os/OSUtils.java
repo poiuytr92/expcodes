@@ -27,7 +27,7 @@ public final class OSUtils {
 			System.getProperty("os.arch").toLowerCase();
 
 	/** 操作系统字符集编码 */
-	protected static String OS_ENCODING = 
+	protected final static String OS_ENCODING = 
 			System.getProperty("sun.jnu.encoding").toUpperCase();
 	
 	/**
@@ -36,8 +36,11 @@ public final class OSUtils {
 	 *  1.通过tomcat运行的J2EE项目为固定值 org.apache.catalina.startup.Bootstrap start
 	 *  2.通过main运行的J2SE项目为main入口类的类名
 	 */
-	protected static String RUN_EVN = 
+	protected final static String RUN_EVN = 
 			System.getProperty("sun.java.command");
+	
+	private final static boolean RUN_BY_TOMCAT = 
+			RUN_EVN.startsWith(" org.apache.catalina.startup.Bootstrap");
 	
 	/** 私有化构造函数 */
 	protected OSUtils() {}
@@ -108,7 +111,7 @@ public final class OSUtils {
 	 * @return true:通过tomcat启动; false:通过main启动
 	 */
 	public static boolean isRunByTomcat() {
-		return "org.apache.catalina.startup.Bootstrap start".equals(RUN_EVN);
+		return RUN_BY_TOMCAT;
 	}
 	
 	/**
