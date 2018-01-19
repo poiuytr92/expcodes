@@ -10,13 +10,13 @@
 
 	<name>经验库-骨架-WEB版</name>
 	<description>用于快速构建WEB项目的程序框架</description>
-	<url>http://172.168.27.5:81/svn/release/99_publicProject/19_构件经验库/05_WEB骨架/trunk</url>
+	<url>https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-web-archetype/trunk</url>
 
 	<!-- 软件配置管理 -->
 	<scm>
-		<connection>scm:svn:http://172.168.27.5:81/svn/release/99_publicProject/19_构件经验库/05_WEB骨架/trunk</connection>
-		<developerConnection>scm:svn:http://172.168.27.5:81/svn/release/99_publicProject/19_构件经验库/05_WEB骨架/trunk</developerConnection>
-		<url>scm:svn:http://172.168.27.5:81/svn/release/99_publicProject/19_构件经验库/05_WEB骨架/trunk</url>
+		<connection>scm:svn:https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-web-archetype/trunk</connection>
+		<developerConnection>scm:svn:https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-web-archetype/trunk</developerConnection>
+		<url>scm:svn:https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-web-archetype/trunk</url>
 	</scm>
 	
 	<!-- 项目构建 -->
@@ -31,7 +31,7 @@
 				<artifactId>maven-release-plugin</artifactId>
 				<version>2.3.2</version>
 				<configuration>
-					<tagBase>http://172.168.27.5:81/svn/release/99_publicProject/19_构件经验库/05_WEB骨架/tags</tagBase>
+					<tagBase>https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-web-archetype/tags</tagBase>
 				</configuration>
 			</plugin>
 			
