@@ -45,11 +45,11 @@ public class SpecialGift extends _Msg {
 	@SuppressWarnings("rawtypes")
 	@Override
 	protected void analyse(JSONObject json) {
+		this.roomId = JsonUtils.getInt(json, BiliCmdAtrbt.roomid, 0);
 		JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 		Iterator keys = data.keys();
 		if(keys.hasNext()) {
 			JSONObject obj = JsonUtils.getObject(data, keys.next().toString());
-			this.roomId = JsonUtils.getInt(obj, BiliCmdAtrbt.roomid, 0);
 			this.raffleId = JsonUtils.getStr(obj, BiliCmdAtrbt.id);
 		}
 	}

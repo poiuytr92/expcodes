@@ -68,6 +68,10 @@ public class BiliCmd {
 	private final static String _RAFFLE_END = "RAFFLE_END";
 	public final static BiliCmd RAFFLE_END = new BiliCmd(_RAFFLE_END);
 	
+	/** (直播间内)许愿瓶实现进度消息 */
+	private final static String _WISH_BOTTLE = "WISH_BOTTLE";
+	public final static BiliCmd WISH_BOTTLE = new BiliCmd(_WISH_BOTTLE);
+	
 	private String cmd;
 	
 	private BiliCmd(String cmd) {
@@ -118,6 +122,9 @@ public class BiliCmd {
 			
 		} else if(_RAFFLE_END.equals(cmd)) {
 			biliCMD = RAFFLE_END;
+			
+		} else if(_WISH_BOTTLE.equals(cmd)) {
+			biliCMD = WISH_BOTTLE;
 			
 		}
 		return biliCMD;

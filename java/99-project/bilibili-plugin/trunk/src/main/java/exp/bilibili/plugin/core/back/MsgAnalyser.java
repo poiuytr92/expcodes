@@ -20,6 +20,7 @@ import exp.bilibili.plugin.bean.pdm.SysMsg;
 import exp.bilibili.plugin.bean.pdm.TvLottery;
 import exp.bilibili.plugin.bean.pdm.WelcomeGuard;
 import exp.bilibili.plugin.bean.pdm.WelcomeMsg;
+import exp.bilibili.plugin.bean.pdm.WishBottle;
 import exp.bilibili.plugin.cache.ActivityMgr;
 import exp.bilibili.plugin.cache.ChatMgr;
 import exp.bilibili.plugin.cache.MsgKwMgr;
@@ -97,6 +98,9 @@ public class MsgAnalyser {
 			
 		} else if(biliCmd == BiliCmd.PREPARING) {
 			toDo(new Preparing(json));
+			
+		} else if(biliCmd == BiliCmd.WISH_BOTTLE) {
+			toDo(new WishBottle(json));
 			
 		} else {
 			isOk = false;
@@ -291,6 +295,14 @@ public class MsgAnalyser {
 		String msg = StrUtils.concat("直播间 [", preparing.getRoomId(), "] 主播已下线.");
 		UIUtils.chat(msg);
 		log.info(msg);
+	}
+	
+	/**
+	 * (直播间内)许愿瓶实现进度消息
+	 * @param wishBottle
+	 */
+	private static void toDo(WishBottle wishBottle) {
+		// Undo
 	}
 	
 	/**

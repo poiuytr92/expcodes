@@ -38,7 +38,7 @@ public class ChatMgr extends LoopThread {
 	private final static Logger log = LoggerFactory.getLogger(ChatMgr.class);
 	
 	/** 同屏可以显示的最大发言数 */
-	private final static int SCREEN_CHAT_LIMT = 10;
+	private final static int SCREEN_CHAT_LIMT = 7;
 	
 	private final static String NOTICE_KEY = "【公告】";
 	
@@ -141,20 +141,20 @@ public class ChatMgr extends LoopThread {
 	@Override
 	protected void _loopRun() {
 		
-		// 定时感谢礼物投喂
+		// 自动感谢礼物投喂
 		if(thxCnt++ >= THX_LIMIT) {
 			thxCnt = 0;
 			toThxGift();
 		}
 		
 		// 定时公告
-		if(noticeCnt++ >= NOTICE_LIMIT) {
+		if(noticeCnt++ >= NOTICE_LIMIT && allowAutoChat()) {
 			noticeCnt = 0;
 			toNotice();
 		}
 		
 		// 定时打call（支持主播公告）
-		if(callCnt++ >= CALL_LIMIT) {
+		if(callCnt++ >= CALL_LIMIT && allowAutoChat()) {
 			callCnt = 0;
 			toCall();
 		}
@@ -344,8 +344,7 @@ public class ChatMgr extends LoopThread {
 	 * 定时公告
 	 */
 	private void toNotice() {
-		if(!isAutoNotice() || !allowAutoChat() || 
-				ListUtils.isEmpty(MsgKwMgr.getNotices())) {
+		if(!isAutoNotice() || ListUtils.isEmpty(MsgKwMgr.getNotices())) {
 			return;
 		}
 		
@@ -357,8 +356,7 @@ public class ChatMgr extends LoopThread {
 	 * 定时打call
 	 */
 	private void toCall() {
-		if(!isAutoCall() || !allowAutoChat() || 
-				ListUtils.isEmpty(MsgKwMgr.getCalls())) {
+		if(!isAutoCall() || ListUtils.isEmpty(MsgKwMgr.getCalls())) {
 			return;
 		}
 		
@@ -377,6 +375,7 @@ public class ChatMgr extends LoopThread {
 	
 	public void setAutoNotice() {
 		autoNotice = !autoNotice;
+		chatCnt = SCREEN_CHAT_LIMT;
 	}
 	
 	public boolean isAutoNotice() {
@@ -385,6 +384,7 @@ public class ChatMgr extends LoopThread {
 	
 	public void setAutoCall() {
 		autoCall = !autoCall;
+		chatCnt = SCREEN_CHAT_LIMT;
 	}
 	
 	public boolean isAutoCall() {

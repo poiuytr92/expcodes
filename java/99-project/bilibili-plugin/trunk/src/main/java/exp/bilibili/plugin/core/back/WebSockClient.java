@@ -80,6 +80,7 @@ public class WebSockClient extends LoopThread {
 
 	@Override
 	protected void _after() {
+		close();
 		log.info("{} 已停止", getName());
 	}
 	

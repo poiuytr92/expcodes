@@ -2,6 +2,7 @@ package exp.bilibili.plugin.cache;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -98,6 +99,12 @@ public class StormScanner extends LoopThread {
 
 	public void setScan() {
 		scan = !scan;
+		
+		if(scan == false) {
+			clearTopRoomLinks();
+		} else {
+			loopCnt = LOOP_LIMIT;	// 触发重新扫描房间号
+		}
 	}
 	
 	@Override
@@ -124,6 +131,7 @@ public class StormScanner extends LoopThread {
 
 	@Override
 	protected void _after() {
+		clearTopRoomLinks();
 		log.info("{} 已停止", getName());
 	}
 	
@@ -184,6 +192,16 @@ public class StormScanner extends LoopThread {
 		}
 		
 		log.info("已重点监听 [Top {}] 直播间的节奏风暴.", TOP);
+	}
+	
+	private void clearTopRoomLinks() {
+		Iterator<Integer> roomIds = hotRoomLinks.keySet().iterator();
+		while(roomIds.hasNext()) {
+			Integer roomId = roomIds.next();
+			WebSockClient wsc = hotRoomLinks.get(roomId);
+			wsc._stop();
+		}
+		hotRoomLinks.clear();
 	}
 	
 	/**

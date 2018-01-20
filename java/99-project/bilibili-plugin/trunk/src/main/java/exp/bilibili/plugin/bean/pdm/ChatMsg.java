@@ -33,7 +33,8 @@ import exp.libs.utils.other.StrUtils;
 	      1,
 	      1,
 	      10000,
-	      1
+	      1,
+	      ""		// 这是后面版本突然多出来的一个元素
 	    ],
 	    [
 	      16,
@@ -99,7 +100,7 @@ public class ChatMsg extends _Msg {
 					// Undo 
 					
 				// 发起聊天的用户信息
-				} else if(array.size() == 7) {
+				} else if(array.size() == 7 || array.size() == 8) {
 					this.uid = array.getString(0);
 					this.username = array.getString(1);
 					
