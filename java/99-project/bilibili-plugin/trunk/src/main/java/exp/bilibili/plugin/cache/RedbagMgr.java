@@ -190,7 +190,7 @@ public class RedbagMgr extends LoopThread {
 				if(exchange(redbag, num)) {
 //					keepRedbagNum -= (redbag.PRICE() * num);
 				} else {
-					redbagIts.remove();
+//					redbagIts.remove();
 				}
 			}
 		}
