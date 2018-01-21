@@ -322,15 +322,29 @@ public class TimeUtils {
 		return millisTime;
 	}
 	
+	private final static long DAY_UNIT = 86400000L;
+	
+	private final static long HOUR_UNIT = 3600000L;
+	
+	private final static long MIN_UNIT = 60000L;
+	
 	/**
 	 * 获取当前的小时值
 	 * @param offset 时差值
 	 * @return 当前小时
 	 */
 	public static int getCurHour(int offset) {
-		long hour = ((System.currentTimeMillis() % 86400000) / 3600000);
+		long hour = ((System.currentTimeMillis() % DAY_UNIT) / HOUR_UNIT);
 		hour = (hour + offset + 24) % 24;	// 时差
 		return (int) hour;
+	}
+	
+	/**
+	 * 获取当前的分钟数
+	 * @return 当前分钟数
+	 */
+	public static int getCurMinute() {
+		return (int) (System.currentTimeMillis() % DAY_UNIT % HOUR_UNIT / MIN_UNIT);
 	}
 	
 }
