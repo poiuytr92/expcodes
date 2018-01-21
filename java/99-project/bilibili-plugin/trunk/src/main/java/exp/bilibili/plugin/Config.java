@@ -173,6 +173,14 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/doTask");
 	}
 	
+	public String GET_REDBAG_URL() {
+		return xConf.getVal("/config/biliUrls/getRedbag");
+	}
+	
+	public String EX_REDBAG_URL() {
+		return xConf.getVal("/config/biliUrls/exRedbag");
+	}
+	
 	public String COOKIE_DIR() {
 		return xConf.getVal("/config/files/cookies");
 	}

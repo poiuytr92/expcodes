@@ -31,6 +31,9 @@
         <checkTask caption="日常任务检测服务器"><![CDATA[http://api.live.bilibili.com/FreeSilver/getCurrentTask]]></checkTask>
         <vercode caption="校验码服务器"><![CDATA[http://api.live.bilibili.com/freeSilver/getCaptcha]]></vercode>
         <doTask caption="日常任务提交服务器"><![CDATA[http://api.live.bilibili.com/FreeSilver/getAward]]></doTask>
+        
+        <getRedbag caption="2018春节活动：查询红包奖池"><![CDATA[http://api.live.bilibili.com/activity/v1/NewSpring/redBagPool]]></getRedbag>
+        <exRedbag caption="2018春节活动：兑换红包礼物"><![CDATA[http://api.live.bilibili.com/activity/v1/NewSpring/redBagExchange]]></exRedbag>
     </biliUrls>
     
     <files caption="本地文件位置">

@@ -102,4 +102,18 @@ public class BiliCmdAtrbt {
 	
 	public final static String online = "online";
 	
+	public final static String red_bag_num = "red_bag_num";
+	
+	public final static String pool_list = "pool_list";
+	
+	public final static String award_id = "award_id";
+	
+	public final static String award_name = "award_name";
+	
+	public final static String stock_num = "stock_num";
+	
+	public final static String exchange_limit = "exchange_limit";
+	
+	public final static String user_exchange_count = "user_exchange_count";
+	
 }

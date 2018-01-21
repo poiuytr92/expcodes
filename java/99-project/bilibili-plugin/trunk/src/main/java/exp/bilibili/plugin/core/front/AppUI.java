@@ -25,6 +25,7 @@ import exp.bilibili.plugin.cache.ChatMgr;
 import exp.bilibili.plugin.cache.LoginMgr;
 import exp.bilibili.plugin.cache.MsgKwMgr;
 import exp.bilibili.plugin.cache.OnlineUserMgr;
+import exp.bilibili.plugin.cache.RedbagMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.core.back.MsgSender;
@@ -79,6 +80,8 @@ public class AppUI extends MainWindow {
 	
 	private JButton lotteryBtn;
 	
+	private JButton activeListBtn;
+	
 	private JButton loginBtn;
 	
 	private JButton stormBtn;
@@ -97,11 +100,13 @@ public class AppUI extends MainWindow {
 	
 	private JButton eNoticeBtn;
 	
-	private JButton nightBtn;
-	
 	private JButton callBtn;
 	
 	private JButton eCallBtn;
+	
+	private JButton nightBtn;
+	
+	private JButton redbagBtn;
 	
 	private JTextField httpTF;
 	
@@ -212,6 +217,7 @@ public class AppUI extends MainWindow {
 		this.defaultBtn = new JButton("★");
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
+		this.activeListBtn = new JButton("☷");
 		this.loginBtn = new JButton("扫码/帐密登陆 (自动抽奖)");
 		this.stormBtn = new JButton("节奏风暴扫描");
 		this.modeBtn = new JButton("模");
@@ -221,13 +227,15 @@ public class AppUI extends MainWindow {
 		this.thxBtn = new JButton("答谢姬");
 		this.noticeBtn = new JButton("公告姬");
 		this.eNoticeBtn = new JButton(">");
-		this.nightBtn = new JButton("晚安姬");
 		this.callBtn = new JButton("小call姬");
 		this.eCallBtn = new JButton(">");
+		this.nightBtn = new JButton("晚安姬");
+		this.redbagBtn = new JButton("红包兑奖姬");
 		defaultBtn.setToolTipText("设为默认");
 		defaultBtn.setForeground(Color.MAGENTA);
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
+		activeListBtn.setForeground(Color.BLUE);
 		loginBtn.setForeground(Color.BLACK);
 		stormBtn.setForeground(Color.BLACK);
 		modeBtn.setForeground(Color.BLACK);
@@ -237,9 +245,10 @@ public class AppUI extends MainWindow {
 		thxBtn.setForeground(Color.BLACK);
 		noticeBtn.setForeground(Color.BLACK);
 		eNoticeBtn.setForeground(Color.BLACK);
-		nightBtn.setForeground(Color.BLACK);
 		callBtn.setForeground(Color.BLACK);
 		eCallBtn.setForeground(Color.BLACK);
+		nightBtn.setForeground(Color.BLACK);
+		redbagBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -284,7 +293,8 @@ public class AppUI extends MainWindow {
 	private JPanel _getLinkPanel() {
 		JPanel panel = new JPanel(new GridLayout(2, 1));
 		SwingUtils.addBorder(panel);
-		panel.add(SwingUtils.getHGridPanel(linkBtn, lotteryBtn), 0);
+		panel.add(SwingUtils.getHGridPanel(linkBtn, 
+				SwingUtils.getEBorderPanel(lotteryBtn, activeListBtn)), 0);
 		
 		JPanel livePanel = new JPanel(new BorderLayout()); {
 			livePanel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), BorderLayout.CENTER);
@@ -324,7 +334,7 @@ public class AppUI extends MainWindow {
 				thxBtn, 
 				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
 				SwingUtils.getEBorderPanel(callBtn, eCallBtn), 
-				nightBtn);
+				nightBtn, redbagBtn);
 	}
 	
 	private JPanel getRightPanel() {
@@ -368,6 +378,7 @@ public class AppUI extends MainWindow {
 		setDefaultBtnListener();
 		setLinkBtnListener();
 		setLotteryBtnListener();
+		setActiveListBtnListener();
 		setLoginBtnListener();
 		setStormBtnListener();
 		setModeBtnListener();
@@ -376,8 +387,9 @@ public class AppUI extends MainWindow {
 		setColorBtnListener();
 		setThxBtnListener();
 		setNoticeBtnListener();
-		setNightBtnListener();
 		setCallBtnListener();
+		setNightBtnListener();
+		setRedbagBtnListener();
 		setChatTFListener();
 		setEditBtnListener();
 	}
@@ -444,6 +456,16 @@ public class AppUI extends MainWindow {
 				lotteryUI.refreshUsers();
 				lotteryUI._view();
 				lockBtn();
+			}
+		});
+	}
+	
+	private void setActiveListBtnListener() {
+		activeListBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new _ActiveListUI()._view();
 			}
 		});
 	}
@@ -766,6 +788,21 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
+	private void setRedbagBtnListener() {
+		redbagBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!isLogined()) {
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [红包兑奖姬] 哦~");
+					return;
+				}
+				
+				new _RedbagUI()._view();
+			}
+		});
+	}
+	
 	private void setChatTFListener() {
 		chatTF.addKeyListener(new KeyListener() {
 			
@@ -825,6 +862,7 @@ public class AppUI extends MainWindow {
 		wsClient._stop();
 		lotteryUI.clear();
 		
+		RedbagMgr.getInstn()._stop();
 		StormScanner.getInstn()._stop();
 		ChatMgr.getInstn()._stop();
 		LoginMgr.getInstn()._stop();	
