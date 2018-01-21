@@ -188,9 +188,19 @@ public class CheckBoxGroup<T> {
 		return new LinkedList<JCheckBox>(cbs);
 	}
 	
-	public JPanel toDefaultPanel() {
+	public JPanel toHGridPanel() {
 		int col = (size <= 0 ? 1 : size);
 		JPanel panel = new JPanel(new GridLayout(1, col));
+		for(int i = 0; i < size; i++) {
+			JCheckBox cb = cbs.get(i);
+			panel.add(cb, i);
+		}
+		return panel;
+	}
+	
+	public JPanel toVGridPanel() {
+		int row = (size <= 0 ? 1 : size);
+		JPanel panel = new JPanel(new GridLayout(row, 1));
 		for(int i = 0; i < size; i++) {
 			JCheckBox cb = cbs.get(i);
 			panel.add(cb, i);

@@ -85,7 +85,7 @@ class _VerMgrUI extends MainWindow {
 	 * 私有化构造函数
 	 */
 	private _VerMgrUI() {
-		super(DEFAULT_TITLE, 600, 400);
+		super(DEFAULT_TITLE, 700, 430);
 	}
 	
 	/**

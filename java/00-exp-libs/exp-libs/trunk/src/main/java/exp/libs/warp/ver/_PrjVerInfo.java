@@ -54,7 +54,7 @@ class _PrjVerInfo {
 	
 	private String prjCharset;
 	
-	private JComboBox prjCharsetTF;
+	private JComboBox<String> prjCharsetTF;
 	
 	private String diskSize;
 	
@@ -95,7 +95,7 @@ class _PrjVerInfo {
 		this.prjNameTF = new JTextField();
 		this.prjDescTF = new JTextField();
 		this.teamNameTF = new JTextField();
-		this.prjCharsetTF = new JComboBox(CHARSET_ITEMS);
+		this.prjCharsetTF = new JComboBox<String>(CHARSET_ITEMS);
 		this.diskSizeTF = new JTextField();
 		this.cacheSizeTF = new JTextField();
 		this._APIsCB = new CheckBoxGroup<String>(API_ITEMS);
@@ -147,7 +147,7 @@ class _PrjVerInfo {
 			panel.add(SwingUtils.getPairsPanel("项目编码", prjCharsetTF));
 			panel.add(SwingUtils.getPairsPanel("硬盘需求", diskSizeTF));
 			panel.add(SwingUtils.getPairsPanel("内存需求", cacheSizeTF));
-			panel.add(SwingUtils.getPairsPanel("相关接口", _APIsCB.toDefaultPanel()));
+			panel.add(SwingUtils.getPairsPanel("相关接口", _APIsCB.toHGridPanel()));
 		}
 		return SwingUtils.addAutoScroll(panel);
 	}
