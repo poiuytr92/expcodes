@@ -134,6 +134,8 @@ public class AppUI extends MainWindow {
 	
 	private _QrcodeUI qrcodeUI;
 	
+	private _RedbagUI redbagUI;
+	
 	private _ModeUI modeUI;
 	
 	private _ColorUI colorUI;
@@ -266,6 +268,7 @@ public class AppUI extends MainWindow {
 		this.wsClient = new WebSockClient();
 		this.lotteryUI = new _LotteryUI();
 		this.qrcodeUI = new _QrcodeUI();
+		this.redbagUI = new _RedbagUI();
 		this.modeUI = new _ModeUI();
 		this.colorUI = new _ColorUI();
 		this.curChatColor = ChatColor.WHITE;
@@ -798,7 +801,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				new _RedbagUI()._view();
+				redbagUI._view();
 			}
 		});
 	}

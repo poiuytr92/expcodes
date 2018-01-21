@@ -79,12 +79,14 @@ class _RedbagUI extends PopChildWindow {
 				RedbagMgr.getInstn().setExchange();
 				
 				if(RedbagMgr.getInstn().isExchange()) {
+					redbags.setEnable(false);
 					RedbagMgr.getInstn()._start();
 					RedbagMgr.getInstn().update(redbags.getItems(true));
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, exchangeBtn);
 					UIUtils.log("[红包抽奖姬] 被召唤成功O(∩_∩)O");
 					
 				} else {
+					redbags.setEnable(true);
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, exchangeBtn);
 					UIUtils.log("[红包抽奖姬] 被封印啦/(ㄒoㄒ)/");
 				}
