@@ -107,7 +107,7 @@ public class RedbagMgr extends LoopThread {
 	public void updateExTime() {
 		int minute = TimeUtils.getCurMinute();
 		
-		if(exTime == false && minute == 59) {
+		if(exTime == false && minute == 55) {
 			exTime = true;
 			log.info("已达到兑奖时间点");
 			
