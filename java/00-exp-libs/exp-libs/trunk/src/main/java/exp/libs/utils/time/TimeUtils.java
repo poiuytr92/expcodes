@@ -36,6 +36,12 @@ public class TimeUtils {
 	/** 日期格式： yyyy-MM-dd HH:mm:ss.SSS */
 	public final static String FORMAT_YMDHMSS = DateFormat.YMDHMSS;
 	
+	private final static long DAY_UNIT = 86400000L;
+	
+	private final static long HOUR_UNIT = 3600000L;
+	
+	private final static long MIN_UNIT = 60000L;
+	
 	/** 私有化构造函数 */
 	protected TimeUtils() {}
 	
@@ -321,12 +327,6 @@ public class TimeUtils {
 		millisTime = NumUtils.max(millisTime, minMillisTime);
 		return millisTime;
 	}
-	
-	private final static long DAY_UNIT = 86400000L;
-	
-	private final static long HOUR_UNIT = 3600000L;
-	
-	private final static long MIN_UNIT = 60000L;
 	
 	/**
 	 * 获取当前的小时值
