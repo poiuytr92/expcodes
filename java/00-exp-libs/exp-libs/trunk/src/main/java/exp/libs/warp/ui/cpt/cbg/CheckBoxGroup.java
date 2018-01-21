@@ -144,6 +144,13 @@ public class CheckBoxGroup<T> {
 		}
 	}
 	
+	public void setEnable(boolean enable) {
+		for(int i = 0; i < size; i++) {
+			JCheckBox cb = cbs.get(i);
+			cb.setEnabled(enable);
+		}
+	}
+	
 	public T getItem(int itemIdx) {
 		T item = null;
 		if(items != null && itemIdx >= 0 && itemIdx < size) {
