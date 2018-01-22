@@ -13,6 +13,7 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 import exp.bilibili.plugin.cache.RedbagMgr;
 import exp.bilibili.plugin.envm.Redbag;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.cbg.CheckBoxGroup;
@@ -97,7 +98,8 @@ class _RedbagUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(SwingUtils.confirm("确认刷新奖池 ? (刷新成功后会马上执行兑换)")) {
+				if(SwingUtils.confirm(StrUtils.concat("确认刷新 ? (需花费", 
+						Redbag.REDBAG_POOL.PRICE(), "红包, 刷新后马上兑奖)"))) {
 					
 					if(RedbagMgr.getInstn().reflashPool()) {
 						RedbagMgr.getInstn().update(redbags.getItems(true));

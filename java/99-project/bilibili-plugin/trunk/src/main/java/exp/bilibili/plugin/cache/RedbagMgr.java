@@ -127,12 +127,12 @@ public class RedbagMgr extends LoopThread {
 		if(exTime == false && minute == 55) {
 			sleepTime = 1000;
 			exTime = true;
-			log.info("红包兑奖时间已到");
+			UIUtils.log("红包兑奖时间已到, 正在尝试兑奖...");
 			
 		} else if(exTime == true && minute == 2) {
 			sleepTime = 60000;
 			exTime = false;
-			log.info("红包兑奖时间已过");
+			UIUtils.log("红包兑奖时间已过, 已停止兑奖.");
 		}
 	}
 	
