@@ -54,7 +54,7 @@ class _PrjVerInfo {
 	
 	private String prjCharset;
 	
-	private JComboBox<String> prjCharsetTF;
+	private JComboBox prjCharsetTF;
 	
 	private String diskSize;
 	
@@ -95,7 +95,7 @@ class _PrjVerInfo {
 		this.prjNameTF = new JTextField();
 		this.prjDescTF = new JTextField();
 		this.teamNameTF = new JTextField();
-		this.prjCharsetTF = new JComboBox<String>(CHARSET_ITEMS);
+		this.prjCharsetTF = new JComboBox(CHARSET_ITEMS);
 		this.diskSizeTF = new JTextField();
 		this.cacheSizeTF = new JTextField();
 		this._APIsCB = new CheckBoxGroup<String>(API_ITEMS);
