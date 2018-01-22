@@ -49,7 +49,7 @@ class _RedbagUI extends PopChildWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.exchangeBtn = new JButton("自动兑换 (按花费从大到小尽可能多兑换)");
+		this.exchangeBtn = new JButton("自动兑换 (多选则按花费降序尽可能兑换)");
 		this.reflashBtn = new JButton("刷新奖池");
 		exchangeBtn.setForeground(Color.BLACK);
 		reflashBtn.setForeground(Color.BLACK);
@@ -80,8 +80,8 @@ class _RedbagUI extends PopChildWindow {
 				
 				if(RedbagMgr.getInstn().isExchange()) {
 					redbags.setEnable(false);
-					RedbagMgr.getInstn()._start();
 					RedbagMgr.getInstn().update(redbags.getItems(true));
+					RedbagMgr.getInstn()._start();
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, exchangeBtn);
 					UIUtils.log("[红包抽奖姬] 被召唤成功O(∩_∩)O");
 					
@@ -97,7 +97,7 @@ class _RedbagUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(SwingUtils.confirm("确认刷新奖池 ? (刷新成功后马上执行兑换)")) {
+				if(SwingUtils.confirm("确认刷新奖池 ? (刷新成功后会马上执行兑换)")) {
 					
 					if(RedbagMgr.getInstn().reflashPool()) {
 						RedbagMgr.getInstn().update(redbags.getItems(true));
@@ -111,5 +111,5 @@ class _RedbagUI extends PopChildWindow {
 			}
 		});
 	}
-
+	
 }

@@ -468,7 +468,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new _ActiveListUI()._view();
+//				new _ActiveListUI()._view();
 			}
 		});
 	}

@@ -34,7 +34,7 @@ public class StormScanner extends LoopThread {
 	private final static Logger log = LoggerFactory.getLogger(StormScanner.class);
 	
 	/** 试探轮询行为的间隔 */
-	private final static int SLEEP_TIME = 2000;
+	private final static long SLEEP_TIME = 2000;
 	
 	/** 最大的查询分页(每页最多30个房间): 每页30个房间 */
 	private final static int MAX_PAGES = 2;

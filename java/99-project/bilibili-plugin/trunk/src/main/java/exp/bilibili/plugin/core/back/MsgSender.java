@@ -1070,7 +1070,7 @@ public class MsgSender {
 	public static String exchangeRedbag(String id, int num) {
 		Map<String, String> headers = toPostHeadParams(Browser.COOKIES(), "pages/1703/spring-2018.html");
 		Map<String, String> requests = new HashMap<String, String>();
-		requests.put("award_id", "stuff-3");
+		requests.put("award_id", id);
 		requests.put("exchange_num", String.valueOf(num));
 		String response = HttpURLUtils.doPost(EX_REDBAG_URL, headers, requests);
 		return response;

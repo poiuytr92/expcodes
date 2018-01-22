@@ -38,10 +38,12 @@ public class RedbagMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(RedbagMgr.class);
 	
-	private final static int SLEEP_TIME = 1000;
+	private long sleepTime;
 	
+	/** 期望兑换列表 */
 	private List<Redbag> redbags;
 	
+	/** 是否执行兑换 */
 	private boolean exchange;
 	
 	/**
@@ -50,13 +52,23 @@ public class RedbagMgr extends LoopThread {
 	 */
 	private boolean exTime;
 	
+	/** 本轮手持红包数 */
+	private int keepRedbagNum;
+	
+	/** 本轮奖池信息 */
+	private Map<String, Award> pool;
+	
 	private static volatile RedbagMgr instance;
 	
 	private RedbagMgr() {
 		super("红包兑奖姬");
+		this.sleepTime = 1000;
 		this.redbags = new LinkedList<Redbag>();
 		this.exchange = false;
 		this.exTime = false;
+		
+		this.keepRedbagNum = 0;
+		this.pool = new HashMap<String, Award>();
 	}
 	
 	public static RedbagMgr getInstn() {
@@ -77,14 +89,15 @@ public class RedbagMgr extends LoopThread {
 
 	@Override
 	protected void _loopRun() {
+		updateExTime();
+		
 		if(isExchange() && isExTime()) {
 			synchronized (redbags) {
 				exchange();
 			}
 		}
 		
-		updateExTime();
-		_sleep(SLEEP_TIME);
+		_sleep(sleepTime);
 	}
 
 	@Override
@@ -104,91 +117,97 @@ public class RedbagMgr extends LoopThread {
 		return exTime;
 	}
 	
+	/**
+	 * 更新兑奖的执行时间段:
+	 * 	从每个小时的55分开始, 一直持续到下一个小时的02分
+	 */
 	public void updateExTime() {
 		int minute = TimeUtils.getCurMinute();
 		
 		if(exTime == false && minute == 55) {
+			sleepTime = 1000;
 			exTime = true;
-			log.info("已达到兑奖时间点");
+			log.info("红包兑奖时间已到");
 			
-		} else if(exTime == true && minute == 1) {
+		} else if(exTime == true && minute == 2) {
+			sleepTime = 60000;
 			exTime = false;
-			
-			log.info("兑奖时间已过");
+			log.info("红包兑奖时间已过");
 		}
 	}
 	
+	/**
+	 * 查询奖池.
+	 * 	每轮只查询一次奖池
+	 * @return 手持红包数
+	 */
+	public int queryPool() {
+		pool.clear();
+		String response = MsgSender.queryRedbagPool();
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+				keepRedbagNum = JsonUtils.getInt(data, BiliCmdAtrbt.red_bag_num, 0);
+				JSONArray redbagPool = JsonUtils.getArray(data, BiliCmdAtrbt.pool_list);
+				for(int i = 0; i < redbagPool.size(); i++) {
+					Award award = new Award(redbagPool.getJSONObject(i));
+					pool.put(award.getId(), award);
+				}
+				
+			} else {
+				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("查询红包奖池失败: {}", reason);
+			}
+		} catch(Exception e) {
+			log.error("查询红包奖池失败: {}", response, e);
+		}
+		return keepRedbagNum;
+	}
+	
+	/**
+	 * 兑换奖品
+	 */
 	public void exchange() {
-		if(redbags.isEmpty()) {
+		if(redbags.isEmpty() || queryPool() <= 0) {
 			return;
 		}
-		
-//		int keepRedbagNum = 0;
-//		Map<String, Award> awards = new HashMap<String, Award>();
-		
-		// 查询本轮奖池
-//		boolean isOk = true;
-//		String response = MsgSender.queryRedbagPool();
-//		try {
-//			JSONObject json = JSONObject.fromObject(response);
-//			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-//			if(code == 0) {
-//				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
-//				keepRedbagNum = JsonUtils.getInt(data, BiliCmdAtrbt.red_bag_num, 0);
-//				JSONArray redbagPool = JsonUtils.getArray(data, BiliCmdAtrbt.pool_list);
-//				for(int i = 0; i < redbagPool.size(); i++) {
-//					Award award = new Award(redbagPool.getJSONObject(i));
-//					awards.put(award.getId(), award);
-//				}
-//				
-//			} else {
-//				isOk = false;
-//				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-//				log.warn("查询红包奖池失败: {}", reason);
-//			}
-//		} catch(Exception e) {
-//			isOk = false;
-//			log.error("查询红包奖池失败: {}", response, e);
-//		}
-//		
-//		if(isOk == false) {
-//			return;
-//		}
 		
 		// 根据期望兑换的奖品列表在奖池中进行兑换
 		Iterator<Redbag> redbagIts = redbags.iterator();
 		while(redbagIts.hasNext()) {
 			Redbag redbag = redbagIts.next();
-//			Award award = awards.get(redbag.ID());
-//			
-//			// 本轮奖池无此奖品
-//			if(award == null) {
-//				continue;
-//				
-//			// 该奖品在本轮奖池中已无剩余
-//			} else if(award.getStockNum() <= 0) {
-//				continue;
-//				
-//			// 该奖品不能被无限兑换, 且已达到该用户的兑换上限
-//			} else if(award.getExchangeLimit() > 0 && 
-//					award.getUserExchangeCount() <= 0) {
-//				continue;
-//				
-//			// 用户所持的红包数不足以兑换该奖品
-//			} else if(keepRedbagNum < redbag.PRICE()) {
-//				continue;
-//			}
+			Award award = pool.get(redbag.ID());
+			
+			// 本轮奖池无此奖品
+			if(award == null) {
+				continue;
+				
+			// 该奖品在本轮奖池中已无剩余
+			} else if(award.getStockNum() <= 0) {
+				continue;
+				
+			// 该奖品不能被无限兑换, 且已达到该用户的兑换上限
+			} else if(award.getExchangeLimit() > 0 && 
+					award.getUserExchangeCount() <= 0) {
+				continue;
+				
+			// 用户所持的红包数不足以兑换该奖品
+			} else if(keepRedbagNum < redbag.PRICE()) {
+				continue;
+			}
 			
 			// 尽可能多地兑换（若兑换成功则更新手持的红包数量）
-//			int num = keepRedbagNum / redbag.PRICE();	// 手持红包可以兑换的上限
-//			num = (num > award.getUserExchangeCount() ? award.getUserExchangeCount() : num);	//  用户剩余兑换上限
-//			num = (num > award.getStockNum() ? award.getStockNum() : num);	// 奖池剩余数量
-			int num = 1;
+			int num = keepRedbagNum / redbag.PRICE();	// 手持红包可以兑换的上限
+			num = (num > award.getUserExchangeCount() ? award.getUserExchangeCount() : num);	//  用户剩余兑换上限
+			num = (num > award.getStockNum() ? award.getStockNum() : num);	// 奖池剩余数量
 			
 			log.info("正在试图兑换 [{}] 个 [{}] ...", num, redbag.DESC());
 			if(num > 0) {
 				if(exchange(redbag, num)) {
-//					keepRedbagNum -= (redbag.PRICE() * num);
+					keepRedbagNum -= (redbag.PRICE() * num);
+					
 				} else {
 //					redbagIts.remove();
 				}
@@ -203,9 +222,9 @@ public class RedbagMgr extends LoopThread {
 	 * @return true:兑换成功; false:兑换失败
 	 */
 	private boolean exchange(Redbag redbag, int num) {
-		String response = MsgSender.exchangeRedbag(redbag.ID(), num);
-		
 		boolean isOk = false;
+		
+		String response = MsgSender.exchangeRedbag(redbag.ID(), num);
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
@@ -217,9 +236,7 @@ public class RedbagMgr extends LoopThread {
 				
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				String msg = StrUtils.concat("兑换[", redbag.DESC(), "]失败: ", reason);
-				UIUtils.log(msg);
-				log.warn(msg);
+				log.warn("兑换 [{}] 失败: {}", redbag.DESC(), reason);
 			}
 		} catch(Exception e) {
 			log.error("兑换 [{}] 失败: {}", redbag.DESC(), response, e);
