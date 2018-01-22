@@ -116,7 +116,7 @@ class _ActiveListUI extends PopChildWindow {
 			)), BorderLayout.CENTER);
 			
 			panel.add(SwingUtils.getHGridPanel(SwingUtils.addBorder(
-					SwingUtils.getVGridPanel(new JLabel("可兑换天数", JLabel.CENTER), 
+					SwingUtils.getVGridPanel(new JLabel("[可兑换天数]", JLabel.CENTER), 
 							dayLabel)), exportBtn
 			), BorderLayout.EAST);
 		}
