@@ -1,18 +1,24 @@
 package exp.bilibili.plugin.core.front;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.cache.ActivityMgr;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
+import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
 /**
@@ -39,6 +45,12 @@ class _ActiveListUI extends PopChildWindow {
 	
 	private final static int HEIGHT = 400;
 	
+	private final static String[] HEADER = {
+		"排名", "账号名称", "活跃值"
+	};
+	
+	private final static int MAX_ROW = 50;
+	
 	private JTextField lastActiveTF;
 	
 	private JTextField curActiveTF;
@@ -46,6 +58,8 @@ class _ActiveListUI extends PopChildWindow {
 	private JLabel dayLabel;
 	
 	private JButton exportBtn;
+	
+	private _HisVerTable activeTable;
 	
 	protected _ActiveListUI() {
 		super(StrUtils.concat("[", Config.getInstn().ACTIVITY_ROOM_ID(), 
@@ -61,6 +75,29 @@ class _ActiveListUI extends PopChildWindow {
 		
 		this.exportBtn = new JButton("导出");
 		this.dayLabel = new JLabel("0", JLabel.CENTER);
+		
+		this.activeTable = new _HisVerTable();
+		activeTable.reflash(getActiveDatas());
+	}
+	
+	private List<List<String>> getActiveDatas() {
+		List<List<String>> datas = new ArrayList<List<String>>(MAX_ROW);
+		
+		int sortId = 1;
+		List<Map.Entry<String, Integer>> actives = ActivityMgr.getInstn().getDescActives();
+		for(Map.Entry<String, Integer> active : actives) {
+			List<String> row = Arrays.asList(new String[] {
+				String.valueOf(sortId++), 
+				ActivityMgr.getInstn().getUserName(active.getKey()), 
+				String.valueOf(active.getValue())
+			});
+			datas.add(row);
+			
+			if(sortId >= MAX_ROW) {
+				break;
+			}
+		}
+		return datas;
 	}
 
 	@Override
@@ -87,11 +124,35 @@ class _ActiveListUI extends PopChildWindow {
 	}
 	
 	private JScrollPane _getCenterPanel() {
-		return SwingUtils.addAutoScroll(new JTextArea());
+		return SwingUtils.addAutoScroll(activeTable);
 	}
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
+		
+	}
+	
+	
+	/**
+	 * <PRE>
+	 * 历史版本表单组件
+	 * </PRE>
+	 * 
+	 * @author Administrator
+	 * @date 2017年7月6日
+	 */
+	private class _HisVerTable extends NormTable {
+		
+		private static final long serialVersionUID = -3111568334645181825L;
+		
+		private _HisVerTable() {
+			super(HEADER, 100);
+		}
+
+		@Override
+		protected void initRightBtnPopMenu(JPopupMenu popMenu) {
+			// Undo
+		}
 		
 	}
 

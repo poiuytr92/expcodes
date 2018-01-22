@@ -2,11 +2,15 @@ package exp.bilibili.plugin.cache;
 
 import java.io.File;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -109,11 +113,11 @@ public class ActivityMgr {
 	 * @return
 	 */
 	private static boolean initEnv() {
-		boolean isOk = true;
 		if(Config.LEVEL < Level.ADMIN) {
-			return isOk;	// 仅管理员可以操作
+			return false;	// 仅管理员可以操作
 		}
 		
+		boolean isOk = true;
 		File dbFile = new File(ENV_DB_PATH);
 		if(!dbFile.exists()) {
 			FileUtils.createDir(ENV_DB_DIR);
@@ -316,6 +320,35 @@ public class ActivityMgr {
 		SqliteUtils.releaseDisk(conn);
 		SqliteUtils.close(conn);
 		return isOk;
+	}
+	
+	/**
+	 * 获取用户名称
+	 * @param userId 用户ID
+	 * @return 用户名称
+	 */
+	public String getUserName(String userId) {
+		String username = users.get(userId);
+		return (username == null ? userId : username);
+	}
+	
+	/**
+	 * 获取降序排序后的活跃值表
+	 * @return
+	 */
+	public List<Map.Entry<String, Integer>> getDescActives() {
+		List<Map.Entry<String, Integer>> list = 
+				new ArrayList<Map.Entry<String, Integer>>(costs.entrySet());
+		
+		 // 降序排序
+		Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
+           
+            @Override
+            public int compare(Entry<String, Integer> a, Entry<String, Integer> b) {
+                return b.getValue().compareTo(a.getValue());
+            }
+        });
+		return list;
 	}
 	
 }
