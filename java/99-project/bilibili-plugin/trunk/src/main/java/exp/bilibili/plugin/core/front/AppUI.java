@@ -88,6 +88,8 @@ public class AppUI extends MainWindow {
 	
 	private JButton modeBtn;
 	
+	private JButton addUserBtn;
+	
 	private JButton clrBtn;
 	
 	private JButton sendBtn;
@@ -223,6 +225,7 @@ public class AppUI extends MainWindow {
 		this.loginBtn = new JButton("扫码/帐密登陆 (自动抽奖)");
 		this.stormBtn = new JButton("节奏风暴扫描");
 		this.modeBtn = new JButton("模");
+		this.addUserBtn = new JButton("╋");
 		this.clrBtn = new JButton("清");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
@@ -241,6 +244,7 @@ public class AppUI extends MainWindow {
 		loginBtn.setForeground(Color.BLACK);
 		stormBtn.setForeground(Color.BLACK);
 		modeBtn.setForeground(Color.BLACK);
+		addUserBtn.setForeground(Color.BLACK);
 		clrBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
@@ -352,7 +356,7 @@ public class AppUI extends MainWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
 		panel.add(SwingUtils.getEBorderPanel(loginBtn, stormBtn), BorderLayout.CENTER);
-		panel.add(SwingUtils.getHGridPanel(modeBtn, clrBtn), BorderLayout.EAST);
+		panel.add(SwingUtils.getHGridPanel(/*modeBtn*/ addUserBtn, clrBtn), BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -385,6 +389,7 @@ public class AppUI extends MainWindow {
 		setLoginBtnListener();
 		setStormBtnListener();
 		setModeBtnListener();
+		setAddUserBtnListener();
 		setClrBtnListener();
 		setSendBtnListener();
 		setColorBtnListener();
@@ -618,6 +623,16 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				modeUI._view();
+			}
+		});
+	}
+	
+	private void setAddUserBtnListener() {
+		addUserBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO
 			}
 		});
 	}

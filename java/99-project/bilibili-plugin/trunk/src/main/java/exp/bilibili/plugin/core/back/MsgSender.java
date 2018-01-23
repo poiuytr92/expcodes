@@ -1,6 +1,5 @@
 package exp.bilibili.plugin.core.back;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,7 +10,6 @@ import net.sf.json.JSONObject;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
-import org.openqa.selenium.Cookie;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +20,7 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
+import exp.bilibili.plugin.tmp.HttpCookies;
 import exp.bilibili.plugin.utils.RSAUtils;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -180,11 +179,11 @@ public class MsgSender {
 	 * @param password 密码
 	 * @param vccode 验证码
 	 * @param vcCookies 与验证码配套的登陆用cookies
-	 * @return selenium浏览器用的Cookie (若为空集则登陆失败)
+	 * @return Cookie集合
 	 */
-	public static List<Cookie> toLogin(String username, String password, 
+	public static HttpCookies toLogin(String username, String password, 
 			String vccode, String vcCookies) {
-		List<Cookie> cookies = new LinkedList<Cookie>();
+		HttpCookies cookies = new HttpCookies();
 		HttpClient client = new HttpClient();
 		
 		try {
@@ -209,8 +208,7 @@ public class MsgSender {
 					Header[] outHeaders = method.getResponseHeaders();
 					for(Header outHeader : outHeaders) {
 						if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
-							Cookie cookie = _toCookie(outHeader.getValue());
-							cookies.add(cookie);
+							cookies.add(outHeader.getValue());
 						}
 					}
 				}
@@ -251,56 +249,6 @@ public class MsgSender {
 		requests.put("keep", "true");
 		requests.put("gourl", HOME_URL);	// 登录后的跳转页面
 		return requests;
-	}
-	
-	/**
-	 * 把服务端返回的cookie字符串转换为selumin的Cookie对象
-	 * @param cookie
-	 * @return
-	 */
-	private static Cookie _toCookie(String cookie) {
-		String name = "";
-		String value = "";
-		String domain = "";
-		String path = "";
-		Date expiry = new Date();
-		boolean isSecure = false;
-		boolean isHttpOnly = false;
-		
-		String[] vals = cookie.split(";");
-		for(int i = 0; i < vals.length; i++) {
-			String[] kv = vals[i].split("=");
-			if(kv.length == 2) {
-				String key = kv[0].trim();
-				String val = kv[1].trim();
-				
-				if(i == 0) {
-					name = key;
-					value = val;
-					
-				} else {
-					if("Domain".equalsIgnoreCase(key)) {
-						domain = val;
-						
-					} else if("Path".equalsIgnoreCase(key)) {
-						path = val;
-						
-					} else if("Expires".equalsIgnoreCase(key)) {
-						expiry = TimeUtils.toDate(val);
-					}
-				}
-				
-			} else if(kv.length == 1){
-				String key = kv[0].trim();
-				if("Secure".equalsIgnoreCase(key)) {
-					isSecure = true;
-					
-				} else if("HttpOnly".equalsIgnoreCase(key)) {
-					isHttpOnly = true;
-				}
-			}
-		}
-		return new Cookie(name, value, domain, path, expiry, isSecure, isHttpOnly);
 	}
 	
 	/**

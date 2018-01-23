@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.front.AppUI;
+import exp.bilibili.plugin.tmp.HttpCookies;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
@@ -305,7 +306,8 @@ public class LoginMgr extends LoopThread {
 	public boolean toLogin(String username, String password, 
 			String vccode, String vcCookies) {
 		boolean isOk = false;
-		List<Cookie> cookies = MsgSender.toLogin(username, password, vccode, vcCookies);
+		HttpCookies httpCookies = MsgSender.toLogin(username, password, vccode, vcCookies);
+		List<Cookie> cookies = httpCookies.toSeleniumCookies();
 		isOk = ListUtils.isNotEmpty(cookies);
 		
 		if(isOk == true) {
@@ -331,17 +333,11 @@ public class LoginMgr extends LoopThread {
 	public String toLoginMini(String username, String password, 
 			String vccode, String vcCookies) {
 		String miniCookie = "";
-		List<Cookie> cookies =  MsgSender.toLogin(username, password, vccode, vcCookies);
-		if(ListUtils.isNotEmpty(cookies)) {
-			StringBuilder kvs = new StringBuilder();
-			for(Cookie cookie : cookies) {
-				kvs.append(cookie.getName()).append("=");
-				kvs.append(cookie.getValue()).append("; ");
-			}
-			kvs.setLength(kvs.length() - 2);
-			miniCookie = kvs.toString();
-			
-			// 转存外存
+		HttpCookies httpCookies = MsgSender.toLogin(username, password, vccode, vcCookies);
+		
+		// 转存外存
+		if(httpCookies.isVaild()) {
+			miniCookie = httpCookies.toCookies();
 			FileUtils.write(MINI_COOKIE_PATH, miniCookie, Charset.ISO, false);
 		}
 		return miniCookie;
