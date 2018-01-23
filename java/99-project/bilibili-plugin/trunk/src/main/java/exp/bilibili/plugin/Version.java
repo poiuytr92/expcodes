@@ -26,7 +26,7 @@ public class Version {
 		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
 		
-		// TODO: 活跃度排行榜
+		// TODO
 		// 批量挂机
 		// win10支持（win10支持JDK1.6  但是无法运行程序???）
 	}

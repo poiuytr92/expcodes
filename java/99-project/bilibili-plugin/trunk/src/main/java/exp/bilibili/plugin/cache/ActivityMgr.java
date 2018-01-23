@@ -79,7 +79,7 @@ public class ActivityMgr {
 			Config.getInstn().ACTIVITY_ROOM_ID());
 	
 	/** 特殊用户: 所有用户的活跃值累计 */
-	public final static String UNAME_SUM_COST = "UNAME_SUM_COST";
+	public final static String UNAME_SUM_COST = "ACTIVE_SUM_COST";
 	
 	/** 特殊用户的ID */
 	public final static String UID_SUM_COST = "0";
@@ -331,10 +331,11 @@ public class ActivityMgr {
 			int cost = costs.get(uid);
 			
 			TActivity activity = new TActivity();
+			activity.setPeriod(curPeriod);
+			activity.setRoomid(ROOM_ID);
 			activity.setUid(uid);
 			activity.setUsername(username);
 			activity.setCost(cost);
-			activity.setRoomid(ROOM_ID);
 			activitys.add(activity);
 		}
 		
@@ -347,7 +348,8 @@ public class ActivityMgr {
 	}
 	
 	private boolean _truncate() {
-		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID);
+		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID, 
+				" AND ", TActivity.getPeriod$CN(), " = ", curPeriod);
 		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		boolean isOk = TActivity.delete(conn, where);
 		SqliteUtils.close(conn);

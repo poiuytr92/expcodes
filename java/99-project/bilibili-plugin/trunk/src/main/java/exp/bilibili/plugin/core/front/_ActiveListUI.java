@@ -21,11 +21,9 @@ import org.apache.poi.ss.usermodel.Font;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.ActivityMgr;
-import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
@@ -44,12 +42,6 @@ import exp.libs.warp.xls.Sheet;
  */
 class _ActiveListUI extends PopChildWindow {
 
-	public static void main(String[] args) {
-		Config.LEVEL = Level.ADMIN;
-		BeautyEyeUtils.init();
-		new _ActiveListUI()._view();
-	}
-	
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5691969159309932864L;
 
