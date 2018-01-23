@@ -156,7 +156,7 @@ public class @{class_name}@  {
      * get all column names
      * @return String
      */
-    public static String getAllColNames() {
+    public final static String ALL_COLUMN_NAMES() {
         return "@{all_column_names}@";
     }
 
@@ -164,7 +164,7 @@ public class @{class_name}@  {
      * get all java names
      * @return String
      */
-    public static String getAllJavaNames() {
+    public final static String ALL_JAVA_NAMES() {
         return "@{all_java_names}@";
     }
 
@@ -172,7 +172,7 @@ public class @{class_name}@  {
      * get table name
      * @return String
      */
-    public static String getTableName() {
+    public final static String TABLE_NAME() {
         return "@{table_name}@";
     }
 
@@ -180,7 +180,7 @@ public class @{class_name}@  {
      * get class name
      * @return String
      */
-    public static String getClassName() {
+    public final static String CLASS_NAME() {
         return "@{class_name}@";
     }
     

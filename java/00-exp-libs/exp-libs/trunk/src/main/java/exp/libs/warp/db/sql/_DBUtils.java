@@ -399,14 +399,12 @@ final class _DBUtils {
 		//设置 获取单个数据库字段域名称的方法
 		sb.setLength(0);
 		for(String colName : colNameList) {
-			String uppHumpColName = getHumpColumnName(colName, true);
-			
 			sb.append("    /**\r\n");
 			sb.append("     * get column name\r\n");
 			sb.append("     * @return ").append(colName).append("\r\n");
 			sb.append("     */\r\n");
-			sb.append("    public static String get").append(uppHumpColName);
-			sb.append("$CN() {\r\n");
+			sb.append("    public final static String CN$");
+			sb.append(colName.toUpperCase()).append("() {\r\n");
 			sb.append("        return \"").append(colName);
 			sb.append("\";\r\n    }\r\n\r\n");
 		}
@@ -416,15 +414,13 @@ final class _DBUtils {
 		//设置 获取单个类成员变量名称的方法
 		sb.setLength(0);
 		for(String colName : colNameList) {
-			String uppHumpColName = getHumpColumnName(colName, true);
 			String lowHumpColName = getHumpColumnName(colName, false);
-			
 			sb.append("    /**\r\n");
 			sb.append("     * get java name\r\n");
 			sb.append("     * @return ").append(lowHumpColName);
 			sb.append("\r\n     */\r\n");
-			sb.append("    public static String get").append(uppHumpColName);
-			sb.append("$JN() {\r\n");
+			sb.append("    public final static String JN$");
+			sb.append(colName.toUpperCase()).append("() {\r\n");
 			sb.append("        return \"").append(lowHumpColName);
 			sb.append("\";\r\n    }\r\n\r\n");
 		}
@@ -456,7 +452,7 @@ final class _DBUtils {
 			
 			sb.append("        sb.append(\"\\t").append(colName);
 			sb.append('/').append(lowHumpColName).append("\").append(");
-			sb.append("\" = \").append(this.get");
+			sb.append("\" = \").append(get");
 			sb.append(uppHumpColName).append("()).append(\"\\r\\n\");");
 			sb.append("\r\n");
 		}
