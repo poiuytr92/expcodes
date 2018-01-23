@@ -96,7 +96,7 @@ class _ActiveListUI extends PopChildWindow {
 		this.curPeriod = ActivityMgr.getInstn().getCurPeriod();
 		this.lastSumCost = ActivityMgr.getInstn().getLastSumCost();
 		this.curSumCost = ActivityMgr.getInstn().getCurSumCost();
-		this.day = (curSumCost - lastSumCost) / ActivityMgr.DAY_UNIT;
+		this.day = curSumCost / ActivityMgr.DAY_UNIT;
 		
 		this.lastActiveTF = new JTextField(String.valueOf(lastSumCost));
 		this.curActiveTF = new JTextField(String.valueOf(curSumCost));
