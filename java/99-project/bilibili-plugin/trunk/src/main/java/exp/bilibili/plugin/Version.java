@@ -27,6 +27,7 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO
+		// 关注通知
 		// 批量挂机
 		// win10支持（win10支持JDK1.6  但是无法运行程序???）
 	}
