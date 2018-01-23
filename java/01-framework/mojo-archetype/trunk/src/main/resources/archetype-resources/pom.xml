@@ -249,13 +249,13 @@
 								</copy>
 								<echo>拷贝文档</echo>
 								<copy todir="${symbol_dollar}{release.dir}/doc/04_维护文档">
-									<fileset dir="doc/04_维护文档"></fileset>
+									<fileset dir="doc/04_维护文档" />
 								</copy>
 								<copy todir="${symbol_dollar}{release.dir}/doc/06_使用文档">
-									<fileset dir="doc/06_使用文档"></fileset>
+									<fileset dir="doc/06_使用文档" />
 								</copy>
 								<copy todir="${symbol_dollar}{release.dir}/doc/07_演示文档">
-									<fileset dir="doc/07_演示文档"></fileset>
+									<fileset dir="doc/07_演示文档" />
 								</copy>
 							</target>
 						</configuration>
