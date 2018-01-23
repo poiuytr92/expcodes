@@ -10,8 +10,8 @@ public class CreateBeans {
 	public static void main(String[] args) {
 		Connection conn = SqliteUtils.getConn(ActivityMgr.DS);
 		SqliteUtils.createBeanFromDB(conn, 
-				"exp.bilibili.plugin.bean.pdm", 
-				"./src/main/java/exp/bilibili/plugin/bean/pdm", 
+				"exp.bilibili.plugin.bean.ldm", 
+				"./src/main/java/exp/bilibili/plugin/bean/ldm", 
 				new String[] { "T_ACTIVITY" }
 		);
 		SqliteUtils.close(conn);

@@ -12,7 +12,7 @@ import exp.libs.warp.db.sql.DBUtils;
  * </PRE>
  * <B>PROJECT:</B> exp-libs
  * <B>SUPPORT:</B> EXP 2018
- * @version   1.0.0.0 2018-01-23 09:34:38
+ * @version   1.0.0.0 2018-01-23 14:46:29
  * @author    Expert: 272629724@qq.com
  * @since     jdk version : jdk 1.6
  */
@@ -255,7 +255,7 @@ public class TActivity  {
      * get column name
      * @return I_PERIOD
      */
-    public static String getPeriod$CN() {
+    public final static String CN$I_PERIOD() {
         return "I_PERIOD";
     }
 
@@ -263,7 +263,7 @@ public class TActivity  {
      * get column name
      * @return S_UID
      */
-    public static String getUid$CN() {
+    public final static String CN$S_UID() {
         return "S_UID";
     }
 
@@ -271,7 +271,7 @@ public class TActivity  {
      * get column name
      * @return S_USERNAME
      */
-    public static String getUsername$CN() {
+    public final static String CN$S_USERNAME() {
         return "S_USERNAME";
     }
 
@@ -279,7 +279,7 @@ public class TActivity  {
      * get column name
      * @return I_COST
      */
-    public static String getCost$CN() {
+    public final static String CN$I_COST() {
         return "I_COST";
     }
 
@@ -287,7 +287,7 @@ public class TActivity  {
      * get column name
      * @return I_ROOMID
      */
-    public static String getRoomid$CN() {
+    public final static String CN$I_ROOMID() {
         return "I_ROOMID";
     }
 
@@ -295,7 +295,7 @@ public class TActivity  {
      * get java name
      * @return period
      */
-    public static String getPeriod$JN() {
+    public final static String JN$I_PERIOD() {
         return "period";
     }
 
@@ -303,7 +303,7 @@ public class TActivity  {
      * get java name
      * @return uid
      */
-    public static String getUid$JN() {
+    public final static String JN$S_UID() {
         return "uid";
     }
 
@@ -311,7 +311,7 @@ public class TActivity  {
      * get java name
      * @return username
      */
-    public static String getUsername$JN() {
+    public final static String JN$S_USERNAME() {
         return "username";
     }
 
@@ -319,7 +319,7 @@ public class TActivity  {
      * get java name
      * @return cost
      */
-    public static String getCost$JN() {
+    public final static String JN$I_COST() {
         return "cost";
     }
 
@@ -327,7 +327,7 @@ public class TActivity  {
      * get java name
      * @return roomid
      */
-    public static String getRoomid$JN() {
+    public final static String JN$I_ROOMID() {
         return "roomid";
     }
 
@@ -335,7 +335,7 @@ public class TActivity  {
      * get all column names
      * @return String
      */
-    public static String getAllColNames() {
+    public final static String ALL_COLUMN_NAMES() {
         return "I_PERIOD, S_UID, S_USERNAME, I_COST, I_ROOMID";
     }
 
@@ -343,7 +343,7 @@ public class TActivity  {
      * get all java names
      * @return String
      */
-    public static String getAllJavaNames() {
+    public final static String ALL_JAVA_NAMES() {
         return "period, uid, username, cost, roomid";
     }
 
@@ -351,7 +351,7 @@ public class TActivity  {
      * get table name
      * @return String
      */
-    public static String getTableName() {
+    public final static String TABLE_NAME() {
         return "T_ACTIVITY";
     }
 
@@ -359,7 +359,7 @@ public class TActivity  {
      * get class name
      * @return String
      */
-    public static String getClassName() {
+    public final static String CLASS_NAME() {
         return "TActivity";
     }
     
@@ -371,11 +371,11 @@ public class TActivity  {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("T_ACTIVITY/TActivity: {\r\n");
-        sb.append("\tI_PERIOD/period").append(" = ").append(this.getPeriod()).append("\r\n");
-        sb.append("\tS_UID/uid").append(" = ").append(this.getUid()).append("\r\n");
-        sb.append("\tS_USERNAME/username").append(" = ").append(this.getUsername()).append("\r\n");
-        sb.append("\tI_COST/cost").append(" = ").append(this.getCost()).append("\r\n");
-        sb.append("\tI_ROOMID/roomid").append(" = ").append(this.getRoomid()).append("\r\n");
+        sb.append("\tI_PERIOD/period").append(" = ").append(getPeriod()).append("\r\n");
+        sb.append("\tS_UID/uid").append(" = ").append(getUid()).append("\r\n");
+        sb.append("\tS_USERNAME/username").append(" = ").append(getUsername()).append("\r\n");
+        sb.append("\tI_COST/cost").append(" = ").append(getCost()).append("\r\n");
+        sb.append("\tI_ROOMID/roomid").append(" = ").append(getRoomid()).append("\r\n");
         sb.append("}\r\n");
         return sb.toString();
     }

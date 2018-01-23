@@ -294,8 +294,8 @@ public class ActivityMgr {
 	}
 	
 	private List<TActivity> _queryCurPeriodData() {
-		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID, 
-				" AND ", TActivity.getPeriod$CN(), " = ", curPeriod);
+		String where = StrUtils.concat(TActivity.CN$I_ROOMID(), " = ", ROOM_ID, 
+				" AND ", TActivity.CN$I_PERIOD(), " = ", curPeriod);
 		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		List<TActivity> activitys = TActivity.querySome(conn, where);
 		SqliteUtils.close(conn);
@@ -303,10 +303,10 @@ public class ActivityMgr {
 	}
 	
 	private int _queryLastPeriodData() {
-		String sql = StrUtils.concat("SELECT ", TActivity.getCost$CN(), " FROM ", 
-				TActivity.getTableName(), " WHERE ", TActivity.getRoomid$CN(), 
-				" = ", ROOM_ID, " AND ", TActivity.getPeriod$CN(), " = ", lastPeriod, 
-				" AND ", TActivity.getUid$CN(), " = '", UID_SUM_COST, "'"
+		String sql = StrUtils.concat("SELECT ", TActivity.CN$I_COST(), " FROM ", 
+				TActivity.TABLE_NAME(), " WHERE ", TActivity.CN$I_ROOMID(), 
+				" = ", ROOM_ID, " AND ", TActivity.CN$I_PERIOD(), " = ", lastPeriod, 
+				" AND ", TActivity.CN$S_UID(), " = '", UID_SUM_COST, "'"
 		);
 		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		int lastSumCost = SqliteUtils.queryInt(conn, sql);
@@ -348,8 +348,8 @@ public class ActivityMgr {
 	}
 	
 	private boolean _truncate() {
-		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID, 
-				" AND ", TActivity.getPeriod$CN(), " = ", curPeriod);
+		String where = StrUtils.concat(TActivity.CN$I_ROOMID(), " = ", ROOM_ID, 
+				" AND ", TActivity.CN$I_PERIOD(), " = ", curPeriod);
 		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		boolean isOk = TActivity.delete(conn, where);
 		SqliteUtils.close(conn);
