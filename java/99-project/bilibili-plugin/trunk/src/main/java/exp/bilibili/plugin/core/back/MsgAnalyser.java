@@ -5,6 +5,7 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.bean.pdm.ActivityEvent;
 import exp.bilibili.plugin.bean.pdm.ChatMsg;
 import exp.bilibili.plugin.bean.pdm.EnergyLottery;
 import exp.bilibili.plugin.bean.pdm.GuardBuy;
@@ -101,6 +102,9 @@ public class MsgAnalyser {
 			
 		} else if(biliCmd == BiliCmd.WISH_BOTTLE) {
 			toDo(new WishBottle(json));
+			
+		} else if(biliCmd == BiliCmd.ACTIVITY_EVENT) {
+			toDo(new ActivityEvent(json));
 			
 		} else {
 			isOk = false;
@@ -291,8 +295,8 @@ public class MsgAnalyser {
 	 * 关播通知
 	 * @param msgBean
 	 */
-	private static void toDo(Preparing preparing) {
-		String msg = StrUtils.concat("直播间 [", preparing.getRoomId(), "] 主播已下线.");
+	private static void toDo(Preparing msgBean) {
+		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 主播已下线.");
 		UIUtils.chat(msg);
 		log.info(msg);
 	}
@@ -301,7 +305,15 @@ public class MsgAnalyser {
 	 * (直播间内)许愿瓶实现进度消息
 	 * @param wishBottle
 	 */
-	private static void toDo(WishBottle wishBottle) {
+	private static void toDo(WishBottle msgBean) {
+		// Undo
+	}
+	
+	/**
+	 * 2018春节活动(新春榜)触发事件
+	 * @param wishBottle
+	 */
+	private static void toDo(ActivityEvent msgBean) {
 		// Undo
 	}
 	

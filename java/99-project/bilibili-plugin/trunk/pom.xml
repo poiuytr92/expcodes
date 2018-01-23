@@ -6,7 +6,7 @@
 	<!--项目基本信息(必填)-->
 	<groupId>exp.bilibili</groupId>
 	<artifactId>bilibili-plugin</artifactId>
-	<version>2.2-SNAPSHOT</version>
+	<version>2.3-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>哔哩哔哩插件姬</name>
@@ -345,7 +345,7 @@
 						
 						<!-- 保持[Bean类]不变（若框架对 Bean中的内容做了反射处理，则必须保持不变） -->
 						<!-- 按实际项目修正 -->
-						<!-- option>-keep class exp.bilibili.plugin.bean.** { *;}</option -->
+						<option>-keep class exp.bilibili.plugin.bean.ldm.TActivity</option>
 						
 						<!-- 保持[所有入口方法]不变 -->
 						<!-- 固定不变 -->
@@ -409,13 +409,32 @@
 						</goals>
 						<configuration>
 							<target>
-								<echo>拷贝资源数据</echo>
-								<copy todir="${release.dir}/data">
-									<fileset dir="data"></fileset>
-								</copy>
 								<echo>拷贝项目配置文件</echo>
 								<copy todir="${release.dir}/conf">
-									<fileset dir="conf" />
+									<fileset dir="conf">
+									  <exclude name="driver/chrome-driver.exe" />
+									</fileset>
+								</copy>
+								<echo>拷贝资源数据</echo>
+								<copy todir="${release.dir}/data">
+									<fileset dir="data">
+									  <exclude name="cookies/*" />
+									  <exclude name="cookie-mini.dat" />
+									  <exclude name=".BP" />
+									  <exclude name="img/qrcode.png" />
+									  <exclude name="img/vccode.jpg" />
+									  <exclude name="img/vercode.jpg" />
+									  <exclude name="img/tesseract.log" />
+									</fileset>
+								</copy>
+								<echo>拷贝文档</echo>
+								<copy todir="${release.dir}/运行截图">
+									<fileset dir="doc/运行截图" />
+								</copy>
+								<copy todir="${release.dir}">
+									<fileset dir="doc">
+									  <include name="使用说明.txt" />
+									</fileset>
 								</copy>
 							</target>
 						</configuration>
