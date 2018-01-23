@@ -468,6 +468,11 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(Config.LEVEL < Level.ADMIN) {
+					SwingUtils.warn("您未被授权管理 [活跃值排行榜] 哦~");
+					return;
+				}
+				
 				new _ActiveListUI()._view();
 			}
 		});

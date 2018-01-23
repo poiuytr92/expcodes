@@ -1,6 +1,9 @@
 package exp.bilibili.plugin.core.front;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -13,13 +16,21 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
+
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.ActivityMgr;
+import exp.bilibili.plugin.envm.Level;
+import exp.bilibili.plugin.utils.TimeUtils;
+import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
+import exp.libs.warp.xls.Excel;
+import exp.libs.warp.xls.Sheet;
 
 /**
  * <PRE>
@@ -34,6 +45,7 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
 class _ActiveListUI extends PopChildWindow {
 
 	public static void main(String[] args) {
+		Config.LEVEL = Level.ADMIN;
 		BeautyEyeUtils.init();
 		new _ActiveListUI()._view();
 	}
@@ -44,9 +56,20 @@ class _ActiveListUI extends PopChildWindow {
 	private final static int WIDTH = 500;
 	
 	private final static int HEIGHT = 400;
+
+	private final static int ROOM_ID = Config.getInstn().ACTIVITY_ROOM_ID();
+	
+	/** Excel模板路径 */
+	private final static String XLS_TPL_PATH = "./conf/template.xlsx";
+	
+	/** 导出Excel详单保存路径 */
+	private final static String XLS_SAVE_PATH = PathUtils.combine(
+			PathUtils.getDesktopPath(), 
+			StrUtils.concat("[", ROOM_ID, "] 直播间活跃值排名 - ", 
+					TimeUtils.getSysDate("yyyyMMdd"), ".xlsx"));
 	
 	private final static String[] HEADER = {
-		"排名", "账号名称", "活跃值"
+		"个人排名", "昵称", "个人活跃值"
 	};
 	
 	private final static int MAX_ROW = 50;
@@ -61,45 +84,41 @@ class _ActiveListUI extends PopChildWindow {
 	
 	private _HisVerTable activeTable;
 	
+	private int lastPeriod;
+	
+	private int curPeriod;
+	
+	private int lastSumCost;
+	
+	private int curSumCost;
+	
+	private int day;
+	
 	protected _ActiveListUI() {
-		super(StrUtils.concat("[", Config.getInstn().ACTIVITY_ROOM_ID(), 
-				"直播间] 活跃值排行榜"), WIDTH, HEIGHT);
+		super(StrUtils.concat("[", ROOM_ID, "直播间] 活跃值排行榜"), WIDTH, HEIGHT);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.lastActiveTF = new JTextField("0");
-		this.curActiveTF = new JTextField("0");
+		this.lastPeriod = ActivityMgr.getInstn().getLastPeriod();
+		this.curPeriod = ActivityMgr.getInstn().getCurPeriod();
+		this.lastSumCost = ActivityMgr.getInstn().getLastSumCost();
+		this.curSumCost = ActivityMgr.getInstn().getCurSumCost();
+		this.day = (curSumCost - lastSumCost) / ActivityMgr.DAY_UNIT;
+		
+		this.lastActiveTF = new JTextField(String.valueOf(lastSumCost));
+		this.curActiveTF = new JTextField(String.valueOf(curSumCost));
 		lastActiveTF.setEditable(false);
 		curActiveTF.setEditable(false);
 		
-		this.exportBtn = new JButton("导出");
-		this.dayLabel = new JLabel("0", JLabel.CENTER);
+		this.dayLabel = new JLabel(String.valueOf(day), JLabel.CENTER);
+		this.exportBtn = new JButton("导出详单");
+		exportBtn.setForeground(Color.BLACK);
 		
 		this.activeTable = new _HisVerTable();
 		activeTable.reflash(getActiveDatas());
 	}
 	
-	private List<List<String>> getActiveDatas() {
-		List<List<String>> datas = new ArrayList<List<String>>(MAX_ROW);
-		
-		int sortId = 1;
-		List<Map.Entry<String, Integer>> actives = ActivityMgr.getInstn().getDescActives();
-		for(Map.Entry<String, Integer> active : actives) {
-			List<String> row = Arrays.asList(new String[] {
-				String.valueOf(sortId++), 
-				ActivityMgr.getInstn().getUserName(active.getKey()), 
-				String.valueOf(active.getValue())
-			});
-			datas.add(row);
-			
-			if(sortId >= MAX_ROW) {
-				break;
-			}
-		}
-		return datas;
-	}
-
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
 		rootPanel.add(_getNorthPanel(), BorderLayout.NORTH);
@@ -109,10 +128,9 @@ class _ActiveListUI extends PopChildWindow {
 	private JPanel _getNorthPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel); {
-			
 			panel.add(SwingUtils.addBorder(SwingUtils.getVGridPanel(
-					SwingUtils.getPairsPanel("上期总活跃值", lastActiveTF), 
-					SwingUtils.getPairsPanel("本期总活跃值", curActiveTF)
+					SwingUtils.getPairsPanel(String.valueOf(lastPeriod).concat("期-总活跃值"), lastActiveTF), 
+					SwingUtils.getPairsPanel(String.valueOf(curPeriod).concat("期-总活跃值"), curActiveTF)
 			)), BorderLayout.CENTER);
 			
 			panel.add(SwingUtils.getHGridPanel(SwingUtils.addBorder(
@@ -129,9 +147,86 @@ class _ActiveListUI extends PopChildWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
-		
+		exportBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(exportActiveDatas()) {
+					SwingUtils.info("已导出到桌面");
+				} else {
+					SwingUtils.warn("导出失败");
+				}
+			}
+		});
 	}
 	
+	/**
+	 * 查询活跃值数据
+	 * @return
+	 */
+	private List<List<String>> getActiveDatas() {
+		List<List<String>> datas = new ArrayList<List<String>>(MAX_ROW);
+		
+		int sortId = 1;
+		List<Map.Entry<String, Integer>> actives = ActivityMgr.getInstn().getDSortActives();
+		for(Map.Entry<String, Integer> active : actives) {
+			List<String> row = Arrays.asList(new String[] {
+				String.valueOf(sortId++), 
+				ActivityMgr.getInstn().getUserName(active.getKey()), 
+				String.valueOf(active.getValue())
+			});
+			datas.add(row);
+			
+			if(sortId > MAX_ROW) {
+				break;
+			}
+		}
+		return datas;
+	}
+	
+	/**
+	 * 导出活跃值数据
+	 * @return
+	 */
+	private boolean exportActiveDatas() {
+		Excel excel = new Excel(XLS_TPL_PATH);
+		Sheet sheet = excel.getSheet(0);
+		
+		// 设置头信息
+		sheet.setVal(0, 1, ROOM_ID);
+		sheet.setVal(1, 1, lastSumCost);
+		sheet.setVal(1, 2, lastPeriod);
+		sheet.setVal(2, 1, curSumCost);
+		sheet.setVal(2, 2, curPeriod);
+		sheet.setVal(3, 2, day);
+		
+		// 设置单元格风格
+		CellStyle cellStyle = excel.createCellStyle(); 
+		cellStyle.setBorderBottom(CellStyle.BORDER_THIN);	// 下边框    
+		cellStyle.setBorderLeft(CellStyle.BORDER_THIN);		// 左边框    
+		cellStyle.setBorderRight(CellStyle.BORDER_THIN);	// 右边框    
+		cellStyle.setAlignment(CellStyle.ALIGN_CENTER);				// 水平居中
+		cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);	// 垂直居中
+		Font font = excel.createFont();
+		font.setFontHeightInPoints((short) 9);
+		cellStyle.setFont(font);	// 字体大小
+		
+		// 设置排行榜
+		int sortId = 1;
+		int row = 5;
+		List<Map.Entry<String, Integer>> actives = ActivityMgr.getInstn().getDSortActives();
+		for(Map.Entry<String, Integer> active : actives) {
+			sheet.setVal(row, 0, sortId++);
+			sheet.setVal(row, 1, ActivityMgr.getInstn().getUserName(active.getKey()));
+			sheet.setVal(row, 2, active.getValue());
+			
+			sheet.setStyle(row, 0, cellStyle);
+			sheet.setStyle(row, 1, cellStyle);
+			sheet.setStyle(row, 2, cellStyle);
+			row++;
+		}
+		return excel.saveAs(XLS_SAVE_PATH);
+	}
 	
 	/**
 	 * <PRE>
@@ -146,7 +241,7 @@ class _ActiveListUI extends PopChildWindow {
 		private static final long serialVersionUID = -3111568334645181825L;
 		
 		private _HisVerTable() {
-			super(HEADER, 100);
+			super(HEADER, MAX_ROW);
 		}
 
 		@Override

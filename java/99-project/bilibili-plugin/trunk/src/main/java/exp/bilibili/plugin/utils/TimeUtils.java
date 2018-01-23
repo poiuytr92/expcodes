@@ -7,6 +7,7 @@ import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -56,6 +57,37 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	public static boolean isNight() {
 		int hour = TimeUtils.getCurHour(8);	// 中国8小时时差
 		return (hour >= 18 && hour < 24);
+	}
+	
+	/**
+	 * 获取本期时间
+	 * @return yyyyMM 格式, 如: 201801
+	 */
+	public static int getCurPeriod() {
+		return NumUtils.toInt(TimeUtils.toStr(new Date(), "yyyyMM"), 0);
+	}
+	
+	/**
+	 * 获取上期时间
+	 * @return yyyyMM 格式, 如: 201712
+	 */
+	public static int getLastPeriod() {
+		return getLastPeriod(getCurPeriod());
+	}
+	
+	/**
+	 * 获取上期时间
+	 * @param curPeriod 本期时间, yyyyMM 格式, 如: 201801
+	 * @return yyyyMM 格式, 如: 201712
+	 */
+	public static int getLastPeriod(int curPeriod) {
+		int period = curPeriod;
+		if(period % 100 == 1) {
+			period = period - 101 + 12;
+		} else {
+			period = period - 1;
+		}
+		return period;
 	}
 	
 }

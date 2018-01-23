@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.bean.pdm;
+package exp.bilibili.plugin.bean.ldm;
 
 import java.sql.Connection;
 import java.util.List;
@@ -12,7 +12,7 @@ import exp.libs.warp.db.sql.DBUtils;
  * </PRE>
  * <B>PROJECT:</B> exp-libs
  * <B>SUPPORT:</B> EXP 2018
- * @version   1.0.0.0 2018-01-14 09:52:38
+ * @version   1.0.0.0 2018-01-23 09:34:38
  * @author    Expert: 272629724@qq.com
  * @since     jdk version : jdk 1.6
  */
@@ -20,7 +20,7 @@ public class TActivity  {
     
     /** insert sql */
     public final static String SQL_INSERT = 
-            "INSERT INTO T_ACTIVITY(S_UID, S_USERNAME, I_COST, I_ROOMID) VALUES(?, ?, ?, ?)";
+            "INSERT INTO T_ACTIVITY(I_PERIOD, S_UID, S_USERNAME, I_COST, I_ROOMID) VALUES(?, ?, ?, ?, ?)";
     
     /** delete sql */
     public final static String SQL_DELETE = 
@@ -28,11 +28,14 @@ public class TActivity  {
     
     /** update sql */
     public final static String SQL_UPDATE = 
-            "UPDATE T_ACTIVITY SET S_UID = ?, S_USERNAME = ?, I_COST = ?, I_ROOMID = ? WHERE 1 = 1 ";
+            "UPDATE T_ACTIVITY SET I_PERIOD = ?, S_UID = ?, S_USERNAME = ?, I_COST = ?, I_ROOMID = ? WHERE 1 = 1 ";
     
     /** select sql */
     public final static String SQL_SELECT = 
-            "SELECT S_UID AS 'uid', S_USERNAME AS 'username', I_COST AS 'cost', I_ROOMID AS 'roomid' FROM T_ACTIVITY WHERE 1 = 1 ";
+            "SELECT I_PERIOD AS 'period', S_UID AS 'uid', S_USERNAME AS 'username', I_COST AS 'cost', I_ROOMID AS 'roomid' FROM T_ACTIVITY WHERE 1 = 1 ";
+
+    /** I_PERIOD */
+    private Integer period;
 
     /** S_UID */
     private String uid;
@@ -55,6 +58,7 @@ public class TActivity  {
      */
     public static boolean insert(Connection conn, TActivity bean) {
         Object[] params = new Object[] {
+                bean.getPeriod(),
                 bean.getUid(),
                 bean.getUsername(),
                 bean.getCost(),
@@ -106,6 +110,7 @@ public class TActivity  {
             sql.append(where);
         }
         Object[] params = new Object[] {
+                bean.getPeriod(),
                 bean.getUid(),
                 bean.getUsername(),
                 bean.getCost(),
@@ -166,6 +171,22 @@ public class TActivity  {
         return DBUtils.query(TActivity.class, conn, sql.toString());
     }
     
+    /**
+     * getPeriod
+     * @return Integer
+     */
+    public Integer getPeriod() {
+        return this.period;
+    }
+
+    /**
+     * setPeriod
+     * @param period period to set
+     */
+    public void setPeriod(Integer period) {
+        this.period = period;
+    }
+
     /**
      * getUid
      * @return String
@@ -232,6 +253,14 @@ public class TActivity  {
 
     /**
      * get column name
+     * @return I_PERIOD
+     */
+    public static String getPeriod$CN() {
+        return "I_PERIOD";
+    }
+
+    /**
+     * get column name
      * @return S_UID
      */
     public static String getUid$CN() {
@@ -260,6 +289,14 @@ public class TActivity  {
      */
     public static String getRoomid$CN() {
         return "I_ROOMID";
+    }
+
+    /**
+     * get java name
+     * @return period
+     */
+    public static String getPeriod$JN() {
+        return "period";
     }
 
     /**
@@ -299,7 +336,7 @@ public class TActivity  {
      * @return String
      */
     public static String getAllColNames() {
-        return "S_UID, S_USERNAME, I_COST, I_ROOMID";
+        return "I_PERIOD, S_UID, S_USERNAME, I_COST, I_ROOMID";
     }
 
     /**
@@ -307,7 +344,7 @@ public class TActivity  {
      * @return String
      */
     public static String getAllJavaNames() {
-        return "uid, username, cost, roomid";
+        return "period, uid, username, cost, roomid";
     }
 
     /**
@@ -334,6 +371,7 @@ public class TActivity  {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("T_ACTIVITY/TActivity: {\r\n");
+        sb.append("\tI_PERIOD/period").append(" = ").append(this.getPeriod()).append("\r\n");
         sb.append("\tS_UID/uid").append(" = ").append(this.getUid()).append("\r\n");
         sb.append("\tS_USERNAME/username").append(" = ").append(this.getUsername()).append("\r\n");
         sb.append("\tI_COST/cost").append(" = ").append(this.getCost()).append("\r\n");

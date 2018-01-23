@@ -12,7 +12,7 @@ public class CreateBeans {
 		SqliteUtils.createBeanFromDB(conn, 
 				"exp.bilibili.plugin.bean.pdm", 
 				"./src/main/java/exp/bilibili/plugin/bean/pdm", 
-				null
+				new String[] { "T_ACTIVITY" }
 		);
 		SqliteUtils.close(conn);
 	}

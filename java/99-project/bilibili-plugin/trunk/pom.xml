@@ -144,10 +144,6 @@
 	          <artifactId>soapui</artifactId>
 	        </exclusion>
 	        <exclusion>
-	          <groupId>org.apache.xmlbeans</groupId>
-	          <artifactId>xmlbeans</artifactId>
-	        </exclusion>
-	        <exclusion>
 	          <groupId>net.webservices.client</groupId>
 	          <artifactId>soapui-xmlbeans</artifactId>
 	        </exclusion>

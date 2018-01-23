@@ -16,13 +16,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.bean.ldm.TActivity;
 import exp.bilibili.plugin.bean.pdm.ChatMsg;
 import exp.bilibili.plugin.bean.pdm.GuardBuy;
 import exp.bilibili.plugin.bean.pdm.SendGift;
-import exp.bilibili.plugin.bean.pdm.TActivity;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.envm.Level;
+import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.envm.Charset;
 import exp.libs.envm.DBType;
@@ -64,15 +65,24 @@ public class ActivityMgr {
 	/** 管理员在B站的用户ID */
 	private final static String SENDER_UID = CryptoUtils.deDES("349B00EE2F2B0A6B");
 	
-	/** 触发私信的活跃值单位(即每至少超过1W活跃值时发送一次私信) */
+	/** 总活跃值每10W可兑换软件使用期1天 */
+	public final static int DAY_UNIT = 100000;
+	
+	/** 触发个人私信的活跃值单位(即每至少超过1W活跃值时发送一次私信) */
 	private final static int COST_UNIT = 10000;
 	
 	/** 打印活跃值时需要除掉的单位（100） */
 	private final static int SHOW_UNIT = 100;
 	
 	/** 只针对此直播间计算活跃度, 在其他直播间的行为不计算活跃度. */
-	private final static int ROOM_ID = RoomMgr.getInstn().getRealRoomId(
+	public final static int ROOM_ID = RoomMgr.getInstn().getRealRoomId(
 			Config.getInstn().ACTIVITY_ROOM_ID());
+	
+	/** 特殊用户: 所有用户的活跃值累计 */
+	public final static String UNAME_SUM_COST = "UNAME_SUM_COST";
+	
+	/** 特殊用户的ID */
+	public final static String UID_SUM_COST = "0";
 	
 	/**
 	 * 用户集
@@ -86,11 +96,29 @@ public class ActivityMgr {
 	 */
 	private Map<String, Integer> costs;
 	
+	/** 上期期数 */
+	private int lastPeriod;
+	
+	/** 本期期数 */
+	private int curPeriod;
+	
+	/** 上期所有用户的活跃值累计 */
+	private int lastSumCost;
+	
+	/** 本期所有用户的活跃值累计 */
+	private int curSumCost;
+	
 	private static volatile ActivityMgr instance;
 	
 	private ActivityMgr() {
+		this.curSumCost = 0;
 		this.users = new HashMap<String, String>();
 		this.costs = new HashMap<String, Integer>();
+		
+		this.lastPeriod = TimeUtils.getLastPeriod();
+		this.curPeriod = TimeUtils.getCurPeriod();
+		this.lastSumCost = 0;
+		this.curSumCost = 0;
 		
 		if(initEnv()) {
 			read();
@@ -209,6 +237,7 @@ public class ActivityMgr {
 		before = (before == null ? 0 : before);
 		int after = before + cost;
 		costs.put(uid, after);
+		curSumCost += cost;
 		
 		if(UIUtils.isLogined() && // 登陆后才能发送私信
 				(before % COST_UNIT + cost) >= COST_UNIT) {
@@ -246,20 +275,42 @@ public class ActivityMgr {
 			return;	// 仅管理员可以操作
 		}
 		
-		List<TActivity> activitys = _queryAll();
+		int sum = 0;
+		List<TActivity> activitys = _queryCurPeriodData();
 		for(TActivity activity : activitys) {
-			users.put(activity.getUid(), activity.getUsername());
-			costs.put(activity.getUid(), activity.getCost());
+			if(UID_SUM_COST.equals(activity.getUid())) {
+				curSumCost = activity.getCost();
+				
+			} else {
+				users.put(activity.getUid(), activity.getUsername());
+				costs.put(activity.getUid(), activity.getCost());
+				sum += activity.getCost();
+			}
 		}
+		curSumCost = (curSumCost <= 0 ? sum : curSumCost);
+		lastSumCost = _queryLastPeriodData();
+		
 		log.info("已读取直播间 [{}] 的历史活跃值", ROOM_ID);
 	}
 	
-	private static List<TActivity> _queryAll() {
-		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID);
+	private List<TActivity> _queryCurPeriodData() {
+		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID, 
+				" AND ", TActivity.getPeriod$CN(), " = ", curPeriod);
 		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		List<TActivity> activitys = TActivity.querySome(conn, where);
 		SqliteUtils.close(conn);
 		return activitys;
+	}
+	
+	private int _queryLastPeriodData() {
+		String sql = StrUtils.concat("SELECT ", TActivity.getCost$CN(), " FROM ", 
+				TActivity.getTableName(), " WHERE ", TActivity.getRoomid$CN(), 
+				" = ", ROOM_ID, " AND ", TActivity.getPeriod$CN(), " = ", lastPeriod, 
+				" AND ", TActivity.getUid$CN(), " = '", UID_SUM_COST, "'"
+		);
+		Connection conn = SqliteUtils.getConnByJDBC(DS);
+		int lastSumCost = SqliteUtils.queryInt(conn, sql);
+		return (lastSumCost < 0 ? 0 : lastSumCost);
 	}
 	
 	/**
@@ -269,6 +320,8 @@ public class ActivityMgr {
 		if(users.size() <= 0 || costs.size() <= 0) {
 			return;
 		}
+		users.put(UID_SUM_COST, UNAME_SUM_COST);
+		costs.put(UID_SUM_COST, curSumCost);
 		
 		List<TActivity> activitys = new LinkedList<TActivity>();
 		Iterator<String> uids = costs.keySet().iterator();
@@ -293,7 +346,7 @@ public class ActivityMgr {
 		costs.clear();
 	}
 	
-	private static boolean _truncate() {
+	private boolean _truncate() {
 		String where = StrUtils.concat(TActivity.getRoomid$CN(), " = ", ROOM_ID);
 		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		boolean isOk = TActivity.delete(conn, where);
@@ -301,7 +354,7 @@ public class ActivityMgr {
 		return isOk;
 	}
 	
-	private static boolean _saveAll(List<TActivity> activitys) {
+	private boolean _saveAll(List<TActivity> activitys) {
 		boolean isOk = true;
 		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		SqliteUtils.setAutoCommit(conn, false);
@@ -336,7 +389,7 @@ public class ActivityMgr {
 	 * 获取降序排序后的活跃值表
 	 * @return
 	 */
-	public List<Map.Entry<String, Integer>> getDescActives() {
+	public List<Map.Entry<String, Integer>> getDSortActives() {
 		List<Map.Entry<String, Integer>> list = 
 				new ArrayList<Map.Entry<String, Integer>>(costs.entrySet());
 		
@@ -349,6 +402,22 @@ public class ActivityMgr {
             }
         });
 		return list;
+	}
+
+	public int getLastPeriod() {
+		return lastPeriod;
+	}
+
+	public int getCurPeriod() {
+		return curPeriod;
+	}
+
+	public int getLastSumCost() {
+		return lastSumCost;
+	}
+
+	public int getCurSumCost() {
+		return curSumCost;
 	}
 	
 }

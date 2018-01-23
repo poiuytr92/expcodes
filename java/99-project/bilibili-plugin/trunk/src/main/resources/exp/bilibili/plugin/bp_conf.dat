@@ -50,7 +50,7 @@
     <app caption="应用配置">
         <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">51108</signRoomId>
         <tabuAutoRoomIds caption="禁止自动发言房间号(需为真实房号)">51108,390480</tabuAutoRoomIds>
-        <activityRoomId caption="用于计算活跃度的房间号">390480</activityRoomId>
+        <activityRoomId caption="用于计算活跃度的房间号">438</activityRoomId>
         <waitElementTime caption="页面元素加载等待时间(s)">10</waitElementTime>
         <clearCacheCycle caption="清理内存周期(每抽奖N次清理一次)">10</clearCacheCycle>
     </app>
