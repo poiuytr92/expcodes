@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.swing.filechooser.FileSystemView;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -229,6 +231,15 @@ public class PathUtils {
 			}
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * 获取桌面路径
+	 * @return 桌面路径
+	 */
+	public static String getDesktopPath() {
+		FileSystemView fsv = FileSystemView.getFileSystemView();
+		return fsv.getHomeDirectory().getPath();
 	}
 	
 }

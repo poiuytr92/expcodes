@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.poi.ss.SpreadsheetVersion;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
+import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -160,6 +161,30 @@ public class Excel {
 		DataFormat format = workbook.createDataFormat();
 		dateCellStyle.setDataFormat(format.getFormat("yyyy-mm-dd hh:mm:ss"));
 		return dateCellStyle;
+	}
+	
+	/**
+	 * 获取新的单元格风格
+	 * @return 单元格风格
+	 */
+	public CellStyle createCellStyle() {
+		return (init ? workbook.createCellStyle() : null);
+	}
+	
+	/**
+	 * 获取新的字体格式
+	 * @return 字体格式
+	 */
+	public Font createFont() {
+		return (init ? workbook.createFont() : null);
+	}
+	
+	/**
+	 * 获取Excel工作簿
+	 * @return Excel工作簿
+	 */
+	public Workbook WORKBOOK() {
+		return (init ? workbook : null);
 	}
 	
 	/**
