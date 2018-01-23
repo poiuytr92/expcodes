@@ -45,7 +45,7 @@ class _ActiveListUI extends PopChildWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5691969159309932864L;
 
-	private final static int WIDTH = 600;
+	private final static int WIDTH = 650;
 	
 	private final static int HEIGHT = 500;
 
