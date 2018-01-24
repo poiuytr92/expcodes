@@ -7,7 +7,7 @@ import org.openqa.selenium.Cookie;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.libs.utils.other.StrUtils;
 
-public class HttpCookie {
+final public class HttpCookie {
 
 	private String name;
 	
@@ -23,7 +23,7 @@ public class HttpCookie {
 	
 	private boolean isHttpOnly;
 	
-	public HttpCookie() {
+	protected HttpCookie() {
 		this.name = "";
 		this.value = "";
 		this.domain = "";
@@ -33,7 +33,7 @@ public class HttpCookie {
 		this.isHttpOnly = false;
 	}
 	
-	public HttpCookie(Cookie cookie) {
+	protected HttpCookie(Cookie cookie) {
 		this();
 		init(cookie);
 	}

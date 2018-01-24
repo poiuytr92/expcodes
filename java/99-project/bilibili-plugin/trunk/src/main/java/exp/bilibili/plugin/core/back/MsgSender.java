@@ -199,10 +199,10 @@ public class MsgSender {
 			Map<String, String> requests = _toLoginRequestParams(username, password, vccode);
 			sJson = client.doPost(MINI_LOGIN_URL, headers, requests);
 			
-//			{"code":0,"data":"https://passport.biligame.com/crossDomain?DedeUserID=31796320&DedeUserID__ckMd5=7a2868581681a219&Expires=2592000&SESSDATA=b21f4571%2C1517901333%2Cba70690c&bili_jct=7136e7aefb2385048cd77cc93ce25d56&gourl=https%3A%2F%2Fwww.bilibili.com"}
+			// 若登陆成功，则提取返回的登陆cookies, 以便下次使用
 			json = JSONObject.fromObject(sJson);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			if(code == 0) {	// 若登陆成功，则把返回的登陆cookies转化为selenium浏览器用的cookies
+			if(code == 0) {	
 				HttpMethod method = client.getHttpMethod();
 				if(method != null) {
 					Header[] outHeaders = method.getResponseHeaders();
@@ -254,10 +254,10 @@ public class MsgSender {
 	/**
 	 * 查询账号信息
 	 * {"code":0,"status":true,"data":{"level_info":{"current_level":4,"current_min":4500,"current_exp":7480,"next_exp":10800},"bCoins":0,"coins":464,"face":"http:\/\/i2.hdslb.com\/bfs\/face\/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","nameplate_current":"http:\/\/i1.hdslb.com\/bfs\/face\/54f4c31ab9b1f1fa2c29dbbc967f66535699337e.png","pendant_current":"","uname":"M-\u4e9a\u7d72\u5a1c","userStatus":"","vipType":1,"vipStatus":1,"official_verify":-1,"pointBalance":0}}
+	 * @param cookies
 	 * @return username
 	 */
-	public static String queryUsername() {
-		final String cookies = Browser.COOKIES();
+	public static String queryUsername(String cookies) {
 		Map<String, String> headers = toGetHeadParams(cookies);
 		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null, Config.DEFAULT_CHARSET);
 		

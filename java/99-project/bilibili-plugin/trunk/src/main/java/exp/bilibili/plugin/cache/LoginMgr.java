@@ -241,7 +241,7 @@ public class LoginMgr extends LoopThread {
 		Browser.backupCookies();	// 保存登录成功的cookies到外存, 以备下次使用
 		Browser.quit();	// 退出浏览器(此浏览器是加载图片的, 不加载图片的浏览器后面再延迟启动)
 		
-		loginUser = MsgSender.queryUsername();	// 获取当前登陆的用户名
+		loginUser = MsgSender.queryUsername(Browser.COOKIES());	// 获取当前登陆的用户名
 		AppUI.getInstn().markLogin(loginUser);	// 在界面标记已登陆
 	}
 	
@@ -337,7 +337,7 @@ public class LoginMgr extends LoopThread {
 		
 		// 转存外存
 		if(httpCookies.isVaild()) {
-			miniCookie = httpCookies.toCookies();
+			miniCookie = httpCookies.toStrCookies();
 			FileUtils.write(MINI_COOKIE_PATH, miniCookie, Charset.ISO, false);
 		}
 		return miniCookie;

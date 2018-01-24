@@ -10,8 +10,13 @@ import exp.libs.utils.other.StrUtils;
 
 public class HttpCookies {
 	
+	public final static HttpCookies NULL = new HttpCookies();
+	
 	/** B站CSRF标识 */
 	private final static String CSRF_KEY = "bili_jct";
+	
+	/** 该cookie对应的用户 */
+	private String user;
 	
 	private List<HttpCookie> cookies;
 	
@@ -25,6 +30,7 @@ public class HttpCookies {
 	private boolean isChanged;
 	
 	public HttpCookies() {
+		this.user = "";
 		this.cookies = new LinkedList<HttpCookie>();
 		this.kvCookies = "";
 		this.csrf = "";
@@ -91,7 +97,7 @@ public class HttpCookies {
 		return seleniumCookies;
 	}
 	
-	public String toCookies() {
+	public String toStrCookies() {
 		if(isChanged == true) {
 			
 			StringBuilder kvs = new StringBuilder();
@@ -103,8 +109,17 @@ public class HttpCookies {
 		return kvCookies;
 	}
 	
+	public String getUser() {
+		return user;
+	}
+
+	public void setUser(String user) {
+		this.user = user;
+	}
+
+	@Override
 	public String toString() {
-		return toCookies();
+		return toStrCookies();
 	}
 	
 }

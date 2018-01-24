@@ -50,11 +50,10 @@ public class LoginByVC {
 						StrUtils.concat("(", JSESSIONID, "=[^;]+)"));
 			}
 		}
+		client.close();
 		
 		// SID与JSESSIONID绑定了该二维码图片, 在登陆时需要把这个信息一起POST
-		final String cookies = StrUtils.concat(sid, "; ", jsessionId);
-		client.close();
-		return cookies;
+		return StrUtils.concat(sid, "; ", jsessionId);
 	}
 	
 	/**
@@ -77,20 +76,21 @@ public class LoginByVC {
 	}
 	
 	/**
-	 * 使用帐密+验证码的方式登录(用于登录主号, 即获取收益的账号)
-	 * 	并把登录cookies同时转存到selenium浏览器
-	 * @param username
-	 * @param password
-	 * @param vccode
-	 * @param vcCookies
+	 * 使用帐密+验证码的方式登录
+	 * @param username 账号
+	 * @param password 密码
+	 * @param vccode 验证码
+	 * @param vcCookies 与验证码配套的cookies
 	 * @return
 	 */
-	public boolean toLogin(String username, String password, 
+	public HttpCookies toLogin(String username, String password, 
 			String vccode, String vcCookies) {
 		HttpCookies cookies = MsgSender.toLogin(username, password, vccode, vcCookies);
-		
-//		saveLoginInfo();	// 备份cookies
-		return cookies.isVaild();
+		if(cookies.isVaild() == true) {
+			String user = MsgSender.queryUsername(cookies.toStrCookies());
+			cookies.setUser(user);
+		}
+		return cookies;
 	}
 	
 }
