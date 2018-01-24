@@ -33,6 +33,25 @@ public class HttpCookie {
 		this.isHttpOnly = false;
 	}
 	
+	public HttpCookie(Cookie cookie) {
+		this();
+		init(cookie);
+	}
+	
+	private void init(Cookie cookie) {
+		if(cookie == null) {
+			return;
+		}
+		
+		this.name = cookie.getName();
+		this.value = cookie.getValue();
+		this.domain = cookie.getDomain();
+		this.path = cookie.getPath();
+		this.expiry = cookie.getExpiry();
+		this.isSecure = cookie.isSecure();
+		this.isHttpOnly = cookie.isHttpOnly();
+	}
+	
 	/**
 	 * 
 	 * @param responseHeadCookie HTTP响应头中的 Set-Cookie

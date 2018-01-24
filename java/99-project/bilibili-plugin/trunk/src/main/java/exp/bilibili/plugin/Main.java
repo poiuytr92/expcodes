@@ -2,6 +2,7 @@ package exp.bilibili.plugin;
 
 import exp.bilibili.plugin.core.front.AppUI;
 import exp.libs.utils.other.LogUtils;
+import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 
 
@@ -20,6 +21,7 @@ public class Main {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		Config.getInstn();
+		SqliteUtils.setAutoShutdownPool(false);
 		
 		BeautyEyeUtils.init();
 		AppUI.createInstn(args);

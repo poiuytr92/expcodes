@@ -7,7 +7,7 @@ import exp.bilibili.plugin.envm.BiliCmd;
  * 
  * <PRE>
  * 
-	2018春节活动(新春榜)触发事件：
+	2018春节活动-红灯笼高能通知事件：
 	{
 	  "cmd": "ACTIVITY_EVENT",
 	  "data": {

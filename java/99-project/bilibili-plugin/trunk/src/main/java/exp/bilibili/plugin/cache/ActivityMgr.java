@@ -108,9 +108,12 @@ public class ActivityMgr {
 	/** 本期所有用户的活跃值累计 */
 	private int curSumCost;
 	
+	private boolean isInit;
+	
 	private static volatile ActivityMgr instance;
 	
 	private ActivityMgr() {
+		this.isInit = false;
 		this.curSumCost = 0;
 		this.users = new HashMap<String, String>();
 		this.costs = new HashMap<String, Integer>();
@@ -119,10 +122,6 @@ public class ActivityMgr {
 		this.curPeriod = TimeUtils.getCurPeriod();
 		this.lastSumCost = 0;
 		this.curSumCost = 0;
-		
-		if(initEnv()) {
-			read();
-		}
 	}
 	
 	public static ActivityMgr getInstn() {
@@ -137,10 +136,24 @@ public class ActivityMgr {
 	}
 	
 	/**
+	 * 初始化
+	 */
+	public void init() {
+		if(isInit == true) {
+			return;
+		}
+		
+		isInit = initEnv();
+		if(isInit == true) {
+			read();
+		}
+	}
+	
+	/**
 	 * 初始化活跃值数据库环境
 	 * @return
 	 */
-	private static boolean initEnv() {
+	private boolean initEnv() {
 		if(Config.LEVEL < Level.ADMIN) {
 			return false;	// 仅管理员可以操作
 		}
@@ -166,13 +179,119 @@ public class ActivityMgr {
 	}
 	
 	/**
+	 * 读取历史活跃值
+	 */
+	private void read() {
+		int sum = 0;
+		List<TActivity> activitys = _queryCurPeriodData();
+		for(TActivity activity : activitys) {
+			if(UID_SUM_COST.equals(activity.getUid())) {
+				curSumCost = activity.getCost();
+				
+			} else {
+				users.put(activity.getUid(), activity.getUsername());
+				costs.put(activity.getUid(), activity.getCost());
+				sum += activity.getCost();
+			}
+		}
+		curSumCost = (curSumCost <= 0 ? sum : curSumCost);
+		lastSumCost = _queryLastPeriodData();
+		
+		log.info("已读取直播间 [{}] 的历史活跃值", ROOM_ID);
+	}
+	
+	private List<TActivity> _queryCurPeriodData() {
+		String where = StrUtils.concat(TActivity.CN$I_ROOMID(), " = ", ROOM_ID, 
+				" AND ", TActivity.CN$I_PERIOD(), " = ", curPeriod);
+		Connection conn = SqliteUtils.getConn(DS);
+		List<TActivity> activitys = TActivity.querySome(conn, where);
+		SqliteUtils.close(conn);
+		return activitys;
+	}
+	
+	private int _queryLastPeriodData() {
+		String sql = StrUtils.concat("SELECT ", TActivity.CN$I_COST(), " FROM ", 
+				TActivity.TABLE_NAME(), " WHERE ", TActivity.CN$I_ROOMID(), 
+				" = ", ROOM_ID, " AND ", TActivity.CN$I_PERIOD(), " = ", lastPeriod, 
+				" AND ", TActivity.CN$S_UID(), " = '", UID_SUM_COST, "'"
+		);
+		Connection conn = SqliteUtils.getConn(DS);
+		int lastSumCost = SqliteUtils.queryInt(conn, sql);
+		return (lastSumCost < 0 ? 0 : lastSumCost);
+	}
+	
+	/**
+	 * 更新保存活跃值
+	 */
+	public void save() {
+		if(users.size() <= 0 || costs.size() <= 0) {
+			return;
+		}
+		users.put(UID_SUM_COST, UNAME_SUM_COST);
+		costs.put(UID_SUM_COST, curSumCost);
+		
+		List<TActivity> activitys = new LinkedList<TActivity>();
+		Iterator<String> uids = costs.keySet().iterator();
+		while(uids.hasNext()) {
+			String uid = uids.next();
+			String username = users.get(uid);
+			int cost = costs.get(uid);
+			
+			TActivity activity = new TActivity();
+			activity.setPeriod(curPeriod);
+			activity.setRoomid(ROOM_ID);
+			activity.setUid(uid);
+			activity.setUsername(username);
+			activity.setCost(cost);
+			activitys.add(activity);
+		}
+		
+		boolean isOk = _truncate();
+		isOk &= _saveAll(activitys);
+		log.info("更新直播间 [{}] 的活跃值{}", ROOM_ID, (isOk ? "成功" : "失败"));
+		
+		users.clear();
+		costs.clear();
+	}
+	
+	private boolean _truncate() {
+		String where = StrUtils.concat(TActivity.CN$I_ROOMID(), " = ", ROOM_ID, 
+				" AND ", TActivity.CN$I_PERIOD(), " = ", curPeriod);
+		Connection conn = SqliteUtils.getConn(DS);
+		boolean isOk = TActivity.delete(conn, where);
+		SqliteUtils.close(conn);
+		return isOk;
+	}
+	
+	private boolean _saveAll(List<TActivity> activitys) {
+		boolean isOk = true;
+		Connection conn = SqliteUtils.getConn(DS);
+		SqliteUtils.setAutoCommit(conn, false);
+		try {
+			for(TActivity activity : activitys) {
+				isOk &= TActivity.insert(conn, activity);
+			}
+			conn.commit();
+			
+		} catch(Exception e) {
+			log.error("更新直播间 [{}] 的活跃值异常", ROOM_ID, e);
+			isOk = false;
+		}
+		
+		SqliteUtils.setAutoCommit(conn, true);
+		SqliteUtils.releaseDisk(conn);
+		SqliteUtils.close(conn);
+		return isOk;
+	}
+	
+	/**
 	 * 是否记录活跃值
 	 *  当且仅当是管理员身份, 且在监听特定直播间时才记录
 	 * @return
 	 */
 	private boolean isRecord() {
 		boolean isRecord = false;
-		if(Config.LEVEL >= Level.ADMIN) {
+		if(isInit && Config.LEVEL >= Level.ADMIN) {
 			int curRoomId = RoomMgr.getInstn().getRealRoomId(UIUtils.getCurRoomId());
 			if(ROOM_ID > 0 && ROOM_ID == curRoomId) {
 				isRecord = true;
@@ -265,116 +384,6 @@ public class ActivityMgr {
 	 */
 	public static int showCost(String giftName, int num) {
 		return (countCost(giftName, num) / SHOW_UNIT);
-	}
-	
-	/**
-	 * 读取历史活跃值
-	 */
-	private void read() {
-		if(Config.LEVEL < Level.ADMIN) {
-			return;	// 仅管理员可以操作
-		}
-		
-		int sum = 0;
-		List<TActivity> activitys = _queryCurPeriodData();
-		for(TActivity activity : activitys) {
-			if(UID_SUM_COST.equals(activity.getUid())) {
-				curSumCost = activity.getCost();
-				
-			} else {
-				users.put(activity.getUid(), activity.getUsername());
-				costs.put(activity.getUid(), activity.getCost());
-				sum += activity.getCost();
-			}
-		}
-		curSumCost = (curSumCost <= 0 ? sum : curSumCost);
-		lastSumCost = _queryLastPeriodData();
-		
-		log.info("已读取直播间 [{}] 的历史活跃值", ROOM_ID);
-	}
-	
-	private List<TActivity> _queryCurPeriodData() {
-		String where = StrUtils.concat(TActivity.CN$I_ROOMID(), " = ", ROOM_ID, 
-				" AND ", TActivity.CN$I_PERIOD(), " = ", curPeriod);
-		Connection conn = SqliteUtils.getConnByJDBC(DS);
-		List<TActivity> activitys = TActivity.querySome(conn, where);
-		SqliteUtils.close(conn);
-		return activitys;
-	}
-	
-	private int _queryLastPeriodData() {
-		String sql = StrUtils.concat("SELECT ", TActivity.CN$I_COST(), " FROM ", 
-				TActivity.TABLE_NAME(), " WHERE ", TActivity.CN$I_ROOMID(), 
-				" = ", ROOM_ID, " AND ", TActivity.CN$I_PERIOD(), " = ", lastPeriod, 
-				" AND ", TActivity.CN$S_UID(), " = '", UID_SUM_COST, "'"
-		);
-		Connection conn = SqliteUtils.getConnByJDBC(DS);
-		int lastSumCost = SqliteUtils.queryInt(conn, sql);
-		return (lastSumCost < 0 ? 0 : lastSumCost);
-	}
-	
-	/**
-	 * 更新保存活跃值
-	 */
-	public void save() {
-		if(users.size() <= 0 || costs.size() <= 0) {
-			return;
-		}
-		users.put(UID_SUM_COST, UNAME_SUM_COST);
-		costs.put(UID_SUM_COST, curSumCost);
-		
-		List<TActivity> activitys = new LinkedList<TActivity>();
-		Iterator<String> uids = costs.keySet().iterator();
-		while(uids.hasNext()) {
-			String uid = uids.next();
-			String username = users.get(uid);
-			int cost = costs.get(uid);
-			
-			TActivity activity = new TActivity();
-			activity.setPeriod(curPeriod);
-			activity.setRoomid(ROOM_ID);
-			activity.setUid(uid);
-			activity.setUsername(username);
-			activity.setCost(cost);
-			activitys.add(activity);
-		}
-		
-		boolean isOk = _truncate();
-		isOk &= _saveAll(activitys);
-		log.info("更新直播间 [{}] 的活跃值{}", ROOM_ID, (isOk ? "成功" : "失败"));
-		
-		users.clear();
-		costs.clear();
-	}
-	
-	private boolean _truncate() {
-		String where = StrUtils.concat(TActivity.CN$I_ROOMID(), " = ", ROOM_ID, 
-				" AND ", TActivity.CN$I_PERIOD(), " = ", curPeriod);
-		Connection conn = SqliteUtils.getConnByJDBC(DS);
-		boolean isOk = TActivity.delete(conn, where);
-		SqliteUtils.close(conn);
-		return isOk;
-	}
-	
-	private boolean _saveAll(List<TActivity> activitys) {
-		boolean isOk = true;
-		Connection conn = SqliteUtils.getConnByJDBC(DS);
-		SqliteUtils.setAutoCommit(conn, false);
-		try {
-			for(TActivity activity : activitys) {
-				isOk &= TActivity.insert(conn, activity);
-			}
-			conn.commit();
-			
-		} catch(Exception e) {
-			log.error("更新直播间 [{}] 的活跃值异常", ROOM_ID, e);
-			isOk = false;
-		}
-		
-		SqliteUtils.setAutoCommit(conn, true);
-		SqliteUtils.releaseDisk(conn);
-		SqliteUtils.close(conn);
-		return isOk;
 	}
 	
 	/**

@@ -72,7 +72,7 @@ public class BiliCmd {
 	private final static String _WISH_BOTTLE = "WISH_BOTTLE";
 	public final static BiliCmd WISH_BOTTLE = new BiliCmd(_WISH_BOTTLE);
 	
-	/** 2018春节活动(新春榜)触发事件 */
+	/** 2018春节活动-红灯笼高能通知事件 */
 	private final static String _ACTIVITY_EVENT = "ACTIVITY_EVENT";
 	public final static BiliCmd ACTIVITY_EVENT = new BiliCmd(_ACTIVITY_EVENT);
 	

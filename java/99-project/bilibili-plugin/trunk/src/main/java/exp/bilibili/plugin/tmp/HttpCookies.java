@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.openqa.selenium.Cookie;
 
+import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 
 public class HttpCookies {
@@ -45,8 +46,22 @@ public class HttpCookies {
 		}
 	}
 	
+	public HttpCookies(List<Cookie> cookies) {
+		this();
+		
+		if(ListUtils.isNotEmpty(cookies)) {
+			for(Cookie cookie : cookies) {
+				add(cookie);
+			}
+		}
+	}
+	
 	public boolean isVaild() {
 		return cookies.size() > 0;
+	}
+	
+	public void add(Cookie cookie) {
+		add(new HttpCookie(cookie));
 	}
 	
 	public void add(String responseHeadCookie) {

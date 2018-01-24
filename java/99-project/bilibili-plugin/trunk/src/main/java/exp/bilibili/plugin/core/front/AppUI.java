@@ -40,6 +40,7 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -147,8 +148,6 @@ public class AppUI extends MainWindow {
 	private String loginUser;
 	
 	private boolean isLogined;
-	
-	private boolean isRunning;
 	
 	private static volatile AppUI instance;
 	
@@ -279,7 +278,6 @@ public class AppUI extends MainWindow {
 		
 		this.loginUser = "";
 		this.isLogined = false;
-		this.isRunning = false;
 		printVersionInfo();
 	}
 
@@ -432,7 +430,6 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				isRunning = true;
 				int roomId = RoomMgr.getInstn().getRealRoomId(getCurRoomId());
 				if(roomId <= 0) {
 					SwingUtils.warn("直播间房号无效/未收录");
@@ -459,8 +456,6 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				isRunning = true;
-				
 				lotteryUI.refreshUsers();
 				lotteryUI._view();
 				lockBtn();
@@ -478,6 +473,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
+				ActivityMgr.getInstn().init();
 				new _ActiveListUI()._view();
 			}
 		});
@@ -493,7 +489,6 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				isRunning = true;
 				if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1天)", "帐密登陆 (30天)")) {
 					_loginByQrcode();
 					
@@ -878,10 +873,6 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void beforeExit() {
-		if(isRunning == false) {
-			return;	// 避免没有启动过浏览器直接关闭时, 也会把浏览器先打开再关闭
-		}
-		
 		wsClient._stop();
 		lotteryUI.clear();
 		
@@ -894,6 +885,7 @@ public class AppUI extends MainWindow {
 		SafetyMonitor.getInstn()._stop();
 		ActivityMgr.getInstn().save();
 		
+		SqliteUtils.shutdownPool();
 		Browser.quit();
 	}
 	

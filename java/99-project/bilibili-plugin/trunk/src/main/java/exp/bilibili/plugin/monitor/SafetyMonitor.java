@@ -86,11 +86,8 @@ public class SafetyMonitor extends LoopThread {
 		this.noResponseCnt = 0;
 		this.loopCnt = LOOP_LIMIT;
 		this.cause = UNCHECK_CAUSE;
-		
-		String verInfo =  VersionMgr.exec("-p");
-		this.appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
-		this.appVersion = RegexUtils.findFirst(verInfo, "版本号[ |]*([\\d|\\.]+)");
-		updateCertificateTime(SafetyUtils.fileToCertificate());
+		this.appName = "";
+		this.appVersion = "";
 	}
 	
 	public static SafetyMonitor getInstn() {
@@ -106,6 +103,11 @@ public class SafetyMonitor extends LoopThread {
 	
 	@Override
 	protected void _before() {
+		String verInfo =  VersionMgr.exec("-p");
+		appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
+		appVersion = RegexUtils.findFirst(verInfo, "版本号[ |]*([\\d|\\.]+)");
+		updateCertificateTime(SafetyUtils.fileToCertificate());
+		
 		log.info("{} 已启动", getName());
 	}
 
@@ -358,7 +360,9 @@ public class SafetyMonitor extends LoopThread {
 	 * 更新授权时间
 	 */
 	private void updateCertificateTime(App app) {
-		checkInTime(app.getTime());
+		if(app != null) {
+			checkInTime(app.getTime());
+		}
 	}
 	
 }

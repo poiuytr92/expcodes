@@ -14,6 +14,7 @@ import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpUtils;
 
+// 用于登录主号、小号、马甲号
 public class LoginByVC {
 
 	private final static String VCCODE_URL = Config.getInstn().VCCODE_URL();
