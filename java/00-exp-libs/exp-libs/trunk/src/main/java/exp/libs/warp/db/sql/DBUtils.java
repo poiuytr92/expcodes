@@ -16,6 +16,7 @@ import java.util.Map;
 
 import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.BeanListHandler;
+import org.logicalcobwebs.proxool.ProxoolFacade;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +58,44 @@ public class DBUtils {
 	
 	/** 私有化构造函数 */
 	protected DBUtils() {}
+	
+	/**
+	 * <PRE>
+	 * 设置是否自动关闭线程池.
+	 * 
+	 * 	使用场景：
+	 *   通常当在进程销毁钩子中需要入库操作时, 若使用线程池, 则必定报错：
+	 * 		Attempt to refer to a unregistered pool by its alias xxx
+	 * 
+	 *   这是因为proxool总是最先向JVM请求销毁自身, 导致在进程销毁钩子无法使用线程池, 只能使用常规的JDBC操作.
+	 *   
+	 *   通过此方法, 在程序使用线程池之前设置 {@link #setAutoShutdownPool() false} 可以避免这种主动销毁的行为
+	 *   但是在进程钩子的最后, 需要手动调用 {@link #shutdownPool()} 方法关闭线程池
+	 * </PRE>
+	 * @param auto true:自动关闭线程池(默认); false:手动关闭线程池
+	 */
+	public static void setAutoShutdownPool(boolean auto) {
+		if(auto == true) {
+			ProxoolFacade.enableShutdownHook();
+		} else {
+			ProxoolFacade.disableShutdownHook();
+		}
+	}
+	
+	/**
+	 * 马上关闭线程池
+	 */
+	public static void shutdownPool() {
+		shutdownPool(0);
+	}
+	
+	/**
+	 * 延迟一段时间后关闭线程池
+	 * @param delay 延迟时间, 单位:ms
+	 */
+	public static void shutdownPool(int delay) {
+		ProxoolFacade.shutdown(delay < 0 ? 0 : delay);
+	}
 	
 	/**
 	 * 测试数据源连接是否可用
