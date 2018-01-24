@@ -34,7 +34,7 @@ class _RedbagUI extends PopChildWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5691969159309932864L;
 
-	private final static int WIDTH = 500;
+	private final static int WIDTH = 550;
 	
 	private final static int HEIGHT = 600;
 	
@@ -60,7 +60,7 @@ class _RedbagUI extends PopChildWindow {
 				Redbag.LANTERN, Redbag.SPRING, Redbag.STUFF1, 
 				Redbag.STUFF2, Redbag.STUFF3, Redbag.FIRECRACKER, 
 				Redbag.BEAST, Redbag.DOG, Redbag.GUARD, 
-				Redbag.GOLD_DANMU, Redbag.GOLD_NAME, 
+				Redbag.GOLD_DANMU, Redbag.GOLD_NAME, Redbag.CALENDAR
 		});
 	}
 	

@@ -162,7 +162,7 @@ public class ActivityMgr {
 		File dbFile = new File(ENV_DB_PATH);
 		if(!dbFile.exists()) {
 			FileUtils.createDir(ENV_DB_DIR);
-			Connection conn = SqliteUtils.getConn(DS);
+			Connection conn = SqliteUtils.getConnByJDBC(DS);
 			String script = JarUtils.read(ENV_DB_SCRIPT, Charset.ISO);
 			String[] sqls = script.split(";");
 			for(String sql : sqls) {
@@ -203,7 +203,7 @@ public class ActivityMgr {
 	private List<TActivity> _queryCurPeriodData() {
 		String where = StrUtils.concat(TActivity.CN$I_ROOMID(), " = ", ROOM_ID, 
 				" AND ", TActivity.CN$I_PERIOD(), " = ", curPeriod);
-		Connection conn = SqliteUtils.getConn(DS);
+		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		List<TActivity> activitys = TActivity.querySome(conn, where);
 		SqliteUtils.close(conn);
 		return activitys;
@@ -215,7 +215,7 @@ public class ActivityMgr {
 				" = ", ROOM_ID, " AND ", TActivity.CN$I_PERIOD(), " = ", lastPeriod, 
 				" AND ", TActivity.CN$S_UID(), " = '", UID_SUM_COST, "'"
 		);
-		Connection conn = SqliteUtils.getConn(DS);
+		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		int lastSumCost = SqliteUtils.queryInt(conn, sql);
 		return (lastSumCost < 0 ? 0 : lastSumCost);
 	}
@@ -257,7 +257,7 @@ public class ActivityMgr {
 	private boolean _truncate() {
 		String where = StrUtils.concat(TActivity.CN$I_ROOMID(), " = ", ROOM_ID, 
 				" AND ", TActivity.CN$I_PERIOD(), " = ", curPeriod);
-		Connection conn = SqliteUtils.getConn(DS);
+		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		boolean isOk = TActivity.delete(conn, where);
 		SqliteUtils.close(conn);
 		return isOk;
@@ -265,7 +265,7 @@ public class ActivityMgr {
 	
 	private boolean _saveAll(List<TActivity> activitys) {
 		boolean isOk = true;
-		Connection conn = SqliteUtils.getConn(DS);
+		Connection conn = SqliteUtils.getConnByJDBC(DS);
 		SqliteUtils.setAutoCommit(conn, false);
 		try {
 			for(TActivity activity : activitys) {

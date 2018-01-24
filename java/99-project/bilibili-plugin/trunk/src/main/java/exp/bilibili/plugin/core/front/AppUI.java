@@ -40,7 +40,6 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -885,7 +884,6 @@ public class AppUI extends MainWindow {
 		SafetyMonitor.getInstn()._stop();
 		ActivityMgr.getInstn().save();
 		
-		SqliteUtils.shutdownPool();
 		Browser.quit();
 	}
 	

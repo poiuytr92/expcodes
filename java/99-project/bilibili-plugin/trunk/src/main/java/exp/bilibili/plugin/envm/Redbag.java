@@ -36,6 +36,8 @@ public class Redbag {
 	
 	public final static Redbag GOLD_NAME = new Redbag("uname-gold", 8888, "金色昵称特权（1天）", 42);
 	
+	public final static Redbag CALENDAR = new Redbag("award-calendar", 8888, "哔哩哔哩直播2018新年台历", 2);
+	
 	private String id;
 	
 	private int price;
@@ -113,6 +115,9 @@ public class Redbag {
 			
 		} else if(GOLD_NAME.ID().equals(id)) {
 			redbag = GOLD_NAME;
+			
+		} else if(CALENDAR.ID().equals(id)) {
+			redbag = CALENDAR;
 		}
 		return redbag;
 	}
