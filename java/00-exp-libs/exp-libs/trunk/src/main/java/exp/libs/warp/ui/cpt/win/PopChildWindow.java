@@ -22,16 +22,16 @@ public abstract class PopChildWindow extends _SwingWindow {
 		super(name);
 	}
 	
-	protected PopChildWindow(String name, int width, int high) {
-		super(name, width, high);
+	protected PopChildWindow(String name, int width, int height) {
+		super(name, width, height);
 	}
 	
-	protected PopChildWindow(String name, int width, int high, boolean relative) {
-		super(name, width, high, relative);
+	protected PopChildWindow(String name, int width, int height, boolean relative) {
+		super(name, width, height, relative);
 	}
 	
-	protected PopChildWindow(String name, int width, int high, boolean relative, Object... args) {
-		super(name, width, high, relative, args);
+	protected PopChildWindow(String name, int width, int height, boolean relative, Object... args) {
+		super(name, width, height, relative, args);
 	}
 	
 	@Override

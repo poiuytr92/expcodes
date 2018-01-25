@@ -85,8 +85,8 @@ public class TopoGraphUI extends PopChildWindow {
 	/** 是否使用GEF组件计算节点坐标 */
 	private boolean useGEF;
 	
-	public TopoGraphUI(String name, int width, int high, TopoGraph topoGraph) {
-		super(name, width, high, false, topoGraph);
+	public TopoGraphUI(String name, int width, int height, TopoGraph topoGraph) {
+		super(name, width, height, false, topoGraph);
 	}
 
 	@Override
@@ -131,6 +131,12 @@ public class TopoGraphUI extends PopChildWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel root) {}
+	
+	@Override
+	protected void beforeView() {}
+
+	@Override
+	protected void beforeHide() {}
 	
 	/**
 	 * 绘图
@@ -484,5 +490,5 @@ public class TopoGraphUI extends PopChildWindow {
 		GraphConstants.setBorderColor(nodeAttribute, backGround);
 		return nodeAttribute;
 	}
-	
+
 }

@@ -30,8 +30,8 @@ public class TestSearchWindow extends MainWindow {
 	
 	private SearchPanel searchPanel;
 	
-	protected TestSearchWindow(String name, int width, int high) {
-		super(name, width, high, false);
+	protected TestSearchWindow(String name, int width, int heigh) {
+		super(name, width, heigh, false);
 	}
 	
 	@Override
@@ -51,9 +51,12 @@ public class TestSearchWindow extends MainWindow {
 	}
 
 	@Override
-	protected void beforeExit() {
-		// TODO Auto-generated method stub
-		
-	}
+	protected void beforeView() {}
+
+	@Override
+	protected void beforeHide() {}
+	
+	@Override
+	protected void beforeExit() {}
 	
 }

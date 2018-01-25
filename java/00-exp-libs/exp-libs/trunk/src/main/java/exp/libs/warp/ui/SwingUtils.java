@@ -4,7 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Toolkit;
 
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -448,6 +452,79 @@ public class SwingUtils {
 		if(textArea != null) {
 			textArea.setCaretPosition(textArea.getText().length());
 		}
+	}
+	
+	/**
+	 * <PRE>
+	 * 加载图片对象(对于路径不变但图像持续变化的图片， 支持实时更新).
+	 * 
+	 * 	此方法并没有使用new ImageIcon(imgPath)的方式去读取图片文件, 这是因为：
+	 * 		对于路径不变但图像持续变化的图片, 会会因为图片路径没有变化, 而不去更新缓存, 导致显示的图片一直不变
+	 * </PRE>
+	 * @param imgPath 图片存储路径, 支持文件路径和包路径
+	 * 			文件路径，如： ./foo/bar/img.png
+	 * 			包路径，如： /foo/bar/img.png
+	 * @return 图片对象, 若加载失败则返回null
+	 */
+	public static ImageIcon loadImage(String imgPath) {
+		ImageIcon icon = null;
+		try {
+			if(FileUtils.exists(imgPath)) {	// 文件路径
+				Image img = Toolkit.getDefaultToolkit().createImage(imgPath);
+				icon = new ImageIcon(img);
+				
+			} else {	// 包路径
+				icon = new ImageIcon(SwingUtils.class.getResource(imgPath));
+			}
+		} catch(Exception e) {}
+		return icon;
+	}
+	
+	/**
+	 * 设置JLabel上的图片(对于路径不变但图像持续变化的图片， 支持实时更新)
+	 * @param label JLabel标签对象
+	 * @param imgPath 图片存储路径, 支持文件路径和包路径
+	 * 			文件路径，如： ./foo/bar/img.png
+	 * 			包路径，如： /foo/bar/img.png
+	 */
+	public static void setImage(JLabel label, String imgPath) {
+		setImage(label, imgPath, -1, -1);
+	}
+	
+	/**
+	 * 设置JLabel上的图片(支持实时更新)
+	 * @param label JLabel标签对象
+	 * @param imgPath 图片存储路径, 支持文件路径和包路径
+	 * 			文件路径，如： ./foo/bar/img.png
+	 * 			包路径，如： /foo/bar/img.png
+	 */
+	public static boolean setImage(JLabel label, String imgPath, int width, int height) {
+		boolean isOk = false;
+		if(label == null) {
+			return isOk;
+		}
+		
+		ImageIcon icon = loadImage(imgPath);
+		if(icon != null) {
+			if(width >= 0 && height >= 0) {
+				icon = new ImageIcon(
+						modifySize(icon.getImage(), width, height));
+			}
+			label.setIcon(icon);
+			isOk = true;
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 修改图片尺寸（原图对象的尺寸不会变化）
+	 * @param img 图片对象
+	 * @param width 宽
+	 * @param height 高
+	 * @return 修改尺寸后的新图片
+	 */
+	private static Image modifySize(Image img, int width, int height) {
+		return img.getScaledInstance(width, height, Image.SCALE_FAST);
 	}
 	
 }

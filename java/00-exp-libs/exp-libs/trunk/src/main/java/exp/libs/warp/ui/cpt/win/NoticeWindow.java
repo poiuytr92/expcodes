@@ -22,6 +22,8 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 
 	private Thread _this;
 	
+	private boolean isRun = false;
+	
 	protected NoticeWindow() {
 		super("NoticeWindow");
 	}
@@ -30,16 +32,16 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 		super(name);
 	}
 	
-	protected NoticeWindow(String name, int width, int high) {
-		super(name, width, high);
+	protected NoticeWindow(String name, int width, int height) {
+		super(name, width, height);
 	}
 	
-	protected NoticeWindow(String name, int width, int high, boolean relative) {
-		super(name, width, high, relative);
+	protected NoticeWindow(String name, int width, int height, boolean relative) {
+		super(name, width, height, relative);
 	}
 	
-	protected NoticeWindow(String name, int width, int high, boolean relative, Object... args) {
-		super(name, width, high, relative, args);
+	protected NoticeWindow(String name, int width, int height, boolean relative, Object... args) {
+		super(name, width, height, relative, args);
 	}
 	
 	@Override
@@ -55,11 +57,19 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 	/**
 	 * 以渐隐方式显示通知消息
 	 */
-	public void _show() {
-		_view();	// 显示通知消息
-		
-		_this = new Thread(this);
-		_this.start();	// 渐隐窗体
+	@Override
+	protected final void beforeView() {
+		if(isRun == false) {
+			isRun = true;
+			_this = new Thread(this);
+			_this.start();	// 渐隐窗体
+		}
+	}
+	
+	@Deprecated
+	@Override
+	protected final void beforeHide() {
+		// Undo
 	}
 	
 	@Override

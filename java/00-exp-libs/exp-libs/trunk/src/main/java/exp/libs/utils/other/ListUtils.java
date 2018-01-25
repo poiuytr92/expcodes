@@ -50,7 +50,7 @@ public class ListUtils {
 	 * @param list 被测试队列
 	 * @return true:是; false:否
 	 */
-	public static boolean isEmpty(Collection<?> list) {
+	public static <E> boolean isEmpty(Collection<E> list) {
 		return (list == null || list.size() <= 0);
 	}
 	
@@ -59,7 +59,7 @@ public class ListUtils {
 	 * @param list 被测试队列
 	 * @return true:是; false:否
 	 */
-	public static boolean isNotEmpty(List<?> list) {
+	public static <E> boolean isNotEmpty(Collection<E> list) {
 		return !isEmpty(list);
 	}
 	

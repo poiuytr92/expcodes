@@ -22,16 +22,16 @@ public abstract class MainWindow extends _SwingWindow {
 		super(name);
 	}
 	
-	protected MainWindow(String name, int width, int high) {
-		super(name, width, high);
+	protected MainWindow(String name, int width, int height) {
+		super(name, width, height);
 	}
 	
-	protected MainWindow(String name, int width, int high, boolean relative) {
-		super(name, width, high, relative);
+	protected MainWindow(String name, int width, int height, boolean relative) {
+		super(name, width, height, relative);
 	}
 	
-	protected MainWindow(String name, int width, int high, boolean relative, Object... args) {
-		super(name, width, high, relative, args);
+	protected MainWindow(String name, int width, int height, boolean relative, Object... args) {
+		super(name, width, height, relative, args);
 	}
 	
 	@Override

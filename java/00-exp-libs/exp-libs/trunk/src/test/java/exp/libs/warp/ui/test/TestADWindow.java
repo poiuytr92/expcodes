@@ -28,8 +28,8 @@ public class TestADWindow extends MainWindow {
 	
 	private JButton printBtn;
 	
-	protected TestADWindow(String name, int width, int high, Class<_MyADComponent> component) {
-		super(name, width, high, false, component);
+	protected TestADWindow(String name, int width, int heigh, Class<_MyADComponent> component) {
+		super(name, width, heigh, false, component);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -71,9 +71,12 @@ public class TestADWindow extends MainWindow {
 	}
 
 	@Override
-	protected void beforeExit() {
-		// TODO Auto-generated method stub
-		
-	}
+	protected void beforeView() {}
+
+	@Override
+	protected void beforeHide() {}
+	
+	@Override
+	protected void beforeExit() {}
 
 }

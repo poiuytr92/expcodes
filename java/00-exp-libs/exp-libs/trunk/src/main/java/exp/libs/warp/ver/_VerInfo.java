@@ -135,6 +135,12 @@ class _VerInfo extends PopChildWindow {
 		});
 	}
 	
+	@Override
+	protected void beforeView() {}
+
+	@Override
+	protected void beforeHide() {}
+	
 	protected JScrollPane toPanel(boolean isEditable) {
 		setValToUI();
 		

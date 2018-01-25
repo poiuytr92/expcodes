@@ -308,9 +308,13 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	@Override
-	protected void beforeExit() {
-		// Undo
-	}
+	protected void beforeView() {}
+
+	@Override
+	protected void beforeHide() {}
+	
+	@Override
+	protected void beforeExit() {}
 	
 	/**
 	 * 保存项目信息

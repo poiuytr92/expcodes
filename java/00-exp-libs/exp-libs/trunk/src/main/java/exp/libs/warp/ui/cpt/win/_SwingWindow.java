@@ -66,17 +66,17 @@ abstract class _SwingWindow extends JFrame {
 			(int) Toolkit.getDefaultToolkit().getScreenSize().getWidth();
 	
 	/** 屏高 */
-	protected final int WIN_HIGH = 
+	protected final int WIN_HEIGHT = 
 			(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
-	
-	/** 窗口名称 */
-	private String name;
 	
 	/** 窗口宽 */
 	protected final int width;
 	
 	/** 窗口高 */
-	protected final int high;
+	protected final int height;
+	
+	/** 窗口名称 */
+	private String name;
 	
 	/** 最小化模式 */
 	private int miniMode;
@@ -110,45 +110,45 @@ abstract class _SwingWindow extends JFrame {
 	 * 限定大小初始化
 	 * @param name 窗口名称
 	 * @param width 初始窗宽
-	 * @param high 初始窗高
+	 * @param height 初始窗高
 	 */
-	protected _SwingWindow(String name, int width, int high) {
-		this(name, width, high, false);
+	protected _SwingWindow(String name, int width, int height) {
+		this(name, width, height, false);
 	}
 	
 	/**
 	 * 限定大小初始化
 	 * @param name 窗口名称
 	 * @param width 初始窗宽(relative=true时, width<=0; relative=false时, width>0)
-	 * @param high 初始窗高(relative=true时, high<=0; relative=false时, high>0)
-	 * @param relative 相对尺寸（当此值为true时, width/high为相对全屏宽度的大小）
+	 * @param height 初始窗高(relative=true时, height<=0; relative=false时, height>0)
+	 * @param relative 相对尺寸（当此值为true时, width/height为相对全屏宽度的大小）
 	 */
-	protected _SwingWindow(String name, int width, int high, boolean relative) {
-		this(name, width, high, relative, new Object[0]);
+	protected _SwingWindow(String name, int width, int height, boolean relative) {
+		this(name, width, height, relative, new Object[0]);
 	}
 	
 	/**
 	 * 全参初始化
 	 * @param name 窗口名称
 	 * @param width 初始窗宽(relative=true时, width<=0; relative=false时, width>0)
-	 * @param high 初始窗高(relative=true时, high<=0; relative=false时, high>0)
-	 * @param relative 相对尺寸（当此值为true时, width/high为相对全屏宽度的大小）
+	 * @param height 初始窗高(relative=true时, height<=0; relative=false时, height>0)
+	 * @param relative 相对尺寸（当此值为true时, width/height为相对全屏宽度的大小）
 	 * @param args 从外部传入的其他参数
 	 */
-	protected _SwingWindow(String name, int width, int high, boolean relative, Object... args) {
+	protected _SwingWindow(String name, int width, int height, boolean relative, Object... args) {
 		super(name);
 		this.name = name;
 		if(relative == true) {
 			this.width = WIN_WIDTH - (width > 0 ? width : -width);
-			this.high = WIN_HIGH - (high > 0 ? high : -high);
+			this.height = WIN_HEIGHT - (height > 0 ? height : -height);
 		} else {
 			this.width = (width <= 0 ? -width : width);
-			this.high = (high <= 0 ? -high : high);
+			this.height = (height <= 0 ? -height : height);
 		}
 		
 		// 初始化界面
 		this.miniMode = UNINIT;
-		this.setSize(this.width, this.high);
+		this.setSize(this.width, this.height);
 		_setLocation();	// 设置窗口位置
 		setAlwaysOnTop(WIN_ON_TOP());	// 设置窗口置顶
 		this.basePanel = new JPanel(new GridLayout(1, 1));
@@ -195,7 +195,7 @@ abstract class _SwingWindow extends JFrame {
 				break;
 			}
 			case LOCATION_LB: {	// 左下
-				setLocation(0, (WIN_HIGH - this.high - TASK_HEIGHT));
+				setLocation(0, (WIN_HEIGHT - this.height - TASK_HEIGHT));
 				break;
 			}
 			case LOCATION_RU: {	// 右上
@@ -204,12 +204,12 @@ abstract class _SwingWindow extends JFrame {
 			}
 			case LOCATION_RB: {	// 右下
 				setLocation((WIN_WIDTH - this.width), 
-						(WIN_HIGH - this.high - TASK_HEIGHT));
+						(WIN_HEIGHT - this.height - TASK_HEIGHT));
 				break;
 			}
 			default: {
 				setLocation((WIN_WIDTH / 2 - this.width / 2), 
-						(WIN_HIGH / 2 - this.high / 2));
+						(WIN_HEIGHT / 2 - this.height / 2));
 			}
 		}
 	}
@@ -342,6 +342,7 @@ abstract class _SwingWindow extends JFrame {
 	 * 显示窗口
 	 */
 	public final void _view() {
+		beforeView();
 		setVisible(true);
 	}
 	
@@ -349,6 +350,7 @@ abstract class _SwingWindow extends JFrame {
 	 * 隐藏窗口
 	 */
 	public final void _hide() {
+		beforeHide();
 		dispose();
 	}
 
@@ -380,6 +382,15 @@ abstract class _SwingWindow extends JFrame {
 	 */
 	protected abstract void setComponentsListener(final JPanel rootPanel);
 
+	/**
+	 * 显示界面前行为(调用{@link _view()}方法时触发)
+	 */
+	protected abstract void beforeView();
+	
+	/**
+	 * 隐藏界面前行为(调用{@link _hide()}方法时触发)
+	 */
+	protected abstract void beforeHide();
 	
 	/**
 	 * 关闭界面前行为(仅主窗口模式会触发)
