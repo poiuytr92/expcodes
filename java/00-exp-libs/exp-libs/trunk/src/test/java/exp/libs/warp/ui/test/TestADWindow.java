@@ -71,7 +71,7 @@ public class TestADWindow extends MainWindow {
 	}
 
 	@Override
-	protected void beforeView() {}
+	protected void AfterView() {}
 
 	@Override
 	protected void beforeHide() {}

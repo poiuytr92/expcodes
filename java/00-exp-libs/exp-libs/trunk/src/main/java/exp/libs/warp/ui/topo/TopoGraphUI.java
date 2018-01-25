@@ -133,7 +133,7 @@ public class TopoGraphUI extends PopChildWindow {
 	protected void setComponentsListener(JPanel root) {}
 	
 	@Override
-	protected void beforeView() {}
+	protected void AfterView() {}
 
 	@Override
 	protected void beforeHide() {}

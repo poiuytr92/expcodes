@@ -58,7 +58,7 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 	 * 以渐隐方式显示通知消息
 	 */
 	@Override
-	protected final void beforeView() {
+	protected final void AfterView() {
 		if(isRun == false) {
 			isRun = true;
 			_this = new Thread(this);

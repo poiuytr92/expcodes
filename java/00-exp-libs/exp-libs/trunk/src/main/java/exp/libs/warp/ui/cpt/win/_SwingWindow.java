@@ -342,8 +342,8 @@ abstract class _SwingWindow extends JFrame {
 	 * 显示窗口
 	 */
 	public final void _view() {
-		beforeView();
 		setVisible(true);
+		AfterView();
 	}
 	
 	/**
@@ -383,9 +383,9 @@ abstract class _SwingWindow extends JFrame {
 	protected abstract void setComponentsListener(final JPanel rootPanel);
 
 	/**
-	 * 显示界面前行为(调用{@link _view()}方法时触发)
+	 * 显示界面后行为(调用{@link _view()}方法时触发)
 	 */
-	protected abstract void beforeView();
+	protected abstract void AfterView();
 	
 	/**
 	 * 隐藏界面前行为(调用{@link _hide()}方法时触发)

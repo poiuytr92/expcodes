@@ -136,7 +136,7 @@ class _VerInfo extends PopChildWindow {
 	}
 	
 	@Override
-	protected void beforeView() {}
+	protected void AfterView() {}
 
 	@Override
 	protected void beforeHide() {}
