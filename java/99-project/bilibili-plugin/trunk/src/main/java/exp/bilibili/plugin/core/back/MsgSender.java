@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.DailyTask;
 import exp.bilibili.plugin.bean.ldm.HttpCookies;
-import exp.bilibili.plugin.cache.Browser;
 import exp.bilibili.plugin.cache.RoomMgr;
+import exp.bilibili.plugin.cache.login.LoginMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
@@ -279,8 +279,7 @@ public class MsgSender {
 	 * 每日签到
 	 * @return
 	 */
-	public static void toSign() {
-		final String cookies = Browser.COOKIES();
+	public static void toSign(String cookies) {
 		int roomId = Config.getInstn().SIGN_ROOM_ID();
 		roomId = (roomId <= 0 ? UIUtils.getCurRoomId() : roomId);
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
@@ -315,15 +314,15 @@ public class MsgSender {
 	 * 友爱社签到
 	 * @return 是否需要持续测试签到
 	 */
-	public static boolean toAssn() {
-		Map<String, String> headers = toPostHeadParams(Browser.COOKIES());
+	public static boolean toAssn(String cookies, String csrf) {
+		Map<String, String> headers = toPostHeadParams(cookies);
 		headers.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
 		headers.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
 		headers.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/center/index"));
 		
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("task_id", "double_watch_task");
-		requests.put("csrf_token", Browser.CSRF());
+		requests.put("csrf_token", csrf);
 		
 		String response = HttpURLUtils.doPost(ASSN_URL, headers, requests);
 		return _analyseAssnResponse(response);
@@ -396,7 +395,8 @@ public class MsgSender {
 	 * @return
 	 */
 	public static boolean sendChat(String msg, ChatColor color, int roomId) {
-		return sendChat(msg, color, roomId, Browser.COOKIES());
+		return sendChat(msg, color, roomId, 
+				LoginMgr.INSTN().getMainCookies().toNVCookies());
 	}
 
 	/**
@@ -525,7 +525,7 @@ public class MsgSender {
 	/**
 	 * 扫描节奏风暴
 	 */
-	public static int scanStorms(String cookies, 
+	public static int scanStorms(String cookies, String csrf, 
 			List<Integer> roomIds, long scanInterval) {
 		int sum = 0;
 		HttpClient client = new HttpClient();
@@ -540,7 +540,7 @@ public class MsgSender {
 				cnt = 0;
 				String response = client.doGet(STORM_CHECK_URL, headers, requests);
 				List<String> raffleIds = _getStormIds(roomId, response);
-				cnt = _joinStorms(roomId, raffleIds);
+				cnt = _joinStorms(cookies, csrf, roomId, raffleIds);
 				sum += cnt;
 			} while(cnt > 0);	// 对于存在节奏风暴的房间, 再扫描一次(可能有人连续送节奏风暴)
 			ThreadUtils.tSleep(scanInterval);
@@ -591,7 +591,7 @@ public class MsgSender {
 	 * @param raffleIds
 	 * @return
 	 */
-	private static int _joinStorms(int roomId, List<String> raffleIds) {
+	private static int _joinStorms(String cookies, String csrf, int roomId, List<String> raffleIds) {
 		int cnt = 0;
 		if(raffleIds.size() > 0) {
 			String msg = StrUtils.concat("直播间 [", roomId, 
@@ -599,7 +599,7 @@ public class MsgSender {
 			UIUtils.notify(msg);
 			
 			for(String raffleId : raffleIds) {
-				cnt += (MsgSender.toStormLottery(roomId, raffleId) ? 1 : 0);
+				cnt += (MsgSender.toStormLottery(cookies, csrf, roomId, raffleId) ? 1 : 0);
 			}
 		}
 		return cnt;
@@ -610,9 +610,9 @@ public class MsgSender {
 	 * @param roomId
 	 * @return
 	 */
-	public static boolean toStormLottery(int roomId, String raffleId) {
+	public static boolean toStormLottery(String cookies, String csrf, int roomId, String raffleId) {
 		boolean isOk = true;
-		String errDesc = joinLottery(STORM_JOIN_URL, roomId, raffleId, Browser.COOKIES(), LotteryType.STORM);
+		String errDesc = joinLottery(STORM_JOIN_URL, roomId, raffleId, cookies, csrf, LotteryType.STORM);
 		if(StrUtils.isEmpty(errDesc)) {
 			log.info("参与直播间 [{}] 抽奖成功", roomId);
 			UIUtils.statistics("成功(节奏风暴): 抽奖直播间 [", roomId, "]");
@@ -632,8 +632,8 @@ public class MsgSender {
 	 * @param raffleId
 	 * @return
 	 */
-	public static String toTvLottery(int roomId, String raffleId) {
-		return joinLottery(TV_JOIN_URL, roomId, raffleId, Browser.COOKIES(), LotteryType.TV);
+	public static String toTvLottery(String cookies, int roomId, String raffleId) {
+		return joinLottery(TV_JOIN_URL, roomId, raffleId, cookies, "", LotteryType.TV);
 	}
 	
 	/**
@@ -641,8 +641,8 @@ public class MsgSender {
 	 * @param roomId
 	 * @return
 	 */
-	public static int toEgLottery(int roomId) {
-		return toLottery(roomId, EG_CHECK_URL, EG_JOIN_URL);
+	public static int toEgLottery(String cookies, int roomId) {
+		return toLottery(cookies, "", roomId, EG_CHECK_URL, EG_JOIN_URL);
 	}
 	
 	/**
@@ -652,9 +652,8 @@ public class MsgSender {
 	 * @param joinUrl
 	 * @return
 	 */
-	private static int toLottery(int roomId, String checkUrl, String joinUrl) {
+	private static int toLottery(String cookies, String csrf, int roomId, String checkUrl, String joinUrl) {
 		int cnt = 0;
-		final String cookies = Browser.COOKIES();
 		List<String> raffleIds = checkLottery(checkUrl, roomId, cookies);
 		
 		if(ListUtils.isNotEmpty(raffleIds)) {
@@ -662,7 +661,8 @@ public class MsgSender {
 				int id = NumUtils.toInt(raffleId, 0);
 				if(id > LAST_RAFFLEID) {	// 礼物编号是递增
 					LAST_RAFFLEID = id;
-					String errDesc = joinLottery(joinUrl, roomId, raffleId, cookies, LotteryType.OTHER);
+					String errDesc = joinLottery(
+							joinUrl, roomId, raffleId, cookies, csrf, LotteryType.OTHER);
 					if(StrUtils.isEmpty(errDesc)) {
 						cnt++;
 					} else {
@@ -709,14 +709,14 @@ public class MsgSender {
 	 * @return
 	 */
 	private static String joinLottery(String url, int roomId, String raffleId, 
-			String cookies, LotteryType type) {
+			String cookies, String csrf, LotteryType type) {
 		String errDesc = "";
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
 			Map<String, String> headers = toGetHeadParams(cookies, sRoomId);
 			Map<String, String> requests = (LotteryType.STORM == type ? 
-					_toStormRequestParams(sRoomId, raffleId) : 
+					_toStormRequestParams(sRoomId, raffleId, csrf) : 
 					_toLotteryRequestParams(sRoomId, raffleId));
 			
 			String response = HttpURLUtils.doPost(url, headers, requests, Config.DEFAULT_CHARSET);
@@ -775,14 +775,14 @@ public class MsgSender {
 		return params;
 	}
 	
-	private static Map<String, String> _toStormRequestParams(String realRoomId, String raffleId) {
+	private static Map<String, String> _toStormRequestParams(String realRoomId, String raffleId, String csrf) {
 		Map<String, String> params = _toLotteryRequestParams(realRoomId);
 		params.put("id", raffleId);	// 礼物编号
 		params.put("color", ChatColor.WHITE.CODE());
 		params.put("captcha_token", "");
 		params.put("captcha_phrase", "");
 		params.put("token", "");
-		params.put("csrf_token", Browser.CSRF());
+		params.put("csrf_token", csrf);
 		return params;
 	}
 	
@@ -814,7 +814,7 @@ public class MsgSender {
 	 * @param roomId
 	 * @return 返回下次任务的时间点
 	 */
-	public static long doDailyTasks() {
+	public static long doDailyTasks(String cookies) {
 		long nextTaskTime = -1;
 		final int roomId = UIUtils.getCurRoomId();
 		final int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
@@ -822,7 +822,7 @@ public class MsgSender {
 			return nextTaskTime;
 		}
 		final Map<String, String> header = toGetHeadParams(
-				Browser.COOKIES(), String.valueOf(realRoomId));
+				cookies, String.valueOf(realRoomId));
 		
 		DailyTask task = checkTask(header);
 		if(task != DailyTask.NULL) {
@@ -954,13 +954,15 @@ public class MsgSender {
 	 * @return
 	 */
 	public static boolean sendPrivateMsg(String sendId, String recvId, String msg) {
-		Map<String, String> headers = toPostHeadParams(Browser.COOKIES());
+		HttpCookies cookies = LoginMgr.INSTN().getMainCookies();
+		
+		Map<String, String> headers = toPostHeadParams(cookies.toNVCookies());
 		headers.put(HttpUtils.HEAD.KEY.HOST, LINK_HOST);
 		headers.put(HttpUtils.HEAD.KEY.ORIGIN, MSG_HOST);
 		headers.put(HttpUtils.HEAD.KEY.REFERER, MSG_HOST);
 		
 		Map<String, String> requests = new HashMap<String, String>();
-		requests.put("csrf_token", Browser.CSRF());
+		requests.put("csrf_token", cookies.CSRF());
 		requests.put("platform", "pc");
 		requests.put("msg[sender_uid]", sendId);
 		requests.put("msg[receiver_id]", recvId);
@@ -999,8 +1001,8 @@ public class MsgSender {
 	 * 2018春节活动：查询当前红包奖池
 	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月）","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权（1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权（1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯笼","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换池","stock_num":99999,"exchange_limit":0,"price":6666}}}
 	 */
-	public static String queryRedbagPool() {
-		Map<String, String> headers = toGetHeadParams(Browser.COOKIES(), "pages/1703/spring-2018.html");
+	public static String queryRedbagPool(String cookies) {
+		Map<String, String> headers = toGetHeadParams(cookies, "pages/1703/spring-2018.html");
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("_", String.valueOf(System.currentTimeMillis()));
 		String response = HttpURLUtils.doGet(GET_REDBAG_URL, headers, requests);
@@ -1015,8 +1017,8 @@ public class MsgSender {
 	 * 	{"code":0,"msg":"OK","message":"OK","data":{"award_id":"stuff-3","red_bag_num":1695}}
 	 * 	{"code":-404,"msg":"这个奖品已经兑换完啦，下次再来吧","message":"这个奖品已经兑换完啦，下次再来吧","data":[]}
 	 */
-	public static String exchangeRedbag(String id, int num) {
-		Map<String, String> headers = toPostHeadParams(Browser.COOKIES(), "pages/1703/spring-2018.html");
+	public static String exchangeRedbag(String cookies, String id, int num) {
+		Map<String, String> headers = toPostHeadParams(cookies, "pages/1703/spring-2018.html");
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("award_id", id);
 		requests.put("exchange_num", String.valueOf(num));

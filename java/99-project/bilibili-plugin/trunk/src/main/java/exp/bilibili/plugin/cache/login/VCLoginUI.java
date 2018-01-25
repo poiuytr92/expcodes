@@ -246,6 +246,7 @@ public class VCLoginUI extends PopChildWindow {
 		reflashBtn.doClick();
 	}
 
+	// FIXME
 	@Override
 	protected void AfterView() {
 		boolean isOk = LoginMgr.INSTN().load(type);
@@ -255,7 +256,7 @@ public class VCLoginUI extends PopChildWindow {
 				isOk = LoginMgr.checkLogined(cookies);
 				if(isOk == true) {
 					_hide();
-					SwingUtils.info("登陆成功: ".concat(cookies.getNickName()));
+					System.out.println("登陆成功: ".concat(cookies.getNickName()));
 				}
 				
 			} else if(LoginType.VEST == type) {
