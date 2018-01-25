@@ -1,8 +1,8 @@
 package exp.bilibili.plugin.cache;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
@@ -307,7 +307,7 @@ public class LoginMgr extends LoopThread {
 			String vccode, String vcCookies) {
 		boolean isOk = false;
 		HttpCookies httpCookies = MsgSender.toLogin(username, password, vccode, vcCookies);
-		List<Cookie> cookies = httpCookies.toSeleniumCookies();
+		Set<Cookie> cookies = httpCookies.toSeleniumCookies();
 		isOk = ListUtils.isNotEmpty(cookies);
 		
 		if(isOk == true) {
@@ -337,7 +337,7 @@ public class LoginMgr extends LoopThread {
 		
 		// 转存外存
 		if(httpCookies.isVaild()) {
-			miniCookie = httpCookies.toStrCookies();
+			miniCookie = httpCookies.toNVCookies();
 			FileUtils.write(MINI_COOKIE_PATH, miniCookie, Charset.ISO, false);
 		}
 		return miniCookie;

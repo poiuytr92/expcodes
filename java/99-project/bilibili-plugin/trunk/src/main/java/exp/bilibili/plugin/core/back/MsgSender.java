@@ -261,7 +261,7 @@ public class MsgSender {
 		Map<String, String> headers = toGetHeadParams(cookies);
 		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null, Config.DEFAULT_CHARSET);
 		
-		String username = "unknow";
+		String username = "";
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);

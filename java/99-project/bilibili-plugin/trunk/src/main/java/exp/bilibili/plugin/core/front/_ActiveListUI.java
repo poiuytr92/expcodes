@@ -108,7 +108,6 @@ class _ActiveListUI extends PopChildWindow {
 		exportBtn.setForeground(Color.BLACK);
 		
 		this.activeTable = new _HisVerTable();
-		activeTable.reflash(getActiveDatas());
 	}
 	
 	@Override
@@ -150,6 +149,17 @@ class _ActiveListUI extends PopChildWindow {
 				}
 			}
 		});
+	}
+	
+	@Override
+	protected void beforeView() {
+		activeTable.reflash(getActiveDatas());
+	}
+
+	@Override
+	protected void beforeHide() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	/**

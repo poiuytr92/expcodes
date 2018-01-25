@@ -86,8 +86,6 @@ public class AppUI extends MainWindow {
 	
 	private JButton stormBtn;
 	
-	private JButton modeBtn;
-	
 	private JButton addUserBtn;
 	
 	private JButton clrBtn;
@@ -137,8 +135,6 @@ public class AppUI extends MainWindow {
 	private _QrcodeUI qrcodeUI;
 	
 	private _RedbagUI redbagUI;
-	
-	private _ModeUI modeUI;
 	
 	private _ColorUI colorUI;
 	
@@ -222,7 +218,6 @@ public class AppUI extends MainWindow {
 		this.activeListBtn = new JButton("☷");
 		this.loginBtn = new JButton("扫码/帐密登陆 (自动抽奖)");
 		this.stormBtn = new JButton("节奏风暴扫描");
-		this.modeBtn = new JButton("模");
 		this.addUserBtn = new JButton("╋");
 		this.clrBtn = new JButton("清");
 		this.sendBtn = new JButton("发言");
@@ -241,7 +236,6 @@ public class AppUI extends MainWindow {
 		activeListBtn.setForeground(Color.BLUE);
 		loginBtn.setForeground(Color.BLACK);
 		stormBtn.setForeground(Color.BLACK);
-		modeBtn.setForeground(Color.BLACK);
 		addUserBtn.setForeground(Color.BLACK);
 		clrBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
@@ -271,7 +265,6 @@ public class AppUI extends MainWindow {
 		this.lotteryUI = new _LotteryUI();
 		this.qrcodeUI = new _QrcodeUI();
 		this.redbagUI = new _RedbagUI();
-		this.modeUI = new _ModeUI();
 		this.colorUI = new _ColorUI();
 		this.curChatColor = ChatColor.WHITE;
 		
@@ -353,7 +346,7 @@ public class AppUI extends MainWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
 		panel.add(SwingUtils.getEBorderPanel(loginBtn, stormBtn), BorderLayout.CENTER);
-		panel.add(SwingUtils.getHGridPanel(/*modeBtn*/ addUserBtn, clrBtn), BorderLayout.EAST);
+		panel.add(SwingUtils.getHGridPanel(addUserBtn, clrBtn), BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -385,7 +378,6 @@ public class AppUI extends MainWindow {
 		setActiveListBtnListener();
 		setLoginBtnListener();
 		setStormBtnListener();
-		setModeBtnListener();
 		setAddUserBtnListener();
 		setClrBtnListener();
 		setSendBtnListener();
@@ -609,16 +601,6 @@ public class AppUI extends MainWindow {
 		StormScanner.getInstn()._start();
 		stormBtn.doClick();
 		lockBtn();
-	}
-	
-	private void setModeBtnListener() {
-		modeBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				modeUI._view();
-			}
-		});
 	}
 	
 	private void setAddUserBtnListener() {
@@ -871,6 +853,12 @@ public class AppUI extends MainWindow {
 	}
 	
 	@Override
+	protected void beforeView() {}
+
+	@Override
+	protected void beforeHide() {}
+	
+	@Override
 	protected void beforeExit() {
 		wsClient._stop();
 		lotteryUI.clear();
@@ -991,14 +979,6 @@ public class AppUI extends MainWindow {
 	public boolean isLogined() {
 		return isLogined;
 	}	
-	
-	/**
-	 * 是否为暗中抽奖模式
-	 * @return true:使用后台协议抽奖; false:模拟前端行为抽奖
-	 */
-	public boolean isBackLotteryMode() {
-		return modeUI.isBackMode();
-	}
 	
 	/**
 	 * 获取当前监听的直播间地址

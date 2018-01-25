@@ -1,6 +1,5 @@
 package exp.bilibili.plugin.cache;
 
-import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,9 +10,9 @@ import org.openqa.selenium.WebElement;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BrowserDriver;
 import exp.bilibili.plugin.envm.WebDriverType;
-import exp.libs.utils.other.ObjUtils;
-import exp.libs.utils.other.StrUtils;
-import exp.libs.utils.verify.RegexUtils;
+import exp.bilibili.plugin.tmp.HttpCookies;
+import exp.bilibili.plugin.tmp.LoginMgr;
+import exp.bilibili.plugin.tmp.LoginType;
 
 /**
  * <PRE>
@@ -27,31 +26,16 @@ import exp.libs.utils.verify.RegexUtils;
  */
 public class Browser {
 	
-	private final static String CSRF_KEY = "bili_jct";
-	
-	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
-	
-	private final static String COOKIE_NAME = "cookie";
-	
-	private final static String COOKIE_SUFFIX = ".dat";
-	
-	private final static String COOKIE_REGEX = StrUtils.concat(COOKIE_NAME, "-\\d+", COOKIE_SUFFIX);
-	
 	private final static int WAIT_ELEMENT_TIME = Config.getInstn().WAIT_ELEMENT_TIME();
 	
-	/** 当前登陆用户的cookies，供https接口用 */
-	private String sCookies;
-	
-	/** 从cookies提取的csrf token */
-	private String csrf;
-	
 	private BrowserDriver browser;
+	
+	private HttpCookies cookies;
 	
 	private static volatile Browser instance;
 	
 	private Browser() {
-		this.sCookies = "";
-		this.csrf = "";
+		this.cookies = new HttpCookies();
 	}
 	
 	private static Browser INSTN() {
@@ -70,7 +54,7 @@ public class Browser {
 	}
 	
 	private String _COOKIES() {
-		return sCookies;
+		return cookies.toNVCookies();
 	}
 	
 	public static String CSRF() {
@@ -78,7 +62,7 @@ public class Browser {
 	}
 	
 	private String _CSRF() {
-		return csrf;
+		return cookies.CSRF();
 	}
 	
 	public static void init(boolean loadImages) {
@@ -181,7 +165,13 @@ public class Browser {
 	}
 	
 	private boolean _addCookie(Cookie cookie) {
-		return (browser == null ? false : browser.addCookie(cookie));
+		boolean isOk = false;
+		if(browser != null && cookie != null) {
+			browser.addCookie(cookie);
+			cookies.add(cookie);
+			isOk = true;
+		}
+		return isOk;
 	}
 	
 	public static Set<Cookie> getCookies() {
@@ -198,28 +188,7 @@ public class Browser {
 	
 	private void _backupCookies() {
 		if(browser != null) {
-			int idx = 0;
-			StringBuilder kvs = new StringBuilder();	
-			
-			Set<Cookie> cookies = browser.getCookies();
-			for(Cookie cookie : cookies) {
-				String sIDX = StrUtils.leftPad(String.valueOf(idx++), '0', 2);
-				String savePath = StrUtils.concat(COOKIE_DIR, "/", COOKIE_NAME, "-", sIDX, COOKIE_SUFFIX);
-				ObjUtils.toSerializable(cookie, savePath);	// 序列化到外存， 供下次启动用
-				
-				// 供后台HTTPS协议用
-				kvs.append(cookie.getName()).append("=");
-				kvs.append(cookie.getValue()).append("; ");
-				
-				if(CSRF_KEY.equals(cookie.getName())) {
-					this.csrf = cookie.getValue();
-				}
-			}
-			
-			if(idx > 0) {
-				kvs.setLength(kvs.length() - 2);
-				this.sCookies = kvs.toString();
-			}
+			LoginMgr.INSTN().add(cookies, LoginType.TEMP);
 		}
 	}
 	
@@ -230,18 +199,9 @@ public class Browser {
 	private int _recoveryCookies() {
 		int cnt = 0;
 		if(browser != null) {
-			File dir = new File(COOKIE_DIR);
-			File[] files = dir.listFiles();
-			for(File file : files) {
-				if(!RegexUtils.matches(file.getName(), COOKIE_REGEX)) {
-					continue;
-				}
-				
-				try {
-					Cookie cookie = (Cookie) ObjUtils.unSerializable(file.getPath());
-					cnt += (browser.addCookie(cookie) ? 1 : 0);
-				} catch(Throwable e) {}
-			}
+//			LoginMgr.INSTN().load(LoginType.TEMP);
+			cookies = LoginMgr.INSTN().getTempCookies();
+			browser.addCookies(cookies.toSeleniumCookies());
 		}
 		return cnt;
 	}

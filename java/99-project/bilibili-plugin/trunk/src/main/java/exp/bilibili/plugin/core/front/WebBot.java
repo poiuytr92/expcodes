@@ -145,6 +145,7 @@ class WebBot extends LoopThread {
 	/**
 	 * 模拟web行为
 	 */
+	@SuppressWarnings("unused")
 	private void toDo() {
 		
 		// 参与直播间抽奖
@@ -152,10 +153,10 @@ class WebBot extends LoopThread {
 		if(room != null) {
 			
 			// 后台注入式抽奖
-			if(UIUtils.isBackLotteryMode()) {
+			if(true) {
 				toLottery(room);
 				
-			// 前端仿真式抽奖
+			// 前端仿真式抽奖(效率问题已废弃, 仅留代码参考)
 			} else if(room.TYPE() != LotteryType.STORM) {	// 节奏风暴的抽奖位置不一样
 				toLottery(room.getRoomId());
 			}
@@ -214,6 +215,7 @@ class WebBot extends LoopThread {
 	 * 通过前端模拟浏览器行为参与抽奖
 	 * @param roomId
 	 */
+	@Deprecated
 	private void toLottery(int roomId) {
 		String url = StrUtils.concat(LIVE_URL, roomId);
 		Browser.open(url);	// 打开/重开直播间(可屏蔽上一次抽奖结果提示)
@@ -232,6 +234,7 @@ class WebBot extends LoopThread {
 		}
 	}
 	
+	@Deprecated
 	private boolean _lottery(int roomId) {
 		boolean isOk = false;
 		try {
@@ -251,6 +254,7 @@ class WebBot extends LoopThread {
 		return isOk;
 	}
 	
+	@Deprecated
 	private boolean _lottery() {
 		boolean isOk = false;
 		WebElement vm = Browser.findElement(By.id("chat-popup-area-vm"));
@@ -274,12 +278,16 @@ class WebBot extends LoopThread {
 	 * @param rst
 	 * @return
 	 */
+	@Deprecated
 	private boolean _clickArea(WebElement lotteryBox, WebElement rst) {
 		Browser.click(lotteryBox);	// 点击抽奖
 		_sleep(SLEEP_TIME);	// 等待抽奖结果
 		return rst.getText().contains("成功");
 	}
 
+	/**
+	 * 友爱社日常签到
+	 */
 	private void toSignAssn() {
 		if(signAssn == false || (assnCnt++ <= ASSN_LIMIT)) {
 			return;

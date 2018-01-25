@@ -113,5 +113,17 @@ class _RedbagUI extends PopChildWindow {
 			}
 		});
 	}
+
+	@Override
+	protected void beforeView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void beforeHide() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

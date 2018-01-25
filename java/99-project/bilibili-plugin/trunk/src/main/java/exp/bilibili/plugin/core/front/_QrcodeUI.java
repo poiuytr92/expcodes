@@ -66,9 +66,21 @@ class _QrcodeUI extends PopChildWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
-		// Undo
+		// TODO Auto-generated method stub
 	}
 
+	@Override
+	protected void beforeView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void beforeHide() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	protected void updateImg() {
 		File dir = new File(LoginMgr.IMG_DIR);
 		File[] files = dir.listFiles();

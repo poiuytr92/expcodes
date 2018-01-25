@@ -1,27 +1,31 @@
 package exp.bilibili.plugin.tmp;
 
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.openqa.selenium.Cookie;
 
-import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 
 public class HttpCookies {
 	
 	public final static HttpCookies NULL = new HttpCookies();
 	
+	private final static String LFCR = "\r\n";
+	
 	/** B站CSRF标识 */
 	private final static String CSRF_KEY = "bili_jct";
 	
-	/** 该cookie对应的用户 */
-	private String user;
+	/** 该cookie对应的用户昵称 */
+	private String nickName;
 	
 	private List<HttpCookie> cookies;
 	
-	/** 多个cookies组合而成的KV串 */
-	private String kvCookies;
+	/** 多个cookies组合而成的NV串 */
+	private String nvCookies;
 	
 	/** 从cookies提取的csrf token */
 	private String csrf;
@@ -30,38 +34,46 @@ public class HttpCookies {
 	private boolean isChanged;
 	
 	public HttpCookies() {
-		this.user = "";
+		this.nickName = "";
 		this.cookies = new LinkedList<HttpCookie>();
-		this.kvCookies = "";
+		this.nvCookies = "";
 		this.csrf = "";
 		isChanged = false;
 	}
 	
-	/**
-	 * 
-	 * @param kvCookies 多个cookies组合而成的KV串
-	 */
-	public HttpCookies(String kvCookies) {
+	public HttpCookies(String headerCookies) {
 		this();
 		
-		if(StrUtils.isNotEmpty(kvCookies)) {
-			String[] kvs = kvCookies.split(";");
-			for(String kv : kvs) {
-				add(kv);
+		if(StrUtils.isNotEmpty(headerCookies)) {
+			String[] lines = headerCookies.split(LFCR);
+			for(int i = 0; i < lines.length; i++) {
+				add(lines[i]);
 			}
 		}
 	}
 	
-	public HttpCookies(List<Cookie> cookies) {
+	public HttpCookies(Collection<Cookie> cookies) {
 		this();
 		
-		if(ListUtils.isNotEmpty(cookies)) {
+		if(cookies != null) {
 			for(Cookie cookie : cookies) {
 				add(cookie);
 			}
 		}
 	}
 	
+	/**
+	 * cookies是否过期
+	 * @return true:已过期; false未过期
+	 */
+	public boolean isExpire() {
+		return StrUtils.isEmpty(nickName);
+	}
+	
+	/**
+	 * cookies是否有效
+	 * @return true:有效; false:无效
+	 */
 	public boolean isVaild() {
 		return cookies.size() > 0;
 	}
@@ -70,8 +82,8 @@ public class HttpCookies {
 		add(new HttpCookie(cookie));
 	}
 	
-	public void add(String responseHeadCookie) {
-		add(new HttpCookie(responseHeadCookie));
+	public void add(String headerCookie) {
+		add(new HttpCookie(headerCookie));
 	}
 	
 	public void add(HttpCookie cookie) {
@@ -89,37 +101,45 @@ public class HttpCookies {
 		return csrf;
 	}
 	
-	public List<Cookie> toSeleniumCookies() {
-		List<Cookie> seleniumCookies = new LinkedList<Cookie>();
+	public String toNVCookies() {
+		if(isChanged == true) {
+			
+			StringBuilder kvs = new StringBuilder();
+			for(HttpCookie cookie : cookies) {
+				kvs.append(cookie.toNV()).append("; ");
+			}
+			nvCookies = kvs.toString();
+		}
+		return nvCookies;
+	}
+	
+	public String toHeaderCookies() {
+		StringBuilder sb = new StringBuilder();
+		for(HttpCookie cookie : cookies) {
+			sb.append(cookie.toString()).append(LFCR);
+		}
+		return sb.toString();
+	}
+	
+	public Set<Cookie> toSeleniumCookies() {
+		Set<Cookie> seleniumCookies = new HashSet<Cookie>();
 		for(HttpCookie cookie : cookies) {
 			seleniumCookies.add(cookie.toSeleniumCookie());
 		}
 		return seleniumCookies;
 	}
 	
-	public String toStrCookies() {
-		if(isChanged == true) {
-			
-			StringBuilder kvs = new StringBuilder();
-			for(HttpCookie cookie : cookies) {
-				kvs.append(cookie.toKV()).append("; ");
-			}
-			kvCookies = kvs.toString();
-		}
-		return kvCookies;
-	}
-	
-	public String getUser() {
-		return user;
+	public String getNickName() {
+		return nickName;
 	}
 
-	public void setUser(String user) {
-		this.user = user;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	@Override
 	public String toString() {
-		return toStrCookies();
+		return toHeaderCookies();
 	}
 	
 }

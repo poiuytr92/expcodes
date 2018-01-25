@@ -71,6 +71,18 @@ public class UIUtils {
 		AppUI.getInstn().updateLotteryCnt(num);
 	}
 	
+	public static void updateQrcode() {
+		AppUI.getInstn().updateQrcode();
+	}
+	
+	public static void updateQrcodeTime(int second) {
+		AppUI.getInstn().updateQrcodeTime(second);
+	}
+	
+	public static void markLogin(String username) {
+		AppUI.getInstn().markLogin(username);
+	}
+	
 	public static boolean isLogined() {
 		return AppUI.getInstn().isLogined();
 	}
@@ -83,6 +95,10 @@ public class UIUtils {
 		AppUI.getInstn().printVersionInfo();
 	}
 	
+	public static String getCurLiveURL() {
+		return AppUI.getInstn().getLiveUrl();
+	}
+	
 	public static int getCurRoomId() {
 		return AppUI.getInstn().getCurRoomId();
 	}
@@ -91,12 +107,8 @@ public class UIUtils {
 		return AppUI.getInstn().getCurChatColor();
 	}
 	
-	public static boolean isBackLotteryMode() {
-		return AppUI.getInstn().isBackLotteryMode();
-	}
-	
 	public static void notityLive(int roomId) {
-		new _NoticeUI(roomId)._show();		// 右下角通知提示
+		new _NoticeUI(roomId)._view();		// 右下角通知提示
 		Toolkit.getDefaultToolkit().beep();	// 蜂鸣音提示
 	}
 	

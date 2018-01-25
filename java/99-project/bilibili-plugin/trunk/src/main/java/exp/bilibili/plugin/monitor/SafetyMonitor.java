@@ -143,7 +143,7 @@ public class SafetyMonitor extends LoopThread {
 			
 			// 使用渐隐自动关闭的提示窗口, 可避免用户卡着提示窗口导致程序不退出的问题
 			_ExitNoticeUI exit = new _ExitNoticeUI(cause);
-			exit._show();
+			exit._view();
 			exit._join();
 			
 			System.exit(0);

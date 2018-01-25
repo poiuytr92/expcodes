@@ -51,6 +51,20 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	}
 	
 	/**
+	 * 把日期转换为cookie中的有效时间
+	 * @param date 日期
+	 * @return 有效时间,格式如: Tue, 06-Feb-2018 11:54:42 GMT
+	 */
+	public static String toExpires(Date date) {
+		String sDate = "Thu, 01-Jan-1970 08:00:00 GMT+08:00";
+		if(date != null) {
+			SimpleDateFormat sdf = new SimpleDateFormat(GMT_FORMAT, Locale.ENGLISH);
+			sDate = sdf.format(date);
+		}
+		return sDate;
+	}
+	
+	/**
 	 * 检查当前时间是否为晚上(18:00~24:00)
 	 * @return
 	 */

@@ -1,16 +1,13 @@
-package exp.bilibili.plugin.core.front;
+package exp.bilibili.plugin.tmp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -20,7 +17,6 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.cache.LoginMgr;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
@@ -29,7 +25,8 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
 /**
  * <PRE>
- * 帐密登陆窗口
+ * 帐密登陆窗口.
+ *  可用于登陆主号、小号、马甲号
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -37,14 +34,25 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class _LoginUI extends PopChildWindow {
+public class VCLoginUI extends PopChildWindow {
+	
+	public static void main(String[] args) {
+		BeautyEyeUtils.init();
+		new VCLoginUI(LoginType.MAIN)._view();
+	}
 	
 	/** serialVersionUID */
 	private static final long serialVersionUID = -1752327112586227761L;
 
-	private final static String TIPS_PATH = Config.getInstn().IMG_DIR().concat("/vcTips.jpg");
+	private final static String IMG_DIR = Config.getInstn().IMG_DIR();
 	
-	private final static String VCIMG_PATH = Config.getInstn().IMG_DIR().concat("/vccode.jpg");
+	private final static String TIPS_PATH = IMG_DIR.concat("/vcTips.jpg");
+	
+	private final static String VCIMG_PATH = IMG_DIR.concat("/vccode.jpg");
+	
+	private final static int IMG_WIDTH = 130;
+	
+	private final static int IMG_HEIGH = 35;
 	
 	private final static int WIDTH = 400;
 	
@@ -67,23 +75,18 @@ public class _LoginUI extends PopChildWindow {
 	/** 与验证码配套的登陆用cookie */
 	private String vcCookies;
 	
-	/** 是否用于登录马甲号 */
-	private boolean isMini;
+	private LoginType type;
 	
-	/**
-	 * 
-	 * @param isMini 是否用于登录马甲号
-	 */
-	public _LoginUI(boolean isMini) {
-		super("B站PC端帐密登陆", WIDTH, HEIGH, false, isMini);
+	public VCLoginUI(LoginType type) {
+		super("哔哩哔哩-帐密登陆", WIDTH, HEIGH, false, type);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
 		if(args != null && args.length > 0) {
-			this.isMini = (Boolean) args[0];
+			this.type = (LoginType) args[0];
 		} else {
-			this.isMini = false;
+			this.type = LoginType.MINI;
 		}
 		
 		this.usernameTXT = new JTextField();
@@ -91,26 +94,21 @@ public class _LoginUI extends PopChildWindow {
 		SwingUtils.hide(passwordTXT);
 		this.vccodeTXT = new JTextField();
 		
-		this.viewBtn = new JButton(new ImageIcon(
-				_LoginUI.class.getResource("/exp/bilibili/plugin/core/front/eye.png")));
+		this.viewBtn = new JButton(
+				SwingUtils.loadImage("/exp/bilibili/plugin/core/front/eye.png"));
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, viewBtn);
 		
-		this.reflashBtn = new JButton(new ImageIcon(
-				_LoginUI.class.getResource("/exp/bilibili/plugin/core/front/reflash.png")));
+		this.reflashBtn = new JButton(
+				SwingUtils.loadImage("/exp/bilibili/plugin/core/front/reflash.png"));
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, reflashBtn);
 		
-		ImageIcon icon = new ImageIcon(TIPS_PATH);
-		icon = new ImageIcon(modifySize(icon.getImage()));
-		this.imgLabel = new JLabel(icon);
+		this.imgLabel = new JLabel();
+		SwingUtils.setImage(imgLabel, TIPS_PATH, IMG_WIDTH, IMG_HEIGH);
 		
 		this.loginBtn = new JButton("登陆 哔哩哔哩");
 		BeautyEyeUtils.setButtonStyle(NormalColor.green, loginBtn);
 		loginBtn.setForeground(Color.BLACK);
 		this.vcCookies = "";
-	}
-	
-	private Image modifySize(Image img) {
-		return img.getScaledInstance(130, 35, Image.SCALE_FAST);
 	}
 
 	@Override
@@ -170,6 +168,16 @@ public class _LoginUI extends PopChildWindow {
 			
 		});
 				
+		// 设置二维码刷新按钮监听
+		reflashBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateVccodeImg();
+				ThreadUtils.tSleep(200);
+			}
+		});
+				
 		// 设置登陆按钮监听
 		loginBtn.addActionListener(new ActionListener() {
 			
@@ -197,45 +205,43 @@ public class _LoginUI extends PopChildWindow {
 				loginBtn.setEnabled(true);
 			}
 		});
-		
-		// 设置二维码刷新按钮监听
-		reflashBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				updateImg();
-				ThreadUtils.tSleep(200);
-			}
-		});
 	}
 	
+	/**
+	 * 更新验证码图片, 同时获取配套的验证码cookie
+	 */
+	private void updateVccodeImg() {
+		this.vcCookies = VCLogin.downloadVccode(VCIMG_PATH);
+		SwingUtils.setImage(imgLabel, VCIMG_PATH, IMG_WIDTH, IMG_HEIGH);
+	}
+	
+	/**
+	 * 登陆
+	 * @param username 账号
+	 * @param password 密码
+	 * @param vccode 验证码
+	 */
 	private void toLogin(String username, String password, String vccode) {
-		boolean isOk = false;
-		if(isMini == true) {
-			isOk = StrUtils.isNotEmpty(LoginMgr.getInstn().toLoginMini(
-					username, password, vccode, vcCookies));
-			
-		} else {
-			isOk = LoginMgr.getInstn().toLogin(
-					username, password, vccode, vcCookies);
-		}
-		
-		if(isOk == false) {
+		HttpCookies cookies = VCLogin.toLogin(username, password, vccode, vcCookies);
+		if(cookies.isExpire()) {
 			SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
 			reflashBtn.doClick();
 			
 		} else {
+			LoginMgr.INSTN().add(cookies, type);
+			SwingUtils.info("登陆成功: ".concat(cookies.getNickName()));
 			_hide();
 		}
 	}
 	
-	private void updateImg() {
-		this.vcCookies = LoginMgr.getInstn().downloadVccode();
-		
-		// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图片
-		// 因为这种方式会因为图片路径没有变化, 而不去更新缓存, 导致显示的二维码一直不变
-		Image img = Toolkit.getDefaultToolkit().createImage(VCIMG_PATH);
-		imgLabel.setIcon(new ImageIcon(modifySize(img)));
+	/**
+	 * 清空登陆界面的输入数据
+	 */
+	public void clear() {
+		usernameTXT.setText("");
+		passwordTXT.setText("");
+		vccodeTXT.setText("");
+		reflashBtn.doClick();
 	}
 
 	@Override
@@ -249,4 +255,5 @@ public class _LoginUI extends PopChildWindow {
 		// TODO Auto-generated method stub
 		
 	}
+	
 }

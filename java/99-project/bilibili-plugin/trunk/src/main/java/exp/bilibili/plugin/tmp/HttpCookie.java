@@ -7,7 +7,17 @@ import org.openqa.selenium.Cookie;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.libs.utils.other.StrUtils;
 
-final public class HttpCookie {
+final class HttpCookie {
+
+	private final static String DOMAIN = "Domain";
+	
+	private final static String PATH = "Path";
+	
+	private final static String EXPIRE = "Expires";
+	
+	private final static String SECURE = "Secure";
+	
+	private final static String HTTPONLY = "HttpOnly";
 
 	private String name;
 	
@@ -47,22 +57,22 @@ final public class HttpCookie {
 		this.value = cookie.getValue();
 		this.domain = cookie.getDomain();
 		this.path = cookie.getPath();
-		this.expiry = cookie.getExpiry();
+		this.expiry = (cookie.getExpiry() == null ? new Date() : cookie.getExpiry());
 		this.isSecure = cookie.isSecure();
 		this.isHttpOnly = cookie.isHttpOnly();
 	}
 	
 	/**
 	 * 
-	 * @param responseHeadCookie HTTP响应头中的 Set-Cookie
+	 * @param headerCookie HTTP响应头中的 Set-Cookie
 	 */
-	public HttpCookie(String responseHeadCookie) {
+	public HttpCookie(String headerCookie) {
 		this();
-		init(responseHeadCookie);
+		init(headerCookie);
 	}
 	
-	private void init(String responseHeadCookie) {
-		String[] vals = responseHeadCookie.split(";");
+	private void init(String headerCookie) {
+		String[] vals = headerCookie.split(";");
 		for(int i = 0; i < vals.length; i++) {
 			String[] kv = vals[i].split("=");
 			if(kv.length == 2) {
@@ -101,10 +111,21 @@ final public class HttpCookie {
 		return StrUtils.isNotEmpty(name);
 	}
 	
-	public String toKV() {
+	public String toNV() {
 		return (!isVaild() ? "" : StrUtils.concat(name, "=", value));
 	}
 
+	public String toHeaderCookie() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(name).append("=").append(value).append(" ; ");
+		sb.append(DOMAIN).append("=").append(domain).append(" ; ");
+		sb.append(PATH).append("=").append(path).append(" ; ");
+		sb.append(EXPIRE).append("=").append(TimeUtils.toExpires(expiry)).append(" ; ");
+		if(isSecure == true) { sb.append(SECURE).append(" ; "); }
+		if(isHttpOnly == true) { sb.append(HTTPONLY).append(" ; "); }
+		return sb.toString();
+	}
+	
 	public Cookie toSeleniumCookie() {
 		return new Cookie(name, value, domain, path, expiry, isSecure, isHttpOnly);
 	}
@@ -163,6 +184,11 @@ final public class HttpCookie {
 
 	public void setHttpOnly(boolean isHttpOnly) {
 		this.isHttpOnly = isHttpOnly;
+	}
+	
+	@Override
+	public String toString() {
+		return toHeaderCookie();
 	}
 	
 }
