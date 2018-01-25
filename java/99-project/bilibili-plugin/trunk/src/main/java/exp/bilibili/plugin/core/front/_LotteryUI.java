@@ -196,7 +196,7 @@ class _LotteryUI extends PopChildWindow {
 	}
 	
 	@Override
-	protected void beforeView() {
+	protected void AfterView() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -78,7 +78,7 @@ class QRLoginUI extends PopChildWindow {
 	}
 	
 	@Override
-	protected void beforeView() {
+	protected void AfterView() {
 		qrLogin._start();
 	}
 

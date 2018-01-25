@@ -81,7 +81,7 @@ class _EditorUI extends PopChildWindow {
 	}
 	
 	@Override
-	protected void beforeView() {
+	protected void AfterView() {
 		// TODO Auto-generated method stub
 		
 	}

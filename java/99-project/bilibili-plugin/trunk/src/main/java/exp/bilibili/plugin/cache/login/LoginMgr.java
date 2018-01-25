@@ -168,7 +168,7 @@ public class LoginMgr {
 	 * @param cookies
 	 * @return
 	 */
-	protected static boolean checkLogin(HttpCookies cookies) {
+	protected static boolean checkLogined(HttpCookies cookies) {
 		String nickName = MsgSender.queryUsername(cookies.toNVCookies());
 		cookies.setNickName(nickName);
 		return !cookies.isExpire();

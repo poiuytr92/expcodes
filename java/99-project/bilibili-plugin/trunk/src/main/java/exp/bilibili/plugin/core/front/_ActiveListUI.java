@@ -152,7 +152,7 @@ class _ActiveListUI extends PopChildWindow {
 	}
 	
 	@Override
-	protected void beforeView() {
+	protected void AfterView() {
 		activeTable.reflash(getActiveDatas());
 	}
 

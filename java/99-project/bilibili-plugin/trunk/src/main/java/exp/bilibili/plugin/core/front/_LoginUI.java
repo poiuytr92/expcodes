@@ -239,7 +239,7 @@ public class _LoginUI extends PopChildWindow {
 	}
 
 	@Override
-	protected void beforeView() {
+	protected void AfterView() {
 		// TODO Auto-generated method stub
 		
 	}

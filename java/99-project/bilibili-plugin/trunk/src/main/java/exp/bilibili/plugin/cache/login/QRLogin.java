@@ -82,7 +82,7 @@ class QRLogin extends LoopThread {
 			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
 			if(isSwitch() == true) {
 				mainCookies = new HttpCookies(Browser.getCookies());
-				if(LoginMgr.checkLogin(mainCookies)) {
+				if(LoginMgr.checkLogined(mainCookies)) {
 					isLogined = true;
 					
 				} else {
@@ -117,7 +117,7 @@ class QRLogin extends LoopThread {
 		boolean isOk = LoginMgr.INSTN().load(LoginType.MAIN);
 		if(isOk == true) {
 			mainCookies = LoginMgr.INSTN().getMainCookies();
-			isOk = LoginMgr.checkLogin(mainCookies);
+			isOk = LoginMgr.checkLogined(mainCookies);
 		}
 		return isOk;
 	}

@@ -853,7 +853,7 @@ public class AppUI extends MainWindow {
 	}
 	
 	@Override
-	protected void beforeView() {}
+	protected void AfterView() {}
 
 	@Override
 	protected void beforeHide() {}

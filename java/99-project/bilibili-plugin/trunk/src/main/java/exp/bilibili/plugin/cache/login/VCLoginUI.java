@@ -247,9 +247,25 @@ public class VCLoginUI extends PopChildWindow {
 	}
 
 	@Override
-	protected void beforeView() {
-		// TODO Auto-generated method stub
-		
+	protected void AfterView() {
+		boolean isOk = LoginMgr.INSTN().load(type);
+		if(isOk == true) {
+			if(LoginType.MAIN == type) {
+				HttpCookies cookies = LoginMgr.INSTN().getMainCookies();
+				isOk = LoginMgr.checkLogined(cookies);
+				if(isOk == true) {
+					_hide();
+					SwingUtils.info("登陆成功: ".concat(cookies.getNickName()));
+				}
+				
+			} else if(LoginType.VEST == type) {
+				HttpCookies cookies = LoginMgr.INSTN().getVestCookies();
+				isOk = LoginMgr.checkLogined(cookies);
+				if(isOk == true) {
+					_hide();
+				}
+			}
+		}
 	}
 
 	@Override
