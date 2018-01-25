@@ -4,7 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookies;
+import exp.bilibili.plugin.bean.cookie.HttpCookies;
+import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.cache.Browser;
 import exp.bilibili.plugin.envm.LoginType;
 import exp.libs.utils.other.StrUtils;
@@ -41,7 +42,7 @@ class QRLogin extends LoopThread {
 	
 	private boolean isLogined;
 	
-	private HttpCookies mainCookies;
+	private HttpCookie mainCookie;
 	
 	private QRLoginUI qrUI;
 	
@@ -50,7 +51,7 @@ class QRLogin extends LoopThread {
 		this.loopCnt = LOOP_LIMIT;
 		this.isLogined = false;
 		
-		this.mainCookies = HttpCookies.NULL;
+		this.mainCookie = HttpCookie.NULL;
 		this.qrUI = qrUI;
 	}
 	
@@ -81,8 +82,8 @@ class QRLogin extends LoopThread {
 			
 			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
 			if(isSwitch() == true) {
-				mainCookies = new HttpCookies(Browser.getCookies());
-				if(LoginMgr.checkLogined(mainCookies)) {
+				mainCookie = new HttpCookie(Browser.getCookies());
+				if(HttpCookies.checkLogined(mainCookie)) {
 					isLogined = true;
 					
 				} else {
@@ -100,13 +101,13 @@ class QRLogin extends LoopThread {
 	@Override
 	protected void _after() {
 		if(isLogined == true) {
-			LoginMgr.INSTN().add(mainCookies, LoginType.MAIN);
+			HttpCookies.INSTN().add(mainCookie, LoginType.MAIN);
 		}
 		Browser.quit();
 		qrUI._hide();
 		
 		log.info("登陆{}: {}", (isLogined ? "成功" : "失败"), 
-				(isLogined ? mainCookies.getNickName() : "Unknow"));
+				(isLogined ? mainCookie.getNickName() : "Unknow"));
 	}
 	
 	/**
@@ -114,10 +115,10 @@ class QRLogin extends LoopThread {
 	 * @return
 	 */
 	private boolean autoLogin() {
-		boolean isOk = LoginMgr.INSTN().load(LoginType.MAIN);
+		boolean isOk = HttpCookies.INSTN().load(LoginType.MAIN);
 		if(isOk == true) {
-			mainCookies = LoginMgr.INSTN().getMainCookies();
-			isOk = LoginMgr.checkLogined(mainCookies);
+			mainCookie = HttpCookies.INSTN().MAIN();
+			isOk = HttpCookies.checkLogined(mainCookie);
 		}
 		return isOk;
 	}

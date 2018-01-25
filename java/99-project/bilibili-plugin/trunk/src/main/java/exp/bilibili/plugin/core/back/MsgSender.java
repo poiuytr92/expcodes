@@ -14,10 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.bean.cookie.HttpCookies;
+import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.bean.ldm.DailyTask;
-import exp.bilibili.plugin.bean.ldm.HttpCookies;
 import exp.bilibili.plugin.cache.RoomMgr;
-import exp.bilibili.plugin.cache.login.LoginMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
@@ -113,12 +113,12 @@ public class MsgSender {
 	
 	/**
 	 * 生成POST方法的请求头参数
-	 * @param cookies
+	 * @param cookie
 	 * @param realRoomId
 	 * @return
 	 */
-	private static Map<String, String> toPostHeadParams(String cookies, String realRoomId) {
-		Map<String, String> params = toPostHeadParams(cookies);
+	private static Map<String, String> toPostHeadParams(String cookie, String realRoomId) {
+		Map<String, String> params = toPostHeadParams(cookie);
 		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
 		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
 		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(realRoomId));	// 发送/接收消息的直播间地址
@@ -127,10 +127,10 @@ public class MsgSender {
 	
 	/**
 	 * 生成POST方法的请求头参数
-	 * @param cookies
+	 * @param cookie
 	 * @return
 	 */
-	private static Map<String, String> toPostHeadParams(String cookies) {
+	private static Map<String, String> toPostHeadParams(String cookie) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
 		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
@@ -138,19 +138,19 @@ public class MsgSender {
 		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
 		params.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
 				HttpUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
-		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
+		params.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
 		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
 	
 	/**
 	 * 生成GET方法的请求头参数
-	 * @param cookies
+	 * @param cookie
 	 * @param realRoomId
 	 * @return
 	 */
-	private static Map<String, String> toGetHeadParams(String cookies, String realRoomId) {
-		Map<String, String> params = toGetHeadParams(cookies);
+	private static Map<String, String> toGetHeadParams(String cookie, String realRoomId) {
+		Map<String, String> params = toGetHeadParams(cookie);
 		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
 		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
 		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(String.valueOf(realRoomId)));	// 发送/接收消息的直播间地址
@@ -159,16 +159,16 @@ public class MsgSender {
 	
 	/**
 	 * 生成GET方法的请求头参数
-	 * @param cookies
+	 * @param cookie
 	 * @return
 	 */
-	private static Map<String, String> toGetHeadParams(String cookies) {
+	private static Map<String, String> toGetHeadParams(String cookie) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
 		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
 		params.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
 		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		params.put(HttpUtils.HEAD.KEY.COOKIE, cookies);
+		params.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
 		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
 		return params;
 	}
@@ -178,12 +178,12 @@ public class MsgSender {
 	 * @param username 账号
 	 * @param password 密码
 	 * @param vccode 验证码
-	 * @param vcCookies 与验证码配套的登陆用cookies
+	 * @param vcCookies 与验证码配套的登陆用cookie
 	 * @return Cookie集合
 	 */
-	public static HttpCookies toLogin(String username, String password, 
+	public static HttpCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
-		HttpCookies cookies = new HttpCookies();
+		HttpCookie cookie = new HttpCookie();
 		HttpClient client = new HttpClient();
 		
 		try {
@@ -194,12 +194,12 @@ public class MsgSender {
 			String pubKey = JsonUtils.getStr(json, BiliCmdAtrbt.key);
 			password = RSAUtils.encrypt(hash.concat(password), pubKey);
 			
-			// 把验证码、验证码配套的cookies、账号、RSA加密后的密码 提交到登陆服务器
+			// 把验证码、验证码配套的cookie、账号、RSA加密后的密码 提交到登陆服务器
 			Map<String, String> headers = _toLoginHeadParams(vcCookies);
 			Map<String, String> requests = _toLoginRequestParams(username, password, vccode);
 			sJson = client.doPost(MINI_LOGIN_URL, headers, requests);
 			
-			// 若登陆成功，则提取返回的登陆cookies, 以便下次使用
+			// 若登陆成功，则提取返回的登陆cookie, 以便下次使用
 			json = JSONObject.fromObject(sJson);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {	
@@ -208,7 +208,7 @@ public class MsgSender {
 					Header[] outHeaders = method.getResponseHeaders();
 					for(Header outHeader : outHeaders) {
 						if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
-							cookies.add(outHeader.getValue());
+							cookie.add(outHeader.getValue());
 						}
 					}
 				}
@@ -217,16 +217,16 @@ public class MsgSender {
 			log.error("登陆失败", e);
 		}
 		client.close();
-		return cookies;
+		return cookie;
 	}
 	
 	/**
 	 * 生成登陆用的请求头参数
-	 * @param cookies
+	 * @param cookie
 	 * @return
 	 */
-	private static Map<String, String> _toLoginHeadParams(String cookies) {
-		Map<String, String> params = toGetHeadParams(cookies);
+	private static Map<String, String> _toLoginHeadParams(String cookie) {
+		Map<String, String> params = toGetHeadParams(cookie);
 		params.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
 		return params;
 	}
@@ -254,11 +254,11 @@ public class MsgSender {
 	/**
 	 * 查询账号信息
 	 * {"code":0,"status":true,"data":{"level_info":{"current_level":4,"current_min":4500,"current_exp":7480,"next_exp":10800},"bCoins":0,"coins":464,"face":"http:\/\/i2.hdslb.com\/bfs\/face\/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","nameplate_current":"http:\/\/i1.hdslb.com\/bfs\/face\/54f4c31ab9b1f1fa2c29dbbc967f66535699337e.png","pendant_current":"","uname":"M-\u4e9a\u7d72\u5a1c","userStatus":"","vipType":1,"vipStatus":1,"official_verify":-1,"pointBalance":0}}
-	 * @param cookies
+	 * @param cookie
 	 * @return username
 	 */
-	public static String queryUsername(String cookies) {
-		Map<String, String> headers = toGetHeadParams(cookies);
+	public static String queryUsername(String cookie) {
+		Map<String, String> headers = toGetHeadParams(cookie);
 		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null, Config.DEFAULT_CHARSET);
 		
 		String username = "";
@@ -279,13 +279,13 @@ public class MsgSender {
 	 * 每日签到
 	 * @return
 	 */
-	public static void toSign(String cookies) {
+	public static void toSign(String cookie) {
 		int roomId = Config.getInstn().SIGN_ROOM_ID();
 		roomId = (roomId <= 0 ? UIUtils.getCurRoomId() : roomId);
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headers = toGetHeadParams(cookies, sRoomId);
+			Map<String, String> headers = toGetHeadParams(cookie, sRoomId);
 			String response = HttpURLUtils.doGet(SIGN_URL, headers, null, Config.DEFAULT_CHARSET);
 			_analyseSignResponse(response);
 			
@@ -314,8 +314,8 @@ public class MsgSender {
 	 * 友爱社签到
 	 * @return 是否需要持续测试签到
 	 */
-	public static boolean toAssn(String cookies, String csrf) {
-		Map<String, String> headers = toPostHeadParams(cookies);
+	public static boolean toAssn(String cookie, String csrf) {
+		Map<String, String> headers = toPostHeadParams(cookie);
 		headers.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
 		headers.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
 		headers.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/center/index"));
@@ -396,7 +396,7 @@ public class MsgSender {
 	 */
 	public static boolean sendChat(String msg, ChatColor color, int roomId) {
 		return sendChat(msg, color, roomId, 
-				LoginMgr.INSTN().getMainCookies().toNVCookies());
+				HttpCookies.INSTN().MAIN().toNVCookie());
 	}
 
 	/**
@@ -404,16 +404,16 @@ public class MsgSender {
 	 * @param msg 弹幕消息
 	 * @param color 弹幕颜色
 	 * @param roomId 目标直播间房号
-	 * @param cookies 发送用户的cookies
+	 * @param cookie 发送用户的cookie
 	 * @return
 	 */
 	public static boolean sendChat(String msg, ChatColor color, 
-			int roomId, String cookies) {
+			int roomId, String cookie) {
 		boolean isOk = false;
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headers = toPostHeadParams(cookies, sRoomId);
+			Map<String, String> headers = toPostHeadParams(cookie, sRoomId);
 			Map<String, String> requests = _toChatRequestParams(msg, sRoomId, color.CODE());
 			String response = HttpURLUtils.doPost(CHAT_URL, headers, requests, Config.DEFAULT_CHARSET);
 			isOk = _analyseChatResponse(response);
@@ -468,14 +468,14 @@ public class MsgSender {
 	
 	/**
 	 * 扫描当前的人气直播间房号列表
-	 * @param cookies 扫描用的cookies
+	 * @param cookie 扫描用的cookie
 	 * @param MAX_PAGES 最大的查询分页(每页最多30个房间)
 	 * @param MIN_ONLINE 要求房间最小人数(达标才扫描)
 	 * @return
 	 */
-	public static List<Integer> queryTopLiveRoomIds(String cookies, 
+	public static List<Integer> queryTopLiveRoomIds(String cookie, 
 			final int MAX_PAGES, final int MIN_ONLINE) {
-		Map<String, String> header = toGetHeadParams(cookies, "all");
+		Map<String, String> header = toGetHeadParams(cookie, "all");
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("area", "all");
 		request.put("order", "online");
@@ -525,7 +525,7 @@ public class MsgSender {
 	/**
 	 * 扫描节奏风暴
 	 */
-	public static int scanStorms(String cookies, String csrf, 
+	public static int scanStorms(String cookie, String csrf, 
 			List<Integer> roomIds, long scanInterval) {
 		int sum = 0;
 		HttpClient client = new HttpClient();
@@ -533,14 +533,14 @@ public class MsgSender {
 		for(Integer roomId : roomIds) {
 			String sRoomId = String.valueOf(roomId);
 			requests.put("roomid", sRoomId);
-			Map<String, String> headers = toGetHeadParams(cookies, sRoomId);
+			Map<String, String> headers = toGetHeadParams(cookie, sRoomId);
 			
 			int cnt = 0;
 			do {
 				cnt = 0;
 				String response = client.doGet(STORM_CHECK_URL, headers, requests);
 				List<String> raffleIds = _getStormIds(roomId, response);
-				cnt = _joinStorms(cookies, csrf, roomId, raffleIds);
+				cnt = _joinStorms(cookie, csrf, roomId, raffleIds);
 				sum += cnt;
 			} while(cnt > 0);	// 对于存在节奏风暴的房间, 再扫描一次(可能有人连续送节奏风暴)
 			ThreadUtils.tSleep(scanInterval);
@@ -591,7 +591,7 @@ public class MsgSender {
 	 * @param raffleIds
 	 * @return
 	 */
-	private static int _joinStorms(String cookies, String csrf, int roomId, List<String> raffleIds) {
+	private static int _joinStorms(String cookie, String csrf, int roomId, List<String> raffleIds) {
 		int cnt = 0;
 		if(raffleIds.size() > 0) {
 			String msg = StrUtils.concat("直播间 [", roomId, 
@@ -599,7 +599,7 @@ public class MsgSender {
 			UIUtils.notify(msg);
 			
 			for(String raffleId : raffleIds) {
-				cnt += (MsgSender.toStormLottery(cookies, csrf, roomId, raffleId) ? 1 : 0);
+				cnt += (MsgSender.toStormLottery(cookie, csrf, roomId, raffleId) ? 1 : 0);
 			}
 		}
 		return cnt;
@@ -610,9 +610,9 @@ public class MsgSender {
 	 * @param roomId
 	 * @return
 	 */
-	public static boolean toStormLottery(String cookies, String csrf, int roomId, String raffleId) {
+	public static boolean toStormLottery(String cookie, String csrf, int roomId, String raffleId) {
 		boolean isOk = true;
-		String errDesc = joinLottery(STORM_JOIN_URL, roomId, raffleId, cookies, csrf, LotteryType.STORM);
+		String errDesc = joinLottery(STORM_JOIN_URL, roomId, raffleId, cookie, csrf, LotteryType.STORM);
 		if(StrUtils.isEmpty(errDesc)) {
 			log.info("参与直播间 [{}] 抽奖成功", roomId);
 			UIUtils.statistics("成功(节奏风暴): 抽奖直播间 [", roomId, "]");
@@ -632,8 +632,8 @@ public class MsgSender {
 	 * @param raffleId
 	 * @return
 	 */
-	public static String toTvLottery(String cookies, int roomId, String raffleId) {
-		return joinLottery(TV_JOIN_URL, roomId, raffleId, cookies, "", LotteryType.TV);
+	public static String toTvLottery(String cookie, int roomId, String raffleId) {
+		return joinLottery(TV_JOIN_URL, roomId, raffleId, cookie, "", LotteryType.TV);
 	}
 	
 	/**
@@ -641,8 +641,8 @@ public class MsgSender {
 	 * @param roomId
 	 * @return
 	 */
-	public static int toEgLottery(String cookies, int roomId) {
-		return toLottery(cookies, "", roomId, EG_CHECK_URL, EG_JOIN_URL);
+	public static int toEgLottery(String cookie, int roomId) {
+		return toLottery(cookie, "", roomId, EG_CHECK_URL, EG_JOIN_URL);
 	}
 	
 	/**
@@ -652,9 +652,9 @@ public class MsgSender {
 	 * @param joinUrl
 	 * @return
 	 */
-	private static int toLottery(String cookies, String csrf, int roomId, String checkUrl, String joinUrl) {
+	private static int toLottery(String cookie, String csrf, int roomId, String checkUrl, String joinUrl) {
 		int cnt = 0;
-		List<String> raffleIds = checkLottery(checkUrl, roomId, cookies);
+		List<String> raffleIds = checkLottery(checkUrl, roomId, cookie);
 		
 		if(ListUtils.isNotEmpty(raffleIds)) {
 			for(String raffleId : raffleIds) {
@@ -662,7 +662,7 @@ public class MsgSender {
 				if(id > LAST_RAFFLEID) {	// 礼物编号是递增
 					LAST_RAFFLEID = id;
 					String errDesc = joinLottery(
-							joinUrl, roomId, raffleId, cookies, csrf, LotteryType.OTHER);
+							joinUrl, roomId, raffleId, cookie, csrf, LotteryType.OTHER);
 					if(StrUtils.isEmpty(errDesc)) {
 						cnt++;
 					} else {
@@ -681,15 +681,15 @@ public class MsgSender {
 	 * 检查是否存在抽奖
 	 * @param url
 	 * @param roomId
-	 * @param cookies
+	 * @param cookie
 	 * @return
 	 */
-	private static List<String> checkLottery(String url, int roomId, String cookies) {
+	private static List<String> checkLottery(String url, int roomId, String cookie) {
 		List<String> raffleIds = new LinkedList<String>();
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headers = toGetHeadParams(cookies, sRoomId);
+			Map<String, String> headers = toGetHeadParams(cookie, sRoomId);
 			Map<String, String> requests = _toLotteryRequestParams(sRoomId);
 			String response = HttpURLUtils.doGet(url, headers, requests, Config.DEFAULT_CHARSET);
 			raffleIds = _getRaffleId(response);
@@ -704,17 +704,17 @@ public class MsgSender {
 	 * @param url
 	 * @param roomId
 	 * @param raffleId
-	 * @param cookies
+	 * @param cookie
 	 * @param type
 	 * @return
 	 */
 	private static String joinLottery(String url, int roomId, String raffleId, 
-			String cookies, String csrf, LotteryType type) {
+			String cookie, String csrf, LotteryType type) {
 		String errDesc = "";
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headers = toGetHeadParams(cookies, sRoomId);
+			Map<String, String> headers = toGetHeadParams(cookie, sRoomId);
 			Map<String, String> requests = (LotteryType.STORM == type ? 
 					_toStormRequestParams(sRoomId, raffleId, csrf) : 
 					_toLotteryRequestParams(sRoomId, raffleId));
@@ -814,7 +814,7 @@ public class MsgSender {
 	 * @param roomId
 	 * @return 返回下次任务的时间点
 	 */
-	public static long doDailyTasks(String cookies) {
+	public static long doDailyTasks(String cookie) {
 		long nextTaskTime = -1;
 		final int roomId = UIUtils.getCurRoomId();
 		final int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
@@ -822,7 +822,7 @@ public class MsgSender {
 			return nextTaskTime;
 		}
 		final Map<String, String> header = toGetHeadParams(
-				cookies, String.valueOf(realRoomId));
+				cookie, String.valueOf(realRoomId));
 		
 		DailyTask task = checkTask(header);
 		if(task != DailyTask.NULL) {
@@ -954,15 +954,15 @@ public class MsgSender {
 	 * @return
 	 */
 	public static boolean sendPrivateMsg(String sendId, String recvId, String msg) {
-		HttpCookies cookies = LoginMgr.INSTN().getMainCookies();
+		HttpCookie cookie = HttpCookies.INSTN().MAIN();
 		
-		Map<String, String> headers = toPostHeadParams(cookies.toNVCookies());
+		Map<String, String> headers = toPostHeadParams(cookie.toNVCookie());
 		headers.put(HttpUtils.HEAD.KEY.HOST, LINK_HOST);
 		headers.put(HttpUtils.HEAD.KEY.ORIGIN, MSG_HOST);
 		headers.put(HttpUtils.HEAD.KEY.REFERER, MSG_HOST);
 		
 		Map<String, String> requests = new HashMap<String, String>();
-		requests.put("csrf_token", cookies.CSRF());
+		requests.put("csrf_token", cookie.CSRF());
 		requests.put("platform", "pc");
 		requests.put("msg[sender_uid]", sendId);
 		requests.put("msg[receiver_id]", recvId);
@@ -1001,8 +1001,8 @@ public class MsgSender {
 	 * 2018春节活动：查询当前红包奖池
 	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月）","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权（1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权（1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯笼","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换池","stock_num":99999,"exchange_limit":0,"price":6666}}}
 	 */
-	public static String queryRedbagPool(String cookies) {
-		Map<String, String> headers = toGetHeadParams(cookies, "pages/1703/spring-2018.html");
+	public static String queryRedbagPool(String cookie) {
+		Map<String, String> headers = toGetHeadParams(cookie, "pages/1703/spring-2018.html");
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("_", String.valueOf(System.currentTimeMillis()));
 		String response = HttpURLUtils.doGet(GET_REDBAG_URL, headers, requests);
@@ -1017,8 +1017,8 @@ public class MsgSender {
 	 * 	{"code":0,"msg":"OK","message":"OK","data":{"award_id":"stuff-3","red_bag_num":1695}}
 	 * 	{"code":-404,"msg":"这个奖品已经兑换完啦，下次再来吧","message":"这个奖品已经兑换完啦，下次再来吧","data":[]}
 	 */
-	public static String exchangeRedbag(String cookies, String id, int num) {
-		Map<String, String> headers = toPostHeadParams(cookies, "pages/1703/spring-2018.html");
+	public static String exchangeRedbag(String cookie, String id, int num) {
+		Map<String, String> headers = toPostHeadParams(cookie, "pages/1703/spring-2018.html");
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("award_id", id);
 		requests.put("exchange_num", String.valueOf(num));

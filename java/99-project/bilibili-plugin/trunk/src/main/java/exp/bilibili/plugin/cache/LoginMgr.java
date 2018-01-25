@@ -13,7 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookies;
+import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.front.AppUI;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -306,7 +306,7 @@ public class LoginMgr extends LoopThread {
 	public boolean toLogin(String username, String password, 
 			String vccode, String vcCookies) {
 		boolean isOk = false;
-		HttpCookies httpCookies = MsgSender.toLogin(username, password, vccode, vcCookies);
+		HttpCookie httpCookies = MsgSender.toLogin(username, password, vccode, vcCookies);
 		Set<Cookie> cookies = httpCookies.toSeleniumCookies();
 		isOk = ListUtils.isNotEmpty(cookies);
 		
@@ -333,11 +333,11 @@ public class LoginMgr extends LoopThread {
 	public String toLoginMini(String username, String password, 
 			String vccode, String vcCookies) {
 		String miniCookie = "";
-		HttpCookies httpCookies = MsgSender.toLogin(username, password, vccode, vcCookies);
+		HttpCookie httpCookies = MsgSender.toLogin(username, password, vccode, vcCookies);
 		
 		// 转存外存
 		if(httpCookies.isVaild()) {
-			miniCookie = httpCookies.toNVCookies();
+			miniCookie = httpCookies.toNVCookie();
 			FileUtils.write(MINI_COOKIE_PATH, miniCookie, Charset.ISO, false);
 		}
 		return miniCookie;

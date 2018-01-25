@@ -8,9 +8,9 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.bean.cookie.HttpCookies;
+import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.bean.ldm.BrowserDriver;
-import exp.bilibili.plugin.bean.ldm.HttpCookies;
-import exp.bilibili.plugin.cache.login.LoginMgr;
 import exp.bilibili.plugin.envm.LoginType;
 import exp.bilibili.plugin.envm.WebDriverType;
 
@@ -30,12 +30,12 @@ public class Browser {
 	
 	private BrowserDriver browser;
 	
-	private HttpCookies cookies;
+	private HttpCookie httpCookie;
 	
 	private static volatile Browser instance;
 	
 	private Browser() {
-		this.cookies = new HttpCookies();
+		this.httpCookie = new HttpCookie();
 	}
 	
 	private static Browser INSTN() {
@@ -54,7 +54,7 @@ public class Browser {
 	}
 	
 	private String _COOKIES() {
-		return cookies.toNVCookies();
+		return httpCookie.toNVCookie();
 	}
 	
 	public static String CSRF() {
@@ -62,7 +62,7 @@ public class Browser {
 	}
 	
 	private String _CSRF() {
-		return cookies.CSRF();
+		return httpCookie.CSRF();
 	}
 	
 	public static void init(boolean loadImages) {
@@ -168,7 +168,7 @@ public class Browser {
 		boolean isOk = false;
 		if(browser != null && cookie != null) {
 			browser.addCookie(cookie);
-			cookies.add(cookie);
+			httpCookie.add(cookie);
 			isOk = true;
 		}
 		return isOk;
@@ -188,7 +188,7 @@ public class Browser {
 	
 	private void _backupCookies() {
 		if(browser != null) {
-			LoginMgr.INSTN().add(cookies, LoginType.TEMP);
+			HttpCookies.INSTN().add(httpCookie, LoginType.TEMP);
 		}
 	}
 	
@@ -199,9 +199,8 @@ public class Browser {
 	private int _recoveryCookies() {
 		int cnt = 0;
 		if(browser != null) {
-//			LoginMgr.INSTN().load(LoginType.TEMP);
-			cookies = LoginMgr.INSTN().getTempCookies();
-			browser.addCookies(cookies.toSeleniumCookies());
+			httpCookie = HttpCookies.INSTN().TEMP();
+			browser.addCookies(httpCookie.toSeleniumCookies());
 		}
 		return cnt;
 	}

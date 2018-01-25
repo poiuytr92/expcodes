@@ -7,7 +7,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookies;
+import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.StrUtils;
@@ -93,11 +93,11 @@ class VCLogin {
 	 * @param vcCookies 与验证码配套的cookies
 	 * @return
 	 */
-	protected static HttpCookies toLogin(String username, String password, 
+	protected static HttpCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
-		HttpCookies cookies = MsgSender.toLogin(username, password, vccode, vcCookies);
+		HttpCookie cookies = MsgSender.toLogin(username, password, vccode, vcCookies);
 		if(cookies.isVaild() == true) {
-			String nickName = MsgSender.queryUsername(cookies.toNVCookies());
+			String nickName = MsgSender.queryUsername(cookies.toNVCookie());
 			cookies.setNickName(nickName);
 		}
 		return cookies;

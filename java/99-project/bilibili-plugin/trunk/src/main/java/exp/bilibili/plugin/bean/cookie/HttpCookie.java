@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.bean.ldm;
+package exp.bilibili.plugin.bean.cookie;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,9 +10,9 @@ import org.openqa.selenium.Cookie;
 
 import exp.libs.utils.other.StrUtils;
 
-public class HttpCookies {
+public class HttpCookie {
 	
-	public final static HttpCookies NULL = new HttpCookies();
+	public final static HttpCookie NULL = new HttpCookie();
 	
 	private final static String LFCR = "\r\n";
 	
@@ -22,7 +22,7 @@ public class HttpCookies {
 	/** 该cookie对应的用户昵称 */
 	private String nickName;
 	
-	private List<HttpCookie> cookies;
+	private List<_HttpCookie> cookies;
 	
 	/** 多个cookies组合而成的NV串 */
 	private String nvCookies;
@@ -33,15 +33,15 @@ public class HttpCookies {
 	/** cookies是否发生变化 */
 	private boolean isChanged;
 	
-	public HttpCookies() {
+	public HttpCookie() {
 		this.nickName = "";
-		this.cookies = new LinkedList<HttpCookie>();
+		this.cookies = new LinkedList<_HttpCookie>();
 		this.nvCookies = "";
 		this.csrf = "";
 		isChanged = false;
 	}
 	
-	public HttpCookies(String headerCookies) {
+	public HttpCookie(String headerCookies) {
 		this();
 		
 		if(StrUtils.isNotEmpty(headerCookies)) {
@@ -52,7 +52,7 @@ public class HttpCookies {
 		}
 	}
 	
-	public HttpCookies(Collection<Cookie> cookies) {
+	public HttpCookie(Collection<Cookie> cookies) {
 		this();
 		
 		if(cookies != null) {
@@ -79,14 +79,14 @@ public class HttpCookies {
 	}
 	
 	public void add(Cookie cookie) {
-		add(new HttpCookie(cookie));
+		add(new _HttpCookie(cookie));
 	}
 	
 	public void add(String headerCookie) {
-		add(new HttpCookie(headerCookie));
+		add(new _HttpCookie(headerCookie));
 	}
 	
-	public void add(HttpCookie cookie) {
+	public void add(_HttpCookie cookie) {
 		if(cookie != null && cookie.isVaild()) {
 			isChanged = true;
 			cookies.add(cookie);
@@ -101,11 +101,11 @@ public class HttpCookies {
 		return csrf;
 	}
 	
-	public String toNVCookies() {
+	public String toNVCookie() {
 		if(isChanged == true) {
 			
 			StringBuilder kvs = new StringBuilder();
-			for(HttpCookie cookie : cookies) {
+			for(_HttpCookie cookie : cookies) {
 				kvs.append(cookie.toNV()).append("; ");
 			}
 			nvCookies = kvs.toString();
@@ -113,9 +113,9 @@ public class HttpCookies {
 		return nvCookies;
 	}
 	
-	public String toHeaderCookies() {
+	public String toHeaderCookie() {
 		StringBuilder sb = new StringBuilder();
-		for(HttpCookie cookie : cookies) {
+		for(_HttpCookie cookie : cookies) {
 			sb.append(cookie.toString()).append(LFCR);
 		}
 		return sb.toString();
@@ -123,7 +123,7 @@ public class HttpCookies {
 	
 	public Set<Cookie> toSeleniumCookies() {
 		Set<Cookie> seleniumCookies = new HashSet<Cookie>();
-		for(HttpCookie cookie : cookies) {
+		for(_HttpCookie cookie : cookies) {
 			seleniumCookies.add(cookie.toSeleniumCookie());
 		}
 		return seleniumCookies;
@@ -139,7 +139,7 @@ public class HttpCookies {
 
 	@Override
 	public String toString() {
-		return toHeaderCookies();
+		return toHeaderCookie();
 	}
 	
 }

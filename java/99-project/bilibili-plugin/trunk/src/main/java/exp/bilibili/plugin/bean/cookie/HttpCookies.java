@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.cache.login;
+package exp.bilibili.plugin.bean.cookie;
 
 import java.io.File;
 import java.util.Iterator;
@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookies;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.LoginType;
 import exp.bilibili.plugin.utils.TimeUtils;
@@ -16,9 +15,9 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 
-public class LoginMgr {
+public class HttpCookies {
 
-	/** cookies保存目录 */
+	/** cookie保存目录 */
 	private final static String COOKIE_DIR = Config.getInstn().COOKIE_DIR();
 	
 	/**  文件名后缀 */
@@ -32,97 +31,92 @@ public class LoginMgr {
 	private final static String COOKIE_VEST_PATH = PathUtils.combine(COOKIE_DIR, 
 			StrUtils.concat("cookie-vest", SUFFIX));
 	
-	/** 临时cookie文件路径 */
-	private final static String COOKIE_TEMP_PATH = PathUtils.combine(COOKIE_DIR, 
-			StrUtils.concat("cookie-temp", SUFFIX));
-	
 	/** 小号cookie文件名前缀 */
 	private final static String COOKIE_MINI_PREFIX = "cookie-mini-";
 	
 	/** 主号cookie */
-	private HttpCookies mainCookies;
+	private HttpCookie mainCookie;
 	
 	/** 马甲号cookie */
-	private HttpCookies vestCookies;
+	private HttpCookie vestCookie;
 	
 	/** 临时cookie */
-	private HttpCookies tempCookies;
+	private HttpCookie tempCookie;
 	
 	/** 小号cookie集 */
-	private List<HttpCookies> miniCookies;
+	private List<HttpCookie> miniCookies;
 	
-	private static volatile LoginMgr instance;
+	private static volatile HttpCookies instance;
 	
-	private LoginMgr() {
-		this.mainCookies = HttpCookies.NULL;
-		this.vestCookies = HttpCookies.NULL;
-		this.tempCookies = HttpCookies.NULL;
-		this.miniCookies = new LinkedList<HttpCookies>();
+	private HttpCookies() {
+		this.mainCookie = HttpCookie.NULL;
+		this.vestCookie = HttpCookie.NULL;
+		this.tempCookie = HttpCookie.NULL;
+		this.miniCookies = new LinkedList<HttpCookie>();
 	}
 	
-	public static LoginMgr INSTN() {
+	public static HttpCookies INSTN() {
 		if(instance == null) {
-			synchronized (LoginMgr.class) {
+			synchronized (HttpCookies.class) {
 				if(instance == null) {
-					instance = new LoginMgr();
+					instance = new HttpCookies();
 				}
 			}
 		}
 		return instance;
 	}
 	
-	public boolean add(HttpCookies cookies, LoginType type) {
+	public boolean add(HttpCookie cookie, LoginType type) {
 		boolean isOk = false;
-		if(cookies == null || cookies == HttpCookies.NULL || !cookies.isVaild()) {
+		if(cookie == null || cookie == HttpCookie.NULL || !cookie.isVaild()) {
 			return isOk;
 		}
 		
 		if(LoginType.MAIN == type) {
-			this.mainCookies = cookies;
-			isOk = save(cookies, COOKIE_MAIN_PATH);
+			this.mainCookie = cookie;
+			isOk = save(cookie, COOKIE_MAIN_PATH);
 			
 		} else if(LoginType.VEST == type) {
-			this.vestCookies = cookies;
-			isOk = save(cookies, COOKIE_VEST_PATH);
+			this.vestCookie = cookie;
+			isOk = save(cookie, COOKIE_VEST_PATH);
 			
 		} else if(LoginType.TEMP == type) {
-			this.tempCookies = cookies;
-			isOk = save(cookies, COOKIE_TEMP_PATH);
+			this.tempCookie = cookie;
+			isOk = true;
 			
 		} else {
-			this.miniCookies.add(cookies);
-			isOk = save(cookies, PathUtils.combine(COOKIE_DIR, StrUtils.concat(
+			this.miniCookies.add(cookie);
+			isOk = save(cookie, PathUtils.combine(COOKIE_DIR, StrUtils.concat(
 					COOKIE_MINI_PREFIX, TimeUtils.getSysDate("yyyyMMddHHmmSS"), SUFFIX)));
 		}
 		return isOk;
 	}
 	
-	private boolean save(HttpCookies cookies, String cookiePath) {
-		String data = CryptoUtils.toDES(cookies.toString());
+	private boolean save(HttpCookie cookie, String cookiePath) {
+		String data = CryptoUtils.toDES(cookie.toString());
 		return FileUtils.write(cookiePath, data, Charset.ISO, false);
 	}
 	
 	public boolean load(LoginType type) {
 		boolean isOk = true;
 		if(LoginType.MAIN == type) {
-			mainCookies = load(COOKIE_MAIN_PATH);
-			isOk = (mainCookies != HttpCookies.NULL);
+			mainCookie = load(COOKIE_MAIN_PATH);
+			isOk = (mainCookie != HttpCookie.NULL);
 			
 		} else if(LoginType.VEST == type) {
-			vestCookies = load(COOKIE_VEST_PATH);
-			isOk = (vestCookies != HttpCookies.NULL);
+			vestCookie = load(COOKIE_VEST_PATH);
+			isOk = (vestCookie != HttpCookie.NULL);
 
 		} else if(LoginType.TEMP == type) {
-			tempCookies = load(COOKIE_TEMP_PATH);
-			isOk = (tempCookies != HttpCookies.NULL);
+			isOk = (tempCookie != HttpCookie.NULL);
 			
 		} else {
 			File dir = new File(COOKIE_DIR);
 			String[] fileNames = dir.list();
 			for(String fileName : fileNames) {
 				if(fileName.contains(COOKIE_MINI_PREFIX)) {
-					HttpCookies miniCookie = load(PathUtils.combine(dir.getPath(), fileName));
-					if(miniCookie != HttpCookies.NULL) {
+					HttpCookie miniCookie = load(PathUtils.combine(dir.getPath(), fileName));
+					if(miniCookie != HttpCookie.NULL) {
 						miniCookies.add(miniCookie);
 						isOk &= true;
 						
@@ -135,43 +129,50 @@ public class LoginMgr {
 		return isOk;
 	}
 	
-	private HttpCookies load(String cookiePath) {
-		HttpCookies cookies = HttpCookies.NULL;
+	private HttpCookie load(String cookiePath) {
+		HttpCookie cookie = HttpCookie.NULL;
 		if(FileUtils.exists(cookiePath)) {
 			String data = CryptoUtils.deDES(FileUtils.read(cookiePath, Charset.ISO));
 			if(StrUtils.isNotEmpty(data)) {
-				cookies = new HttpCookies(data);
+				cookie = new HttpCookie(data);
 			}
 		}
-		return cookies;
+		return cookie;
 	}
 
-	public HttpCookies getMainCookies() {
-		return mainCookies;
+	public HttpCookie MAIN() {
+		return mainCookie;
 	}
 
-	public HttpCookies getVestCookies() {
-		return vestCookies;
+	public HttpCookie VEST() {
+		return vestCookie;
 	}
 	
-	public HttpCookies getTempCookies() {
-		return tempCookies;
+	public HttpCookie TEMP() {
+		return tempCookie;
 	}
 
-	public Iterator<HttpCookies> getMiniCookies() {
+	public Iterator<HttpCookie> MINIs() {
 		return miniCookies.iterator();
+	}
+	
+	public Iterator<HttpCookie> ALL() {
+		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
+		cookies.add(mainCookie);
+		cookies.addAll(miniCookies);
+		return cookies.iterator();
 	}
 	
 	/**
 	 * 检查cookie是否可以登陆成功
 	 *  若成功则把昵称也更新到cookie中
-	 * @param cookies
+	 * @param cookie
 	 * @return
 	 */
-	protected static boolean checkLogined(HttpCookies cookies) {
-		String nickName = MsgSender.queryUsername(cookies.toNVCookies());
-		cookies.setNickName(nickName);
-		return !cookies.isExpire();
+	public static boolean checkLogined(HttpCookie cookie) {
+		String nickName = MsgSender.queryUsername(cookie.toNVCookie());
+		cookie.setNickName(nickName);
+		return !cookie.isExpire();
 	}
 	
 }

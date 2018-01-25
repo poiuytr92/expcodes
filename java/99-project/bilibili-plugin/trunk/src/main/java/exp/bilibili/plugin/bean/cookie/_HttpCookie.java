@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.bean.ldm;
+package exp.bilibili.plugin.bean.cookie;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import org.openqa.selenium.Cookie;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.libs.utils.other.StrUtils;
 
-final class HttpCookie {
+final class _HttpCookie {
 
 	private final static String DOMAIN = "Domain";
 	
@@ -33,7 +33,7 @@ final class HttpCookie {
 	
 	private boolean isHttpOnly;
 	
-	protected HttpCookie() {
+	protected _HttpCookie() {
 		this.name = "";
 		this.value = "";
 		this.domain = "";
@@ -43,7 +43,7 @@ final class HttpCookie {
 		this.isHttpOnly = false;
 	}
 	
-	protected HttpCookie(Cookie cookie) {
+	protected _HttpCookie(Cookie cookie) {
 		this();
 		init(cookie);
 	}
@@ -66,7 +66,7 @@ final class HttpCookie {
 	 * 
 	 * @param headerCookie HTTP响应头中的 Set-Cookie
 	 */
-	protected HttpCookie(String headerCookie) {
+	protected _HttpCookie(String headerCookie) {
 		this();
 		init(headerCookie);
 	}
