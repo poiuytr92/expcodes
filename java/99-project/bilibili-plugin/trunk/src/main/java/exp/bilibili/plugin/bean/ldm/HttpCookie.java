@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.tmp;
+package exp.bilibili.plugin.bean.ldm;
 
 import java.util.Date;
 
@@ -66,7 +66,7 @@ final class HttpCookie {
 	 * 
 	 * @param headerCookie HTTP响应头中的 Set-Cookie
 	 */
-	public HttpCookie(String headerCookie) {
+	protected HttpCookie(String headerCookie) {
 		this();
 		init(headerCookie);
 	}
@@ -107,15 +107,15 @@ final class HttpCookie {
 		}
 	}
 	
-	public boolean isVaild() {
+	protected boolean isVaild() {
 		return StrUtils.isNotEmpty(name);
 	}
 	
-	public String toNV() {
+	protected String toNV() {
 		return (!isVaild() ? "" : StrUtils.concat(name, "=", value));
 	}
 
-	public String toHeaderCookie() {
+	protected String toHeaderCookie() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(name).append("=").append(value).append(" ; ");
 		sb.append(DOMAIN).append("=").append(domain).append(" ; ");
@@ -126,63 +126,63 @@ final class HttpCookie {
 		return sb.toString();
 	}
 	
-	public Cookie toSeleniumCookie() {
+	protected Cookie toSeleniumCookie() {
 		return new Cookie(name, value, domain, path, expiry, isSecure, isHttpOnly);
 	}
 	
-	public String getName() {
+	protected String getName() {
 		return name;
 	}
 
-	public String getValue() {
+	protected String getValue() {
 		return value;
 	}
 
-	public String getDomain() {
+	protected String getDomain() {
 		return domain;
 	}
 
-	public String getPath() {
+	protected String getPath() {
 		return path;
 	}
 
-	public Date getExpiry() {
+	protected Date getExpiry() {
 		return expiry;
 	}
 
-	public boolean isSecure() {
+	protected boolean isSecure() {
 		return isSecure;
 	}
 
-	public boolean isHttpOnly() {
+	protected boolean isHttpOnly() {
 		return isHttpOnly;
 	}
 
-	public void setName(String name) {
+	protected void setName(String name) {
 		this.name = name;
 	}
 
-	public void setValue(String value) {
+	protected void setValue(String value) {
 		this.value = value;
 	}
 
-	public void setDomain(String domain) {
+	protected void setDomain(String domain) {
 		this.domain = domain;
 	}
 
-	public void setPath(String path) {
+	protected void setPath(String path) {
 		this.path = path;
 	}
 
-	public void setExpiry(Date expiry) {
+	protected void setExpiry(Date expiry) {
 		this.expiry = expiry;
 	}
 
-	public void setSecure(boolean isSecure) {
+	protected void setSecure(boolean isSecure) {
 		this.isSecure = isSecure;
 	}
 
-	public void setHttpOnly(boolean isHttpOnly) {
+	protected void setHttpOnly(boolean isHttpOnly) {
 		this.isHttpOnly = isHttpOnly;
 	}
 	

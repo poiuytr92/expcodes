@@ -15,12 +15,12 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.DailyTask;
+import exp.bilibili.plugin.bean.ldm.HttpCookies;
 import exp.bilibili.plugin.cache.Browser;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
-import exp.bilibili.plugin.tmp.HttpCookies;
 import exp.bilibili.plugin.utils.RSAUtils;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;

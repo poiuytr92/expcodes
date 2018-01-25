@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.tmp;
+package exp.bilibili.plugin.cache.login;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,6 +7,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.bean.ldm.HttpCookies;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.StrUtils;

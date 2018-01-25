@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.tmp;
+package exp.bilibili.plugin.bean.ldm;
 
 import java.util.Collection;
 import java.util.HashSet;

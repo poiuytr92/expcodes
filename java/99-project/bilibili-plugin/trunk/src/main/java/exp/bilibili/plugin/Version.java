@@ -28,7 +28,7 @@ public class Version {
 		
 		// TODO
 		// 关注通知
-		// 批量挂机
+		// 批量挂机, 退出登陆
 		// win10支持（win10支持JDK1.6  但是无法运行程序???）
 	}
 	

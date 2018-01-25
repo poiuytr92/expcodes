@@ -9,10 +9,10 @@ import org.openqa.selenium.WebElement;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BrowserDriver;
+import exp.bilibili.plugin.bean.ldm.HttpCookies;
+import exp.bilibili.plugin.cache.login.LoginMgr;
+import exp.bilibili.plugin.envm.LoginType;
 import exp.bilibili.plugin.envm.WebDriverType;
-import exp.bilibili.plugin.tmp.HttpCookies;
-import exp.bilibili.plugin.tmp.LoginMgr;
-import exp.bilibili.plugin.tmp.LoginType;
 
 /**
  * <PRE>

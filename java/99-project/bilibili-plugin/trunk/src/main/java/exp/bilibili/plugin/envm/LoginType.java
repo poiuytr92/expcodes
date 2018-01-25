@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.tmp;
+package exp.bilibili.plugin.envm;
 
 public class LoginType {
 
