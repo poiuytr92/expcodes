@@ -50,12 +50,12 @@ public class MsgSender {
 		}
 	}
 	
-	public static long doDailyTasks() {
+	public static long doMathTasks() {
 		long maxNextTaskTime = 0;
 		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
 		while(cookieIts.hasNext()) {
 			HttpCookie cookie = cookieIts.next();
-			long nextTaskTime = DailyTasks.doDailyTasks(cookie.toNVCookie());
+			long nextTaskTime = DailyTasks.doMathTasks(cookie.toNVCookie());
 			maxNextTaskTime = (maxNextTaskTime < nextTaskTime ? nextTaskTime : maxNextTaskTime);
 		}
 		return maxNextTaskTime;

@@ -9,22 +9,36 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
-import exp.bilibili.protocol.bean.DailyTask;
+import exp.bilibili.protocol.bean.MathTask;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
+/**
+ * <PRE>
+ * 日常任务
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class DailyTasks extends __Protocol {
 
 	/** 重试间隔 */
 	private final static long SLEEP_TIME = 1000;
 	
+	/** 检查任务URL */
 	private final static String CHECK_TASK_URL = Config.getInstn().CHECK_TASK_URL();
 	
-	private final static String VERCODE_URL = Config.getInstn().VERCODE_URL();
-	
+	/** 执行任务URL */
 	private final static String DO_TASK_URL = Config.getInstn().DO_TASK_URL();
 	
+	/** 验证码URL */
+	private final static String VERCODE_URL = Config.getInstn().VERCODE_URL();
+	
+	/** 验证码下载路径 */
 	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.jpg");
 	
 	/**
@@ -32,7 +46,7 @@ public class DailyTasks extends __Protocol {
 	 * @param roomId
 	 * @return 返回下次任务的时间点
 	 */
-	public static long doDailyTasks(String cookie) {
+	public static long doMathTasks(String cookie) {
 		long nextTaskTime = -1;
 		final int roomId = UIUtils.getCurRoomId();
 		final int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
@@ -42,13 +56,13 @@ public class DailyTasks extends __Protocol {
 		final Map<String, String> header = GET_HEADER(
 				cookie, String.valueOf(realRoomId));
 		
-		DailyTask task = checkTask(header);
-		if(task != DailyTask.NULL) {
+		MathTask task = checkTask(header);
+		if(task != MathTask.NULL) {
 			nextTaskTime = task.getEndTime() * 1000;
 			
 			// 已到达任务执行时间
 			if(nextTaskTime <= System.currentTimeMillis()) {
-				if(!_doDailyTasks(header, task)) {
+				if(!_doMathTasks(header, task)) {
 					nextTaskTime = -1;	// 标记不存在下一轮任务
 				}
 			}
@@ -62,7 +76,7 @@ public class DailyTasks extends __Protocol {
 	 * @param task
 	 * @return 是否存在下一轮任务
 	 */
-	private static boolean _doDailyTasks(Map<String, String> header, DailyTask task) {
+	private static boolean _doMathTasks(Map<String, String> header, MathTask task) {
 		boolean isDone = false;
 		do {
 			int answer = 0;
@@ -86,15 +100,15 @@ public class DailyTasks extends __Protocol {
 	 * @param header
 	 * @return
 	 */
-	private static DailyTask checkTask(Map<String, String> header) {
-		DailyTask task = DailyTask.NULL;
+	private static MathTask checkTask(Map<String, String> header) {
+		MathTask task = MathTask.NULL;
 		String response = HttpURLUtils.doGet(CHECK_TASK_URL, header, null);
 		
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {
-				task = new DailyTask(json);
+				task = new MathTask(json);
 			}
 		} catch(Exception e) {
 			log.error("获取日常任务失败: {}", response, e);
@@ -128,7 +142,7 @@ public class DailyTasks extends __Protocol {
 	 * @param answer
 	 * @return
 	 */
-	private static boolean doTask(Map<String, String> header, DailyTask task, int answer) {
+	private static boolean doTask(Map<String, String> header, MathTask task, int answer) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("time_start", String.valueOf(task.getBgnTime()));
 		request.put("end_time", String.valueOf(task.getEndTime()));

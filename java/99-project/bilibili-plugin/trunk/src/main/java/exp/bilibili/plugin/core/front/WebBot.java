@@ -163,7 +163,7 @@ class WebBot extends LoopThread {
 		// 长时间无抽奖操作则做其他事情
 		} else {
 			toSignAssn();	// 友爱社签到
-			doDailyTasks();	// 日常小学数学任务
+			doMathTasks();	// 日常小学数学任务
 			toSleep();		// 休眠
 		}
 	}
@@ -303,13 +303,13 @@ class WebBot extends LoopThread {
 	/**
 	 * 执行日常小学数学任务
 	 */
-	private void doDailyTasks() {
+	private void doMathTasks() {
 		resetDailyTasks();
 		if(nextTaskTime <= 0 || nextTaskTime > System.currentTimeMillis()) {
 			return;
 		}
 		
-		nextTaskTime = MsgSender.doDailyTasks();
+		nextTaskTime = MsgSender.doMathTasks();
 		if(nextTaskTime <= 0) {
 			UIUtils.log("今天所有小学数学任务已完成");
 		}

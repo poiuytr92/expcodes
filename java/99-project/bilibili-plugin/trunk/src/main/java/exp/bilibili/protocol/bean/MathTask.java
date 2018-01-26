@@ -4,9 +4,19 @@ import net.sf.json.JSONObject;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 
-public class DailyTask {
+/**
+ * <PRE>
+ * 小学数学日常任务
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+public class MathTask {
 
-	public final static DailyTask NULL = new DailyTask(null);
+	public final static MathTask NULL = new MathTask(null);
 	
 	private final static int MAX_STEP = 9;
 	
@@ -23,7 +33,7 @@ public class DailyTask {
 	/** 当前轮的执行阶段:3min/6min/9min */
 	private int step;
 	
-	public DailyTask(JSONObject json) {
+	public MathTask(JSONObject json) {
 		if(json != null) {
 			JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 			this.bgnTime = JsonUtils.getLong(data, BiliCmdAtrbt.time_start, 0);
