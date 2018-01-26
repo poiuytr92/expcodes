@@ -16,23 +16,38 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpUtils;
 
+/**
+ * <PRE>
+ * 登陆
+ * 	FIXME : 补充二维码登陆方式， 不再用webkit
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Login extends __Protocol {
 
+	/** B站首页 */
 	private final static String HOME_URL = Config.getInstn().HOME_URL();
 	
+	/** 登陆服务器 */
 	private final static String LOGIN_HOST = Config.getInstn().LOGIN_HOST();
 	
-	private final static String MINI_LOGIN_URL = Config.getInstn().MINI_LOGIN_URL();
+	/** 验证码登陆URL */
+	private final static String VC_LOGIN_URL = Config.getInstn().VC_LOGIN_URL();
 	
+	/** RSA公钥URL */
 	private final static String RSA_KEY_URL = Config.getInstn().RSA_URL();
 	
 	/**
-	 * 从后台秘密通道登陆B站
+	 * 通过帐密+验证码方式登陆
 	 * @param username 账号
 	 * @param password 密码
 	 * @param vccode 验证码
 	 * @param vcCookies 与验证码配套的登陆用cookie
-	 * @return Cookie集合
+	 * @return 
 	 */
 	public static HttpCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
@@ -41,16 +56,16 @@ public class Login extends __Protocol {
 		
 		try {
 			// 从服务器获取RSA公钥(公钥是固定的)和随机hash码, 然后使用公钥对密码进行RSA加密
-			String sJson = client.doGet(RSA_KEY_URL, _toLoginHeadParams(""), null);
+			String sJson = client.doGet(RSA_KEY_URL, getHeader(""), null);
 			JSONObject json = JSONObject.fromObject(sJson);
 			String hash = JsonUtils.getStr(json, BiliCmdAtrbt.hash);
 			String pubKey = JsonUtils.getStr(json, BiliCmdAtrbt.key);
 			password = RSAUtils.encrypt(hash.concat(password), pubKey);
 			
 			// 把验证码、验证码配套的cookie、账号、RSA加密后的密码 提交到登陆服务器
-			Map<String, String> headers = _toLoginHeadParams(vcCookies);
-			Map<String, String> requests = _toLoginRequestParams(username, password, vccode);
-			sJson = client.doPost(MINI_LOGIN_URL, headers, requests);
+			Map<String, String> headers = getHeader(vcCookies);
+			Map<String, String> request = getRequest(username, password, vccode);
+			sJson = client.doPost(VC_LOGIN_URL, headers, request);
 			
 			// 若登陆成功，则提取返回的登陆cookie, 以便下次使用
 			json = JSONObject.fromObject(sJson);
@@ -78,10 +93,10 @@ public class Login extends __Protocol {
 	 * @param cookie
 	 * @return
 	 */
-	private static Map<String, String> _toLoginHeadParams(String cookie) {
-		Map<String, String> params = GET_HEADER(cookie);
-		params.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
-		return params;
+	private static Map<String, String> getHeader(String cookie) {
+		Map<String, String> header = GET_HEADER(cookie);
+		header.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
+		return header;
 	}
 	
 	/**
@@ -91,17 +106,17 @@ public class Login extends __Protocol {
 	 * @param vccode 图片验证码
 	 * @return
 	 */
-	private static Map<String, String> _toLoginRequestParams(
+	private static Map<String, String> getRequest(
 			String username, String password, String vccode) {
-		Map<String, String> requests = new HashMap<String, String>();
-		requests.put("cType", "2");
-		requests.put("vcType", "1");		// 1:验证码校验方式;  2:二维码校验方式
-		requests.put("captcha", vccode);	// 图片验证码
-		requests.put("user", username);	// 账号（明文）
-		requests.put("pwd", password);	// 密码（RSA公钥加密密文）
-		requests.put("keep", "true");
-		requests.put("gourl", HOME_URL);	// 登录后的跳转页面
-		return requests;
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("cType", "2");
+		request.put("vcType", "1");		// 1:验证码校验方式;  2:二维码校验方式
+		request.put("captcha", vccode);	// 图片验证码
+		request.put("user", username);	// 账号（明文）
+		request.put("pwd", password);	// 密码（RSA公钥加密密文）
+		request.put("keep", "true");
+		request.put("gourl", HOME_URL);	// 登录后的跳转页面
+		return request;
 	}
 	
 }

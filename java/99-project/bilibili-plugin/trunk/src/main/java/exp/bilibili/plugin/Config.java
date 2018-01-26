@@ -81,7 +81,7 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/login");
 	}
 	
-	public String MINI_LOGIN_URL() {
+	public String VC_LOGIN_URL() {
 		return xConf.getVal("/config/biliUrls/miniLogin");
 	}
 	

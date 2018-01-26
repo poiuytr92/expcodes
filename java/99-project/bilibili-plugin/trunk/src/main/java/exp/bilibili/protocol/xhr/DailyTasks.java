@@ -27,7 +27,7 @@ import exp.libs.warp.net.http.HttpURLUtils;
 public class DailyTasks extends __Protocol {
 
 	/** 重试间隔 */
-	private final static long SLEEP_TIME = 1000;
+	private final static long SLEEP_TIME = 500;
 	
 	/** 检查任务URL */
 	private final static String CHECK_TASK_URL = Config.getInstn().CHECK_TASK_URL();
