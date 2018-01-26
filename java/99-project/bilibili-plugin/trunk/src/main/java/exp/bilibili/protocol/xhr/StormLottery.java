@@ -1,6 +1,7 @@
-package exp.bilibili.plugin.bean.protocol;
+package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,8 @@ import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.bean.HttpCookie;
+import exp.bilibili.protocol.bean.HttpCookies;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -88,24 +91,35 @@ public class StormLottery extends _Lottery {
 	/**
 	 * 扫描节奏风暴
 	 */
-	public static int scanStorms(String cookie, String csrf, 
-			List<Integer> roomIds, long scanInterval) {
+	public static int scanStorms(List<Integer> roomIds, long scanInterval) {
 		int sum = 0;
 		HttpClient client = new HttpClient();
 		Map<String, String> requests = new HashMap<String, String>();
 		for(Integer roomId : roomIds) {
 			String sRoomId = String.valueOf(roomId);
 			requests.put("roomid", sRoomId);
-			Map<String, String> headers = toGetHeadParams(cookie, sRoomId);
+			Map<String, String> headers = toGetHeadParams(
+					HttpCookies.INSTN().VEST().toNVCookie(), sRoomId);
 			
-			int cnt = 0;
+			int max = 0;
 			do {
-				cnt = 0;
+				max = 0;
 				String response = client.doGet(STORM_CHECK_URL, headers, requests);
 				List<String> raffleIds = _getStormIds(roomId, response);
-				cnt = _joinStorms(cookie, csrf, roomId, raffleIds);
-				sum += cnt;
-			} while(cnt > 0);	// 对于存在节奏风暴的房间, 再扫描一次(可能有人连续送节奏风暴)
+				
+				Iterator<HttpCookie> cookieIts = HttpCookies.INSTN().ALL();
+				while(cookieIts.hasNext()) {
+					HttpCookie cookie = cookieIts.next();
+					int cnt = _joinStorms(cookie.toNVCookie(), cookie.CSRF(), roomId, raffleIds);
+					if(cnt > 0) {
+						max = (max < cnt ? cnt : max);
+					} else {
+						break;
+					}
+				}
+				
+				sum += max;
+			} while(max > 0);	// 对于存在节奏风暴的房间, 再扫描一次(可能有人连续送节奏风暴)
 			ThreadUtils.tSleep(scanInterval);
 		}
 		client.close();

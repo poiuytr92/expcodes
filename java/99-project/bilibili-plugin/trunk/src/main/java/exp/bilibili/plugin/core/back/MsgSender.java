@@ -14,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.cookie.HttpCookies;
-import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.bean.ldm.DailyTask;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
@@ -25,6 +23,8 @@ import exp.bilibili.plugin.utils.RSAUtils;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
+import exp.bilibili.protocol.bean.HttpCookie;
+import exp.bilibili.protocol.bean.HttpCookies;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;

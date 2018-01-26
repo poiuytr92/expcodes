@@ -11,8 +11,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.back.WebSockClient;
+import exp.bilibili.protocol.xhr.Protocol;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.ListUtils;
@@ -140,8 +140,7 @@ public class StormScanner extends LoopThread {
 	 * @return
 	 */
 	public boolean reflashHotLives() {
-		List<Integer> roomIds = MsgSender.queryTopLiveRoomIds(
-				scanCookie, MAX_PAGES, MIN_ONLINE);
+		List<Integer> roomIds = Protocol.queryTopLiveRoomIds(MAX_PAGES, MIN_ONLINE);
 		if(ListUtils.isNotEmpty(roomIds)) {
 			hotRoomIds.clear();
 			hotRoomIds.addAll(roomIds);
@@ -208,7 +207,7 @@ public class StormScanner extends LoopThread {
 	 * 扫描并加入其他热门房间的节奏风暴抽奖
 	 */
 	public void sancAndJoinStorm() {
-		int cnt = MsgSender.scanStorms(scanCookie, hotRoomIds, SCAN_INTERVAL);
+		int cnt = Protocol.scanAndJoinStorms(hotRoomIds, SCAN_INTERVAL);
 		if(cnt > 0) {
 			log.info("参与节奏风暴抽奖成功(连击x{})", cnt);
 		}

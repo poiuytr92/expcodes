@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.bean.cookie;
+package exp.bilibili.protocol.bean;
 
 import java.util.Collection;
 import java.util.HashSet;

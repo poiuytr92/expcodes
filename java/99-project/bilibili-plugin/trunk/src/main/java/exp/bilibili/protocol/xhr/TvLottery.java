@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.bean.protocol;
+package exp.bilibili.protocol.xhr;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.LotteryType;

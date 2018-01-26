@@ -8,11 +8,11 @@ import org.openqa.selenium.Cookie;
 import org.openqa.selenium.WebElement;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.cookie.HttpCookies;
-import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.bean.ldm.BrowserDriver;
-import exp.bilibili.plugin.envm.LoginType;
 import exp.bilibili.plugin.envm.WebDriverType;
+import exp.bilibili.protocol.bean.HttpCookie;
+import exp.bilibili.protocol.bean.HttpCookies;
+import exp.bilibili.protocol.envm.LoginType;
 
 /**
  * <PRE>

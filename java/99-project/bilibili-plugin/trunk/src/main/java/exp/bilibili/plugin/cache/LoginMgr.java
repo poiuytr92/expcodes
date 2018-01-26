@@ -13,10 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.front.AppUI;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.bean.HttpCookie;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.RandomUtils;

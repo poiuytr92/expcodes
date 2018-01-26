@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.bean.protocol;
+package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -9,9 +9,9 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.RSAUtils;
+import exp.bilibili.protocol.bean.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpUtils;

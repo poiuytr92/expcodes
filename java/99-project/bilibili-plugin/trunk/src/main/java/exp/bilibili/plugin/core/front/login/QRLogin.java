@@ -1,13 +1,13 @@
-package exp.bilibili.plugin.cache.login;
+package exp.bilibili.plugin.core.front.login;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.cookie.HttpCookies;
-import exp.bilibili.plugin.bean.cookie.HttpCookie;
 import exp.bilibili.plugin.cache.Browser;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.protocol.bean.HttpCookie;
+import exp.bilibili.protocol.bean.HttpCookies;
+import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpUtils;
 import exp.libs.warp.thread.LoopThread;

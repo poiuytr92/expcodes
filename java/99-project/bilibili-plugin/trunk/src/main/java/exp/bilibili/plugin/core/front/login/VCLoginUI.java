@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.cache.login;
+package exp.bilibili.plugin.core.front.login;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -17,9 +17,9 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.cookie.HttpCookies;
-import exp.bilibili.plugin.bean.cookie.HttpCookie;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.protocol.bean.HttpCookie;
+import exp.bilibili.protocol.bean.HttpCookies;
+import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;

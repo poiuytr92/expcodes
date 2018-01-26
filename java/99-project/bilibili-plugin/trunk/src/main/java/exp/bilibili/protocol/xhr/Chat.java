@@ -1,15 +1,15 @@
-package exp.bilibili.plugin.bean.protocol;
+package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.cookie.HttpCookies;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.bean.HttpCookies;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 

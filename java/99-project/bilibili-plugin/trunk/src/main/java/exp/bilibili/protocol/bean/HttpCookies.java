@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.bean.cookie;
+package exp.bilibili.protocol.bean;
 
 import java.io.File;
 import java.util.Iterator;
@@ -7,8 +7,8 @@ import java.util.List;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.core.back.MsgSender;
-import exp.bilibili.plugin.envm.LoginType;
 import exp.bilibili.plugin.utils.TimeUtils;
+import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.io.FileUtils;
