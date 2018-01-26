@@ -10,10 +10,11 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.bean.pdm.SendGift;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.bean.SendGift;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
@@ -407,7 +408,7 @@ public class ChatMgr extends LoopThread {
 	public void countChatCnt(String chatUser) {
 		
 		// 当是登陆用户发言时, 清空计数器
-		if(LoginMgr.getInstn().getLoginUser().equals(chatUser)) {
+		if(CookiesMgr.INSTN().MAIN().getNickName().equals(chatUser)) {
 			chatCnt = 0;
 			
 		// 当是其他用户发言时, 计数器+1

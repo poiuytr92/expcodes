@@ -7,13 +7,13 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.LotteryRoom;
-import exp.bilibili.plugin.cache.Browser;
 import exp.bilibili.plugin.cache.RoomMgr;
+import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.xhr.Protocol;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
+import exp.libs.warp.webkit.Browser;
 
 /**
  * <PRE>
@@ -122,7 +122,7 @@ class WebBot extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		Protocol.toSign();	// 自动签到
+		MsgSender.toSign();	// 自动签到
 	}
 
 	@Override
@@ -178,7 +178,7 @@ class WebBot extends LoopThread {
 		
 		// 小电视抽奖
 		if(room.TYPE() == LotteryType.TV) {
-			String errDesc = Protocol.toTvLottery(roomId, raffleId);
+			String errDesc = MsgSender.toTvLottery(roomId, raffleId);
 			if(StrUtils.isEmpty(errDesc)) {
 				log.info("参与直播间 [{}] 抽奖成功", roomId);
 				UIUtils.statistics("成功(小电视): 抽奖直播间 [", roomId, "]");
@@ -191,11 +191,11 @@ class WebBot extends LoopThread {
 			
 		// 节奏风暴抽奖
 		} else if(room.TYPE() == LotteryType.STORM) {
-			Protocol.toStormLottery(roomId, raffleId);
+			MsgSender.toStormLottery(roomId, raffleId);
 			
 		// 高能抽奖
 		} else {
-			int cnt = Protocol.toEgLottery(roomId);
+			int cnt = MsgSender.toEgLottery(roomId);
 			if(cnt > 0) {
 				log.info("参与直播间 [{}] 抽奖成功(连击x{})", roomId, cnt);
 				UIUtils.statistics("成功(连击x", cnt, "): 抽奖直播间 [", roomId, "]");
@@ -293,7 +293,7 @@ class WebBot extends LoopThread {
 		}
 		assnCnt = 0;
 		
-		boolean isGoOn = Protocol.toAssn();
+		boolean isGoOn = MsgSender.toAssn();
 		if(isGoOn == false) {
 			signAssn = false;
 			UIUtils.log("今天已在友爱社签到");
@@ -309,7 +309,7 @@ class WebBot extends LoopThread {
 			return;
 		}
 		
-		nextTaskTime = Protocol.doDailyTasks();
+		nextTaskTime = MsgSender.doDailyTasks();
 		if(nextTaskTime <= 0) {
 			UIUtils.log("今天所有小学数学任务已完成");
 		}
@@ -332,7 +332,7 @@ class WebBot extends LoopThread {
 		if(hour == 0) {
 			resetTaskTime = now;
 			nextTaskTime = now;
-			Protocol.toSign();	// 重新每日签到
+			MsgSender.toSign();	// 重新每日签到
 			signAssn = true;	// 标记友爱社可以签到
 		}
 	}

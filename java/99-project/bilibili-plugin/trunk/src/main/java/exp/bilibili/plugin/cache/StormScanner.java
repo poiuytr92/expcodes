@@ -11,12 +11,9 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.back.WebSockClient;
-import exp.bilibili.protocol.xhr.Protocol;
-import exp.libs.envm.Charset;
-import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.ListUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
 
 /**
@@ -54,9 +51,6 @@ public class StormScanner extends LoopThread {
 	/** 轮询所有房间次数 */
 	private int loopCnt;
 	
-	/** 扫描用的cookie（全平台扫描类似DDOS攻击，尽量不要用大号） */
-	private String scanCookie;
-	
 	/** 总开关：是否扫描房间 */
 	private boolean scan;
 	
@@ -75,8 +69,6 @@ public class StormScanner extends LoopThread {
 		super("节奏风暴扫描器");
 		
 		this.loopCnt = LOOP_LIMIT;
-		this.scanCookie = FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO);
-		scanCookie = (StrUtils.isEmpty(scanCookie) ? Browser.COOKIES() : scanCookie.trim());
 		this.scan = false;
 		this.hotRoomIds = new LinkedList<Integer>();
 		this.hotRoomLinks = new HashMap<Integer, WebSockClient>(TOP);
@@ -140,7 +132,7 @@ public class StormScanner extends LoopThread {
 	 * @return
 	 */
 	public boolean reflashHotLives() {
-		List<Integer> roomIds = Protocol.queryTopLiveRoomIds(MAX_PAGES, MIN_ONLINE);
+		List<Integer> roomIds = MsgSender.queryTopLiveRoomIds(MAX_PAGES, MIN_ONLINE);
 		if(ListUtils.isNotEmpty(roomIds)) {
 			hotRoomIds.clear();
 			hotRoomIds.addAll(roomIds);
@@ -207,7 +199,7 @@ public class StormScanner extends LoopThread {
 	 * 扫描并加入其他热门房间的节奏风暴抽奖
 	 */
 	public void sancAndJoinStorm() {
-		int cnt = Protocol.scanAndJoinStorms(hotRoomIds, SCAN_INTERVAL);
+		int cnt = MsgSender.scanAndJoinStorms(hotRoomIds, SCAN_INTERVAL);
 		if(cnt > 0) {
 			log.info("参与节奏风暴抽奖成功(连击x{})", cnt);
 		}

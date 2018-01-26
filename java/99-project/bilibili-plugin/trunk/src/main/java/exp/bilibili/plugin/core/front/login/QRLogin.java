@@ -4,13 +4,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.cache.Browser;
-import exp.bilibili.protocol.bean.HttpCookie;
-import exp.bilibili.protocol.bean.HttpCookies;
+import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpUtils;
 import exp.libs.warp.thread.LoopThread;
+import exp.libs.warp.webkit.Browser;
 
 /**
  * <PRE>
@@ -83,7 +83,7 @@ class QRLogin extends LoopThread {
 			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
 			if(isSwitch() == true) {
 				mainCookie = new HttpCookie(Browser.getCookies());
-				if(HttpCookies.checkLogined(mainCookie)) {
+				if(CookiesMgr.checkLogined(mainCookie)) {
 					isLogined = true;
 					
 				} else {
@@ -101,7 +101,7 @@ class QRLogin extends LoopThread {
 	@Override
 	protected void _after() {
 		if(isLogined == true) {
-			HttpCookies.INSTN().add(mainCookie, LoginType.MAIN);
+			CookiesMgr.INSTN().add(mainCookie, LoginType.MAIN);
 		}
 		Browser.quit();
 		qrUI._hide();
@@ -115,10 +115,10 @@ class QRLogin extends LoopThread {
 	 * @return
 	 */
 	private boolean autoLogin() {
-		boolean isOk = HttpCookies.INSTN().load(LoginType.MAIN);
+		boolean isOk = CookiesMgr.INSTN().load(LoginType.MAIN);
 		if(isOk == true) {
-			mainCookie = HttpCookies.INSTN().MAIN();
-			isOk = HttpCookies.checkLogined(mainCookie);
+			mainCookie = CookiesMgr.INSTN().MAIN();
+			isOk = CookiesMgr.checkLogined(mainCookie);
 		}
 		return isOk;
 	}

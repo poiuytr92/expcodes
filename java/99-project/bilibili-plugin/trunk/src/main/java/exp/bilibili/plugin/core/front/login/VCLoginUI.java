@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.protocol.bean.HttpCookie;
-import exp.bilibili.protocol.bean.HttpCookies;
+import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -231,7 +231,7 @@ public class VCLoginUI extends PopChildWindow {
 			reflashBtn.doClick();
 			
 		} else {
-			HttpCookies.INSTN().add(cookies, type);
+			CookiesMgr.INSTN().add(cookies, type);
 			SwingUtils.info("登陆成功: ".concat(cookies.getNickName()));
 			_hide();
 		}
@@ -250,19 +250,19 @@ public class VCLoginUI extends PopChildWindow {
 	// FIXME
 	@Override
 	protected void AfterView() {
-		boolean isOk = HttpCookies.INSTN().load(type);
+		boolean isOk = CookiesMgr.INSTN().load(type);
 		if(isOk == true) {
 			if(LoginType.MAIN == type) {
-				HttpCookie cookies = HttpCookies.INSTN().MAIN();
-				isOk = HttpCookies.checkLogined(cookies);
+				HttpCookie cookies = CookiesMgr.INSTN().MAIN();
+				isOk = CookiesMgr.checkLogined(cookies);
 				if(isOk == true) {
 					_hide();
 					System.out.println("登陆成功: ".concat(cookies.getNickName()));
 				}
 				
 			} else if(LoginType.VEST == type) {
-				HttpCookie cookies = HttpCookies.INSTN().VEST();
-				isOk = HttpCookies.checkLogined(cookies);
+				HttpCookie cookies = CookiesMgr.INSTN().VEST();
+				isOk = CookiesMgr.checkLogined(cookies);
 				if(isOk == true) {
 					_hide();
 				}

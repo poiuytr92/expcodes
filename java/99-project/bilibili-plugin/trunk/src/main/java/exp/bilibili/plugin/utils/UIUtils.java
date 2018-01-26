@@ -71,14 +71,6 @@ public class UIUtils {
 		AppUI.getInstn().updateLotteryCnt(num);
 	}
 	
-	public static void updateQrcode() {
-		AppUI.getInstn().updateQrcode();
-	}
-	
-	public static void updateQrcodeTime(int second) {
-		AppUI.getInstn().updateQrcodeTime(second);
-	}
-	
 	public static void markLogin(String username) {
 		AppUI.getInstn().markLogin(username);
 	}

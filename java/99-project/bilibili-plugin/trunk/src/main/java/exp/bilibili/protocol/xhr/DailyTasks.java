@@ -14,7 +14,7 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
-public class DailyTasks extends _MsgSender {
+public class DailyTasks extends __Protocol {
 
 	private final static long SLEEP_TIME = 1000;
 	

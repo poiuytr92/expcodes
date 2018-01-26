@@ -10,7 +10,7 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
-public class Assn extends _MsgSender {
+public class Assn extends __Protocol {
 
 	private final static String ASSN_URL = Config.getInstn().ASSN_URL();
 	

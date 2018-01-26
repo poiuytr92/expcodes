@@ -11,12 +11,12 @@ import org.apache.commons.httpclient.HttpMethod;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.RSAUtils;
-import exp.bilibili.protocol.bean.HttpCookie;
+import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpUtils;
 
-public class Login extends _MsgSender {
+public class Login extends __Protocol {
 
 	private final static String HOME_URL = Config.getInstn().HOME_URL();
 	

@@ -8,7 +8,7 @@ import org.apache.commons.httpclient.HttpMethod;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.core.back.MsgSender;
-import exp.bilibili.protocol.bean.HttpCookie;
+import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
@@ -95,12 +95,12 @@ class VCLogin {
 	 */
 	protected static HttpCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
-		HttpCookie cookies = MsgSender.toLogin(username, password, vccode, vcCookies);
-		if(cookies.isVaild() == true) {
-			String nickName = MsgSender.queryUsername(cookies.toNVCookie());
-			cookies.setNickName(nickName);
+		HttpCookie cookie = MsgSender.toLogin(username, password, vccode, vcCookies);
+		if(cookie.isVaild() == true) {
+			String nickName = MsgSender.queryUsername(cookie);
+			cookie.setNickName(nickName);
 		}
-		return cookies;
+		return cookie;
 	}
 	
 }

@@ -9,11 +9,11 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.bean.HttpCookies;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
-public class Chat extends _MsgSender {
+public class Chat extends __Protocol {
 
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
 	
@@ -57,7 +57,7 @@ public class Chat extends _MsgSender {
 	 */
 	public static boolean sendChat(String msg, ChatColor color, int roomId) {
 		return sendChat(msg, color, roomId, 
-				HttpCookies.INSTN().MAIN().toNVCookie());
+				CookiesMgr.INSTN().MAIN().toNVCookie());
 	}
 
 	/**

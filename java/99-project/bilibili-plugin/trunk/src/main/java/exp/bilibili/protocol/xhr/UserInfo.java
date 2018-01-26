@@ -8,7 +8,7 @@ import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
-public class UserInfo extends _MsgSender {
+public class UserInfo extends __Protocol {
 
 	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
 	

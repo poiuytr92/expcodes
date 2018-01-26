@@ -10,7 +10,7 @@ import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
-public class Sign extends _MsgSender {
+public class Sign extends __Protocol {
 
 	private final static String SIGN_URL = Config.getInstn().SIGN_URL();
 	

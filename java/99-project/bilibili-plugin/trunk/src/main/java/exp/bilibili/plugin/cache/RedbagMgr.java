@@ -15,11 +15,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.bean.ldm.Award;
+import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.Redbag;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.xhr.Protocol;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -143,7 +143,7 @@ public class RedbagMgr extends LoopThread {
 	 */
 	public int queryPool() {
 		pool.clear();
-		String response = Protocol.queryRedbagPool();
+		String response = MsgSender.queryRedbagPool();
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
@@ -224,7 +224,7 @@ public class RedbagMgr extends LoopThread {
 	private boolean exchange(Redbag redbag, int num) {
 		boolean isOk = false;
 		
-		String response = Protocol.exchangeRedbag(redbag.ID(), num);
+		String response = MsgSender.exchangeRedbag(redbag.ID(), num);
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);

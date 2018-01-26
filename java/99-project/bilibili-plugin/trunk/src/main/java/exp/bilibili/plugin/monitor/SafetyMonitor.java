@@ -8,11 +8,11 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.cache.LoginMgr;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.certificate.bean.App;
 import exp.certificate.core.Convertor;
 import exp.libs.utils.encode.CryptoUtils;
@@ -72,6 +72,8 @@ public class SafetyMonitor extends LoopThread {
 	
 	private String cause;
 	
+	private String loginUser;
+	
 	private String appName;
 
 	private String appVersion;
@@ -86,6 +88,7 @@ public class SafetyMonitor extends LoopThread {
 		this.noResponseCnt = 0;
 		this.loopCnt = LOOP_LIMIT;
 		this.cause = UNCHECK_CAUSE;
+		this.loginUser = CookiesMgr.INSTN().MAIN().getNickName();
 		this.appName = "";
 		this.appVersion = "";
 	}
@@ -287,7 +290,6 @@ public class SafetyMonitor extends LoopThread {
 	 */
 	private boolean checkInWhitelist(String whitelist) {
 		boolean isIn = false;
-		String loginUser = LoginMgr.getInstn().getLoginUser();
 		if(StrUtils.isNotEmpty(whitelist, loginUser)) {
 			isIn = whitelist.contains(loginUser);
 		}
@@ -324,7 +326,6 @@ public class SafetyMonitor extends LoopThread {
 	 */
 	private boolean checkNotInBlacklist(String blacklist) {
 		boolean isNotIn = true;
-		String loginUser = LoginMgr.getInstn().getLoginUser();
 		if(StrUtils.isNotEmpty(blacklist, loginUser)) {
 			isNotIn = !blacklist.contains(loginUser);
 		}

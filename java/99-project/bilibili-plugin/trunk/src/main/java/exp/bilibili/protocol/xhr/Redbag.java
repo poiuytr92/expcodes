@@ -6,7 +6,7 @@ import java.util.Map;
 import exp.bilibili.plugin.Config;
 import exp.libs.warp.net.http.HttpURLUtils;
 
-public class Redbag extends _MsgSender {
+public class Redbag extends __Protocol {
 
 	private final static String GET_REDBAG_URL = Config.getInstn().GET_REDBAG_URL();
 	

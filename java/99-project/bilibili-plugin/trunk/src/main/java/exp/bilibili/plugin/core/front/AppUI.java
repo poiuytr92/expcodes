@@ -7,8 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -20,9 +18,7 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.ActivityMgr;
-import exp.bilibili.plugin.cache.Browser;
 import exp.bilibili.plugin.cache.ChatMgr;
-import exp.bilibili.plugin.cache.LoginMgr;
 import exp.bilibili.plugin.cache.MsgKwMgr;
 import exp.bilibili.plugin.cache.OnlineUserMgr;
 import exp.bilibili.plugin.cache.RedbagMgr;
@@ -35,7 +31,7 @@ import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.libs.envm.Charset;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -43,6 +39,7 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
+import exp.libs.warp.webkit.Browser;
 
 
 /**
@@ -129,10 +126,6 @@ public class AppUI extends MainWindow {
 	private WebSockClient wsClient;
 	
 	private _LotteryUI lotteryUI;
-	
-	private _LoginUI loginUI;
-	
-	private _QrcodeUI qrcodeUI;
 	
 	private _RedbagUI redbagUI;
 	
@@ -262,8 +255,6 @@ public class AppUI extends MainWindow {
 		lotteryLabel.setForeground(Color.RED);
 		
 		this.wsClient = new WebSockClient();
-		this.lotteryUI = new _LotteryUI();
-		this.qrcodeUI = new _QrcodeUI();
 		this.redbagUI = new _RedbagUI();
 		this.colorUI = new _ColorUI();
 		this.curChatColor = ChatColor.WHITE;
@@ -494,37 +485,14 @@ public class AppUI extends MainWindow {
 	 * 二维码扫码登陆
 	 */
 	private void _loginByQrcode() {
-		qrcodeUI._view();
-		
-		if(LoginMgr.getInstn().isRun() == false) {
-			UIUtils.log("正在连接登陆服务器, 请稍后...");
-			LoginMgr.getInstn()._start();
-		}
+		// TODO
 	}
 	
 	/**
 	 * 验证码帐密登陆
 	 */
 	private void _loginByVccode() {
-		if(loginUI != null) {
-			loginUI._view();
-			
-		} else {
-			UIUtils.log("正在连接登陆服务器, 请稍后...");
-			new Thread() {
-				public void run() {
-					loginBtn.setEnabled(false);
-					if(LoginMgr.getInstn().autoLogin()) {
-						LoginMgr.getInstn().saveLoginInfo();
-						
-					} else {
-						loginBtn.setEnabled(true);
-						loginUI = new _LoginUI(false);
-						loginUI._view();
-					}
-				};
-			}.start();
-		}
+		// TODO
 	}
 	
 	private void setStormBtnListener() {
@@ -539,7 +507,7 @@ public class AppUI extends MainWindow {
 				
 				// 扫描器线程未启动，则触发登录马甲流程
 				if(!StormScanner.getInstn().isRun()) {
-					_loginMini();
+					_loginVest();
 					
 				// 扫描器线程已启动，则纯粹切换扫描状态
 				} else {
@@ -561,38 +529,14 @@ public class AppUI extends MainWindow {
 	/**
 	 * 登录马甲(用于扫描全平台节奏风暴)
 	 */
-	private void _loginMini() {
+	private void _loginVest() {
 		
 		// 使用马甲号登录
 		if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
+			// TODO
 			
-			// 未登录过马甲号, 则登录一个马甲号
-			if(StrUtils.isEmpty(FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO))) {
-				_LoginUI miniLogin = new _LoginUI(true);
-				
-				miniLogin.addWindowListener(new WindowAdapter() {
-					
-					@Override
-					public void windowClosed(WindowEvent e) {
-						if(StrUtils.isEmpty(FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO))) {
-							SwingUtils.warn("登录马甲失败, 终止扫描节奏风暴");
-							
-						// 使用新登录的马甲号(节奏风暴扫描器启动后会在内部识别)
-						} else {
-							_startStormScanner();
-						}
-					}
-				});
-				miniLogin._view();
-				
-			// 使用上次的马甲号(节奏风暴扫描器启动后会在内部识别)
-			} else {
-				_startStormScanner();
-			}
-			
-		// 使用主号登录(节奏风暴扫描器启动后会在内部识别)
 		} else {
-			LoginMgr.getInstn().clearMiniCookie();
+			// FIXME
 			_startStormScanner();
 		}
 	}
@@ -619,7 +563,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(SwingUtils.confirm("[清除登陆信息] 后下次需重新登陆, 继续吗 ?")) {
-					if(LoginMgr.getInstn().clearAllCookies()) {
+					if(CookiesMgr.clearAllCookies()) {
 						SwingUtils.info("清除登陆信息成功");
 						
 					} else {
@@ -866,7 +810,6 @@ public class AppUI extends MainWindow {
 		RedbagMgr.getInstn()._stop();
 		StormScanner.getInstn()._stop();
 		ChatMgr.getInstn()._stop();
-		LoginMgr.getInstn()._stop();	
 		WebBot.getInstn()._stop();
 		MsgKwMgr.getInstn().clear();
 		SafetyMonitor.getInstn()._stop();
@@ -926,21 +869,6 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 更新二维码图片
-	 */
-	public void updateQrcode() {
-		qrcodeUI.updateImg();
-	}
-	
-	/**
-	 * 更新二维码有效时间
-	 * @param time
-	 */
-	public void updateQrcodeTime(int time) {
-		qrcodeUI.updateTime(time);
-	}
-	
-	/**
 	 * 标记已登陆成功
 	 */
 	public void markLogin(String username) {
@@ -948,8 +876,6 @@ public class AppUI extends MainWindow {
 		isLogined = true;
 		loginBtn.setEnabled(false);	
 		
-		if(loginUI != null) { loginUI._hide(); }
-		qrcodeUI._hide();
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
 		WebBot.getInstn()._start();	// 启动仿真机器人
 		

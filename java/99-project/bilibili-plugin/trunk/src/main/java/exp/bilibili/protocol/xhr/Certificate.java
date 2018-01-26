@@ -5,7 +5,7 @@ import java.util.Map;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
-public class Certificate extends _MsgSender {
+public class Certificate extends __Protocol {
 
 	/**
 	 * 获取B站link中心针对本插件的授权校验标签

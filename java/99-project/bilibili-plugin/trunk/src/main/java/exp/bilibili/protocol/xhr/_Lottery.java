@@ -13,7 +13,7 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
-public class _Lottery extends _MsgSender {
+public class _Lottery extends __Protocol {
 
 	/**
 	 * 加入抽奖

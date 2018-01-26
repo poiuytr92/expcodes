@@ -6,14 +6,14 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
-import exp.bilibili.protocol.bean.HttpCookie;
-import exp.bilibili.protocol.bean.HttpCookies;
+import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
-public class PrivateMsg extends _MsgSender {
+public class PrivateMsg extends __Protocol {
 
 	private final static String MSG_HOST = Config.getInstn().MSG_HOST();
 	
@@ -27,7 +27,7 @@ public class PrivateMsg extends _MsgSender {
 	 * @return
 	 */
 	public static boolean sendPrivateMsg(String sendId, String recvId, String msg) {
-		HttpCookie cookie = HttpCookies.INSTN().MAIN();
+		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
 		
 		Map<String, String> headers = toPostHeadParams(cookie.toNVCookie());
 		headers.put(HttpUtils.HEAD.KEY.HOST, LINK_HOST);

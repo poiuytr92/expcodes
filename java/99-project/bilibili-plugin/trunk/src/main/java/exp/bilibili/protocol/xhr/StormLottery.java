@@ -14,8 +14,8 @@ import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.bean.HttpCookie;
-import exp.bilibili.protocol.bean.HttpCookies;
+import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -99,7 +99,7 @@ public class StormLottery extends _Lottery {
 			String sRoomId = String.valueOf(roomId);
 			requests.put("roomid", sRoomId);
 			Map<String, String> headers = toGetHeadParams(
-					HttpCookies.INSTN().VEST().toNVCookie(), sRoomId);
+					CookiesMgr.INSTN().VEST().toNVCookie(), sRoomId);
 			
 			int max = 0;
 			do {
@@ -107,7 +107,7 @@ public class StormLottery extends _Lottery {
 				String response = client.doGet(STORM_CHECK_URL, headers, requests);
 				List<String> raffleIds = _getStormIds(roomId, response);
 				
-				Iterator<HttpCookie> cookieIts = HttpCookies.INSTN().ALL();
+				Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
 				while(cookieIts.hasNext()) {
 					HttpCookie cookie = cookieIts.next();
 					int cnt = _joinStorms(cookie.toNVCookie(), cookie.CSRF(), roomId, raffleIds);
