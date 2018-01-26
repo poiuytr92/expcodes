@@ -79,7 +79,7 @@ public class Login extends __Protocol {
 	 * @return
 	 */
 	private static Map<String, String> _toLoginHeadParams(String cookie) {
-		Map<String, String> params = toGetHeadParams(cookie);
+		Map<String, String> params = GET_HEADER(cookie);
 		params.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
 		return params;
 	}

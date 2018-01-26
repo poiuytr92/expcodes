@@ -24,7 +24,7 @@ public class Sign extends __Protocol {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headers = toGetHeadParams(cookie, sRoomId);
+			Map<String, String> headers = GET_HEADER(cookie, sRoomId);
 			String response = HttpURLUtils.doGet(SIGN_URL, headers, null, Config.DEFAULT_CHARSET);
 			_analyseSignResponse(response);
 			

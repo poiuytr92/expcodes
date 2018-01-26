@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.core.front.AppUI;
 import exp.bilibili.plugin.core.front._NoticeUI;
 import exp.bilibili.plugin.envm.ChatColor;
@@ -92,7 +93,8 @@ public class UIUtils {
 	}
 	
 	public static int getCurRoomId() {
-		return AppUI.getInstn().getCurRoomId();
+		return RoomMgr.getInstn().getRealRoomId(
+				AppUI.getInstn().getCurRoomId());
 	}
 	
 	public static ChatColor getCurChatColor() {

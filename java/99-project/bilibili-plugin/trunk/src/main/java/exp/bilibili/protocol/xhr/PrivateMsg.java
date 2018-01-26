@@ -29,7 +29,7 @@ public class PrivateMsg extends __Protocol {
 	public static boolean sendPrivateMsg(String sendId, String recvId, String msg) {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
 		
-		Map<String, String> headers = toPostHeadParams(cookie.toNVCookie());
+		Map<String, String> headers = POST_HEADER(cookie.toNVCookie());
 		headers.put(HttpUtils.HEAD.KEY.HOST, LINK_HOST);
 		headers.put(HttpUtils.HEAD.KEY.ORIGIN, MSG_HOST);
 		headers.put(HttpUtils.HEAD.KEY.REFERER, MSG_HOST);

@@ -41,7 +41,7 @@ public class StormLottery extends _Lottery {
 	 */
 	public static List<Integer> queryTopLiveRoomIds(String cookie, 
 			final int MAX_PAGES, final int MIN_ONLINE) {
-		Map<String, String> header = toGetHeadParams(cookie, "all");
+		Map<String, String> header = GET_HEADER(cookie, "all");
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("area", "all");
 		request.put("order", "online");
@@ -98,7 +98,7 @@ public class StormLottery extends _Lottery {
 		for(Integer roomId : roomIds) {
 			String sRoomId = String.valueOf(roomId);
 			requests.put("roomid", sRoomId);
-			Map<String, String> headers = toGetHeadParams(
+			Map<String, String> headers = GET_HEADER(
 					CookiesMgr.INSTN().VEST().toNVCookie(), sRoomId);
 			
 			int max = 0;

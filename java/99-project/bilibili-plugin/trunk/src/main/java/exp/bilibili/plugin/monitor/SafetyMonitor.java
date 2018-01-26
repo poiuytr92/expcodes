@@ -47,10 +47,6 @@ public class SafetyMonitor extends LoopThread {
 	private final static String GITEE_URL = CryptoUtils.deDES(
 			"4C3B7319D21E23D468926AD72569DDF8408E193F3B526A6F5EE2A5699BCCA673DC22BC762A1F149B03E39422823B4BF0");
 	
-	/** 软件授权页(Bilibili-备用) */
-	private final static String BILIBILI_URL = CryptoUtils.deDES(
-			"EECD1D519FEBFDE5EF68693278F5849E8068123647103E9D1644539B452D8DE870DD36BBCFE2C2A8E5A16D58A0CA752D3D715AF120F89F10990A854A386B95631E7C60D1CFD77605");
-	
 	/** 免检原因 */
 	private final static String UNCHECK_CAUSE = "UNCHECK";
 	
@@ -196,7 +192,7 @@ public class SafetyMonitor extends LoopThread {
 	 */
 	private boolean checkByBilibili() {
 		boolean isOk = false;
-		String response = MsgSender.queryCertTags(BILIBILI_URL);
+		String response = MsgSender.queryCertTags();
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);

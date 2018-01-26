@@ -257,7 +257,7 @@ public class AppUI extends MainWindow {
 		this.wsClient = new WebSockClient();
 		this.redbagUI = new _RedbagUI();
 		this.colorUI = new _ColorUI();
-		this.curChatColor = ChatColor.WHITE;
+		this.curChatColor = ChatColor.RANDOM();
 		
 		this.loginUser = "";
 		this.isLogined = false;
@@ -585,9 +585,8 @@ public class AppUI extends MainWindow {
 				}
 				
 				String msg = chatTF.getText();
-				int roomId = getCurRoomId();
-				if(StrUtils.isNotEmpty(msg) && roomId > 0) {
-					MsgSender.sendChat(msg, curChatColor, roomId);
+				if(StrUtils.isNotEmpty(msg)) {
+					MsgSender.sendChat(msg, curChatColor);
 					chatTF.setText("");
 				}
 			}

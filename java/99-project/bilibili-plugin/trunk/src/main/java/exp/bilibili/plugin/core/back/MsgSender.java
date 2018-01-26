@@ -3,7 +3,9 @@ package exp.bilibili.plugin.core.back;
 import java.util.Iterator;
 import java.util.List;
 
+import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.ChatColor;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.xhr.Assn;
@@ -22,8 +24,8 @@ import exp.bilibili.protocol.xhr.UserInfo;
 // FIXME 移植回去每个协议内部， 不需要总协议？
 public class MsgSender {
 
-	public static String queryCertTags(final String BILIBILI_URL) {
-		return Certificate.queryTags(BILIBILI_URL);
+	public static String queryCertTags() {
+		return Certificate.queryTags();
 	}
 	
 	public static HttpCookie toLogin(String username, String password, 
@@ -37,7 +39,7 @@ public class MsgSender {
 
 	public static boolean toAssn() {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号签到有爱社?
-		return Assn.toAssn(cookie.toNVCookie(), cookie.CSRF());
+		return Assn.toSign(cookie);
 	}
 	
 	public static void toSign() {
@@ -123,49 +125,22 @@ public class MsgSender {
 		return Redbag.exchangeRedbag(cookie.toNVCookie(), id, num);
 	}
 	
-	/**
-	 * 发送弹幕消息
-	 * @param msg 弹幕消息
-	 * @return
-	 */
 	public static boolean sendChat(String msg) {
-		return Chat.sendChat(msg);
+		ChatColor color = ChatColor.RANDOM();
+		return sendChat(msg, color);
 	}
 	
-	/**
-	 * 
-	 * @param msg
-	 * @param color
-	 * @return
-	 */
-	public static boolean sendChat(String msg, ChatColor color) {
-		return Chat.sendChat(msg, color);
-	}
-	
-	/**
-	 * 发送弹幕消息
-	 * @param msg 弹幕消息
-	 * @param roomId 目标直播间
-	 * @return
-	 */
 	public static boolean sendChat(String msg, int roomId) {
-		return Chat.sendChat(msg, roomId);
+		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
+		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
+		ChatColor color = ChatColor.RANDOM();
+		return Chat.send(cookie, roomId, msg, color);
 	}
 	
-	/**
-	 * 发送弹幕消息
-	 * @param msg 弹幕消息
-	 * @param color 弹幕颜色
-	 * @param roomId 目标直播间
-	 * @return
-	 */
-	public static boolean sendChat(String msg, ChatColor color, int roomId) {
-		return Chat.sendChat(msg, color, roomId);
-	}
-	
-	public static boolean sendChat(String msg, ChatColor color, 
-			int roomId, HttpCookie cookie) {
-		return Chat.sendChat(msg, color, roomId, cookie.toNVCookie());
+	public static boolean sendChat(String msg, ChatColor color) {
+		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
+		int roomId = UIUtils.getCurRoomId();
+		return Chat.send(cookie, roomId, msg, color);
 	}
 	
 	/**

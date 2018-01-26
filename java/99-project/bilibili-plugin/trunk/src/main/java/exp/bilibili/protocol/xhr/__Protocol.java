@@ -11,7 +11,7 @@ import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
- * B站直播版聊消息发送器
+ * B站XHR协议
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -35,17 +35,33 @@ class __Protocol {
 	protected __Protocol() {}
 	
 	/**
-	 * 生成POST方法的请求头参数
+	 * 生成GET方法的请求头参数
 	 * @param cookie
-	 * @param realRoomId
 	 * @return
 	 */
-	protected static Map<String, String> toPostHeadParams(String cookie, String realRoomId) {
-		Map<String, String> params = toPostHeadParams(cookie);
-		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
-		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
-		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(realRoomId));	// 发送/接收消息的直播间地址
-		return params;
+	protected final static Map<String, String> GET_HEADER(String cookie) {
+		Map<String, String> header = new HashMap<String, String>();
+		header.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
+		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
+		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
+		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
+		header.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
+		return header;
+	}
+	
+	/**
+	 * 生成GET方法的请求头参数
+	 * @param cookie
+	 * @param uri
+	 * @return
+	 */
+	protected final static Map<String, String> GET_HEADER(String cookie, String uri) {
+		Map<String, String> header = GET_HEADER(cookie);
+		header.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(uri));
+		return header;
 	}
 	
 	/**
@@ -53,47 +69,31 @@ class __Protocol {
 	 * @param cookie
 	 * @return
 	 */
-	protected static Map<String, String> toPostHeadParams(String cookie) {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
-		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
-		params.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		params.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
+	protected final static Map<String, String> POST_HEADER(String cookie) {
+		Map<String, String> header = new HashMap<String, String>();
+		header.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
+		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
+		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
+		header.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
 				HttpUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
-		params.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
-		return params;
+		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
+		header.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
+		return header;
 	}
 	
 	/**
-	 * 生成GET方法的请求头参数
+	 * 生成POST方法的请求头参数
 	 * @param cookie
-	 * @param realRoomId
+	 * @param uri
 	 * @return
 	 */
-	protected static Map<String, String> toGetHeadParams(String cookie, String realRoomId) {
-		Map<String, String> params = toGetHeadParams(cookie);
-		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
-		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
-		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(String.valueOf(realRoomId)));	// 发送/接收消息的直播间地址
-		return params;
-	}
-	
-	/**
-	 * 生成GET方法的请求头参数
-	 * @param cookie
-	 * @return
-	 */
-	protected static Map<String, String> toGetHeadParams(String cookie) {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
-		params.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		params.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		params.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		params.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		params.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
-		return params;
+	protected final static Map<String, String> POST_HEADER(String cookie, String uri) {
+		Map<String, String> header = POST_HEADER(cookie);
+		header.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(uri));
+		return header;
 	}
 	
 }

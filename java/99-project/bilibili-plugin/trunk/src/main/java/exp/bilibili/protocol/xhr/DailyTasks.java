@@ -38,7 +38,7 @@ public class DailyTasks extends __Protocol {
 		if(realRoomId <= 0) {
 			return nextTaskTime;
 		}
-		final Map<String, String> header = toGetHeadParams(
+		final Map<String, String> header = GET_HEADER(
 				cookie, String.valueOf(realRoomId));
 		
 		DailyTask task = checkTask(header);

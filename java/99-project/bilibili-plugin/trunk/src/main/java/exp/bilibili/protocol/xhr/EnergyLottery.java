@@ -79,7 +79,7 @@ public class EnergyLottery extends _Lottery {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headers = toGetHeadParams(cookie, sRoomId);
+			Map<String, String> headers = GET_HEADER(cookie, sRoomId);
 			Map<String, String> requests = _toLotteryRequestParams(sRoomId);
 			String response = HttpURLUtils.doGet(url, headers, requests, Config.DEFAULT_CHARSET);
 			raffleIds = _getRaffleId(response);

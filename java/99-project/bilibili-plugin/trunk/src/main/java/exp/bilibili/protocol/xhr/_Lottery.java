@@ -30,7 +30,7 @@ public class _Lottery extends __Protocol {
 		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		if(realRoomId > 0) {
 			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headers = toGetHeadParams(cookie, sRoomId);
+			Map<String, String> headers = GET_HEADER(cookie, sRoomId);
 			Map<String, String> requests = (LotteryType.STORM == type ? 
 					_toStormRequestParams(sRoomId, raffleId, csrf) : 
 					_toLotteryRequestParams(sRoomId, raffleId));
@@ -65,7 +65,7 @@ public class _Lottery extends __Protocol {
 	private static Map<String, String> _toStormRequestParams(String realRoomId, String raffleId, String csrf) {
 		Map<String, String> params = _toLotteryRequestParams(realRoomId);
 		params.put("id", raffleId);	// 礼物编号
-		params.put("color", ChatColor.WHITE.CODE());
+		params.put("color", ChatColor.WHITE.RGB());
 		params.put("captcha_token", "");
 		params.put("captcha_phrase", "");
 		params.put("token", "");

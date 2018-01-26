@@ -19,7 +19,7 @@ public class UserInfo extends __Protocol {
 	 * @return username
 	 */
 	public static String queryUsername(String cookie) {
-		Map<String, String> headers = toGetHeadParams(cookie);
+		Map<String, String> headers = GET_HEADER(cookie);
 		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null, Config.DEFAULT_CHARSET);
 		
 		String username = "";
