@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.bean.ldm;
+package exp.bilibili.protocol.bean;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;

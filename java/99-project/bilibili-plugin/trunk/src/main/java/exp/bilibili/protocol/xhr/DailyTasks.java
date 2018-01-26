@@ -5,17 +5,18 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.DailyTask;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
+import exp.bilibili.protocol.bean.DailyTask;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
 public class DailyTasks extends __Protocol {
 
+	/** 重试间隔 */
 	private final static long SLEEP_TIME = 1000;
 	
 	private final static String CHECK_TASK_URL = Config.getInstn().CHECK_TASK_URL();

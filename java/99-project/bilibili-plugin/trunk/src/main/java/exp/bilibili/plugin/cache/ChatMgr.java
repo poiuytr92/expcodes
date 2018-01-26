@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.bean.SendGift;
+import exp.bilibili.protocol.bean.wsjson.SendGift;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.ListUtils;

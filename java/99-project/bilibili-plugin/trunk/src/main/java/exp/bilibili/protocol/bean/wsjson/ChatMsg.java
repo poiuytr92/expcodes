@@ -1,4 +1,4 @@
-package exp.bilibili.protocol.bean;
+package exp.bilibili.protocol.bean.wsjson;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
