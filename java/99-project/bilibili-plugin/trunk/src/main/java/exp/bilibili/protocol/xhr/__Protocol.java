@@ -21,14 +21,19 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 class __Protocol {
 
+	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(__Protocol.class);
 	
+	/** SSL服务器主机 */
 	protected final static String SSL_HOST = Config.getInstn().SSL_HOST();
 	
+	/** 直播间URL */
 	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
 	
+	/** Link中心服务器主机 */
 	protected final static String LINK_HOST = Config.getInstn().LINK_HOST();
 	
+	/** Link中心URL */
 	protected final static String LINK_URL = Config.getInstn().LINK_URL();
 	
 	/** 私有化构造函数 */

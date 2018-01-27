@@ -41,6 +41,9 @@ public class LotteryEnergy extends _Lottery {
 	/** 最上一次抽奖过的礼物编号(礼物编号是递增的) */
 	private static int LAST_RAFFLEID = 0;
 	
+	/** 私有化构造函数 */
+	protected LotteryEnergy() {}
+	
 	/**
 	 * 高能礼物抽奖
 	 * @param roomId
@@ -101,7 +104,7 @@ public class LotteryEnergy extends _Lottery {
 		return raffleIds;
 	}
 	
-	// FIXME 
+	// FIXME 某个用户是否抽奖成功
 	private static boolean join(int roomId, String raffleId) {
 		boolean isOk = false;
 		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();

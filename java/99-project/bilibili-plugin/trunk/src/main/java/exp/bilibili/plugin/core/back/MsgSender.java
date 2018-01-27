@@ -89,7 +89,7 @@ public class MsgSender {
 	
 	public static String queryRedbagPool() {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号
-		return Redbag.queryRedbagPool(cookie.toNVCookie());
+		return Redbag.queryRedbagPool(cookie);
 	}
 	
 	/**
@@ -102,7 +102,7 @@ public class MsgSender {
 	 */
 	public static String exchangeRedbag(String id, int num) {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号
-		return Redbag.exchangeRedbag(cookie.toNVCookie(), id, num);
+		return Redbag.exchangeRedbag(cookie, id, num);
 	}
 	
 	public static boolean sendDanmu(String msg) {

@@ -22,8 +22,11 @@ public class LotteryTV extends _Lottery {
 	/** 小电视抽奖URL */
 	private final static String TV_JOIN_URL = Config.getInstn().TV_JOIN_URL();
 	
+	/** 私有化构造函数 */
+	protected LotteryTV() {}
+	
 	/**
-	 * 小电视抽奖
+	 * 小电视抽奖 FIXME 某个用户是否成功
 	 * @param roomId
 	 * @param raffleId
 	 * @return

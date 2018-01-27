@@ -13,8 +13,19 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
+/**
+ * <PRE>
+ * 抽奖协议
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _Lottery extends __Protocol {
 
+	/** 私有化构造函数 */
 	protected _Lottery() {}
 	
 	/**

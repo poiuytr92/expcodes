@@ -49,6 +49,9 @@ public class DailyTasks extends __Protocol {
 	/** 小学数学验证码重试间隔 */
 	private final static long SLEEP_TIME = 500;
 	
+	/** 私有化构造函数 */
+	protected DailyTasks() {}
+	
 	/**
 	 * 友爱社签到
 	 * @return 是否需要持续测试签到

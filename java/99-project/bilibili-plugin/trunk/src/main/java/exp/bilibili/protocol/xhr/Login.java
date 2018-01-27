@@ -45,6 +45,9 @@ public class Login extends __Protocol {
 	/** 账号信息URL */
 	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
 	
+	/** 私有化构造函数 */
+	protected Login() {}
+	
 	/**
 	 * 通过帐密+验证码方式登陆
 	 * @param username 账号

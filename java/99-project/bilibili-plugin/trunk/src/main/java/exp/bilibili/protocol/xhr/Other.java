@@ -40,6 +40,9 @@ public class Other extends __Protocol {
 	private final static String ADMIN_URL = CryptoUtils.deDES(
 			"EECD1D519FEBFDE5EF68693278F5849E8068123647103E9D1644539B452D8DE870DD36BBCFE2C2A8E5A16D58A0CA752D3D715AF120F89F10990A854A386B95631E7C60D1CFD77605");
 	
+	/** 私有化构造函数 */
+	protected Other() {}
+	
 	/**
 	 * 扫描当前的人气直播间房号列表
 	 * @param cookie 扫描用的cookie

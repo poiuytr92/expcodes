@@ -35,6 +35,9 @@ public class Chat extends __Protocol {
 	/** 私信URL */
 	private final static String MSG_URL = Config.getInstn().MSG_URL();
 	
+	/** 私有化构造函数 */
+	protected Chat() {}
+	
 	/**
 	 * 发送弹幕消息
 	 * @param cookie 发送弹幕的账号cookie

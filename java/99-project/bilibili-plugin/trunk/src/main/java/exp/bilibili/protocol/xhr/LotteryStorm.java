@@ -41,6 +41,9 @@ public class LotteryStorm extends _Lottery {
 	/** 最上一次抽奖过的节奏风暴编号(礼物编号是递增的) */
 	private static int LAST_STORMID = 0;
 	
+	/** 私有化构造函数 */
+	protected LotteryStorm() {}
+	
 	/**
 	 * 扫描并加入节奏风暴
 	 */
@@ -125,7 +128,7 @@ public class LotteryStorm extends _Lottery {
 	}
 	
 	/**
-	 * 节奏风暴抽奖  // FIXME
+	 * 节奏风暴抽奖  // FIXME 某个用户是否成功
 	 * @param roomId
 	 * @return
 	 */
