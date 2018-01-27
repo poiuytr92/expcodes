@@ -84,7 +84,7 @@ public class SafetyMonitor extends LoopThread {
 		this.noResponseCnt = 0;
 		this.loopCnt = LOOP_LIMIT;
 		this.cause = UNCHECK_CAUSE;
-		this.loginUser = CookiesMgr.INSTN().MAIN().getNickName();
+		this.loginUser = CookiesMgr.INSTN().MAIN().NICKNAME();
 		this.appName = "";
 		this.appVersion = "";
 	}

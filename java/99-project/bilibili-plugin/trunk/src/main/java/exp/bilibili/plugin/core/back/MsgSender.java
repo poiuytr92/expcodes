@@ -6,19 +6,19 @@ import java.util.List;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.cookie.CookiesMgr;
+import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.xhr.Assn;
 import exp.bilibili.protocol.xhr.Certificate;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
-import exp.bilibili.protocol.xhr.EnergyLottery;
+import exp.bilibili.protocol.xhr.HotLive;
 import exp.bilibili.protocol.xhr.Login;
-import exp.bilibili.protocol.xhr.PrivateMsg;
+import exp.bilibili.protocol.xhr.LotteryEnergy;
+import exp.bilibili.protocol.xhr.LotteryStorm;
+import exp.bilibili.protocol.xhr.LotteryTV;
 import exp.bilibili.protocol.xhr.Redbag;
 import exp.bilibili.protocol.xhr.Sign;
-import exp.bilibili.protocol.xhr.StormLottery;
-import exp.bilibili.protocol.xhr.TvLottery;
 import exp.bilibili.protocol.xhr.UserInfo;
 
 // FIXME 移植回去每个协议内部， 不需要总协议？
@@ -33,8 +33,8 @@ public class MsgSender {
 		return Login.toLogin(username, password, vccode, vcCookies);
 	}
 	
-	public static String queryUsername(HttpCookie cookie) {
-		return UserInfo.queryUsername(cookie.toNVCookie());
+	public static boolean queryUserInfo(HttpCookie cookie) {
+		return UserInfo.query(cookie);
 	}
 
 	public static boolean toAssn() {
@@ -63,13 +63,11 @@ public class MsgSender {
 	
 	public static List<Integer> queryTopLiveRoomIds(
 			final int MAX_PAGES, final int MIN_ONLINE) {
-		HttpCookie cookie = CookiesMgr.INSTN().VEST();	// 使用马甲号扫描
-		return StormLottery.queryTopLiveRoomIds(
-				cookie.toNVCookie(), MAX_PAGES, MIN_ONLINE);
+		return HotLive.queryTopLiveRoomIds(MAX_PAGES, MIN_ONLINE);
 	}
 	
-	public static int scanAndJoinStorms(List<Integer> roomIds, long scanInterval) {
-		return StormLottery.scanStorms(roomIds, scanInterval);
+	public static int scanAndJoinStorms(List<Integer> roomIds) {
+		return LotteryStorm.toDo(roomIds);
 	}
 	
 	/**
@@ -78,33 +76,15 @@ public class MsgSender {
 	 * @return
 	 */
 	public static boolean toStormLottery(int roomId, String raffleId) {
-		boolean isOk = true;
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
-			isOk &= StormLottery.toStormLottery(
-					cookie.toNVCookie(), cookie.CSRF(), roomId, raffleId);
-		}
-		return isOk;
+		return LotteryStorm.toDo(roomId, raffleId);
 	}
 	
 	public static String toTvLottery(int roomId, String raffleId) {
-		String errDesc = "";	// FIXME
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
-			errDesc = TvLottery.toTvLottery(cookie.toNVCookie(), roomId, raffleId);
-		}
-		return errDesc;
+		return LotteryTV.toDo(roomId, raffleId);
 	}
 	
 	public static int toEgLottery(int roomId) {
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
-			EnergyLottery.toEgLottery(cookie.toNVCookie(), roomId);
-		}
-		return 0; // FIXME
+		return LotteryEnergy.toDo(roomId);
 	}
 	
 	public static String queryRedbagPool() {
@@ -125,22 +105,22 @@ public class MsgSender {
 		return Redbag.exchangeRedbag(cookie.toNVCookie(), id, num);
 	}
 	
-	public static boolean sendChat(String msg) {
+	public static boolean sendDanmu(String msg) {
 		ChatColor color = ChatColor.RANDOM();
-		return sendChat(msg, color);
+		return sendDanmu(msg, color);
 	}
 	
-	public static boolean sendChat(String msg, int roomId) {
+	public static boolean sendDanmu(String msg, int roomId) {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
 		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		ChatColor color = ChatColor.RANDOM();
-		return Chat.send(cookie, roomId, msg, color);
+		return Chat.sendDanmu(cookie, roomId, msg, color);
 	}
 	
-	public static boolean sendChat(String msg, ChatColor color) {
+	public static boolean sendDanmu(String msg, ChatColor color) {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
 		int roomId = UIUtils.getCurRoomId();
-		return Chat.send(cookie, roomId, msg, color);
+		return Chat.sendDanmu(cookie, roomId, msg, color);
 	}
 	
 	/**
@@ -150,7 +130,8 @@ public class MsgSender {
 	 * @param msg 发送消息
 	 * @return
 	 */
-	public static boolean sendPrivateMsg(String sendId, String recvId, String msg) {
-		return PrivateMsg.sendPrivateMsg(sendId, recvId, msg);
+	public static boolean sendPM(String recvId, String msg) {
+		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
+		return Chat.sendPM(cookie, recvId, msg);
 	}
 }

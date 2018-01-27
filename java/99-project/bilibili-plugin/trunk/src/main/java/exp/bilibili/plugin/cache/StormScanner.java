@@ -42,9 +42,6 @@ public class StormScanner extends LoopThread {
 	/** 使用websocket直接监听的房间(相对耗资源, 暂时针对TOP-10) */
 	private final static int TOP = 10;
 	
-	/** 扫描每个房间的间隔(风险行为， 频率需要控制，太快可能被查出来，太慢成功率太低) */
-	private final static long SCAN_INTERVAL = 50;
-	
 	/** 每轮询N次所有房间，则刷新房间列表 */
 	private final static int LOOP_LIMIT = 10;
 	
@@ -199,7 +196,7 @@ public class StormScanner extends LoopThread {
 	 * 扫描并加入其他热门房间的节奏风暴抽奖
 	 */
 	public void sancAndJoinStorm() {
-		int cnt = MsgSender.scanAndJoinStorms(hotRoomIds, SCAN_INTERVAL);
+		int cnt = MsgSender.scanAndJoinStorms(hotRoomIds);
 		if(cnt > 0) {
 			log.info("参与节奏风暴抽奖成功(连击x{})", cnt);
 		}

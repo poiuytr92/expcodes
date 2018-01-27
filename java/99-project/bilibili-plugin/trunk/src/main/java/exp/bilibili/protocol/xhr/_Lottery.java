@@ -4,17 +4,19 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
-import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
+import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
-public class _Lottery extends __Protocol {
+class _Lottery extends __Protocol {
 
+	protected _Lottery() {}
+	
 	/**
 	 * 加入抽奖
 	 * @param url
@@ -24,53 +26,66 @@ public class _Lottery extends __Protocol {
 	 * @param type
 	 * @return
 	 */
-	protected static String joinLottery(String url, int roomId, String raffleId, 
-			String cookie, String csrf, LotteryType type) {
-		String errDesc = "";
-		int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
-		if(realRoomId > 0) {
-			String sRoomId = String.valueOf(realRoomId);
-			Map<String, String> headers = GET_HEADER(cookie, sRoomId);
-			Map<String, String> requests = (LotteryType.STORM == type ? 
-					_toStormRequestParams(sRoomId, raffleId, csrf) : 
-					_toLotteryRequestParams(sRoomId, raffleId));
-			
-			String response = HttpURLUtils.doPost(url, headers, requests, Config.DEFAULT_CHARSET);
-			errDesc = _analyseLotteryResponse(response);
-			
-			// 系统繁忙哟，请再试一下吧
-			if(errDesc.contains("系统繁忙")) {
-				ThreadUtils.tSleep(1000);
-				response = HttpURLUtils.doPost(url, headers, requests, Config.DEFAULT_CHARSET);
-				errDesc = _analyseLotteryResponse(response);
-			}
-		} else {
-			log.warn("参加抽奖失败: 无效的房间号 [{}]", roomId);
+	protected static String join(LotteryType type, HttpCookie cookie, 
+			String url, int roomId, String raffleId) {
+		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
+		String sRoomId = String.valueOf(roomId);
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);
+		Map<String, String> request = (LotteryType.STORM == type ? 
+				getRequest(sRoomId, raffleId, cookie.CSRF()) : 
+				getRequest(sRoomId, raffleId));
+		
+		String response = HttpURLUtils.doPost(url, header, request);
+		String errDesc = analyseResponse(response);
+		
+		// 重试一次: [系统繁忙哟，请再试一下吧]
+		if(errDesc.contains("系统繁忙")) {
+			ThreadUtils.tSleep(1000);
+			response = HttpURLUtils.doPost(url, header, request);
+			errDesc = analyseResponse(response);
 		}
 		return errDesc;
 	}
 	
-	protected static Map<String, String> _toLotteryRequestParams(String realRoomId) {
-		Map<String, String> params = new HashMap<String, String>();
-		params.put("roomid", realRoomId);	// 正在抽奖的房间号
-		return params;
+	/**
+	 * 高能抽奖请求参数
+	 * @param roomId
+	 * @return
+	 */
+	protected static Map<String, String> getRequest(String roomId) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("roomid", roomId);	// 正在抽奖的房间号
+		return request;
 	}
 	
-	private static Map<String, String> _toLotteryRequestParams(String realRoomId, String raffleId) {
-		Map<String, String> params = _toLotteryRequestParams(realRoomId);
-		params.put("raffleId", raffleId);	// 礼物编号
-		return params;
+	/**
+	 * 小电视抽奖请求参数
+	 * @param roomId
+	 * @param raffleId
+	 * @return
+	 */
+	private static Map<String, String> getRequest(String roomId, String raffleId) {
+		Map<String, String> request = getRequest(roomId);
+		request.put("raffleId", raffleId);	// 礼物编号
+		return request;
 	}
 	
-	private static Map<String, String> _toStormRequestParams(String realRoomId, String raffleId, String csrf) {
-		Map<String, String> params = _toLotteryRequestParams(realRoomId);
-		params.put("id", raffleId);	// 礼物编号
-		params.put("color", ChatColor.WHITE.RGB());
-		params.put("captcha_token", "");
-		params.put("captcha_phrase", "");
-		params.put("token", "");
-		params.put("csrf_token", csrf);
-		return params;
+	/**
+	 * 节奏风暴抽奖请求参数
+	 * @param roomId
+	 * @param raffleId
+	 * @param csrf
+	 * @return
+	 */
+	private static Map<String, String> getRequest(String roomId, String raffleId, String csrf) {
+		Map<String, String> request = getRequest(roomId);
+		request.put("id", raffleId);	// 礼物编号
+		request.put("color", ChatColor.WHITE.RGB());
+		request.put("captcha_token", "");
+		request.put("captcha_phrase", "");
+		request.put("token", "");
+		request.put("csrf_token", csrf);
+		return request;
 	}
 	
 	/**
@@ -80,7 +95,7 @@ public class _Lottery extends __Protocol {
 	 *   节奏风暴 {"code":0,"msg":"","message":"","data":{"gift_id":39,"title":"节奏风暴","content":"<p>你是前 35 位跟风大师<br />恭喜你获得一个亿圆(7天有效期)</p>","mobile_content":"你是前 35 位跟风大师","gift_img":"http://static.hdslb.com/live-static/live-room/images/gift-section/gift-39.png?2017011901","gift_num":1,"gift_name":"亿圆"}}
 	 * @return
 	 */
-	private static String _analyseLotteryResponse(String response) {
+	private static String analyseResponse(String response) {
 		String errDesc = "";
 		try {
 			JSONObject json = JSONObject.fromObject(response);

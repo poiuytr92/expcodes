@@ -27,7 +27,6 @@ import exp.bilibili.protocol.bean.wsjson.GuardBuy;
 import exp.bilibili.protocol.bean.wsjson.SendGift;
 import exp.libs.envm.Charset;
 import exp.libs.envm.DBType;
-import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.io.JarUtils;
 import exp.libs.utils.other.StrUtils;
@@ -62,14 +61,11 @@ public class ActivityMgr {
 		DS.setName(ENV_DB_PATH);
 	}
 	
-	/** 管理员在B站的用户ID */
-	private final static String SENDER_UID = CryptoUtils.deDES("349B00EE2F2B0A6B");
-	
 	/** 总活跃值每10W可兑换软件使用期1天 */
 	public final static int DAY_UNIT = 100000;
 	
-	/** 触发个人私信的活跃值单位(即每至少超过1W活跃值时发送一次私信) */
-	private final static int COST_UNIT = 10000;
+	/** 触发个人私信的活跃值单位(即每至少超过10W活跃值时发送一次私信) */
+	private final static int COST_UNIT = 100000;
 	
 	/** 打印活跃值时需要除掉的单位（100） */
 	private final static int SHOW_UNIT = 100;
@@ -362,7 +358,7 @@ public class ActivityMgr {
 				(before % COST_UNIT + cost) >= COST_UNIT) {
 			String msg = StrUtils.concat("恭喜您在 [", ROOM_ID, "] 直播间的活跃度达到 [", 
 					(after / SHOW_UNIT), "]");
-			MsgSender.sendPrivateMsg(SENDER_UID, uid, msg);
+			MsgSender.sendPM(uid, msg);
 		}
 	}
 	

@@ -7,14 +7,15 @@ import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
-import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
+import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
- * 版聊弹幕
+ * 版聊弹幕/私信消息
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -27,15 +28,21 @@ public class Chat extends __Protocol {
 	/** 弹幕URL */
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
 	
+	/** 私信主机 */
+	private final static String MSG_HOST = Config.getInstn().MSG_HOST();
+	
+	/** 私信URL */
+	private final static String MSG_URL = Config.getInstn().MSG_URL();
+	
 	/**
 	 * 发送弹幕消息
-	 * @param cookie 发送用户的cookie
+	 * @param cookie 发送弹幕的账号cookie
 	 * @param roomId 目标直播间房号
 	 * @param msg 弹幕消息
 	 * @param color 弹幕颜色
 	 * @return
 	 */
-	public static boolean send(HttpCookie cookie, int roomId, String msg, ChatColor color) {
+	public static boolean sendDanmu(HttpCookie cookie, int roomId, String msg, ChatColor color) {
 		boolean isOk = false;
 		if(roomId > 0) {
 			String sRoomId = String.valueOf(roomId);
@@ -51,7 +58,7 @@ public class Chat extends __Protocol {
 	}
 	
 	/**
-	 * 
+	 * 弹幕请求参数
 	 * @param msg
 	 * @param realRoomId
 	 * @param chatColor
@@ -69,8 +76,60 @@ public class Chat extends __Protocol {
 	}
 	
 	/**
+	 * 发送私信
+	 * @param cookie 发送账号的cookie
+	 * @param sendId 发送账号的用户ID
+	 * @param recvId 接收账号的用户ID
+	 * @param msg 发送消息
+	 * @return
+	 */
+	public static boolean sendPM(HttpCookie cookie, String recvId, String msg) {
+		Map<String, String> header = getHeader(cookie.toNVCookie());
+		Map<String, String> request = getRequest(cookie.CSRF(), cookie.UID(), recvId, msg);
+		String response = HttpURLUtils.doPost(MSG_URL, header, request);
+		return analyseResponse(response);
+	}
+	
+	/**
+	 * 私信头参数
+	 * @param cookie
+	 * @return
+	 */
+	private static Map<String, String> getHeader(String cookie) {
+		Map<String, String> header = POST_HEADER(cookie);
+		header.put(HttpUtils.HEAD.KEY.HOST, LINK_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, MSG_HOST);
+		header.put(HttpUtils.HEAD.KEY.REFERER, MSG_HOST);
+		return header;
+	}
+	
+	/**
+	 * 私信请求参数
+	 * @param csrf
+	 * @param sendId
+	 * @param recvId
+	 * @param msg
+	 * @return
+	 */
+	private static Map<String, String> getRequest(String csrf, 
+			String sendId, String recvId, String msg) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("csrf_token", csrf);
+		request.put("platform", "pc");
+		request.put("msg[sender_uid]", sendId);
+		request.put("msg[receiver_id]", recvId);
+		request.put("msg[receiver_type]", "1");
+		request.put("msg[msg_type]", "1");
+		request.put("msg[content]", StrUtils.concat("{\"content\":\"", msg, "\"}"));
+		request.put("msg[timestamp]", String.valueOf(System.currentTimeMillis() / 1000));
+		return request;
+	}
+	
+	/**
 	 * 
-	 * @param response  {"code":-101,"msg":"请先登录","data":[]}
+	 * @param response  
+	 * 		弹幕: {"code":-101,"msg":"请先登录","data":[]}
+	 * 		私信: {"code":0,"msg":"ok","message":"ok","data":{"msg_key":6510413634042085687,"_gt_":0}}
 	 * @return
 	 */
 	private static boolean analyseResponse(String response) {
@@ -82,11 +141,10 @@ public class Chat extends __Protocol {
 				isOk = true;
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				UIUtils.log("发送弹幕失败: ", reason);
+				log.warn("发送消息失败: {}", reason);
 			}
 		} catch(Exception e) {
-			UIUtils.log("发送弹幕失败: 服务器无响应");
-			log.error("发送弹幕失败: {}", response, e);
+			log.error("发送消息失败: {}", response, e);
 		}
 		return isOk;
 	}

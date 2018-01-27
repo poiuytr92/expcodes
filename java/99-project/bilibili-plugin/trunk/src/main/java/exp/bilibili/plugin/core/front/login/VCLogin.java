@@ -96,10 +96,7 @@ class VCLogin {
 	protected static HttpCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
 		HttpCookie cookie = MsgSender.toLogin(username, password, vccode, vcCookies);
-		if(cookie.isVaild() == true) {
-			String nickName = MsgSender.queryUsername(cookie);
-			cookie.setNickName(nickName);
-		}
+		MsgSender.queryUserInfo(cookie);
 		return cookie;
 	}
 	

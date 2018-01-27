@@ -25,13 +25,13 @@ public class LotteryRoom {
 	private LotteryType type;
 	
 	public LotteryRoom(int roomId) {
-		this(roomId, "", LotteryType.OTHER);
+		this(roomId, "", LotteryType.ENGERY);
 	}
 	
 	public LotteryRoom(int roomId, String raffleId, LotteryType type) {
 		this.roomId = roomId;
 		this.raffleId = (StrUtils.isEmpty(raffleId) ? "" : raffleId);
-		this.type = (type == null ? LotteryType.OTHER : type);
+		this.type = (type == null ? LotteryType.ENGERY : type);
 	}
 
 	public int getRoomId() {

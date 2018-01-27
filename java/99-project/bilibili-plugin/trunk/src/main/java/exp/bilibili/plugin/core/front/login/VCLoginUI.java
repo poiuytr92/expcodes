@@ -226,13 +226,13 @@ public class VCLoginUI extends PopChildWindow {
 	 */
 	private void toLogin(String username, String password, String vccode) {
 		HttpCookie cookies = VCLogin.toLogin(username, password, vccode, vcCookies);
-		if(cookies.isExpire()) {
+		if(!cookies.isVaild()) {
 			SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
 			reflashBtn.doClick();
 			
 		} else {
 			CookiesMgr.INSTN().add(cookies, type);
-			SwingUtils.info("登陆成功: ".concat(cookies.getNickName()));
+			SwingUtils.info("登陆成功: ".concat(cookies.NICKNAME()));
 			_hide();
 		}
 	}
@@ -257,7 +257,7 @@ public class VCLoginUI extends PopChildWindow {
 				isOk = CookiesMgr.checkLogined(cookies);
 				if(isOk == true) {
 					_hide();
-					System.out.println("登陆成功: ".concat(cookies.getNickName()));
+					System.out.println("登陆成功: ".concat(cookies.NICKNAME()));
 				}
 				
 			} else if(LoginType.VEST == type) {

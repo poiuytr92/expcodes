@@ -68,7 +68,7 @@ public class CookiesMgr {
 	
 	public boolean add(HttpCookie cookie, LoginType type) {
 		boolean isOk = false;
-		if(cookie == null || cookie == HttpCookie.NULL || !cookie.isVaild()) {
+		if(cookie == null || cookie == HttpCookie.NULL) {
 			return isOk;
 		}
 		
@@ -76,13 +76,19 @@ public class CookiesMgr {
 			this.mainCookie = cookie;
 			isOk = save(cookie, COOKIE_MAIN_PATH);
 			
+			// 默认情况下, 用主号作为马甲号
+			if(isOk == true) {
+				this.vestCookie = cookie;
+				save(cookie, COOKIE_VEST_PATH);
+			}
+			
 		} else if(LoginType.VEST == type) {
 			this.vestCookie = cookie;
 			isOk = save(cookie, COOKIE_VEST_PATH);
 			
 		} else if(LoginType.TEMP == type) {
 			this.tempCookie = cookie;
-			isOk = true;
+			isOk = true;	// 临时cookie无需写入外存
 			
 		} else {
 			this.miniCookies.add(cookie);
@@ -171,14 +177,12 @@ public class CookiesMgr {
 	
 	/**
 	 * 检查cookie是否可以登陆成功
-	 *  若成功则把昵称也更新到cookie中
+	 *  若成功则把账号ID和昵称也更新到cookie中
 	 * @param cookie
 	 * @return
 	 */
 	public static boolean checkLogined(HttpCookie cookie) {
-		String nickName = MsgSender.queryUsername(cookie);
-		cookie.setNickName(nickName);
-		return !cookie.isExpire();
+		return MsgSender.queryUserInfo(cookie);
 	}
 	
 }

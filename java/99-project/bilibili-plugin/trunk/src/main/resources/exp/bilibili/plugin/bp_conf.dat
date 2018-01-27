@@ -15,7 +15,7 @@
         <ws caption="消息推送websocket服务器"><![CDATA[ws://broadcastlv.chat.bilibili.com:2244/sub]]></ws>
         <chat caption="版聊服务器"><![CDATA[https://api.live.bilibili.com/msg/send]]></chat>
         <sign caption="签到服务器"><![CDATA[http://api.live.bilibili.com/sign/doSign]]></sign>
-        <account caption="账号信息服务器"><![CDATA[http://account.bilibili.com/home/userInfo]]></account>
+        <account caption="账号信息服务器"><![CDATA[https://api.live.bilibili.com/i/api/liveinfo]]></account>
         <assn caption="友爱社签到服务器"><![CDATA[http://api.live.bilibili.com/activity/v1/task/receive_award]]></assn>
         <linkHost caption="直播中心主机"><![CDATA[api.vc.bilibili.com]]></linkHost>
         <link caption="直播中心服务器"><![CDATA[http://link.bilibili.com]]></link>

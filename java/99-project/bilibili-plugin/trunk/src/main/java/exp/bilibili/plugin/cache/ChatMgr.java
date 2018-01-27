@@ -190,7 +190,7 @@ public class ChatMgr extends LoopThread {
 		} else {
 			msg = msg.concat("还在浪吗?");
 		}
-		MsgSender.sendChat(msg, roomId);
+		MsgSender.sendDanmu(msg, roomId);
 	}
 	
 	/**
@@ -207,7 +207,7 @@ public class ChatMgr extends LoopThread {
 		
 		if(MsgKwMgr.containsNight(msg)) {
 			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
-			MsgSender.sendChat(chatMsg, UIUtils.getCurChatColor());
+			MsgSender.sendDanmu(chatMsg, UIUtils.getCurChatColor());
 			nightedUsers.add(username);
 		}
 	}
@@ -220,7 +220,7 @@ public class ChatMgr extends LoopThread {
 	public boolean sendThxEnergy(String msg) {
 		boolean isOk = false;
 		if(isAutoThankYou()) {
-			isOk = MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, msg), 
+			isOk = MsgSender.sendDanmu(StrUtils.concat(NOTICE_KEY, msg), 
 					UIUtils.getCurChatColor());
 		}
 		return isOk;
@@ -235,7 +235,7 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		MsgSender.sendChat(StrUtils.concat(NOTICE_KEY, "感谢 ", msg), 
+		MsgSender.sendDanmu(StrUtils.concat(NOTICE_KEY, "感谢 ", msg), 
 				UIUtils.getCurChatColor());
 	}
 	
@@ -280,7 +280,7 @@ public class ChatMgr extends LoopThread {
 		if(userNum > THX_USER_LIMIT) {
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢前面[", userNum, 
 					"]个大佬的投喂d(´ω｀*)");
-			MsgSender.sendChat(msg, UIUtils.getCurChatColor());
+			MsgSender.sendDanmu(msg, UIUtils.getCurChatColor());
 			
 		// 分别合并每个用户的投喂礼物再感谢
 		} else {
@@ -317,7 +317,7 @@ public class ChatMgr extends LoopThread {
 					int cost = ActivityMgr.showCost(giftName, num);
 					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
 							MsgKwMgr.getAdj(), "投喂", num, "个[", giftName, "],活跃+", cost);
-					MsgSender.sendChat(msg, UIUtils.getCurChatColor());
+					MsgSender.sendDanmu(msg, UIUtils.getCurChatColor());
 				}
 			}
 			
@@ -335,7 +335,7 @@ public class ChatMgr extends LoopThread {
 			
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
 					MsgKwMgr.getAdj(), "投喂[", sb.toString(), "],活跃+", cost);
-			MsgSender.sendChat(msg, UIUtils.getCurChatColor());
+			MsgSender.sendDanmu(msg, UIUtils.getCurChatColor());
 		}
 		
 		gifts.clear();
@@ -350,7 +350,7 @@ public class ChatMgr extends LoopThread {
 		}
 		
 		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(MsgKwMgr.getNotices()));
-		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
+		MsgSender.sendDanmu(msg, UIUtils.getCurChatColor());
 	}
 	
 	/**
@@ -362,7 +362,7 @@ public class ChatMgr extends LoopThread {
 		}
 		
 		String msg = RandomUtils.randomElement(MsgKwMgr.getCalls());
-		MsgSender.sendChat(msg, UIUtils.getCurChatColor());
+		MsgSender.sendDanmu(msg, UIUtils.getCurChatColor());
 	}
 	
 	public void setAutoThankYou() {
@@ -408,7 +408,7 @@ public class ChatMgr extends LoopThread {
 	public void countChatCnt(String chatUser) {
 		
 		// 当是登陆用户发言时, 清空计数器
-		if(CookiesMgr.INSTN().MAIN().getNickName().equals(chatUser)) {
+		if(CookiesMgr.INSTN().MAIN().NICKNAME().equals(chatUser)) {
 			chatCnt = 0;
 			
 		// 当是其他用户发言时, 计数器+1

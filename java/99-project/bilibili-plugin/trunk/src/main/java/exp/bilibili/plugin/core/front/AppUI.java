@@ -586,7 +586,7 @@ public class AppUI extends MainWindow {
 				
 				String msg = chatTF.getText();
 				if(StrUtils.isNotEmpty(msg)) {
-					MsgSender.sendChat(msg, curChatColor);
+					MsgSender.sendDanmu(msg, curChatColor);
 					chatTF.setText("");
 				}
 			}

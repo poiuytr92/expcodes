@@ -107,7 +107,7 @@ class QRLogin extends LoopThread {
 		qrUI._hide();
 		
 		log.info("登陆{}: {}", (isLogined ? "成功" : "失败"), 
-				(isLogined ? mainCookie.getNickName() : "Unknow"));
+				(isLogined ? mainCookie.NICKNAME() : "Unknow"));
 	}
 	
 	/**

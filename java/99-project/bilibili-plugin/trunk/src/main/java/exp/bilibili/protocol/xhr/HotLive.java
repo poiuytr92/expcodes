@@ -1,7 +1,6 @@
 package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,26 +10,15 @@ import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
-import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.TimeUtils;
-import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.cookie.CookiesMgr;
+import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpClient;
 
-public class StormLottery extends _Lottery {
+public class HotLive extends __Protocol {
 
 	private final static String LIVE_LIST_URL = Config.getInstn().LIVE_LIST_URL();
-	
-	private final static String STORM_CHECK_URL = Config.getInstn().STORM_CHECK_URL();
-	
-	private final static String STORM_JOIN_URL = Config.getInstn().STORM_JOIN_URL();
-	
-	/** 最上一次抽奖过的节奏风暴编号(礼物编号是递增的) */
-	private static int LAST_STORMID = 0;
 	
 	/**
 	 * 扫描当前的人气直播间房号列表
@@ -39,9 +27,10 @@ public class StormLottery extends _Lottery {
 	 * @param MIN_ONLINE 要求房间最小人数(达标才扫描)
 	 * @return
 	 */
-	public static List<Integer> queryTopLiveRoomIds(String cookie, 
-			final int MAX_PAGES, final int MIN_ONLINE) {
-		Map<String, String> header = GET_HEADER(cookie, "all");
+	public static List<Integer> queryTopLiveRoomIds(final int MAX_PAGES, final int MIN_ONLINE) {
+		HttpCookie cookie = CookiesMgr.INSTN().VEST();	// 使用马甲号扫描
+		
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "all");
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("area", "all");
 		request.put("order", "online");
@@ -86,121 +75,6 @@ public class StormLottery extends _Lottery {
 			log.error("提取人气直播房间号失败: {}", response, e);
 		}
 		return roomIds;
-	}
-	
-	/**
-	 * 扫描节奏风暴
-	 */
-	public static int scanStorms(List<Integer> roomIds, long scanInterval) {
-		int sum = 0;
-		HttpClient client = new HttpClient();
-		Map<String, String> requests = new HashMap<String, String>();
-		for(Integer roomId : roomIds) {
-			String sRoomId = String.valueOf(roomId);
-			requests.put("roomid", sRoomId);
-			Map<String, String> headers = GET_HEADER(
-					CookiesMgr.INSTN().VEST().toNVCookie(), sRoomId);
-			
-			int max = 0;
-			do {
-				max = 0;
-				String response = client.doGet(STORM_CHECK_URL, headers, requests);
-				List<String> raffleIds = _getStormIds(roomId, response);
-				
-				Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-				while(cookieIts.hasNext()) {
-					HttpCookie cookie = cookieIts.next();
-					int cnt = _joinStorms(cookie.toNVCookie(), cookie.CSRF(), roomId, raffleIds);
-					if(cnt > 0) {
-						max = (max < cnt ? cnt : max);
-					} else {
-						break;
-					}
-				}
-				
-				sum += max;
-			} while(max > 0);	// 对于存在节奏风暴的房间, 再扫描一次(可能有人连续送节奏风暴)
-			ThreadUtils.tSleep(scanInterval);
-		}
-		client.close();
-		return sum;
-	}
-	
-	/**
-	 * 获取节奏风暴的礼物ID
-	 * @param roomId
-	 * @param response {"code":0,"msg":"","message":"","data":{"id":157283,"roomid":2717660,"num":100,"time":50,"content":"康康胖胖哒……！","hasJoin":0}}
-	 * @return
-	 */
-	private static List<String> _getStormIds(int roomId, String response) {
-		List<String> raffleIds = new LinkedList<String>();
-		try {
-			JSONObject json = JSONObject.fromObject(response);
-			Object data = json.get(BiliCmdAtrbt.data);
-			if(data instanceof JSONObject) {
-				JSONObject room = (JSONObject) data;
-				int raffleId = JsonUtils.getInt(room, BiliCmdAtrbt.id, 0);
-				if(raffleId > LAST_STORMID) {
-					LAST_STORMID = raffleId;
-					raffleIds.add(String.valueOf(raffleId));
-				}
-						
-			} else if(data instanceof JSONArray) {
-				JSONArray array = (JSONArray) data;
-				for(int i = 0 ; i < array.size(); i++) {
-					JSONObject room = array.getJSONObject(i);
-					int raffleId = JsonUtils.getInt(room, BiliCmdAtrbt.id, 0);
-					if(raffleId > LAST_STORMID) {
-						LAST_STORMID = raffleId;
-						raffleIds.add(String.valueOf(raffleId));
-					}
-				}
-			}
-		} catch(Exception e) {
-			log.error("提取直播间 [{}] 的节奏风暴信息失败: {}", roomId, response, e);
-		}
-		return raffleIds;
-	}
-	
-	/**
-	 * 加入节奏风暴抽奖
-	 * @param roomId
-	 * @param raffleIds
-	 * @return
-	 */
-	private static int _joinStorms(String cookie, String csrf, int roomId, List<String> raffleIds) {
-		int cnt = 0;
-		if(raffleIds.size() > 0) {
-			String msg = StrUtils.concat("直播间 [", roomId, 
-					"] 开启了节奏风暴 [x", raffleIds.size(), "] !!!");
-			UIUtils.notify(msg);
-			
-			for(String raffleId : raffleIds) {
-				cnt += (toStormLottery(cookie, csrf, roomId, raffleId) ? 1 : 0);
-			}
-		}
-		return cnt;
-	}
-	
-	/**
-	 * 节奏风暴抽奖
-	 * @param roomId
-	 * @return
-	 */
-	public static boolean toStormLottery(String cookie, String csrf, int roomId, String raffleId) {
-		boolean isOk = true;
-		String errDesc = joinLottery(STORM_JOIN_URL, roomId, raffleId, cookie, csrf, LotteryType.STORM);
-		if(StrUtils.isEmpty(errDesc)) {
-			log.info("参与直播间 [{}] 抽奖成功", roomId);
-			UIUtils.statistics("成功(节奏风暴): 抽奖直播间 [", roomId, "]");
-			UIUtils.updateLotteryCnt();
-			
-		} else {
-			log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
-			UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
-			isOk = false;
-		}
-		return isOk;
 	}
 	
 }

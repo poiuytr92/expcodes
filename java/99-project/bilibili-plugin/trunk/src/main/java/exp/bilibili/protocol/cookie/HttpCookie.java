@@ -19,6 +19,9 @@ public class HttpCookie {
 	/** B站CSRF标识 */
 	private final static String CSRF_KEY = "bili_jct";
 	
+	/** 该cookie对应的用户ID */
+	private String uid;
+	
 	/** 该cookie对应的用户昵称 */
 	private String nickName;
 	
@@ -34,6 +37,7 @@ public class HttpCookie {
 	private boolean isChanged;
 	
 	public HttpCookie() {
+		this.uid = "";
 		this.nickName = "";
 		this.cookies = new LinkedList<_HttpCookie>();
 		this.nvCookies = "";
@@ -63,19 +67,11 @@ public class HttpCookie {
 	}
 	
 	/**
-	 * cookies是否过期
-	 * @return true:已过期; false未过期
-	 */
-	public boolean isExpire() {
-		return StrUtils.isEmpty(nickName);
-	}
-	
-	/**
 	 * cookies是否有效
 	 * @return true:有效; false:无效
 	 */
 	public boolean isVaild() {
-		return cookies.size() > 0;
+		return (cookies.size() > 0 && StrUtils.isNotEmpty(uid, nickName));
 	}
 	
 	public void add(Cookie cookie) {
@@ -95,10 +91,6 @@ public class HttpCookie {
 				csrf = cookie.getValue();
 			}
 		}
-	}
-	
-	public String CSRF() {
-		return csrf;
 	}
 	
 	public String toNVCookie() {
@@ -129,8 +121,20 @@ public class HttpCookie {
 		return seleniumCookies;
 	}
 	
-	public String getNickName() {
+	public String CSRF() {
+		return csrf;
+	}
+	
+	public String UID() {
+		return uid;
+	}
+	
+	public String NICKNAME() {
 		return nickName;
+	}
+	
+	public void setUid(String uid) {
+		this.uid = uid;
 	}
 
 	public void setNickName(String nickName) {
