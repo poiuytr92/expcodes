@@ -36,13 +36,13 @@ class _Lottery extends __Protocol {
 				getRequest(sRoomId, raffleId));
 		
 		String response = HttpURLUtils.doPost(url, header, request);
-		String errDesc = analyseResponse(response);
+		String errDesc = analyse(response);
 		
 		// 重试一次: [系统繁忙哟，请再试一下吧]
 		if(errDesc.contains("系统繁忙")) {
 			ThreadUtils.tSleep(1000);
 			response = HttpURLUtils.doPost(url, header, request);
-			errDesc = analyseResponse(response);
+			errDesc = analyse(response);
 		}
 		return errDesc;
 	}
@@ -95,7 +95,7 @@ class _Lottery extends __Protocol {
 	 *   节奏风暴 {"code":0,"msg":"","message":"","data":{"gift_id":39,"title":"节奏风暴","content":"<p>你是前 35 位跟风大师<br />恭喜你获得一个亿圆(7天有效期)</p>","mobile_content":"你是前 35 位跟风大师","gift_img":"http://static.hdslb.com/live-static/live-room/images/gift-section/gift-39.png?2017011901","gift_num":1,"gift_name":"亿圆"}}
 	 * @return
 	 */
-	private static String analyseResponse(String response) {
+	private static String analyse(String response) {
 		String errDesc = "";
 		try {
 			JSONObject json = JSONObject.fromObject(response);

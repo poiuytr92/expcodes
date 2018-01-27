@@ -6,10 +6,22 @@ import java.util.Map;
 import exp.bilibili.plugin.Config;
 import exp.libs.warp.net.http.HttpURLUtils;
 
+/**
+ * <PRE>
+ * 2018春节红包活动
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Redbag extends __Protocol {
 
+	/** 查询红包奖池URL */
 	private final static String GET_REDBAG_URL = Config.getInstn().GET_REDBAG_URL();
 	
+	/** 兑换红包URL */
 	private final static String EX_REDBAG_URL = Config.getInstn().EX_REDBAG_URL();
 	
 	/**
@@ -20,8 +32,7 @@ public class Redbag extends __Protocol {
 		Map<String, String> headers = GET_HEADER(cookie, "pages/1703/spring-2018.html");
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("_", String.valueOf(System.currentTimeMillis()));
-		String response = HttpURLUtils.doGet(GET_REDBAG_URL, headers, requests);
-		return response;
+		return HttpURLUtils.doGet(GET_REDBAG_URL, headers, requests);
 	}
 	
 	/**
@@ -37,8 +48,7 @@ public class Redbag extends __Protocol {
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("award_id", id);
 		requests.put("exchange_num", String.valueOf(num));
-		String response = HttpURLUtils.doPost(EX_REDBAG_URL, headers, requests);
-		return response;
+		return HttpURLUtils.doPost(EX_REDBAG_URL, headers, requests);
 	}
 	
 }

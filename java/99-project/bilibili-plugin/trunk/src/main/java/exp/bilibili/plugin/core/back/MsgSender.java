@@ -3,29 +3,26 @@ package exp.bilibili.plugin.core.back;
 import java.util.Iterator;
 import java.util.List;
 
-import exp.bilibili.plugin.cache.RoomMgr;
+import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
-import exp.bilibili.protocol.xhr.Assn;
-import exp.bilibili.protocol.xhr.Certificate;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
-import exp.bilibili.protocol.xhr.HotLive;
 import exp.bilibili.protocol.xhr.Login;
 import exp.bilibili.protocol.xhr.LotteryEnergy;
 import exp.bilibili.protocol.xhr.LotteryStorm;
 import exp.bilibili.protocol.xhr.LotteryTV;
+import exp.bilibili.protocol.xhr.Other;
 import exp.bilibili.protocol.xhr.Redbag;
-import exp.bilibili.protocol.xhr.Sign;
-import exp.bilibili.protocol.xhr.UserInfo;
 
 // FIXME 移植回去每个协议内部， 不需要总协议？
+// 最终状态
 public class MsgSender {
 
 	public static String queryCertTags() {
-		return Certificate.queryTags();
+		return Other.queryCertificateTags();
 	}
 	
 	public static HttpCookie toLogin(String username, String password, 
@@ -34,19 +31,22 @@ public class MsgSender {
 	}
 	
 	public static boolean queryUserInfo(HttpCookie cookie) {
-		return UserInfo.query(cookie);
+		return Login.queryUserInfo(cookie);
 	}
 
 	public static boolean toAssn() {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号签到有爱社?
-		return Assn.toSign(cookie);
+		return DailyTasks.toAssn(cookie);
 	}
 	
 	public static void toSign() {
+		int roomId = Config.getInstn().SIGN_ROOM_ID();
+		roomId = (roomId <= 0 ? UIUtils.getCurRoomId() : roomId);
+		
 		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
 		while(cookieIts.hasNext()) {
 			HttpCookie cookie = cookieIts.next();
-			Sign.toSign(cookie.toNVCookie());
+			DailyTasks.toSign(cookie, roomId);
 		}
 	}
 	
@@ -63,7 +63,7 @@ public class MsgSender {
 	
 	public static List<Integer> queryTopLiveRoomIds(
 			final int MAX_PAGES, final int MIN_ONLINE) {
-		return HotLive.queryTopLiveRoomIds(MAX_PAGES, MIN_ONLINE);
+		return Other.queryHotLiveRoomIds(MAX_PAGES, MIN_ONLINE);
 	}
 	
 	public static int scanAndJoinStorms(List<Integer> roomIds) {
@@ -112,7 +112,6 @@ public class MsgSender {
 	
 	public static boolean sendDanmu(String msg, int roomId) {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
-		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		ChatColor color = ChatColor.RANDOM();
 		return Chat.sendDanmu(cookie, roomId, msg, color);
 	}

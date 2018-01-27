@@ -10,9 +10,11 @@ import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.bean.MathTask;
+import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
+import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
@@ -26,20 +28,96 @@ import exp.libs.warp.net.http.HttpURLUtils;
  */
 public class DailyTasks extends __Protocol {
 
-	/** 重试间隔 */
-	private final static long SLEEP_TIME = 500;
+	/** 日常签到URL */
+	private final static String SIGN_URL = Config.getInstn().SIGN_URL();
 	
-	/** 检查任务URL */
+	/** 友爱社签到URL */
+	private final static String ASSN_URL = Config.getInstn().ASSN_URL();
+	
+	/** 检查小学数学任务URL */
 	private final static String CHECK_TASK_URL = Config.getInstn().CHECK_TASK_URL();
 	
-	/** 执行任务URL */
+	/** 执行小学数学任务URL */
 	private final static String DO_TASK_URL = Config.getInstn().DO_TASK_URL();
 	
-	/** 验证码URL */
+	/** 小学数学验证码URL */
 	private final static String VERCODE_URL = Config.getInstn().VERCODE_URL();
 	
-	/** 验证码下载路径 */
+	/** 小学数学验证码下载路径 */
 	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.jpg");
+	
+	/** 小学数学验证码重试间隔 */
+	private final static long SLEEP_TIME = 500;
+	
+	/**
+	 * 友爱社签到
+	 * @return 是否需要持续测试签到
+	 */
+	public static boolean toAssn(HttpCookie cookie) {
+		Map<String, String> header = getHeader(cookie.toNVCookie());
+		Map<String, String> request = getRequest(cookie.CSRF());
+		String response = HttpURLUtils.doPost(ASSN_URL, header, request);
+		return !analyse(response);
+	}
+	
+	/**
+	 * 有爱社请求头
+	 * @param cookie
+	 * @return
+	 */
+	private static Map<String, String> getHeader(String cookie) {
+		Map<String, String> header = POST_HEADER(cookie);
+		header.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/center/index"));
+		return header;
+	}
+	
+	/**
+	 * 有爱社请求参数
+	 * @param csrf
+	 * @return
+	 */
+	private static Map<String, String> getRequest(String csrf) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("task_id", "double_watch_task");
+		request.put("csrf_token", csrf);
+		return request;
+	}
+	
+	/**
+	 * 每日签到
+	 * @return 是否签到成功
+	 */
+	public static void toSign(HttpCookie cookie, int roomId) {
+		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
+		String sRoomId = String.valueOf(roomId);
+		Map<String, String> headers = GET_HEADER(cookie.toNVCookie(), sRoomId);
+		String response = HttpURLUtils.doGet(SIGN_URL, headers, null);
+		analyse(response);
+	}
+
+	/**
+	 * 
+	 * @param response  {"code":0,"msg":"","message":"","data":[]}
+	 * @return
+	 */
+	private static boolean analyse(String response) {
+		boolean isOk = false;
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+			if(code == 0 || reason.contains("已签到") || reason.contains("已领取")) {
+				isOk = true;
+			} else {
+				log.warn("签到失败: {}", reason);
+			}
+		} catch(Exception e) {
+			log.error("签到失败: {}", response, e);
+		}
+		return isOk;
+	}
 	
 	/**
 	 * 执行小学数学日常任务

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.protocol.cookie.HttpCookie;
@@ -43,18 +44,12 @@ public class Chat extends __Protocol {
 	 * @return
 	 */
 	public static boolean sendDanmu(HttpCookie cookie, int roomId, String msg, ChatColor color) {
-		boolean isOk = false;
-		if(roomId > 0) {
-			String sRoomId = String.valueOf(roomId);
-			Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
-			Map<String, String> request = getRequest(msg, sRoomId, color.RGB());
-			String response = HttpURLUtils.doPost(CHAT_URL, header, request);
-			isOk = analyseResponse(response);
-			
-		} else {
-			log.warn("发送弹幕失败: 无效的房间号 [{}]", roomId);
-		}
-		return isOk;
+		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
+		String sRoomId = String.valueOf(roomId);
+		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
+		Map<String, String> request = getRequest(msg, sRoomId, color.RGB());
+		String response = HttpURLUtils.doPost(CHAT_URL, header, request);
+		return analyse(response);
 	}
 	
 	/**
@@ -87,7 +82,7 @@ public class Chat extends __Protocol {
 		Map<String, String> header = getHeader(cookie.toNVCookie());
 		Map<String, String> request = getRequest(cookie.CSRF(), cookie.UID(), recvId, msg);
 		String response = HttpURLUtils.doPost(MSG_URL, header, request);
-		return analyseResponse(response);
+		return analyse(response);
 	}
 	
 	/**
@@ -132,7 +127,7 @@ public class Chat extends __Protocol {
 	 * 		私信: {"code":0,"msg":"ok","message":"ok","data":{"msg_key":6510413634042085687,"_gt_":0}}
 	 * @return
 	 */
-	private static boolean analyseResponse(String response) {
+	private static boolean analyse(String response) {
 		boolean isOk = false;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
