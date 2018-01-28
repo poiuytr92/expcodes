@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.front.login.win;
+package exp.bilibili.plugin.core.front;
 
 import java.awt.BorderLayout;
 
@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import exp.libs.warp.ui.cpt.pnl.ADPanel;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
-public class MiniLoginMgrUI extends PopChildWindow {
+public class _MiniUserMgrUI extends PopChildWindow {
 
 	private static final long serialVersionUID = 4379374798564622516L;
 
@@ -15,15 +15,15 @@ public class MiniLoginMgrUI extends PopChildWindow {
 	
 	private final static int HEIGHT = 600;
 	
-	private ADPanel<UserLine> adPanel;
+	private ADPanel<__MiniUserLine> adPanel;
 	
-	public MiniLoginMgrUI() {
+	public _MiniUserMgrUI() {
 		super("哔哩哔哩-小号管理列表", WIDTH, HEIGHT);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.adPanel = new ADPanel<UserLine>(UserLine.class);
+		this.adPanel = new ADPanel<__MiniUserLine>(__MiniUserLine.class);
 	}
 
 	@Override

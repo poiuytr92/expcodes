@@ -236,38 +236,11 @@ public class VCLoginUI extends PopChildWindow {
 		}
 	}
 	
-	/**
-	 * 清空登陆界面的输入数据
-	 */
-	public void clear() {
+	@Override
+	protected void AfterView() {
 		cookie = HttpCookie.NULL;
 		vccodeTXT.setText("");
 		reflashBtn.doClick();
-	}
-
-	@Override
-	protected void AfterView() {
-		clear();
-		
-		// FIXME
-//		boolean isOk = CookiesMgr.INSTN().load(type);
-//		if(isOk == true) {
-//			if(LoginType.MAIN == type) {
-//				HttpCookie cookies = CookiesMgr.INSTN().MAIN();
-//				isOk = CookiesMgr.checkLogined(cookies);
-//				if(isOk == true) {
-//					_hide();
-//					System.out.println("登陆成功: ".concat(cookies.NICKNAME()));
-//				}
-//				
-//			} else if(LoginType.VEST == type) {
-//				HttpCookie cookies = CookiesMgr.INSTN().VEST();
-//				isOk = CookiesMgr.checkLogined(cookies);
-//				if(isOk == true) {
-//					_hide();
-//				}
-//			}
-//		}
 	}
 
 	@Override

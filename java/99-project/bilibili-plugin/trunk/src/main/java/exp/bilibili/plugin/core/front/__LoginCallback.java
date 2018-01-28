@@ -1,8 +1,8 @@
-package exp.bilibili.plugin.core.front.login.win;
+package exp.bilibili.plugin.core.front;
 
 import exp.bilibili.protocol.cookie.HttpCookie;
 
-public interface LoginCallback {
+public interface __LoginCallback {
 
 	public void afterLogin(HttpCookie cookie);
 	

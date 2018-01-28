@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.front.login.win;
+package exp.bilibili.plugin.core.front.login;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -8,8 +8,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 
-import exp.bilibili.plugin.core.front.login.QRLoginUI;
-import exp.bilibili.plugin.core.front.login.VCLoginUI;
+import exp.bilibili.plugin.core.front.__LoginCallback;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;
@@ -25,7 +24,7 @@ public class LoginBtn {
 	
 	private JButton btn;
 	
-	private LoginCallback callback;
+	private __LoginCallback callback;
 	
 	private HttpCookie cookie;
 	
@@ -41,7 +40,7 @@ public class LoginBtn {
 		this(type, btnName, null);
 	}
 	
-	public LoginBtn(LoginType type, String btnName, LoginCallback callback) {
+	public LoginBtn(LoginType type, String btnName, __LoginCallback callback) {
 		this.type = type;
 		
 		this.loginTips = btnName;

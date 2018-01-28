@@ -1,15 +1,16 @@
-package exp.bilibili.plugin.core.front.login.win;
+package exp.bilibili.plugin.core.front;
 
 import java.awt.BorderLayout;
 
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import exp.bilibili.plugin.core.front.login.LoginBtn;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.warp.ui.SwingUtils;
 
-public class UserLine extends JPanel {
+class __MiniUserLine extends JPanel {
 
 	private final static long serialVersionUID = -8472154443768267316L;
 	
@@ -17,7 +18,7 @@ public class UserLine extends JPanel {
 	
 	private LoginBtn loginBtn;
 	
-	public UserLine() {
+	protected __MiniUserLine() {
 		super(new BorderLayout());
 		
 		initLayout();
@@ -34,7 +35,7 @@ public class UserLine extends JPanel {
 		add(loginBtn.getButton(), BorderLayout.EAST);
 	}
 	
-	private class Callback implements LoginCallback {
+	private class Callback implements __LoginCallback {
 
 		@Override
 		public void afterLogin(HttpCookie cookie) {

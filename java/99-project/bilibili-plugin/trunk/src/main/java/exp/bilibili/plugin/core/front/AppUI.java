@@ -26,9 +26,7 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.back.WebSockClient;
-import exp.bilibili.plugin.core.front.login.win.LoginBtn;
-import exp.bilibili.plugin.core.front.login.win.LoginCallback;
-import exp.bilibili.plugin.core.front.login.win.MiniLoginMgrUI;
+import exp.bilibili.plugin.core.front.login.LoginBtn;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.monitor.SafetyMonitor;
@@ -134,7 +132,7 @@ public class AppUI extends MainWindow {
 	
 	private WebSockClient wsClient;
 	
-	private MiniLoginMgrUI miniLoginMgrUI;
+	private _MiniUserMgrUI miniLoginMgrUI;
 	
 	private _LotteryUI lotteryUI;
 	
@@ -264,7 +262,7 @@ public class AppUI extends MainWindow {
 		lotteryLabel.setForeground(Color.RED);
 		
 		this.wsClient = new WebSockClient();
-		this.miniLoginMgrUI = new MiniLoginMgrUI();
+		this.miniLoginMgrUI = new _MiniUserMgrUI();
 		this.lotteryUI = new _LotteryUI();
 		this.redbagUI = new _RedbagUI();
 		this.colorUI = new _ColorUI();
@@ -401,7 +399,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				LoginBtn btn = new LoginBtn(LoginType.MAIN, "", new LoginCallback() {
+				LoginBtn btn = new LoginBtn(LoginType.MAIN, "", new __LoginCallback() {
 			
 					@Override
 					public void afterLogin(HttpCookie cookie) {
@@ -535,7 +533,7 @@ public class AppUI extends MainWindow {
 		
 		// 登录马甲号
 		if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
-			LoginBtn btn = new LoginBtn(LoginType.VEST, "", new LoginCallback() {
+			LoginBtn btn = new LoginBtn(LoginType.VEST, "", new __LoginCallback() {
 				
 				@Override
 				public void afterLogin(HttpCookie cookie) {
