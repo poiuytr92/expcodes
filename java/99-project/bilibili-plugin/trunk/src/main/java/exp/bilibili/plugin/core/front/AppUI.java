@@ -72,7 +72,7 @@ public class AppUI extends MainWindow {
 	
 	private final static String LINE_END = "\r\n";
 	
-	private final static int CHAT_LIMIT = 20;
+	private final static int CHAT_LIMIT = 40;
 	
 	private String loginUser;
 	
@@ -207,7 +207,7 @@ public class AppUI extends MainWindow {
 		this.chatTF = new JTextField();
 		this.httpTF = new JTextField("http://live.bilibili.com/");
 		this.ridTF = new JTextField(String.valueOf(Config.getInstn().SIGN_ROOM_ID()), 15);
-		chatTF.setToolTipText("内容长度限制: 20");
+		chatTF.setToolTipText("内容长度限制: ".concat(String.valueOf(CHAT_LIMIT)));
 		httpTF.setEditable(false);
 		
 		this.loginUser = "";
@@ -394,7 +394,8 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(CookiesMgr.INSTN().load(LoginType.MAIN)) {
+				if(CookiesMgr.INSTN().MAIN() != HttpCookie.NULL || 
+						CookiesMgr.INSTN().load(LoginType.MAIN)) {
 					markLogin(CookiesMgr.INSTN().MAIN().NICKNAME());
 					return;
 				}
@@ -546,7 +547,14 @@ public class AppUI extends MainWindow {
 				}
 				
 			});
-			btn.doClick();
+			
+			if(CookiesMgr.INSTN().load(LoginType.VEST)) {
+				btn.markLogined(CookiesMgr.INSTN().VEST());
+				_startStormScanner();
+				
+			} else {
+				btn.doClick();
+			}
 			
 		// 主号同时作为马甲号
 		} else {

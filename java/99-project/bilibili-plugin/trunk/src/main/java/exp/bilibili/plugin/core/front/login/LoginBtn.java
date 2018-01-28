@@ -42,20 +42,12 @@ public class LoginBtn {
 	
 	public LoginBtn(LoginType type, String btnName, __LoginCallback callback) {
 		this.type = type;
+		this.callback = callback;
+		this.cookie = HttpCookie.NULL;
 		
 		this.loginTips = btnName;
 		this.btn = new JButton(btnName);
 		btn.setForeground(Color.BLACK);
-		
-		this.callback = callback;
-		this.cookie = HttpCookie.NULL;
-		this.qrLoginUI = new QRLoginUI(type);
-		this.vcLoginUI = new VCLoginUI(type);
-		
-		initListener();
-	}
-	
-	private void initListener() {
 		btn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -69,6 +61,11 @@ public class LoginBtn {
 			}
 		});
 		
+		initVCLoginUI();
+	}
+	
+	private void initQRLoginUI() {
+		this.qrLoginUI = new QRLoginUI(type);
 		qrLoginUI.addWindowListener(new WindowAdapter() {
 			
 			@Override
@@ -82,7 +79,10 @@ public class LoginBtn {
 				}
 			}
 		});
-
+	}
+	
+	private void initVCLoginUI() {
+		this.vcLoginUI = new VCLoginUI(type);
 		vcLoginUI.addWindowListener(new WindowAdapter() {
 			
 			@Override
@@ -98,38 +98,23 @@ public class LoginBtn {
 		});
 	}
 	
-	private boolean login() {
+	private void login() {
 		if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1天)", "帐密登陆 (30天)")) {
-			_loginByQrcode();
+			initQRLoginUI();	// QR登陆时的检测线程不能重复启动，只能每次新建对象
+			qrLoginUI._view();
 			
 		} else {
-			_loginByVccode();
+			vcLoginUI._view();
 		}
-		
-		if(cookie.isVaild() == true) {
-			CookiesMgr.INSTN().add(cookie, type);
-		}
-		return cookie.isVaild();
 	}
 	
-	private boolean logout() {
-		boolean isOk = CookiesMgr.INSTN().del(cookie);
-		if(isOk == true) {
+	private void logout() {
+		if(SwingUtils.confirm("注销登陆 ?") && CookiesMgr.INSTN().del(cookie)) {
 			btn.setText(loginTips);
 			if(callback != null) {
 				callback.afterLogout(cookie);
 			}
 		}
-		return isOk;
-	}
-	
-	private void _loginByQrcode() {
-		qrLoginUI = new QRLoginUI(type);
-		qrLoginUI._view();
-	}
-	
-	private void _loginByVccode() {
-		vcLoginUI._view();
 	}
 	
 	public HttpCookie getCookie() {
@@ -142,6 +127,13 @@ public class LoginBtn {
 	
 	public void doClick() {
 		btn.doClick();
+	}
+	
+	public void markLogined(HttpCookie cookie) {
+		if(cookie.isVaild()) {
+			this.cookie = cookie;
+			btn.setText(LOGOUT_TIPS);
+		}
 	}
 	
 }

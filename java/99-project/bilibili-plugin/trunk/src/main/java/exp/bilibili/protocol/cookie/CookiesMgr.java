@@ -94,6 +94,7 @@ public class CookiesMgr {
 			isOk = save(cookie, COOKIE_VEST_PATH);
 			
 		} else if(LoginType.TEMP == type) {
+			this.tempCookie = cookie;
 			isOk = true;	// 临时cookie无需写入外存
 			
 		} else {
@@ -101,8 +102,6 @@ public class CookiesMgr {
 			isOk = save(cookie, PathUtils.combine(COOKIE_DIR, StrUtils.concat(
 					COOKIE_MINI_PREFIX, TimeUtils.getSysDate("yyyyMMddHHmmSS"), SUFFIX)));
 		}
-		
-		this.tempCookie = cookie;
 		return isOk;
 	}
 	
