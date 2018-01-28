@@ -87,8 +87,11 @@ public class Login extends __Protocol {
 						}
 					}
 				}
+			} else {
+				cookie = HttpCookie.NULL;
 			}
 		} catch(Exception e) {
+			cookie = HttpCookie.NULL;
 			log.error("登陆失败", e);
 		}
 		client.close();

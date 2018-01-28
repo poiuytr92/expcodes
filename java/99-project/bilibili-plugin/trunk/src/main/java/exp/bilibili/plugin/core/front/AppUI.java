@@ -26,12 +26,17 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.core.back.WebSockClient;
+import exp.bilibili.plugin.core.front.login.win.LoginBtn;
+import exp.bilibili.plugin.core.front.login.win.LoginCallback;
+import exp.bilibili.plugin.core.front.login.win.MiniLoginMgrUI;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.cookie.CookiesMgr;
+import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -57,6 +62,10 @@ public class AppUI extends MainWindow {
 	/** serialVersionUID */
 	private final static long serialVersionUID = 2097374309672044616L;
 
+	private final static int WIDTH = 1024;
+	
+	private final static int HEIGHT = 600;
+	
 	/** 避免连续点击按钮的锁定时间 */
 	private final static long LOCK_TIME = 100;
 	
@@ -65,11 +74,13 @@ public class AppUI extends MainWindow {
 	
 	private final static String LINE_END = "\r\n";
 	
-	private final static int WIDTH = 1024;
-	
-	private final static int HEIGHT = 600;
-	
 	private final static int CHAT_LIMIT = 20;
+	
+	private String loginUser;
+	
+	private boolean isLogined;
+	
+	private JButton loginBtn;
 	
 	private JButton defaultBtn;
 	
@@ -78,8 +89,6 @@ public class AppUI extends MainWindow {
 	private JButton lotteryBtn;
 	
 	private JButton activeListBtn;
-	
-	private JButton loginBtn;
 	
 	private JButton stormBtn;
 	
@@ -125,6 +134,8 @@ public class AppUI extends MainWindow {
 	
 	private WebSockClient wsClient;
 	
+	private MiniLoginMgrUI miniLoginMgrUI;
+	
 	private _LotteryUI lotteryUI;
 	
 	private _RedbagUI redbagUI;
@@ -132,10 +143,6 @@ public class AppUI extends MainWindow {
 	private _ColorUI colorUI;
 	
 	private ChatColor curChatColor;
-	
-	private String loginUser;
-	
-	private boolean isLogined;
 	
 	private static volatile AppUI instance;
 	
@@ -205,11 +212,13 @@ public class AppUI extends MainWindow {
 		chatTF.setToolTipText("内容长度限制: 20");
 		httpTF.setEditable(false);
 		
+		this.loginUser = "";
+		this.isLogined = false;
+		this.loginBtn = new JButton("扫码/帐密登陆(自动抽奖)");
 		this.defaultBtn = new JButton("★");
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.activeListBtn = new JButton("☷");
-		this.loginBtn = new JButton("扫码/帐密登陆 (自动抽奖)");
 		this.stormBtn = new JButton("节奏风暴扫描");
 		this.addUserBtn = new JButton("╋");
 		this.clrBtn = new JButton("清");
@@ -222,12 +231,12 @@ public class AppUI extends MainWindow {
 		this.eCallBtn = new JButton(">");
 		this.nightBtn = new JButton("晚安姬");
 		this.redbagBtn = new JButton("红包兑奖姬");
+		loginBtn.setForeground(Color.BLACK);
 		defaultBtn.setToolTipText("设为默认");
 		defaultBtn.setForeground(Color.MAGENTA);
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		activeListBtn.setForeground(Color.BLUE);
-		loginBtn.setForeground(Color.BLACK);
 		stormBtn.setForeground(Color.BLACK);
 		addUserBtn.setForeground(Color.BLACK);
 		clrBtn.setForeground(Color.BLACK);
@@ -255,12 +264,12 @@ public class AppUI extends MainWindow {
 		lotteryLabel.setForeground(Color.RED);
 		
 		this.wsClient = new WebSockClient();
+		this.miniLoginMgrUI = new MiniLoginMgrUI();
+		this.lotteryUI = new _LotteryUI();
 		this.redbagUI = new _RedbagUI();
 		this.colorUI = new _ColorUI();
 		this.curChatColor = ChatColor.RANDOM();
-		
-		this.loginUser = "";
-		this.isLogined = false;
+				
 		printVersionInfo();
 	}
 
@@ -363,11 +372,11 @@ public class AppUI extends MainWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
+		setLoginBtnListener();
 		setDefaultBtnListener();
 		setLinkBtnListener();
 		setLotteryBtnListener();
 		setActiveListBtnListener();
-		setLoginBtnListener();
 		setStormBtnListener();
 		setAddUserBtnListener();
 		setClrBtnListener();
@@ -380,6 +389,33 @@ public class AppUI extends MainWindow {
 		setRedbagBtnListener();
 		setChatTFListener();
 		setEditBtnListener();
+	}
+	
+	private void setLoginBtnListener() {
+		loginBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(CookiesMgr.INSTN().load(LoginType.MAIN)) {
+					markLogin(CookiesMgr.INSTN().MAIN().NICKNAME());
+					return;
+				}
+				
+				LoginBtn btn = new LoginBtn(LoginType.MAIN, "", new LoginCallback() {
+			
+					@Override
+					public void afterLogin(HttpCookie cookie) {
+						markLogin(cookie.NICKNAME());
+					}
+					
+					@Override
+					public void afterLogout(HttpCookie cookie) {
+						// Undo
+					}
+				});
+				btn.doClick();
+			}
+		});
 	}
 	
 	private void setDefaultBtnListener() {
@@ -461,40 +497,6 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
-	private void setLoginBtnListener() {
-		loginBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(isLogined()) {
-					loginBtn.setEnabled(false);
-					return;
-				}
-				
-				if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1天)", "帐密登陆 (30天)")) {
-					_loginByQrcode();
-					
-				} else {
-					_loginByVccode();
-				}
-			}
-		});
-	}
-	
-	/**
-	 * 二维码扫码登陆
-	 */
-	private void _loginByQrcode() {
-		// TODO
-	}
-	
-	/**
-	 * 验证码帐密登陆
-	 */
-	private void _loginByVccode() {
-		// TODO
-	}
-	
 	private void setStormBtnListener() {
 		stormBtn.addActionListener(new ActionListener() {
 			
@@ -507,7 +509,7 @@ public class AppUI extends MainWindow {
 				
 				// 扫描器线程未启动，则触发登录马甲流程
 				if(!StormScanner.getInstn().isRun()) {
-					_loginVest();
+					_loginStormVest();
 					
 				// 扫描器线程已启动，则纯粹切换扫描状态
 				} else {
@@ -527,24 +529,38 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 登录马甲(用于扫描全平台节奏风暴)
+	 * 登录节奏风暴马甲号(用于扫描全平台节奏风暴)
 	 */
-	private void _loginVest() {
+	private void _loginStormVest() {
 		
-		// 使用马甲号登录
+		// 登录马甲号
 		if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
-			// TODO
+			LoginBtn btn = new LoginBtn(LoginType.VEST, "", new LoginCallback() {
+				
+				@Override
+				public void afterLogin(HttpCookie cookie) {
+					_startStormScanner();
+				}
+				
+				@Override
+				public void afterLogout(HttpCookie cookie) {
+					// Undo
+				}
+				
+			});
+			btn.doClick();
 			
+		// 主号同时作为马甲号
 		} else {
-			// FIXME
+			CookiesMgr.INSTN().add(CookiesMgr.INSTN().MAIN(), LoginType.VEST);
 			_startStormScanner();
 		}
 	}
 	
 	private void _startStormScanner() {
 		StormScanner.getInstn()._start();
-		stormBtn.doClick();
 		lockBtn();
+		stormBtn.doClick();
 	}
 	
 	private void setAddUserBtnListener() {
@@ -552,7 +568,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO
+				miniLoginMgrUI._view();
 			}
 		});
 	}
@@ -873,7 +889,7 @@ public class AppUI extends MainWindow {
 	public void markLogin(String username) {
 		loginUser = username;
 		isLogined = true;
-		loginBtn.setEnabled(false);	
+		loginBtn.setEnabled(false);
 		
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
 		WebBot.getInstn()._start();	// 启动仿真机器人

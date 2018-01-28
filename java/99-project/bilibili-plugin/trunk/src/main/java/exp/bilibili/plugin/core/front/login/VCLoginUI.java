@@ -17,8 +17,8 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.cookie.CookiesMgr;
+import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -38,11 +38,6 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * @since     jdk版本：jdk1.6
  */
 public class VCLoginUI extends PopChildWindow {
-	
-	public static void main(String[] args) {
-		BeautyEyeUtils.init();
-		new VCLoginUI(LoginType.MAIN)._view();
-	}
 	
 	/** serialVersionUID */
 	private static final long serialVersionUID = -1752327112586227761L;
@@ -80,6 +75,8 @@ public class VCLoginUI extends PopChildWindow {
 	
 	private LoginType type;
 	
+	private HttpCookie cookie;
+	
 	public VCLoginUI(LoginType type) {
 		super("哔哩哔哩-帐密登陆", WIDTH, HEIGH, false, type);
 	}
@@ -89,7 +86,7 @@ public class VCLoginUI extends PopChildWindow {
 		if(args != null && args.length > 0) {
 			this.type = (LoginType) args[0];
 		} else {
-			this.type = LoginType.MINI;
+			this.type = LoginType.TEMP;
 		}
 		
 		this.usernameTXT = new JTextField();
@@ -111,7 +108,9 @@ public class VCLoginUI extends PopChildWindow {
 		this.loginBtn = new JButton("登陆 哔哩哔哩");
 		BeautyEyeUtils.setButtonStyle(NormalColor.green, loginBtn);
 		loginBtn.setForeground(Color.BLACK);
+		
 		this.vcCookies = "";
+		this.cookie = HttpCookie.NULL;
 	}
 
 	@Override
@@ -225,14 +224,14 @@ public class VCLoginUI extends PopChildWindow {
 	 * @param vccode 验证码
 	 */
 	private void toLogin(String username, String password, String vccode) {
-		HttpCookie cookies = VCLogin.toLogin(username, password, vccode, vcCookies);
-		if(!cookies.isVaild()) {
+		cookie = VCLogin.toLogin(username, password, vccode, vcCookies);
+		if(!cookie.isVaild()) {
 			SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
 			reflashBtn.doClick();
 			
 		} else {
-			CookiesMgr.INSTN().add(cookies, type);
-			SwingUtils.info("登陆成功: ".concat(cookies.NICKNAME()));
+			CookiesMgr.INSTN().add(cookie, type);
+			SwingUtils.info("登陆成功: ".concat(cookie.NICKNAME()));
 			_hide();
 		}
 	}
@@ -241,39 +240,44 @@ public class VCLoginUI extends PopChildWindow {
 	 * 清空登陆界面的输入数据
 	 */
 	public void clear() {
-		usernameTXT.setText("");
-		passwordTXT.setText("");
+		cookie = HttpCookie.NULL;
 		vccodeTXT.setText("");
 		reflashBtn.doClick();
 	}
 
-	// FIXME
 	@Override
 	protected void AfterView() {
-		boolean isOk = CookiesMgr.INSTN().load(type);
-		if(isOk == true) {
-			if(LoginType.MAIN == type) {
-				HttpCookie cookies = CookiesMgr.INSTN().MAIN();
-				isOk = CookiesMgr.checkLogined(cookies);
-				if(isOk == true) {
-					_hide();
-					System.out.println("登陆成功: ".concat(cookies.NICKNAME()));
-				}
-				
-			} else if(LoginType.VEST == type) {
-				HttpCookie cookies = CookiesMgr.INSTN().VEST();
-				isOk = CookiesMgr.checkLogined(cookies);
-				if(isOk == true) {
-					_hide();
-				}
-			}
-		}
+		clear();
+		
+		// FIXME
+//		boolean isOk = CookiesMgr.INSTN().load(type);
+//		if(isOk == true) {
+//			if(LoginType.MAIN == type) {
+//				HttpCookie cookies = CookiesMgr.INSTN().MAIN();
+//				isOk = CookiesMgr.checkLogined(cookies);
+//				if(isOk == true) {
+//					_hide();
+//					System.out.println("登陆成功: ".concat(cookies.NICKNAME()));
+//				}
+//				
+//			} else if(LoginType.VEST == type) {
+//				HttpCookie cookies = CookiesMgr.INSTN().VEST();
+//				isOk = CookiesMgr.checkLogined(cookies);
+//				if(isOk == true) {
+//					_hide();
+//				}
+//			}
+//		}
 	}
 
 	@Override
 	protected void beforeHide() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	public HttpCookie getCookie() {
+		return cookie;
 	}
 	
 }

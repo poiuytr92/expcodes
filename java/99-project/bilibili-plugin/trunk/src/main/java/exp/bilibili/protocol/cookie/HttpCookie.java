@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.openqa.selenium.Cookie;
 
+import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.other.StrUtils;
 
 public class HttpCookie {
@@ -18,6 +19,8 @@ public class HttpCookie {
 	
 	/** B站CSRF标识 */
 	private final static String CSRF_KEY = "bili_jct";
+	
+	private LoginType type;
 	
 	/** 该cookie对应的用户ID */
 	private String uid;
@@ -37,6 +40,7 @@ public class HttpCookie {
 	private boolean isChanged;
 	
 	public HttpCookie() {
+		this.type = LoginType.TEMP;
 		this.uid = "";
 		this.nickName = "";
 		this.cookies = new LinkedList<_HttpCookie>();
@@ -121,6 +125,10 @@ public class HttpCookie {
 		return seleniumCookies;
 	}
 	
+	public LoginType TYPE() {
+		return type;
+	}
+	
 	public String CSRF() {
 		return csrf;
 	}
@@ -133,6 +141,10 @@ public class HttpCookie {
 		return nickName;
 	}
 	
+	public void setType(LoginType type) {
+		this.type = type;
+	}
+
 	public void setUid(String uid) {
 		this.uid = uid;
 	}

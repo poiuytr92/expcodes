@@ -1,9 +1,11 @@
 package exp.bilibili.protocol.cookie;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.core.back.MsgSender;
@@ -46,6 +48,9 @@ public class CookiesMgr {
 	/** 小号cookie集 */
 	private List<HttpCookie> miniCookies;
 	
+	/** cookie保存路径 */
+	private Map<HttpCookie, String> cookiePaths;
+	
 	private static volatile CookiesMgr instance;
 	
 	private CookiesMgr() {
@@ -53,6 +58,7 @@ public class CookiesMgr {
 		this.vestCookie = HttpCookie.NULL;
 		this.tempCookie = HttpCookie.NULL;
 		this.miniCookies = new LinkedList<HttpCookie>();
+		this.cookiePaths = new HashMap<HttpCookie, String>();
 	}
 	
 	public static CookiesMgr INSTN() {
@@ -72,6 +78,7 @@ public class CookiesMgr {
 			return isOk;
 		}
 		
+		cookie.setType(type);
 		if(LoginType.MAIN == type) {
 			this.mainCookie = cookie;
 			isOk = save(cookie, COOKIE_MAIN_PATH);
@@ -87,7 +94,6 @@ public class CookiesMgr {
 			isOk = save(cookie, COOKIE_VEST_PATH);
 			
 		} else if(LoginType.TEMP == type) {
-			this.tempCookie = cookie;
 			isOk = true;	// 临时cookie无需写入外存
 			
 		} else {
@@ -95,10 +101,13 @@ public class CookiesMgr {
 			isOk = save(cookie, PathUtils.combine(COOKIE_DIR, StrUtils.concat(
 					COOKIE_MINI_PREFIX, TimeUtils.getSysDate("yyyyMMddHHmmSS"), SUFFIX)));
 		}
+		
+		this.tempCookie = cookie;
 		return isOk;
 	}
 	
 	private boolean save(HttpCookie cookie, String cookiePath) {
+		cookiePaths.put(cookie, cookiePath);
 		String data = CryptoUtils.toDES(cookie.toString());
 		return FileUtils.write(cookiePath, data, Charset.ISO, false);
 	}
@@ -106,12 +115,12 @@ public class CookiesMgr {
 	public boolean load(LoginType type) {
 		boolean isOk = true;
 		if(LoginType.MAIN == type) {
-			mainCookie = load(COOKIE_MAIN_PATH);
-			isOk = (mainCookie != HttpCookie.NULL);
+			mainCookie = load(COOKIE_MAIN_PATH, type);
+			isOk = (mainCookie != HttpCookie.NULL && checkLogined(mainCookie));
 			
 		} else if(LoginType.VEST == type) {
-			vestCookie = load(COOKIE_VEST_PATH);
-			isOk = (vestCookie != HttpCookie.NULL);
+			vestCookie = load(COOKIE_VEST_PATH, type);
+			isOk = (vestCookie != HttpCookie.NULL && checkLogined(vestCookie));
 
 		} else if(LoginType.TEMP == type) {
 			isOk = (tempCookie != HttpCookie.NULL);
@@ -121,11 +130,14 @@ public class CookiesMgr {
 			String[] fileNames = dir.list();
 			for(String fileName : fileNames) {
 				if(fileName.contains(COOKIE_MINI_PREFIX)) {
-					HttpCookie miniCookie = load(PathUtils.combine(dir.getPath(), fileName));
+					HttpCookie miniCookie = load(
+							PathUtils.combine(dir.getPath(), fileName), type);
 					if(miniCookie != HttpCookie.NULL) {
-						miniCookies.add(miniCookie);
-						isOk &= true;
-						
+						miniCookie.setType(type);
+						if(checkLogined(miniCookie)) {
+							miniCookies.add(miniCookie);
+							isOk &= true;
+						}
 					} else {
 						isOk &= false;
 					}
@@ -135,15 +147,40 @@ public class CookiesMgr {
 		return isOk;
 	}
 	
-	private HttpCookie load(String cookiePath) {
+	private HttpCookie load(String cookiePath, LoginType type) {
 		HttpCookie cookie = HttpCookie.NULL;
 		if(FileUtils.exists(cookiePath)) {
 			String data = CryptoUtils.deDES(FileUtils.read(cookiePath, Charset.ISO));
 			if(StrUtils.isNotEmpty(data)) {
 				cookie = new HttpCookie(data);
+				cookie.setType(type);
+				cookiePaths.put(cookie, cookiePath);
 			}
 		}
 		return cookie;
+	}
+	
+	public boolean del(HttpCookie cookie) {
+		boolean isOk = false;
+		if(cookie == null || cookie == HttpCookie.NULL) {
+			return isOk;
+		}
+		
+		if(LoginType.MAIN == cookie.TYPE()) {
+			this.mainCookie = HttpCookie.NULL;
+			
+		} else if(LoginType.VEST == cookie.TYPE()) {
+			this.vestCookie = HttpCookie.NULL;
+			
+		} else if(LoginType.TEMP == cookie.TYPE()) {
+			this.tempCookie = HttpCookie.NULL;
+			
+		} else {
+			this.miniCookies.remove(cookie);
+		}
+		
+		String cookiePath = cookiePaths.remove(cookie);
+		return FileUtils.delete(cookiePath);
 	}
 
 	public HttpCookie MAIN() {

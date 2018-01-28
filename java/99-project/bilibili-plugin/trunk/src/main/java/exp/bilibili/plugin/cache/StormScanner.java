@@ -39,8 +39,8 @@ public class StormScanner extends LoopThread {
 	/** 最少在线人数达标的房间才扫描 */
 	private final static int MIN_ONLINE = 3000;
 	
-	/** 使用websocket直接监听的房间(相对耗资源, 暂时针对TOP-10) */
-	private final static int TOP = 10;
+	/** 使用websocket直接监听的房间(相对耗资源, 暂时针对TOP-3) */
+	private final static int TOP = 3;
 	
 	/** 每轮询N次所有房间，则刷新房间列表 */
 	private final static int LOOP_LIMIT = 10;

@@ -42,16 +42,19 @@ class QRLogin extends LoopThread {
 	
 	private boolean isLogined;
 	
-	private HttpCookie mainCookie;
+	private LoginType type;
+	
+	private HttpCookie cookie;
 	
 	private QRLoginUI qrUI;
 	
-	protected QRLogin(QRLoginUI qrUI) {
+	protected QRLogin(QRLoginUI qrUI, LoginType type) {
 		super("二维码登陆器");
 		this.loopCnt = LOOP_LIMIT;
 		this.isLogined = false;
 		
-		this.mainCookie = HttpCookie.NULL;
+		this.type = type;
+		this.cookie = HttpCookie.NULL;
 		this.qrUI = qrUI;
 	}
 	
@@ -82,8 +85,8 @@ class QRLogin extends LoopThread {
 			
 			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
 			if(isSwitch() == true) {
-				mainCookie = new HttpCookie(Browser.getCookies());
-				if(CookiesMgr.checkLogined(mainCookie)) {
+				cookie = new HttpCookie(Browser.getCookies());
+				if(CookiesMgr.checkLogined(cookie)) {
 					isLogined = true;
 					
 				} else {
@@ -101,13 +104,13 @@ class QRLogin extends LoopThread {
 	@Override
 	protected void _after() {
 		if(isLogined == true) {
-			CookiesMgr.INSTN().add(mainCookie, LoginType.MAIN);
+			CookiesMgr.INSTN().add(cookie, type);
 		}
 		Browser.quit();
 		qrUI._hide();
 		
 		log.info("登陆{}: {}", (isLogined ? "成功" : "失败"), 
-				(isLogined ? mainCookie.NICKNAME() : "Unknow"));
+				(isLogined ? cookie.NICKNAME() : "Unknow"));
 	}
 	
 	/**
@@ -115,10 +118,14 @@ class QRLogin extends LoopThread {
 	 * @return
 	 */
 	private boolean autoLogin() {
-		boolean isOk = CookiesMgr.INSTN().load(LoginType.MAIN);
-		if(isOk == true) {
-			mainCookie = CookiesMgr.INSTN().MAIN();
-			isOk = CookiesMgr.checkLogined(mainCookie);
+		boolean isOk = false;
+		if(LoginType.MAIN == type || LoginType.VEST == type) {
+			isOk = CookiesMgr.INSTN().load(LoginType.MAIN);
+			if(isOk == true) {
+				cookie = (LoginType.MAIN == type ? 
+						CookiesMgr.INSTN().MAIN() : CookiesMgr.INSTN().VEST());
+				isOk = CookiesMgr.checkLogined(cookie);
+			}
 		}
 		return isOk;
 	}
@@ -151,6 +158,10 @@ class QRLogin extends LoopThread {
 	private boolean isSwitch() {
 		String curURL = Browser.getCurURL();
 		return (StrUtils.isNotEmpty(curURL) && !curURL.startsWith(LOGIN_URL));
+	}
+	
+	public HttpCookie getCookie() {
+		return cookie;
 	}
 	
 }

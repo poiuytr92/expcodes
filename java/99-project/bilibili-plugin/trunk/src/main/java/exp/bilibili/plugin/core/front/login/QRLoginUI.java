@@ -9,8 +9,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
@@ -25,13 +26,8 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class QRLoginUI extends PopChildWindow {
+public class QRLoginUI extends PopChildWindow {
 
-	public static void main(String[] args) {
-		BeautyEyeUtils.init();
-		new QRLoginUI()._view();
-	}
-	
 	/** serialVersionUID */
 	private final static long serialVersionUID = 3032128610929327304L;
 
@@ -49,19 +45,25 @@ class QRLoginUI extends PopChildWindow {
 	
 	private JLabel tipLabel;
 	
+	private LoginType type;
+	
 	private QRLogin qrLogin;
 	
-	protected QRLoginUI() {
-		super("哔哩哔哩-APP扫码登陆", WIDTH, HEIGHT);
+	public QRLoginUI(LoginType type) {
+		super("哔哩哔哩-APP扫码登陆", WIDTH, HEIGHT, false, type);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
+		if(args != null && args.length > 0) {
+			this.type = (LoginType) args[0];
+		} else {
+			this.type = LoginType.TEMP;
+		}
+		
 		this.imgLabel = new JLabel(new ImageIcon(TIPS_PATH));
 		this.tipLabel = new JLabel(TIPS);
 		tipLabel.setForeground(Color.RED);
-		
-		this.qrLogin = new QRLogin(this);
 	}
 
 	@Override
@@ -79,6 +81,7 @@ class QRLoginUI extends PopChildWindow {
 	
 	@Override
 	protected void AfterView() {
+		this.qrLogin = new QRLogin(this, type);
 		qrLogin._start();
 	}
 
@@ -108,4 +111,8 @@ class QRLoginUI extends PopChildWindow {
 		}
 	}
 
+	public HttpCookie getCookie() {
+		return qrLogin.getCookie();
+	}
+	
 }
