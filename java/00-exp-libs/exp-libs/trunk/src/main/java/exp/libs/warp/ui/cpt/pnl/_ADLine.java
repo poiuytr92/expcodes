@@ -23,6 +23,8 @@ import javax.swing.JTextField;
  */
 class _ADLine<T extends Component> {
 
+	private final static String ERR_TIPS = "警告: 自定义行组件实例化失败(没有提供public的无参构造函数), 已使用JTextField替代自定义行组件";
+	
 	/** 父面板 */
 	private JPanel father;
 	
@@ -47,10 +49,20 @@ class _ADLine<T extends Component> {
 		try {
 			this.component = (T) component.newInstance();
 		} catch (Throwable e) {
-			this.component = new JTextField(
-					"警告: 自定义行组件实例化失败(没有提供public的无参构造函数), 已使用JTextField替代自定义行组件");
+			this.component = new JTextField(ERR_TIPS);
 		}
 		
+		init(father);
+	}
+	
+	protected _ADLine(JPanel father, T component) {
+		this.component = (component == null ? 
+				new JTextField(ERR_TIPS) : component);
+		
+		init(father);
+	}
+	
+	private void init(JPanel father) {
 		this.father = father;
 		this.addBtn = new JButton("+");
 		this.delBtn = new JButton("-");

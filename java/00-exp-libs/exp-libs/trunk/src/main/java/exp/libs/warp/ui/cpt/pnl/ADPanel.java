@@ -29,18 +29,21 @@ public class ADPanel<T extends Component> {
 	/** 承载面板 */
 	private JScrollPane scrollPanel;
 	
+	/** 基准组件面板 */
+	private	JPanel basePanel; 
+			
 	/**
 	 * 构造函数
 	 * @param component 每行差异化组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
 	 */
 	public ADPanel(Class<T> component) {
-		JPanel panel = new JPanel(new VFlowLayout());
-		_ADLine<T> firstLine = new _ADLine<T>(panel, component);
-		panel.add(firstLine.getJPanel());
+		basePanel = new JPanel(new VFlowLayout());
+		_ADLine<T> firstLine = new _ADLine<T>(basePanel, component);
+		basePanel.add(firstLine.getJPanel());
 		
 		// 当出现增减行事件时，刷新滚动面板（使得滚动条动态出现）
-		this.scrollPanel = SwingUtils.addAutoScroll(panel);
-		panel.addContainerListener(new ContainerListener() {
+		this.scrollPanel = SwingUtils.addAutoScroll(basePanel);
+		basePanel.addContainerListener(new ContainerListener() {
 			
 			@Override
 			public void componentRemoved(ContainerEvent e) {
@@ -52,6 +55,23 @@ public class ADPanel<T extends Component> {
 				repaint();
 			}
 		});
+	}
+	
+	public void addLine(T component) {
+		if(component != null) {
+			_ADLine<T> line = new _ADLine<T>(basePanel, component);
+			basePanel.add(line.getJPanel());
+		}
+	}
+	
+	public boolean delLine(int index) {
+		boolean isOk = false;
+		int size = basePanel.getComponentCount();
+		if(size > 1 && index >= 0 && index < size) {
+			basePanel.remove(index);
+			isOk = true;
+		}
+		return isOk;
 	}
 	
 	/**
