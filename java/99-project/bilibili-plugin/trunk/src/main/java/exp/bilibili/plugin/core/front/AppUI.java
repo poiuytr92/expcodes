@@ -586,7 +586,7 @@ public class AppUI extends MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				if(SwingUtils.confirm("[清除登陆信息] 后下次需重新登陆, 继续吗 ?")) {
 					if(CookiesMgr.clearAllCookies()) {
-						SwingUtils.info("清除登陆信息成功");
+						SwingUtils.info("已清除登陆信息, 重启后生效");
 						
 					} else {
 						SwingUtils.info("清除登陆信息失败");
