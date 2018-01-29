@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import org.slf4j.Logger;
@@ -30,11 +31,17 @@ public class TimeUtils {
 	/** 默认时间值 */
 	private final static String DEFAULT_TIME = "0000-00-00 00:00:00.000";
 	
+	/** 默认GMT时间值 */
+	private final static String DEFAULT_GMT = "Thu, 01-Jan-1970 08:00:00 GMT+08:00";
+	
 	/** 日期格式： yyyy-MM-dd HH:mm:ss */
 	public final static String FORMAT_YMDHMS = DateFormat.YMDHMS;
 	
 	/** 日期格式： yyyy-MM-dd HH:mm:ss.SSS */
 	public final static String FORMAT_YMDHMSS = DateFormat.YMDHMSS;
+	
+	/** GMT日期格式(多用于cookie的有效时间)： EEE, dd-MMM-yyyy HH:mm:ss z */
+	public final static String FORMAT_GMT = DateFormat.GMT;
 	
 	private final static long DAY_UNIT = 86400000L;
 	
@@ -44,6 +51,17 @@ public class TimeUtils {
 	
 	/** 私有化构造函数 */
 	protected TimeUtils() {}
+	
+	/**
+	 * 生成SimpleDateFormat对象
+	 * @param format 时间格式
+	 * @return SimpleDateFormat对象
+	 */
+	private final static SimpleDateFormat createSDF(String format) {
+		
+		// Locale.ENGLISH用于设定所生成的格式字符串中的符号为英文标识
+		return new SimpleDateFormat(format, Locale.ENGLISH);
+	}
 	
 	/**
 	 * 把[Date时间]转换为[UTC时间]
@@ -56,7 +74,7 @@ public class TimeUtils {
 			return millis;
 		}
 		
-		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_YMDHMS);
+		SimpleDateFormat sdf = createSDF(FORMAT_YMDHMS);
 		String ymdhms = sdf.format(date);
 		sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 		try {
@@ -65,6 +83,20 @@ public class TimeUtils {
 			log.error("转换UTC时间失败.", e);
 		}
 		return millis;
+	}
+	
+	/**
+	 * 把[Date时间]转换为[cookie有效时间]
+	 * @param date Date时间
+	 * @return cookie有效时间(转换失败则返回默认值 Thu, 01-Jan-1970 08:00:00 GMT+08:00)
+	 */
+	public static String toExpires(Date date) {
+		String expires = DEFAULT_GMT;
+		if(date != null) {
+			SimpleDateFormat sdf = createSDF(FORMAT_GMT);
+			expires = sdf.format(date);
+		}
+		return expires;
 	}
 	
 	/**
@@ -104,7 +136,7 @@ public class TimeUtils {
 	public static String toStr(Date date, String format) {
 		String sDate = DEFAULT_TIME;
 		if(date != null) {
-			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			SimpleDateFormat sdf = createSDF(format);
 			sDate = sdf.format(date);
 		}
 		return sDate;
@@ -115,7 +147,7 @@ public class TimeUtils {
 	 * @return 当前系统时间
 	 */
 	public static String getSysDate() {
-		SimpleDateFormat sdf = new SimpleDateFormat(TimeUtils.FORMAT_YMDHMSS);
+		SimpleDateFormat sdf = createSDF(TimeUtils.FORMAT_YMDHMSS);
 		return sdf.format(new Date(System.currentTimeMillis()));
 	}
 	
@@ -125,7 +157,7 @@ public class TimeUtils {
 	 * @return 当前系统时间
 	 */
 	public static String getSysDate(String format) {
-		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		SimpleDateFormat sdf = createSDF(format);
 		return sdf.format(new Date(System.currentTimeMillis()));
 	}
 	
@@ -145,7 +177,7 @@ public class TimeUtils {
 	 * @return Date时间 (转换失败则返回起始时间 1970-1-1 08:00:00)
 	 */
 	public static Date toDate(String sDate, String format) {
-		SimpleDateFormat sdf = new SimpleDateFormat(format);
+		SimpleDateFormat sdf = createSDF(format);
 		Date date = null;
 		try {
 			date = sdf.parse(sDate);
@@ -277,7 +309,7 @@ public class TimeUtils {
 	 * @return yyyy-MM-dd HH:mm:ss型时间
 	 */
 	public static String getDate(int beforeOrAfterDay) {
-		SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_YMDHMS);
+		SimpleDateFormat sdf = createSDF(FORMAT_YMDHMS);
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.DAY_OF_MONTH, beforeOrAfterDay);
 		return sdf.format(new Date(cal.getTime().getTime()));

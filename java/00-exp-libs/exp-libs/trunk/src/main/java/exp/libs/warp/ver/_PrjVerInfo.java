@@ -28,6 +28,7 @@ import exp.libs.warp.ui.layout.VFlowLayout;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
+@SuppressWarnings({"rawtypes", "unchecked"})
 class _PrjVerInfo {
 	
 	private final static String[] API_ITEMS = new String[] {

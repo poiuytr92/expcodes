@@ -182,12 +182,12 @@ public class HttpUtils {
 	 * 构造HTTP/HTTPS连接
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
-	 * @param headParams 请求头参数
+	 * @param header 请求头参数
 	 * @return HTTP连接(失败返回null)
 	 */
 	public static HttpURLConnection createHttpConn(URL url, 
-			String method, Map<String, String> headParams) {
-		return createHttpConn(url, method, headParams, 
+			String method, Map<String, String> header) {
+		return createHttpConn(url, method, header, 
 				CONN_TIMEOUT, CALL_TIMEOUT);
 	}
 	
@@ -195,16 +195,16 @@ public class HttpUtils {
 	 * 构造HTTP/HTTPS连接
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
-	 * @param headParams 请求头参数
+	 * @param header 请求头参数
 	 * @param connTimeout 连接超时(ms)
 	 * @param readTimeout 读取超时(ms)
 	 * @return HTTP连接(失败返回null)
 	 */
 	public static HttpURLConnection createHttpConn(URL url, String method, 
-			Map<String, String> headParams, int connTimeout, int readTimeout) {
+			Map<String, String> header, int connTimeout, int readTimeout) {
 		HttpURLConnection conn = null;
 		try {
-			conn = _createHttpConn(url, method, headParams, connTimeout, readTimeout);
+			conn = _createHttpConn(url, method, header, connTimeout, readTimeout);
 			
 		} catch(Exception e) {
 			log.error("创建HTTP连接失败", e);
@@ -216,14 +216,14 @@ public class HttpUtils {
 	 * 构造HTTP/HTTPS连接
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
-	 * @param headParams 请求头参数
+	 * @param header 请求头参数
 	 * @param connTimeout 连接超时(ms)
 	 * @param readTimeout 读取超时(ms)
 	 * @return HTTP连接(失败返回null)
 	 * @throws Exception
 	 */
 	private static HttpURLConnection _createHttpConn(URL url, String method, 
-			Map<String, String> headParams, int connTimeout, int readTimeout) 
+			Map<String, String> header, int connTimeout, int readTimeout) 
 					throws Exception {
 		HttpURLConnection conn = null;
 		if (url == null) {
@@ -256,11 +256,11 @@ public class HttpUtils {
 		conn.setDoOutput(true);
 		
 		// 设置自定义请求头参数
-		if(headParams != null) {
-			Iterator<String> keyIts = headParams.keySet().iterator();
+		if(header != null) {
+			Iterator<String> keyIts = header.keySet().iterator();
 			while(keyIts.hasNext()) {
 				String key = keyIts.next();
-				String val = headParams.get(key);
+				String val = header.get(key);
 				if(StrUtils.isNotEmpty(key, val)) {
 					conn.setRequestProperty(key, val);
 				}
@@ -371,31 +371,31 @@ public class HttpUtils {
 	
 	/**
 	 * 把请求参数转换成URL的KV串形式并进行编码
-	 * @param requestParams 请求参数集
+	 * @param request 请求参数集
 	 * @return ?&key1=val1&key2=val2&key3=val3
 	 */
-	public static String encodeRequests(Map<String, String> requestParams) {
-		return encodeRequests(requestParams, DEFAULT_CHARSET);
+	public static String encodeRequests(Map<String, String> request) {
+		return encodeRequests(request, DEFAULT_CHARSET);
 	}
 	
 	/**
 	 * 把请求参数转换成URL的KV串形式并进行编码
-	 * @param requestParams 请求参数集
+	 * @param request 请求参数集
 	 * @param charset 参数字符编码
 	 * @return ?&key1=val1&key2=val2&key3=val3
 	 */
 	public static String encodeRequests(
-			Map<String, String> requestParams, final String charset) {
-		if(requestParams == null || requestParams.isEmpty() || 
+			Map<String, String> request, final String charset) {
+		if(request == null || request.isEmpty() || 
 				CharsetUtils.isInvalid(charset)) {
 			return "";
 		}
 		
 		StringBuilder sb = new StringBuilder("?");
-		Iterator<String> keyIts = requestParams.keySet().iterator();
+		Iterator<String> keyIts = request.keySet().iterator();
 		while(keyIts.hasNext()) {
 			String key = keyIts.next();
-			String val = requestParams.get(key);
+			String val = request.get(key);
 			try {
 				val = URLEncoder.encode(val, charset);
 			} catch (Exception e) {
@@ -491,16 +491,16 @@ public class HttpUtils {
 	
 	/**
 	 * 保存Base64编码的图片数据到本地
-	 * @param imgUrl 图片编码地址，格式形如   data:image/png;base64,base64编码的图片数据
+	 * @param dataUrl 图片数据编码地址，格式形如   data:image/png;base64,base64编码的图片数据
 	 * @param saveDir 希望保存的图片目录
 	 * @param imgName 希望保存的图片名称（不含后缀，后缀通过编码自动解析）
 	 * @return true:保存成功; false:保存失败
 	 */
-	public static boolean convertBase64Img(String imgUrl, 
+	public static boolean convertBase64Img(String dataUrl, 
 			String saveDir, String imgName) {
 		boolean isOk = false;
 		Pattern ptn = Pattern.compile(RGX_BASE64_IMG);  
-        Matcher mth = ptn.matcher(imgUrl);      
+        Matcher mth = ptn.matcher(dataUrl);      
         if(mth.find()) {
         	String ext = mth.group(1);	// 图片后缀
         	String base64Data = mth.group(2);	// 图片数据

@@ -194,6 +194,7 @@ public class JarUtils {
 					list.add(path);
 				}
 			}
+			jar.close();
 		} catch (Exception e) {
 			log.error("读取Jar内文件列表失败: ", 
 					(jarFile == null ? "null" : jarFile.getPath()), e);
