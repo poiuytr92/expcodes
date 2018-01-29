@@ -9,10 +9,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
+
 import exp.bilibili.plugin.Config;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;
+import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.pnl.ADPanel;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
@@ -43,6 +46,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				String.valueOf(Config.getInstn().SIGN_ROOM_ID()));
 		this.feedBtn = new JButton("修改房间号");
 		feedBtn.setForeground(Color.BLACK);
+		BeautyEyeUtils.setButtonStyle(NormalColor.green, feedBtn);
 		
 		this.adPanel = new ADPanel<__MiniUserLine>(__MiniUserLine.class);
 		this.init = false;

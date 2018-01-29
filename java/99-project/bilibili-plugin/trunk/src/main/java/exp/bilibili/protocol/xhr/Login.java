@@ -118,7 +118,6 @@ public class Login extends __Protocol {
 		Map<String, String> header = getHeader();
 		Map<String, String> request = getRequest(oauthKey);
 		String response = client.doPost(QR_LOGIN_URL, header, request);
-		System.out.println(response);
 		// {"status":true,"ts":1516932980,"data":{"url":"https://passport.biligame.com/crossDomain?DedeUserID=1650868&DedeUserID__ckMd5=686caa22740f2663&Expires=84600&SESSDATA=e6e4328c%2C1517017580%2Cc9bf14ac&bili_jct=2be210c9dbaa157359be2ca2d9e50188&gourl=http%3A%2F%2Fwww.bilibili.com"}}
 
 		try {

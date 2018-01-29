@@ -534,7 +534,7 @@ public class AppUI extends MainWindow {
 		HttpCookie vestCookie = CookiesMgr.INSTN().VEST();
 		
 		// 登录马甲号(当主号与马甲号相同时则每次都提示, 否则不再提示)
-		if(CookiesMgr.INSTN().MAIN().equals(vestCookie) && 
+		if((HttpCookie.NULL == vestCookie || CookiesMgr.INSTN().MAIN().equals(vestCookie)) && 
 				SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
 			LoginBtn btn = new LoginBtn(LoginType.VEST, "", new __LoginCallback() {
 				

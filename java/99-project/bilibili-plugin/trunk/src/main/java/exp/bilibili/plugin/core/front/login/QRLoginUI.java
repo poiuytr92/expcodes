@@ -26,7 +26,7 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class QRLoginUI extends PopChildWindow {
+class QRLoginUI extends PopChildWindow {
 
 	/** serialVersionUID */
 	private final static long serialVersionUID = 3032128610929327304L;
@@ -49,7 +49,7 @@ public class QRLoginUI extends PopChildWindow {
 	
 	private QRLogin qrLogin;
 	
-	public QRLoginUI(LoginType type) {
+	protected QRLoginUI(LoginType type) {
 		super("哔哩哔哩-APP扫码登陆", WIDTH, HEIGHT, false, type);
 	}
 	
@@ -106,7 +106,7 @@ public class QRLoginUI extends PopChildWindow {
 		}
 	}
 
-	public HttpCookie getCookie() {
+	protected HttpCookie getCookie() {
 		return qrLogin.getCookie();
 	}
 	

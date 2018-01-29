@@ -249,7 +249,7 @@ public class VCLoginUI extends PopChildWindow {
 		
 	}
 	
-	public HttpCookie getCookie() {
+	protected HttpCookie getCookie() {
 		return cookie;
 	}
 	

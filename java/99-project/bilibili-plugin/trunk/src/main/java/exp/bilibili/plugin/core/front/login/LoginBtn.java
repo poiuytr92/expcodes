@@ -117,10 +117,6 @@ public class LoginBtn {
 		}
 	}
 	
-	public HttpCookie getCookie() {
-		return cookie;
-	}
-	
 	public JButton getButton() {
 		return btn;
 	}
@@ -134,6 +130,10 @@ public class LoginBtn {
 			this.cookie = cookie;
 			btn.setText(LOGOUT_TIPS);
 		}
+	}
+	
+	public HttpCookie getCookie() {
+		return cookie;
 	}
 	
 }

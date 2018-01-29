@@ -206,6 +206,7 @@ public class CookiesMgr {
 	public Iterator<HttpCookie> ALL() {
 		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
 		cookies.add(mainCookie);
+		cookies.add(vestCookie);
 		cookies.addAll(miniCookies);
 		return cookies.iterator();
 	}
