@@ -1,0 +1,3 @@
+[2018-01-29 16:44:05 620] [INFO ] [AWT-EventQueue-0] [ActivityMgr:177] - 初始化活跃值数据库成功
+[2018-01-29 16:44:05 812] [INFO ] [AWT-EventQueue-0] [ActivityMgr:200] - 已读取直播间 [390480] 的历史活跃值
+[2018-01-29 16:44:25 103] [INFO ] [AWT-EventQueue-0] [ActivityMgr:251] - 更新直播间 [390480] 的活跃值成功
