@@ -2,7 +2,6 @@ package exp.bilibili.plugin.core.front.login;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.io.File;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
@@ -11,6 +10,7 @@ import javax.swing.JPanel;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
@@ -90,14 +90,9 @@ public class QRLoginUI extends PopChildWindow {
 		qrLogin._stop();
 	}
 
-	protected void updateQrcodeImg(String imgDir, String qrImgName) {
-		File dir = new File(imgDir);
-		File[] files = dir.listFiles();
-		for(File file : files) {
-			if(file.getName().contains(qrImgName)) {
-				SwingUtils.setImage(imgLabel, file.getPath());
-				break;
-			}
+	protected void updateQrcodeImg(String imgPath) {
+		if(FileUtils.exists(imgPath)) {
+			SwingUtils.setImage(imgLabel, imgPath, 200, 200);
 		}
 	}
 	

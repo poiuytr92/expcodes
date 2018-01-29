@@ -93,6 +93,14 @@ public class Config {
 		return xConf.getVal("/config/biliUrls/rsa");
 	}
 	
+	public String QRCODE_URL() {
+		return xConf.getVal("/config/biliUrls/qrcode");
+	}
+	
+	public String QR_LOGIN_URL() {
+		return xConf.getVal("/config/biliUrls/qrlogin");
+	}
+	
 	public String LIVE_URL() {
 		return xConf.getVal("/config/biliUrls/live");
 	}

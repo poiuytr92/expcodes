@@ -8,6 +8,8 @@
         <miniLogin caption="秘密登陆页"><![CDATA[https://passport.bilibili.com/web/login]]></miniLogin>
         <vccode caption="登陆验证码服务器"><![CDATA[https://passport.bilibili.com/captcha]]></vccode>
         <rsa caption="RSA密钥服务器"><![CDATA[https://passport.bilibili.com/login?act=getkey]]></rsa>
+        <qrcode caption="获取二维码登陆信息"><![CDATA[https://passport.bilibili.com/qrcode/getLoginUrl]]></qrcode>
+        <qrlogin caption="检测二维码登陆状态"><![CDATA[https://passport.bilibili.com/qrcode/getLoginInfo]]></qrlogin>
         
         <live caption="直播页"><![CDATA[http://live.bilibili.com/]]></live>
         <livelist caption="直播列表服务器"><![CDATA[http://api.live.bilibili.com/area/liveList]]></livelist>
@@ -51,8 +53,6 @@
         <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">51108</signRoomId>
         <tabuAutoRoomIds caption="禁止自动发言房间号(需为真实房号)">51108,390480</tabuAutoRoomIds>
         <activityRoomId caption="用于计算活跃度的房间号">438</activityRoomId>
-        <waitElementTime caption="页面元素加载等待时间(s)">10</waitElementTime>
-        <clearCacheCycle caption="清理内存周期(每抽奖N次清理一次)">10</clearCacheCycle>
     </app>
     
 </config>

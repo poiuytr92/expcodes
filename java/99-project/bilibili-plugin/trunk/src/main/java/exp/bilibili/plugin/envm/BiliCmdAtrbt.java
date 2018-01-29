@@ -118,4 +118,6 @@ public class BiliCmdAtrbt {
 	
 	public final static String user_exchange_count = "user_exchange_count";
 	
+	public final static String status = "status";
+	
 }

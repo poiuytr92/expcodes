@@ -1,16 +1,14 @@
 package exp.bilibili.plugin.core.front.login;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-
 import exp.bilibili.plugin.Config;
-import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.protocol.cookie.CookiesMgr;
+import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;
+import exp.libs.utils.img.QRCodeUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.thread.LoopThread;
-import exp.libs.warp.webkit.Browser;
 
 /**
  * <PRE>
@@ -25,11 +23,15 @@ import exp.libs.warp.webkit.Browser;
  */
 class QRLogin extends LoopThread {
 
-	private final static String LOGIN_URL = Config.getInstn().LOGIN_URL();
-	
 	private final static String IMG_DIR = Config.getInstn().IMG_DIR();
 	
-	private final static String QRIMG_NAME = "qrcode";
+	private final static String QRIMG_PATH = IMG_DIR.concat("/qrcode.png");
+	
+	private final static int WIDTH = 140;
+	
+	private final static int HEIGHT = 140;
+	
+	private final static String RGX_OAUTH = "oauthKey=([^&]+)";
 	
 	/** B站二维码有效时间是180s, 这里设置120s, 避免边界问题 */
 	private final static long UPDATE_TIME = 120000;
@@ -39,6 +41,8 @@ class QRLogin extends LoopThread {
 	private final static int LOOP_LIMIT = (int) (UPDATE_TIME / LOOP_TIME);
 	
 	private int loopCnt;
+	
+	private String oauthKey;
 	
 	private boolean isLogined;
 	
@@ -51,8 +55,8 @@ class QRLogin extends LoopThread {
 	protected QRLogin(QRLoginUI qrUI, LoginType type) {
 		super("二维码登陆器");
 		this.loopCnt = LOOP_LIMIT;
+		this.oauthKey = "";
 		this.isLogined = false;
-		
 		this.type = type;
 		this.cookie = HttpCookie.NULL;
 		this.qrUI = qrUI;
@@ -60,12 +64,7 @@ class QRLogin extends LoopThread {
 	
 	@Override
 	protected void _before() {
-		log.info("正在尝试使用Cookies自动登陆...");
-		
-		isLogined = autoLogin();	// 尝试使用cookies自动登陆
-		if(isLogined == false) {
-			Browser.init(true);		// 使用加载图片的浏览器（首次登陆需要扫描二维码图片/验证码图片）
-		}
+		// Undo
 	}
 	
 	@Override
@@ -77,21 +76,21 @@ class QRLogin extends LoopThread {
 			
 			// 在二维码失效前更新图片
 			if(loopCnt >= LOOP_LIMIT) {
-				if(downloadQrcode(IMG_DIR, QRIMG_NAME)) {
-					qrUI.updateQrcodeImg(IMG_DIR, QRIMG_NAME);
+				if(downloadQrcode(QRIMG_PATH)) {
+					qrUI.updateQrcodeImg(QRIMG_PATH);
 					loopCnt = 0;
 				}
 			}
 			
-			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
-			if(isSwitch() == true) {
-				cookie = new HttpCookie(Browser.getCookies());
+			// 检测是否已扫码登陆成功
+			cookie = MsgSender.toLogin(oauthKey);
+			if(HttpCookie.NULL != cookie) {
 				if(CookiesMgr.checkLogined(cookie)) {
 					isLogined = true;
 					
 				} else {
 					isLogined = false;
-					loopCnt = LOOP_LIMIT;	// 登陆失败, 下一个轮询直接刷新二维码
+					loopCnt = LOOP_LIMIT;	// 登陆失败, 下一次轮询直接刷新二维码
 				}
 			}
 		}
@@ -106,58 +105,23 @@ class QRLogin extends LoopThread {
 		if(isLogined == true) {
 			CookiesMgr.INSTN().add(cookie, type);
 		}
-		Browser.quit();
 		qrUI._hide();
-		
-		log.info("登陆{}: {}", (isLogined ? "成功" : "失败"), 
-				(isLogined ? cookie.NICKNAME() : "Unknow"));
-	}
-	
-	/**
-	 * 尝试使用cookies自动登陆
-	 * @return
-	 */
-	private boolean autoLogin() {
-		boolean isOk = false;
-		if(LoginType.MAIN == type || LoginType.VEST == type) {
-			isOk = CookiesMgr.INSTN().load(LoginType.MAIN);
-			if(isOk == true) {
-				cookie = (LoginType.MAIN == type ? 
-						CookiesMgr.INSTN().MAIN() : CookiesMgr.INSTN().VEST());
-				isOk = CookiesMgr.checkLogined(cookie);
-			}
-		}
-		return isOk;
 	}
 	
 	/**
 	 * 下载登陆二维码
-	 * @param imgDir 下载二维码目录
-	 * @param qrImgName 二维码文件名称（不含后缀）
-	 * @return
+	 * @param imgPath 下载二维码路径
+	 * @return 
 	 */
-	private boolean downloadQrcode(String imgDir, String qrImgName) {
-		boolean isOk = false;
-		log.info("正在更新登陆二维码...");
+	private boolean downloadQrcode(String imgPath) {
+		String url = MsgSender.getQrcodeInfo();
+		oauthKey = RegexUtils.findFirst(url, RGX_OAUTH);
 		
-		Browser.open(LOGIN_URL);
-		WebElement img = Browser.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
-		if(img != null) {
-			String imgUrl = img.getAttribute("src");
-			isOk = HttpUtils.convertBase64Img(imgUrl, imgDir, qrImgName);
-			
-			log.info("更新登陆二维码{}", (isOk ? "成功, 请打开 [哔哩哔哩手机客户端] 扫码登陆..." : "失败"));
+		boolean isOk = false;
+		if(StrUtils.isNotEmpty(oauthKey)) {
+			isOk = QRCodeUtils.toQRCode(url, WIDTH, HEIGHT, imgPath);
 		}
 		return isOk;
-	}
-	
-	/**
-	 * 检查页面是否发生了跳转, 以判定是否登陆成功
-	 * @return
-	 */
-	private boolean isSwitch() {
-		String curURL = Browser.getCurURL();
-		return (StrUtils.isNotEmpty(curURL) && !curURL.startsWith(LOGIN_URL));
 	}
 	
 	public HttpCookie getCookie() {

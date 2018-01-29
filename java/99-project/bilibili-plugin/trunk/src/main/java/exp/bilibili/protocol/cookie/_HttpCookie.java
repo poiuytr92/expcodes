@@ -2,8 +2,6 @@ package exp.bilibili.protocol.cookie;
 
 import java.util.Date;
 
-import org.openqa.selenium.Cookie;
-
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -43,25 +41,6 @@ final class _HttpCookie {
 		this.isHttpOnly = false;
 	}
 	
-	protected _HttpCookie(Cookie cookie) {
-		this();
-		init(cookie);
-	}
-	
-	private void init(Cookie cookie) {
-		if(cookie == null) {
-			return;
-		}
-		
-		this.name = cookie.getName();
-		this.value = cookie.getValue();
-		this.domain = cookie.getDomain();
-		this.path = cookie.getPath();
-		this.expiry = (cookie.getExpiry() == null ? new Date() : cookie.getExpiry());
-		this.isSecure = cookie.isSecure();
-		this.isHttpOnly = cookie.isHttpOnly();
-	}
-	
 	/**
 	 * 
 	 * @param headerCookie HTTP响应头中的 Set-Cookie
@@ -91,7 +70,7 @@ final class _HttpCookie {
 						this.path = val;
 						
 					} else if("Expires".equalsIgnoreCase(key)) {
-						this.expiry = TimeUtils.toDate(val);
+						this.expiry = TimeUtils.toDate(val, TimeUtils.FORMAT_GMT);
 					}
 				}
 				
@@ -124,10 +103,6 @@ final class _HttpCookie {
 		if(isSecure == true) { sb.append(SECURE).append(" ; "); }
 		if(isHttpOnly == true) { sb.append(HTTPONLY).append(" ; "); }
 		return sb.toString();
-	}
-	
-	protected Cookie toSeleniumCookie() {
-		return new Cookie(name, value, domain, path, expiry, isSecure, isHttpOnly);
 	}
 	
 	protected String getName() {

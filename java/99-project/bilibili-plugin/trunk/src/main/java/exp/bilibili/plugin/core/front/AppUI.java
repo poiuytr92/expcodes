@@ -42,7 +42,6 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
-import exp.libs.warp.webkit.Browser;
 
 
 /**
@@ -531,9 +530,12 @@ public class AppUI extends MainWindow {
 	 * 登录节奏风暴马甲号(用于扫描全平台节奏风暴)
 	 */
 	private void _loginStormVest() {
+		CookiesMgr.INSTN().load(LoginType.VEST);
+		HttpCookie vestCookie = CookiesMgr.INSTN().VEST();
 		
-		// 登录马甲号
-		if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
+		// 登录马甲号(当主号与马甲号相同时则每次都提示, 否则不再提示)
+		if(CookiesMgr.INSTN().MAIN().equals(vestCookie) && 
+				SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
 			LoginBtn btn = new LoginBtn(LoginType.VEST, "", new __LoginCallback() {
 				
 				@Override
@@ -548,8 +550,8 @@ public class AppUI extends MainWindow {
 				
 			});
 			
-			if(CookiesMgr.INSTN().load(LoginType.VEST)) {
-				btn.markLogined(CookiesMgr.INSTN().VEST());
+			if(CookiesMgr.checkLogined(vestCookie)) {
+				btn.markLogined(vestCookie);
 				_startStormScanner();
 				
 			} else {
@@ -584,12 +586,12 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(SwingUtils.confirm("[清除登陆信息] 后下次需重新登陆, 继续吗 ?")) {
+				if(SwingUtils.confirm("清除所有账号的登陆痕迹, 继续吗 ?")) {
 					if(CookiesMgr.clearAllCookies()) {
-						SwingUtils.info("已清除登陆信息, 重启后生效");
+						SwingUtils.info("已清除, 重启程序后生效");
 						
 					} else {
-						SwingUtils.info("清除登陆信息失败");
+						SwingUtils.info("清除失败");
 					}
 				}
 			}
@@ -835,8 +837,6 @@ public class AppUI extends MainWindow {
 		MsgKwMgr.getInstn().clear();
 		SafetyMonitor.getInstn()._stop();
 		ActivityMgr.getInstn().save();
-		
-		Browser.quit();
 	}
 	
 	

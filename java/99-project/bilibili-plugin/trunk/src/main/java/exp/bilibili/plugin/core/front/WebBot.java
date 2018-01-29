@@ -1,11 +1,8 @@
 package exp.bilibili.plugin.core.front;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.LotteryRoom;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.core.back.MsgSender;
@@ -13,7 +10,6 @@ import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
-import exp.libs.warp.webkit.Browser;
 
 /**
  * <PRE>
@@ -33,10 +29,6 @@ import exp.libs.warp.webkit.Browser;
 class WebBot extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(WebBot.class);
-	
-	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
-	
-	private final static String HOME_URL = Config.getInstn().HOME_URL();
 	
 	private final static long DAY_UNIT = 86400000L;
 	
@@ -59,17 +51,11 @@ class WebBot extends LoopThread {
 	/** 友爱社签到行为周期 */
 	private final static int ASSN_LIMIT = (int) (ASSN_TIME / SLEEP_TIME);
 	
-	/** 浏览器打开后限制可以抽奖的次数(超过次数则关闭浏览器, 避免内存占用过大) */
-	private final static int LOTTERY_LIMIT = Config.getInstn().CLEAR_CACHE_CYCLE();
-	
 	/** 累计60次空闲, 则打印版本信息提示 */
 	private final static int TIP_LIMIT = 60;
 	
 	/** 行为轮询次数 */
 	private int loopCnt;
-	
-	/** 抽奖累计次数 */
-	private int lotteryCnt;
 	
 	/** 提示累计次数 */
 	private int tipCnt;
@@ -90,7 +76,6 @@ class WebBot extends LoopThread {
 	private WebBot() {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
-		this.lotteryCnt = 0;
 		this.tipCnt = 0;
 		this.assnCnt = 0;
 		this.signAssn = true;
@@ -114,11 +99,6 @@ class WebBot extends LoopThread {
 		return instance;
 	}
 
-	private void closeBrowser() {
-		Browser.quit();
-		lotteryCnt = 0;	// 关闭浏览器后则重置这个浏览器累计的抽奖次数
-	}
-	
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
@@ -130,8 +110,7 @@ class WebBot extends LoopThread {
 		try {
 			toDo();
 		} catch(Exception e) {
-			log.error("模拟Web操作异常, 自动重启Web驱动", e);
-			closeBrowser();
+			log.error("模拟Web行为异常", e);
 		}
 		_sleep(SLEEP_TIME);
 	}
@@ -144,27 +123,18 @@ class WebBot extends LoopThread {
 	/**
 	 * 模拟web行为
 	 */
-	@SuppressWarnings("unused")
 	private void toDo() {
 		
-		// 参与直播间抽奖
+		// 优先参与直播间抽奖
 		LotteryRoom room = RoomMgr.getInstn().getGiftRoom();
 		if(room != null) {
+			toLottery(room);
 			
-			// 后台注入式抽奖
-			if(true) {
-				toLottery(room);
-				
-			// 前端仿真式抽奖(效率问题已废弃, 仅留代码参考)
-			} else if(room.TYPE() != LotteryType.STORM) {	// 节奏风暴的抽奖位置不一样
-				toLottery(room.getRoomId());
-			}
-			
-		// 长时间无抽奖操作则做其他事情
+		// 无抽奖操作则做其他事情
 		} else {
 			toSignAssn();	// 友爱社签到
 			doMathTasks();	// 日常小学数学任务
-			toSleep();		// 休眠
+			toHeartbeat();	// 心跳
 		}
 	}
 	
@@ -210,80 +180,6 @@ class WebBot extends LoopThread {
 		_sleep(SLEEP_TIME);
 	}
 	
-	/**
-	 * 通过前端模拟浏览器行为参与抽奖
-	 * @param roomId
-	 */
-	@Deprecated
-	private void toLottery(int roomId) {
-		String url = StrUtils.concat(LIVE_URL, roomId);
-		Browser.open(url);	// 打开/重开直播间(可屏蔽上一次抽奖结果提示)
-		_sleep(SLEEP_TIME);
-		boolean isOk = _lottery(roomId);
-		log.info("参与直播间 [{}] 抽奖{}", roomId, (isOk ? "成功" : "失败"));
-		
-		// 连续抽奖超过一定次数, 重启浏览器释放缓存
-		if(lotteryCnt++ >= LOTTERY_LIMIT) {
-			closeBrowser();
-			UIUtils.log("已释放无效的内存空间");
-			
-		// 若无后续抽奖则马上跳回去首页, 避免接收太多直播间数据浪费内存
-		} else if(RoomMgr.getInstn().getGiftRoomCount() <= 0){
-			Browser.open(HOME_URL);
-		}
-	}
-	
-	@Deprecated
-	private boolean _lottery(int roomId) {
-		boolean isOk = false;
-		try {
-			if(_lottery()) {
-				UIUtils.statistics("成功: 抽奖直播间 [", roomId, "]");
-				UIUtils.updateLotteryCnt();
-				isOk = true;
-				
-			} else {
-				UIUtils.statistics("超时: 抽奖直播间 [", roomId, "]");
-			}
-			
-		} catch(Throwable e) {
-			UIUtils.statistics("挤不进去: 抽奖直播间 [", roomId, "] ");
-			UIUtils.log("辣鸡B站炸了, 自动重连");
-		}
-		return isOk;
-	}
-	
-	@Deprecated
-	private boolean _lottery() {
-		boolean isOk = false;
-		WebElement vm = Browser.findElement(By.id("chat-popup-area-vm"));
-		By element = By.className("lottery-box");
-		if(Browser.existElement(element)) {
-			WebElement lotteryBox = vm.findElement(element);
-			WebElement rst = lotteryBox.findElement(By.className("next-loading"));
-			
-			isOk = _clickArea(lotteryBox, rst);
-			if(isOk == false) {	// 重试一次
-				_sleep(SLEEP_TIME);
-				isOk = _clickArea(lotteryBox, rst);
-			}
-		}
-		return isOk;
-	}
-	
-	/**
-	 * 点击抽奖区域
-	 * @param lotteryBox
-	 * @param rst
-	 * @return
-	 */
-	@Deprecated
-	private boolean _clickArea(WebElement lotteryBox, WebElement rst) {
-		Browser.click(lotteryBox);	// 点击抽奖
-		_sleep(SLEEP_TIME);	// 等待抽奖结果
-		return rst.getText().contains("成功");
-	}
-
 	/**
 	 * 友爱社日常签到
 	 */
@@ -338,13 +234,12 @@ class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 计数器累计达到一个心跳周期后, 关闭浏览器(等待有其他事件时再自动重启)
+	 * 打印心跳消息
 	 */
-	private void toSleep() {
+	private void toHeartbeat() {
 		if(loopCnt++ >= LOOP_LIMIT) {
 			tipCnt++;
 			loopCnt = 0;
-			closeBrowser();
 			log.info("{} 活动中...", getName());
 		}
 		

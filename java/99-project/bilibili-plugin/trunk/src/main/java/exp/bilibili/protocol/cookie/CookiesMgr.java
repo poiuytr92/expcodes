@@ -2,14 +2,15 @@ package exp.bilibili.protocol.cookie;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.core.back.MsgSender;
-import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -46,9 +47,9 @@ public class CookiesMgr {
 	private HttpCookie tempCookie;
 	
 	/** 小号cookie集 */
-	private List<HttpCookie> miniCookies;
+	private Set<HttpCookie> miniCookies;
 	
-	/** cookie保存路径 */
+	/** 所有cookie保存路径 */
 	private Map<HttpCookie, String> cookiePaths;
 	
 	private static volatile CookiesMgr instance;
@@ -57,7 +58,7 @@ public class CookiesMgr {
 		this.mainCookie = HttpCookie.NULL;
 		this.vestCookie = HttpCookie.NULL;
 		this.tempCookie = HttpCookie.NULL;
-		this.miniCookies = new LinkedList<HttpCookie>();
+		this.miniCookies = new HashSet<HttpCookie>();
 		this.cookiePaths = new HashMap<HttpCookie, String>();
 	}
 	
@@ -83,12 +84,6 @@ public class CookiesMgr {
 			this.mainCookie = cookie;
 			isOk = save(cookie, COOKIE_MAIN_PATH);
 			
-			// 默认情况下, 用主号作为马甲号
-			if(isOk == true) {
-				this.vestCookie = cookie;
-				save(cookie, COOKIE_VEST_PATH);
-			}
-			
 		} else if(LoginType.VEST == type) {
 			this.vestCookie = cookie;
 			isOk = save(cookie, COOKIE_VEST_PATH);
@@ -98,9 +93,14 @@ public class CookiesMgr {
 			isOk = true;	// 临时cookie无需写入外存
 			
 		} else {
+			String cookiePath = cookiePaths.get(cookie);
+			if(cookiePath == null) {
+				cookiePath = PathUtils.combine(COOKIE_DIR, StrUtils.concat(
+						COOKIE_MINI_PREFIX, cookie.UID(), SUFFIX));
+			}
+			
 			this.miniCookies.add(cookie);
-			isOk = save(cookie, PathUtils.combine(COOKIE_DIR, StrUtils.concat(
-					COOKIE_MINI_PREFIX, TimeUtils.getSysDate("yyyyMMddHHmmSS"), SUFFIX)));
+			isOk = save(cookie, cookiePath);
 		}
 		return isOk;
 	}
@@ -115,11 +115,17 @@ public class CookiesMgr {
 		boolean isOk = true;
 		if(LoginType.MAIN == type) {
 			mainCookie = load(COOKIE_MAIN_PATH, type);
-			isOk = (mainCookie != HttpCookie.NULL && checkLogined(mainCookie));
+			isOk = checkLogined(mainCookie);
+			if(isOk == false) {
+				del(mainCookie);
+			}
 			
 		} else if(LoginType.VEST == type) {
 			vestCookie = load(COOKIE_VEST_PATH, type);
-			isOk = (vestCookie != HttpCookie.NULL && checkLogined(vestCookie));
+			isOk = checkLogined(vestCookie);
+			if(isOk == false) {
+				del(vestCookie);
+			}
 
 		} else if(LoginType.TEMP == type) {
 			isOk = (tempCookie != HttpCookie.NULL);
@@ -129,16 +135,15 @@ public class CookiesMgr {
 			String[] fileNames = dir.list();
 			for(String fileName : fileNames) {
 				if(fileName.contains(COOKIE_MINI_PREFIX)) {
-					HttpCookie miniCookie = load(
-							PathUtils.combine(dir.getPath(), fileName), type);
+					String cookiePath = PathUtils.combine(dir.getPath(), fileName);
+					
+					HttpCookie miniCookie = load(cookiePath, type);
 					if(miniCookie != HttpCookie.NULL) {
-						miniCookie.setType(type);
 						if(checkLogined(miniCookie)) {
 							miniCookies.add(miniCookie);
-							isOk &= true;
+						} else {
+							del(miniCookie);
 						}
-					} else {
-						isOk &= false;
 					}
 				}
 			}
@@ -218,7 +223,7 @@ public class CookiesMgr {
 	 * @return
 	 */
 	public static boolean checkLogined(HttpCookie cookie) {
-		return MsgSender.queryUserInfo(cookie);
+		return (HttpCookie.NULL != cookie && MsgSender.queryUserInfo(cookie));
 	}
 	
 }

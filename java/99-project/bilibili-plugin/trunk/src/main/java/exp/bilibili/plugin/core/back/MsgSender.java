@@ -25,6 +25,23 @@ public class MsgSender {
 		return Other.queryCertificateTags();
 	}
 	
+	public static String getQrcodeInfo() {
+		return Login.getQrcodeInfo();
+	}
+	
+	public static HttpCookie toLogin(String oauthKey) {
+		return Login.toLogin(oauthKey);
+	}
+	
+	/**
+	 * 下载登陆用的验证码图片
+	 * @param imgPath 图片保存路径
+	 * @return 与该验证码配套的cookies
+	 */
+	public static String downloadVccode(String imgPath) {
+		return Login.downloadVccode(imgPath);
+	}
+	
 	public static HttpCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
 		return Login.toLogin(username, password, vccode, vcCookies);

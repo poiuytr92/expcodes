@@ -13,6 +13,9 @@ import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.RSAUtils;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
@@ -36,17 +39,179 @@ public class Login extends __Protocol {
 	/** 登陆服务器 */
 	private final static String LOGIN_HOST = Config.getInstn().LOGIN_HOST();
 	
-	/** 验证码登陆URL */
-	private final static String VC_LOGIN_URL = Config.getInstn().VC_LOGIN_URL();
+	/** 登陆URL */
+	private final static String LOGIN_URL = Config.getInstn().LOGIN_URL();
 	
 	/** RSA公钥URL */
 	private final static String RSA_KEY_URL = Config.getInstn().RSA_URL();
 	
-	/** 账号信息URL */
+	/** 下载验证码图片的URL */
+	private final static String VCCODE_URL = Config.getInstn().VCCODE_URL();
+	
+	/** 验证码图片配套cookie中的SID */
+	private final static String SID = "sid";
+	
+	/** 验证码图片配套cookie中的JSESSIONID */
+	private final static String JSESSIONID = "JSESSIONID";
+	
+	/** 使用帐密+验证码登陆的URL */
+	private final static String VC_LOGIN_URL = Config.getInstn().VC_LOGIN_URL();
+	
+	/** 获取二维码图片信息的URL */
+	private final static String QRCODE_URL = Config.getInstn().QRCODE_URL();
+	
+	/** 检测二维码是否被扫码登陆的URL */
+	private final static String QR_LOGIN_URL = Config.getInstn().QR_LOGIN_URL();
+	
+	/** 查询账号信息URL */
 	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
 	
 	/** 私有化构造函数 */
 	protected Login() {}
+	
+	/**
+	 * 从Http会话的响应报文中提取cookie信息
+	 * @param client Http会话客户端
+	 * @param cookie cookie对象容器
+	 */
+	private static void takeCookies(HttpClient client, HttpCookie cookie) {
+		HttpMethod method = client.getHttpMethod();
+		if(method != null) {
+			Header[] outHeaders = method.getResponseHeaders();
+			for(Header outHeader : outHeaders) {
+				if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
+					cookie.add(outHeader.getValue());
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 获取二维码登陆信息(用于在本地生成二维码图片)
+	 * @return https://passport.bilibili.com/qrcode/h5/login?oauthKey=b2fd47ca9a9fcb5a5943782d54ac3022
+	 */
+	public static String getQrcodeInfo() {
+		Map<String, String> header = getHeader();
+		String response = HttpURLUtils.doGet(QRCODE_URL, header, null);
+		
+		String url = "";
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+			url = JsonUtils.getStr(data, BiliCmdAtrbt.url);
+			
+		} catch(Exception e) {
+			log.error("获取二维码登陆信息失败: {}", response, e);
+		}
+		return url;
+	}
+	
+	/**
+	 * 检测二维码是否扫码登陆成功
+	 * @param oauthKey 二维码登陆信息中提取的oauthKey
+	 * @return 若扫码登陆成功, 则返回有效Cookie
+	 */
+	public static HttpCookie toLogin(String oauthKey) {
+		HttpCookie cookie = new HttpCookie();
+		HttpClient client = new HttpClient();
+		
+		Map<String, String> header = getHeader();
+		Map<String, String> request = getRequest(oauthKey);
+		String response = client.doPost(QR_LOGIN_URL, header, request);
+		System.out.println(response);
+		// {"status":true,"ts":1516932980,"data":{"url":"https://passport.biligame.com/crossDomain?DedeUserID=1650868&DedeUserID__ckMd5=686caa22740f2663&Expires=84600&SESSDATA=e6e4328c%2C1517017580%2Cc9bf14ac&bili_jct=2be210c9dbaa157359be2ca2d9e50188&gourl=http%3A%2F%2Fwww.bilibili.com"}}
+
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			String status = JsonUtils.getStr(json, BiliCmdAtrbt.status);
+			if("true".equalsIgnoreCase(status)) {
+				takeCookies(client, cookie);
+			} else {
+				cookie = HttpCookie.NULL;
+			}
+		} catch(Exception e) {
+			cookie = HttpCookie.NULL;
+			log.error("获取二维码登陆信息失败: {}", response, e);
+		}
+		client.close();
+		return cookie;
+	}
+	
+	/**
+	 * 生成二维码登陆用的请求头
+	 * @param cookie
+	 * @return
+	 */
+	private static Map<String, String> getHeader() {
+		Map<String, String> header = POST_HEADER("");
+		header.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LOGIN_URL);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LOGIN_URL);
+		return header;
+	}
+	
+	/**
+	 * 生成二维码登陆用的请求参数
+	 * @param username 账号
+	 * @param password 密码（RSA公钥加密密文）
+	 * @param vccode 图片验证码
+	 * @return
+	 */
+	private static Map<String, String> getRequest(String oauthKey) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("oauthKey", oauthKey);
+		request.put("gourl", HOME_URL);
+		return request;
+	}
+	
+	/**
+	 * 下载登陆用的验证码图片
+	 * @param imgPath 验证码图片保存路径
+	 * @return 与该验证码配套的cookies
+	 */
+	public static String downloadVccode(String imgPath) {
+		final String sid = StrUtils.concat(SID, "=", randomSID());
+		HttpClient client = new HttpClient();
+		
+		// 下载验证码图片（该验证码图片需要使用一个随机sid去请求）
+		Map<String, String> inHeaders = new HashMap<String, String>();
+		inHeaders.put(HttpUtils.HEAD.KEY.COOKIE, sid);
+		boolean isOk = client.downloadByGet(imgPath, VCCODE_URL, inHeaders, null);
+		
+		// 服务端返回验证码的同时，会返回一个与之绑定的JSESSIONID
+		String jsessionId = "";
+		HttpMethod method = client.getHttpMethod();
+		if(isOk && method != null) {
+			Header outHeader = method.getResponseHeader(HttpUtils.HEAD.KEY.SET_COOKIE);
+			if(outHeader != null) {
+				jsessionId = RegexUtils.findFirst(outHeader.getValue(), 
+						StrUtils.concat("(", JSESSIONID, "=[^;]+)"));
+			}
+		}
+		client.close();
+		
+		// SID与JSESSIONID绑定了该验证码图片, 在登陆时需要把这个信息一起POST
+		return StrUtils.concat(sid, "; ", jsessionId);
+	}
+	
+	/**
+	 * 生成随机SID (sid是由长度为8的由a-z0-9字符组成的字符串)
+	 * @return 随机SID
+	 */
+	private static String randomSID() {
+		StringBuilder sid = new StringBuilder();
+		for(int i = 0; i < 8; i++) {	// sid长度为8
+			int n = RandomUtils.randomInt(36);	// a-z, 0-9
+			if(n < 26) {	// a-z
+				sid.append((char) (n + 'a'));
+				
+			} else {	// 0-9
+				n = n - 26;
+				sid.append((char) (n + '0'));
+			}
+		}
+		return sid.toString();
+	}
 	
 	/**
 	 * 通过帐密+验证码方式登陆
@@ -78,15 +243,7 @@ public class Login extends __Protocol {
 			json = JSONObject.fromObject(sJson);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {	
-				HttpMethod method = client.getHttpMethod();
-				if(method != null) {
-					Header[] outHeaders = method.getResponseHeaders();
-					for(Header outHeader : outHeaders) {
-						if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
-							cookie.add(outHeader.getValue());
-						}
-					}
-				}
+				takeCookies(client, cookie);
 			} else {
 				cookie = HttpCookie.NULL;
 			}
@@ -99,7 +256,20 @@ public class Login extends __Protocol {
 	}
 	
 	/**
-	 * 生成登陆用的请求参数
+	 * 生成验证码登陆用的请求头
+	 * @param cookie
+	 * @return
+	 */
+	private static Map<String, String> getHeader(String cookie, String host) {
+		Map<String, String> header = POST_HEADER(cookie);
+		header.put(HttpUtils.HEAD.KEY.HOST, host);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/center/index"));
+		return header;
+	}
+	
+	/**
+	 * 生成验证码登陆用的请求参数
 	 * @param username 账号
 	 * @param password 密码（RSA公钥加密密文）
 	 * @param vccode 图片验证码
@@ -133,29 +303,16 @@ public class Login extends __Protocol {
 			if(code == 0) {
 				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 				JSONObject userInfo = JsonUtils.getObject(data, BiliCmdAtrbt.userInfo);
-				String uid = JsonUtils.getStr(userInfo, BiliCmdAtrbt.uid);
+//				String uid = JsonUtils.getStr(userInfo, BiliCmdAtrbt.uid);
 				String username = JsonUtils.getStr(userInfo, BiliCmdAtrbt.uname);
 				
-				cookie.setUid(uid);
+//				cookie.setUid(uid);	// 登陆cookie中已自带，此处可不再写入
 				cookie.setNickName(username);
 			}
 		} catch(Exception e) {
 			log.error("查询账号信息失败: {}", response, e);
 		}
 		return cookie.isVaild();
-	}
-	
-	/**
-	 * 生成请求头
-	 * @param cookie
-	 * @return
-	 */
-	private static Map<String, String> getHeader(String cookie, String host) {
-		Map<String, String> header = POST_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/center/index"));
-		return header;
 	}
 	
 }

@@ -1,12 +1,7 @@
 package exp.bilibili.protocol.cookie;
 
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-
-import org.openqa.selenium.Cookie;
 
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.other.StrUtils;
@@ -19,6 +14,9 @@ public class HttpCookie {
 	
 	/** B站CSRF标识 */
 	private final static String CSRF_KEY = "bili_jct";
+	
+	/** B站用户ID标识 */
+	private final static String UID_KEY = "DedeUserID";
 	
 	private LoginType type;
 	
@@ -60,26 +58,12 @@ public class HttpCookie {
 		}
 	}
 	
-	public HttpCookie(Collection<Cookie> cookies) {
-		this();
-		
-		if(cookies != null) {
-			for(Cookie cookie : cookies) {
-				add(cookie);
-			}
-		}
-	}
-	
 	/**
 	 * cookies是否有效
 	 * @return true:有效; false:无效
 	 */
 	public boolean isVaild() {
 		return (cookies.size() > 0 && StrUtils.isNotEmpty(uid, nickName));
-	}
-	
-	public void add(Cookie cookie) {
-		add(new _HttpCookie(cookie));
 	}
 	
 	public void add(String headerCookie) {
@@ -91,8 +75,11 @@ public class HttpCookie {
 			isChanged = true;
 			cookies.add(cookie);
 			
-			if(CSRF_KEY.equals(cookie.getName())) {
+			if(CSRF_KEY.equalsIgnoreCase(cookie.getName())) {
 				csrf = cookie.getValue();
+				
+			} else if(UID_KEY.equalsIgnoreCase(cookie.getName())) {
+				uid = cookie.getValue();
 			}
 		}
 	}
@@ -117,14 +104,6 @@ public class HttpCookie {
 		return sb.toString();
 	}
 	
-	public Set<Cookie> toSeleniumCookies() {
-		Set<Cookie> seleniumCookies = new HashSet<Cookie>();
-		for(_HttpCookie cookie : cookies) {
-			seleniumCookies.add(cookie.toSeleniumCookie());
-		}
-		return seleniumCookies;
-	}
-	
 	public LoginType TYPE() {
 		return type;
 	}
@@ -145,14 +124,25 @@ public class HttpCookie {
 		this.type = type;
 	}
 
-	public void setUid(String uid) {
-		this.uid = uid;
-	}
-
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof HttpCookie)) {
+			return false;
+		}
+		
+		HttpCookie other = (HttpCookie) obj;
+		return this.uid.equals(other.uid);
+	}
+	
+	@Override
+	public int hashCode() {
+		return uid.hashCode();
+	}
+	
 	@Override
 	public String toString() {
 		return toHeaderCookie();
