@@ -8,7 +8,6 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
 
 /**
@@ -144,16 +143,7 @@ class WebBot extends LoopThread {
 		
 		// 小电视抽奖
 		if(room.TYPE() == LotteryType.TV) {
-			String errDesc = MsgSender.toTvLottery(roomId, raffleId);
-			if(StrUtils.isEmpty(errDesc)) {
-				log.info("参与直播间 [{}] 抽奖成功", roomId);
-				UIUtils.statistics("成功(小电视): 抽奖直播间 [", roomId, "]");
-				UIUtils.updateLotteryCnt();
-				
-			} else {
-				log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
-				UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
-			}
+			MsgSender.toTvLottery(roomId, raffleId);
 			
 		// 节奏风暴抽奖
 		} else if(room.TYPE() == LotteryType.STORM) {
@@ -161,15 +151,7 @@ class WebBot extends LoopThread {
 			
 		// 高能抽奖
 		} else {
-			int cnt = MsgSender.toEgLottery(roomId);
-			if(cnt > 0) {
-				log.info("参与直播间 [{}] 抽奖成功(连击x{})", roomId, cnt);
-				UIUtils.statistics("成功(连击x", cnt, "): 抽奖直播间 [", roomId, "]");
-				UIUtils.updateLotteryCnt(cnt);
-				
-			} else {
-				log.info("请勿重复操作: 抽奖直播间 [{}]", roomId);
-			}
+			MsgSender.toEgLottery(roomId);
 		}
 		
 		// 后端抽奖过快， 需要限制， 不然连续抽奖时会取不到礼物编号

@@ -104,25 +104,27 @@ public class LotteryEnergy extends _Lottery {
 		return raffleIds;
 	}
 	
-	// FIXME 某个用户是否抽奖成功
-	private static boolean join(int roomId, String raffleId) {
-		boolean isOk = false;
+	private static void join(int roomId, String raffleId) {
+		int cnt = 0;
 		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
 		while(cookieIts.hasNext()) {
 			HttpCookie cookie = cookieIts.next();
-			String errDesc = join(LotteryType.ENGERY, cookie, 
-					EG_JOIN_URL, roomId, raffleId);
+			String errDesc = join(LotteryType.ENGERY, cookie, EG_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(errDesc)) {
-				isOk = true;
+				log.info("[{}] 参与直播间 [{}] 抽奖成功", cookie.NICKNAME(), roomId);
+				cnt++;
 				
-			} else {
-				if(!errDesc.contains("你已加入抽奖")) {
-					UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
-				}
-				log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
+			} else if(!errDesc.contains("你已加入抽奖")) {
+				log.info("[{}] 参与直播间 [{}] 抽奖失败", cookie.NICKNAME(), roomId);
+				UIUtils.statistics("失败(", errDesc, "): 直播间 [", roomId, 
+						"],账号[", cookie.NICKNAME(), "]");
 			}
 		}
-		return isOk;
+		
+		if(cnt > 0) {
+			UIUtils.statistics("成功(高能礼物x", cnt, "): 抽奖直播间 [", roomId, "]");
+			UIUtils.updateLotteryCnt(cnt);
+		}
 	}
 	
 }

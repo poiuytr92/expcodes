@@ -67,8 +67,8 @@ public class MsgSender {
 		return Other.queryHotLiveRoomIds(MAX_PAGES, MIN_ONLINE);
 	}
 	
-	public static int scanAndJoinStorms(List<Integer> roomIds) {
-		return LotteryStorm.toDo(roomIds);
+	public static void scanAndJoinStorms(List<Integer> roomIds) {
+		LotteryStorm.toDo(roomIds);
 	}
 	
 	/**
@@ -76,16 +76,16 @@ public class MsgSender {
 	 * @param roomId
 	 * @return
 	 */
-	public static boolean toStormLottery(int roomId, String raffleId) {
-		return LotteryStorm.toDo(roomId, raffleId);
+	public static void toStormLottery(int roomId, String raffleId) {
+		LotteryStorm.toDo(roomId, raffleId);
 	}
 	
-	public static String toTvLottery(int roomId, String raffleId) {
-		return LotteryTV.toDo(roomId, raffleId);
+	public static void toTvLottery(int roomId, String raffleId) {
+		LotteryTV.toDo(roomId, raffleId);
 	}
 	
-	public static int toEgLottery(int roomId) {
-		return LotteryEnergy.toDo(roomId);
+	public static void toEgLottery(int roomId) {
+		LotteryEnergy.toDo(roomId);
 	}
 	
 	public static String queryRedbagPool() {

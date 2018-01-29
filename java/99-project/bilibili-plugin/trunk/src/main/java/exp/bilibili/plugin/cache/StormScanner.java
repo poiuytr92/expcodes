@@ -196,10 +196,7 @@ public class StormScanner extends LoopThread {
 	 * 扫描并加入其他热门房间的节奏风暴抽奖
 	 */
 	public void sancAndJoinStorm() {
-		int cnt = MsgSender.scanAndJoinStorms(hotRoomIds);
-		if(cnt > 0) {
-			log.info("参与节奏风暴抽奖成功(连击x{})", cnt);
-		}
+		MsgSender.scanAndJoinStorms(hotRoomIds);
 	}
 	
 }

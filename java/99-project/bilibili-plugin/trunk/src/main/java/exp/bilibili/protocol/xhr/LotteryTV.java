@@ -4,8 +4,10 @@ import java.util.Iterator;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.LotteryType;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -31,14 +33,27 @@ public class LotteryTV extends _Lottery {
 	 * @param raffleId
 	 * @return
 	 */
-	public static String toDo(int roomId, String raffleId) {
-		String errDesc = "";
+	public static void toDo(int roomId, String raffleId) {
+		int cnt = 0;
 		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
 		while(cookieIts.hasNext()) {
 			HttpCookie cookie = cookieIts.next();
-			errDesc = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
+			String errDesc = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
+			if(StrUtils.isEmpty(errDesc)) {
+				log.info("[{}] 参与直播间 [{}] 抽奖成功", cookie.NICKNAME(), roomId);
+				cnt++;
+				
+			} else {
+				log.info("[{}] 参与直播间 [{}] 抽奖失败", cookie.NICKNAME(), roomId);
+				UIUtils.statistics("失败(", errDesc, "): 直播间 [", roomId, 
+						"],账号[", cookie.NICKNAME(), "]");
+			}
 		}
-		return errDesc;
+		
+		if(cnt > 0) {
+			UIUtils.statistics("成功(小电视x", cnt, "): 抽奖直播间 [", roomId, "]");
+			UIUtils.updateLotteryCnt(cnt);
+		}
 	}
 	
 }
