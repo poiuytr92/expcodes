@@ -36,20 +36,20 @@ class WebBot extends LoopThread {
 	
 	private final static int HOUR_OFFSET = 8;
 	
-	/** 单次浏览器行为的轮询间隔 */
+	/** 轮询间隔 */
 	private final static long SLEEP_TIME = 1000;
 	
-	/** 浏览器非活动时的保持时间 */
-	private final static long KEEP_TIME = 60000;
+	/** 心跳间隔 */
+	private final static long LOOP_TIME = 60000;
 	
-	/** 累计的行为周期(达到周期则关闭浏览器, 避免内存占用过大) */
-	private final static int LOOP_LIMIT = (int) (KEEP_TIME / SLEEP_TIME);
+	/** 打印心跳信息周期 */
+	private final static int LOOP_LIMIT = (int) (LOOP_TIME / SLEEP_TIME);
 	
-	/** 测试有爱社签到间隔 */
-	private final static long ASSN_TIME = 60000;
+	/** 签到间隔 */
+	private final static long SIGN_TIME = 300000;
 	
-	/** 友爱社签到行为周期 */
-	private final static int ASSN_LIMIT = (int) (ASSN_TIME / SLEEP_TIME);
+	/** 签到行为周期 */
+	private final static int SIGN_LIMIT = (int) (SIGN_TIME / SLEEP_TIME);
 	
 	/** 累计60次空闲, 则打印版本信息提示 */
 	private final static int TIP_LIMIT = 60;
@@ -60,10 +60,7 @@ class WebBot extends LoopThread {
 	/** 提示累计次数 */
 	private int tipCnt;
 	
-	/** 是否需要签到友爱社 */
-	private boolean signAssn;
-	
-	private int assnCnt;
+	private int signCnt;
 	
 	/** 执行下次日常任务的时间点 */
 	private long nextTaskTime;
@@ -77,8 +74,7 @@ class WebBot extends LoopThread {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
 		this.tipCnt = 0;
-		this.assnCnt = 0;
-		this.signAssn = true;
+		this.signCnt = 0;
 		this.nextTaskTime = System.currentTimeMillis();
 		this.resetTaskTime = System.currentTimeMillis();
 		
@@ -102,7 +98,6 @@ class WebBot extends LoopThread {
 	@Override
 	protected void _before() {
 		log.info("{} 已启动", getName());
-		MsgSender.toSign();	// 自动签到
 	}
 
 	@Override
@@ -132,8 +127,9 @@ class WebBot extends LoopThread {
 			
 		// 无抽奖操作则做其他事情
 		} else {
-			toSignAssn();	// 友爱社签到
-			doMathTasks();	// 日常小学数学任务
+			resetDailyTasks();	// 满足某个时间点则重置每日任务
+			doDailyTasks();		// 执行每日任务
+			
 			toHeartbeat();	// 心跳
 		}
 	}
@@ -181,18 +177,31 @@ class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 友爱社日常签到
+	 * 每小时自动重置每日任务(目的是针对可能新添加的小号)
 	 */
-	private void toSignAssn() {
-		if(signAssn == false || (assnCnt++ <= ASSN_LIMIT)) {
+	private void resetDailyTasks() {
+		long now = System.currentTimeMillis();
+		if(nextTaskTime > 0 || (now - resetTaskTime <= HOUR_UNIT)) {
 			return;
 		}
-		assnCnt = 0;
 		
-		boolean isGoOn = MsgSender.toAssn();
-		if(isGoOn == false) {
-			signAssn = false;
-			UIUtils.log("今天已在友爱社签到");
+		resetTaskTime = now;
+		nextTaskTime = now;
+	}
+	
+	/**
+	 * 执行每日任务
+	 */
+	private void doDailyTasks() {
+		toSign();		// 签到(每日+友爱社)
+		doMathTasks();	// 日常小学数学任务
+	}
+	
+	private void toSign() {
+		if(signCnt++ > SIGN_LIMIT) {
+			signCnt = 0;
+			MsgSender.toSign();
+			MsgSender.toAssn();
 		}
 	}
 	
@@ -200,36 +209,8 @@ class WebBot extends LoopThread {
 	 * 执行日常小学数学任务
 	 */
 	private void doMathTasks() {
-		resetDailyTasks();
-		if(nextTaskTime <= 0 || nextTaskTime > System.currentTimeMillis()) {
-			return;
-		}
-		
-		nextTaskTime = MsgSender.doMathTasks();
-		if(nextTaskTime <= 0) {
-			UIUtils.log("今天所有小学数学任务已完成");
-		}
-	}
-	
-	/**
-	 * 当跨天后，自动重置每日任务
-	 */
-	private void resetDailyTasks() {
-		long now = System.currentTimeMillis();
-		if(nextTaskTime > 0 || (now - resetTaskTime <= DAY_UNIT)) {
-			return;
-		}
-		
-		long hms = now % DAY_UNIT;	// 取时分秒
-		long hour = hms / HOUR_UNIT;	// 取小时
-		hour = (hour + HOUR_OFFSET) % 24;		// 校正时差
-		
-		// 凌晨时重置每日任务时间
-		if(hour == 0) {
-			resetTaskTime = now;
-			nextTaskTime = now;
-			MsgSender.toSign();	// 重新每日签到
-			signAssn = true;	// 标记友爱社可以签到
+		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
+			nextTaskTime = MsgSender.doMathTasks();
 		}
 	}
 	

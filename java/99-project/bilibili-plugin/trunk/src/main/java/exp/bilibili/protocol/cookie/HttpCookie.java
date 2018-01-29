@@ -38,7 +38,7 @@ public class HttpCookie {
 	private boolean isChanged;
 	
 	public HttpCookie() {
-		this.type = LoginType.TEMP;
+		this.type = LoginType.UNKNOW;
 		this.uid = "";
 		this.nickName = "";
 		this.cookies = new LinkedList<_HttpCookie>();

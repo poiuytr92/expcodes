@@ -43,9 +43,6 @@ public class CookiesMgr {
 	/** 马甲号cookie */
 	private HttpCookie vestCookie;
 	
-	/** 临时cookie */
-	private HttpCookie tempCookie;
-	
 	/** 小号cookie集 */
 	private Set<HttpCookie> miniCookies;
 	
@@ -57,7 +54,6 @@ public class CookiesMgr {
 	private CookiesMgr() {
 		this.mainCookie = HttpCookie.NULL;
 		this.vestCookie = HttpCookie.NULL;
-		this.tempCookie = HttpCookie.NULL;
 		this.miniCookies = new HashSet<HttpCookie>();
 		this.cookiePaths = new HashMap<HttpCookie, String>();
 	}
@@ -87,10 +83,6 @@ public class CookiesMgr {
 		} else if(LoginType.VEST == type) {
 			this.vestCookie = cookie;
 			isOk = save(cookie, COOKIE_VEST_PATH);
-			
-		} else if(LoginType.TEMP == type) {
-			this.tempCookie = cookie;
-			isOk = true;	// 临时cookie无需写入外存
 			
 		} else {
 			String cookiePath = cookiePaths.get(cookie);
@@ -126,9 +118,6 @@ public class CookiesMgr {
 			if(isOk == false) {
 				del(vestCookie);
 			}
-
-		} else if(LoginType.TEMP == type) {
-			isOk = (tempCookie != HttpCookie.NULL);
 			
 		} else {
 			File dir = new File(COOKIE_DIR);
@@ -176,9 +165,6 @@ public class CookiesMgr {
 		} else if(LoginType.VEST == cookie.TYPE()) {
 			this.vestCookie = HttpCookie.NULL;
 			
-		} else if(LoginType.TEMP == cookie.TYPE()) {
-			this.tempCookie = HttpCookie.NULL;
-			
 		} else {
 			this.miniCookies.remove(cookie);
 		}
@@ -195,18 +181,14 @@ public class CookiesMgr {
 		return vestCookie;
 	}
 	
-	public HttpCookie TEMP() {
-		return tempCookie;
-	}
-
 	public Iterator<HttpCookie> MINIs() {
 		return miniCookies.iterator();
 	}
 	
 	public Iterator<HttpCookie> ALL() {
 		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
-		cookies.add(mainCookie);
-		cookies.add(vestCookie);
+		if(HttpCookie.NULL != mainCookie) { cookies.add(mainCookie); }
+		if(HttpCookie.NULL != vestCookie) { cookies.add(vestCookie); }
 		cookies.addAll(miniCookies);
 		return cookies.iterator();
 	}

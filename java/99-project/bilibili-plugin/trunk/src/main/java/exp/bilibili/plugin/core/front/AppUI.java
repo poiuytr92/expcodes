@@ -576,6 +576,11 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(!isLogined()) {
+					SwingUtils.warn("请先登录主号");
+					return;
+				}
+				
 				miniLoginMgrUI._view();
 			}
 		});

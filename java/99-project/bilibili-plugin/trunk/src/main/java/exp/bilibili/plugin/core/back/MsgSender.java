@@ -1,9 +1,7 @@
 package exp.bilibili.plugin.core.back;
 
-import java.util.Iterator;
 import java.util.List;
 
-import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.cookie.CookiesMgr;
@@ -57,25 +55,11 @@ public class MsgSender {
 	}
 	
 	public static void toSign() {
-		int roomId = Config.getInstn().SIGN_ROOM_ID();
-		roomId = (roomId <= 0 ? UIUtils.getCurRoomId() : roomId);
-		
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
-			DailyTasks.toSign(cookie, roomId);
-		}
+		DailyTasks.toSign();
 	}
 	
 	public static long doMathTasks() {
-		long maxNextTaskTime = 0;
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
-			long nextTaskTime = DailyTasks.doMathTasks(cookie.toNVCookie());
-			maxNextTaskTime = (maxNextTaskTime < nextTaskTime ? nextTaskTime : maxNextTaskTime);
-		}
-		return maxNextTaskTime;
+		return DailyTasks.doMathTasks();
 	}
 	
 	public static List<Integer> queryTopLiveRoomIds(

@@ -1,6 +1,7 @@
 package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
@@ -10,6 +11,7 @@ import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.bean.MathTask;
+import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -60,7 +62,7 @@ public class DailyTasks extends __Protocol {
 		Map<String, String> header = getHeader(cookie.toNVCookie());
 		Map<String, String> request = getRequest(cookie.CSRF());
 		String response = HttpURLUtils.doPost(ASSN_URL, header, request);
-		return !analyse(response);
+		return !analyse(response, cookie.NICKNAME(), true);
 	}
 	
 	/**
@@ -90,14 +92,23 @@ public class DailyTasks extends __Protocol {
 	
 	/**
 	 * 每日签到
-	 * @return 是否签到成功
 	 */
-	public static void toSign(HttpCookie cookie, int roomId) {
-		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
-		String sRoomId = String.valueOf(roomId);
-		Map<String, String> headers = GET_HEADER(cookie.toNVCookie(), sRoomId);
+	public static void toSign() {
+		String roomId = String.valueOf(RoomMgr.getInstn().getRealRoomId(UIUtils.getCurRoomId()));
+		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
+		while(cookieIts.hasNext()) {
+			HttpCookie cookie = cookieIts.next();
+			DailyTasks.toSign(cookie, roomId);
+		}
+	}
+	
+	/**
+	 * 每日签到
+	 */
+	private static void toSign(HttpCookie cookie, String roomId) {
+		Map<String, String> headers = GET_HEADER(cookie.toNVCookie(), roomId);
 		String response = HttpURLUtils.doGet(SIGN_URL, headers, null);
-		analyse(response);
+		analyse(response, cookie.NICKNAME(), false);
 	}
 
 	/**
@@ -105,7 +116,8 @@ public class DailyTasks extends __Protocol {
 	 * @param response  {"code":0,"msg":"","message":"","data":[]}
 	 * @return
 	 */
-	private static boolean analyse(String response) {
+	private static boolean analyse(String response, String username, boolean assn) {
+		String signType = (assn ? "友爱社" : "每日");
 		boolean isOk = false;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -113,29 +125,42 @@ public class DailyTasks extends __Protocol {
 			String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 			if(code == 0 || reason.contains("已签到") || reason.contains("已领取")) {
 				isOk = true;
+				UIUtils.log("[", username, "] ", signType, "签到完成");
+				
 			} else {
-				log.warn("签到失败: {}", reason);
+				log.warn("[{}] {}签到失败: {}", username, signType, reason);
 			}
 		} catch(Exception e) {
-			log.error("签到失败: {}", response, e);
+			log.error("[{}] {}签到失败: {}", username, signType, response, e);
 		}
 		return isOk;
 	}
 	
 	/**
 	 * 执行小学数学日常任务
+	 * @return
+	 */
+	public static long doMathTasks() {
+		String roomId = String.valueOf(RoomMgr.getInstn().getRealRoomId(UIUtils.getCurRoomId()));
+		long maxNextTaskTime = 0;
+		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
+		while(cookieIts.hasNext()) {
+			HttpCookie cookie = cookieIts.next();
+			long nextTaskTime = DailyTasks.doMathTasks(cookie, roomId);
+			maxNextTaskTime = (maxNextTaskTime < nextTaskTime ? nextTaskTime : maxNextTaskTime);
+		}
+		return maxNextTaskTime;
+	}
+	
+	/**
+	 * 执行小学数学日常任务
+	 * @param cookie
 	 * @param roomId
 	 * @return 返回下次任务的时间点
 	 */
-	public static long doMathTasks(String cookie) {
+	private static long doMathTasks(HttpCookie cookie, String roomId) {
 		long nextTaskTime = -1;
-		final int roomId = UIUtils.getCurRoomId();
-		final int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
-		if(realRoomId <= 0) {
-			return nextTaskTime;
-		}
-		final Map<String, String> header = GET_HEADER(
-				cookie, String.valueOf(realRoomId));
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
 		
 		MathTask task = checkTask(header);
 		if(task != MathTask.NULL) {
@@ -143,7 +168,7 @@ public class DailyTasks extends __Protocol {
 			
 			// 已到达任务执行时间
 			if(nextTaskTime <= System.currentTimeMillis()) {
-				if(!_doMathTasks(header, task)) {
+				if(!doMathTasks(header, cookie.NICKNAME(), task)) {
 					nextTaskTime = -1;	// 标记不存在下一轮任务
 				}
 			}
@@ -154,10 +179,12 @@ public class DailyTasks extends __Protocol {
 	/**
 	 * 执行小学数学日常任务
 	 * @param header
+	 * @param username
 	 * @param task
 	 * @return 是否存在下一轮任务
 	 */
-	private static boolean _doMathTasks(Map<String, String> header, MathTask task) {
+	private static boolean doMathTasks(Map<String, String> header, 
+			String username, MathTask task) {
 		boolean isDone = false;
 		do {
 			int answer = 0;
@@ -167,7 +194,7 @@ public class DailyTasks extends __Protocol {
 			} while(answer <= 0);	// 若解析二维码图片失败, 则重新解析
 			
 			ThreadUtils.tSleep(SLEEP_TIME);
-			isDone = doTask(header, task, answer);
+			isDone = doTask(header, username, task, answer);
 		} while(!isDone);	// 若计算二维码结果错误, 则重新计算
 		
 		return task.existNext();
@@ -223,7 +250,8 @@ public class DailyTasks extends __Protocol {
 	 * @param answer
 	 * @return
 	 */
-	private static boolean doTask(Map<String, String> header, MathTask task, int answer) {
+	private static boolean doTask(Map<String, String> header, String username, 
+			MathTask task, int answer) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("time_start", String.valueOf(task.getBgnTime()));
 		request.put("end_time", String.valueOf(task.getEndTime()));
@@ -234,13 +262,13 @@ public class DailyTasks extends __Protocol {
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			isOk = (code == 0);
-			if(isOk == true) {
-				UIUtils.log("已完成小学数学任务: ", task.getCurRound(), "/", 
+			if(code == 0) {
+				isOk = true;
+				UIUtils.log("[", username, "] 已完成小学数学任务: ", task.getCurRound(), "/", 
 						task.getMaxRound(), "轮-", task.getStep(), "分钟");
 			}
 		} catch(Exception e) {
-			log.error("执行日常任务失败: {}", response, e);
+			log.error("[{}] 执行日常任务失败: {}", username, response, e);
 		}
 		return isOk;
 	}

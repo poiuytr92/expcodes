@@ -86,7 +86,7 @@ public class VCLoginUI extends PopChildWindow {
 		if(args != null && args.length > 0) {
 			this.type = (LoginType) args[0];
 		} else {
-			this.type = LoginType.TEMP;
+			this.type = LoginType.UNKNOW;
 		}
 		
 		this.usernameTXT = new JTextField();

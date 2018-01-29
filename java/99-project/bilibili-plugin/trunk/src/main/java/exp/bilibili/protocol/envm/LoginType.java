@@ -8,7 +8,7 @@ public class LoginType {
 	
 	public final static LoginType VEST = new LoginType(3, "马甲号");
 	
-	public final static LoginType TEMP = new LoginType(3, "临时号");
+	public final static LoginType UNKNOW = new LoginType(4, "未知号");
 	
 	private int id;
 	
