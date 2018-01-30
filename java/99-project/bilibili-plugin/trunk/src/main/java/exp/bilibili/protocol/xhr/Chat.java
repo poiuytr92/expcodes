@@ -5,7 +5,6 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.protocol.cookie.HttpCookie;
@@ -47,8 +46,7 @@ public class Chat extends __Protocol {
 	 * @return
 	 */
 	public static boolean sendDanmu(HttpCookie cookie, int roomId, String msg, ChatColor color) {
-		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
-		String sRoomId = String.valueOf(roomId);
+		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
 		Map<String, String> request = getRequest(msg, sRoomId, color.RGB());
 		String response = HttpURLUtils.doPost(CHAT_URL, header, request);

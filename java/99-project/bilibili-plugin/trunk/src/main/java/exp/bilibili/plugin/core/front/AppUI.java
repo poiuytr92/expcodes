@@ -588,8 +588,8 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(SwingUtils.confirm("清除所有账号的登陆痕迹, 继续吗 ?")) {
-					if(CookiesMgr.clearAllCookies()) {
+				if(SwingUtils.confirm("清除 [主号] 和 [马甲号] 的登陆痕迹, 继续吗 ?")) {
+					if(CookiesMgr.clearMainAndVestCookies()) {
 						SwingUtils.info("已清除, 重启程序后生效");
 						
 					} else {

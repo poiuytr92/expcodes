@@ -7,6 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.cache.RoomMgr;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
 /**
@@ -38,6 +40,14 @@ class __Protocol {
 	
 	/** 私有化构造函数 */
 	protected __Protocol() {}
+	
+	protected static String getRealRoomId() {
+		return getRealRoomId(UIUtils.getCurRoomId());
+	}
+	
+	protected static String getRealRoomId(int roomId) {
+		return String.valueOf(RoomMgr.getInstn().getRealRoomId(roomId));
+	}
 	
 	/**
 	 * 生成GET方法的请求头参数

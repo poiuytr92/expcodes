@@ -54,6 +54,9 @@ public class CookiesMgr {
 	/** 所有cookie保存路径 */
 	private Map<HttpCookie, String> cookiePaths;
 	
+	/** 最近一次添加过cookie的时间点 */
+	private long lastAddCookieTime;
+	
 	private static volatile CookiesMgr instance;
 	
 	private CookiesMgr() {
@@ -61,6 +64,7 @@ public class CookiesMgr {
 		this.vestCookie = HttpCookie.NULL;
 		this.miniCookies = new HashSet<HttpCookie>();
 		this.cookiePaths = new HashMap<HttpCookie, String>();
+		this.lastAddCookieTime = System.currentTimeMillis();
 	}
 	
 	public static CookiesMgr INSTN() {
@@ -107,24 +111,22 @@ public class CookiesMgr {
 	private boolean save(HttpCookie cookie, String cookiePath) {
 		cookiePaths.put(cookie, cookiePath);
 		String data = CryptoUtils.toDES(cookie.toString());
-		return FileUtils.write(cookiePath, data, Charset.ISO, false);
+		boolean isOk = FileUtils.write(cookiePath, data, Charset.ISO, false);
+		if(isOk == true) {
+			lastAddCookieTime = System.currentTimeMillis();
+		}
+		return isOk;
 	}
 	
 	public boolean load(LoginType type) {
-		boolean isOk = true;
+		boolean isOk = false;
 		if(LoginType.MAIN == type) {
 			mainCookie = load(COOKIE_MAIN_PATH, type);
-			isOk = checkLogined(mainCookie);
-			if(isOk == false) {
-				del(mainCookie);
-			}
+			isOk = (mainCookie != HttpCookie.NULL);
 			
 		} else if(LoginType.VEST == type) {
 			vestCookie = load(COOKIE_VEST_PATH, type);
-			isOk = checkLogined(vestCookie);
-			if(isOk == false) {
-				del(vestCookie);
-			}
+			isOk = (vestCookie != HttpCookie.NULL);
 			
 		} else {
 			File dir = new File(COOKIE_DIR);
@@ -132,14 +134,10 @@ public class CookiesMgr {
 			for(String fileName : fileNames) {
 				if(fileName.contains(COOKIE_MINI_PREFIX) && miniCookies.size() < MAX_NUM) {
 					String cookiePath = PathUtils.combine(dir.getPath(), fileName);
-					
 					HttpCookie miniCookie = load(cookiePath, type);
-					if(miniCookie != HttpCookie.NULL) {
-						if(checkLogined(miniCookie)) {
-							miniCookies.add(miniCookie);
-						} else {
-							del(miniCookie);
-						}
+					if(HttpCookie.NULL != null) {
+						miniCookies.add(miniCookie);
+						isOk = true;
 					}
 				}
 			}
@@ -154,7 +152,14 @@ public class CookiesMgr {
 			if(StrUtils.isNotEmpty(data)) {
 				cookie = new HttpCookie(data);
 				cookie.setType(type);
-				cookiePaths.put(cookie, cookiePath);
+				
+				if(checkLogined(cookie) && !cookiePaths.containsKey(cookie)) {
+					cookiePaths.put(cookie, cookiePath);
+					lastAddCookieTime = System.currentTimeMillis();
+				} else {
+					cookie = HttpCookie.NULL;
+					FileUtils.delete(cookiePath);
+				}
 			}
 		}
 		return cookie;
@@ -211,6 +216,16 @@ public class CookiesMgr {
 			}
 		}
 		return cookies.iterator();
+	}
+	
+	public long getLastAddCookieTime() {
+		return lastAddCookieTime;
+	}
+	
+	public static boolean clearMainAndVestCookies() {
+		boolean isOk = FileUtils.delete(COOKIE_MAIN_PATH);
+		isOk &= FileUtils.delete(COOKIE_VEST_PATH);
+		return isOk;
 	}
 	
 	public static boolean clearAllCookies() {

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
-import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
@@ -39,8 +38,7 @@ class _Lottery extends __Protocol {
 	 */
 	protected static String join(LotteryType type, HttpCookie cookie, 
 			String url, int roomId, String raffleId) {
-		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
-		String sRoomId = String.valueOf(roomId);
+		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);
 		Map<String, String> request = (LotteryType.STORM == type ? 
 				getRequest(sRoomId, raffleId, cookie.CSRF()) : 

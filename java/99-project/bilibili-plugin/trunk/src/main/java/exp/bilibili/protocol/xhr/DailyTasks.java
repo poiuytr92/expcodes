@@ -1,17 +1,14 @@
 package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.bean.MathTask;
-import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -49,20 +46,24 @@ public class DailyTasks extends __Protocol {
 	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.jpg");
 	
 	/** 小学数学验证码重试间隔 */
-	private final static long SLEEP_TIME = 500;
+	private final static long SLEEP_TIME = 500L;
+	
+	/** 执行下次任务的延迟时间点（5分钟后） */
+	private final static long NEXT_TASK_DELAY = 300000L;
 	
 	/** 私有化构造函数 */
 	protected DailyTasks() {}
 	
 	/**
 	 * 友爱社签到
-	 * @return 是否需要持续测试签到
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
-	public static void toAssn(HttpCookie cookie) {
+	public static long toAssn(HttpCookie cookie) {
 		Map<String, String> header = getHeader(cookie.toNVCookie());
 		Map<String, String> request = getRequest(cookie.CSRF());
 		String response = HttpURLUtils.doPost(ASSN_URL, header, request);
-		analyse(response, cookie.NICKNAME(), true);
+		return analyse(response, cookie.NICKNAME(), true);
 	}
 	
 	/**
@@ -92,31 +93,23 @@ public class DailyTasks extends __Protocol {
 	
 	/**
 	 * 每日签到
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
-	public static void toSign() {
-		String roomId = String.valueOf(RoomMgr.getInstn().getRealRoomId(UIUtils.getCurRoomId()));
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
-			DailyTasks.toSign(cookie, roomId);
-		}
+	public static long toSign(HttpCookie cookie) {
+		String roomId = getRealRoomId();
+		Map<String, String> headers = GET_HEADER(cookie.toNVCookie(), roomId);
+		String response = HttpURLUtils.doGet(SIGN_URL, headers, null);
+		return analyse(response, cookie.NICKNAME(), false);
 	}
 	
 	/**
-	 * 每日签到
-	 */
-	private static void toSign(HttpCookie cookie, String roomId) {
-		Map<String, String> headers = GET_HEADER(cookie.toNVCookie(), roomId);
-		String response = HttpURLUtils.doGet(SIGN_URL, headers, null);
-		analyse(response, cookie.NICKNAME(), false);
-	}
-
-	/**
 	 * 
 	 * @param response  {"code":0,"msg":"","message":"","data":[]}
-	 * @return
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
-	private static void analyse(String response, String username, boolean assn) {
+	private static long analyse(String response, String username, boolean assn) {
+		long nextTaskTime = -1;
 		String signType = (assn ? "友爱社" : "每日");
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -126,46 +119,33 @@ public class DailyTasks extends __Protocol {
 				UIUtils.log("[", username, "] ", signType, "签到完成");
 				
 			} else if(!reason.contains("已签到") && !reason.contains("已领取")) {
+				nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
 				log.warn("[{}] {}签到失败: {}", username, signType, reason);
 			}
 		} catch(Exception e) {
+			nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
 			log.error("[{}] {}签到失败: {}", username, signType, response, e);
 		}
-	}
-	
-	/**
-	 * 执行小学数学日常任务
-	 * @return
-	 */
-	public static long doMathTasks() {
-		String roomId = String.valueOf(RoomMgr.getInstn().getRealRoomId(UIUtils.getCurRoomId()));
-		long maxNextTaskTime = 0;
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
-			long nextTaskTime = DailyTasks.doMathTasks(cookie, roomId);
-			maxNextTaskTime = (maxNextTaskTime < nextTaskTime ? nextTaskTime : maxNextTaskTime);
-		}
-		return maxNextTaskTime;
+		return nextTaskTime;
 	}
 	
 	/**
 	 * 执行小学数学日常任务
 	 * @param cookie
-	 * @param roomId
-	 * @return 返回下次任务的时间点
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
-	private static long doMathTasks(HttpCookie cookie, String roomId) {
+	public static long doMathTask(HttpCookie cookie) {
 		long nextTaskTime = -1;
+		String roomId = getRealRoomId();
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
 		
-		MathTask task = checkTask(header);
+		MathTask task = checkMathTask(header);
 		if(task != MathTask.NULL) {
 			nextTaskTime = task.getEndTime() * 1000;
 			
 			// 已到达任务执行时间
 			if(nextTaskTime <= System.currentTimeMillis()) {
-				if(!doMathTasks(header, cookie.NICKNAME(), task)) {
+				if(!doMathTask(header, cookie.NICKNAME(), task)) {
 					nextTaskTime = -1;	// 标记不存在下一轮任务
 				}
 			}
@@ -180,18 +160,18 @@ public class DailyTasks extends __Protocol {
 	 * @param task
 	 * @return 是否存在下一轮任务
 	 */
-	private static boolean doMathTasks(Map<String, String> header, 
+	private static boolean doMathTask(Map<String, String> header, 
 			String username, MathTask task) {
 		boolean isRedone = false;
 		do {
 			int answer = 0;
 			do {
 				ThreadUtils.tSleep(SLEEP_TIME);
-				answer = getAnswer(header);
+				answer = calculateAnswer(header);
 			} while(answer <= 0);	// 若解析二维码图片失败, 则重新解析
 			
 			ThreadUtils.tSleep(SLEEP_TIME);
-			isRedone = doTask(header, username, task, answer);
+			isRedone = execMathTask(header, username, task, answer);
 		} while(isRedone == true);	// 若计算二维码结果错误, 则重新计算
 		
 		return task.existNext();
@@ -205,7 +185,7 @@ public class DailyTasks extends __Protocol {
 	 * @param header
 	 * @return
 	 */
-	private static MathTask checkTask(Map<String, String> header) {
+	private static MathTask checkMathTask(Map<String, String> header) {
 		MathTask task = MathTask.NULL;
 		String response = HttpURLUtils.doGet(MATH_CHECK_URL, header, null);
 		try {
@@ -225,7 +205,7 @@ public class DailyTasks extends __Protocol {
 	 * @param header
 	 * @return
 	 */
-	private static int getAnswer(Map<String, String> header) {
+	private static int calculateAnswer(Map<String, String> header) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("ts", String.valueOf(System.currentTimeMillis()));
 		
@@ -246,8 +226,8 @@ public class DailyTasks extends __Protocol {
 	 * @param answer
 	 * @return
 	 */
-	private static boolean doTask(Map<String, String> header, String username, 
-			MathTask task, int answer) {
+	private static boolean execMathTask(Map<String, String> header, 
+			String username, MathTask task, int answer) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("time_start", String.valueOf(task.getBgnTime()));
 		request.put("end_time", String.valueOf(task.getEndTime()));
@@ -265,6 +245,9 @@ public class DailyTasks extends __Protocol {
 				
 			} else if(errDesc.contains("验证码错误")) {
 				isRedone = true;
+				
+			} else if(errDesc.contains("未绑定手机")) {
+				task.setExistNext(false);	// 标记不存在下一轮任务
 			}
 		} catch(Exception e) {
 			log.error("[{}] 执行小学数学任务失败: {}", username, response, e);

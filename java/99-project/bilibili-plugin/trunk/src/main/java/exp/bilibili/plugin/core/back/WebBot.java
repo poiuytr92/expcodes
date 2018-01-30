@@ -1,5 +1,9 @@
 package exp.bilibili.plugin.core.back;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -7,6 +11,10 @@ import exp.bilibili.plugin.bean.ldm.LotteryRoom;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.cookie.CookiesMgr;
+import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.xhr.DailyTasks;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.warp.thread.LoopThread;
 
 /**
@@ -37,27 +45,19 @@ public class WebBot extends LoopThread {
 	private final static long SLEEP_TIME = 1000;
 	
 	/** 心跳间隔 */
-	private final static long LOOP_TIME = 60000;
+	private final static long HB_TIME = 3600000;
 	
 	/** 打印心跳信息周期 */
-	private final static int LOOP_LIMIT = (int) (LOOP_TIME / SLEEP_TIME);
+	private final static int HB_LIMIT = (int) (HB_TIME / SLEEP_TIME);
 	
-	/** 签到间隔 */
-	private final static long SIGN_TIME = 300000;
-	
-	/** 签到行为周期 */
-	private final static int SIGN_LIMIT = (int) (SIGN_TIME / SLEEP_TIME);
-	
-	/** 累计60次空闲, 则打印版本信息提示 */
-	private final static int TIP_LIMIT = 60;
-	
-	/** 行为轮询次数 */
+	/** 轮询次数 */
 	private int loopCnt;
 	
-	/** 提示累计次数 */
-	private int tipCnt;
+	/** 已完成当天任务的cookies */
+	private Set<HttpCookie> finCookies;
 	
-	private int signCnt;
+	/** 最近一次添加过cookie的时间点 */
+	private long lastAddCookieTime;
 	
 	/** 执行下次日常任务的时间点 */
 	private long nextTaskTime;
@@ -65,22 +65,34 @@ public class WebBot extends LoopThread {
 	/** 上次重置每日任务的时间点 */
 	private long resetTaskTime;
 	
+	/** 单例 */
 	private static volatile WebBot instance;
 	
+	/**
+	 * 构造函数
+	 */
 	private WebBot() {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
-		this.tipCnt = 0;
-		this.signCnt = 0;
+		this.finCookies = new HashSet<HttpCookie>();
+		this.lastAddCookieTime = System.currentTimeMillis();
 		this.nextTaskTime = System.currentTimeMillis();
-		this.resetTaskTime = System.currentTimeMillis();
-		
-		// 把上次任务重置时间设为为当天0点
-		resetTaskTime = resetTaskTime / DAY_UNIT * DAY_UNIT;
+		initResetTaskTime();
+	}
+	
+	/**
+	 * 把上次任务重置时间初始化为当天0点
+	 */
+	private void initResetTaskTime() {
+		resetTaskTime = System.currentTimeMillis() / DAY_UNIT * DAY_UNIT;
 		resetTaskTime -= HOUR_UNIT * HOUR_OFFSET;
 		resetTaskTime += 300000;	// 避免临界点时差, 后延5分钟
 	}
 	
+	/**
+	 * 获取单例
+	 * @return
+	 */
 	public static WebBot getInstn() {
 		if(instance == null) {
 			synchronized (WebBot.class) {
@@ -109,21 +121,10 @@ public class WebBot extends LoopThread {
 
 	@Override
 	protected void _after() {
+		finCookies.clear();
 		log.info("{} 已停止", getName());
 	}
 	
-	/**
-	 * 模拟web行为
-	 * FIXME:
-	 * 	启动时，触发所有cookie任务
-	 *  每增加一个cookie，对应触发该cookie的任务
-	 *  到达周期时，触发所有cookie任务
-	 *  
-	 *   所有任务跨天后触发一次
-	 *   日常签到任务每天只触发一次
-	 *   友爱签到任务定点触发，满足条件后退出
-	 *   数学任务定点触发，满足条件后退出
-	 */
 	private void toDo() {
 		
 		// 优先参与直播间抽奖
@@ -133,7 +134,7 @@ public class WebBot extends LoopThread {
 			
 		// 无抽奖操作则做其他事情
 		} else {
-			resetDailyTasks();	// 满足某个时间点则重置每日任务
+			resetDailyTasks();	// 满足某个条件则重置每日任务
 			doDailyTasks();		// 执行每日任务
 			
 			toHeartbeat();	// 心跳
@@ -163,40 +164,52 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 每小时自动重置每日任务(目的是针对可能新添加的小号)
+	 * 当cookies发生变化时, 重置每日任务
 	 */
 	private void resetDailyTasks() {
-		long now = System.currentTimeMillis();
-		if(nextTaskTime > 0 || (now - resetTaskTime <= HOUR_UNIT)) {
-			return;
+		if(nextTaskTime > 0){
+			return;	// 当天任务还在执行中, 无需重置任务时间点
 		}
 		
-		resetTaskTime = now;
-		nextTaskTime = now;
+		// 当cookie发生变化时, 重置任务时间
+		if(lastAddCookieTime != CookiesMgr.INSTN().getLastAddCookieTime()) {
+			lastAddCookieTime = CookiesMgr.INSTN().getLastAddCookieTime();
+			nextTaskTime = System.currentTimeMillis();
+			
+		// 当跨天时, 重置任务时间
+		} else {
+			long now = System.currentTimeMillis();
+			if(now - resetTaskTime > DAY_UNIT) {
+				resetTaskTime = now;
+				nextTaskTime = now;
+				finCookies.clear();	// 跨天后, 已完成任务的cookie标记也需要重置
+			}
+		}
 	}
 	
 	/**
 	 * 执行每日任务
 	 */
 	private void doDailyTasks() {
-		toSign();		// 签到(每日+友爱社)
-		doMathTasks();	// 日常小学数学任务
-	}
-	
-	private void toSign() {
-		if(signCnt++ > SIGN_LIMIT) {
-			signCnt = 0;
-			MsgSender.toSign();
-			MsgSender.toAssn();
-		}
-	}
-	
-	/**
-	 * 执行日常小学数学任务
-	 */
-	private void doMathTasks() {
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
-			nextTaskTime = MsgSender.doMathTasks();
+			
+			long max = -1;
+			Iterator<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
+			while(cookies.hasNext()) {
+				HttpCookie cookie = cookies.next();
+				if(finCookies.contains(cookie)) {
+					continue;
+				}
+				
+				max = NumUtils.max(DailyTasks.toSign(cookie), max);
+				max = NumUtils.max(DailyTasks.toAssn(cookie), max);
+				max = NumUtils.max(DailyTasks.doMathTask(cookie), max);
+				
+				if(max <= 0) {
+					finCookies.add(cookie);
+				}
+			}
+			nextTaskTime = max;
 		}
 	}
 	
@@ -204,14 +217,9 @@ public class WebBot extends LoopThread {
 	 * 打印心跳消息
 	 */
 	private void toHeartbeat() {
-		if(loopCnt++ >= LOOP_LIMIT) {
-			tipCnt++;
+		if(loopCnt++ >= HB_LIMIT) {
 			loopCnt = 0;
 			log.info("{} 活动中...", getName());
-		}
-		
-		if(tipCnt >= TIP_LIMIT) {
-			tipCnt = 0;
 			UIUtils.printVersionInfo();
 		}
 	}

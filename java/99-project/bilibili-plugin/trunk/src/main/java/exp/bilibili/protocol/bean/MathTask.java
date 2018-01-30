@@ -20,6 +20,9 @@ public class MathTask {
 	
 	private final static int MAX_STEP = 9;
 	
+	/** 是否存在下一轮任务 */
+	private boolean existNext;
+	
 	private long bgnTime;
 	
 	private long endTime;
@@ -34,6 +37,7 @@ public class MathTask {
 	private int step;
 	
 	public MathTask(JSONObject json) {
+		this.existNext = true;
 		if(json != null) {
 			JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 			this.bgnTime = JsonUtils.getLong(data, BiliCmdAtrbt.time_start, 0);
@@ -52,7 +56,11 @@ public class MathTask {
 	}
 	
 	public boolean existNext() {
-		return !(curRound == maxRound && step == MAX_STEP);
+		return (existNext && !(curRound >= maxRound && step >= MAX_STEP));
+	}
+	
+	public void setExistNext(boolean exist) {
+		this.existNext = exist;
 	}
 
 	public long getBgnTime() {

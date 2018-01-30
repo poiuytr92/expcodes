@@ -49,17 +49,16 @@ public class MsgSender {
 		return Login.queryUserInfo(cookie);
 	}
 
-	public static void toAssn() {
-		HttpCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号签到有爱社?
-		DailyTasks.toAssn(cookie);
+	public static long toAssn(HttpCookie cookie) {
+		return DailyTasks.toAssn(cookie);
 	}
 	
-	public static void toSign() {
-		DailyTasks.toSign();
+	public static long toSign(HttpCookie cookie) {
+		return DailyTasks.toSign(cookie);
 	}
 	
-	public static long doMathTasks() {
-		return DailyTasks.doMathTasks();
+	public static long doMathTask(HttpCookie cookie) {
+		return DailyTasks.doMathTask(cookie);
 	}
 	
 	public static List<Integer> queryTopLiveRoomIds(

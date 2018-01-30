@@ -8,7 +8,6 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -49,7 +48,6 @@ public class LotteryEnergy extends _Lottery {
 	 * @return
 	 */
 	public static void toDo(int roomId) {
-		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		List<String> raffleIds = getRaffleId(EG_CHECK_URL, roomId, 
 				CookiesMgr.INSTN().VEST().toNVCookie());
 		for(String raffleId : raffleIds) {
@@ -69,7 +67,7 @@ public class LotteryEnergy extends _Lottery {
 	private static List<String> getRaffleId(String url, int roomId, String cookie) {
 		List<String> raffleIds = new LinkedList<String>();
 		
-		String sRoomId = String.valueOf(roomId);
+		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER(cookie, sRoomId);
 		Map<String, String> request = getRequest(sRoomId);
 		
