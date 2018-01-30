@@ -11,6 +11,7 @@ import java.util.Set;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.core.back.MsgSender;
+import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -36,6 +37,10 @@ public class CookiesMgr {
 	
 	/** 小号cookie文件名前缀 */
 	private final static String COOKIE_MINI_PREFIX = "cookie-mini-";
+	
+	/** 上限保存的小号Cookie个数 */
+	public final static int MAX_NUM = Config.LEVEL >= Level.ADMIN ? 99 : (
+			Config.LEVEL >= Level.UPLIVE ? 8 : 3);
 	
 	/** 主号cookie */
 	private HttpCookie mainCookie;
@@ -85,14 +90,16 @@ public class CookiesMgr {
 			isOk = save(cookie, COOKIE_VEST_PATH);
 			
 		} else {
-			String cookiePath = cookiePaths.get(cookie);
-			if(cookiePath == null) {
-				cookiePath = PathUtils.combine(COOKIE_DIR, StrUtils.concat(
-						COOKIE_MINI_PREFIX, cookie.UID(), SUFFIX));
+			if(miniCookies.size() < MAX_NUM) {
+				String cookiePath = cookiePaths.get(cookie);
+				if(cookiePath == null) {
+					cookiePath = PathUtils.combine(COOKIE_DIR, StrUtils.concat(
+							COOKIE_MINI_PREFIX, cookie.UID(), SUFFIX));
+				}
+				
+				this.miniCookies.add(cookie);
+				isOk = save(cookie, cookiePath);
 			}
-			
-			this.miniCookies.add(cookie);
-			isOk = save(cookie, cookiePath);
 		}
 		return isOk;
 	}
@@ -123,7 +130,7 @@ public class CookiesMgr {
 			File dir = new File(COOKIE_DIR);
 			String[] fileNames = dir.list();
 			for(String fileName : fileNames) {
-				if(fileName.contains(COOKIE_MINI_PREFIX)) {
+				if(fileName.contains(COOKIE_MINI_PREFIX) && miniCookies.size() < MAX_NUM) {
 					String cookiePath = PathUtils.combine(dir.getPath(), fileName);
 					
 					HttpCookie miniCookie = load(cookiePath, type);
@@ -182,14 +189,27 @@ public class CookiesMgr {
 	}
 	
 	public Iterator<HttpCookie> MINIs() {
-		return miniCookies.iterator();
+		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
+		Iterator<HttpCookie> minis = miniCookies.iterator();
+		for(int i = 0; i < MAX_NUM; i++) {
+			if(minis.hasNext()) {
+				cookies.add(minis.next());
+			}
+		}
+		return cookies.iterator();
 	}
 	
 	public Iterator<HttpCookie> ALL() {
 		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
 		if(HttpCookie.NULL != mainCookie) { cookies.add(mainCookie); }
 		if(HttpCookie.NULL != vestCookie) { cookies.add(vestCookie); }
-		cookies.addAll(miniCookies);
+		
+		Iterator<HttpCookie> minis = miniCookies.iterator();
+		for(int i = 0; i < MAX_NUM; i++) {
+			if(minis.hasNext()) {
+				cookies.add(minis.next());
+			}
+		}
 		return cookies.iterator();
 	}
 	

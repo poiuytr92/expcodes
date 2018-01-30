@@ -147,7 +147,7 @@ public class LotteryStorm extends _Lottery {
 		}
 		
 		if(cnt > 0) {
-			UIUtils.statistics("成功(节奏风暴x", cnt, "): 抽奖直播间 [", roomId, "]");
+			UIUtils.statistics("成功(节奏风暴x", cnt, "): 直播间 [", roomId, "]");
 			UIUtils.updateLotteryCnt(cnt);
 		}
 		return (cnt > 0);

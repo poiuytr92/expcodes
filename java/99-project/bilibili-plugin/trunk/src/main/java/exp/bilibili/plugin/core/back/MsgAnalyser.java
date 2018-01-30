@@ -47,6 +47,9 @@ public class MsgAnalyser {
 
 	private final static Logger log = LoggerFactory.getLogger(MsgAnalyser.class);
 	
+	/** 上次开播时间 */
+	private static long lastOpenLive = 0;
+	
 	protected MsgAnalyser() {}
 	
 	public static boolean toMsgBean(BiliCmd biliCmd, JSONObject json) {
@@ -287,8 +290,13 @@ public class MsgAnalyser {
 		UIUtils.chat(msg);
 		log.info(msg);
 		
-		ChatMgr.getInstn().helloLive(msgBean.getRoomId());
-		UIUtils.notityLive(msgBean.getRoomId());
+		// 一小时内的重复开播, 认为是房间信号调整, 不重复提示
+		long curTime = System.currentTimeMillis();
+		if(curTime - lastOpenLive > 3600000L) {
+			ChatMgr.getInstn().helloLive(msgBean.getRoomId());
+			UIUtils.notityLive(msgBean.getRoomId());
+		}
+		lastOpenLive = curTime;
 	}
 	
 	/**
