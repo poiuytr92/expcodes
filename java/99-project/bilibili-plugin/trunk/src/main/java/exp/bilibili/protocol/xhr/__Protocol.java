@@ -42,7 +42,7 @@ class __Protocol {
 	protected __Protocol() {}
 	
 	protected static String getRealRoomId() {
-		return getRealRoomId(UIUtils.getCurRoomId());
+		return getRealRoomId(UIUtils.getLiveRoomId());
 	}
 	
 	protected static String getRealRoomId(int roomId) {

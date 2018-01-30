@@ -238,15 +238,15 @@ public class DailyTasks extends __Protocol {
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			String errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+			String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 			if(code == 0) {
 				UIUtils.log("[", username, "] 小学数学任务进度: ", task.getCurRound(), "/", 
 						task.getMaxRound(), "轮-", task.getStep(), "分钟");
 				
-			} else if(errDesc.contains("验证码错误")) {
+			} else if(reason.contains("验证码错误")) {
 				isRedone = true;
 				
-			} else if(errDesc.contains("未绑定手机")) {
+			} else if(reason.contains("未绑定手机")) {
 				task.setExistNext(false);	// 标记不存在下一轮任务
 			}
 		} catch(Exception e) {

@@ -32,11 +32,17 @@ public class BiliCmdAtrbt {
 	
 	public final static String data = "data";
 	
+	public final static String list = "list";
+	
 	public final static String userInfo = "userInfo";
 	
 	public final static String uid = "uid";
 	
 	public final static String username = "username";
+	
+	public final static String userCoinIfo = "userCoinIfo";
+	
+	public final static String silver = "silver";
 	
 	public final static String guard_level = "guard_level";
 	
@@ -119,5 +125,13 @@ public class BiliCmdAtrbt {
 	public final static String user_exchange_count = "user_exchange_count";
 	
 	public final static String status = "status";
+	
+	public final static String bag_id = "bag_id";
+	
+	public final static String gift_id = "gift_id";
+	
+	public final static String gift_name = "gift_name";
+	
+	public final static String gift_num = "gift_num";
 	
 }

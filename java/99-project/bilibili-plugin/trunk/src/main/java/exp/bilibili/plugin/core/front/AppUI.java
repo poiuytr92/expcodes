@@ -114,7 +114,7 @@ public class AppUI extends MainWindow {
 	
 	private JTextField httpTF;
 	
-	private JTextField ridTF;
+	private JTextField liveRoomTF;
 	
 	private JTextArea chatTA;
 	
@@ -206,7 +206,7 @@ public class AppUI extends MainWindow {
 	protected void initComponents(Object... args) {
 		this.chatTF = new JTextField();
 		this.httpTF = new JTextField("http://live.bilibili.com/");
-		this.ridTF = new JTextField(String.valueOf(Config.getInstn().SIGN_ROOM_ID()), 15);
+		this.liveRoomTF = new JTextField(String.valueOf(Config.getInstn().SIGN_ROOM_ID()), 15);
 		chatTF.setToolTipText("内容长度限制: ".concat(String.valueOf(CHAT_LIMIT)));
 		httpTF.setEditable(false);
 		
@@ -294,7 +294,7 @@ public class AppUI extends MainWindow {
 		JPanel livePanel = new JPanel(new BorderLayout()); {
 			livePanel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), BorderLayout.CENTER);
 			livePanel.add(SwingUtils.getEBorderPanel(
-					SwingUtils.getPairsPanel("房间号", ridTF), defaultBtn), 
+					SwingUtils.getPairsPanel("房间号", liveRoomTF), defaultBtn), 
 					BorderLayout.EAST);
 		}
 		panel.add(livePanel, 1);
@@ -427,7 +427,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				int roomId = getCurRoomId();
+				int roomId = getLiveRoomId();
 				int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 				if(realRoomId <= 0) {
 					SwingUtils.warn("直播间房号无效/未收录");
@@ -447,7 +447,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int roomId = RoomMgr.getInstn().getRealRoomId(getCurRoomId());
+				int roomId = RoomMgr.getInstn().getRealRoomId(getLiveRoomId());
 				if(roomId <= 0) {
 					SwingUtils.warn("直播间房号无效/未收录");
 					return;
@@ -643,7 +643,7 @@ public class AppUI extends MainWindow {
 					return;
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
-						Config.getInstn().isTabuAutoChat(getCurRoomId())) {
+						Config.getInstn().isTabuAutoChat(getLiveRoomId())) {
 					SwingUtils.warn("您未被授权在此直播间使用 [答谢姬] 哦~");
 					return;
 				}
@@ -677,7 +677,7 @@ public class AppUI extends MainWindow {
 					return;
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
-						Config.getInstn().isTabuAutoChat(getCurRoomId())) {
+						Config.getInstn().isTabuAutoChat(getLiveRoomId())) {
 					SwingUtils.warn("您未被授权在此直播间使用 [公告姬] 哦~");
 					return;
 				}
@@ -736,7 +736,7 @@ public class AppUI extends MainWindow {
 					return;
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
-						Config.getInstn().isTabuAutoChat(getCurRoomId())) {
+						Config.getInstn().isTabuAutoChat(getLiveRoomId())) {
 					SwingUtils.warn("您未被授权在此直播间使用 [晚安姬] 哦~");
 					return;
 				}
@@ -934,16 +934,26 @@ public class AppUI extends MainWindow {
 	 * @return
 	 */
 	public String getLiveUrl() {
-		return StrUtils.concat(httpTF.getText(), ridTF.getText());
+		return StrUtils.concat(httpTF.getText(), liveRoomTF.getText());
 	}
 	
 	/**
 	 * 获取当前监听的直播房间号
 	 * @return
 	 */
-	public int getCurRoomId() {
-		return NumUtils.toInt(ridTF.getText().trim());
+	public int getLiveRoomId() {
+		return NumUtils.toInt(liveRoomTF.getText().trim());
 	}
+	
+	/**
+	 * 获取自动投喂的房间号
+	 * @return
+	 */
+	public int getFeedRoomId() {
+		int roomId = miniLoginMgrUI.getFeedRoomId();
+		return (roomId <= 0 ? getLiveRoomId() : roomId);
+	}
+	
 	
 	/**
 	 * 更新弹幕颜色

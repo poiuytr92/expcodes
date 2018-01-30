@@ -91,8 +91,12 @@ public class UIUtils {
 		return AppUI.getInstn().getLiveUrl();
 	}
 	
-	public static int getCurRoomId() {
-		return AppUI.getInstn().getCurRoomId();
+	public static int getLiveRoomId() {
+		return AppUI.getInstn().getLiveRoomId();
+	}
+	
+	public static int getFeedRoomId() {
+		return AppUI.getInstn().getFeedRoomId();
 	}
 	
 	public static ChatColor getCurChatColor() {

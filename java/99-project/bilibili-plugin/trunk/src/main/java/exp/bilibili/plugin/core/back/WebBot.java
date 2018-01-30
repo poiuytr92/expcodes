@@ -22,8 +22,10 @@ import exp.libs.warp.thread.LoopThread;
  * Web行为模拟器（仿真机器人）
  * 
  * 	主要功能:
- *   1.全平台礼物抽奖管理器（小电视/高能礼物）
- *   2.打印版权信息
+ *   1.全平台礼物抽奖管理器（小电视/高能礼物/节奏风暴）
+ *   2.日常任务(签到/友爱社/小学数学)
+ *   3.自动投喂
+ *   4.打印版权信息
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -220,7 +222,22 @@ public class WebBot extends LoopThread {
 		if(loopCnt++ >= HB_LIMIT) {
 			loopCnt = 0;
 			log.info("{} 活动中...", getName());
+			
+			toAutoFeed();
 			UIUtils.printVersionInfo();
+		}
+	}
+	
+	/**
+	 * 自动投喂
+	 *  FIXME: 开关
+	 */
+	private void toAutoFeed() {
+		int roomId = UIUtils.getFeedRoomId();
+		Iterator<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
+		while(cookies.hasNext()) {
+			HttpCookie cookie = cookies.next();
+			MsgSender.toFeed(cookie, roomId);
 		}
 	}
 	

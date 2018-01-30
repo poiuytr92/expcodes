@@ -47,7 +47,7 @@ public class LotteryEnergy extends _Lottery {
 	 * @param roomId
 	 * @return
 	 */
-	public static void toDo(int roomId) {
+	public static void toLottery(int roomId) {
 		List<String> raffleIds = getRaffleId(EG_CHECK_URL, roomId, 
 				CookiesMgr.INSTN().VEST().toNVCookie());
 		for(String raffleId : raffleIds) {
@@ -99,14 +99,14 @@ public class LotteryEnergy extends _Lottery {
 		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
 		while(cookieIts.hasNext()) {
 			HttpCookie cookie = cookieIts.next();
-			String errDesc = join(LotteryType.ENGERY, cookie, EG_JOIN_URL, roomId, raffleId);
-			if(StrUtils.isEmpty(errDesc)) {
+			String reason = join(LotteryType.ENGERY, cookie, EG_JOIN_URL, roomId, raffleId);
+			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功", cookie.NICKNAME(), roomId);
 				cnt++;
 				
-			} else if(!errDesc.contains("你已加入抽奖")) {
+			} else if(!reason.contains("你已加入抽奖")) {
 				log.info("[{}] 参与直播间 [{}] 抽奖失败", cookie.NICKNAME(), roomId);
-				UIUtils.statistics("失败(", errDesc, "): 直播间 [", roomId, 
+				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");
 			}
 		}

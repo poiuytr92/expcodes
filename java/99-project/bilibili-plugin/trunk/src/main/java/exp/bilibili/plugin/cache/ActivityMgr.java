@@ -288,7 +288,7 @@ public class ActivityMgr {
 	private boolean isRecord() {
 		boolean isRecord = false;
 		if(isInit && Config.LEVEL >= Level.ADMIN) {
-			int curRoomId = RoomMgr.getInstn().getRealRoomId(UIUtils.getCurRoomId());
+			int curRoomId = RoomMgr.getInstn().getRealRoomId(UIUtils.getLiveRoomId());
 			if(ROOM_ID > 0 && ROOM_ID == curRoomId) {
 				isRecord = true;
 			}

@@ -309,7 +309,7 @@ public class Login extends __Protocol {
 				cookie.setNickName(username);
 			}
 		} catch(Exception e) {
-			log.error("查询账号信息失败: {}", response, e);
+			log.error("查询账号信息异常: {}", response, e);
 		}
 		return cookie.isVaild();
 	}

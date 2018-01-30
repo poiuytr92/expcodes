@@ -8,6 +8,7 @@ import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
+import exp.bilibili.protocol.xhr.Feed;
 import exp.bilibili.protocol.xhr.Login;
 import exp.bilibili.protocol.xhr.LotteryEnergy;
 import exp.bilibili.protocol.xhr.LotteryStorm;
@@ -63,11 +64,11 @@ public class MsgSender {
 	
 	public static List<Integer> queryTopLiveRoomIds(
 			final int MAX_PAGES, final int MIN_ONLINE) {
-		return Other.queryHotLiveRoomIds(MAX_PAGES, MIN_ONLINE);
+		return LotteryStorm.queryHotLiveRoomIds(MAX_PAGES, MIN_ONLINE);
 	}
 	
 	public static void scanAndJoinStorms(List<Integer> roomIds) {
-		LotteryStorm.toDo(roomIds);
+		LotteryStorm.toLottery(roomIds);
 	}
 	
 	/**
@@ -76,15 +77,19 @@ public class MsgSender {
 	 * @return
 	 */
 	public static void toStormLottery(int roomId, String raffleId) {
-		LotteryStorm.toDo(roomId, raffleId);
+		LotteryStorm.toLottery(roomId, raffleId);
 	}
 	
 	public static void toTvLottery(int roomId, String raffleId) {
-		LotteryTV.toDo(roomId, raffleId);
+		LotteryTV.toLottery(roomId, raffleId);
 	}
 	
 	public static void toEgLottery(int roomId) {
-		LotteryEnergy.toDo(roomId);
+		LotteryEnergy.toLottery(roomId);
+	}
+	
+	public static void toFeed(HttpCookie cookie, int roomId) {
+		Feed.toFeed(cookie, roomId);
 	}
 	
 	public static String queryRedbagPool() {
@@ -118,7 +123,7 @@ public class MsgSender {
 	
 	public static boolean sendDanmu(String msg, ChatColor color) {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
-		int roomId = UIUtils.getCurRoomId();
+		int roomId = UIUtils.getLiveRoomId();
 		return Chat.sendDanmu(cookie, roomId, msg, color);
 	}
 	

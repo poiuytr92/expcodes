@@ -45,15 +45,15 @@ class _Lottery extends __Protocol {
 				getRequest(sRoomId, raffleId));
 		
 		String response = HttpURLUtils.doPost(url, header, request);
-		String errDesc = analyse(response);
+		String reason = analyse(response);
 		
 		// 重试一次: [系统繁忙哟，请再试一下吧]
-		if(errDesc.contains("系统繁忙")) {
+		if(reason.contains("系统繁忙")) {
 			ThreadUtils.tSleep(1000);
 			response = HttpURLUtils.doPost(url, header, request);
-			errDesc = analyse(response);
+			reason = analyse(response);
 		}
-		return errDesc;
+		return reason;
 	}
 	
 	/**
@@ -105,18 +105,18 @@ class _Lottery extends __Protocol {
 	 * @return
 	 */
 	private static String analyse(String response) {
-		String errDesc = "";
+		String reason = "";
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code != 0) {
-				errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("参加抽奖失败: {}", errDesc);
+				reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("参加抽奖失败: {}", reason);
 			}
 		} catch(Exception e) {
 			log.error("参加抽奖失败: {}", response, e);
 		}
-		return errDesc;
+		return reason;
 	}
 	
 }

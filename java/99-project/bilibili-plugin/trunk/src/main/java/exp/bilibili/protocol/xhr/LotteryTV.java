@@ -33,19 +33,19 @@ public class LotteryTV extends _Lottery {
 	 * @param raffleId
 	 * @return
 	 */
-	public static void toDo(int roomId, String raffleId) {
+	public static void toLottery(int roomId, String raffleId) {
 		int cnt = 0;
 		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
 		while(cookieIts.hasNext()) {
 			HttpCookie cookie = cookieIts.next();
-			String errDesc = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
-			if(StrUtils.isEmpty(errDesc)) {
+			String reason = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
+			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功", cookie.NICKNAME(), roomId);
 				cnt++;
 				
 			} else {
 				log.info("[{}] 参与直播间 [{}] 抽奖失败", cookie.NICKNAME(), roomId);
-				UIUtils.statistics("失败(", errDesc, "): 直播间 [", roomId, 
+				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");
 			}
 		}

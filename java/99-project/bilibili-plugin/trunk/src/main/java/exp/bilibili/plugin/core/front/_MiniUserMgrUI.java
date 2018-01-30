@@ -15,6 +15,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -105,9 +106,13 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		
 	}
 	
-	public void updateUserCnt() {
+	protected void updateUserCnt() {
 		String text = StrUtils.concat(adPanel.size(), "/", MAX_USER);
 		userLabel.setText(text);
+	}
+	
+	protected int getFeedRoomId() {
+		return NumUtils.toInt(feedRoomTF.getText().trim());
 	}
 
 }
