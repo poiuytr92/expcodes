@@ -26,19 +26,32 @@ import exp.libs.warp.ui.layout.VFlowLayout;
  */
 public class ADPanel<T extends Component> {
 
+	/** 默认最大的行组件数(<=0表示不限) */
+	private final static int MAX = -1;
+	
+	/** 最大的行组件数(<=0表示不限) */
+	private int max;
+	
 	/** 承载面板 */
 	private JScrollPane scrollPanel;
 	
 	/** 基准组件面板 */
 	private	JPanel basePanel; 
-			
+	
+	public ADPanel(Class<T> component) {
+		this(component, MAX);
+	}
+	
 	/**
 	 * 构造函数
 	 * @param component 每行差异化组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
+	 * @param maxNum 最多可以添加的行组件数(<=0表示不限)
 	 */
-	public ADPanel(Class<T> component) {
+	public ADPanel(Class<T> component, int maxNum) {
+		this.max = maxNum;
+		
 		basePanel = new JPanel(new VFlowLayout());
-		_ADLine<T> firstLine = new _ADLine<T>(basePanel, component);
+		_ADLine<T> firstLine = new _ADLine<T>(basePanel, component, max);
 		basePanel.add(firstLine.getJPanel());
 		
 		// 当出现增减行事件时，刷新滚动面板（使得滚动条动态出现）
@@ -57,17 +70,67 @@ public class ADPanel<T extends Component> {
 		});
 	}
 	
-	public void addLine(T component) {
-		if(component != null) {
-			_ADLine<T> line = new _ADLine<T>(basePanel, component);
-			basePanel.add(line.getJPanel());
-		}
+	/**
+	 * 获取当前行组件数
+	 * @return 行组件数
+	 */
+	public int size() {
+		return basePanel.getComponentCount();
 	}
 	
-	public boolean delLine(int index) {
+	/**
+	 * 新增行组件(程序内部接口)
+	 * @param component 行组件
+	 * @return 是否添加成功
+	 */
+	public boolean add(T component) {
 		boolean isOk = false;
-		int size = basePanel.getComponentCount();
-		if(size > 1 && index >= 0 && index < size) {
+		if(component != null) {
+			if(max > 0 && size() < max) {
+				_ADLine<T> line = new _ADLine<T>(basePanel, component, max);
+				basePanel.add(line.getJPanel());
+				isOk = true;
+			}
+		}
+		return isOk;
+	}
+	
+	
+	/**
+	 * 替换指定行的行组件（若不存在对应行, 则添加到末尾）
+	 * @param component 行组件
+	 * @return 是否替换成功
+	 */
+	public boolean set(T component, int index) {
+		boolean isOk = false;
+		if(component != null && index >= 0) {
+			if(index < size()) {
+				basePanel.remove(index);
+				
+			} else if(index >= size() && size() < max) {
+				index = size();
+				
+			} else {
+				index = -1;
+			}
+			
+			if(index >= 0) {
+				_ADLine<T> line = new _ADLine<T>(basePanel, component, max);
+				basePanel.add(line.getJPanel(), index);
+				isOk = true;
+			}
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 删除行组件(程序内部接口)
+	 * @param index 行组件索引
+	 * @return 是否删除成功
+	 */
+	public boolean del(int index) {
+		boolean isOk = false;
+		if(size() > 1 && index >= 0 && index < size()) {
 			basePanel.remove(index);
 			isOk = true;
 		}

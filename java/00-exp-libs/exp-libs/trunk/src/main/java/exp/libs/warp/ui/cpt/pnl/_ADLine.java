@@ -23,7 +23,11 @@ import javax.swing.JTextField;
  */
 class _ADLine<T extends Component> {
 
+	/** 异常提示 */
 	private final static String ERR_TIPS = "警告: 自定义行组件实例化失败(没有提供public的无参构造函数), 已使用JTextField替代自定义行组件";
+	
+	/** 最大的行组件数(<=0表示不限) */
+	private int max;
 	
 	/** 父面板 */
 	private JPanel father;
@@ -44,21 +48,30 @@ class _ADLine<T extends Component> {
 	 * 构造函数
 	 * @param father 父面板（用于承载所有行组件的面板, 布局模式建议使用垂直流式布局器）
 	 * @param component 每行差异化组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
+	 * @param max 最多可以添加的行组件数(<=0表示不限)
 	 */
-	protected _ADLine(JPanel father, Class<T> component) {
+	protected _ADLine(JPanel father, Class<T> component, int max) {
 		try {
 			this.component = (T) component.newInstance();
 		} catch (Throwable e) {
 			this.component = new JTextField(ERR_TIPS);
 		}
 		
+		this.max = max;
 		init(father);
 	}
 	
-	protected _ADLine(JPanel father, T component) {
+	/**
+	 * 构造函数
+	 * @param father 父面板（用于承载所有行组件的面板, 布局模式建议使用垂直流式布局器）
+	 * @param component 每行差异化组件的类对象
+	 * @param max 最多可以添加的行组件数(<=0表示不限)
+	 */
+	protected _ADLine(JPanel father, T component, int max) {
 		this.component = (component == null ? 
 				new JTextField(ERR_TIPS) : component);
 		
+		this.max = max;
 		init(father);
 	}
 	
@@ -98,8 +111,12 @@ class _ADLine<T extends Component> {
 			@SuppressWarnings("unchecked")
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(father.getComponentCount() >= max) {
+					return;
+				}
+				
 				int idx = father.getComponentZOrder(linePanel);
-				_ADLine<T> newLine = new _ADLine<T>(father, (Class<T>) component.getClass());
+				_ADLine<T> newLine = new _ADLine<T>(father, (Class<T>) component.getClass(), max);
 				father.add(newLine.getJPanel(), idx + 1);
 				repaint();
 			}
