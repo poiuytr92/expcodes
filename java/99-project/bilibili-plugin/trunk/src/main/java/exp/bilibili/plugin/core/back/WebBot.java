@@ -193,7 +193,6 @@ public class WebBot extends LoopThread {
 	private void doDailyTasks() {
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
 			
-			long max = -1;
 			Iterator<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
 			while(cookies.hasNext()) {
 				HttpCookie cookie = cookies.next();
@@ -201,15 +200,16 @@ public class WebBot extends LoopThread {
 					continue;
 				}
 				
+				long max = -1;
 				max = NumUtils.max(DailyTasks.toSign(cookie), max);
 				max = NumUtils.max(DailyTasks.toAssn(cookie), max);
 				max = NumUtils.max(DailyTasks.doMathTask(cookie), max);
+				nextTaskTime = NumUtils.max(nextTaskTime, max);
 				
 				if(max <= 0) {
 					finCookies.add(cookie);
 				}
 			}
-			nextTaskTime = max;
 		}
 	}
 	
