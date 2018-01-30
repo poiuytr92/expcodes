@@ -25,6 +25,7 @@ import exp.bilibili.plugin.cache.RedbagMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.core.back.MsgSender;
+import exp.bilibili.plugin.core.back.WebBot;
 import exp.bilibili.plugin.core.back.WebSockClient;
 import exp.bilibili.plugin.core.front.login.LoginBtn;
 import exp.bilibili.plugin.envm.ChatColor;
@@ -533,9 +534,12 @@ public class AppUI extends MainWindow {
 		CookiesMgr.INSTN().load(LoginType.VEST);
 		HttpCookie vestCookie = CookiesMgr.INSTN().VEST();
 		
-		// 登录马甲号(当主号与马甲号相同时则每次都提示, 否则不再提示)
-		if((HttpCookie.NULL == vestCookie || CookiesMgr.INSTN().MAIN().equals(vestCookie)) && 
-				SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
+		// 若现有马甲号不是主号，则使用现有马甲号
+		if(HttpCookie.NULL != vestCookie && !CookiesMgr.INSTN().MAIN().equals(vestCookie)) {
+			_startStormScanner();
+			
+		// 若不存在马甲号 或 现有马甲号是主号， 则询问
+		} else if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
 			LoginBtn btn = new LoginBtn(LoginType.VEST, "", new __LoginCallback() {
 				
 				@Override
@@ -549,16 +553,9 @@ public class AppUI extends MainWindow {
 				}
 				
 			});
+			btn.doClick();
 			
-			if(CookiesMgr.checkLogined(vestCookie)) {
-				btn.markLogined(vestCookie);
-				_startStormScanner();
-				
-			} else {
-				btn.doClick();
-			}
-			
-		// 主号同时作为马甲号
+		// 使用主号作为马甲号
 		} else {
 			CookiesMgr.INSTN().add(CookiesMgr.INSTN().MAIN(), LoginType.VEST);
 			_startStormScanner();

@@ -44,17 +44,14 @@ public class WebSockClient extends LoopThread {
 	
 	private int roomId;
 	
-	private boolean onlyStorm;
-	
 	public WebSockClient() {
-		this(Config.DEFAULT_ROOM_ID, false);
+		this(Config.DEFAULT_ROOM_ID);
 	}
 	
-	public WebSockClient(int roomId, boolean onlyStorm) {
+	public WebSockClient(int roomId) {
 		super("websocket连接监控线程");
 		this.roomId = roomId;
 		this.loopCnt = LOOP_CNT;
-		this.onlyStorm = onlyStorm;
 	}
 	
 	@Override
@@ -95,15 +92,13 @@ public class WebSockClient extends LoopThread {
 		
 		boolean isOk = false;
 		try {
-			this.session = new WebSockSession(new URI(WS_URL), DRAFT, roomId, onlyStorm);
+			this.session = new WebSockSession(new URI(WS_URL), DRAFT);
 			if(session.conn()) {
 				session.send(Frame.C2S_CONN(roomId));	// B站的websocket连接成功后需要马上发送连接请求
 				isOk = true;
 				
 				log.info("连接/重连到直播间 [{}] 的websocket成功: [{}]", roomId, WS_URL);
-				if(onlyStorm == false) {
-					UIUtils.log("正在尝试入侵直播间 [", roomId, "] 后台...");
-				}
+				UIUtils.log("正在尝试入侵直播间 [", roomId, "] 后台...");
 			}
 		} catch (Exception e) {
 			log.error("连接到直播间 [{}] 的websocket失败: [{}]", roomId, WS_URL, e);

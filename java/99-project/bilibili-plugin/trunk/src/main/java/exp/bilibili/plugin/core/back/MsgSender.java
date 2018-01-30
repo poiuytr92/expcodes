@@ -49,9 +49,9 @@ public class MsgSender {
 		return Login.queryUserInfo(cookie);
 	}
 
-	public static boolean toAssn() {
+	public static void toAssn() {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号签到有爱社?
-		return DailyTasks.toAssn(cookie);
+		DailyTasks.toAssn(cookie);
 	}
 	
 	public static void toSign() {

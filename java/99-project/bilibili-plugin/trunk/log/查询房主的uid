@@ -1,0 +1,39 @@
+Request URL:http://api.live.bilibili.com/room/v1/Room/room_init?id=51108
+Request Method:GET
+Status Code:200 OK
+Remote Address:111.230.85.89:80
+Referrer Policy:no-referrer-when-downgrade
+Response Headers
+view source
+Access-Control-Allow-Credentials:true
+Access-Control-Allow-Headers:Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type
+Access-Control-Allow-Methods:GET,POST,OPTIONS
+Access-Control-Allow-Origin:http://live.bilibili.com
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Length:229
+Content-Type:application/json
+Date:Tue, 30 Jan 2018 01:56:57 GMT
+Expires:Tue, 30 Jan 2018 01:56:56 GMT
+L:v
+Server:swoole-http-server
+Set-Cookie:l=v
+X-Cache:BYPASS from tx-gz3-webcdn-08.hdslb.com
+X-Trace-Id:60444c05eb4cd2f
+Request Headers
+view source
+Accept:application/json, text/plain, */*
+Accept-Encoding:gzip, deflate
+Accept-Language:zh-CN,zh;q=0.8
+Connection:keep-alive
+Cookie:l=v; LIVE_BUVID=898e66928551af38afa5297609493c46; LIVE_BUVID__ckMd5=e50d27283c24d405; sid=jelg7ubk; fts=1513213605; buvid3=8649DE3A-0DE5-43E9-B4B3-34CF02F3BE6223651infoc; finger=edc6ecda; _jct=a7dbec00055f11e8a1320242ac123ea4; DedeUserID=247057916; DedeUserID__ckMd5=c8a42850ac4b8876; SESSDATA=4b8de79e%2C1519868922%2Cc4fda6b7; bili_jct=0fba5870d602d5aea8012ec2d45b2269; _dfcaptcha=600bae699e213bff279d5fb488aca050; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1514949445,1517276948; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1517276948
+Host:api.live.bilibili.com
+Origin:http://live.bilibili.com
+Referer:http://live.bilibili.com/51108
+User-Agent:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.86 Safari/537.36
+Query String Parameters
+view source
+view URL encoded
+id:51108
+
+{"code":0,"msg":"ok","message":"ok","data":{"room_id":51108,"short_id":0,"uid":13173681,"need_p2p":0,"is_hidden":false,"is_locked":false,"hidden_till":-62170012800,"lock_till":-62170012800,"encrypted":false,"pwd_verified":false}}

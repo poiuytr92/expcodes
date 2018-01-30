@@ -44,18 +44,10 @@ class WebSockSession extends WebSocketClient {
 	/** 连接超时 */
 	private final static long CONN_TIMEOUT = 10000;
 	
-	private int roomId;
-	
-	private boolean onlyStorm;
-	
 	private boolean isClosed;
 	
 	protected WebSockSession(URI serverURI, Draft draft) {
-		this(serverURI, draft, 0, Config.DEFAULT_ROOM_ID, false, false);
-	}
-	
-	protected WebSockSession(URI serverURI, Draft draft, int roomId, boolean onlyStorm) {
-		this(serverURI, draft, 0, roomId, onlyStorm, false);
+		this(serverURI, draft, 0, false);
 	}
 	
 	/**
@@ -66,17 +58,12 @@ class WebSockSession extends WebSocketClient {
 	 * 				通过打开调试开关 WebSocketImpl.DEBUG = true 可以知道服务端的协议版本
 	 * 				Draft_6455 为最新的WebSocket协议版本
 	 * @param timeout 本地连接保活超时（0不生效，默认60，即60秒后自动断开）
-	 * @param roomId 所连接的房间号
-	 * @param onlyStorm 仅用于监听节奏风暴
 	 * @param debug 调试模式
 	 */
-	protected WebSockSession(URI serverURI, Draft draft, int timeout, 
-			int roomId, boolean onlyStorm, boolean debug) {
+	protected WebSockSession(URI serverURI, Draft draft, int timeout, boolean debug) {
 		super(serverURI, draft);
 		setTimeout(timeout);
 		debug(debug);
-		this.roomId = roomId;
-		this.onlyStorm = onlyStorm;
 		this.isClosed = true;
 	}
 	
@@ -148,9 +135,8 @@ class WebSockSession extends WebSocketClient {
 			
 		} else if(Binary.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.debug("websocket连接成功确认");
-			if(onlyStorm == false) {
-				UIUtils.log("入侵直播间成功, 正在暗中观察...");
-			}
+			UIUtils.log("入侵直播间成功, 正在暗中观察...");
+			
 		} else {
 			String msg = CharsetUtils.toStr(buff, Config.DEFAULT_CHARSET);
 			String sJson = RegexUtils.findFirst(msg.substring(15), RGX_JSON);	// 消息的前16个字符为无效字符
@@ -159,17 +145,8 @@ class WebSockSession extends WebSocketClient {
 				JSONObject json = JSONObject.fromObject(sJson);
 				String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
 				BiliCmd biliCmd = BiliCmd.toCmd(cmd);
-				if(BiliCmd.SPECIAL_GIFT == biliCmd) {
-					json.put(BiliCmdAtrbt.roomid, roomId);
-				}
 				
-				if(onlyStorm == true) {
-					if(BiliCmd.SPECIAL_GIFT == biliCmd) {
-						MsgAnalyser.toMsgBean(biliCmd, json);
-					} else {
-						// Undo 节奏风暴模式下，无视其他消息
-					}
-				} else if(!MsgAnalyser.toMsgBean(biliCmd, json)) {
+				if(!MsgAnalyser.toMsgBean(biliCmd, json)) {
 					log.info("无效的推送消息: {}", hex);
 				}
 			} else {
@@ -188,18 +165,14 @@ class WebSockSession extends WebSocketClient {
 		isClosed = true;
 		log.info("websocket连接正在断开: [错误码:{}] [发起人:{}] [原因:{}]", 
 				code, (remote ? "server" : "client"), reason);
-		if(onlyStorm == false) {
-			UIUtils.log("与直播间的连接已断开 (Reason:", (remote ? "server" : "client"), ")");
-		}
+		UIUtils.log("与直播间的连接已断开 (Reason:", (remote ? "server" : "client"), ")");
 	}
 
 	@Override
 	public void onError(Exception e) {
 		isClosed = true;
 		log.error("websocket连接异常", e);
-		if(onlyStorm == false) {
-			UIUtils.log("与直播间的连接已断开 (Reason:", e.getMessage(), ")");
-		}
+		UIUtils.log("与直播间的连接已断开 (Reason:", e.getMessage(), ")");
 	}
 
 }

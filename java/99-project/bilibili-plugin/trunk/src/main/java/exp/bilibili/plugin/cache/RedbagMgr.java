@@ -124,7 +124,7 @@ public class RedbagMgr extends LoopThread {
 	public void updateExTime() {
 		int minute = TimeUtils.getCurMinute();
 		
-		if(exTime == false && minute == 55) {
+		if(exTime == false && minute == 58) {
 			sleepTime = 1000;
 			exTime = true;
 			UIUtils.log("红包兑奖时间已到, 正在尝试兑奖...");
@@ -225,6 +225,7 @@ public class RedbagMgr extends LoopThread {
 		boolean isOk = false;
 		
 		String response = MsgSender.exchangeRedbag(redbag.ID(), num);
+		System.out.println(response);
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);

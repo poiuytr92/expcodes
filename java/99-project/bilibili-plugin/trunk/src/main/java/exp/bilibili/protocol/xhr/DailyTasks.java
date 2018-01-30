@@ -58,11 +58,11 @@ public class DailyTasks extends __Protocol {
 	 * 友爱社签到
 	 * @return 是否需要持续测试签到
 	 */
-	public static boolean toAssn(HttpCookie cookie) {
+	public static void toAssn(HttpCookie cookie) {
 		Map<String, String> header = getHeader(cookie.toNVCookie());
 		Map<String, String> request = getRequest(cookie.CSRF());
 		String response = HttpURLUtils.doPost(ASSN_URL, header, request);
-		return !analyse(response, cookie.NICKNAME(), true);
+		analyse(response, cookie.NICKNAME(), true);
 	}
 	
 	/**
@@ -116,24 +116,21 @@ public class DailyTasks extends __Protocol {
 	 * @param response  {"code":0,"msg":"","message":"","data":[]}
 	 * @return
 	 */
-	private static boolean analyse(String response, String username, boolean assn) {
+	private static void analyse(String response, String username, boolean assn) {
 		String signType = (assn ? "友爱社" : "每日");
-		boolean isOk = false;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-			if(code == 0 || reason.contains("已签到") || reason.contains("已领取")) {
-				isOk = true;
+			if(code == 0) {
 				UIUtils.log("[", username, "] ", signType, "签到完成");
 				
-			} else {
+			} else if(!reason.contains("已签到") && !reason.contains("已领取")) {
 				log.warn("[{}] {}签到失败: {}", username, signType, reason);
 			}
 		} catch(Exception e) {
 			log.error("[{}] {}签到失败: {}", username, signType, response, e);
 		}
-		return isOk;
 	}
 	
 	/**
@@ -185,7 +182,7 @@ public class DailyTasks extends __Protocol {
 	 */
 	private static boolean doMathTasks(Map<String, String> header, 
 			String username, MathTask task) {
-		boolean isDone = false;
+		boolean isRedone = false;
 		do {
 			int answer = 0;
 			do {
@@ -194,8 +191,8 @@ public class DailyTasks extends __Protocol {
 			} while(answer <= 0);	// 若解析二维码图片失败, 则重新解析
 			
 			ThreadUtils.tSleep(SLEEP_TIME);
-			isDone = doTask(header, username, task, answer);
-		} while(!isDone);	// 若计算二维码结果错误, 则重新计算
+			isRedone = doTask(header, username, task, answer);
+		} while(isRedone == true);	// 若计算二维码结果错误, 则重新计算
 		
 		return task.existNext();
 	}
@@ -211,7 +208,6 @@ public class DailyTasks extends __Protocol {
 	private static MathTask checkTask(Map<String, String> header) {
 		MathTask task = MathTask.NULL;
 		String response = HttpURLUtils.doGet(CHECK_TASK_URL, header, null);
-		
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
@@ -219,7 +215,7 @@ public class DailyTasks extends __Protocol {
 				task = new MathTask(json);
 			}
 		} catch(Exception e) {
-			log.error("获取日常任务失败: {}", response, e);
+			log.error("获取小学数学任务失败: {}", response, e);
 		}
 		return task;
 	}
@@ -258,19 +254,22 @@ public class DailyTasks extends __Protocol {
 		request.put("captcha", String.valueOf(answer));
 		String response = HttpURLUtils.doGet(DO_TASK_URL, header, request);
 		
-		boolean isOk = false;
+		boolean isRedone = false;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			String errDesc = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 			if(code == 0) {
-				isOk = true;
-				UIUtils.log("[", username, "] 已完成小学数学任务: ", task.getCurRound(), "/", 
+				UIUtils.log("[", username, "] 小学数学任务进度: ", task.getCurRound(), "/", 
 						task.getMaxRound(), "轮-", task.getStep(), "分钟");
+				
+			} else if(errDesc.contains("验证码错误")) {
+				isRedone = true;
 			}
 		} catch(Exception e) {
-			log.error("[{}] 执行日常任务失败: {}", username, response, e);
+			log.error("[{}] 执行小学数学任务失败: {}", username, response, e);
 		}
-		return isOk;
+		return isRedone;
 	}
 	
 }

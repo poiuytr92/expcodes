@@ -1,11 +1,10 @@
-package exp.bilibili.plugin.core.front;
+package exp.bilibili.plugin.core.back;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.bean.ldm.LotteryRoom;
 import exp.bilibili.plugin.cache.RoomMgr;
-import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -17,7 +16,6 @@ import exp.libs.warp.thread.LoopThread;
  * 	主要功能:
  *   1.全平台礼物抽奖管理器（小电视/高能礼物）
  *   2.打印版权信息
- *   3.浏览器保活
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -25,7 +23,7 @@ import exp.libs.warp.thread.LoopThread;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class WebBot extends LoopThread {
+public class WebBot extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(WebBot.class);
 	
@@ -83,7 +81,7 @@ class WebBot extends LoopThread {
 		resetTaskTime += 300000;	// 避免临界点时差, 后延5分钟
 	}
 	
-	protected static WebBot getInstn() {
+	public static WebBot getInstn() {
 		if(instance == null) {
 			synchronized (WebBot.class) {
 				if(instance == null) {
@@ -116,6 +114,15 @@ class WebBot extends LoopThread {
 	
 	/**
 	 * 模拟web行为
+	 * FIXME:
+	 * 	启动时，触发所有cookie任务
+	 *  每增加一个cookie，对应触发该cookie的任务
+	 *  到达周期时，触发所有cookie任务
+	 *  
+	 *   所有任务跨天后触发一次
+	 *   日常签到任务每天只触发一次
+	 *   友爱签到任务定点触发，满足条件后退出
+	 *   数学任务定点触发，满足条件后退出
 	 */
 	private void toDo() {
 		
@@ -153,9 +160,6 @@ class WebBot extends LoopThread {
 		} else {
 			MsgSender.toEgLottery(roomId);
 		}
-		
-		// 后端抽奖过快， 需要限制， 不然连续抽奖时会取不到礼物编号
-		_sleep(SLEEP_TIME);
 	}
 	
 	/**

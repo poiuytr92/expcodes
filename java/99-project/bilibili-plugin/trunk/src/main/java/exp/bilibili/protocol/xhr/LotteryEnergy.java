@@ -16,7 +16,6 @@ import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.NumUtils;
-import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
@@ -49,24 +48,17 @@ public class LotteryEnergy extends _Lottery {
 	 * @param roomId
 	 * @return
 	 */
-	public static int toDo(int roomId) {
+	public static void toDo(int roomId) {
 		roomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		List<String> raffleIds = getRaffleId(EG_CHECK_URL, roomId, 
 				CookiesMgr.INSTN().VEST().toNVCookie());
-		
-		int cnt = 0;
-		if(ListUtils.isEmpty(raffleIds)) {
-			return cnt;
-		}
-		
 		for(String raffleId : raffleIds) {
 			int id = NumUtils.toInt(raffleId, 0);
-			if(id > LAST_RAFFLEID) {	// 礼物编号是递增
+			if(id > LAST_RAFFLEID) {	// 礼物编号是递增的
 				LAST_RAFFLEID = id;
 				join(roomId, raffleId);
 			}
 		}
-		return cnt;
 	}
 	
 	/**
@@ -122,7 +114,7 @@ public class LotteryEnergy extends _Lottery {
 		}
 		
 		if(cnt > 0) {
-			UIUtils.statistics("成功(高能礼物x", cnt, "): 抽奖直播间 [", roomId, "]");
+			UIUtils.statistics("成功(高能x", cnt, "): 抽奖直播间 [", roomId, "]");
 			UIUtils.updateLotteryCnt(cnt);
 		}
 	}
