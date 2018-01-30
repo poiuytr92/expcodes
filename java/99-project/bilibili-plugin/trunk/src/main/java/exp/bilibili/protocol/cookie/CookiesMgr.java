@@ -195,8 +195,6 @@ public class CookiesMgr {
 	
 	public Iterator<HttpCookie> MINIs() {
 		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
-		if(HttpCookie.NULL != vestCookie) { cookies.add(vestCookie); }
-		
 		Iterator<HttpCookie> minis = miniCookies.iterator();
 		for(int i = 0; i < MAX_NUM; i++) {
 			if(minis.hasNext()) {
