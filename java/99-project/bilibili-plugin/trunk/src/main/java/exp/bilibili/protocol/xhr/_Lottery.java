@@ -10,6 +10,7 @@ import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
 /**
@@ -111,7 +112,10 @@ class _Lottery extends __Protocol {
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code != 0) {
 				reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("参加抽奖失败: {}", reason);
+				
+				reason = StrUtils.isEmpty(reason) ? "unknow" : reason;
+//				log.warn("参加抽奖失败: {}", reason);	// FIXME: 节奏风暴抽奖失败时， 原因为空
+				log.warn("参加抽奖失败: {}", response);
 			}
 		} catch(Exception e) {
 			log.error("参加抽奖失败: {}", response, e);
