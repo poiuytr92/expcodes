@@ -1,0 +1,39 @@
+Request URL:http://api.live.bilibili.com/live_user/v1/UserInfo/get_info_in_room?roomid=390480
+Request Method:GET
+Status Code:200 OK
+Remote Address:36.248.28.7:80
+Response Headers
+view source
+Access-Control-Allow-Credentials:true
+Access-Control-Allow-Headers:Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type
+Access-Control-Allow-Methods:GET,POST,OPTIONS
+Access-Control-Allow-Origin:http://live.bilibili.com
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Encoding:gzip
+Content-Type:application/json
+Date:Tue, 30 Jan 2018 12:13:34 GMT
+Expires:Tue, 30 Jan 2018 12:13:33 GMT
+L:v
+Server:swoole-http-server
+Set-Cookie:l=v
+Transfer-Encoding:chunked
+X-Cache:BYPASS from cn-fjfz-cu-w-01.hdslb.com
+X-Trace-Id:a730f32efa1afbf
+Request Headers
+view source
+Accept:application/json, text/plain, */*
+Accept-Encoding:gzip, deflate, sdch
+Accept-Language:zh-CN,zh;q=0.8,en;q=0.6
+Connection:keep-alive
+Cookie:l=v; sid=8elb18h6; fts=1503182043; UM_distinctid=15e190d0c1199-043296bc4d1c16-414a0229-1fa400-15e190d0c12148; pgv_pvi=5198061568; rpdid=oqqsioskoqdoswkxsqqxw; LIVE_BUVID=58c76905d29d011b993b790132f9742e; LIVE_BUVID__ckMd5=47f66bfea6569d8a; biliMzIsnew=1; biliMzTs=0; buvid3=D7D00281-D075-4E98-9FA1-80F6AEA8AE5826553infoc; _qddaz=QD.2wiuv2.u684hf.jbdtvvxc; user_face=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Fface%2Fbbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg; DedeUserID=1650868; DedeUserID__ckMd5=686caa22740f2663; SESSDATA=e6e4328c%2C1518534742%2C82d92918; bili_jct=dee89ca3ea515c76eab9b25349650f36; finger=81df3ec0; im_seqno_1650868=12694; im_local_unread_1650868=0; im_notify_type_1650868=0; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1517232150,1517310701,1517314206,1517314305; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1517314305; _dfcaptcha=ef2c8c1cb5eab724d98ed47ca4b539bb
+Host:api.live.bilibili.com
+Origin:http://live.bilibili.com
+Referer:http://live.bilibili.com/438
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+Query String Parameters
+view source
+view URL encoded
+roomid:390480
+
+{"code":0,"msg":"success","message":"success","data":{"vip":{"uid":"1650868","uname":"M-亚絲娜","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":"10000","identification":"1","mobile_verify":"1"},"level":{"uid":"1650868","cost":"64628595","rcost":"2481900","user_score":"442028760","vip":"1","vip_time":"2018-12-12 21:56:04","svip":"1","svip_time":"2018-12-06 21:56:04","update_time":"2018-01-30 20:12:07","master_level":{"level":10,"current":[6300,18060],"next":[9100,27160]},"user_level":45,"color":16746162,"is_show_vip_broadcast":0},"role":{"role_id":2,"role_name":"播主","info":{"roomid":"269706"}},"room_admin":{"is_admin":1},"wallet":{"silver":"97602","gold":"62009"},"privilege":{"notice_status":1,"id":"80859","uid":"1650868","target_id":"20872515","privilege_type":"2","expired_time":"2018-02-05 23:59:59","heart_status":true,"heart_time":300},"gift":{"uid":1650868,"is_show":0},"info":{"uid":1650868,"uname":"M-亚絲娜","face":"http://i2.hdslb.com/bfs/face/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":10000,"identification":1,"mobile_verify":1,"platform_user_level":4,"official_verify":{"type":-1,"desc":""},"mobile_virtual":0,"bili_vip":0}}}

@@ -972,7 +972,7 @@ public class AppUI extends MainWindow {
 	 */
 	public void printVersionInfo() {
 		toConsole("**********************************************************");
-		toConsole(" [亚絲娜] 享有本软件的完全著作权");
+		toConsole(StrUtils.concat(" [亚絲娜] 享有本软件的完全著作权 (当前版本: v", SafetyMonitor.VERSION(), ")"));
 		toConsole(" 未经许可严禁擅自用于商业用途, 违者保留追究其法律责任的权利");
 		toConsole("**********************************************************");
 	}

@@ -1,0 +1,53 @@
+Request URL:http://api.live.bilibili.com/gift/v2/gift/send
+Request Method:POST
+Status Code:200 OK
+Remote Address:36.248.28.7:80
+Response Headers
+view source
+Access-Control-Allow-Credentials:true
+Access-Control-Allow-Headers:Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type
+Access-Control-Allow-Methods:GET,POST,OPTIONS
+Access-Control-Allow-Origin:http://live.bilibili.com
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Length:728
+Content-Type:application/json
+Date:Tue, 30 Jan 2018 12:12:06 GMT
+Expires:Tue, 30 Jan 2018 12:12:05 GMT
+L:v
+Server:swoole-http-server
+Set-Cookie:l=v
+X-Cache:BYPASS from cn-fjfz-cu-w-02.hdslb.com
+X-Trace-Id:cbcd2fa3a0a1e3f
+Request Headers
+view source
+Accept:application/json, text/plain, */*
+Accept-Encoding:gzip, deflate
+Accept-Language:zh-CN,zh;q=0.8,en;q=0.6
+Connection:keep-alive
+Content-Length:204
+Content-Type:application/x-www-form-urlencoded
+Cookie:l=v; sid=8elb18h6; fts=1503182043; UM_distinctid=15e190d0c1199-043296bc4d1c16-414a0229-1fa400-15e190d0c12148; pgv_pvi=5198061568; rpdid=oqqsioskoqdoswkxsqqxw; LIVE_BUVID=58c76905d29d011b993b790132f9742e; LIVE_BUVID__ckMd5=47f66bfea6569d8a; biliMzIsnew=1; biliMzTs=0; buvid3=D7D00281-D075-4E98-9FA1-80F6AEA8AE5826553infoc; _qddaz=QD.2wiuv2.u684hf.jbdtvvxc; user_face=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Fface%2Fbbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg; DedeUserID=1650868; DedeUserID__ckMd5=686caa22740f2663; SESSDATA=e6e4328c%2C1518534742%2C82d92918; bili_jct=dee89ca3ea515c76eab9b25349650f36; finger=81df3ec0; im_seqno_1650868=12694; im_local_unread_1650868=0; im_notify_type_1650868=0; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1517232150,1517310701,1517314206,1517314305; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1517314305; _dfcaptcha=ef2c8c1cb5eab724d98ed47ca4b539bb
+Host:api.live.bilibili.com
+Origin:http://live.bilibili.com
+Referer:http://live.bilibili.com/438
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+Form Data
+view source
+view URL encoded
+uid:1650868
+gift_id:1
+ruid:20872515
+gift_num:2
+coin_type:silver
+bag_id:0
+platform:pc
+biz_code:live
+biz_id:390480
+rnd:1517314303
+storm_beat_id:0
+metadata:
+token:
+csrf_token:dee89ca3ea515c76eab9b25349650f36
+
+{"code":0,"msg":"success","message":"success","data":{"tid":"1650868@15173143268996399536","uid":1650868,"uname":"M-亚絲娜","ruid":20872515,"rcost":3173474,"gift_id":1,"gift_type":0,"gift_name":"辣条","gift_num":2,"gift_action":"喂食","gift_price":100,"coin_type":"silver","total_coin":200,"metadata":"","fulltext":null,"rnd":"1517314303","effect_block":1,"extra":{"wallet":{"gold":62009,"silver":97602},"top_list":[],"follow":null,"medal":null,"title":null,"event":{"event_score":0},"capsule":{"normal":{"coin":77,"change":0,"progress":{"now":5391,"max":10000}},"colorful":{"coin":8,"change":0,"progress":{"now":4000,"max":5000}}}},"gift_effect":{"super":0,"broadcast_msg_list":[],"small_tv_list":[],"beat_storm":null}}}

@@ -87,6 +87,8 @@ public class SafetyMonitor extends LoopThread {
 		this.loginUser = CookiesMgr.INSTN().MAIN().NICKNAME();
 		this.appName = "";
 		this.appVersion = "";
+		
+		init();
 	}
 	
 	public static SafetyMonitor getInstn() {
@@ -100,13 +102,15 @@ public class SafetyMonitor extends LoopThread {
 		return instance;
 	}
 	
-	@Override
-	protected void _before() {
+	private void init() {
 		String verInfo =  VersionMgr.exec("-p");
 		appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
 		appVersion = RegexUtils.findFirst(verInfo, "版本号[ |]*([\\d|\\.]+)");
+	}
+	
+	@Override
+	protected void _before() {
 		updateCertificateTime(SafetyUtils.fileToCertificate());
-		
 		log.info("{} 已启动", getName());
 	}
 
@@ -291,7 +295,7 @@ public class SafetyMonitor extends LoopThread {
 		}
 		return isIn;
 	}
-	
+
 	/**
 	 * 检查软件的当前版本是否大于等于授权版本
 	 * @param versions 授权版本(格式: major.minor ，如: 1.9)
@@ -360,6 +364,14 @@ public class SafetyMonitor extends LoopThread {
 		if(app != null) {
 			checkInTime(app.getTime());
 		}
+	}
+	
+	/**
+	 * 获取当前版本号
+	 * @return
+	 */
+	public static String VERSION() {
+		return getInstn().appVersion;
 	}
 	
 }
