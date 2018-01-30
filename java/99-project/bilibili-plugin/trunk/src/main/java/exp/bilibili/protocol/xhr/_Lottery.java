@@ -114,7 +114,7 @@ class _Lottery extends __Protocol {
 				reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 				
 				reason = StrUtils.isEmpty(reason) ? "unknow" : reason;
-//				log.warn("参加抽奖失败: {}", reason);	// FIXME: 节奏风暴抽奖失败时， 原因为空
+//				log.warn("参加抽奖失败: {}", reason);	// FIXME: 节奏风暴抽奖失败时， 原因为空 {"code":429,"msg":"","message":"","data":[]}
 				log.warn("参加抽奖失败: {}", response);
 			}
 		} catch(Exception e) {
