@@ -27,8 +27,8 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO
+		// 自动投喂(包括银瓜子)
 		// 调整xml中的URL标签名
-		// 限制小号个数(显示 当前小号数10/999)
 	}
 	
 }

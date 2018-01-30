@@ -31,7 +31,7 @@ import exp.libs.warp.net.http.HttpUtils;
 public class Other extends __Protocol {
 
 	/** 热门直播间URL */
-	private final static String LIVE_LIST_URL = Config.getInstn().LIVE_LIST_URL();
+	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
 	
 	/**
 	 * 软件授权页(Bilibili-备用)
@@ -59,7 +59,7 @@ public class Other extends __Protocol {
 		int pageOffset = TimeUtils.isNight() ? 1 : 0;	// 当为晚上时, 不选择首页房间(抢风暴成功率太低)
 		for(int page = 1 + pageOffset; page <= MAX_PAGES + pageOffset; page++) {
 			request.put("page", String.valueOf(page));
-			String response = client.doGet(LIVE_LIST_URL, header, request);
+			String response = client.doGet(LIVE_URL, header, request);
 			roomIds.addAll(analyse(response, MIN_ONLINE));
 		}
 		client.close();
@@ -122,8 +122,8 @@ public class Other extends __Protocol {
 	private static Map<String, String> getHeader() {
 		Map<String, String> header = GET_HEADER("");
 		header.put(HttpUtils.HEAD.KEY.HOST, LINK_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/world/index"));
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOME);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_HOME.concat("/p/world/index"));
 		return header;
 	}
 	

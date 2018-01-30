@@ -37,7 +37,7 @@ public class Config {
 //			"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 	
-	private final static String APP_PATH = "/exp/bilibili/plugin/bp_conf.dat";
+	private final static String APP_PATH = "/exp/bilibili/plugin/bp_conf.xml";
 	
 	private final static String USER_PATH = "./conf/bp_conf.xml";
 	
@@ -50,7 +50,7 @@ public class Config {
 	private XConfig xConf;
 	
 	private Config() {
-		this.xConf = XConfigFactory.createConfig("biliConf");
+		this.xConf = XConfigFactory.createConfig("BILIBILI_CONF");
 		xConf.loadConfFileInJar(APP_PATH);
 		xConf.loadConfFile(USER_PATH);
 		
@@ -69,124 +69,124 @@ public class Config {
 		return instance;
 	}
 	
-	public String HOME_URL() {
-		return xConf.getVal("/config/biliUrls/home");
+	public String WEBSOCKET() {
+		return xConf.getVal("/config/urls/ws");
 	}
 	
-	public String LOGIN_HOST() {
-		return xConf.getVal("/config/biliUrls/loginHost");
+	public String MAIN_HOME() {
+		return xConf.getVal("/config/urls/mainHome");
 	}
 	
-	public String LOGIN_URL() {
-		return xConf.getVal("/config/biliUrls/login");
+	public String LIVE_HOME() {
+		return xConf.getVal("/config/urls/liveHome");
 	}
 	
-	public String VC_LOGIN_URL() {
-		return xConf.getVal("/config/biliUrls/miniLogin");
+	public String LINK_HOME() {
+		return xConf.getVal("/config/urls/linkHome");
 	}
 	
-	public String VCCODE_URL() {
-		return xConf.getVal("/config/biliUrls/vccode");
-	}
-	
-	public String RSA_URL() {
-		return xConf.getVal("/config/biliUrls/rsa");
-	}
-	
-	public String QRCODE_URL() {
-		return xConf.getVal("/config/biliUrls/qrcode");
-	}
-	
-	public String QR_LOGIN_URL() {
-		return xConf.getVal("/config/biliUrls/qrlogin");
-	}
-	
-	public String LIVE_URL() {
-		return xConf.getVal("/config/biliUrls/live");
-	}
-	
-	public String LIVE_LIST_URL() {
-		return xConf.getVal("/config/biliUrls/livelist");
-	}
-	
-	public String SSL_HOST() {
-		return xConf.getVal("/config/biliUrls/ssl");
-	}
-	
-	public String WS_URL() {
-		return xConf.getVal("/config/biliUrls/ws");
-	}
-	
-	public String CHAT_URL() {
-		return xConf.getVal("/config/biliUrls/chat");
-	}
-	
-	public String SIGN_URL() {
-		return xConf.getVal("/config/biliUrls/sign");
-	}
-	
-	public String ACCOUNT_URL() {
-		return xConf.getVal("/config/biliUrls/account");
-	}
-	
-	public String ASSN_URL() {
-		return xConf.getVal("/config/biliUrls/assn");
+	public String MSG_HOME() {
+		return xConf.getVal("/config/urls/msgHome");
 	}
 	
 	public String LINK_HOST() {
-		return xConf.getVal("/config/biliUrls/linkHost");
-	}
-	
-	public String LINK_URL() {
-		return xConf.getVal("/config/biliUrls/link");
-	}
-	
-	public String MSG_HOST() {
-		return xConf.getVal("/config/biliUrls/msgHost");
+		return xConf.getVal("/config/urls/linkHost");
 	}
 	
 	public String MSG_URL() {
-		return xConf.getVal("/config/biliUrls/msg");
+		return xConf.getVal("/config/urls/msgURL");
+	}
+	
+	public String LOGIN_HOST() {
+		return xConf.getVal("/config/urls/loginHost");
+	}
+	
+	public String QRCODE_URL() {
+		return xConf.getVal("/config/urls/qrcodeURL");
+	}
+	
+	public String QRCHECK_URL() {
+		return xConf.getVal("/config/urls/qrcheckURL");
+	}
+	
+	public String QRLOGIN_URL() {
+		return xConf.getVal("/config/urls/qrloginURL");
+	}
+	
+	public String VCCODE_URL() {
+		return xConf.getVal("/config/urls/vccodeURL");
+	}
+	
+	public String RSA_URL() {
+		return xConf.getVal("/config/urls/rsaURL");
+	}
+	
+	public String VCLOGIN_URL() {
+		return xConf.getVal("/config/urls/vcloginURL");
+	}
+	
+	public String LIVE_HOST() {
+		return xConf.getVal("/config/urls/liveHost");
+	}
+	
+	public String LIVE_URL() {
+		return xConf.getVal("/config/urls/liveURL");
+	}
+	
+	public String CHAT_URL() {
+		return xConf.getVal("/config/urls/chatURL");
+	}
+	
+	public String SIGN_URL() {
+		return xConf.getVal("/config/urls/signURL");
+	}
+	
+	public String ASSN_URL() {
+		return xConf.getVal("/config/urls/assnURL");
+	}
+	
+	public String ACCOUNT_URL() {
+		return xConf.getVal("/config/urls/accountURL");
 	}
 	
 	public String STORM_CHECK_URL() {
-		return xConf.getVal("/config/biliUrls/stormCheck");
+		return xConf.getVal("/config/urls/stormCheckURL");
 	}
 	
 	public String STORM_JOIN_URL() {
-		return xConf.getVal("/config/biliUrls/stormJoin");
+		return xConf.getVal("/config/urls/stormJoinURL");
 	}
 	
 	public String EG_CHECK_URL() {
-		return xConf.getVal("/config/biliUrls/egCheck");
+		return xConf.getVal("/config/urls/egCheckURL");
 	}
 	
 	public String EG_JOIN_URL() {
-		return xConf.getVal("/config/biliUrls/egJoin");
+		return xConf.getVal("/config/urls/egJoinURL");
 	}
 	
 	public String TV_JOIN_URL() {
-		return xConf.getVal("/config/biliUrls/tvJoin");
+		return xConf.getVal("/config/urls/tvJoinURL");
 	}
 	
-	public String CHECK_TASK_URL() {
-		return xConf.getVal("/config/biliUrls/checkTask");
+	public String MATH_CHECK_URL() {
+		return xConf.getVal("/config/urls/mathCheckURL");
 	}
 	
-	public String VERCODE_URL() {
-		return xConf.getVal("/config/biliUrls/vercode");
+	public String MATH_CODE_URL() {
+		return xConf.getVal("/config/urls/mathCodeURL");
 	}
 	
-	public String DO_TASK_URL() {
-		return xConf.getVal("/config/biliUrls/doTask");
+	public String MATH_EXEC_URL() {
+		return xConf.getVal("/config/urls/mathExecURL");
 	}
 	
 	public String GET_REDBAG_URL() {
-		return xConf.getVal("/config/biliUrls/getRedbag");
+		return xConf.getVal("/config/urls/getRedbag");
 	}
 	
 	public String EX_REDBAG_URL() {
-		return xConf.getVal("/config/biliUrls/exRedbag");
+		return xConf.getVal("/config/urls/exRedbag");
 	}
 	
 	public String COOKIE_DIR() {

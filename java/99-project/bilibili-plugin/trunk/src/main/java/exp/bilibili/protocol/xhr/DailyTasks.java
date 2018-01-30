@@ -37,13 +37,13 @@ public class DailyTasks extends __Protocol {
 	private final static String ASSN_URL = Config.getInstn().ASSN_URL();
 	
 	/** 检查小学数学任务URL */
-	private final static String CHECK_TASK_URL = Config.getInstn().CHECK_TASK_URL();
+	private final static String MATH_CHECK_URL = Config.getInstn().MATH_CHECK_URL();
 	
 	/** 执行小学数学任务URL */
-	private final static String DO_TASK_URL = Config.getInstn().DO_TASK_URL();
+	private final static String MATH_EXEC_URL = Config.getInstn().MATH_EXEC_URL();
 	
 	/** 小学数学验证码URL */
-	private final static String VERCODE_URL = Config.getInstn().VERCODE_URL();
+	private final static String MATH_CODE_URL = Config.getInstn().MATH_CODE_URL();
 	
 	/** 小学数学验证码下载路径 */
 	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.jpg");
@@ -72,9 +72,9 @@ public class DailyTasks extends __Protocol {
 	 */
 	private static Map<String, String> getHeader(String cookie) {
 		Map<String, String> header = POST_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/center/index"));
+		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOME);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
 		return header;
 	}
 	
@@ -207,7 +207,7 @@ public class DailyTasks extends __Protocol {
 	 */
 	private static MathTask checkTask(Map<String, String> header) {
 		MathTask task = MathTask.NULL;
-		String response = HttpURLUtils.doGet(CHECK_TASK_URL, header, null);
+		String response = HttpURLUtils.doGet(MATH_CHECK_URL, header, null);
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
@@ -229,7 +229,7 @@ public class DailyTasks extends __Protocol {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("ts", String.valueOf(System.currentTimeMillis()));
 		
-		boolean isOk = HttpURLUtils.downloadByGet(VERCODE_PATH, VERCODE_URL, header, request);
+		boolean isOk = HttpURLUtils.downloadByGet(VERCODE_PATH, MATH_CODE_URL, header, request);
 		int answer = (isOk ? VercodeUtils.calculateImage(VERCODE_PATH) : 0);
 		return answer;
 	}
@@ -252,7 +252,7 @@ public class DailyTasks extends __Protocol {
 		request.put("time_start", String.valueOf(task.getBgnTime()));
 		request.put("end_time", String.valueOf(task.getEndTime()));
 		request.put("captcha", String.valueOf(answer));
-		String response = HttpURLUtils.doGet(DO_TASK_URL, header, request);
+		String response = HttpURLUtils.doGet(MATH_EXEC_URL, header, request);
 		
 		boolean isRedone = false;
 		try {

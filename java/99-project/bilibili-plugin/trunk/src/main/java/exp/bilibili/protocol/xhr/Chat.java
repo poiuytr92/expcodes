@@ -30,7 +30,7 @@ public class Chat extends __Protocol {
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
 	
 	/** 私信主机 */
-	private final static String MSG_HOST = Config.getInstn().MSG_HOST();
+	private final static String MSG_HOME = Config.getInstn().MSG_HOME();
 	
 	/** 私信URL */
 	private final static String MSG_URL = Config.getInstn().MSG_URL();
@@ -96,8 +96,8 @@ public class Chat extends __Protocol {
 	private static Map<String, String> getHeader(String cookie) {
 		Map<String, String> header = POST_HEADER(cookie);
 		header.put(HttpUtils.HEAD.KEY.HOST, LINK_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, MSG_HOST);
-		header.put(HttpUtils.HEAD.KEY.REFERER, MSG_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, MSG_HOME);
+		header.put(HttpUtils.HEAD.KEY.REFERER, MSG_HOME);
 		return header;
 	}
 	

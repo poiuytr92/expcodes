@@ -25,16 +25,16 @@ class __Protocol {
 	protected final static Logger log = LoggerFactory.getLogger(__Protocol.class);
 	
 	/** SSL服务器主机 */
-	protected final static String SSL_HOST = Config.getInstn().SSL_HOST();
+	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
 	
 	/** 直播间URL */
-	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
+	private final static String LIVE_HOME = Config.getInstn().LIVE_HOME();
 	
 	/** Link中心服务器主机 */
 	protected final static String LINK_HOST = Config.getInstn().LINK_HOST();
 	
 	/** Link中心URL */
-	protected final static String LINK_URL = Config.getInstn().LINK_URL();
+	protected final static String LINK_HOME = Config.getInstn().LINK_HOME();
 	
 	/** 私有化构造函数 */
 	protected __Protocol() {}
@@ -63,9 +63,9 @@ class __Protocol {
 	 */
 	protected final static Map<String, String> GET_HEADER(String cookie, String uri) {
 		Map<String, String> header = GET_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(uri));
+		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_HOME);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_HOME.concat(uri));
 		return header;
 	}
 	
@@ -95,9 +95,9 @@ class __Protocol {
 	 */
 	protected final static Map<String, String> POST_HEADER(String cookie, String uri) {
 		Map<String, String> header = POST_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(uri));
+		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_HOME);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_HOME.concat(uri));
 		return header;
 	}
 	

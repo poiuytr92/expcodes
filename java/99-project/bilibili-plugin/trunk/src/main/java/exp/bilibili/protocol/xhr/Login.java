@@ -34,13 +34,13 @@ import exp.libs.warp.net.http.HttpUtils;
 public class Login extends __Protocol {
 
 	/** B站首页 */
-	private final static String HOME_URL = Config.getInstn().HOME_URL();
+	private final static String MAIN_HOME = Config.getInstn().MAIN_HOME();
 	
 	/** 登陆服务器 */
 	private final static String LOGIN_HOST = Config.getInstn().LOGIN_HOST();
 	
 	/** 登陆URL */
-	private final static String LOGIN_URL = Config.getInstn().LOGIN_URL();
+	private final static String QRLOGIN_URL = Config.getInstn().QRLOGIN_URL();
 	
 	/** RSA公钥URL */
 	private final static String RSA_KEY_URL = Config.getInstn().RSA_URL();
@@ -55,13 +55,13 @@ public class Login extends __Protocol {
 	private final static String JSESSIONID = "JSESSIONID";
 	
 	/** 使用帐密+验证码登陆的URL */
-	private final static String VC_LOGIN_URL = Config.getInstn().VC_LOGIN_URL();
+	private final static String VCLOGIN_URL = Config.getInstn().VCLOGIN_URL();
 	
 	/** 获取二维码图片信息的URL */
 	private final static String QRCODE_URL = Config.getInstn().QRCODE_URL();
 	
 	/** 检测二维码是否被扫码登陆的URL */
-	private final static String QR_LOGIN_URL = Config.getInstn().QR_LOGIN_URL();
+	private final static String QRCHECK_URL = Config.getInstn().QRCHECK_URL();
 	
 	/** 查询账号信息URL */
 	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
@@ -117,7 +117,7 @@ public class Login extends __Protocol {
 		
 		Map<String, String> header = getHeader();
 		Map<String, String> request = getRequest(oauthKey);
-		String response = client.doPost(QR_LOGIN_URL, header, request);
+		String response = client.doPost(QRCHECK_URL, header, request);
 		// {"status":true,"ts":1516932980,"data":{"url":"https://passport.biligame.com/crossDomain?DedeUserID=1650868&DedeUserID__ckMd5=686caa22740f2663&Expires=84600&SESSDATA=e6e4328c%2C1517017580%2Cc9bf14ac&bili_jct=2be210c9dbaa157359be2ca2d9e50188&gourl=http%3A%2F%2Fwww.bilibili.com"}}
 
 		try {
@@ -144,8 +144,8 @@ public class Login extends __Protocol {
 	private static Map<String, String> getHeader() {
 		Map<String, String> header = POST_HEADER("");
 		header.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LOGIN_URL);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LOGIN_URL);
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, QRLOGIN_URL);
+		header.put(HttpUtils.HEAD.KEY.REFERER, QRLOGIN_URL);
 		return header;
 	}
 	
@@ -159,7 +159,7 @@ public class Login extends __Protocol {
 	private static Map<String, String> getRequest(String oauthKey) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("oauthKey", oauthKey);
-		request.put("gourl", HOME_URL);
+		request.put("gourl", MAIN_HOME);
 		return request;
 	}
 	
@@ -236,7 +236,7 @@ public class Login extends __Protocol {
 			// 把验证码、验证码配套的cookie、账号、RSA加密后的密码 提交到登陆服务器
 			Map<String, String> headers = getHeader(vcCookies, LOGIN_HOST);
 			Map<String, String> request = getRequest(username, password, vccode);
-			sJson = client.doPost(VC_LOGIN_URL, headers, request);
+			sJson = client.doPost(VCLOGIN_URL, headers, request);
 			
 			// 若登陆成功，则提取返回的登陆cookie, 以便下次使用
 			json = JSONObject.fromObject(sJson);
@@ -262,8 +262,8 @@ public class Login extends __Protocol {
 	private static Map<String, String> getHeader(String cookie, String host) {
 		Map<String, String> header = POST_HEADER(cookie);
 		header.put(HttpUtils.HEAD.KEY.HOST, host);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_URL);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_URL.concat("/p/center/index"));
+		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOME);
+		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
 		return header;
 	}
 	
@@ -283,7 +283,7 @@ public class Login extends __Protocol {
 		request.put("user", username);	// 账号（明文）
 		request.put("pwd", password);	// 密码（RSA公钥加密密文）
 		request.put("keep", "true");
-		request.put("gourl", HOME_URL);	// 登录后的跳转页面
+		request.put("gourl", MAIN_HOME);	// 登录后的跳转页面
 		return request;
 	}
 	
@@ -294,7 +294,7 @@ public class Login extends __Protocol {
 	 * @return username
 	 */
 	public static boolean queryUserInfo(HttpCookie cookie) {
-		Map<String, String> headers = getHeader(cookie.toNVCookie(), SSL_HOST);
+		Map<String, String> headers = getHeader(cookie.toNVCookie(), LIVE_HOST);
 		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null);
 		try {
 			JSONObject json = JSONObject.fromObject(response);

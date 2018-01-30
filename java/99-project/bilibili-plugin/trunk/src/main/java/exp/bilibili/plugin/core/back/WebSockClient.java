@@ -27,7 +27,7 @@ public class WebSockClient extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockClient.class);
 	
-	private final static String WS_URL = Config.getInstn().WS_URL();
+	private final static String WEBSOCKET = Config.getInstn().WEBSOCKET();
 	
 	private final static Draft DRAFT = new Draft_6455();
 	
@@ -92,16 +92,16 @@ public class WebSockClient extends LoopThread {
 		
 		boolean isOk = false;
 		try {
-			this.session = new WebSockSession(new URI(WS_URL), DRAFT);
+			this.session = new WebSockSession(new URI(WEBSOCKET), DRAFT);
 			if(session.conn()) {
 				session.send(Frame.C2S_CONN(roomId));	// B站的websocket连接成功后需要马上发送连接请求
 				isOk = true;
 				
-				log.info("连接/重连到直播间 [{}] 的websocket成功: [{}]", roomId, WS_URL);
+				log.info("连接/重连到直播间 [{}] 的websocket成功: [{}]", roomId, WEBSOCKET);
 				UIUtils.log("正在尝试入侵直播间 [", roomId, "] 后台...");
 			}
 		} catch (Exception e) {
-			log.error("连接到直播间 [{}] 的websocket失败: [{}]", roomId, WS_URL, e);
+			log.error("连接到直播间 [{}] 的websocket失败: [{}]", roomId, WEBSOCKET, e);
 		}
 		return isOk;
 	}
