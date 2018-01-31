@@ -312,7 +312,7 @@
 						
 						<!-- 保持[Bean类]不变（若框架对 Bean中的内容做了反射处理，则必须保持不变） -->
 						<!-- 按实际项目修正 -->
-						<option>-keep class exp.bilibili.plugin.bean.ldm.TActivity { *;}</option>
+						<option>-keep class exp.bilibili.plugin.bean.pdm.TActivity { *;}</option>
 						
 						<!-- 保持[所有入口方法]不变 -->
 						<!-- 固定不变 -->
@@ -386,7 +386,7 @@
 								<copy todir="${release.dir}/data">
 									<fileset dir="data">
 									  <exclude name="cookies/*" />
-									  <exclude name=".BP" />
+									  <exclude name="active/*" />
 									  <exclude name="img/qrcode.png" />
 									  <exclude name="img/vccode.jpg" />
 									  <exclude name="img/vercode.jpg" />

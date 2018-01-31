@@ -101,6 +101,9 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				if(id > 0) {
 					roomId = id;
 					SwingUtils.warn("修改成功");
+					if(autoFeed == true) {
+						UIUtils.log("[自动投喂] 房间号变更为: ", roomId);
+					}
 					
 				} else {
 					SwingUtils.warn("无效的房间号");
