@@ -3,7 +3,7 @@ package exp.bilibili.plugin.ui.login;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.protocol.XHRSender;
 import exp.libs.utils.img.QRCodeUtils;
 import exp.libs.utils.other.StrUtils;
@@ -46,13 +46,13 @@ class QRLogin extends LoopThread {
 	
 	private boolean isLogined;
 	
-	private LoginType type;
+	private CookieType type;
 	
 	private HttpCookie cookie;
 	
 	private QRLoginUI qrUI;
 	
-	protected QRLogin(QRLoginUI qrUI, LoginType type) {
+	protected QRLogin(QRLoginUI qrUI, CookieType type) {
 		super("二维码登陆器");
 		this.loopCnt = LOOP_LIMIT;
 		this.oauthKey = "";

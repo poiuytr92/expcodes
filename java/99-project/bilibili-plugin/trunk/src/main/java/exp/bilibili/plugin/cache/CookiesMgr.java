@@ -11,7 +11,7 @@ import java.util.Set;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.envm.Level;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.protocol.XHRSender;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -19,6 +19,16 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 账号cookie管理器
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class CookiesMgr {
 
 	/** cookie保存目录 */
@@ -82,18 +92,18 @@ public class CookiesMgr {
 		return instance;
 	}
 	
-	public boolean add(HttpCookie cookie, LoginType type) {
+	public boolean add(HttpCookie cookie, CookieType type) {
 		boolean isOk = false;
 		if(cookie == null || cookie == HttpCookie.NULL) {
 			return isOk;
 		}
 		
 		cookie.setType(type);
-		if(LoginType.MAIN == type) {
+		if(CookieType.MAIN == type) {
 			this.mainCookie = cookie;
 			isOk = save(cookie, COOKIE_MAIN_PATH);
 			
-		} else if(LoginType.VEST == type) {
+		} else if(CookieType.VEST == type) {
 			this.vestCookie = cookie;
 			isOk = save(cookie, COOKIE_VEST_PATH);
 			
@@ -113,7 +123,7 @@ public class CookiesMgr {
 	}
 	
 	private boolean save(HttpCookie cookie, String cookiePath) {
-		if(cookie.TYPE() == LoginType.MINI) {
+		if(cookie.TYPE() == CookieType.MINI) {
 			miniPaths.put(cookie, cookiePath);
 		}
 		
@@ -125,13 +135,13 @@ public class CookiesMgr {
 		return isOk;
 	}
 	
-	public boolean load(LoginType type) {
+	public boolean load(CookieType type) {
 		boolean isOk = false;
-		if(LoginType.MAIN == type) {
+		if(CookieType.MAIN == type) {
 			mainCookie = load(COOKIE_MAIN_PATH, type);
 			isOk = (mainCookie != HttpCookie.NULL);
 			
-		} else if(LoginType.VEST == type) {
+		} else if(CookieType.VEST == type) {
 			vestCookie = load(COOKIE_VEST_PATH, type);
 			isOk = (vestCookie != HttpCookie.NULL);
 			
@@ -152,7 +162,7 @@ public class CookiesMgr {
 		return isOk;
 	}
 	
-	private HttpCookie load(String cookiePath, LoginType type) {
+	private HttpCookie load(String cookiePath, CookieType type) {
 		HttpCookie cookie = HttpCookie.NULL;
 		if(FileUtils.exists(cookiePath)) {
 			String data = CryptoUtils.deDES(FileUtils.read(cookiePath, Charset.ISO));
@@ -160,8 +170,8 @@ public class CookiesMgr {
 				cookie = new HttpCookie(data);
 				cookie.setType(type);
 				
-				if(checkLogined(cookie) && !miniPaths.containsKey(cookie)) {
-					if(cookie.TYPE() == LoginType.MINI) {
+				if(checkLogined(cookie) == true) {
+					if(cookie.TYPE() == CookieType.MINI && !miniPaths.containsKey(cookie)) {
 						miniPaths.put(cookie, cookiePath);
 					}
 					lastAddCookieTime = System.currentTimeMillis();
@@ -182,11 +192,11 @@ public class CookiesMgr {
 		}
 		
 		String cookiePath = "";
-		if(LoginType.MAIN == cookie.TYPE()) {
+		if(CookieType.MAIN == cookie.TYPE()) {
 			this.mainCookie = HttpCookie.NULL;
 			cookiePath = COOKIE_MAIN_PATH;
 			
-		} else if(LoginType.VEST == cookie.TYPE()) {
+		} else if(CookieType.VEST == cookie.TYPE()) {
 			this.vestCookie = HttpCookie.NULL;
 			cookiePath = COOKIE_VEST_PATH;
 			

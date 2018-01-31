@@ -10,17 +10,28 @@ import javax.swing.JButton;
 
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.ui.__LoginCallback;
 import exp.libs.warp.ui.SwingUtils;
 
+/**
+ * <PRE>
+ * 登陆按钮：
+ * 	封装了 二维码扫码登陆 和 帐密登陆 两种方式
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class LoginBtn {
 
 	private final static String LOGOUT_TIPS = "注销";
 	
 	private String loginTips;
 	
-	private LoginType type;
+	private CookieType type;
 	
 	private JButton btn;
 	
@@ -32,15 +43,15 @@ public class LoginBtn {
 	
 	private VCLoginUI vcLoginUI;
 	
-	public LoginBtn(LoginType type) {
+	public LoginBtn(CookieType type) {
 		this(type, "", null);
 	}
 	
-	public LoginBtn(LoginType type, String btnName) {
+	public LoginBtn(CookieType type, String btnName) {
 		this(type, btnName, null);
 	}
 	
-	public LoginBtn(LoginType type, String btnName, __LoginCallback callback) {
+	public LoginBtn(CookieType type, String btnName, __LoginCallback callback) {
 		this.type = type;
 		this.callback = callback;
 		this.cookie = HttpCookie.NULL;

@@ -9,10 +9,20 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.libs.warp.ui.SwingUtils;
 
+/**
+ * <PRE>
+ * 小号账号管理窗口的单行组件
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class __MiniUserLine extends JPanel {
 
 	private final static long serialVersionUID = -8472154443768267316L;
@@ -51,7 +61,7 @@ public class __MiniUserLine extends JPanel {
 		this.usernameTF = new JTextField(miniCookie.NICKNAME());
 		usernameTF.setEditable(false);
 		
-		this.loginBtn = new LoginBtn(LoginType.MINI, "登陆", new Callback());
+		this.loginBtn = new LoginBtn(CookieType.MINI, "登陆", new Callback());
 		if(loginBtn.markLogined(miniCookie)) {
 			autoFeed.doClick();
 		}

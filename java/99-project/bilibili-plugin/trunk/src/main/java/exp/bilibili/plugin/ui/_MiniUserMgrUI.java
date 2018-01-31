@@ -16,7 +16,7 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
@@ -25,6 +25,16 @@ import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.pnl.ADPanel;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
+/**
+ * <PRE>
+ * 小号账号管理窗口
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class _MiniUserMgrUI extends PopChildWindow {
 	
 	private static final long serialVersionUID = 4379374798564622516L;
@@ -133,7 +143,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		if(init == false) {
 			init = true;
 			int idx = 0;
-			CookiesMgr.INSTN().load(LoginType.MINI);
+			CookiesMgr.INSTN().load(CookieType.MINI);
 			Set<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
 			for(HttpCookie cookie : cookies) {
 				__MiniUserLine line = new __MiniUserLine(cookie);

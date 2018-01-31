@@ -3,9 +3,19 @@ package exp.bilibili.plugin.bean.ldm;
 import java.util.LinkedList;
 import java.util.List;
 
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 单个账号的cookie集
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class HttpCookie {
 	
 	public final static HttpCookie NULL = new HttpCookie();
@@ -19,7 +29,7 @@ public class HttpCookie {
 	private final static String UID_KEY = "DedeUserID";
 	
 	/** 登陆类型 */
-	private LoginType type;
+	private CookieType type;
 	
 	/** 自动投喂 */
 	private boolean autoFeed;
@@ -42,7 +52,7 @@ public class HttpCookie {
 	private boolean isChanged;
 	
 	public HttpCookie() {
-		this.type = LoginType.UNKNOW;
+		this.type = CookieType.UNKNOW;
 		this.autoFeed = false;
 		this.uid = "";
 		this.nickName = "";
@@ -109,7 +119,7 @@ public class HttpCookie {
 		return sb.toString();
 	}
 	
-	public LoginType TYPE() {
+	public CookieType TYPE() {
 		return type;
 	}
 	
@@ -125,7 +135,7 @@ public class HttpCookie {
 		return nickName;
 	}
 	
-	public void setType(LoginType type) {
+	public void setType(CookieType type) {
 		this.type = type;
 	}
 

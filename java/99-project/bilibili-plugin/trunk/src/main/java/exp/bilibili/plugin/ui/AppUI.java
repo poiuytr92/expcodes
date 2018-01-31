@@ -29,7 +29,7 @@ import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.cache.WebBot;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.Level;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.bilibili.plugin.utils.SafetyUtils;
@@ -408,12 +408,12 @@ public class AppUI extends MainWindow {
 				
 				// 自动登陆
 				if(CookiesMgr.INSTN().MAIN() != HttpCookie.NULL || 
-						CookiesMgr.INSTN().load(LoginType.MAIN)) {
+						CookiesMgr.INSTN().load(CookieType.MAIN)) {
 					markLogin(CookiesMgr.INSTN().MAIN().NICKNAME());
 				
 				// 手工登陆
 				} else {
-					LoginBtn btn = new LoginBtn(LoginType.MAIN, "", new __LoginCallback() {
+					LoginBtn btn = new LoginBtn(CookieType.MAIN, "", new __LoginCallback() {
 						
 						@Override
 						public void afterLogin(final HttpCookie cookie) {
@@ -547,7 +547,7 @@ public class AppUI extends MainWindow {
 	 * 登录节奏风暴马甲号(用于扫描全平台节奏风暴)
 	 */
 	private void _loginStormVest() {
-		CookiesMgr.INSTN().load(LoginType.VEST);
+		CookiesMgr.INSTN().load(CookieType.VEST);
 		HttpCookie vestCookie = CookiesMgr.INSTN().VEST();
 		
 		// 若现有马甲号不是主号，则使用现有马甲号
@@ -556,7 +556,7 @@ public class AppUI extends MainWindow {
 			
 		// 若不存在马甲号 或 现有马甲号是主号， 则询问
 		} else if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
-			LoginBtn btn = new LoginBtn(LoginType.VEST, "", new __LoginCallback() {
+			LoginBtn btn = new LoginBtn(CookieType.VEST, "", new __LoginCallback() {
 				
 				@Override
 				public void afterLogin(final HttpCookie cookie) {
@@ -573,7 +573,7 @@ public class AppUI extends MainWindow {
 			
 		// 使用主号作为马甲号
 		} else {
-			CookiesMgr.INSTN().add(CookiesMgr.INSTN().MAIN(), LoginType.VEST);
+			CookiesMgr.INSTN().add(CookiesMgr.INSTN().MAIN(), CookieType.VEST);
 			_startStormScanner();
 		}
 	}

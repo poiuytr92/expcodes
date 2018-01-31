@@ -14,6 +14,16 @@ import com.security.rsa.Base64;
 import exp.bilibili.plugin.Config;
 import exp.libs.utils.encode.CharsetUtils;
 
+/**
+ * <PRE>
+ * RSA密钥编解码工具
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class RSAUtils {
 
 	private final static Logger log = LoggerFactory.getLogger(RSAUtils.class);

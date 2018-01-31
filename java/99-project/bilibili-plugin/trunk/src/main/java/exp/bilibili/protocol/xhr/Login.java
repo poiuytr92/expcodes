@@ -11,7 +11,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.RSAUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
@@ -289,7 +289,7 @@ public class Login extends __XHR {
 	}
 	
 	public static void main(String[] args) {
-		CookiesMgr.INSTN().load(LoginType.VEST);
+		CookiesMgr.INSTN().load(CookieType.VEST);
 		queryUserInfo(CookiesMgr.INSTN().VEST());
 	}
 	

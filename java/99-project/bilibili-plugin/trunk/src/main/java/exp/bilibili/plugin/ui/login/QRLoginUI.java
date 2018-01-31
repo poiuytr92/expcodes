@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
-import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -18,7 +18,7 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
 /**
  * <PRE>
  * 二维码登陆窗口.
- *  暂时仅用于登陆主号
+ * 	可用于登陆主号、小号、马甲号
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -45,20 +45,20 @@ class QRLoginUI extends PopChildWindow {
 	
 	private JLabel tipLabel;
 	
-	private LoginType type;
+	private CookieType type;
 	
 	private QRLogin qrLogin;
 	
-	protected QRLoginUI(LoginType type) {
+	protected QRLoginUI(CookieType type) {
 		super("哔哩哔哩-APP扫码登陆", WIDTH, HEIGHT, false, type);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
 		if(args != null && args.length > 0) {
-			this.type = (LoginType) args[0];
+			this.type = (CookieType) args[0];
 		} else {
-			this.type = LoginType.UNKNOW;
+			this.type = CookieType.UNKNOW;
 		}
 		
 		this.imgLabel = new JLabel(new ImageIcon(TIPS_PATH));

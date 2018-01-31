@@ -5,6 +5,16 @@ import java.util.Date;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 单个cookie域值
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 final class _HttpCookie {
 
 	private final static String DOMAIN = "Domain";
