@@ -29,8 +29,7 @@ public class Version {
 		// TODO
 		// 模拟观看时长
 		// 系统托盘好卡
-		
-		// 日期校验2.2 但当前版本直接失效
+		// GITHUB HTTPS 的TLS协议为2.0 ?? 无法获取页面源码
 	}
 	
 }

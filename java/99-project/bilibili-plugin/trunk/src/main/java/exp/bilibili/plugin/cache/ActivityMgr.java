@@ -61,8 +61,8 @@ public class ActivityMgr {
 		DS.setName(ENV_DB_PATH);
 	}
 	
-	/** 总活跃值每10W可兑换软件使用期1天 */
-	public final static int DAY_UNIT = 100000;
+	/** 总活跃值每20W可兑换软件使用期1天 */
+	public final static int DAY_UNIT = 200000;
 	
 	/** 触发个人私信的活跃值单位(即每至少超过10W活跃值时发送一次私信) */
 	private final static int COST_UNIT = 100000;
