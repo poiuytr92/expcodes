@@ -1,6 +1,6 @@
 package exp.bilibili.protocol.xhr;
 
-import java.util.Iterator;
+import java.util.List;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
@@ -35,9 +35,8 @@ public class LotteryTV extends _Lottery {
 	 */
 	public static void toLottery(int roomId, String raffleId) {
 		int cnt = 0;
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
+		List<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
+		for(HttpCookie cookie : cookies) {
 			String reason = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功", cookie.NICKNAME(), roomId);

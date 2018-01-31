@@ -58,8 +58,12 @@ public class CookiesMgr {
 	/** 最近一次添加过cookie的时间点 */
 	private long lastAddCookieTime;
 	
+	/** 单例 */
 	private static volatile CookiesMgr instance;
 	
+	/**
+	 * 构造函数
+	 */
 	private CookiesMgr() {
 		this.mainCookie = HttpCookie.NULL;
 		this.vestCookie = HttpCookie.NULL;
@@ -194,7 +198,7 @@ public class CookiesMgr {
 		return vestCookie;
 	}
 	
-	public Iterator<HttpCookie> MINIs() {
+	public List<HttpCookie> MINIs() {
 		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
 		Iterator<HttpCookie> minis = miniCookies.iterator();
 		for(int i = 0; i < MAX_NUM; i++) {
@@ -202,27 +206,29 @@ public class CookiesMgr {
 				cookies.add(minis.next());
 			}
 		}
-		return cookies.iterator();
+		return cookies;
 	}
 	
-	public Iterator<HttpCookie> ALL() {
+	public List<HttpCookie> ALL() {
 		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
 		if(HttpCookie.NULL != mainCookie) { cookies.add(mainCookie); }
 		if(HttpCookie.NULL != vestCookie) { cookies.add(vestCookie); }
-		
-		Iterator<HttpCookie> minis = miniCookies.iterator();
-		for(int i = 0; i < MAX_NUM; i++) {
-			if(minis.hasNext()) {
-				cookies.add(minis.next());
-			}
-		}
-		return cookies.iterator();
+		cookies.addAll(MINIs());
+		return cookies;
 	}
 	
+	/**
+	 * 获取最近一次添加cookie的时间
+	 * @return
+	 */
 	public long getLastAddCookieTime() {
 		return lastAddCookieTime;
 	}
 	
+	/**
+	 * 持有cookie数
+	 * @return
+	 */
 	public int size() {
 		int size = 0;
 		size += (mainCookie != HttpCookie.NULL ? 1 : 0);
@@ -231,16 +237,28 @@ public class CookiesMgr {
 		return size;
 	}
 	
+	/**
+	 * 持有小号的cookie数
+	 * @return
+	 */
 	public int miniSize() {
 		return miniCookies.size();
 	}
 	
+	/**
+	 * 清除主号和马甲号的cookies
+	 * @return
+	 */
 	public static boolean clearMainAndVestCookies() {
 		boolean isOk = FileUtils.delete(COOKIE_MAIN_PATH);
 		isOk &= FileUtils.delete(COOKIE_VEST_PATH);
 		return isOk;
 	}
 	
+	/**
+	 * 清除所有cookies
+	 * @return
+	 */
 	public static boolean clearAllCookies() {
 		boolean isOk = FileUtils.delete(COOKIE_DIR);
 		isOk &= (FileUtils.createDir(COOKIE_DIR) != null);

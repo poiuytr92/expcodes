@@ -4,7 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Iterator;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -132,10 +132,8 @@ public class _MiniUserMgrUI extends PopChildWindow {
 			init = true;
 			int idx = 0;
 			CookiesMgr.INSTN().load(LoginType.MINI);
-			Iterator<HttpCookie> minis = CookiesMgr.INSTN().MINIs();
-			while(minis.hasNext()) {
-				HttpCookie cookie = minis.next();
-				
+			List<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
+			for(HttpCookie cookie : cookies) {
 				__MiniUserLine line = new __MiniUserLine(cookie);
 				adPanel.set(line, idx++);
 			}

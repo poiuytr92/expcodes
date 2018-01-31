@@ -1,7 +1,6 @@
 package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -203,9 +202,8 @@ public class LotteryStorm extends _Lottery {
 	 */
 	public static boolean toLottery(int roomId, String raffleId) {
 		int cnt = 0;
-		Iterator<HttpCookie> cookieIts = CookiesMgr.INSTN().ALL();
-		while(cookieIts.hasNext()) {
-			HttpCookie cookie = cookieIts.next();
+		List<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
+		for(HttpCookie cookie : cookies) {
 			String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功", cookie.NICKNAME(), roomId);
