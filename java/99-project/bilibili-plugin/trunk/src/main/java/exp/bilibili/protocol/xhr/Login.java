@@ -120,7 +120,6 @@ public class Login extends __XHR {
 		Map<String, String> header = getHeader();
 		Map<String, String> request = getRequest(oauthKey);
 		String response = client.doPost(QRCHECK_URL, header, request);
-		// {"status":true,"ts":1516932980,"data":{"url":"https://passport.biligame.com/crossDomain?DedeUserID=1650868&DedeUserID__ckMd5=686caa22740f2663&Expires=84600&SESSDATA=e6e4328c%2C1517017580%2Cc9bf14ac&bili_jct=2be210c9dbaa157359be2ca2d9e50188&gourl=http%3A%2F%2Fwww.bilibili.com"}}
 
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -295,7 +294,7 @@ public class Login extends __XHR {
 	}
 	
 	/**
-	 * 查询账号信息(写入cookie内)
+	 * 查询账号信息(并写入cookie内)
 	 * {"code":0,"msg":"\u83b7\u53d6\u6210\u529f","data":{"achieves":960,"userInfo":{"uid":1650868,"uname":"M-\u4e9a\u7d72\u5a1c","face":"https:\/\/i1.hdslb.com\/bfs\/face\/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":10000,"identification":1,"mobile_verify":1,"platform_user_level":4,"official_verify":{"type":-1,"desc":""}},"roomid":"269706","userCoinIfo":{"uid":1650868,"vip":1,"vip_time":"2018-12-12 21:56:04","svip":1,"svip_time":"2018-12-06 21:56:04","cost":63781395,"rcost":2481900,"user_score":440323260,"silver":"29902","gold":"72009","iap_gold":0,"score":24819,"master_level":{"level":10,"current":[6300,18060],"next":[9100,27160]},"user_current_score":504104655,"user_level":45,"user_next_level":46,"user_intimacy":4104655,"user_next_intimacy":50000000,"user_level_rank":4325,"bili_coins":0,"coins":475},"vipViewStatus":false,"discount":false,"svip_endtime":"2018-12-06","vip_endtime":"2018-12-12","year_price":233000,"month_price":20000,"action":"index","liveTime":0,"master":{"level":10,"current":6759,"next":9100,"medalInfo":{"id":"25072","uid":"1650868","medal_name":"\u795e\u624b","live_status":"1","master_status":"1","status":1,"reason":"0","last_rename_time":"0","time_able_change":0,"rename_status":1,"charge_num":50,"coin_num":20,"platform_status":"2"}},"san":12,"count":{"guard":2,"fansMedal":11,"title":24,"achieve":0}}}
 	 * @param cookie
 	 * @return username

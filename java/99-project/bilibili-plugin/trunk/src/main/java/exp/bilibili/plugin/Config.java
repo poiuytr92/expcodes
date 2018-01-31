@@ -149,6 +149,18 @@ public class Config {
 		return xConf.getVal("/config/urls/accountURL");
 	}
 	
+	public String ROOM_URL() {
+		return xConf.getVal("/config/urls/roomURL");
+	}
+	
+	public String BAG_URL() {
+		return xConf.getVal("/config/urls/bagURL");
+	}
+	
+	public String FEED_URL() {
+		return xConf.getVal("/config/urls/feedURL");
+	}
+	
 	public String STORM_CHECK_URL() {
 		return xConf.getVal("/config/urls/stormCheckURL");
 	}

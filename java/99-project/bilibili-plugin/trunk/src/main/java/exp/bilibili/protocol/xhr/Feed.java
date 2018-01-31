@@ -16,29 +16,36 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
-// FIXME
+/**
+ * <PRE>
+ * 投喂主播
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Feed extends __XHR {
 
-	private final static String UID_URL = "http://api.live.bilibili.com/room/v1/Room/room_init";
+	private final static String ROOM_URL = Config.getInstn().ROOM_URL();
 	
-	private final static String BAG_URL = "http://api.live.bilibili.com/gift/v2/gift/bag_list";
+	private final static String BAG_URL = Config.getInstn().BAG_URL();
 	
-	private final static String FEED_URL = "http://api.live.bilibili.com/gift/v2/live/bag_send";
+	private final static String FEED_URL = Config.getInstn().FEED_URL();
 	
-	/** SSL服务器主机 */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
 	
-	/** 查询账号信息URL */
 	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
 	
 	/**
-	 * 
-	 * @param cookie
-	 * @param roomId
+	 * 投喂主播
+	 * @param cookie 投喂用户cookie
+	 * @param roomId 房间号
 	 */
 	public static void toFeed(HttpCookie cookie, int roomId) {
 		String sRoomId = getRealRoomId(roomId);
-		String upUID = queryUpliveUID(sRoomId);
+		String upUID = queryUpUID(sRoomId);
 		
 		List<BagGift> bagGifts = queryBagList(cookie, sRoomId);
 		int silver = querySilver(cookie);
@@ -51,12 +58,15 @@ public class Feed extends __XHR {
 		feed(cookie, sRoomId, upUID, bagGifts);
 	}
 	
-	private static String queryUpliveUID(String roomId) {
+	/**
+	 * 查询直播间主播的用户ID
+	 * @param roomId
+	 * @return
+	 */
+	private static String queryUpUID(String roomId) {
 		Map<String, String> header = GET_HEADER("", roomId);
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("id", roomId);
-		String response = HttpURLUtils.doGet(UID_URL, header, request);
-		// {"code":0,"msg":"ok","message":"ok","data":{"room_id":51108,"short_id":0,"uid":13173681,"need_p2p":0,"is_hidden":false,"is_locked":false,"is_portrait":false,"live_status":0,"hidden_till":0,"lock_till":0,"encrypted":false,"pwd_verified":false}}
+		Map<String, String> request = _getRequest(roomId);
+		String response = HttpURLUtils.doGet(ROOM_URL, header, request);
 		
 		String uid = "";
 		try {
@@ -76,10 +86,21 @@ public class Feed extends __XHR {
 		return uid;
 	}
 	
+	private static Map<String, String> _getRequest(String roomId) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("id", roomId);
+		return request;
+	}
+	
+	/**
+	 * 获取包裹礼物列表
+	 * @param cookie
+	 * @param roomId
+	 * @return
+	 */
 	private static List<BagGift> queryBagList(HttpCookie cookie, String roomId) {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
 		String response = HttpURLUtils.doGet(BAG_URL, header, null);
-		// {"code":0,"msg":"success","message":"success","data":{"list":[{"bag_id":60043379,"gift_id":1,"gift_name":"辣条","gift_num":8,"gift_type":0,"expire_at":1519833600},{"bag_id":17041846,"gift_id":3,"gift_name":"B坷垃","gift_num":5,"gift_type":0,"expire_at":0}],"time":1517324236}}
 
 		List<BagGift> bagGifts = new LinkedList<BagGift>();
 		try {
@@ -102,10 +123,14 @@ public class Feed extends __XHR {
 		return bagGifts;
 	}
 	
+	/**
+	 * 查询账户银瓜子数量
+	 * @param cookie
+	 * @return
+	 */
 	private static int querySilver(HttpCookie cookie) {
-		Map<String, String> headers = getHeader(cookie.toNVCookie());
+		Map<String, String> headers = _getHeader(cookie.toNVCookie());
 		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null);
-		// {"code":0,"msg":"\u83b7\u53d6\u6210\u529f","data":{"achieves":0,"userInfo":{"uid":247058029,"uname":"qpfh1185","face":"https:\/\/static.hdslb.com\/images\/member\/noface.gif","rank":5000,"identification":0,"mobile_verify":0,"platform_user_level":0,"official_verify":{"type":-1,"desc":""}},"roomid":false,"userCoinIfo":{"uid":247058029,"vip":0,"vip_time":"0000-00-00 00:00:00","svip":0,"svip_time":"0000-00-00 00:00:00","cost":"8800","rcost":"0","user_score":"3000","silver":"0","gold":"0","iap_gold":0,"face":"https:\/\/static.hdslb.com\/images\/member\/noface.gif","uname":"qpfh1185","platform_user_level":0,"score":0,"master_level":{"level":1,"current":[0,0],"next":[50,50]},"user_current_score":11800,"user_level":0,"user_next_level":1,"user_intimacy":11800,"user_next_intimacy":100000,"user_level_rank":">50000","bili_coins":0,"coins":0},"vipViewStatus":true,"discount":false,"svip_endtime":0,"vip_endtime":0,"year_price":233000,"month_price":20000,"action":"index","liveTime":0,"master":{"level":1,"current":0,"next":50,"medalInfo":null},"san":12,"count":{"guard":false,"fansMedal":0,"title":0,"achieve":0}}}
 
 		int silver = 0;
 		try {
@@ -127,7 +152,7 @@ public class Feed extends __XHR {
 		return silver;
 	}
 	
-	private static Map<String, String> getHeader(String cookie) {
+	private static Map<String, String> _getHeader(String cookie) {
 		Map<String, String> header = POST_HEADER(cookie);
 		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
 		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOME);
@@ -135,27 +160,23 @@ public class Feed extends __XHR {
 		return header;
 	}
 	
-	private static boolean feed(HttpCookie cookie, String roomId, String upUID, List<BagGift> bagGifts) {
+	/**
+	 * 投喂主播
+	 * @param cookie
+	 * @param roomId
+	 * @param upUID
+	 * @param bagGifts
+	 * @return
+	 */
+	private static void feed(HttpCookie cookie, String roomId, String upUID, List<BagGift> bagGifts) {
 		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), roomId);
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("uid", cookie.UID());
-		request.put("ruid", upUID);
-		request.put("platform", "pc");
-		request.put("biz_code", "live");
-		request.put("biz_id", roomId);
-		request.put("rnd", String.valueOf(System.currentTimeMillis() / 1000));
-		request.put("storm_beat_id", "0");
-		request.put("metadata", "");
-		request.put("token", "");
-		request.put("csrf_token", cookie.CSRF());
-		request.put("coin_type", "silver");
+		Map<String, String> request = _getRequest(cookie, roomId, upUID);
 		
 		for(BagGift bagGift : bagGifts) {
 			request.put("bag_id", bagGift.getBagId());
 			request.put("gift_id", bagGift.getGiftId());
 			request.put("gift_num", String.valueOf(bagGift.getGiftNum()));
 			String response = HttpURLUtils.doPost(FEED_URL, header, request);
-			// {"code":0,"msg":"success","message":"success","data":{"tid":"247058029@15173267098104729866","uid":247058029,"uname":"qpfh1185","ruid":20872515,"rcost":3177637,"gift_id":1,"gift_type":0,"gift_name":"辣条","gift_num":78,"gift_action":"喂食","gift_price":100,"coin_type":"silver","total_coin":7800,"metadata":"","fulltext":null,"rnd":"1517326708","effect_block":1,"extra":{"gift_bag":{"bag_id":60502126,"gift_num":0},"top_list":[],"follow":null,"medal":null,"title":null,"event":{"event_score":0},"capsule":{"normal":{"coin":0,"change":0,"progress":{"now":8000,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":0,"max":5000}}}},"gift_effect":{"super":0,"broadcast_msg_list":[],"small_tv_list":[],"beat_storm":null}}}
 			
 			try {
 				JSONObject json = JSONObject.fromObject(response);
@@ -172,7 +193,23 @@ public class Feed extends __XHR {
 				log.error("[{}] 投喂直播间 [{}] 异常: {}", cookie.NICKNAME(), roomId, response, e);
 			}
 		}
-		return true;
+	}
+	
+	private static Map<String, String> _getRequest(
+			HttpCookie cookie, String roomId, String upUID) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("uid", cookie.UID());
+		request.put("ruid", upUID);
+		request.put("platform", "pc");
+		request.put("biz_code", "live");
+		request.put("biz_id", roomId);
+		request.put("rnd", String.valueOf(System.currentTimeMillis() / 1000));
+		request.put("storm_beat_id", "0");
+		request.put("metadata", "");
+		request.put("token", "");
+		request.put("csrf_token", cookie.CSRF());
+		request.put("coin_type", "silver");
+		return request;
 	}
 	
 }

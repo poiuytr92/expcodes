@@ -27,7 +27,7 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO
-		// 自动投喂(包括银瓜子)
+		// 模拟观看时长
 		// 日期校验2.2 但当前版本直接失效
 		
 		// 马甲号同时作为小号？？

@@ -28,14 +28,27 @@ import exp.bilibili.protocol.xhr.Redbag;
  */
 public class XHRSender {
 
+	/**
+	 * 获取管理员在B站link中心针对本插件的授权校验标签
+	 * @return
+	 */
 	public static String queryCertTags() {
 		return Other.queryCertificateTags();
 	}
 	
+	/**
+	 * 获取二维码登陆信息(用于在本地生成二维码图片)
+	 * @return
+	 */
 	public static String getQrcodeInfo() {
 		return Login.getQrcodeInfo();
 	}
 	
+	/**
+	 * 检测二维码是否扫码登陆成功
+	 * @param oauthKey 二维码登陆信息中提取的oauthKey
+	 * @return 若扫码登陆成功, 则返回有效Cookie
+	 */
 	public static HttpCookie toLogin(String oauthKey) {
 		return Login.toLogin(oauthKey);
 	}
@@ -49,34 +62,71 @@ public class XHRSender {
 		return Login.downloadVccode(imgPath);
 	}
 	
+	/**
+	 * 通过帐密+验证码方式登陆
+	 * @param username 账号
+	 * @param password 密码
+	 * @param vccode 验证码
+	 * @param vcCookies 与验证码配套的登陆用cookie
+	 * @return 
+	 */
 	public static HttpCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
 		return Login.toLogin(username, password, vccode, vcCookies);
 	}
 	
+	/**
+	 * 查询账号信息(并写入cookie内)
+	 * @param cookie
+	 * @return username
+	 */
 	public static boolean queryUserInfo(HttpCookie cookie) {
 		return Login.queryUserInfo(cookie);
 	}
 
-	public static long toAssn(HttpCookie cookie) {
-		return DailyTasks.toAssn(cookie);
-	}
-	
+	/**
+	 * 每日签到
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
+	 */
 	public static long toSign(HttpCookie cookie) {
 		return DailyTasks.toSign(cookie);
 	}
 	
+	/**
+	 * 友爱社签到
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
+	 */
+	public static long toAssn(HttpCookie cookie) {
+		return DailyTasks.toAssn(cookie);
+	}
+	
+	/**
+	 * 执行小学数学日常任务
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
+	 */
 	public static long doMathTask(HttpCookie cookie) {
 		return DailyTasks.doMathTask(cookie);
 	}
 	
-	public static List<Integer> queryTopLiveRoomIds(
-			final int MAX_PAGES, final int MIN_ONLINE) {
-		return LotteryStorm.queryHotLiveRoomIds(MAX_PAGES, MIN_ONLINE);
+	/**
+	 * 扫描当前的人气直播间房号列表
+	 * @param cookie 扫描用的cookie
+	 * @return
+	 */
+	public static List<Integer> queryTopLiveRoomIds() {
+		HttpCookie cookie = CookiesMgr.INSTN().VEST();
+		return LotteryStorm.queryHotLiveRoomIds(cookie);
 	}
 	
-	public static void scanAndJoinStorms(List<Integer> roomIds) {
-		LotteryStorm.toLottery(roomIds);
+	/**
+	 * 扫描并加入节奏风暴
+	 * @param hotRoomIds 热门房间列表
+	 */
+	public static void scanAndJoinStorms(List<Integer> hotRoomIds) {
+		LotteryStorm.toLottery(hotRoomIds);
 	}
 	
 	/**
@@ -88,18 +138,83 @@ public class XHRSender {
 		LotteryStorm.toLottery(roomId, raffleId);
 	}
 	
+	/**
+	 * 小电视抽奖
+	 * @param roomId
+	 * @param raffleId
+	 * @return
+	 */
 	public static void toTvLottery(int roomId, String raffleId) {
 		LotteryTV.toLottery(roomId, raffleId);
 	}
 	
+	/**
+	 * 高能礼物抽奖
+	 * @param roomId
+	 * @return
+	 */
 	public static void toEgLottery(int roomId) {
 		LotteryEnergy.toLottery(roomId);
 	}
 	
+	/**
+	 * 投喂主播
+	 * @param cookie 投喂用户cookie
+	 * @param roomId 房间号
+	 */
 	public static void toFeed(HttpCookie cookie, int roomId) {
 		Feed.toFeed(cookie, roomId);
 	}
 	
+	/**
+	 * 发送弹幕消息到当前监听的直播间
+	 * @param msg 弹幕消息
+	 * @return
+	 */
+	public static boolean sendDanmu(String msg) {
+		ChatColor color = ChatColor.RANDOM();
+		return sendDanmu(msg, color);
+	}
+	
+	/**
+	 * 发送弹幕消息到当前监听的直播间
+	 * @param msg 弹幕消息
+	 * @param color 弹幕颜色
+	 * @return
+	 */
+	public static boolean sendDanmu(String msg, ChatColor color) {
+		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
+		int roomId = UIUtils.getLiveRoomId();
+		return Chat.sendDanmu(cookie, roomId, msg, color);
+	}
+	
+	/**
+	 * 发送弹幕消息
+	 * @param msg 弹幕消息
+	 * @param roomId 接收弹幕的直播间
+	 * @return
+	 */
+	public static boolean sendDanmu(String msg, int roomId) {
+		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
+		ChatColor color = ChatColor.RANDOM();
+		return Chat.sendDanmu(cookie, roomId, msg, color);
+	}
+	
+	/**
+	 * 发送私信
+	 * @param recvId 接收账号的用户ID
+	 * @param msg 私信消息
+	 * @return
+	 */
+	public static boolean sendPM(String recvId, String msg) {
+		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
+		return Chat.sendPM(cookie, recvId, msg);
+	}
+	
+	/**
+	 * 2018春节活动：查询当前红包奖池
+	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月）","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权（1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权（1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯笼","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换池","stock_num":99999,"exchange_limit":0,"price":6666}}}
+	 */
 	public static String queryRedbagPool() {
 		HttpCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号
 		return Redbag.queryRedbagPool(cookie);
@@ -118,32 +233,4 @@ public class XHRSender {
 		return Redbag.exchangeRedbag(cookie, id, num);
 	}
 	
-	public static boolean sendDanmu(String msg) {
-		ChatColor color = ChatColor.RANDOM();
-		return sendDanmu(msg, color);
-	}
-	
-	public static boolean sendDanmu(String msg, int roomId) {
-		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
-		ChatColor color = ChatColor.RANDOM();
-		return Chat.sendDanmu(cookie, roomId, msg, color);
-	}
-	
-	public static boolean sendDanmu(String msg, ChatColor color) {
-		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
-		int roomId = UIUtils.getLiveRoomId();
-		return Chat.sendDanmu(cookie, roomId, msg, color);
-	}
-	
-	/**
-	 * 发送私信
-	 * @param sendId 发送账号的用户ID
-	 * @param recvId 接收账号的用户ID
-	 * @param msg 发送消息
-	 * @return
-	 */
-	public static boolean sendPM(String recvId, String msg) {
-		HttpCookie cookie = CookiesMgr.INSTN().MAIN();
-		return Chat.sendPM(cookie, recvId, msg);
-	}
 }

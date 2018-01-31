@@ -33,6 +33,12 @@ import exp.libs.warp.net.http.HttpClient;
  */
 public class LotteryStorm extends _Lottery {
 
+	/** 最大的查询分页(每页最多30个房间): 每页30个房间 */
+	private final static int MAX_PAGES = 2;
+	
+	/** 最少在线人数达标的房间才扫描 */
+	private final static int MIN_ONLINE = 3000;
+	
 	/** 扫描每个房间的间隔(风险行为， 频率需要控制，太快可能被查出来，太慢成功率太低) */
 	private final static long SCAN_INTERVAL = 50;
 	
@@ -52,12 +58,10 @@ public class LotteryStorm extends _Lottery {
 	/**
 	 * 扫描当前的人气直播间房号列表
 	 * @param cookie 扫描用的cookie
-	 * @param MAX_PAGES 最大的查询分页(每页最多30个房间)
-	 * @param MIN_ONLINE 要求房间最小人数(达标才扫描)
 	 * @return
 	 */
-	public static List<Integer> queryHotLiveRoomIds(final int MAX_PAGES, final int MIN_ONLINE) {
-		Map<String, String> header = GET_HEADER(CookiesMgr.INSTN().VEST().toNVCookie(), "all");
+	public static List<Integer> queryHotLiveRoomIds(HttpCookie cookie) {
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "all");
 		Map<String, String> request = getRequest();
 		
 		List<Integer> roomIds = new LinkedList<Integer>();
@@ -114,11 +118,12 @@ public class LotteryStorm extends _Lottery {
 	
 	/**
 	 * 扫描并加入节奏风暴
+	 * @param hotRoomIds 热门房间列表
 	 */
-	public static void toLottery(List<Integer> roomIds) {
+	public static void toLottery(List<Integer> hotRoomIds) {
 		HttpClient client = new HttpClient();
 		Map<String, String> requests = new HashMap<String, String>();
-		for(Integer roomId : roomIds) {
+		for(Integer roomId : hotRoomIds) {
 			String sRoomId = String.valueOf(roomId);
 			requests.put("roomid", sRoomId);
 			Map<String, String> headers = GET_HEADER(

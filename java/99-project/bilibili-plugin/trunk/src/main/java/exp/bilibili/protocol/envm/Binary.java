@@ -62,23 +62,23 @@ public class Binary {
 	
 	/**
 	 * 
-	14:15:04:9179 WSSession199.WebSocket'WebSocket #199'
-	MessageID:	Client.924
-	MessageType:	Binary
-	PayloadString:	00-00-00-1F-00-10-00-01-00-00-00-02-00-00-00-01-5B-6F-62-6A-65-63-74-20-4F-62-6A-65-63-74-5D
-	Masking:	27-72-F5-28
-
-	14:15:04:9529 WSSession199.WebSocket'WebSocket #199'
-	MessageID:	Server.925
-	MessageType:	Binary
-	PayloadString:	00-00-00-14-00-10-00-01-00-00-00-03-00-00-00-01-00-00-00-0B
-	Masking:	<none>
-
-	14:47:20:8430 WSSession54.WebSocket'WebSocket #54'
-	MessageID:	Client.7
-	MessageType:	Close
-	PayloadString:	03-E9
-	Masking:	AD-73-35-23
+		14:15:04:9179 WSSession199.WebSocket'WebSocket #199'
+		MessageID:	Client.924
+		MessageType:	Binary
+		PayloadString:	00-00-00-1F-00-10-00-01-00-00-00-02-00-00-00-01-5B-6F-62-6A-65-63-74-20-4F-62-6A-65-63-74-5D
+		Masking:	27-72-F5-28
+	
+		14:15:04:9529 WSSession199.WebSocket'WebSocket #199'
+		MessageID:	Server.925
+		MessageType:	Binary
+		PayloadString:	00-00-00-14-00-10-00-01-00-00-00-03-00-00-00-01-00-00-00-0B
+		Masking:	<none>
+	
+		14:47:20:8430 WSSession54.WebSocket'WebSocket #54'
+		MessageID:	Client.7
+		MessageType:	Close
+		PayloadString:	03-E9
+		Masking:	AD-73-35-23
 
 	 */
 	

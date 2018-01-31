@@ -27,12 +27,6 @@ public class StormScanner extends LoopThread {
 	/** 试探轮询行为的间隔 */
 	private final static long SLEEP_TIME = 2000;
 	
-	/** 最大的查询分页(每页最多30个房间): 每页30个房间 */
-	private final static int MAX_PAGES = 2;
-	
-	/** 最少在线人数达标的房间才扫描 */
-	private final static int MIN_ONLINE = 3000;
-	
 	/** 每轮询N次所有房间，则刷新房间列表 */
 	private final static int LOOP_LIMIT = 10;
 	
@@ -106,7 +100,7 @@ public class StormScanner extends LoopThread {
 	 * @return
 	 */
 	public boolean reflashHotLives() {
-		List<Integer> roomIds = XHRSender.queryTopLiveRoomIds(MAX_PAGES, MIN_ONLINE);
+		List<Integer> roomIds = XHRSender.queryTopLiveRoomIds();
 		if(ListUtils.isNotEmpty(roomIds)) {
 			hotRoomIds.clear();
 			hotRoomIds.addAll(roomIds);

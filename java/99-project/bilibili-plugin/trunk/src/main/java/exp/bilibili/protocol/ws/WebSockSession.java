@@ -17,8 +17,6 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.WSAnalyser;
 import exp.bilibili.protocol.bean.other.Frame;
-import exp.bilibili.protocol.envm.BiliCmd;
-import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.bilibili.protocol.envm.Binary;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
@@ -144,10 +142,7 @@ class WebSockSession extends WebSocketClient {
 			
 			if(JsonUtils.isVaild(sJson)) {
 				JSONObject json = JSONObject.fromObject(sJson);
-				String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
-				BiliCmd biliCmd = BiliCmd.toCmd(cmd);
-				
-				if(!WSAnalyser.toMsgBean(biliCmd, json)) {
+				if(!WSAnalyser.toMsgBean(json)) {
 					log.info("无效的推送消息: {}", hex);
 				}
 			} else {

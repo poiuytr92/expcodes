@@ -52,8 +52,11 @@ public class WSAnalyser {
 	
 	protected WSAnalyser() {}
 	
-	public static boolean toMsgBean(BiliCmd biliCmd, JSONObject json) {
+	public static boolean toMsgBean(JSONObject json) {
 		boolean isOk = true;
+		String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
+		BiliCmd biliCmd = BiliCmd.toCmd(cmd);
+		
 		if(biliCmd == BiliCmd.DANMU_MSG) {
 			toDo(new ChatMsg(json));
 			
