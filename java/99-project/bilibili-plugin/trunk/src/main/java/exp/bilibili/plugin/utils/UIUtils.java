@@ -99,6 +99,10 @@ public class UIUtils {
 		return AppUI.getInstn().getFeedRoomId();
 	}
 	
+	public static boolean isAutoFeed() {
+		return AppUI.getInstn().isAutoFeed();
+	}
+	
 	public static ChatColor getCurChatColor() {
 		return AppUI.getInstn().getCurChatColor();
 	}

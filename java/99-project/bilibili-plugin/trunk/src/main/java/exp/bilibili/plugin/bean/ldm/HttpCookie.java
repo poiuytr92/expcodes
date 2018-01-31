@@ -18,7 +18,11 @@ public class HttpCookie {
 	/** B站用户ID标识 */
 	private final static String UID_KEY = "DedeUserID";
 	
+	/** 登陆类型 */
 	private LoginType type;
+	
+	/** 自动投喂 */
+	private boolean autoFeed;
 	
 	/** 该cookie对应的用户ID */
 	private String uid;
@@ -39,6 +43,7 @@ public class HttpCookie {
 	
 	public HttpCookie() {
 		this.type = LoginType.UNKNOW;
+		this.autoFeed = false;
 		this.uid = "";
 		this.nickName = "";
 		this.cookies = new LinkedList<_HttpCookie>();
@@ -126,6 +131,14 @@ public class HttpCookie {
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+
+	public boolean isAutoFeed() {
+		return autoFeed;
+	}
+
+	public void setAutoFeed(boolean autoFeed) {
+		this.autoFeed = autoFeed;
 	}
 
 	@Override

@@ -125,11 +125,14 @@ public class LoginBtn {
 		btn.doClick();
 	}
 	
-	public void markLogined(HttpCookie cookie) {
+	public boolean markLogined(HttpCookie cookie) {
+		boolean isOk = false;
 		if(cookie.isVaild()) {
+			isOk = true;
 			this.cookie = cookie;
 			btn.setText(LOGOUT_TIPS);
 		}
+		return isOk;
 	}
 	
 	public HttpCookie getCookie() {

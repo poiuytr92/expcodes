@@ -2,6 +2,8 @@ package exp.bilibili.plugin.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Iterator;
 
 import javax.swing.JButton;
@@ -15,6 +17,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.LoginType;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
@@ -35,11 +38,17 @@ public class _MiniUserMgrUI extends PopChildWindow {
 	
 	private JLabel userLabel;
 	
-	private JTextField feedRoomTF;
+	private int roomId;
+	
+	private JTextField roomTF;
+	
+	private JButton roomBtn;
 	
 	private JButton feedBtn;
 	
 	private ADPanel<__MiniUserLine> adPanel;
+	
+	private boolean autoFeed;
 	
 	private boolean init;
 	
@@ -52,13 +61,18 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		this.userLabel = new JLabel("0/".concat(String.valueOf(MAX_USER)));
 		userLabel.setForeground(Color.RED);
 		
-		this.feedRoomTF = new JTextField(
-				String.valueOf(Config.getInstn().SIGN_ROOM_ID()));
+		this.roomId = Config.getInstn().SIGN_ROOM_ID();
+		this.roomTF = new JTextField(String.valueOf(roomId));
+		
+		this.roomBtn = new JButton("修改房号");
+		BeautyEyeUtils.setButtonStyle(NormalColor.green, roomBtn);
+		roomBtn.setForeground(Color.BLACK);
+		
 		this.feedBtn = new JButton("自动投喂");
 		feedBtn.setForeground(Color.BLACK);
-		BeautyEyeUtils.setButtonStyle(NormalColor.green, feedBtn);
 		
 		this.adPanel = new ADPanel<__MiniUserLine>(__MiniUserLine.class, MAX_USER);
+		this.autoFeed = false;
 		this.init = false;
 	}
 
@@ -72,15 +86,44 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
 		panel.add(SwingUtils.getPairsPanel("挂机数", userLabel), BorderLayout.WEST);
-		panel.add(SwingUtils.getWEBorderPanel(
-				new JLabel("    [房间号]: "), feedRoomTF, feedBtn), BorderLayout.CENTER);
+		panel.add(SwingUtils.getWEBorderPanel(new JLabel("    [房间号]: "), roomTF, 
+				SwingUtils.getHGridPanel(roomBtn, feedBtn)), BorderLayout.CENTER);
 		return panel;
 	}
 	
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
-		// TODO Auto-generated method stub
+		roomBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				int id = NumUtils.toInt(roomTF.getText().trim(), 0);
+				if(id > 0) {
+					roomId = id;
+					SwingUtils.warn("修改成功");
+					
+				} else {
+					SwingUtils.warn("无效的房间号");
+				}
+			}
+		});
 		
+		
+		feedBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				autoFeed = !autoFeed;
+				if(autoFeed == true) {
+					BeautyEyeUtils.setButtonStyle(NormalColor.blue, feedBtn);
+					UIUtils.log("[自动投喂] 已启动, 投喂房间号: ", roomId);
+					
+				} else {
+					BeautyEyeUtils.setButtonStyle(NormalColor.normal, feedBtn);
+					UIUtils.log("[自动投喂] 已关闭");
+				}
+			}
+		});
 	}
 
 	@Override
@@ -97,7 +140,12 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				adPanel.set(line, idx++);
 			}
 		}
-		updateUserCnt();
+		updateUserCount();
+	}
+	
+	private void updateUserCount() {
+		String text = StrUtils.concat(CookiesMgr.INSTN().miniSize(), "/", MAX_USER);
+		userLabel.setText(text);
 	}
 	
 	@Override
@@ -106,13 +154,12 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		
 	}
 	
-	protected void updateUserCnt() {
-		String text = StrUtils.concat(adPanel.size(), "/", MAX_USER);
-		userLabel.setText(text);
-	}
-	
 	protected int getFeedRoomId() {
-		return NumUtils.toInt(feedRoomTF.getText().trim());
+		return roomId;
 	}
 
+	protected boolean isAutoFeed() {
+		return autoFeed;
+	}
+	
 }

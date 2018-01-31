@@ -403,12 +403,12 @@ public class AppUI extends MainWindow {
 				LoginBtn btn = new LoginBtn(LoginType.MAIN, "", new __LoginCallback() {
 			
 					@Override
-					public void afterLogin(HttpCookie cookie) {
+					public void afterLogin(final HttpCookie cookie) {
 						markLogin(cookie.NICKNAME());
 					}
 					
 					@Override
-					public void afterLogout(HttpCookie cookie) {
+					public void afterLogout(final HttpCookie cookie) {
 						// Undo
 					}
 				});
@@ -543,12 +543,12 @@ public class AppUI extends MainWindow {
 			LoginBtn btn = new LoginBtn(LoginType.VEST, "", new __LoginCallback() {
 				
 				@Override
-				public void afterLogin(HttpCookie cookie) {
+				public void afterLogin(final HttpCookie cookie) {
 					_startStormScanner();
 				}
 				
 				@Override
-				public void afterLogout(HttpCookie cookie) {
+				public void afterLogout(final HttpCookie cookie) {
 					// Undo
 				}
 				
@@ -952,6 +952,10 @@ public class AppUI extends MainWindow {
 	public int getFeedRoomId() {
 		int roomId = miniLoginMgrUI.getFeedRoomId();
 		return (roomId <= 0 ? getLiveRoomId() : roomId);
+	}
+	
+	public boolean isAutoFeed() {
+		return miniLoginMgrUI.isAutoFeed();
 	}
 	
 	

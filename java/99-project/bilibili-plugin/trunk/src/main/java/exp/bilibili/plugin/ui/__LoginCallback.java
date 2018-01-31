@@ -4,8 +4,8 @@ import exp.bilibili.plugin.bean.ldm.HttpCookie;
 
 public interface __LoginCallback {
 
-	public void afterLogin(HttpCookie cookie);
+	public void afterLogin(final HttpCookie cookie);
 	
-	public void afterLogout(HttpCookie cookie);
+	public void afterLogout(final HttpCookie cookie);
 	
 }

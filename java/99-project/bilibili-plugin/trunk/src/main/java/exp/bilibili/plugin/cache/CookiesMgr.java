@@ -223,6 +223,18 @@ public class CookiesMgr {
 		return lastAddCookieTime;
 	}
 	
+	public int size() {
+		int size = 0;
+		size += (mainCookie != HttpCookie.NULL ? 1 : 0);
+		size += (vestCookie != HttpCookie.NULL ? 1 : 0);
+		size += miniSize();
+		return size;
+	}
+	
+	public int miniSize() {
+		return miniCookies.size();
+	}
+	
 	public static boolean clearMainAndVestCookies() {
 		boolean isOk = FileUtils.delete(COOKIE_MAIN_PATH);
 		isOk &= FileUtils.delete(COOKIE_VEST_PATH);

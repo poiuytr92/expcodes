@@ -43,13 +43,13 @@ public class WebBot extends LoopThread {
 	private final static int HOUR_OFFSET = 8;
 	
 	/** 轮询间隔 */
-	private final static long SLEEP_TIME = 1000;
+	private final static long LOOP_TIME = 1000L;
 	
-	/** 心跳间隔 */
-	private final static long HB_TIME = 3600000;
+	/** 定时触发事件的间隔 */
+	private final static long EVENT_TIME = 3600000L;
 	
-	/** 打印心跳信息周期 */
-	private final static int HB_LIMIT = (int) (HB_TIME / SLEEP_TIME);
+	/** 定时触发事件的周期 */
+	private final static int EVENT_LIMIT = (int) (EVENT_TIME / LOOP_TIME);
 	
 	/** 轮询次数 */
 	private int loopCnt;
@@ -117,7 +117,7 @@ public class WebBot extends LoopThread {
 		} catch(Exception e) {
 			log.error("模拟Web行为异常", e);
 		}
-		_sleep(SLEEP_TIME);
+		_sleep(LOOP_TIME);
 	}
 
 	@Override
@@ -135,10 +135,8 @@ public class WebBot extends LoopThread {
 			
 		// 无抽奖操作则做其他事情
 		} else {
-			resetDailyTasks();	// 满足某个条件则重置每日任务
-			doDailyTasks();		// 执行每日任务
-			
-			toHeartbeat();	// 心跳
+			doDailyTasks();	// 执行每日任务
+			doEvent();		// 定时触发事件
 		}
 	}
 	
@@ -161,6 +159,34 @@ public class WebBot extends LoopThread {
 		// 高能抽奖
 		} else {
 			XHRSender.toEgLottery(roomId);
+		}
+	}
+	
+	/**
+	 * 执行每日任务
+	 */
+	private void doDailyTasks() {
+		resetDailyTasks();	// 满足某个条件则重置每日任务
+		
+		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
+			
+			Iterator<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
+			while(cookies.hasNext()) {
+				HttpCookie cookie = cookies.next();
+				if(finCookies.contains(cookie)) {
+					continue;
+				}
+				
+				long max = -1;
+				max = NumUtils.max(DailyTasks.toSign(cookie), max);
+				max = NumUtils.max(DailyTasks.toAssn(cookie), max);
+				max = NumUtils.max(DailyTasks.doMathTask(cookie), max);
+				nextTaskTime = NumUtils.max(nextTaskTime, max);
+				
+				if(max <= 0) {
+					finCookies.add(cookie);
+				}
+			}
 		}
 	}
 	
@@ -189,54 +215,36 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 执行每日任务
+	 * 触发事件
 	 */
-	private void doDailyTasks() {
-		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
-			
-			Iterator<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
-			while(cookies.hasNext()) {
-				HttpCookie cookie = cookies.next();
-				if(finCookies.contains(cookie)) {
-					continue;
-				}
-				
-				long max = -1;
-				max = NumUtils.max(DailyTasks.toSign(cookie), max);
-				max = NumUtils.max(DailyTasks.toAssn(cookie), max);
-				max = NumUtils.max(DailyTasks.doMathTask(cookie), max);
-				nextTaskTime = NumUtils.max(nextTaskTime, max);
-				
-				if(max <= 0) {
-					finCookies.add(cookie);
-				}
-			}
-		}
-	}
-	
-	/**
-	 * 打印心跳消息
-	 */
-	private void toHeartbeat() {
-		if(loopCnt++ >= HB_LIMIT) {
+	private void doEvent() {
+		if(loopCnt++ >= EVENT_LIMIT) {
 			loopCnt = 0;
-			log.info("{} 活动中...", getName());
 			
+			// 自动投喂
 			toAutoFeed();
+			
+			// 打印心跳
+			log.info("{} 活动中...", getName());
 			UIUtils.printVersionInfo();
 		}
 	}
 	
 	/**
 	 * 自动投喂
-	 *  FIXME: 开关
 	 */
 	private void toAutoFeed() {
+		if(UIUtils.isAutoFeed() == false) {
+			return;
+		}
+		
 		int roomId = UIUtils.getFeedRoomId();
 		Iterator<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
 		while(cookies.hasNext()) {
 			HttpCookie cookie = cookies.next();
-			XHRSender.toFeed(cookie, roomId);
+			if(cookie.isAutoFeed()) {
+				XHRSender.toFeed(cookie, roomId);
+			}
 		}
 	}
 	
