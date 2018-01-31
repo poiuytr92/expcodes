@@ -1645,10 +1645,10 @@ public abstract class HttpMethodBase implements HttpMethod {
                                 + parser.formatCookie(cookie) + "\"");
                         }
                     } catch (MalformedCookieException e) {
-                        if (LOG.isWarnEnabled()) {
-                            LOG.warn("Cookie rejected: \"" + parser.formatCookie(cookie) 
-                                + "\". " + e.getMessage());
-                        }
+//                        if (LOG.isWarnEnabled()) {
+//                            LOG.warn("Cookie rejected: \"" + parser.formatCookie(cookie) 
+//                                + "\". " + e.getMessage());
+//                        }
                     }
                 }
             }
