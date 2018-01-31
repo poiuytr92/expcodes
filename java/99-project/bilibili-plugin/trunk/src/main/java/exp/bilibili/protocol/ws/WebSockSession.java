@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.MsgAnalyser;
+import exp.bilibili.protocol.WSAnalyser;
 import exp.bilibili.protocol.bean.other.Frame;
 import exp.bilibili.protocol.envm.BiliCmd;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
@@ -147,7 +147,7 @@ class WebSockSession extends WebSocketClient {
 				String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
 				BiliCmd biliCmd = BiliCmd.toCmd(cmd);
 				
-				if(!MsgAnalyser.toMsgBean(biliCmd, json)) {
+				if(!WSAnalyser.toMsgBean(biliCmd, json)) {
 					log.info("无效的推送消息: {}", hex);
 				}
 			} else {

@@ -21,7 +21,7 @@ import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.bean.ws.ChatMsg;
 import exp.bilibili.protocol.bean.ws.GuardBuy;
 import exp.bilibili.protocol.bean.ws.SendGift;
@@ -358,7 +358,7 @@ public class ActivityMgr {
 				(before % COST_UNIT + cost) >= COST_UNIT) {
 			String msg = StrUtils.concat("恭喜您在 [", ROOM_ID, "] 直播间的活跃度达到 [", 
 					(after / SHOW_UNIT), "]");
-			MsgSender.sendPM(uid, msg);
+			XHRSender.sendPM(uid, msg);
 		}
 	}
 	

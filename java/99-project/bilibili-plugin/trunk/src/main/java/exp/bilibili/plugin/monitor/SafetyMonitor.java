@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.certificate.bean.App;
 import exp.certificate.core.Convertor;
@@ -196,7 +196,7 @@ public class SafetyMonitor extends LoopThread {
 	 */
 	private boolean checkByBilibili() {
 		boolean isOk = false;
-		String response = MsgSender.queryCertTags();
+		String response = XHRSender.queryCertTags();
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);

@@ -8,7 +8,7 @@ import java.util.Set;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.LotteryType;
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.bean.other.LotteryRoom;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
@@ -83,7 +83,7 @@ public class RoomMgr {
 		// 节奏风暴 因为对点击速度要求很高, 不放到抽奖房间队列排队, 直接抽奖
 //		giftRoomIds.add(new LotteryRoom(roomId, stormId, LotteryType.STORM));
 		
-		MsgSender.toStormLottery(roomId, stormId);
+		XHRSender.toStormLottery(roomId, stormId);
 	}
 	
 	/**

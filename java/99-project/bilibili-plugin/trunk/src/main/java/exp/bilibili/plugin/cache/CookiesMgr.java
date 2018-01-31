@@ -13,7 +13,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.envm.LoginType;
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.io.FileUtils;
@@ -242,7 +242,7 @@ public class CookiesMgr {
 	 * @return
 	 */
 	public static boolean checkLogined(HttpCookie cookie) {
-		return (HttpCookie.NULL != cookie && MsgSender.queryUserInfo(cookie));
+		return (HttpCookie.NULL != cookie && XHRSender.queryUserInfo(cookie));
 	}
 	
 }

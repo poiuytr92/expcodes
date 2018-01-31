@@ -16,9 +16,17 @@ import exp.bilibili.protocol.xhr.LotteryTV;
 import exp.bilibili.protocol.xhr.Other;
 import exp.bilibili.protocol.xhr.Redbag;
 
-// FIXME 移植回去每个协议内部， 不需要总协议？
-// 最终状态
-public class MsgSender {
+/**
+ * <PRE>
+ * XHR请求发送器
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+public class XHRSender {
 
 	public static String queryCertTags() {
 		return Other.queryCertificateTags();

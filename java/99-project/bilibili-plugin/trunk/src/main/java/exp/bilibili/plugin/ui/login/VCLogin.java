@@ -1,7 +1,7 @@
 package exp.bilibili.plugin.ui.login;
 
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 
 /**
  * <PRE>
@@ -24,7 +24,7 @@ class VCLogin {
 	 * @return 与该验证码配套的cookies
 	 */
 	protected static String downloadVccode(String imgPath) {
-		return MsgSender.downloadVccode(imgPath);
+		return XHRSender.downloadVccode(imgPath);
 	}
 	
 	/**
@@ -37,9 +37,9 @@ class VCLogin {
 	 */
 	protected static HttpCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
-		HttpCookie cookie = MsgSender.toLogin(username, password, vccode, vcCookies);
+		HttpCookie cookie = XHRSender.toLogin(username, password, vccode, vcCookies);
 		if(cookie != HttpCookie.NULL) {
-			MsgSender.queryUserInfo(cookie);
+			XHRSender.queryUserInfo(cookie);
 		}
 		return cookie;
 	}

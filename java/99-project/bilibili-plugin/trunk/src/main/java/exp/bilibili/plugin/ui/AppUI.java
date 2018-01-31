@@ -34,7 +34,7 @@ import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.ws.WebSockClient;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
@@ -612,7 +612,7 @@ public class AppUI extends MainWindow {
 				
 				String msg = chatTF.getText();
 				if(StrUtils.isNotEmpty(msg)) {
-					MsgSender.sendDanmu(msg, curChatColor);
+					XHRSender.sendDanmu(msg, curChatColor);
 					chatTF.setText("");
 				}
 			}

@@ -4,7 +4,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.LoginType;
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 import exp.libs.utils.img.QRCodeUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
@@ -83,7 +83,7 @@ class QRLogin extends LoopThread {
 			}
 			
 			// 检测是否已扫码登陆成功
-			cookie = MsgSender.toLogin(oauthKey);
+			cookie = XHRSender.toLogin(oauthKey);
 			if(HttpCookie.NULL != cookie) {
 				if(CookiesMgr.checkLogined(cookie)) {
 					isLogined = true;
@@ -114,7 +114,7 @@ class QRLogin extends LoopThread {
 	 * @return 
 	 */
 	private boolean downloadQrcode(String imgPath) {
-		String url = MsgSender.getQrcodeInfo();
+		String url = XHRSender.getQrcodeInfo();
 		oauthKey = RegexUtils.findFirst(url, RGX_OAUTH);
 		
 		boolean isOk = false;

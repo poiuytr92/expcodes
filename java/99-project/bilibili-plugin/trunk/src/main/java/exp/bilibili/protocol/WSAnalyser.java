@@ -35,7 +35,7 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * B站json命令报文解析器
+ * WS接收的JSON报文解析器
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -43,14 +43,14 @@ import exp.libs.utils.other.StrUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class MsgAnalyser {
+public class WSAnalyser {
 
-	private final static Logger log = LoggerFactory.getLogger(MsgAnalyser.class);
+	private final static Logger log = LoggerFactory.getLogger(WSAnalyser.class);
 	
 	/** 上次开播时间 */
 	private static long lastOpenLive = 0;
 	
-	protected MsgAnalyser() {}
+	protected WSAnalyser() {}
 	
 	public static boolean toMsgBean(BiliCmd biliCmd, JSONObject json) {
 		boolean isOk = true;

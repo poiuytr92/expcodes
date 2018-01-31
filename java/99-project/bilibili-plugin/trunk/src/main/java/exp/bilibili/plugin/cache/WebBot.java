@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.bean.other.LotteryRoom;
 import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.libs.utils.num.NumUtils;
@@ -152,15 +152,15 @@ public class WebBot extends LoopThread {
 		
 		// 小电视抽奖
 		if(room.TYPE() == LotteryType.TV) {
-			MsgSender.toTvLottery(roomId, raffleId);
+			XHRSender.toTvLottery(roomId, raffleId);
 			
 		// 节奏风暴抽奖
 		} else if(room.TYPE() == LotteryType.STORM) {
-			MsgSender.toStormLottery(roomId, raffleId);
+			XHRSender.toStormLottery(roomId, raffleId);
 			
 		// 高能抽奖
 		} else {
-			MsgSender.toEgLottery(roomId);
+			XHRSender.toEgLottery(roomId);
 		}
 	}
 	
@@ -236,7 +236,7 @@ public class WebBot extends LoopThread {
 		Iterator<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
 		while(cookies.hasNext()) {
 			HttpCookie cookie = cookies.next();
-			MsgSender.toFeed(cookie, roomId);
+			XHRSender.toFeed(cookie, roomId);
 		}
 	}
 	

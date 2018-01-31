@@ -6,7 +6,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.protocol.MsgSender;
+import exp.bilibili.protocol.XHRSender;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.warp.thread.LoopThread;
 
@@ -106,7 +106,7 @@ public class StormScanner extends LoopThread {
 	 * @return
 	 */
 	public boolean reflashHotLives() {
-		List<Integer> roomIds = MsgSender.queryTopLiveRoomIds(MAX_PAGES, MIN_ONLINE);
+		List<Integer> roomIds = XHRSender.queryTopLiveRoomIds(MAX_PAGES, MIN_ONLINE);
 		if(ListUtils.isNotEmpty(roomIds)) {
 			hotRoomIds.clear();
 			hotRoomIds.addAll(roomIds);
@@ -119,7 +119,7 @@ public class StormScanner extends LoopThread {
 	 * 扫描并加入其他热门房间的节奏风暴抽奖
 	 */
 	public void sancAndJoinStorm() {
-		MsgSender.scanAndJoinStorms(hotRoomIds);
+		XHRSender.scanAndJoinStorms(hotRoomIds);
 	}
 	
 }
