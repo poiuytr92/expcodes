@@ -98,7 +98,9 @@ public class AppUI extends MainWindow {
 	
 	private JButton colorBtn;
 	
-	private JButton thxBtn;
+	private JButton musicBtn;
+	
+	private JButton eMusicBtn;
 	
 	private JButton noticeBtn;
 	
@@ -107,6 +109,8 @@ public class AppUI extends MainWindow {
 	private JButton callBtn;
 	
 	private JButton eCallBtn;
+	
+	private JButton thxBtn;
 	
 	private JButton nightBtn;
 	
@@ -222,6 +226,8 @@ public class AppUI extends MainWindow {
 		this.clrBtn = new JButton("清");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
+		this.musicBtn = new JButton("随缘点歌姬");
+		this.eMusicBtn = new JButton(">");
 		this.thxBtn = new JButton("答谢姬");
 		this.noticeBtn = new JButton("公告姬");
 		this.eNoticeBtn = new JButton(">");
@@ -240,6 +246,8 @@ public class AppUI extends MainWindow {
 		clrBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
+		musicBtn.setForeground(Color.BLACK);
+		eMusicBtn.setForeground(Color.BLACK);
 		thxBtn.setForeground(Color.BLACK);
 		noticeBtn.setForeground(Color.BLACK);
 		eNoticeBtn.setForeground(Color.BLACK);
@@ -312,7 +320,10 @@ public class AppUI extends MainWindow {
 	private JPanel _getSendPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(chatTF, BorderLayout.CENTER);
-		panel.add(SwingUtils.getEBorderPanel(sendBtn, colorBtn), BorderLayout.EAST);
+		panel.add(SwingUtils.getEBorderPanel(
+				SwingUtils.getEBorderPanel(sendBtn, colorBtn), 
+				SwingUtils.getEBorderPanel(musicBtn, eMusicBtn)), 
+				BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -326,10 +337,9 @@ public class AppUI extends MainWindow {
 	
 	private JPanel _getCtrlPanel() {
 		return SwingUtils.getVGridPanel(
-				thxBtn, 
 				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
 				SwingUtils.getEBorderPanel(callBtn, eCallBtn), 
-				nightBtn, redbagBtn);
+				thxBtn, nightBtn, redbagBtn);
 	}
 	
 	private JPanel getRightPanel() {
@@ -380,9 +390,10 @@ public class AppUI extends MainWindow {
 		setClrBtnListener();
 		setSendBtnListener();
 		setColorBtnListener();
-		setThxBtnListener();
+		setMusicBtnListener();
 		setNoticeBtnListener();
 		setCallBtnListener();
+		setThxBtnListener();
 		setNightBtnListener();
 		setRedbagBtnListener();
 		setChatTFListener();
@@ -394,25 +405,30 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				
+				// 自动登陆
 				if(CookiesMgr.INSTN().MAIN() != HttpCookie.NULL || 
 						CookiesMgr.INSTN().load(LoginType.MAIN)) {
 					markLogin(CookiesMgr.INSTN().MAIN().NICKNAME());
-					return;
+				
+				// 手工登陆
+				} else {
+					LoginBtn btn = new LoginBtn(LoginType.MAIN, "", new __LoginCallback() {
+						
+						@Override
+						public void afterLogin(final HttpCookie cookie) {
+							markLogin(cookie.NICKNAME());
+						}
+						
+						@Override
+						public void afterLogout(final HttpCookie cookie) {
+							// Undo
+						}
+					});
+					btn.doClick();
 				}
 				
-				LoginBtn btn = new LoginBtn(LoginType.MAIN, "", new __LoginCallback() {
-			
-					@Override
-					public void afterLogin(final HttpCookie cookie) {
-						markLogin(cookie.NICKNAME());
-					}
-					
-					@Override
-					public void afterLogout(final HttpCookie cookie) {
-						// Undo
-					}
-				});
-				btn.doClick();
+				miniLoginMgrUI.init();
 			}
 		});
 	}
@@ -629,39 +645,25 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
-	private void setThxBtnListener() {
-		thxBtn.addActionListener(new ActionListener() {
+	private void setMusicBtnListener() {
+		musicBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogined()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [答谢姬] 哦~");
-					return;
-					
-				} else if(Config.LEVEL < Level.UPLIVE) {
-					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [答谢姬] 哦~");
-					return;
-					
-				} else if(Config.LEVEL < Level.ADMIN && 
-						Config.getInstn().isTabuAutoChat(getLiveRoomId())) {
-					SwingUtils.warn("您未被授权在此直播间使用 [答谢姬] 哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [随缘点歌姬] 哦~");
 					return;
 				}
 				
-				ChatMgr.getInstn()._start();
-				ChatMgr.getInstn().setAutoThankYou();
-				if(ChatMgr.getInstn().isAutoThankYou()) {
-					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, thxBtn);
-					UIUtils.log("[答谢姬] 被召唤成功O(∩_∩)O");
-					
-				} else {
-					BeautyEyeUtils.setButtonStyle(NormalColor.normal, thxBtn);
-					UIUtils.log("[答谢姬] 被封印啦/(ㄒoㄒ)/");
+				String music = MsgKwMgr.getMusic();
+				if(StrUtils.isNotEmpty(music)) {
+					XHRSender.sendDanmu("#点歌 ".concat(music), curChatColor);
 				}
 				lockBtn();
 			}
 		});
 	}
+	
 	
 	private void setNoticeBtnListener() {
 		noticeBtn.addActionListener(new ActionListener() {
@@ -716,6 +718,40 @@ public class AppUI extends MainWindow {
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, callBtn);
 					UIUtils.log("[小call姬] 被封印啦/(ㄒoㄒ)/");
+				}
+				lockBtn();
+			}
+		});
+	}
+	
+	private void setThxBtnListener() {
+		thxBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!isLogined()) {
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [答谢姬] 哦~");
+					return;
+					
+				} else if(Config.LEVEL < Level.UPLIVE) {
+					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [答谢姬] 哦~");
+					return;
+					
+				} else if(Config.LEVEL < Level.ADMIN && 
+						Config.getInstn().isTabuAutoChat(getLiveRoomId())) {
+					SwingUtils.warn("您未被授权在此直播间使用 [答谢姬] 哦~");
+					return;
+				}
+				
+				ChatMgr.getInstn()._start();
+				ChatMgr.getInstn().setAutoThankYou();
+				if(ChatMgr.getInstn().isAutoThankYou()) {
+					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, thxBtn);
+					UIUtils.log("[答谢姬] 被召唤成功O(∩_∩)O");
+					
+				} else {
+					BeautyEyeUtils.setButtonStyle(NormalColor.normal, thxBtn);
+					UIUtils.log("[答谢姬] 被封印啦/(ㄒoㄒ)/");
 				}
 				lockBtn();
 			}
@@ -804,7 +840,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				new _EditorUI("公告姬", Config.getInstn().NOTICE_PATH())._view();
+				new _EditorUI("公告", Config.getInstn().NOTICE_PATH())._view();
 				lockBtn();
 			}
 			
@@ -814,7 +850,17 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new _EditorUI("打call姬", Config.getInstn().CALL_PATH())._view();
+				new _EditorUI("打call语录", Config.getInstn().CALL_PATH())._view();
+				lockBtn();
+			}
+			
+		});
+		
+		eMusicBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new _EditorUI("歌单", Config.getInstn().MUSIC_PATH())._view();
 				lockBtn();
 			}
 			

@@ -126,8 +126,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		});
 	}
 
-	@Override
-	protected void AfterView() {
+	protected void init() {
 		if(init == false) {
 			init = true;
 			int idx = 0;
@@ -138,6 +137,11 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				adPanel.set(line, idx++);
 			}
 		}
+		updateUserCount();
+	}
+	
+	@Override
+	protected void AfterView() {
 		updateUserCount();
 	}
 	

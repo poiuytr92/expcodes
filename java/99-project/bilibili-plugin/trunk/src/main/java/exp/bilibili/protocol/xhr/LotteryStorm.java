@@ -206,11 +206,11 @@ public class LotteryStorm extends _Lottery {
 		for(HttpCookie cookie : cookies) {
 			String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
-				log.info("[{}] 参与直播间 [{}] 抽奖成功", cookie.NICKNAME(), roomId);
+				log.info("[{}] 参与直播间 [{}] 抽奖成功(节奏风暴)", cookie.NICKNAME(), roomId);
 				cnt++;
 				
 			} else if(!reason.contains("已经领取")) {
-				log.info("[{}] 参与直播间 [{}] 抽奖失败", cookie.NICKNAME(), roomId);
+				log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"], 账号 [", cookie.NICKNAME(), "]");
 				break;	// 节奏风暴是限时限量的, 只要有一个用户失败, 后续用户无需参与抽奖 

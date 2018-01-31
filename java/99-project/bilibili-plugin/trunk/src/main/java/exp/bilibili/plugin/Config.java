@@ -233,6 +233,10 @@ public class Config {
 		return xConf.getVal("/config/files/notices");
 	}
 	
+	public String MUSIC_PATH() {
+		return xConf.getVal("/config/files/musics");
+	}
+	
 	public int SIGN_ROOM_ID() {
 		return xConf.getInt("/config/app/signRoomId");
 	}

@@ -52,6 +52,7 @@
         <calls caption="公告屏语录"><![CDATA[./data/msg/calls.dat]]></calls>
         <cards caption="上车卡片类型"><![CDATA[./data/msg/cards.dat]]></cards>
         <notices caption="滚屏公告"><![CDATA[./data/msg/notices.dat]]></notices>
+        <musics caption="歌单"><![CDATA[./data/msg/musics.dat]]></musics>
     </files>
     
     <app caption="应用配置">

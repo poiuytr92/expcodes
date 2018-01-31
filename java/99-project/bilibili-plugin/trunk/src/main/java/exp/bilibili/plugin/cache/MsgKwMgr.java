@@ -36,6 +36,9 @@ public class MsgKwMgr {
 	/** 自动打call的候选列表 */
 	private List<String> calls;
 	
+	/** 歌单 */
+	private List<String> musics;
+	
 	private static volatile MsgKwMgr instance;
 	
 	private MsgKwMgr() {
@@ -44,6 +47,7 @@ public class MsgKwMgr {
 		this.cards = new ArrayList<String>();
 		this.notices = new ArrayList<String>();
 		this.calls = new ArrayList<String>();
+		this.musics = new ArrayList<String>();
 		
 		init();
 	}
@@ -66,6 +70,7 @@ public class MsgKwMgr {
 		
 		read(Config.getInstn().NOTICE_PATH(), notices);
 		read(Config.getInstn().CALL_PATH(), calls);
+		read(Config.getInstn().MUSIC_PATH(), musics);
 	}
 	
 	private void read(String path, Collection<String> list) {
@@ -82,9 +87,9 @@ public class MsgKwMgr {
 		advs.clear();
 		nights.clear();
 		cards.clear();
-		
 		notices.clear();
 		calls.clear();
+		musics.clear();
 	}
 	
 	public void reload() {
@@ -106,6 +111,19 @@ public class MsgKwMgr {
 		
 		int idx = RandomUtils.randomInt(advs.size());
 		return advs.get(idx);
+	}
+	
+	public static String getMusic() {
+		return getInstn()._getMusic();
+	}
+	
+	private String _getMusic() {
+		if(musics.size() <= 0) {
+			return "";
+		}
+		
+		int idx = RandomUtils.randomInt(musics.size());
+		return musics.get(idx);
 	}
 	
 	public static boolean containsNight(String msg) {
