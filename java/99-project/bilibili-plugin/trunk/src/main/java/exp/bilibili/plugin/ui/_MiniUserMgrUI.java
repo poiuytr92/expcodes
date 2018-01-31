@@ -86,7 +86,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
 		panel.add(SwingUtils.getPairsPanel("挂机数", userLabel), BorderLayout.WEST);
-		panel.add(SwingUtils.getWEBorderPanel(new JLabel("    [房间号]: "), roomTF, 
+		panel.add(SwingUtils.getWEBorderPanel(new JLabel("  [房号]: "), roomTF, 
 				SwingUtils.getHGridPanel(roomBtn, feedBtn)), BorderLayout.CENTER);
 		return panel;
 	}
