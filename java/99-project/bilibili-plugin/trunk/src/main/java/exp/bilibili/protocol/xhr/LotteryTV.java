@@ -3,10 +3,10 @@ package exp.bilibili.protocol.xhr;
 import java.util.Iterator;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.cookie.CookiesMgr;
-import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.libs.utils.other.StrUtils;
 
 /**

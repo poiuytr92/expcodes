@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.libs.warp.net.http.HttpURLUtils;
 
 /**

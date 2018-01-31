@@ -12,9 +12,9 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.protocol.cookie.CookiesMgr;
-import exp.bilibili.protocol.cookie.HttpCookie;
-import exp.bilibili.protocol.envm.LoginType;
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
+import exp.bilibili.plugin.envm.LoginType;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;

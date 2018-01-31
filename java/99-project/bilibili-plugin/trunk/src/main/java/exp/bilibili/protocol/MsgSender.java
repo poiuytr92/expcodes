@@ -2,10 +2,10 @@ package exp.bilibili.protocol;
 
 import java.util.List;
 
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.cookie.CookiesMgr;
-import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.bilibili.protocol.xhr.Feed;

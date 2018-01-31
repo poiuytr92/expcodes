@@ -5,11 +5,11 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.envm.BiliCmdAtrbt;
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
-import exp.bilibili.protocol.bean.MathTask;
-import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.bean.xhr.MathTask;
+import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;

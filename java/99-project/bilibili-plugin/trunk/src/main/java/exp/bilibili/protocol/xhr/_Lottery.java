@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
-import exp.bilibili.plugin.envm.BiliCmdAtrbt;
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
-import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;

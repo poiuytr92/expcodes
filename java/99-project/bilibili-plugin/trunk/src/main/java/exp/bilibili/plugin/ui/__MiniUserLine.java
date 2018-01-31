@@ -6,9 +6,9 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.envm.LoginType;
 import exp.bilibili.plugin.ui.login.LoginBtn;
-import exp.bilibili.protocol.cookie.HttpCookie;
-import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.warp.ui.SwingUtils;
 
 public class __MiniUserLine extends JPanel {

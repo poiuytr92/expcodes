@@ -1,6 +1,6 @@
 package exp.bilibili.plugin.ui;
 
-import exp.bilibili.protocol.cookie.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
 
 public interface __LoginCallback {
 

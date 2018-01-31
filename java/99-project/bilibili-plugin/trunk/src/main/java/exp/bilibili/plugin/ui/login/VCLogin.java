@@ -1,7 +1,7 @@
 package exp.bilibili.plugin.ui.login;
 
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
 import exp.bilibili.protocol.MsgSender;
-import exp.bilibili.protocol.cookie.HttpCookie;
 
 /**
  * <PRE>

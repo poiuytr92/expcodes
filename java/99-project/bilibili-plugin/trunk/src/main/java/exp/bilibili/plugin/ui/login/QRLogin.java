@@ -1,10 +1,10 @@
 package exp.bilibili.plugin.ui.login;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
+import exp.bilibili.plugin.envm.LoginType;
 import exp.bilibili.protocol.MsgSender;
-import exp.bilibili.protocol.cookie.CookiesMgr;
-import exp.bilibili.protocol.cookie.HttpCookie;
-import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.utils.img.QRCodeUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;

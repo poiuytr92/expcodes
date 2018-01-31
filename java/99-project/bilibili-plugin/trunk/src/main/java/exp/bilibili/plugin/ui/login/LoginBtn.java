@@ -8,10 +8,10 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 
+import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
+import exp.bilibili.plugin.envm.LoginType;
 import exp.bilibili.plugin.ui.__LoginCallback;
-import exp.bilibili.protocol.cookie.CookiesMgr;
-import exp.bilibili.protocol.cookie.HttpCookie;
-import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.warp.ui.SwingUtils;
 
 public class LoginBtn {

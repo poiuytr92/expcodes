@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.Frame;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.bean.other.Frame;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.thread.LoopThread;
 
