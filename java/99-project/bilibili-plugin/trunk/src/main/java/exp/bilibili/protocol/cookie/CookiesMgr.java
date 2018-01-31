@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.Level;
+import exp.bilibili.protocol.MsgSender;
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
