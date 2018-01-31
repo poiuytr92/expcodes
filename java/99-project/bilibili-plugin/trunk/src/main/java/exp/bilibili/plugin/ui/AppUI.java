@@ -337,8 +337,8 @@ public class AppUI extends MainWindow {
 	
 	private JPanel _getCtrlPanel() {
 		return SwingUtils.getVGridPanel(
-				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
 				SwingUtils.getEBorderPanel(callBtn, eCallBtn), 
+				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
 				thxBtn, nightBtn, redbagBtn);
 	}
 	

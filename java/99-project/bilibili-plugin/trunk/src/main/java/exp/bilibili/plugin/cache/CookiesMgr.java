@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -206,7 +207,7 @@ public class CookiesMgr {
 	}
 	
 	public Set<HttpCookie> MINIs() {
-		Set<HttpCookie> cookies = new HashSet<HttpCookie>();
+		Set<HttpCookie> cookies = new LinkedHashSet<HttpCookie>();
 		Iterator<HttpCookie> minis = miniCookies.iterator();
 		for(int i = 0; i < MAX_NUM; i++) {
 			if(minis.hasNext()) {
@@ -217,7 +218,7 @@ public class CookiesMgr {
 	}
 	
 	public Set<HttpCookie> ALL() {
-		Set<HttpCookie> cookies = new HashSet<HttpCookie>();
+		Set<HttpCookie> cookies = new LinkedHashSet<HttpCookie>();
 		if(HttpCookie.NULL != mainCookie) { cookies.add(mainCookie); }
 		if(HttpCookie.NULL != vestCookie) { cookies.add(vestCookie); }
 		cookies.addAll(MINIs());
