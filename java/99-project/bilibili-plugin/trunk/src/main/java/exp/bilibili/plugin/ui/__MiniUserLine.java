@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.front;
+package exp.bilibili.plugin.ui;
 
 import java.awt.BorderLayout;
 
@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import exp.bilibili.plugin.core.front.login.LoginBtn;
+import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;
 import exp.libs.warp.ui.SwingUtils;

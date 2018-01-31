@@ -8,10 +8,10 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.MsgSender;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.certificate.bean.App;
 import exp.certificate.core.Convertor;

@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.front.login;
+package exp.bilibili.plugin.ui.login;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -95,11 +95,11 @@ public class VCLoginUI extends PopChildWindow {
 		this.vccodeTXT = new JTextField();
 		
 		this.viewBtn = new JButton(
-				SwingUtils.loadImage("/exp/bilibili/plugin/core/front/eye.png"));
+				SwingUtils.loadImage("/exp/bilibili/plugin/ui/login/eye.png"));
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, viewBtn);
 		
 		this.reflashBtn = new JButton(
-				SwingUtils.loadImage("/exp/bilibili/plugin/core/front/reflash.png"));
+				SwingUtils.loadImage("/exp/bilibili/plugin/ui/login/reflash.png"));
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, reflashBtn);
 		
 		this.imgLabel = new JLabel();

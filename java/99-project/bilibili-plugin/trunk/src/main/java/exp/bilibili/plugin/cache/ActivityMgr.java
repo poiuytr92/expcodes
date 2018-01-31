@@ -17,11 +17,11 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.pdm.TActivity;
-import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.MsgSender;
 import exp.bilibili.protocol.bean.wsjson.ChatMsg;
 import exp.bilibili.protocol.bean.wsjson.GuardBuy;
 import exp.bilibili.protocol.bean.wsjson.SendGift;

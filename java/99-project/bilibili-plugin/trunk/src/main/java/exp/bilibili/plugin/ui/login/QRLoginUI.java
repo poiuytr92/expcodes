@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.front.login;
+package exp.bilibili.plugin.ui.login;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

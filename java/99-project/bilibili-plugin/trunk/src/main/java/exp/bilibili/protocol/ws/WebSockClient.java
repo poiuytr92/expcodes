@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.back;
+package exp.bilibili.protocol.ws;
 
 import java.net.URI;
 

@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.front;
+package exp.bilibili.plugin.ui;
 
 import exp.bilibili.protocol.cookie.HttpCookie;
 

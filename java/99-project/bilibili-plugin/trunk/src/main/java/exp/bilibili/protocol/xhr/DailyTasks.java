@@ -25,7 +25,7 @@ import exp.libs.warp.net.http.HttpUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class DailyTasks extends __Protocol {
+public class DailyTasks extends __XHR {
 
 	/** 日常签到URL */
 	private final static String SIGN_URL = Config.getInstn().SIGN_URL();

@@ -1,6 +1,6 @@
-package exp.bilibili.plugin.core.front.login;
+package exp.bilibili.plugin.ui.login;
 
-import exp.bilibili.plugin.core.back.MsgSender;
+import exp.bilibili.protocol.MsgSender;
 import exp.bilibili.protocol.cookie.HttpCookie;
 
 /**

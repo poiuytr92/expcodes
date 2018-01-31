@@ -16,7 +16,7 @@ import exp.libs.warp.net.http.HttpUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class Other extends __Protocol {
+public class Other extends __XHR {
 
 	/**
 	 * 软件授权页(Bilibili-备用)

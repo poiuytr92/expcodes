@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.front.login;
+package exp.bilibili.plugin.ui.login;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -8,7 +8,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 
-import exp.bilibili.plugin.core.front.__LoginCallback;
+import exp.bilibili.plugin.ui.__LoginCallback;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.envm.LoginType;

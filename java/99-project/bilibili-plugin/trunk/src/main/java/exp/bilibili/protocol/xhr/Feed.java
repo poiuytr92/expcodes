@@ -17,7 +17,7 @@ import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
 // FIXME
-public class Feed extends __Protocol {
+public class Feed extends __XHR {
 
 	private final static String UID_URL = "http://api.live.bilibili.com/room/v1/Room/room_init";
 	

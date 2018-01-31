@@ -23,7 +23,7 @@ import exp.libs.warp.net.http.HttpUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class Chat extends __Protocol {
+public class Chat extends __XHR {
 
 	/** 弹幕URL */
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();

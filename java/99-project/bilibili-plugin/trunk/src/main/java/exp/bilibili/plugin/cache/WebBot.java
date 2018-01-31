@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.back;
+package exp.bilibili.plugin.cache;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -8,9 +8,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.bean.ldm.LotteryRoom;
-import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.MsgSender;
 import exp.bilibili.protocol.cookie.CookiesMgr;
 import exp.bilibili.protocol.cookie.HttpCookie;
 import exp.bilibili.protocol.xhr.DailyTasks;

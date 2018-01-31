@@ -5,9 +5,9 @@ import java.awt.Toolkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.core.front.AppUI;
-import exp.bilibili.plugin.core.front._NoticeUI;
 import exp.bilibili.plugin.envm.ChatColor;
+import exp.bilibili.plugin.ui.AppUI;
+import exp.bilibili.plugin.ui._NoticeUI;
 import exp.libs.utils.other.StrUtils;
 
 /**

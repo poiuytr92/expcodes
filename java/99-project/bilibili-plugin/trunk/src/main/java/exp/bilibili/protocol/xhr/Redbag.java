@@ -17,7 +17,7 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class Redbag extends __Protocol {
+public class Redbag extends __XHR {
 
 	/** 查询红包奖池URL */
 	private final static String GET_REDBAG_URL = Config.getInstn().GET_REDBAG_URL();

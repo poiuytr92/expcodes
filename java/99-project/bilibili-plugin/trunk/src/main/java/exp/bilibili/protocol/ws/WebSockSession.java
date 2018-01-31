@@ -1,4 +1,4 @@
-package exp.bilibili.plugin.core.back;
+package exp.bilibili.protocol.ws;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -19,6 +19,7 @@ import exp.bilibili.plugin.envm.BiliCmd;
 import exp.bilibili.plugin.envm.BiliCmdAtrbt;
 import exp.bilibili.plugin.envm.Binary;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.MsgAnalyser;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;

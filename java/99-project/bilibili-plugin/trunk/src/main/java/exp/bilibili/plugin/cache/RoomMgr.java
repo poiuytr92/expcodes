@@ -8,8 +8,8 @@ import java.util.Set;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.LotteryRoom;
-import exp.bilibili.plugin.core.back.MsgSender;
 import exp.bilibili.plugin.envm.LotteryType;
+import exp.bilibili.protocol.MsgSender;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;

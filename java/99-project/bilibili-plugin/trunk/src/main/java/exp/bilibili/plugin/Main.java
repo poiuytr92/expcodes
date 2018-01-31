@@ -1,6 +1,6 @@
 package exp.bilibili.plugin;
 
-import exp.bilibili.plugin.core.front.AppUI;
+import exp.bilibili.plugin.ui.AppUI;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 

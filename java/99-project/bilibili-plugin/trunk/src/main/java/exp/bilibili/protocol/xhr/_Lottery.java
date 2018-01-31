@@ -23,8 +23,10 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class _Lottery extends __Protocol {
+class _Lottery extends __XHR {
 
+	private final static String ERR_BUSY = "系统繁忙";
+	
 	/** 私有化构造函数 */
 	protected _Lottery() {}
 	
@@ -49,7 +51,7 @@ class _Lottery extends __Protocol {
 		String reason = analyse(response);
 		
 		// 重试一次: [系统繁忙哟，请再试一下吧]
-		if(reason.contains("系统繁忙")) {
+		if(reason.contains(ERR_BUSY)) {
 			ThreadUtils.tSleep(1000);
 			response = HttpURLUtils.doPost(url, header, request);
 			reason = analyse(response);
@@ -113,12 +115,12 @@ class _Lottery extends __Protocol {
 			if(code != 0) {
 				reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 				
-				reason = StrUtils.isEmpty(reason) ? "unknow" : reason;
-//				log.warn("参加抽奖失败: {}", reason);	// FIXME: 节奏风暴抽奖失败时， 原因为空 {"code":429,"msg":"","message":"","data":[]}
-				log.warn("参加抽奖失败: {}", response);
+				// 节奏风暴抽奖失败时， 原因可能为空, 此处替换原因, 避免外部调用误判
+				reason = StrUtils.isEmpty(reason) ? ERR_BUSY : reason;
 			}
 		} catch(Exception e) {
-			log.error("参加抽奖失败: {}", response, e);
+			reason = "服务器异常";
+			log.error("参加抽奖异常: {}", response, e);
 		}
 		return reason;
 	}

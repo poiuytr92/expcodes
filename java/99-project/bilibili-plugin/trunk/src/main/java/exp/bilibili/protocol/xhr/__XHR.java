@@ -21,10 +21,10 @@ import exp.libs.warp.net.http.HttpUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-class __Protocol {
+class __XHR {
 
 	/** 日志器 */
-	protected final static Logger log = LoggerFactory.getLogger(__Protocol.class);
+	protected final static Logger log = LoggerFactory.getLogger(__XHR.class);
 	
 	/** SSL服务器主机 */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
@@ -39,7 +39,7 @@ class __Protocol {
 	protected final static String LINK_HOME = Config.getInstn().LINK_HOME();
 	
 	/** 私有化构造函数 */
-	protected __Protocol() {}
+	protected __XHR() {}
 	
 	protected static String getRealRoomId() {
 		return getRealRoomId(UIUtils.getLiveRoomId());
