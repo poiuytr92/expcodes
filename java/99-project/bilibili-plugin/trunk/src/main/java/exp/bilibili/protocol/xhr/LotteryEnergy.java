@@ -3,6 +3,7 @@ package exp.bilibili.protocol.xhr;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -95,7 +96,7 @@ public class LotteryEnergy extends _Lottery {
 	
 	private static void join(int roomId, String raffleId) {
 		int cnt = 0;
-		List<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
+		Set<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
 		for(HttpCookie cookie : cookies) {
 			String reason = join(LotteryType.ENGERY, cookie, EG_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {

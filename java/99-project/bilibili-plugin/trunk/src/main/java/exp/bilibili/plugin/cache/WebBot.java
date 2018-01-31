@@ -1,7 +1,6 @@
 package exp.bilibili.plugin.cache;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -170,7 +169,7 @@ public class WebBot extends LoopThread {
 		
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
 			
-			List<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
+			Set<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
 			for(HttpCookie cookie : cookies) {
 				if(finCookies.contains(cookie)) {
 					continue;
@@ -238,7 +237,7 @@ public class WebBot extends LoopThread {
 		}
 		
 		int roomId = UIUtils.getFeedRoomId();
-		List<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
+		Set<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
 		for(HttpCookie cookie : cookies) {
 			if(cookie.isAutoFeed()) {
 				XHRSender.toFeed(cookie, roomId);

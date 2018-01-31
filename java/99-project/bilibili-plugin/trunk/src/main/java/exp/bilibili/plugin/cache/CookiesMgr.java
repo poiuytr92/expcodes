@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -52,8 +50,8 @@ public class CookiesMgr {
 	/** 小号cookie集 */
 	private Set<HttpCookie> miniCookies;
 	
-	/** 所有cookie保存路径 */
-	private Map<HttpCookie, String> cookiePaths;
+	/** 小号cookie保存路径 */
+	private Map<HttpCookie, String> miniPaths;
 	
 	/** 最近一次添加过cookie的时间点 */
 	private long lastAddCookieTime;
@@ -68,7 +66,7 @@ public class CookiesMgr {
 		this.mainCookie = HttpCookie.NULL;
 		this.vestCookie = HttpCookie.NULL;
 		this.miniCookies = new HashSet<HttpCookie>();
-		this.cookiePaths = new HashMap<HttpCookie, String>();
+		this.miniPaths = new HashMap<HttpCookie, String>();
 		this.lastAddCookieTime = System.currentTimeMillis();
 	}
 	
@@ -100,7 +98,7 @@ public class CookiesMgr {
 			
 		} else {
 			if(miniCookies.size() < MAX_NUM) {
-				String cookiePath = cookiePaths.get(cookie);
+				String cookiePath = miniPaths.get(cookie);
 				if(cookiePath == null) {
 					cookiePath = PathUtils.combine(COOKIE_DIR, StrUtils.concat(
 							COOKIE_MINI_PREFIX, cookie.UID(), SUFFIX));
@@ -114,7 +112,10 @@ public class CookiesMgr {
 	}
 	
 	private boolean save(HttpCookie cookie, String cookiePath) {
-		cookiePaths.put(cookie, cookiePath);
+		if(cookie.TYPE() == LoginType.MINI) {
+			miniPaths.put(cookie, cookiePath);
+		}
+		
 		String data = CryptoUtils.toDES(cookie.toString());
 		boolean isOk = FileUtils.write(cookiePath, data, Charset.ISO, false);
 		if(isOk == true) {
@@ -158,9 +159,12 @@ public class CookiesMgr {
 				cookie = new HttpCookie(data);
 				cookie.setType(type);
 				
-				if(checkLogined(cookie) && !cookiePaths.containsKey(cookie)) {
-					cookiePaths.put(cookie, cookiePath);
+				if(checkLogined(cookie) && !miniPaths.containsKey(cookie)) {
+					if(cookie.TYPE() == LoginType.MINI) {
+						miniPaths.put(cookie, cookiePath);
+					}
 					lastAddCookieTime = System.currentTimeMillis();
+					
 				} else {
 					cookie = HttpCookie.NULL;
 					FileUtils.delete(cookiePath);
@@ -176,17 +180,20 @@ public class CookiesMgr {
 			return isOk;
 		}
 		
+		String cookiePath = "";
 		if(LoginType.MAIN == cookie.TYPE()) {
 			this.mainCookie = HttpCookie.NULL;
+			cookiePath = COOKIE_MAIN_PATH;
 			
 		} else if(LoginType.VEST == cookie.TYPE()) {
 			this.vestCookie = HttpCookie.NULL;
+			cookiePath = COOKIE_VEST_PATH;
 			
 		} else {
 			this.miniCookies.remove(cookie);
+			cookiePath = miniPaths.remove(cookie);
 		}
 		
-		String cookiePath = cookiePaths.remove(cookie);
 		return FileUtils.delete(cookiePath);
 	}
 
@@ -198,8 +205,8 @@ public class CookiesMgr {
 		return vestCookie;
 	}
 	
-	public List<HttpCookie> MINIs() {
-		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
+	public Set<HttpCookie> MINIs() {
+		Set<HttpCookie> cookies = new HashSet<HttpCookie>();
 		Iterator<HttpCookie> minis = miniCookies.iterator();
 		for(int i = 0; i < MAX_NUM; i++) {
 			if(minis.hasNext()) {
@@ -209,20 +216,12 @@ public class CookiesMgr {
 		return cookies;
 	}
 	
-	public List<HttpCookie> ALL() {
-		List<HttpCookie> cookies = new LinkedList<HttpCookie>();
+	public Set<HttpCookie> ALL() {
+		Set<HttpCookie> cookies = new HashSet<HttpCookie>();
 		if(HttpCookie.NULL != mainCookie) { cookies.add(mainCookie); }
 		if(HttpCookie.NULL != vestCookie) { cookies.add(vestCookie); }
 		cookies.addAll(MINIs());
 		return cookies;
-	}
-	
-	/**
-	 * 获取最近一次添加cookie的时间
-	 * @return
-	 */
-	public long getLastAddCookieTime() {
-		return lastAddCookieTime;
 	}
 	
 	/**
@@ -243,6 +242,14 @@ public class CookiesMgr {
 	 */
 	public int miniSize() {
 		return miniCookies.size();
+	}
+	
+	/**
+	 * 获取最近一次添加cookie的时间
+	 * @return
+	 */
+	public long getLastAddCookieTime() {
+		return lastAddCookieTime;
 	}
 	
 	/**
