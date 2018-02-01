@@ -26,7 +26,6 @@ import exp.libs.warp.ui.SwingUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-@SuppressWarnings({ "rawtypes", "unchecked" })
 public class SearchPanel {
 
 	/** 承载面板 */
