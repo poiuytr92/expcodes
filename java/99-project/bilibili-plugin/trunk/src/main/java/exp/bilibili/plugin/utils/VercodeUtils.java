@@ -23,7 +23,7 @@ public class VercodeUtils {
 	 * @return
 	 */
 	public static int calculateImage(String vercodeImgPath) {
-		return calculate(OCRUtils.jpgToTxt(vercodeImgPath));
+		return calculate(OCRUtils.pngToTxt(vercodeImgPath));
 	}
 	
 	/**

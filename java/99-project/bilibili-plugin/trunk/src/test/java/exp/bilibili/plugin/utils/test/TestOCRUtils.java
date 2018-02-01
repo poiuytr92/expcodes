@@ -10,8 +10,8 @@ public class TestOCRUtils {
 		File dir = new File("./src/test/java/exp/bilibili/plugin/utils/test/img");
 		File[] imgs = dir.listFiles();
 		for(File img : imgs) {
-			if(img.getName().endsWith(".jpg")) {
-				System.out.println(img.getName() + " : " + OCRUtils.jpgToTxt(img.getPath()));
+			if(img.getName().endsWith(".png")) {
+				System.out.println(img.getName() + " : " + OCRUtils.pngToTxt(img.getPath()));
 			}
 		}
 	}

@@ -43,7 +43,7 @@ public class DailyTasks extends __XHR {
 	private final static String MATH_CODE_URL = Config.getInstn().MATH_CODE_URL();
 	
 	/** 小学数学验证码下载路径 */
-	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.jpg");
+	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.png");
 	
 	/** 小学数学验证码重试间隔 */
 	private final static long SLEEP_TIME = 500L;

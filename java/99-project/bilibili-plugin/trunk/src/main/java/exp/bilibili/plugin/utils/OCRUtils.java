@@ -42,6 +42,21 @@ public class OCRUtils {
 	}
 	
 	/**
+	 * 把PNG图像识别成文本内容
+	 * @param pngPath
+	 * @return
+	 */
+	public static String pngToTxt(String pngPath) {
+		String txt = "";
+		try {
+			txt = _OCR.recognizeText(pngPath, OCR.IMG_FORMAT_PNG);
+		} catch (Exception e) {
+			log.error("识别图片文字失败: {}", pngPath, e);
+		}
+		return revise(txt.trim());
+	}
+	
+	/**
 	 * 目前验证码图片只有 a+b 与 a-b 两种形式, 由于字体问题，某些数字会被固定识别错误, 
 	 *  此方法用于修正常见的识别错误的数字/符号, 提高识别率
 	 * @param txt
@@ -74,21 +89,6 @@ public class OCRUtils {
 		
 		revise = revise.replace("·", "-");
 		return revise;
-	}
-	
-	/**
-	 * 把PNG图像识别成文本内容
-	 * @param pngPath
-	 * @return
-	 */
-	public static String pngToTxt(String pngPath) {
-		String txt = "";
-		try {
-			txt = _OCR.recognizeText(pngPath, OCR.IMG_FORMAT_PNG);
-		} catch (Exception e) {
-			log.error("识别图片文字失败: {}", pngPath, e);
-		}
-		return txt.trim();
 	}
 	
 }
