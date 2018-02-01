@@ -82,10 +82,14 @@ public class _VerDBMgr {
 		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
 		if(!SqliteUtils.testConn(ds)) {
 			
+			// 对于J2SE项目, 若若同位置存在版本文件, 先删除再复制, 避免复制失败使得显示的版本依然为旧版
 			if(!OSUtils.isRunByTomcat()) {
+				FileUtils.delete(TMP_VER_DB);	
 				JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
-			} else {
-				// Undo 当程序运行在Tomcat时, 会自动把版本库拷贝到classes目录下, 无需再拷贝
+				
+			// 当程序运行在Tomcat时, Tomcat会自动把版本库拷贝到classes目录下, 一般无需再拷贝(但以防万一, 若不存在版本文件还是拷贝一下)
+			} else if(!FileUtils.exists(TMP_VER_DB)){
+				JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
 			}
 			
 			FileUtils.hide(TMP_VER_DB);
