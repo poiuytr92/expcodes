@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
@@ -39,7 +39,7 @@ class _Lottery extends __XHR {
 	 * @param type
 	 * @return
 	 */
-	protected static String join(LotteryType type, HttpCookie cookie, 
+	protected static String join(LotteryType type, BiliCookie cookie, 
 			String url, int roomId, String raffleId) {
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);

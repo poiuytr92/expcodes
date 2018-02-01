@@ -8,7 +8,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
@@ -106,7 +106,7 @@ class QRLoginUI extends PopChildWindow {
 		}
 	}
 
-	protected HttpCookie getCookie() {
+	protected BiliCookie getCookie() {
 		return qrLogin.getCookie();
 	}
 	

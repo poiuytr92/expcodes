@@ -8,7 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.libs.warp.ui.SwingUtils;
@@ -33,13 +33,13 @@ public class __MiniUserLine extends JPanel {
 	
 	private JRadioButton autoFeed;
 	
-	private HttpCookie miniCookie;
+	private BiliCookie miniCookie;
 	
 	public __MiniUserLine() {
-		this(HttpCookie.NULL);
+		this(BiliCookie.NULL);
 	}
 	
-	public __MiniUserLine(HttpCookie cookie) {
+	public __MiniUserLine(BiliCookie cookie) {
 		super(new BorderLayout());
 		
 		this.miniCookie = cookie;
@@ -52,7 +52,7 @@ public class __MiniUserLine extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(miniCookie != HttpCookie.NULL) {
+				if(miniCookie != BiliCookie.NULL) {
 					miniCookie.setAutoFeed(autoFeed.isSelected());
 				}
 			}
@@ -74,16 +74,16 @@ public class __MiniUserLine extends JPanel {
 	private class Callback implements __LoginCallback {
 
 		@Override
-		public void afterLogin(final HttpCookie cookie) {
+		public void afterLogin(final BiliCookie cookie) {
 			miniCookie = cookie;
 			autoFeed.doClick();
 			usernameTF.setText(miniCookie.NICKNAME());
 		}
 
 		@Override
-		public void afterLogout(final HttpCookie cookie) {
+		public void afterLogout(final BiliCookie cookie) {
 			miniCookie.setAutoFeed(false);
-			miniCookie = HttpCookie.NULL;
+			miniCookie = BiliCookie.NULL;
 			autoFeed.setSelected(false);
 			usernameTF.setText("");
 		}

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
@@ -45,7 +45,7 @@ public class Chat extends __XHR {
 	 * @param color 弹幕颜色
 	 * @return
 	 */
-	public static boolean sendDanmu(HttpCookie cookie, int roomId, String msg, ChatColor color) {
+	public static boolean sendDanmu(BiliCookie cookie, int roomId, String msg, ChatColor color) {
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
 		Map<String, String> request = getRequest(msg, sRoomId, color.RGB());
@@ -79,7 +79,7 @@ public class Chat extends __XHR {
 	 * @param msg 发送消息
 	 * @return
 	 */
-	public static boolean sendPM(HttpCookie cookie, String recvId, String msg) {
+	public static boolean sendPM(BiliCookie cookie, String recvId, String msg) {
 		Map<String, String> header = getHeader(cookie.toNVCookie());
 		Map<String, String> request = getRequest(cookie.CSRF(), cookie.UID(), recvId, msg);
 		String response = HttpURLUtils.doPost(MSG_URL, header, request);

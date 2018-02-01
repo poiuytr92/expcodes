@@ -3,7 +3,7 @@ package exp.bilibili.protocol.xhr;
 import java.util.Set;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -35,8 +35,8 @@ public class LotteryTV extends _Lottery {
 	 */
 	public static void toLottery(int roomId, String raffleId) {
 		int cnt = 0;
-		Set<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
-		for(HttpCookie cookie : cookies) {
+		Set<BiliCookie> cookies = CookiesMgr.INSTN().ALL();
+		for(BiliCookie cookie : cookies) {
 			String reason = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功(小电视)", cookie.NICKNAME(), roomId);

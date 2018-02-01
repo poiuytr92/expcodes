@@ -9,7 +9,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.RSAUtils;
@@ -76,7 +76,7 @@ public class Login extends __XHR {
 	 * @param client Http会话客户端
 	 * @param cookie cookie对象容器
 	 */
-	private static void takeCookies(HttpClient client, HttpCookie cookie) {
+	private static void takeCookies(HttpClient client, BiliCookie cookie) {
 		HttpMethod method = client.getHttpMethod();
 		if(method != null) {
 			Header[] outHeaders = method.getResponseHeaders();
@@ -113,8 +113,8 @@ public class Login extends __XHR {
 	 * @param oauthKey 二维码登陆信息中提取的oauthKey
 	 * @return 若扫码登陆成功, 则返回有效Cookie
 	 */
-	public static HttpCookie toLogin(String oauthKey) {
-		HttpCookie cookie = new HttpCookie();
+	public static BiliCookie toLogin(String oauthKey) {
+		BiliCookie cookie = new BiliCookie();
 		HttpClient client = new HttpClient();
 		
 		Map<String, String> header = getHeader();
@@ -127,10 +127,10 @@ public class Login extends __XHR {
 			if("true".equalsIgnoreCase(status)) {
 				takeCookies(client, cookie);
 			} else {
-				cookie = HttpCookie.NULL;
+				cookie = BiliCookie.NULL;
 			}
 		} catch(Exception e) {
-			cookie = HttpCookie.NULL;
+			cookie = BiliCookie.NULL;
 			log.error("获取二维码登陆信息失败: {}", response, e);
 		}
 		client.close();
@@ -221,9 +221,9 @@ public class Login extends __XHR {
 	 * @param vcCookies 与验证码配套的登陆用cookie
 	 * @return 
 	 */
-	public static HttpCookie toLogin(String username, String password, 
+	public static BiliCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
-		HttpCookie cookie = new HttpCookie();
+		BiliCookie cookie = new BiliCookie();
 		HttpClient client = new HttpClient();
 		
 		try {
@@ -245,10 +245,10 @@ public class Login extends __XHR {
 			if(code == 0) {	
 				takeCookies(client, cookie);
 			} else {
-				cookie = HttpCookie.NULL;
+				cookie = BiliCookie.NULL;
 			}
 		} catch(Exception e) {
-			cookie = HttpCookie.NULL;
+			cookie = BiliCookie.NULL;
 			log.error("登陆失败", e);
 		}
 		client.close();
@@ -299,7 +299,7 @@ public class Login extends __XHR {
 	 * @param cookie
 	 * @return username
 	 */
-	public static boolean queryUserInfo(HttpCookie cookie) {
+	public static boolean queryUserInfo(BiliCookie cookie) {
 		Map<String, String> headers = getHeader(cookie.toNVCookie(), LIVE_HOST);
 		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null);
 		

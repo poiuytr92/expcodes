@@ -8,7 +8,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.ui.__LoginCallback;
@@ -37,7 +37,7 @@ public class LoginBtn {
 	
 	private __LoginCallback callback;
 	
-	private HttpCookie cookie;
+	private BiliCookie cookie;
 	
 	private QRLoginUI qrLoginUI;
 	
@@ -54,7 +54,7 @@ public class LoginBtn {
 	public LoginBtn(CookieType type, String btnName, __LoginCallback callback) {
 		this.type = type;
 		this.callback = callback;
-		this.cookie = HttpCookie.NULL;
+		this.cookie = BiliCookie.NULL;
 		
 		this.loginTips = btnName;
 		this.btn = new JButton(btnName);
@@ -136,7 +136,7 @@ public class LoginBtn {
 		btn.doClick();
 	}
 	
-	public boolean markLogined(HttpCookie cookie) {
+	public boolean markLogined(BiliCookie cookie) {
 		boolean isOk = false;
 		if(cookie.isVaild()) {
 			isOk = true;
@@ -146,7 +146,7 @@ public class LoginBtn {
 		return isOk;
 	}
 	
-	public HttpCookie getCookie() {
+	public BiliCookie getCookie() {
 		return cookie;
 	}
 	

@@ -8,7 +8,7 @@ import java.util.Set;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -96,8 +96,8 @@ public class LotteryEnergy extends _Lottery {
 	
 	private static void join(int roomId, String raffleId) {
 		int cnt = 0;
-		Set<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
-		for(HttpCookie cookie : cookies) {
+		Set<BiliCookie> cookies = CookiesMgr.INSTN().ALL();
+		for(BiliCookie cookie : cookies) {
 			String reason = join(LotteryType.ENGERY, cookie, EG_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功(高能礼物)", cookie.NICKNAME(), roomId);

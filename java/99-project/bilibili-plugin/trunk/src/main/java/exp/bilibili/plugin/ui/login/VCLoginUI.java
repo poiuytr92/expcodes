@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.libs.utils.os.ThreadUtils;
@@ -75,7 +75,7 @@ public class VCLoginUI extends PopChildWindow {
 	
 	private CookieType type;
 	
-	private HttpCookie cookie;
+	private BiliCookie cookie;
 	
 	public VCLoginUI(CookieType type) {
 		super("哔哩哔哩-帐密登陆", WIDTH, HEIGH, false, type);
@@ -110,7 +110,7 @@ public class VCLoginUI extends PopChildWindow {
 		loginBtn.setForeground(Color.BLACK);
 		
 		this.vcCookies = "";
-		this.cookie = HttpCookie.NULL;
+		this.cookie = BiliCookie.NULL;
 	}
 
 	@Override
@@ -238,7 +238,7 @@ public class VCLoginUI extends PopChildWindow {
 	
 	@Override
 	protected void AfterView() {
-		cookie = HttpCookie.NULL;
+		cookie = BiliCookie.NULL;
 		vccodeTXT.setText("");
 		reflashBtn.doClick();
 	}
@@ -249,7 +249,7 @@ public class VCLoginUI extends PopChildWindow {
 		
 	}
 	
-	protected HttpCookie getCookie() {
+	protected BiliCookie getCookie() {
 		return cookie;
 	}
 	

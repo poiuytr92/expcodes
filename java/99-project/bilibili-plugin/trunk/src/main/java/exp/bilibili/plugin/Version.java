@@ -27,6 +27,7 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO
+		// 优化身份识别系统
 		// 模拟观看时长
 		// 系统托盘好卡
 		// GITHUB HTTPS 的TLS协议为2.0 ?? 无法获取页面源码

@@ -14,7 +14,7 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -144,8 +144,8 @@ public class _MiniUserMgrUI extends PopChildWindow {
 			init = true;
 			int idx = 0;
 			CookiesMgr.INSTN().load(CookieType.MINI);
-			Set<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
-			for(HttpCookie cookie : cookies) {
+			Set<BiliCookie> cookies = CookiesMgr.INSTN().MINIs();
+			for(BiliCookie cookie : cookies) {
 				__MiniUserLine line = new __MiniUserLine(cookie);
 				adPanel.set(line, idx++);
 			}

@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Set;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
-import exp.bilibili.plugin.envm.Level;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.CookieType;
+import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.protocol.XHRSender;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -53,16 +53,16 @@ public class CookiesMgr {
 			Config.LEVEL >= Level.UPLIVE ? 8 : 3);
 	
 	/** 主号cookie */
-	private HttpCookie mainCookie;
+	private BiliCookie mainCookie;
 	
 	/** 马甲号cookie */
-	private HttpCookie vestCookie;
+	private BiliCookie vestCookie;
 	
 	/** 小号cookie集 */
-	private Set<HttpCookie> miniCookies;
+	private Set<BiliCookie> miniCookies;
 	
 	/** 小号cookie保存路径 */
-	private Map<HttpCookie, String> miniPaths;
+	private Map<BiliCookie, String> miniPaths;
 	
 	/** 最近一次添加过cookie的时间点 */
 	private long lastAddCookieTime;
@@ -74,10 +74,10 @@ public class CookiesMgr {
 	 * 构造函数
 	 */
 	private CookiesMgr() {
-		this.mainCookie = HttpCookie.NULL;
-		this.vestCookie = HttpCookie.NULL;
-		this.miniCookies = new HashSet<HttpCookie>();
-		this.miniPaths = new HashMap<HttpCookie, String>();
+		this.mainCookie = BiliCookie.NULL;
+		this.vestCookie = BiliCookie.NULL;
+		this.miniCookies = new HashSet<BiliCookie>();
+		this.miniPaths = new HashMap<BiliCookie, String>();
 		this.lastAddCookieTime = System.currentTimeMillis();
 	}
 	
@@ -92,9 +92,9 @@ public class CookiesMgr {
 		return instance;
 	}
 	
-	public boolean add(HttpCookie cookie, CookieType type) {
+	public boolean add(BiliCookie cookie, CookieType type) {
 		boolean isOk = false;
-		if(cookie == null || cookie == HttpCookie.NULL) {
+		if(cookie == null || cookie == BiliCookie.NULL) {
 			return isOk;
 		}
 		
@@ -122,7 +122,7 @@ public class CookiesMgr {
 		return isOk;
 	}
 	
-	private boolean save(HttpCookie cookie, String cookiePath) {
+	private boolean save(BiliCookie cookie, String cookiePath) {
 		if(cookie.TYPE() == CookieType.MINI) {
 			miniPaths.put(cookie, cookiePath);
 		}
@@ -139,11 +139,11 @@ public class CookiesMgr {
 		boolean isOk = false;
 		if(CookieType.MAIN == type) {
 			mainCookie = load(COOKIE_MAIN_PATH, type);
-			isOk = (mainCookie != HttpCookie.NULL);
+			isOk = (mainCookie != BiliCookie.NULL);
 			
 		} else if(CookieType.VEST == type) {
 			vestCookie = load(COOKIE_VEST_PATH, type);
-			isOk = (vestCookie != HttpCookie.NULL);
+			isOk = (vestCookie != BiliCookie.NULL);
 			
 		} else {
 			File dir = new File(COOKIE_DIR);
@@ -151,8 +151,8 @@ public class CookiesMgr {
 			for(String fileName : fileNames) {
 				if(fileName.contains(COOKIE_MINI_PREFIX) && miniCookies.size() < MAX_NUM) {
 					String cookiePath = PathUtils.combine(dir.getPath(), fileName);
-					HttpCookie miniCookie = load(cookiePath, type);
-					if(HttpCookie.NULL != null) {
+					BiliCookie miniCookie = load(cookiePath, type);
+					if(BiliCookie.NULL != null) {
 						miniCookies.add(miniCookie);
 						isOk = true;
 					}
@@ -162,12 +162,12 @@ public class CookiesMgr {
 		return isOk;
 	}
 	
-	private HttpCookie load(String cookiePath, CookieType type) {
-		HttpCookie cookie = HttpCookie.NULL;
+	private BiliCookie load(String cookiePath, CookieType type) {
+		BiliCookie cookie = BiliCookie.NULL;
 		if(FileUtils.exists(cookiePath)) {
 			String data = CryptoUtils.deDES(FileUtils.read(cookiePath, Charset.ISO));
 			if(StrUtils.isNotEmpty(data)) {
-				cookie = new HttpCookie(data);
+				cookie = new BiliCookie(data);
 				cookie.setType(type);
 				
 				if(checkLogined(cookie) == true) {
@@ -177,7 +177,7 @@ public class CookiesMgr {
 					lastAddCookieTime = System.currentTimeMillis();
 					
 				} else {
-					cookie = HttpCookie.NULL;
+					cookie = BiliCookie.NULL;
 					FileUtils.delete(cookiePath);
 				}
 			}
@@ -185,19 +185,19 @@ public class CookiesMgr {
 		return cookie;
 	}
 	
-	public boolean del(HttpCookie cookie) {
+	public boolean del(BiliCookie cookie) {
 		boolean isOk = false;
-		if(cookie == null || cookie == HttpCookie.NULL) {
+		if(cookie == null || cookie == BiliCookie.NULL) {
 			return isOk;
 		}
 		
 		String cookiePath = "";
 		if(CookieType.MAIN == cookie.TYPE()) {
-			this.mainCookie = HttpCookie.NULL;
+			this.mainCookie = BiliCookie.NULL;
 			cookiePath = COOKIE_MAIN_PATH;
 			
 		} else if(CookieType.VEST == cookie.TYPE()) {
-			this.vestCookie = HttpCookie.NULL;
+			this.vestCookie = BiliCookie.NULL;
 			cookiePath = COOKIE_VEST_PATH;
 			
 		} else {
@@ -208,17 +208,17 @@ public class CookiesMgr {
 		return FileUtils.delete(cookiePath);
 	}
 
-	public HttpCookie MAIN() {
+	public BiliCookie MAIN() {
 		return mainCookie;
 	}
 
-	public HttpCookie VEST() {
+	public BiliCookie VEST() {
 		return vestCookie;
 	}
 	
-	public Set<HttpCookie> MINIs() {
-		Set<HttpCookie> cookies = new LinkedHashSet<HttpCookie>();
-		Iterator<HttpCookie> minis = miniCookies.iterator();
+	public Set<BiliCookie> MINIs() {
+		Set<BiliCookie> cookies = new LinkedHashSet<BiliCookie>();
+		Iterator<BiliCookie> minis = miniCookies.iterator();
 		for(int i = 0; i < MAX_NUM; i++) {
 			if(minis.hasNext()) {
 				cookies.add(minis.next());
@@ -227,10 +227,10 @@ public class CookiesMgr {
 		return cookies;
 	}
 	
-	public Set<HttpCookie> ALL() {
-		Set<HttpCookie> cookies = new LinkedHashSet<HttpCookie>();
-		if(HttpCookie.NULL != mainCookie) { cookies.add(mainCookie); }
-		if(HttpCookie.NULL != vestCookie) { cookies.add(vestCookie); }
+	public Set<BiliCookie> ALL() {
+		Set<BiliCookie> cookies = new LinkedHashSet<BiliCookie>();
+		if(BiliCookie.NULL != mainCookie) { cookies.add(mainCookie); }
+		if(BiliCookie.NULL != vestCookie) { cookies.add(vestCookie); }
 		cookies.addAll(MINIs());
 		return cookies;
 	}
@@ -241,8 +241,8 @@ public class CookiesMgr {
 	 */
 	public int size() {
 		int size = 0;
-		size += (mainCookie != HttpCookie.NULL ? 1 : 0);
-		size += (vestCookie != HttpCookie.NULL ? 1 : 0);
+		size += (mainCookie != BiliCookie.NULL ? 1 : 0);
+		size += (vestCookie != BiliCookie.NULL ? 1 : 0);
 		size += miniSize();
 		return size;
 	}
@@ -289,8 +289,8 @@ public class CookiesMgr {
 	 * @param cookie
 	 * @return
 	 */
-	public static boolean checkLogined(HttpCookie cookie) {
-		return (HttpCookie.NULL != cookie && XHRSender.queryUserInfo(cookie));
+	public static boolean checkLogined(BiliCookie cookie) {
+		return (BiliCookie.NULL != cookie && XHRSender.queryUserInfo(cookie));
 	}
 	
 }

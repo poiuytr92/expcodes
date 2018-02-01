@@ -1,6 +1,6 @@
 package exp.bilibili.plugin.ui.login;
 
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.protocol.XHRSender;
 
 /**
@@ -35,10 +35,10 @@ class VCLogin {
 	 * @param vcCookies 与验证码配套的cookies
 	 * @return
 	 */
-	protected static HttpCookie toLogin(String username, String password, 
+	protected static BiliCookie toLogin(String username, String password, 
 			String vccode, String vcCookies) {
-		HttpCookie cookie = XHRSender.toLogin(username, password, vccode, vcCookies);
-		if(cookie != HttpCookie.NULL) {
+		BiliCookie cookie = XHRSender.toLogin(username, password, vccode, vcCookies);
+		if(cookie != BiliCookie.NULL) {
 			XHRSender.queryUserInfo(cookie);
 		}
 		return cookie;

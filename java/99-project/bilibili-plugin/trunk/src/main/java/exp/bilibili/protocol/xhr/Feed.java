@@ -8,7 +8,7 @@ import java.util.Map;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.protocol.bean.xhr.BagGift;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
@@ -43,7 +43,7 @@ public class Feed extends __XHR {
 	 * @param cookie 投喂用户cookie
 	 * @param roomId 房间号
 	 */
-	public static void toFeed(HttpCookie cookie, int roomId) {
+	public static void toFeed(BiliCookie cookie, int roomId) {
 		String sRoomId = getRealRoomId(roomId);
 		String upUID = queryUpUID(sRoomId);
 		
@@ -98,7 +98,7 @@ public class Feed extends __XHR {
 	 * @param roomId
 	 * @return
 	 */
-	private static List<BagGift> queryBagList(HttpCookie cookie, String roomId) {
+	private static List<BagGift> queryBagList(BiliCookie cookie, String roomId) {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
 		String response = HttpURLUtils.doGet(BAG_URL, header, null);
 
@@ -128,7 +128,7 @@ public class Feed extends __XHR {
 	 * @param cookie
 	 * @return
 	 */
-	private static int querySilver(HttpCookie cookie) {
+	private static int querySilver(BiliCookie cookie) {
 		Map<String, String> headers = _getHeader(cookie.toNVCookie());
 		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null);
 
@@ -168,7 +168,7 @@ public class Feed extends __XHR {
 	 * @param bagGifts
 	 * @return
 	 */
-	private static void feed(HttpCookie cookie, String roomId, String upUID, List<BagGift> bagGifts) {
+	private static void feed(BiliCookie cookie, String roomId, String upUID, List<BagGift> bagGifts) {
 		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), roomId);
 		Map<String, String> request = _getRequest(cookie, roomId, upUID);
 		
@@ -196,7 +196,7 @@ public class Feed extends __XHR {
 	}
 	
 	private static Map<String, String> _getRequest(
-			HttpCookie cookie, String roomId, String upUID) {
+			BiliCookie cookie, String roomId, String upUID) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("uid", cookie.UID());
 		request.put("ruid", upUID);

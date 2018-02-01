@@ -1,6 +1,6 @@
 package exp.bilibili.plugin.ui;
 
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 
 /**
  * <PRE>
@@ -14,8 +14,16 @@ import exp.bilibili.plugin.bean.ldm.HttpCookie;
  */
 public interface __LoginCallback {
 
-	public void afterLogin(final HttpCookie cookie);
+	/**
+	 * 登录成功后触发
+	 * @param cookie 登录成功后的cookie
+	 */
+	public void afterLogin(final BiliCookie cookie);
 	
-	public void afterLogout(final HttpCookie cookie);
+	/**
+	 * 注销成功后触发
+	 * @param cookie 注销前的cookie
+	 */
+	public void afterLogout(final BiliCookie cookie);
 	
 }

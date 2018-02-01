@@ -5,7 +5,7 @@ import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.bean.xhr.MathTask;
@@ -59,7 +59,7 @@ public class DailyTasks extends __XHR {
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
-	public static long toAssn(HttpCookie cookie) {
+	public static long toAssn(BiliCookie cookie) {
 		Map<String, String> header = getHeader(cookie.toNVCookie());
 		Map<String, String> request = getRequest(cookie.CSRF());
 		String response = HttpURLUtils.doPost(ASSN_URL, header, request);
@@ -96,7 +96,7 @@ public class DailyTasks extends __XHR {
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
-	public static long toSign(HttpCookie cookie) {
+	public static long toSign(BiliCookie cookie) {
 		String roomId = getRealRoomId();
 		Map<String, String> headers = GET_HEADER(cookie.toNVCookie(), roomId);
 		String response = HttpURLUtils.doGet(SIGN_URL, headers, null);
@@ -134,7 +134,7 @@ public class DailyTasks extends __XHR {
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
-	public static long doMathTask(HttpCookie cookie) {
+	public static long doMathTask(BiliCookie cookie) {
 		long nextTaskTime = -1;
 		String roomId = getRealRoomId();
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);

@@ -17,7 +17,7 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.ActivityMgr;
 import exp.bilibili.plugin.cache.ChatMgr;
 import exp.bilibili.plugin.cache.CookiesMgr;
@@ -28,8 +28,8 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.cache.WebBot;
 import exp.bilibili.plugin.envm.ChatColor;
-import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.envm.CookieType;
+import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.bilibili.plugin.utils.SafetyUtils;
@@ -407,7 +407,7 @@ public class AppUI extends MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				
 				// 自动登陆
-				if(CookiesMgr.INSTN().MAIN() != HttpCookie.NULL || 
+				if(CookiesMgr.INSTN().MAIN() != BiliCookie.NULL || 
 						CookiesMgr.INSTN().load(CookieType.MAIN)) {
 					markLogin(CookiesMgr.INSTN().MAIN().NICKNAME());
 				
@@ -416,12 +416,12 @@ public class AppUI extends MainWindow {
 					LoginBtn btn = new LoginBtn(CookieType.MAIN, "", new __LoginCallback() {
 						
 						@Override
-						public void afterLogin(final HttpCookie cookie) {
+						public void afterLogin(final BiliCookie cookie) {
 							markLogin(cookie.NICKNAME());
 						}
 						
 						@Override
-						public void afterLogout(final HttpCookie cookie) {
+						public void afterLogout(final BiliCookie cookie) {
 							// Undo
 						}
 					});
@@ -548,10 +548,10 @@ public class AppUI extends MainWindow {
 	 */
 	private void _loginStormVest() {
 		CookiesMgr.INSTN().load(CookieType.VEST);
-		HttpCookie vestCookie = CookiesMgr.INSTN().VEST();
+		BiliCookie vestCookie = CookiesMgr.INSTN().VEST();
 		
 		// 若现有马甲号不是主号，则使用现有马甲号
-		if(HttpCookie.NULL != vestCookie && !CookiesMgr.INSTN().MAIN().equals(vestCookie)) {
+		if(BiliCookie.NULL != vestCookie && !CookiesMgr.INSTN().MAIN().equals(vestCookie)) {
 			_startStormScanner();
 			
 		// 若不存在马甲号 或 现有马甲号是主号， 则询问
@@ -559,12 +559,12 @@ public class AppUI extends MainWindow {
 			LoginBtn btn = new LoginBtn(CookieType.VEST, "", new __LoginCallback() {
 				
 				@Override
-				public void afterLogin(final HttpCookie cookie) {
+				public void afterLogin(final BiliCookie cookie) {
 					_startStormScanner();
 				}
 				
 				@Override
-				public void afterLogout(final HttpCookie cookie) {
+				public void afterLogout(final BiliCookie cookie) {
 					// Undo
 				}
 				

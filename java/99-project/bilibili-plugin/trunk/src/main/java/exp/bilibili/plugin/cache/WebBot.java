@@ -6,7 +6,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
@@ -54,7 +54,7 @@ public class WebBot extends LoopThread {
 	private int loopCnt;
 	
 	/** 已完成当天任务的cookies */
-	private Set<HttpCookie> finCookies;
+	private Set<BiliCookie> finCookies;
 	
 	/** 最近一次添加过cookie的时间点 */
 	private long lastAddCookieTime;
@@ -74,7 +74,7 @@ public class WebBot extends LoopThread {
 	private WebBot() {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
-		this.finCookies = new HashSet<HttpCookie>();
+		this.finCookies = new HashSet<BiliCookie>();
 		this.lastAddCookieTime = System.currentTimeMillis();
 		this.nextTaskTime = System.currentTimeMillis();
 		initResetTaskTime();
@@ -169,8 +169,8 @@ public class WebBot extends LoopThread {
 		
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
 			
-			Set<HttpCookie> cookies = CookiesMgr.INSTN().ALL();
-			for(HttpCookie cookie : cookies) {
+			Set<BiliCookie> cookies = CookiesMgr.INSTN().ALL();
+			for(BiliCookie cookie : cookies) {
 				if(finCookies.contains(cookie)) {
 					continue;
 				}
@@ -237,8 +237,8 @@ public class WebBot extends LoopThread {
 		}
 		
 		int roomId = UIUtils.getFeedRoomId();
-		Set<HttpCookie> cookies = CookiesMgr.INSTN().MINIs();
-		for(HttpCookie cookie : cookies) {
+		Set<BiliCookie> cookies = CookiesMgr.INSTN().MINIs();
+		for(BiliCookie cookie : cookies) {
 			if(cookie.isAutoFeed()) {
 				XHRSender.toFeed(cookie, roomId);
 			}

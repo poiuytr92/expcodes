@@ -1,7 +1,7 @@
 package exp.bilibili.plugin.ui.login;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.HttpCookie;
+import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.protocol.XHRSender;
@@ -48,7 +48,7 @@ class QRLogin extends LoopThread {
 	
 	private CookieType type;
 	
-	private HttpCookie cookie;
+	private BiliCookie cookie;
 	
 	private QRLoginUI qrUI;
 	
@@ -58,7 +58,7 @@ class QRLogin extends LoopThread {
 		this.oauthKey = "";
 		this.isLogined = false;
 		this.type = type;
-		this.cookie = HttpCookie.NULL;
+		this.cookie = BiliCookie.NULL;
 		this.qrUI = qrUI;
 	}
 	
@@ -84,7 +84,7 @@ class QRLogin extends LoopThread {
 			
 			// 检测是否已扫码登陆成功
 			cookie = XHRSender.toLogin(oauthKey);
-			if(HttpCookie.NULL != cookie) {
+			if(BiliCookie.NULL != cookie) {
 				if(CookiesMgr.checkLogined(cookie)) {
 					isLogined = true;
 					
@@ -124,7 +124,7 @@ class QRLogin extends LoopThread {
 		return isOk;
 	}
 	
-	public HttpCookie getCookie() {
+	public BiliCookie getCookie() {
 		return cookie;
 	}
 	
