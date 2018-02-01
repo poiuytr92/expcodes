@@ -15,6 +15,7 @@ import exp.libs.utils.other.StrUtils;
  */
 public class BiliCookie extends HttpCookie {
 
+	/** NULL-cookie对象 */
 	public final static BiliCookie NULL = new BiliCookie();
 	
 	/** B站CSRF标识 */

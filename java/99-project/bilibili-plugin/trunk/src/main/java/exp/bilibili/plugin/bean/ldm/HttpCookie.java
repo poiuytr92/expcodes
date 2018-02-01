@@ -7,7 +7,7 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * 单个账号的cookie集
+ * 单个会话的cookie集
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -17,11 +17,13 @@ import exp.libs.utils.other.StrUtils;
  */
 public class HttpCookie {
 	
+	/** 换行符 */
 	private final static String LFCR = "\r\n";
 	
+	/** cookie属性集 */
 	private List<_HttpCookie> cookies;
 	
-	/** 多个cookies组合而成的NV串 */
+	/** 多个cookie的NV组合而成的NV串 */
 	private String nvCookies;
 	
 	/** cookies是否发生变化 */
