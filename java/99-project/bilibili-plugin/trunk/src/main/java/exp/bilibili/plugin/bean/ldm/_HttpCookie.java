@@ -7,7 +7,7 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * 单个cookie域值
+ * 单个cookie属性集
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -17,30 +17,45 @@ import exp.libs.utils.other.StrUtils;
  */
 final class _HttpCookie {
 
-	private final static String DOMAIN = "Domain";
-	
-	private final static String PATH = "Path";
-	
-	private final static String EXPIRE = "Expires";
-	
-	private final static String SECURE = "Secure";
-	
-	private final static String HTTPONLY = "HttpOnly";
-
+	/** cookie键名 */
 	private String name;
 	
+	/** cookie键值 */
 	private String value;
 	
+	/** cookie域名 */
+	private final static String DOMAIN = "Domain";
+	
+	/** cookie域值 */
 	private String domain;
 	
+	/** cookie路径名 */
+	private final static String PATH = "Path";
+	
+	/** cookie路径值 */
 	private String path;
 	
+	/** cookie有效期名 */
+	private final static String EXPIRE = "Expires";
+	
+	/** cookie有效期值（英文GMT格式, 如: Thu, 01-Jan-1970 08:00:00 GMT+08:00） */
 	private Date expiry;
 	
+	/** cookie属性：若出现该关键字表示该cookie只会在HTTPS中进行会话验证 */
+	private final static String SECURE = "Secure";
+	
+	/** 是否出现了Secure关键字 */
 	private boolean isSecure;
 	
+	/** cookie属性：若出现该关键字表示该cookie无法被JS等脚本读取, 可防止XSS攻击 */
+	private final static String HTTPONLY = "HttpOnly";
+	
+	/** 是否出现了HttpOnly关键字 */
 	private boolean isHttpOnly;
 	
+	/**
+	 * 构造函数
+	 */
 	protected _HttpCookie() {
 		this.name = "";
 		this.value = "";
@@ -52,14 +67,19 @@ final class _HttpCookie {
 	}
 	
 	/**
-	 * 
-	 * @param headerCookie HTTP响应头中的 Set-Cookie
+	 * 构造函数
+	 * @param headerCookie HTTP响应头中的 Set-Cookie, 格式如：
+	 * 	JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
 	 */
 	protected _HttpCookie(String headerCookie) {
 		this();
 		init(headerCookie);
 	}
 	
+	/**
+	 * 通过HTTP响应头中的Set-Cookie串初始化
+	 * @param headerCookie
+	 */
 	private void init(String headerCookie) {
 		String[] vals = headerCookie.split(";");
 		for(int i = 0; i < vals.length; i++) {
@@ -96,14 +116,27 @@ final class _HttpCookie {
 		}
 	}
 	
+	/**
+	 * cookie是否有效
+	 * @return
+	 */
 	protected boolean isVaild() {
 		return StrUtils.isNotEmpty(name);
 	}
 	
+	/**
+	 * 生成该Cookie的名值对
+	 * 	在与服务端校验cookie会话时, 只需对name与value属性进行校验, 其他属性无需校验, 保存在本地即可
+	 * @return name=value
+	 */
 	protected String toNV() {
 		return (!isVaild() ? "" : StrUtils.concat(name, "=", value));
 	}
 
+	/**
+	 * 生成该cookie在Header中的字符串形式
+	 * @return 形如：JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
+	 */
 	protected String toHeaderCookie() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(name).append("=").append(value).append(" ; ");
