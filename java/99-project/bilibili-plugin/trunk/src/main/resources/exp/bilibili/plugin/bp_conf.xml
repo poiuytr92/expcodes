@@ -43,7 +43,7 @@
     </urls>
     
     <files caption="本地文件位置">
-        <cookies caption="cookies缓存"><![CDATA[./data/cookies]]></cookies>
+        <cookies caption="cookies缓存"><![CDATA[./cookies]]></cookies>
         <img caption="图片缓存"><![CDATA[./data/img]]></img>
         <room caption="房间号缓存"><![CDATA[./data/room/roomids.dat]]></room>
         
