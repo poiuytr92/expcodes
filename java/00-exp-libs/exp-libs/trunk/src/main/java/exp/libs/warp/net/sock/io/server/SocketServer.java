@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.io.client.SocketClient;
+import exp.libs.warp.net.sock.io.common.ISession;
 import exp.libs.warp.thread.ThreadPool;
 
 /**
@@ -161,7 +162,7 @@ public class SocketServer extends Thread {
 				
 				log.debug("Socket服务 [{}] 新增会话 [{}] {}, 当前活动会话数: [{}/{}]", 
 						getName(), clientProxy.ID(), (isOver ? "失败" : ""), 
-						clientProxys.size(), sockConf.getMaxConnectionCount());
+						getClientSize(), sockConf.getMaxConnectionCount());
 			}
 		} while(running == true);
 		
@@ -203,7 +204,27 @@ public class SocketServer extends Thread {
 				clients.remove();
 			}
 		}
-		return (clientProxys.size() >= sockConf.getMaxConnectionCount());
+		return (getClientSize() >= sockConf.getMaxConnectionCount());
+	}
+	
+	/**
+	 * 获取当下这一个时间点所有连接到服务端的客户端数量
+	 * @return 客户端数量
+	 */
+	public int getClientSize() {
+		return clientProxys.size();
+	}
+	
+	/**
+	 * 获取当下这一个时间点所有连接到服务端的客户端会话.
+	 * @return 客户端会话集
+	 */
+	public Iterator<ISession> getClients() {
+		List<ISession> clients = new LinkedList<ISession>();
+		for(_SocketClientProxy client : clientProxys) {
+			clients.add(client);
+		}
+		return clients.iterator();
 	}
 	
 	/**

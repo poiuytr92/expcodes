@@ -61,6 +61,26 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	
 	/**
 	 * 往队尾放入一个元素.
+	 * （阻塞操作）
+	 * @param e 元素
+	 * @param timeout 超时时间(ms)
+	 * @return 是否添加成功 （若超时未能插入则返回false）
+	 */
+	public final boolean add(E e, long timeout) {
+		boolean isAdd = false;
+		if(e != null) {
+			try {
+				isAdd = super.offer(e, timeout, TimeUnit.MILLISECONDS);
+				
+			} catch (InterruptedException ex) {
+				log.error("元素 [{}] 插入PC队列失败, 已从内存丢失.", ex);
+			}
+		}
+		return isAdd;
+	}
+	
+	/**
+	 * 往队尾放入一个元素.
 	 * （非阻塞操作）
 	 * 
 	 * @param e 元素
@@ -84,6 +104,24 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 		E e = null;
 		try {
 			e = super.take();
+			
+		} catch (InterruptedException ex) {
+			log.error("从PC队列取出元素失败.", ex);
+		}
+		return e;
+	}
+	
+	/**
+	 * 从队头取出一个元素.
+	 * （阻塞操作）
+	 * 
+	 * @param timeout 超时时间(ms)
+	 * @return 元素（若超时或发生内部异常，返回null）
+	 */
+	public final E get(long timeout) {
+		E e = null;
+		try {
+			e = super.poll(timeout, TimeUnit.MILLISECONDS);
 			
 		} catch (InterruptedException ex) {
 			log.error("从PC队列取出元素失败.", ex);
