@@ -168,7 +168,6 @@ public class WebBot extends LoopThread {
 		resetDailyTasks();	// 满足某个条件则重置每日任务
 		
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
-			
 			Set<BiliCookie> cookies = CookiesMgr.INSTN().ALL();
 			for(BiliCookie cookie : cookies) {
 				if(finCookies.contains(cookie)) {
@@ -192,23 +191,18 @@ public class WebBot extends LoopThread {
 	 * 当cookies发生变化时, 重置每日任务
 	 */
 	private void resetDailyTasks() {
-		if(nextTaskTime > 0){
-			return;	// 当天任务还在执行中, 无需重置任务时间点
-		}
 		
-		// 当cookie发生变化时, 重置任务时间
-		if(lastAddCookieTime != CookiesMgr.INSTN().getLastAddCookieTime()) {
+		// 当跨天时, 重置任务时间, 且清空完成任务的cookie标记
+		long now = System.currentTimeMillis();
+		if(now - resetTaskTime > DAY_UNIT) {
+			resetTaskTime = now;
+			nextTaskTime = now;
+			finCookies.clear();
+			
+		// 当cookie发生变化时, 仅重置任务时间
+		} else if(lastAddCookieTime != CookiesMgr.INSTN().getLastAddCookieTime()) {
 			lastAddCookieTime = CookiesMgr.INSTN().getLastAddCookieTime();
 			nextTaskTime = System.currentTimeMillis();
-			
-		// 当跨天时, 重置任务时间, 且清空完成任务的cookie标记
-		} else {
-			long now = System.currentTimeMillis();
-			if(now - resetTaskTime > DAY_UNIT) {
-				resetTaskTime = now;
-				nextTaskTime = now;
-				finCookies.clear();
-			}
 		}
 	}
 	
