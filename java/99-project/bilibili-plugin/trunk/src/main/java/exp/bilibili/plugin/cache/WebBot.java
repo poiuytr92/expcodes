@@ -201,13 +201,13 @@ public class WebBot extends LoopThread {
 			lastAddCookieTime = CookiesMgr.INSTN().getLastAddCookieTime();
 			nextTaskTime = System.currentTimeMillis();
 			
-		// 当跨天时, 重置任务时间
+		// 当跨天时, 重置任务时间, 且清空完成任务的cookie标记
 		} else {
 			long now = System.currentTimeMillis();
 			if(now - resetTaskTime > DAY_UNIT) {
 				resetTaskTime = now;
 				nextTaskTime = now;
-				finCookies.clear();	// 跨天后, 已完成任务的cookie标记也需要重置
+				finCookies.clear();
 			}
 		}
 	}
