@@ -385,7 +385,6 @@
 								<echo>拷贝资源数据</echo>
 								<copy todir="${release.dir}/data">
 									<fileset dir="data">
-									  <exclude name="cookies/*" />
 									  <exclude name="active/*" />
 									  <exclude name="img/qrcode.png" />
 									  <exclude name="img/vccode.jpg" />
@@ -393,6 +392,11 @@
 									  <exclude name="img/tesseract.log" />
 									</fileset>
 								</copy>
+								<copy todir="${release.dir}/cookies">
+                                    <fileset dir="cookies">
+                                      <exclude name="*" />
+                                    </fileset>
+                                </copy>
 								<echo>拷贝文档</echo>
 								<copy todir="${release.dir}/运行截图">
 									<fileset dir="doc/运行截图" />
