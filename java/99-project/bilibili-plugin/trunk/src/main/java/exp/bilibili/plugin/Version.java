@@ -27,6 +27,7 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO
+		// 房管举报1次直接关人
 		// 优化身份识别系统
 		// 模拟观看时长
 		// 系统托盘好卡
