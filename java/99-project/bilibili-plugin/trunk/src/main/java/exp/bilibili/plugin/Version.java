@@ -27,7 +27,6 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO
-		// 执法机器人： 举报+用户名
 		// 优化身份识别系统
 		// 模拟观看时长
 		// 系统托盘好卡

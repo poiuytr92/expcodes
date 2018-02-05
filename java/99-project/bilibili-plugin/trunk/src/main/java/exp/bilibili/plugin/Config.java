@@ -133,6 +133,10 @@ public class Config {
 		return xConf.getVal("/config/urls/liveURL");
 	}
 	
+	public String BLACK_URL() {
+		return xConf.getVal("/config/urls/blackURL");
+	}
+	
 	public String CHAT_URL() {
 		return xConf.getVal("/config/urls/chatURL");
 	}

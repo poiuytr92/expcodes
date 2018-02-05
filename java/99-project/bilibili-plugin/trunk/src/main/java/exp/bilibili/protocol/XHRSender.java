@@ -37,6 +37,18 @@ public class XHRSender {
 	}
 	
 	/**
+	 * 临时把用户关小黑屋1小时
+	 * @param username
+	 * @return
+	 */
+	public static boolean blockUser(String username) {
+		BiliCookie cookie = CookiesMgr.INSTN().MAIN();
+		int roomId = UIUtils.getLiveRoomId();
+		final int hour = 1;
+		return Other.blockUser(cookie, roomId, username, hour);
+	}
+	
+	/**
 	 * 获取二维码登陆信息(用于在本地生成二维码图片)
 	 * @return
 	 */

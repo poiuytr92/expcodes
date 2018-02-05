@@ -134,6 +134,7 @@ public class WSAnalyser {
 		ActivityMgr.getInstn().add(msgBean);
 		ChatMgr.getInstn().addNight(msgBean.getUsername(), msgBean.getMsg());
 		ChatMgr.getInstn().countChatCnt(msgBean.getUsername());
+		ChatMgr.getInstn().checkComplaint(msgBean);
 	}
 	
 	/**

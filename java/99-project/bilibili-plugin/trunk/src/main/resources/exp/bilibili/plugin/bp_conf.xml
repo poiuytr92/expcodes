@@ -22,6 +22,7 @@
         
         <liveHost caption="直播主机"><![CDATA[api.live.bilibili.com]]></liveHost>
         <liveURL caption="直播列表URL"><![CDATA[http://api.live.bilibili.com/area/liveList]]></liveURL>
+        <blackURL caption="小黑屋URL"><![CDATA[http://api.live.bilibili.com/liveact/room_block_user]]></blackURL>
         <chatURL caption="版聊URL"><![CDATA[https://api.live.bilibili.com/msg/send]]></chatURL>
         <signURL caption="签到URL"><![CDATA[http://api.live.bilibili.com/sign/doSign]]></signURL>
         <assnURL caption="友爱社URL"><![CDATA[http://api.live.bilibili.com/activity/v1/task/receive_award]]></assnURL>

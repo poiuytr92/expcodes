@@ -13,10 +13,12 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
+import exp.bilibili.protocol.bean.ws.ChatMsg;
 import exp.bilibili.protocol.bean.ws.SendGift;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.thread.LoopThread;
 
 /**
@@ -37,8 +39,16 @@ public class ChatMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(ChatMgr.class);
 	
+	/** 被其他人联名举报上限: 超过上限则临时关小黑屋1小时 */
+	private final static int COMPLAINT_LIMIT = 3;
+	
+	/** 举报关键字 */
+	private final static String COMPLAINT_KEY = "#举报";
+	
 	/** 同屏可以显示的最大发言数 */
 	private final static int SCREEN_CHAT_LIMT = 7;
+	
+	private final static String WARN_KEY = "【警告】";
 	
 	private final static String NOTICE_KEY = "【公告】";
 	
@@ -279,7 +289,7 @@ public class ChatMgr extends LoopThread {
 		if(userNum > THX_USER_LIMIT) {
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢前面[", userNum, 
 					"]个大佬的投喂d(´ω｀*)");
-			XHRSender.sendDanmu(msg, UIUtils.getCurChatColor());
+			XHRSender.sendDanmu(msg);
 			
 		// 分别合并每个用户的投喂礼物再感谢
 		} else {
@@ -316,7 +326,7 @@ public class ChatMgr extends LoopThread {
 					int cost = ActivityMgr.showCost(giftName, num);
 					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
 							MsgKwMgr.getAdj(), "投喂", num, "个[", giftName, "],活跃+", cost);
-					XHRSender.sendDanmu(msg, UIUtils.getCurChatColor());
+					XHRSender.sendDanmu(msg);
 				}
 			}
 			
@@ -334,7 +344,7 @@ public class ChatMgr extends LoopThread {
 			
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
 					MsgKwMgr.getAdj(), "投喂[", sb.toString(), "],活跃+", cost);
-			XHRSender.sendDanmu(msg, UIUtils.getCurChatColor());
+			XHRSender.sendDanmu(msg);
 		}
 		
 		gifts.clear();
@@ -349,7 +359,7 @@ public class ChatMgr extends LoopThread {
 		}
 		
 		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(MsgKwMgr.getNotices()));
-		XHRSender.sendDanmu(msg, UIUtils.getCurChatColor());
+		XHRSender.sendDanmu(msg);
 	}
 	
 	/**
@@ -361,7 +371,7 @@ public class ChatMgr extends LoopThread {
 		}
 		
 		String msg = RandomUtils.randomElement(MsgKwMgr.getCalls());
-		XHRSender.sendDanmu(msg, UIUtils.getCurChatColor());
+		XHRSender.sendDanmu(msg);
 	}
 	
 	public void setAutoThankYou() {
@@ -423,6 +433,31 @@ public class ChatMgr extends LoopThread {
 	 */
 	private boolean allowAutoChat() {
 		return chatCnt >= SCREEN_CHAT_LIMT;
+	}
+	
+	/**
+	 * 检查举报发言
+	 * @param msgBean
+	 */
+	public void checkComplaint(ChatMsg chatMsg) {
+		if(!chatMsg.getMsg().startsWith(COMPLAINT_KEY)) {
+			return;
+		}
+		
+		String accuser = chatMsg.getUsername();
+		String accused = RegexUtils.findFirst(chatMsg.getMsg(), COMPLAINT_KEY.concat("\\s*(.+)")).trim();
+		int cnt = OnlineUserMgr.getInstn().complaint(accuser, accused);
+		
+		if(cnt >= COMPLAINT_LIMIT) {
+			if(XHRSender.blockUser(accused)) {
+				OnlineUserMgr.getInstn().cancel(accused);
+				String msg = StrUtils.concat(WARN_KEY, "[", accused, "]被", cnt, "人举报,暂时禁言");
+				XHRSender.sendDanmu(msg);
+			}
+		} else {
+			String msg = StrUtils.concat(WARN_KEY, cnt, "次,请[", accused, "]注意弹幕礼仪");
+			XHRSender.sendDanmu(msg);
+		}
 	}
 	
 }
