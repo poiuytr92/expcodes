@@ -10,6 +10,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
@@ -440,7 +442,8 @@ public class ChatMgr extends LoopThread {
 	 * @param msgBean
 	 */
 	public void checkComplaint(ChatMsg chatMsg) {
-		if(!chatMsg.getMsg().startsWith(COMPLAINT_KEY)) {
+		if(Config.LEVEL < Level.ADMIN || 
+				!chatMsg.getMsg().startsWith(COMPLAINT_KEY)) {
 			return;
 		}
 		
@@ -455,7 +458,7 @@ public class ChatMgr extends LoopThread {
 				XHRSender.sendDanmu(msg);
 			}
 		} else {
-			String msg = StrUtils.concat(WARN_KEY, cnt, "次,请[", accused, "]注意弹幕礼仪");
+			String msg = StrUtils.concat(WARN_KEY, "x", cnt, ",请[", accused, "]注意弹幕礼仪");
 			XHRSender.sendDanmu(msg);
 		}
 	}
