@@ -22,7 +22,7 @@ import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.verify.RegexUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -37,8 +37,6 @@ import exp.libs.utils.verify.RegexUtils;
 class WebSockSession extends WebSocketClient {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockSession.class);
-	
-	private final static String RGX_JSON = "[^{]*([^\0]*)";
 	
 	/** 连接超时 */
 	private final static long CONN_TIMEOUT = 10000;
@@ -137,11 +135,21 @@ class WebSockSession extends WebSocketClient {
 			UIUtils.log("入侵直播间成功, 正在暗中观察...");
 			
 		} else {
-			String msg = CharsetUtils.toStr(buff, Config.DEFAULT_CHARSET);
-			String sJson = RegexUtils.findFirst(msg.substring(15), RGX_JSON);	// 消息的前16个字符为无效字符
+			alalyseMsg(hex);
+		}
+    }
+	
+	private void alalyseMsg(String hexMsg) {
+		String split = hexMsg.substring(0, 32);	// 消息的前32个字节(即16个字符)为分隔符
+		String[] hexs = hexMsg.split(split);
+		for(String hex : hexs) {
+			if(StrUtils.isEmpty(hex)) {
+				continue;
+			}
 			
-			if(JsonUtils.isVaild(sJson)) {
-				JSONObject json = JSONObject.fromObject(sJson);
+			String msg = CharsetUtils.toStr(BODHUtils.toBytes(hex), Config.DEFAULT_CHARSET);
+			if(JsonUtils.isVaild(msg)) {
+				JSONObject json = JSONObject.fromObject(msg);
 				if(!WSAnalyser.toMsgBean(json)) {
 					log.info("无效的推送消息: {}", hex);
 				}
@@ -149,7 +157,7 @@ class WebSockSession extends WebSocketClient {
 				log.info("无效的推送消息: {}", hex);
 			}
 		}
-    }
+	}
 	
 	@Override
     public void onFragment(Framedata framedata) {

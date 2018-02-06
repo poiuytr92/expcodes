@@ -130,6 +130,7 @@ public class WSAnalyser {
 		UIUtils.chat(msg);
 		log.info(msg);
 		
+		// FIXME 封装
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
 		ActivityMgr.getInstn().add(msgBean);
 		ChatMgr.getInstn().addNight(msgBean.getUsername(), msgBean.getMsg());
