@@ -550,7 +550,7 @@ public class CompressUtils {
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean extract(String filePath, FileType fileType) {
-		return extract(filePath, new File(filePath).getParent(), fileType);
+		return extract(filePath, getSnkDir(filePath), fileType);
 	}
 	
 	/**
@@ -560,23 +560,23 @@ public class CompressUtils {
 	 * </PRE>
 	 * 
 	 * @param srcPath 被解压的文件路径（路径包含文件名）
-	 * @param snkPath 得到解压文件的路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
-	public static boolean extract(String srcPath, String snkPath) {
-		return extract(srcPath, snkPath, null);
+	public static boolean extract(String srcPath, String snkDir) {
+		return extract(srcPath, snkDir, null);
 	}
 	
 	/**
 	 * 使用指定算法解压文件.
 	 * 
 	 * @param srcPath 被解压的文件路径（路径包含文件名）
-	 * @param snkPath 得到解压文件的路径（路径包含文件名）
+	 * @param snkPath 得到解压文件的目录
 	 * @param fileType 被解压的文件类型
 	 * @return true:解压成功; false:解压失败
 	 */
-	public static boolean extract(String srcPath, String snkPath, FileType fileType) {
-		if(StrUtils.isEmpty(srcPath) || StrUtils.isEmpty(snkPath)){
+	public static boolean extract(String srcPath, String snkDir, FileType fileType) {
+		if(StrUtils.isEmpty(srcPath) || StrUtils.isEmpty(snkDir)){
 			log.warn("解压文件 [{}] 失败：源路径/目标路径为空.");
 			return false;
 		}
@@ -588,42 +588,50 @@ public class CompressUtils {
 		try {
 			if (FileType.ZIP.HEAD_MSG.equals(headMsg) || 
 					FileType.ZIP.EXT.equals(ext)) {
-				isOk = unZip(srcPath, snkPath);
+				isOk = unZip(srcPath, snkDir);
 				
 			} else if (FileType.TAR.HEAD_MSG.equals(headMsg) || 
 					FileType.TAR.EXT.equals(ext)) {
-				isOk = unTar(srcPath, snkPath);
+				isOk = unTar(srcPath, snkDir);
 				
 			} else if (FileType.GZ.HEAD_MSG.equals(headMsg) || 
 					FileType.GZ.EXT.equals(ext)) {
-				isOk = unGZip(srcPath, snkPath);
+				isOk = unGZip(srcPath, snkDir);
 				
 			} else if (FileType.BZ2.HEAD_MSG.equals(headMsg) || 
 					FileType.BZ2.EXT.equals(ext)) {
-				isOk = unBZ2(srcPath, snkPath);
+				isOk = unBZ2(srcPath, snkDir);
 				
 			} else {
 				log.warn("解压文件 [{}] 失败： 不支持的压缩格式 [{}].", srcPath, ext);
 			}
 		} catch (Exception e) {
-			log.error("解压文件 [{}] 到 [{}] 失败.", srcPath, snkPath, e);
+			log.error("解压文件 [{}] 到 [{}] 失败.", srcPath, snkDir, e);
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 使用zip算法解压文件到zipPath所在的目录
+	 * @param zipPath 被解压的文件路径（路径包含文件名）
+	 * @return true:解压成功; false:解压失败
+	 */
+	public static boolean unZip(String zipPath) {
+		String snkDir = getSnkDir(zipPath);
+		return unZip(zipPath, snkDir);
 	}
 	
 	/**
 	 * 使用zip算法解压文件
 	 * 
 	 * @param zipPath 被解压的文件路径（路径包含文件名）
-	 * @param snkPath 得到解压文件的路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
-	public static boolean unZip(String zipPath, String snkPath) {
+	public static boolean unZip(String zipPath, String snkDir) {
 		boolean isOk = true;
-		snkPath = getSnkPath(zipPath, snkPath);
-		
+		FileUtils.createDir(snkDir);
 		File zipFile = new File(zipPath);
-		File unZipDir = FileUtils.createDir(snkPath);
 		ZipFile zip = null;
 		try {
 			zip = new ZipFile(zipFile);
@@ -632,12 +640,12 @@ public class CompressUtils {
 			while (entries.hasMoreElements()) {
 				ZipArchiveEntry zipEntry = entries.nextElement();
 				String name = zipEntry.getName().trim();
-				name = name.replace('\\', '/').replaceFirst("[^/]+/", "");
-				File destFile = new File(unZipDir, name);
+				name = name.replace('\\', '/');
+				File destFile = new File(snkDir, name);
 				
 				// 所解压的是目录
-				if (name.endsWith("/")) {
-					if (!destFile.isDirectory() && !destFile.mkdirs()) {
+				if ("".equals(name) || name.endsWith("/")) {
+					if (!destFile.mkdirs()) {
 						isOk = false;
 						break;
 					}
@@ -646,7 +654,7 @@ public class CompressUtils {
 				// 所解压的是文件, 先创建其所有祖先目录
 				} else if (name.indexOf('/') != -1) {
 					File parentDir = destFile.getParentFile();
-					if (!parentDir.isDirectory() && !parentDir.mkdirs()) {
+					if (!parentDir.exists() && !parentDir.mkdirs()) {
 						isOk = false;
 					}
 				}
@@ -663,7 +671,7 @@ public class CompressUtils {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-ZIP] 解压文件 [{}] 到 [{}] 失败.", zipPath, snkPath, e);
+			log.error("[ERROR-ZIP] 解压文件 [{}] 到 [{}] 失败.", zipPath, snkDir, e);
 			
 		} finally {
 			if (zip != null) {
@@ -679,32 +687,38 @@ public class CompressUtils {
 	}
 
 	/**
+	 * 使用tar算法解压文件到tarPath所在的目录
+	 * @param tarPath 被解压的文件路径（路径包含文件名）
+	 * @return true:解压成功; false:解压失败
+	 */
+	public static boolean unTar(String tarPath) {
+		String snkDir = getSnkDir(tarPath);
+		return unTar(tarPath, snkDir);
+	}
+	
+	/**
 	 * 使用tar算法解压文件
 	 * 
 	 * @param tarPath 被解压的文件路径（路径包含文件名）
-	 * @param snkPath 得到解压文件的路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
-	public static boolean unTar(String tarPath, String snkPath) {
+	public static boolean unTar(String tarPath, String snkDir) {
 		boolean isOk = true;
-		snkPath = getSnkPath(tarPath, snkPath);
-		
+		FileUtils.createDir(snkDir);
 		File tarFile = new File(tarPath);
-		File unTarDir = new File(snkPath);
-		unTarDir.mkdirs();
-		
 		TarArchiveInputStream tis = null;
 		try {
 			tis = new TarArchiveInputStream(new FileInputStream(tarFile));
 			TarArchiveEntry tarEntry = null;
 			while ((tarEntry = tis.getNextTarEntry()) != null) {
 				String name = tarEntry.getName().trim();
-				name = name.replace('\\', '/').replaceFirst("[^/]+/", "");
-				File destFile = new File(unTarDir, name);
+				name = name.replace('\\', '/');
+				File destFile = new File(snkDir, name);
 				
 				// 所解压的是目录
-				if (name.endsWith("/")) {
-					if (!destFile.isDirectory() && !destFile.mkdirs()) {
+				if ("".equals(name) || name.endsWith("/")) {
+					if (!destFile.mkdirs()) {
 						isOk = false;
 						break;
 					}
@@ -713,7 +727,7 @@ public class CompressUtils {
 				// 所解压的是文件, 先创建其所有祖先目录
 				} else if (name.indexOf('/') != -1) {
 					File parentDir = destFile.getParentFile();
-					if (!parentDir.isDirectory() && !parentDir.mkdirs()) {
+					if (!parentDir.exists() && !parentDir.mkdirs()) {
 						isOk = false;
 					}
 				}
@@ -731,7 +745,7 @@ public class CompressUtils {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-TAR] 解压文件 [{}] 到 [{}] 失败.", tarPath, snkPath, e);
+			log.error("[ERROR-TAR] 解压文件 [{}] 到 [{}] 失败.", tarPath, snkDir, e);
 			
 		} finally {
 			if (tis != null) {
@@ -747,23 +761,32 @@ public class CompressUtils {
 	}
 
 	/**
+	 * 使用gzip算法解压文件到gzipPath所在的目录
+	 * @param gzipPath 被解压的文件路径（路径包含文件名）
+	 * @return true:解压成功; false:解压失败
+	 */
+	public static boolean unGZip(String gzipPath) {
+		String snkDir = getSnkDir(gzipPath);
+		return unGZip(gzipPath, snkDir);
+	}
+	
+	/**
 	 * 使用gzip算法解压文件
 	 * 
 	 * @param gzipPath 被解压的文件路径（路径包含文件名）
-	 * @param snkPath 得到解压文件的路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
-	public static boolean unGZip(String gzipPath, String snkPath) {
+	public static boolean unGZip(String gzipPath, String snkDir) {
 		boolean isOk = true;
-		snkPath = getSnkPath(gzipPath, snkPath);
-		
+		FileUtils.createDir(snkDir);
 		GZIPInputStream gis = null;
 		BufferedInputStream bis = null;
 		FileOutputStream fos = null;
 		try {
 			gis = new GZIPInputStream(new FileInputStream(gzipPath));
 			bis = new BufferedInputStream(gis);
-			fos = new FileOutputStream(snkPath);
+			fos = new FileOutputStream(snkDir);
 
 			int cnt = 0;
 			byte[] buf = new byte[1024];
@@ -772,7 +795,7 @@ public class CompressUtils {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-GZIP] 解压文件 [{}] 到 [{}] 失败.", gzipPath, snkPath, e);
+			log.error("[ERROR-GZIP] 解压文件 [{}] 到 [{}] 失败.", gzipPath, snkDir, e);
 			
 		} finally {
 			if (fos != null) {
@@ -780,7 +803,7 @@ public class CompressUtils {
 					fos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-GZIP] 关闭文件输出流失败: [{}].", snkPath, e);
+					log.error("[ERROR-GZIP] 关闭文件输出流失败: [{}].", snkDir, e);
 				}
 			}
 			
@@ -806,23 +829,32 @@ public class CompressUtils {
 	}
 
 	/**
+	 * 使用bz2算法解压文件到bzPath所在的目录
+	 * @param bzPath 被解压的文件路径（路径包含文件名）
+	 * @return true:解压成功; false:解压失败
+	 */
+	public static boolean unBZ2(String bzPath) {
+		String snkDir = getSnkDir(bzPath);
+		return unBZ2(bzPath, snkDir);
+	}
+	
+	/**
 	 * 使用bz2算法解压文件
 	 * 
 	 * @param bzPath 被解压的文件路径（路径包含文件名）
-	 * @param snkPath 得到解压文件的路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
-	public static boolean unBZ2(String bzPath, String snkPath) {
+	public static boolean unBZ2(String bzPath, String snkDir) {
 		boolean isOk = true;
-		snkPath = getSnkPath(bzPath, snkPath);
-		
+		FileUtils.createDir(snkDir);
 		BZip2CompressorInputStream bzis = null;
 		BufferedInputStream bis = null;
 		FileOutputStream fos = null;
 		try {
 			bzis = new BZip2CompressorInputStream(new FileInputStream(bzPath));
 			bis = new BufferedInputStream(bzis);
-			fos = new FileOutputStream(snkPath);
+			fos = new FileOutputStream(snkDir);
 
 			int cnt = 0;
 			byte[] buf = new byte[1024];
@@ -831,7 +863,7 @@ public class CompressUtils {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-BZ2] 解压文件 [{}] 到 [{}] 失败.", bzPath, snkPath, e);
+			log.error("[ERROR-BZ2] 解压文件 [{}] 到 [{}] 失败.", bzPath, snkDir, e);
 			
 		} finally {
 			if (fos != null) {
@@ -839,7 +871,7 @@ public class CompressUtils {
 					fos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-BZ2] 关闭文件输出流失败: [{}].", snkPath, e);
+					log.error("[ERROR-BZ2] 关闭文件输出流失败: [{}].", snkDir, e);
 				}
 			}
 			
@@ -864,18 +896,17 @@ public class CompressUtils {
 		return isOk;
 	}
 
-	private static String getSnkPath(String srcPath, String snkPath) {
-		String targetPath = "";
-		if(StrUtils.isNotEmpty(srcPath) && StrUtils.isNotEmpty(snkPath)) {
-			targetPath = snkPath;
-			if(FileUtils.isDirectory(snkPath)) {
-				String name = FileUtils.getName(srcPath);
-				int pos = name.lastIndexOf('.');
-				name = (pos > 0 ? name.substring(0, pos) : name);
-				targetPath = StrUtils.concat(targetPath, File.separator, name);
-			}
+	/**
+	 * 从压缩文件路径中提取解压目录路径
+	 * @param srcPath 压缩文件路径
+	 * @return 解压目录路径
+	 */
+	private static String getSnkDir(String srcPath) {
+		String snkDir = "";
+		if(StrUtils.isNotEmpty(srcPath)) {
+			snkDir = new File(srcPath).getParent();
 		}
-		return targetPath;
+		return snkDir;
 	}
 	
 	/**
