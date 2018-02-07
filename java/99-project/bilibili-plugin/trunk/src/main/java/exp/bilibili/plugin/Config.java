@@ -157,6 +157,10 @@ public class Config {
 		return xConf.getVal("/config/urls/roomURL");
 	}
 	
+	public String MANAGE_URL() {
+		return xConf.getVal("/config/urls/manageURL");
+	}
+	
 	public String BAG_URL() {
 		return xConf.getVal("/config/urls/bagURL");
 	}

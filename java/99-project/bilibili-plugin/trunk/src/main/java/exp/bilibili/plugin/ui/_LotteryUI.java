@@ -62,7 +62,7 @@ class _LotteryUI extends PopChildWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.users = OnlineUserMgr.getInstn().getAllUsers();
+		this.users = OnlineUserMgr.getInstn().getAllOnlineUsers();
 		this.userPanel = new JPanel(new GridLayout(ROW, COL));
 		SwingUtils.addBorder(userPanel, "在线活跃用户列表  (仅随机显示" +  (ROW * COL) + "名)");
 		refreshUserPanel();
@@ -180,7 +180,7 @@ class _LotteryUI extends PopChildWindow {
 		}
 		
 		users.clear();
-		users = OnlineUserMgr.getInstn().getAllUsers();
+		users = OnlineUserMgr.getInstn().getAllOnlineUsers();
 		refreshUserPanel();
 		
 		luckyBtn.setText("抽奖人数:" + users.size());

@@ -130,7 +130,7 @@ public class WSAnalyser {
 		UIUtils.chat(msg);
 		log.info(msg);
 		
-		OnlineUserMgr.getInstn().add(msgBean.getUsername());
+		OnlineUserMgr.getInstn().addOnlineUser(msgBean.getUsername());
 		ActivityMgr.getInstn().add(msgBean);
 		ChatMgr.getInstn().analyseDanmu(msgBean);
 	}
@@ -148,7 +148,7 @@ public class WSAnalyser {
 		log.info(msg);
 		
 		ChatMgr.getInstn().addThxGift(msgBean);
-		OnlineUserMgr.getInstn().add(msgBean.getUname());
+		OnlineUserMgr.getInstn().addOnlineUser(msgBean.getUname());
 		ActivityMgr.getInstn().add(msgBean);
 	}
 	
@@ -270,7 +270,7 @@ public class WSAnalyser {
 		log.info(msg);
 			
 		ChatMgr.getInstn().sendThxGuard(msg);
-		OnlineUserMgr.getInstn().add(msgBean.getUsername());
+		OnlineUserMgr.getInstn().addOnlineUser(msgBean.getUsername());
 		ActivityMgr.getInstn().add(msgBean);
 	}
 

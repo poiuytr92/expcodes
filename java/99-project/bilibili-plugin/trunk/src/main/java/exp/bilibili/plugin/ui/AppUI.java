@@ -479,6 +479,7 @@ public class AppUI extends MainWindow {
 				
 				chatTA.setText("");		// 清空版聊区
 				OnlineUserMgr.getInstn().clear(); // 重连直播间时清空在线用户列表
+				OnlineUserMgr.getInstn().updateManagers(); // 更新当前直播间的房管列表(含主播)
 				lockBtn();
 			}
 		});

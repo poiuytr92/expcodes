@@ -11,6 +11,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.protocol.bean.xhr.BagGift;
+import exp.bilibili.protocol.bean.xhr.User;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
@@ -28,8 +29,6 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 public class Feed extends __XHR {
 
-	private final static String ROOM_URL = Config.getInstn().ROOM_URL();
-	
 	private final static String BAG_URL = Config.getInstn().BAG_URL();
 	
 	private final static String FEED_URL = Config.getInstn().FEED_URL();
@@ -45,7 +44,7 @@ public class Feed extends __XHR {
 	 */
 	public static void toFeed(BiliCookie cookie, int roomId) {
 		String sRoomId = getRealRoomId(roomId);
-		String upUID = queryUpUID(sRoomId);
+		User up = Other.queryUpInfo(roomId);
 		
 		List<BagGift> bagGifts = queryBagList(cookie, sRoomId);
 		int silver = querySilver(cookie);
@@ -55,41 +54,7 @@ public class Feed extends __XHR {
 			bagGifts.add(bagGift);
 		}
 		
-		feed(cookie, sRoomId, upUID, bagGifts);
-	}
-	
-	/**
-	 * 查询直播间主播的用户ID
-	 * @param roomId
-	 * @return 主播的用户ID
-	 */
-	private static String queryUpUID(String roomId) {
-		Map<String, String> header = GET_HEADER("", roomId);
-		Map<String, String> request = _getRequest(roomId);
-		String response = HttpURLUtils.doGet(ROOM_URL, header, request);
-		
-		String uid = "";
-		try {
-			JSONObject json = JSONObject.fromObject(response);
-			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			if(code == 0) {
-				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
-				uid = JsonUtils.getStr(data, BiliCmdAtrbt.uid);
-				
-			} else {
-				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("获取主播ID失败: {}", reason);
-			}
-		} catch(Exception e) {
-			log.error("获取主播ID异常: {}", response, e);
-		}
-		return uid;
-	}
-	
-	private static Map<String, String> _getRequest(String roomId) {
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("id", roomId);
-		return request;
+		feed(cookie, sRoomId, up.ID(), bagGifts);
 	}
 	
 	/**

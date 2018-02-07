@@ -1,11 +1,13 @@
 package exp.bilibili.protocol;
 
 import java.util.List;
+import java.util.Set;
 
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.bilibili.protocol.bean.xhr.User;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.bilibili.protocol.xhr.Feed;
@@ -34,6 +36,16 @@ public class XHRSender {
 	 */
 	public static String queryCertTags() {
 		return Other.queryCertificateTags();
+	}
+	
+	/**
+	 * 查询直播间的房管(含主播)
+	 * @param roomId 直播间ID
+	 * @return 房管列表
+	 */
+	public static Set<User> queryManagers() {
+		int roomId = UIUtils.getLiveRoomId();
+		return Other.queryManagers(roomId);
 	}
 	
 	/**

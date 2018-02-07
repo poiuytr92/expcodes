@@ -36,6 +36,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String userInfo = "userInfo";
 	
+	public final static String userinfo = "userinfo";
+	
 	public final static String uid = "uid";
 	
 	public final static String username = "username";

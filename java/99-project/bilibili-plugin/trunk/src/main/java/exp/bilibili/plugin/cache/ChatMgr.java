@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -43,6 +44,9 @@ public class ChatMgr extends LoopThread {
 	
 	/** 被其他人联名举报上限: 超过上限则临时关小黑屋1小时 */
 	private final static int COMPLAINT_LIMIT = 3;
+	
+	/** 禁言关键字 */
+	private final static String BAN_KEY = "#禁言";
 	
 	/** 举报关键字 */
 	private final static String COMPLAINT_KEY = "#举报";
@@ -364,7 +368,8 @@ public class ChatMgr extends LoopThread {
 	public void analyseDanmu(ChatMsg chatMsg) {
 		countChatCnt(chatMsg.getUsername());	// 登陆用户发言计数器
 		toNight(chatMsg.getUsername(), chatMsg.getMsg());	// 自动晚安
-		checkComplaint(chatMsg.getUsername(), chatMsg.getMsg());	// 举报处理
+		complaint(chatMsg.getUsername(), chatMsg.getMsg());	// 举报处理
+		ban(chatMsg.getUsername(), chatMsg.getMsg());	// 禁言处理
 	}
 	
 	/**
@@ -384,10 +389,30 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 检查举报发言
-	 * @param msgBean
+	 * 自动晚安
+	 * @param username
+	 * @param msg
 	 */
-	private void checkComplaint(String username, String msg) {
+	private void toNight(String username, String msg) {
+		if(!isAutoGoodNight() || 
+				msg.startsWith(NIGHT_KEY) ||		// 避免跟机器人对话
+				nightedUsers.contains(username)) { 	// 避免重复晚安
+			return;
+		}
+		
+		if(MsgKwMgr.containsNight(msg)) {
+			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
+			XHRSender.sendDanmu(chatMsg, UIUtils.getCurChatColor());
+			nightedUsers.add(username);
+		}
+	}
+	
+	/**
+	 * 弹幕举报
+	 * @param username 举报人
+	 * @param msg 弹幕（消息含被举报人）
+	 */
+	private void complaint(String username, String msg) {
 		if(Config.LEVEL < Level.ADMIN || !msg.trim().startsWith(COMPLAINT_KEY)) {
 			return;
 		}
@@ -408,21 +433,38 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 自动晚安
-	 * @param username
-	 * @param msg
+	 * 把指定用户关小黑屋
+	 * @param username 房管名称
+	 * @param msg 弹幕（消息含被禁闭人）
 	 */
-	private void toNight(String username, String msg) {
-		if(!isAutoGoodNight() || 
-				msg.startsWith(NIGHT_KEY) ||		// 避免跟机器人对话
-				nightedUsers.contains(username)) { 	// 避免重复晚安
+	private void ban(String username, String msg) {
+		if(Config.LEVEL < Level.ADMIN || 
+				!OnlineUserMgr.getInstn().isManager(username) || 
+				!msg.trim().startsWith(BAN_KEY)) {
 			return;
 		}
 		
-		if(MsgKwMgr.containsNight(msg)) {
-			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
-			XHRSender.sendDanmu(chatMsg, UIUtils.getCurChatColor());
-			nightedUsers.add(username);
+		String managerId = OnlineUserMgr.getInstn().getManagerID(username);
+		String unameKey = RegexUtils.findFirst(msg, BAN_KEY.concat("\\s*(.+)")).trim();
+		List<String> accuseds = OnlineUserMgr.getInstn().findOnlineUser(unameKey);
+		
+		if(accuseds.size() <= 0) {
+			msg = StrUtils.concat("[禁言失败] 不存在关键字为 [", unameKey, "] 的用户");
+			XHRSender.sendPM(managerId, msg);
+			
+		} else if(accuseds.size() > 1) {
+			msg = StrUtils.concat("[禁言失败] 关键字为 [", unameKey, "] 的用户有 [", accuseds.size(), 
+					"] 个, 请确认其中一个用户再执行禁言: ");
+			for(String accused : accuseds) {
+				msg = StrUtils.concat(msg, "[", accused, "] ");
+			}
+			XHRSender.sendPM(managerId, msg);
+			
+		} else {
+			String accused = accuseds.get(0);
+			boolean isOk = XHRSender.blockUser(accused);
+			msg = StrUtils.concat("用户 [", accused, "] 被您禁言", (isOk ? "成功" : "失败"));
+			XHRSender.sendPM(managerId, msg);
 		}
 	}
 	

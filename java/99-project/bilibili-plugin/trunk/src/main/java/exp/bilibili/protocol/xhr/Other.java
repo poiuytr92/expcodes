@@ -1,16 +1,19 @@
 package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.CookieType;
+import exp.bilibili.protocol.bean.xhr.User;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
@@ -32,6 +35,10 @@ public class Other extends __XHR {
 	 */
 	private final static String ADMIN_URL = CryptoUtils.deDES(
 			"EECD1D519FEBFDE5EF68693278F5849E8068123647103E9D1644539B452D8DE870DD36BBCFE2C2A8E5A16D58A0CA752D3D715AF120F89F10990A854A386B95631E7C60D1CFD77605");
+	
+	private final static String ROOM_URL = Config.getInstn().ROOM_URL();
+	
+	private final static String MANAGE_URL = Config.getInstn().MANAGE_URL();
 	
 	private final static String BLACK_URL = Config.getInstn().BLACK_URL();
 	
@@ -57,6 +64,82 @@ public class Other extends __XHR {
 		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOME);
 		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_HOME.concat("/p/world/index"));
 		return header;
+	}
+	
+	/**
+	 * 查询直播间主播的用户信息
+	 * @param roomId
+	 * @return 主播的用户信息
+	 */
+	public static User queryUpInfo(int roomId) {
+		String sRoomId = getRealRoomId(roomId);
+		Map<String, String> header = GET_HEADER("", sRoomId);
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("roomid", sRoomId);
+		
+		String response = HttpURLUtils.doGet(ROOM_URL, header, request);
+		User up = User.NULL;
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+				JSONObject info = JsonUtils.getObject(data, BiliCmdAtrbt.info);
+				String uid = JsonUtils.getStr(info, BiliCmdAtrbt.uid);
+				String uname = JsonUtils.getStr(info, BiliCmdAtrbt.uname);
+				up = new User(uid, uname);
+				
+			} else {
+				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("获取主播ID失败: {}", reason);
+			}
+		} catch(Exception e) {
+			log.error("获取主播ID异常: {}", response, e);
+		}
+		return up;
+	}
+	
+	/**
+	 * 查询直播间的房管
+	 * @param roomId 直播间ID
+	 * @return 房管列表
+	 */
+	public static Set<User> queryManagers(int roomId) {
+		Set<User> managers = new HashSet<User>();
+		
+		// 查询主播昵称
+		User up = queryUpInfo(roomId);
+		if(up != User.NULL) {
+			managers.add(up);
+		}
+		
+		// 查询房管列表
+		String sRoomId = getRealRoomId(roomId);
+		Map<String, String> header = GET_HEADER("", sRoomId);
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("anchor_id", up.ID());
+		String response = HttpURLUtils.doGet(MANAGE_URL, header, request);
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				JSONArray data = JsonUtils.getArray(json, BiliCmdAtrbt.data);
+				for(int i = 0; i < data.size(); i++) {
+					JSONObject userinfo = JsonUtils.getObject(data.getJSONObject(i), BiliCmdAtrbt.userinfo);
+					String uid = JsonUtils.getStr(userinfo, BiliCmdAtrbt.uname);
+					String uname = JsonUtils.getStr(userinfo, BiliCmdAtrbt.uname);
+					if(StrUtils.isNotEmpty(uid, uname)) {
+						managers.add(new User(uid, uname));
+					}
+				}
+			} else {
+				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("查询房管列表失败: {}", reason);
+			}
+		} catch(Exception e) {
+			log.error("查询房管列表异常: {}", response, e);
+		}
+		return managers;
 	}
 	
 	/**
@@ -100,21 +183,4 @@ public class Other extends __XHR {
 		return request;
 	}
 	
-	
-	public static void queryAdmin() {
-		CookiesMgr.INSTN().load(CookieType.VEST);
-		BiliCookie cookie = CookiesMgr.VEST();
-		String url = "http://api.live.bilibili.com/live_user/v1/RoomAdmin/get_by_anchor";
-		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "390480");
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("anchor_id", "20872515");
-		request.put("page", "1");
-		
-		String response = HttpURLUtils.doGet(url, header, request);
-		System.out.println(response);
-	}
-	
-	public static void main(String[] args) {
-		queryAdmin();
-	}
 }
