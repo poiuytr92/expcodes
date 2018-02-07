@@ -1,38 +1,61 @@
-package exp.libs.warp.net.webkit;
+package exp.libs.warp.net.http.cookie;
 
 import java.util.Date;
-
-import org.openqa.selenium.Cookie;
 
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
 
-final class _HttpCookie {
+/**
+ * <PRE>
+ * 单个cookie属性集
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-01-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+class _HttpCookie {
 
-	private final static String DOMAIN = "Domain";
+	/** cookie键名 */
+	protected String name;
 	
-	private final static String PATH = "Path";
+	/** cookie键值 */
+	protected String value;
 	
-	private final static String EXPIRE = "Expires";
+	/** cookie域名 */
+	protected final static String DOMAIN = "Domain";
 	
-	private final static String SECURE = "Secure";
+	/** cookie域值 */
+	protected String domain;
 	
-	private final static String HTTPONLY = "HttpOnly";
-
-	private String name;
+	/** cookie路径名 */
+	protected final static String PATH = "Path";
 	
-	private String value;
+	/** cookie路径值 */
+	protected String path;
 	
-	private String domain;
+	/** cookie有效期名 */
+	protected final static String EXPIRE = "Expires";
 	
-	private String path;
+	/** cookie有效期值（英文GMT格式, 如: Thu, 01-Jan-1970 08:00:00 GMT+08:00） */
+	protected Date expiry;
 	
-	private Date expiry;
+	/** cookie属性：若出现该关键字表示该cookie只会在HTTPS中进行会话验证 */
+	protected final static String SECURE = "Secure";
 	
-	private boolean isSecure;
+	/** 是否出现了Secure关键字 */
+	protected boolean isSecure;
 	
-	private boolean isHttpOnly;
+	/** cookie属性：若出现该关键字表示该cookie无法被JS等脚本读取, 可防止XSS攻击 */
+	protected final static String HTTPONLY = "HttpOnly";
 	
+	/** 是否出现了HttpOnly关键字 */
+	protected boolean isHttpOnly;
+	
+	/**
+	 * 构造函数
+	 */
 	protected _HttpCookie() {
 		this.name = "";
 		this.value = "";
@@ -43,34 +66,20 @@ final class _HttpCookie {
 		this.isHttpOnly = false;
 	}
 	
-	protected _HttpCookie(Cookie cookie) {
-		this();
-		init(cookie);
-	}
-	
-	private void init(Cookie cookie) {
-		if(cookie == null) {
-			return;
-		}
-		
-		this.name = cookie.getName();
-		this.value = cookie.getValue();
-		this.domain = cookie.getDomain();
-		this.path = cookie.getPath();
-		this.expiry = (cookie.getExpiry() == null ? new Date() : cookie.getExpiry());
-		this.isSecure = cookie.isSecure();
-		this.isHttpOnly = cookie.isHttpOnly();
-	}
-	
 	/**
-	 * 
-	 * @param headerCookie HTTP响应头中的 Set-Cookie
+	 * 构造函数
+	 * @param headerCookie HTTP响应头中的 Set-Cookie, 格式如：
+	 * 	JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
 	 */
 	protected _HttpCookie(String headerCookie) {
 		this();
 		init(headerCookie);
 	}
 	
+	/**
+	 * 通过HTTP响应头中的Set-Cookie串初始化
+	 * @param headerCookie 格式如：JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly;
+	 */
 	private void init(String headerCookie) {
 		String[] vals = headerCookie.split(";");
 		for(int i = 0; i < vals.length; i++) {
@@ -84,37 +93,50 @@ final class _HttpCookie {
 					this.value = val;
 					
 				} else {
-					if("Domain".equalsIgnoreCase(key)) {
+					if(DOMAIN.equalsIgnoreCase(key)) {
 						this.domain = val;
 						
-					} else if("Path".equalsIgnoreCase(key)) {
+					} else if(PATH.equalsIgnoreCase(key)) {
 						this.path = val;
 						
-					} else if("Expires".equalsIgnoreCase(key)) {
+					} else if(EXPIRE.equalsIgnoreCase(key)) {
 						this.expiry = TimeUtils.toDate(val, TimeUtils.FORMAT_GMT);
 					}
 				}
 				
 			} else if(kv.length == 1){
 				String key = kv[0].trim();
-				if("Secure".equalsIgnoreCase(key)) {
+				if(SECURE.equalsIgnoreCase(key)) {
 					this.isSecure = true;
 					
-				} else if("HttpOnly".equalsIgnoreCase(key)) {
+				} else if(HTTPONLY.equalsIgnoreCase(key)) {
 					this.isHttpOnly = true;
 				}
 			}
 		}
 	}
 	
+	/**
+	 * cookie是否有效
+	 * @return
+	 */
 	protected boolean isVaild() {
 		return StrUtils.isNotEmpty(name);
 	}
 	
+	/**
+	 * 生成该Cookie的名值对
+	 * 	在与服务端校验cookie会话时, 只需对name与value属性进行校验, 其他属性无需校验, 保存在本地即可
+	 * @return name=value
+	 */
 	protected String toNV() {
 		return (!isVaild() ? "" : StrUtils.concat(name, "=", value));
 	}
 
+	/**
+	 * 生成该cookie在Header中的字符串形式
+	 * @return 形如：JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
+	 */
 	protected String toHeaderCookie() {
 		StringBuilder sb = new StringBuilder();
 		sb.append(name).append("=").append(value).append(" ; ");
@@ -124,10 +146,6 @@ final class _HttpCookie {
 		if(isSecure == true) { sb.append(SECURE).append(" ; "); }
 		if(isHttpOnly == true) { sb.append(HTTPONLY).append(" ; "); }
 		return sb.toString();
-	}
-	
-	protected Cookie toSeleniumCookie() {
-		return new Cookie(name, value, domain, path, expiry, isSecure, isHttpOnly);
 	}
 	
 	protected String getName() {
