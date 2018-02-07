@@ -84,7 +84,7 @@ public class OnlineUserMgr {
 			while(usernameIts.hasNext()) {
 				String username = usernameIts.next();
 				if(username.contains(unameKey)) {
-					usernames.add(unameKey);
+					usernames.add(username);
 				}
 			}
 		}

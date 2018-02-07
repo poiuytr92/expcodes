@@ -126,7 +126,7 @@ public class Other extends __XHR {
 				JSONArray data = JsonUtils.getArray(json, BiliCmdAtrbt.data);
 				for(int i = 0; i < data.size(); i++) {
 					JSONObject userinfo = JsonUtils.getObject(data.getJSONObject(i), BiliCmdAtrbt.userinfo);
-					String uid = JsonUtils.getStr(userinfo, BiliCmdAtrbt.uname);
+					String uid = JsonUtils.getStr(userinfo, BiliCmdAtrbt.uid);
 					String uname = JsonUtils.getStr(userinfo, BiliCmdAtrbt.uname);
 					if(StrUtils.isNotEmpty(uid, uname)) {
 						managers.add(new User(uid, uname));
