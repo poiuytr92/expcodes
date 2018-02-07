@@ -38,7 +38,7 @@ import exp.libs.warp.net.sock.io.common.ISession;
 public class SocketClient implements ISession {
 
 	/** 日志器 */
-	private Logger log = LoggerFactory.getLogger(SocketClient.class);
+	protected Logger log = LoggerFactory.getLogger(SocketClient.class);
 	
 	/** Socket重连间隔(ms) */
 	private final static long RECONN_INTERVAL = 10000;
@@ -47,13 +47,20 @@ public class SocketClient implements ISession {
 	private final static int RECONN_LIMIT = 30;
 	
 	/** Socket配置信息 */
-	private SocketBean sockConf;
+	protected SocketBean sockConf;
 	
-	/** Socket客户端 */
-	private Socket socket;
+	/** Socket会话 */
+	protected Socket socket;
 	
 	/** Socket本地读缓存 */
-	private SocketByteBuffer localBuffer;
+	protected SocketByteBuffer localBuffer;
+	
+	/**
+	 * 用于继承的构造函数
+	 */
+	protected SocketClient() {
+		// Undo : 继承用
+	}
 	
 	/**
 	 * 构造函数
@@ -91,7 +98,7 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 获取socket会话对象
+	 * 获取socket底层会话对象
 	 * @return socket会话对象
 	 */
 	@Override
@@ -151,6 +158,15 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
+	 * socket会话是否有效（多用于需要登录的判定）
+	 * @return true:有效; false:无效
+	 */
+	@Override
+	public boolean isVaild() {
+		return true;
+	}
+	
+	/**
 	 * 检查socket连接是否已断开
 	 * @return true:已断开; false:未断开
 	 */
@@ -169,12 +185,12 @@ public class SocketClient implements ISession {
 	 */
 	@Override
 	public boolean close() {
-		boolean isClose = true;
+		boolean isClosed = true;
 		if(socket != null) {
 			try {
 				socket.close();
 			} catch (Exception e) {
-				isClose = false;
+				isClosed = false;
 				log.error("客户端 [{}] 断开Socket连接异常", sockConf.getAlias(), e);
 			}
 		}
@@ -182,7 +198,7 @@ public class SocketClient implements ISession {
 		if(localBuffer != null) {
 			localBuffer.clear();
 		}
-		return isClose;
+		return isClosed;
 	}
 	
 	/**
@@ -283,6 +299,7 @@ public class SocketClient implements ISession {
 	/**
 	 * Socket写操作.
 	 * @param msg 需发送到服务端的的消息报文
+	 * @return true:发送成功; false:发送失败
 	 */
 	@Override
 	public boolean write(final String msg) {
@@ -338,5 +355,5 @@ public class SocketClient implements ISession {
 	public String toString() {
 		return sockConf.toString();
 	}
-	
+
 }

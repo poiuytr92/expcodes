@@ -16,6 +16,16 @@ public interface IHandler {
 
 	/**
 	 * <PRE>
+	 * 会话登陆逻辑.
+	 * 	只有登陆成功的会话才会触发{@link _handle()}方法调用
+	 * </PRE>
+	 * @param session 客户端代理会话
+	 * @return true:登陆成功; false:登陆失败
+	 */
+	public boolean _login(ISession session);
+	
+	/**
+	 * <PRE>
 	 * 业务处理逻辑.
 	 * 	此方法只会触发1次, 离开此方法的控制域后, session会话依然存活.
 	 * 	默认的session会话关闭方式是 客户端关闭 或 超时关闭, 但根据实际需要也可在此方法内直接close会话

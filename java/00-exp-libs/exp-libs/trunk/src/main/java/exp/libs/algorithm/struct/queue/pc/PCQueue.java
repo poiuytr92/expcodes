@@ -70,6 +70,7 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 		boolean isAdd = false;
 		if(e != null) {
 			try {
+				timeout = (timeout < 0 ? 0 : timeout);
 				isAdd = super.offer(e, timeout, TimeUnit.MILLISECONDS);
 				
 			} catch (InterruptedException ex) {
@@ -121,6 +122,7 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	public final E get(long timeout) {
 		E e = null;
 		try {
+			timeout = (timeout < 0 ? 0 : timeout);
 			e = super.poll(timeout, TimeUnit.MILLISECONDS);
 			
 		} catch (InterruptedException ex) {

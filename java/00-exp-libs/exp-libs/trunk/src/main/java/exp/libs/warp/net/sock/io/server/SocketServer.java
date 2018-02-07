@@ -45,11 +45,14 @@ public class SocketServer extends Thread {
 	/** Socket服务端 */
 	private ServerSocket socketServer;
 	
-	/** Socket会话队列 */
-	private List<_SocketClientProxy> clientProxys;
+	/** 未登陆客户端的Socket会话注册线程池 */
+	private ThreadPool loginPool;
 	
-	/** Socket会话线程池 */
-	private ThreadPool stp;
+	/** 已登陆客户端的Socket会话执行线程池 */
+	private ThreadPool execPool;
+	
+	/** 已登陆客户端的Socket会话队列 */
+	private List<_SocketClientProxy> clientProxys;
 	
 	/** 运行标识 */
 	private boolean running;
@@ -65,6 +68,8 @@ public class SocketServer extends Thread {
 		this.sockConf = (sockConf == null ? new SocketBean() : sockConf);
 		this.sHandler = (handler == null ? new _DefaultHandler() : handler);
 		this.clientProxys = new LinkedList<_SocketClientProxy>();
+		this.loginPool = new ThreadPool(this.sockConf.getMaxConnectionCount());
+		this.execPool = new ThreadPool(this.sockConf.getMaxConnectionCount());
 		this.running = false;
 		this.setName(this.sockConf.getAlias());
 	}
@@ -85,8 +90,6 @@ public class SocketServer extends Thread {
 			log.info("Socket服务 [{}] 侦听 {}{} 端口成功.", getName(), 
 					(listenAllIP ? "" : sockConf.getIp().concat(" 上的 ")), 
 					sockConf.getPort());
-			
-			stp = new ThreadPool(sockConf.getMaxConnectionCount());
 			
 		} catch (Exception e) {
 			isOk = false;
@@ -153,16 +156,16 @@ public class SocketServer extends Thread {
 			if(clientProxy != null) {
 				boolean isOver = checkOverLimit();
 				if(isOver == true) {
+//					clientProxy.write("[ERROR] CONNECTION LIMIT");
 					clientProxy.close();
+					log.debug("Socket服务 [{}] 注册新会话失败, 连接数已达上限: [{}]", 
+							getName(), sockConf.getMaxConnectionCount());
 					
 				} else {
-					clientProxys.add(clientProxy);
-					stp.execute(clientProxy);
+					_ReserveThread reserve = new _ReserveThread(getName(), 
+							execPool, clientProxys, clientProxy);
+					loginPool.execute(reserve);
 				}
-				
-				log.debug("Socket服务 [{}] 新增会话 [{}] {}, 当前活动会话数: [{}/{}]", 
-						getName(), clientProxy.ID(), (isOver ? "失败" : ""), 
-						getClientSize(), sockConf.getMaxConnectionCount());
 			}
 		} while(running == true);
 		
@@ -175,6 +178,7 @@ public class SocketServer extends Thread {
 		if(running == true) {
 			try {
 				Socket client = socketServer.accept();
+				client.setSoTimeout(sockConf.getOvertime());
 				
 				IHandler cHandler = sHandler._clone();
 				clientProxy = new _SocketClientProxy(sockConf, client, 
@@ -208,7 +212,10 @@ public class SocketServer extends Thread {
 	}
 	
 	/**
-	 * 获取当下这一个时间点所有连接到服务端的客户端数量
+	 * <PRE>
+	 * 获取当下这一个时间点所有连接到服务端的客户端数量.
+	 * 	(可能存在部分客户端连接已失效)
+	 * <PRE>
 	 * @return 客户端数量
 	 */
 	public int getClientSize() {
@@ -220,11 +227,17 @@ public class SocketServer extends Thread {
 	 * @return 客户端会话集
 	 */
 	public Iterator<ISession> getClients() {
-		List<ISession> clients = new LinkedList<ISession>();
-		for(_SocketClientProxy client : clientProxys) {
-			clients.add(client);
+		List<ISession> sessions = new LinkedList<ISession>();
+		Iterator<_SocketClientProxy> clients = clientProxys.iterator();
+		while(clients.hasNext()) {
+			_SocketClientProxy client = clients.next();
+			if(client.isVaild() && !client.isClosed()) {
+				sessions.add(client);
+			} else {
+				clients.remove();
+			}
 		}
-		return clients.iterator();
+		return sessions.iterator();
 	}
 	
 	/**
@@ -237,7 +250,9 @@ public class SocketServer extends Thread {
 			client.close();
 		}
 		clientProxys.clear();
-		stp.shutdown();
+		
+		loginPool.shutdown();
+		execPool.shutdown();
 	}
 	
 	/**

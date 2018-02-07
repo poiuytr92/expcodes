@@ -51,4 +51,10 @@ class _PFHandler implements IHandler {
 		return new _PFHandler(config);
 	}
 
+	@Deprecated
+	@Override
+	public boolean _login(ISession session) {
+		return true;
+	}
+
 }

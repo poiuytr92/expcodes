@@ -57,4 +57,10 @@ class _FPFSHandler implements IHandler {
 		return new _FPFSHandler(srFileMgr, config);
 	}
 
+	@Deprecated
+	@Override
+	public boolean _login(ISession session) {
+		return true;
+	}
+	
 }

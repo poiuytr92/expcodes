@@ -182,7 +182,7 @@ class _TranslateCData extends Thread {
 		try {
 			long bgnTime = System.currentTimeMillis();
 			InputStream in = snk.getInputStream();
-			while (true) {
+			while (!snk.isClosed()) {
 				byte[] buffer = new byte[_Envm.IO_BUFF];
 				int len = in.read(buffer);
 				if (len > 0) {

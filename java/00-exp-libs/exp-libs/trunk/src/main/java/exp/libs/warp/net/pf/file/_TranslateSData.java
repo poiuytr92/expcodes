@@ -107,7 +107,7 @@ class _TranslateSData extends Thread {
 		try {
 			long bgnTime = System.currentTimeMillis();
 			InputStream in = src.getInputStream();
-			while (true) {
+			while (!src.isClosed()) {
 				byte[] buffer = new byte[_Envm.IO_BUFF];
 				int len = in.read(buffer);
 				if (len > 0) {
