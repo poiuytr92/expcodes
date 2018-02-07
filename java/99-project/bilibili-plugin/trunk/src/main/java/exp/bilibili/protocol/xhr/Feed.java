@@ -61,7 +61,7 @@ public class Feed extends __XHR {
 	/**
 	 * 查询直播间主播的用户ID
 	 * @param roomId
-	 * @return
+	 * @return 主播的用户ID
 	 */
 	private static String queryUpUID(String roomId) {
 		Map<String, String> header = GET_HEADER("", roomId);

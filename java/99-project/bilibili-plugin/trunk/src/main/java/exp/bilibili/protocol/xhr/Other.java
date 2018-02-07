@@ -6,6 +6,8 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;
@@ -98,4 +100,21 @@ public class Other extends __XHR {
 		return request;
 	}
 	
+	
+	public static void queryAdmin() {
+		CookiesMgr.INSTN().load(CookieType.VEST);
+		BiliCookie cookie = CookiesMgr.VEST();
+		String url = "http://api.live.bilibili.com/live_user/v1/RoomAdmin/get_by_anchor";
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "390480");
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("anchor_id", "20872515");
+		request.put("page", "1");
+		
+		String response = HttpURLUtils.doGet(url, header, request);
+		System.out.println(response);
+	}
+	
+	public static void main(String[] args) {
+		queryAdmin();
+	}
 }

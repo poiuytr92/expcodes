@@ -27,12 +27,13 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO
-		// 房管举报1次直接关人
+		// 房管举报1次直接关人(房管列表)
 		// 优化身份识别系统
 		// 模拟观看时长
 		// 系统托盘好卡
 		// GITHUB HTTPS 的TLS协议为2.0 ?? 无法获取页面源码
 		// 在线升级， 升级命令：移动文件，删除文件，添加文件,  压缩包转txt
+		// XHR- URL注释
 	}
 	
 }

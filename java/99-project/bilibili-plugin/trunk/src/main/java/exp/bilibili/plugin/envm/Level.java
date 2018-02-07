@@ -2,7 +2,7 @@ package exp.bilibili.plugin.envm;
 
 /**
  * <PRE>
- * 登良路用户等级
+ * 登陆路用户等级
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
