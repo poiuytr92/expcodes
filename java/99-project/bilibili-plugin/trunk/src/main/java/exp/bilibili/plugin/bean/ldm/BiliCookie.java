@@ -2,6 +2,7 @@ package exp.bilibili.plugin.bean.ldm;
 
 import exp.bilibili.plugin.envm.CookieType;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.net.http.cookie.HttpCookie;
 
 /**
  * <PRE>
@@ -58,7 +59,7 @@ public class BiliCookie extends HttpCookie {
 	}
 	
 	@Override
-	protected void taskNV(String name, String value) {
+	protected void takeNV(String name, String value) {
 		if(CSRF_KEY.equalsIgnoreCase(name)) {
 			csrf = value;
 			

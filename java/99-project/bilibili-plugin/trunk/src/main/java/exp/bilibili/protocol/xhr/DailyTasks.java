@@ -119,8 +119,10 @@ public class DailyTasks extends __XHR {
 				UIUtils.log("[", username, "] ", signType, "签到完成");
 				
 			} else if(!reason.contains("已签到") && !reason.contains("已领取")) {
-				nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
 				log.warn("[{}] {}签到失败: {}", username, signType, reason);
+				if(!reason.contains("需要绑定手机号")) {
+					nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
+				}
 			}
 		} catch(Exception e) {
 			nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
