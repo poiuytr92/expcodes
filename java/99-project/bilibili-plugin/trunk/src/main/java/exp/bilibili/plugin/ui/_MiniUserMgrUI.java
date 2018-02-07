@@ -144,7 +144,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 			init = true;
 			int idx = 0;
 			CookiesMgr.INSTN().load(CookieType.MINI);
-			Set<BiliCookie> cookies = CookiesMgr.INSTN().MINIs();
+			Set<BiliCookie> cookies = CookiesMgr.MINIs();
 			for(BiliCookie cookie : cookies) {
 				__MiniUserLine line = new __MiniUserLine(cookie);
 				adPanel.set(line, idx++);
@@ -159,7 +159,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 	}
 	
 	private void updateUserCount() {
-		String text = StrUtils.concat(CookiesMgr.INSTN().miniSize(), "/", MAX_USER);
+		String text = StrUtils.concat(CookiesMgr.MINI_SIZE(), "/", MAX_USER);
 		userLabel.setText(text);
 	}
 	

@@ -130,12 +130,9 @@ public class WSAnalyser {
 		UIUtils.chat(msg);
 		log.info(msg);
 		
-		// FIXME 封装
 		OnlineUserMgr.getInstn().add(msgBean.getUsername());
 		ActivityMgr.getInstn().add(msgBean);
-		ChatMgr.getInstn().addNight(msgBean.getUsername(), msgBean.getMsg());
-		ChatMgr.getInstn().countChatCnt(msgBean.getUsername());
-		ChatMgr.getInstn().checkComplaint(msgBean);
+		ChatMgr.getInstn().analyseDanmu(msgBean);
 	}
 	
 	/**
@@ -217,7 +214,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(RaffleStart msgBean) {
-		String msg = StrUtils.concat("感谢 [", msgBean.getFrom(), "] 的嗨翻全场!!!");
+		String msg = StrUtils.concat("感谢[", msgBean.getFrom(), "]的高能!!!");
 		log.info(msg);
 		
 		ChatMgr.getInstn().sendThxEnergy(msg);

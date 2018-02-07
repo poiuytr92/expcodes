@@ -42,7 +42,7 @@ public class XHRSender {
 	 * @return
 	 */
 	public static boolean blockUser(String username) {
-		BiliCookie cookie = CookiesMgr.INSTN().MAIN();
+		BiliCookie cookie = CookiesMgr.MAIN();
 		int roomId = UIUtils.getLiveRoomId();
 		final int hour = 1;
 		return Other.blockUser(cookie, roomId, username, hour);
@@ -129,7 +129,7 @@ public class XHRSender {
 	 * @return
 	 */
 	public static List<Integer> queryTopLiveRoomIds() {
-		BiliCookie cookie = CookiesMgr.INSTN().VEST();
+		BiliCookie cookie = CookiesMgr.VEST();
 		return LotteryStorm.queryHotLiveRoomIds(cookie);
 	}
 	
@@ -195,7 +195,7 @@ public class XHRSender {
 	 * @return
 	 */
 	public static boolean sendDanmu(String msg, ChatColor color) {
-		BiliCookie cookie = CookiesMgr.INSTN().MAIN();
+		BiliCookie cookie = CookiesMgr.MAIN();
 		int roomId = UIUtils.getLiveRoomId();
 		return Chat.sendDanmu(cookie, roomId, msg, color);
 	}
@@ -207,7 +207,7 @@ public class XHRSender {
 	 * @return
 	 */
 	public static boolean sendDanmu(String msg, int roomId) {
-		BiliCookie cookie = CookiesMgr.INSTN().MAIN();
+		BiliCookie cookie = CookiesMgr.MAIN();
 		ChatColor color = ChatColor.RANDOM();
 		return Chat.sendDanmu(cookie, roomId, msg, color);
 	}
@@ -219,7 +219,7 @@ public class XHRSender {
 	 * @return
 	 */
 	public static boolean sendPM(String recvId, String msg) {
-		BiliCookie cookie = CookiesMgr.INSTN().MAIN();
+		BiliCookie cookie = CookiesMgr.MAIN();
 		return Chat.sendPM(cookie, recvId, msg);
 	}
 	
@@ -228,7 +228,7 @@ public class XHRSender {
 	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月）","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权（1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权（1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯笼","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换池","stock_num":99999,"exchange_limit":0,"price":6666}}}
 	 */
 	public static String queryRedbagPool() {
-		BiliCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号
+		BiliCookie cookie = CookiesMgr.MAIN();	// FIXME 仅主号
 		return Redbag.queryRedbagPool(cookie);
 	}
 	
@@ -241,7 +241,7 @@ public class XHRSender {
 	 * 	{"code":-404,"msg":"这个奖品已经兑换完啦，下次再来吧","message":"这个奖品已经兑换完啦，下次再来吧","data":[]}
 	 */
 	public static String exchangeRedbag(String id, int num) {
-		BiliCookie cookie = CookiesMgr.INSTN().MAIN();	// FIXME 仅主号
+		BiliCookie cookie = CookiesMgr.MAIN();	// FIXME 仅主号
 		return Redbag.exchangeRedbag(cookie, id, num);
 	}
 	

@@ -21,7 +21,7 @@ import exp.libs.warp.thread.LoopThread;
  * 
  * 	主要功能:
  *   1.全平台礼物抽奖管理器（小电视/高能礼物/节奏风暴）
- *   2.日常任务(签到/友爱社/小学数学) FIXME 未验证手机的移除
+ *   2.日常任务(签到/友爱社/小学数学)
  *   3.自动投喂
  *   4.打印版权信息
  * </PRE>
@@ -168,7 +168,7 @@ public class WebBot extends LoopThread {
 		resetDailyTasks();	// 满足某个条件则重置每日任务
 		
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
-			Set<BiliCookie> cookies = CookiesMgr.INSTN().ALL();
+			Set<BiliCookie> cookies = CookiesMgr.ALL();
 			for(BiliCookie cookie : cookies) {
 				if(finCookies.contains(cookie)) {
 					continue;
@@ -231,7 +231,7 @@ public class WebBot extends LoopThread {
 		}
 		
 		int roomId = UIUtils.getFeedRoomId();
-		Set<BiliCookie> cookies = CookiesMgr.INSTN().MINIs();
+		Set<BiliCookie> cookies = CookiesMgr.MINIs();
 		for(BiliCookie cookie : cookies) {
 			if(cookie.isAutoFeed()) {
 				XHRSender.toFeed(cookie, roomId);

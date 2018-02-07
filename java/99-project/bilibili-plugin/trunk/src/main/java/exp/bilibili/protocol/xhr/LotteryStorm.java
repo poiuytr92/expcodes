@@ -127,7 +127,7 @@ public class LotteryStorm extends _Lottery {
 			String sRoomId = String.valueOf(roomId);
 			requests.put("roomid", sRoomId);
 			Map<String, String> headers = GET_HEADER(
-					CookiesMgr.INSTN().VEST().toNVCookie(), sRoomId);
+					CookiesMgr.VEST().toNVCookie(), sRoomId);
 			
 			boolean isExist = true;
 			while(isExist == true) {	// 对于存在节奏风暴的房间, 继续扫描(可能有人连续送节奏风暴)
@@ -203,7 +203,7 @@ public class LotteryStorm extends _Lottery {
 	 */
 	public static boolean toLottery(int roomId, String raffleId) {
 		int cnt = 0;
-		Set<BiliCookie> cookies = CookiesMgr.INSTN().ALL();
+		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
 			String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {

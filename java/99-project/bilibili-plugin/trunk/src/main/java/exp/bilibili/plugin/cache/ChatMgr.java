@@ -48,7 +48,7 @@ public class ChatMgr extends LoopThread {
 	private final static String COMPLAINT_KEY = "#举报";
 	
 	/** 同屏可以显示的最大发言数 */
-	private final static int SCREEN_CHAT_LIMT = 7;
+	private final static int SCREEN_CHAT_LIMT = 10;
 	
 	private final static String WARN_KEY = "【警告】";
 	
@@ -205,25 +205,6 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 自动晚安
-	 * @param username
-	 * @param msg
-	 */
-	public void addNight(String username, String msg) {
-		if(!isAutoGoodNight() || 
-				msg.startsWith(NIGHT_KEY) ||		// 避免跟机器人对话
-				nightedUsers.contains(username)) { 	// 避免重复晚安
-			return;
-		}
-		
-		if(MsgKwMgr.containsNight(msg)) {
-			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
-			XHRSender.sendDanmu(chatMsg, UIUtils.getCurChatColor());
-			nightedUsers.add(username);
-		}
-	}
-	
-	/**
 	 * 房间内高能礼物感谢与中奖祝贺
 	 * @param msg
 	 * @return
@@ -376,6 +357,75 @@ public class ChatMgr extends LoopThread {
 		XHRSender.sendDanmu(msg);
 	}
 	
+	/**
+	 * 分析弹幕内容, 触发不同的响应机制
+	 * @param chatMsg
+	 */
+	public void analyseDanmu(ChatMsg chatMsg) {
+		countChatCnt(chatMsg.getUsername());	// 登陆用户发言计数器
+		toNight(chatMsg.getUsername(), chatMsg.getMsg());	// 自动晚安
+		checkComplaint(chatMsg.getUsername(), chatMsg.getMsg());	// 举报处理
+	}
+	
+	/**
+	 * 计算登陆用户的发言次数
+	 * @param username 当前发言用户
+	 */
+	private void countChatCnt(String username) {
+		
+		// 当是登陆用户发言时, 清空计数器
+		if(CookiesMgr.MAIN().NICKNAME().equals(username)) {
+			chatCnt = 0;
+			
+		// 当是其他用户发言时, 计数器+1
+		} else {
+			chatCnt++;
+		}
+	}
+	
+	/**
+	 * 检查举报发言
+	 * @param msgBean
+	 */
+	private void checkComplaint(String username, String msg) {
+		if(Config.LEVEL < Level.ADMIN || !msg.trim().startsWith(COMPLAINT_KEY)) {
+			return;
+		}
+		
+		String accuser = username;
+		String accused = RegexUtils.findFirst(msg, COMPLAINT_KEY.concat("\\s*(.+)")).trim();
+		int cnt = OnlineUserMgr.getInstn().complaint(accuser, accused);
+		
+		if(cnt < COMPLAINT_LIMIT) {
+			msg = StrUtils.concat(WARN_KEY, "x", cnt, ",请[", accused, "]注意弹幕礼仪");
+			XHRSender.sendDanmu(msg);
+			
+		} else if(XHRSender.blockUser(accused)) {
+			OnlineUserMgr.getInstn().cancel(accused);
+			msg = StrUtils.concat(WARN_KEY, "[", accused, "]被", cnt, "人举报,暂时禁言");
+			XHRSender.sendDanmu(msg);
+		}
+	}
+	
+	/**
+	 * 自动晚安
+	 * @param username
+	 * @param msg
+	 */
+	private void toNight(String username, String msg) {
+		if(!isAutoGoodNight() || 
+				msg.startsWith(NIGHT_KEY) ||		// 避免跟机器人对话
+				nightedUsers.contains(username)) { 	// 避免重复晚安
+			return;
+		}
+		
+		if(MsgKwMgr.containsNight(msg)) {
+			String chatMsg = StrUtils.concat(NIGHT_KEY, ", ", username);
+			XHRSender.sendDanmu(chatMsg, UIUtils.getCurChatColor());
+			nightedUsers.add(username);
+		}
+	}
+	
 	public void setAutoThankYou() {
 		autoThankYou = !autoThankYou;
 		userGifts.clear();	// 切换状态时, 清空已投喂的礼物列表
@@ -413,54 +463,12 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 计算登陆用户的发言次数
-	 * @param chatUser 当前发言用户
-	 */
-	public void countChatCnt(String chatUser) {
-		
-		// 当是登陆用户发言时, 清空计数器
-		if(CookiesMgr.INSTN().MAIN().NICKNAME().equals(chatUser)) {
-			chatCnt = 0;
-			
-		// 当是其他用户发言时, 计数器+1
-		} else {
-			chatCnt++;
-		}
-	}
-	
-	/**
 	 * 是否允许自动发言:
 	 * 	当距离上一次发言超过同屏显示限制时，则允许自动发言
 	 * @return
 	 */
 	private boolean allowAutoChat() {
 		return chatCnt >= SCREEN_CHAT_LIMT;
-	}
-	
-	/**
-	 * 检查举报发言
-	 * @param msgBean
-	 */
-	public void checkComplaint(ChatMsg chatMsg) {
-		if(Config.LEVEL < Level.ADMIN || 
-				!chatMsg.getMsg().startsWith(COMPLAINT_KEY)) {
-			return;
-		}
-		
-		String accuser = chatMsg.getUsername();
-		String accused = RegexUtils.findFirst(chatMsg.getMsg(), COMPLAINT_KEY.concat("\\s*(.+)")).trim();
-		int cnt = OnlineUserMgr.getInstn().complaint(accuser, accused);
-		
-		if(cnt >= COMPLAINT_LIMIT) {
-			if(XHRSender.blockUser(accused)) {
-				OnlineUserMgr.getInstn().cancel(accused);
-				String msg = StrUtils.concat(WARN_KEY, "[", accused, "]被", cnt, "人举报,暂时禁言");
-				XHRSender.sendDanmu(msg);
-			}
-		} else {
-			String msg = StrUtils.concat(WARN_KEY, "x", cnt, ",请[", accused, "]注意弹幕礼仪");
-			XHRSender.sendDanmu(msg);
-		}
 	}
 	
 }

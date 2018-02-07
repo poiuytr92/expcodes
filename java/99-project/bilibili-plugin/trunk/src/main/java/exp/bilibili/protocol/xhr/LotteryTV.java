@@ -35,7 +35,7 @@ public class LotteryTV extends _Lottery {
 	 */
 	public static void toLottery(int roomId, String raffleId) {
 		int cnt = 0;
-		Set<BiliCookie> cookies = CookiesMgr.INSTN().ALL();
+		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
 			String reason = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {

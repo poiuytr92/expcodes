@@ -49,7 +49,7 @@ public class LotteryEnergy extends _Lottery {
 	 */
 	public static void toLottery(int roomId) {
 		List<String> raffleIds = getRaffleId(EG_CHECK_URL, roomId, 
-				CookiesMgr.INSTN().VEST().toNVCookie());
+				CookiesMgr.VEST().toNVCookie());
 		for(String raffleId : raffleIds) {
 			int id = NumUtils.toInt(raffleId, 0);
 			if(id > LAST_RAFFLEID) {	// 礼物编号是递增的
@@ -96,7 +96,7 @@ public class LotteryEnergy extends _Lottery {
 	
 	private static void join(int roomId, String raffleId) {
 		int cnt = 0;
-		Set<BiliCookie> cookies = CookiesMgr.INSTN().ALL();
+		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
 			String reason = join(LotteryType.ENGERY, cookie, EG_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {

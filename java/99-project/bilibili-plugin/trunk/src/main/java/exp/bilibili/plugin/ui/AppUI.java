@@ -407,9 +407,9 @@ public class AppUI extends MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				
 				// 自动登陆
-				if(CookiesMgr.INSTN().MAIN() != BiliCookie.NULL || 
+				if(CookiesMgr.MAIN() != BiliCookie.NULL || 
 						CookiesMgr.INSTN().load(CookieType.MAIN)) {
-					markLogin(CookiesMgr.INSTN().MAIN().NICKNAME());
+					markLogin(CookiesMgr.MAIN().NICKNAME());
 				
 				// 手工登陆
 				} else {
@@ -548,10 +548,10 @@ public class AppUI extends MainWindow {
 	 */
 	private void _loginStormVest() {
 		CookiesMgr.INSTN().load(CookieType.VEST);
-		BiliCookie vestCookie = CookiesMgr.INSTN().VEST();
+		BiliCookie vestCookie = CookiesMgr.VEST();
 		
 		// 若现有马甲号不是主号，则使用现有马甲号
-		if(BiliCookie.NULL != vestCookie && !CookiesMgr.INSTN().MAIN().equals(vestCookie)) {
+		if(BiliCookie.NULL != vestCookie && !CookiesMgr.MAIN().equals(vestCookie)) {
 			_startStormScanner();
 			
 		// 若不存在马甲号 或 现有马甲号是主号， 则询问
@@ -573,7 +573,7 @@ public class AppUI extends MainWindow {
 			
 		// 使用主号作为马甲号
 		} else {
-			CookiesMgr.INSTN().add(CookiesMgr.INSTN().MAIN(), CookieType.VEST);
+			CookiesMgr.INSTN().add(CookiesMgr.MAIN(), CookieType.VEST);
 			_startStormScanner();
 		}
 	}

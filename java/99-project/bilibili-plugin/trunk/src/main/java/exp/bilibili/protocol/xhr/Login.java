@@ -10,8 +10,6 @@ import org.apache.commons.httpclient.HttpMethod;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.RSAUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
@@ -286,11 +284,6 @@ public class Login extends __XHR {
 		request.put("keep", "true");
 		request.put("gourl", MAIN_HOME);	// 登录后的跳转页面
 		return request;
-	}
-	
-	public static void main(String[] args) {
-		CookiesMgr.INSTN().load(CookieType.VEST);
-		queryUserInfo(CookiesMgr.INSTN().VEST());
 	}
 	
 	/**

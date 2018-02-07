@@ -208,17 +208,17 @@ public class CookiesMgr {
 		return FileUtils.delete(cookiePath);
 	}
 
-	public BiliCookie MAIN() {
-		return mainCookie;
+	public static BiliCookie MAIN() {
+		return INSTN().mainCookie;
 	}
 
-	public BiliCookie VEST() {
-		return vestCookie;
+	public static BiliCookie VEST() {
+		return INSTN().vestCookie;
 	}
 	
-	public Set<BiliCookie> MINIs() {
+	public static Set<BiliCookie> MINIs() {
 		Set<BiliCookie> cookies = new LinkedHashSet<BiliCookie>();
-		Iterator<BiliCookie> minis = miniCookies.iterator();
+		Iterator<BiliCookie> minis = INSTN().miniCookies.iterator();
 		for(int i = 0; i < MAX_NUM; i++) {
 			if(minis.hasNext()) {
 				cookies.add(minis.next());
@@ -227,10 +227,10 @@ public class CookiesMgr {
 		return cookies;
 	}
 	
-	public Set<BiliCookie> ALL() {
+	public static Set<BiliCookie> ALL() {
 		Set<BiliCookie> cookies = new LinkedHashSet<BiliCookie>();
-		if(BiliCookie.NULL != mainCookie) { cookies.add(mainCookie); }
-		if(BiliCookie.NULL != vestCookie) { cookies.add(vestCookie); }
+		if(BiliCookie.NULL != MAIN()) { cookies.add(MAIN()); }
+		if(BiliCookie.NULL != VEST()) { cookies.add(VEST()); }
 		cookies.addAll(MINIs());
 		return cookies;
 	}
@@ -239,11 +239,11 @@ public class CookiesMgr {
 	 * 持有cookie数
 	 * @return
 	 */
-	public int size() {
+	public static int SIZE() {
 		int size = 0;
-		size += (mainCookie != BiliCookie.NULL ? 1 : 0);
-		size += (vestCookie != BiliCookie.NULL ? 1 : 0);
-		size += miniSize();
+		size += (MAIN() != BiliCookie.NULL ? 1 : 0);
+		size += (VEST() != BiliCookie.NULL ? 1 : 0);
+		size += MINI_SIZE();
 		return size;
 	}
 	
@@ -251,8 +251,8 @@ public class CookiesMgr {
 	 * 持有小号的cookie数
 	 * @return
 	 */
-	public int miniSize() {
-		return miniCookies.size();
+	public static int MINI_SIZE() {
+		return INSTN().miniCookies.size();
 	}
 	
 	/**
