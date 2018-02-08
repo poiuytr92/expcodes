@@ -46,13 +46,20 @@ import exp.libs.utils.other.StrUtils;
  */
 public class WSAnalyser {
 
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(WSAnalyser.class);
 	
 	/** 上次开播时间 */
 	private static long lastOpenLive = 0;
 	
+	/** 私有化构造函数 */
 	protected WSAnalyser() {}
 	
+	/**
+	 * 把从ws接收到到的json消息转换为Bean对象并处理
+	 * @param json
+	 * @return
+	 */
 	public static boolean toMsgBean(JSONObject json) {
 		boolean isOk = true;
 		String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
@@ -120,6 +127,19 @@ public class WSAnalyser {
 			isOk = false;
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 获取抽奖房间号
+	 * @param json
+	 * @return
+	 */
+	private static String _getRoomId(JSONObject json) {
+		String roomId = JsonUtils.getStr(json, BiliCmdAtrbt.real_roomid);
+		if(StrUtils.isEmpty(roomId)) {
+			roomId = JsonUtils.getStr(json, BiliCmdAtrbt.roomid);
+		}
+		return roomId;
 	}
 	
 	/**
@@ -338,19 +358,6 @@ public class WSAnalyser {
 	 */
 	private static void toDo(ActivityEvent msgBean) {
 		// Undo
-	}
-	
-	/**
-	 * 获取抽奖房间号
-	 * @param json
-	 * @return
-	 */
-	private static String _getRoomId(JSONObject json) {
-		String roomId = JsonUtils.getStr(json, BiliCmdAtrbt.real_roomid);
-		if(StrUtils.isEmpty(roomId)) {
-			roomId = JsonUtils.getStr(json, BiliCmdAtrbt.roomid);
-		}
-		return roomId;
 	}
 	
 }
