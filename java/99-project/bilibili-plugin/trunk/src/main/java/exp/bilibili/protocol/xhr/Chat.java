@@ -6,9 +6,12 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.ChatColor;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.other.LogUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
@@ -50,7 +53,7 @@ public class Chat extends __XHR {
 		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
 		Map<String, String> request = getRequest(msg, sRoomId, color.RGB());
 		String response = HttpURLUtils.doPost(CHAT_URL, header, request);
-		return analyse(response);
+		return analyse(response, msg);
 	}
 	
 	/**
@@ -83,7 +86,7 @@ public class Chat extends __XHR {
 		Map<String, String> header = getHeader(cookie.toNVCookie());
 		Map<String, String> request = getRequest(cookie.CSRF(), cookie.UID(), recvId, msg);
 		String response = HttpURLUtils.doPost(MSG_URL, header, request);
-		return analyse(response);
+		return analyse(response, msg);
 	}
 	
 	/**
@@ -116,8 +119,11 @@ public class Chat extends __XHR {
 		request.put("msg[receiver_id]", recvId);
 		request.put("msg[receiver_type]", "1");
 		request.put("msg[msg_type]", "1");
-		request.put("msg[content]", StrUtils.concat("{\"content\":\"", msg, "\"}"));
 		request.put("msg[timestamp]", String.valueOf(System.currentTimeMillis() / 1000));
+		
+		JSONObject json = new JSONObject();
+		json.put("content", msg);
+		request.put("msg[content]", json.toString());
 		return request;
 	}
 	
@@ -128,7 +134,7 @@ public class Chat extends __XHR {
 	 * 		私信: {"code":0,"msg":"ok","message":"ok","data":{"msg_key":6510413634042085687,"_gt_":0}}
 	 * @return
 	 */
-	private static boolean analyse(String response) {
+	private static boolean analyse(String response, String msg) {
 		boolean isOk = false;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -137,12 +143,21 @@ public class Chat extends __XHR {
 				isOk = true;
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("发送消息失败: {}", reason);
+				reason = (StrUtils.isEmpty(reason) ? String.valueOf(code) : reason);
+				log.warn("发送消息失败({}): {}", reason, msg);
 			}
 		} catch(Exception e) {
-			log.error("发送消息失败: {}", response, e);
+			log.error("发送消息失败: {}", msg, e);
 		}
 		return isOk;
+	}
+	
+	public static void main(String[] args) {
+		LogUtils.loadLogBackConfig();
+		
+		CookiesMgr.INSTN().load(CookieType.MAIN);
+		boolean isOk = sendPM(CookiesMgr.MAIN(), "31796320", "测试私信1036");
+		System.out.println(isOk);
 	}
 	
 }

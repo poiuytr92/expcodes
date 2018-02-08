@@ -11,8 +11,6 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
@@ -31,6 +29,7 @@ import exp.libs.warp.thread.LoopThread;
  *  2.自动感谢投喂
  *  3.定时公告
  *  4.自动打call
+ *  5.举报/禁言等命令检测
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -408,12 +407,14 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 弹幕举报
+	 * 弹幕举报.
+	 * 	借登陆用户的权限执法, 登陆用户必须是当前直播间的主播或房管.
 	 * @param username 举报人
 	 * @param msg 弹幕（消息含被举报人）
 	 */
 	private void complaint(String username, String msg) {
-		if(Config.LEVEL < Level.ADMIN || !msg.trim().startsWith(COMPLAINT_KEY)) {
+		if(!OnlineUserMgr.getInstn().isManager(CookiesMgr.MAIN().NICKNAME()) || 
+				!msg.trim().startsWith(COMPLAINT_KEY)) {
 			return;
 		}
 		
@@ -423,22 +424,22 @@ public class ChatMgr extends LoopThread {
 		
 		if(cnt < COMPLAINT_LIMIT) {
 			msg = StrUtils.concat(WARN_KEY, "x", cnt, ",请[", accused, "]注意弹幕礼仪");
-			XHRSender.sendDanmu(msg);
 			
 		} else if(XHRSender.blockUser(accused)) {
 			OnlineUserMgr.getInstn().cancel(accused);
 			msg = StrUtils.concat(WARN_KEY, "[", accused, "]被", cnt, "人举报,暂时禁言");
-			XHRSender.sendDanmu(msg);
 		}
+		XHRSender.sendDanmu(msg);
 	}
 	
 	/**
-	 * 把指定用户关小黑屋
-	 * @param username 房管名称
+	 * 把指定用户关小黑屋.
+	 *  借登陆用户的权限执法, 登陆用户必须是当前直播间的主播或房管.
+	 * @param username 举报人名称（只能是房管）
 	 * @param msg 弹幕（消息含被禁闭人）
 	 */
 	private void ban(String username, String msg) {
-		if(Config.LEVEL < Level.ADMIN || 
+		if(!OnlineUserMgr.getInstn().isManager(CookiesMgr.MAIN().NICKNAME()) || 
 				!OnlineUserMgr.getInstn().isManager(username) || 
 				!msg.trim().startsWith(BAN_KEY)) {
 			return;
@@ -449,23 +450,27 @@ public class ChatMgr extends LoopThread {
 		List<String> accuseds = OnlineUserMgr.getInstn().findOnlineUser(unameKey);
 		
 		if(accuseds.size() <= 0) {
-			msg = StrUtils.concat("[禁言失败] 不存在关键字为 [", unameKey, "] 的用户");
-			XHRSender.sendPM(managerId, msg);
+			msg = StrUtils.concat("【禁言失败】 不存在关键字为 [", unameKey, "] 的用户");
 			
 		} else if(accuseds.size() > 1) {
-			msg = StrUtils.concat("[禁言失败] 关键字为 [", unameKey, "] 的用户有 [", accuseds.size(), 
+			msg = StrUtils.concat("【禁言失败】 关键字为 [", unameKey, "] 的用户有 [", accuseds.size(), 
 					"] 个, 请确认其中一个用户再执行禁言: ");
 			for(String accused : accuseds) {
 				msg = StrUtils.concat(msg, "[", accused, "] ");
 			}
-			XHRSender.sendPM(managerId, msg);
-			
 		} else {
 			String accused = accuseds.get(0);
-			boolean isOk = XHRSender.blockUser(accused);
-			msg = StrUtils.concat("用户 [", accused, "] 被您禁言", (isOk ? "成功" : "失败"));
-			XHRSender.sendPM(managerId, msg);
+			if(OnlineUserMgr.getInstn().isManager(accused)) {
+				msg = StrUtils.concat("【禁言失败】 用户 [", accused, "] 是主播/管理员");
+				
+			} else if(XHRSender.blockUser(accused)) {
+				msg = StrUtils.concat("【禁言成功】 用户 [", accused, "] 已暂时关到小黑屋1小时");
+				
+			} else {
+				msg = StrUtils.concat("【禁言失败】 用户 [", accused, "] 可能有特权, 正在逍遥法外::>.<::");
+			}
 		}
+		XHRSender.sendPM(managerId, msg);
 	}
 	
 	public void setAutoThankYou() {
