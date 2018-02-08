@@ -37,6 +37,9 @@ public class BiliCookie extends HttpCookie {
 	/** 该cookie对应的用户昵称 */
 	private String nickName;
 	
+	/** 是否已绑定手机 */
+	private boolean bindTel;
+	
 	/** 从cookies提取的csrf token */
 	private String csrf;
 	
@@ -55,6 +58,7 @@ public class BiliCookie extends HttpCookie {
 		this.autoFeed = (autoFeed ? true : false);
 		this.uid = (StrUtils.isEmpty(uid) ? "" : uid);
 		this.nickName = (StrUtils.isEmpty(nickName) ? "" : nickName);
+		this.bindTel = false;
 		this.csrf = (StrUtils.isEmpty(csrf) ? "" : csrf);
 	}
 	
@@ -92,12 +96,20 @@ public class BiliCookie extends HttpCookie {
 		return nickName;
 	}
 	
+	public boolean BIND_TEL() {
+		return bindTel;
+	}
+	
 	public void setType(CookieType type) {
 		this.type = type;
 	}
 
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
+	}
+	
+	public void setBindTel(boolean bindTel) {
+		this.bindTel = bindTel;
 	}
 
 	public boolean isAutoFeed() {

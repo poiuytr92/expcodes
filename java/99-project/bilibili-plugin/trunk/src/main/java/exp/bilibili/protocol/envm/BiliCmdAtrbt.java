@@ -136,4 +136,10 @@ public class BiliCmdAtrbt {
 	
 	public final static String gift_num = "gift_num";
 	
+	public final static String safe_rank = "safe_rank";
+	
+	public final static String bind_tel = "bind_tel";
+	
+	public final static String bind_email = "bind_email";
+	
 }

@@ -205,6 +205,10 @@ public class LotteryStorm extends _Lottery {
 		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
+			if(cookie.BIND_TEL() == false) {
+				continue;	// 未绑定手机的账号无法参与节奏风暴
+			}
+			
 			String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功(节奏风暴)", cookie.NICKNAME(), roomId);

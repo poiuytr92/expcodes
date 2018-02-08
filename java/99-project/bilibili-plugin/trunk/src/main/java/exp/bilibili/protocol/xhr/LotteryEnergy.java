@@ -98,6 +98,10 @@ public class LotteryEnergy extends _Lottery {
 		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
+			if(cookie.BIND_TEL() == false) {
+				continue;	// 未绑定手机的账号无法参与高能抽奖
+			}
+			
 			String reason = join(LotteryType.ENGERY, cookie, EG_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功(高能礼物)", cookie.NICKNAME(), roomId);

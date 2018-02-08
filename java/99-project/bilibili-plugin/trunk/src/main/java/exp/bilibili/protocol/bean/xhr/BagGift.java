@@ -3,6 +3,7 @@ package exp.bilibili.protocol.bean.xhr;
 import net.sf.json.JSONObject;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * 
@@ -95,6 +96,11 @@ public class BagGift {
 
 	public int getGiftNum() {
 		return giftNum;
+	}
+	
+	@Override
+	public String toString() {
+		return StrUtils.concat(getGiftName(), "x", getGiftNum());
 	}
 	
 }

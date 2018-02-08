@@ -105,7 +105,9 @@ public class XHRSender {
 	 * @return username
 	 */
 	public static boolean queryUserInfo(BiliCookie cookie) {
-		return Login.queryUserInfo(cookie);
+		boolean isOk = Login.queryUserInfo(cookie);
+		isOk &= Login.queryUserSafeInfo(cookie);
+		return isOk;
 	}
 
 	/**

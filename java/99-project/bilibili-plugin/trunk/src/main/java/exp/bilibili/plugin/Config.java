@@ -14,7 +14,6 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
 
-
 /**
  * <PRE>
  * 程序配置
@@ -123,6 +122,10 @@ public class Config {
 	
 	public String VCLOGIN_URL() {
 		return xConf.getVal("/config/urls/vcloginURL");
+	}
+	
+	public String SAFE_URL() {
+		return xConf.getVal("/config/urls/safeURL");
 	}
 	
 	public String LIVE_HOST() {
