@@ -24,7 +24,7 @@ import exp.libs.utils.format.ESCUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.HttpURLUtils;
+import exp.libs.warp.net.http.HttpClient;
 import exp.qw.Config;
 
 public class SinaWeiboUtils {
@@ -134,27 +134,34 @@ public class SinaWeiboUtils {
 	 */
 	protected static int wormAlbum(WebDriver webDriver, String albumName, String albumUrl) {
 		int cnt = 0;
-		if(StrUtils.isEmpty(albumUrl)) {
+		if(StrUtils.isEmpty(albumUrl) || !"微博配图".equals(albumName)) {
 			return cnt;
 		}
 		
 		log.info("开始爬取相册 [{}] : [{}].", albumName, albumUrl);
 		List<String> picUrls = getPicUlrs(webDriver, albumName, albumUrl);
 		
+		HttpClient client = new HttpClient();
 		for(String picUrl : picUrls) {
+			if(++cnt <= 408) {
+				continue;
+			}
+			
 			String bigPicUrl = getBigPicUrl(webDriver, picUrl);
 			webDriver.get(bigPicUrl);
 			WebElement we = webDriver.findElement(By.id("pic"));
 			String url = we.getAttribute("src");
 			
+			System.out.println(url);
 			String savePath = StrUtils.concat(DOWNLOAD_DIR, albumName, "/", System.currentTimeMillis(), PIC_SUFFIX);
-			HttpURLUtils.downloadByGet(savePath, url, null, null);
+			client.downloadByGet(savePath, url, null, null);
 			
-			if(++cnt % 100 == 0) {
-				log.info("爬取相册 [{}] 中... 避免反爬, 休眠30秒. 当前已爬取 [{}] 张照片.", albumName, cnt);
-				ThreadUtils.tSleep(30000);
-			}
+//			if(++cnt % 100 == 0) {
+//				log.info("爬取相册 [{}] 中... 避免反爬, 休眠30秒. 当前已爬取 [{}] 张照片.", albumName, cnt);
+//				ThreadUtils.tSleep(30000);
+//			}
 		}
+		client.close();
 		log.info("爬取相册 [{}] 完成, 共爬取 [{}] 张照片.", albumName, cnt);
 		return cnt;
 	}
