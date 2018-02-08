@@ -17,7 +17,7 @@
 	</appender>
 
     <!-- 全量异常日志器  -->
-   <appender name="exception"
+    <appender name="exception"
       class="ch.qos.logback.core.rolling.RollingFileAppender">
       <file>${symbol_dollar}{LOG_HOME}/exception.log</file>
       <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -36,7 +36,7 @@
          <onMatch>ACCEPT</onMatch>
          <onMismatch>DENY</onMismatch>
       </filter>
-   </appender>
+    </appender>
    
 	<!-- 应用程序日志器 -->
 	<appender name="app"
