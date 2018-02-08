@@ -14,6 +14,7 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
 import exp.libs.utils.verify.RegexUtils;
+import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 import exp.qw.Config;
 import exp.qw.bean.BrowserDriver;
@@ -250,7 +251,7 @@ public class MoodWordAnalyzer {
 				
 				String picName = StrUtils.concat(createTime, "-", i - 2, IMAGE_SUFFIX);
 				String savePath = StrUtils.concat(saveDir, picName);
-				HttpUtils.download(line, savePath);
+				HttpURLUtils.downloadByGet(savePath, line, null, null);
 				picNum++;
 			}
 		}
