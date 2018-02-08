@@ -11,6 +11,8 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.envm.Level;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
@@ -413,7 +415,8 @@ public class ChatMgr extends LoopThread {
 	 * @param msg 弹幕（消息含被举报人）
 	 */
 	private void complaint(String username, String msg) {
-		if(!OnlineUserMgr.getInstn().isManager(CookiesMgr.MAIN().NICKNAME()) || 
+		if(Config.LEVEL < Level.ADMIN || 
+				!OnlineUserMgr.getInstn().isManager(CookiesMgr.MAIN().NICKNAME()) || 
 				!msg.trim().startsWith(COMPLAINT_KEY)) {
 			return;
 		}
@@ -439,7 +442,8 @@ public class ChatMgr extends LoopThread {
 	 * @param msg 弹幕（消息含被禁闭人）
 	 */
 	private void ban(String username, String msg) {
-		if(!OnlineUserMgr.getInstn().isManager(CookiesMgr.MAIN().NICKNAME()) || 
+		if(Config.LEVEL < Level.ADMIN || 
+				!OnlineUserMgr.getInstn().isManager(CookiesMgr.MAIN().NICKNAME()) || 
 				!OnlineUserMgr.getInstn().isManager(username) || 
 				!msg.trim().startsWith(BAN_KEY)) {
 			return;
@@ -467,7 +471,7 @@ public class ChatMgr extends LoopThread {
 				msg = StrUtils.concat("【禁言成功】 用户 [", accused, "] 已暂时关到小黑屋1小时");
 				
 			} else {
-				msg = StrUtils.concat("【禁言失败】 用户 [", accused, "] 可能有特权, 正在逍遥法外::>.<::");
+				msg = StrUtils.concat("【禁言失败】 用户 [", accused, "] 已被其他房管拖到小黑屋不可描述了");
 			}
 		}
 		XHRSender.sendPM(managerId, msg);
