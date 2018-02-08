@@ -1,4 +1,4 @@
-package exp.bilibili.protocol.bean.xhr;
+package exp.bilibili.protocol.bean.other;
 
 public class User {
 

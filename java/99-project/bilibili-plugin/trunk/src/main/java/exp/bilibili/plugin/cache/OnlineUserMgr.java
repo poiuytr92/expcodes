@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Set;
 
 import exp.bilibili.protocol.XHRSender;
-import exp.bilibili.protocol.bean.xhr.User;
+import exp.bilibili.protocol.bean.other.User;
 import exp.libs.utils.other.StrUtils;
 
 /**

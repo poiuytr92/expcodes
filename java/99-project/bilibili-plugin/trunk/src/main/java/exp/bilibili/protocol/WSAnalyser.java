@@ -20,6 +20,7 @@ import exp.bilibili.protocol.bean.ws.LiveMsg;
 import exp.bilibili.protocol.bean.ws.Preparing;
 import exp.bilibili.protocol.bean.ws.RaffleEnd;
 import exp.bilibili.protocol.bean.ws.RaffleStart;
+import exp.bilibili.protocol.bean.ws.RoomBlock;
 import exp.bilibili.protocol.bean.ws.SendGift;
 import exp.bilibili.protocol.bean.ws.SpecialGift;
 import exp.bilibili.protocol.bean.ws.SysGift;
@@ -108,6 +109,9 @@ public class WSAnalyser {
 			
 		} else if(biliCmd == BiliCmd.WISH_BOTTLE) {
 			toDo(new WishBottle(json));
+			
+		} else if(biliCmd == BiliCmd.ROOM_BLOCK_MSG) {
+			toDo(new RoomBlock(json));
 			
 		} else if(biliCmd == BiliCmd.ACTIVITY_EVENT) {
 			toDo(new ActivityEvent(json));
@@ -313,15 +317,24 @@ public class WSAnalyser {
 	
 	/**
 	 * (直播间内)许愿瓶实现进度消息
-	 * @param wishBottle
+	 * @param msgBean
 	 */
 	private static void toDo(WishBottle msgBean) {
 		// Undo
 	}
 	
 	/**
+	 * (直播间内)关小黑屋通知消息
+	 * @param msgBean
+	 */
+	private static void toDo(RoomBlock msgBean) {
+		log.info("直播间 [{}] 的用户 [{}] 被关小黑屋了!!!", 
+				msgBean.getRoomId(), msgBean.getUname());
+	}
+	
+	/**
 	 * 2018春节活动(新春榜)触发事件
-	 * @param wishBottle
+	 * @param msgBean
 	 */
 	private static void toDo(ActivityEvent msgBean) {
 		// Undo

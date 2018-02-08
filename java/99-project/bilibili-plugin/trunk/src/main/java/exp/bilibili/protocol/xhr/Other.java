@@ -9,7 +9,7 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.protocol.bean.xhr.User;
+import exp.bilibili.protocol.bean.other.User;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;

@@ -7,7 +7,7 @@ import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.bean.xhr.User;
+import exp.bilibili.protocol.bean.other.User;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.bilibili.protocol.xhr.Feed;

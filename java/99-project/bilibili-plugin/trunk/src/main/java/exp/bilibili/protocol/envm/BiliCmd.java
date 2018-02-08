@@ -72,6 +72,10 @@ public class BiliCmd {
 	private final static String _WISH_BOTTLE = "WISH_BOTTLE";
 	public final static BiliCmd WISH_BOTTLE = new BiliCmd(_WISH_BOTTLE);
 	
+	/** (直播间内)关小黑屋通知消息 */
+	private final static String _ROOM_BLOCK_MSG = "ROOM_BLOCK_MSG";
+	public final static BiliCmd ROOM_BLOCK_MSG = new BiliCmd(_ROOM_BLOCK_MSG);
+	
 	/** 2018春节活动-红灯笼高能通知事件 */
 	private final static String _ACTIVITY_EVENT = "ACTIVITY_EVENT";
 	public final static BiliCmd ACTIVITY_EVENT = new BiliCmd(_ACTIVITY_EVENT);
@@ -129,6 +133,9 @@ public class BiliCmd {
 			
 		} else if(_WISH_BOTTLE.equals(cmd)) {
 			biliCMD = WISH_BOTTLE;
+			
+		} else if(_ROOM_BLOCK_MSG.equals(cmd)) {
+			biliCMD = ROOM_BLOCK_MSG;
 			
 		} else if(_ACTIVITY_EVENT.equals(cmd)) {
 			biliCMD = ACTIVITY_EVENT;

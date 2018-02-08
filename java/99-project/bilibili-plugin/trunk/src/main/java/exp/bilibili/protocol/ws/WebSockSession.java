@@ -134,12 +134,13 @@ class WebSockSession extends WebSocketClient {
 			log.debug("websocket连接成功确认");
 			UIUtils.log("入侵直播间成功, 正在暗中观察...");
 			
-		} else {
-			alalyseMsg(hex);
+		} else if(alalyseHexMsg(hex) == false) {
+			log.warn("存在无效的推送消息: {}", hex);
 		}
     }
 	
-	private void alalyseMsg(String hexMsg) {
+	private boolean alalyseHexMsg(String hexMsg) {
+		boolean isOk = true;
 		String split = hexMsg.substring(0, 32);	// 消息的前32个字节(即16个字符)为分隔符
 		String[] hexs = hexMsg.split(split);
 		for(String hex : hexs) {
@@ -151,12 +152,13 @@ class WebSockSession extends WebSocketClient {
 			if(JsonUtils.isVaild(msg)) {
 				JSONObject json = JSONObject.fromObject(msg);
 				if(!WSAnalyser.toMsgBean(json)) {
-					log.info("无效的推送消息: {}", hex);
+					isOk = false;
 				}
 			} else {
-				log.info("无效的推送消息: {}", hex);
+				isOk = false;
 			}
 		}
+		return isOk;
 	}
 	
 	@Override
