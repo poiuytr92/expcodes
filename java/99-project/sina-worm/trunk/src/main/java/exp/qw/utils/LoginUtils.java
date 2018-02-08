@@ -24,7 +24,7 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.JSUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.warp.net.http.HttpURLUtils;
 import exp.qw.Config;
 
 public class LoginUtils {
@@ -86,7 +86,7 @@ public class LoginUtils {
 				WebElement we = webDriver.findElement(By.id("pic"));
 				String url = we.getAttribute("src");
 				System.out.println(url);
-				HttpUtils.download(url, "./downloads/" + albumName + "/" + System.currentTimeMillis() + ".jpg");
+				HttpURLUtils.downloadByGet("./downloads/" + albumName + "/" + System.currentTimeMillis() + ".jpg", url, null, null);
 			}
 		}
 		

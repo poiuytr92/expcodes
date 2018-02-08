@@ -24,7 +24,7 @@ import exp.libs.utils.format.ESCUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.warp.net.http.HttpURLUtils;
 import exp.qw.Config;
 
 public class SinaWeiboUtils {
@@ -148,7 +148,7 @@ public class SinaWeiboUtils {
 			String url = we.getAttribute("src");
 			
 			String savePath = StrUtils.concat(DOWNLOAD_DIR, albumName, "/", System.currentTimeMillis(), PIC_SUFFIX);
-			HttpUtils.download(url, savePath);
+			HttpURLUtils.downloadByGet(savePath, url, null, null);
 			
 			if(++cnt % 100 == 0) {
 				log.info("爬取相册 [{}] 中... 避免反爬, 休眠30秒. 当前已爬取 [{}] 张照片.", albumName, cnt);
