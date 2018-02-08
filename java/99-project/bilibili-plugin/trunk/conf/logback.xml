@@ -13,7 +13,7 @@
 		<target>System.out</target><!-- System.out|System.err -->
 	</appender>
 
-    <!-- 全量异常日志器  -->
+   <!-- 全量异常日志器  -->
    <appender name="exception"
       class="ch.qos.logback.core.rolling.RollingFileAppender">
       <file>${LOG_HOME}/exception.log</file>

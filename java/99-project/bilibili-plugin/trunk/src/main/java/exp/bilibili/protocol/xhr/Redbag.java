@@ -5,6 +5,7 @@ import java.util.Map;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.warp.net.http.HttpURLUtils;
 
 /**
@@ -22,7 +23,7 @@ public class Redbag extends __XHR {
 	/** 查询红包奖池URL */
 	private final static String GET_REDBAG_URL = Config.getInstn().GET_REDBAG_URL();
 	
-	/** 兑换红包URL */
+	/** 兑换红包礼物URL */
 	private final static String EX_REDBAG_URL = Config.getInstn().EX_REDBAG_URL();
 	
 	/** 私有化构造函数 */
@@ -35,7 +36,7 @@ public class Redbag extends __XHR {
 	public static String queryRedbagPool(BiliCookie cookie) {
 		Map<String, String> headers = GET_HEADER(cookie.toNVCookie(), "pages/1703/spring-2018.html");
 		Map<String, String> requests = new HashMap<String, String>();
-		requests.put("_", String.valueOf(System.currentTimeMillis()));
+		requests.put(BiliCmdAtrbt._, String.valueOf(System.currentTimeMillis()));
 		return HttpURLUtils.doGet(GET_REDBAG_URL, headers, requests);
 	}
 	
@@ -50,8 +51,8 @@ public class Redbag extends __XHR {
 	public static String exchangeRedbag(BiliCookie cookie, String id, int num) {
 		Map<String, String> headers = POST_HEADER(cookie.toNVCookie(), "pages/1703/spring-2018.html");
 		Map<String, String> requests = new HashMap<String, String>();
-		requests.put("award_id", id);
-		requests.put("exchange_num", String.valueOf(num));
+		requests.put(BiliCmdAtrbt.award_id, id);
+		requests.put(BiliCmdAtrbt.exchange_num, String.valueOf(num));
 		return HttpURLUtils.doPost(EX_REDBAG_URL, headers, requests);
 	}
 	

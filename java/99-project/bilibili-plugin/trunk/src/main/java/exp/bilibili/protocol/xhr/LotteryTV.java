@@ -28,7 +28,7 @@ public class LotteryTV extends _Lottery {
 	protected LotteryTV() {}
 	
 	/**
-	 * 小电视抽奖
+	 * 参加小电视抽奖
 	 * @param roomId
 	 * @param raffleId
 	 * @return

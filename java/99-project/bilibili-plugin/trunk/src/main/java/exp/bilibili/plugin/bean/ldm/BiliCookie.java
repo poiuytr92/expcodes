@@ -96,7 +96,7 @@ public class BiliCookie extends HttpCookie {
 		return nickName;
 	}
 	
-	public boolean BIND_TEL() {
+	public boolean IS_BIND_TEL() {
 		return bindTel;
 	}
 	

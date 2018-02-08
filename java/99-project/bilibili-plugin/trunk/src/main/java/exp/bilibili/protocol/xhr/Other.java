@@ -36,10 +36,13 @@ public class Other extends __XHR {
 	private final static String ADMIN_URL = CryptoUtils.deDES(
 			"EECD1D519FEBFDE5EF68693278F5849E8068123647103E9D1644539B452D8DE870DD36BBCFE2C2A8E5A16D58A0CA752D3D715AF120F89F10990A854A386B95631E7C60D1CFD77605");
 	
+	/** 查询房间信息URL */
 	private final static String ROOM_URL = Config.getInstn().ROOM_URL();
 	
+	/** 查询房管列表URL */
 	private final static String MANAGE_URL = Config.getInstn().MANAGE_URL();
 	
+	/** 小黑屋URL */
 	private final static String BLACK_URL = Config.getInstn().BLACK_URL();
 	
 	/** 私有化构造函数 */
@@ -75,7 +78,7 @@ public class Other extends __XHR {
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER("", sRoomId);
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("roomid", sRoomId);
+		request.put(BiliCmdAtrbt.roomid, sRoomId);
 		
 		String response = HttpURLUtils.doGet(ROOM_URL, header, request);
 		User up = User.NULL;
@@ -100,7 +103,7 @@ public class Other extends __XHR {
 	}
 	
 	/**
-	 * 查询直播间的房管
+	 * 查询直播间的房管（含主播）
 	 * @param roomId 直播间ID
 	 * @return 房管列表
 	 */
@@ -117,7 +120,7 @@ public class Other extends __XHR {
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER("", sRoomId);
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("anchor_id", up.ID());
+		request.put(BiliCmdAtrbt.anchor_id, up.ID());
 		String response = HttpURLUtils.doGet(MANAGE_URL, header, request);
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -172,14 +175,22 @@ public class Other extends __XHR {
 		return isOk;
 	}
 	
+	/**
+	 * 关小黑屋的请求参数
+	 * @param csrf
+	 * @param roomId
+	 * @param username
+	 * @param hour
+	 * @return
+	 */
 	private static Map<String, String> getRequest(String csrf, String roomId, String username, int hour) {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("roomid", roomId);
-		request.put("type", "1");
-		request.put("content", username);
-		request.put("hour", String.valueOf(hour));
-		request.put("token", "");
-		request.put("csrf_token", csrf);
+		request.put(BiliCmdAtrbt.roomid, roomId);
+		request.put(BiliCmdAtrbt.type, "1");
+		request.put(BiliCmdAtrbt.content, username);
+		request.put(BiliCmdAtrbt.hour, String.valueOf(hour));
+		request.put(BiliCmdAtrbt.token, "");
+		request.put(BiliCmdAtrbt.csrf_token, csrf);
 		return request;
 	}
 	

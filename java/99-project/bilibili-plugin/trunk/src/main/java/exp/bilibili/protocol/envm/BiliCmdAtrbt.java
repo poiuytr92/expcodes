@@ -2,6 +2,7 @@ package exp.bilibili.protocol.envm;
 
 
 
+
 /**
  * <PRE>
  * B站Json交互报文字段属性
@@ -14,6 +15,8 @@ package exp.bilibili.protocol.envm;
  */
 public class BiliCmdAtrbt {
 
+	public final static String _ = "_";
+	
 	public final static String cmd = "cmd";
 	
 	public final static String real_roomid = "real_roomid";
@@ -92,11 +95,17 @@ public class BiliCmdAtrbt {
 	
 	public final static String time_end = "time_end";
 	
+	public final static String end_time = "end_time";
+	
 	public final static String minute = "minute";
 	
 	public final static String times = "times";
 	
 	public final static String max_times = "max_times";
+	
+	public final static String task_id = "task_id";
+	
+	public final static String captcha = "captcha";
 	
 	public final static String id = "id";
 	
@@ -122,6 +131,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String stock_num = "stock_num";
 	
+	public final static String exchange_num = "exchange_num";
+	
 	public final static String exchange_limit = "exchange_limit";
 	
 	public final static String user_exchange_count = "user_exchange_count";
@@ -141,5 +152,73 @@ public class BiliCmdAtrbt {
 	public final static String bind_tel = "bind_tel";
 	
 	public final static String bind_email = "bind_email";
+	
+	public final static String color = "color";
+	
+	public final static String captcha_token = "captcha_token";
+	
+	public final static String captcha_phrase = "captcha_phrase";
+	
+	public final static String token = "token";
+	
+	public final static String csrf_token = "csrf_token";
+	
+	public final static String fontsize = "fontsize";
+	
+	public final static String mode = "mode";
+	
+	public final static String platform = "platform";
+	
+	public final static String content = "content";
+	
+	public final static String msg$sender_uid = "msg[sender_uid]";
+	
+	public final static String msg$receiver_id = "msg[receiver_id]";
+	
+	public final static String msg$receiver_type = "msg[receiver_type]";
+	
+	public final static String msg$msg_type = "msg[msg_type]";
+	
+	public final static String msg$timestamp = "msg[timestamp]";
+	
+	public final static String msg$content = "msg[content]";
+	
+	public final static String ruid = "ruid";
+	
+	public final static String biz_code = "biz_code";
+	
+	public final static String biz_id = "biz_id";
+	
+	public final static String storm_beat_id = "storm_beat_id";
+	
+	public final static String metadata = "metadata";
+	
+	public final static String coin_type = "coin_type";
+	
+	public final static String oauthKey = "oauthKey";
+	
+	public final static String gourl = "gourl";
+	
+	public final static String cType = "cType";
+	
+	public final static String vcType = "vcType";
+	
+	public final static String user = "user";
+	
+	public final static String pwd = "pwd";
+	
+	public final static String keep = "keep";
+	
+	public final static String area = "area";
+	
+	public final static String order = "order";
+	
+	public final static String page = "page";
+	
+	public final static String type = "type";
+	
+	public final static String hour = "hour";
+	
+	public final static String anchor_id = "anchor_id";
 	
 }

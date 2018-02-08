@@ -26,25 +26,34 @@ class __XHR {
 	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(__XHR.class);
 	
-	/** SSL服务器主机 */
+	/** 直播服务器主机 */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
 	
-	/** 直播间URL */
+	/** 直播首页 */
 	private final static String LIVE_HOME = Config.getInstn().LIVE_HOME();
 	
-	/** Link中心服务器主机 */
+	/** 个人Link中心服务器主机 */
 	protected final static String LINK_HOST = Config.getInstn().LINK_HOST();
 	
-	/** Link中心URL */
+	/** 个人Link中心首页 */
 	protected final static String LINK_HOME = Config.getInstn().LINK_HOME();
 	
 	/** 私有化构造函数 */
 	protected __XHR() {}
 	
+	/**
+	 * 获取当前监听直播间的真实房号
+	 * @return
+	 */
 	protected static String getRealRoomId() {
 		return getRealRoomId(UIUtils.getLiveRoomId());
 	}
 	
+	/**
+	 * 获取直播间的真实房号
+	 * @param roomId
+	 * @return
+	 */
 	protected static String getRealRoomId(int roomId) {
 		return String.valueOf(RoomMgr.getInstn().getRealRoomId(roomId));
 	}

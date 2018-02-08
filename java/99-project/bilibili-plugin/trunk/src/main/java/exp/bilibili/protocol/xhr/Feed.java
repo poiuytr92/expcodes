@@ -29,18 +29,19 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 public class Feed extends __XHR {
 
+	/** 查询包裹礼物列表URL */
 	private final static String BAG_URL = Config.getInstn().BAG_URL();
 	
+	/** 投喂URL */
 	private final static String FEED_URL = Config.getInstn().FEED_URL();
 	
-	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
-	
+	/** 查询账号信息URL */
 	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
 	
 	/**
 	 * 投喂主播
 	 * @param cookie 投喂用户cookie
-	 * @param roomId 房间号
+	 * @param roomId 主播所在房间号
 	 */
 	public static void toFeed(BiliCookie cookie, int roomId) {
 		String sRoomId = getRealRoomId(roomId);
@@ -117,6 +118,11 @@ public class Feed extends __XHR {
 		return silver;
 	}
 	
+	/**
+	 * 查询银瓜子的请求头
+	 * @param cookie
+	 * @return
+	 */
 	private static Map<String, String> _getHeader(String cookie) {
 		Map<String, String> header = POST_HEADER(cookie);
 		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
@@ -138,9 +144,9 @@ public class Feed extends __XHR {
 		Map<String, String> request = _getRequest(cookie, roomId, upUID);
 		
 		for(BagGift bagGift : bagGifts) {
-			request.put("bag_id", bagGift.getBagId());
-			request.put("gift_id", bagGift.getGiftId());
-			request.put("gift_num", String.valueOf(bagGift.getGiftNum()));
+			request.put(BiliCmdAtrbt.bag_id, bagGift.getBagId());
+			request.put(BiliCmdAtrbt.gift_id, bagGift.getGiftId());
+			request.put(BiliCmdAtrbt.gift_num, String.valueOf(bagGift.getGiftNum()));
 			String response = HttpURLUtils.doPost(FEED_URL, header, request);
 			
 			try {
@@ -160,20 +166,27 @@ public class Feed extends __XHR {
 		}
 	}
 	
+	/**
+	 * 投喂主播的请求参数
+	 * @param cookie
+	 * @param roomId
+	 * @param upUID
+	 * @return
+	 */
 	private static Map<String, String> _getRequest(
 			BiliCookie cookie, String roomId, String upUID) {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("uid", cookie.UID());
-		request.put("ruid", upUID);
-		request.put("platform", "pc");
-		request.put("biz_code", "live");
-		request.put("biz_id", roomId);
-		request.put("rnd", String.valueOf(System.currentTimeMillis() / 1000));
-		request.put("storm_beat_id", "0");
-		request.put("metadata", "");
-		request.put("token", "");
-		request.put("csrf_token", cookie.CSRF());
-		request.put("coin_type", "silver");
+		request.put(BiliCmdAtrbt.uid, cookie.UID());
+		request.put(BiliCmdAtrbt.ruid, upUID);
+		request.put(BiliCmdAtrbt.platform, "pc");
+		request.put(BiliCmdAtrbt.biz_code, "live");
+		request.put(BiliCmdAtrbt.biz_id, roomId);
+		request.put(BiliCmdAtrbt.rnd, String.valueOf(System.currentTimeMillis() / 1000));
+		request.put(BiliCmdAtrbt.storm_beat_id, "0");
+		request.put(BiliCmdAtrbt.metadata, "");
+		request.put(BiliCmdAtrbt.token, "");
+		request.put(BiliCmdAtrbt.csrf_token, cookie.CSRF());
+		request.put(BiliCmdAtrbt.coin_type, "silver");
 		return request;
 	}
 	

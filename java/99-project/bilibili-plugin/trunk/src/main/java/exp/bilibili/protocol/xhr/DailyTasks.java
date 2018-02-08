@@ -39,13 +39,13 @@ public class DailyTasks extends __XHR {
 	/** 执行小学数学任务URL */
 	private final static String MATH_EXEC_URL = Config.getInstn().MATH_EXEC_URL();
 	
-	/** 小学数学验证码URL */
+	/** 获取小学数学任务验证码URL */
 	private final static String MATH_CODE_URL = Config.getInstn().MATH_CODE_URL();
 	
-	/** 小学数学验证码下载路径 */
+	/** 小学数学任务验证码图片的下载保存路径 */
 	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.png");
 	
-	/** 小学数学验证码重试间隔 */
+	/** 小学数学任务重试间隔(验证码计算成功率只有90%左右, 失败后需重试) */
 	private final static long SLEEP_TIME = 500L;
 	
 	/** 执行下次任务的延迟时间点（5分钟后） */
@@ -80,14 +80,14 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 有爱社请求参数
+	 * 友爱社请求参数
 	 * @param csrf
 	 * @return
 	 */
 	private static Map<String, String> getRequest(String csrf) {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("task_id", "double_watch_task");
-		request.put("csrf_token", csrf);
+		request.put(BiliCmdAtrbt.task_id, "double_watch_task");
+		request.put(BiliCmdAtrbt.csrf_token, csrf);
 		return request;
 	}
 	
@@ -104,7 +104,7 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 
+	 * （友爱社/每日）签到结果解析
 	 * @param response  {"code":0,"msg":"","message":"","data":[]}
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
@@ -132,7 +132,7 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 执行小学数学日常任务
+	 * 执行小学数学任务
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
@@ -156,7 +156,7 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 执行小学数学日常任务
+	 * 执行小学数学任务
 	 * @param header
 	 * @param username
 	 * @param task
@@ -180,8 +180,7 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 提取当前的小学数学日常任务
-	 * 
+	 * 提取小学数学日常任务
 	 * {"code":0,"msg":"","data":{"minute":6,"silver":80,"time_start":1514015075,"time_end":1514015435,"times":3,"max_times":5}}
 	 * {"code":0,"msg":"","data":{"minute":9,"silver":190,"time_start":1514036545,"time_end":1514037085,"times":3,"max_times":5}}
 	 * @param header
@@ -203,7 +202,7 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 计算验证码图片的小学数学
+	 * 计算验证码图片的小学数学题
 	 * @param header
 	 * @return
 	 */
@@ -230,10 +229,7 @@ public class DailyTasks extends __XHR {
 	 */
 	private static boolean execMathTask(Map<String, String> header, 
 			String username, MathTask task, int answer) {
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("time_start", String.valueOf(task.getBgnTime()));
-		request.put("end_time", String.valueOf(task.getEndTime()));
-		request.put("captcha", String.valueOf(answer));
+		Map<String, String> request = getRequest(task, answer);
 		String response = HttpURLUtils.doGet(MATH_EXEC_URL, header, request);
 		
 		boolean isRedone = false;
@@ -255,6 +251,20 @@ public class DailyTasks extends __XHR {
 			log.error("[{}] 执行小学数学任务失败: {}", username, response, e);
 		}
 		return isRedone;
+	}
+	
+	/**
+	 * 执行小学数学任务请求参数
+	 * @param task
+	 * @param answer
+	 * @return
+	 */
+	private static Map<String, String> getRequest(MathTask task, int answer) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(BiliCmdAtrbt.time_start, String.valueOf(task.getBgnTime()));
+		request.put(BiliCmdAtrbt.end_time, String.valueOf(task.getEndTime()));
+		request.put(BiliCmdAtrbt.captcha, String.valueOf(answer));
+		return request;
 	}
 	
 }

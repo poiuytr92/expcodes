@@ -25,10 +25,10 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 public class Chat extends __XHR {
 
-	/** 弹幕URL */
+	/** 弹幕版聊URL */
 	private final static String CHAT_URL = Config.getInstn().CHAT_URL();
 	
-	/** 私信主机 */
+	/** 私信首页 */
 	private final static String MSG_HOME = Config.getInstn().MSG_HOME();
 	
 	/** 私信URL */
@@ -62,12 +62,12 @@ public class Chat extends __XHR {
 	 */
 	private static Map<String, String> getRequest(String msg, String roomId, String color) {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("rnd", String.valueOf(System.currentTimeMillis() / 1000));	// 时间戳
-		params.put("msg", msg);			// 弹幕内容
-		params.put("color", color);		// 弹幕颜色
-		params.put("roomid", roomId);	// 接收消息的房间号
-		params.put("fontsize", "25");
-		params.put("mode", "1");
+		params.put(BiliCmdAtrbt.rnd, String.valueOf(System.currentTimeMillis() / 1000));	// 时间戳
+		params.put(BiliCmdAtrbt.msg, msg);			// 弹幕内容
+		params.put(BiliCmdAtrbt.color, color);		// 弹幕颜色
+		params.put(BiliCmdAtrbt.roomid, roomId);	// 接收消息的房间号
+		params.put(BiliCmdAtrbt.fontsize, "25");
+		params.put(BiliCmdAtrbt.mode, "1");
 		return params;
 	}
 	
@@ -110,22 +110,22 @@ public class Chat extends __XHR {
 	private static Map<String, String> getRequest(String csrf, 
 			String sendId, String recvId, String msg) {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("csrf_token", csrf);
-		request.put("platform", "pc");
-		request.put("msg[sender_uid]", sendId);
-		request.put("msg[receiver_id]", recvId);
-		request.put("msg[receiver_type]", "1");
-		request.put("msg[msg_type]", "1");
-		request.put("msg[timestamp]", String.valueOf(System.currentTimeMillis() / 1000));
+		request.put(BiliCmdAtrbt.csrf_token, csrf);
+		request.put(BiliCmdAtrbt.platform, "pc");
+		request.put(BiliCmdAtrbt.msg$sender_uid, sendId);
+		request.put(BiliCmdAtrbt.msg$receiver_id, recvId);
+		request.put(BiliCmdAtrbt.msg$receiver_type, "1");
+		request.put(BiliCmdAtrbt.msg$msg_type, "1");
+		request.put(BiliCmdAtrbt.msg$timestamp, String.valueOf(System.currentTimeMillis() / 1000));
 		
 		JSONObject json = new JSONObject();
-		json.put("content", msg);
-		request.put("msg[content]", json.toString());
+		json.put(BiliCmdAtrbt.content, msg);
+		request.put(BiliCmdAtrbt.msg$content, json.toString());
 		return request;
 	}
 	
 	/**
-	 * 
+	 * 弹幕/消息发送结果解析
 	 * @param response  
 	 * 		弹幕: {"code":-101,"msg":"请先登录","data":[]}
 	 * 		私信: {"code":0,"msg":"ok","message":"ok","data":{"msg_key":6510413634042085687,"_gt_":0}}

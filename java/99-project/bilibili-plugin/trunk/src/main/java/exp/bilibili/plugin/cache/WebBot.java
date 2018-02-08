@@ -176,7 +176,7 @@ public class WebBot extends LoopThread {
 				
 				long max = -1;
 				max = NumUtils.max(DailyTasks.toSign(cookie), max);
-				if(cookie.BIND_TEL()) {	// 仅绑定了手机的账号才能参与
+				if(cookie.IS_BIND_TEL()) {	// 仅绑定了手机的账号才能参与
 					max = NumUtils.max(DailyTasks.toAssn(cookie), max);
 					max = NumUtils.max(DailyTasks.doMathTask(cookie), max);
 				}

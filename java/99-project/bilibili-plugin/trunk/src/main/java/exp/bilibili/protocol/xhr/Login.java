@@ -23,7 +23,6 @@ import exp.libs.warp.net.http.HttpUtils;
 /**
  * <PRE>
  * 登陆
- * 	FIXME : 补充二维码登陆方式， 不再用webkit
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -33,17 +32,20 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 public class Login extends __XHR {
 
-	/** B站首页 */
+	/** B站主站首页 */
 	private final static String MAIN_HOME = Config.getInstn().MAIN_HOME();
 	
-	/** 登陆服务器 */
+	/** 登陆主机服务器 */
 	private final static String LOGIN_HOST = Config.getInstn().LOGIN_HOST();
 	
-	/** 登陆URL */
-	private final static String QRLOGIN_URL = Config.getInstn().QRLOGIN_URL();
+	/** 获取二维码图片信息的URL */
+	private final static String QRCODE_URL = Config.getInstn().QRCODE_URL();
 	
-	/** RSA公钥URL */
-	private final static String RSA_KEY_URL = Config.getInstn().RSA_URL();
+	/** 检测二维码是否被扫码登陆的URL */
+	private final static String QRCHECK_URL = Config.getInstn().QRCHECK_URL();
+	
+	/** 二维码扫码登陆URL */
+	private final static String QRLOGIN_URL = Config.getInstn().QRLOGIN_URL();
 	
 	/** 下载验证码图片的URL */
 	private final static String VCCODE_URL = Config.getInstn().VCCODE_URL();
@@ -54,18 +56,16 @@ public class Login extends __XHR {
 	/** 验证码图片配套cookie中的JSESSIONID */
 	private final static String JSESSIONID = "JSESSIONID";
 	
+	/** 获取RSA公钥URL */
+	private final static String RSA_KEY_URL = Config.getInstn().RSA_URL();
+	
 	/** 使用帐密+验证码登陆的URL */
 	private final static String VCLOGIN_URL = Config.getInstn().VCLOGIN_URL();
-	
-	/** 获取二维码图片信息的URL */
-	private final static String QRCODE_URL = Config.getInstn().QRCODE_URL();
-	
-	/** 检测二维码是否被扫码登陆的URL */
-	private final static String QRCHECK_URL = Config.getInstn().QRCHECK_URL();
 	
 	/** 查询账号信息URL */
 	private final static String ACCOUNT_URL = Config.getInstn().ACCOUNT_URL();
 	
+	/** 查询账号安全信息URL */
 	private final static String SAFE_URL = Config.getInstn().SAFE_URL();
 	
 	/** 私有化构造函数 */
@@ -159,8 +159,8 @@ public class Login extends __XHR {
 	 */
 	private static Map<String, String> getRequest(String oauthKey) {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("oauthKey", oauthKey);
-		request.put("gourl", MAIN_HOME);
+		request.put(BiliCmdAtrbt.oauthKey, oauthKey);
+		request.put(BiliCmdAtrbt.gourl, MAIN_HOME);
 		return request;
 	}
 	
@@ -278,13 +278,13 @@ public class Login extends __XHR {
 	private static Map<String, String> getRequest(
 			String username, String password, String vccode) {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("cType", "2");
-		request.put("vcType", "1");		// 1:验证码校验方式;  2:二维码校验方式
-		request.put("captcha", vccode);	// 图片验证码
-		request.put("user", username);	// 账号（明文）
-		request.put("pwd", password);	// 密码（RSA公钥加密密文）
-		request.put("keep", "true");
-		request.put("gourl", MAIN_HOME);	// 登录后的跳转页面
+		request.put(BiliCmdAtrbt.cType, "2");
+		request.put(BiliCmdAtrbt.vcType, "1");		// 1:验证码校验方式;  2:二维码校验方式
+		request.put(BiliCmdAtrbt.captcha, vccode);	// 图片验证码
+		request.put(BiliCmdAtrbt.user, username);	// 账号（明文）
+		request.put(BiliCmdAtrbt.pwd, password);	// 密码（RSA公钥加密密文）
+		request.put(BiliCmdAtrbt.keep, "true");
+		request.put(BiliCmdAtrbt.gourl, MAIN_HOME);	// 登录后的跳转页面
 		return request;
 	}
 	

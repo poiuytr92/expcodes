@@ -30,7 +30,7 @@ import exp.libs.warp.net.http.HttpURLUtils;
  */
 public class LotteryEnergy extends _Lottery {
 	
-	/** 高能礼物ID查询URL */
+	/** 高能礼物取号URL */
 	private final static String EG_CHECK_URL = Config.getInstn().EG_CHECK_URL();
 	
 	/** 高能礼物抽奖URL */
@@ -65,13 +65,12 @@ public class LotteryEnergy extends _Lottery {
 	 * @return
 	 */
 	private static List<String> getRaffleId(String url, int roomId, String cookie) {
-		List<String> raffleIds = new LinkedList<String>();
-		
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER(cookie, sRoomId);
 		Map<String, String> request = getRequest(sRoomId);
-		
 		String response = HttpURLUtils.doGet(url, header, request);
+		
+		List<String> raffleIds = new LinkedList<String>();
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
@@ -94,11 +93,16 @@ public class LotteryEnergy extends _Lottery {
 		return raffleIds;
 	}
 	
+	/**
+	 * 参加抽奖
+	 * @param roomId
+	 * @param raffleId
+	 */
 	private static void join(int roomId, String raffleId) {
 		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
-			if(cookie.BIND_TEL() == false) {
+			if(cookie.IS_BIND_TEL() == false) {
 				continue;	// 未绑定手机的账号无法参与高能抽奖
 			}
 			

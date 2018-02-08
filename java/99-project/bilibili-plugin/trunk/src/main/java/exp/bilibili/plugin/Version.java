@@ -29,6 +29,7 @@ public class Version {
 		// TODO
 		// 优化身份识别系统
 		// XHR- URL注释
+		// 节奏风暴：多线程抽奖
 		// 模拟观看时长
 		// GITHUB HTTPS 的TLS协议为2.0 ?? 无法获取页面源码
 		// 在线升级， 升级命令：移动文件，删除文件，添加文件,  压缩包转txt

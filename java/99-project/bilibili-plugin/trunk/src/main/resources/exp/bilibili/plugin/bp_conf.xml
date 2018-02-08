@@ -19,7 +19,7 @@
         <vccodeURL caption="获取验证码URL"><![CDATA[https://passport.bilibili.com/captcha]]></vccodeURL>
         <rsaURL caption="获取RSA公钥URL"><![CDATA[https://passport.bilibili.com/login?act=getkey]]></rsaURL>
         <vcloginURL caption="帐密登陆URL"><![CDATA[https://passport.bilibili.com/web/login]]></vcloginURL>
-        <safeURL caption="安全等级URL"><![CDATA[https://passport.bilibili.com/web/site/index]]></safeURL>
+        <safeURL caption="安全信息URL"><![CDATA[https://passport.bilibili.com/web/site/index]]></safeURL>
         
         <liveHost caption="直播主机"><![CDATA[api.live.bilibili.com]]></liveHost>
         <liveURL caption="直播列表URL"><![CDATA[http://api.live.bilibili.com/area/liveList]]></liveURL>
