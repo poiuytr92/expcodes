@@ -36,8 +36,8 @@ public final class OSUtils {
 	 *  1.通过tomcat运行的J2EE项目为固定值 org.apache.catalina.startup.Bootstrap start
 	 *  2.通过main运行的J2SE项目为main入口类的类名
 	 */
-	protected final static String RUN_EVN = 
-			System.getProperty("sun.java.command");
+	private final static String SJC = System.getProperty("sun.java.command");
+	protected final static String RUN_EVN = (SJC == null ? "" : SJC);
 	
 	private final static boolean RUN_BY_TOMCAT = 
 			RUN_EVN.startsWith("org.apache.catalina.startup.Bootstrap");
