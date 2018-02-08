@@ -6,12 +6,9 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.ChatColor;
-import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.other.LogUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
@@ -150,14 +147,6 @@ public class Chat extends __XHR {
 			log.error("发送消息失败: {}", msg, e);
 		}
 		return isOk;
-	}
-	
-	public static void main(String[] args) {
-		LogUtils.loadLogBackConfig();
-		
-		CookiesMgr.INSTN().load(CookieType.MAIN);
-		boolean isOk = sendPM(CookiesMgr.MAIN(), "31796320", "测试私信1036");
-		System.out.println(isOk);
 	}
 	
 }
