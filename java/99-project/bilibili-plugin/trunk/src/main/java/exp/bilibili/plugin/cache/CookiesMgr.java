@@ -81,7 +81,7 @@ public class CookiesMgr {
 		this.lastAddCookieTime = System.currentTimeMillis();
 	}
 	
-	public static CookiesMgr INSTN() {
+	public static CookiesMgr getInstn() {
 		if(instance == null) {
 			synchronized (CookiesMgr.class) {
 				if(instance == null) {
@@ -209,16 +209,16 @@ public class CookiesMgr {
 	}
 
 	public static BiliCookie MAIN() {
-		return INSTN().mainCookie;
+		return getInstn().mainCookie;
 	}
 
 	public static BiliCookie VEST() {
-		return INSTN().vestCookie;
+		return getInstn().vestCookie;
 	}
 	
 	public static Set<BiliCookie> MINIs() {
 		Set<BiliCookie> cookies = new LinkedHashSet<BiliCookie>();
-		Iterator<BiliCookie> minis = INSTN().miniCookies.iterator();
+		Iterator<BiliCookie> minis = getInstn().miniCookies.iterator();
 		for(int i = 0; i < MAX_NUM; i++) {
 			if(minis.hasNext()) {
 				cookies.add(minis.next());
@@ -252,7 +252,7 @@ public class CookiesMgr {
 	 * @return
 	 */
 	public static int MINI_SIZE() {
-		return INSTN().miniCookies.size();
+		return getInstn().miniCookies.size();
 	}
 	
 	/**

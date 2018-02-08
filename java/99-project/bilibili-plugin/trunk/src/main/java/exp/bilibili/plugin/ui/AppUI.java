@@ -408,7 +408,7 @@ public class AppUI extends MainWindow {
 				
 				// 自动登陆
 				if(CookiesMgr.MAIN() != BiliCookie.NULL || 
-						CookiesMgr.INSTN().load(CookieType.MAIN)) {
+						CookiesMgr.getInstn().load(CookieType.MAIN)) {
 					markLogin(CookiesMgr.MAIN().NICKNAME());
 				
 				// 手工登陆
@@ -548,7 +548,7 @@ public class AppUI extends MainWindow {
 	 * 登录节奏风暴马甲号(用于扫描全平台节奏风暴)
 	 */
 	private void _loginStormVest() {
-		CookiesMgr.INSTN().load(CookieType.VEST);
+		CookiesMgr.getInstn().load(CookieType.VEST);
 		BiliCookie vestCookie = CookiesMgr.VEST();
 		
 		// 若现有马甲号不是主号，则使用现有马甲号
@@ -574,7 +574,7 @@ public class AppUI extends MainWindow {
 			
 		// 使用主号作为马甲号
 		} else {
-			CookiesMgr.INSTN().add(CookiesMgr.MAIN(), CookieType.VEST);
+			CookiesMgr.getInstn().add(CookiesMgr.MAIN(), CookieType.VEST);
 			_startStormScanner();
 		}
 	}

@@ -230,7 +230,7 @@ public class VCLoginUI extends PopChildWindow {
 			reflashBtn.doClick();
 			
 		} else {
-			CookiesMgr.INSTN().add(cookie, type);
+			CookiesMgr.getInstn().add(cookie, type);
 			SwingUtils.info("登陆成功: ".concat(cookie.NICKNAME()));
 			_hide();
 		}

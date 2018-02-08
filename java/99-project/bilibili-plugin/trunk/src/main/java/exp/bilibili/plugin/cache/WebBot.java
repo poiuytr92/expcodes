@@ -200,8 +200,8 @@ public class WebBot extends LoopThread {
 			finCookies.clear();
 			
 		// 当cookie发生变化时, 仅重置任务时间
-		} else if(lastAddCookieTime != CookiesMgr.INSTN().getLastAddCookieTime()) {
-			lastAddCookieTime = CookiesMgr.INSTN().getLastAddCookieTime();
+		} else if(lastAddCookieTime != CookiesMgr.getInstn().getLastAddCookieTime()) {
+			lastAddCookieTime = CookiesMgr.getInstn().getLastAddCookieTime();
 			nextTaskTime = System.currentTimeMillis();
 		}
 	}

@@ -120,7 +120,7 @@ public class LoginBtn {
 	}
 	
 	private void logout() {
-		if(SwingUtils.confirm("注销登陆 ?") && CookiesMgr.INSTN().del(cookie)) {
+		if(SwingUtils.confirm("注销登陆 ?") && CookiesMgr.getInstn().del(cookie)) {
 			btn.setText(loginTips);
 			if(callback != null) {
 				callback.afterLogout(cookie);

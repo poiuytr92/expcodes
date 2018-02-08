@@ -40,7 +40,7 @@ public class LotteryStorm extends _Lottery {
 	private final static int MIN_ONLINE = 3000;
 	
 	/** 扫描每个房间的间隔(风险行为， 频率需要控制，太快可能被查出来，太慢成功率太低) */
-	private final static long SCAN_INTERVAL = 100;
+	private final static long SCAN_INTERVAL = Config.getInstn().STORM_FREQUENCY();
 	
 	/** 热门直播间URL */
 	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
@@ -214,7 +214,7 @@ public class LotteryStorm extends _Lottery {
 				log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"], 账号 [", cookie.NICKNAME(), "]");
-//				break;	// 节奏风暴是限时限量的, 只要有一个用户失败, 后续用户无需参与抽奖 
+				break;	// 节奏风暴是限时限量的, 只要有一个用户失败, 后续用户无需参与抽奖 
 			}
 		}
 		

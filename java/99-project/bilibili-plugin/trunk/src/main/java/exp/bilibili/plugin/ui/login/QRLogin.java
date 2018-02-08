@@ -103,7 +103,7 @@ class QRLogin extends LoopThread {
 	@Override
 	protected void _after() {
 		if(isLogined == true) {
-			CookiesMgr.INSTN().add(cookie, type);
+			CookiesMgr.getInstn().add(cookie, type);
 		}
 		qrUI._hide();
 	}

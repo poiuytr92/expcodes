@@ -258,12 +258,8 @@ public class Config {
 		return xConf.getInt("/config/app/activityRoomId");
 	}
 	
-	public int WAIT_ELEMENT_TIME() {
-		return xConf.getInt("/config/app/waitElementTime");
-	}
-	
-	public int CLEAR_CACHE_CYCLE() {
-		return xConf.getInt("/config/app/clearCacheCycle");
+	public long STORM_FREQUENCY() {
+		return xConf.getLong("/config/app/stormFrequency");
 	}
 	
 	/**

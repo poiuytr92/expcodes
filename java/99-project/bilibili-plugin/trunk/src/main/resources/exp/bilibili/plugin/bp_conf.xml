@@ -61,6 +61,7 @@
         <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">51108</signRoomId>
         <tabuAutoRoomIds caption="禁止自动发言房间号(需为真实房号)">51108,390480</tabuAutoRoomIds>
         <activityRoomId caption="用于计算活跃度的房间号">438</activityRoomId>
+        <stormFrequency caption="节奏风暴扫描频率(单位:ms)" hint="小于100容易被封IP">100</stormFrequency>
     </app>
     
 </config>

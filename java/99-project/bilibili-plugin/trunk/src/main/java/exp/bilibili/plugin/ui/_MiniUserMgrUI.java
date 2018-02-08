@@ -143,7 +143,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		if(init == false) {
 			init = true;
 			int idx = 0;
-			CookiesMgr.INSTN().load(CookieType.MINI);
+			CookiesMgr.getInstn().load(CookieType.MINI);
 			Set<BiliCookie> cookies = CookiesMgr.MINIs();
 			for(BiliCookie cookie : cookies) {
 				__MiniUserLine line = new __MiniUserLine(cookie);
