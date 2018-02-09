@@ -199,6 +199,10 @@ public class Config {
 		return xConf.getVal("/config/urls/mathExecURL");
 	}
 	
+	public String PC_WATCH_URL() {
+		return xConf.getVal("/config/urls/pcWatchURL");
+	}
+	
 	public String GET_REDBAG_URL() {
 		return xConf.getVal("/config/urls/getRedbag");
 	}

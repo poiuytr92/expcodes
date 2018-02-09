@@ -148,6 +148,16 @@ public class XHRSender {
 	}
 	
 	/**
+	 * 模拟PC端在线观看直播 (需5分钟发送一次心跳)
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(固定返回5分钟后)
+	 */
+	public static long toWatchLive(BiliCookie cookie) {
+		int roomId = UIUtils.getLiveRoomId();
+		return DailyTasks.toWatchLive(cookie, roomId);
+	}
+	
+	/**
 	 * 扫描当前的人气直播间房号列表
 	 * @param cookie 扫描用的cookie
 	 * @return

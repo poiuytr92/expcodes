@@ -11,7 +11,6 @@ import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.bean.other.LotteryRoom;
-import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.warp.thread.LoopThread;
 
@@ -182,11 +181,14 @@ public class WebBot extends LoopThread {
 				}
 				
 				long max = -1;
-				max = NumUtils.max(DailyTasks.toSign(cookie), max);
+				max = NumUtils.max(XHRSender.toSign(cookie), max);
 				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
-					max = NumUtils.max(DailyTasks.toAssn(cookie), max);
-					max = NumUtils.max(DailyTasks.doMathTask(cookie), max);
+					max = NumUtils.max(XHRSender.toAssn(cookie), max);
+					max = NumUtils.max(XHRSender.doMathTask(cookie), max);
 				}
+				
+				// FIXME: 设计在数学任务完成后就不看了， 减少心跳请求, 本来每天5分钟就够了
+				max = NumUtils.max(XHRSender.toWatchLive(cookie), max);
 				nextTaskTime = NumUtils.max(nextTaskTime, max);
 				
 				if(max <= 0) {

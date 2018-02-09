@@ -48,6 +48,9 @@ public class DailyTasks extends __XHR {
 	/** 小学数学任务重试间隔(验证码计算成功率只有90%左右, 失败后需重试) */
 	private final static long SLEEP_TIME = 500L;
 	
+	/** 模拟PC端在线观看直播的心跳URL */
+	private final static String PC_WATCH_URL = Config.getInstn().PC_WATCH_URL();
+	
 	/** 执行下次任务的延迟时间点（5分钟后） */
 	private final static long NEXT_TASK_DELAY = 300000L;
 	
@@ -265,6 +268,32 @@ public class DailyTasks extends __XHR {
 		request.put(BiliCmdAtrbt.end_time, String.valueOf(task.getEndTime()));
 		request.put(BiliCmdAtrbt.captcha, String.valueOf(answer));
 		return request;
+	}
+	
+	/**
+	 * 模拟PC端在线观看直播 (需5分钟发送一次心跳)
+	 * @param cookie
+	 * @param roomId
+	 * @return 返回执行下次任务的时间点(固定返回5分钟后)
+	 */
+	public static long toWatchLive(BiliCookie cookie, int roomId) {
+		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), getRealRoomId(roomId));
+		String response = HttpURLUtils.doGet(PC_WATCH_URL, header, null);
+		
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				log.info("[{}] 正在模拟PC端在线观看直播...", cookie.NICKNAME());
+				
+			} else {
+				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.error("[{}] 模拟PC端在线观看直播失败: {}", cookie.NICKNAME(), reason);
+			}
+		} catch(Exception e) {
+			log.error("[{}] 模拟PC端在线观看直播失败: {}", cookie.NICKNAME(), response, e);
+		}
+		return (System.currentTimeMillis() + NEXT_TASK_DELAY);
 	}
 	
 }

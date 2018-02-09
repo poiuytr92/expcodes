@@ -41,6 +41,8 @@
         <mathCheckURL caption="数学任务检测URL"><![CDATA[http://api.live.bilibili.com/FreeSilver/getCurrentTask]]></mathCheckURL>
         <mathCodeURL caption="获取数学任务校验码URL"><![CDATA[http://api.live.bilibili.com/freeSilver/getCaptcha]]></mathCodeURL>
         <mathExecURL caption="执行数学任务URL"><![CDATA[http://api.live.bilibili.com/FreeSilver/getAward]]></mathExecURL>
+        <pcWatchURL caption="PC端观看直播URL"><![CDATA[http://api.live.bilibili.com/User/userOnlineHeart]]></pcWatchURL>
+        
         
         <getRedbag caption="2018春节活动：查询红包奖池URL"><![CDATA[http://api.live.bilibili.com/activity/v1/NewSpring/redBagPool]]></getRedbag>
         <exRedbag caption="2018春节活动：兑换红包礼物URL"><![CDATA[http://api.live.bilibili.com/activity/v1/NewSpring/redBagExchange]]></exRedbag>
