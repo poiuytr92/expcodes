@@ -33,7 +33,7 @@ public class Version {
 		// GITHUB HTTPS 的TLS协议为2.0 ?? 无法获取页面源码
 		// 在线升级， 升级命令：移动文件，删除文件，添加文件,  压缩包转txt
 		// 系统托盘好卡
-		
+		// 备份cookie zip
 	}
 	
 }
