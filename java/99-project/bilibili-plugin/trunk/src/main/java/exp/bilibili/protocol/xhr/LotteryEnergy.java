@@ -102,7 +102,7 @@ public class LotteryEnergy extends _Lottery {
 		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
-			if(cookie.IS_BIND_TEL() == false) {
+			if(cookie.isBindTel() == false) {
 				continue;	// 未绑定手机的账号无法参与高能抽奖
 			}
 			

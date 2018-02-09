@@ -70,7 +70,7 @@ class __XHR {
 		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
 		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
 		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
+		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
 		return header;
 	}
 	
@@ -102,7 +102,7 @@ class __XHR {
 		header.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
 				HttpUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
 		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, Config.USER_AGENT);
+		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
 		return header;
 	}
 	

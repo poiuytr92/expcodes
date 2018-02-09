@@ -98,8 +98,8 @@ public class DailyTasks extends __XHR {
 	 */
 	public static long toSign(BiliCookie cookie) {
 		String roomId = getRealRoomId();
-		Map<String, String> headers = GET_HEADER(cookie.toNVCookie(), roomId);
-		String response = HttpURLUtils.doGet(SIGN_URL, headers, null);
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
+		String response = HttpURLUtils.doGet(SIGN_URL, header, null);
 		return analyse(response, cookie.NICKNAME(), false);
 	}
 	

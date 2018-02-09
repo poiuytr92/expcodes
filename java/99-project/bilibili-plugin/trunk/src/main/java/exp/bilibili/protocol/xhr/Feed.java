@@ -95,8 +95,8 @@ public class Feed extends __XHR {
 	 * @return
 	 */
 	private static int querySilver(BiliCookie cookie) {
-		Map<String, String> headers = _getHeader(cookie.toNVCookie());
-		String response = HttpURLUtils.doGet(ACCOUNT_URL, headers, null);
+		Map<String, String> header = _getHeader(cookie.toNVCookie());
+		String response = HttpURLUtils.doGet(ACCOUNT_URL, header, null);
 
 		int silver = 0;
 		try {

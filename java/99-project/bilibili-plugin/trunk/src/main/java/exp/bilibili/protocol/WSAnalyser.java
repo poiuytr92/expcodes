@@ -258,7 +258,7 @@ public class WSAnalyser {
 	}
 	
 	/**
-	 * 欢迎老爷消息
+	 * 欢迎老爷/房管消息
 	 * @param msgBean
 	 */
 	private static void toDo(WelcomeMsg msgBean) {

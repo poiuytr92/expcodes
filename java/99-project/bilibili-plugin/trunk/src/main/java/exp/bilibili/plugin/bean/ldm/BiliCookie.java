@@ -1,6 +1,7 @@
 package exp.bilibili.plugin.bean.ldm;
 
 import exp.bilibili.plugin.envm.CookieType;
+import exp.bilibili.plugin.envm.Danmu;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.cookie.HttpCookie;
 
@@ -28,8 +29,8 @@ public class BiliCookie extends HttpCookie {
 	/** 登陆类型 */
 	private CookieType type;
 	
-	/** 自动投喂 */
-	private boolean autoFeed;
+	/** 从cookies提取的csrf token */
+	private String csrf;
 	
 	/** 该cookie对应的用户ID */
 	private String uid;
@@ -38,10 +39,19 @@ public class BiliCookie extends HttpCookie {
 	private String nickName;
 	
 	/** 是否已绑定手机 */
-	private boolean bindTel;
+	private boolean isBindTel;
 	
-	/** 从cookies提取的csrf token */
-	private String csrf;
+	/** 是否为房管 */
+	private boolean isRoomAdmin;
+	
+	/** 是否为老爷/年费老爷 */
+	private boolean isVip;
+	
+	/** 是否为提督/总督 */
+	private boolean isGuard;
+	
+	/** 自动投喂 */
+	private boolean autoFeed;
 	
 	public BiliCookie() {
 		super();
@@ -55,11 +65,14 @@ public class BiliCookie extends HttpCookie {
 	
 	private void init() {
 		this.type = (type == null ? CookieType.UNKNOW : type);
-		this.autoFeed = (autoFeed ? true : false);
+		this.csrf = (StrUtils.isEmpty(csrf) ? "" : csrf);
 		this.uid = (StrUtils.isEmpty(uid) ? "" : uid);
 		this.nickName = (StrUtils.isEmpty(nickName) ? "" : nickName);
-		this.bindTel = false;
-		this.csrf = (StrUtils.isEmpty(csrf) ? "" : csrf);
+		this.isBindTel = false;
+		this.isRoomAdmin = false;
+		this.isVip = false;
+		this.isGuard = false;
+		this.autoFeed = (autoFeed ? true : false);
 	}
 	
 	@Override
@@ -84,6 +97,10 @@ public class BiliCookie extends HttpCookie {
 		return type;
 	}
 	
+	public void setType(CookieType type) {
+		this.type = type;
+	}
+	
 	public String CSRF() {
 		return csrf;
 	}
@@ -92,24 +109,52 @@ public class BiliCookie extends HttpCookie {
 		return uid;
 	}
 	
+	public void setUid(String uid) {
+		this.uid = uid;
+	}
+	
 	public String NICKNAME() {
 		return nickName;
 	}
 	
-	public boolean IS_BIND_TEL() {
-		return bindTel;
-	}
-	
-	public void setType(CookieType type) {
-		this.type = type;
-	}
-
 	public void setNickName(String nickName) {
 		this.nickName = nickName;
 	}
 	
-	public void setBindTel(boolean bindTel) {
-		this.bindTel = bindTel;
+	public boolean isBindTel() {
+		return isBindTel;
+	}
+	
+	public void setBindTel(boolean isBindTel) {
+		this.isBindTel = isBindTel;
+	}
+
+	public boolean isRoomAdmin() {
+		return isRoomAdmin;
+	}
+
+	public void setRoomAdmin(boolean isRoomAdmin) {
+		this.isRoomAdmin = isRoomAdmin;
+	}
+	
+	public boolean isVip() {
+		return isVip;
+	}
+
+	public void setVip(boolean isVip) {
+		this.isVip = isVip;
+	}
+	
+	public boolean isGuard() {
+		return isGuard;
+	}
+
+	public void setGuard(boolean isGuard) {
+		this.isGuard = isGuard;
+	}
+	
+	public int DANMU_LEN() {
+		return (isGuard ? Danmu.LEN_GUARD : (isVip ? Danmu.LEN_VIP : Danmu.LEN));
 	}
 
 	public boolean isAutoFeed() {

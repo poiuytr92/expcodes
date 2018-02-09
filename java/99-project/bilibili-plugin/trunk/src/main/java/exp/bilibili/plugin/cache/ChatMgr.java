@@ -11,8 +11,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.envm.Level;
+import exp.bilibili.plugin.envm.Identity;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
@@ -190,6 +189,10 @@ public class ChatMgr extends LoopThread {
 	 * @param roomId
 	 */
 	public void helloLive(int roomId) {
+		if(UIUtils.isLogined() == false) {
+			return;
+		}
+		
 		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
 		String msg = "滴~".concat(card);
 		
@@ -367,6 +370,10 @@ public class ChatMgr extends LoopThread {
 	 * @param chatMsg
 	 */
 	public void analyseDanmu(ChatMsg chatMsg) {
+		if(UIUtils.isLogined() == false) {
+			return;
+		}
+		
 		countChatCnt(chatMsg.getUsername());	// 登陆用户发言计数器
 		toNight(chatMsg.getUsername(), chatMsg.getMsg());	// 自动晚安
 		complaint(chatMsg.getUsername(), chatMsg.getMsg());	// 举报处理
@@ -415,24 +422,38 @@ public class ChatMgr extends LoopThread {
 	 * @param msg 弹幕（消息含被举报人）
 	 */
 	private void complaint(String username, String msg) {
-		if(Config.LEVEL < Level.ADMIN || 
-				!OnlineUserMgr.getInstn().isManager(CookiesMgr.MAIN().NICKNAME()) || 
+		if(Identity.less(Identity.ADMIN) || 
+				!CookiesMgr.MAIN().isRoomAdmin() || 
 				!msg.trim().startsWith(COMPLAINT_KEY)) {
 			return;
 		}
 		
 		String accuser = username;
-		String accused = RegexUtils.findFirst(msg, COMPLAINT_KEY.concat("\\s*(.+)")).trim();
-		int cnt = OnlineUserMgr.getInstn().complaint(accuser, accused);
-		
-		if(cnt < COMPLAINT_LIMIT) {
-			msg = StrUtils.concat(WARN_KEY, "x", cnt, ",请[", accused, "]注意弹幕礼仪");
+		String unameKey = RegexUtils.findFirst(msg, COMPLAINT_KEY.concat("\\s*(.+)")).trim();
+		List<String> accuseds = OnlineUserMgr.getInstn().findOnlineUser(unameKey);
+		if(accuseds.size() <= 0) {
+			log.warn("用户 [{}] 举报失败: 不存在关键字为 [{}] 的账号", accuser, unameKey);
 			
-		} else if(XHRSender.blockUser(accused)) {
-			OnlineUserMgr.getInstn().cancel(accused);
-			msg = StrUtils.concat(WARN_KEY, "[", accused, "]被", cnt, "人举报,暂时禁言");
+		} else if(accuseds.size() > 1) {
+			log.warn("用户 [{}] 举报失败: 关键字为 [{}] 的账号有多个", accuser, unameKey);
+			
+		} else {
+			String accused = accuseds.get(0);
+			int cnt = OnlineUserMgr.getInstn().complaint(accuser, accused);
+			if(cnt > 0) {
+				if(cnt < COMPLAINT_LIMIT) {
+					msg = StrUtils.concat(WARN_KEY, "x", cnt, ":请[", accused, "]注意弹幕礼仪");
+					
+				} else if(XHRSender.blockUser(accused)) {
+					OnlineUserMgr.getInstn().cancel(accused);
+					msg = StrUtils.concat(WARN_KEY, "[", accused, "]被", cnt, "人举报,暂时禁言");
+				}
+				XHRSender.sendDanmu(msg);
+				
+			} else {
+				log.warn("用户 [{}] 举报失败: 请勿重复举报 [{}]", accuser, accused);
+			}
 		}
-		XHRSender.sendDanmu(msg);
 	}
 	
 	/**
@@ -442,8 +463,8 @@ public class ChatMgr extends LoopThread {
 	 * @param msg 弹幕（消息含被禁闭人）
 	 */
 	private void ban(String username, String msg) {
-		if(Config.LEVEL < Level.ADMIN || 
-				!OnlineUserMgr.getInstn().isManager(CookiesMgr.MAIN().NICKNAME()) || 
+		if(Identity.less(Identity.ADMIN) || 
+				!CookiesMgr.MAIN().isRoomAdmin() || 
 				!OnlineUserMgr.getInstn().isManager(username) || 
 				!msg.trim().startsWith(BAN_KEY)) {
 			return;

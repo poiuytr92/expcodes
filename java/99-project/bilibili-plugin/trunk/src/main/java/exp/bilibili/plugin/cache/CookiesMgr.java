@@ -11,7 +11,7 @@ import java.util.Set;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.CookieType;
-import exp.bilibili.plugin.envm.Level;
+import exp.bilibili.plugin.envm.Identity;
 import exp.bilibili.protocol.XHRSender;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -49,8 +49,8 @@ public class CookiesMgr {
 	private final static String COOKIE_MINI_PREFIX = "cookie-mini-";
 	
 	/** 上限保存的小号Cookie个数 */
-	public final static int MAX_NUM = Config.LEVEL >= Level.ADMIN ? 99 : (
-			Config.LEVEL >= Level.UPLIVE ? 8 : 3);
+	public final static int MAX_NUM = !Identity.less(Identity.ADMIN) ? 99 : 
+		(!Identity.less(Identity.UPLIVE) ? 8 : 3);
 	
 	/** 主号cookie */
 	private BiliCookie mainCookie;

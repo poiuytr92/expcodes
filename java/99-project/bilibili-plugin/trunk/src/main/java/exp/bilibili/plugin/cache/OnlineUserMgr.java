@@ -124,8 +124,7 @@ public class OnlineUserMgr {
 			accusers = new HashSet<String>();
 			blacks.put(accused, accusers);
 		}
-		accusers.add(accuser);
-		return accusers.size();
+		return (accusers.add(accuser) ? accusers.size() : 0);
 	}
 	
 	/**

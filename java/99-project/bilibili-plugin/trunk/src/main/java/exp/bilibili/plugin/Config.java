@@ -6,7 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import exp.bilibili.plugin.cache.RoomMgr;
-import exp.bilibili.plugin.envm.Level;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
@@ -26,15 +25,7 @@ import exp.libs.warp.conf.xml.XConfigFactory;
  */
 public class Config {
 	
-	/** 使用者的权限等级 */
-	public static int LEVEL = Level.USER;
-	
 	public final static String DEFAULT_CHARSET = Charset.UTF8;
-	
-	/** 用户代理（浏览器头标识）: 假装是谷歌，避免被反爬   （浏览器头可以用Fiddler抓包抓到）*/
-	public final static String USER_AGENT = 
-//			"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
-			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 	
 	private final static String APP_PATH = "/exp/bilibili/plugin/bp_conf.xml";
 	
@@ -158,6 +149,10 @@ public class Config {
 	
 	public String ROOM_URL() {
 		return xConf.getVal("/config/urls/roomURL");
+	}
+	
+	public String PLAYER_URL() {
+		return xConf.getVal("/config/urls/playerURL");
 	}
 	
 	public String MANAGE_URL() {

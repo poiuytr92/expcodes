@@ -40,7 +40,7 @@ import exp.libs.utils.format.JsonUtils;
 public class WelcomeMsg extends _Msg {
 
 	private final static String[] VIPS = {
-		"老爷", "月费老爷", "年费老爷", "管理员", 
+		"老爷", "月费老爷", "年费老爷", "房管", 
 	};
 	
 	private String uid;
@@ -68,10 +68,10 @@ public class WelcomeMsg extends _Msg {
 			if(isAdmin == false) {
 				isAdmin = (JsonUtils.getInt(data, BiliCmdAtrbt.isadmin, 0) != 0);
 				if(isAdmin == true) {
-					vipLevel = 3;	// 管理员
+					vipLevel = 3;	// 房管
 				}
 			} else {
-				vipLevel = 3;	// 管理员
+				vipLevel = 3;	// 房管
 			}
 			
 			if(isAdmin == false) {

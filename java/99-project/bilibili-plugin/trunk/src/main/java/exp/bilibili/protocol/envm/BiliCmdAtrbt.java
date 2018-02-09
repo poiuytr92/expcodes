@@ -41,11 +41,13 @@ public class BiliCmdAtrbt {
 	
 	public final static String userinfo = "userinfo";
 	
+	public final static String userCoinIfo = "userCoinIfo";
+	
 	public final static String uid = "uid";
 	
 	public final static String username = "username";
 	
-	public final static String userCoinIfo = "userCoinIfo";
+	public final static String wallet = "wallet";
 	
 	public final static String silver = "silver";
 	
@@ -220,5 +222,13 @@ public class BiliCmdAtrbt {
 	public final static String hour = "hour";
 	
 	public final static String anchor_id = "anchor_id";
+	
+	public final static String msg_length = "msg_length";
+	
+	public final static String ts = "ts";
+	
+	public final static String cid = "cid:";
+	
+	public final static String player_type = "player_type";
 	
 }

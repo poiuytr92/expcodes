@@ -307,7 +307,7 @@
 						<!-- 按实际项目修正 -->
 						<option>-keep class 
 							exp.bilibili.plugin.Version,
-							exp.bilibili.plugin.Main
+							exp.bilibili.plugin.BPMain
 						</option>
 						
 						<!-- 保持[Bean类]不变（若框架对 Bean中的内容做了反射处理，则必须保持不变） -->
@@ -398,9 +398,9 @@
                                     </fileset>
                                 </copy>
 								<echo>拷贝文档</echo>
-								<copy todir="${release.dir}/运行截图">
+								<!-- copy todir="${release.dir}/运行截图">
 									<fileset dir="doc/运行截图" />
-								</copy>
+								</copy -->
 								<copy todir="${release.dir}">
 									<fileset dir="doc">
 									  <include name="使用说明.txt" />
@@ -427,7 +427,7 @@
 						<configuration>
 							<mavenRepository>D:\mavenRepository</mavenRepository>
 							<verClass>exp.bilibili.plugin.Version</verClass>
-							<mainClass>exp.bilibili.plugin.Main</mainClass>
+							<mainClass>exp.bilibili.plugin.BPMain</mainClass>
 							<mainArgs></mainArgs>
 							<charset>UTF-8</charset>
 							<jdkPath>java</jdkPath>

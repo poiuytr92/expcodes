@@ -15,7 +15,7 @@ import exp.libs.warp.ui.BeautyEyeUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class Main {
+public class BPMain {
 	
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();

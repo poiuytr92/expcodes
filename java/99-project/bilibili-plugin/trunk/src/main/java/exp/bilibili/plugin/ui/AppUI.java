@@ -29,14 +29,14 @@ import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.cache.WebBot;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.CookieType;
-import exp.bilibili.plugin.envm.Level;
+import exp.bilibili.plugin.envm.Danmu;
+import exp.bilibili.plugin.envm.Identity;
 import exp.bilibili.plugin.monitor.SafetyMonitor;
 import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.ws.WebSockClient;
-import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -71,8 +71,6 @@ public class AppUI extends MainWindow {
 	private final static int MAX_LINE = 200;
 	
 	private final static String LINE_END = "\r\n";
-	
-	private final static int CHAT_LIMIT = 40;
 	
 	private String loginUser;
 	
@@ -157,38 +155,48 @@ public class AppUI extends MainWindow {
 	 * @param args main入参
 	 */
 	public static void createInstn(String[] args) {
-		checkIdentity(args);
-		getInstn();
+		if(checkIdentity(args)) {
+			getInstn();
+			
+		} else {
+			System.exit(0);
+		}
 	}
 	
 	/**
 	 * 身份校验
 	 * @param args main入参
 	 */
-	public static void checkIdentity(String[] args) {
-		
-		// 管理员: 无条件开启所有功能
-		if(args == null || args.length <= 0) {	
-			if(FileUtils.exists("./doc/icon.ico")) {	// 发布的项目是不存在doc文件夹的, 避免管理员权限泄露
-				Config.LEVEL = Level.ADMIN;
-				
-			} else {
-				SwingUtils.warn("很明显你是假的管理员");
-				System.exit(0);
-			}
+	public static boolean checkIdentity(String[] args) {
+		boolean isOk = true;
+		if(StrUtils.isEmpty(args) || args.length != 1) {
+			isOk = false;
 			
-		// 用户
 		} else {
-			String code = SwingUtils.input("请输入注册码");
-			String errMsg = SafetyUtils.checkAC(code);
-			if(StrUtils.isNotEmpty(errMsg)) {
-				SwingUtils.warn(errMsg);
-				System.exit(0);
+			
+			// 管理员: 无条件开启所有功能
+			if(Identity.ADMIN.CMD().equals(args[0])) {
+				Identity.set(Identity.ADMIN);
 				
-			} else if(args.length > 1) {
-				Config.LEVEL = Level.UPLIVE;
+			// 用户
+			} else {
+				String code = SwingUtils.input("请输入注册码");
+				String errMsg = SafetyUtils.checkAC(code);
+				if(StrUtils.isNotEmpty(errMsg)) {
+					SwingUtils.warn(errMsg);
+					isOk = false;
+					
+				// 主播用户
+				} else if(Identity.UPLIVE.CMD().equals(args[0])) {
+					Identity.set(Identity.UPLIVE);
+					
+				// 普通用户
+				} else {
+					Identity.set(Identity.USER);
+				}
 			}
 		}
+		return isOk;
 	}
 	
 	/**
@@ -211,7 +219,7 @@ public class AppUI extends MainWindow {
 		this.chatTF = new JTextField();
 		this.httpTF = new JTextField("http://live.bilibili.com/");
 		this.liveRoomTF = new JTextField(String.valueOf(Config.getInstn().SIGN_ROOM_ID()), 15);
-		chatTF.setToolTipText("内容长度限制: ".concat(String.valueOf(CHAT_LIMIT)));
+		chatTF.setToolTipText("内容长度限制: ".concat(String.valueOf(Danmu.LEN_LIMIT)));
 		httpTF.setEditable(false);
 		
 		this.loginUser = "";
@@ -438,7 +446,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Config.LEVEL < Level.UPLIVE) {
+				if(Identity.less(Identity.UPLIVE)) {
 					SwingUtils.warn("非主播用户没有这个技能哦::>_<::");
 					return;
 				}
@@ -477,12 +485,24 @@ public class AppUI extends MainWindow {
 					wsClient.relink(roomId);
 				}
 				
-				chatTA.setText("");		// 清空版聊区
-				OnlineUserMgr.getInstn().clear(); // 重连直播间时清空在线用户列表
-				OnlineUserMgr.getInstn().updateManagers(); // 更新当前直播间的房管列表(含主播)
+				_switchRoom();	// 切换房间后的操作
 				lockBtn();
 			}
 		});
+	}
+	
+	/**
+	 * 切换房间后的操作
+	 */
+	private void _switchRoom() {
+		chatTA.setText("");		// 清空版聊区
+		OnlineUserMgr.getInstn().clear(); // 清空上一直播间的在线用户列表
+		OnlineUserMgr.getInstn().updateManagers(); // 更新当前直播间的房管列表(含主播)
+		
+		// 更新主号在新房间的权限(主要是房管、弹幕长度)
+		if(isLogined() == true) {
+			XHRSender.queryUserAuthorityInfo(CookiesMgr.MAIN());
+		}
 	}
 	
 	private void setLotteryBtnListener() {
@@ -502,7 +522,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Config.LEVEL < Level.ADMIN) {
+				if(Identity.less(Identity.ADMIN)) {
 					SwingUtils.warn("您未被授权管理 [活跃值排行榜] 哦~");
 					return;
 				}
@@ -675,11 +695,11 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [公告姬] 哦~");
 					return;
 					
-				} else if(Config.LEVEL < Level.UPLIVE) {
+				} else if(Identity.less(Identity.UPLIVE)) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [公告姬] 哦~");
 					return;
 					
-				} else if(Config.LEVEL < Level.ADMIN && 
+				} else if(Identity.less(Identity.ADMIN) && 
 						Config.getInstn().isTabuAutoChat(getLiveRoomId())) {
 					SwingUtils.warn("您未被授权在此直播间使用 [公告姬] 哦~");
 					return;
@@ -734,11 +754,11 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [答谢姬] 哦~");
 					return;
 					
-				} else if(Config.LEVEL < Level.UPLIVE) {
+				} else if(Identity.less(Identity.UPLIVE)) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [答谢姬] 哦~");
 					return;
 					
-				} else if(Config.LEVEL < Level.ADMIN && 
+				} else if(Identity.less(Identity.ADMIN) && 
 						Config.getInstn().isTabuAutoChat(getLiveRoomId())) {
 					SwingUtils.warn("您未被授权在此直播间使用 [答谢姬] 哦~");
 					return;
@@ -768,11 +788,11 @@ public class AppUI extends MainWindow {
 					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [晚安姬] 哦~");
 					return;
 					
-				} else if(Config.LEVEL < Level.UPLIVE) {
+				} else if(Identity.less(Identity.UPLIVE)) {
 					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [晚安姬] 哦~");
 					return;
 					
-				} else if(Config.LEVEL < Level.ADMIN && 
+				} else if(Identity.less(Identity.ADMIN) && 
 						Config.getInstn().isTabuAutoChat(getLiveRoomId())) {
 					SwingUtils.warn("您未被授权在此直播间使用 [晚安姬] 哦~");
 					return;
@@ -813,7 +833,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
-				if(chatTF.getText().length() > CHAT_LIMIT) {
+				if(chatTF.getText().length() > CookiesMgr.MAIN().DANMU_LEN()) {
 					e.consume(); // 销毁新输入的字符，限制长度
 				}
 			}
@@ -837,7 +857,7 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Config.LEVEL < Level.UPLIVE) {
+				if(Identity.less(Identity.UPLIVE)) {
 					return;
 				}
 				

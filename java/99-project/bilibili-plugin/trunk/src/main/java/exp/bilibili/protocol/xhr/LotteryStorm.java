@@ -125,16 +125,16 @@ public class LotteryStorm extends _Lottery {
 	 */
 	public static void toLottery(List<Integer> hotRoomIds) {
 		HttpClient client = new HttpClient();
-		Map<String, String> requests = new HashMap<String, String>();
+		Map<String, String> request = new HashMap<String, String>();
 		for(Integer roomId : hotRoomIds) {
 			String sRoomId = String.valueOf(roomId);
-			requests.put(BiliCmdAtrbt.roomid, sRoomId);
-			Map<String, String> headers = GET_HEADER(
+			request.put(BiliCmdAtrbt.roomid, sRoomId);
+			Map<String, String> header = GET_HEADER(
 					CookiesMgr.VEST().toNVCookie(), sRoomId);
 			
 			boolean isExist = true;
 			while(isExist == true) {	// 对于存在节奏风暴的房间, 继续扫描(可能有人连续送节奏风暴)
-				String response = client.doGet(STORM_CHECK_URL, headers, requests);
+				String response = client.doGet(STORM_CHECK_URL, header, request);
 				List<String> raffleIds = getStormIds(roomId, response);
 				isExist = join(roomId, raffleIds);
 			}
@@ -209,7 +209,7 @@ public class LotteryStorm extends _Lottery {
 		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
-			if(cookie.IS_BIND_TEL() == false) {
+			if(cookie.isBindTel() == false) {
 				continue;	// 未绑定手机的账号无法参与节奏风暴
 			}
 			

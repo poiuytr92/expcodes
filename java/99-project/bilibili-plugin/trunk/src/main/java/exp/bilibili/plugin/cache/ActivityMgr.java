@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.pdm.TActivity;
 import exp.bilibili.plugin.envm.Gift;
-import exp.bilibili.plugin.envm.Level;
+import exp.bilibili.plugin.envm.Identity;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
@@ -150,7 +150,7 @@ public class ActivityMgr {
 	 * @return
 	 */
 	private boolean initEnv() {
-		if(Config.LEVEL < Level.ADMIN) {
+		if(Identity.less(Identity.ADMIN)) {
 			return false;	// 仅管理员可以操作
 		}
 		
@@ -287,7 +287,7 @@ public class ActivityMgr {
 	 */
 	private boolean isRecord() {
 		boolean isRecord = false;
-		if(isInit && Config.LEVEL >= Level.ADMIN) {
+		if(isInit && !Identity.less(Identity.ADMIN)) {
 			int curRoomId = RoomMgr.getInstn().getRealRoomId(UIUtils.getLiveRoomId());
 			if(ROOM_ID > 0 && ROOM_ID == curRoomId) {
 				isRecord = true;

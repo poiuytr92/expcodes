@@ -105,9 +105,19 @@ public class XHRSender {
 	 * @return username
 	 */
 	public static boolean queryUserInfo(BiliCookie cookie) {
-		boolean isOk = Login.queryUserInfo(cookie);	// 普通信息: 用户ID+昵称
-		isOk &= Login.queryUserSafeInfo(cookie);	// 安全信息: 是否绑定手机号
+		boolean isOk = Other.queryUserInfo(cookie);	// 普通信息: 用户ID+昵称
+		isOk &= Other.queryUserSafeInfo(cookie);	// 安全信息: 是否绑定手机号
 		return isOk;
+	}
+	
+	/**
+	 * 查询账号在当前直播间的授权信息(并写入cookie内)
+	 * @param cookie
+	 * @return
+	 */
+	public static boolean queryUserAuthorityInfo(BiliCookie cookie) {
+		int roomId = UIUtils.getLiveRoomId();
+		return Other.queryUserAuthorityInfo(cookie, roomId);
 	}
 
 	/**

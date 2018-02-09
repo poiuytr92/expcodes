@@ -33,13 +33,20 @@ import exp.libs.warp.thread.LoopThread;
  */
 public class WebBot extends LoopThread {
 
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(WebBot.class);
 	
+	/** 单位时间：天 */
 	private final static long DAY_UNIT = 86400000L;
 	
+	/** 单位时间：小时 */
 	private final static long HOUR_UNIT = 3600000L;
 	
+	/** 北京时间时差 */
 	private final static int HOUR_OFFSET = 8;
+	
+	/** 延迟时间 */
+	private final static long DELAY_TIME = 120000L;
 	
 	/** 轮询间隔 */
 	private final static long LOOP_TIME = 1000L;
@@ -76,7 +83,7 @@ public class WebBot extends LoopThread {
 		this.loopCnt = 0;
 		this.finCookies = new HashSet<BiliCookie>();
 		this.lastAddCookieTime = System.currentTimeMillis();
-		this.nextTaskTime = System.currentTimeMillis();
+		this.nextTaskTime = System.currentTimeMillis() + DELAY_TIME;	// 首次打开软件时, 延迟一点时间再执行任务
 		initResetTaskTime();
 	}
 	
@@ -86,7 +93,7 @@ public class WebBot extends LoopThread {
 	private void initResetTaskTime() {
 		resetTaskTime = System.currentTimeMillis() / DAY_UNIT * DAY_UNIT;
 		resetTaskTime -= HOUR_UNIT * HOUR_OFFSET;
-		resetTaskTime += 300000;	// 避免临界点时差, 后延5分钟
+		resetTaskTime += DELAY_TIME;	// 避免临界点时差, 后延一点时间
 	}
 	
 	/**
@@ -176,7 +183,7 @@ public class WebBot extends LoopThread {
 				
 				long max = -1;
 				max = NumUtils.max(DailyTasks.toSign(cookie), max);
-				if(cookie.IS_BIND_TEL()) {	// 仅绑定了手机的账号才能参与
+				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
 					max = NumUtils.max(DailyTasks.toAssn(cookie), max);
 					max = NumUtils.max(DailyTasks.doMathTask(cookie), max);
 				}
@@ -202,7 +209,8 @@ public class WebBot extends LoopThread {
 			finCookies.clear();
 			
 		// 当cookie发生变化时, 仅重置任务时间
-		} else if(lastAddCookieTime != CookiesMgr.getInstn().getLastAddCookieTime()) {
+		} else if(nextTaskTime <= 0 && 
+				lastAddCookieTime != CookiesMgr.getInstn().getLastAddCookieTime()) {
 			lastAddCookieTime = CookiesMgr.getInstn().getLastAddCookieTime();
 			nextTaskTime = System.currentTimeMillis();
 		}
