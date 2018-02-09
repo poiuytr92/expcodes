@@ -23,8 +23,10 @@ import exp.libs.utils.other.StrUtils;
  */
 public class MsgKwMgr {
 
+	/** 行为副词 */
 	private List<String> advs;
 	
+	/** 晚安关键词 */
 	private Set<String> nights;
 	
 	/** 开播上车的卡片类型 */
@@ -39,6 +41,7 @@ public class MsgKwMgr {
 	/** 歌单 */
 	private List<String> musics;
 	
+	/** 单例 */
 	private static volatile MsgKwMgr instance;
 	
 	private MsgKwMgr() {
@@ -100,11 +103,11 @@ public class MsgKwMgr {
 		read(Config.getInstn().CALL_PATH(), calls);
 	}
 
-	public static String getAdj() {
-		return getInstn()._getAdj();
+	public static String getAdv() {
+		return getInstn()._getAdv();
 	}
 	
-	private String _getAdj() {
+	private String _getAdv() {
 		if(advs.size() <= 0) {
 			return "";
 		}

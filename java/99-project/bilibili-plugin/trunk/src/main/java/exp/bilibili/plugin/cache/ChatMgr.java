@@ -235,7 +235,7 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		XHRSender.sendDanmu(StrUtils.concat(NOTICE_KEY, "感谢 ", msg), 
+		XHRSender.sendDanmu(StrUtils.concat(NOTICE_KEY, "感谢", msg), 
 				UIUtils.getCurChatColor());
 	}
 	
@@ -316,7 +316,8 @@ public class ChatMgr extends LoopThread {
 				if(num != null && num > 0) {
 					int cost = ActivityMgr.showCost(giftName, num);
 					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-							MsgKwMgr.getAdj(), "投喂", num, "个[", giftName, "],活跃+", cost);
+							(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提督/总督的弹幕长度不够, 不写形容词
+							"投喂", giftName, "x", num, ":活跃+", cost);
 					XHRSender.sendDanmu(msg);
 				}
 			}
@@ -334,7 +335,8 @@ public class ChatMgr extends LoopThread {
 			sb.setLength(sb.length() - 1);
 			
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-					MsgKwMgr.getAdj(), "投喂[", sb.toString(), "],活跃+", cost);
+					(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提督/总督的弹幕长度不够, 不写形容词
+					"投喂[", sb.toString(), "]:活跃+", cost);
 			XHRSender.sendDanmu(msg);
 		}
 		
@@ -349,7 +351,8 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		String msg = NOTICE_KEY.concat(RandomUtils.randomElement(MsgKwMgr.getNotices()));
+		String msg = NOTICE_KEY.concat(
+				RandomUtils.randomElement(MsgKwMgr.getNotices()));
 		XHRSender.sendDanmu(msg);
 	}
 	

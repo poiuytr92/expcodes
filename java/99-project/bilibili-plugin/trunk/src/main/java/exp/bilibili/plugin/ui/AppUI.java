@@ -78,7 +78,7 @@ public class AppUI extends MainWindow {
 	
 	private JButton loginBtn;
 	
-	private JButton defaultBtn;
+	private JButton loveBtn;
 	
 	private JButton linkBtn;
 	
@@ -225,7 +225,7 @@ public class AppUI extends MainWindow {
 		this.loginUser = "";
 		this.isLogined = false;
 		this.loginBtn = new JButton("扫码/帐密登陆(自动抽奖)");
-		this.defaultBtn = new JButton("★");
+		this.loveBtn = new JButton("★");
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.activeListBtn = new JButton("☷");
@@ -244,8 +244,8 @@ public class AppUI extends MainWindow {
 		this.nightBtn = new JButton("晚安姬");
 		this.redbagBtn = new JButton("红包兑奖姬");
 		loginBtn.setForeground(Color.BLACK);
-		defaultBtn.setToolTipText("设为默认");
-		defaultBtn.setForeground(Color.MAGENTA);
+		loveBtn.setToolTipText("设为默认");
+		loveBtn.setForeground(Color.MAGENTA);
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		activeListBtn.setForeground(Color.BLUE);
@@ -310,7 +310,7 @@ public class AppUI extends MainWindow {
 		JPanel livePanel = new JPanel(new BorderLayout()); {
 			livePanel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), BorderLayout.CENTER);
 			livePanel.add(SwingUtils.getEBorderPanel(
-					SwingUtils.getPairsPanel("房间号", liveRoomTF), defaultBtn), 
+					SwingUtils.getPairsPanel("房间号", liveRoomTF), loveBtn), 
 					BorderLayout.EAST);
 		}
 		panel.add(livePanel, 1);
@@ -389,7 +389,7 @@ public class AppUI extends MainWindow {
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
 		setLoginBtnListener();
-		setDefaultBtnListener();
+		setLoveBtnListener();
 		setLinkBtnListener();
 		setLotteryBtnListener();
 		setActiveListBtnListener();
@@ -441,13 +441,13 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
-	private void setDefaultBtnListener() {
-		defaultBtn.addActionListener(new ActionListener() {
+	private void setLoveBtnListener() {
+		loveBtn.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(Identity.less(Identity.UPLIVE)) {
-					SwingUtils.warn("非主播用户没有这个技能哦::>_<::");
+					SwingUtils.warn("花心的您未被授权 [收藏直播间] 哦~");
 					return;
 				}
 				
@@ -502,6 +502,15 @@ public class AppUI extends MainWindow {
 		// 更新主号在新房间的权限(主要是房管、弹幕长度)
 		if(isLogined() == true) {
 			XHRSender.queryUserAuthorityInfo(CookiesMgr.MAIN());
+			
+			// 暂不开放动态切换软件权限
+//			if(Identity.less(Identity.ADMIN)) {
+//				if(CookiesMgr.MAIN().isRoomAdmin()) {
+//					Identity.set(Identity.UPLIVE);
+//				} else {
+//					Identity.set(Identity.USER);
+//				}
+//			}
 		}
 	}
 	

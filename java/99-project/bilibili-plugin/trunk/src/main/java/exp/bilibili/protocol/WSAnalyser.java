@@ -263,7 +263,7 @@ public class WSAnalyser {
 	 */
 	private static void toDo(WelcomeMsg msgBean) {
 		String msg = StrUtils.concat("[", msgBean.getVipDesc(), "][", 
-				msgBean.getUsername(), "] ", MsgKwMgr.getAdj(), "溜进了直播间"
+				msgBean.getUsername(), "] ", MsgKwMgr.getAdv(), "溜进了直播间"
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
@@ -275,7 +275,7 @@ public class WSAnalyser {
 	 */
 	private static void toDo(WelcomeGuard msgBean) {
 		String msg = StrUtils.concat("[", msgBean.getGuardDesc(), "][", 
-				msgBean.getUsername(), "] ", MsgKwMgr.getAdj(), "溜进了直播间"
+				msgBean.getUsername(), "] ", MsgKwMgr.getAdv(), "溜进了直播间"
 		);
 		UIUtils.chat(msg);
 		log.info(msg);
@@ -286,8 +286,8 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(GuardBuy msgBean) {
-		String msg = StrUtils.concat("[", msgBean.getGuardDesc(), "][", 
-				msgBean.getUsername(), "] ", MsgKwMgr.getAdj(), "上了贼船,活跃+",
+		String msg = StrUtils.concat("[", msgBean.getUsername(), "] ", 
+				MsgKwMgr.getAdv(), "上了", msgBean.getGuardDesc(), ":活跃+",
 				ActivityMgr.showCost(msgBean.getGuardDesc(), 1)
 		);
 		UIUtils.chat(msg);
