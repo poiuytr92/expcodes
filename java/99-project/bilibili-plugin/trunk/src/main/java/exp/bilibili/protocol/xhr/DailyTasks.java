@@ -59,7 +59,7 @@ public class DailyTasks extends __XHR {
 	private final static String APP_WATCH_URL = Config.getInstn().APP_WATCH_URL();
 	
 	/** 执行下次任务的延迟时间点（5分钟后） */
-	private final static long NEXT_TASK_DELAY = 15000L;
+	private final static long NEXT_TASK_DELAY = 300000L;
 	
 	/** 私有化构造函数 */
 	protected DailyTasks() {}
@@ -168,16 +168,19 @@ public class DailyTasks extends __XHR {
 	}
 	
 	public static void main(String[] args) {
-		CookiesMgr.getInstn().load(CookieType.VEST);
-		BiliCookie cookie = CookiesMgr.VEST();
-		System.out.println(cookie.toHeaderCookie());
+		System.out.println(HttpUtils.decodeURL("http%3A%2F%2Flive-play.acgvideo.com%2Flive%2F358%2Flive_20872515_1403835.flv%3FwsSecret%3D2543f09b0ed159cf4e099502519aa36f%26wsTime%3D5a577b50"));
+		System.out.println(HttpUtils.decodeURL("http%3A%2F%2Flive-play.acgvideo.com%2Flive%2F414%2Flive_20872515_1403835.flv%3FwsSecret%3D67ddf24003c2ec748b3f0c05e560daed%26wsTime%3D5a578101"));;
 		
-		long bgnTime = System.currentTimeMillis() / 1000;
-		for(int i = 0 ; i < 10000; i++) {
-			int cnt = (i * 15);
-			toWatchAppLive(cookie, 438, bgnTime, cnt);
-			ThreadUtils.tSleep(15000);
-		}
+//		CookiesMgr.getInstn().load(CookieType.VEST);
+//		BiliCookie cookie = CookiesMgr.VEST();
+//		System.out.println(cookie.toHeaderCookie());
+//		
+//		long bgnTime = System.currentTimeMillis() / 1000;
+//		for(int i = 0 ; i < 10000; i++) {
+//			int cnt = (i * 15);
+//			toWatchAppLive(cookie, 438, bgnTime, cnt);
+//			ThreadUtils.tSleep(15000);
+//		}
 	}
 	
 	/**
