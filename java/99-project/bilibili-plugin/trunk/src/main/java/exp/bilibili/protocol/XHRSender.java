@@ -135,7 +135,15 @@ public class XHRSender {
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	public static long toAssn(BiliCookie cookie) {
-		return DailyTasks.toAssn(cookie);
+		long nextTaskTime = DailyTasks.toAssn(cookie);
+		
+		// 若有爱社签到失败, 则模拟双端观看直播
+		if(nextTaskTime > 0) {
+			int roomId = UIUtils.getLiveRoomId();
+			DailyTasks.toWatchPCLive(cookie, roomId);	// PC端
+//			DailyTasks.toWatchAppLive(cookie);	// 手机端
+		}
+		return nextTaskTime;
 	}
 	
 	/**
@@ -145,16 +153,6 @@ public class XHRSender {
 	 */
 	public static long doMathTask(BiliCookie cookie) {
 		return DailyTasks.doMathTask(cookie);
-	}
-	
-	/**
-	 * 模拟PC端在线观看直播 (需5分钟发送一次心跳)
-	 * @param cookie
-	 * @return 返回执行下次任务的时间点(固定返回5分钟后)
-	 */
-	public static long toWatchLive(BiliCookie cookie) {
-		int roomId = UIUtils.getLiveRoomId();
-		return DailyTasks.toWatchLive(cookie, roomId);
 	}
 	
 	/**

@@ -57,6 +57,10 @@ public class BiliCmdAtrbt {
 	
 	public final static String uname = "uname";
 	
+	public final static String level = "level";
+	
+	public final static String master_level = "master_level";
+	
 	public final static String timestamp = "timestamp";
 	
 	public final static String action = "action";

@@ -186,9 +186,6 @@ public class WebBot extends LoopThread {
 					max = NumUtils.max(XHRSender.toAssn(cookie), max);
 					max = NumUtils.max(XHRSender.doMathTask(cookie), max);
 				}
-				
-				// FIXME: 设计在数学任务完成后就不看了， 减少心跳请求, 本来每天5分钟就够了
-				max = NumUtils.max(XHRSender.toWatchLive(cookie), max);
 				nextTaskTime = NumUtils.max(nextTaskTime, max);
 				
 				if(max <= 0) {

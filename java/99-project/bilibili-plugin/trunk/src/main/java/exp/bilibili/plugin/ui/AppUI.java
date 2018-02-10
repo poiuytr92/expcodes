@@ -418,6 +418,7 @@ public class AppUI extends MainWindow {
 				if(CookiesMgr.MAIN() != BiliCookie.NULL || 
 						CookiesMgr.getInstn().load(CookieType.MAIN)) {
 					markLogin(CookiesMgr.MAIN().NICKNAME());
+					loginMinis();
 				
 				// 手工登陆
 				} else {
@@ -426,6 +427,7 @@ public class AppUI extends MainWindow {
 						@Override
 						public void afterLogin(final BiliCookie cookie) {
 							markLogin(cookie.NICKNAME());
+							loginMinis();
 						}
 						
 						@Override
@@ -435,10 +437,19 @@ public class AppUI extends MainWindow {
 					});
 					btn.doClick();
 				}
-				
-				miniLoginMgrUI.init();
 			}
 		});
+	}
+	
+	/**
+	 * 异步登陆所有小号
+	 */
+	private void loginMinis() {
+		new Thread() {
+			public void run() {
+				miniLoginMgrUI.init();
+			};
+		}.start();
 	}
 	
 	private void setLoveBtnListener() {

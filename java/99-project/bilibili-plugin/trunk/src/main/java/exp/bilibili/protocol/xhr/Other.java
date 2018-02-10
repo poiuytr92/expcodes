@@ -227,7 +227,10 @@ public class Other extends __XHR {
 				JSONObject info = JsonUtils.getObject(data, BiliCmdAtrbt.info);
 				String uid = JsonUtils.getStr(info, BiliCmdAtrbt.uid);
 				String uname = JsonUtils.getStr(info, BiliCmdAtrbt.uname);
-				up = new User(uid, uname);
+				JSONObject level = JsonUtils.getObject(data, BiliCmdAtrbt.level);
+				JSONObject masterLevel = JsonUtils.getObject(level, BiliCmdAtrbt.master_level);
+				int lv = JsonUtils.getInt(masterLevel, BiliCmdAtrbt.level, 0);
+				up = new User(uid, uname, lv);
 				
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);

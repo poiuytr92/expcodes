@@ -149,8 +149,8 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				__MiniUserLine line = new __MiniUserLine(cookie);
 				adPanel.set(line, idx++);
 			}
+			updateUserCount();
 		}
-		updateUserCount();
 	}
 	
 	@Override
