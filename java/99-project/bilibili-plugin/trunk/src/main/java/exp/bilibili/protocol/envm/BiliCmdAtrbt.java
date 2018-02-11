@@ -3,6 +3,7 @@ package exp.bilibili.protocol.envm;
 
 
 
+
 /**
  * <PRE>
  * B站Json交互报文字段属性
@@ -32,6 +33,8 @@ public class BiliCmdAtrbt {
 	public final static String rep = "rep";
 	
 	public final static String url = "url";
+	
+	public final static String durl = "durl";
 	
 	public final static String data = "data";
 	
@@ -217,6 +220,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String area = "area";
 	
+	public final static String parent_area = "parent_area";
+	
 	public final static String order = "order";
 	
 	public final static String page = "page";
@@ -231,8 +236,50 @@ public class BiliCmdAtrbt {
 	
 	public final static String ts = "ts";
 	
-	public final static String cid = "cid:";
+	public final static String cid = "cid";
 	
 	public final static String player_type = "player_type";
+	
+	public final static String mid = "mid";
+	
+	public final static String otype = "otype";
+	
+	public final static String device = "device";
+	
+	public final static String DeviceID = "Device-ID";
+	
+	public final static String DisplayID = "Display-ID";
+	
+	public final static String Buvid = "Buvid";
+	
+	public final static String build = "build";
+	
+	public final static String version = "version";
+	
+	public final static String c_time = "c_time";
+	
+	public final static String delta_ts = "delta_ts";
+	
+	public final static String room_id = "room_id";
+	
+	public final static String up_id = "up_id";
+	
+	public final static String up_level = "up_level";
+	
+	public final static String playurl = "playurl";
+	
+	public final static String guid = "guid";
+	
+	public final static String sign = "sign";
+	
+	public final static String jumpfrom = "jumpfrom";
+	
+	public final static String appkey = "appkey";
+	
+	public final static String mobi_app = "mobi_app";
+	
+	public final static String pid = "pid";
+	
+	public final static String play_type = "play_type";
 	
 }

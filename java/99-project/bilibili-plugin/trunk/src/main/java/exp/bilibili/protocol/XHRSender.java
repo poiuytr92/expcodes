@@ -17,6 +17,7 @@ import exp.bilibili.protocol.xhr.LotteryStorm;
 import exp.bilibili.protocol.xhr.LotteryTV;
 import exp.bilibili.protocol.xhr.Other;
 import exp.bilibili.protocol.xhr.Redbag;
+import exp.bilibili.protocol.xhr.WatchLive;
 
 /**
  * <PRE>
@@ -140,8 +141,8 @@ public class XHRSender {
 		// 若有爱社签到失败, 则模拟双端观看直播
 		if(nextTaskTime > 0) {
 			int roomId = UIUtils.getLiveRoomId();
-			DailyTasks.toWatchPCLive(cookie, roomId);	// PC端
-//			DailyTasks.toWatchAppLive(cookie);	// 手机端
+			WatchLive.toWatchPCLive(cookie, roomId);	// PC端
+			WatchLive.toWatchAppLive(cookie, roomId);	// 手机端 (FIXME: 暂时无效)
 		}
 		return nextTaskTime;
 	}

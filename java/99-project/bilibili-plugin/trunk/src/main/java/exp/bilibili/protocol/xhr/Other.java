@@ -199,7 +199,7 @@ public class Other extends __XHR {
 	 */
 	private static Map<String, String> getRequest(String roomId) {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put(BiliCmdAtrbt.id, BiliCmdAtrbt.cid.concat(roomId));
+		request.put(BiliCmdAtrbt.id, StrUtils.concat(BiliCmdAtrbt.cid, ":", roomId));
 		request.put(BiliCmdAtrbt.ts, BODHUtils.decToHex(System.currentTimeMillis()));
 		request.put(BiliCmdAtrbt.platform, "pc");
 		request.put(BiliCmdAtrbt.player_type, "web");

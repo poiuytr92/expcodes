@@ -143,14 +143,6 @@ public class Config {
 		return xConf.getVal("/config/urls/assnURL");
 	}
 	
-	public String PC_WATCH_URL() {
-		return xConf.getVal("/config/urls/pcWatchURL");
-	}
-	
-	public String APP_WATCH_URL() {
-		return xConf.getVal("/config/urls/appWatchURL");
-	}
-	
 	public String ACCOUNT_URL() {
 		return xConf.getVal("/config/urls/accountURL");
 	}
@@ -205,6 +197,18 @@ public class Config {
 	
 	public String MATH_EXEC_URL() {
 		return xConf.getVal("/config/urls/mathExecURL");
+	}
+	
+	public String APP_VIDEO_URL() {
+		return xConf.getVal("/config/urls/apVideoURL");
+	}
+	
+	public String APP_WATCH_URL() {
+		return xConf.getVal("/config/urls/appWatchURL");
+	}
+	
+	public String PC_WATCH_URL() {
+		return xConf.getVal("/config/urls/pcWatchURL");
 	}
 	
 	public String GET_REDBAG_URL() {

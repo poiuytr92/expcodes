@@ -134,15 +134,14 @@ public class ActivityMgr {
 	/**
 	 * 初始化
 	 */
-	public void init() {
-		if(isInit == true) {
-			return;
+	public boolean init() {
+		if(isInit == false) {
+			isInit = initEnv();
+			if(isInit == true) {
+				read();
+			}
 		}
-		
-		isInit = initEnv();
-		if(isInit == true) {
-			read();
-		}
+		return isInit;
 	}
 	
 	/**
@@ -158,6 +157,7 @@ public class ActivityMgr {
 		File dbFile = new File(ENV_DB_PATH);
 		if(!dbFile.exists()) {
 			FileUtils.createDir(ENV_DB_DIR);
+			
 			Connection conn = SqliteUtils.getConnByJDBC(DS);
 			String script = JarUtils.read(ENV_DB_SCRIPT, Charset.ISO);
 			String[] sqls = script.split(";");
@@ -287,7 +287,7 @@ public class ActivityMgr {
 	 */
 	private boolean isRecord() {
 		boolean isRecord = false;
-		if(isInit && !Identity.less(Identity.ADMIN)) {
+		if(init() && !Identity.less(Identity.ADMIN)) {
 			int curRoomId = RoomMgr.getInstn().getRealRoomId(UIUtils.getLiveRoomId());
 			if(ROOM_ID > 0 && ROOM_ID == curRoomId) {
 				isRecord = true;

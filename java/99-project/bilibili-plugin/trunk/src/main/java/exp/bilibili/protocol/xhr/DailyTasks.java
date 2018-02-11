@@ -6,16 +6,12 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
-import exp.bilibili.protocol.bean.other.User;
 import exp.bilibili.protocol.bean.xhr.MathTask;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
@@ -51,12 +47,6 @@ public class DailyTasks extends __XHR {
 	
 	/** 小学数学任务重试间隔(验证码计算成功率只有90%左右, 失败后需重试) */
 	private final static long SLEEP_TIME = 500L;
-	
-	/** 模拟PC端在线观看直播的心跳URL */
-	private final static String PC_WATCH_URL = Config.getInstn().PC_WATCH_URL();
-	
-	/** 模拟手机端在线观看直播的心跳URL */
-	private final static String APP_WATCH_URL = Config.getInstn().APP_WATCH_URL();
 	
 	/** 执行下次任务的延迟时间点（5分钟后） */
 	private final static long NEXT_TASK_DELAY = 300000L;
@@ -141,116 +131,6 @@ public class DailyTasks extends __XHR {
 		return nextTaskTime;
 	}
 	
-	/**
-	 * 模拟PC端在线观看直播 (需5分钟发送一次心跳)
-	 * @param cookie
-	 * @param roomId
-	 * @return 返回执行下次任务的时间点(固定返回5分钟后)
-	 */
-	public static long toWatchPCLive(BiliCookie cookie, int roomId) {
-		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), getRealRoomId(roomId));
-		String response = HttpURLUtils.doGet(PC_WATCH_URL, header, null);
-		
-		try {
-			JSONObject json = JSONObject.fromObject(response);
-			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			if(code == 0) {
-				log.info("[{}] 正在模拟PC端在线观看直播...", cookie.NICKNAME());
-				
-			} else {
-				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.error("[{}] 模拟PC端在线观看直播失败: {}", cookie.NICKNAME(), reason);
-			}
-		} catch(Exception e) {
-			log.error("[{}] 模拟PC端在线观看直播失败: {}", cookie.NICKNAME(), response, e);
-		}
-		return (System.currentTimeMillis() + NEXT_TASK_DELAY);
-	}
-	
-	public static void main(String[] args) {
-		System.out.println(HttpUtils.decodeURL("http%3A%2F%2Flive-play.acgvideo.com%2Flive%2F358%2Flive_20872515_1403835.flv%3FwsSecret%3D2543f09b0ed159cf4e099502519aa36f%26wsTime%3D5a577b50"));
-		System.out.println(HttpUtils.decodeURL("http%3A%2F%2Flive-play.acgvideo.com%2Flive%2F414%2Flive_20872515_1403835.flv%3FwsSecret%3D67ddf24003c2ec748b3f0c05e560daed%26wsTime%3D5a578101"));;
-		
-//		CookiesMgr.getInstn().load(CookieType.VEST);
-//		BiliCookie cookie = CookiesMgr.VEST();
-//		System.out.println(cookie.toHeaderCookie());
-//		
-//		long bgnTime = System.currentTimeMillis() / 1000;
-//		for(int i = 0 ; i < 10000; i++) {
-//			int cnt = (i * 15);
-//			toWatchAppLive(cookie, 438, bgnTime, cnt);
-//			ThreadUtils.tSleep(15000);
-//		}
-	}
-	
-	/**
-	 * 模拟手机端在线观看直播 (需5分钟发送一次心跳)
-	 * @param cookie
-	 * @return 返回执行下次任务的时间点(固定返回5分钟后)
-	 */
-	public static long toWatchAppLive(BiliCookie cookie, int roomId, long bgnSecond, int cnt) {
-		Map<String, String> header = getHeader(cookie, bgnSecond);
-		Map<String, String> request = getRequest(cookie.UID(), roomId, cnt);
-		System.out.println(request);
-		String response = HttpURLUtils.doPost(APP_WATCH_URL, header, request);
-		System.out.println(response);
-		if("ok".equals(response)) {
-			log.info("[{}] 正在模拟手机端在线观看直播...", cookie.NICKNAME());
-			
-		} else {
-			log.error("[{}] 模拟手机端在线观看直播失败: {}", cookie.NICKNAME(), response);
-		}
-		return (System.currentTimeMillis() + NEXT_TASK_DELAY);
-	}
-	
-	private static Map<String, String> getHeader(BiliCookie cookie, long bgnSecond) {
-		Map<String, String> header = new HashMap<String, String>();
-		header.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		header.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
-				HttpUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
-		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie.toNVCookie());
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, "Mozilla/5.0 BiliDroid/5.22.1 (bbcallen@gmail.com)");
-		header.put(HttpUtils.HEAD.KEY.HOST, "live-trace.bilibili.com");
-		header.put("Device-ID", "SilMKRkvHSwfe04rVyseKxNxSH4aKWkLbAJmVSdbOghiVjUEMgMyAzMDMQE2Ag");
-		header.put("Buvid", "52EBE497-0DEC-4056-8FD3-FDB2F69690877229infoc");
-		header.put("Display-ID", StrUtils.concat(cookie.UID(), "-", bgnSecond));
-		return header;
-	}
-	
-	private static Map<String, String> getRequest(String uid, int roomId, int cnt) {
-		long now = System.currentTimeMillis();
-		String sRoomId = getRealRoomId(roomId);
-		User up = Other.queryUpInfo(roomId);
-		
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("c_time", String.valueOf(now));
-		request.put("ts", String.valueOf(now / 1000));
-		request.put("delta_ts", String.valueOf(cnt));	// 每次调用+15
-		request.put("mid", uid);
-		request.put("room_id", sRoomId);
-		request.put("up_id", up.ID());
-		request.put("up_level", String.valueOf(up.LV()));
-//		request.put("playurl", "http://live-play.acgvideo.com/live/640/live_20872515_1403835.flv?wsSecret=4c9ded5f264f7f2e881f729dc0e3b11b&wsTime=5a562f29");
-//		request.put("guid", "080207a6b4d5dee3f0d18f18e8641ee1");	// 每次打开直播间都随机生成一个固定值
-//		request.put("sign", "1cb2e9066b1fe22a94360c0f6dd96fd0");	// 每次变化值
-//		request.put("data_behavior_id", "97c3fbc28cbefd7:97c3fbc28cbefd7:0:0");
-//		request.put("data_source_id", "system");
-		request.put("appkey", "1d8b6e7d45233436");	// 固定值
-		request.put("area", "21");	// 每个直播间固定
-		request.put("build", "5220001");	// 临时固定值(APP版本号)
-		request.put("version", "5.22.1");	// 临时固定值(APP版本号)
-		request.put("jumpfrom", "21000");	// 相对固定值（打开直播间的入口， 从我的关注打开）
-		request.put("mobi_app", "android");
-		request.put("parent_area", "1");	// 固定值
-		request.put("pid", "13");	// 固定值
-		request.put("platform", "android");
-		request.put("play_type", "1");	// 固定值
-		return request;
-	}
-
 	/**
 	 * 执行小学数学任务
 	 * @param cookie
