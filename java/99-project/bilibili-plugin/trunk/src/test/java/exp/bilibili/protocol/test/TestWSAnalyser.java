@@ -1,7 +1,5 @@
 package exp.bilibili.protocol.test;
 
-import exp.bilibili.plugin.Config;
-import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -12,22 +10,31 @@ public class TestWSAnalyser {
 		alalyseMsg(hex);
 	}
 	
-	public static void alalyseMsg(String hexMsg) {
+	private static void alalyseMsg(String hexMsg) {
 		byte[] bytes = BODHUtils.toBytes(hexMsg);
 		String msg = new String(bytes);
 		System.out.println(StrUtils.view(msg));
 		System.out.println("====");
 		
-		String split = hexMsg.substring(0, 32);	// 消息的前32个字节(即16个字符)为分隔符
-		String[] hexs = hexMsg.split(split);
-		for(String hex : hexs) {
-			if(StrUtils.isEmpty(hex)) {
-				continue;
+		int len = 0;
+		do {
+			len = getLen(hexMsg);
+			if(len <= 32) {
+				break;
 			}
+			String subHexMsg = hexMsg.substring(32, len);
+			msg = new String(BODHUtils.toBytes(subHexMsg));
+			System.out.println(StrUtils.view(msg));
 			
-			msg = CharsetUtils.toStr(BODHUtils.toBytes(hex), Config.DEFAULT_CHARSET);
-			System.out.println(msg);
-		}
+			
+			hexMsg = hexMsg.substring(len);
+		} while(StrUtils.isNotEmpty(hexMsg));
+	}
+	
+	private static int getLen(String hexMsg) {
+		String hexLen = hexMsg.substring(0, 8);	// 消息的前8位是本条消息长度
+		long len = BODHUtils.hexToDec(hexLen);
+		return (int) (len * 2);
 	}
 	
 }

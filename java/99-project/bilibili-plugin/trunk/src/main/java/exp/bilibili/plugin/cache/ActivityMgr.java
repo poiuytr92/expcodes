@@ -357,7 +357,7 @@ public class ActivityMgr {
 		if(UIUtils.isLogined() && // 登陆后才能发送私信
 				(before % COST_UNIT + cost) >= COST_UNIT) {
 			String msg = StrUtils.concat("恭喜您在 [", ROOM_ID, "] 直播间的活跃度达到 [", 
-					(after / SHOW_UNIT), "] O(∩_∩)O 谢谢资瓷, 活跃度以后会逐步用于福利用途哦~");
+					after, "] O(∩_∩)O 谢谢资瓷, 活跃度以后会逐步用于福利用途哦~");
 			XHRSender.sendPM(uid, msg);
 		}
 	}
