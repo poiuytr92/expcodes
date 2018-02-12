@@ -38,6 +38,12 @@ class WebSockSession extends WebSocketClient {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockSession.class);
 	
+	/** 子消息的前32位字节是该子消息的含消息头 */
+	private final static int MSG_HEADER_LEN = 32;
+	
+	/** 子消息的前8位字节是该子消息的字符长度（含消息头） */
+	private final static int MSG_LENGTH_LEN = 8;
+	
 	/** 连接超时 */
 	private final static long CONN_TIMEOUT = 10000;
 	
@@ -139,16 +145,22 @@ class WebSockSession extends WebSocketClient {
 		}
     }
 	
+	/**
+	 * 解析十六进制消息
+	 * @param hexMsg 可能是多条子消息拼接而成
+	 * @return
+	 */
 	private boolean alalyseHexMsg(String hexMsg) {
 		boolean isOk = true;
-		String split = hexMsg.substring(0, 32);	// 消息的前32个字节(即16个字符)为分隔符
-		String[] hexs = hexMsg.split(split);
-		for(String hex : hexs) {
-			if(StrUtils.isEmpty(hex)) {
-				continue;
+		while(StrUtils.isNotEmpty(hexMsg)) {
+			int len = getHexLen(hexMsg);	// 获取子消息长度
+			if(len <= MSG_HEADER_LEN) {	// 消息的前32个字节(即16个字符)为消息头
+				break;
 			}
 			
-			String msg = CharsetUtils.toStr(BODHUtils.toBytes(hex), Config.DEFAULT_CHARSET);
+			String subHexMsg = hexMsg.substring(MSG_HEADER_LEN, len);
+			String msg = CharsetUtils.toStr(
+					BODHUtils.toBytes(subHexMsg), Config.DEFAULT_CHARSET);
 			if(JsonUtils.isVaild(msg)) {
 				JSONObject json = JSONObject.fromObject(msg);
 				if(!WSAnalyser.toMsgBean(json)) {
@@ -157,8 +169,20 @@ class WebSockSession extends WebSocketClient {
 			} else {
 				isOk = false;
 			}
+			hexMsg = hexMsg.substring(len);
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 获取子消息的长度
+	 * @param hexMsg 所有消息
+	 * @return 子消息的16进制长度
+	 */
+	private static int getHexLen(String hexMsg) {
+		String hexLen = hexMsg.substring(0, MSG_LENGTH_LEN); // 子消息的前8位是该子消息的字符长度（含消息头）
+		long len = BODHUtils.hexToDec(hexLen);
+		return (int) (len * 2);	// 1字符 = 2个16进制字节
 	}
 	
 	@Override
