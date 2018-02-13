@@ -128,8 +128,8 @@ public class WatchLive extends __XHR {
 		request.put(BiliCmdAtrbt.up_level, String.valueOf(appVideo.getUpLv()));	// 主播等级
 		request.put(BiliCmdAtrbt.playurl, appVideo.getUrl());		// 所观看的直播视频地址
 		request.put(BiliCmdAtrbt.guid, appVideo.getGuid());	// FIXME： 随直播视频地址变化, 生成规则未知
-		request.put(BiliCmdAtrbt.area, "21");		// FIXME: 每个直播间固定, 生成规则未知
-		request.put(BiliCmdAtrbt.parent_area, "1");	// FIXME: 每个直播间固定, 生成规则未知
+		request.put(BiliCmdAtrbt.area, "21");		// FIXME: 每个直播间固定, 生成规则未知, 应该是直播子分区
+		request.put(BiliCmdAtrbt.parent_area, "1");	// FIXME: 每个直播间固定, 生成规则未知, 应该是直播分区
 		request.put(BiliCmdAtrbt.sign, IDUtils.getUUID().replace("-", ""));	// FIXME: 每次请求都会变化, 生成规则未知
 		request.put(BiliCmdAtrbt.jumpfrom, "24000");	// FIXME: 跳转到当前直播间的入口, 如从"我的关注"进入是21000, 从平台进入是24000, 具体生成规则未知
 		

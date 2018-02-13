@@ -34,6 +34,7 @@ public class Version {
 		// 在线升级， 升级命令：移动文件，删除文件，添加文件,  压缩包转txt
 		// 系统托盘好卡
 		// 备份cookie zip
+		// 如何获取app的cookie
 	}
 	
 }

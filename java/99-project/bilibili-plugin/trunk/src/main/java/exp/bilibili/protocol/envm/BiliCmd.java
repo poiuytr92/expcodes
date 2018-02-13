@@ -56,6 +56,10 @@ public class BiliCmd {
 	private final static String _PREPARING = "PREPARING";
 	public final static BiliCmd PREPARING = new BiliCmd(_PREPARING);
 	
+	/** 关播通知消息 */
+	private final static String _ROOM_SILENT_OFF = "ROOM_SILENT_OFF";
+	public final static BiliCmd ROOM_SILENT_OFF = new BiliCmd(_ROOM_SILENT_OFF);
+	
 	/** 特殊礼物：(直播间内)节奏风暴消息 */
 	private final static String _SPECIAL_GIFT = "SPECIAL_GIFT";
 	public final static BiliCmd SPECIAL_GIFT = new BiliCmd(_SPECIAL_GIFT);
@@ -121,6 +125,9 @@ public class BiliCmd {
 			
 		} else if(_PREPARING.equals(cmd)) {
 			biliCMD = PREPARING;
+			
+		} else if(_ROOM_SILENT_OFF.equals(cmd)) {
+			biliCMD = ROOM_SILENT_OFF;
 			
 		} else if(_SPECIAL_GIFT.equals(cmd)) {
 			biliCMD = SPECIAL_GIFT;

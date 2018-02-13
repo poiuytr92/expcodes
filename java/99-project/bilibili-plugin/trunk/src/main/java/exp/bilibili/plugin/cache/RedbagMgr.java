@@ -62,7 +62,7 @@ public class RedbagMgr extends LoopThread {
 	
 	private RedbagMgr() {
 		super("红包兑奖姬");
-		this.sleepTime = 1000;
+		this.sleepTime = 500;
 		this.redbags = new LinkedList<Redbag>();
 		this.exchange = false;
 		this.exTime = false;
@@ -125,7 +125,7 @@ public class RedbagMgr extends LoopThread {
 		int minute = TimeUtils.getCurMinute();
 		
 		if(exTime == false && minute == 58) {
-			sleepTime = 1000;
+			sleepTime = 500;
 			exTime = true;
 			UIUtils.log("红包兑奖时间已到, 正在尝试兑奖...");
 			

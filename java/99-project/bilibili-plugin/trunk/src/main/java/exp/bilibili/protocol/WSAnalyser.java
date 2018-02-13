@@ -21,6 +21,7 @@ import exp.bilibili.protocol.bean.ws.Preparing;
 import exp.bilibili.protocol.bean.ws.RaffleEnd;
 import exp.bilibili.protocol.bean.ws.RaffleStart;
 import exp.bilibili.protocol.bean.ws.RoomBlock;
+import exp.bilibili.protocol.bean.ws.RoomSilentOff;
 import exp.bilibili.protocol.bean.ws.SendGift;
 import exp.bilibili.protocol.bean.ws.SpecialGift;
 import exp.bilibili.protocol.bean.ws.SysGift;
@@ -113,6 +114,9 @@ public class WSAnalyser {
 			
 		} else if(biliCmd == BiliCmd.PREPARING) {
 			toDo(new Preparing(json));
+			
+		} else if(biliCmd == BiliCmd.ROOM_SILENT_OFF) {
+			toDo(new RoomSilentOff(json));
 			
 		} else if(biliCmd == BiliCmd.WISH_BOTTLE) {
 			toDo(new WishBottle(json));
@@ -331,6 +335,16 @@ public class WSAnalyser {
 	 */
 	private static void toDo(Preparing msgBean) {
 		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 主播已下线.");
+		UIUtils.chat(msg);
+		log.info(msg);
+	}
+	
+	/**
+	 * 关播通知
+	 * @param msgBean
+	 */
+	private static void toDo(RoomSilentOff msgBean) {
+		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 串流已停止.");
 		UIUtils.chat(msg);
 		log.info(msg);
 	}
