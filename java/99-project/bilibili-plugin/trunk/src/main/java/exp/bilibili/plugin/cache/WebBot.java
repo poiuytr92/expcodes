@@ -182,6 +182,7 @@ public class WebBot extends LoopThread {
 				
 				long max = -1;
 				max = NumUtils.max(XHRSender.toSign(cookie), max);
+				max = NumUtils.max(XHRSender.toBucket(cookie), max);
 				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
 					max = NumUtils.max(XHRSender.toAssn(cookie), max);
 					max = NumUtils.max(XHRSender.doMathTask(cookie), max);

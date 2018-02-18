@@ -3,9 +3,14 @@ package exp.bilibili.protocol.xhr;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
+import exp.bilibili.plugin.envm.CookieType;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
+import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
 /**
@@ -20,6 +25,10 @@ import exp.libs.warp.net.http.HttpURLUtils;
  */
 public class Redbag extends __XHR {
 
+	private final static String GET_BUCKET_URL = Config.getInstn().GET_BUCKET_URL();
+	
+	private final static String EX_BUCKET_URL = Config.getInstn().EX_BUCKET_URL();
+	
 	/** 查询红包奖池URL */
 	private final static String GET_REDBAG_URL = Config.getInstn().GET_REDBAG_URL();
 	
@@ -28,6 +37,58 @@ public class Redbag extends __XHR {
 	
 	/** 私有化构造函数 */
 	protected Redbag() {}
+	
+	public static void main(String[] args) {
+		CookiesMgr.getInstn().load(CookieType.MAIN);
+		System.out.println(queryBucketRoomId(CookiesMgr.MAIN()));
+	}
+	
+	public static int queryBucketRoomId(BiliCookie cookie) {
+		int roomId = 0;
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "pages/1703/spring-2018.html");
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(BiliCmdAtrbt._, String.valueOf(System.currentTimeMillis()));
+		String response = HttpURLUtils.doGet(GET_BUCKET_URL, header, request);
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+			JSONObject bucketRoom = JsonUtils.getObject(data, BiliCmdAtrbt.bucketRoom);
+			roomId = JsonUtils.getInt(bucketRoom, BiliCmdAtrbt.roomid, 0);
+			
+		} catch(Exception e) {
+			log.error("查询上上签直播间号失败: {}", response, e);
+		}
+		return roomId;
+	}
+	
+	public static long exchangeBucket(BiliCookie cookie, int roomId) {
+		long nextTime = 300000L;
+		if(roomId <= 0) {
+			return nextTime;
+		}
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), String.valueOf(roomId));
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(BiliCmdAtrbt.roomid, String.valueOf(roomId));
+		String response = HttpURLUtils.doGet(EX_BUCKET_URL, header, request);
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				nextTime = -1;
+				UIUtils.log("[", cookie.NICKNAME(), "] 领取上上签完成");
+				
+			} else if(code == 402) {
+				nextTime = -1;
+				
+			} else {
+				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("[{}] 领取上上签失败: {}", cookie.NICKNAME(), reason);
+			}
+		} catch(Exception e) {
+			log.error("[{}] 领取上上签失败: {}", cookie.NICKNAME(), response, e);
+		}
+		return nextTime;
+	}
 	
 	/**
 	 * 2018春节活动：查询当前红包奖池

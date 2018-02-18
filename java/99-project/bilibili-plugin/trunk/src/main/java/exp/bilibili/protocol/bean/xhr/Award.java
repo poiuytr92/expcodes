@@ -113,6 +113,11 @@ public class Award {
 	/** 用户剩余可以兑换的数量 */
 	private int userExchangeCount;
 	
+	public Award(String id, int redbagNum) {
+		this.id = id;
+		this.stockNum = redbagNum;
+	}
+	
 	public Award(JSONObject json) {
 		this.id = JsonUtils.getStr(json, BiliCmdAtrbt.award_id);
 		this.name = JsonUtils.getStr(json, BiliCmdAtrbt.award_name);

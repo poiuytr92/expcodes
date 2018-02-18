@@ -132,6 +132,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String red_bag_num = "red_bag_num";
 	
+	public final static String round = "round";
+	
 	public final static String pool_list = "pool_list";
 	
 	public final static String award_id = "award_id";
@@ -281,5 +283,7 @@ public class BiliCmdAtrbt {
 	public final static String pid = "pid";
 	
 	public final static String play_type = "play_type";
+	
+	public final static String bucketRoom = "bucketRoom";
 	
 }
