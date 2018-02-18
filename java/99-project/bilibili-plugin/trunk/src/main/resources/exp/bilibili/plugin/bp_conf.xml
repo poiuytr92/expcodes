@@ -33,6 +33,8 @@
         <manageURL caption="房管列表URL"><![CDATA[http://api.live.bilibili.com/live_user/v1/RoomAdmin/get_by_anchor]]></manageURL>
         <bagURL caption="包裹列表URL"><![CDATA[http://api.live.bilibili.com/gift/v2/gift/bag_list]]></bagURL>
         <feedURL caption="投喂URL"><![CDATA[http://api.live.bilibili.com/gift/v2/live/bag_send]]></feedURL>
+        <getAchieveURL caption="查询成就列表URL"><![CDATA[http://api.live.bilibili.com/i/api/ajaxGetAchieve]]></getAchieveURL>
+        <doAchieveURL caption="领取成就奖励URL"><![CDATA[http://api.live.bilibili.com/i/ajaxGetTaskAward]]></doAchieveURL>
         <stormCheckURL caption="节奏风暴检测URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/check]]></stormCheckURL>
         <stormJoinURL caption="节奏风暴抽奖URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/join]]></stormJoinURL>
         <egCheckURL caption="高能礼物取号URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/check]]></egCheckURL>

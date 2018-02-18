@@ -223,8 +223,8 @@ public class WebBot extends LoopThread {
 		if(loopCnt++ >= EVENT_LIMIT) {
 			loopCnt = 0;
 			
-			// 自动投喂
-			toAutoFeed();
+			toAutoFeed();	// 自动投喂
+			takeFinishAchieve();	// 领取成就奖励
 			
 			// 打印心跳
 			log.info("{} 活动中...", getName());
@@ -246,6 +246,16 @@ public class WebBot extends LoopThread {
 			if(cookie.isAutoFeed()) {
 				XHRSender.toFeed(cookie, roomId);
 			}
+		}
+	}
+	
+	/**
+	 * 领取已完成的任务奖励
+	 */
+	public void takeFinishAchieve() {
+		Set<BiliCookie> cookies = CookiesMgr.ALL();
+		for(BiliCookie cookie : cookies) {
+			XHRSender.toAchieve(cookie);
 		}
 	}
 	

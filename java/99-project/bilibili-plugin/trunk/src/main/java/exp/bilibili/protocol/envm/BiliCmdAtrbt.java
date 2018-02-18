@@ -228,6 +228,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String page = "page";
 	
+	public final static String pageSize = "pageSize";
+	
 	public final static String type = "type";
 	
 	public final static String hour = "hour";
@@ -285,5 +287,15 @@ public class BiliCmdAtrbt {
 	public final static String play_type = "play_type";
 	
 	public final static String bucketRoom = "bucketRoom";
+	
+	public final static String category = "category";
+	
+	public final static String keywords = "keywords";
+	
+	public final static String tid = "tid";
+	
+	public final static String title = "title";
+	
+	public final static String finished = "finished";
 	
 }

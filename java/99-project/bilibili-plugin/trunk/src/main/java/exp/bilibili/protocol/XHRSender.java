@@ -8,6 +8,7 @@ import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.bean.other.User;
+import exp.bilibili.protocol.bean.xhr.Achieve;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.bilibili.protocol.xhr.Feed;
@@ -209,6 +210,15 @@ public class XHRSender {
 	 */
 	public static void toFeed(BiliCookie cookie, int roomId) {
 		Feed.toFeed(cookie, roomId);
+	}
+	
+	/**
+	 * 领取已完成的成就奖励
+	 * @param cookie
+	 */
+	public static void toAchieve(BiliCookie cookie) {
+		List<Achieve> achieves = Other.queryAchieve(cookie);
+		Other.doAchieve(cookie, achieves);
 	}
 	
 	/**

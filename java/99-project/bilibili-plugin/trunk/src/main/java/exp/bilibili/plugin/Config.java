@@ -167,6 +167,14 @@ public class Config {
 		return xConf.getVal("/config/urls/feedURL");
 	}
 	
+	public String GET_ACHIEVE_URL() {
+		return xConf.getVal("/config/urls/getAchieveURL");
+	}
+	
+	public String DO_ACHIEVE_URL() {
+		return xConf.getVal("/config/urls/doAchieveURL");
+	}
+	
 	public String STORM_CHECK_URL() {
 		return xConf.getVal("/config/urls/stormCheckURL");
 	}

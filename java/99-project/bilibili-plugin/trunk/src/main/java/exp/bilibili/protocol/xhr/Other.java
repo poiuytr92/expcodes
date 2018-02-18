@@ -2,6 +2,8 @@ package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +17,9 @@ import org.dom4j.Element;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.Danmu;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.bean.other.User;
+import exp.bilibili.protocol.bean.xhr.Achieve;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;
@@ -61,6 +65,12 @@ public class Other extends __XHR {
 	
 	/** 小黑屋URL */
 	private final static String BLACK_URL = Config.getInstn().BLACK_URL();
+	
+	/** 查询成就列表URL */
+	private final static String GET_ACHIEVE_URL = Config.getInstn().GET_ACHIEVE_URL();
+	
+	/** 领取成就奖励URL */
+	private final static String DO_ACHIEVE_URL = Config.getInstn().DO_ACHIEVE_URL();
 	
 	/** 私有化构造函数 */
 	protected Other() {}
@@ -154,7 +164,7 @@ public class Other extends __XHR {
 			}
 		} catch(Exception e) {
 			isOk = false;
-			log.error("查询账号安全信息异常: {}", response, e);
+			log.error("查询账号 [{}] 的安全信息异常: {}", cookie.NICKNAME(), response, e);
 		}
 		return isOk;
 	}
@@ -234,10 +244,10 @@ public class Other extends __XHR {
 				
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("获取主播ID失败: {}", reason);
+				log.warn("获取直播间 [{}] 的主播ID失败: {}", sRoomId, reason);
 			}
 		} catch(Exception e) {
-			log.error("获取主播ID异常: {}", response, e);
+			log.error("获取直播间 [{}] 的主播ID异常: {}", sRoomId, response, e);
 		}
 		return up;
 	}
@@ -277,10 +287,10 @@ public class Other extends __XHR {
 				}
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("查询房管列表失败: {}", reason);
+				log.warn("查询直播间 [{}] 的房管列表失败: {}", sRoomId, reason);
 			}
 		} catch(Exception e) {
-			log.error("查询房管列表异常: {}", response, e);
+			log.error("查询直播间 [{}] 的房管列表失败: {}", sRoomId, response, e);
 		}
 		return managers;
 	}
@@ -305,12 +315,12 @@ public class Other extends __XHR {
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {
 				isOk = true;
-				log.info("直播间 [{}]: 用户 [{}] 被关小黑屋 [{}] 小时", sRoomId, username, hour);
+				log.info("直播间 [{}]: [{}] 被关小黑屋 [{}] 小时", sRoomId, username, hour);
 			} else {
-				log.info("直播间 [{}]: 把用户 [{}] 关小黑屋失败", sRoomId, username);
+				log.warn("直播间 [{}]: 把 [{}] 关小黑屋失败", sRoomId, username);
 			}
 		} catch(Exception e) {
-			log.info("直播间 [{}]: 把用户 [{}] 关小黑屋异常", sRoomId, username, e);
+			log.error("直播间 [{}]: 把 [{}] 关小黑屋异常", sRoomId, username, e);
 		}
 		return isOk;
 	}
@@ -332,6 +342,83 @@ public class Other extends __XHR {
 		request.put(BiliCmdAtrbt.token, "");
 		request.put(BiliCmdAtrbt.csrf_token, csrf);
 		return request;
+	}
+	
+	/**
+	 * 查询可领取奖励的成就列表
+	 * @param cookie
+	 * @return 可领取奖励的成就列表
+	 */
+	public static List<Achieve> queryAchieve(BiliCookie cookie) {
+		Map<String, String> header = getHeader(cookie.toNVCookie());
+		Map<String, String> request = getRequest();
+		String response = HttpURLUtils.doGet(GET_ACHIEVE_URL, header, request);
+		
+		List<Achieve> achieves = new LinkedList<Achieve>();
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+				JSONArray info = JsonUtils.getArray(data, BiliCmdAtrbt.info);
+				for(int i = 0; i < info.size(); i++) {
+					JSONObject obj = info.getJSONObject(i);
+					boolean status = JsonUtils.getBool(obj, BiliCmdAtrbt.status, false);
+					boolean finished = JsonUtils.getBool(obj, BiliCmdAtrbt.finished, false);
+					if(status && !finished) {
+						String tid = JsonUtils.getStr(obj, BiliCmdAtrbt.tid);
+						String title = JsonUtils.getStr(obj, BiliCmdAtrbt.title);
+						achieves.add(new Achieve(tid, title));
+					}
+				}
+			} else {
+				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.info("查询 [{}] 的成就列表失败: {}", cookie.NICKNAME(), reason);
+			}
+		} catch(Exception e) {
+			log.error("查询 [{}] 的成就列表失败: {}", cookie.NICKNAME(), response, e);
+		}
+		return achieves;
+	}
+	
+	private static Map<String, String> getRequest() {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(BiliCmdAtrbt.type, "normal");	// 普通成就
+		request.put(BiliCmdAtrbt.category, "all");	// 普通成就的分类
+		request.put(BiliCmdAtrbt.status, "1");		// 0:所有成就;  1：已完成成就（包括未领取）;  -1：未完成成就
+		request.put(BiliCmdAtrbt.keywords, "");
+		request.put(BiliCmdAtrbt.page, "1");
+		request.put(BiliCmdAtrbt.pageSize, "100");	// 每页显示的成就数（B站目前最多48个成就）
+		return request;
+	}
+	
+	/**
+	 * 领取成就奖励
+	 * @param cookie
+	 * @param achieves 可领取奖励的成就列表
+	 */
+	public static void doAchieve(BiliCookie cookie, List<Achieve> achieves) {
+		Map<String, String> header = getHeader(cookie.toNVCookie());
+		Map<String, String> request = new HashMap<String, String>();
+		
+		for(Achieve achieve : achieves) {
+			request.put(BiliCmdAtrbt.id, achieve.getId());
+			String response = HttpURLUtils.doGet(DO_ACHIEVE_URL, header, request);
+			
+			try {
+				JSONObject json = JSONObject.fromObject(response);
+				int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+				if(code == 0) {
+					UIUtils.log("[", cookie.NICKNAME(), "] 已领取成就奖励 [", achieve.getName(),"]");
+					
+				} else {
+					String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+					log.info("[{}] 领取成就 [{}] 的奖励失败: {}", cookie.NICKNAME(), achieve.getName(), reason);
+				}
+			} catch(Exception e) {
+				log.error("[{}] 领取成就 [{}] 的奖励失败: {}", cookie.NICKNAME(), achieve.getName(), response, e);
+			}
+		}
 	}
 	
 }
