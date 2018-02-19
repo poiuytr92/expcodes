@@ -64,8 +64,8 @@ public class ActivityMgr {
 	/** 总活跃值每20W可兑换软件使用期1天 */
 	public final static int DAY_UNIT = 200000;
 	
-	/** 触发个人私信的活跃值单位(即每至少超过10W活跃值时发送一次私信) */
-	private final static int COST_UNIT = 100000;
+	/** 触发个人私信的活跃值单位(即每至少超过20W活跃值时发送一次私信) */
+	private final static int COST_UNIT = 200000;
 	
 	/** 打印活跃值时需要除掉的单位（100） */
 	private final static int SHOW_UNIT = 100;
@@ -356,8 +356,8 @@ public class ActivityMgr {
 		
 		if(UIUtils.isLogined() && // 登陆后才能发送私信
 				(before % COST_UNIT + cost) >= COST_UNIT) {
-			String msg = StrUtils.concat("恭喜您在 [", ROOM_ID, "] 直播间的活跃度达到 [", 
-					after, "] O(∩_∩)O 谢谢资瓷, 活跃度以后会逐步用于福利用途哦~");
+			String msg = StrUtils.concat("恭喜您在 [", Config.getInstn().ACTIVITY_ROOM_ID(), 
+					"] 直播间的活跃度达到 [", after, "] O(∩_∩)O 谢谢资瓷 ~");
 			XHRSender.sendPM(uid, msg);
 		}
 	}
