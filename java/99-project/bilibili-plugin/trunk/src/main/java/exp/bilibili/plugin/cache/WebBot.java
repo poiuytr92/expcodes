@@ -181,11 +181,11 @@ public class WebBot extends LoopThread {
 				}
 				
 				long max = -1;
-				max = NumUtils.max(XHRSender.toSign(cookie), max);
-				max = NumUtils.max(XHRSender.toBucket(cookie), max);
+				max = NumUtils.max(XHRSender.toSign(cookie), max);		// 每日签到
+				max = NumUtils.max(XHRSender.toBucket(cookie), max);	// 上上签
 				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
-					max = NumUtils.max(XHRSender.toAssn(cookie), max);
-					max = NumUtils.max(XHRSender.doMathTask(cookie), max);
+					max = NumUtils.max(XHRSender.toAssn(cookie), max);		// 友爱社
+					max = NumUtils.max(XHRSender.doMathTask(cookie), max);	// 小学数学
 				}
 				nextTaskTime = NumUtils.max(nextTaskTime, max);
 				
