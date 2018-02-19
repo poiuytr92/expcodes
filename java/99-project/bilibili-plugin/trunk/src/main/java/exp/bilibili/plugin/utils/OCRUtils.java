@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.media.OCR;
 
+import exp.libs.utils.other.StrUtils;
+
 
 /**
  * <PRE>
@@ -27,18 +29,16 @@ public class OCRUtils {
 	protected OCRUtils() {}
 
 	/**
-	 * 把JPG图像识别成文本内容
-	 * @param jpgPath
+	 * 把图像识别成文本内容
+	 * @param imgPath
 	 * @return
 	 */
-	public static String jpgToTxt(String jpgPath) {
-		String txt = "";
-		try {
-			txt = _OCR.recognizeText(jpgPath, OCR.IMG_FORMAT_JPG);
-		} catch (Exception e) {
-			log.error("识别图片文字失败: {}", jpgPath, e);
+	public static String imgToTxt(String imgPath) {
+		String txt = pngToTxt(imgPath);
+		if(StrUtils.isEmpty(txt)) {
+			txt = jpgToTxt(imgPath);
 		}
-		return revise(txt.trim());
+		return txt;
 	}
 	
 	/**
@@ -52,6 +52,21 @@ public class OCRUtils {
 			txt = _OCR.recognizeText(pngPath, OCR.IMG_FORMAT_PNG);
 		} catch (Exception e) {
 			log.error("识别图片文字失败: {}", pngPath, e);
+		}
+		return revise(txt.trim());
+	}
+	
+	/**
+	 * 把JPG图像识别成文本内容
+	 * @param jpgPath
+	 * @return
+	 */
+	public static String jpgToTxt(String jpgPath) {
+		String txt = "";
+		try {
+			txt = _OCR.recognizeText(jpgPath, OCR.IMG_FORMAT_JPG);
+		} catch (Exception e) {
+			log.error("识别图片文字失败: {}", jpgPath, e);
 		}
 		return revise(txt.trim());
 	}
