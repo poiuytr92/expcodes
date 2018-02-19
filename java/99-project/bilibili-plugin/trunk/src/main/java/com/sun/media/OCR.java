@@ -20,8 +20,6 @@ import exp.libs.utils.other.PathUtils;
  */
 public class OCR {
 	
-	public final static String TESSDATA_PREFIX_KEY = "TESSDATA_PREFIX";
-	
 	// tessdata
 	public final static String TESSDATA = "tessdata";
 		
