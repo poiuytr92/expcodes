@@ -4,8 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
+
+import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.other.PathUtils;
 
 /**
  * <PRE>
@@ -19,6 +20,14 @@ import java.util.List;
  */
 public class OCR {
 	
+	public final static String TESSDATA_PREFIX_KEY = "TESSDATA_PREFIX";
+	
+	// tessdata
+	public final static String TESSDATA = "tessdata";
+		
+	// tesseract.exe
+	public final static String TESSERACT = "tesseract";
+		
 	private final static String CHARSET = "UTF-8";
 	
 	private final static String EOL = System.getProperty("line.separator");
@@ -27,20 +36,14 @@ public class OCR {
 	
 	private final static String TMP_SUFFIX = ".txt";
 	
-	private final static String LANG_OPTION = "-l";
-	
-	private final static String ENG = "eng";
-	
-	public final static String TESSERACT = "tesseract";
-	
 	public final static String IMG_FORMAT_JPG = "jpg";
 	
 	public final static String IMG_FORMAT_PNG = "png";
 	
-	private String tesseractPath;
+	private String tesseractDir;
 
-	public OCR(String tesseractPath) {
-		this.tesseractPath = new File(tesseractPath).getAbsolutePath();
+	public OCR(String tesseractDir) {
+		this.tesseractDir = new File(tesseractDir).getAbsolutePath();
 	}
 	
 	public String recognizeText(String imgPath, String imgFormat) throws Exception {
@@ -53,6 +56,7 @@ public class OCR {
 		String rst = (status == 0 ? readFile(tmpTxtPath) : toErrDesc(status));
 		
 		tmpImg.delete();
+		FileUtils.delete(tmpTxtPath);
 		new File(tmpTxtPath).delete();
 		
 		if(status != 0) {
@@ -62,12 +66,11 @@ public class OCR {
 	}
 	
 	private int analyseImg(File imgFile, File tmpImg, File tmpTxt) throws Exception {
-		List<String> cmd = new ArrayList<String>();
-		cmd.add(tesseractPath.concat("/").concat(TESSERACT));
-		cmd.add(tmpImg.getName());
-		cmd.add(tmpTxt.getName());
-		cmd.add(LANG_OPTION);
-		cmd.add(ENG);
+		String[] cmd = {	// 组装orc命令
+				PathUtils.combine(tesseractDir, TESSERACT), 
+				tmpImg.getName(), tmpTxt.getName(), 
+				"-l", "eng"	// 图片语言
+		};
 		
 		ProcessBuilder pb = new ProcessBuilder();
 		pb.directory(imgFile.getParentFile());

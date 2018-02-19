@@ -164,18 +164,16 @@ public class DailyTasks extends __XHR {
 	 */
 	private static boolean doMathTask(Map<String, String> header, 
 			String username, MathTask task) {
-		boolean isRedone = false;
-		do {
-			int answer = 0;
-			do {
-				ThreadUtils.tSleep(SLEEP_TIME);
-				answer = calculateAnswer(header);
-			} while(answer <= 0);	// 若解析二维码图片失败, 则重新解析
-			
-			ThreadUtils.tSleep(SLEEP_TIME);
-			isRedone = execMathTask(header, username, task, answer);
-		} while(isRedone == true);	// 若计算二维码结果错误, 则重新计算
-		
+		for(int retry = 0; retry < 2; retry++) {
+			int answer = calculateAnswer(header);
+			if(answer >= 0) {
+				if(execMathTask(header, username, task, answer)) {
+					break;
+				} else {
+					ThreadUtils.tSleep(SLEEP_TIME);
+				}
+			}
+		}
 		return task.existNext();
 	}
 	
@@ -211,7 +209,7 @@ public class DailyTasks extends __XHR {
 		request.put("ts", String.valueOf(System.currentTimeMillis()));
 		
 		boolean isOk = HttpURLUtils.downloadByGet(VERCODE_PATH, MATH_CODE_URL, header, request);
-		int answer = (isOk ? VercodeUtils.calculateImage(VERCODE_PATH) : 0);
+		int answer = (isOk ? VercodeUtils.calculateImage(VERCODE_PATH) : -1);
 		return answer;
 	}
 	
@@ -232,25 +230,27 @@ public class DailyTasks extends __XHR {
 		Map<String, String> request = getRequest(task, answer);
 		String response = HttpURLUtils.doGet(MATH_EXEC_URL, header, request);
 		
-		boolean isRedone = false;
+		boolean isOk = false;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 			if(code == 0) {
+				isOk = true;
 				UIUtils.log("[", username, "] 小学数学任务进度: ", task.getCurRound(), "/", 
 						task.getMaxRound(), "轮-", task.getStep(), "分钟");
 				
 			} else if(reason.contains("验证码错误")) {
-				isRedone = true;
+				isOk = false;
 				
 			} else if(reason.contains("未绑定手机")) {
+				isOk = true;
 				task.setExistNext(false);	// 标记不存在下一轮任务
 			}
 		} catch(Exception e) {
 			log.error("[{}] 执行小学数学任务失败: {}", username, response, e);
 		}
-		return isRedone;
+		return isOk;
 	}
 	
 	/**
