@@ -35,6 +35,7 @@ public class Version {
 		// 系统托盘好卡
 		// 备份cookie zip
 		// 如何获取app的cookie
+		// win10系统无法执行小学数据任务(ORC不可用)
 	}
 	
 }
