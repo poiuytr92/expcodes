@@ -120,7 +120,8 @@ public class RedbagMgr extends LoopThread {
 	public void updateExTime() {
 		int minute = TimeUtils.getCurMinute();
 		
-		if(exTime == false && minute == 58) {
+		if(exTime == false && minute >= 58) {
+			lastRound = queryPool(CookiesMgr.MAIN(), null);	// 防止有人主动刷新过奖池
 			sleepTime = 500;
 			exTime = true;
 			UIUtils.log("红包兑奖时间已到, 正在尝试兑奖...");
@@ -179,7 +180,7 @@ public class RedbagMgr extends LoopThread {
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			if(code == 0) {
+			if(code == 0 && pool != null) {
 				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 				int keepRedbagNum = JsonUtils.getInt(data, BiliCmdAtrbt.red_bag_num, 0);
 				round = JsonUtils.getInt(data, BiliCmdAtrbt.round, 0);
