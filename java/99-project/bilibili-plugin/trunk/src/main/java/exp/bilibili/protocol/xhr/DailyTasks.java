@@ -164,7 +164,7 @@ public class DailyTasks extends __XHR {
 	 */
 	private static boolean doMathTask(Map<String, String> header, 
 			String username, MathTask task) {
-		for(int retry = 0; retry < 2; retry++) {
+		for(int retry = 0; retry < 5; retry++) {	// 最多重试5次验证码, 避免阻塞抽奖
 			int answer = calculateAnswer(header);
 			if(answer >= 0) {
 				if(execMathTask(header, username, task, answer)) {
