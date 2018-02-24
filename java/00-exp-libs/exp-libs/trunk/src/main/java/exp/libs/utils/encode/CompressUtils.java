@@ -581,24 +581,24 @@ public class CompressUtils {
 			return false;
 		}
 		
-		String headMsg = FileUtils.getHeadMsg(srcPath).toUpperCase();
+		String headMsg = FileUtils.getHexHeader(srcPath).toUpperCase();
 		String ext = FileUtils.getExtension(srcPath).toLowerCase();
 		
 		boolean isOk = false;
 		try {
-			if (FileType.ZIP.HEAD_MSG.equals(headMsg) || 
+			if (FileType.ZIP.HEX_HEADER.equals(headMsg) || 
 					FileType.ZIP.EXT.equals(ext)) {
 				isOk = unZip(srcPath, snkDir);
 				
-			} else if (FileType.TAR.HEAD_MSG.equals(headMsg) || 
+			} else if (FileType.TAR.HEX_HEADER.equals(headMsg) || 
 					FileType.TAR.EXT.equals(ext)) {
 				isOk = unTar(srcPath, snkDir);
 				
-			} else if (FileType.GZ.HEAD_MSG.equals(headMsg) || 
+			} else if (FileType.GZ.HEX_HEADER.equals(headMsg) || 
 					FileType.GZ.EXT.equals(ext)) {
 				isOk = unGZip(srcPath, snkDir);
 				
-			} else if (FileType.BZ2.HEAD_MSG.equals(headMsg) || 
+			} else if (FileType.BZ2.HEX_HEADER.equals(headMsg) || 
 					FileType.BZ2.EXT.equals(ext)) {
 				isOk = unBZ2(srcPath, snkDir);
 				

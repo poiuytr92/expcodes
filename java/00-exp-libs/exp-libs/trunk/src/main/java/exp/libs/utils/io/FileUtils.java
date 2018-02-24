@@ -9,6 +9,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.envm.FileType;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.os.OSUtils;
@@ -753,14 +754,32 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
+	 * 获取文件类型
+	 * @param filePath 文件路径
+	 * @return 文件类型
+	 */
+	public static FileType getFileType(String filePath) {
+		return FileType.toFileType(getHexHeader(filePath));
+	}
+	
+	/**
+	 * 获取文件类型
+	 * @param file 文件
+	 * @return 文件类型
+	 */
+	public static FileType getFileType(File file) {
+		return FileType.toFileType(getHexHeader(file));
+	}
+	
+	/**
 	 * 获取文件头信息
 	 * @param filePath 文件路径
 	 * @return 文件头信息
 	 */
-	public static String getHeadMsg(String filePath) {
+	public static String getHexHeader(String filePath) {
 		String head = "";
 		if(filePath != null) {
-			head = getHeadMsg(new File(filePath));
+			head = getHexHeader(new File(filePath));
 		}
 		return head;
 	}
@@ -770,7 +789,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param file 文件
 	 * @return 文件头信息
 	 */
-	public static String getHeadMsg(File file) {
+	public static String getHexHeader(File file) {
 		String head = "";
 		try {
 			FileInputStream is = new FileInputStream(file);

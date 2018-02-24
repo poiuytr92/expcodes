@@ -127,9 +127,9 @@ public class Excel {
 			return isOk;
 		}
 		
-		String headMsg = FileUtils.getHeadMsg(xlsFile);
-		if(!FileType.XLS.HEAD_MSG.equals(headMsg) && 
-				!FileType.XLSX.HEAD_MSG.equals(headMsg)) {
+		String hexHeader = FileUtils.getHexHeader(xlsFile);
+		if(!FileType.XLS.HEX_HEADER.equals(hexHeader) && 
+				!FileType.XLSX.HEX_HEADER.equals(hexHeader)) {
 			log.error("加载xls文件失败: 不支持的文件类型({})", xlsFile.getAbsoluteFile());
 			return isOk;
 		}
