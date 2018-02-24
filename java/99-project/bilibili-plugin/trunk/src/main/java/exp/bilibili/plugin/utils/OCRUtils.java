@@ -5,7 +5,8 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.media.OCR;
 
-import exp.libs.utils.other.StrUtils;
+import exp.libs.envm.FileType;
+import exp.libs.utils.io.FileUtils;
 
 
 /**
@@ -34,8 +35,12 @@ public class OCRUtils {
 	 * @return
 	 */
 	public static String imgToTxt(String imgPath) {
-		String txt = pngToTxt(imgPath);
-		if(StrUtils.isEmpty(txt)) {
+		String txt = "";
+		FileType type = FileUtils.getFileType(imgPath);
+		if(FileType.PNG == type) {
+			txt = pngToTxt(imgPath);
+			
+		} else if(FileType.JPG == type) {
 			txt = jpgToTxt(imgPath);
 		}
 		return txt;
