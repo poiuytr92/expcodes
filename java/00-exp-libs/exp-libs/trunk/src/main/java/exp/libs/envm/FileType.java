@@ -13,35 +13,40 @@ package exp.libs.envm;
  */
 public enum FileType {
 
-	UNKNOW(".unknow", ""),
+	UNKNOW("unknow", "", ""),
 	
-	RAR(".rar", "52617221"),
+	RAR("rar", ".rar", "52617221"),
 	
-	ZIP(".zip", "504B0304"),
+	ZIP("zip", ".zip", "504B0304"),
 	
-	TAR(".tar", "4D746F73"),
+	TAR("tar", ".tar", "4D746F73"),
 	
-	GZ(".gz", "1F8B0800"),
+	GZ("gz", ".gz", "1F8B0800"),
 	
-	BZ2(".bz2", "425A6839"),
+	BZ2("bz2", ".bz2", "425A6839"),
 	
-	XLS(".xls", "D0CF11E0"),
+	XLS("xls", ".xls", "D0CF11E0"),
 	
-	XLSX(".xlsx", "504B0304"),
+	XLSX("xlsx", ".xlsx", "504B0304"),
 	
-	JPG(".jpg", "FFD8FFE0"),
+	JPG("jpg", ".jpg", "FFD8FFE0"),
 	
-	PNG(".png", "89504E47"),
+	PNG("png", ".png", "89504E47"),
+	
+	BMP("bmp", ".bmp", "424D3E02"),
 	
 	;
+	
+	public String NAME;
 	
 	public String EXT;
 	
 	public String HEX_HEADER;
 	
-	private FileType(String ext, String hexHeader) {
-		this.EXT = (ext != null ? ext.trim().toLowerCase() : "");
-		this.HEX_HEADER = (hexHeader != null ? hexHeader.trim().toUpperCase() : "");
+	private FileType(String name, String ext, String hexHeader) {
+		this.NAME = name;
+		this.EXT = ext;
+		this.HEX_HEADER = hexHeader;
 	}
 	
 	public static FileType toFileType(String hexHeader) {
@@ -72,6 +77,9 @@ public enum FileType {
 			
 		} else if(PNG.HEX_HEADER.equals(hexHeader)) {
 			type = PNG;
+			
+		} else if(BMP.HEX_HEADER.equals(hexHeader)) {
+			type = BMP;
 			
 		}
 		return type;
