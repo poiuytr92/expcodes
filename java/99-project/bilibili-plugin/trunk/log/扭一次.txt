@@ -1,0 +1,44 @@
+Request URL:http://api.live.bilibili.com/api/ajaxCapsuleOpen
+Request Method:POST
+Status Code:200 OK
+Remote Address:36.248.28.7:80
+Referrer Policy:no-referrer-when-downgrade
+Response Headers
+view source
+Access-Control-Allow-Credentials:true
+Access-Control-Allow-Headers:Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type
+Access-Control-Allow-Methods:GET,POST,OPTIONS
+Access-Control-Allow-Origin:http://live.bilibili.com
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Length:252
+Content-Type:application/json; charset=utf-8
+Date:Sun, 25 Feb 2018 00:59:53 GMT
+Expires:Sun, 25 Feb 2018 00:59:52 GMT
+L:v
+Server:nginx
+X-Cache:BYPASS from cn-fjfz-cu-w-02.hdslb.com
+Request Headers
+view source
+Accept:application/json, text/plain, */*
+Accept-Encoding:gzip, deflate
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Content-Length:26
+Content-Type:application/x-www-form-urlencoded
+Cookie:sid=4ulrqv6u; fts=1515770764; LIVE_BUVID=7dc3b268cc27b62ec67eb2965e2979a7; LIVE_BUVID__ckMd5=49b649991b4b02d2; finger=edc6ecda; UM_distinctid=1617108c932402-057546f8e21b33-333f5902-144000-1617108c933455; im_notify_type_31796320=0; im_seqno_31796320=151; im_local_unread_31796320=0; buvid3=BD6070BB-14E7-4171-A657-0449AD524E1C31234infoc; pgv_pvi=9572722688; im_seqno_247056867=1; im_local_unread_247056867=0; im_seqno_284997350=5; im_local_unread_284997350=0; DedeUserID=294338133; DedeUserID__ckMd5=5423fe52987e941e; SESSDATA=3c1e04de%2C1522104480%2C089b7aa1; bili_jct=541f50a3b3dfa82ac13b7db1ef4b623b; _dfcaptcha=fe88620663dab53bd70c9778df9384f7; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519512406,1519512473,1519520150,1519520192; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519520192
+Host:api.live.bilibili.com
+Origin:http://live.bilibili.com
+Referer:http://live.bilibili.com/pages/playground/index
+User-Agent:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36
+Form Data
+view source
+view URL encoded
+type:normal
+count:1     // 扭的次数
+token:
+
+
+{"code":0,"msg":"OK","data":{"status":true,"text":["小红包 X 1"],"info":{"normal":{"coin":37,"change":0,"progress":{"now":9300,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":0,"max":5000}}},"showTitle":"","isEntity":false}}
+
+{"code":0,"msg":"OK","data":{"status":true,"text":["小红包 X 8","辣条 X 1","经验原石 X 1"],"info":{"normal":{"coin":27,"change":0,"progress":{"now":9300,"max":10000}},"colorful":{"coin":0,"change":0,"progress":{"now":0,"max":5000}}},"showTitle":"","isEntity":false}}

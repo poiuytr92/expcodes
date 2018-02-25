@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 
+import exp.libs.envm.FileType;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
 
@@ -34,19 +35,17 @@ public class OCR {
 	
 	private final static String TMP_SUFFIX = ".txt";
 	
-	public final static String IMG_FORMAT_JPG = "jpg";
-	
-	public final static String IMG_FORMAT_PNG = "png";
-	
 	private String tesseractDir;
 
 	public OCR(String tesseractDir) {
 		this.tesseractDir = new File(tesseractDir).getAbsolutePath();
 	}
 	
-	public String recognizeText(String imgPath, String imgFormat) throws Exception {
+	public String recognizeText(String imgPath) throws Exception {
 		File imgFile = new File(imgPath);
-		File tmpImg = ImageIOHelper.createImage(imgFile, imgFormat);
+		FileType type = FileUtils.getFileType(imgFile);	// 目前仅适用于png/jpg格式图片
+		
+		File tmpImg = ImageIOHelper.createImage(imgFile, type.NAME);
 		File tmpTxt = new File(imgFile.getParentFile(), TMP_FILENAME);
 		String tmpTxtPath = tmpTxt.getAbsolutePath().concat(TMP_SUFFIX);
 		
@@ -58,7 +57,7 @@ public class OCR {
 		new File(tmpTxtPath).delete();
 		
 		if(status != 0) {
-			throw new RuntimeException(rst);
+			throw new Exception(rst);
 		}
 		return rst;
 	}

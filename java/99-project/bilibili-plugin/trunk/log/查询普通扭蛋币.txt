@@ -1,0 +1,36 @@
+Request URL:http://api.live.bilibili.com/api/ajaxCapsule
+Request Method:GET
+Status Code:200 OK
+Remote Address:36.248.28.7:80
+Referrer Policy:no-referrer-when-downgrade
+Response Headers
+view source
+Access-Control-Allow-Credentials:true
+Access-Control-Allow-Headers:Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type
+Access-Control-Allow-Methods:GET,POST,OPTIONS
+Access-Control-Allow-Origin:http://live.bilibili.com
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Encoding:gzip
+Content-Type:application/json; charset=utf-8
+Date:Sun, 25 Feb 2018 00:57:13 GMT
+Expires:Sun, 25 Feb 2018 00:57:12 GMT
+L:v
+Server:nginx
+Transfer-Encoding:chunked
+X-Cache:BYPASS from cn-fjfz-cu-w-02.hdslb.com
+Request Headers
+view source
+Accept:application/json, text/plain, */*
+Accept-Encoding:gzip, deflate
+Accept-Language:zh-CN,zh;q=0.9
+Connection:keep-alive
+Cookie:sid=4ulrqv6u; fts=1515770764; LIVE_BUVID=7dc3b268cc27b62ec67eb2965e2979a7; LIVE_BUVID__ckMd5=49b649991b4b02d2; finger=edc6ecda; UM_distinctid=1617108c932402-057546f8e21b33-333f5902-144000-1617108c933455; im_notify_type_31796320=0; im_seqno_31796320=151; im_local_unread_31796320=0; buvid3=BD6070BB-14E7-4171-A657-0449AD524E1C31234infoc; pgv_pvi=9572722688; im_seqno_247056867=1; im_local_unread_247056867=0; im_seqno_284997350=5; im_local_unread_284997350=0; DedeUserID=294338133; DedeUserID__ckMd5=5423fe52987e941e; SESSDATA=3c1e04de%2C1522104480%2C089b7aa1; bili_jct=541f50a3b3dfa82ac13b7db1ef4b623b; _dfcaptcha=fe88620663dab53bd70c9778df9384f7; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519512406,1519512473,1519520150,1519520192; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1519520192
+Host:api.live.bilibili.com
+Origin:http://live.bilibili.com
+Referer:http://live.bilibili.com/pages/playground/index
+User-Agent:Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36
+
+
+{"code":0,"msg":"OK","data":{"normal":{"status":true,"coin":241,"change":0,"progress":{"now":3974,"max":10000},"rule":"使用价值累计达到10000瓜子的礼物（包含直接使用瓜子购买、道具包裹，但不包括产生梦幻扭蛋币的活动道具），可以获得1枚扭蛋币。使用扭蛋币可以参与抽奖。","gift":[{"id":"22","name":"经验曜石"},{"id":"21","name":"经验原石"},{"id":"35","name":"秋田君头衔"},{"id":"36","name":"小红包"},{"id":"30","name":"爱心便当"},{"id":"b","name":"小号小电视"},{"id":"4","name":"蓝白胖次"},{"id":"3","name":"B坷垃"},{"id":"2","name":"亿圆"},{"id":"1","name":"辣条"}],"list":[{"num":"1","gift":"经验原石","date":"2018-02-25","name":"日常脱宅"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"我不喝开水"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"我不喝开水"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"4528514"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"世纪佳宇"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"婊气女孩101"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"世纪佳宇"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"世纪佳宇"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"杉生有杏"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"淑杉压力大"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"阿骑骑"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"影儿の辣鸡欧尼酱"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"刃无法"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"小祖宗杨晓"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"小祖宗杨晓"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"林渊的菠萝宇宙无敌甜"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"影儿の辣鸡欧尼酱"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"影儿の辣鸡欧尼酱"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"影儿の辣鸡欧尼酱"},{"num":"1","gift":"经验曜石","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"南羽靑璃"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"不离青莲"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"范佳原"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"潜不了水的水军"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"晚风与鱼"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"熊の骚年"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"杉生有杏"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"爱儿的花"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"微尘呀"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"听说名字只能取这么长"}]},"colorful":{"status":true,"coin":2,"change":0,"progress":{"now":0,"max":5000},"rule":"详细规则请前往<a href=\"http:\/\/live.bilibili.com\/pages\/1703\/spring-2018.html\" target=\"_blank\">活动页面<\/a>","gift":[{"id":"n","name":"提督体验"},{"id":"k","name":"舰长体验"},{"id":"23","name":"贤者之石"},{"id":"22","name":"经验曜石"},{"id":"21","name":"经验原石"},{"id":"35","name":"秋田君头衔"},{"id":"36","name":"小红包"},{"id":"3","name":"B坷垃"},{"id":"11","name":"喵娘"},{"id":"2","name":"亿圆"}],"list":[{"num":"1","gift":"亿圆","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"100","gift":"小红包","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"1","gift":"经验曜石","date":"2018-02-25","name":"刃无法"},{"num":"1","gift":"秋田君头衔","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"50","gift":"小红包","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"100","gift":"小红包","date":"2018-02-25","name":"顾寒的穆穆女票ALex"},{"num":"2","gift":"亿圆","date":"2018-02-25","name":"不正常的游宅"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"200","gift":"小红包","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"50","gift":"小红包","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"50","gift":"小红包","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"50","gift":"小红包","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"亿圆","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"1","gift":"经验原石","date":"2018-02-25","name":"亲鱼啾啾"},{"num":"100","gift":"小红包","date":"2018-02-25","name":"亲鱼啾啾"}]}}}
+
