@@ -5,9 +5,6 @@ import org.slf4j.LoggerFactory;
 
 import com.sun.media.OCR;
 
-import exp.libs.envm.FileType;
-import exp.libs.utils.io.FileUtils;
-
 
 /**
  * <PRE>
@@ -21,7 +18,7 @@ import exp.libs.utils.io.FileUtils;
  */
 public class OCRUtils {
 	
-	private final static Logger log = LoggerFactory.getLogger(UIUtils.class);
+	private final static Logger log = LoggerFactory.getLogger(OCRUtils.class);
 	
 	private final static String OCR_DIR = "./conf/ocr/tesseract";
 	
@@ -36,42 +33,10 @@ public class OCRUtils {
 	 */
 	public static String imgToTxt(String imgPath) {
 		String txt = "";
-		FileType type = FileUtils.getFileType(imgPath);
-		if(FileType.PNG == type) {
-			txt = pngToTxt(imgPath);
-			
-		} else if(FileType.JPG == type) {
-			txt = jpgToTxt(imgPath);
-		}
-		return txt;
-	}
-	
-	/**
-	 * 把PNG图像识别成文本内容
-	 * @param pngPath
-	 * @return
-	 */
-	public static String pngToTxt(String pngPath) {
-		String txt = "";
 		try {
-			txt = _OCR.recognizeText(pngPath, OCR.IMG_FORMAT_PNG);
+			txt = _OCR.recognizeText(imgPath);
 		} catch (Exception e) {
-			log.error("识别图片文字失败: {}", pngPath, e);
-		}
-		return revise(txt.trim());
-	}
-	
-	/**
-	 * 把JPG图像识别成文本内容
-	 * @param jpgPath
-	 * @return
-	 */
-	public static String jpgToTxt(String jpgPath) {
-		String txt = "";
-		try {
-			txt = _OCR.recognizeText(jpgPath, OCR.IMG_FORMAT_JPG);
-		} catch (Exception e) {
-			log.error("识别图片文字失败: {}", jpgPath, e);
+			log.error("识别图片文字失败: {}", imgPath, e);
 		}
 		return revise(txt.trim());
 	}
