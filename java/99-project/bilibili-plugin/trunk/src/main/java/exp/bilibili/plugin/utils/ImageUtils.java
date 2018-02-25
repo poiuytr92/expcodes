@@ -27,8 +27,7 @@ public class ImageUtils {
 		File dir = new File("./log/节奏风暴验证码");
 		File[] imgs = dir.listFiles();
 		for(File img : imgs) {
-			String bmpPath = toBinary(img.getPath());
-			System.out.println(bmpPath);
+			System.out.println(toBinary(img.getPath()));
 		}
 		
 //		String token = "aa4f1a6dad33c3b16926a70e9e0eadbfb56ba91c";
