@@ -28,9 +28,6 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 class _Lottery extends __XHR {
 
-	/** 异常原因：系统繁忙 */
-	private final static String ERR_BUSY = "系统繁忙";
-	
 	/** 获取节奏风暴验证码URL */
 	private final static String STORM_CODE_URL = Config.getInstn().STORM_CODE_URL();
 	
@@ -70,7 +67,7 @@ class _Lottery extends __XHR {
 		String reason = analyse(response);
 		
 		// 重试一次: [系统繁忙哟，请再试一下吧]
-		if(reason.contains(ERR_BUSY)) {
+		if(reason.contains("系统繁忙")) {
 			ThreadUtils.tSleep(1000);
 			response = HttpURLUtils.doPost(url, header, request);
 			reason = analyse(response);
@@ -141,9 +138,9 @@ class _Lottery extends __XHR {
 				if(StrUtils.isEmpty(reason)) {
 					reason = "验证码错误:实名认证可跳过";
 					
-				// 这两种异常均可重试一次
-				} else if(reason.contains("错过了奖励") || reason.contains(ERR_BUSY)) {
-					reason = ERR_BUSY;
+				// 这两种异常实际上都是领不到的
+				} else if(reason.contains("错过了奖励") || reason.contains("已经领取")) {
+					reason = "亿圆被抢光啦";
 				}
 			}
 		} catch(Exception e) {

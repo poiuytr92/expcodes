@@ -2,11 +2,15 @@ package exp.bilibili.plugin.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import exp.libs.envm.FileType;
 
 public class ImageUtils {
 
@@ -21,18 +25,107 @@ public class ImageUtils {
 	/** 二值化图片格式 */
 	private final static String PNG = "png";
 	
+	/** 私有化构造函数 */
 	private ImageUtils() {}
 	
 	public static void main(String[] args) {
-		File dir = new File("./log/节奏风暴验证码");
-		File[] imgs = dir.listFiles();
-		for(File img : imgs) {
-			System.out.println(toBinary(img.getPath()));
+		String imgPath = "./tmp/9.jpg";
+		imgPath = toBinary(imgPath);
+		BufferedImage image = read(imgPath);
+		final int W = image.getWidth();
+		final int H = image.getHeight();
+		
+		List<Integer> fres = new ArrayList<Integer>(W);	// 每一列的黑色像素个数
+		for(int i = 0; i < W; i++) {
+			int cnt = 0;
+			for(int j = 0; j < H; j++) {
+				cnt += (image.getRGB(i, j) == RGB_BLACK ? 1 : 0);
+			}
+			fres.add(cnt);
+			System.out.print(cnt + " ");
+		}
+		System.out.println();
+		
+		int[] splitIdx = { 0, -1, -1, -1, -1, (W - 1) };	// 6条分割线的位置
+		
+		// 第一条分割线位置
+		for(int i = 0; i < W && fres.get(i) == 0; i++) {
+			splitIdx[0] = i;
 		}
 		
-//		String token = "aa4f1a6dad33c3b16926a70e9e0eadbfb56ba91c";
-//		String dataUrl = "data:image/jpeg;base64,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";
-//		HttpUtils.convertBase64Img(dataUrl, "./log/节奏风暴验证码", "img");
+		// 最后一条分割线位置
+		for(int i = W - 1; i >= 0 && fres.get(i) == 0; i--) {
+			splitIdx[5] = i;
+		}
+		
+		int avgWidth = (splitIdx[5] - splitIdx[0]) / 5;	// 单个字符的平均宽度
+		System.out.println("平均字宽：" + avgWidth);
+		
+		// 中间分割线位置
+		for(int i = splitIdx[0] + 1; i < splitIdx[5]; i++) {
+			if(fres.get(i) == 0) {
+				int diff = (i - splitIdx[0]) / avgWidth;
+				diff = (diff == 0 ? 1 : diff);
+				splitIdx[diff] = i;
+			}
+		}
+		
+		// 处理黏连字符
+		for(int i = 0; i < splitIdx.length; i++) {
+			if(splitIdx[i] < 0) {
+				int bgnIdx = splitIdx[i - 1];
+				int cnt = 1;	// 此区域黏连的字符数
+				int endIdx = bgnIdx;
+				do {
+					endIdx = splitIdx[i + (cnt++)];
+				} while(endIdx < 0);
+				
+				// 模糊均分区域内黏连字符
+				int avg = (endIdx - bgnIdx) / cnt;
+				for(int j = 0; j < cnt - 1; j++) {
+					splitIdx[i + j] = splitIdx[i + j - 1] + avg;
+				}
+			}
+			System.out.println("第" + i + "条分割线：" + splitIdx[i]);
+		}
+		
+		// 图像分割
+		for(int i = 0; i < splitIdx.length - 1; i++) {
+			int bgnIdx = splitIdx[i];
+			int endIdx = splitIdx[i + 1];
+			
+			int weight = endIdx - bgnIdx;
+			BufferedImage subImage = new BufferedImage(weight, H,
+					BufferedImage.TYPE_BYTE_BINARY);
+			
+			for(int w = 0; w < weight; w++) {
+				for(int h = 0; h < H; h++) {
+					int rgb = image.getRGB((w + bgnIdx), h);
+					subImage.setRGB(w, h, rgb);
+				}
+			}
+			write(subImage, "./tmp/9-" + i + ".jpg", FileType.PNG);
+		}
+	}
+	
+	public static BufferedImage read(String imgPath) {
+		BufferedImage image = null;
+		try {
+			image = ImageIO.read(new File(imgPath));
+		} catch (Exception e) {
+			log.error("读取图片失败: {}", imgPath, e);
+		}
+		return image;
+	}
+	
+	public static boolean write(BufferedImage image, String savePath, FileType imageType) {
+		boolean isOk = false;
+		try {
+			isOk = ImageIO.write(image, imageType.NAME, new File(savePath));
+		} catch (Exception e) {
+			log.error("保存图片失败: {}", savePath, e);
+		}
+		return isOk;
 	}
 	
 	/**
