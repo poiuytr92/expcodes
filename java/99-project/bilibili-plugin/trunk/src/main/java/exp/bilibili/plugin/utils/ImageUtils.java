@@ -16,8 +16,6 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.envm.FileType;
 import exp.libs.utils.format.JsonUtils;
@@ -56,7 +54,7 @@ public class ImageUtils {
 		for(File file : files) {
 			String imgName = file.getName().replaceFirst("\\.jp.*$", "");
 			String imgType = file.getName().replaceFirst("[^\\.]*\\.", "");
-			toDo(imgDir, imgName, imgType);
+			_toDo(imgDir, imgName, imgType);
 		}
 		
 //		CookiesMgr.getInstn().load(CookieType.VEST);
@@ -64,6 +62,53 @@ public class ImageUtils {
 //		
 //		final String imgDir = "./storm/";
 //		toDo(imgDir, "storm", "jpeg");
+	}
+	
+	public static void _toDo(String imgDir, String imgName, String imgType) {
+		String imgPath = imgDir + imgName + "." + imgType;
+		imgPath = toBinary(imgPath);
+		BufferedImage image = read(imgPath);
+		final int W = image.getWidth();
+		final int H = image.getHeight();
+		
+		List<Integer> fres = new ArrayList<Integer>(W);	// 每一列的黑色像素个数
+		for(int i = 0; i < W; i++) {
+			int cnt = 0;
+			for(int j = 0; j < H; j++) {
+				cnt += (image.getRGB(i, j) == RGB_BLACK ? 1 : 0);
+			}
+			fres.add(cnt);
+			System.out.print(cnt + " ");
+		}
+		System.out.println();
+		
+		int offset = 0;	// 有效区域偏移值
+		for(int i = 0; i < W && fres.get(i) < 2; i++) {	// <2 是扔掉干扰线
+			offset = i;
+		}
+		
+		// 最后一条分割线位置
+		int endIdx = 0;
+		for(int i = W - 1; i >= 0 && fres.get(i) < 2; i--) {	// <2 是扔掉干扰线
+			endIdx = i;
+		}
+		
+		// 5个字符的 左右边界
+		int[][] spIdxs = new int[][] {
+			{ offset, -1 }, 
+			{ -1, -1 },  
+			{ -1, -1 }, 
+			{ -1, -1 }, 
+			{ -1, endIdx }, 
+		};
+		
+		int avgWidth = (endIdx - offset) / 5;	// 单个字符的平均宽度
+		System.out.println("平均字宽：" + avgWidth);
+		
+		// 定位5组边界
+		for(int i = offset; i <= endIdx; i++) {
+			
+		}
 	}
 	
 	public static void toDo(String imgDir, String imgName, String imgType) {
