@@ -2,8 +2,8 @@ package exp.bilibili.plugin.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.plugin.bean.ldm.ScanLine;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.envm.FileType;
 import exp.libs.utils.format.JsonUtils;
@@ -54,7 +55,7 @@ public class ImageUtils {
 		for(File file : files) {
 			String imgName = file.getName().replaceFirst("\\.jp.*$", "");
 			String imgType = file.getName().replaceFirst("[^\\.]*\\.", "");
-			_toDo(imgDir, imgName, imgType);
+			toDo(imgDir, imgName, imgType);
 		}
 		
 //		CookiesMgr.getInstn().load(CookieType.VEST);
@@ -64,133 +65,172 @@ public class ImageUtils {
 //		toDo(imgDir, "storm", "jpeg");
 	}
 	
-	public static void _toDo(String imgDir, String imgName, String imgType) {
-		String imgPath = imgDir + imgName + "." + imgType;
-		imgPath = toBinary(imgPath);
-		BufferedImage image = read(imgPath);
-		final int W = image.getWidth();
-		final int H = image.getHeight();
-		
-		List<Integer> fres = new ArrayList<Integer>(W);	// 每一列的黑色像素个数
-		for(int i = 0; i < W; i++) {
-			int cnt = 0;
-			for(int j = 0; j < H; j++) {
-				cnt += (image.getRGB(i, j) == RGB_BLACK ? 1 : 0);
-			}
-			fres.add(cnt);
-			System.out.print(cnt + " ");
-		}
-		System.out.println();
-		
-		int offset = 0;	// 有效区域偏移值
-		for(int i = 0; i < W && fres.get(i) < 2; i++) {	// <2 是扔掉干扰线
-			offset = i;
-		}
-		
-		// 最后一条分割线位置
-		int endIdx = 0;
-		for(int i = W - 1; i >= 0 && fres.get(i) < 2; i--) {	// <2 是扔掉干扰线
-			endIdx = i;
-		}
-		
-		// 5个字符的 左右边界
-		int[][] spIdxs = new int[][] {
-			{ offset, -1 }, 
-			{ -1, -1 },  
-			{ -1, -1 }, 
-			{ -1, -1 }, 
-			{ -1, endIdx }, 
-		};
-		
-		int avgWidth = (endIdx - offset) / 5;	// 单个字符的平均宽度
-		System.out.println("平均字宽：" + avgWidth);
-		
-		// 定位5组边界
-		for(int i = offset; i <= endIdx; i++) {
-			
-		}
-	}
-	
 	public static void toDo(String imgDir, String imgName, String imgType) {
 		String imgPath = imgDir + imgName + "." + imgType;
 		imgPath = toBinary(imgPath);
 		BufferedImage image = read(imgPath);
-		final int W = image.getWidth();
-		final int H = image.getHeight();
-		
-		List<Integer> fres = new ArrayList<Integer>(W);	// 每一列的黑色像素个数
-		for(int i = 0; i < W; i++) {
-			int cnt = 0;
-			for(int j = 0; j < H; j++) {
-				cnt += (image.getRGB(i, j) == RGB_BLACK ? 1 : 0);
-			}
-			fres.add(cnt);
-			System.out.print(cnt + " ");
-		}
-		System.out.println();
-		
-		int[] splitIdx = { 0, -1, -1, -1, -1, (W - 1) };	// 6条分割线的位置
-		
-		// 第一条分割线位置
-		for(int i = 0; i < W && fres.get(i) < 2; i++) {	// <2 是扔掉干扰线
-			splitIdx[0] = i;
-		}
-		
-		// 最后一条分割线位置
-		for(int i = W - 1; i >= 0 && fres.get(i) < 2; i--) {	// <2 是扔掉干扰线
-			splitIdx[5] = i;
-		}
-		
-		int avgWidth = (splitIdx[5] - splitIdx[0]) / 5;	// 单个字符的平均宽度
-		System.out.println("平均字宽：" + avgWidth);
-		
-		// 中间分割线位置
-		for(int i = splitIdx[0] + 1; i < splitIdx[5]; i++) {
-			if(fres.get(i) == 0) {
-				int diff = (i - splitIdx[0]) / avgWidth;
-				diff = (diff == 0 ? 1 : diff);
-				splitIdx[diff] = i;
-			}
-		}
-		
-		// 处理黏连字符
-		for(int i = 0; i < splitIdx.length; i++) {
-			if(splitIdx[i] < 0) {
-				int bgnIdx = splitIdx[i - 1];
-				int cnt = 1;	// 此区域黏连的字符数
-				int endIdx = bgnIdx;
-				do {
-					endIdx = splitIdx[i + (cnt++)];
-				} while(endIdx < 0);
-				
-				// 模糊均分区域内黏连字符
-				int avg = (endIdx - bgnIdx) / cnt;
-				for(int j = 0; j < cnt - 1; j++) {
-					splitIdx[i + j] = splitIdx[i + j - 1] + avg;
-				}
-			}
-			System.out.println("第" + i + "条分割线：" + splitIdx[i]);
-		}
+		List<ScanLine> vScanLines = getVScanLines(image);
 		
 		// 图像分割
-		for(int i = 0; i < splitIdx.length - 1; i++) {
-			int bgnIdx = splitIdx[i];
-			int endIdx = splitIdx[i + 1];
-			
-			int weight = endIdx - bgnIdx;
-			BufferedImage subImage = new BufferedImage(weight, H,
-					BufferedImage.TYPE_BYTE_BINARY);
-			
-			for(int w = 0; w < weight; w++) {
-				for(int h = 0; h < H; h++) {
-					int rgb = image.getRGB((w + bgnIdx), h);
-					subImage.setRGB(w, h, rgb);
-				}
-			}
-			
+		List<BufferedImage> subImages = split(image, vScanLines);
+		for(int i = 0; i < subImages.size(); i++) {
+			BufferedImage subImage = subImages.get(i);
 			String subPath = imgDir + imgName + "-" + i + ".png";
 			write(subImage, subPath, FileType.PNG);
 		}
+	}
+	
+	/**
+	 * 获取验证码图像中每个字符的垂直扫描线（左右边界）
+	 * @param image
+	 * @return
+	 */
+	private static List<ScanLine> getVScanLines(BufferedImage image) {
+		int[] vPixels = scanVerticalPixels(image);	// 每一垂直扫描线上的前景元素个数
+		final int LR_MIN_PIXEL = 3;	// 最左/最右边界上最少的前景元素个数(小于这个数量认为是无效区)
+		final int CHAR_NUM = 5;		// 有效区域内的字符个数
+		
+		// 有效图像区域的最左边界
+		int left = 0;
+		while(left < vPixels.length && vPixels[left] < LR_MIN_PIXEL) {
+			left++;
+		}
+		
+		// 有效图像区域的最右边界
+		int right = vPixels.length - 1;
+		while(right > left && vPixels[right] < LR_MIN_PIXEL) {
+			right--;
+		}
+		
+		// 单个字符的平均宽度
+		final int CHAT_AVG_WIDTH = (right - left) / CHAR_NUM;
+		
+		// 通过有效图像区域内没有黏连位置，初步切割图像为多个子区域（每个区域可能含有1个以上的字符）
+		List<ScanLine> vScanLines = new LinkedList<ScanLine>();
+		for(int i = left; i < right; i++) {
+			if(vPixels[i] == 0) {	// 无
+				vScanLines.add(new ScanLine(left, i - 1));
+				
+				while(vPixels[++i] == 0);	// 跳过无黏连的空白区域
+				left = i--;		// 修正左边界
+			}
+		}
+		vScanLines.add(new ScanLine(left, right));
+		
+		// 切割每个子区域的黏连字符 FIXME 个数不好控制, 最终必须为5个
+		while (vScanLines.size() < CHAR_NUM) {
+			int maxDist = 0;
+			int maxIdx = 0;
+			for(int i = 0; i < vScanLines.size(); i++) {
+				ScanLine vScanLine = vScanLines.get(i);
+				if(maxDist < vScanLine.getDist()) {
+					maxDist = vScanLine.getDist();
+					maxIdx = i;
+				}
+			}
+			
+			ScanLine vScanLine = vScanLines.get(maxIdx);
+			int cnt = vScanLine.getDist() / CHAT_AVG_WIDTH + 1;
+			cnt = (cnt <= 1 ? 1 : cnt);
+			
+			final int BGN = vScanLine.getBgn();
+			final int END = vScanLine.getEnd();
+			final int AVG = vScanLine.getDist() / cnt;
+			vScanLine.setEnd(BGN + AVG);
+			
+			for(int i = 1; i < cnt; i++) {
+				ScanLine scanLine = new ScanLine(BGN + AVG * i, END);
+				if(i < cnt - 1) {
+					scanLine.setEnd(scanLine.getBgn() + AVG);
+				}
+				vScanLines.add(maxIdx + i, scanLine);
+			}
+		}
+		
+		System.out.println(vScanLines.size());
+		for(ScanLine vScanLine : vScanLines) {
+			System.out.println(vScanLine.getBgn() + ", " + vScanLine.getEnd());
+		}
+		return vScanLines;
+	}
+	
+	/**
+	 * 扫描垂直方向的像素点
+	 * @param image
+	 * @return 每一垂直扫描线上的前景色像素个数
+	 */
+	private static int[] scanVerticalPixels(BufferedImage image) {
+		int[] vPixel = new int[image.getWidth()];
+		for(int i = 0; i < image.getWidth(); i++) {
+			int cnt = 0;
+			for(int j = 0; j < image.getHeight(); j++) {
+				cnt += (image.getRGB(i, j) == RGB_BLACK ? 1 : 0);
+			}
+			vPixel[i] = cnt;
+			System.out.print(cnt + " ");
+		}
+		System.out.println();
+		return vPixel;
+	}
+	
+	/**
+	 * 根据扫描线切割图像
+	 * @param image
+	 * @param vScanLines 垂直扫描线
+	 * @return
+	 */
+	private static List<BufferedImage> split(BufferedImage image, List<ScanLine> vScanLines) {
+		final int HEIGHT = image.getHeight();
+		final int SUB_EDGE = 32;
+		List<BufferedImage> subImages = new LinkedList<BufferedImage>();
+		
+		for(ScanLine vScanLine : vScanLines) {
+			int width = vScanLine.getEnd() - vScanLine.getBgn();
+			BufferedImage area = new BufferedImage(width, HEIGHT,
+					BufferedImage.TYPE_BYTE_BINARY);
+			
+			// 根据原图的垂直扫描线的左右边界截图子图，并确定水平扫描线的上下边界, 得到有效图像区域
+			ScanLine hScanLine = new ScanLine(0, HEIGHT);
+			for(int h = 0; h < HEIGHT; h++) {
+				int cnt = 0;	// 当前行像素个数
+				
+				for(int w = 0; w < width; w++) {
+					int wOffset = w + vScanLine.getBgn();
+					int RGB = image.getRGB(wOffset, h);
+					area.setRGB(w, h, RGB);
+					cnt += (RGB == RGB_BLACK ? 1 : 0); 
+				}
+				
+				// 设置水平扫描线边界
+				if(cnt > 0) {
+					if(hScanLine.getBgn() <= 0) {
+						hScanLine.setBgn(h);
+					} else {
+						hScanLine.setEnd(h);
+					}
+				}
+			}
+			
+			// 把有效图像区域放入32x32的子图正中心
+			int height = hScanLine.getDist();
+			int wOffset = (SUB_EDGE - width) / 2;
+			int hOffset = (SUB_EDGE - height) / 2;
+			BufferedImage subImage = new BufferedImage(SUB_EDGE, SUB_EDGE,
+					BufferedImage.TYPE_BYTE_BINARY);
+			for(int w = 0; w < SUB_EDGE; w++) {
+				for(int h = 0; h < SUB_EDGE; h++) {
+					subImage.setRGB(w, h, RGB_WHITE);
+				}
+			}
+			for(int w = 0; w < width; w++) {
+				for(int h = hScanLine.getBgn(); h < hScanLine.getEnd(); h++) {
+					int RGB = area.getRGB(w, h);
+					subImage.setRGB((w + wOffset), (h - hScanLine.getBgn() + hOffset), RGB);
+				}
+			}
+			subImages.add(subImage);
+		}
+		return subImages;
 	}
 	
 	public static BufferedImage read(String imgPath) {

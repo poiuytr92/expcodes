@@ -232,9 +232,14 @@ public class RedbagMgr extends LoopThread {
 				continue;
 			}
 			
+			int userExchangeCount = award.getUserExchangeCount();
+			if(award.getExchangeLimit() <= 0) {
+				userExchangeCount = 99999;
+			}
+			
 			// 尽可能多地兑换（若兑换成功则更新手持的红包数量）
 			int num = keepRedbagNum / redbag.PRICE();	// 手持红包可以兑换的上限
-			num = (num > award.getUserExchangeCount() ? award.getUserExchangeCount() : num);	//  用户剩余兑换上限
+			num = (num > userExchangeCount ? userExchangeCount: num);	//  用户剩余兑换上限
 			num = (num > award.getStockNum() ? award.getStockNum() : num);	// 奖池剩余数量
 			
 			UIUtils.log("[", cookie.NICKNAME(), "] 正在试图兑换 [", num, "] 个 [", redbag.DESC(), "] ...");
