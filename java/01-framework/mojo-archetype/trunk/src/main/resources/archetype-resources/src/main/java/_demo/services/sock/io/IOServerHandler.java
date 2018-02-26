@@ -19,6 +19,12 @@ import exp.libs.warp.net.sock.io.server.IHandler;
 class IOServerHandler implements IHandler {
 
 	@Override
+	public boolean _login(ISession session) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	@Override
 	public void _handle(ISession session) {
 		// TODO Auto-generated method stub
 		session.write("conn success");

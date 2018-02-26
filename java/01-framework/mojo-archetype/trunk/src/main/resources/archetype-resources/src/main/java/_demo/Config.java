@@ -6,11 +6,11 @@ package ${package}._demo;
 import java.util.List;
 import java.util.Map;
 
-import com.kt.explibs.envm.Charset;
-import com.kt.explibs.warp.conf.xml.XConfig;
-import com.kt.explibs.warp.conf.xml.XConfigFactory;
-import com.kt.explibs.warp.db.sql.bean.DataSourceBean;
-import com.kt.explibs.warp.net.sock.bean.SocketBean;
+import exp.libs.envm.Charset;
+import exp.libs.warp.conf.xml.XConfig;
+import exp.libs.warp.conf.xml.XConfigFactory;
+import exp.libs.warp.db.sql.bean.DataSourceBean;
+import exp.libs.warp.net.sock.bean.SocketBean;
 
 /**
  * <PRE>
