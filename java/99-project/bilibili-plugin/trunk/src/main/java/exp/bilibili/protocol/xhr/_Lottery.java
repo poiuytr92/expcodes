@@ -1,6 +1,5 @@
 package exp.bilibili.protocol.xhr;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,9 +36,6 @@ class _Lottery extends __XHR {
 	/** 图片缓存目录 */
 	private final static String IMG_DIR = Config.getInstn().IMG_DIR();
 	
-	/** 节奏风暴图片验证码的图片名称 */
-	private final static String STORM_CODE_IMG_NAME = "storm";
-	
 	/** 私有化构造函数 */
 	protected _Lottery() {}
 	
@@ -63,9 +59,10 @@ class _Lottery extends __XHR {
 		} else {
 			String token = "";		// 验证码token (实名认证的账号可不填)
 			String captcha = "";	// 验证码解析值 (实名认证的账号可不填)
-			if(!cookie.isRealName()) {
-//				token = getStormCaptcha(cookie);	// FIXME
-//				captcha = analyseStormCaptcha();
+			if(cookie.isRealName() == false) {	// 未实名账号需要填写验证码
+//				String[] rst = getStormCaptcha(cookie);	// FIXME
+//				token = rst[0];
+//				captcha = analyseStormCaptcha(rst[1]);
 			}
 			request = getRequest(sRoomId, raffleId, cookie.CSRF(), token, captcha);
 		}
@@ -146,6 +143,7 @@ class _Lottery extends __XHR {
 				if(StrUtils.isEmpty(reason)) {
 					reason = "验证码错误:实名认证可跳过";
 					
+				// 这两种异常均可重试一次
 				} else if(reason.contains("错过了奖励") || reason.contains(ERR_BUSY)) {
 					reason = ERR_BUSY;
 				}
@@ -161,31 +159,30 @@ class _Lottery extends __XHR {
 	 * 获取节奏风暴验证码图片
 	 * {"code":0,"msg":"","message":"","data":{"token":"aa4f1a6dad33c3b16926a70e9e0eadbfb56ba91c","image":"data:image/jpeg;base64,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"}}
 	 * @param cookie
-	 * @return 验证码图片token
+	 * @return { 验证码token, 验证码图片保存路径 }
 	 */
-	private static String getStormCaptcha(BiliCookie cookie) {
+	private static String[] getStormCaptcha(BiliCookie cookie) {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "");
 		Map<String, String> request = _getRequest();
 		String response = HttpURLUtils.doGet(STORM_CODE_URL, header, request);
 		
-		String token = "";
+		String[] rst = { "", "" };
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {
 				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
-				token = JsonUtils.getStr(data, BiliCmdAtrbt.token);
+				String token = JsonUtils.getStr(data, BiliCmdAtrbt.token);
 				String image = JsonUtils.getStr(data, BiliCmdAtrbt.image);
+				String savePath = HttpUtils.convertBase64Img(image, IMG_DIR, "storm");
 				
-				if(!HttpUtils.convertBase64Img(image, IMG_DIR, STORM_CODE_IMG_NAME)) {
-					token = "";
-					log.warn("保存节奏风暴验证码图片失败: {}", image);
-				}
+				rst[0] = token;
+				rst[1] = savePath;
 			}
 		} catch(Exception e) {
 			log.error("获取节奏风暴验证码图片异常: {}", response, e);
 		}
-		return token;
+		return rst;
 	}
 	
 	/**
@@ -202,20 +199,12 @@ class _Lottery extends __XHR {
 	
 	/**
 	 * 解析节奏风暴验证码图片
+	 * @param imgPath 验证码图片路径
 	 * @return 验证码解析值
 	 */
-	private static String analyseStormCaptcha() {
+	private static String analyseStormCaptcha(String imgPath) {
 		String captcha = "";
 		
-		File dir = new File(IMG_DIR);
-		File[] files = dir.listFiles();
-		for(File file : files) {
-			if(file.getName().startsWith(STORM_CODE_IMG_NAME)) {
-				// TODO
-				System.out.println(file.getPath());
-				break;
-			}
-		}
 		return captcha;
 	}
 	

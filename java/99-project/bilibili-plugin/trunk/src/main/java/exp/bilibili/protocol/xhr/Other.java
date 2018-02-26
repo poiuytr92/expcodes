@@ -143,7 +143,7 @@ public class Other extends __XHR {
 	
 	/**
 	 * 查询账号安全信息(并写入cookie内)
-	 *  主要用于检测账号是否: 已绑定手机, 已实名认证
+	 *  主要用于检测账号是否: 绑定手机, 实名认证
 	 *  {"code":0,"data":{"safe_question":0,"hide_email":"272****@qq.com","hide_tel_phone":"139*****412","safe_rank":{"score":80,"level":2,"bind_tel":1,"bind_email":1,"email_veri":1,"tel_veri":1,"real_name":1,"pwd_level":3},"aso_account_sns":{"sina_bind":2,"qq_bind":2},"skipVerify":false}}
 	 * @param cookie
 	 * @return

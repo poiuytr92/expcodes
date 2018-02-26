@@ -111,7 +111,7 @@ public class LotteryEnergy extends _Lottery {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功(高能礼物)", cookie.NICKNAME(), roomId);
 				cnt++;
 				
-			} else if(!reason.contains("你已加入抽奖")) {
+			} else if(!reason.contains("已加入抽奖")) {
 				log.info("[{}] 参与直播间 [{}] 抽奖失败(高能礼物)", cookie.NICKNAME(), roomId);
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");

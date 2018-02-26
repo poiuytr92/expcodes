@@ -214,11 +214,11 @@ public class LotteryStorm extends _Lottery {
 			}
 			
 			String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
-			if(StrUtils.isEmpty(reason)) {
+			if(StrUtils.isEmpty(reason) || reason.contains("已经领取")) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功(节奏风暴)", cookie.NICKNAME(), roomId);
 				cnt++;
 				
-			} else if(!reason.contains("已经领取")) {
+			} else {
 				log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"], 账号 [", cookie.NICKNAME(), "]");
