@@ -167,6 +167,14 @@ public class Config {
 		return xConf.getVal("/config/urls/feedURL");
 	}
 	
+	public String GET_CAPSULE_URL() {
+		return xConf.getVal("/config/urls/getCapsuleURL");
+	}
+	
+	public String OPEN_CAPSULE_URL() {
+		return xConf.getVal("/config/urls/openCapsuleURL");
+	}
+	
 	public String GET_ACHIEVE_URL() {
 		return xConf.getVal("/config/urls/getAchieveURL");
 	}
@@ -177,6 +185,10 @@ public class Config {
 	
 	public String STORM_CHECK_URL() {
 		return xConf.getVal("/config/urls/stormCheckURL");
+	}
+	
+	public String STORM_CODE_URL() {
+		return xConf.getVal("/config/urls/stormCodeURL");
 	}
 	
 	public String STORM_JOIN_URL() {

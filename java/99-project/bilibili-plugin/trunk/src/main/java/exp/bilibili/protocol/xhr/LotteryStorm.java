@@ -222,6 +222,11 @@ public class LotteryStorm extends _Lottery {
 				log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"], 账号 [", cookie.NICKNAME(), "]");
+				
+				// 节奏风暴名额已抽完, 其他账号无需参与
+				if(reason.contains("不存在")) {
+					break;
+				}
 			}
 		}
 		

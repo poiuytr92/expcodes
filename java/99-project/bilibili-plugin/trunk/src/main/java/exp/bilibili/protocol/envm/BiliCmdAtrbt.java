@@ -16,7 +16,7 @@ package exp.bilibili.protocol.envm;
  */
 public class BiliCmdAtrbt {
 
-	public final static String _ = "_";
+	public final static String underline = "_";
 	
 	public final static String cmd = "cmd";
 	
@@ -37,6 +37,10 @@ public class BiliCmdAtrbt {
 	public final static String durl = "durl";
 	
 	public final static String data = "data";
+	
+	public final static String normal = "normal";
+	
+	public final static String text = "text";
 	
 	public final static String list = "list";
 	
@@ -163,6 +167,8 @@ public class BiliCmdAtrbt {
 	public final static String bind_tel = "bind_tel";
 	
 	public final static String bind_email = "bind_email";
+	
+	public final static String real_name = "real_name";
 	
 	public final static String color = "color";
 	
@@ -297,5 +303,15 @@ public class BiliCmdAtrbt {
 	public final static String title = "title";
 	
 	public final static String finished = "finished";
+	
+	public final static String coin = "coin";
+	
+	public final static String count = "count";
+	
+	public final static String width = "width";
+	
+	public final static String height = "height";
+	
+	public final static String image = "image";
 	
 }

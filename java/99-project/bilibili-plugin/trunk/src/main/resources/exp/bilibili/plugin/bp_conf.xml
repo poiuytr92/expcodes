@@ -31,11 +31,14 @@
         <roomURL caption="房间信息URL"><![CDATA[http://api.live.bilibili.com/live_user/v1/UserInfo/get_anchor_in_room]]></roomURL>
         <playerURL caption="账号在特定房间内的信息URL"><![CDATA[https://api.live.bilibili.com/api/player]]></playerURL>
         <manageURL caption="房管列表URL"><![CDATA[http://api.live.bilibili.com/live_user/v1/RoomAdmin/get_by_anchor]]></manageURL>
-        <bagURL caption="包裹列表URL"><![CDATA[http://api.live.bilibili.com/gift/v2/gift/bag_list]]></bagURL>
+        <bagURL caption="查包裹礼物URL"><![CDATA[http://api.live.bilibili.com/gift/v2/gift/bag_list]]></bagURL>
         <feedURL caption="投喂URL"><![CDATA[http://api.live.bilibili.com/gift/v2/live/bag_send]]></feedURL>
+        <getCapsuleURL caption="查扭蛋币URL">http://api.live.bilibili.com/api/ajaxCapsule</getCapsuleURL>
+        <openCapsuleURL caption="打开扭蛋URL">http://api.live.bilibili.com/api/ajaxCapsuleOpen</openCapsuleURL>
         <getAchieveURL caption="查询成就列表URL"><![CDATA[http://api.live.bilibili.com/i/api/ajaxGetAchieve]]></getAchieveURL>
         <doAchieveURL caption="领取成就奖励URL"><![CDATA[http://api.live.bilibili.com/i/ajaxGetTaskAward]]></doAchieveURL>
         <stormCheckURL caption="节奏风暴检测URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/check]]></stormCheckURL>
+        <stormCodeURL caption="节奏风暴验证码URL"><![CDATA[http://api.live.bilibili.com/captcha/v1/Captcha/create]]></stormCodeURL>
         <stormJoinURL caption="节奏风暴抽奖URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/join]]></stormJoinURL>
         <egCheckURL caption="高能礼物取号URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/check]]></egCheckURL>
         <egJoinURL caption="高能礼物抽奖URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/join]]></egJoinURL>

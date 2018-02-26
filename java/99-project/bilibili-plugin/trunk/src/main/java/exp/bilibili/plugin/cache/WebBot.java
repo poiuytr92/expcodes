@@ -21,8 +21,9 @@ import exp.libs.warp.thread.LoopThread;
  * 	主要功能:
  *   1.全平台礼物抽奖管理器（小电视/高能礼物/节奏风暴）
  *   2.日常任务(签到/友爱社/小学数学)
- *   3.自动投喂
- *   4.打印版权信息
+ *   3.自动扭蛋、投喂
+ *   4.自动领取成就奖励
+ *   5.打印版权信息
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -223,6 +224,7 @@ public class WebBot extends LoopThread {
 		if(loopCnt++ >= EVENT_LIMIT) {
 			loopCnt = 0;
 			
+			toCapsule();	// 自动扭蛋
 			toAutoFeed();	// 自动投喂
 			takeFinishAchieve();	// 领取成就奖励
 			
@@ -233,7 +235,23 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 自动投喂
+	 * 自动扭蛋机（仅小号）
+	 */
+	private void toCapsule() {
+		if(UIUtils.isAutoFeed() == false) {
+			return;
+		}
+		
+		Set<BiliCookie> cookies = CookiesMgr.MINIs();
+		for(BiliCookie cookie : cookies) {
+			if(cookie.isAutoFeed()) {
+				XHRSender.toCapsule(cookie);
+			}
+		}
+	}
+	
+	/**
+	 * 自动投喂（仅小号）
 	 */
 	private void toAutoFeed() {
 		if(UIUtils.isAutoFeed() == false) {

@@ -41,6 +41,9 @@ public class BiliCookie extends HttpCookie {
 	/** 是否已绑定手机 */
 	private boolean isBindTel;
 	
+	/** 是否已实名认证 */
+	private boolean isRealName;
+	
 	/** 是否为房管 */
 	private boolean isRoomAdmin;
 	
@@ -69,6 +72,7 @@ public class BiliCookie extends HttpCookie {
 		this.uid = (StrUtils.isEmpty(uid) ? "" : uid);
 		this.nickName = (StrUtils.isEmpty(nickName) ? "" : nickName);
 		this.isBindTel = false;
+		this.isRealName = false;
 		this.isRoomAdmin = false;
 		this.isVip = false;
 		this.isGuard = false;
@@ -127,6 +131,14 @@ public class BiliCookie extends HttpCookie {
 	
 	public void setBindTel(boolean isBindTel) {
 		this.isBindTel = isBindTel;
+	}
+
+	public boolean isRealName() {
+		return isRealName;
+	}
+
+	public void setRealName(boolean isRealName) {
+		this.isRealName = isRealName;
 	}
 
 	public boolean isRoomAdmin() {

@@ -11,7 +11,7 @@ import exp.bilibili.protocol.bean.other.User;
 import exp.bilibili.protocol.bean.xhr.Achieve;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
-import exp.bilibili.protocol.xhr.Feed;
+import exp.bilibili.protocol.xhr.Gifts;
 import exp.bilibili.protocol.xhr.Login;
 import exp.bilibili.protocol.xhr.LotteryEnergy;
 import exp.bilibili.protocol.xhr.LotteryStorm;
@@ -209,7 +209,25 @@ public class XHRSender {
 	 * @param roomId 房间号
 	 */
 	public static void toFeed(BiliCookie cookie, int roomId) {
-		Feed.toFeed(cookie, roomId);
+		Gifts.toFeed(cookie, roomId);
+	}
+	
+	/**
+	 * 扭蛋
+	 * @param cookie
+	 */
+	public static void toCapsule(BiliCookie cookie) {
+		final int MAX_COIN = 100; // 每次打开扭蛋上限
+		int coin = Gifts.queryCapsuleCoin(cookie);
+		
+		// 满100个扭蛋币才执行, 可提高奖品质量
+		while(coin >= MAX_COIN) {
+			boolean isOk = Gifts.openCapsuleCoin(cookie, MAX_COIN);
+			if(isOk == false) {
+				break;
+			}
+			coin -= MAX_COIN;
+		}
 	}
 	
 	/**

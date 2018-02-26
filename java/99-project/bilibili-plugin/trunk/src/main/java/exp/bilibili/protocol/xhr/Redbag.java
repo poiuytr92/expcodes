@@ -47,7 +47,7 @@ public class Redbag extends __XHR {
 		int roomId = 0;
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "pages/1703/spring-2018.html");
 		Map<String, String> request = new HashMap<String, String>();
-		request.put(BiliCmdAtrbt._, String.valueOf(System.currentTimeMillis()));
+		request.put(BiliCmdAtrbt.underline, String.valueOf(System.currentTimeMillis()));
 		String response = HttpURLUtils.doGet(GET_BUCKET_URL, header, request);
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -97,7 +97,7 @@ public class Redbag extends __XHR {
 	public static String queryRedbagPool(BiliCookie cookie) {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "pages/1703/spring-2018.html");
 		Map<String, String> request = new HashMap<String, String>();
-		request.put(BiliCmdAtrbt._, String.valueOf(System.currentTimeMillis()));
+		request.put(BiliCmdAtrbt.underline, String.valueOf(System.currentTimeMillis()));
 		return HttpURLUtils.doGet(GET_REDBAG_URL, header, request);
 	}
 	
