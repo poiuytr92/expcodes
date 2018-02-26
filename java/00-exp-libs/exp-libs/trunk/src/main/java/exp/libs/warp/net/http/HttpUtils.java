@@ -498,29 +498,28 @@ public class HttpUtils {
 	 * @param dataUrl 图片数据编码地址，格式形如   data:image/png;base64,base64编码的图片数据
 	 * @param saveDir 希望保存的图片目录
 	 * @param imgName 希望保存的图片名称（不含后缀，后缀通过编码自动解析）
-	 * @return true:保存成功; false:保存失败
+	 * @return 图片保存路径（若保存失败则返回空字符串）
 	 */
-	public static boolean convertBase64Img(String dataUrl, 
+	public static String convertBase64Img(String dataUrl, 
 			String saveDir, String imgName) {
-		boolean isOk = false;
+		String savePath = "";
 		Pattern ptn = Pattern.compile(RGX_BASE64_IMG);  
         Matcher mth = ptn.matcher(dataUrl);      
         if(mth.find()) {
         	String ext = mth.group(1);	// 图片后缀
         	String base64Data = mth.group(2);	// 图片数据
-            String savePath = StrUtils.concat(saveDir, "/", imgName, ".", ext);
+            savePath = StrUtils.concat(saveDir, "/", imgName, ".", ext);
             
             try {
             	BASE64Decoder decoder = new BASE64Decoder();
             	byte[] bytes = decoder.decodeBuffer(base64Data);  
                 FileUtils.writeByteArrayToFile(new File(savePath), bytes, false);
-                isOk = true;
                 
             } catch (Exception e) {  
                 log.error("转换Base64编码图片数据到本地文件失败: [{}]", savePath, e);
             }
         }
-        return isOk;  
+        return savePath;  
     }
 	
 }
