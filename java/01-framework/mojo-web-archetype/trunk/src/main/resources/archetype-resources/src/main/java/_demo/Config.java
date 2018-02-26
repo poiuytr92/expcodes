@@ -14,7 +14,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 
 /**
  * <PRE>
- * XML配置加载器 [com.kt.explibs.warp.conf.xml.XConfig] 使用参考.
+ * XML配置加载器 [exp.libs.warp.conf.xml.XConfig] 使用参考.
  * </PRE>
  * <B>项    目：</B> xxxxxxx
  * <B>技术支持：</B> xxxxxxx
