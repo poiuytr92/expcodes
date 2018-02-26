@@ -31,49 +31,14 @@ public class OCRUtils {
 	 * @param imgPath
 	 * @return
 	 */
-	public static String imgToTxt(String imgPath) {
+	protected static String imgToTxt(String imgPath) {
 		String txt = "";
 		try {
 			txt = _OCR.recognizeText(imgPath);
 		} catch (Exception e) {
 			log.error("识别图片文字失败: {}", imgPath, e);
 		}
-		return revise(txt.trim());
-	}
-	
-	/**
-	 * 目前验证码图片只有 a+b 与 a-b 两种形式, 由于字体问题，某些数字会被固定识别错误, 
-	 *  此方法用于修正常见的识别错误的数字/符号, 提高识别率
-	 * @param txt
-	 * @return
-	 */
-	private static String revise(String txt) {
-		String revise = txt;
-		
-		revise = revise.replace("[1", "0");
-		revise = revise.replace("[|", "0");
-		
-		revise = revise.replace("'I", "7");
-		
-		revise = revise.replace("l•", "4");
-		revise = revise.replace("l»", "4");
-		revise = revise.replace("b", "4");
-		revise = revise.replace("h", "4");
-		
-		revise = revise.replace("i", "1");
-		revise = revise.replace("I", "1");
-		revise = revise.replace("]", "1");
-		revise = revise.replace("|", "1");
-		
-		revise = revise.replace("E", "6");
-		
-		revise = revise.replace("B", "8");
-		
-		revise = revise.replace("H", "9");
-		revise = revise.replace("Q", "9");
-		
-		revise = revise.replace("·", "-");
-		return revise;
+		return txt.trim();
 	}
 	
 }

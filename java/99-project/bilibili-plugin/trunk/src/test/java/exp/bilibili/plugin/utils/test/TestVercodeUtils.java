@@ -2,7 +2,6 @@ package exp.bilibili.plugin.utils.test;
 
 import java.io.File;
 
-import exp.bilibili.plugin.utils.OCRUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
 
 public class TestVercodeUtils {
@@ -11,9 +10,8 @@ public class TestVercodeUtils {
 		File dir = new File("./src/test/resources/exp/bilibili/plugin/utils/test/img");
 		File[] imgs = dir.listFiles();
 		for(File img : imgs) {
-			String expression = OCRUtils.imgToTxt(img.getPath());
-			int rst = VercodeUtils.calculate(expression);
-			System.out.println(img.getName() + " : " + expression + "=" + rst);
+			int rst = VercodeUtils.calculateExpressionImage(img.getPath());
+			System.out.println(img.getName() + " : " + rst);
 		}
 	}
 	

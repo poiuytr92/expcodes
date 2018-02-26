@@ -20,7 +20,6 @@ import javax.imageio.ImageWriter;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.stream.ImageInputStream;
 import javax.imageio.stream.ImageOutputStream;
-import javax.swing.JOptionPane;
 
 import com.sun.media.imageio.plugins.tiff.TIFFImageWriteParam;
 
@@ -119,9 +118,7 @@ public class ImageIOHelper {
 			ImageReader reader = readers.next();
 
 			if (reader == null) {
-				JOptionPane
-						.showConfirmDialog(null,
-								"Need to install JAI Image I/O package.\nhttps://jai-imageio.dev.java.net");
+				System.err.println("Need to install JAI Image I/O package.\nhttps://jai-imageio.dev.java.net");
 				return null;
 			}
 

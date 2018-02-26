@@ -209,7 +209,7 @@ public class DailyTasks extends __XHR {
 		request.put("ts", String.valueOf(System.currentTimeMillis()));
 		
 		boolean isOk = HttpURLUtils.downloadByGet(VERCODE_PATH, MATH_CODE_URL, header, request);
-		int answer = (isOk ? VercodeUtils.calculateImage(VERCODE_PATH) : -1);
+		int answer = (isOk ? VercodeUtils.calculateExpressionImage(VERCODE_PATH) : -1);
 		return answer;
 	}
 	

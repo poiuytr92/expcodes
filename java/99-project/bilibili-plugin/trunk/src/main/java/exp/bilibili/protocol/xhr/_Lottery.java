@@ -8,6 +8,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
+import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -57,14 +58,11 @@ class _Lottery extends __XHR {
 			request = getRequest(sRoomId, raffleId);
 			
 		} else {
-			String token = "";		// 验证码token (实名认证的账号可不填)
-			String captcha = "";	// 验证码解析值 (实名认证的账号可不填)
-			if(cookie.isRealName() == false) {	// 未实名账号需要填写验证码
-//				String[] rst = getStormCaptcha(cookie);	// FIXME
-//				token = rst[0];
-//				captcha = analyseStormCaptcha(rst[1]);
-			}
-			request = getRequest(sRoomId, raffleId, cookie.CSRF(), token, captcha);
+			
+			// 节奏风暴验证码 (token + value), 实名认证后无需填
+			String[] captcha = cookie.isRealName() ? 
+					new String[] { "", "" } : getStormCaptcha(cookie);	
+			request = getRequest(sRoomId, raffleId, cookie.CSRF(), captcha[0], captcha[1]);
 		}
 		
 		// 加入抽奖
@@ -108,17 +106,17 @@ class _Lottery extends __XHR {
 	 * @param roomId
 	 * @param raffleId
 	 * @param csrf
-	 * @param token 验证码token (实名认证的账号可不填)
-	 * @param captcha 验证码值 (实名认证的账号可不填)
+	 * @param captchaToken 验证码token (实名认证的账号可不填)
+	 * @param captchaValue 验证码值 (实名认证的账号可不填)
 	 * @return
 	 */
 	private static Map<String, String> getRequest(String roomId, String raffleId, 
-			String csrf, String token, String captcha) {
+			String csrf, String captchaToken, String captchaValue) {
 		Map<String, String> request = getRequest(roomId);
 		request.put(BiliCmdAtrbt.id, raffleId);		// 礼物编号
 		request.put(BiliCmdAtrbt.color, ChatColor.WHITE.RGB());
-		request.put(BiliCmdAtrbt.captcha_token, token);
-		request.put(BiliCmdAtrbt.captcha_phrase, captcha);
+		request.put(BiliCmdAtrbt.captcha_token, captchaToken);
+		request.put(BiliCmdAtrbt.captcha_phrase, captchaValue);
 		request.put(BiliCmdAtrbt.token, "");
 		request.put(BiliCmdAtrbt.csrf_token, csrf);
 		return request;
@@ -156,10 +154,10 @@ class _Lottery extends __XHR {
 	}
 	
 	/**
-	 * 获取节奏风暴验证码图片
+	 * 解析节奏风暴验证码图片
 	 * {"code":0,"msg":"","message":"","data":{"token":"aa4f1a6dad33c3b16926a70e9e0eadbfb56ba91c","image":"data:image/jpeg;base64,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"}}
 	 * @param cookie
-	 * @return { 验证码token, 验证码图片保存路径 }
+	 * @return { 验证码token, 验证码图片的解析值 }
 	 */
 	private static String[] getStormCaptcha(BiliCookie cookie) {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "");
@@ -177,7 +175,7 @@ class _Lottery extends __XHR {
 				String savePath = HttpUtils.convertBase64Img(image, IMG_DIR, "storm");
 				
 				rst[0] = token;
-				rst[1] = savePath;
+				rst[1] = VercodeUtils.recognizeStormImage(savePath);
 			}
 		} catch(Exception e) {
 			log.error("获取节奏风暴验证码图片异常: {}", response, e);
@@ -195,17 +193,6 @@ class _Lottery extends __XHR {
 		request.put(BiliCmdAtrbt.width, "112");
 		request.put(BiliCmdAtrbt.height, "32");
 		return request;
-	}
-	
-	/**
-	 * 解析节奏风暴验证码图片
-	 * @param imgPath 验证码图片路径
-	 * @return 验证码解析值
-	 */
-	private static String analyseStormCaptcha(String imgPath) {
-		String captcha = "";
-		
-		return captcha;
 	}
 	
 }
