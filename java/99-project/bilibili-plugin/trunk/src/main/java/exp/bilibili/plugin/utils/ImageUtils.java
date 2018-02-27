@@ -2,39 +2,31 @@ package exp.bilibili.plugin.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.imageio.ImageIO;
-
-import net.sf.json.JSONObject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.bean.ldm.ScanLine;
-import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.envm.FileType;
-import exp.libs.utils.format.JsonUtils;
-import exp.libs.warp.net.http.HttpURLUtils;
-import exp.libs.warp.net.http.HttpUtils;
 
+/**
+ * <PRE>
+ * 图像处理工具
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class ImageUtils {
 
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(ImageUtils.class);
-	
-	/** 直播服务器主机 */
-	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
-	
-	/** 直播首页 */
-	private final static String LIVE_HOME = Config.getInstn().LIVE_HOME();
-	
-	/** 获取节奏风暴验证码URL */
-	private final static String STORM_CODE_URL = Config.getInstn().STORM_CODE_URL();
 	
 	/** javax.imageio.ImageIO 的黑色RGB(应该是反码, 理论值应为0) */
 	private final static int RGB_BLACK = -16777216;
@@ -42,197 +34,14 @@ public class ImageUtils {
 	/** javax.imageio.ImageIO 的白色RGB值(应该是反码, 理论值应为16777215) */
 	private final static int RGB_WHITE = -1;
 	
-	/** 二值化图片格式 */
-	private final static String PNG = "png";
-	
 	/** 私有化构造函数 */
 	private ImageUtils() {}
 	
-	public static void main(String[] args) {
-		final String imgDir = "./tmp/";
-		File dir = new File(imgDir);
-		File[] files = dir.listFiles();
-		for(File file : files) {
-			String imgName = file.getName().replaceFirst("\\.jp.*$", "");
-			String imgType = file.getName().replaceFirst("[^\\.]*\\.", "");
-			toDo(imgDir, imgName, imgType);
-		}
-		
-//		CookiesMgr.getInstn().load(CookieType.VEST);
-////		getStormCaptcha(CookiesMgr.VEST());
-//		
-//		final String imgDir = "./storm/";
-//		toDo(imgDir, "storm", "jpeg");
-	}
-	
-	public static void toDo(String imgDir, String imgName, String imgType) {
-		String imgPath = imgDir + imgName + "." + imgType;
-		imgPath = toBinary(imgPath);
-		BufferedImage image = read(imgPath);
-		List<ScanLine> vScanLines = getVScanLines(image);
-		
-		// 图像分割
-		List<BufferedImage> subImages = split(image, vScanLines);
-		for(int i = 0; i < subImages.size(); i++) {
-			BufferedImage subImage = subImages.get(i);
-			String subPath = imgDir + imgName + "-" + i + ".png";
-			write(subImage, subPath, FileType.PNG);
-		}
-	}
-	
 	/**
-	 * 获取验证码图像中每个字符的垂直扫描线（左右边界）
-	 * @param image
+	 * 读取图像
+	 * @param imgPath
 	 * @return
 	 */
-	private static List<ScanLine> getVScanLines(BufferedImage image) {
-		int[] vPixels = scanVerticalPixels(image);	// 每一垂直扫描线上的前景元素个数
-		final int LR_MIN_PIXEL = 3;	// 最左/最右边界上最少的前景元素个数(小于这个数量认为是无效区)
-		final int CHAR_NUM = 5;		// 有效区域内的字符个数
-		
-		// 有效图像区域的最左边界
-		int left = 0;
-		while(left < vPixels.length && vPixels[left] < LR_MIN_PIXEL) {
-			left++;
-		}
-		
-		// 有效图像区域的最右边界
-		int right = vPixels.length - 1;
-		while(right > left && vPixels[right] < LR_MIN_PIXEL) {
-			right--;
-		}
-		
-		// 单个字符的平均宽度
-		final int CHAT_AVG_WIDTH = (right - left) / CHAR_NUM;
-		
-		// 通过有效图像区域内没有黏连位置，初步切割图像为多个子区域（每个区域可能含有1个以上的字符）
-		List<ScanLine> vScanLines = new LinkedList<ScanLine>();
-		for(int i = left; i < right; i++) {
-			if(vPixels[i] == 0) {	// 无
-				vScanLines.add(new ScanLine(left, i - 1));
-				
-				while(vPixels[++i] == 0);	// 跳过无黏连的空白区域
-				left = i--;		// 修正左边界
-			}
-		}
-		vScanLines.add(new ScanLine(left, right));
-		
-		// 切割每个子区域的黏连字符 FIXME 个数不好控制, 最终必须为5个
-		while (vScanLines.size() < CHAR_NUM) {
-			int maxDist = 0;
-			int maxIdx = 0;
-			for(int i = 0; i < vScanLines.size(); i++) {
-				ScanLine vScanLine = vScanLines.get(i);
-				if(maxDist < vScanLine.getDist()) {
-					maxDist = vScanLine.getDist();
-					maxIdx = i;
-				}
-			}
-			
-			ScanLine vScanLine = vScanLines.get(maxIdx);
-			int cnt = vScanLine.getDist() / CHAT_AVG_WIDTH + 1;
-			cnt = (cnt <= 1 ? 1 : cnt);
-			
-			final int BGN = vScanLine.getBgn();
-			final int END = vScanLine.getEnd();
-			final int AVG = vScanLine.getDist() / cnt;
-			vScanLine.setEnd(BGN + AVG);
-			
-			for(int i = 1; i < cnt; i++) {
-				ScanLine scanLine = new ScanLine(BGN + AVG * i, END);
-				if(i < cnt - 1) {
-					scanLine.setEnd(scanLine.getBgn() + AVG);
-				}
-				vScanLines.add(maxIdx + i, scanLine);
-			}
-		}
-		
-		System.out.println(vScanLines.size());
-		for(ScanLine vScanLine : vScanLines) {
-			System.out.println(vScanLine.getBgn() + ", " + vScanLine.getEnd());
-		}
-		return vScanLines;
-	}
-	
-	/**
-	 * 扫描垂直方向的像素点
-	 * @param image
-	 * @return 每一垂直扫描线上的前景色像素个数
-	 */
-	private static int[] scanVerticalPixels(BufferedImage image) {
-		int[] vPixel = new int[image.getWidth()];
-		for(int i = 0; i < image.getWidth(); i++) {
-			int cnt = 0;
-			for(int j = 0; j < image.getHeight(); j++) {
-				cnt += (image.getRGB(i, j) == RGB_BLACK ? 1 : 0);
-			}
-			vPixel[i] = cnt;
-			System.out.print(cnt + " ");
-		}
-		System.out.println();
-		return vPixel;
-	}
-	
-	/**
-	 * 根据扫描线切割图像
-	 * @param image
-	 * @param vScanLines 垂直扫描线
-	 * @return
-	 */
-	private static List<BufferedImage> split(BufferedImage image, List<ScanLine> vScanLines) {
-		final int HEIGHT = image.getHeight();
-		final int SUB_EDGE = 32;
-		List<BufferedImage> subImages = new LinkedList<BufferedImage>();
-		
-		for(ScanLine vScanLine : vScanLines) {
-			int width = vScanLine.getEnd() - vScanLine.getBgn();
-			BufferedImage area = new BufferedImage(width, HEIGHT,
-					BufferedImage.TYPE_BYTE_BINARY);
-			
-			// 根据原图的垂直扫描线的左右边界截图子图，并确定水平扫描线的上下边界, 得到有效图像区域
-			ScanLine hScanLine = new ScanLine(0, HEIGHT);
-			for(int h = 0; h < HEIGHT; h++) {
-				int cnt = 0;	// 当前行像素个数
-				
-				for(int w = 0; w < width; w++) {
-					int wOffset = w + vScanLine.getBgn();
-					int RGB = image.getRGB(wOffset, h);
-					area.setRGB(w, h, RGB);
-					cnt += (RGB == RGB_BLACK ? 1 : 0); 
-				}
-				
-				// 设置水平扫描线边界
-				if(cnt > 0) {
-					if(hScanLine.getBgn() <= 0) {
-						hScanLine.setBgn(h);
-					} else {
-						hScanLine.setEnd(h);
-					}
-				}
-			}
-			
-			// 把有效图像区域放入32x32的子图正中心
-			int height = hScanLine.getDist();
-			int wOffset = (SUB_EDGE - width) / 2;
-			int hOffset = (SUB_EDGE - height) / 2;
-			BufferedImage subImage = new BufferedImage(SUB_EDGE, SUB_EDGE,
-					BufferedImage.TYPE_BYTE_BINARY);
-			for(int w = 0; w < SUB_EDGE; w++) {
-				for(int h = 0; h < SUB_EDGE; h++) {
-					subImage.setRGB(w, h, RGB_WHITE);
-				}
-			}
-			for(int w = 0; w < width; w++) {
-				for(int h = hScanLine.getBgn(); h < hScanLine.getEnd(); h++) {
-					int RGB = area.getRGB(w, h);
-					subImage.setRGB((w + wOffset), (h - hScanLine.getBgn() + hOffset), RGB);
-				}
-			}
-			subImages.add(subImage);
-		}
-		return subImages;
-	}
-	
 	public static BufferedImage read(String imgPath) {
 		BufferedImage image = null;
 		try {
@@ -243,6 +52,13 @@ public class ImageUtils {
 		return image;
 	}
 	
+	/**
+	 * 保存图像
+	 * @param image 
+	 * @param savePath
+	 * @param imageType
+	 * @return
+	 */
 	public static boolean write(BufferedImage image, String savePath, FileType imageType) {
 		boolean isOk = false;
 		try {
@@ -254,23 +70,23 @@ public class ImageUtils {
 	}
 	
 	/**
-	 * 图片二值化
-	 * @param imgPath 原图路径
-	 * @return 二值化图片路径(若失败返回原图路径)
+	 * 图像二值化
+	 * @param image 原图
+	 * @return 二值化图像
 	 */
-	public static String toBinary(String imgPath) {
-		String savePath = imgPath;
+	public static BufferedImage toBinary(BufferedImage image) {
+		image = (image == null ? 
+				new BufferedImage(1, 1, BufferedImage.TYPE_BYTE_BINARY) : image);
+		final int W = image.getWidth();
+		final int H = image.getHeight();
+		
+		BufferedImage binaryImage = image;
 		try {
-			// 读取原图
-			File srcFile = new File(imgPath);
-			BufferedImage image = ImageIO.read(srcFile);
-			final int W = image.getWidth();
-			final int H = image.getHeight();
 
 			// 把原图转换为二值化图像
 			int whiteCnt = 0; // 白色像素计数器
 			int blackCnt = 0; // 黑色像素极速器
-			BufferedImage binaryImage = new BufferedImage(W, H,
+			binaryImage = new BufferedImage(W, H,
 					BufferedImage.TYPE_BYTE_BINARY); // 可选择模式: 二值化/灰度化
 			for (int i = 0; i < W; i++) {
 				for (int j = 0; j < H; j++) {
@@ -300,19 +116,13 @@ public class ImageUtils {
 				}
 			}
 			
-			
 			toDenoise(binaryImage);	// 降噪： 8邻域降噪(小噪点) + 泛水填充法(连通域大噪点)
 			cleanInterferenceLine(binaryImage);	// 去除干扰线
-
-			// 保存二值化图像
-			savePath = savePath.replaceFirst("\\.\\w+$", ".".concat(PNG));
-			File snkFile = new File(savePath);
-			ImageIO.write(binaryImage, PNG, snkFile);	// 为保证无色差, 只能为BMP/PNG格式
 			
 		} catch (Exception e) {
-			log.error("二值化图片失败: {}", imgPath, e);
+			log.error("二值化图片失败", e);
 		}
-		return savePath;
+		return binaryImage;
 	}
 	
 	/**
@@ -394,81 +204,193 @@ public class ImageUtils {
 	 * @param binaryImage
 	 */
 	private static void cleanInterferenceLine(BufferedImage binaryImage) {
-		final int W = binaryImage.getWidth();
-		final int H = binaryImage.getHeight();
-		
+		// TODO 暂未有好的算法
 	}
 	
 	/**
-	 * 解析节奏风暴验证码图片
-	 * {"code":0,"msg":"","message":"","data":{"token":"aa4f1a6dad33c3b16926a70e9e0eadbfb56ba91c","image":"data:image/jpeg;base64,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"}}
-	 * @param cookie
-	 * @return { 验证码token, 验证码图片的解析值 }
+	 * 图像切割
+	 * @param image
+	 * @param CHAR_NUM 图像中含有的字符数
+	 * @return
 	 */
-	private static String[] getStormCaptcha(BiliCookie cookie) {
-		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "");
-		Map<String, String> request = _getRequest();
-		String response = HttpURLUtils.doGet(STORM_CODE_URL, header, request);
-		
-		String[] rst = { "", "" };
+	public static List<BufferedImage> split(BufferedImage image, final int CHAR_NUM) {
+		List<BufferedImage> subImages = null;
 		try {
-			JSONObject json = JSONObject.fromObject(response);
-			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			if(code == 0) {
-				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
-				String token = JsonUtils.getStr(data, BiliCmdAtrbt.token);
-				String image = JsonUtils.getStr(data, BiliCmdAtrbt.image);
-				String savePath = HttpUtils.convertBase64Img(image, "./storm/", "storm");
+			image = toBinary(image);	// 图像二值化（含消除噪点、干扰线操作）
+			List<ScanLine> vScanLines = calculateVScanLines(image, CHAR_NUM);	// 计算切割边界
+			if(vScanLines.size() == CHAR_NUM) {
+				subImages = split(image, vScanLines);	// 图像切割
 				
-				rst[0] = token;
-				rst[1] = VercodeUtils.recognizeStormImage(savePath);
+			} else {
+				log.warn("图像切割错位: 期望区域 [{}] 实际区域 [{}]", CHAR_NUM, vScanLines.size());
 			}
 		} catch(Exception e) {
-			log.error("获取节奏风暴验证码图片异常: {}", response, e);
+			log.error("图像切割失败", e);
 		}
-		return rst;
+		return (subImages == null ? new LinkedList<BufferedImage>() : subImages);
 	}
 	
 	/**
-	 * 获取节奏风暴验证码参数
+	 * 计算验证码图像中每个字符的垂直扫描线（左右边界）
+	 * @param image
+	 * @param CHAR_NUM 图像中含有的字符个数
 	 * @return
 	 */
-	private static Map<String, String> _getRequest() {
-		Map<String, String> request = new HashMap<String, String>();
-		request.put(BiliCmdAtrbt.underline, String.valueOf(System.currentTimeMillis()));
-		request.put(BiliCmdAtrbt.width, "112");
-		request.put(BiliCmdAtrbt.height, "32");
-		return request;
+	private static List<ScanLine> calculateVScanLines(BufferedImage image, final int CHAR_NUM) {
+		int[] vPixels = _scanVerticalPixels(image);	// 每一垂直扫描线上的前景元素个数
+		final int LR_MIN_PIXEL = 3;	// 最左/最右边界上最少的前景元素个数(小于这个数量认为是无效区)
+		
+		// 有效图像区域的最左边界
+		int left = 0;
+		while(left < vPixels.length && vPixels[left] < LR_MIN_PIXEL) {
+			left++;
+		}
+		
+		// 有效图像区域的最右边界
+		int right = vPixels.length - 1;
+		while(right > left && vPixels[right] < LR_MIN_PIXEL) {
+			right--;
+		}
+		
+		// 单个字符的平均宽度
+		final int CHAT_AVG_WIDTH = (right - left) / CHAR_NUM;
+		
+		// 通过有效图像区域内没有黏连位置，初步切割图像为多个子区域（每个区域可能含有1个以上的字符）
+		List<ScanLine> vScanLines = new LinkedList<ScanLine>();
+		for(int i = left; i < right; i++) {
+			if(vPixels[i] == 0) {	// 无
+				vScanLines.add(new ScanLine(left, i));
+				
+				while(vPixels[++i] == 0);	// 跳过无黏连的空白区域
+				left = i--;		// 修正左边界
+			}
+		}
+		if(left < right) {
+			vScanLines.add(new ScanLine(left, right));
+		}
+		
+		// 切割每个子区域的黏连字符
+		while (vScanLines.size() < CHAR_NUM) {
+			
+			// 每次挑选宽度最大的区域进行切割
+			int maxDist = 0;
+			int maxIdx = 0;
+			for(int i = 0; i < vScanLines.size(); i++) {
+				ScanLine vScanLine = vScanLines.get(i);
+				if(maxDist < vScanLine.getDist()) {
+					maxDist = vScanLine.getDist();
+					maxIdx = i;
+				}
+			}
+			
+			// 以平均字符宽度作为参考, 估计所选区域可切割的次数
+			ScanLine vScanLine = vScanLines.get(maxIdx);
+			int num = _divide(vScanLine.getDist(), CHAT_AVG_WIDTH);
+			num = (num <= 1 ? 2 : num);	// 保证最大的区域被分隔为2部分
+			
+			int BGN = vScanLine.getBgn();
+			int END = vScanLine.getEnd();
+			int AVG = vScanLine.getDist() / num;
+			int MID = BGN + AVG;
+			vScanLine.setEnd(MID);
+			
+			for(int i = 1; i < num; i++) {
+				BGN = MID + 1;
+				MID = BGN + AVG;
+				MID = (MID > END ? END : MID);
+				ScanLine scanLine = new ScanLine(BGN, MID);
+				vScanLines.add(maxIdx + i, scanLine);
+			}
+		}
+		return vScanLines;
 	}
 	
 	/**
-	 * 生成GET方法的请求头参数
-	 * @param cookie
-	 * @return
+	 * 扫描垂直方向的像素点
+	 * @param image
+	 * @return 每一垂直扫描线上的前景色像素个数
 	 */
-	protected final static Map<String, String> GET_HEADER(String cookie) {
-		Map<String, String> header = new HashMap<String, String>();
-		header.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
-		return header;
+	private static int[] _scanVerticalPixels(BufferedImage image) {
+		int[] vPixel = new int[image.getWidth()];
+		for(int i = 0; i < image.getWidth(); i++) {
+			int cnt = 0;
+			for(int j = 0; j < image.getHeight(); j++) {
+				cnt += (image.getRGB(i, j) == RGB_BLACK ? 1 : 0);
+			}
+			vPixel[i] = cnt;
+		}
+		return vPixel;
 	}
 	
 	/**
-	 * 生成GET方法的请求头参数
-	 * @param cookie
-	 * @param uri
+	 * 四舍五入除法
+	 * @param a
+	 * @param b
 	 * @return
 	 */
-	protected final static Map<String, String> GET_HEADER(String cookie, String uri) {
-		Map<String, String> header = GET_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_HOME);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_HOME.concat(uri));
-		return header;
+	private static int _divide(int a, int b) {
+		double rst = (double) a / (double) b;
+		return (int) Math.round(rst);	// 四舍五入
+	}
+	
+	/**
+	 * 根据扫描线切割图像
+	 * @param image
+	 * @param vScanLines 垂直扫描线
+	 * @return
+	 */
+	private static List<BufferedImage> split(BufferedImage image, List<ScanLine> vScanLines) {
+		final int HEIGHT = image.getHeight();
+		final int SUB_EDGE = 32;	// 存储切割子图的容器的宽高(32x32)
+		List<BufferedImage> subImages = new LinkedList<BufferedImage>();
+		
+		for(ScanLine vScanLine : vScanLines) {
+			int width = vScanLine.getEnd() - vScanLine.getBgn();
+			BufferedImage area = new BufferedImage(width, HEIGHT,
+					BufferedImage.TYPE_BYTE_BINARY);
+			
+			// 根据原图的垂直扫描线的左右边界截图子图，并确定水平扫描线的上下边界, 得到有效图像区域
+			ScanLine hScanLine = new ScanLine(0, HEIGHT);
+			for(int h = 0; h < HEIGHT; h++) {
+				int cnt = 0;	// 当前行像素个数
+				
+				for(int w = 0; w < width; w++) {
+					int wOffset = w + vScanLine.getBgn();
+					int RGB = image.getRGB(wOffset, h);
+					area.setRGB(w, h, RGB);
+					cnt += (RGB == RGB_BLACK ? 1 : 0); 
+				}
+				
+				// 设置水平扫描线边界
+				if(cnt > 0) {
+					if(hScanLine.getBgn() <= 0) {
+						hScanLine.setBgn(h);
+					} else {
+						hScanLine.setEnd(h);
+					}
+				}
+			}
+			
+			// 把有效图像区域放入32x32的子图正中心
+			int height = hScanLine.getDist();
+			int wOffset = (SUB_EDGE - width) / 2;
+			int hOffset = (SUB_EDGE - height) / 2;
+			BufferedImage subImage = new BufferedImage(SUB_EDGE, SUB_EDGE,
+					BufferedImage.TYPE_3BYTE_BGR);
+			for(int w = 0; w < SUB_EDGE; w++) {
+				for(int h = 0; h < SUB_EDGE; h++) {
+					subImage.setRGB(w, h, RGB_WHITE);
+				}
+			}
+			for(int w = 0; w < width; w++) {
+				for(int h = hScanLine.getBgn(); h < hScanLine.getEnd(); h++) {
+					int RGB = area.getRGB(w, h);
+					subImage.setRGB((w + wOffset), (h - hScanLine.getBgn() + hOffset), RGB);
+				}
+			}
+			subImages.add(subImage);
+		}
+		return subImages;
 	}
 	
 }

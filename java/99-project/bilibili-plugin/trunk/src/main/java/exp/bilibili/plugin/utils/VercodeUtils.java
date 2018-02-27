@@ -1,7 +1,12 @@
 package exp.bilibili.plugin.utils;
 
+import java.awt.image.BufferedImage;
+import java.util.List;
+
+import exp.libs.envm.FileType;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.VerifyUtils;
 
 /**
  * <PRE>
@@ -15,6 +20,9 @@ import exp.libs.utils.other.StrUtils;
  */
 public class VercodeUtils {
 
+	/** 节奏风暴验证码中的字符个数 */
+	private final static int CHAR_NUM = 5;
+	
 	/** 私有化构造函数 */
 	protected VercodeUtils() {}
 	
@@ -25,18 +33,18 @@ public class VercodeUtils {
 	 */
 	public static int calculateExpressionImage(String imgPath) {
 		String expression = OCRUtils.imgToTxt(imgPath);	// 图像识别
-		expression = revise(expression);	// 修正表达式
+		expression = reviseExpression(expression);	// 修正表达式
 		return calculate(expression);
 	}
 	
 	/**
-	 * 目前验证码图片只有 a+b 与 a-b 两种形式, 由于字体问题，某些数字会被固定识别错误, 
+	 * 目前小学数学验证码图片的运算式只有 a+b 与 a-b 两种形式, 由于字体问题，某些数字会被固定识别错误, 
 	 *  此方法用于修正常见的识别错误的数字/符号, 提高识别率
 	 * @param txt
 	 * @return
 	 */
-	private static String revise(String txt) {
-		String revise = txt;
+	private static String reviseExpression(String expression) {
+		String revise = expression;
 		
 		revise = revise.replace("[1", "0");
 		revise = revise.replace("[|", "0");
@@ -88,8 +96,40 @@ public class VercodeUtils {
 	 * @return 文字形式字符
 	 */
 	public static String recognizeStormImage(String imgPath) {
-		// FIXME
-		return OCRUtils.imgToTxt(imgPath);
+		if(StrUtils.isTrimEmpty(imgPath)) {
+			return "";
+		}
+		
+		// 读取图片并切割字符
+		BufferedImage image = ImageUtils.read(imgPath);
+		List<BufferedImage> subImages = ImageUtils.split(image, CHAR_NUM);
+		
+		// 逐字符解析
+		StringBuilder chars = new StringBuilder();
+		final String CHAR_IMG_PATH = imgPath.replaceFirst("(.+)\\.(.+)$", "$1-tmp.$2");
+		for(BufferedImage subImage : subImages) {
+			ImageUtils.write(subImage, CHAR_IMG_PATH, FileType.PNG);
+			char ch = reviseChar(OCRUtils.imgToTxt(CHAR_IMG_PATH));
+			chars.append(ch);
+		}
+		return chars.toString();
+	}
+	
+	/**
+	 * 修正所识别的验证码字符
+	 * @param txt
+	 * @return
+	 */
+	private static char reviseChar(String txt) {
+		char c = '0';
+		char[] chs = txt.toCharArray();
+		for(char ch : chs) {
+			if(VerifyUtils.isDigitsOrLetter(ch)) {
+				c = ch;
+				break;
+			}
+		}
+		return c;
 	}
 	
 }

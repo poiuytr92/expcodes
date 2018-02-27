@@ -28,7 +28,7 @@ public class ScanLine {
 	}
 	
 	public int getDist() {
-		return end - bgn;
+		return end - bgn + 1;
 	}
 	
 }

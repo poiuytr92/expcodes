@@ -8,7 +8,7 @@ import com.sun.media.OCR;
 
 /**
  * <PRE>
- * 图像识别工具
+ * 图像字符识别工具
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -18,12 +18,16 @@ import com.sun.media.OCR;
  */
 public class OCRUtils {
 	
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(OCRUtils.class);
 	
+	/** OCR组件目录 */
 	private final static String OCR_DIR = "./conf/ocr/tesseract";
 	
+	/** OCR处理对象 */
 	private final static OCR _OCR = new OCR(OCR_DIR);
 	
+	/** 私有化构造函数 */
 	protected OCRUtils() {}
 
 	/**
@@ -31,7 +35,7 @@ public class OCRUtils {
 	 * @param imgPath
 	 * @return
 	 */
-	protected static String imgToTxt(String imgPath) {
+	public static String imgToTxt(String imgPath) {
 		String txt = "";
 		try {
 			txt = _OCR.recognizeText(imgPath);
