@@ -6,6 +6,16 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 安全校验工具类
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class SafetyUtils {
 
 	/** 授权码正则 */
@@ -38,9 +48,10 @@ public class SafetyUtils {
 			errMsg = "无效的授权码";
 		}
 		
-		if(!checkCertificate()) {
-			errMsg = "软件授权已过期";
-		}
+		// FIXME 启动时暂不检查对私授权时间, 由授权监控线程负责检查
+//		if(!checkCertificate()) {
+//			errMsg = "软件授权已过期";
+//		}
 		return errMsg;
 	}
 	
