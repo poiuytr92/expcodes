@@ -347,7 +347,7 @@ public class AppUI extends MainWindow {
 		return SwingUtils.getVGridPanel(
 				SwingUtils.getEBorderPanel(callBtn, eCallBtn), 
 				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
-				thxBtn, nightBtn, redbagBtn);
+				thxBtn, nightBtn, stormBtn);
 	}
 	
 	private JPanel getRightPanel() {
@@ -361,7 +361,7 @@ public class AppUI extends MainWindow {
 	private JPanel _getLoginPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
-		panel.add(SwingUtils.getEBorderPanel(loginBtn, stormBtn), BorderLayout.CENTER);
+		panel.add(loginBtn, BorderLayout.CENTER);
 		panel.add(SwingUtils.getHGridPanel(addUserBtn, clrBtn), BorderLayout.EAST);
 		return panel;
 	}
