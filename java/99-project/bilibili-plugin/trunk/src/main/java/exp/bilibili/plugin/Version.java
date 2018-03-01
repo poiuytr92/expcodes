@@ -30,6 +30,7 @@ public class Version {
 		// WS- 注释  ,OCR  RSA代码整理
 		// 模拟APP观看时长		
 		// 安卓模拟器抓包？？？  手机节奏风暴不需要验证码
+		// cookie过期后依然在抽奖，此时返回错误  请先登录
 		
 		// 节奏风暴：多线程抽奖?? 封IP。。。
 		// GITHUB HTTPS 的TLS协议为2.0 ?? 无法获取页面源码
