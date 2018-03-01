@@ -29,10 +29,10 @@ public class ImageUtils {
 	private final static Logger log = LoggerFactory.getLogger(ImageUtils.class);
 	
 	/** javax.imageio.ImageIO 的黑色RGB(应该是反码, 理论值应为0) */
-	private final static int RGB_BLACK = -16777216;
+	public final static int RGB_BLACK = -16777216;
 	
 	/** javax.imageio.ImageIO 的白色RGB值(应该是反码, 理论值应为16777215) */
-	private final static int RGB_WHITE = -1;
+	public final static int RGB_WHITE = -1;
 	
 	/** 私有化构造函数 */
 	private ImageUtils() {}

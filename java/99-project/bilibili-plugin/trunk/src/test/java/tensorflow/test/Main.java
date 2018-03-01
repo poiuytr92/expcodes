@@ -1,22 +1,18 @@
 package tensorflow.test;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.ImageUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.envm.FileType;
-import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.IDUtils;
-import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
@@ -35,21 +31,35 @@ public class Main {
 	/** 图片缓存目录 */
 	private final static String IMG_DIR = "./storm/";
 	
+	private final static int TOTAL = 112 * 32;
+	
 	/**
 	 * 获取节奏风暴验证码图片并将其二值化
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		CookiesMgr.getInstn().load(CookieType.VEST);
-		BiliCookie cookie = CookiesMgr.VEST();
-		for(int i = 0; i < 760; i++) {
-			String imgPath = getStormCaptcha(cookie);
-			String binaryPath = toBinary(imgPath);
-			FileUtils.delete(imgPath);
-			
-			System.out.println(binaryPath);
-			ThreadUtils.tSleep(10);
+//		CookiesMgr.getInstn().load(CookieType.VEST);
+//		BiliCookie cookie = CookiesMgr.VEST();
+//		for(int i = 0; i < 76; i++) {
+//			String imgPath = getStormCaptcha(cookie);
+//			String binaryPath = toBinary(imgPath);
+//			FileUtils.delete(imgPath);
+//			
+//			if(StrUtils.isEmpty(binaryPath)) {
+//				i--;
+//			}
+//			ThreadUtils.tSleep(100);
+//		}
+		
+		File dir = new File(IMG_DIR);
+		File[] files = dir.listFiles();
+		for(File file : files) {
+			BufferedImage img = ImageUtils.read(file.getAbsolutePath());
+			img = ImageUtils.toBinary(img);	// 单通道图像
+			ImageUtils.write(img, file.getAbsolutePath(), FileType.PNG);
 		}
+		
+		
 	}
 	
 	private static String getStormCaptcha(BiliCookie cookie) {
@@ -123,16 +133,22 @@ public class Main {
 		final int W = img.getWidth();
 		final int H = img.getHeight();
 		
-		BufferedImage image = new BufferedImage(W, H,
-				BufferedImage.TYPE_3BYTE_BGR);	// 转换为3通道图像
+		int blackCnt = 0;
 		for(int w = 0; w < W; w++) {
 			for(int h = 0; h < H; h++) {
-				image.setRGB(w, h, img.getRGB(w, h));
+				int RGB = img.getRGB(w, h);
+				blackCnt += (RGB == ImageUtils.RGB_BLACK ? 1 : 0);
 			}
 		}
 		
-		String savePath = StrUtils.concat(IMG_DIR, IDUtils.getMillisID(), FileType.PNG.EXT);
-		ImageUtils.write(image, savePath, FileType.PNG);
+		// 总像素点为112*32, 在此范围外的黑色像素不是过少就是过多，不便于机器学习辨识
+		String savePath = "";
+		if(blackCnt >= 200 && blackCnt <= 800) {
+			savePath = StrUtils.concat(IMG_DIR, IDUtils.getMillisID(), FileType.PNG.EXT);
+			ImageUtils.write(img, savePath, FileType.PNG);
+			
+			System.out.println(savePath + ":" + blackCnt + "/" + TOTAL);
+		}
 		return savePath;
 	}
 	
