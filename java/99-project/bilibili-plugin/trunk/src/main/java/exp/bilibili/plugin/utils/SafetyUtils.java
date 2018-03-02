@@ -48,10 +48,10 @@ public class SafetyUtils {
 			errMsg = "无效的授权码";
 		}
 		
-		// FIXME 启动时暂不检查对私授权时间, 由授权监控线程负责检查
-//		if(!checkCertificate()) {
-//			errMsg = "软件授权已过期";
-//		}
+		// 对私时间用于对外出售，限制其使用期限（过期后不管对公时间如何，均无法启动）
+		if(!checkCertificate()) {
+			errMsg = "软件授权已过期";
+		}
 		return errMsg;
 	}
 	
