@@ -23,9 +23,10 @@ public class GenerateSafetyInfo {
 	
 	/**
 	 * 更新对私授权时间
+	 *  对私时间用于对外出售，限制其使用期限（过期后不管对公时间如何，均无法启动）
 	 */
 	public static void updatePrivateTime() {
-		int day = 77;	// 授权时间(从当前开始往后推N天)
+		int day = 90;	// 授权时间(从当前开始往后推N天)
 		String code = SafetyUtils.certificateToFile(day);	// 授权码
 		System.out.println(code);
 		System.out.println(TimeUtils.toStr(NumUtils.toLong(CryptoUtils.deDES(code))));
