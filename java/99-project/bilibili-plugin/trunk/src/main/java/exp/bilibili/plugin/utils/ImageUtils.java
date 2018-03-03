@@ -115,10 +115,6 @@ public class ImageUtils {
 					}
 				}
 			}
-			
-//			toDenoise(binaryImage);	// 降噪： 8邻域降噪(小噪点) + 泛水填充法(连通域大噪点)
-//			cleanInterferenceLine(binaryImage);	// 去除干扰线
-			
 		} catch (Exception e) {
 			log.error("二值化图片失败", e);
 		}

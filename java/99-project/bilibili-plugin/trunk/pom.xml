@@ -181,6 +181,13 @@
 		  <version>1.1-alpha</version>
 		  <classifier>alpha</classifier>
 		</dependency>
+		
+		<!-- 深度学习模型接口 -->
+		<dependency>
+          <groupId>org.tensorflow</groupId>
+          <artifactId>tensorflow</artifactId>
+          <version>1.6.0-rc1</version>
+        </dependency>
 
 		<!-- 单元测试 -->
 		<dependency>
