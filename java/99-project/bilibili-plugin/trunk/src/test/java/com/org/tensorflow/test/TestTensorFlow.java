@@ -1,4 +1,4 @@
-package tensorflow.test;
+package com.org.tensorflow.test;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -6,18 +6,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
+
+import org.junit.Test;
+
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.plugin.cache.CookiesMgr;
+import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.ImageUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.envm.FileType;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.IDUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
-public class Main {
+public class TestTensorFlow {
 
 	/** 直播服务器主机 */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
@@ -29,39 +36,47 @@ public class Main {
 	private final static String STORM_CODE_URL = Config.getInstn().STORM_CODE_URL();
 	
 	/** 图片缓存目录 */
-	private final static String IMG_DIR = "./storm/";
+	private final static String IMG_DIR = "./src/test/resources/exp/bilibili/plugin/utils/test/storm/";
 	
-	private final static int TOTAL = 112 * 32;
+	/** 节奏风暴验证码图片宽度 */
+	private final static int IMG_WIDTH = 112;
+	
+	/** 节奏风暴验证码图片高度 */
+	private final static int IMG_HEIGHT = 32;
 	
 	/**
-	 * 获取节奏风暴验证码图片并将其二值化
+	 * 下载节奏风暴验证码图片并将其二值化
+	 *  可用于深度学习训练
 	 * @param args
 	 */
-	public static void main(String[] args) {
-//		CookiesMgr.getInstn().load(CookieType.VEST);
-//		BiliCookie cookie = CookiesMgr.VEST();
-//		for(int i = 0; i < 76; i++) {
-//			String imgPath = getStormCaptcha(cookie);
-//			String binaryPath = toBinary(imgPath);
-//			FileUtils.delete(imgPath);
-//			
-//			if(StrUtils.isEmpty(binaryPath)) {
-//				i--;
-//			}
-//			ThreadUtils.tSleep(100);
-//		}
+	@Test
+	public void testDownloadStormVccodeImage() {
+		CookiesMgr.getInstn().load(CookieType.VEST);
+		BiliCookie cookie = CookiesMgr.VEST();
 		
-		File dir = new File(IMG_DIR);
-		File[] files = dir.listFiles();
-		for(File file : files) {
-			BufferedImage img = ImageUtils.read(file.getAbsolutePath());
-			img = ImageUtils.toBinary(img);	// 单通道图像
-			ImageUtils.write(img, file.getAbsolutePath(), FileType.PNG);
+		for(int i = 0; i < 10; i++) {
+			String imgPath = getStormCaptcha(cookie);
+			BufferedImage image = ImageUtils.read(imgPath);
+			
+			FileUtils.delete(imgPath);	// 先删除原图
+			image = ImageUtils.toBinary(image);	// 二值化图片
+			if(isVaild(image)) {	// 检查是否为有效图片（容易辨析，可用于深度训练）
+				String savePath = StrUtils.concat(IMG_DIR, IDUtils.getMillisID(), FileType.PNG.EXT);
+				ImageUtils.write(image, savePath, FileType.PNG);
+				System.out.println(savePath);
+				
+			} else {
+				i--;
+			}
+			ThreadUtils.tSleep(100);
 		}
-		
-		
 	}
 	
+	/**
+	 * 下载节奏风暴验证码图片
+	 * @param cookie
+	 * @return
+	 */
 	private static String getStormCaptcha(BiliCookie cookie) {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "");
 		Map<String, String> request = _getRequest();
@@ -113,7 +128,6 @@ public class Main {
 		return header;
 	}
 	
-	
 	/**
 	 * 获取节奏风暴验证码参数
 	 * @return
@@ -121,35 +135,56 @@ public class Main {
 	private static Map<String, String> _getRequest() {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.underline, String.valueOf(System.currentTimeMillis()));
-		request.put(BiliCmdAtrbt.width, "112");
-		request.put(BiliCmdAtrbt.height, "32");
+		request.put(BiliCmdAtrbt.width, String.valueOf(IMG_WIDTH));
+		request.put(BiliCmdAtrbt.height, String.valueOf(IMG_HEIGHT));
 		return request;
 	}
 	
-	private static String toBinary(String imgPath) {
-		BufferedImage img = ImageUtils.read(imgPath);
-		img = ImageUtils.toBinary(img);	// 单通道图像
-		
-		final int W = img.getWidth();
-		final int H = img.getHeight();
+	/**
+	 * 检查是否为有效图像（此方法仅仅是粗判）
+	 *   前景色（黑色）像素的个数在一定范围内时，认为是有效图片
+	 * @param image
+	 * @return
+	 */
+	private boolean isVaild(BufferedImage image) {
+		final int W = image.getWidth();
+		final int H = image.getHeight();
 		
 		int blackCnt = 0;
 		for(int w = 0; w < W; w++) {
 			for(int h = 0; h < H; h++) {
-				int RGB = img.getRGB(w, h);
+				int RGB = image.getRGB(w, h);
 				blackCnt += (RGB == ImageUtils.RGB_BLACK ? 1 : 0);
 			}
 		}
 		
-		// 总像素点为112*32, 在此范围外的黑色像素不是过少就是过多，不便于机器学习辨识
-		String savePath = "";
-		if(blackCnt >= 200 && blackCnt <= 800) {
-			savePath = StrUtils.concat(IMG_DIR, IDUtils.getMillisID(), FileType.PNG.EXT);
-			ImageUtils.write(img, savePath, FileType.PNG);
-			
-			System.out.println(savePath + ":" + blackCnt + "/" + TOTAL);
+		// 前景色在图像占比为 5%~25% 之间认为是有效图像
+		// 过少认为二值化后图像过浅，难以辨认
+		// 过多认为二值化后图像噪点过多，干扰太多
+		boolean isVaild = false;
+		double percent = ((double) blackCnt) / (W * H);
+		if(percent >= 0.05 && percent <= 0.25) {
+			isVaild = true;
 		}
-		return savePath;
+		return isVaild;
+	}
+	
+	/**
+	 * 把指定目录下的所有图片二值化
+	 */
+	@Test
+	public void testConvertImageToBinary() {
+		File dir = new File(IMG_DIR);
+		File[] files = dir.listFiles();
+		for(File file : files) {
+			if(FileType.PNG == FileUtils.getFileType(file)) {
+				BufferedImage img = ImageUtils.read(file.getAbsolutePath());
+				img = ImageUtils.toBinary(img);	// 单通道图像
+				boolean isOk = ImageUtils.write(img, file.getAbsolutePath(), FileType.PNG);
+				
+				System.out.println(isOk + " : " + file.getPath());
+			}
+		}
 	}
 	
 }

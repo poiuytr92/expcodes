@@ -34,6 +34,12 @@ class _Lottery extends __XHR {
 	/** 图片缓存目录 */
 	private final static String IMG_DIR = Config.getInstn().IMG_DIR();
 	
+	/** 节奏风暴验证码图片宽度 */
+	private final static int IMG_WIDTH = 112;
+	
+	/** 节奏风暴验证码图片高度 */
+	private final static int IMG_HEIGHT = 32;
+	
 	/** 私有化构造函数 */
 	protected _Lottery() {}
 	
@@ -48,29 +54,40 @@ class _Lottery extends __XHR {
 	 */
 	protected static String join(LotteryType type, BiliCookie cookie, 
 			String url, int roomId, String raffleId) {
+		final int RETRY_LIMIT = 2;
+		final int RETRY_TIME = 1000;
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);
-		Map<String, String> request = null;
+		String reason = "";
+		
+		// 加入高能/小电视抽奖
 		if(LotteryType.STORM != type) {
-			request = getRequest(sRoomId, raffleId);
+			Map<String, String> request = getRequest(sRoomId, raffleId);
+			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
+				String response = HttpURLUtils.doPost(url, header, request);
+				
+				reason = analyse(response);
+				if(StrUtils.isEmpty(reason) || !reason.contains("系统繁忙")) {
+					break;
+				}
+				ThreadUtils.tSleep(RETRY_TIME);
+			}
 			
+		// 加入节奏风暴抽奖
 		} else {
-			
-			// 节奏风暴验证码 (token + value), 实名认证后无需填
-			String[] captcha = cookie.isRealName() ? 
-					new String[] { "", "" } : getStormCaptcha(cookie);	
-			request = getRequest(sRoomId, raffleId, cookie.CSRF(), captcha[0], captcha[1]);
-		}
-		
-		// 加入抽奖
-		String response = HttpURLUtils.doPost(url, header, request);
-		String reason = analyse(response);
-		
-		// 重试一次: [系统繁忙哟，请再试一下吧]
-		if(reason.contains("系统繁忙")) {
-			ThreadUtils.tSleep(1000);
-			response = HttpURLUtils.doPost(url, header, request);
-			reason = analyse(response);
+			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
+				String[] captcha = cookie.isRealName() ? // 实名认证后无需填节奏风暴验证码
+						new String[] { "", "" } : getStormCaptcha(cookie);
+				Map<String, String> request = getRequest(sRoomId, raffleId, 
+						cookie.CSRF(), captcha[0], captcha[1]);
+				String response = HttpURLUtils.doPost(url, header, request);
+				
+				reason = analyse(response);
+				if(StrUtils.isEmpty(reason) || reason.contains("不存在")) {
+					break;
+				}
+				ThreadUtils.tSleep(RETRY_TIME);
+			}
 		}
 		return reason;
 	}
@@ -187,8 +204,8 @@ class _Lottery extends __XHR {
 	private static Map<String, String> _getRequest() {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.underline, String.valueOf(System.currentTimeMillis()));
-		request.put(BiliCmdAtrbt.width, "112");
-		request.put(BiliCmdAtrbt.height, "32");
+		request.put(BiliCmdAtrbt.width, String.valueOf(IMG_WIDTH));
+		request.put(BiliCmdAtrbt.height, String.valueOf(IMG_HEIGHT));
 		return request;
 	}
 	
