@@ -18,7 +18,7 @@ TRAIN_MAX_COUNT = 10000    # 训练次数
 MAX_ACC_LINE = 0.99    # 准确率合格线（达到则退出训练）
 
 TEST_DIR = './data/test/'
-TEST_CAPTCHA_NUM = 1  # 用于测试的验证码数量
+TEST_CAPTCHA_NUM = 10  # 用于测试的验证码数量
 
 PB_MODEL_PATH = './model/pb/captch.pb'
 CKPT_MODEL_DIR = './model/ckpt/'
