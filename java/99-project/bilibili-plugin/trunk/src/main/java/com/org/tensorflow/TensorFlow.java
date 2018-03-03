@@ -7,6 +7,16 @@ import org.tensorflow.Operation;
 
 import exp.bilibili.plugin.utils.ImageUtils;
 
+/**
+ * <PRE>
+ * TensorFlow深度学习训练模型调用接口
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-03-04
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class TensorFlow {
 	
 	private TensorFlowInferenceInterface tfi;
