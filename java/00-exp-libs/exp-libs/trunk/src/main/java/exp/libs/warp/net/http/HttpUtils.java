@@ -156,7 +156,9 @@ public class HttpUtils {
 			HttpURLConnection conn = 
 					(HttpURLConnection) new URL(url).openConnection();
 			isValid = isResponseOK(conn);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			log.error("测试URL失败", e);
+		}
 		return isValid;
 	}
 	
@@ -169,7 +171,9 @@ public class HttpUtils {
 		boolean isOk = false;
 		try {
 			isOk = (conn.getResponseCode() == HttpURLConnection.HTTP_OK);
-		} catch (Exception e) {}
+		} catch (Exception e) {
+			log.error("提取HTTP状态码失败", e);
+		}
 		return isOk;
 	}
 	
@@ -234,7 +238,7 @@ public class HttpUtils {
 			return conn;
 		}
 		
-		// HTTPS连接
+		// HTTPS连接(若依然报错 protocol_version， 则调用此方法的程序需切换到JDK1.8以上)
 		if(HTTPS.equals(url.getProtocol())) {
 			SSLContext ssl = SSLContext.getInstance(TLS);
 			ssl.init(new KeyManager[0], new TrustManager[] { new _X509TrustManager() }, new SecureRandom());
