@@ -27,14 +27,12 @@ public class Version {
 		VersionMgr.exec(args);
 		
 		// TODO
+		// win10系统无法执行小学数据任务(OCR不可用)
 		// WS- 注释  ,OCR  RSA代码整理
 		// 模拟APP观看时长	(如何获取app的cookie ?? 安卓模拟器抓包？？？  手机节奏风暴不需要验证码)
 		// cookie过期后依然在抽奖，此时返回错误  请先登录
 		// cookie 过期后没有消除账号登陆，又没提示
 		// 备份cookie zip
-		
-		// GITHUB HTTPS 的TLS协议为2.0 ?? 无法获取页面源码
-		// win10系统无法执行小学数据任务(OCR不可用)
 	}
 	
 }
