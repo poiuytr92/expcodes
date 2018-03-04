@@ -1,5 +1,7 @@
 package exp.bilibili.plugin.bean.ldm;
 
+import java.util.Date;
+
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.envm.Danmu;
 import exp.libs.utils.other.StrUtils;
@@ -29,10 +31,13 @@ public class BiliCookie extends HttpCookie {
 	/** 登陆类型 */
 	private CookieType type;
 	
+	/** 从cookies提取的有效期 */
+	private Date expires;
+	
 	/** 从cookies提取的csrf token */
 	private String csrf;
 	
-	/** 该cookie对应的用户ID */
+	/** 从cookies提取的用户ID */
 	private String uid;
 	
 	/** 该cookie对应的用户昵称 */
@@ -67,25 +72,29 @@ public class BiliCookie extends HttpCookie {
 	}
 	
 	private void init() {
-		this.type = (type == null ? CookieType.UNKNOW : type);
-		this.csrf = (StrUtils.isEmpty(csrf) ? "" : csrf);
-		this.uid = (StrUtils.isEmpty(uid) ? "" : uid);
-		this.nickName = (StrUtils.isEmpty(nickName) ? "" : nickName);
+		this.type = CookieType.UNKNOW;
+		this.nickName = "";
 		this.isBindTel = false;
 		this.isRealName = false;
 		this.isRoomAdmin = false;
 		this.isVip = false;
 		this.isGuard = false;
-		this.autoFeed = (autoFeed ? true : false);
+		this.autoFeed = false;
+		
+		// 以下值可能先在 {@link takeCookieNVE} 中被初始化
+		this.expires = (expires == null ? new Date() : expires);
+		this.csrf = (StrUtils.isEmpty(csrf) ? "" : csrf);
+		this.uid = (StrUtils.isEmpty(uid) ? "" : uid);
 	}
 	
 	@Override
-	protected void takeNV(String name, String value) {
+	protected void takeCookieNVE(String name, String value, Date expires) {
 		if(CSRF_KEY.equalsIgnoreCase(name)) {
-			csrf = value;
+			this.csrf = value;
 			
 		} else if(UID_KEY.equalsIgnoreCase(name)) {
-			uid = value;
+			this.uid = value;
+			this.expires = expires;
 		}
 	}
 	
@@ -103,6 +112,10 @@ public class BiliCookie extends HttpCookie {
 	
 	public void setType(CookieType type) {
 		this.type = type;
+	}
+	
+	public Date EXPIRES() {
+		return expires;
 	}
 	
 	public String CSRF() {
