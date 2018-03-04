@@ -1,4 +1,4 @@
-package com.org.tensorflow.test;
+package exp.bilibili.plugin;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -24,7 +24,17 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
-public class TestTensorFlow {
+/**
+ * <PRE>
+ * 生成TensorFlow训练数据（节奏风暴验证码）
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+public class GenerateTensorFlowTrainDatas {
 
 	/** 直播服务器主机 */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();

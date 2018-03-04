@@ -3,7 +3,7 @@ package com.org.tensorflow;
 import java.nio.FloatBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -14,8 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.tensorflow.Graph;
 import org.tensorflow.Operation;
 import org.tensorflow.Session;
+import org.tensorflow.Session.Run;
 import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
+
+import exp.libs.utils.other.ListUtils;
 
 /**
  * <PRE>
@@ -32,9 +35,6 @@ public class TensorFlowAPI {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(TensorFlowAPI.class);
 	
-    /** 已训练好的PB文件模型 */
-    private final String pbModelFilePath;
-    
     /** PB训练模型(TensorFlow用数据流图表示模型) */
     private final Graph graph;
     
@@ -44,19 +44,16 @@ public class TensorFlowAPI {
     /** TensorFlow执行器 */
     private Runner runner;
     
-    /** feedNames */
-    private List<String> feedNames = new ArrayList<String>();
+    /** TensorFlow输入张量表 */
+    private Map<String, Tensor<?>> feedTensors;
     
-    /** feedTensors */
-    private List<Tensor<?>> feedTensors = new ArrayList<Tensor<?>>();
+    /** TensorFlow输出张量表 */
+    private Map<String, Tensor<?>> fetchTensors;
     
-    /** fetchNames */
-    private List<String> fetchNames = new ArrayList<String>();
+    /** 调试模式 */
+    private boolean debug;
     
-    /** fetchTensors */
-    private List<Tensor<?>> fetchTensors = new ArrayList<Tensor<?>>();
-    
-    /** runStats */
+    /** 运行日志统计器 */
     private RunStats runStats;
     
     /**
@@ -64,10 +61,27 @@ public class TensorFlowAPI {
      * @param pbModelFilePath 已训练好的PB模型文件路径
      */
     public TensorFlowAPI(String pbModelFilePath) {
-        this.pbModelFilePath = pbModelFilePath;
+    	this(pbModelFilePath, false);
+    }
+    
+    /**
+     * 构造函数
+     * @param pbModelFilePath 已训练好的PB模型文件路径
+     * @param debug 是否启动调试模式：执行运行日志统计 (需调用本地化接口，建议为false)
+     */
+    public TensorFlowAPI(String pbModelFilePath, boolean debug) {
         this.graph = loadGraph(pbModelFilePath);
         this.session = new Session(graph);
         this.runner = session.runner();
+        
+        this.feedTensors = new HashMap<String, Tensor<?>>();
+        this.fetchTensors = new HashMap<String, Tensor<?>>();
+        
+        // 需加载dll/so文件才能初始化
+        this.debug = debug;
+        if(debug == true) {
+        	this.runStats = new RunStats();
+        }
     }
     
     /**
@@ -91,232 +105,183 @@ public class TensorFlowAPI {
      * 获取TensorFlow训练模型
      * @return Graph
      */
-    public final Graph graph() {
+    public final Graph getGraphDef() {
         return graph;
+    }
+    
+    /**
+     * 获取TensorFlow模型图的操作节点
+     * @param operationName 操作节点名称
+     * @return 操作节点(若不存在返回null)
+     */
+    public Operation getGraphOperation(String operationName) {
+        return graph.operation(operationName);
     }
     
     /**
      * 提取模型中所有张量节点的名称和类型
      * @return Map: name->type
      */
-    public Map<String, String> listAllNodes() {
+    public Map<String, String> listAllShapes() {
     	Map<String, String> nodes = new HashMap<String, String>();
-        Iterator<Operation> ops = graph.operations();
-        while(ops.hasNext()) {
-        	Operation op = ops.next();
-        	nodes.put(op.name(), op.type());
+        Iterator<Operation> shapes = graph.operations();
+        while(shapes.hasNext()) {
+        	Operation shape = shapes.next();
+        	nodes.put(shape.name(), shape.type());
         }
         return nodes;
     }
     
     /**
-     * 在先前注册的输入节点之间进行推理（通过*）
-*和请求的输出节点。然后，输出节点可以用
-*获取*方法。
-应该由推理填充的输出节点列表
-*通过。
-     * Runs inference between the previously registered input nodes (via feed*)
-     * and the requested output nodes. Output nodes can then be queried with the
-     * fetch* methods.
-     *
-     * @param outputNames
-     *            A list of output nodes which should be filled by the inference
-     *            pass.
+     * 设置输入张量的值
+     * @param inputName 输入张量的名称, 格式为 name:index (若无index则默认为0)
+     * @param datas 输入张量的值（降维到1维矩阵的数据）
+     * @param dims 输入张量的原矩阵维度列表
      */
-    public void run(String[] outputNames) {
-        run(outputNames, false);
+    public void feed(String inputName, float[] datas, long... dims) {
+        addFeed(inputName, Tensor.create(dims, FloatBuffer.wrap(datas)));
     }
     
     /**
-     * Runs inference between the previously registered input nodes (via feed*)
-     * and the requested output nodes. Output nodes can then be queried with the
-     * fetch* methods.
-     *
-     * @param outputNames
-     *            A list of output nodes which should be filled by the inference
-     *            pass.
-     * @param enableStats enableStats
+     * 设置输入张量的值
+     * @param inputName 输入张量的名称, 格式为 name:index (若无index则默认为0)
+     * @param datas 输入张量的值（降维到1维矩阵的数据）
      */
-    public void run(String[] outputNames, boolean enableStats) {
-        // Release any Tensors from the previous run calls.
+    public void feed(String inputName, byte[] datas) {
+        addFeed(inputName, Tensor.create(datas));
+    }
+    
+    /**
+     * 添加输入张量
+     * @param inputName 输入张量的名称, 格式为 name:index (若无index则默认为0)
+     * @param tensor 输入张量对象
+     */
+	private void addFeed(String inputName, Tensor<?> tensor) {
+    	feedTensors.put(inputName, tensor);
+    	
+        TensorIndex ti = TensorIndex.parse(inputName);
+        runner.feed(ti.NAME(), ti.IDX(), tensor);
+    }
+    
+    /**
+     * 运行TensorFlow模型
+     * @param outputNames 输出张量的名称列表, 单个张量名称格式为 name:index (若无index则默认为0)
+     * @return 是否运行成功
+     */
+    public boolean run(String... outputNames) {
+    	boolean isOk = false;
+    	if(ListUtils.isEmpty(outputNames)) {
+    		return isOk;
+    	}
+    	
+    	// 关闭上次运行模型时声明的输出张量
         closeFetches();
         
-        // Add fetches.
-        for (String o : outputNames) {
-            fetchNames.add(o);
-            TensorIndex ti = TensorIndex.parse(o);
+        // 注册输出张量名称
+        for(String outputName : outputNames) {
+            TensorIndex ti = TensorIndex.parse(outputName);
             runner.fetch(ti.NAME(), ti.IDX());
         }
         
-        // Run the session.
+        // 运行TensorFlow模型
         try {
-            if (enableStats) {
-                Session.Run r = runner.setOptions(RunStats.RUN_OPTIONS()).runAndFetchMetadata();
-                fetchTensors = r.outputs;
+        	List<Tensor<?>> tensors = null;
+            if(debug == true) {
+                Run run = runner.setOptions(RunStats.RUN_OPTIONS()).runAndFetchMetadata();
+                tensors = run.outputs;
+                runStats.add(run.metadata);	
                 
-                if (runStats == null) {
-                    runStats = new RunStats();
-                }
-                runStats.add(r.metadata);
             } else {
-                fetchTensors = runner.run();
+            	tensors = runner.run();
             }
-        } catch (RuntimeException e) {
-            // Ideally the exception would have been let through, but since this
-            // interface predates the
-            // TensorFlow Java API, must return -1.
-            System.out.println("Failed to run TensorFlow inference with inputs:[" + feedNames + "], outputs:["
-                + fetchNames + "]");
-            throw e;
+            
+            // 记录得到的所有输出张量
+            for(int i = 0; i < outputNames.length; i++) {
+            	String outputName = outputNames[i];
+            	Tensor<?> tensor = tensors.get(i);
+            	fetchTensors.put(outputName, tensor);
+            }
+            isOk = true;
+            
+        } catch(Exception e) {
+        	log.error("运行TensorFlow模型失败.\r\n输入张量列表: {}\r\n输出张量列表: {}", 
+        			feedTensors.keySet(), Arrays.asList(outputNames), e);
+        	
+        // 重置模型执行器
         } finally {
-            // Always release the feeds (to save resources) and reset the
-            // runner, this run is
-            // over.
             closeFeeds();
             runner = session.runner();
         }
+        return isOk;
     }
     
-    
-    
     /**
-     * 方法说明
-     * 
-     * @param inputName 参数
-     * @param src 参数
-     * @param dims 参数
+     * 获取运行日志统计概要.
+     * 	需在执行{@link run}方法时打开debug开关
+     * @return 运行日志统计概要
      */
-    public void feed(String inputName, float[] src, long... dims) {
-        addFeed(inputName, Tensor.create(dims, FloatBuffer.wrap(src)));
+    public String getRunlog() {
+        return (debug ? "" : runStats.summary());
     }
     
     /**
-     * 方法说明
-     * @param inputName 参数
-     * @param src 参数
+     * 获取输出张量的值
+     * @param outputName 输出张量的名称, 格式为 name:index (若无index则默认为0)
+     * @return 输出张量的值（降维到1维矩阵的数据）
      */
-    public void feed(String inputName, byte[] src) {
-        addFeed(inputName, Tensor.create(src));
+    public float[] fetch(String outputName) {
+    	
+		// 提取输出张量的节点
+		Operation op = getGraphOperation(outputName);
+		
+		// 获取输出张量降维到一维后的矩阵维度
+		TensorIndex ti = TensorIndex.parse(outputName);
+		final int dimension = (int) op.output(ti.IDX()).shape().size(1);
+		
+		// 存储输出张量的矩阵数据
+		float[] output = new float[dimension];
+		FloatBuffer buffer = FloatBuffer.wrap(output);
+		Tensor<?> tensor = fetchTensors.get(outputName);
+    	if(tensor != null) {
+    		tensor.writeTo(buffer);
+    	}
+        return output;
     }
     
     /**
-     * 方法说明
-     * 
-     * @param inputName 参数
-     * @param t 参数
-     */
-    private void addFeed(String inputName, Tensor t) {
-        // The string format accepted by TF is
-        // node_name[:output_index].
-        TensorIndex ti = TensorIndex.parse(inputName);
-        runner.feed(ti.NAME(), ti.IDX(), t);
-        feedNames.add(inputName);
-        feedTensors.add(t);
-    }
-    
-    /**
-     * 方法说明
-     * 
-     * @param outputName 参数
-     * @param dst 参数
-     */
-    public void fetch(String outputName, float[] dst) {
-        fetch(outputName, FloatBuffer.wrap(dst));
-    }
-    
-    /**
-     * 方法说明
-     * 
-     * @param outputName 参数
-     * @param dst 参数
-     */
-    public void fetch(String outputName, FloatBuffer dst) {
-        getTensor(outputName).writeTo(dst);
-    }
-    
-    /**
-     * 方法说明
-     * 
-     * @param outputName 参数
-     * @return 参数
-     */
-    private Tensor getTensor(String outputName) {
-        int i = 0;
-        for (String n : fetchNames) {
-            if (n.equals(outputName)) {
-                return fetchTensors.get(i);
-            }
-            ++i;
-        }
-        throw new RuntimeException("Node '" + outputName + "' was not provided to run(), so it cannot be read");
-    }
-    
-    /**
-     * 方法说明
-     * 
-     * @param operationName 参数
-     * @return 参数
-     */
-    public Operation graphOperation(String operationName) {
-        final Operation operation = graph.operation(operationName);
-        if (operation == null) {
-            throw new RuntimeException("Node '" + operationName + "' does not exist in model '" +  pbModelFilePath+ "'");
-        }
-        return operation;
-    }
-    
-    /**
-     * Returns the last stat summary string if logging is enabled.
-     * 
-     * @return 返回
-     */
-    public String getStatString() {
-        return (runStats == null) ? "" : runStats.summary();
-    }
-    
-    /**
-     * Cleans up the state associated with this Object. initializeTensorFlow()
-     * can then be called again to initialize a new session.
+     * 清理并关闭TensorFlow模型
      */
     public void close() {
         closeFeeds();
         closeFetches();
         session.close();
         graph.close();
-        if (runStats != null) {
-            runStats.close();
-        }
-        runStats = null;
-    }
-    
-    @Override
-    protected void finalize() throws Throwable {
-        try {
-            close();
-        } finally {
-            super.finalize();
+        
+        if(debug == true) {
+        	runStats.close();
         }
     }
     
     /**
-     * 方法说明 参数
+     * 关闭所有输入张量
      */
     private void closeFeeds() {
-        for (Tensor t : feedTensors) {
-            t.close();
+    	Iterator<Tensor<?>> tensors = feedTensors.values().iterator();
+    	while(tensors.hasNext()) {
+    		tensors.next().close();
         }
         feedTensors.clear();
-        feedNames.clear();
     }
     
     /**
-     * 方法说明 参数
+     * 关闭所有输出张量
      */
     private void closeFetches() {
-        for (Tensor t : fetchTensors) {
-            t.close();
+    	Iterator<Tensor<?>> tensors = fetchTensors.values().iterator();
+    	while(tensors.hasNext()) {
+    		tensors.next().close();
         }
-        fetchTensors.clear();
-        fetchNames.clear();
+    	fetchTensors.clear();
     }
+    
 }

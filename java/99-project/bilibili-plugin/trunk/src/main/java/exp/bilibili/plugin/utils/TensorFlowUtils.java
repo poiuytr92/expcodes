@@ -53,7 +53,7 @@ public class TensorFlowUtils {
 		float[] inputImage = _TF.loadImage(binaryImage);
 		
 		// 输入张量image_input: 待解析的二进制图片数据
-		_TF.setInput("image_input", inputImage, IMG_WIDTH, IMG_HEIGHT);	// 
+		_TF.setInput("image_input", inputImage, IMG_WIDTH, IMG_HEIGHT);
 		
 		// 输入张量keep_prob: 神经元被选中的概率，用于防过拟合，取值0~1.0，值越大训练越快，但准确率越低; 但使用模型时固定为1即可
 		_TF.setInput("keep_prob", new float[] { 1.0f }, 1);		

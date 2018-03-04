@@ -3,8 +3,6 @@ package com.org.tensorflow;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 
-import org.tensorflow.Operation;
-
 import exp.bilibili.plugin.utils.ImageUtils;
 
 /**
@@ -19,10 +17,15 @@ import exp.bilibili.plugin.utils.ImageUtils;
  */
 public class TensorFlow {
 	
-	private TensorFlowInferenceInterface tfi;
+	/** 模型接口 */
+	private TensorFlowAPI tfi;
 	
-	public TensorFlow(String pbPath) {
-		this.tfi = new TensorFlowInferenceInterface(pbPath);
+	/**
+     * 构造函数
+     * @param pbModelFilePath 已训练好的PB模型文件路径
+     */
+	public TensorFlow(String pbModelFilePath) {
+		this.tfi = new TensorFlowAPI(pbModelFilePath);
 	}
 	
 	/**
@@ -32,7 +35,7 @@ public class TensorFlow {
 	 * @param dims 变量矩阵的维度值列表， 如 2x3矩阵，则此处为 {2, 3}
 	 */
 	public void setInput(final String feedName, float[] feedValue, long... dims) {
-		tfi.feed(feedName, feedValue, dims);
+		tfi.feed(feedName, feedValue, dims);	// 设置输入张量
 	}
 	
 	/**
@@ -41,18 +44,8 @@ public class TensorFlow {
 	 * @return
 	 */
 	public float[] getOutput(final String fetchName) {
-		tfi.run(new String[] { fetchName });	// 执行模型运算
-		
-		// 提取输出张量的节点
-		Operation op = tfi.graphOperation(fetchName);
-		
-		// 获取输出张量降维到一维后的矩阵维度 (如输出张量为 2x3 则维度为 6)
-		final int dimension = (int) op.output(0).shape().size(1);
-		
-		// 存储输出张量的矩阵
-		float[] output = new float[dimension];
-		tfi.fetch(fetchName, output);
-		return output;
+		tfi.run(fetchName);	// 执行模型运算
+		return tfi.fetch(fetchName);	// 获取输出张量的矩阵值
 	}
 	
 	/**
