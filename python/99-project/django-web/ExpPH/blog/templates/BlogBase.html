@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Welcome to Exp's Blog</title>
+	</head>
+	
+	<style type="text/css">
+	   body { color: #efd; background: #453; padding: 0 5em; margin: 0 }
+	   h1 { padding: 2em 1em; background: #675 }
+	   h2 { color: #bf8; border-top: 1px dotted #fff; margin-top: 2em }
+	   p { margin: 1em 0 }
+	</style>
+	
+	<body>
+	   <h1>
+		   {{ title }}
+		   <br/>
+		   <font face="楷体" size="5" color="yellow">
+		      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		       —— 本网站正在调测中...
+		       <a href="{{ homeURL }}">[Back to Home Page]</a>
+		   </font>
+	   </h1>
+	   <h2></h2>
+	   {% block content %}
+	   {% endblock %}
+	</body>
+</html>

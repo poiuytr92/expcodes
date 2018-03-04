@@ -1,0 +1,9 @@
+{% extends "BlogBase.html" %}
+
+{% block content %}
+	{% for post in posts %}
+	    <h2>{{ post.title }}</h2>
+	    <p>{{ post.timestamp|date:"Y, F jS, l" }}</p>  <!-- 把时间部分过滤，仅留日期格式 -->
+	    <p>{{ post.body }}</p>
+	{% endfor %}
+{% endblock %}

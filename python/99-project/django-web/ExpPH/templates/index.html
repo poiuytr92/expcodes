@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<!-- Head -->
+<head>
+<title>{{ title }}</title>
+
+<link rel="stylesheet" type="text/css" media="all"
+	href="{{ MEDIA_URL }}web/style.css" />
+<link rel="stylesheet" href="{{ MEDIA_URL }}web/css/reset.css"
+	type="text/css" media="screen">
+<link rel="stylesheet" href="{{ MEDIA_URL }}web/css/960.css"
+	type="text/css" media="screen">
+<link rel="stylesheet" href="{{ MEDIA_URL }}web/css/supersized.css"
+	type="text/css" media="screen">
+
+<script type='text/javascript'
+	src='includes/js/jquery/jquery.js?ver=1.7.2'></script>
+<meta name="generator" content="WordPress 3.4.1" />
+<script type="text/javascript"
+	src="{{ MEDIA_URL }}web/js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript"
+	src="{{ MEDIA_URL }}web/js/jquery.countdown.js"></script>
+<script type="text/javascript"
+	src="{{ MEDIA_URL }}web/js/jquery.easing.min.js"></script>
+<script type="text/javascript"
+	src="{{ MEDIA_URL }}web/js/supersized.3.2.7.min.js"></script>
+<script type="text/javascript" src="{{ MEDIA_URL }}web/js/main.js"></script>
+
+<script type="text/javascript" charset="utf-8">
+	jQuery(document).ready(function($) {
+		$('div#countdown-timer').countdown("2013/12/16", function(event) {
+			var $this = $(this);
+			switch (event.type) {
+			case "seconds":
+			case "minutes":
+			case "hours":
+			case "days":
+			case "weeks":
+			case "daysLeft":
+				$this.find('span#' + event.type).html(event.value);
+				break;
+			case "finished":
+				$this.hide();
+				break;
+			}
+		});
+	});
+</script>
+
+<script type="text/javascript">
+	jQuery(document).ready(function($) {
+
+		$.supersized({
+
+			// Functionality
+			slide_interval : 3000, // Length between transitions
+			transition : 1, // 0-None, 1-Fade, 2-Slide Top, 3-Slide Right, 4-Slide Bottom, 5-Slide Left, 6-Carousel Right, 7-Carousel Left
+			transition_speed : 700, // Speed of transition
+
+			// Components							
+			slide_links : 'blank', // Individual links for each slide (Options: false, 'num', 'name', 'blank')
+			slides : [ // Slideshow Images
+			{
+				image : '{{ MEDIA_URL }}web/images/slide/1.jpg'
+			}, {
+				image : '{{ MEDIA_URL }}web/images/slide/2.jpg'
+			}, {
+				image : '{{ MEDIA_URL }}web/images/slide/3.jpg'
+			}
+
+			]
+		});
+	});
+</script>
+
+</head>
+<body>
+	<!--TOPBAR START-->
+	<div id="droptop">
+		<div class="topbar">
+			<!-- Contact Section -->
+			<div class="contact-block">
+				<div class="container_12 ">
+					<div class="grid_6">
+						<h1>Contact us</h1>
+						<p>
+							此网站现阶段还在调试中. 欢迎给我提任何建议.
+							<br />
+							[{{ ip }}] 你是第 [{{ pageview }}] 个访客. {{ email_msg }}
+							<br />
+							[{{ datetime }}] - {{ db_msg }}
+						</p>
+						<form action="" id="contact_form">
+							<fieldset>
+								<p>
+									<label for="name">Name:</label> <input type="text" name="name" />
+								</p>
+								<p>
+									<label for="email">Email:</label> <input type="text"
+										name="email" />
+								</p>
+								<p>
+									<label for="message">Message:</label>
+									<textarea name="message" id="" cols="20" 
+									   rows="6">温馨提示：再刷新 [{{ email_cnt }}] 次页面就可以发送邮件咯！</textarea>
+								</p>
+								<input type="submit" name="submit" value="submit" />
+							</fieldset>
+						</form>
+					</div>
+					<div class="grid_6 contact-details">
+						<span class="phone">+?? 158 178 *****</span> 
+						<span class="fax">I haven't any fax</span> 
+						<span class="email">289065406@qq.com</span>
+						<!-- Map Placeholder -->
+						<iframe class="map-placeholder" width="100%" height="280" src=""
+							frameborder="0"></iframe>
+					</div>
+				</div>
+				<div class="clear"></div>
+			</div>
+			<!-- End of Contact Section -->
+		</div>
+		<a href="#" class="topbar-btn"></a>
+	</div>
+	<!--TOPBAR END-->
+	<div id="cover">
+		<div class="topline"></div>
+		<!--Header Start-->
+		<div id="header">
+			<div class="container_12">
+				<!--Logo-->
+				<div class="grid_3 logo">
+					<a href="http://expph.sinaapp.com/"> <img
+						src="{{ MEDIA_URL }}web/images/Logo.png" alt="Go to homepage"></a>
+				</div>
+				<!--End Logo-->
+				<!--social section-->
+				<div class="grid_9 contact">
+					<ul class="social-networks">
+						<li class="icon-twitter"><a href="{{ url_blog }}">Blog</a></li>
+						<li class="icon-facebook"><a href="{{ url_album }}">Album</a></li>
+						<!-- li class="icon-dribbble"><a href="video" target="_self">Video</a></li-->
+						<li class="icon-dribbble"><a href="#" target="_self">Video</a></li>
+						<li class="icon-skype"><a href="#">Forrst</a></li>
+						<li class="icon-forrst"><a href="#">Forrst</a></li>
+						<li class="icon-rss"><a href="#">Rss</a></li>
+						<li class="phone">+?? 158 178 *****</li>
+					</ul>
+				</div>
+				<!-- //grid_8 -->
+				<!--social section-->
+			</div>
+			<!-- //container_12 -->
+		</div>
+		<!--Header End-->
+		<div class="clear"></div>
+		<!--Welcome Content Start-->
+		<div class="welcome-content">
+			<div class="container_12">
+				<div class="grid_12">
+					<h3 class="welcome-title">
+						WELCOME TO EXP'S <span class="highlight">PERSONAL HOME PAGE</span>
+					</h3>
+					<br />
+					<p>我的网站正在调测中...很快就会建立起来的啦 O(∩_∩)O</p>
+				</div>
+				<!-- //grid_12 -->
+			</div>
+			<!-- //container_12 -->
+		</div>
+		<!--Welcome Content End-->
+		<div class="clear"></div>
+		<!--BEGIN subscribe -->
+		<div id="subscribe">
+			<div id="subscribes">
+				<form method="post" action="">
+					<input type="text" id="emailsub" name="email" value="现在输入也是木有用D~~" />
+					<input type="submit" value="subscribe" id="submitButton">
+				</form>
+			</div>
+		</div>
+		<!--END subscribe -->
+		<div class="clear"></div>
+		<div class="container_12">
+			<div id="countdown-timer">
+				<div class="block">
+					<span id="weeks"></span>WEEKS
+				</div>
+				<div class="space">&nbsp;</div>
+				<div class="block">
+					<span id="daysLeft"></span>DAYS
+				</div>
+				<div class="space">&nbsp;</div>
+				<div class="block">
+					<span id="hours"></span>HOURS
+				</div>
+				<div class="space">&nbsp;</div>
+				<div class="block">
+					<span id="minutes"></span>MINUTES
+				</div>
+				<div class="space">&nbsp;</div>
+				<div class="block">
+					<span id="seconds"></span>SECONDS
+				</div>
+			</div>
+		</div>
+		<!-- //container_12 -->
+		<div class="clear"></div>
+		<!--Footer Copyright wrap Start-->
+		<div id="footer-bottom">
+			<div class="container_12 ">
+				<div class="grid_12 copyright">
+					<p>
+						&copy; Copyright &copy; 2014.Company [EXP] All rights reserved.<a
+							target="_blank" href="http://www.baidu.com">友情链接</a> - About Me <a
+							href="http://expph.sinaapp.com/" target="_blank"
+							title="没错是我的QQ：289065406">悬浮彩蛋</a></a>
+					</p>
+				</div>
+			</div>
+			<!-- //container_12 -->
+		</div>
+		<!--Footer Copyright wrap End-->
+	</div>
+	
+	<!-- bgsound只有IE才能播放 -->
+    <!--bgsound src="{{ MEDIA_URL }}web/sounds/lanye.mp3" loop="-1"-->
+    
+    <!-- 未正式公布前不要用背景音乐，超级消耗流量，浪费云豆 -->
+    <!-- EMBED SRC="{{ MEDIA_URL }}web/sounds/lanye.mp3" autostart=true hidden=true loop=true /-->
+    
+</body>
+</html>

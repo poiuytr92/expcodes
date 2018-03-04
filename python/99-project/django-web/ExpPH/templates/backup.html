@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>{{ title }}</title>
+		<style type="text/css">
+           body { color: #000; background: #ddd; padding: 0 5em; margin: 0 }
+	       h2 { color: #258; border-bottom: 1px dotted #fff; margin-top: 2em }
+	       p { margin: 1em 0 }
+        </style>
+	</head>
+	<body>
+	   <h2>LIST...</h2>
+	   <p>· <a href="{{ url_album }}">相册</a><br/></p>
+	   <p>· <a href="{{ url_blog }}">博客</a><br/></p>
+	   <p>· 全自动作死机</p>
+	   <h2></h2>
+	   <p>
+	       <table>
+	           <tr>
+	               <td>Your IP:</td><td>[{{ ip }}]</td>
+	           </tr>
+               <tr>
+                   <td>Vistors:</td><td>[{{ pageview }}]</td>
+               </tr>
+               <tr>
+                   <td>NowDate:</td><td>[{{ datetime }}]</td>
+               </tr>
+	       </table>
+	   </p>
+	   <h2></h2>
+	   <p>
+		   <font color="blue">温馨提示：再刷新 [{{ email_cnt }}] 次页面就可以发送邮件咯！</font>
+		   <br/>
+		   <br/>
+		   <font color="red">{{ email_msg }}</font>
+	   </p>
+	   <p>
+	       <font color="green">{{ db_msg }}</font>
+	   </p>
+	</body>
+</html>

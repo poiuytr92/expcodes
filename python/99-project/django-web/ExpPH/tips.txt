@@ -1,0 +1,11 @@
+
+config.yaml 和 index.wsgi 为新浪SAE上运行 ExpPH 项目的web接口配置文件。
+
+新浪SAE使用的是 1.5版的 django，而本地是1.7版的django，
+两者区别：
+1、django 1.5比1.7项目少了一层目录。
+2、生成新的django项目后，1.7版需要把 settings.py 的 MIDDLEWARE_CLASSES 中的
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware'
+      注释掉，否则1.5无法兼容运行。
+      
+      
