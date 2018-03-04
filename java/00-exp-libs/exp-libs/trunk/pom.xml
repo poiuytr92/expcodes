@@ -303,6 +303,19 @@
           <version>3.3</version>
         </dependency>
         
+        <!-- TensorFlow深度学习模型接口 -->
+        <dependency>
+          <groupId>org.tensorflow</groupId>
+          <artifactId>tensorflow</artifactId>
+          <version>1.6.0-rc1</version>
+          <exclusions>
+            <exclusion> <!-- 此JNI接口目前已知仅用于记录运行日志，暂时不需要 -->
+              <groupId>org.tensorflow</groupId>
+              <artifactId>libtensorflow_jni</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+        
         <!-- WEB-SOCKET -->
 	    <dependency>
 		  <groupId>org.java-websocket</groupId>
