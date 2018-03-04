@@ -36,7 +36,7 @@ public class TestTensorFlow {
 	private final static String STORM_CODE_URL = Config.getInstn().STORM_CODE_URL();
 	
 	/** 图片缓存目录 */
-	private final static String IMG_DIR = "./src/test/resources/exp/bilibili/plugin/utils/test/storm/";
+	private final static String IMG_DIR = "./src/test/resources/exp/bilibili/plugin/utils/test/storm/download/";
 	
 	/** 节奏风暴验证码图片宽度 */
 	private final static int IMG_WIDTH = 112;
@@ -77,6 +77,7 @@ public class TestTensorFlow {
 	 * @param cookie
 	 * @return
 	 */
+	@SuppressWarnings("unused")
 	private static String getStormCaptcha(BiliCookie cookie) {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "");
 		Map<String, String> request = _getRequest();

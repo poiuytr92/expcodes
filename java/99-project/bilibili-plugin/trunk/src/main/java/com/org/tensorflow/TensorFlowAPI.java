@@ -1,38 +1,48 @@
 package com.org.tensorflow;
 
-import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.tensorflow.Graph;
 import org.tensorflow.Operation;
 import org.tensorflow.Session;
+import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
-import org.tensorflow.TensorFlow;
 
 /**
- *
- * @author yangzhenggang
- * @since jdk1.7
- * @version 2017年4月17日 yangzhenggang
+ * <PRE>
+ * TensorFlow深度学习训练模型调用接口
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-03-04
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
-public class TensorFlowInferenceInterface {
+public class TensorFlowAPI {
     
-    /** modelName */
-    private final String modelName;
+	/** 日志器 */
+	private final static Logger log = LoggerFactory.getLogger(TensorFlowAPI.class);
+	
+    /** 已训练好的PB文件模型 */
+    private final String pbModelFilePath;
     
-    /** g */
-    private final Graph g;
+    /** PB训练模型(TensorFlow用数据流图表示模型) */
+    private final Graph graph;
     
-    /** sess */
-    private final Session sess;
+    /** TensorFlow会话 */
+    private final Session session;
     
-    /** runner */
-    private Session.Runner runner;
+    /** TensorFlow执行器 */
+    private Runner runner;
     
     /** feedNames */
     private List<String> feedNames = new ArrayList<String>();
@@ -49,42 +59,62 @@ public class TensorFlowInferenceInterface {
     /** runStats */
     private RunStats runStats;
     
-    public TensorFlowInferenceInterface(String modelFile) {
-    	this(modelFile, modelFile);
+    /**
+     * 构造函数
+     * @param pbModelFilePath 已训练好的PB模型文件路径
+     */
+    public TensorFlowAPI(String pbModelFilePath) {
+        this.pbModelFilePath = pbModelFilePath;
+        this.graph = loadGraph(pbModelFilePath);
+        this.session = new Session(graph);
+        this.runner = session.runner();
     }
     
     /**
-     * Load a TensorFlow model from the AssetManager or from disk if it is not
-     * an asset file.
-     * 
-     * @param modelFile The AssetManager to use to load the model file.
-     * 
-     * @param model The filepath to the GraphDef proto representing the model.
+     * 加载TensorFlow训练模型
+     * @param pbModelFilePath 已训练好的PB模型文件路径
+     * @return
      */
-    public TensorFlowInferenceInterface(String modelFile, String modelName) {
-        this.modelName = modelName;
-        this.g = new Graph();
-        this.sess = new Session(g);
-        this.runner = sess.runner();
+    private Graph loadGraph(String pbModelFilePath) {
+    	Graph graph = new Graph();
         try {
-            loadGraph(modelFile, g);
-            System.out.println("Successfully loaded model from '" + modelName + "'");
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load model from '" + modelName + "'", e);
+            byte[] graphDef = Files.readAllBytes(Paths.get(pbModelFilePath));
+            graph.importGraphDef(graphDef);
+            
+        } catch (Exception e) {
+            log.error("加载TensorFlow训练模型失败: {}", pbModelFilePath, e);
         }
+        return graph;
     }
     
-    public void showNodesName() {
-    	System.out.println("========");
-        Iterator<Operation> ops = g.operations();
+    /**
+     * 获取TensorFlow训练模型
+     * @return Graph
+     */
+    public final Graph graph() {
+        return graph;
+    }
+    
+    /**
+     * 提取模型中所有张量节点的名称和类型
+     * @return Map: name->type
+     */
+    public Map<String, String> listAllNodes() {
+    	Map<String, String> nodes = new HashMap<String, String>();
+        Iterator<Operation> ops = graph.operations();
         while(ops.hasNext()) {
         	Operation op = ops.next();
-        	System.out.println(op.name() + "," + op.numOutputs() + "," + op.type());
+        	nodes.put(op.name(), op.type());
         }
-        System.out.println("========");
+        return nodes;
     }
     
     /**
+     * 在先前注册的输入节点之间进行推理（通过*）
+*和请求的输出节点。然后，输出节点可以用
+*获取*方法。
+应该由推理填充的输出节点列表
+*通过。
      * Runs inference between the previously registered input nodes (via feed*)
      * and the requested output nodes. Output nodes can then be queried with the
      * fetch* methods.
@@ -114,8 +144,8 @@ public class TensorFlowInferenceInterface {
         // Add fetches.
         for (String o : outputNames) {
             fetchNames.add(o);
-            TensorId tid = TensorId.parse(o);
-            runner.fetch(tid.name, tid.outputIndex);
+            TensorIndex ti = TensorIndex.parse(o);
+            runner.fetch(ti.NAME(), ti.IDX());
         }
         
         // Run the session.
@@ -143,19 +173,11 @@ public class TensorFlowInferenceInterface {
             // runner, this run is
             // over.
             closeFeeds();
-            runner = sess.runner();
+            runner = session.runner();
         }
     }
     
-    /**
-     * Returns a reference to the Graph describing the computation run during
-     * inference.
-     * 
-     * @return Graph
-     */
-    public Graph graph() {
-        return g;
-    }
+    
     
     /**
      * 方法说明
@@ -184,10 +206,10 @@ public class TensorFlowInferenceInterface {
      * @param t 参数
      */
     private void addFeed(String inputName, Tensor t) {
-        // The string format accepted by TensorFlowInferenceInterface is
+        // The string format accepted by TF is
         // node_name[:output_index].
-        TensorId tid = TensorId.parse(inputName);
-        runner.feed(tid.name, tid.outputIndex, t);
+        TensorIndex ti = TensorIndex.parse(inputName);
+        runner.feed(ti.NAME(), ti.IDX(), t);
         feedNames.add(inputName);
         feedTensors.add(t);
     }
@@ -236,9 +258,9 @@ public class TensorFlowInferenceInterface {
      * @return 参数
      */
     public Operation graphOperation(String operationName) {
-        final Operation operation = g.operation(operationName);
+        final Operation operation = graph.operation(operationName);
         if (operation == null) {
-            throw new RuntimeException("Node '" + operationName + "' does not exist in model '" + modelName + "'");
+            throw new RuntimeException("Node '" + operationName + "' does not exist in model '" +  pbModelFilePath+ "'");
         }
         return operation;
     }
@@ -259,8 +281,8 @@ public class TensorFlowInferenceInterface {
     public void close() {
         closeFeeds();
         closeFetches();
-        sess.close();
-        g.close();
+        session.close();
+        graph.close();
         if (runStats != null) {
             runStats.close();
         }
@@ -273,67 +295,6 @@ public class TensorFlowInferenceInterface {
             close();
         } finally {
             super.finalize();
-        }
-    }
-    
-    /**
-     * 方法说明
-     * 
-     * @param path 参数
-     * @param graph 参数
-     * @throws IOException 参数
-     */
-    private void loadGraph(String path, Graph graph) throws IOException {
-        final long startMs = System.currentTimeMillis();
-        try {
-            byte[] graphDef = Files.readAllBytes(Paths.get(path));
-            graph.importGraphDef(graphDef);
-        } catch (IOException e) {
-            System.err.println("Failed to read [" + path + "]: " + e.getMessage());
-            throw e;
-        }
-        final long endMs = System.currentTimeMillis();
-        System.out
-            .println("Model load took " + (endMs - startMs) + "ms, TensorFlow version: " + TensorFlow.version());
-    }
-    
-    /**
-     *
-     * @author yangzhenggang
-     * @since jdk1.7
-     * @version 2017年4月17日 yangzhenggang
-     */
-    private static class TensorId {
-        
-        /** name */
-        String name;
-        
-        /** outputIndex */
-        int outputIndex;
-        
-        /**
-         * Parse output names into a TensorId.
-         * E.g., "foo" --> ("foo", 0), while "foo:1" --> ("foo", 1)
-         * 
-         * @param name 参数
-         * @return 参数
-         */
-        public static TensorId parse(String name) {
-            TensorId tid = new TensorId();
-            int colonIndex = name.lastIndexOf(':');
-            if (colonIndex < 0) {
-                tid.outputIndex = 0;
-                tid.name = name;
-                return tid;
-            }
-            try {
-                tid.outputIndex = Integer.parseInt(name.substring(colonIndex + 1));
-                tid.name = name.substring(0, colonIndex);
-            } catch (NumberFormatException e) {
-                tid.outputIndex = 0;
-                tid.name = name;
-            }
-            return tid;
         }
     }
     

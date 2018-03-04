@@ -22,11 +22,11 @@ public class TestVercodeUtils {
 	
 	@Test
 	public void testRecognizeStormImage() {
-		File dir = new File("./src/test/resources/exp/bilibili/plugin/utils/test/storm");
+		File dir = new File("./src/test/resources/exp/bilibili/plugin/utils/test/storm/train");
 		File[] imgs = dir.listFiles();
 		for(File img : imgs) {
 			FileType type = FileUtils.getFileType(img);
-			if(type == FileType.JPG) {
+			if(type == FileType.PNG) {
 				String code = VercodeUtils.recognizeStormImage(img.getPath());
 				System.out.println(img.getName() + " : " + code);
 			}

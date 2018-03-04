@@ -2,9 +2,6 @@ package exp.bilibili.plugin.utils;
 
 import java.awt.image.BufferedImage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.org.tensorflow.TensorFlow;
 
 /**
@@ -19,13 +16,28 @@ import com.org.tensorflow.TensorFlow;
  */
 public class TensorFlowUtils {
 
-	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(TensorFlowUtils.class);
-	
+	/** 已训练好的验证码模型 */
 	private final static String PB_PATH = "./conf/tensorflow/storm-captch.pb";
 	
+	/** TensorFlow接口 */
 	private final static TensorFlow _TF = new TensorFlow(PB_PATH);
 	
+	/** 验证码图片宽度 */
+	private final static int IMG_WIDTH = 112;
+	
+	/** 验证码图片高度 */
+	private final static int IMG_HEIGHT = 32;
+	
+	/** 验证码图片中含有的字符个数 */
+	private final static int CHAR_NUM = 5;
+	
+	/**
+	 * 验证码图片中的字符的取值范围: 
+	 * 	26(小写英文字符) + 10(数字)
+	 */
+	private final static int CHAR_RANGE = 36;
+	
+	/** 私有化构造函数 */
 	protected TensorFlowUtils() {}
 	
 	/**
@@ -34,21 +46,32 @@ public class TensorFlowUtils {
 	 * @return
 	 */
 	public static String imgToTxt(String imgPath) {
+		
+		// 读取图片数据并转换为二进制格式（黑色为0，白色为1）
 		BufferedImage image = ImageUtils.read(imgPath);
 		BufferedImage binaryImage = ImageUtils.toBinary(image);
 		float[] inputImage = _TF.loadImage(binaryImage);
 		
-		_TF.setInput("image_input", inputImage, 112, 32);		// image_input
-		_TF.setInput("keep_prob", new float[] { 1.0f }, 1);		// keep_prob (神经元被选中的概率，用于防过拟合，取值0~1.0，值越大训练越快，但准确率越低)
+		// 输入张量image_input: 待解析的二进制图片数据
+		_TF.setInput("image_input", inputImage, IMG_WIDTH, IMG_HEIGHT);	// 
 		
-		// 解集： 5x36 (26+10)
+		// 输入张量keep_prob: 神经元被选中的概率，用于防过拟合，取值0~1.0，值越大训练越快，但准确率越低; 但使用模型时固定为1即可
+		_TF.setInput("keep_prob", new float[] { 1.0f }, 1);		
+		
+		// 获取此CNN模型的输出张量： 
+		// 张量维度为 180 = 5x36 (26+10), 每行可解析为一个验证码字符
 		float[] output = _TF.getOutput("final_output");
-		int[] idxs = _TF.argmax(output, 5, 36, 1);
+		
+		// 分析输出张量，得到最终解(取输出张量矩阵每行最大值的索引值)
+		int[] idxs = _TF.argmax(output, CHAR_NUM, CHAR_RANGE, 1);
+		
+		// 把索引值解析成字符
 		StringBuilder captch = new StringBuilder();
 		for(int idx : idxs) {
-			if(idx < 26) {
+			if(idx < 26) {	// 解析为小写英文字母
 				captch.append((char) (idx + 'a'));
-			} else {
+				
+			} else {		// 解析为数字
 				captch.append((char) (idx - 26 + '0'));
 			}
 		}
