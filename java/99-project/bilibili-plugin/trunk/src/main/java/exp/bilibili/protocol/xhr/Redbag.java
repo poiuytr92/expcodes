@@ -38,11 +38,6 @@ public class Redbag extends __XHR {
 	/** 私有化构造函数 */
 	protected Redbag() {}
 	
-	public static void main(String[] args) {
-		CookiesMgr.getInstn().load(CookieType.MAIN);
-		System.out.println(queryBucketRoomId(CookiesMgr.MAIN()));
-	}
-	
 	public static int queryBucketRoomId(BiliCookie cookie) {
 		int roomId = 0;
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "pages/1703/spring-2018.html");
