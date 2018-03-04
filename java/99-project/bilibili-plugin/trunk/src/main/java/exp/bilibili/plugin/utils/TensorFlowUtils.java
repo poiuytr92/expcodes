@@ -2,7 +2,9 @@ package exp.bilibili.plugin.utils;
 
 import java.awt.image.BufferedImage;
 
-import com.org.tensorflow.TensorFlow;
+import exp.libs.algorithm.dl.tensorflow.TensorFlow;
+import exp.libs.utils.img.ImageUtils;
+import exp.libs.utils.io.FileUtils;
 
 /**
  * <PRE>
@@ -46,6 +48,9 @@ public class TensorFlowUtils {
 	 * @return
 	 */
 	public static String imgToTxt(String imgPath) {
+		if(!FileUtils.exists(PB_PATH)) {
+			return "";
+		}
 		
 		// 读取图片数据并转换为二进制格式（黑色为0，白色为1）
 		BufferedImage image = ImageUtils.read(imgPath);

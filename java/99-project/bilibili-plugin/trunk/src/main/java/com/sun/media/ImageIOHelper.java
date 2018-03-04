@@ -23,13 +23,15 @@ import javax.imageio.stream.ImageOutputStream;
 
 import com.sun.media.imageio.plugins.tiff.TIFFImageWriteParam;
 
-/*
- * ImageIOHelper.java
- *
- * Created on December 24, 2007, 1:15 AM
- *
- * To change this template, choose Tools | Template Manager
- * and open the template in the editor.
+/**
+ * <PRE>
+ * 图像IO接口
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class ImageIOHelper {
 

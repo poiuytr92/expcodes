@@ -188,8 +188,8 @@ class _Lottery extends __XHR {
 				String image = JsonUtils.getStr(data, BiliCmdAtrbt.image);
 				String savePath = HttpUtils.convertBase64Img(image, IMG_DIR, "storm");
 				
-				rst[0] = token;
 				rst[1] = VercodeUtils.recognizeStormImage(savePath);
+				rst[0] = StrUtils.isEmpty(rst[1]) ? "" : token;
 			}
 		} catch(Exception e) {
 			log.error("获取节奏风暴验证码图片异常: {}", response, e);
