@@ -1,5 +1,6 @@
 package exp.libs.warp.net.http.cookie;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class HttpCookie {
 	public HttpCookie() {
 		this.cookies = new LinkedList<_HttpCookie>();
 		this.nvCookies = "";
-		isChanged = false;
+		this.isChanged = false;
 	}
 	
 	/**
@@ -82,16 +83,17 @@ public class HttpCookie {
 			isChanged = true;
 			cookies.add(cookie);
 			
-			takeNV(cookie.getName(), cookie.getValue());
+			takeCookieNVE(cookie.getName(), cookie.getValue(), cookie.getExpiry());
 		}
 	}
 	
 	/**
 	 * 在添加新的cookie时会触发此方法, 用于提取某些特殊的名值对作为常量, 例如CSRF
-	 * @param name 键名
-	 * @param value 键值
+	 * @param name cookie键名
+	 * @param value cookie键值
+	 * @param expires cookie有效期
 	 */
-	protected void takeNV(String name, String value) {
+	protected void takeCookieNVE(String name, String value, Date expires) {
 		// Undo
 	}
 	
