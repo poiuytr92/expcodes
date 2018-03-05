@@ -211,9 +211,17 @@ public class TimeUtils {
 	 * @param ymdhms yyyy-MM-dd HH:mm:ss格式字符串
 	 * @return 毫秒时间
 	 */
-	public static long toMillis(String ymdhms) {
-		Date date = toDate(ymdhms);
+	public static long toMillis(Date date) {
 		return (date == null ? 0 : date.getTime());
+	}
+	
+	/**
+	 * 把[yyyy-MM-dd HH:mm:ss格式字符串]转换为[毫秒时间]
+	 * @param ymdhms yyyy-MM-dd HH:mm:ss格式字符串
+	 * @return 毫秒时间
+	 */
+	public static long toMillis(String ymdhms) {
+		return toMillis(toDate(ymdhms));
 	}
 	
 	/**
@@ -223,8 +231,7 @@ public class TimeUtils {
 	 * @return 毫秒时间
 	 */
 	public static long toMillis(String sData, String format) {
-		Date date = toDate(sData, format);
-		return (date == null ? 0 : date.getTime());
+		return toMillis(toDate(sData, format));
 	}
 	
 	/**

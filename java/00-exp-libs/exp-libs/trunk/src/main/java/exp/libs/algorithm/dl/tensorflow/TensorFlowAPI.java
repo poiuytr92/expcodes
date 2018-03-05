@@ -1,8 +1,7 @@
 package exp.libs.algorithm.dl.tensorflow;
 
+import java.io.File;
 import java.nio.FloatBuffer;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,8 +17,7 @@ import org.tensorflow.Session.Run;
 import org.tensorflow.Session.Runner;
 import org.tensorflow.Tensor;
 
-import exp.libs.utils.io.JarUtils;
-import exp.libs.utils.os.OSUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.ListUtils;
 
 /**
@@ -36,9 +34,6 @@ public class TensorFlowAPI {
     
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(TensorFlowAPI.class);
-	
-	/** 本地运行库目录*/
-	private final static String NATIVE_LIB_DIR = "./lib/";
 	
     /** PB训练模型(TensorFlow用数据流图表示模型) */
     private final Graph graph;
@@ -82,7 +77,10 @@ public class TensorFlowAPI {
         this.feedTensors = new HashMap<String, Tensor<?>>();
         this.fetchTensors = new HashMap<String, Tensor<?>>();
         
-        loadNativeLinbary(debug);
+        if(debug == true) {
+        	this.debug = true;
+        	this.runStats = new RunStats();
+        }
     }
     
     /**
@@ -93,63 +91,14 @@ public class TensorFlowAPI {
     private Graph loadGraph(String pbModelFilePath) {
     	Graph graph = new Graph();
         try {
-            byte[] graphDef = Files.readAllBytes(Paths.get(pbModelFilePath));
+        	File pbModelFile = new File(pbModelFilePath);
+            byte[] graphDef = FileUtils.readFileToByteArray(pbModelFile);
             graph.importGraphDef(graphDef);
             
         } catch (Exception e) {
             log.error("加载TensorFlow训练模型失败: {}", pbModelFilePath, e);
         }
         return graph;
-    }
-    
-    /**
-     * 加载本地运行库(dll/so文件)
-     * 	库文件在 libtensorflow_jni.jar 构件中
-     */
-    private void loadNativeLinbary(boolean debug) {
-    	boolean isOk = false;
-        if(debug == true) {
-        	if(OSUtils.isWin()) {
-        		final String SRC_DIR = "/org/tensorflow/native/windows-x86_64/";
-        		final String LIB_NAME = "tensorflow_jni.dll";
-        		isOk = loadNativeLinbary(SRC_DIR, NATIVE_LIB_DIR, LIB_NAME);
-        		
-        	} else {
-        		isOk = true;
-        		final String SRC_DIR = "/org/tensorflow/native/linux-x86_64/";
-        		final String[] LIB_NAMES = { "libtensorflow_jni.so", "libtensorflow_framework.so" };
-        		for(String libName : LIB_NAMES) {
-        			isOk &= loadNativeLinbary(SRC_DIR, NATIVE_LIB_DIR, libName);
-        		}
-        	}
-        }
-        
-        if(isOk == true) {
-        	this.debug = true;
-        	this.runStats = new RunStats();
-        }
-    }
-    
-    /**
-     * 加载本地运行库
-     * @param srcDir
-     * @param snkDir
-     * @param libName
-     * @return
-     */
-    private boolean loadNativeLinbary(String srcDir, String snkDir, String libName) {
-    	String srcPath = srcDir.concat(libName);
-		String snkPath = snkDir.concat(libName);
-		JarUtils.copyFile(srcPath, snkPath);
-		
-		boolean isOk = true;
-		try {
-			System.load(snkPath);
-		} catch(Exception e) {
-			log.error("加载本地运行库失败: {}", libName, e);
-			isOk = false;
-		}
-		return isOk;
     }
     
     /**

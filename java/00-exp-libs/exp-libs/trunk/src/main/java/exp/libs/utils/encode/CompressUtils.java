@@ -645,10 +645,7 @@ public class CompressUtils {
 				
 				// 所解压的是目录
 				if ("".equals(name) || name.endsWith("/")) {
-					if (!destFile.mkdirs()) {
-						isOk = false;
-						break;
-					}
+					destFile.mkdirs();
 					continue;
 
 				// 所解压的是文件, 先创建其所有祖先目录
@@ -718,10 +715,7 @@ public class CompressUtils {
 				
 				// 所解压的是目录
 				if ("".equals(name) || name.endsWith("/")) {
-					if (!destFile.mkdirs()) {
-						isOk = false;
-						break;
-					}
+					destFile.mkdirs();
 					continue;
 
 				// 所解压的是文件, 先创建其所有祖先目录

@@ -308,12 +308,6 @@
           <groupId>org.tensorflow</groupId>
           <artifactId>tensorflow</artifactId>
           <version>1.6.0-rc1</version>
-          <exclusions>
-            <exclusion> <!-- 此JNI接口目前已知仅用于记录运行日志，暂时不需要 -->
-              <groupId>org.tensorflow</groupId>
-              <artifactId>libtensorflow_jni</artifactId>
-            </exclusion>
-          </exclusions>
         </dependency>
         
         <!-- WEB-SOCKET -->
@@ -479,7 +473,6 @@
 	      </exclusions>
 	    </dependency>
 	    <dependency>
-	      <!-- XmlSchema-1.4.7.jar和xmlschema-core-2.1.0.jar 使用2.1.0版本 -->
 	      <groupId>org.apache.ws.xmlschema</groupId>
 	      <artifactId>xmlschema-core</artifactId>
 	      <version>2.1.0</version>
@@ -509,7 +502,6 @@
 	          <artifactId>cxf-rt-bindings-xml</artifactId>
 	          <groupId>org.apache.cxf</groupId>
 	        </exclusion>
-	        <!-- 整合到ktjsdp依赖 <exclusion> <artifactId>asm</artifactId> <groupId>asm</groupId> </exclusion> -->
 	        <exclusion>
 	          <artifactId>xml-resolver</artifactId>
 	          <groupId>xml-resolver</groupId>
