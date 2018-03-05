@@ -16,6 +16,7 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
+import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
@@ -39,7 +40,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 	
 	private static final long serialVersionUID = 4379374798564622516L;
 
-	private final static int WIDTH = 500;
+	private final static int WIDTH = 700;
 	
 	private final static int HEIGHT = 600;
 	
@@ -96,7 +97,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
 		panel.add(SwingUtils.getPairsPanel("挂机数", userLabel), BorderLayout.WEST);
-		panel.add(SwingUtils.getWEBorderPanel(new JLabel("  [房号]: "), roomTF, 
+		panel.add(SwingUtils.getWEBorderPanel(new JLabel("  [默认投喂房间号]: "), roomTF, 
 				SwingUtils.getHGridPanel(roomBtn, feedBtn)), BorderLayout.CENTER);
 		return panel;
 	}
@@ -107,16 +108,17 @@ public class _MiniUserMgrUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int id = NumUtils.toInt(roomTF.getText().trim(), 0);
-				if(id > 0) {
+				String sRoomId = roomTF.getText().trim();
+				int id = NumUtils.toInt(sRoomId, 0);
+				if(RoomMgr.getInstn().isExist(id)) {
 					roomId = id;
-					SwingUtils.warn("修改成功");
-					if(autoFeed == true) {
-						UIUtils.log("[自动投喂] 房间号变更为: ", roomId);
-					}
+					String msg = StrUtils.concat("[默认投喂房间号] 变更为: ", roomId);
+					SwingUtils.info(msg);
+					UIUtils.log(msg);
 					
 				} else {
-					SwingUtils.warn("无效的房间号");
+					SwingUtils.warn("无效的房间号: ".concat(sRoomId));
+					roomTF.setText(String.valueOf(roomId));
 				}
 			}
 		});
@@ -129,7 +131,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				autoFeed = !autoFeed;
 				if(autoFeed == true) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.blue, feedBtn);
-					UIUtils.log("[自动投喂] 已启动, 投喂房间号: ", roomId);
+					UIUtils.log("[自动投喂] 已启动, 默认投喂房间号: ", roomId);
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, feedBtn);

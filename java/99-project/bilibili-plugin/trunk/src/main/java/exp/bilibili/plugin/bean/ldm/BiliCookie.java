@@ -61,6 +61,9 @@ public class BiliCookie extends HttpCookie {
 	/** 自动投喂 */
 	private boolean autoFeed;
 	
+	/** 投喂房间号 */
+	private int feedRoomId;
+	
 	public BiliCookie() {
 		super();
 		init();
@@ -80,6 +83,7 @@ public class BiliCookie extends HttpCookie {
 		this.isVip = false;
 		this.isGuard = false;
 		this.autoFeed = false;
+		this.feedRoomId = 0;
 		
 		// 以下值可能先在 {@link takeCookieNVE} 中被初始化
 		this.expires = (expires == null ? new Date() : expires);
@@ -190,6 +194,14 @@ public class BiliCookie extends HttpCookie {
 		this.autoFeed = autoFeed;
 	}
 	
+	public int getFeedRoomId() {
+		return feedRoomId;
+	}
+
+	public void setFeedRoomId(int feedRoomId) {
+		this.feedRoomId = feedRoomId;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null || !(obj instanceof BiliCookie)) {

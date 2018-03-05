@@ -160,6 +160,15 @@ public class RoomMgr {
 	}
 	
 	/**
+	 * 检查房间号是否存在
+	 * @param roomId 房间号(短号或长号均可)
+	 * @return
+	 */
+	public boolean isExist(int roomId) {
+		return (realRoomIds.get(roomId) != null);
+	}
+	
+	/**
 	 * 从外存读取真实房号记录
 	 */
 	private void readRoomIds() {

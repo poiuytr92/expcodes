@@ -161,9 +161,8 @@ public class Gifts extends __XHR {
 				JSONObject json = JSONObject.fromObject(response);
 				int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 				if(code == 0) {
-					log.info("[{}] 投喂直播间 [{}] 成功: [{}x{}]", cookie.NICKNAME(), roomId, 
-							bagGift.getGiftName(), bagGift.getGiftNum());
-					
+					UIUtils.log("[", cookie.NICKNAME(), "] 已投喂直播间 [", roomId, 
+							"] 礼物: [", bagGift.getGiftName(), "x", bagGift.getGiftNum(), "]");
 				} else {
 					String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 					log.warn("[{}] 投喂直播间 [{}] 失败: {}", cookie.NICKNAME(), roomId, reason);

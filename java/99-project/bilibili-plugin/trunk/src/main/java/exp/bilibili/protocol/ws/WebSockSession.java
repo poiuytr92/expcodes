@@ -193,7 +193,7 @@ class WebSockSession extends WebSocketClient {
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		isClosed = true;
-		log.info("websocket连接正在断开: [错误码:{}] [发起人:{}] [原因:{}]", 
+		log.error("websocket连接断开: [错误码:{}] [发起人:{}] [原因:{}]", 
 				code, (remote ? "server" : "client"), reason);
 		UIUtils.log("与直播间的连接已断开 (Reason:", (remote ? "server" : "client"), ")");
 	}

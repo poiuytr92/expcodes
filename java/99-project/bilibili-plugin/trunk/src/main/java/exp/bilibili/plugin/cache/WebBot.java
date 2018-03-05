@@ -258,13 +258,15 @@ public class WebBot extends LoopThread {
 	 */
 	private void toAutoFeed() {
 		if(UIUtils.isAutoFeed() == false) {
-			return;
+			return;	// 总开关
 		}
 		
-		int roomId = UIUtils.getFeedRoomId();
+		int defaultRoomId = UIUtils.getFeedRoomId();
 		Set<BiliCookie> cookies = CookiesMgr.MINIs();
 		for(BiliCookie cookie : cookies) {
 			if(cookie.isAutoFeed()) {
+				int roomId = cookie.getFeedRoomId();
+				roomId = RoomMgr.getInstn().isExist(roomId) ? roomId : defaultRoomId;
 				XHRSender.toFeed(cookie, roomId);
 			}
 		}
