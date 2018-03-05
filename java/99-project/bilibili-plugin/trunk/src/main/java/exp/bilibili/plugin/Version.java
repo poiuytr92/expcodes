@@ -30,7 +30,6 @@ public class Version {
 		// win10系统无法执行小学数据任务(OCR不可用)
 		// WS- 注释  ,OCR  RSA代码整理
 		// 模拟APP观看时长	(如何获取app的cookie ?? 安卓模拟器抓包？？？  手机节奏风暴不需要验证码)
-		// 备份cookie zip
 	}
 	
 }

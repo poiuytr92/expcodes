@@ -7,8 +7,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -37,8 +39,12 @@ import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.ws.WebSockClient;
+import exp.libs.envm.FileType;
+import exp.libs.utils.encode.CompressUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -78,6 +84,14 @@ public class AppUI extends MainWindow {
 	
 	private JButton loginBtn;
 	
+	private JButton logoutBtn;
+	
+	private JButton addUserBtn;
+	
+	private JButton exportBtn;
+	
+	private JButton importBtn;
+	
 	private JButton loveBtn;
 	
 	private JButton linkBtn;
@@ -87,10 +101,6 @@ public class AppUI extends MainWindow {
 	private JButton activeListBtn;
 	
 	private JButton stormBtn;
-	
-	private JButton addUserBtn;
-	
-	private JButton clrBtn;
 	
 	private JButton sendBtn;
 	
@@ -225,13 +235,14 @@ public class AppUI extends MainWindow {
 		this.loginUser = "";
 		this.isLogined = false;
 		this.loginBtn = new JButton("扫码/帐密登陆(自动抽奖)");
+		this.logoutBtn = new JButton("销");
+		this.addUserBtn = new JButton("╋");
+		this.exportBtn = new JButton("备");
+		this.importBtn = new JButton("导");
 		this.loveBtn = new JButton("★");
 		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
 		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
 		this.activeListBtn = new JButton("☷");
-		this.stormBtn = new JButton("节奏风暴扫描");
-		this.addUserBtn = new JButton("╋");
-		this.clrBtn = new JButton("注销");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
 		this.musicBtn = new JButton("随缘点歌姬");
@@ -242,16 +253,18 @@ public class AppUI extends MainWindow {
 		this.callBtn = new JButton("小call姬");
 		this.eCallBtn = new JButton(">");
 		this.nightBtn = new JButton("晚安姬");
+		this.stormBtn = new JButton("节奏风暴扫描");
 		this.redbagBtn = new JButton("红包兑奖姬");
 		loginBtn.setForeground(Color.BLACK);
+		logoutBtn.setForeground(Color.BLACK);
+		addUserBtn.setForeground(Color.BLACK);
+		exportBtn.setForeground(Color.BLACK);
+		importBtn.setForeground(Color.BLACK);
 		loveBtn.setToolTipText("设为默认");
 		loveBtn.setForeground(Color.MAGENTA);
 		linkBtn.setForeground(Color.BLACK);
 		lotteryBtn.setForeground(Color.BLACK);
 		activeListBtn.setForeground(Color.BLUE);
-		stormBtn.setForeground(Color.BLACK);
-		addUserBtn.setForeground(Color.BLACK);
-		clrBtn.setForeground(Color.BLACK);
 		sendBtn.setForeground(Color.BLACK);
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
 		musicBtn.setForeground(Color.BLACK);
@@ -262,6 +275,7 @@ public class AppUI extends MainWindow {
 		callBtn.setForeground(Color.BLACK);
 		eCallBtn.setForeground(Color.BLACK);
 		nightBtn.setForeground(Color.BLACK);
+		stormBtn.setForeground(Color.BLACK);
 		redbagBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
@@ -362,7 +376,8 @@ public class AppUI extends MainWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
 		panel.add(loginBtn, BorderLayout.CENTER);
-		panel.add(SwingUtils.getHGridPanel(addUserBtn, clrBtn), BorderLayout.EAST);
+		panel.add(SwingUtils.getHGridPanel(
+				addUserBtn, exportBtn, importBtn, logoutBtn), BorderLayout.EAST);
 		return panel;
 	}
 	
@@ -389,13 +404,14 @@ public class AppUI extends MainWindow {
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
 		setLoginBtnListener();
+		setLogoutBtnListener();
+		setAddUserBtnListener();
+		setExportBtnListener();
+		setImportBtnListener();
 		setLoveBtnListener();
 		setLinkBtnListener();
 		setLotteryBtnListener();
 		setActiveListBtnListener();
-		setStormBtnListener();
-		setAddUserBtnListener();
-		setClrBtnListener();
 		setSendBtnListener();
 		setColorBtnListener();
 		setMusicBtnListener();
@@ -403,6 +419,7 @@ public class AppUI extends MainWindow {
 		setCallBtnListener();
 		setThxBtnListener();
 		setNightBtnListener();
+		setStormBtnListener();
 		setRedbagBtnListener();
 		setChatTFListener();
 		setEditBtnListener();
@@ -418,7 +435,7 @@ public class AppUI extends MainWindow {
 				if(CookiesMgr.MAIN() != BiliCookie.NULL || 
 						CookiesMgr.getInstn().load(CookieType.MAIN)) {
 					markLogin(CookiesMgr.MAIN().NICKNAME());
-					loginMinis();
+					_loginMinis();
 				
 				// 手工登陆
 				} else {
@@ -427,7 +444,7 @@ public class AppUI extends MainWindow {
 						@Override
 						public void afterLogin(final BiliCookie cookie) {
 							markLogin(cookie.NICKNAME());
-							loginMinis();
+							_loginMinis();
 						}
 						
 						@Override
@@ -444,12 +461,94 @@ public class AppUI extends MainWindow {
 	/**
 	 * 异步登陆所有小号
 	 */
-	private void loginMinis() {
+	private void _loginMinis() {
 		new Thread() {
 			public void run() {
 				miniLoginMgrUI.init();
 			};
 		}.start();
+	}
+	
+	private void setLogoutBtnListener() {
+		logoutBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(SwingUtils.confirm("注销 [主号] 和 [马甲号] 并退出程序, 继续吗 ?")) {
+					if(CookiesMgr.clearMainAndVestCookies()) {
+						UIUtils.notityExit("注销成功, 重启后请重新登陆");
+						
+					} else {
+						SwingUtils.info("注销失败");
+					}
+				}
+			}
+		});
+	}
+	
+	private void setAddUserBtnListener() {
+		addUserBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!isLogined()) {
+					SwingUtils.warn("请先登录主号");
+					return;
+				}
+				
+				miniLoginMgrUI._view();
+			}
+		});
+	}
+	public static void main(String[] args) {
+		String snkPath = StrUtils.concat(PathUtils.getDesktopPath(), "/", 
+				FileUtils.getName(Config.getInstn().COOKIE_DIR()), 
+				FileType.ZIP.EXT);
+		CompressUtils.toZip(Config.getInstn().COOKIE_DIR(), snkPath);
+		
+		CompressUtils.unZip(snkPath, ".");
+	}
+	private void setExportBtnListener() {
+		exportBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(SwingUtils.confirm("备份登陆账号的Cookies? (用于升级迁移)")) {
+					String snkPath = StrUtils.concat(PathUtils.getDesktopPath(), 
+							File.separator, 
+							FileUtils.getName(Config.getInstn().COOKIE_DIR()), 
+							FileType.ZIP.EXT);
+					if(CompressUtils.toZip(Config.getInstn().COOKIE_DIR(), snkPath)) {
+						SwingUtils.info("Cookies已备份到桌面: ".concat(snkPath));
+					}
+				}
+			}
+		});
+	}
+	
+	private void setImportBtnListener() {
+		importBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(SwingUtils.confirm("导入Cookies? (会覆盖当前登陆账号)")) {
+					JFileChooser fc = new JFileChooser();
+					
+					if(JFileChooser.APPROVE_OPTION == fc.showOpenDialog(null)) {
+						File file = fc.getSelectedFile();
+						boolean isOk = CompressUtils.unZip(file.getAbsolutePath(), ".");
+						isOk &= !FileUtils.isEmpty(Config.getInstn().COOKIE_DIR());
+						
+						if(isOk == true) {
+							SwingUtils.info("Cookies已导入".concat(
+									isLogined() ? "(重启后生效)" : ""));
+						} else {
+							SwingUtils.warn("无效的Cookies文件");
+						}
+					}
+				}
+			}
+		});
 	}
 	
 	private void setLoveBtnListener() {
@@ -549,110 +648,6 @@ public class AppUI extends MainWindow {
 				
 				ActivityMgr.getInstn().init();
 				new _ActiveListUI()._view();
-			}
-		});
-	}
-	
-	private void setStormBtnListener() {
-		stormBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(!isLogined()) {
-					SwingUtils.warn("登陆后才能使用此功能");
-					return;
-				}
-				
-				// 扫描器线程未启动，则触发登录马甲流程
-				if(!StormScanner.getInstn().isRun()) {
-					_loginStormVest();
-					
-				// 扫描器线程已启动，则纯粹切换扫描状态
-				} else {
-					StormScanner.getInstn().setScan();
-					if(StormScanner.getInstn().isScan()) {
-						BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, stormBtn);
-						UIUtils.log("[全平台节奏风暴扫描] 已启动");
-						
-					} else {
-						BeautyEyeUtils.setButtonStyle(NormalColor.normal, stormBtn);
-						UIUtils.log("[全平台节奏风暴扫描] 已停止");
-					}
-				}
-				lockBtn();
-			}
-		});
-	}
-	
-	/**
-	 * 登录节奏风暴马甲号(用于扫描全平台节奏风暴)
-	 */
-	private void _loginStormVest() {
-		CookiesMgr.getInstn().load(CookieType.VEST);
-		BiliCookie vestCookie = CookiesMgr.VEST();
-		
-		// 若现有马甲号不是主号，则使用现有马甲号
-		if(BiliCookie.NULL != vestCookie && !CookiesMgr.MAIN().equals(vestCookie)) {
-			_startStormScanner();
-			
-		// 若不存在马甲号 或 现有马甲号是主号， 则询问
-		} else if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
-			LoginBtn btn = new LoginBtn(CookieType.VEST, "", new __LoginCallback() {
-				
-				@Override
-				public void afterLogin(final BiliCookie cookie) {
-					_startStormScanner();
-				}
-				
-				@Override
-				public void afterLogout(final BiliCookie cookie) {
-					// Undo
-				}
-				
-			});
-			btn.doClick();
-			
-		// 使用主号作为马甲号
-		} else {
-			CookiesMgr.getInstn().add(CookiesMgr.MAIN(), CookieType.VEST);
-			_startStormScanner();
-		}
-	}
-	
-	private void _startStormScanner() {
-		StormScanner.getInstn()._start();
-		lockBtn();
-		stormBtn.doClick();
-	}
-	
-	private void setAddUserBtnListener() {
-		addUserBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(!isLogined()) {
-					SwingUtils.warn("请先登录主号");
-					return;
-				}
-				
-				miniLoginMgrUI._view();
-			}
-		});
-	}
-	
-	private void setClrBtnListener() {
-		clrBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(SwingUtils.confirm("注销 [主号] 和 [马甲号] 并退出程序, 继续吗 ?")) {
-					if(CookiesMgr.clearMainAndVestCookies()) {
-						UIUtils.notityExit("注销成功, 重启后请重新登陆");
-						
-					} else {
-						SwingUtils.info("注销失败");
-					}
-				}
 			}
 		});
 	}
@@ -831,6 +826,78 @@ public class AppUI extends MainWindow {
 				lockBtn();
 			}
 		});
+	}
+	
+	private void setStormBtnListener() {
+		stormBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!isLogined()) {
+					SwingUtils.warn("登陆后才能使用此功能");
+					return;
+				}
+				
+				// 扫描器线程未启动，则触发登录马甲流程
+				if(!StormScanner.getInstn().isRun()) {
+					_loginStormVest();
+					
+				// 扫描器线程已启动，则纯粹切换扫描状态
+				} else {
+					StormScanner.getInstn().setScan();
+					if(StormScanner.getInstn().isScan()) {
+						BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, stormBtn);
+						UIUtils.log("[全平台节奏风暴扫描] 已启动");
+						
+					} else {
+						BeautyEyeUtils.setButtonStyle(NormalColor.normal, stormBtn);
+						UIUtils.log("[全平台节奏风暴扫描] 已停止");
+					}
+				}
+				lockBtn();
+			}
+		});
+	}
+	
+	/**
+	 * 登录节奏风暴马甲号(用于扫描全平台节奏风暴)
+	 */
+	private void _loginStormVest() {
+		CookiesMgr.getInstn().load(CookieType.VEST);
+		BiliCookie vestCookie = CookiesMgr.VEST();
+		
+		// 若现有马甲号不是主号，则使用现有马甲号
+		if(BiliCookie.NULL != vestCookie && !CookiesMgr.MAIN().equals(vestCookie)) {
+			_startStormScanner();
+			
+		// 若不存在马甲号 或 现有马甲号是主号， 则询问
+		} else if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
+			LoginBtn btn = new LoginBtn(CookieType.VEST, "", new __LoginCallback() {
+				
+				@Override
+				public void afterLogin(final BiliCookie cookie) {
+					_startStormScanner();
+				}
+				
+				@Override
+				public void afterLogout(final BiliCookie cookie) {
+					// Undo
+				}
+				
+			});
+			btn.doClick();
+			
+		// 使用主号作为马甲号
+		} else {
+			CookiesMgr.getInstn().add(CookiesMgr.MAIN(), CookieType.VEST);
+			_startStormScanner();
+		}
+	}
+	
+	private void _startStormScanner() {
+		StormScanner.getInstn()._start();
+		lockBtn();
+		stormBtn.doClick();
 	}
 	
 	private void setRedbagBtnListener() {
