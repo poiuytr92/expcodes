@@ -226,10 +226,10 @@ public class WebBot extends LoopThread {
 		if(loopCnt++ >= EVENT_LIMIT) {
 			loopCnt = 0;
 			
-			checkCookieExpires();	// 检查Cookie有效期
 			toCapsule();	// 自动扭蛋
 			toAutoFeed();	// 自动投喂
 			takeFinishAchieve();	// 领取成就奖励
+			checkCookieExpires();	// 检查Cookie有效期
 			
 			// 打印心跳
 			log.info("{} 活动中...", getName());
