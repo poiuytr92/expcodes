@@ -63,7 +63,7 @@ public class GenerateTensorFlowTrainDatas {
 		CookiesMgr.getInstn().load(CookieType.VEST);
 		BiliCookie cookie = CookiesMgr.VEST();
 		
-		for(int i = 0; i < 10; i++) {
+		for(int i = 0; i < 1000; i++) {
 			String imgPath = getStormCaptcha(cookie);
 			BufferedImage image = ImageUtils.read(imgPath);
 			
