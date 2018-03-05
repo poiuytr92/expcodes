@@ -40,7 +40,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 	
 	private static final long serialVersionUID = 4379374798564622516L;
 
-	private final static int WIDTH = 700;
+	private final static int WIDTH = 750;
 	
 	private final static int HEIGHT = 600;
 	

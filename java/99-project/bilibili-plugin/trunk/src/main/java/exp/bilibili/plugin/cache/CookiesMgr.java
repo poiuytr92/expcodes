@@ -152,7 +152,7 @@ public class CookiesMgr {
 				if(fileName.contains(COOKIE_MINI_PREFIX) && miniCookies.size() < MAX_NUM) {
 					String cookiePath = PathUtils.combine(dir.getPath(), fileName);
 					BiliCookie miniCookie = load(cookiePath, type);
-					if(BiliCookie.NULL != null) {
+					if(BiliCookie.NULL != miniCookie) {
 						miniCookies.add(miniCookie);
 						isOk = true;
 					}
