@@ -536,8 +536,14 @@ public class AppUI extends MainWindow {
 					
 					if(JFileChooser.APPROVE_OPTION == fc.showOpenDialog(null)) {
 						File file = fc.getSelectedFile();
-						boolean isOk = CompressUtils.unZip(file.getAbsolutePath(), ".");
-						isOk &= !FileUtils.isEmpty(Config.getInstn().COOKIE_DIR());
+						
+						boolean isOk = true;
+						if(FileType.ZIP == FileUtils.getFileType(file)) {
+							isOk = CompressUtils.unZip(file.getAbsolutePath(), ".");
+							isOk &= !FileUtils.isEmpty(Config.getInstn().COOKIE_DIR());
+						} else {
+							isOk = false;
+						}
 						
 						if(isOk == true) {
 							SwingUtils.info("Cookies已导入".concat(

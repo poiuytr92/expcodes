@@ -39,7 +39,7 @@ public class SafetyMonitor extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(SafetyMonitor.class);
 	
-	/** 软件授权页(Github) */
+	/** 软件授权页(Github) TLS协议版本问题，需JDK1.8编译的程序才能访问此网址 */
 	private final static String GITHUB_URL = CryptoUtils.deDES(
 			"610BEF99CF948F0DB1542314AC977291892B30802EC5BF3B2DCDD5538D66DDA67467CE4082C2D0BC56227128E753555C");
 	
