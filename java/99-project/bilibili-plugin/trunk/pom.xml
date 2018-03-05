@@ -164,9 +164,21 @@
 	          <groupId>org.seleniumhq.selenium</groupId>
 	          <artifactId>selenium-htmlunit-driver</artifactId>
 	        </exclusion>
+	        <exclusion>	<!-- tensorflow本地化接口（darwin+linux+win） -->
+	          <groupId>org.tensorflow</groupId>
+	          <artifactId>libtensorflow_jni</artifactId>
+	        </exclusion>
 	      </exclusions>
 		</dependency>
 		
+		<!-- tensorflow本地化接口（精简：仅win） -->
+		<dependency>
+		  <groupId>org.tensorflow</groupId>
+		  <artifactId>libtensorflow_jni-for-win</artifactId>
+		  <version>1.6.0-rc1</version>
+		  <classifier>rc1</classifier>
+		</dependency>
+
 		<!-- 程序校验 -->
 		<dependency>
 			<groupId>exp.certificate</groupId>
