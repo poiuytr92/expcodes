@@ -231,7 +231,7 @@ public class AppUI extends MainWindow {
 		this.activeListBtn = new JButton("☷");
 		this.stormBtn = new JButton("节奏风暴扫描");
 		this.addUserBtn = new JButton("╋");
-		this.clrBtn = new JButton("清");
+		this.clrBtn = new JButton("注销");
 		this.sendBtn = new JButton("发言");
 		this.colorBtn = new JButton("●");
 		this.musicBtn = new JButton("随缘点歌姬");
@@ -645,12 +645,12 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(SwingUtils.confirm("清除 [主号] 和 [马甲号] 的登陆痕迹, 继续吗 ?")) {
+				if(SwingUtils.confirm("注销 [主号] 和 [马甲号] 并退出程序, 继续吗 ?")) {
 					if(CookiesMgr.clearMainAndVestCookies()) {
-						SwingUtils.info("已清除, 重启程序后生效");
+						UIUtils.notityExit("注销成功, 重启后请重新登陆");
 						
 					} else {
-						SwingUtils.info("清除失败");
+						SwingUtils.info("注销失败");
 					}
 				}
 			}

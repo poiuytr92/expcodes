@@ -38,7 +38,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
-		<jdk.version>1.8</jdk.version>
+		<jdk.version>1.7</jdk.version>
 		<explibs.version>1.0-SNAPSHOT</explibs.version>
 		<mrp.plugin.version>1.0-SNAPSHOT</mrp.plugin.version>
 	</properties>
@@ -182,19 +182,6 @@
 		  <classifier>alpha</classifier>
 		</dependency>
 		
-		<!-- 深度学习模型接口 -->
-		<dependency>
-          <groupId>org.tensorflow</groupId>
-          <artifactId>tensorflow</artifactId>
-          <version>1.6.0-rc1</version>
-          <exclusions>
-            <exclusion> <!-- 此JNI接口目前已知仅用于记录运行日志，暂时不需要 -->
-              <groupId>org.tensorflow</groupId>
-              <artifactId>libtensorflow_jni</artifactId>
-            </exclusion>
-          </exclusions>
-        </dependency>
-
 		<!-- 单元测试 -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -247,7 +234,7 @@
 							<value>target/cobertura/cobertura.ser</value>
 						</property>
 					</systemProperties>
-					<!-- 项目打包时是否跳过d单元测试 -->
+					<!-- 项目打包时是否跳过单元测试 -->
 					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
@@ -459,20 +446,24 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
                 <configuration>
                		<aggregate>true</aggregate>
                 	<charset>UTF-8</charset>
                 	<encoding>UTF-8</encoding>
                 	<docencoding>UTF-8</docencoding>
+                	<skip>false</skip>	<!-- 是否在项目打包时跳过javadoc -->
                 </configuration>
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
+			            <id>attach-javadocs</id>
+			            <phase>deploy</phase>
+			            <goals>
+			                <goal>jar</goal>
+			            </goals>
+			            <configuration>
+			                <additionalparam>-Xdoclint:none</additionalparam>
+			            </configuration>
+			        </execution>
                 </executions>
             </plugin>
 

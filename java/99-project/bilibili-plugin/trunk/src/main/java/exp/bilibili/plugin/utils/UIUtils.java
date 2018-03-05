@@ -9,6 +9,7 @@ import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.ui.AppUI;
 import exp.bilibili.plugin.ui._NoticeUI;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.ui.SwingUtils;
 
 /**
  * <PRE>
@@ -110,6 +111,11 @@ public class UIUtils {
 	public static void notityLive(int roomId) {
 		new _NoticeUI(roomId)._view();		// 右下角通知提示
 		Toolkit.getDefaultToolkit().beep();	// 蜂鸣音提示
+	}
+	
+	public static void notityExit(String msg) {
+		SwingUtils.warn(msg);
+		System.exit(0);
 	}
 	
 }

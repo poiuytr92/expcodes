@@ -88,7 +88,8 @@ public class VercodeUtils {
 	 * @return 文字形式字符
 	 */
 	public static String recognizeStormImage(String imgPath) {
-		return StrUtils.isTrimEmpty(imgPath) ? "" : TensorFlowUtils.imgToTxt(imgPath);
+		return StrUtils.isTrimEmpty(imgPath) ? "" : 
+			TensorFlowUtils.imgToTxt(imgPath);
 	}
 	
 }

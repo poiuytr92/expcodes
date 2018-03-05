@@ -33,7 +33,7 @@ public class Config {
 	
 	public final static int DEFAULT_ROOM_ID = 390480;
 	
-	public Set<Integer> tabuAutoRoomIds;
+	private Set<Integer> tabuAutoRoomIds;
 	
 	private static volatile Config instance;
 	
