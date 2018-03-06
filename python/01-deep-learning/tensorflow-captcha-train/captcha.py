@@ -211,7 +211,7 @@ def crack_captcha_by_pb():
 
 
 if __name__ == '__main__':
-    train_crack_captcha_cnn()   # 训练模型
+    # train_crack_captcha_cnn()   # 训练模型
     # crack_captcha_by_ckpt()       # 测试模式
-    # crack_captcha_by_pb()         # 测试模式
+    crack_captcha_by_pb()         # 测试模式
 
