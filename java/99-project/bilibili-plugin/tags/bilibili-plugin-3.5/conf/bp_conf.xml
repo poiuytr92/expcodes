@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config hint="常用配置（覆写全量配置文件的对应项）">
+  
+    <app caption="应用配置">
+        <signRoomId caption="签到直播间(房间勋章等级越高签到奖励越多)">438</signRoomId>
+        <stormFrequency caption="节奏风暴扫描频率(单位:ms)" hint="小于100容易被封IP">100</stormFrequency>
+    </app>
+   
+</config>
