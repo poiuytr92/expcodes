@@ -1,201 +1,289 @@
 package exp.bilibili.plugin;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
+import java.util.Random;
 
-import net.sf.json.JSONObject;
+import javax.imageio.ImageIO;
 
-import org.junit.Test;
-
-import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.cache.CookiesMgr;
-import exp.bilibili.plugin.envm.CookieType;
-import exp.bilibili.protocol.envm.BiliCmdAtrbt;
-import exp.libs.envm.FileType;
-import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.img.ImageUtils;
-import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.num.IDUtils;
-import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.HttpURLUtils;
-import exp.libs.warp.net.http.HttpUtils;
-
-/**
- * <PRE>
- * 生成TensorFlow训练数据（节奏风暴验证码）
- * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2017-12-17
- * @author    EXP: 272629724@qq.com
- * @since     jdk版本：jdk1.6
- */
 public class GenerateTensorFlowTrainDatas {
 
-	/** 直播服务器主机 */
-	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
-	
-	/** 直播首页 */
-	private final static String LIVE_HOME = Config.getInstn().LIVE_HOME();
-	
-	/** 获取节奏风暴验证码URL */
-	private final static String STORM_CODE_URL = Config.getInstn().STORM_CODE_URL();
-	
-	/** 图片缓存目录 */
-	private final static String IMG_DIR = "./src/test/resources/exp/bilibili/plugin/utils/test/storm/download/";
-	
-	/** 节奏风暴验证码图片宽度 */
-	private final static int IMG_WIDTH = 112;
-	
-	/** 节奏风暴验证码图片高度 */
-	private final static int IMG_HEIGHT = 32;
-	
-	/**
-	 * 下载节奏风暴验证码图片并将其二值化
-	 *  可用于深度学习训练
-	 * @param args
-	 */
-	@Test
-	public void testDownloadStormVccodeImage() {
-		CookiesMgr.getInstn().load(CookieType.VEST);
-		BiliCookie cookie = CookiesMgr.VEST();
-		
-		for(int i = 0; i < 1000; i++) {
-			String imgPath = getStormCaptcha(cookie);
-			BufferedImage image = ImageUtils.read(imgPath);
-			
-			FileUtils.delete(imgPath);	// 先删除原图
-			image = ImageUtils.toBinary(image);	// 二值化图片
-			if(isVaild(image)) {	// 检查是否为有效图片（容易辨析，可用于深度训练）
-				String savePath = StrUtils.concat(IMG_DIR, IDUtils.getMillisID(), FileType.PNG.EXT);
-				ImageUtils.write(image, savePath, FileType.PNG);
-				System.out.println(savePath);
-				
-			} else {
-				i--;
-			}
-			ThreadUtils.tSleep(100);
+	public static void main(String[] args) throws IOException {
+		File dir = new File("./log/");
+		int w = 112, h = 32;
+		for (int i = 0; i < 10; i++) {
+			String verifyCode = generateVerifyCode(5);
+			File file = new File(dir, verifyCode + ".jpg");
+			outputImage(w, h, file, verifyCode);
 		}
 	}
 	
-	/**
-	 * 下载节奏风暴验证码图片
-	 * @param cookie
-	 * @return
-	 */
-	@SuppressWarnings("unused")
-	private static String getStormCaptcha(BiliCookie cookie) {
-		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "");
-		Map<String, String> request = _getRequest();
-		String response = HttpURLUtils.doGet(STORM_CODE_URL, header, request);
-		
-		String savePath = "";
-		try {
-			JSONObject json = JSONObject.fromObject(response);
-			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
-			if(code == 0) {
-				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
-				String token = JsonUtils.getStr(data, BiliCmdAtrbt.token);
-				String image = JsonUtils.getStr(data, BiliCmdAtrbt.image);
-				savePath = HttpUtils.convertBase64Img(image, IMG_DIR, "storm");
-			}
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
-		return savePath;
-	}
-	
-	/**
-	 * 生成GET方法的请求头参数
-	 * @param cookie
-	 * @return
-	 */
-	protected final static Map<String, String> GET_HEADER(String cookie) {
-		Map<String, String> header = new HashMap<String, String>();
-		header.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
-		return header;
-	}
-	
-	/**
-	 * 生成GET方法的请求头参数
-	 * @param cookie
-	 * @param uri
-	 * @return
-	 */
-	protected final static Map<String, String> GET_HEADER(String cookie, String uri) {
-		Map<String, String> header = GET_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_HOME);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_HOME.concat(uri));
-		return header;
-	}
-	
-	/**
-	 * 获取节奏风暴验证码参数
-	 * @return
-	 */
-	private static Map<String, String> _getRequest() {
-		Map<String, String> request = new HashMap<String, String>();
-		request.put(BiliCmdAtrbt.underline, String.valueOf(System.currentTimeMillis()));
-		request.put(BiliCmdAtrbt.width, String.valueOf(IMG_WIDTH));
-		request.put(BiliCmdAtrbt.height, String.valueOf(IMG_HEIGHT));
-		return request;
-	}
-	
-	/**
-	 * 检查是否为有效图像（此方法仅仅是粗判）
-	 *   前景色（黑色）像素的个数在一定范围内时，认为是有效图片
-	 * @param image
-	 * @return
-	 */
-	private boolean isVaild(BufferedImage image) {
-		final int W = image.getWidth();
-		final int H = image.getHeight();
-		
-		int blackCnt = 0;
-		for(int w = 0; w < W; w++) {
-			for(int h = 0; h < H; h++) {
-				int RGB = image.getRGB(w, h);
-				blackCnt += (RGB == ImageUtils.RGB_BLACK ? 1 : 0);
-			}
-		}
-		
-		// 前景色在图像占比为 5%~25% 之间认为是有效图像
-		// 过少认为二值化后图像过浅，难以辨认
-		// 过多认为二值化后图像噪点过多，干扰太多
-		boolean isVaild = false;
-		double percent = ((double) blackCnt) / (W * H);
-		if(percent >= 0.05 && percent <= 0.25) {
-			isVaild = true;
-		}
-		return isVaild;
-	}
-	
-	/**
-	 * 把指定目录下的所有图片二值化
-	 */
-	@Test
-	public void testConvertImageToBinary() {
-		File dir = new File(IMG_DIR);
-		File[] files = dir.listFiles();
-		for(File file : files) {
-			if(FileType.PNG == FileUtils.getFileType(file)) {
-				BufferedImage img = ImageUtils.read(file.getAbsolutePath());
-				img = ImageUtils.toBinary(img);	// 单通道图像
-				boolean isOk = ImageUtils.write(img, file.getAbsolutePath(), FileType.PNG);
-				
-				System.out.println(isOk + " : " + file.getPath());
-			}
-		}
-	}
-	
-}
+	// 使用到Algerian字体，系统里没有的话需要安装字体，字体只显示大写，去掉了0,o,l几个容易混淆的字符
+	public static final String VERIFY_CODES = "123456789abcdefghijkmnpqrstuvwxyz";
+	private static Random random = new Random();
 
+	/**
+	 * 使用系统默认字符源生成验证码
+	 * 
+	 * @param verifySize
+	 *            验证码长度
+	 * @return
+	 */
+	public static String generateVerifyCode(int verifySize) {
+		return generateVerifyCode(verifySize, VERIFY_CODES);
+	}
+
+	/**
+	 * 使用指定源生成验证码
+	 * 
+	 * @param verifySize
+	 *            验证码长度
+	 * @param sources
+	 *            验证码字符源
+	 * @return
+	 */
+	public static String generateVerifyCode(int verifySize, String sources) {
+		if (sources == null || sources.length() == 0) {
+			sources = VERIFY_CODES;
+		}
+		int codesLen = sources.length();
+		Random rand = new Random(System.currentTimeMillis());
+		StringBuilder verifyCode = new StringBuilder(verifySize);
+		for (int i = 0; i < verifySize; i++) {
+			verifyCode.append(sources.charAt(rand.nextInt(codesLen - 1)));
+		}
+		return verifyCode.toString();
+	}
+
+	/**
+	 * 生成随机验证码文件,并返回验证码值
+	 * 
+	 * @param w
+	 * @param h
+	 * @param outputFile
+	 * @param verifySize
+	 * @return
+	 * @throws IOException
+	 */
+	public static String outputVerifyImage(int w, int h, File outputFile,
+			int verifySize) throws IOException {
+		String verifyCode = generateVerifyCode(verifySize);
+		outputImage(w, h, outputFile, verifyCode);
+		return verifyCode;
+	}
+
+	/**
+	 * 输出随机验证码图片流,并返回验证码值
+	 * 
+	 * @param w
+	 * @param h
+	 * @param os
+	 * @param verifySize
+	 * @return
+	 * @throws IOException
+	 */
+	public static String outputVerifyImage(int w, int h, OutputStream os,
+			int verifySize) throws IOException {
+		String verifyCode = generateVerifyCode(verifySize);
+		outputImage(w, h, os, verifyCode);
+		return verifyCode;
+	}
+
+	/**
+	 * 生成指定验证码图像文件
+	 * 
+	 * @param w
+	 * @param h
+	 * @param outputFile
+	 * @param code
+	 * @throws IOException
+	 */
+	public static void outputImage(int w, int h, File outputFile, String code)
+			throws IOException {
+		if (outputFile == null) {
+			return;
+		}
+		File dir = outputFile.getParentFile();
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		try {
+			outputFile.createNewFile();
+			FileOutputStream fos = new FileOutputStream(outputFile);
+			outputImage(w, h, fos, code);
+			fos.close();
+		} catch (IOException e) {
+			throw e;
+		}
+	}
+
+	/**
+	 * 输出指定验证码图片流
+	 * 
+	 * @param w
+	 * @param h
+	 * @param os
+	 * @param code
+	 * @throws IOException
+	 */
+	public static void outputImage(int w, int h, OutputStream os, String code)
+			throws IOException {
+		int verifySize = code.length();
+		BufferedImage image = new BufferedImage(w, h,
+				BufferedImage.TYPE_INT_RGB);
+		Random rand = new Random();
+		Graphics2D g2 = image.createGraphics();
+		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+				RenderingHints.VALUE_ANTIALIAS_ON);
+		Color[] colors = new Color[5];
+		Color[] colorSpaces = new Color[] { Color.WHITE, Color.CYAN,
+				Color.GRAY, Color.LIGHT_GRAY, Color.MAGENTA, Color.ORANGE,
+				Color.PINK, Color.YELLOW };
+		float[] fractions = new float[colors.length];
+		for (int i = 0; i < colors.length; i++) {
+			colors[i] = colorSpaces[rand.nextInt(colorSpaces.length)];
+			fractions[i] = rand.nextFloat();
+		}
+		Arrays.sort(fractions);
+
+		g2.setColor(Color.GRAY);// 设置边框色
+		g2.fillRect(0, 0, w, h);
+
+		Color c = Color.WHITE;
+		g2.setColor(Color.WHITE);// 设置背景色
+		g2.fillRect(0, 2, w, h - 4);
+
+		// 绘制干扰线
+		Random random = new Random();
+		g2.setColor(Color.BLACK);// 设置线条的颜色
+		for (int i = 0; i < 20; i++) {
+			int x = random.nextInt(w - 1);
+			int y = random.nextInt(h - 1);
+			int xl = random.nextInt(6) + 1;
+			int yl = random.nextInt(12) + 1;
+			g2.drawLine(x, y, x + xl + 40, y + yl + 20);
+		}
+
+		// 添加噪点
+		float yawpRate = 0.05f;// 噪声率
+		int area = (int) (yawpRate * w * h);
+		for (int i = 0; i < area; i++) {
+			int x = random.nextInt(w);
+			int y = random.nextInt(h);
+			int rgb = getRandomIntColor();
+			image.setRGB(x, y, rgb);
+		}
+
+		shear(g2, w, h, c);// 使图片扭曲
+
+		g2.setColor(Color.BLACK);
+		int fontSize = h - 4;
+		Font font = new Font("Algerian", Font.ITALIC, fontSize);	// 使用的字体
+		g2.setFont(font);
+		char[] chars = code.toCharArray();
+		for (int i = 0; i < verifySize; i++) {
+			AffineTransform affine = new AffineTransform();
+			affine.setToRotation(
+					Math.PI / 4 * rand.nextDouble()
+							* (rand.nextBoolean() ? 1 : -1), (w / verifySize)
+							* i + fontSize / 2, h / 2);
+			g2.setTransform(affine);
+			g2.drawChars(chars, i, 1, ((w - 10) / verifySize) * i + 5, h / 2
+					+ fontSize / 2 - 10);
+		}
+
+		g2.dispose();
+		ImageIO.write(image, "jpg", os);
+	}
+
+	private static Color getRandColor(int fc, int bc) {
+		if (fc > 255)
+			fc = 255;
+		if (bc > 255)
+			bc = 255;
+		int r = fc + random.nextInt(bc - fc);
+		int g = fc + random.nextInt(bc - fc);
+		int b = fc + random.nextInt(bc - fc);
+		return new Color(r, g, b);
+	}
+
+	private static int getRandomIntColor() {
+		int[] rgb = getRandomRgb();
+		int color = 0;
+		for (int c : rgb) {
+			color = color << 8;
+			color = color | c;
+		}
+		return color;
+	}
+
+	private static int[] getRandomRgb() {
+		int[] rgb = new int[3];
+		for (int i = 0; i < 3; i++) {
+			rgb[i] = random.nextInt(255);
+		}
+		return rgb;
+	}
+
+	private static void shear(Graphics g, int w1, int h1, Color color) {
+		shearX(g, w1, h1, color);
+		shearY(g, w1, h1, color);
+	}
+
+	private static void shearX(Graphics g, int w1, int h1, Color color) {
+
+		int period = random.nextInt(2);
+
+		boolean borderGap = true;
+		int frames = 1;
+		int phase = random.nextInt(2);
+
+		for (int i = 0; i < h1; i++) {
+			double d = (double) (period >> 1)
+					* Math.sin((double) i / (double) period
+							+ (6.2831853071795862D * (double) phase)
+							/ (double) frames);
+			g.copyArea(0, i, w1, 1, (int) d, 0);
+			if (borderGap) {
+				g.setColor(color);
+				g.drawLine((int) d, i, 0, i);
+				g.drawLine((int) d + w1, i, w1, i);
+			}
+		}
+
+	}
+
+	private static void shearY(Graphics g, int w1, int h1, Color color) {
+
+		int period = random.nextInt(40) + 10; // 50;
+
+		boolean borderGap = true;
+		int frames = 20;
+		int phase = 7;
+		for (int i = 0; i < w1; i++) {
+			double d = (double) (period >> 1)
+					* Math.sin((double) i / (double) period
+							+ (6.2831853071795862D * (double) phase)
+							/ (double) frames);
+			g.copyArea(i, 0, 1, h1, 0, (int) d);
+			if (borderGap) {
+				g.setColor(color);
+				g.drawLine(i, (int) d, i, 0);
+				g.drawLine(i, (int) d + h1, i, h1);
+			}
+
+		}
+
+	}
+
+}
