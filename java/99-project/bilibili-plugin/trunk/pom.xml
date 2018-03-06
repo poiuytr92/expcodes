@@ -463,18 +463,16 @@
                 	<charset>UTF-8</charset>
                 	<encoding>UTF-8</encoding>
                 	<docencoding>UTF-8</docencoding>
+                	<outputEncondig>UTF-8</outputEncondig>
                 	<skip>false</skip>	<!-- 是否在项目打包时跳过javadoc -->
                 </configuration>
                 <executions>
                     <execution>
 			            <id>attach-javadocs</id>
-			            <phase>deploy</phase>
+			            <phase>install</phase>
 			            <goals>
 			                <goal>jar</goal>
 			            </goals>
-			            <configuration>
-			                <additionalparam>-Xdoclint:none</additionalparam>
-			            </configuration>
 			        </execution>
                 </executions>
             </plugin>
