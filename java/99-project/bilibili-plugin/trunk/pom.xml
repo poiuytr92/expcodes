@@ -172,12 +172,12 @@
 		</dependency>
 		
 		<!-- tensorflow本地化接口（精简：仅win） -->
-		<!-- dependency>
+		<dependency>
 		  <groupId>org.tensorflow</groupId>
 		  <artifactId>libtensorflow_jni-for-win</artifactId>
 		  <version>1.6.0-rc1</version>
 		  <classifier>rc1</classifier>
-		</dependency -->
+		</dependency>
 
 		<!-- 程序校验 -->
 		<dependency>
@@ -391,7 +391,6 @@
 								<copy todir="${release.dir}/conf">
 									<fileset dir="conf">
 									  <exclude name="driver/chrome-driver.exe" />
-									  <exclude name="tensorflow/storm-captch.pb" />
 									</fileset>
 								</copy>
 								<echo>拷贝资源数据</echo>
