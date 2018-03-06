@@ -1,4 +1,4 @@
-package exp.bilibili.plugin;
+package org.tensorflow.test;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -9,6 +9,7 @@ import net.sf.json.JSONObject;
 
 import org.junit.Test;
 
+import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.CookieType;

@@ -1,4 +1,4 @@
-package exp.bilibili.plugin;
+package exp.bilibili.certificate.test;
 
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.TimeUtils;
@@ -15,7 +15,7 @@ import exp.libs.utils.num.NumUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class GenerateSafetyInfo {
+public class GenerateCertificate {
 
 	public static void main(String[] args) {
 		updatePrivateTime();
