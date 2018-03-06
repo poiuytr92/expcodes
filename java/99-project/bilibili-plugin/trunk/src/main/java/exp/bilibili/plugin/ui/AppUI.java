@@ -500,14 +500,7 @@ public class AppUI extends MainWindow {
 			}
 		});
 	}
-	public static void main(String[] args) {
-		String snkPath = StrUtils.concat(PathUtils.getDesktopPath(), "/", 
-				FileUtils.getName(Config.getInstn().COOKIE_DIR()), 
-				FileType.ZIP.EXT);
-		CompressUtils.toZip(Config.getInstn().COOKIE_DIR(), snkPath);
-		
-		CompressUtils.unZip(snkPath, ".");
-	}
+	
 	private void setExportBtnListener() {
 		exportBtn.addActionListener(new ActionListener() {
 			
