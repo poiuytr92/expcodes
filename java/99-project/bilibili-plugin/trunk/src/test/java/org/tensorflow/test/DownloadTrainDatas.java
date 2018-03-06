@@ -34,7 +34,7 @@ import exp.libs.warp.net.http.HttpUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class DownloadTensorFlowTrainDatas {
+public class DownloadTrainDatas {
 
 	/** 直播服务器主机 */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
@@ -64,7 +64,7 @@ public class DownloadTensorFlowTrainDatas {
 		CookiesMgr.getInstn().load(CookieType.VEST);
 		BiliCookie cookie = CookiesMgr.VEST();
 		
-		for(int i = 0; i < 1000; i++) {
+		for(int i = 0; i < 20; i++) {
 			String imgPath = getStormCaptcha(cookie);
 			BufferedImage image = ImageUtils.read(imgPath);
 			

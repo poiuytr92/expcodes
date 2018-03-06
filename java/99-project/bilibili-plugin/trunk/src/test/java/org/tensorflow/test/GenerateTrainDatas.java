@@ -16,7 +16,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-public class GenerateTensorFlowTrainDatas {
+public class GenerateTrainDatas {
 
 	public static void main(String[] args) throws IOException {
 		File dir = new File("./log/");
