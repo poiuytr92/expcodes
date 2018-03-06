@@ -13,8 +13,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 
 TRAIN_DIR = './data/train/'
-TRAIN_CAPTCHA_NUM = 1002  # 用于训练的验证码数量
-TRAIN_MAX_COUNT = 10000    # 训练次数
+TRAIN_CAPTCHA_NUM = 1900  # 用于训练的验证码数量
+TRAIN_MAX_COUNT = 50000    # 训练次数
 MAX_ACC_LINE = 0.99    # 准确率合格线（达到则退出训练）
 
 TEST_DIR = './data/test/'
@@ -211,7 +211,7 @@ def crack_captcha_by_pb():
 
 
 if __name__ == '__main__':
-    # train_crack_captcha_cnn()   # 训练模型
-    # crack_captcha_by_ckpt()       # 测试模式
-    crack_captcha_by_pb()         # 测试模式
+    train_crack_captcha_cnn()   # 训练模型
+    # crack_captcha_by_ckpt()     # 测试模式
+    # crack_captcha_by_pb()       # 测试模式
 
