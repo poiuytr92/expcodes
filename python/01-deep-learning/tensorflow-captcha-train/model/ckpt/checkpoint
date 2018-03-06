@@ -1,2 +1,2 @@
-model_checkpoint_path: "captch.ckpt-2800"
-all_model_checkpoint_paths: "captch.ckpt-2800"
+model_checkpoint_path: "captch.ckpt-5000"
+all_model_checkpoint_paths: "captch.ckpt-5000"

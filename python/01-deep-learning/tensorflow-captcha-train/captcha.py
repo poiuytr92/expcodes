@@ -13,7 +13,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
 
 
 TRAIN_DIR = './data/train/'
-TRAIN_CAPTCHA_NUM = 1900  # 用于训练的验证码数量
+TRAIN_CAPTCHA_NUM = 1899  # 用于训练的验证码数量
 TRAIN_MAX_COUNT = 50000    # 训练次数
 MAX_ACC_LINE = 0.99    # 准确率合格线（达到则退出训练）
 
