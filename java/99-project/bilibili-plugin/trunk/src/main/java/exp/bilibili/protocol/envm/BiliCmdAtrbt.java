@@ -316,4 +316,6 @@ public class BiliCmdAtrbt {
 	
 	public final static String image = "image";
 	
+	public final static String img = "img";
+	
 }

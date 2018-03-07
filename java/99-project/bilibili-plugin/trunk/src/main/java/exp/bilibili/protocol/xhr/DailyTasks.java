@@ -46,8 +46,8 @@ public class DailyTasks extends __XHR {
 	/** 获取小学数学任务验证码URL */
 	private final static String MATH_CODE_URL = Config.getInstn().MATH_CODE_URL();
 	
-	/** 小学数学任务验证码图片的下载保存路径 */
-	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.png");
+	/** 图片缓存目录 */
+	private final static String IMG_DIR = Config.getInstn().IMG_DIR();
 	
 	/** 小学数学任务重试间隔(验证码计算成功率只有90%左右, 失败后需重试) */
 	private final static long SLEEP_TIME = 500L;
@@ -243,9 +243,19 @@ public class DailyTasks extends __XHR {
 	private static int calculateAnswer(Map<String, String> header) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("ts", String.valueOf(System.currentTimeMillis()));
+		String response = HttpURLUtils.doGet(MATH_CODE_URL, header, request);
 		
-		boolean isOk = HttpURLUtils.downloadByGet(VERCODE_PATH, MATH_CODE_URL, header, request);
-		int answer = (isOk ? VercodeUtils.calculateExpressionImage(VERCODE_PATH) : -1);
+		int answer = -1;
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+			String img = JsonUtils.getStr(data, BiliCmdAtrbt.img);
+			String imgPath = HttpUtils.convertBase64Img(img, IMG_DIR, "vercode");
+			answer = VercodeUtils.calculateExpressionImage(imgPath);
+			
+		} catch(Exception e) {
+			log.error("下载小学数学验证码图片失败", e);
+		}
 		return answer;
 	}
 	
