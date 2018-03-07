@@ -1099,18 +1099,12 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 获取自动投喂的房间号
+	 * 是否自动投喂主播
 	 * @return
 	 */
-	public int getFeedRoomId() {
-		int roomId = miniLoginMgrUI.getFeedRoomId();
-		return (roomId <= 0 ? getLiveRoomId() : roomId);
-	}
-	
 	public boolean isAutoFeed() {
 		return miniLoginMgrUI.isAutoFeed();
 	}
-	
 	
 	/**
 	 * 更新弹幕颜色

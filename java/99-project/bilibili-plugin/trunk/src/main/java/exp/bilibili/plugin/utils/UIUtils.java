@@ -96,10 +96,6 @@ public class UIUtils {
 		return AppUI.getInstn().getLiveRoomId();
 	}
 	
-	public static int getFeedRoomId() {
-		return AppUI.getInstn().getFeedRoomId();
-	}
-	
 	public static boolean isAutoFeed() {
 		return AppUI.getInstn().isAutoFeed();
 	}

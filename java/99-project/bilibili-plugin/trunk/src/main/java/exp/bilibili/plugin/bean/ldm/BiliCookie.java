@@ -2,8 +2,11 @@ package exp.bilibili.plugin.bean.ldm;
 
 import java.util.Date;
 
+import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.envm.Danmu;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.cookie.HttpCookie;
 
@@ -27,6 +30,9 @@ public class BiliCookie extends HttpCookie {
 	
 	/** B站用户ID标识 */
 	private final static String UID_KEY = "DedeUserID";
+	
+	/** 自动投喂房间号标识 */
+	private final static String RID_KEY = "RoomID";
 	
 	/** 登陆类型 */
 	private CookieType type;
@@ -83,23 +89,30 @@ public class BiliCookie extends HttpCookie {
 		this.isVip = false;
 		this.isGuard = false;
 		this.autoFeed = false;
-		this.feedRoomId = 0;
 		
 		// 以下值可能先在 {@link takeCookieNVE} 中被初始化
 		this.expires = (expires == null ? new Date() : expires);
 		this.csrf = (StrUtils.isEmpty(csrf) ? "" : csrf);
 		this.uid = (StrUtils.isEmpty(uid) ? "" : uid);
+		this.feedRoomId = (RoomMgr.getInstn().isExist(feedRoomId) ? 
+				feedRoomId : Config.getInstn().SIGN_ROOM_ID());
 	}
 	
 	@Override
-	protected void takeCookieNVE(String name, String value, Date expires) {
+	protected boolean takeCookieNVE(String name, String value, Date expires) {
+		boolean isKeep = true;
 		if(CSRF_KEY.equalsIgnoreCase(name)) {
 			this.csrf = value;
 			
 		} else if(UID_KEY.equalsIgnoreCase(name)) {
 			this.uid = value;
 			this.expires = expires;
+			
+		} else if(RID_KEY.equals(name)) {
+			this.feedRoomId = NumUtils.toInt(value, 0);
+			isKeep = false;	// 属于自定义的cookie属性, 不保持到cookie会话中(即不会发送到服务器)
 		}
+		return isKeep;
 	}
 	
 	/**
@@ -202,6 +215,12 @@ public class BiliCookie extends HttpCookie {
 		this.feedRoomId = feedRoomId;
 	}
 
+	@Override
+	public String toHeaderCookie() {
+		return StrUtils.concat(super.toHeaderCookie(), LFCR, 
+				RID_KEY, "=", getFeedRoomId());
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null || !(obj instanceof BiliCookie)) {

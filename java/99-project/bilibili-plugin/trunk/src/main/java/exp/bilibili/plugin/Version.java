@@ -29,6 +29,8 @@ public class Version {
 		// TODO
 		// WS- 注释  ,OCR  RSA代码整理
 		// 模拟APP观看时长	(如何获取app的cookie ?? 安卓模拟器抓包？？？  手机节奏风暴不需要验证码)
+		// 投喂房号记录到cookies, 移除默认投喂房号
+		
 	}
 	
 }

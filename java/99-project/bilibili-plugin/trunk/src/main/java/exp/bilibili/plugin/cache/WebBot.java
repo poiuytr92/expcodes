@@ -263,12 +263,10 @@ public class WebBot extends LoopThread {
 			return;	// 总开关
 		}
 		
-		int defaultRoomId = UIUtils.getFeedRoomId();
 		Set<BiliCookie> cookies = CookiesMgr.MINIs();
 		for(BiliCookie cookie : cookies) {
 			if(cookie.isAutoFeed()) {
 				int roomId = cookie.getFeedRoomId();
-				roomId = RoomMgr.getInstn().isExist(roomId) ? roomId : defaultRoomId;
 				XHRSender.toFeed(cookie, roomId);
 				ThreadUtils.tSleep(50);
 			}

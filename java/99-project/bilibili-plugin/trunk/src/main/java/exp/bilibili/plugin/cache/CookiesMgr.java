@@ -108,7 +108,7 @@ public class CookiesMgr {
 			isOk = save(cookie, COOKIE_VEST_PATH);
 			
 		} else {
-			if(miniCookies.size() < MAX_NUM) {
+			if(miniCookies.size() < MAX_NUM || miniCookies.contains(cookie)) {
 				String cookiePath = miniPaths.get(cookie);
 				if(cookiePath == null) {
 					cookiePath = PathUtils.combine(COOKIE_DIR, StrUtils.concat(
@@ -127,12 +127,16 @@ public class CookiesMgr {
 			miniPaths.put(cookie, cookiePath);
 		}
 		
-		String data = CryptoUtils.toDES(cookie.toString());
+		String data = CryptoUtils.toDES(cookie.toHeaderCookie());
 		boolean isOk = FileUtils.write(cookiePath, data, Charset.ISO, false);
 		if(isOk == true) {
 			lastAddCookieTime = System.currentTimeMillis();
 		}
 		return isOk;
+	}
+	
+	public boolean update(BiliCookie cookie) {
+		return add(cookie, cookie.TYPE());
 	}
 	
 	public boolean load(CookieType type) {
