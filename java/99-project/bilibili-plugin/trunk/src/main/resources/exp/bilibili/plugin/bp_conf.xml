@@ -45,7 +45,7 @@
         <egJoinURL caption="高能礼物抽奖URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/join]]></egJoinURL>
         <tvJoinURL caption="小电视抽奖URL"><![CDATA[http://api.live.bilibili.com/gift/v2/smalltv/join]]></tvJoinURL>
         <mathCheckURL caption="数学任务检测URL"><![CDATA[http://api.live.bilibili.com/FreeSilver/getCurrentTask]]></mathCheckURL>
-        <mathCodeURL caption="获取数学任务校验码URL"><![CDATA[http://api.live.bilibili.com/freeSilver/getCaptcha]]></mathCodeURL>
+        <mathCodeURL caption="获取数学任务校验码URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/SilverBox/getCaptcha]]></mathCodeURL>
         <mathExecURL caption="执行数学任务URL"><![CDATA[http://api.live.bilibili.com/FreeSilver/getAward]]></mathExecURL>
         
         
