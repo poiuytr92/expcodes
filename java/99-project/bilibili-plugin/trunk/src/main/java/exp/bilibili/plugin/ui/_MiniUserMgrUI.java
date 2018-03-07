@@ -16,7 +16,6 @@ import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -64,7 +63,6 @@ public class _MiniUserMgrUI extends PopChildWindow {
 		userLabel.setForeground(Color.RED);
 		
 		this.feedBtn = new JButton("自动投喂");
-		BeautyEyeUtils.setButtonStyle(NormalColor.green, feedBtn);
 		feedBtn.setForeground(Color.BLACK);
 		
 		this.adPanel = new ADPanel<__MiniUserLine>(__MiniUserLine.class, MAX_USER);
@@ -94,7 +92,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 			public void actionPerformed(ActionEvent e) {
 				autoFeed = !autoFeed;
 				if(autoFeed == true) {
-					BeautyEyeUtils.setButtonStyle(NormalColor.blue, feedBtn);
+					BeautyEyeUtils.setButtonStyle(NormalColor.green, feedBtn);
 					UIUtils.log("[自动投喂姬] 被召唤成功O(∩_∩)O");
 					
 				} else {
@@ -114,7 +112,6 @@ public class _MiniUserMgrUI extends PopChildWindow {
 			for(BiliCookie cookie : cookies) {
 				__MiniUserLine line = new __MiniUserLine(cookie);
 				adPanel.set(line, idx++);
-				ThreadUtils.tSleep(50);
 			}
 			updateUserCount();
 		}

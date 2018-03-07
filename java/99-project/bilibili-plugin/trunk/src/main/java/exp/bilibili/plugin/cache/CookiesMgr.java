@@ -16,6 +16,7 @@ import exp.bilibili.protocol.XHRSender;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -160,6 +161,7 @@ public class CookiesMgr {
 						miniCookies.add(miniCookie);
 						isOk = true;
 					}
+					ThreadUtils.tSleep(50);
 				}
 			}
 		}
