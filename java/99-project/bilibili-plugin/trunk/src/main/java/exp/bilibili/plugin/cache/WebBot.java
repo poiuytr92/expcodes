@@ -230,6 +230,7 @@ public class WebBot extends LoopThread {
 			toCapsule();	// 自动扭蛋
 			toAutoFeed();	// 自动投喂
 			takeFinishAchieve();	// 领取成就奖励
+			reflashActivity();		// 刷新活跃值到数据库
 			checkCookieExpires();	// 检查Cookie有效期
 			
 			// 打印心跳
@@ -282,6 +283,13 @@ public class WebBot extends LoopThread {
 		for(BiliCookie cookie : cookies) {
 			XHRSender.toAchieve(cookie);
 		}
+	}
+	
+	/**
+	 * 刷新活跃值到数据库
+	 */
+	private void reflashActivity() {
+		ActivityMgr.getInstn().reflash();
 	}
 	
 	/**
