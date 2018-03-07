@@ -95,7 +95,7 @@ public class WebBot extends LoopThread {
 	 * 把上次任务重置时间初始化为当天0点
 	 */
 	private void initResetTaskTime() {
-		resetTaskTime = System.currentTimeMillis() / DAY_UNIT * DAY_UNIT;
+		resetTaskTime = (System.currentTimeMillis() + DAY_UNIT) / DAY_UNIT * DAY_UNIT;
 		resetTaskTime -= HOUR_UNIT * HOUR_OFFSET;
 		resetTaskTime += DELAY_TIME;	// 避免临界点时差, 后延一点时间
 	}
@@ -187,7 +187,7 @@ public class WebBot extends LoopThread {
 				
 				long max = -1;
 				max = NumUtils.max(XHRSender.toSign(cookie), max);			// 每日签到
-				max= NumUtils.max(XHRSender.receiveDailyGift(cookie), max);	// 每日/每周礼包
+				max = NumUtils.max(XHRSender.receiveDailyGift(cookie), max);// 每日/每周礼包
 				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
 					max = NumUtils.max(XHRSender.toAssn(cookie), max);		// 友爱社
 					max = NumUtils.max(XHRSender.doMathTask(cookie), max);	// 小学数学
@@ -212,6 +212,7 @@ public class WebBot extends LoopThread {
 			resetTaskTime = now;
 			nextTaskTime = now;
 			finCookies.clear();
+			log.info("日常任务已重置");
 			
 		// 当cookie发生变化时, 仅重置任务时间
 		} else if(nextTaskTime <= 0 && 

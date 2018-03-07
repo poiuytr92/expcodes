@@ -137,11 +137,13 @@ public class DailyTasks extends __XHR {
 	
 	/**
 	 * 领取日常/周常的勋章/友爱社礼物
+	 *  {"code":0,"msg":"success","message":"success","data":{"bag_status":2,"bag_expire_status":1,"bag_list":[{"type":1,"bag_name":"粉丝勋章礼包","source":{"medal_id":"571606","medal_name":"翘李吗","level":17},"gift_list":[{"gift_id":"6","gift_num":4,"expire_at":1520524800}]}],"time":1520438809}}
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	public static long receiveDailyGift(BiliCookie cookie) {
-		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), getRealRoomId());
+		String roomId = getRealRoomId();
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
 		String response = HttpURLUtils.doGet(GIFT_URL, header, null);
 		
 		long nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
@@ -153,7 +155,7 @@ public class DailyTasks extends __XHR {
 				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 				JSONArray bagList = JsonUtils.getArray(data, BiliCmdAtrbt.bag_list);
 				if(!bagList.isEmpty()) {
-					UIUtils.log("[", cookie.NICKNAME(), "] 已领取日常/周常/勋章/友爱社礼包");
+					log.info("[{}] 已领取日常/周常/勋章/友爱社礼包", cookie.NICKNAME());
 				}
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
