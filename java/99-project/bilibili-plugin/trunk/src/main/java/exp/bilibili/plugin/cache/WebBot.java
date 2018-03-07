@@ -13,6 +13,7 @@ import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.bean.other.LotteryRoom;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.LoopThread;
 
@@ -268,6 +269,7 @@ public class WebBot extends LoopThread {
 				int roomId = cookie.getFeedRoomId();
 				roomId = RoomMgr.getInstn().isExist(roomId) ? roomId : defaultRoomId;
 				XHRSender.toFeed(cookie, roomId);
+				ThreadUtils.tSleep(50);
 			}
 		}
 	}

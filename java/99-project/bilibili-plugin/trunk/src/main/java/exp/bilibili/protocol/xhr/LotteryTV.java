@@ -7,6 +7,7 @@ import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -47,6 +48,8 @@ public class LotteryTV extends _Lottery {
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");
 			}
+			
+			ThreadUtils.tSleep(50);
 		}
 		
 		if(cnt > 0) {

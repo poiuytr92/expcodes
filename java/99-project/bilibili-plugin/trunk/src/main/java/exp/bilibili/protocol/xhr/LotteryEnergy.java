@@ -15,6 +15,7 @@ import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
@@ -116,6 +117,8 @@ public class LotteryEnergy extends _Lottery {
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");
 			}
+			
+			ThreadUtils.tSleep(50);
 		}
 		
 		if(cnt > 0) {

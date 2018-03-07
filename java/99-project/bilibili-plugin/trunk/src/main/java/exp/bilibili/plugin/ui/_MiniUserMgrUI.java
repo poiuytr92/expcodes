@@ -20,6 +20,7 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -150,6 +151,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 			for(BiliCookie cookie : cookies) {
 				__MiniUserLine line = new __MiniUserLine(cookie);
 				adPanel.set(line, idx++);
+				ThreadUtils.tSleep(50);
 			}
 			updateUserCount();
 		}
