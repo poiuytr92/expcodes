@@ -7,6 +7,7 @@ import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.ChatColor;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.other.StrUtils;
@@ -141,7 +142,7 @@ public class Chat extends __XHR {
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 				reason = (StrUtils.isEmpty(reason) ? String.valueOf(code) : reason);
-				log.warn("发送消息失败({}): {}", reason, msg);
+				UIUtils.log("发送消息失败(", reason, "): ", msg);
 			}
 		} catch(Exception e) {
 			log.error("发送消息失败: {}", msg, e);

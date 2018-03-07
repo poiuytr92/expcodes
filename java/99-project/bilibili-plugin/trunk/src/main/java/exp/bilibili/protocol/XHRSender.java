@@ -149,6 +149,15 @@ public class XHRSender {
 	}
 	
 	/**
+	 * 领取日常/周常的勋章/友爱社礼物
+	 * @param cookie
+	 * @return
+	 */
+	public static long receiveDailyGift(BiliCookie cookie) {
+		return DailyTasks.receiveDailyGift(cookie);
+	}
+	
+	/**
 	 * 执行小学数学日常任务
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)

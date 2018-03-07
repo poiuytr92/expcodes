@@ -31,6 +31,7 @@
         <roomURL caption="房间信息URL"><![CDATA[http://api.live.bilibili.com/live_user/v1/UserInfo/get_anchor_in_room]]></roomURL>
         <playerURL caption="账号在特定房间内的信息URL"><![CDATA[https://api.live.bilibili.com/api/player]]></playerURL>
         <manageURL caption="房管列表URL"><![CDATA[http://api.live.bilibili.com/live_user/v1/RoomAdmin/get_by_anchor]]></manageURL>
+        <giftURL caption="日常/周常礼物URL"><![CDATA[http://api.live.bilibili.com/gift/v2/live/receive_daily_bag]]></giftURL>
         <bagURL caption="查包裹礼物URL"><![CDATA[http://api.live.bilibili.com/gift/v2/gift/bag_list]]></bagURL>
         <feedURL caption="投喂URL"><![CDATA[http://api.live.bilibili.com/gift/v2/live/bag_send]]></feedURL>
         <getCapsuleURL caption="查扭蛋币URL">http://api.live.bilibili.com/api/ajaxCapsule</getCapsuleURL>

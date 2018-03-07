@@ -15,7 +15,6 @@ import exp.bilibili.protocol.bean.other.User;
 import exp.bilibili.protocol.bean.xhr.BagGift;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
@@ -246,12 +245,8 @@ public class Gifts extends __XHR {
 				isOk = true;
 				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 				JSONArray text = JsonUtils.getArray(data, BiliCmdAtrbt.text);
-				
-				String msg = StrUtils.concat("[", cookie.NICKNAME(), "] 打开了 [", 
-						coin, "] 个扭蛋, 获得: ", text.toString());
-				UIUtils.log(msg);
-				log.info(msg);
-				
+				UIUtils.log("[", cookie.NICKNAME(), "] 打开了 [", coin, 
+						"] 个扭蛋, 获得: ", text.toString());
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 				log.warn("[{}] 打开 [{}] 个扭蛋失败: {}", cookie.NICKNAME(), coin, reason);

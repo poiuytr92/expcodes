@@ -3,6 +3,7 @@ package exp.bilibili.protocol.xhr;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
@@ -32,6 +33,9 @@ public class DailyTasks extends __XHR {
 	
 	/** 友爱社签到URL */
 	private final static String ASSN_URL = Config.getInstn().ASSN_URL();
+	
+	/** 领取日常/周常礼物URL */
+	private final static String GIFT_URL = Config.getInstn().GIFT_URL();
 	
 	/** 检查小学数学任务URL */
 	private final static String MATH_CHECK_URL = Config.getInstn().MATH_CHECK_URL();
@@ -127,6 +131,36 @@ public class DailyTasks extends __XHR {
 		} catch(Exception e) {
 			nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
 			log.error("[{}] {}签到失败: {}", username, signType, response, e);
+		}
+		return nextTaskTime;
+	}
+	
+	/**
+	 * 领取日常/周常的勋章/友爱社礼物
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
+	 */
+	public static long receiveDailyGift(BiliCookie cookie) {
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), getRealRoomId());
+		String response = HttpURLUtils.doGet(GIFT_URL, header, null);
+		
+		long nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
+			if(code == 0) {
+				nextTaskTime = -1;
+				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+				JSONArray bagList = JsonUtils.getArray(data, BiliCmdAtrbt.bag_list);
+				if(!bagList.isEmpty()) {
+					UIUtils.log("[", cookie.NICKNAME(), "] 已领取日常/周常/勋章/友爱社礼包");
+				}
+			} else {
+				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
+				log.warn("[{}] 领取日常/周常/勋章/友爱社礼包失败: {}", cookie.NICKNAME(), reason);
+			}
+		} catch(Exception e) {
+			log.error("[{}] 领取日常/周常/勋章/友爱社礼包失败: {}", cookie.NICKNAME(), response, e);
 		}
 		return nextTaskTime;
 	}

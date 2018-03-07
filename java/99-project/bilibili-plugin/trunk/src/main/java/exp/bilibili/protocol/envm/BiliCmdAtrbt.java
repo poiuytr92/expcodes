@@ -44,6 +44,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String list = "list";
 	
+	public final static String bag_list = "bag_list";
+	
 	public final static String userInfo = "userInfo";
 	
 	public final static String userinfo = "userinfo";
