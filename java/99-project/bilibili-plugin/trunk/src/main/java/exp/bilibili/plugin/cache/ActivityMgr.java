@@ -281,6 +281,18 @@ public class ActivityMgr {
 	}
 	
 	/**
+	 * 刷新活跃值到数据库
+	 */
+	public void reflash() {
+		if(isRecord() == true) {
+			save();
+			lastPeriod = TimeUtils.getLastPeriod();
+			curPeriod = TimeUtils.getCurPeriod();
+			read();
+		}
+	}
+	
+	/**
 	 * 是否记录活跃值
 	 *  当且仅当是管理员身份, 且在监听特定直播间时才记录
 	 * @return
