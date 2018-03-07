@@ -70,21 +70,25 @@ public class HttpCookie {
 	 * @param headerCookie HTTP响应头中的 Set-Cookie, 格式如：
 	 * 	JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
 	 */
-	public void add(String headerCookie) {
-		add(new _HttpCookie(headerCookie));
+	public boolean add(String headerCookie) {
+		return add(new _HttpCookie(headerCookie));
 	}
 	
 	/**
 	 * 添加一个cookie对象
 	 * @param cookie
 	 */
-	public void add(_HttpCookie cookie) {
+	public boolean add(_HttpCookie cookie) {
+		boolean isOk = false;
 		if(cookie != null && cookie.isVaild()) {
-			isChanged = true;
-			cookies.add(cookie);
-			
-			takeCookieNVE(cookie.getName(), cookie.getValue(), cookie.getExpiry());
+			isOk = takeCookieNVE(
+					cookie.getName(), cookie.getValue(), cookie.getExpiry());
+			if(isOk == true) {
+				isChanged = true;
+				cookies.add(cookie);
+			}
 		}
+		return isOk;
 	}
 	
 	/**
@@ -92,9 +96,11 @@ public class HttpCookie {
 	 * @param name cookie键名
 	 * @param value cookie键值
 	 * @param expires cookie有效期
+	 * return true:保留该cookie; false;丢弃该cookie
 	 */
-	protected void takeCookieNVE(String name, String value, Date expires) {
+	protected boolean takeCookieNVE(String name, String value, Date expires) {
 		// Undo
+		return true;
 	}
 	
 	/**
