@@ -19,6 +19,10 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 
 	protected TimeUtils() {}
 	
+	/**
+	 * 获取当前时间
+	 * @return [HH:mm:ss]
+	 */
 	public static String getCurTime() {
 		String time = toStr(System.currentTimeMillis(), "HH:mm:ss");
 		return StrUtils.concat("[", time, "] ");

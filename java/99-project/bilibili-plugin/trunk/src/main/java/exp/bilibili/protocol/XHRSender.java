@@ -1,14 +1,21 @@
 package exp.bilibili.protocol;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
+import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.ChatColor;
+import exp.bilibili.plugin.envm.Gift;
+import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.bean.other.User;
 import exp.bilibili.protocol.bean.xhr.Achieve;
+import exp.bilibili.protocol.bean.xhr.BagGift;
+import exp.bilibili.protocol.bean.xhr.Medal;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.bilibili.protocol.xhr.Gifts;
@@ -211,14 +218,78 @@ public class XHRSender {
 	public static void toEgLottery(int roomId) {
 		LotteryEnergy.toLottery(roomId);
 	}
-	
+
 	/**
 	 * 投喂主播
 	 * @param cookie 投喂用户cookie
 	 * @param roomId 房间号
 	 */
 	public static void toFeed(BiliCookie cookie, int roomId) {
-		Gifts.toFeed(cookie, roomId);
+		
+		// 查询持有的所有礼物（包括银瓜子可以兑换的辣条数）
+		List<BagGift> allGifts = Gifts.queryBagList(cookie, roomId);
+		int silver = Gifts.querySilver(cookie);
+		int giftNum = silver / Gift.HOT_STRIP.COST();
+		if(giftNum > 0) {
+			BagGift bagGift = new BagGift(
+					Gift.HOT_STRIP.ID(), Gift.HOT_STRIP.NAME(), giftNum);
+			allGifts.add(bagGift);
+		}
+		
+		// 查询用户当前持有的勋章
+		Map<Integer, Medal> medals = Gifts.queryMedals(cookie);
+		Medal medal = medals.get(RoomMgr.getInstn().getRealRoomId(roomId));
+		
+		// 筛选可以投喂的礼物列表
+		List<BagGift> feedGifts = filterGifts(allGifts, medal);
+		
+		// 投喂主播
+		User up = Other.queryUpInfo(roomId);
+		Gifts.feed(cookie, roomId, up.ID(), feedGifts);
+	}
+	
+	/**
+	 * 过滤可投喂的礼物
+	 * @param allGifts 当前持有的所有礼物
+	 * @param medal 当前房间的勋章
+	 * @return 可投喂的礼物列表
+	 */
+	private static List<BagGift> filterGifts(List<BagGift> allGifts, Medal medal) {
+		List<BagGift> feedGifts = new LinkedList<BagGift>();
+		
+		// 用户没有持有当前投喂的房间的勋章, 则所有礼物均可投喂
+		if(medal == null) {
+			feedGifts = allGifts;
+			
+		// 用户持有当前投喂的房间的勋章, 则需筛选礼物
+		} else {
+			long tomorrow = TimeUtils.getZeroPointMillis() + TimeUtils.DAY_UNIT; // 明天零点
+			int todayIntimacy = medal.getDayLimit() - medal.getTodayFeed();	// 今天可用亲密度
+			
+			for(BagGift gift : allGifts) {
+				
+				// 今天内到期的礼物, 全部选择(无视亲密度)
+				if(gift.getExpire() > 0 && gift.getExpire() <= tomorrow) {
+					feedGifts.add(gift);
+					todayIntimacy -= gift.getIntimacy() * gift.getGiftNum();
+					continue;
+					
+				// 亲密度<=0 的礼物, 全部不选择(可能是某些活动礼物)
+				} else if(gift.getIntimacy() <= 0) {
+					continue;
+				}
+				
+				// 在不溢出亲密度的前提下选择礼物
+				int num = todayIntimacy / gift.getIntimacy();
+				num = (num > gift.getGiftNum() ? gift.getGiftNum() : num);
+				if(num > 0) {
+					gift.setGiftNum(num);
+					feedGifts.add(gift);
+					todayIntimacy -= gift.getIntimacy() * num;
+				}
+			}
+		}
+		return feedGifts;
 	}
 	
 	/**

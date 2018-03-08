@@ -88,16 +88,7 @@ public class WebBot extends LoopThread {
 		this.finCookies = new HashSet<BiliCookie>();
 		this.lastAddCookieTime = System.currentTimeMillis();
 		this.nextTaskTime = System.currentTimeMillis() + DELAY_TIME;	// 首次打开软件时, 延迟一点时间再执行任务
-		initResetTaskTime();
-	}
-	
-	/**
-	 * 把上次任务重置时间初始化为当天0点
-	 */
-	private void initResetTaskTime() {
-		resetTaskTime = (System.currentTimeMillis() + DAY_UNIT) / DAY_UNIT * DAY_UNIT;
-		resetTaskTime -= HOUR_UNIT * HOUR_OFFSET;
-		resetTaskTime += DELAY_TIME;	// 避免临界点时差, 后延一点时间
+		this.resetTaskTime = TimeUtils.getZeroPointMillis(HOUR_OFFSET) + DELAY_TIME;	// 避免临界点时差, 后延一点时间
 	}
 	
 	/**
@@ -197,6 +188,7 @@ public class WebBot extends LoopThread {
 				if(max <= 0) {
 					finCookies.add(cookie);
 				}
+				ThreadUtils.tSleep(50);
 			}
 		}
 	}

@@ -159,6 +159,10 @@ public class Config {
 		return xConf.getVal("/config/urls/manageURL");
 	}
 	
+	public String MEDAL_URL() {
+		return xConf.getVal("/config/urls/medalURL");
+	}
+	
 	public String GIFT_URL() {
 		return xConf.getVal("/config/urls/giftURL");
 	}

@@ -122,6 +122,12 @@ public class DailyTasks extends __XHR {
 			if(code == 0) {
 				UIUtils.log("[", username, "] ", signType, "签到完成");
 				
+				// FIXME: 每日签到时, 顺便打印领取日常/周常礼包提示
+				// （这些礼物如果没赠送，领取状态一直都是成功, 只能放在此处打印）
+				if(assn == false) {
+					log.info("[", username, "] 已领取日常/周常礼包(含签到/勋章/友爱社奖励)");
+				}
+				
 			} else if(!reason.contains("已签到") && !reason.contains("已领取")) {
 				log.warn("[{}] {}签到失败: {}", username, signType, reason);
 				if(!reason.contains("需要绑定手机号")) {
@@ -136,7 +142,7 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 领取日常/周常的勋章/友爱社礼物
+	 * 领取日常/周常礼包(含签到/勋章/友爱社奖励)
 	 *  {"code":0,"msg":"success","message":"success","data":{"bag_status":2,"bag_expire_status":1,"bag_list":[{"type":1,"bag_name":"粉丝勋章礼包","source":{"medal_id":"571606","medal_name":"翘李吗","level":17},"gift_list":[{"gift_id":"6","gift_num":4,"expire_at":1520524800}]}],"time":1520438809}}
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
@@ -155,14 +161,17 @@ public class DailyTasks extends __XHR {
 				JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 				JSONArray bagList = JsonUtils.getArray(data, BiliCmdAtrbt.bag_list);
 				if(!bagList.isEmpty()) {
-					log.info("[{}] 已领取日常/周常/勋章/友爱社礼包", cookie.NICKNAME());
+					
+					// FIXME: 这些礼物如果没赠送，领取状态一直都是成功
+					// 因此暂时把领取成功的提示放到每日签到时一起打印
+					log.info("[{}] 已领取日常/周常礼包(含签到/勋章/友爱社奖励)", cookie.NICKNAME());
 				}
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("[{}] 领取日常/周常/勋章/友爱社礼包失败: {}", cookie.NICKNAME(), reason);
+				log.warn("[{}] 已领取日常/周常礼包失败: {}", cookie.NICKNAME(), reason);
 			}
 		} catch(Exception e) {
-			log.error("[{}] 领取日常/周常/勋章/友爱社礼包失败: {}", cookie.NICKNAME(), response, e);
+			log.error("[{}] 已领取日常/周常礼包失败: {}", cookie.NICKNAME(), response, e);
 		}
 		return nextTaskTime;
 	}

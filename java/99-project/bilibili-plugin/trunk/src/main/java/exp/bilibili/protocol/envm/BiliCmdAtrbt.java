@@ -4,6 +4,7 @@ package exp.bilibili.protocol.envm;
 
 
 
+
 /**
  * <PRE>
  * B站Json交互报文字段属性
@@ -164,6 +165,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String gift_num = "gift_num";
 	
+	public final static String expire_at = "expire_at";
+	
 	public final static String safe_rank = "safe_rank";
 	
 	public final static String bind_tel = "bind_tel";
@@ -317,5 +320,15 @@ public class BiliCmdAtrbt {
 	public final static String image = "image";
 	
 	public final static String img = "img";
+	
+	public final static String fansMedalList = "fansMedalList";
+	
+	public final static String medal_id = "medal_id";
+	
+	public final static String medal_name = "medal_name";
+	
+	public final static String day_limit = "day_limit";
+	
+	public final static String todayFeed = "todayFeed";
 	
 }
