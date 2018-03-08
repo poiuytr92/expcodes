@@ -43,11 +43,17 @@ public class TimeUtils {
 	/** GMT日期格式(多用于cookie的有效时间)： EEE, dd-MMM-yyyy HH:mm:ss z */
 	public final static String FORMAT_GMT = DateFormat.GMT;
 	
-	private final static long DAY_UNIT = 86400000L;
+	/** 北京时差：8小时 */
+	public final static int PEKING_HOUR_OFFSET = 8;
 	
-	private final static long HOUR_UNIT = 3600000L;
+	/** "天"换算为millis单位 */
+	public final static long DAY_UNIT = 86400000L;
+
+	/** "小时"换算为millis单位 */
+	public final static long HOUR_UNIT = 3600000L;
 	
-	private final static long MIN_UNIT = 60000L;
+	/** "分钟"换算为millis单位 */
+	public final static long MIN_UNIT = 60000L;
 	
 	/** 私有化构造函数 */
 	protected TimeUtils() {}
@@ -368,6 +374,14 @@ public class TimeUtils {
 	}
 	
 	/**
+	 * 获取当前的小时值（默认为北京时间8小时时差）
+	 * @return 当前小时
+	 */
+	public static int getCurHour() {
+		return getCurHour(PEKING_HOUR_OFFSET);
+	}
+	
+	/**
 	 * 获取当前的小时值
 	 * @param offset 时差值
 	 * @return 当前小时
@@ -384,6 +398,27 @@ public class TimeUtils {
 	 */
 	public static int getCurMinute() {
 		return (int) (System.currentTimeMillis() % DAY_UNIT % HOUR_UNIT / MIN_UNIT);
+	}
+	
+	/**
+	 * 获取当天零点毫秒时间（默认为北京时间8小时时差）
+	 * @return 零点毫秒时间
+	 */
+	public static long getZeroPointMillis() {
+		return getZeroPointMillis(PEKING_HOUR_OFFSET);
+	}
+	
+	/**
+	 * 获取当天零点毫秒时间
+	 * @param offset 时差值
+	 * @return 零点毫秒时间
+	 */
+	public static long getZeroPointMillis(int offset) {
+		int curHour = TimeUtils.getCurHour(offset);
+		long zero = System.currentTimeMillis() + (curHour < offset ? DAY_UNIT : 0);
+		zero = zero / DAY_UNIT * DAY_UNIT;
+		zero = zero - HOUR_UNIT * offset;
+		return zero;
 	}
 	
 }
