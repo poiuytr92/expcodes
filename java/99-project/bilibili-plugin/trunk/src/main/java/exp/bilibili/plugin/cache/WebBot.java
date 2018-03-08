@@ -26,8 +26,9 @@ import exp.libs.warp.thread.LoopThread;
  *   2.日常任务(签到/友爱社/小学数学)
  *   3.自动扭蛋、投喂
  *   4.自动领取成就奖励
- *   5.检查cookie有效期
- *   6.打印版权信息
+ *   5.自动领取日常/周常礼包
+ *   6.检查cookie有效期
+ *   7.打印版权信息
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP

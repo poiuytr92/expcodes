@@ -125,7 +125,7 @@ public class DailyTasks extends __XHR {
 				// FIXME: 每日签到时, 顺便打印领取日常/周常礼包提示
 				// （这些礼物如果没赠送，领取状态一直都是成功, 只能放在此处打印）
 				if(assn == false) {
-					log.info("[", username, "] 已领取日常/周常礼包(含签到/勋章/友爱社奖励)");
+					UIUtils.log("[", username, "] 已领取日常/周常礼包(含签到/勋章/友爱社奖励)");
 				}
 				
 			} else if(!reason.contains("已签到") && !reason.contains("已领取")) {
