@@ -4,7 +4,7 @@ import java.nio.ByteBuffer;
 
 import org.java_websocket.framing.Framedata;
 
-import exp.bilibili.protocol.envm.Binary;
+import exp.bilibili.protocol.envm.BiliBinary;
 import exp.libs.utils.num.BODHUtils;
 
 /**
@@ -21,6 +21,35 @@ import exp.libs.utils.num.BODHUtils;
  */
 public class Frame implements Framedata {
 
+	/**
+	 * 连接WebSock数据帧（到指定房间）
+	 * @param roomId
+	 * @return
+	 */
+	public static Frame C2S_CONN(int roomId) {
+		return new Frame(BiliBinary.CLIENT_CONNECT(roomId));
+	}
+	
+	/**
+	 * 关闭WebSock连接数据帧
+	 * @return
+	 */
+	public static Frame C2S_CLOSE() {
+		return new Frame(BiliBinary.CLIENT_CLOSE, Opcode.CLOSING);
+	}
+	
+	/**
+	 * WebSock心跳数据帧
+	 * @return
+	 */
+	public static Frame C2S_HB() {
+		return new Frame(BiliBinary.CLIENT_HB);
+	}
+	
+	
+	//////////////////////////////////////////////////////////////
+	
+	
 	private ByteBuffer payloadData;
 	
 	private Opcode opcode;
@@ -44,7 +73,7 @@ public class Frame implements Framedata {
 	
 	@Override
 	public boolean isFin() {
-		return true;	// 暂不存在多帧分包发送的情况
+		return true;	// 暂不存在多帧分包发送的情况, 所以每个包都发送一个fin标识
 	}
 
 	@Override
@@ -83,17 +112,4 @@ public class Frame implements Framedata {
 		
 	}
 
-	// {"uid":0,"roomid":390480,"protover":1}
-	public static Frame C2S_CONN(int roomId) {
-		return new Frame(Binary.CLIENT_CONNECT(roomId));
-	}
-	
-	public static Frame C2S_CLOSE() {
-		return new Frame(Binary.CLIENT_CLOSE, Opcode.CLOSING);
-	}
-	
-	public static Frame C2S_HB() {
-		return new Frame(Binary.CLIENT_HB);
-	}
-	
 }

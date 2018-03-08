@@ -230,11 +230,12 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(SpecialGift msgBean) {
-		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 开启了节奏风暴!!!");
+		int roomId = UIUtils.getLiveRoomId();
+		String msg = StrUtils.concat("直播间 [", roomId, "] 开启了节奏风暴!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
-		RoomMgr.getInstn().addStormRoom(msgBean.getRoomId(), msgBean.getRaffleId());
+		RoomMgr.getInstn().addStormRoom(roomId, msgBean.getRaffleId());
 	}
 
 	/**

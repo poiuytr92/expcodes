@@ -17,7 +17,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.WSAnalyser;
 import exp.bilibili.protocol.bean.other.Frame;
-import exp.bilibili.protocol.envm.Binary;
+import exp.bilibili.protocol.envm.BiliBinary;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.BODHUtils;
@@ -36,6 +36,7 @@ import exp.libs.utils.other.StrUtils;
  */
 class WebSockSession extends WebSocketClient {
 
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(WebSockSession.class);
 	
 	/** 子消息的前32位字节是该子消息的含消息头 */
@@ -133,10 +134,10 @@ class WebSockSession extends WebSocketClient {
 		String hex = BODHUtils.toHex(buff);
 		log.debug("接收到推送消息: {}", hex);
 		
-		if(hex.startsWith(Binary.SERVER_HB_CONFIRM)) {
+		if(hex.startsWith(BiliBinary.SERVER_HB_CONFIRM)) {
 			log.debug("websocket连接保活确认");
 			
-		} else if(Binary.SERVER_CONN_CONFIRM.equals(hex)) {
+		} else if(BiliBinary.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.debug("websocket连接成功确认");
 			UIUtils.log("入侵直播间成功, 正在暗中观察...");
 			
