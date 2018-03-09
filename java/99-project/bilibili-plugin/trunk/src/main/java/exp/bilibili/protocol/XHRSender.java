@@ -243,7 +243,7 @@ public class XHRSender {
 		Medal medal = medals.get(RoomMgr.getInstn().getRealRoomId(roomId));
 		
 		// 筛选可以投喂的礼物列表
-		List<BagGift> feedGifts = filterGifts(cookie.isRealName(), allGifts, medal);
+		List<BagGift> feedGifts = filterGifts(cookie, allGifts, medal);
 		
 		// 投喂主播
 		User up = Other.queryUpInfo(roomId);
@@ -252,23 +252,26 @@ public class XHRSender {
 	
 	/**
 	 * 过滤可投喂的礼物
-	 * @isRealName 是否已实名认证
+	 * @param cookie 
 	 * @param allGifts 当前持有的所有礼物
 	 * @param medal 当前房间的勋章
 	 * @return 可投喂的礼物列表
 	 */
-	private static List<BagGift> filterGifts(boolean isRealName, 
+	private static List<BagGift> filterGifts(BiliCookie cookie, 
 			List<BagGift> allGifts, Medal medal) {
 		List<BagGift> feedGifts = new LinkedList<BagGift>();
 		final long TOMORROW = TimeUtils.getZeroPointMillis() + TimeUtils.DAY_UNIT; // 今天24点之前
 		
-		// 移除实名保护礼物 和 无亲密度礼物(可能是活动礼物)
-		if(isRealName == true) {
+		// 对于已绑定手机或实名的账号，移除受保护礼物（即不投喂）
+		if(cookie.isBindTel() || cookie.isRealName()) {
 			Iterator<BagGift> giftIts = allGifts.iterator();
 			while(giftIts.hasNext()) {
 				BagGift gift = giftIts.next();
 				if(gift.getExpire() <= 0) {
 					giftIts.remove(); 	// 永久礼物
+					
+				} else if(gift.getIntimacy() <= 0) {
+					giftIts.remove(); 	// 亲密度<=0 的礼物(可能是某些活动礼物)
 					
 				} else if(Gift.B_CLOD.ID().equals(gift.getGiftId()) && 
 						gift.getExpire() > TOMORROW) {
@@ -308,10 +311,6 @@ public class XHRSender {
 				if(gift.getExpire() > 0 && gift.getExpire() <= TOMORROW) {
 					feedGifts.add(gift);
 					todayIntimacy -= gift.getIntimacy() * gift.getGiftNum();
-					
-				// 亲密度<=0 的礼物, 全部不选择(可能是某些活动礼物)
-				} else if(gift.getIntimacy() <= 0) {
-					// Undo
 					
 				// 在不溢出亲密度的前提下选择礼物
 				} else {
