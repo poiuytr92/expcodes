@@ -39,9 +39,6 @@ public class LotteryStorm extends _Lottery {
 	/** 最少在线人数达标的房间才扫描 */
 	private final static int MIN_ONLINE = 3000;
 	
-	/** 扫描每个房间的间隔(风险行为， 频率需要控制，太快可能被查出来，太慢成功率太低) */
-	private final static long SCAN_INTERVAL = Config.getInstn().STORM_FREQUENCY();
-	
 	/** 查询热门直播间列表URL */
 	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
 	
@@ -122,8 +119,9 @@ public class LotteryStorm extends _Lottery {
 	/**
 	 * 扫描房间中是否有节奏风暴, 有则加入节奏风暴抽奖
 	 * @param hotRoomIds 热门房间列表
+	 * @param scanInterval 扫描房间间隔
 	 */
-	public static void toLottery(List<Integer> hotRoomIds) {
+	public static void toLottery(List<Integer> hotRoomIds, long scanInterval) {
 		HttpClient client = new HttpClient();
 		Map<String, String> request = new HashMap<String, String>();
 		for(Integer roomId : hotRoomIds) {
@@ -138,7 +136,7 @@ public class LotteryStorm extends _Lottery {
 				List<String> raffleIds = getStormIds(roomId, response);
 				isExist = join(roomId, raffleIds);
 			}
-			ThreadUtils.tSleep(SCAN_INTERVAL);
+			ThreadUtils.tSleep(scanInterval);
 		}
 		client.close();
 	}

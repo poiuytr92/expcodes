@@ -1,5 +1,6 @@
 package exp.bilibili.protocol;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -186,9 +187,10 @@ public class XHRSender {
 	/**
 	 * 扫描并加入节奏风暴
 	 * @param hotRoomIds 热门房间列表
+	 * @param scanInterval 扫描房间间隔
 	 */
-	public static void scanAndJoinStorms(List<Integer> hotRoomIds) {
-		LotteryStorm.toLottery(hotRoomIds);
+	public static void scanAndJoinStorms(List<Integer> hotRoomIds, long scanInterval) {
+		LotteryStorm.toLottery(hotRoomIds, scanInterval);
 	}
 	
 	/**
@@ -218,7 +220,7 @@ public class XHRSender {
 	public static void toEgLottery(int roomId) {
 		LotteryEnergy.toLottery(roomId);
 	}
-
+	
 	/**
 	 * 投喂主播
 	 * @param cookie 投喂用户cookie
@@ -230,7 +232,7 @@ public class XHRSender {
 		List<BagGift> allGifts = Gifts.queryBagList(cookie, roomId);
 		int silver = Gifts.querySilver(cookie);
 		int giftNum = silver / Gift.HOT_STRIP.COST();
-		if(giftNum > 0) {
+		if(giftNum > 0) {	// 银瓜子转换为虚拟的永久辣条
 			BagGift bagGift = new BagGift(
 					Gift.HOT_STRIP.ID(), Gift.HOT_STRIP.NAME(), giftNum);
 			allGifts.add(bagGift);
@@ -241,7 +243,7 @@ public class XHRSender {
 		Medal medal = medals.get(RoomMgr.getInstn().getRealRoomId(roomId));
 		
 		// 筛选可以投喂的礼物列表
-		List<BagGift> feedGifts = filterGifts(allGifts, medal);
+		List<BagGift> feedGifts = filterGifts(cookie.isRealName(), allGifts, medal);
 		
 		// 投喂主播
 		User up = Other.queryUpInfo(roomId);
@@ -250,42 +252,76 @@ public class XHRSender {
 	
 	/**
 	 * 过滤可投喂的礼物
+	 * @isRealName 是否已实名认证
 	 * @param allGifts 当前持有的所有礼物
 	 * @param medal 当前房间的勋章
 	 * @return 可投喂的礼物列表
 	 */
-	private static List<BagGift> filterGifts(List<BagGift> allGifts, Medal medal) {
+	private static List<BagGift> filterGifts(boolean isRealName, 
+			List<BagGift> allGifts, Medal medal) {
 		List<BagGift> feedGifts = new LinkedList<BagGift>();
+		final long TOMORROW = TimeUtils.getZeroPointMillis() + TimeUtils.DAY_UNIT; // 今天24点之前
 		
-		// 用户没有持有当前投喂的房间的勋章, 则所有礼物均可投喂
+		// 移除实名保护礼物 和 无亲密度礼物(可能是活动礼物)
+		if(isRealName == true) {
+			Iterator<BagGift> giftIts = allGifts.iterator();
+			while(giftIts.hasNext()) {
+				BagGift gift = giftIts.next();
+				if(gift.getExpire() <= 0) {
+					giftIts.remove(); 	// 永久礼物
+					
+				} else if(Gift.B_CLOD.ID().equals(gift.getGiftId()) && 
+						gift.getExpire() > TOMORROW) {
+					giftIts.remove();	// 未过期的B坷垃
+				}
+			}
+		}
+		
+		// 用户没有持有当前投喂的房间的勋章
 		if(medal == null) {
-			feedGifts = allGifts;
+			
+			// 检查是否持有B坷垃
+			BagGift bClod = null;
+			for(BagGift gift : allGifts) {
+				if(Gift.B_CLOD.ID().equals(gift.getGiftId())) {
+					bClod = gift;
+					bClod.setGiftNum(1);
+					break;
+					
+				} else {
+					feedGifts.add(gift);	// 当没有B坷垃时, 默认所有礼物均可投喂
+				}
+			}
+			
+			// 若持有B坷垃，则先只投喂1个B坷垃(下一轮自动投喂再根据亲密度选择礼物)
+			if(bClod != null) {
+				feedGifts.clear();
+				feedGifts.add(bClod);
+			}
 			
 		// 用户持有当前投喂的房间的勋章, 则需筛选礼物
 		} else {
-			long tomorrow = TimeUtils.getZeroPointMillis() + TimeUtils.DAY_UNIT; // 明天零点
 			int todayIntimacy = medal.getDayLimit() - medal.getTodayFeed();	// 今天可用亲密度
-			
 			for(BagGift gift : allGifts) {
 				
-				// 今天内到期的礼物, 全部选择(无视亲密度)
-				if(gift.getExpire() > 0 && gift.getExpire() <= tomorrow) {
+				// 今天内到期的礼物, 全部选择(无视亲密度和实名)
+				if(gift.getExpire() > 0 && gift.getExpire() <= TOMORROW) {
 					feedGifts.add(gift);
 					todayIntimacy -= gift.getIntimacy() * gift.getGiftNum();
-					continue;
 					
 				// 亲密度<=0 的礼物, 全部不选择(可能是某些活动礼物)
 				} else if(gift.getIntimacy() <= 0) {
-					continue;
-				}
-				
+					// Undo
+					
 				// 在不溢出亲密度的前提下选择礼物
-				int num = todayIntimacy / gift.getIntimacy();
-				num = (num > gift.getGiftNum() ? gift.getGiftNum() : num);
-				if(num > 0) {
-					gift.setGiftNum(num);
-					feedGifts.add(gift);
-					todayIntimacy -= gift.getIntimacy() * num;
+				} else {
+					int num = todayIntimacy / gift.getIntimacy();
+					num = (num > gift.getGiftNum() ? gift.getGiftNum() : num);
+					if(num > 0) {
+						gift.setGiftNum(num);
+						feedGifts.add(gift);
+						todayIntimacy -= gift.getIntimacy() * num;
+					}
 				}
 			}
 		}

@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -23,6 +25,9 @@ import exp.libs.warp.thread.LoopThread;
 public class StormScanner extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(StormScanner.class);
+	
+	/** 默认扫描每个房间的间隔(风险行为， 频率需要控制，太快可能被查出来，太慢成功率太低) */
+	private final static long MIN_SCAN_INTERVAL = Config.getInstn().STORM_FREQUENCY();
 	
 	/** 试探轮询行为的间隔 */
 	private final static long SLEEP_TIME = 2000;
@@ -113,7 +118,15 @@ public class StormScanner extends LoopThread {
 	 * 扫描并加入其他热门房间的节奏风暴抽奖
 	 */
 	public void sancAndJoinStorm() {
-		XHRSender.scanAndJoinStorms(hotRoomIds);
+		long scanInterval = MIN_SCAN_INTERVAL;
+		if(TimeUtils.inZeroPointRange()) {
+			scanInterval *= 3;	// 零点附近存在大量跨天日常任务, 避免大量请求, 适当增大扫描间隔
+			
+		} else if(TimeUtils.isDawn()) {
+			scanInterval *= 2;	// 凌晨基本没人直播, 无需大量请求, 适当增大扫描间隔
+		}
+		
+		XHRSender.scanAndJoinStorms(hotRoomIds, scanInterval);
 	}
 	
 }

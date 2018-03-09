@@ -42,13 +42,13 @@ public class WebBot extends LoopThread {
 	private final static Logger log = LoggerFactory.getLogger(WebBot.class);
 	
 	/** 单位时间：天 */
-	private final static long DAY_UNIT = 86400000L;
+	private final static long DAY_UNIT = TimeUtils.DAY_UNIT;
 	
 	/** 单位时间：小时 */
-	private final static long HOUR_UNIT = 3600000L;
+	private final static long HOUR_UNIT = TimeUtils.HOUR_UNIT;
 	
 	/** 北京时间时差 */
-	private final static int HOUR_OFFSET = 8;
+	private final static int HOUR_OFFSET = TimeUtils.PEKING_HOUR_OFFSET;
 	
 	/** 延迟时间 */
 	private final static long DELAY_TIME = 120000L;
@@ -222,9 +222,13 @@ public class WebBot extends LoopThread {
 		if(loopCnt++ >= EVENT_LIMIT) {
 			loopCnt = 0;
 			
-			toCapsule();	// 自动扭蛋
-			toAutoFeed();	// 自动投喂
-			takeFinishAchieve();	// 领取成就奖励
+			// 零点错峰时不执行事件
+			if(TimeUtils.inZeroPointRange() == false) {
+				toCapsule();	// 自动扭蛋
+				toAutoFeed();	// 自动投喂
+				takeFinishAchieve();	// 领取成就奖励
+			}
+			
 			reflashActivity();		// 刷新活跃值到数据库
 			checkCookieExpires();	// 检查Cookie有效期
 			
