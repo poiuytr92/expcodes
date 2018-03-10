@@ -168,10 +168,10 @@ public class DailyTasks extends __XHR {
 				}
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("[{}] 已领取日常/周常礼包失败: {}", cookie.NICKNAME(), reason);
+				log.warn("[{}] 领取日常/周常礼包失败: {}", cookie.NICKNAME(), reason);
 			}
 		} catch(Exception e) {
-			log.error("[{}] 已领取日常/周常礼包失败: {}", cookie.NICKNAME(), response, e);
+			log.error("[{}] 领取日常/周常礼包失败: {}", cookie.NICKNAME(), response, e);
 		}
 		return nextTaskTime;
 	}
