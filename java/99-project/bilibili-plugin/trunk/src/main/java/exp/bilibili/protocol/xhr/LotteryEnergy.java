@@ -116,6 +116,11 @@ public class LotteryEnergy extends _Lottery {
 				log.info("[{}] 参与直播间 [{}] 抽奖失败(高能礼物)", cookie.NICKNAME(), roomId);
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");
+				
+				// 高能已过期, 其他账号无需参与
+				if(reason.contains("不存在")) {
+					break;
+				}
 			}
 			
 			ThreadUtils.tSleep(50);

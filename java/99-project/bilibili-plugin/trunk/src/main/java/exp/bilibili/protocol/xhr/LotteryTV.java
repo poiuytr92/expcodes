@@ -47,6 +47,11 @@ public class LotteryTV extends _Lottery {
 				log.info("[{}] 参与直播间 [{}] 抽奖失败(小电视)", cookie.NICKNAME(), roomId);
 				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");
+				
+				// 小电视已过期, 其他账号无需参与
+				if(reason.contains("不存在")) {
+					break;
+				}
 			}
 			
 			ThreadUtils.tSleep(50);
