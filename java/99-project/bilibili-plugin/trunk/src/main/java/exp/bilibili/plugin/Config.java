@@ -308,6 +308,10 @@ public class Config {
 		return xConf.getLong("/config/app/stormFrequency");
 	}
 	
+	public boolean PROTECT_FEED() {
+		return xConf.getBool("/config/app/protectFeed");
+	}
+	
 	/**
 	 * 设置默认房间号（每日签到用）
 	 * (房间勋章等级越高签到奖励越多)

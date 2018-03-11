@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
@@ -263,7 +264,8 @@ public class XHRSender {
 		final long TOMORROW = TimeUtils.getZeroPointMillis() + TimeUtils.DAY_UNIT; // 今天24点之前
 		
 		// 对于已绑定手机或实名的账号，移除受保护礼物（即不投喂）
-		if(cookie.isBindTel() || cookie.isRealName()) {
+		if(cookie.isRealName() || 
+				(cookie.isBindTel() && Config.getInstn().PROTECT_FEED())) {
 			Iterator<BagGift> giftIts = allGifts.iterator();
 			while(giftIts.hasNext()) {
 				BagGift gift = giftIts.next();

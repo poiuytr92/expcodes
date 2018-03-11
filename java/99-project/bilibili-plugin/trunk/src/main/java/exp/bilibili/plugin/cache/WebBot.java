@@ -6,6 +6,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.TimeUtils;
@@ -249,7 +250,12 @@ public class WebBot extends LoopThread {
 		Set<BiliCookie> cookies = CookiesMgr.MINIs();
 		for(BiliCookie cookie : cookies) {
 			if(cookie.isAutoFeed()) {
-				XHRSender.toCapsule(cookie);
+				if(cookie.isRealName() || 
+						(cookie.isBindTel() && Config.getInstn().PROTECT_FEED())) {
+					// Undo 已经实名、 或绑了手机且开了投喂保护的， 不触发扭蛋
+				} else {
+					XHRSender.toCapsule(cookie);
+				}
 			}
 		}
 	}
