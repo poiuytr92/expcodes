@@ -39,6 +39,9 @@ class WebSockSession extends WebSocketClient {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(WebSockSession.class);
 	
+	/** WebSoekct原始报文日志器 */
+	private final static Logger wslog = LoggerFactory.getLogger("WEBSOCKET");
+	
 	/** 子消息的前32位字节是该子消息的含消息头 */
 	private final static int MSG_HEADER_LEN = 32;
 	
@@ -133,6 +136,7 @@ class WebSockSession extends WebSocketClient {
 		byte[] buff = byteBuffer.array();
 		String hex = BODHUtils.toHex(buff);
 		log.debug("接收到推送消息: {}", hex);
+		wslog.info("RECEIVE: {}", hex);
 		
 		if(hex.startsWith(BiliBinary.SERVER_HB_CONFIRM)) {
 			log.debug("websocket连接保活确认");

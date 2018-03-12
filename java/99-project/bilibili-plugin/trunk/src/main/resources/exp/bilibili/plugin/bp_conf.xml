@@ -79,7 +79,14 @@
         <tabuAutoRoomIds caption="禁止自动发言房间号(需为真实房号)">51108,390480</tabuAutoRoomIds>
         <activityRoomId caption="用于计算活跃度的房间号">438</activityRoomId>
         <stormFrequency caption="节奏风暴扫描频率(单位:ms)" hint="小于100容易被封IP">100</stormFrequency>
-        <protectFeed caption="自动投喂保护" hint="绑定手机号的不触发永久礼物/银瓜子投喂，也不触发自动扭蛋">true</protectFeed>
+        <protectFeed caption="自动投喂保护" 
+                     hint="自动投喂打开后, 会每小时触发：自动扭蛋(满100执行)、自动投喂（包裹+银瓜子）
+                           ,而为了避免误操作打开开关带来损失, 再增加此备用开关, 策略如下：
+                           1. 实名认证用户, 此开关无效, 强制不触发扭蛋、永久礼物、银瓜子投喂
+                           2. 仅手机绑定用户, 若此保护开关打开, 则享有与实名认证用户同等待遇
+                           3. 仅手机绑定用户, 若此保护开关关闭, 则依然触发扭蛋、所有礼物、银瓜子投喂
+                           4. 无手机绑定用户, 此开关无效, 强制触发扭蛋、永久礼物、银瓜子投喂"
+        >true</protectFeed>
     </app>
     
 </config>
