@@ -258,6 +258,10 @@ public class Gift {
 	
 	public final static Gift SQUIB = new Gift("110", "小爆竹", 2000);
 	
+	public final static Gift PEACH = new Gift("115", "桃花", 2000);
+	
+	public final static Gift LETTER = new Gift("116", "情书", 2000);
+	
 	/** 礼物ID */
 	private String id;
 	
@@ -324,6 +328,13 @@ public class Gift {
 			
 		} else if(SQUIB.ID().equals(giftId)) {
 			intimacy = SQUIB.INTIMACY();
+			
+		} else if(PEACH.ID().equals(giftId)) {
+			intimacy = PEACH.INTIMACY();
+			
+		} else if(LETTER.ID().equals(giftId)) {
+			intimacy = LETTER.INTIMACY();
+			
 		}
 		return intimacy;
 	}
@@ -371,6 +382,13 @@ public class Gift {
 			
 		} else if(SQUIB.NAME().equals(giftName)) {
 			cost = SQUIB.COST();
+			
+		} else if(PEACH.NAME().equals(giftName)) {
+			cost = PEACH.COST();
+			
+		} else if(LETTER.NAME().equals(giftName)) {
+			cost = LETTER.COST();
+			
 		}
 		return cost;
 	}

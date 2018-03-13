@@ -29,6 +29,9 @@ public class Version {
 		// TODO
 		// WS- 注释  ,OCR  RSA代码整理
 		// 模拟APP观看时长	(如何获取app的cookie ?? 安卓模拟器抓包？？？  手机节奏风暴不需要验证码)
+		// cookie到期注销后，小号管理面板没有对应删除该项，只能重启时生效
+		// 小号管理面板 悬浮鼠标显示用户ID
+		// 自动投喂开关记录到cookie
 	}
 	
 }
