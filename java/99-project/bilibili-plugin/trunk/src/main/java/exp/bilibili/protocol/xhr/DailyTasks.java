@@ -2,6 +2,7 @@ package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
@@ -37,6 +38,12 @@ public class DailyTasks extends __XHR {
 	/** 领取日常/周常礼物URL */
 	private final static String GIFT_URL = Config.getInstn().GIFT_URL();
 	
+	/** 活动心跳URL */
+	private final static String HB_URL = Config.getInstn().HB_URL();
+	
+	/** 领取活动心跳礼物URL */
+	private final static String HB_GIFT_URL = Config.getInstn().HB_GIFT_URL();
+	
 	/** 检查小学数学任务URL */
 	private final static String MATH_CHECK_URL = Config.getInstn().MATH_CHECK_URL();
 	
@@ -53,7 +60,10 @@ public class DailyTasks extends __XHR {
 	private final static long SLEEP_TIME = 500L;
 	
 	/** 执行下次任务的延迟时间点（5分钟后） */
-	private final static long NEXT_TASK_DELAY = 300000L;
+	private final static long DELAY_5_MIN = 300000L;
+	
+	/** 执行下次任务的延迟时间点（10分钟后） */
+	private final static long DELAY_10_MIN = 600000L;
 	
 	/** 私有化构造函数 */
 	protected DailyTasks() {}
@@ -131,11 +141,11 @@ public class DailyTasks extends __XHR {
 			} else if(!reason.contains("已签到") && !reason.contains("已领取")) {
 				log.warn("[{}] {}签到失败: {}", username, signType, reason);
 				if(!reason.contains("需要绑定手机号")) {
-					nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
+					nextTaskTime = System.currentTimeMillis() + DELAY_5_MIN;
 				}
 			}
 		} catch(Exception e) {
-			nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
+			nextTaskTime = System.currentTimeMillis() + DELAY_5_MIN;
 			log.error("[{}] {}签到失败: {}", username, signType, response, e);
 		}
 		return nextTaskTime;
@@ -152,7 +162,7 @@ public class DailyTasks extends __XHR {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
 		String response = HttpURLUtils.doGet(GIFT_URL, header, null);
 		
-		long nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
+		long nextTaskTime = System.currentTimeMillis() + DELAY_10_MIN;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
@@ -174,6 +184,62 @@ public class DailyTasks extends __XHR {
 			log.error("[{}] 领取日常/周常礼包失败: {}", cookie.NICKNAME(), response, e);
 		}
 		return nextTaskTime;
+	}
+	
+	/**
+	 * 领取活动心跳礼物（每在线10分钟领取一个xxx）
+	 * {"code":0,"msg":"success","message":"success","data":{"gift_list":{"115":{"gift_id":115,"gift_name":"桃花","bag_id":67513170,"gift_num":1,"day_num":1,"day_limit":6}},"heart_status":1,"heart_time":300}}
+	 * {"code":0,"msg":"success","message":"success","data":{"gift_list":null,"heart_status":1,"heart_time":300}}
+	 * {"code":0,"msg":"success","message":"success","data":{"gift_list":[],"heart_status":1,"heart_time":300}}
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
+	 */
+	@SuppressWarnings("unchecked")
+	public static long receiveHeartbeatGift(BiliCookie cookie) {
+		String roomId = getRealRoomId();
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(BiliCmdAtrbt.roomid, roomId);
+		request.put(BiliCmdAtrbt.area_v2_id, "0");	// 当前主播所在的直播分区
+		
+		heartbeat(header);
+		String response = HttpURLUtils.doGet(HB_GIFT_URL, header, request);
+		System.out.println(response);
+		
+		long nextTaskTime = System.currentTimeMillis() + DELAY_10_MIN;
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
+			Object obj = data.get(BiliCmdAtrbt.gift_list);
+			if(obj instanceof JSONObject) {
+				JSONObject giftList = (JSONObject) obj;
+				Set<String> keys = giftList.keySet();
+				for(String key : keys) {
+					JSONObject gift = giftList.getJSONObject(key);
+					int dayNum = JsonUtils.getInt(gift, BiliCmdAtrbt.day_num, -1);
+					int dayLimit = JsonUtils.getInt(gift, BiliCmdAtrbt.day_limit, 0);
+					if(dayNum >= dayLimit) {
+						nextTaskTime = -1;
+					}
+					
+					UIUtils.log("[", cookie.NICKNAME(), "] 已领取活动礼物: ", dayNum, "/", dayLimit);
+					break;
+				}
+			}
+		} catch(Exception e) {
+			log.error("[{}] 领取活动礼物失败: {}", cookie.NICKNAME(), response, e);
+		}
+		return nextTaskTime;
+	}
+	
+	/**
+	 * 活动心跳
+	 * @param cookie
+	 */
+	private static void heartbeat(Map<String, String> header) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(BiliCmdAtrbt.underline, String.valueOf(System.currentTimeMillis()));
+		HttpURLUtils.doGet(HB_URL, header, request);
 	}
 	
 	/**

@@ -28,8 +28,9 @@ import exp.libs.warp.thread.LoopThread;
  *   3.自动扭蛋、投喂
  *   4.自动领取成就奖励
  *   5.自动领取日常/周常礼包
- *   6.检查cookie有效期
- *   7.打印版权信息
+ *   6.自动领取活动心跳礼物
+ *   7.检查cookie有效期
+ *   8.打印版权信息
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -179,11 +180,12 @@ public class WebBot extends LoopThread {
 				}
 				
 				long max = -1;
-				max = NumUtils.max(XHRSender.toSign(cookie), max);			// 每日签到
-				max = NumUtils.max(XHRSender.receiveDailyGift(cookie), max);// 每日/每周礼包
+				max = NumUtils.max(XHRSender.toSign(cookie), max);				// 每日签到
+				max = NumUtils.max(XHRSender.receiveDailyGift(cookie), max);	// 每日/每周礼包
 				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
-					max = NumUtils.max(XHRSender.toAssn(cookie), max);		// 友爱社
-					max = NumUtils.max(XHRSender.doMathTask(cookie), max);	// 小学数学
+					max = NumUtils.max(XHRSender.receiveHBGift(cookie), max);	// 活动心跳礼物
+					max = NumUtils.max(XHRSender.toAssn(cookie), max);			// 友爱社
+					max = NumUtils.max(XHRSender.doMathTask(cookie), max);		// 小学数学
 				}
 				nextTaskTime = NumUtils.max(nextTaskTime, max);
 				

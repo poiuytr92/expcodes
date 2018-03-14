@@ -227,8 +227,16 @@ public class Config {
 		return xConf.getVal("/config/urls/mathExecURL");
 	}
 	
+	public String HB_URL() {
+		return xConf.getVal("/config/urls/hbURL");
+	}
+	
+	public String HB_GIFT_URL() {
+		return xConf.getVal("/config/urls/hbGiftURL");
+	}
+	
 	public String APP_VIDEO_URL() {
-		return xConf.getVal("/config/urls/apVideoURL");
+		return xConf.getVal("/config/urls/appVideoURL");
 	}
 	
 	public String APP_WATCH_URL() {

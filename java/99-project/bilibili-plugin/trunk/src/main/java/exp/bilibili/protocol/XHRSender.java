@@ -160,10 +160,19 @@ public class XHRSender {
 	/**
 	 * 领取日常/周常的勋章/友爱社礼物
 	 * @param cookie
-	 * @return
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	public static long receiveDailyGift(BiliCookie cookie) {
 		return DailyTasks.receiveDailyGift(cookie);
+	}
+	
+	/**
+	 * 领取活动心跳礼物（每在线10分钟领取一个xxx）
+	 * @param cookie
+	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
+	 */
+	public static long receiveHBGift(BiliCookie cookie) {
+		return DailyTasks.receiveHeartbeatGift(cookie);
 	}
 	
 	/**

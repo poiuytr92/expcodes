@@ -27,6 +27,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String roomid = "roomid";
 	
+	public final static String area_v2_id = "area_v2_id";
+	
 	public final static String msg_text = "msg_text";
 	
 	public final static String msg = "msg";
@@ -327,8 +329,12 @@ public class BiliCmdAtrbt {
 	
 	public final static String medal_name = "medal_name";
 	
+	public final static String day_num = "day_num";
+	
 	public final static String day_limit = "day_limit";
 	
 	public final static String todayFeed = "todayFeed";
+	
+	public final static String gift_list = "gift_list";
 	
 }
