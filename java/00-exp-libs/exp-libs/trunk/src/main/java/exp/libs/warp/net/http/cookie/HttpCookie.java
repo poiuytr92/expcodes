@@ -37,6 +37,7 @@ public class HttpCookie {
 		this.cookies = new LinkedList<_HttpCookie>();
 		this.nvCookies = "";
 		this.isChanged = false;
+		init();
 	}
 	
 	/**
@@ -55,6 +56,14 @@ public class HttpCookie {
 				add(lines[i]);
 			}
 		}
+	}
+	
+	/**
+	 * 初始化.
+	 *  此方法在{@link takeCookieNVE()}之前执行
+	 */
+	protected void init() {
+		// Undo 供子类使用
 	}
 	
 	/**
