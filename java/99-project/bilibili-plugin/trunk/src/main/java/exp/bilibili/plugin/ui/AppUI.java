@@ -25,7 +25,6 @@ import exp.bilibili.plugin.cache.ChatMgr;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.cache.MsgKwMgr;
 import exp.bilibili.plugin.cache.OnlineUserMgr;
-import exp.bilibili.plugin.cache.RedbagMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.cache.WebBot;
@@ -122,8 +121,6 @@ public class AppUI extends MainWindow {
 	
 	private JButton nightBtn;
 	
-	private JButton redbagBtn;
-	
 	private JTextField httpTF;
 	
 	private JTextField liveRoomTF;
@@ -147,8 +144,6 @@ public class AppUI extends MainWindow {
 	private _MiniUserMgrUI miniLoginMgrUI;
 	
 	private _LotteryUI lotteryUI;
-	
-	private _RedbagUI redbagUI;
 	
 	private _ColorUI colorUI;
 	
@@ -254,7 +249,6 @@ public class AppUI extends MainWindow {
 		this.eCallBtn = new JButton(">");
 		this.nightBtn = new JButton("晚安姬");
 		this.stormBtn = new JButton("节奏风暴扫描");
-		this.redbagBtn = new JButton("红包兑奖姬");
 		loginBtn.setForeground(Color.BLACK);
 		logoutBtn.setForeground(Color.BLACK);
 		addUserBtn.setForeground(Color.BLACK);
@@ -276,7 +270,6 @@ public class AppUI extends MainWindow {
 		eCallBtn.setForeground(Color.BLACK);
 		nightBtn.setForeground(Color.BLACK);
 		stormBtn.setForeground(Color.BLACK);
-		redbagBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -294,7 +287,6 @@ public class AppUI extends MainWindow {
 		this.wsClient = new WebSockClient();
 		this.miniLoginMgrUI = new _MiniUserMgrUI();
 		this.lotteryUI = new _LotteryUI();
-		this.redbagUI = new _RedbagUI();
 		this.colorUI = new _ColorUI();
 		this.curChatColor = ChatColor.RANDOM();
 				
@@ -420,7 +412,6 @@ public class AppUI extends MainWindow {
 		setThxBtnListener();
 		setNightBtnListener();
 		setStormBtnListener();
-		setRedbagBtnListener();
 		setChatTFListener();
 		setEditBtnListener();
 	}
@@ -899,21 +890,6 @@ public class AppUI extends MainWindow {
 		stormBtn.doClick();
 	}
 	
-	private void setRedbagBtnListener() {
-		redbagBtn.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(!isLogined()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [红包兑奖姬] 哦~");
-					return;
-				}
-				
-				redbagUI._view();
-			}
-		});
-	}
-	
 	private void setChatTFListener() {
 		chatTF.addKeyListener(new KeyListener() {
 			
@@ -985,7 +961,6 @@ public class AppUI extends MainWindow {
 		wsClient._stop();
 		lotteryUI.clear();
 		
-		RedbagMgr.getInstn()._stop();
 		StormScanner.getInstn()._stop();
 		ChatMgr.getInstn()._stop();
 		WebBot.getInstn()._stop();

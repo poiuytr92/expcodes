@@ -247,22 +247,6 @@ public class Config {
 		return xConf.getVal("/config/urls/pcWatchURL");
 	}
 	
-	public String GET_BUCKET_URL() {
-		return xConf.getVal("/config/urls/getBucket");
-	}
-	
-	public String EX_BUCKET_URL() {
-		return xConf.getVal("/config/urls/exBucket");
-	}
-	
-	public String GET_REDBAG_URL() {
-		return xConf.getVal("/config/urls/getRedbag");
-	}
-	
-	public String EX_REDBAG_URL() {
-		return xConf.getVal("/config/urls/exRedbag");
-	}
-	
 	public String COOKIE_DIR() {
 		return xConf.getVal("/config/files/cookies");
 	}

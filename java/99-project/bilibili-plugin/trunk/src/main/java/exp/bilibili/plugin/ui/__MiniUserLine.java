@@ -106,9 +106,10 @@ public class __MiniUserLine extends JPanel {
 	}
 	
 	private void _afterLogin() {
-		autoFeed.doClick();
+		autoFeed.setSelected(miniCookie.isAutoFeed());
 		roomTF.setText(String.valueOf(miniCookie.getFeedRoomId()));
 		usernameTF.setText(miniCookie.NICKNAME());
+		usernameTF.setToolTipText(miniCookie.UID());
 	}
 	
 	private void setAutoFeedBtnListener() {
@@ -118,6 +119,7 @@ public class __MiniUserLine extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				if(miniCookie != BiliCookie.NULL) {
 					miniCookie.setAutoFeed(autoFeed.isSelected());
+					CookiesMgr.getInstn().update(miniCookie);
 				}
 			}
 		});

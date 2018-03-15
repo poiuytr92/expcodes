@@ -1,6 +1,5 @@
 package exp.bilibili.plugin.cache;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -67,9 +66,6 @@ public class WebBot extends LoopThread {
 	/** 轮询次数 */
 	private int loopCnt;
 	
-	/** 已完成当天任务的cookies */
-	private Set<BiliCookie> finCookies;
-	
 	/** 最近一次添加过cookie的时间点 */
 	private long lastAddCookieTime;
 	
@@ -88,7 +84,6 @@ public class WebBot extends LoopThread {
 	private WebBot() {
 		super("Web行为模拟器");
 		this.loopCnt = 0;
-		this.finCookies = new HashSet<BiliCookie>();
 		this.lastAddCookieTime = System.currentTimeMillis();
 		this.nextTaskTime = System.currentTimeMillis() + DELAY_TIME;	// 首次打开软件时, 延迟一点时间再执行任务
 		this.resetTaskTime = TimeUtils.getZeroPointMillis(HOUR_OFFSET) + DELAY_TIME;	// 避免临界点时差, 后延一点时间
@@ -126,7 +121,6 @@ public class WebBot extends LoopThread {
 
 	@Override
 	protected void _after() {
-		finCookies.clear();
 		log.info("{} 已停止", getName());
 	}
 	
@@ -175,7 +169,7 @@ public class WebBot extends LoopThread {
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
 			Set<BiliCookie> cookies = CookiesMgr.ALL();
 			for(BiliCookie cookie : cookies) {
-				if(finCookies.contains(cookie)) {
+				if(cookie.TASK_STATUS().isAllFinish()) {
 					continue;
 				}
 				
@@ -183,15 +177,11 @@ public class WebBot extends LoopThread {
 				max = NumUtils.max(XHRSender.toSign(cookie), max);				// 每日签到
 				max = NumUtils.max(XHRSender.receiveDailyGift(cookie), max);	// 每日/每周礼包
 				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
-					max = NumUtils.max(XHRSender.receiveHBGift(cookie), max);	// 活动心跳礼物
+					max = NumUtils.max(XHRSender.receiveHolidayGift(cookie), max);	// 活动心跳礼物
 					max = NumUtils.max(XHRSender.toAssn(cookie), max);			// 友爱社
 					max = NumUtils.max(XHRSender.doMathTask(cookie), max);		// 小学数学
 				}
 				nextTaskTime = NumUtils.max(nextTaskTime, max);
-				
-				if(max <= 0) {
-					finCookies.add(cookie);
-				}
 				ThreadUtils.tSleep(50);
 			}
 		}
@@ -207,7 +197,7 @@ public class WebBot extends LoopThread {
 		if(now - resetTaskTime > DAY_UNIT) {
 			resetTaskTime = now;
 			nextTaskTime = now;
-			finCookies.clear();
+			CookiesMgr.getInstn().resetTaskStatus();
 			log.info("日常任务已重置");
 			
 		// 当cookie发生变化时, 仅重置任务时间

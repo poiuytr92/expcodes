@@ -26,7 +26,6 @@ import exp.bilibili.protocol.xhr.LotteryEnergy;
 import exp.bilibili.protocol.xhr.LotteryStorm;
 import exp.bilibili.protocol.xhr.LotteryTV;
 import exp.bilibili.protocol.xhr.Other;
-import exp.bilibili.protocol.xhr.Redbag;
 import exp.bilibili.protocol.xhr.WatchLive;
 
 /**
@@ -137,7 +136,12 @@ public class XHRSender {
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	public static long toSign(BiliCookie cookie) {
-		return DailyTasks.toSign(cookie);
+		long nextTaskTime = (cookie.TASK_STATUS().isFinSign() ? 
+				-1 : DailyTasks.toSign(cookie));
+		if(nextTaskTime <= 0) {
+			cookie.TASK_STATUS().markSign();
+		}
+		return nextTaskTime;
 	}
 	
 	/**
@@ -146,13 +150,17 @@ public class XHRSender {
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	public static long toAssn(BiliCookie cookie) {
-		long nextTaskTime = DailyTasks.toAssn(cookie);
+		long nextTaskTime = (cookie.TASK_STATUS().isFinAssn() ? 
+				-1 : DailyTasks.toAssn(cookie));
 		
 		// 若有爱社签到失败, 则模拟双端观看直播
 		if(nextTaskTime > 0) {
 			int roomId = UIUtils.getLiveRoomId();
 			WatchLive.toWatchPCLive(cookie, roomId);	// PC端
-//			WatchLive.toWatchAppLive(cookie, roomId);	// 手机端 (FIXME: 暂时无效)
+//			WatchLive.toWatchAppLive(cookie, roomId);	// 手机端 (FIXME: 暂时无效)\
+			
+		} else {
+			cookie.TASK_STATUS().markAssn();
 		}
 		return nextTaskTime;
 	}
@@ -163,7 +171,12 @@ public class XHRSender {
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	public static long receiveDailyGift(BiliCookie cookie) {
-		return DailyTasks.receiveDailyGift(cookie);
+		long nextTaskTime = (cookie.TASK_STATUS().isFinDailyGift() ? 
+				-1 : DailyTasks.receiveDailyGift(cookie));
+		if(nextTaskTime <= 0) {
+			cookie.TASK_STATUS().markDailyGift();
+		}
+		return nextTaskTime;
 	}
 	
 	/**
@@ -171,8 +184,13 @@ public class XHRSender {
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
-	public static long receiveHBGift(BiliCookie cookie) {
-		return DailyTasks.receiveHeartbeatGift(cookie);
+	public static long receiveHolidayGift(BiliCookie cookie) {
+		long nextTaskTime = (cookie.TASK_STATUS().isFinHoliday() ? 
+				-1 : DailyTasks.receiveHolidayGift(cookie));
+		if(nextTaskTime <= 0) {
+			cookie.TASK_STATUS().markHolidayGift();
+		}
+		return nextTaskTime;
 	}
 	
 	/**
@@ -181,7 +199,12 @@ public class XHRSender {
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	public static long doMathTask(BiliCookie cookie) {
-		return DailyTasks.doMathTask(cookie);
+		long nextTaskTime = (cookie.TASK_STATUS().isFinMath() ? 
+				-1 : DailyTasks.doMathTask(cookie));
+		if(nextTaskTime <= 0) {
+			cookie.TASK_STATUS().markMath();
+		}
+		return nextTaskTime;
 	}
 	
 	/**
@@ -408,31 +431,6 @@ public class XHRSender {
 	public static boolean sendPM(String recvId, String msg) {
 		BiliCookie cookie = CookiesMgr.MAIN();
 		return Chat.sendPM(cookie, recvId, msg);
-	}
-	
-	public static long toBucket(BiliCookie cookie) {
-		int roomId = Redbag.queryBucketRoomId(cookie);
-		return Redbag.exchangeBucket(cookie, roomId);
-	}
-	
-	/**
-	 * 2018春节活动：查询当前红包奖池
-	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月）","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权（1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权（1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯笼","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换池","stock_num":99999,"exchange_limit":0,"price":6666}}}
-	 */
-	public static String queryRedbagPool(BiliCookie cookie) {
-		return Redbag.queryRedbagPool(cookie);
-	}
-	
-	/**
-	 * 2018春节活动：兑换红包
-	 * @param id 奖品编号
-	 * @param num 兑换数量
-	 * @return 
-	 * 	{"code":0,"msg":"OK","message":"OK","data":{"award_id":"stuff-3","red_bag_num":1695}}
-	 * 	{"code":-404,"msg":"这个奖品已经兑换完啦，下次再来吧","message":"这个奖品已经兑换完啦，下次再来吧","data":[]}
-	 */
-	public static String exchangeRedbag(BiliCookie cookie, String id, int num) {
-		return Redbag.exchangeRedbag(cookie, id, num);
 	}
 	
 }

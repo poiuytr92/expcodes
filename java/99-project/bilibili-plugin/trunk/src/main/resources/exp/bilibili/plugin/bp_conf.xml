@@ -51,16 +51,9 @@
         <hbURL caption="活动心跳URL"><![CDATA[http://api.live.bilibili.com/feed/v1/feed/heartBeat]]></hbURL>
         <hbGiftURL caption="领取活动心跳礼物URL"><![CDATA[http://api.live.bilibili.com/gift/v2/live/heart_gift_receive]]></hbGiftURL>
         
-        
         <appVideoURL caption="获取手机端视频地址URL"><![CDATA[http://live.bilibili.com/api/playurl]]></appVideoURL>
         <appWatchURL caption="手机端观看直播URL"><![CDATA[http://live-trace.bilibili.com/heartbeat_ext/v1/Heartbeat/player]]></appWatchURL>
         <pcWatchURL caption="PC端观看直播URL"><![CDATA[http://api.live.bilibili.com/User/userOnlineHeart]]></pcWatchURL>
-        
-        
-        <getBucket caption="2018春节活动：查询上上签URL"><![CDATA[http://api.live.bilibili.com/activity/v1/NewSpring/index]]></getBucket>
-        <exBucket caption="2018春节活动：领取上上签URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Common/getReceiveGift]]></exBucket>
-        <getRedbag caption="2018春节活动：查询红包奖池URL"><![CDATA[http://api.live.bilibili.com/activity/v1/NewSpring/redBagPool]]></getRedbag>
-        <exRedbag caption="2018春节活动：兑换红包礼物URL"><![CDATA[http://api.live.bilibili.com/activity/v1/NewSpring/redBagExchange]]></exRedbag>
     </urls>
     
     <files caption="本地文件位置">

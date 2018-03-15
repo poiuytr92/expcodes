@@ -3,10 +3,10 @@ package exp.bilibili.plugin.bean.ldm;
 import java.util.Date;
 
 import exp.bilibili.plugin.Config;
-import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.envm.Danmu;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.other.BoolUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.cookie.HttpCookie;
 
@@ -30,6 +30,9 @@ public class BiliCookie extends HttpCookie {
 	
 	/** B站用户ID标识 */
 	private final static String UID_KEY = "DedeUserID";
+	
+	/** 自动投喂开关 */
+	private final static String FEED_KEY = "AutoFeed";
 	
 	/** 自动投喂房间号标识 */
 	private final static String RID_KEY = "RoomID";
@@ -69,19 +72,23 @@ public class BiliCookie extends HttpCookie {
 	
 	/** 投喂房间号 */
 	private int feedRoomId;
+
+	/** 标识日常任务的执行状态 */
+	private TaskStatus taskStatus;
 	
 	public BiliCookie() {
 		super();
-		init();
 	}
 	
 	public BiliCookie(String headerCookies) {
 		super(headerCookies);
-		init();
 	}
 	
-	private void init() {
+	protected void init() {
 		this.type = CookieType.UNKNOW;
+		this.expires = new Date();
+		this.csrf = "";
+		this.uid = "";
 		this.nickName = "";
 		this.isBindTel = false;
 		this.isRealName = false;
@@ -89,13 +96,8 @@ public class BiliCookie extends HttpCookie {
 		this.isVip = false;
 		this.isGuard = false;
 		this.autoFeed = false;
-		
-		// 以下值可能先在 {@link takeCookieNVE} 中被初始化
-		this.expires = (expires == null ? new Date() : expires);
-		this.csrf = (StrUtils.isEmpty(csrf) ? "" : csrf);
-		this.uid = (StrUtils.isEmpty(uid) ? "" : uid);
-		this.feedRoomId = (RoomMgr.getInstn().isExist(feedRoomId) ? 
-				feedRoomId : Config.getInstn().SIGN_ROOM_ID());
+		this.feedRoomId = Config.getInstn().SIGN_ROOM_ID();
+		this.taskStatus = new TaskStatus();
 	}
 	
 	@Override
@@ -107,6 +109,10 @@ public class BiliCookie extends HttpCookie {
 		} else if(UID_KEY.equalsIgnoreCase(name)) {
 			this.uid = value;
 			this.expires = expires;
+			
+		} else if(FEED_KEY.equals(name)) {
+			this.autoFeed = BoolUtils.toBool(value, false);
+			isKeep = false;	// 属于自定义的cookie属性, 不保持到cookie会话中(即不会发送到服务器)
 			
 		} else if(RID_KEY.equals(name)) {
 			this.feedRoomId = NumUtils.toInt(value, 0);
@@ -214,11 +220,16 @@ public class BiliCookie extends HttpCookie {
 	public void setFeedRoomId(int feedRoomId) {
 		this.feedRoomId = feedRoomId;
 	}
+	
+	public TaskStatus TASK_STATUS() {
+		return taskStatus;
+	}
 
 	@Override
 	public String toHeaderCookie() {
-		return StrUtils.concat(super.toHeaderCookie(), LFCR, 
-				RID_KEY, "=", getFeedRoomId());
+		return StrUtils.concat(super.toHeaderCookie(), 
+				LFCR, FEED_KEY, "=", (isAutoFeed() ? "true" : "false"), 
+				LFCR, RID_KEY, "=", getFeedRoomId());
 	}
 	
 	@Override

@@ -195,14 +195,14 @@ public class DailyTasks extends __XHR {
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	@SuppressWarnings("unchecked")
-	public static long receiveHeartbeatGift(BiliCookie cookie) {
+	public static long receiveHolidayGift(BiliCookie cookie) {
 		String roomId = getRealRoomId();
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), roomId);
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.roomid, roomId);
 		request.put(BiliCmdAtrbt.area_v2_id, "0");	// 当前主播所在的直播分区
 		
-		heartbeat(header);
+		holidayHeartbeat(header);
 		String response = HttpURLUtils.doGet(HB_GIFT_URL, header, request);
 		System.out.println(response);
 		
@@ -236,7 +236,7 @@ public class DailyTasks extends __XHR {
 	 * 活动心跳
 	 * @param cookie
 	 */
-	private static void heartbeat(Map<String, String> header) {
+	private static void holidayHeartbeat(Map<String, String> header) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.underline, String.valueOf(System.currentTimeMillis()));
 		HttpURLUtils.doGet(HB_URL, header, request);

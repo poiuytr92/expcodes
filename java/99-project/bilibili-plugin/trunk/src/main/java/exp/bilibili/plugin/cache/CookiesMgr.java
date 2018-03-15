@@ -270,6 +270,16 @@ public class CookiesMgr {
 	}
 	
 	/**
+	 * 重置所有Cookie的任务执行状态
+	 */
+	public void resetTaskStatus() {
+		Set<BiliCookie> cookies = ALL();
+		for(BiliCookie cookie : cookies) {
+			cookie.TASK_STATUS().init();
+		}
+	}
+	
+	/**
 	 * 清除主号和马甲号的cookies
 	 * @return
 	 */
