@@ -260,6 +260,9 @@ public class XHRSender {
 	 * @param roomId 房间号
 	 */
 	public static void toFeed(BiliCookie cookie, int roomId) {
+		if(cookie.TASK_STATUS().isFinFeed()) {
+			return;
+		}
 		
 		// 查询持有的所有礼物（包括银瓜子可以兑换的辣条数）
 		List<BagGift> allGifts = Gifts.queryBagList(cookie, roomId);
@@ -356,6 +359,10 @@ public class XHRSender {
 						todayIntimacy -= gift.getIntimacy() * num;
 					}
 				}
+			}
+			
+			if(todayIntimacy <= 0) {
+				cookie.TASK_STATUS().markFeed();
 			}
 		}
 		return feedGifts;

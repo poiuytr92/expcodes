@@ -24,6 +24,8 @@ public class TaskStatus {
 	
 	private final static int HOLIDAY_GIFT = 16;
 	
+	private final static int FEED = 32;	// 投喂礼物不作为日常任务是否完成的判断依据之一
+	
 	private final static int _FIN = SIGN | ASSN | MATH | DAILT_GIFT | HOLIDAY_GIFT;
 	
 	private int status;
@@ -45,11 +47,13 @@ public class TaskStatus {
 	public boolean isFinMath() { return (status & MATH) != _INIT; }
 	public boolean isFinDailyGift() { return (status & DAILT_GIFT) != _INIT; }
 	public boolean isFinHoliday() { return (status & HOLIDAY_GIFT) != _INIT; }
+	public boolean isFinFeed() { return (status & FEED) != _INIT; }
 	
 	public void markSign() { status |= SIGN; }
 	public void markAssn() { status |= ASSN; }
 	public void markMath() { status |= MATH; }
 	public void markDailyGift() { status |= DAILT_GIFT; }
 	public void markHolidayGift() { status |= HOLIDAY_GIFT; }
+	public void markFeed() { status |= FEED; }
 	
 }
