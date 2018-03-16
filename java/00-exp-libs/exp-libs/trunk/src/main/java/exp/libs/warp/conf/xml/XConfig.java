@@ -76,6 +76,8 @@ public class XConfig implements Runnable, _IConfig {
 	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(_Config.class);
 	
+	public final static XNode NULL_XNODE = _Config.NULL_XNODE;
+	
 	private final static long MIN_REFLASH_TIME = 10000L;
 	
 	private final static long DEFAULT_REFLASH_TIME = 60000L;
@@ -346,6 +348,38 @@ public class XConfig implements Runnable, _IConfig {
 		return config.loadConfFileByTomcat(confFilePath);
 	}
 
+	/**
+	 * 获取节点.
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若节点不存在则返回无效对象节点 NULL_XNODE (绝不返回null)
+	 */
+	@Override
+	public XNode getNode(String xPath) {
+		XNode node = NULL_XNODE;
+		if(isReflash && reflashing) {
+			synchronized (rLock) {
+				node = config.getNode(xPath);
+			}
+		} else {
+			Object obj = nearValues.remove(xPath);
+			node = (obj == null ? config.getNode(xPath) : (XNode) obj);
+			nearValues.put(xPath, node);
+		}
+		return node;
+	}
+
+	/**
+	 * 获取节点.
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @return 若节点不存在则返回无效对象节点 NULL_XNODE (绝不返回null)
+	 */
+	@Override
+	public XNode getNode(String xName, String xId) {
+		String xPath = config.toXPath(xName, xId);
+		return getNode(xPath);
+	}
+	
 	/**
 	 * 获取String标签值(使用trim处理).
 	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag

@@ -30,7 +30,7 @@ class _Config implements _IConfig {
 	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(_Config.class);
 	
-	private final static _XNode NULL_XNODE = new _XNode(null, null);
+	protected final static XNode NULL_XNODE = new XNode(null, null);
 	
 	/** 配置对象名称 */
 	protected String name;
@@ -193,24 +193,34 @@ class _Config implements _IConfig {
 		return confFiles;
 	}
 	
-	protected String toXPath(String eName, String xId) {
-		return xTree.toXPath(eName, xId);
+	protected String toXPath(String xName, String xId) {
+		return xTree.toXPath(xName, xId);
 	}
 	
-	private _XNode findXNode(String xPath) {
-		_XNode node = xTree.findXNode(xPath);
+	private XNode findXNode(String xPath) {
+		XNode node = xTree.findXNode(xPath);
 		return (node == null ? NULL_XNODE : node);
 	}
 	
 	@Override
+	public XNode getNode(String xPath) {
+		return findXNode(xPath);
+	}
+
+	@Override
+	public XNode getNode(String xName, String xId) {
+		return getNode(toXPath(xName, xId));
+	}
+	
+	@Override
 	public String getVal(String xPath) {
-		_XNode xNode = findXNode(xPath);
+		XNode xNode = findXNode(xPath);
 		return xNode.VAL();
 	}
 	
 	@Override
-	public String getVal(String eName, String xId) {
-		return getVal(toXPath(eName, xId));
+	public String getVal(String xName, String xId) {
+		return getVal(toXPath(xName, xId));
 	}
 	
 	@Override
@@ -219,8 +229,8 @@ class _Config implements _IConfig {
 	}
 	
 	@Override
-	public int getInt(String eName, String xId) {
-		return getInt(toXPath(eName, xId));
+	public int getInt(String xName, String xId) {
+		return getInt(toXPath(xName, xId));
 	}
 	
 	@Override
@@ -229,8 +239,8 @@ class _Config implements _IConfig {
 	}
 	
 	@Override
-	public long getLong(String eName, String xId) {
-		return getLong(toXPath(eName, xId));
+	public long getLong(String xName, String xId) {
+		return getLong(toXPath(xName, xId));
 	}
 	
 	@Override
@@ -239,47 +249,47 @@ class _Config implements _IConfig {
 	}
 	
 	@Override
-	public boolean getBool(String eName, String xId) {
-		return getBool(toXPath(eName, xId));
+	public boolean getBool(String xName, String xId) {
+		return getBool(toXPath(xName, xId));
 	}
 	
 	@Override
 	public List<String> getEnums(String xPath) {
 		List<String> enums = new LinkedList<String>();
-		_XNode xNode = findXNode(xPath);
-		Iterator<_XNode> childs = xNode.getChilds();
+		XNode xNode = findXNode(xPath);
+		Iterator<XNode> childs = xNode.getChilds();
 		while(childs.hasNext()) {
-			_XNode child = childs.next();
+			XNode child = childs.next();
 			enums.add(child.VAL());
 		}
 		return enums;
 	}
 	
 	@Override
-	public List<String> getEnums(String eName, String xId) {
-		return getEnums(toXPath(eName, xId));
+	public List<String> getEnums(String xName, String xId) {
+		return getEnums(toXPath(xName, xId));
 	}
 	
 	@Override
 	public String getAttribute(String xPath, String attributeName) {
-		_XNode xNode = findXNode(xPath);
+		XNode xNode = findXNode(xPath);
 		return xNode.getAttribute(attributeName);
 	}
 	
 	@Override
-	public String getAttribute(String eName, String xId, String attributeName) {
-		return getAttribute(toXPath(eName, xId), attributeName);
+	public String getAttribute(String xName, String xId, String attributeName) {
+		return getAttribute(toXPath(xName, xId), attributeName);
 	}
 	
 	@Override
 	public Map<String, String> getAttributes(String xPath) {
-		_XNode xNode = findXNode(xPath);
+		XNode xNode = findXNode(xPath);
 		return xNode.getAttributes();
 	}
 	
 	@Override
-	public Map<String, String> getAttributes(String eName, String xId) {
-		return getAttributes(toXPath(eName, xId));
+	public Map<String, String> getAttributes(String xName, String xId) {
+		return getAttributes(toXPath(xName, xId));
 	}
 	
 	@Override
@@ -291,7 +301,7 @@ class _Config implements _IConfig {
 		
 		dsId = dsId.trim();
 		String xPath = toXPath("datasource", dsId);
-		_XNode xNode = findXNode(xPath);
+		XNode xNode = findXNode(xPath);
 		if(xNode != NULL_XNODE) {
 			ds.setId(dsId);
 			ds.setDriver(xNode.getChildVal("driver"));
@@ -326,7 +336,7 @@ class _Config implements _IConfig {
 		
 		sockId = sockId.trim();
 		String xPath = toXPath("socket", sockId);
-		_XNode xNode = findXNode(xPath);
+		XNode xNode = findXNode(xPath);
 		if(xNode != NULL_XNODE) {
 			sb.setId(sockId);
 			sb.setIp(xNode.getChildVal("ip"));
@@ -354,5 +364,5 @@ class _Config implements _IConfig {
 		// TODO
 		return new JmsBean();
 	}
-	
+
 }

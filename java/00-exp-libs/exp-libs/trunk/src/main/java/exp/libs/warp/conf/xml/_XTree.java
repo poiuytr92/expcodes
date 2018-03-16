@@ -17,17 +17,17 @@ class _XTree {
 	private final static String PATH_SPLIT = "/";
 	
 	/** 虚构根节点 */
-	private final _XNode TREE_ROOT;
+	private final XNode TREE_ROOT;
 	
 	/** 节点集合 */
-	private Set<_XNode> xNodes;
+	private Set<XNode> xNodes;
 	
 	/** node position(name@id) -> node xPaths */
 	private Map<String, String> xPaths;
 	
 	protected _XTree() {
-		this.TREE_ROOT = new _XNode(null, null);
-		this.xNodes = new HashSet<_XNode>();
+		this.TREE_ROOT = new XNode(null, null);
+		this.xNodes = new HashSet<XNode>();
 		this.xPaths = new HashMap<String, String>();
 	}
 	
@@ -41,7 +41,7 @@ class _XTree {
 	}
 	
 	private void updateValues(Element root) {
-		Map<Element, _XNode> parents = new HashMap<Element, _XNode>();
+		Map<Element, XNode> parents = new HashMap<Element, XNode>();
 		parents.put(root, TREE_ROOT);
 		
 		List<Element> bfsQueue = new ArrayList<Element>();
@@ -50,19 +50,19 @@ class _XTree {
 		int tail = 0;
 		while(head <= tail) {
 			Element element = bfsQueue.get(head++);
-			_XNode parent = parents.get(element);
+			XNode parent = parents.get(element);
 			
-			_XNode node = null;
+			XNode node = null;
 			if(parent.isEnum()) {
-				node = new _XNode(parent, element);
+				node = new XNode(parent, element);
 				parent.addChild(node);
 				xNodes.add(node);
 				
 			} else {
-				String pos = _XNode.toPosition(element);
+				String pos = XNode.toPosition(element);
 				node = parent.getChild(pos);
 				if(node == null) {
-					node = new _XNode(parent, element);
+					node = new XNode(parent, element);
 					parent.addChild(node);
 					xNodes.add(node);
 					
@@ -85,24 +85,24 @@ class _XTree {
 	
 	// 遍历树， 计算所有节点的xPath
 	private void updateXPaths() {
-		Map<_XNode, String> xPathPrefixs = new HashMap<_XNode, String>();
+		Map<XNode, String> xPathPrefixs = new HashMap<XNode, String>();
 		xPathPrefixs.put(TREE_ROOT, "");
 		
-		List<_XNode> bfsQueue = new ArrayList<_XNode>();
+		List<XNode> bfsQueue = new ArrayList<XNode>();
 		bfsQueue.add(TREE_ROOT);
 		int head = 0;
 		int tail = 0;
 		while(head <= tail) {
-			_XNode node = bfsQueue.get(head++);
+			XNode node = bfsQueue.get(head++);
 			
 			String xPathPrefix = xPathPrefixs.get(node);
 			String xPath = StrUtils.concat(xPathPrefix, PATH_SPLIT, node.POS());
 			updateXPath(node, xPath);
 			
 			// 更新BFS队列
-			Iterator<_XNode> childs = node.getChilds();
+			Iterator<XNode> childs = node.getChilds();
 			while(childs.hasNext()) {
-				_XNode child = childs.next();
+				XNode child = childs.next();
 				xPathPrefixs.put(child, xPath);
 				bfsQueue.add(child);
 				tail++;
@@ -110,7 +110,7 @@ class _XTree {
 		}
 	}
 	
-	private void updateXPath(_XNode node, String xPath) {
+	private void updateXPath(XNode node, String xPath) {
 		if(xPaths.get(node.POS()) == null) {
 			xPaths.put(node.POS(), xPath);
 		}
@@ -125,7 +125,7 @@ class _XTree {
 	 * @param xPath  /foo/bar@id/tmp@id/xxx/yyy
 	 * @return
 	 */
-	protected _XNode findXNode(String xPath) {
+	protected XNode findXNode(String xPath) {
 		if(xPath == null) {
 			return null;
 			
@@ -133,16 +133,16 @@ class _XTree {
 			xPath = toXPath(xPath, null);
 		}
 		
-		_XNode node = TREE_ROOT;
+		XNode node = TREE_ROOT;
 		String[] poses = xPath.replace("\\", PATH_SPLIT).split(PATH_SPLIT);
 		for(String pos : poses) {
 			if(StrUtils.isEmpty(pos)) {
 				continue;
 			}
 			
-			_XNode child = node.getChild(pos);
+			XNode child = node.getChild(pos);
 			if(child == null) {
-				child = node.getChild(_XNode.toName(pos));
+				child = node.getChild(XNode.toName(pos));
 				if(child == null) {
 					break;
 				}
@@ -154,7 +154,7 @@ class _XTree {
 	
 	protected String toXPath(String name, String id) {
 		String xPath = "";
-		String pos = _XNode.toPosition(name, id);
+		String pos = XNode.toPosition(name, id);
 		if(!pos.contains(PATH_SPLIT)) {
 			xPath = xPaths.get(pos);
 		}
@@ -162,7 +162,7 @@ class _XTree {
 	}
 	
 	protected void clear() {
-		for(_XNode xNode : xNodes) {
+		for(XNode xNode : xNodes) {
 			xNode.clear();
 		}
 		xNodes.clear();

@@ -31,33 +31,37 @@ interface _IConfig {
 	
 	public Element loadConfFileByTomcat(String confFilePath);
 	
-	public String getVal(String ePath);
+	public XNode getNode(String xPath);
 	
-	public String getVal(String eName, String eId);
+	public XNode getNode(String xName, String xId);
 	
-	public int getInt(String ePath);
+	public String getVal(String xPath);
 	
-	public int getInt(String eName, String eId);
+	public String getVal(String xName, String xId);
 	
-	public long getLong(String ePath);
+	public int getInt(String xPath);
 	
-	public long getLong(String eName, String eId);
+	public int getInt(String xName, String xId);
 	
-	public boolean getBool(String ePath);
+	public long getLong(String xPath);
 	
-	public boolean getBool(String eName, String eId);
+	public long getLong(String xName, String xId);
 	
-	public List<String> getEnums(String ePath);
+	public boolean getBool(String xPath);
 	
-	public List<String> getEnums(String eName, String eId);
+	public boolean getBool(String xName, String xId);
 	
-	public String getAttribute(String ePath, String attributeName);
+	public List<String> getEnums(String xPath);
 	
-	public String getAttribute(String eName, String eId, String attributeName);
+	public List<String> getEnums(String xName, String xId);
 	
-	public Map<String, String> getAttributes(String ePath);
+	public String getAttribute(String xPath, String attributeName);
 	
-	public Map<String, String> getAttributes(String eName, String eId);
+	public String getAttribute(String xName, String xId, String attributeName);
+	
+	public Map<String, String> getAttributes(String xPath);
+	
+	public Map<String, String> getAttributes(String xName, String xId);
 	
 	public DataSourceBean getDataSourceBean(String dsId);
 	
