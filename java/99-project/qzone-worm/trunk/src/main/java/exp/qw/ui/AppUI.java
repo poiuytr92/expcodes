@@ -99,9 +99,9 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.unTF = new JTextField("289065406");
-		this.pwTF = new JPasswordField("dfmlLMH5222");
-		this.targetQQTF = new JTextField("1107174918");
+		this.unTF = new JTextField("");
+		this.pwTF = new JPasswordField("");
+		this.targetQQTF = new JTextField("");
 		
 		unTF.setToolTipText("请确保此QQ具有查看对方空间权限 (不负责权限破解)");
 		targetQQTF.setToolTipText("此软件不盗号, 不放心勿用");
