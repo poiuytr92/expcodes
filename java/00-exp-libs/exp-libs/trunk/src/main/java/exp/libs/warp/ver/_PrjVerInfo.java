@@ -32,7 +32,7 @@ import exp.libs.warp.ui.layout.VFlowLayout;
 class _PrjVerInfo {
 	
 	private final static String[] API_ITEMS = new String[] {
-		"DB", "SOCKET", "WS", "CORBA", "FTP", "OTHER"
+		"DB", "SOCKET", "WS", "HTTP", "FTP", "OTHER"
 	};
 	
 	private final static String[] CHARSET_ITEMS = new String[] {

@@ -43,6 +43,7 @@ public class _VerDBMgr {
 	/** 版本信息文件的数据源 */
 	private DataSourceBean ds;
 	
+	/** 是否已初始化 */
 	private boolean inited;
 	
 	/** 单例 */

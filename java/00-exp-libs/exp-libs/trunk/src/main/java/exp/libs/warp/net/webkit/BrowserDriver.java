@@ -1,14 +1,11 @@
 package exp.libs.warp.net.webkit;
 
-import java.io.File;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Cookie;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.OutputType;
-import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -20,7 +17,6 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -34,36 +30,62 @@ import exp.libs.utils.other.StrUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-final public class BrowserDriver {
+public class BrowserDriver {
 
-	public final static String USER_AGENT = 
+	/** 浏览器代理头 */
+	private final static String USER_AGENT = 
 //			"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 			"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 	
-	private final static long DEFAULT_WAIT_ELEMENT_TIME = 5;
+	/** 等待动态元素的加载时间(单位:s) */
+	private final static long WAIT_ELEMENT_SECOND = 5;
 	
+	/** WEB驱动类型 */
 	private WebDriverType type;
 	
+	/** WEB驱动 */
 	private WebDriver webDriver;
 	
 	/** 针对页面事件进行操作的行为对象 */
 	private Actions action;
 	
+	/**
+	 * 构造函数
+	 * @param type WEB驱动类型
+	 */
 	public BrowserDriver(WebDriverType type) {
-		this(type, false, DEFAULT_WAIT_ELEMENT_TIME);
+		this(type, false, WAIT_ELEMENT_SECOND);
 	}
 	
+	/**
+	 * 构造函数
+	 * @param type WEB驱动类型
+	 * @param loadImages 是否加载图片(默认不加载)
+	 */
+	public BrowserDriver(WebDriverType type, boolean loadImages) {
+		this(type, loadImages, WAIT_ELEMENT_SECOND);
+	}
+
+	/**
+	 * 构造函数
+	 * @param type WEB驱动类型
+	 * @param loadImages 是否加载图片(默认不加载)
+	 * @param waitElementSecond 等待动态元素的加载时间(单位:s)
+	 */
 	public BrowserDriver(WebDriverType type, boolean loadImages, long waitElementSecond) {
 		this.type = type;
 		waitElementSecond = (waitElementSecond <= 0 ? 
-				DEFAULT_WAIT_ELEMENT_TIME : waitElementSecond);
+				WAIT_ELEMENT_SECOND : waitElementSecond);
 		
-		initProperty();
+		setWebPropertyToSysEnv();
 		initWebDriver(loadImages);
 		setWaitElementTime(waitElementSecond);
 	}
 	
-	private void initProperty() {
+	/**
+	 * 设置WEB属性到系统环境
+	 */
+	private void setWebPropertyToSysEnv() {
 		String property = "";
 		if(WebDriverType.PHANTOMJS == type) {
 			property = PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY;
@@ -80,6 +102,10 @@ final public class BrowserDriver {
 		}
 	}
 	
+	/**
+	 * 初始化WEB驱动参数
+	 * @param loadImages 是否加载图片(默认不加载)
+	 */
 	public void initWebDriver(boolean loadImages) {
 		if(WebDriverType.PHANTOMJS == type) {
 			this.webDriver = new PhantomJSDriver(getCapabilities(loadImages));
@@ -93,6 +119,11 @@ final public class BrowserDriver {
 		this.action = new Actions(webDriver);
 	}
 	
+	/**
+	 * 获取WEB驱动的能力参数
+	 * @param loadImages
+	 * @return
+	 */
 	private DesiredCapabilities getCapabilities(boolean loadImages) {
 		DesiredCapabilities capabilities = null;
 		
@@ -106,7 +137,6 @@ final public class BrowserDriver {
 			capabilities.setCapability(PAGE_SETTINGS.concat("XSSAuditingEnabled"), false);	// 跨域请求监控
 			capabilities.setCapability(PAGE_SETTINGS.concat("localToRemoteUrlAccessEnabled"), false);	// 本地资源是否可以访问远程URL
 			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), USER_AGENT);	// 伪装浏览器
-			
 			
 //			final String HERDER = PhantomJSDriverService.PHANTOMJS_PAGE_CUSTOMHEADERS_PREFIX;
 //			capabilities.setCapability(HERDER.concat("Accept"), "application/json, text/javascript, */*; q=0.01");
@@ -126,14 +156,6 @@ final public class BrowserDriver {
 		return capabilities;
 	}
 	
-	public WebDriver getDriver() {
-		return webDriver;
-	}
-	
-	public void open(String url) {
-		webDriver.navigate().to(url);
-	}
-	
 	/**
 	 * 隐式等待期望的元素出现
 	 * @param second 最长的等待秒数
@@ -143,14 +165,37 @@ final public class BrowserDriver {
 	}
 	
 	/**
-	 * 刷新页面
+	 * 获取WEB驱动
+	 * @return
 	 */
-	public void refresh() {
-		webDriver.navigate().refresh();
+	public WebDriver getDriver() {
+		return webDriver;
 	}
 	
 	/**
-	 * 关闭当前页面
+	 * 获取页面事件的行为操作对象
+	 * @return
+	 */
+	public Actions getAction() {
+		return action;
+	}
+	
+	/**
+	 * 关闭浏览器（退出浏览器进程）
+	 */
+	public void quit() {
+		try {
+			webDriver.quit();
+		} catch(Throwable e) {}
+		
+		// 以防万一, 使用系统命令杀掉驱动进程 （Chrome只能通过此方法）
+		if(WebDriverType.PHANTOMJS != type) {
+			CmdUtils.kill(type.DRIVER_NAME());
+		}
+	}
+	
+	/**
+	 * 关闭当前页面（若所有页面都被关闭，则自动退出浏览器进程）
 	 */
 	public void close() {
 		try {
@@ -159,17 +204,24 @@ final public class BrowserDriver {
 	}
 	
 	/**
-	 * 关闭浏览器
+	 * 打开页面
+	 * @param url 页面URL
 	 */
-	public void quit() {
-		try {
-			webDriver.quit();	// 大部分浏览器驱动结束进程的方法
-		} catch(Throwable e) {}
-		
-		// 以防万一, 使用系统命令杀掉驱动进程 （Chrome只能通过此方法）
-		CmdUtils.kill(type.DRIVER_NAME());
+	public void open(String url) {
+		webDriver.navigate().to(url);
 	}
 	
+	/**
+	 * 刷新当前页面
+	 */
+	public void refresh() {
+		webDriver.navigate().refresh();
+	}
+	
+	/**
+	 * 获取当前页面路径
+	 * @return
+	 */
 	public String getCurURL() {
 		String url = "";
 		try {
@@ -178,6 +230,10 @@ final public class BrowserDriver {
 		return url;
 	}
 	
+	/**
+	 * 获取页面源码
+	 * @return
+	 */
 	public String getPageSource() {
 		String ps = "";
 		try {
@@ -186,12 +242,20 @@ final public class BrowserDriver {
 		return ps;
 	}
 	
+	/**
+	 * 清空cookies
+	 */
 	public void clearCookies() {
 		try {
 			webDriver.manage().deleteAllCookies();
 		} catch(Throwable e) {}
 	}
 	
+	/**
+	 * 添加cookie
+	 * @param cookie
+	 * @return
+	 */
 	public boolean addCookie(Cookie cookie) {
 		boolean isOk = true;
 		try {
@@ -202,6 +266,11 @@ final public class BrowserDriver {
 		return isOk;
 	}
 	
+	/**
+	 * 添加cookie集
+	 * @param cookies cookie集
+	 * @return
+	 */
 	public boolean addCookies(Set<Cookie> cookies) {
 		boolean isOk = true;
 		if(cookies == null) {
@@ -215,10 +284,19 @@ final public class BrowserDriver {
 		return isOk;
 	}
 	
+	/**
+	 * 获取cookie集
+	 * @return
+	 */
 	public Set<Cookie> getCookies() {
 		return webDriver.manage().getCookies();
 	}
 	
+	/**
+	 * 获取页面元素
+	 * @param by 元素位置
+	 * @return 若不存在返回null
+	 */
 	public WebElement findElement(By by) {
 		WebElement element = null;
 		try {
@@ -227,10 +305,19 @@ final public class BrowserDriver {
 		return element;
 	}
 
+	/**
+	 * 点击按钮并提交
+	 * @param button 页面按钮元素
+	 */
 	public void click(WebElement button) {
 		action.click(button).perform();	// 点击并提交
 	}
 	
+	/**
+	 * 提交数据到页面表单元素
+	 * @param form 页面表单元素
+	 * @param msg 表单数据
+	 */
 	public void send(WebElement form, String msg) {
 		action.sendKeys(form, msg, Keys.ENTER, Keys.NULL).perform();
 	}
@@ -240,9 +327,16 @@ final public class BrowserDriver {
 	 * @param imgPath 图片保存路径
 	 */
 	public void screenshot(String imgPath) {
-		webDriver.manage().window().maximize(); //浏览器窗口最大化
-		File srcFile = ((TakesScreenshot) webDriver).getScreenshotAs(OutputType.FILE);  
-        FileUtils.copyFile(srcFile, new File(imgPath));
+		WebUtils.screenshot(webDriver, imgPath);
+	}
+	
+	/**
+	 * 保存当前页面（包括页面截图和页面源码）
+	 * @param saveDir 保存目录
+	 * @param saveName 保存名称
+	 */
+	public void saveCurPage(String saveDir, String saveName) {
+		WebUtils.saveCurPage(webDriver, saveDir, saveName);
 	}
 	
 }

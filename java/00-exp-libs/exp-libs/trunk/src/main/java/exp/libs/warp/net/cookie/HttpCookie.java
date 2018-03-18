@@ -1,4 +1,4 @@
-package exp.libs.warp.net.http.cookie;
+package exp.libs.warp.net.cookie;
 
 import java.util.Date;
 import java.util.LinkedList;
@@ -141,6 +141,21 @@ public class HttpCookie {
 			sb.append(cookie.toString()).append(LFCR);
 		}
 		return sb.toString();
+	}
+	
+	/**
+	 * 获取cookie数量
+	 * @return
+	 */
+	public int size() {
+		return cookies.size();
+	}
+	
+	/**
+	 * 清除cookies
+	 */
+	public void clear() {
+		cookies.clear();
 	}
 	
 	@Override

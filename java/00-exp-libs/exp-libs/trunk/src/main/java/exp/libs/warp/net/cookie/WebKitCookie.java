@@ -1,4 +1,4 @@
-package exp.libs.warp.net.http.cookie;
+package exp.libs.warp.net.cookie;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -18,9 +18,6 @@ import org.openqa.selenium.Cookie;
  */
 public class WebKitCookie extends HttpCookie {
 
-	/** NULL-cookie对象 */
-	public final static WebKitCookie NULL = new WebKitCookie();
-	
 	/**
 	 * 构造函数
 	 */
@@ -45,7 +42,14 @@ public class WebKitCookie extends HttpCookie {
 	 */
 	public WebKitCookie(Collection<Cookie> cookies) {
 		super();
-		
+		add(cookies);
+	}
+	
+	/**
+	 * 添加多个selenium的cookie
+	 * @param cookie
+	 */
+	public void add(Collection<Cookie> cookies) {
 		if(cookies != null) {
 			for(Cookie cookie : cookies) {
 				add(cookie);
@@ -70,17 +74,8 @@ public class WebKitCookie extends HttpCookie {
 			isChanged = true;
 			cookies.add(cookie);
 			
-			takeNV(cookie.getName(), cookie.getValue());
+			takeCookieNVE(cookie.getName(), cookie.getValue(), cookie.getExpiry());
 		}
-	}
-	
-	/**
-	 * 在添加新的cookie时会触发此方法, 用于提取某些特殊的名值对作为常量, 例如CSRF
-	 * @param name 键名
-	 * @param value 键值
-	 */
-	protected void takeNV(String name, String value) {
-		// Undo
 	}
 	
 	/**

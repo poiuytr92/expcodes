@@ -1,4 +1,4 @@
-package exp.libs.warp.net.http.cookie;
+package exp.libs.warp.net.cookie;
 
 import java.util.Date;
 
