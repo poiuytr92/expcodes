@@ -8,7 +8,7 @@ import exp.bilibili.plugin.envm.Danmu;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.BoolUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.cookie.HttpCookie;
+import exp.libs.warp.net.cookie.HttpCookie;
 
 /**
  * <PRE>

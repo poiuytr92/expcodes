@@ -45,14 +45,17 @@ public class ChatColor {
 			"orange", "柠檬橙", 255, 152, 0);
 	
 	public final static ChatColor PINK = new ChatColor(
-			"pink", "蜜桃粉", 255, 115, 154);
+			"pink", "情书粉", 255, 115, 154);
+	
+	public final static ChatColor PEACH_PINK = new ChatColor(
+			"peachpink", "桃花粉", 250, 173, 229);
 	
 	public final static ChatColor GOLD = new ChatColor(
 			"gold", "土豪金", 251, 254, 182);
 	
 	/** 颜色集: 用于取随机颜色 */
 	private final static List<ChatColor> COLORS = Arrays.asList(new ChatColor[] {
-			WHITE, RED, BLUE, PURPLE, CYAN, GREEN, YELLOW, ORANGE, PINK, GOLD
+			WHITE, RED, BLUE, PURPLE, CYAN, GREEN, YELLOW, ORANGE, PINK, PEACH_PINK, GOLD
 	});
 	
 	private String en;

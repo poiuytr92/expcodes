@@ -70,7 +70,7 @@ public class AppUI extends MainWindow {
 	private final static int HEIGHT = 600;
 	
 	/** 避免连续点击按钮的锁定时间 */
-	private final static long LOCK_TIME = 100;
+	private final static long LOCK_TIME = 50;
 	
 	/** 界面文本框最大缓存行数 */
 	private final static int MAX_LINE = 200;
