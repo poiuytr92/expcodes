@@ -15,10 +15,8 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
-import exp.libs.warp.net.http.HttpUtils;
-import exp.qw.Config;
-import exp.qw.bean.BrowserDriver;
-import exp.qw.utils.LoginUtils;
+import exp.libs.warp.net.webkit.BrowserDriver;
+import exp.qw.cache.Browser;
 import exp.qw.utils.UIUtils;
 
 /**
@@ -60,8 +58,8 @@ public class MoodWordAnalyzer {
 	public static void catchOnlineInfo(BrowserDriver bDriver, 
 			String username, String password, 
 			String targetQQ, int totalPageNum) {
-		WebDriver driver = bDriver.getWebDriver();
-		String gtk = LoginUtils.login(driver, Config.LOGIN_PAGE, username, password);
+		WebDriver driver = bDriver.getDriver();
+		String gtk = Browser.GTK();
 		
 		if(StrUtils.isNotEmpty(gtk)) {
 			UIUtils.log("登陆成功： 开始抓取 【说说】 数据...");
@@ -84,7 +82,7 @@ public class MoodWordAnalyzer {
 			UIUtils.log("登陆失败： 无法获得 [g_tk] 码, 本次操作终止.");
 		}
 		
-		bDriver.close(driver);
+		bDriver.quit();
 	}
 	
 	/**

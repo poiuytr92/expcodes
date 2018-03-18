@@ -4,38 +4,32 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.ui.BeautyEyeUtils;
-import exp.qw.AppUI;
 
+/**
+ * <PRE>
+ * 界面工具类
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class UIUtils {
 
 	private final static Logger log = LoggerFactory.getLogger(UIUtils.class);
 	
-	public static void BeautySwing() {
-		BeautyEyeUtils.init();
+	protected UIUtils() {}
+	
+	public static void log(Object... msgs) {
+		log(StrUtils.concat(msgs));
 	}
 	
 	public static void log(String msg) {
 		log.info(msg);
-		msg = StrUtils.concat(TimeUtils.getCurTimePrefix(), msg);
-		AppUI.getInstn().appendLog(msg);
+		msg = StrUtils.concat(TimeUtils.getCurTime(), msg);
+//		AppUI.getInstn().toConsole(msg);
 	}
 	
-	public static void log(Object... msg) {
-		if(msg == null) {
-			return;
-		}
-		
-		StringBuilder sb = new StringBuilder();
-		if(msg != null) {
-			for(Object o : msg) {
-				if(o == null) {
-					continue;
-				}
-				sb.append(o.toString());
-			}
-		}
-		log(sb.toString());
-	}
 	
 }

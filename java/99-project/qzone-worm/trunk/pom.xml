@@ -38,23 +38,130 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
+		<jdk.version>1.7</jdk.version>
+        <explibs.version>1.0-SNAPSHOT</explibs.version>
+        <mrp.plugin.version>1.0-SNAPSHOT</mrp.plugin.version>
 	</properties>
 
 	<!-- 项目依赖 -->
 	<dependencies>
 	
-		<dependency>
-			<groupId>exp.libs</groupId>
-		    <artifactId>exp-libs</artifactId>
-		    <version>1.0-SNAPSHOT</version>
-		</dependency>
-		
-		<dependency>
-		  <groupId>net.sf.json-lib</groupId>
-		  <artifactId>json-lib</artifactId>
-		  <version>2.4</version>
-		  <classifier>jdk15</classifier>
-		</dependency>
+		<!-- 经验库 -->
+        <dependency>
+          <groupId>exp.libs</groupId>
+          <artifactId>exp-libs</artifactId>
+          <version>${explibs.version}</version>
+          <exclusions>
+            <exclusion>
+              <groupId>mysql</groupId>
+              <artifactId>mysql-connector-java</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>com.oracle</groupId>
+              <artifactId>ojdbc</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>redis.clients</groupId>
+              <artifactId>jedis</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.eclipse</groupId>
+              <artifactId>draw2d</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.jgraph</groupId>
+              <artifactId>jGraph</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>com.realpersist</groupId>
+              <artifactId>schemaeditor</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>exp.libs</groupId>
+              <artifactId>jvm-agent</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.sf.ehcache</groupId>
+              <artifactId>ehcache</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>exp.libs</groupId>
+              <artifactId>jep</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.quartz</groupId>
+              <artifactId>quartz-all</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>jsch</groupId>
+              <artifactId>jsch</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>javax.activation</groupId>
+              <artifactId>activation</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>javax.mail</groupId>
+              <artifactId>mail</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.activemq</groupId>
+              <artifactId>activemq-all</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.axis2</groupId>
+              <artifactId>axis2-adb</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.ws.xmlschema</groupId>
+              <artifactId>xmlschema-core</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.axis2</groupId>
+              <artifactId>axis2-transport-http</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.axis2</groupId>
+              <artifactId>axis2-transport-local</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-transports-http</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.webservices.client</groupId>
+              <artifactId>wsdl4j</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.webservices.client</groupId>
+              <artifactId>jabref</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.webservices.client</groupId>
+              <artifactId>soapui</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.webservices.client</groupId>
+              <artifactId>soapui-xmlbeans</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.seleniumhq.selenium</groupId>
+              <artifactId>selenium-chrome-driver</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.java-websocket</groupId>
+              <artifactId>Java-WebSocket</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.tensorflow</groupId>
+              <artifactId>tensorflow</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
 
 		<!-- 单元测试 -->
 		<dependency>
@@ -69,6 +176,16 @@
 	<!-- 项目构建 -->
 	<build>
 		<plugins>
+		
+		    <!-- 指定项目JDK版本 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
 
 			<!-- 版本打包插件，在dos跳转到项目根目录，依次执行（需保证没有引用快照、本地与SVN服务器内容完全一致）: 
 				1 发布基线到svn: mvn release:prepare 
@@ -103,70 +220,109 @@
 				</configuration>
 			</plugin>
 
-
 			<!-- Ant插件：项目部署文件复制 -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.7</version>
-				<executions>
-					<execution>
-						<id>ant-build</id>
-						<phase>package</phase>
-						<configuration>
-							<target>
-								<echo>拷贝项目配置文件</echo>
-								<copy todir="${release.dir}/conf">
-									<fileset dir="conf" />
-								</copy>
-								<echo>拷贝编译jar文件</echo>
-								<copy file="${project.build.directory}/${project.artifactId}-${project.version}.jar"
-									tofile="${release.dir}/lib/${project.artifactId}.jar" />
-								<!-- copy todir="${release.dir}/lib">
-									<fileset dir="${project.build.directory}">
-										<include name="${project.artifactId}-${project.version}.jar" />
-									</fileset>
-								</copy -->
-							</target>
-						</configuration>
-						<goals>
-							<goal>run</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!-- 打包源码: 项目发布基线版本时会自动打包源码，不要启用此插件，否则会失败 -->
-			<!-- plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>2.1.2</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>jar-no-fork</goal>
-							<goal>test-jar-no-fork</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin -->
-
-			<!-- 打包javadoc: 项目发布基线版本时会自动打包javadoc，不要启用此插件，否则会失败 -->
-			<!-- plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>ant-build</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo>拷贝项目配置文件</echo>
+                                <copy todir="${release.dir}/conf">
+                                    <fileset dir="conf">
+                                      <exclude name="driver/chrome-driver.exe" />
+                                    </fileset>
+                                </copy>
+                                <echo>拷贝资源数据</echo>
+                                <copy todir="${release.dir}/data">
+                                    <fileset dir="data">
+                                      <exclude name="active/*" />
+                                      <exclude name="img/qrcode.png" />
+                                      <exclude name="img/vccode.jpg" />
+                                      <exclude name="img/vercode.jpg" />
+                                      <exclude name="img/tesseract.log" />
+                                    </fileset>
+                                </copy>
+                                <copy todir="${release.dir}/cookies">
+                                    <fileset dir="cookies">
+                                      <exclude name="*" />
+                                    </fileset>
+                                </copy>
+                                <echo>拷贝文档</echo>
+                                <!-- copy todir="${release.dir}/运行截图">
+                                    <fileset dir="doc/运行截图" />
+                                </copy -->
+                                <copy todir="${release.dir}">
+                                    <fileset dir="doc">
+                                      <include name="使用说明.txt" />
+                                    </fileset>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- 项目发布插件(自动生成脚本) -->
+            <plugin>
+                <groupId>exp.libs</groupId>
+                <artifactId>mojo-release-plugin</artifactId>
+                <version>${mrp.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>mrp</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>install</goal>
+                        </goals>
+                        <configuration>
+                            <mavenRepository>D:\mavenRepository</mavenRepository>
+                            <verClass>exp.bilibili.plugin.Version</verClass>
+                            <mainClass>exp.bilibili.plugin.BPMain</mainClass>
+                            <mainArgs></mainArgs>
+                            <charset>UTF-8</charset>
+                            <jdkPath>java</jdkPath>
+                            <xms>32m</xms>
+                            <xmx>256m</xmx>
+                            <jdkParams></jdkParams>
+                            <noVerJarRegex>exp-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
+                            <proguard>true</proguard>  <!-- 是否使用混淆包(需配置混淆打包插件) -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- 打包javadoc: 项目发布基线版本时会自动打包javadoc，若报错不要启用此插件 -->
+            <!-- javadoc插件会强制使用GBK读取pom文件的内容, 若得到的html网页标题乱码,  -->
+            <!-- 则需要通过Run Configurations -> 自定义Maven install命令 -> Common -> Encoding:GBK 确保不会乱码 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <aggregate>true</aggregate>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <docencoding>UTF-8</docencoding>
+                    <outputEncondig>UTF-8</outputEncondig>
+                    <skip>false</skip>  <!-- 是否在项目打包时跳过javadoc -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
 		</plugins>
 	</build>
