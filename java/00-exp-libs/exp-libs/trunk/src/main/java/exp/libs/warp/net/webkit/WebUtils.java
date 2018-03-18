@@ -85,11 +85,12 @@ public class WebUtils {
 	
 	/**
 	 * 切换到frame嵌套页面的driver
-	 * @param driver
+	 * 	(入参的driver也会发生上下文切换, 即返回的驱动对象跟入参的驱动对象是相同的)
+	 * @param driver 
 	 * @param frame
 	 * @return
 	 */
-	public static WebDriver toFrameDriver(WebDriver driver, By frame) {
+	public static WebDriver switchToFrame(WebDriver driver, By frame) {
 		WebDriver frameDriver = null;
 		if(driver != null) {
 			try {
@@ -97,7 +98,7 @@ public class WebUtils {
 						driver.findElement(frame));
 				
 			} catch(Exception e) {
-				log.error("获取到嵌套页面驱动失败: [{}]", frame.toString(), e);
+				log.error("切换到嵌套页面驱动失败: [{}]", frame.toString(), e);
 			}
 		}
 		return frameDriver;

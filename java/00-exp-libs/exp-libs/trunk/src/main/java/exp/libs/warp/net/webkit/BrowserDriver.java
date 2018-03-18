@@ -46,9 +46,6 @@ public class BrowserDriver {
 	/** WEB驱动 */
 	private WebDriver webDriver;
 	
-	/** 针对页面事件进行操作的行为对象 */
-	private Actions action;
-	
 	/**
 	 * 构造函数
 	 * @param type WEB驱动类型
@@ -116,7 +113,6 @@ public class BrowserDriver {
 		} else {
 			this.webDriver = new HtmlUnitDriver(getCapabilities(loadImages));
 		}
-		this.action = new Actions(webDriver);
 	}
 	
 	/**
@@ -170,14 +166,6 @@ public class BrowserDriver {
 	 */
 	public WebDriver getDriver() {
 		return webDriver;
-	}
-	
-	/**
-	 * 获取页面事件的行为操作对象
-	 * @return
-	 */
-	public Actions getAction() {
-		return action;
 	}
 	
 	/**
@@ -310,6 +298,9 @@ public class BrowserDriver {
 	 * @param button 页面按钮元素
 	 */
 	public void click(WebElement button) {
+		
+		// webDriver可能会因为嵌套页切换导致变化, 因此此处action需要实时生成
+		Actions action = new Actions(webDriver);	
 		action.click(button).perform();	// 点击并提交
 	}
 	
@@ -319,6 +310,7 @@ public class BrowserDriver {
 	 * @param msg 表单数据
 	 */
 	public void send(WebElement form, String msg) {
+		Actions action = new Actions(webDriver);
 		action.sendKeys(form, msg, Keys.ENTER, Keys.NULL).perform();
 	}
 	
