@@ -10,7 +10,7 @@ public class QQCookie extends WebKitCookie {
 	/** NULL-cookie对象 */
 	public final static QQCookie NULL = new QQCookie();
 	
-	private final static String GTK_JS_PATH = "./lib/gtk.js";
+	private final static String GTK_JS_PATH = "./conf/gtk.js";
 	
 	private final static String GTK_METHOD = "getACSRFToken";
 	
