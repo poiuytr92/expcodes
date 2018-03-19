@@ -924,4 +924,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return isOk;
 	}
 	
+	/**
+	 * 移除不允许出现在文件名中的特殊字符
+	 * @param fileName 文件名
+	 * @param symbol 用于替代被移除的特殊字符
+	 * @return 移除特殊字符后的文件名
+	 */
+	public static String delForbidCharInFileName(String fileName, String symbol) {
+		String name = (fileName == null ? "" : fileName);
+		return name.replaceAll("[/\\\\:\\*\"<>\\|\\?]", symbol);
+	}
+	
 }

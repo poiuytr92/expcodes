@@ -115,6 +115,7 @@ public class HttpUtils {
 			/** 浏览器代理头标识: 假装是Mac，可避免被反爬 */
 			public final static String USER_AGENT = 
 					"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
+//					"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 			
 			/** 请求POST的数据是xml */
 			public final static String POST_XML = 
