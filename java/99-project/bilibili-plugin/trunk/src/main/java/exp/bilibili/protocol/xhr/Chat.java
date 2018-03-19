@@ -49,7 +49,7 @@ public class Chat extends __XHR {
 	public static boolean sendDanmu(BiliCookie cookie, int roomId, String msg, ChatColor color) {
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
-		Map<String, String> request = getRequest(msg, sRoomId, color.RGB());
+		Map<String, String> request = getRequest(cookie.CSRF(), msg, sRoomId, color);
 		String response = HttpURLUtils.doPost(CHAT_URL, header, request);
 		return analyse(response, msg);
 	}
@@ -61,14 +61,16 @@ public class Chat extends __XHR {
 	 * @param chatColor
 	 * @return
 	 */
-	private static Map<String, String> getRequest(String msg, String roomId, String color) {
+	private static Map<String, String> getRequest(String csrf, 
+			String msg, String roomId, ChatColor color) {
 		Map<String, String> params = new HashMap<String, String>();
 		params.put(BiliCmdAtrbt.rnd, String.valueOf(System.currentTimeMillis() / 1000));	// 时间戳
 		params.put(BiliCmdAtrbt.msg, msg);			// 弹幕内容
-		params.put(BiliCmdAtrbt.color, color);		// 弹幕颜色
+		params.put(BiliCmdAtrbt.color, color.RGB());// 弹幕颜色
 		params.put(BiliCmdAtrbt.roomid, roomId);	// 接收消息的房间号
 		params.put(BiliCmdAtrbt.fontsize, "25");
 		params.put(BiliCmdAtrbt.mode, "1");
+		params.put(BiliCmdAtrbt.csrf_token, csrf);
 		return params;
 	}
 	
