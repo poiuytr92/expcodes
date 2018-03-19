@@ -18,13 +18,14 @@ import javax.swing.JTextField;
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.thread.ThreadPool;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
-import exp.qw.Config;
 import exp.qw.cache.Browser;
 import exp.qw.core.AlbumAnalyzer;
 import exp.qw.core.Landers;
+import exp.qw.envm.URL;
 
 public class AppUI extends MainWindow {
 
@@ -40,14 +41,14 @@ public class AppUI extends MainWindow {
 	/** 换行符 */
 	private final static String LINE_END = "\r\n";
 	
+	/** 目标QQ号输入框 */
+	private JTextField targetQQTF;
+	
 	/** QQ号输入框 */
 	private JTextField unTF;
 	
 	/** 密码输入框 */
 	private JPasswordField pwTF;
-	
-	/** 目标QQ号输入框 */
-	private JTextField targetQQTF;
 	
 	/** 【记住登陆信息】选项 */
 	private JRadioButton rememberBtn;
@@ -66,6 +67,9 @@ public class AppUI extends MainWindow {
 	
 	/** 日志输出区 */
 	private JTextArea consoleTA;
+	
+	/** 线程池 */
+	private ThreadPool tp;
 	
 	/** 单例 */
 	private static volatile AppUI instance;
@@ -99,29 +103,31 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
+		this.targetQQTF = new JTextField("");
 		this.unTF = new JTextField("");
 		this.pwTF = new JPasswordField("");
-		this.targetQQTF = new JTextField("");
+		this.rememberBtn = new JRadioButton("记住我");
 		
+		targetQQTF.setToolTipText("需要爬取数据的目标QQ号");
 		unTF.setToolTipText("请确保此QQ具有查看对方空间权限 (不负责权限破解)");
-		targetQQTF.setToolTipText("此软件不盗号, 不放心勿用");
-		
+		pwTF.setToolTipText("此软件不盗号, 不放心勿用");
 		
 		this.loginBtn = new JButton("登陆 QQ 空间");
-		this.albumBtn = new JButton("爬取【相册】图文");
-		this.moodBtn = new JButton("爬取【说说】图文");
+		this.albumBtn = new JButton("爬取【相册】图文数据");
+		this.moodBtn = new JButton("爬取【说说】图文数据");
 		
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn);
-		BeautyEyeUtils.setButtonStyle(NormalColor.green, albumBtn);
-		BeautyEyeUtils.setButtonStyle(NormalColor.green, moodBtn);
+		albumBtn.setEnabled(false);
+		moodBtn.setEnabled(false);
 		loginBtn.setForeground(Color.BLACK);
 		albumBtn.setForeground(Color.BLACK);
 		moodBtn.setForeground(Color.BLACK);
 		
-		
-		this.isLogin = false;
 		this.consoleTA = new JTextArea();
 		consoleTA.setEditable(false);
+		
+		this.isLogin = false;
+		this.tp = new ThreadPool(10);
 	}
 
 	@Override
@@ -135,7 +141,7 @@ public class AppUI extends MainWindow {
 				SwingUtils.getPairsPanel("QQ账号", unTF), 
 				SwingUtils.getPairsPanel("QQ密码", pwTF), 
 				SwingUtils.getPairsPanel("目标QQ", targetQQTF), 
-				loginBtn, 
+				SwingUtils.getEBorderPanel(loginBtn, rememberBtn), 
 				SwingUtils.getHGridPanel(albumBtn, moodBtn)
 		);
 		SwingUtils.addBorder(panel, "control");
@@ -192,19 +198,27 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String username = unTF.getText();
-				String password = String.valueOf(pwTF.getPassword());
+				final String username = unTF.getText();
+				final String password = String.valueOf(pwTF.getPassword());
 				
 				if(StrUtils.isNotEmpty(username, password)) {
-					isLogin = Landers.toLogin(username, password, getQZoneURL());
-					if(isLogin == true) {
-						loginBtn.setEnabled(false);
-						SwingUtils.warn("登陆成功");
+					tp.execute(new Thread() {
 						
-					} else {
-						Browser.quit();
-						SwingUtils.warn("登陆失败: 账号或密码错误");
-					}
+						@Override
+						public void run() {
+							isLogin = Landers.toLogin(username, password, getQZoneURL());
+							if(isLogin == true) {
+								loginBtn.setEnabled(false);
+								albumBtn.setEnabled(true);
+								moodBtn.setEnabled(true);
+								SwingUtils.warn("登陆成功");
+								
+							} else {
+								Browser.quit();
+								SwingUtils.warn("登陆失败 (若一直失败请重启软件)");
+							}
+						}
+					});
 				} else {
 					SwingUtils.warn("账号或密码不能为空");
 				}
@@ -213,7 +227,26 @@ public class AppUI extends MainWindow {
 	}
 	
 	public void setAlbumBtnListener() {
-		
+		albumBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(moodBtn.isEnabled() == false) {
+					SwingUtils.warn("请先等待【说说】下载完成...");
+					
+				} else {
+					albumBtn.setEnabled(false);
+					tp.execute(new Thread() {
+						
+						@Override
+						public void run() {
+							AlbumAnalyzer.downloadAlbums(getQZoneURL());
+							albumBtn.setEnabled(true);
+						}
+					});
+				}
+			}
+		});
 	}
 
 	public void setMoodBtnListener() {
@@ -221,32 +254,24 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				AlbumAnalyzer.downloadAlbums(getQZoneURL());
-				
-//				if(StrUtils.isNotEmpty(username) && 
-//						StrUtils.isNotEmpty(password) && 
-//						StrUtils.isNotEmpty(targetQQ)) {
+				if(albumBtn.isEnabled() == false) {
+					SwingUtils.warn("请先等待【相册】下载完成...");
 					
-//					new Thread() {
-//						public void run() {
-//							int pageNum = NumUtils.toInt(pageNumTF.getText().trim());
-//							pageNum = (pageNum <= 0 ? 1000 : pageNum);
-//							
-//							UIUtils.log("程序已启动, 正在打开浏览器模拟操作...");
-//							
+				} else {
+					moodBtn.setEnabled(false);
+					tp.execute(new Thread() {
+						
+						@Override
+						public void run() {
 //							MoodWordAnalyzer.catchOnlineInfo(_AppUI.browserDriver, 
 //									username, password, targetQQ, pageNum);
 //							MoodWordAnalyzer.downloadDatas();
 //							MoodWordAnalyzer.copyTogether();
-//							
-//							UIUtils.log("所有抓取操作已完成.");
-//							moodBtn.setEnabled(true);
-//						};
-//					}.start();
-//					
-//					moodBtn.setEnabled(false);
-//				}
+									
+							moodBtn.setEnabled(true);
+						}
+					});
+				}
 			}
 		});
 	}
@@ -270,7 +295,7 @@ public class AppUI extends MainWindow {
 	
 	private String getQZoneURL() {
 		String targetQQ = targetQQTF.getText().trim();
-		return Config.QZONE_HOME_URL_PREFIX.concat(targetQQ);
+		return URL.QZONE_DOMAIN.concat(targetQQ);
 	}
 	
 	public void toConsole(String msg) {

@@ -1,26 +1,38 @@
 package exp.qw.bean;
 
+import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.num.IDUtils;
+import exp.libs.utils.other.StrUtils;
+
+
 public class Photo {
 
 	private String name;
+	
+	private String desc;
 	
 	private String date;
 	
 	private String url;
 	
-	public Photo(String name, String date, String url) {
-		this.name = remove(name);
-		this.date = date;
-		this.url = url;
+	public Photo(String desc, String date, String url) {
+		this.name = "";
+		this.desc = (desc == null ? desc : "");
+		this.date = (date == null ? date : "");
+		this.url = (url == null ? url : "");
 	}
 	
-	private String remove(String name) {
-		// FIXME 移除特殊字符
+	public String getFileName() {
+		if(StrUtils.isEmpty(name)) {
+			name = StrUtils.concat("[D", IDUtils.getTimeID(), "]-[U", date, "] ", desc);
+			name = FileUtils.delForbidCharInFileName(name, "");
+			name = StrUtils.showSummary(name);
+		}
 		return name;
 	}
 	
-	public String NAME() {
-		return name;
+	public String DESC() {
+		return desc;
 	}
 	
 	public String DATE() {

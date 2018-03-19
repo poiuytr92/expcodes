@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.other.StrUtils;
+import exp.qw.ui.AppUI;
 
 /**
  * <PRE>
@@ -28,7 +29,7 @@ public class UIUtils {
 	public static void log(String msg) {
 		log.info(msg);
 		msg = StrUtils.concat(TimeUtils.getCurTime(), msg);
-//		AppUI.getInstn().toConsole(msg);
+		AppUI.getInstn().toConsole(msg);
 	}
 	
 	

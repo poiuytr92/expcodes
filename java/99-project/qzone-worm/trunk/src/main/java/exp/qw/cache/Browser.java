@@ -4,8 +4,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import exp.libs.warp.net.webkit.BrowserDriver;
+import exp.libs.warp.net.webkit.WebBrowser;
 import exp.libs.warp.net.webkit.WebDriverType;
+import exp.libs.warp.net.webkit.WebUtils;
 import exp.qw.bean.QQCookie;
 
 
@@ -21,7 +22,7 @@ import exp.qw.bean.QQCookie;
  */
 public class Browser {
 	
-	private BrowserDriver browser;
+	private WebBrowser browser;
 	
 	private QQCookie qqCookie;
 	
@@ -58,8 +59,8 @@ public class Browser {
 	private void _reset(boolean loadImages) {
 		_backupCookies();
 		_quit();
-		browser = new BrowserDriver(WebDriverType.PHANTOMJS, loadImages);
-		_recoveryCookies();
+		browser = new WebBrowser(WebDriverType.PHANTOMJS, loadImages);
+		recoveryCookies();
 	}
 	
 	public static WebDriver DRIVER() {
@@ -92,7 +93,7 @@ public class Browser {
 	
 	private void _open(String url) {
 		if(browser == null){
-			_reset(true);
+			_reset(false);	// 默认不加载图片
 		}
 		browser.open(url);
 	}
@@ -106,19 +107,6 @@ public class Browser {
 			browser.refresh();
 		}
 	}
-	
-//	public static void close() {
-//		INSTN()._close();
-//	}
-//	
-//	/**
-//	 * 关闭当前页面(若是最后一个页面, 则会关闭浏览器)
-//	 */
-//	private void _close() {
-//		if(browser != null) {
-//			browser.close();
-//		}
-//	}
 	
 	public static void quit() {
 		INSTN()._quit();
@@ -161,27 +149,22 @@ public class Browser {
 		}
 	}
 	
-	public static int recoveryCookies() {
-		return INSTN()._recoveryCookies();
-	}
-	
-	private int _recoveryCookies() {
-		int cnt = 0;
+	private void recoveryCookies() {
 		if(browser != null) {
-			cnt = qqCookie.size();
-			
 			browser.clearCookies();
 			browser.addCookies(qqCookie.toSeleniumCookies());
 		}
-		return cnt;
 	}
 	
-	public static boolean existElement(By by) {
-		return INSTN()._existElement(by);
+	public static void clearCookies() {
+		INSTN()._clearCookies();
 	}
 	
-	private boolean _existElement(By by) {
-		return (_findElement(by) != null);
+	private void _clearCookies() {
+		qqCookie.clear();
+		if(browser != null) {
+			browser.clearCookies();
+		}
 	}
 	
 	public static WebElement findElement(By by) {
@@ -189,57 +172,43 @@ public class Browser {
 	}
 	
 	private WebElement _findElement(By by) {
-		return (browser == null ? null : browser.findElement(by));
+		return WebUtils.findElement(browser.getDriver(), by);
 	}
 	
-	public static void click(WebElement element) {
-		INSTN()._click(element);
+	public static void fill(WebElement input, String data) {
+		WebUtils.fill(input, data);
 	}
 	
-	private void _click(WebElement element) {
-		if(browser != null) {
-			browser.click(element);
-		}
+	public static void click(WebElement button) {
+		INSTN()._click(button);
 	}
 	
-	/**
-	 * 使浏览器跳转到指定页面后截图
-	 * @param driver 浏览器驱动
-	 * @param url 跳转页面
-	 * @param imgPath 图片保存路径
-	 */
-	public static void screenshot(String imgPath) {
-		INSTN()._screenshot(imgPath);
+	private void _click(WebElement button) {
+		WebUtils.click(browser.getDriver(), button);
 	}
 	
-	/**
-	 * 对浏览器的当前页面截图
-	 * @param imgPath 图片保存路径
-	 */
-	private void _screenshot(String imgPath) {
-		if(browser != null) {
-			browser.screenshot(imgPath);
-		}
-	}
-
-	/**
-	 * 保存当前页面（包括页面截图和页面源码）
-	 * @param saveDir 保存目录
-	 * @param saveName 保存名称
-	 */
-	public static void saveCurPage(String saveDir, String saveName) {
-		INSTN()._saveCurPage(saveDir, saveName);
+	public static void switchToFrame(By frame) {
+		INSTN()._switchToFrame(frame);
 	}
 	
-	/**
-	 * 保存当前页面（包括页面截图和页面源码）
-	 * @param saveDir 保存目录
-	 * @param saveName 保存名称
-	 */
-	private void _saveCurPage(String saveDir, String saveName) {
-		if(browser != null) {
-			browser.saveCurPage(saveDir, saveName);
-		}
+	private void _switchToFrame(By frame) {
+		WebUtils.switchToFrame(browser.getDriver(), frame);
+	}
+	
+	public static void switchToParentFrame() {
+		INSTN()._switchToParentFrame();
+	}
+	
+	private void _switchToParentFrame() {
+		WebUtils.switchToParentFrame(browser.getDriver());
+	}
+	
+	public static void switchToTopFrame() {
+		INSTN()._switchToTopFrame();
+	}
+	
+	private void _switchToTopFrame() {
+		WebUtils.switchToTopFrame(browser.getDriver());
 	}
 	
 }

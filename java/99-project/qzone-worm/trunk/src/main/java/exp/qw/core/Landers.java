@@ -7,8 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.webkit.WebUtils;
 import exp.qw.cache.Browser;
+import exp.qw.envm.URL;
+import exp.qw.utils.UIUtils;
 
 /**
  * <PRE>
@@ -24,9 +25,6 @@ public class Landers {
 	
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(Landers.class);
-	
-	/** QQ空间登陆页面 */
-	private final static String LOGIN_URL = "http://qzone.qq.com/";
 	
 	/** 行为休眠间隔 */
 	private final static long SLEEP_TIME = 50;
@@ -44,10 +42,14 @@ public class Landers {
 	public static boolean toLogin(String username, String password, final String QZONE_URL) {
 		boolean isOk = false;
 		try {
+			Browser.reset(false);
+			Browser.clearCookies();
+			
 			isOk = _toLogin(username, password, QZONE_URL);
-			log.info("登陆QQ [{}] {}", username, (isOk ? "成功" : "失败: 账号或密码错误"));
+			UIUtils.log("登陆QQ [", username, "] ", (isOk ? "成功" : "失败: 账号或密码错误"));
 			
 		} catch(Exception e) {
+			UIUtils.log("仿真浏览器异常: 若一直失败请重启软件");
 			log.error("登陆QQ [{}] 异常", username, e);
 		}
 		return isOk;
@@ -61,19 +63,21 @@ public class Landers {
 	 * @return
 	 */
 	private static boolean _toLogin(String username, String password, final String QZONE_URL) {
-		Browser.open(LOGIN_URL);
-		switchLoginMode();	// 获取帐密登陆frame的WEB驱动
+		UIUtils.log("正在打开QQ登陆页面: ", URL.QZONE_LOGIN);
+		Browser.open(URL.QZONE_LOGIN);
+		switchLoginMode();	// 切换为帐密登陆模式
 		ThreadUtils.tSleep(SLEEP_TIME);
 		
 		fill("u", username);
 		fill("p", password);
 		ThreadUtils.tSleep(SLEEP_TIME);
 		
+		UIUtils.log("正在登陆QQ [", username, "] ...");
 		boolean isOk = clickLoginBtn();
 		if(isOk == true) {
 			Browser.open(QZONE_URL);
 			skipTitle();
-//			skipTips();
+			skipTips();
 		}
 		return isOk;
 	}
@@ -87,7 +91,7 @@ public class Landers {
 	private static void switchLoginMode() {
 		
 		// QQ空间的【登陆操作界面】是通过【iframe】嵌套在【登陆页面】中的子页面
-		WebUtils.switchToFrame(Browser.DRIVER(), By.id("login_frame"));
+		Browser.switchToFrame(By.id("login_frame"));
 		
 		// 切换帐密登陆方式为 [帐密登陆]
 		WebElement switchBtn = Browser.findElement(By.id("switcher_plogin"));
@@ -101,8 +105,7 @@ public class Landers {
 	 */
 	private static void fill(String name, String value) {
 		WebElement input = Browser.findElement(By.id(name));
-		input.clear();
-		input.sendKeys(value);
+		Browser.fill(input, value);
 	}
 	
 	/**
@@ -147,12 +150,12 @@ public class Landers {
 			Browser.click(span);
 			
 		} catch(Exception e) {
-			log.error("跳过QQ空间片头动画失败", e);
+			log.warn("跳过QQ空间片头动画失败");
 		}
 	}
 	
 	/**
-	 * 跳过操作提示(第一次打开时会触发)
+	 * 跳过操作提示(第一次打开时可能会触发)
 	 */
 	private static void skipTips() {
 		try {
@@ -163,7 +166,7 @@ public class Landers {
 			Browser.click(a);
 			
 		} catch(Exception e) {
-			log.error("跳过QQ空间操作提示失败", e);
+			log.warn("跳过QQ空间操作提示失败");
 		}
 	}
 	

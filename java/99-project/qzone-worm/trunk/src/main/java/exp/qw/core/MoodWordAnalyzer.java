@@ -15,7 +15,7 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
-import exp.libs.warp.net.webkit.BrowserDriver;
+import exp.libs.warp.net.webkit.WebBrowser;
 import exp.qw.cache.Browser;
 import exp.qw.utils.UIUtils;
 
@@ -55,7 +55,7 @@ public class MoodWordAnalyzer {
 	 * @param targetQQ
 	 * @param totalPageNum
 	 */
-	public static void catchOnlineInfo(BrowserDriver bDriver, 
+	public static void catchOnlineInfo(WebBrowser bDriver, 
 			String username, String password, 
 			String targetQQ, int totalPageNum) {
 		WebDriver driver = bDriver.getDriver();
