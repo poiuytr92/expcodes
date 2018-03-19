@@ -211,4 +211,13 @@ public class Browser {
 		WebUtils.switchToTopFrame(browser.getDriver());
 	}
 	
+	public static void scrollToBottom() {
+		INSTN()._scrollToBottom();
+	}
+	
+	private void _scrollToBottom() {
+		WebUtils.scrollToBottom(browser.getDriver());
+	}
+	
+	
 }

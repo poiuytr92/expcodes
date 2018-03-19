@@ -27,9 +27,9 @@ import exp.qw.utils.UIUtils;
  * @author lqb
  * @date 2016年6月12日
  */
-public class MoodWordAnalyzer {
+public class MoodAnalyzer {
 
-	private final static Logger log = LoggerFactory.getLogger(MoodWordAnalyzer.class);
+	private final static Logger log = LoggerFactory.getLogger(MoodAnalyzer.class);
 	
 	private final static String INFO_DIR = "./data/page/";
 	

@@ -9,8 +9,10 @@ import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
@@ -33,6 +35,9 @@ import exp.qw.utils.UIUtils;
  */
 public class AlbumAnalyzer {
 
+	/** 行为休眠间隔 */
+	private final static long SLEEP_TIME = 50;
+	
 	/** 相册保存目录 */
 	private final static String ALBUM_DIR = "./data/album/";
 	
@@ -58,16 +63,24 @@ public class AlbumAnalyzer {
 			Iterator<Album> albumIts = allPhotos.keySet().iterator();
 			while(albumIts.hasNext()) {
 				Album album = albumIts.next();
+				StringBuilder infos = new StringBuilder(album.toString());
+				
 				List<Photo> photos = allPhotos.get(album);
 				FileUtils.createDir(ALBUM_DIR.concat(album.NAME()));
 				
 				UIUtils.log("正在下载相册 [", album.NAME(), "] 的照片...");
 				int cnt = 0;
 				for(Photo photo : photos) {
-					cnt += (downloadPhoto(album, photo) ? 1 : 0);
+					boolean isOk = downloadPhoto(album, photo);
+					cnt += (isOk ? 1 : 0);
+					infos.append(photo.toString(isOk));
 					UIUtils.log("下载进度: ", cnt, "/", photos.size());
 				}
 				UIUtils.log("下载完成, 共下载照片: ", cnt, "/", photos.size());
+				
+				// 保存下载信息
+				String fileName = StrUtils.concat(ALBUM_DIR, album.NAME(), "/AlbumInfo-[相册下载信息].txt");
+				FileUtils.write(fileName, infos.toString(), Charset.UTF8, false);
 			}
 		}
 		UIUtils.log("所有相册下载完毕, 图文数据已保存到: ", ALBUM_DIR);
@@ -163,13 +176,22 @@ public class AlbumAnalyzer {
 
 	/**
 	 * 获取当前页面的所有照片地址
-	 * 
-	 *  FIXME: 腾讯只预加载了前30张
 	 * @return
 	 */
 	private static List<Photo> getCurPagePhotoURLs() {
 		List<Photo> photos = new LinkedList<Photo>();
 		
+		// 加载本页所有照片
+		while(true) {
+			WebElement more = Browser.findElement(By.className("j-pl-photolist-tip-more"));
+			if(more == null) {
+				break;
+			}
+			more.click();
+			ThreadUtils.tSleep(SLEEP_TIME);
+		}
+		
+		// 提取本页所有照片的信息
 		WebElement ul = Browser.findElement(By.className("j-pl-photolist-ul"));
 		List<WebElement> list = ul.findElements(By.xpath("li"));
 		for(WebElement li : list) {
@@ -190,7 +212,6 @@ public class AlbumAnalyzer {
 			}
 			url = url.replace("psbe?", "psb?");	// 去除权限加密（部分相册虽然没密码，但不是对所有人可见的）
 			url = url.replace("/m/", "/b/");	// 缩略图变成大图
-			url = url.replace("&rf=photolist", "&rf=viewer_4&t=5");	// 无影响：呈现方式(photolist为缩略图列表, viewer_4为幻灯片)
 			
 			// 保存照片信息(用于下载)
 			photos.add(new Photo(desc, date, url));
@@ -214,9 +235,16 @@ public class AlbumAnalyzer {
 		header.put(HttpUtils.HEAD.KEY.HOST, RegexUtils.findFirst(photo.URL(), "http://([^/]*)/"));
 		header.put(HttpUtils.HEAD.KEY.REFERER, album.URL());
 		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
-		
-		String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), photo.getFileName(), ".png");
-		return HttpURLUtils.downloadByGet(savePath, photo.URL(), header, null);
+
+		boolean isOk = false;
+		String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), "/", photo.getFileName(), ".png");
+		for(int retry = 0; !isOk && retry < 3; retry++) {
+			isOk = HttpURLUtils.downloadByGet(savePath, photo.URL(), header, null);
+			if(isOk == false) {
+				FileUtils.delete(savePath);
+			}
+		}
+		return isOk;
 	}
 	
 }

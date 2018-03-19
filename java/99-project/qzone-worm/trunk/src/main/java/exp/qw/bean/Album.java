@@ -33,4 +33,16 @@ public class Album {
 		return num;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("++++++++++++++++++++++++++++++++++++++++++++++++++++++\r\n");
+		sb.append("+ [相册名称] : ").append(NAME()).append("\r\n");
+		sb.append("+ [相册编号] : ").append(ID()).append("\r\n");
+		sb.append("+ [相册地址] : ").append(URL()).append("\r\n");
+		sb.append("+ [照片数量] : ").append(NUM()).append("\r\n");
+		sb.append("++++++++++++++++++++++++++++++++++++++++++++++++++++++\r\n");
+		return sb.toString();
+	}
+	
 }

@@ -17,9 +17,9 @@ public class Photo {
 	
 	public Photo(String desc, String date, String url) {
 		this.name = "";
-		this.desc = (desc == null ? desc : "");
-		this.date = (date == null ? date : "");
-		this.url = (url == null ? url : "");
+		this.desc = (desc == null ? "" : desc.replaceAll("[\r\n]", ""));
+		this.date = (date == null ? "" : date);
+		this.url = (url == null ? "" : url);
 	}
 	
 	public String getFileName() {
@@ -41,6 +41,16 @@ public class Photo {
 	
 	public String URL() {
 		return url;
+	}
+	
+	public String toString(boolean isDownload) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("[下载状态] : ").append(isDownload).append("\r\n");
+		sb.append("[照片路径] : ").append(URL()).append("\r\n");
+		sb.append("[照片描述] : ").append(DESC()).append("\r\n");
+		sb.append("[上传时间] : ").append(DATE()).append("\r\n");
+		sb.append("======================================================\r\n");
+		return sb.toString();
 	}
 	
 }
