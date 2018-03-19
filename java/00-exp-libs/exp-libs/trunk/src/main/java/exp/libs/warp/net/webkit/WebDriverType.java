@@ -15,7 +15,7 @@ import exp.libs.utils.other.StrUtils;
 public class WebDriverType {
 
 	/** WEB驱动包目录 */
-	private final static String DRIVER_DIR = "./lib/driver/";
+	private final static String DRIVER_DIR = "./conf/driver/";
 	
 	/** HTML默认浏览器 */
 	private final static String HtmlUnit = "HtmlUnit";
