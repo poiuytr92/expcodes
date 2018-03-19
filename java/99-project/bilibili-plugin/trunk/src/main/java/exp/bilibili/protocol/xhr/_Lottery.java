@@ -81,6 +81,7 @@ class _Lottery extends __XHR {
 				Map<String, String> request = getRequest(sRoomId, raffleId, 
 						cookie.CSRF(), captcha[0], captcha[1]);
 				String response = HttpURLUtils.doPost(url, header, request);
+				xhrlog.info("STORM-[{}]: {}", cookie.NICKNAME(), response);
 				
 				reason = analyse(response);
 				if(StrUtils.isEmpty(reason) || reason.contains("不存在")) {
