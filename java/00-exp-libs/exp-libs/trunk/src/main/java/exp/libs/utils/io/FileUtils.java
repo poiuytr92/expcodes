@@ -932,7 +932,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 */
 	public static String delForbidCharInFileName(String fileName, String symbol) {
 		String name = (fileName == null ? "" : fileName);
-		return name.replaceAll("[/\\\\:\\*\"<>\\|\\?]", symbol);
+		return name.replaceAll("[/\\\\:\\*\"<>\\|\\?\r\n\t\0]", symbol);
 	}
 	
 }

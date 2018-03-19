@@ -3,6 +3,7 @@ package exp.libs.warp.net.webkit;
 import java.io.File;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -205,6 +206,33 @@ public class WebUtils {
 			
 		} catch(Exception e) {
 			log.error("点击页面元素失败", e);
+		}
+	}
+	
+	/**
+	 * 滚动到页面顶部
+	 * @param driver
+	 */
+	public static void scrollToTop(WebDriver driver) {
+		scroll(driver, false);
+	}
+	
+	/**
+	 * 滚动到页面底部
+	 * @param driver
+	 */
+	public static void scrollToBottom(WebDriver driver) {
+		scroll(driver, true);
+	}
+	
+	private static void scroll(WebDriver driver, boolean toBottom) {
+		try {
+			String js = "document.documentElement.scrollTop=".
+					concat(toBottom ? "10000" : "0");
+			((JavascriptExecutor) driver).executeScript(js);  
+			
+		} catch(Exception e) {
+			log.error("滚动页面到{}失败", (toBottom ? "底部" : "顶部"), e);
 		}
 	}
 	
