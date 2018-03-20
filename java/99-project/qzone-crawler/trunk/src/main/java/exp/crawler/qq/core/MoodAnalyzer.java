@@ -20,12 +20,14 @@ import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.utils.UIUtils;
 
 /**
- * 【说说】分析器
  * <PRE>
+ * 【说说】解析器
  * </PRE>
- * 
- * @author lqb
- * @date 2016年6月12日
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-07-11
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class MoodAnalyzer {
 

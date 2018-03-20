@@ -32,5 +32,4 @@ public class UIUtils {
 		AppUI.getInstn().toConsole(msg);
 	}
 	
-	
 }

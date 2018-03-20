@@ -27,7 +27,7 @@ public class Landers {
 	private final static Logger log = LoggerFactory.getLogger(Landers.class);
 	
 	/** 行为休眠间隔 */
-	private final static long SLEEP_TIME = 50;
+	private final static long SLEEP_TIME = 100;
 	
 	/** 登陆超时 */
 	private final static long TIMEOUT = 5000;
@@ -65,19 +65,20 @@ public class Landers {
 	private static boolean _toLogin(String username, String password, final String QZONE_URL) {
 		UIUtils.log("正在打开QQ登陆页面: ", URL.QZONE_LOGIN);
 		Browser.open(URL.QZONE_LOGIN);
-		switchLoginMode();	// 切换为帐密登陆模式
-		ThreadUtils.tSleep(SLEEP_TIME);
-		
-		fill("u", username);
-		fill("p", password);
-		ThreadUtils.tSleep(SLEEP_TIME);
-		
-		UIUtils.log("正在登陆QQ [", username, "] ...");
-		boolean isOk = clickLoginBtn();
+		boolean isOk = switchLoginMode();	// 切换为帐密登陆模式
 		if(isOk == true) {
-			Browser.open(QZONE_URL);
-			skipTitle();
-			skipTips();
+			fill("u", username);	// 填写账号
+			fill("p", password);	// 填写密码
+			ThreadUtils.tSleep(SLEEP_TIME);
+			
+			UIUtils.log("正在登陆QQ [", username, "] ...");
+			isOk = clickLoginBtn();	// 点击登陆并检测是否登成功
+			
+			if(isOk == true) {
+				Browser.open(QZONE_URL);
+				skipTitle();	// 跳过空间片头动画
+				skipTips();		// 跳过空间操作提示
+			}
 		}
 		return isOk;
 	}
@@ -88,14 +89,26 @@ public class Landers {
 	 * 
 	 * @return frame驱动
 	 */
-	private static void switchLoginMode() {
+	private static boolean switchLoginMode() {
 		
 		// QQ空间的【登陆操作界面】是通过【iframe】嵌套在【登陆页面】中的子页面
 		Browser.switchToFrame(By.id("login_frame"));
+		ThreadUtils.tSleep(SLEEP_TIME);
 		
 		// 切换帐密登陆方式为 [帐密登陆]
-		WebElement switchBtn = Browser.findElement(By.id("switcher_plogin"));
-		switchBtn.click();
+		boolean isOk = true;
+		for(int retry = 1; retry <= 3; retry++) {
+			try {
+				WebElement switchBtn = Browser.findElement(By.id("switcher_plogin"));
+				switchBtn.click();
+				break;
+				
+			} catch(Exception e) {
+				isOk = false;	// 有时操作过快可能会报元素不存在异常
+				ThreadUtils.tSleep(SLEEP_TIME);
+			}
+		}
+		return isOk;
 	}
 	
 	/**
@@ -135,7 +148,7 @@ public class Landers {
 		// 备份登陆cookies
 		if(isOk == true) {
 			Browser.backupCookies();
-			isOk = StrUtils.isNotEmpty(Browser.GTK());
+			isOk = StrUtils.isNotEmpty(Browser.GTK());	// 只有正确生成了GTK才认为登陆成功
 		}
 		return isOk;
 	}

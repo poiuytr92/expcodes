@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -17,15 +18,18 @@ import javax.swing.JTextField;
 
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
+import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.core.AlbumAnalyzer;
+import exp.crawler.qq.core.Landers;
+import exp.crawler.qq.envm.URL;
+import exp.libs.envm.Charset;
+import exp.libs.utils.encode.CryptoUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.ThreadPool;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
-import exp.crawler.qq.cache.Browser;
-import exp.crawler.qq.core.AlbumAnalyzer;
-import exp.crawler.qq.core.Landers;
-import exp.crawler.qq.envm.URL;
 
 public class AppUI extends MainWindow {
 
@@ -40,6 +44,9 @@ public class AppUI extends MainWindow {
 	
 	/** 换行符 */
 	private final static String LINE_END = "\r\n";
+	
+	/** 登陆信息保存路径 */
+	private final static String LOGIN_INFO_PATH = "./conf/info.dat";
 	
 	/** 目标QQ号输入框 */
 	private JTextField targetQQTF;
@@ -111,14 +118,17 @@ public class AppUI extends MainWindow {
 		targetQQTF.setToolTipText("需要爬取数据的目标QQ号");
 		unTF.setToolTipText("请确保此QQ具有查看对方空间权限 (不负责权限破解)");
 		pwTF.setToolTipText("此软件不盗号, 不放心勿用");
+		recoveryLoginInfo();
 		
 		this.loginBtn = new JButton("登陆 QQ 空间");
 		this.albumBtn = new JButton("爬取【相册】图文数据");
 		this.moodBtn = new JButton("爬取【说说】图文数据");
 		
-		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn);
 		albumBtn.setEnabled(false);
 		moodBtn.setEnabled(false);
+		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn);
+		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, albumBtn);
+		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, moodBtn);
 		loginBtn.setForeground(Color.BLACK);
 		albumBtn.setForeground(Color.BLACK);
 		moodBtn.setForeground(Color.BLACK);
@@ -198,23 +208,29 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final String username = unTF.getText();
+				final String username = unTF.getText().trim();
 				final String password = String.valueOf(pwTF.getPassword());
 				
 				if(StrUtils.isNotEmpty(username, password)) {
+					loginBtn.setEnabled(false);
 					tp.execute(new Thread() {
 						
 						@Override
 						public void run() {
 							isLogin = Landers.toLogin(username, password, getQZoneURL());
 							if(isLogin == true) {
-								loginBtn.setEnabled(false);
 								albumBtn.setEnabled(true);
 								moodBtn.setEnabled(true);
+								unTF.setEditable(false);
+								pwTF.setEditable(false);
 								SwingUtils.warn("登陆成功");
 								
+								if(rememberBtn.isSelected()) {
+									backupLoginInfo();
+								}
 							} else {
 								Browser.quit();
+								loginBtn.setEnabled(true);
 								SwingUtils.warn("登陆失败 (若一直失败请重启软件)");
 							}
 						}
@@ -305,6 +321,34 @@ public class AppUI extends MainWindow {
 		
 		consoleTA.append(msg.concat(LINE_END));
 		SwingUtils.toEnd(consoleTA);
+	}
+	
+	/**
+	 * 备份登陆信息
+	 */
+	private void backupLoginInfo() {
+		String username = unTF.getText().trim();
+		String password = String.valueOf(pwTF.getPassword());
+		String targetQQ = targetQQTF.getText().trim();
+		
+		String loginInfo = StrUtils.concat(
+				CryptoUtils.toDES(username), LINE_END, 
+				CryptoUtils.toDES(password), LINE_END, 
+				CryptoUtils.toDES(targetQQ)
+		);
+		FileUtils.write(LOGIN_INFO_PATH, loginInfo, Charset.ISO, false);
+	}
+	
+	/**
+	 * 还原登陆信息
+	 */
+	private void recoveryLoginInfo() {
+		List<String> lines = FileUtils.readLines(LOGIN_INFO_PATH, Charset.ISO);
+		if(lines.size() == 3) {
+			unTF.setText(CryptoUtils.deDES(lines.get(0).trim()));
+			pwTF.setText(CryptoUtils.deDES(lines.get(1).trim()));
+			targetQQTF.setText(CryptoUtils.deDES(lines.get(2).trim()));
+		}
 	}
 
 }

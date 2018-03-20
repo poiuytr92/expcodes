@@ -1,35 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- 推荐使用logback日志框架 configuration 
-	debug 是否打印logbak的内部调试日志 
-	scan 定时刷新，默认1分钟 
-	scanPeriod 定时刷新时间，单位 milliseconds、seconds、minutes 和 hours -->
-<configuration debug="false" scan="true" scanPeriod="60 seconds">
+<configuration debug="false" scan="false" scanPeriod="60 seconds">
 	<property name="CHARSET" value="utf-8" /><!-- 字符集 -->
 	<property name="LOG_HOME" value="log" /><!-- log目录 -->
-	<property name="BACKUP" value="${LOG_HOME}/%d{yyyy-MM-dd}" /><!-- 日志备份目录 -->
-	
-	<!-- 日志输出格式 类路径c 行号l 方法名m 尽量避免使用 -->
-	<!-- 日志输出格式, %c{0} 表示打印logger名，若logger名是一个类路径，则打印最后一个.右边的部分 -->
-	<property name="PATTERN_DEF" value="[%d{yyyy-MM-dd HH:mm:ss SSS}] [%-5p] [%c{-20}] [%L]- %m%n" />
+	<property name="BACKUP" value="${LOG_HOME}/BACKUP/%d{yyyy-MM-dd}" /><!-- 日志备份目录 -->
+	<property name="PATTERN_DEF" value="[%d{yyyy-MM-dd HH:mm:ss SSS}] [%-5p] [%t] [%c{0}:%L] - %m%n" /><!-- 日志输出格式, %c{0} 表示打印logger名，若logger名是一个类路径，则打印最后一个.右边的部分 -->
 
-	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+	<!-- 控制台日志器 -->
+	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
 		<encoder>
-			<!-- 这里不需要配置字符集，根据系统默认即可 
-			<charset>${CHARSET}</charset> -->
 			<pattern>${PATTERN_DEF}</pattern>
 		</encoder>
 		<target>System.out</target><!-- System.out|System.err -->
 	</appender>
 
-	<appender name="run_log"
+   <!-- 全量异常日志器  -->
+   <appender name="exception"
+      class="ch.qos.logback.core.rolling.RollingFileAppender">
+      <file>${LOG_HOME}/exception.log</file>
+      <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+         <fileNamePattern>${BACKUP}/exception_%d{yyyy-MM-dd}-%i.log.zip</fileNamePattern>
+         <maxHistory>15</maxHistory>
+         <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <maxFileSize>64MB</maxFileSize>
+         </timeBasedFileNamingAndTriggeringPolicy>
+      </rollingPolicy>
+      <encoder>
+         <charset>${CHARSET}</charset>
+         <pattern>${PATTERN_DEF}</pattern>
+      </encoder>
+      <filter class="ch.qos.logback.classic.filter.LevelFilter">
+         <level>ERROR</level>
+         <onMatch>ACCEPT</onMatch>
+         <onMismatch>DENY</onMismatch>
+      </filter>
+   </appender>
+   
+	<!-- 应用程序日志器 -->
+	<appender name="app"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_HOME}/run.log</file>
+		<prudent>false</prudent> <!-- 如果是 true，日志会被安全的写入文件（多线程同步），但效率低，默认是 false。 -->
+		<file>${LOG_HOME}/log.log</file> <!-- 可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建 -->
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${BACKUP}/run_%d{yyyy-MM-dd}-%i.log.zip
+			<fileNamePattern>${BACKUP}/log_%d{yyyy-MM-dd}-%i.log.zip
 			</fileNamePattern>
-			<maxHistory>7</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+			<maxHistory>15</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
 				<maxFileSize>64MB</maxFileSize>
 			</timeBasedFileNamingAndTriggeringPolicy>
 		</rollingPolicy>
@@ -38,37 +53,49 @@
 			<pattern>${PATTERN_DEF}</pattern>
 		</encoder>
 	</appender>
-
-	<appender name="exception_log"
+	
+	<!-- 其他日志器 -->
+	<appender name="other"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOG_HOME}/exception.log</file>
+		<prudent>false</prudent> <!-- 如果是 true，日志会被安全的写入文件（多线程同步），但效率低，默认是 false。 -->
+		<file>${LOG_HOME}/other.log</file> <!-- 可以是相对目录，也可以是绝对目录，如果上级目录不存在会自动创建 -->
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${BACKUP}/other_%d{yyyy-MM-dd}-%i.log.zip
+			</fileNamePattern>
+			<maxHistory>15</maxHistory>
+			<timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+				<maxFileSize>64MB</maxFileSize>
+			</timeBasedFileNamingAndTriggeringPolicy>
+		</rollingPolicy>
+		<encoder>
+			<charset>${CHARSET}</charset>
+			<pattern>${PATTERN_DEF}</pattern>
+		</encoder>
 		<filter class="ch.qos.logback.classic.filter.LevelFilter">
-			<level>ERROR</level>
-			<onMatch>ACCEPT</onMatch> <!-- 用于配置符合过滤条件的操 NEUTRAL中立 ACCEPT接受 DENY否定 -->
-			<onMismatch>DENY</onMismatch> <!-- 用于配置符合过滤条件的操 -->
-		</filter>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${BACKUP}/exception_%d{yyyy-MM-dd}-%i.log.zip
-			</fileNamePattern>
-			<maxHistory>7</maxHistory>
-			<timeBasedFileNamingAndTriggeringPolicy
-				class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
-				<maxFileSize>64MB</maxFileSize>
-			</timeBasedFileNamingAndTriggeringPolicy>
-		</rollingPolicy>
-		<encoder>
-			<charset>${CHARSET}</charset>
-			<pattern>${PATTERN_DEF}</pattern>
-		</encoder>
+            <level>ERROR</level>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter>
 	</appender>
-
-	<logger name="exp.qw" level="info" additivity="true">
+	
+	<!-- 主程序日志 -->
+	<logger name="exp.crawler.qq" level="info" additivity="true">
+		<appender-ref ref="app" />
 	</logger>
-
-	<!-- 启用appender，不配置的appender默认不生效 -->
+	
+	<!-- 经验库日志 -->
+	<logger name="exp.libs" level="info" additivity="false">
+		<appender-ref ref="other" />
+		<appender-ref ref="exception" />
+	</logger>
+	
+	<!-- 第三方日志 -->
+	<logger name="org.apache" level="error" additivity="true" />
+	<logger name="org.logicalcobwebs" level="error" additivity="true" />
+	
+	<!-- 根日志 -->
 	<root level="debug">
-		<appender-ref ref="stdout" />
-		<appender-ref ref="run_log" />
-		<appender-ref ref="exception_log" />
+		<appender-ref ref="console" />
+		<appender-ref ref="exception" />
 	</root>
 </configuration>

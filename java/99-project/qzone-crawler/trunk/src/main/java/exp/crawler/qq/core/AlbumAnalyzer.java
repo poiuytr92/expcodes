@@ -25,7 +25,7 @@ import exp.crawler.qq.utils.UIUtils;
 
 /**
  * <PRE>
- * 相册解析器
+ * 【相册】解析器
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -42,56 +42,27 @@ public class AlbumAnalyzer {
 	private final static String ALBUM_DIR = "./data/album/";
 	
 	/**
-	 * 下载相册
-	 * @param qq QQ号
+	 * 下载所有相册
+	 * @param QZONE_URL 目标QQ空间的首页地址
 	 */
 	public static void downloadAlbums(final String QZONE_URL) {
-		if(!switchToAlbumPage(QZONE_URL)) {
-			UIUtils.log("获取【相册列表】失败");
-			
-		} else {
-			
-			// 删除旧数据
-			FileUtils.delete(ALBUM_DIR);
-			
-			// 提取所有相册的照片信息
-			Map<Album, List<Photo>> allPhotos = new HashMap<Album, List<Photo>>();
-			List<Album> albums = getAlbums(QZONE_URL);
-			for(Album album : albums) {
-				List<Photo> photos = open(album);
-				allPhotos.put(album, photos);
+		try {
+			if(!switchToAlbumPage(QZONE_URL)) {
+				UIUtils.log("获取【相册列表】失败");
+				
+			} else {
+				FileUtils.delete(ALBUM_DIR);
+				download(getAlbumAndPhotos(QZONE_URL));
+				UIUtils.log("任务完成, 图文数据已保存到: ", ALBUM_DIR);
 			}
-			
-			// 下载照片
-			Iterator<Album> albumIts = allPhotos.keySet().iterator();
-			while(albumIts.hasNext()) {
-				Album album = albumIts.next();
-				StringBuilder infos = new StringBuilder(album.toString());
-				
-				List<Photo> photos = allPhotos.get(album);
-				FileUtils.createDir(ALBUM_DIR.concat(album.NAME()));
-				
-				UIUtils.log("正在下载相册 [", album.NAME(), "] 的照片...");
-				int cnt = 0;
-				for(Photo photo : photos) {
-					boolean isOk = downloadPhoto(album, photo);
-					cnt += (isOk ? 1 : 0);
-					infos.append(photo.toString(isOk));
-					UIUtils.log("下载进度: ", cnt, "/", photos.size());
-				}
-				UIUtils.log("下载完成, 共下载照片: ", cnt, "/", photos.size());
-				
-				// 保存下载信息
-				String fileName = StrUtils.concat(ALBUM_DIR, album.NAME(), "/AlbumInfo-[相册下载信息].txt");
-				FileUtils.write(fileName, infos.toString(), Charset.UTF8, false);
-			}
+		} catch(Exception e) {
+			UIUtils.log("下载QQ空间相册时发生异常: ", e.getMessage());
 		}
-		UIUtils.log("所有相册下载完毕, 图文数据已保存到: ", ALBUM_DIR);
 	}
 	
 	/**
 	 * 切换到相册列表页面
-	 * @param QZONE_URL QQ空间主页
+	 * @param QZONE_URL 目标QQ空间的首页地址
 	 * @return 是否切换成功
 	 */
 	private static boolean switchToAlbumPage(final String QZONE_URL) {
@@ -117,7 +88,27 @@ public class AlbumAnalyzer {
 		return isOk;
 	}
 	
-	private static List<Album> getAlbums(final String QZONE_URL) {
+	/**
+	 * 提取所有相册及其内的照片信息
+	 * @return 相册 -> 照片集
+	 */
+	private static Map<Album, List<Photo>> getAlbumAndPhotos(final String QZONE_URL) {
+		Map<Album, List<Photo>> aps = new HashMap<Album, List<Photo>>();
+		List<Album> albums = _getAlbums(QZONE_URL);
+		for(Album album : albums) {
+			List<Photo> photos = _open(album);
+			aps.put(album, photos);
+		}
+		return aps;
+	}
+	
+	
+	/**
+	 * 提取所有相册信息
+	 * @param QZONE_URL 目标QQ空间的首页地址
+	 * @return
+	 */
+	private static List<Album> _getAlbums(final String QZONE_URL) {
 		List<Album> albums = new LinkedList<Album>();
 			
 		// 切换到【相册列表】的嵌套页
@@ -150,10 +141,11 @@ public class AlbumAnalyzer {
 	}
 	
 	/**
-	 * 打开相册
-	 * @return 该相册所有图片的下载路径
+	 * 打开相册, 提取其中的所有照片信息
+	 * @param album 相册信息
+	 * @return
 	 */
-	private static List<Photo> open(Album album) {
+	private static List<Photo> _open(Album album) {
 		List<Photo> photos = new LinkedList<Photo>();
 		UIUtils.log("正在读取相册 [", album.NAME(), "] (照片x", album.NUM(), "), 地址: ", album.URL());
 		
@@ -164,7 +156,7 @@ public class AlbumAnalyzer {
 		for(int page = 1; ; page++) {
 			
 			UIUtils.log("正在提取第 [", page, "] 页的照片信息...");
-			photos.addAll(getCurPagePhotoURLs());
+			photos.addAll(_getCurPagePhotoURLs());
 			UIUtils.log("第 [", page, "] 页提取完成, 当前进度: ", photos.size(), "/", album.NUM());
 			
 			// 下一页
@@ -178,10 +170,10 @@ public class AlbumAnalyzer {
 	}
 
 	/**
-	 * 获取当前页面的所有照片地址
+	 * 获取当前页面的所有照片信息
 	 * @return
 	 */
-	private static List<Photo> getCurPagePhotoURLs() {
+	private static List<Photo> _getCurPagePhotoURLs() {
 		List<Photo> photos = new LinkedList<Photo>();
 		
 		// 加载本页所有照片
@@ -223,12 +215,41 @@ public class AlbumAnalyzer {
 	}
 	
 	/**
-	 * 下载照片
-	 * @param album
-	 * @param photo
-	 * @return
+	 * 下载所有相册及其内的照片
+	 * @param albumAndPhotos 相册及照片集
 	 */
-	private static boolean downloadPhoto(Album album, Photo photo) {
+	private static void download(Map<Album, List<Photo>> albumAndPhotos) {
+		Iterator<Album> albums = albumAndPhotos.keySet().iterator();
+		while(albums.hasNext()) {
+			Album album = albums.next();
+			StringBuilder infos = new StringBuilder(album.toString());
+			
+			List<Photo> photos = albumAndPhotos.get(album);
+			FileUtils.createDir(ALBUM_DIR.concat(album.NAME()));
+			
+			UIUtils.log("正在下载相册 [", album.NAME(), "] 的照片...");
+			int cnt = 0;
+			for(Photo photo : photos) {
+				boolean isOk = _downloadPhoto(album, photo);
+				cnt += (isOk ? 1 : 0);
+				infos.append(photo.toString(isOk));
+				UIUtils.log("下载进度(", (isOk ? "成功" : "失败"), "): ", cnt, "/", photos.size());
+			}
+			UIUtils.log("成功下载相册 [", album.NAME(), "] 照片: ", cnt, "/", photos.size());
+			
+			// 保存下载信息
+			String fileName = StrUtils.concat(ALBUM_DIR, album.NAME(), "/AlbumInfo-[相册下载信息].txt");
+			FileUtils.write(fileName, infos.toString(), Charset.UTF8, false);
+		}
+	}
+	
+	/**
+	 * 下载照片
+	 * @param album 照片所属的相册信息
+	 * @param photo 照片信息
+	 * @return 是否下载成功
+	 */
+	private static boolean _downloadPhoto(Album album, Photo photo) {
 		Map<String, String> header = new HashMap<String, String>();
 		header.put(HttpUtils.HEAD.KEY.ACCEPT, "image/webp,image/*,*/*;q=0.8");
 		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
