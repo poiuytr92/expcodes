@@ -48,7 +48,7 @@ public class AlbumAnalyzer {
 	public static void downloadAlbums(final String QZONE_URL) {
 		try {
 			if(!switchToAlbumPage(QZONE_URL)) {
-				UIUtils.log("获取【相册列表】失败");
+				UIUtils.log("切换到【相册列表】失败");
 				
 			} else {
 				FileUtils.delete(ALBUM_DIR);
@@ -56,7 +56,7 @@ public class AlbumAnalyzer {
 				UIUtils.log("任务完成, 图文数据已保存到: ", ALBUM_DIR);
 			}
 		} catch(Exception e) {
-			UIUtils.log("下载QQ空间相册时发生异常: ", e.getMessage());
+			UIUtils.log("下载QQ空间的【相册】时发生异常");
 		}
 	}
 	
@@ -69,21 +69,12 @@ public class AlbumAnalyzer {
 		UIUtils.log("正在打开QQ空间页面: ", QZONE_URL);
 		Browser.open(QZONE_URL);
 		
-		UIUtils.log("正在获取【相册列表】入口...");
+		UIUtils.log("正在切换到【相册列表】...");
 		boolean isOk = false;
-		WebElement ul = Browser.findElement(By.className("stats-list"));
-		List<WebElement> list = ul.findElements(By.tagName("li"));
-		for(WebElement li : list) {
-			WebElement a = li.findElement(By.tagName("a"));
-			String id = a.getAttribute("id");
-			
-			// 【相册】入口
-			if("QM_Profile_Photo_A".equals(id)) {
-				UIUtils.log("正在切换到【相册列表】...");
-				Browser.click(a);
-				isOk = true;
-				break;
-			}
+		WebElement a = Browser.findElement(By.id("QM_Profile_Photo_A"));
+		if(a != null) {
+			isOk = true;
+			Browser.click(a);
 		}
 		return isOk;
 	}

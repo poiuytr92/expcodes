@@ -21,6 +21,7 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.AlbumAnalyzer;
 import exp.crawler.qq.core.Landers;
+import exp.crawler.qq.core.MoodAnalyzer;
 import exp.crawler.qq.envm.URL;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -231,7 +232,7 @@ public class AppUI extends MainWindow {
 							} else {
 								Browser.quit();
 								loginBtn.setEnabled(true);
-								SwingUtils.warn("登陆失败 (若一直失败请重启软件)");
+								SwingUtils.warn("登陆失败: 帐密错误或程序异常");
 							}
 						}
 					});
@@ -279,11 +280,7 @@ public class AppUI extends MainWindow {
 						
 						@Override
 						public void run() {
-//							MoodWordAnalyzer.catchOnlineInfo(_AppUI.browserDriver, 
-//									username, password, targetQQ, pageNum);
-//							MoodWordAnalyzer.downloadDatas();
-//							MoodWordAnalyzer.copyTogether();
-									
+							MoodAnalyzer.downloadMoods(getQZoneURL());
 							moodBtn.setEnabled(true);
 						}
 					});
