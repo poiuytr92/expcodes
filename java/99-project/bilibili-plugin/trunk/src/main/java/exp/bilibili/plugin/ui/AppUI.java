@@ -619,6 +619,11 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(Identity.less(Identity.UPLIVE)) {
+					SwingUtils.warn("您未被授权发起 [直播间抽奖] 哦~");
+					return;
+				}
+				
 				lotteryUI._view();
 				lockBtn();
 			}
