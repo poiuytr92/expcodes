@@ -1,4 +1,4 @@
-package com;
+package com.mcavallo.tags.cloud;
 
 import java.util.Random;
 
@@ -10,6 +10,7 @@ import javax.swing.SwingUtilities;
 import org.mcavallo.opencloud.Cloud;
 import org.mcavallo.opencloud.Tag;
 
+// 2D标签云
 public class TestOpenCloud {
 
     private static final String[] WORDS = { "art", "australia", "baby", "beach", "birthday", "blue", "bw", "california", "canada", "canon",

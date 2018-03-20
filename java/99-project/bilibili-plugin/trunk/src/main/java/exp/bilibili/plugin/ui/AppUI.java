@@ -619,7 +619,6 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				lotteryUI.refreshUsers();
 				lotteryUI._view();
 				lockBtn();
 			}
