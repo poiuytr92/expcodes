@@ -27,6 +27,7 @@ public class Photo {
 			name = StrUtils.concat("[D", IDUtils.getTimeID(), "]-[U", date, "] ", desc);
 			name = FileUtils.delForbidCharInFileName(name, "");
 			name = StrUtils.showSummary(name);
+			name = name.concat(".png");
 		}
 		return name;
 	}

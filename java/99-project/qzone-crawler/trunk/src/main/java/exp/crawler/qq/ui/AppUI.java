@@ -224,7 +224,6 @@ public class AppUI extends MainWindow {
 								moodBtn.setEnabled(true);
 								unTF.setEditable(false);
 								pwTF.setEditable(false);
-								SwingUtils.warn("登陆成功");
 								
 								if(rememberBtn.isSelected()) {
 									backupLoginInfo();
@@ -232,7 +231,6 @@ public class AppUI extends MainWindow {
 							} else {
 								Browser.quit();
 								loginBtn.setEnabled(true);
-								SwingUtils.warn("登陆失败: 帐密错误或程序异常");
 							}
 						}
 					});

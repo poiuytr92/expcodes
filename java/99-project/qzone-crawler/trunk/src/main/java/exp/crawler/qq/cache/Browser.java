@@ -1,13 +1,15 @@
 package exp.crawler.qq.cache;
 
+import java.util.List;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
+import exp.crawler.qq.bean.QQCookie;
 import exp.libs.warp.net.webkit.WebBrowser;
 import exp.libs.warp.net.webkit.WebDriverType;
 import exp.libs.warp.net.webkit.WebUtils;
-import exp.crawler.qq.bean.QQCookie;
 
 
 /**
@@ -173,6 +175,14 @@ public class Browser {
 	
 	private WebElement _findElement(By by) {
 		return WebUtils.findElement(browser.getDriver(), by);
+	}
+	
+	public static List<WebElement> findElements(By by) {
+		return INSTN()._findElements(by);
+	}
+	
+	private List<WebElement> _findElements(By by) {
+		return WebUtils.findElements(browser.getDriver(), by);
 	}
 	
 	public static void fill(WebElement input, String data) {

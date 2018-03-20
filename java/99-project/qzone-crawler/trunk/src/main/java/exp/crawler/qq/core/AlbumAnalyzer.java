@@ -2,6 +2,7 @@ package exp.crawler.qq.core;
 
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -84,13 +85,13 @@ public class AlbumAnalyzer {
 	 * @return 相册 -> 照片集
 	 */
 	private static Map<Album, List<Photo>> getAlbumAndPhotos(final String QZONE_URL) {
-		Map<Album, List<Photo>> aps = new HashMap<Album, List<Photo>>();
+		Map<Album, List<Photo>> albumAndPhotos = new LinkedHashMap<Album, List<Photo>>();
 		List<Album> albums = _getAlbums(QZONE_URL);
 		for(Album album : albums) {
 			List<Photo> photos = _open(album);
-			aps.put(album, photos);
+			albumAndPhotos.put(album, photos);
 		}
-		return aps;
+		return albumAndPhotos;
 	}
 	
 	
@@ -148,7 +149,7 @@ public class AlbumAnalyzer {
 			
 			UIUtils.log("正在提取第 [", page, "] 页的照片信息...");
 			photos.addAll(_getCurPagePhotoURLs());
-			UIUtils.log("第 [", page, "] 页提取完成, 当前进度: ", photos.size(), "/", album.NUM());
+			UIUtils.log("第 [", page, "] 页照片提取完成, 当前进度: ", photos.size(), "/", album.NUM());
 			
 			// 下一页
 			WebElement next = Browser.findElement(By.id("pager_next_1"));
@@ -221,7 +222,7 @@ public class AlbumAnalyzer {
 			UIUtils.log("正在下载相册 [", album.NAME(), "] 的照片...");
 			int cnt = 0;
 			for(Photo photo : photos) {
-				boolean isOk = _downloadPhoto(album, photo);
+				boolean isOk = _download(album, photo);
 				cnt += (isOk ? 1 : 0);
 				infos.append(photo.toString(isOk));
 				UIUtils.log("下载进度(", (isOk ? "成功" : "失败"), "): ", cnt, "/", photos.size());
@@ -240,7 +241,7 @@ public class AlbumAnalyzer {
 	 * @param photo 照片信息
 	 * @return 是否下载成功
 	 */
-	private static boolean _downloadPhoto(Album album, Photo photo) {
+	private static boolean _download(Album album, Photo photo) {
 		Map<String, String> header = new HashMap<String, String>();
 		header.put(HttpUtils.HEAD.KEY.ACCEPT, "image/webp,image/*,*/*;q=0.8");
 		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
@@ -252,7 +253,7 @@ public class AlbumAnalyzer {
 		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
 
 		boolean isOk = false;
-		String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), "/", photo.getFileName(), ".png");
+		String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), "/", photo.getFileName());
 		for(int retry = 0; !isOk && retry < 3; retry++) {
 			isOk = HttpURLUtils.downloadByGet(savePath, photo.URL(), header, null);
 			if(isOk == false) {
