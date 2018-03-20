@@ -1,6 +1,8 @@
 package exp.libs.warp.net.webkit;
 
 import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -149,6 +151,23 @@ public class WebUtils {
 			log.error("查找页面元素失败", e);
 		}
 		return element;
+	}
+	
+	/**
+	 * 查找页面元素列表
+	 * @param by 元素位置
+	 * @return 若不存在返回空队列
+	 */
+	public static List<WebElement> findElements(WebDriver driver, By by) {
+		List<WebElement> elements = null;
+		try {
+			elements = driver.findElements(by);
+			
+		} catch(Throwable e) {
+			elements = new LinkedList<WebElement>();
+			log.error("查找页面元素失败", e);
+		}
+		return elements;
 	}
 	
 	/**
