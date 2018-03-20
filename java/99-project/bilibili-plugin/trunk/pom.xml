@@ -397,7 +397,8 @@
 								<echo>拷贝项目配置文件</echo>
 								<copy todir="${release.dir}/conf">
 									<fileset dir="conf">
-									  <exclude name="driver/chrome-driver.exe" />
+									  <exclude name="tensorflow/storm-captch.pb" />
+									  <exclude name="web/bilibili-lucky-princess.html" />
 									</fileset>
 								</copy>
 								<echo>拷贝资源数据</echo>
