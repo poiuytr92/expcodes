@@ -44,10 +44,10 @@ class _LotteryUI extends PopChildWindow {
 	private final static long serialVersionUID = -4322589966897649896L;
 
 	/** 3D抽奖姬-页面模板路径 */
-	private final static String _3D_TPL_PATH = "./conf/template.html";
+	private final static String _3D_TPL_PATH = "./conf/web/template.html";
 	
 	/** 3D抽奖姬-页面路径 */
-	private final static String _3D_PAGE_PATH = "./web/lucky-princess.html";
+	private final static String _3D_PAGE_PATH = "./conf/web/lucky-princess.html";
 	
 	private final static int WIDTH = 800;
 	
