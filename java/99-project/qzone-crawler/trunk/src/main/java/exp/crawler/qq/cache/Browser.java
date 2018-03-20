@@ -1,4 +1,4 @@
-package exp.qw.cache;
+package exp.crawler.qq.cache;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 import exp.libs.warp.net.webkit.WebBrowser;
 import exp.libs.warp.net.webkit.WebDriverType;
 import exp.libs.warp.net.webkit.WebUtils;
-import exp.qw.bean.QQCookie;
+import exp.crawler.qq.bean.QQCookie;
 
 
 /**

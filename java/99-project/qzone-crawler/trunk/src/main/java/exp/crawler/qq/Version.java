@@ -1,4 +1,4 @@
-package exp.qw;
+package exp.crawler.qq;
 
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ver.VersionMgr;

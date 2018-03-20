@@ -1,4 +1,4 @@
-package exp.qw.ui;
+package exp.crawler.qq.ui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,10 +22,10 @@ import exp.libs.warp.thread.ThreadPool;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
-import exp.qw.cache.Browser;
-import exp.qw.core.AlbumAnalyzer;
-import exp.qw.core.Landers;
-import exp.qw.envm.URL;
+import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.core.AlbumAnalyzer;
+import exp.crawler.qq.core.Landers;
+import exp.crawler.qq.envm.URL;
 
 public class AppUI extends MainWindow {
 

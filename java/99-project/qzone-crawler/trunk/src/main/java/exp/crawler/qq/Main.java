@@ -1,8 +1,8 @@
-package exp.qw;
+package exp.crawler.qq;
 
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
-import exp.qw.ui.AppUI;
+import exp.crawler.qq.ui.AppUI;
 
 public class Main {
 

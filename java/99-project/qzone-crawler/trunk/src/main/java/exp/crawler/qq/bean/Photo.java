@@ -1,4 +1,4 @@
-package exp.qw.bean;
+package exp.crawler.qq.bean;
 
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.IDUtils;

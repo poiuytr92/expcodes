@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!--项目基本信息(必填)-->
-	<groupId>exp.qw</groupId>
+	<groupId>exp.crawler</groupId>
 	<artifactId>qzone-crawler</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
@@ -260,8 +260,8 @@
                         </goals>
                         <configuration>
                             <mavenRepository>D:\mavenRepository</mavenRepository>
-                            <verClass>exp.bilibili.plugin.Version</verClass>
-                            <mainClass>exp.bilibili.plugin.BPMain</mainClass>
+                            <verClass>exp.crawler.qq.Version</verClass>
+                            <mainClass>exp.crawler.qq.Main</mainClass>
                             <mainArgs></mainArgs>
                             <charset>UTF-8</charset>
                             <jdkPath>java</jdkPath>

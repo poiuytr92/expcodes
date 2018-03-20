@@ -1,4 +1,4 @@
-package exp.qw.core;
+package exp.crawler.qq.core;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.qw.cache.Browser;
-import exp.qw.envm.URL;
-import exp.qw.utils.UIUtils;
+import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.envm.URL;
+import exp.crawler.qq.utils.UIUtils;
 
 /**
  * <PRE>

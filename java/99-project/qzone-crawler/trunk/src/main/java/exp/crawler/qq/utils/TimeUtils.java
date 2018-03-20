@@ -1,4 +1,4 @@
-package exp.qw.utils;
+package exp.crawler.qq.utils;
 
 import exp.libs.utils.other.StrUtils;
 

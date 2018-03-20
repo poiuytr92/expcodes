@@ -1,4 +1,4 @@
-package exp.qw.core;
+package exp.crawler.qq.core;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -17,10 +17,10 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
-import exp.qw.bean.Album;
-import exp.qw.bean.Photo;
-import exp.qw.cache.Browser;
-import exp.qw.utils.UIUtils;
+import exp.crawler.qq.bean.Album;
+import exp.crawler.qq.bean.Photo;
+import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.utils.UIUtils;
 
 
 /**

@@ -1,4 +1,4 @@
-package exp.qw.core;
+package exp.crawler.qq.core;
 
 import java.io.File;
 
@@ -16,8 +16,8 @@ import exp.libs.utils.time.TimeUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.webkit.WebBrowser;
-import exp.qw.cache.Browser;
-import exp.qw.utils.UIUtils;
+import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.utils.UIUtils;
 
 /**
  * 【说说】分析器

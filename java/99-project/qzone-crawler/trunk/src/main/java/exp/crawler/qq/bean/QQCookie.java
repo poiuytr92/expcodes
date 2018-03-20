@@ -1,4 +1,4 @@
-package exp.qw.bean;
+package exp.crawler.qq.bean;
 
 import java.util.Date;
 

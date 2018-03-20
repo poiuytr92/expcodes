@@ -1,10 +1,10 @@
-package exp.qw.utils;
+package exp.crawler.qq.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.other.StrUtils;
-import exp.qw.ui.AppUI;
+import exp.crawler.qq.ui.AppUI;
 
 /**
  * <PRE>
