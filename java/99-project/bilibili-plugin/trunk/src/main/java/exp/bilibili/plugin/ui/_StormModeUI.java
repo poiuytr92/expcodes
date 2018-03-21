@@ -47,7 +47,7 @@ class _StormModeUI extends PopChildWindow {
 	
 	private final static HotLiveRange RANGE_3_TO_5 = new HotLiveRange(3, 5);
 	
-	private final static int WIDTH = 430;
+	private final static int WIDTH = 450;
 	
 	private final static int HEIGHT = 350;
 	
