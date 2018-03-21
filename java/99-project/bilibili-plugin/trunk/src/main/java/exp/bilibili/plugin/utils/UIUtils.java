@@ -5,6 +5,7 @@ import java.awt.Toolkit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.ui.AppUI;
 import exp.bilibili.plugin.ui._NoticeUI;
@@ -94,6 +95,10 @@ public class UIUtils {
 	
 	public static int getLiveRoomId() {
 		return AppUI.getInstn().getLiveRoomId();
+	}
+	
+	public static HotLiveRange getHotLiveRange() {
+		return AppUI.getInstn().getHotLiveRange();
 	}
 	
 	public static boolean isAutoFeed() {

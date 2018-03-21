@@ -10,10 +10,10 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.LotteryType;
-import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
@@ -33,12 +33,6 @@ import exp.libs.warp.net.http.HttpClient;
  */
 public class LotteryStorm extends _Lottery {
 
-	/** 最大的查询分页(每页最多30个房间): 每页30个房间 */
-	private final static int MAX_PAGES = 2;
-	
-	/** 最少在线人数达标的房间才扫描 */
-	private final static int MIN_ONLINE = 3000;
-	
 	/** 查询热门直播间列表URL */
 	private final static String LIVE_URL = Config.getInstn().LIVE_URL();
 	
@@ -56,17 +50,17 @@ public class LotteryStorm extends _Lottery {
 	
 	/**
 	 * 扫描当前的人气直播间房号列表
-	 * @param cookie 扫描用的cookie
+	 * @param cookie
+	 * @param range 扫描范围
 	 * @return
 	 */
-	public static List<Integer> queryHotLiveRoomIds(BiliCookie cookie) {
+	public static List<Integer> queryHotLiveRoomIds(BiliCookie cookie, HotLiveRange range) {
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "all");
 		Map<String, String> request = getRequest();
 		
 		List<Integer> roomIds = new LinkedList<Integer>();
 		HttpClient client = new HttpClient();
-		int pageOffset = TimeUtils.isNight() ? 1 : 0;	// 当为晚上时, 不选择首页房间(抢风暴成功率太低)
-		for(int page = 1 + pageOffset; page <= MAX_PAGES + pageOffset; page++) {
+		for(int page = range.BGN_PAGE(); page <= range.END_PAGE(); page++) {
 			request.put(BiliCmdAtrbt.page, String.valueOf(page));
 			String response = client.doGet(LIVE_URL, header, request);
 			roomIds.addAll(analyse(response));
@@ -100,10 +94,10 @@ public class LotteryStorm extends _Lottery {
 			for(int i = 0 ; i < data.size(); i++) {
 				JSONObject room = data.getJSONObject(i);
 				int realRoomId = JsonUtils.getInt(room, BiliCmdAtrbt.roomid, 0);
-				int online = JsonUtils.getInt(room, BiliCmdAtrbt.online, 0);
-				if(online > MIN_ONLINE) {
+//				int online = JsonUtils.getInt(room, BiliCmdAtrbt.online, 0);
+//				if(online > 3000) {	// 在线人气达标才纳入扫描范围
 					roomIds.add(realRoomId);
-				}
+//				}
 				
 				// 顺便关联房间号(短号)与真实房号(长号)
 				int shortId = JsonUtils.getInt(room, BiliCmdAtrbt.short_id, -1);

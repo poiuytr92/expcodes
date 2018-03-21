@@ -26,7 +26,7 @@ class _ColorUI extends PopChildWindow {
 	/** serialVersionUID */
 	private static final long serialVersionUID = -5691969159309932864L;
 
-	private final static int WIDTH = 440;
+	private final static int WIDTH = 480;
 	
 	private final static int HEIGHT = 120;
 	
@@ -48,6 +48,8 @@ class _ColorUI extends PopChildWindow {
 	
 	private JButton pinkBtn;
 	
+	private JButton peachPinkBtn;
+	
 	private JButton goldBtn;
 	
 	protected _ColorUI() {
@@ -58,40 +60,54 @@ class _ColorUI extends PopChildWindow {
 	protected void initComponents(Object... args) {
 		this.whiteBtn = new JButton("●");
 		whiteBtn.setForeground(ChatColor.WHITE.COLOR());
+		whiteBtn.setToolTipText(ChatColor.WHITE.ZH());
 		
 		this.redBtn = new JButton("●");
 		redBtn.setForeground(ChatColor.RED.COLOR());
+		redBtn.setToolTipText(ChatColor.RED.ZH());
 		
 		this.blueBtn = new JButton("●");
 		blueBtn.setForeground(ChatColor.BLUE.COLOR());
+		blueBtn.setToolTipText(ChatColor.BLUE.ZH());
 		
 		this.purpleBtn = new JButton("●");
 		purpleBtn.setForeground(ChatColor.PURPLE.COLOR());
+		purpleBtn.setToolTipText(ChatColor.PURPLE.ZH());
 		
 		this.cyanBtn = new JButton("●");
 		cyanBtn.setForeground(ChatColor.CYAN.COLOR());
+		cyanBtn.setToolTipText(ChatColor.CYAN.ZH());
 		
 		this.greenBtn = new JButton("●");
 		greenBtn.setForeground(ChatColor.GREEN.COLOR());
+		greenBtn.setToolTipText(ChatColor.GREEN.ZH());
 		
 		this.yellowBtn = new JButton("●");
 		yellowBtn.setForeground(ChatColor.YELLOW.COLOR());
+		yellowBtn.setToolTipText(ChatColor.YELLOW.ZH());
 		
 		this.orangeBtn = new JButton("●");
 		orangeBtn.setForeground(ChatColor.ORANGE.COLOR());
+		orangeBtn.setToolTipText(ChatColor.ORANGE.ZH());
 		
 		this.pinkBtn = new JButton("●");
 		pinkBtn.setForeground(ChatColor.PINK.COLOR());
+		pinkBtn.setToolTipText(ChatColor.PINK.ZH());
+		
+		this.peachPinkBtn = new JButton("●");
+		peachPinkBtn.setForeground(ChatColor.PEACH_PINK.COLOR());
+		peachPinkBtn.setToolTipText(ChatColor.PEACH_PINK.ZH());
 		
 		this.goldBtn = new JButton("●");
 		goldBtn.setForeground(ChatColor.GOLD.COLOR());
+		goldBtn.setToolTipText(ChatColor.GOLD.ZH());
 	}
 
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
 		rootPanel.add(SwingUtils.getHGridPanel(
-				whiteBtn, redBtn, blueBtn, purpleBtn, cyanBtn, 
-				greenBtn, yellowBtn, orangeBtn, pinkBtn, goldBtn
+				whiteBtn, redBtn, blueBtn, purpleBtn, cyanBtn, greenBtn, 
+				yellowBtn, orangeBtn, pinkBtn, peachPinkBtn, goldBtn
 		), BorderLayout.CENTER);
 	}
 
@@ -166,6 +182,14 @@ class _ColorUI extends PopChildWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				AppUI.getInstn().updateChatColor(ChatColor.PINK);
+			}
+		});
+		
+		peachPinkBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				AppUI.getInstn().updateChatColor(ChatColor.PEACH_PINK);
 			}
 		});
 

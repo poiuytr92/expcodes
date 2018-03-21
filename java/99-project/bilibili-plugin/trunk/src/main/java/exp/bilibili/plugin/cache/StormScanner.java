@@ -7,7 +7,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
+import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.utils.TimeUtils;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.warp.thread.LoopThread;
@@ -120,11 +122,13 @@ public class StormScanner extends LoopThread {
 	 * @return
 	 */
 	public boolean reflashHotLives() {
-		List<Integer> roomIds = XHRSender.queryTopLiveRoomIds();
+		HotLiveRange range = UIUtils.getHotLiveRange();
+		List<Integer> roomIds = XHRSender.queryTopLiveRoomIds(range);
 		if(ListUtils.isNotEmpty(roomIds)) {
 			hotRoomIds.clear();
 			hotRoomIds.addAll(roomIds);
-			log.info("已更新 [Top {}] 的人气直播间.", hotRoomIds.size());
+			log.info("已更新 [Page:{}-{}] 的 [{}] 个人气直播间.", 
+					range.BGN_PAGE(), range.END_PAGE(), hotRoomIds.size());
 		}
 		return hotRoomIds.isEmpty();
 	}

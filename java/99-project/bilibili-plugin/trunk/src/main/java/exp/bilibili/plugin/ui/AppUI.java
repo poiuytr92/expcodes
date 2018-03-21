@@ -20,6 +20,7 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.cache.ActivityMgr;
 import exp.bilibili.plugin.cache.ChatMgr;
 import exp.bilibili.plugin.cache.CookiesMgr;
@@ -99,8 +100,6 @@ public class AppUI extends MainWindow {
 	
 	private JButton activeListBtn;
 	
-	private JButton stormBtn;
-	
 	private JButton sendBtn;
 	
 	private JButton colorBtn;
@@ -120,6 +119,10 @@ public class AppUI extends MainWindow {
 	private JButton thxBtn;
 	
 	private JButton nightBtn;
+	
+	private JButton stormBtn;
+	
+	private JButton eStormBtn;
 	
 	private JTextField httpTF;
 	
@@ -146,6 +149,8 @@ public class AppUI extends MainWindow {
 	private _LotteryUI lotteryUI;
 	
 	private _ColorUI colorUI;
+	
+	private _StormModeUI stormUI;
 	
 	private ChatColor curChatColor;
 	
@@ -248,7 +253,9 @@ public class AppUI extends MainWindow {
 		this.callBtn = new JButton("小call姬");
 		this.eCallBtn = new JButton(">");
 		this.nightBtn = new JButton("晚安姬");
-		this.stormBtn = new JButton("节奏风暴扫描");
+		this.stormBtn = new JButton("节奏风暴");
+		this.eStormBtn = new JButton(">");
+		
 		loginBtn.setForeground(Color.BLACK);
 		logoutBtn.setForeground(Color.BLACK);
 		addUserBtn.setForeground(Color.BLACK);
@@ -270,6 +277,7 @@ public class AppUI extends MainWindow {
 		eCallBtn.setForeground(Color.BLACK);
 		nightBtn.setForeground(Color.BLACK);
 		stormBtn.setForeground(Color.BLACK);
+		eStormBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -288,6 +296,7 @@ public class AppUI extends MainWindow {
 		this.miniLoginMgrUI = new _MiniUserMgrUI();
 		this.lotteryUI = new _LotteryUI();
 		this.colorUI = new _ColorUI();
+		this.stormUI = new _StormModeUI();
 		this.curChatColor = ChatColor.RANDOM();
 				
 		printVersionInfo();
@@ -353,7 +362,9 @@ public class AppUI extends MainWindow {
 		return SwingUtils.getVGridPanel(
 				SwingUtils.getEBorderPanel(callBtn, eCallBtn), 
 				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
-				thxBtn, nightBtn, stormBtn);
+				thxBtn, nightBtn, 
+				SwingUtils.getEBorderPanel(stormBtn, eStormBtn)
+		);
 	}
 	
 	private JPanel getRightPanel() {
@@ -404,6 +415,7 @@ public class AppUI extends MainWindow {
 		setLinkBtnListener();
 		setLotteryBtnListener();
 		setActiveListBtnListener();
+		setChatTFListener();
 		setSendBtnListener();
 		setColorBtnListener();
 		setMusicBtnListener();
@@ -412,8 +424,6 @@ public class AppUI extends MainWindow {
 		setThxBtnListener();
 		setNightBtnListener();
 		setStormBtnListener();
-		setChatTFListener();
-		setEditBtnListener();
 	}
 	
 	private void setLoginBtnListener() {
@@ -546,11 +556,6 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(Identity.less(Identity.UPLIVE)) {
-					SwingUtils.warn("花心的您未被授权 [收藏直播间] 哦~");
-					return;
-				}
-				
 				int roomId = getLiveRoomId();
 				int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 				if(realRoomId <= 0) {
@@ -646,6 +651,30 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
+	private void setChatTFListener() {
+		chatTF.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+				if(chatTF.getText().length() > CookiesMgr.MAIN().DANMU_LEN()) {
+					e.consume(); // 销毁新输入的字符，限制长度
+				}
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+				// Undo
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyChar() == KeyEvent.VK_ENTER) {
+					sendBtn.doClick();// 监听到回车键则触发发送按钮
+				}
+			}
+		});
+	}
+	
 	private void setSendBtnListener() {
 		sendBtn.addActionListener(new ActionListener() {
 			
@@ -692,6 +721,16 @@ public class AppUI extends MainWindow {
 				lockBtn();
 			}
 		});
+		
+		eMusicBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new _EditorUI("歌单", Config.getInstn().MUSIC_PATH())._view();
+				lockBtn();
+			}
+			
+		});
 	}
 	
 	
@@ -727,6 +766,20 @@ public class AppUI extends MainWindow {
 				lockBtn();
 			}
 		});
+		
+		eNoticeBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(Identity.less(Identity.UPLIVE)) {
+					return;
+				}
+				
+				new _EditorUI("公告", Config.getInstn().NOTICE_PATH())._view();
+				lockBtn();
+			}
+			
+		});
 	}
 	
 	private void setCallBtnListener() {
@@ -751,6 +804,16 @@ public class AppUI extends MainWindow {
 				}
 				lockBtn();
 			}
+		});
+		
+		eCallBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new _EditorUI("打call语录", Config.getInstn().CALL_PATH())._view();
+				lockBtn();
+			}
+			
 		});
 	}
 	
@@ -851,6 +914,14 @@ public class AppUI extends MainWindow {
 				lockBtn();
 			}
 		});
+		
+		eStormBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				stormUI._view();
+			}
+		});
 	}
 	
 	/**
@@ -892,66 +963,6 @@ public class AppUI extends MainWindow {
 		StormScanner.getInstn()._start();
 		lockBtn();
 		stormBtn.doClick();
-	}
-	
-	private void setChatTFListener() {
-		chatTF.addKeyListener(new KeyListener() {
-			
-			@Override
-			public void keyTyped(KeyEvent e) {
-				if(chatTF.getText().length() > CookiesMgr.MAIN().DANMU_LEN()) {
-					e.consume(); // 销毁新输入的字符，限制长度
-				}
-			}
-			
-			@Override
-			public void keyReleased(KeyEvent e) {
-				// Undo
-			}
-			
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyChar() == KeyEvent.VK_ENTER) {
-					sendBtn.doClick();// 监听到回车键则触发发送按钮
-				}
-			}
-		});
-	}
-	
-	private void setEditBtnListener() {
-		eNoticeBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if(Identity.less(Identity.UPLIVE)) {
-					return;
-				}
-				
-				new _EditorUI("公告", Config.getInstn().NOTICE_PATH())._view();
-				lockBtn();
-			}
-			
-		});
-		
-		eCallBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new _EditorUI("打call语录", Config.getInstn().CALL_PATH())._view();
-				lockBtn();
-			}
-			
-		});
-		
-		eMusicBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new _EditorUI("歌单", Config.getInstn().MUSIC_PATH())._view();
-				lockBtn();
-			}
-			
-		});
 	}
 	
 	@Override
@@ -1075,6 +1086,14 @@ public class AppUI extends MainWindow {
 	 */
 	public int getLiveRoomId() {
 		return NumUtils.toInt(liveRoomTF.getText().trim());
+	}
+	
+	/**
+	 * 根据节奏风暴策略获取人气直播间的扫描范围
+	 * @return
+	 */
+	public HotLiveRange getHotLiveRange() {
+		return stormUI.getHotLiveRange();
 	}
 	
 	/**

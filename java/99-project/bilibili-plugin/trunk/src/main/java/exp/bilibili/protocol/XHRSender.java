@@ -8,6 +8,7 @@ import java.util.Set;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
+import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.envm.ChatColor;
@@ -209,12 +210,12 @@ public class XHRSender {
 	
 	/**
 	 * 扫描当前的人气直播间房号列表
-	 * @param cookie 扫描用的cookie
+	 * @param range 扫描页码范围
 	 * @return
 	 */
-	public static List<Integer> queryTopLiveRoomIds() {
+	public static List<Integer> queryTopLiveRoomIds(HotLiveRange range) {
 		BiliCookie cookie = CookiesMgr.VEST();
-		return LotteryStorm.queryHotLiveRoomIds(cookie);
+		return LotteryStorm.queryHotLiveRoomIds(cookie, range);
 	}
 	
 	/**

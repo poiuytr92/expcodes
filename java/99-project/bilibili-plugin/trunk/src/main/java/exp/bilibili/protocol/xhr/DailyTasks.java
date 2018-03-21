@@ -204,7 +204,6 @@ public class DailyTasks extends __XHR {
 		
 		holidayHeartbeat(header);
 		String response = HttpURLUtils.doGet(HB_GIFT_URL, header, request);
-		System.out.println(response);
 		
 		long nextTaskTime = System.currentTimeMillis() + DELAY_10_MIN;
 		try {
