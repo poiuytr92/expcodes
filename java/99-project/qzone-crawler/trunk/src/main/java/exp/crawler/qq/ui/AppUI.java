@@ -22,7 +22,6 @@ import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.AlbumAnalyzer;
 import exp.crawler.qq.core.Landers;
 import exp.crawler.qq.core.MoodAnalyzer;
-import exp.crawler.qq.envm.URL;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.io.FileUtils;
@@ -209,8 +208,9 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final String username = unTF.getText().trim();
+				final String username = unTF.getText();
 				final String password = String.valueOf(pwTF.getPassword());
+				final String targetQQ = targetQQTF.getText();
 				
 				if(StrUtils.isNotEmpty(username, password)) {
 					loginBtn.setEnabled(false);
@@ -218,7 +218,7 @@ public class AppUI extends MainWindow {
 						
 						@Override
 						public void run() {
-							isLogin = Landers.toLogin(username, password, getQZoneURL());
+							isLogin = Landers.toLogin(username, password, targetQQ);
 							if(isLogin == true) {
 								albumBtn.setEnabled(true);
 								moodBtn.setEnabled(true);
@@ -255,7 +255,8 @@ public class AppUI extends MainWindow {
 						
 						@Override
 						public void run() {
-							AlbumAnalyzer.downloadAlbums(getQZoneURL());
+							String targetQQ = targetQQTF.getText();
+							AlbumAnalyzer.downloadAlbums(targetQQ);
 							albumBtn.setEnabled(true);
 						}
 					});
@@ -278,7 +279,8 @@ public class AppUI extends MainWindow {
 						
 						@Override
 						public void run() {
-							MoodAnalyzer.downloadMoods(getQZoneURL());
+							String targetQQ = targetQQTF.getText();
+							MoodAnalyzer.downloadMoods(targetQQ);
 							moodBtn.setEnabled(true);
 						}
 					});
@@ -304,11 +306,6 @@ public class AppUI extends MainWindow {
 		Browser.quit();
 	}
 	
-	private String getQZoneURL() {
-		String targetQQ = targetQQTF.getText().trim();
-		return URL.QZONE_DOMAIN.concat(targetQQ);
-	}
-	
 	public void toConsole(String msg) {
 		if(StrUtils.count(consoleTA.getText(), '\n') >= MAX_LINE) {
 			consoleTA.setText("");
@@ -322,9 +319,9 @@ public class AppUI extends MainWindow {
 	 * 备份登陆信息
 	 */
 	private void backupLoginInfo() {
-		String username = unTF.getText().trim();
+		String username = unTF.getText();
 		String password = String.valueOf(pwTF.getPassword());
-		String targetQQ = targetQQTF.getText().trim();
+		String targetQQ = targetQQTF.getText();
 		
 		String loginInfo = StrUtils.concat(
 				CryptoUtils.toDES(username), LINE_END, 

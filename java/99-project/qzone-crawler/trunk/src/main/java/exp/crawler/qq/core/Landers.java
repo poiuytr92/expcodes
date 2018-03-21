@@ -5,11 +5,12 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.StrUtils;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.envm.URL;
 import exp.crawler.qq.utils.UIUtils;
+import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
 
 /**
  * <PRE>
@@ -36,10 +37,11 @@ public class Landers {
 	 * 登陆QQ空间
 	 * @param username
 	 * @param password
-	 * @param QZONE_URL
+	 * @param targetQQ 目标QQ
 	 * @return
 	 */
-	public static boolean toLogin(String username, String password, final String QZONE_URL) {
+	public static boolean toLogin(String username, String password, String targetQQ) {
+		final String QZONE_URL = URL.QZONE_DOMAIN.concat(targetQQ);
 		boolean isOk = false;
 		try {
 			Browser.reset(false);
@@ -72,13 +74,7 @@ public class Landers {
 			ThreadUtils.tSleep(SLEEP_TIME);
 			
 			UIUtils.log("正在登陆QQ [", username, "] ...");
-			isOk = clickLoginBtn();	// 点击登陆并检测是否登成功
-			
-			if(isOk == true) {
-				Browser.open(QZONE_URL);
-				skipTitle();	// 跳过空间片头动画
-				skipTips();		// 跳过空间操作提示
-			}
+			isOk = clickLoginBtn(QZONE_URL);	// 点击登陆并检测是否登成功
 		}
 		return isOk;
 	}
@@ -126,7 +122,7 @@ public class Landers {
 	 * @param frame
 	 * @return
 	 */
-	private static boolean clickLoginBtn() {
+	private static boolean clickLoginBtn(final String QZONE_URL) {
 		final String URL = Browser.getCurURL();	// 登录前URL
 		
 		// 点击登陆按钮
@@ -147,8 +143,18 @@ public class Landers {
 		
 		// 备份登陆cookies
 		if(isOk == true) {
+			Browser.open(QZONE_URL);
+			skipTitle();	// 跳过空间片头动画
+			skipTips();		// 跳过空间操作提示
+			
+			String qzoneToken = getQzoneToken(Browser.getPageSource());
+			Browser.setQzoneToken(qzoneToken);
 			Browser.backupCookies();
-			isOk = StrUtils.isNotEmpty(Browser.GTK());	// 只有正确生成了GTK才认为登陆成功
+			
+			System.out.println(qzoneToken);
+			
+			// 只有正确生成了 GTK 和 QZONETOKEN 才认为登陆成功
+			isOk = StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
 		}
 		return isOk;
 	}
@@ -161,6 +167,7 @@ public class Landers {
 			WebElement welFlash = Browser.findElement(By.name("welFlash"));
 			WebElement span = welFlash.findElement(By.tagName("span"));
 			Browser.click(span);
+			UIUtils.log("已跳过QQ空间片头动画");
 			
 		} catch(Exception e) {
 			log.warn("跳过QQ空间片头动画失败");
@@ -177,10 +184,23 @@ public class Landers {
 			WebElement m = top.findElement(By.className("m"));
 			WebElement a = m.findElement(By.tagName("a"));
 			Browser.click(a);
+			UIUtils.log("已跳过QQ空间操作提示");
 			
 		} catch(Exception e) {
 			log.warn("跳过QQ空间操作提示失败");
 		}
+	}
+	
+	/**
+	 * 从QQ空间首页首页源码中提取 qzonetoken.
+	 * 	qzonetoken 在每次登陆时自动生成一个固定值, 但是生成算法相对复杂（需要jother解码）, 
+	 *  因此此处直接在页面源码中提取
+	 * @param qzoneHomePageSource QQ空间首页源码
+	 * @return qzonetoken
+	 */
+	private static String getQzoneToken(String qzoneHomePageSource) {
+		final String RGX_QZONE_TOKEN = "window\\.g_qzonetoken[^\"]+\"([^\"]+)\"";
+		return RegexUtils.findFirst(qzoneHomePageSource, RGX_QZONE_TOKEN);
 	}
 	
 }

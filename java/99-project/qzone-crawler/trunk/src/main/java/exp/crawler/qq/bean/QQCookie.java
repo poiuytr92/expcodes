@@ -19,6 +19,15 @@ public class QQCookie extends WebKitCookie {
 	/** 每次登陆QQ空间都会生成一个固定的GTK, 用于其他页面操作 */
 	private String gtk;
 	
+	/** 每次登陆QQ空间都会生成一个固定的qzonetoken, 用于其他页面操作 */
+	private String qzoneToken;
+	
+	@Override
+	protected void init() {
+		this.gtk = "";
+		this.qzoneToken = "";
+	}
+	
 	/**
 	 * 在添加新的cookie时会触发此方法, 用于提取某些特殊的名值对作为常量, 例如CSRF
 	 * @param name cookie键名
@@ -76,6 +85,14 @@ public class QQCookie extends WebKitCookie {
 	
 	public String GTK() {
 		return gtk;
+	}
+	
+	public String QZONE_TOKEN() {
+		return qzoneToken;
+	}
+	
+	public void setQzoneToken(String qzoneToken) {
+		this.qzoneToken = qzoneToken;
 	}
 	
 }

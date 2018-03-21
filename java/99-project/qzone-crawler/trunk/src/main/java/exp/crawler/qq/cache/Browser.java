@@ -74,19 +74,19 @@ public class Browser {
 	}
 	
 	public static QQCookie COOKIE() {
-		return INSTN()._COOKIE();
-	}
-	
-	private QQCookie _COOKIE() {
-		return qqCookie;
+		return INSTN().qqCookie;
 	}
 	
 	public static String GTK() {
-		return INSTN()._GTK();
+		return INSTN().qqCookie.GTK();
 	}
 	
-	private String _GTK() {
-		return qqCookie.GTK();
+	public static String QZONE_TOKEN() {
+		return INSTN().qqCookie.QZONE_TOKEN();
+	}
+	
+	public static void setQzoneToken(String qzoneToken) {
+		INSTN().qqCookie.setQzoneToken(qzoneToken);
 	}
 	
 	public static void open(String url) {

@@ -10,6 +10,7 @@ import org.openqa.selenium.WebElement;
 
 import exp.crawler.qq.bean.Mood;
 import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.envm.URL;
 import exp.crawler.qq.utils.UIUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.IDUtils;
@@ -31,6 +32,9 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 public class MoodAnalyzer {
 	
+	/** 说说每页URL */
+	private final static String MOOD_URL = "https://h5.qzone.qq.com/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6";
+	         
 	/** 行为休眠间隔 */
 	private final static long SLEEP_TIME = 50;
 	
@@ -45,16 +49,23 @@ public class MoodAnalyzer {
 	
 	/**
 	 * 下载所有说说
-	 * @param QZONE_URL 目标QQ空间的首页地址
+	 * @param targetQQ 目标QQ
 	 */
-	public static void downloadMoods(final String QZONE_URL) {
+	public static void downloadMoods(String targetQQ) {
+		final String QZONE_URL = URL.QZONE_DOMAIN.concat(targetQQ);
 		try {
 			if(!switchToMoodPage(QZONE_URL)) {
 				UIUtils.log("切换到【说说列表】失败");
 				
 			} else {
+				
+				
 				FileUtils.delete(MOOD_DIR);
-				download(getAllMoods());
+//				download(getAllMoods());
+				
+				String json = getPageMoods(targetQQ, 1);
+				System.out.println(json);
+				
 				UIUtils.log("任务完成, 图文数据已保存到: ", MOOD_DIR);
 			}
 		} catch(Exception e) {
@@ -104,6 +115,52 @@ public class MoodAnalyzer {
 		}
 		return moods;
 	}
+	
+	
+	private static String getPageMoods(String targetQQ, int page) {
+		Map<String, String> header = _getPageHeader(Browser.COOKIE().toNVCookie());
+		Map<String, String> request = _getPageRequest(targetQQ, page, Browser.GTK(), Browser.QZONE_TOKEN());
+		String response = HttpURLUtils.doGet(MOOD_URL, header, request);
+		String json = RegexUtils.findFirst(response.replace("\\/", "/"), "_Callback\\(([\\s\\S]*)\\);$");
+		return json;
+	}
+	
+	private static Map<String, String> _getPageHeader(String cookie) {
+		Map<String, String> header = new HashMap<String, String>();
+		header.put(HttpUtils.HEAD.KEY.ACCEPT, "image/webp,image/*,*/*;q=0.8");
+		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
+		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
+		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
+		header.put(HttpUtils.HEAD.KEY.REFERER, "https://qzs.qq.com/qzone/app/mood_v6/html/index.html");
+		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
+		return header;
+	}
+	
+	private static Map<String, String> _getPageRequest(String targetQQ, int page, 
+			String gtk, String qzoneToken) {
+		final int EACH_PAGE_LIMIT = 20;
+		int bgnIdx = page * EACH_PAGE_LIMIT;
+		
+		Map<String, String> request = new HashMap<String, String>();
+		request.put("uin", targetQQ);
+		request.put("hostUin", targetQQ);
+		request.put("inCharset", "utf-8");
+		request.put("outCharset", "utf-8");
+		request.put("notice", "0");
+		request.put("sort", "0");
+		request.put("pos", String.valueOf(bgnIdx));	// 起始说以呢索引
+		request.put("num", String.valueOf(EACH_PAGE_LIMIT));	// 每页说说数量
+		request.put("cgi_host", "http://taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6");
+		request.put("code_version", "1");
+		request.put("format", "jsonp");
+		request.put("need_private_comment", "1");
+		request.put("g_tk", gtk);
+		request.put("qzonetoken", qzoneToken);
+		return request;
+	}
+	
+	
 	
 	/**
 	 * 获取当前页面的所有照片信息

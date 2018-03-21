@@ -21,6 +21,7 @@ import exp.libs.warp.net.http.HttpUtils;
 import exp.crawler.qq.bean.Album;
 import exp.crawler.qq.bean.Photo;
 import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.envm.URL;
 import exp.crawler.qq.utils.UIUtils;
 
 
@@ -44,9 +45,10 @@ public class AlbumAnalyzer {
 	
 	/**
 	 * 下载所有相册
-	 * @param QZONE_URL 目标QQ空间的首页地址
+	 * @param targetQQ 目标QQ
 	 */
-	public static void downloadAlbums(final String QZONE_URL) {
+	public static void downloadAlbums(String targetQQ) {
+		final String QZONE_URL = URL.QZONE_DOMAIN.concat(targetQQ);
 		try {
 			if(!switchToAlbumPage(QZONE_URL)) {
 				UIUtils.log("切换到【相册列表】失败");
