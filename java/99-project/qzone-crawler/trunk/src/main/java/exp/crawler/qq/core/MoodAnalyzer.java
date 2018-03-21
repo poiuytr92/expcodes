@@ -95,17 +95,12 @@ public class MoodAnalyzer {
 		for(int page = 1; ; page++) {
 			
 			UIUtils.log("正在提取第 [", page, "] 页的说说信息...");
-			moods.addAll(_getCurPageMoods(page));
+//			moods.addAll(_getCurPageMoods(page));
 			UIUtils.log("第 [", page, "] 页说说提取完成, 累计数量: ", moods.size());
 			
-			// 下一页   
-			WebElement pagenav = Browser.findElement(By.className("mod_pagenav_main"));
-			WebElement next = pagenav.findElement(By.xpath("a[last()]"));
-			if(!"下一页".equals(next.getAttribute("title"))) {
+			if(_nextPage() == false) {
 				break;
 			}
-			next.click();
-			ThreadUtils.tSleep(1000);	// FIXME  较高概率没加载到下一页的元素，还是改用XHR请求比较好
 		}
 		return moods;
 	}
@@ -137,6 +132,27 @@ public class MoodAnalyzer {
 			moods.add(mood);
 		}
 		return moods;
+	}
+	
+	/**
+	 * 切换到下一页
+	 * @return true:已切换到下一页; false:已是最后一页
+	 */
+	private static boolean _nextPage() {
+		boolean hasNext = true;
+		for(int retry = 1; retry <= 10; retry++) {
+			try {
+				WebElement pagenav = Browser.findElement(By.className("mod_pagenav_main"));
+				WebElement next = pagenav.findElement(By.xpath("a[last()]"));
+				if(next != null && "下一页".equals(next.getAttribute("title"))) {
+					next.click();
+					break;
+				}
+			} catch(Exception e) {
+				ThreadUtils.tSleep(SLEEP_TIME);
+			}
+		}
+		return hasNext;
 	}
 	
 	/**

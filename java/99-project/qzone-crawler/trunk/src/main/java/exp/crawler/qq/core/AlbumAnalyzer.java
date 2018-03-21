@@ -151,12 +151,9 @@ public class AlbumAnalyzer {
 			photos.addAll(_getCurPagePhotoURLs());
 			UIUtils.log("第 [", page, "] 页照片提取完成, 当前进度: ", photos.size(), "/", album.NUM());
 			
-			// 下一页
-			WebElement next = Browser.findElement(By.id("pager_next_1"));
-			if(next == null) {
+			if(_nextPage() == false) {
 				break;
 			}
-			next.click();
 		}
 		return photos;
 	}
@@ -204,6 +201,25 @@ public class AlbumAnalyzer {
 			photos.add(new Photo(desc, date, url));
 		}
 		return photos;
+	}
+	
+	/**
+	 * 切换到下一页
+	 * @return true:已切换到下一页; false:已是最后一页
+	 */
+	private static boolean _nextPage() {
+		boolean hasNext = true;
+		for(int retry = 1; retry <= 10; retry++) {
+			try {
+				WebElement next = Browser.findElement(By.id("pager_next_1"));
+				if(next != null) {
+					next.click();
+				}
+			} catch(Exception e) {
+				ThreadUtils.tSleep(SLEEP_TIME);
+			}
+		}
+		return hasNext;
 	}
 	
 	/**

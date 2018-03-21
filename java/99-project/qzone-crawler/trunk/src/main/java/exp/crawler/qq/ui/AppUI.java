@@ -167,14 +167,14 @@ public class AppUI extends MainWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
-		setQQTFListener(unTF);
-		setQQTFListener(targetQQTF);
+		setNumTextFieldListener(unTF);
+		setNumTextFieldListener(targetQQTF);
 		setLoginBtnListener();
 		setAlbumBtnListener();
 		setMoodBtnListener();
 	}
 	
-	public void setQQTFListener(final JTextField textField) {
+	private void setNumTextFieldListener(final JTextField textField) {
 		textField.addKeyListener(new KeyListener() {
 
 		    @Override
@@ -204,7 +204,7 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
-	public void setLoginBtnListener() {
+	private void setLoginBtnListener() {
 		loginBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -241,7 +241,7 @@ public class AppUI extends MainWindow {
 		});
 	}
 	
-	public void setAlbumBtnListener() {
+	private void setAlbumBtnListener() {
 		albumBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -264,7 +264,7 @@ public class AppUI extends MainWindow {
 		});
 	}
 
-	public void setMoodBtnListener() {
+	private void setMoodBtnListener() {
 		moodBtn.addActionListener(new ActionListener() {
 			
 			@Override
