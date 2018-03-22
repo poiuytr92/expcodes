@@ -14,7 +14,7 @@ import exp.libs.utils.verify.RegexUtils;
 
 /**
  * <PRE>
- * 登陆器
+ * QQ空间登陆器
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -35,19 +35,18 @@ public class Landers {
 	
 	/**
 	 * 登陆QQ空间
-	 * @param username
+	 * @param username 
 	 * @param password
 	 * @param targetQQ 目标QQ
 	 * @return
 	 */
-	public static boolean toLogin(String username, String password, String targetQQ) {
-		final String QZONE_URL = URL.QZONE_DOMAIN.concat(targetQQ);
+	public static boolean toLogin(String username, String password) {
 		boolean isOk = false;
 		try {
 			Browser.reset(false);
 			Browser.clearCookies();
 			
-			isOk = _toLogin(username, password, QZONE_URL);
+			isOk = _toLogin(username, password);
 			UIUtils.log("登陆QQ [", username, "] ", (isOk ? "成功" : "失败: 账号或密码错误"));
 			
 		} catch(Exception e) {
@@ -59,14 +58,13 @@ public class Landers {
 	
 	/**
 	 * 登陆QQ空间
-	 * @param username
-	 * @param password
-	 * @param QZONE_URL
-	 * @return
+	 * @param username QQ登陆账号
+	 * @param password QQ登陆密码
+	 * @return 是否登陆成功
 	 */
-	private static boolean _toLogin(String username, String password, final String QZONE_URL) {
-		UIUtils.log("正在打开QQ登陆页面: ", URL.QZONE_LOGIN);
-		Browser.open(URL.QZONE_LOGIN);
+	private static boolean _toLogin(String username, String password) {
+		UIUtils.log("正在打开QQ登陆页面: ", URL.QZONE_LOGIN_URL);
+		Browser.open(URL.QZONE_LOGIN_URL);
 		boolean isOk = switchLoginMode();	// 切换为帐密登陆模式
 		if(isOk == true) {
 			fill("u", username);	// 填写账号
@@ -74,16 +72,14 @@ public class Landers {
 			ThreadUtils.tSleep(SLEEP_TIME);
 			
 			UIUtils.log("正在登陆QQ [", username, "] ...");
-			isOk = clickLoginBtn(QZONE_URL);	// 点击登陆并检测是否登成功
+			isOk = clickLoginBtn(username);	// 点击登陆并检测是否登成功
 		}
 		return isOk;
 	}
 	
 	/**
-	 * 切换登陆方式
-	 * 	。
-	 * 
-	 * @return frame驱动
+	 * 切换登陆方式为[帐密登陆]
+	 * return 是否切换成功
 	 */
 	private static boolean switchLoginMode() {
 		
@@ -118,12 +114,12 @@ public class Landers {
 	}
 	
 	/**
-	 * 点击登陆按钮
-	 * @param frame
+	 * 点击登陆按钮并进入QQ空间
+	 * @param QQ
 	 * @return
 	 */
-	private static boolean clickLoginBtn(final String QZONE_URL) {
-		final String URL = Browser.getCurURL();	// 登录前URL
+	private static boolean clickLoginBtn(String QQ) {
+		final String UNLOGIN_URL = Browser.getCurURL();	// 登录前URL
 		
 		// 点击登陆按钮
 		WebElement loginBtn = Browser.findElement(By.id("login_button"));
@@ -132,28 +128,26 @@ public class Landers {
 		// 轮询是否登陆成功（发生页面切换）
 		boolean isOk = true;
 		long bgnTime = System.currentTimeMillis();
-		while(URL.equals(Browser.getCurURL())) {
+		while(UNLOGIN_URL.equals(Browser.getCurURL())) {
 			ThreadUtils.tSleep(SLEEP_TIME);
 			
 			if(System.currentTimeMillis() - bgnTime >= TIMEOUT) {
-				isOk = false;
+				isOk = false;	// 超时未切换页面则认为登陆失败
 				break;
 			}
 		}
 		
 		// 备份登陆cookies
 		if(isOk == true) {
-			Browser.open(QZONE_URL);
+			Browser.open(URL.QZONE_HOMR_URL(QQ));
 			skipTitle();	// 跳过空间片头动画
 			skipTips();		// 跳过空间操作提示
 			
+			// 生成并备份本次登陆的 gtk 和  qzoneToken 
+			// (这两个值每次登陆都不同，但登陆后就固定了, 发起HTTP请求时需要用到)
 			String qzoneToken = getQzoneToken(Browser.getPageSource());
 			Browser.setQzoneToken(qzoneToken);
 			Browser.backupCookies();
-			
-			System.out.println(qzoneToken);
-			
-			// 只有正确生成了 GTK 和 QZONETOKEN 才认为登陆成功
 			isOk = StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
 		}
 		return isOk;
@@ -193,8 +187,8 @@ public class Landers {
 	
 	/**
 	 * 从QQ空间首页首页源码中提取 qzonetoken.
-	 * 	qzonetoken 在每次登陆时自动生成一个固定值, 但是生成算法相对复杂（需要jother解码）, 
-	 *  因此此处直接在页面源码中提取
+	 * 	类似于gtk, qzonetoken 在每次登陆时自动生成一个固定值, 但是生成算法相对复杂（需要jother解码）, 
+	 *  因此此处取巧, 直接在页面源码中提取明文
 	 * @param qzoneHomePageSource QQ空间首页源码
 	 * @return qzonetoken
 	 */

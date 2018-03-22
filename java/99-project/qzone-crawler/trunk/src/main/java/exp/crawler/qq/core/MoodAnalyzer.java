@@ -5,15 +5,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import exp.crawler.qq.bean.Mood;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.envm.URL;
+import exp.crawler.qq.envm.XHRAtrbt;
+import exp.crawler.qq.ui.PicUtils;
 import exp.crawler.qq.utils.UIUtils;
+import exp.libs.envm.Charset;
+import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.num.IDUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
@@ -32,9 +38,15 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 public class MoodAnalyzer {
 	
-	/** 说说每页URL */
-	private final static String MOOD_URL = "https://h5.qzone.qq.com/proxy/domain/taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6";
-	         
+	/** 日志器 */
+	private final static Logger log = LoggerFactory.getLogger(MoodAnalyzer.class);
+	
+	/**
+	 * 每页最多20条说说
+	 * （但可能少于20条, 即每页的实际个数不定, 造成这种情况可能因为被删除的说说依然占位）
+	 */
+	private final static int EACH_PAGE_LIMIT = 20;
+	
 	/** 行为休眠间隔 */
 	private final static long SLEEP_TIME = 50;
 	
@@ -47,169 +59,155 @@ public class MoodAnalyzer {
 	/** 说说每页所有照片的保存目录 */
 	private final static String PHOTO_DIR = MOOD_DIR.concat("photos/");
 	
+	/** 说说分页信息保存文件名 */
+	private final static String MOOD_NAME = "MoodInfo-[说说信息].txt";
+	
 	/**
 	 * 下载所有说说
-	 * @param targetQQ 目标QQ
+	 * @param QQ 目标QQ
 	 */
-	public static void downloadMoods(String targetQQ) {
-		final String QZONE_URL = URL.QZONE_DOMAIN.concat(targetQQ);
+	public static void downloadMoods(String QQ) {
 		try {
-			if(!switchToMoodPage(QZONE_URL)) {
-				UIUtils.log("切换到【说说列表】失败");
-				
-			} else {
-				
-				
-				FileUtils.delete(MOOD_DIR);
-//				download(getAllMoods());
-				
-				String json = getPageMoods(targetQQ, 1);
-				System.out.println(json);
-				
-				UIUtils.log("任务完成, 图文数据已保存到: ", MOOD_DIR);
-			}
+			FileUtils.delete(MOOD_DIR);
+			download(getAllMoods(QQ));
+			UIUtils.log("任务完成, QQ[", QQ, "] 的【说说】数据已保存到: ", MOOD_DIR);
+			
 		} catch(Exception e) {
-			UIUtils.log("下载QQ空间的【说说】时发生异常");
+			UIUtils.log("下载 QQ[", QQ, "] 的空间【说说】时发生异常");
+			log.error("下载 QQ[{}] 的空间【说说】时发生异常", QQ, e);
 		}
 	}
 	
 	/**
-	 * 切换到相册列表页面
-	 * @param QZONE_URL 目标QQ空间的首页地址
-	 * @return 是否切换成功
+	 * 获取所有说说的图文信息
+	 * @param QQ 目标QQ
+	 * @return
 	 */
-	private static boolean switchToMoodPage(final String QZONE_URL) {
-		UIUtils.log("正在打开QQ空间页面: ", QZONE_URL);
-		Browser.open(QZONE_URL);
-		
-		UIUtils.log("正在切换到【说说列表】...");
-		boolean isOk = false;
-		WebElement a = Browser.findElement(By.id("QM_Profile_Mood_A"));
-		if(a != null) {
-			isOk = true;
-			Browser.click(a);
-		}
-		return isOk;
-	}
-	
-	/**
-	 * 提取每一页的说说及其照片信息
-	 * @return 相册 -> 照片集
-	 */
-	private static List<Mood> getAllMoods() {
-		
-		// 切换到本页【说说列表】的嵌套页
-		Browser.switchToFrame(By.id("app_canvas_frame"));
-		
-		// 获取本页说说列表
+	private static List<Mood> getAllMoods(String QQ) {
 		List<Mood> moods = new LinkedList<Mood>();
-		for(int page = 1; ; page++) {
+		final int PAGE_NUM = getTotalPageNum(QQ);
+		UIUtils.log("目标QQ[", QQ, "] 的说说总页数: ", PAGE_NUM);
+		
+		for(int page = 1; page <= PAGE_NUM; page++) {
+			UIUtils.log("正在提取第 [", page, "] 页的说说数据...");
+			moods.addAll(getPageMoods(QQ, page));
+			UIUtils.log("第 [", page, "/", PAGE_NUM, "] 页说说提取完成, 累计: ", moods.size());
 			
-			UIUtils.log("正在提取第 [", page, "] 页的说说信息...");
-//			moods.addAll(_getCurPageMoods(page));
-			UIUtils.log("第 [", page, "] 页说说提取完成, 累计数量: ", moods.size());
-			
-			if(_nextPage() == false) {
-				break;
-			}
+			ThreadUtils.tSleep(SLEEP_TIME);
 		}
 		return moods;
 	}
 	
-	
-	private static String getPageMoods(String targetQQ, int page) {
-		Map<String, String> header = _getPageHeader(Browser.COOKIE().toNVCookie());
-		Map<String, String> request = _getPageRequest(targetQQ, page, Browser.GTK(), Browser.QZONE_TOKEN());
-		String response = HttpURLUtils.doGet(MOOD_URL, header, request);
-		String json = RegexUtils.findFirst(response.replace("\\/", "/"), "_Callback\\(([\\s\\S]*)\\);$");
-		return json;
+	/**
+	 * 获取目标QQ空间的说说总页数
+	 * @param QQ
+	 * @return
+	 */
+	private static int getTotalPageNum(String QQ) {
+		String response = _getPageMoods(QQ, 1);
+		int total = 0;
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			total = JsonUtils.getInt(json, XHRAtrbt.total, 0);	// 总说说数量
+		} catch(Exception e) {}
+		
+		int pageNum = total / EACH_PAGE_LIMIT;
+		if(total % EACH_PAGE_LIMIT != 0) {
+			pageNum += 1;	// 向上取整
+		}
+		return pageNum;
 	}
 	
-	private static Map<String, String> _getPageHeader(String cookie) {
+	/**
+	 * 获取分页的说说内容
+	 * @param QQ 目标QQ
+	 * @param page 页数
+	 * @return 
+	 */
+	private static List<Mood> getPageMoods(String QQ, int page) {
+		List<Mood> moods = new LinkedList<Mood>();
+		String response = _getPageMoods(QQ, page);
+		
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			JSONArray msglist = JsonUtils.getArray(json, XHRAtrbt.msglist);
+			for(int i = 0; i < msglist.size(); i++) {
+				JSONObject msg = msglist.getJSONObject(i);
+				String content = JsonUtils.getStr(msg, XHRAtrbt.content);
+				long createTime = JsonUtils.getLong(msg, XHRAtrbt.created_time, 0) * 1000;
+				
+				Mood mood = new Mood(page, content, createTime);
+				JSONArray pics = JsonUtils.getArray(msg, XHRAtrbt.pic);
+				for(int j = 0; j < pics.size(); j++) {
+					JSONObject pic = pics.getJSONObject(j);
+					String url = JsonUtils.getStr(pic, XHRAtrbt.url3);
+					mood.addPicURL(url);
+				}
+				
+				moods.add(mood);
+			}
+		} catch(Exception e) {
+			log.error("提取 QQ[{}] 第 [{}] 页的空间【说说】数据异常", QQ, page, e);
+		}
+		return moods;
+	}
+	
+	/**
+	 * 获取分页的说说内容
+	 * @param QQ 目标QQ
+	 * @param page 页数
+	 * @return json
+	 */
+	private static String _getPageMoods(String QQ, int page) {
+		Map<String, String> header = _toMoodHeader(Browser.COOKIE().toNVCookie());
+		Map<String, String> request = _toMoodeRequest(QQ, page, Browser.GTK(), Browser.QZONE_TOKEN());
+		String response = HttpURLUtils.doGet(URL.MOOD_URL, header, request);
+		return RegexUtils.findFirst(response.replace("\\/", "/"), "_Callback\\(([\\s\\S]*)\\);$");
+	}
+	
+	/**
+	 * 说说分页请求头
+	 * @param cookie
+	 * @return
+	 */
+	private static Map<String, String> _toMoodHeader(String cookie) {
 		Map<String, String> header = new HashMap<String, String>();
 		header.put(HttpUtils.HEAD.KEY.ACCEPT, "image/webp,image/*,*/*;q=0.8");
 		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
 		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
 		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
 		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		header.put(HttpUtils.HEAD.KEY.REFERER, "https://qzs.qq.com/qzone/app/mood_v6/html/index.html");
+		header.put(HttpUtils.HEAD.KEY.REFERER, URL.MOOD_REFERER);
 		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
 		return header;
 	}
 	
-	private static Map<String, String> _getPageRequest(String targetQQ, int page, 
-			String gtk, String qzoneToken) {
-		final int EACH_PAGE_LIMIT = 20;
-		int bgnIdx = page * EACH_PAGE_LIMIT;
-		
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("uin", targetQQ);
-		request.put("hostUin", targetQQ);
-		request.put("inCharset", "utf-8");
-		request.put("outCharset", "utf-8");
-		request.put("notice", "0");
-		request.put("sort", "0");
-		request.put("pos", String.valueOf(bgnIdx));	// 起始说以呢索引
-		request.put("num", String.valueOf(EACH_PAGE_LIMIT));	// 每页说说数量
-		request.put("cgi_host", "http://taotao.qq.com/cgi-bin/emotion_cgi_msglist_v6");
-		request.put("code_version", "1");
-		request.put("format", "jsonp");
-		request.put("need_private_comment", "1");
-		request.put("g_tk", gtk);
-		request.put("qzonetoken", qzoneToken);
-		return request;
-	}
-	
-	
-	
 	/**
-	 * 获取当前页面的所有照片信息
+	 * 说说分页请求参数
+	 * @param QQ
+	 * @param page
+	 * @param gtk
+	 * @param qzoneToken
 	 * @return
 	 */
-	private static List<Mood> _getCurPageMoods(int page) {
-		List<Mood> moods = new LinkedList<Mood>();
-		
-		WebElement ul = Browser.findElement(By.id("msgList"));
-		List<WebElement> list = ul.findElements(By.xpath("li"));
-		for(WebElement li : list) {
-			
-			WebElement desc = li.findElement(By.xpath("div[3]/div[2]/pre"));
-			String content = desc.getText().trim();
-			
-			List<String> urls = new LinkedList<String>();
-			List<WebElement> as = li.findElements(By.xpath("div[3]/div[3]/div[1]/div/a"));
-			for(WebElement a : as) {
-				String url = a.getAttribute("href");
-				url = url.replace("psbe?", "psb?");	// 去除权限加密（部分相册虽然没密码，但不是对所有人可见的）
-				url = url.replace("/c/", "/b/");	// 缩略图变成大图
-				urls.add(url);
-			}
-			
-			Mood mood = new Mood(page, content, urls);
-			moods.add(mood);
-		}
-		return moods;
-	}
-	
-	/**
-	 * 切换到下一页
-	 * @return true:已切换到下一页; false:已是最后一页
-	 */
-	private static boolean _nextPage() {
-		boolean hasNext = true;
-		for(int retry = 1; retry <= 10; retry++) {
-			try {
-				WebElement pagenav = Browser.findElement(By.className("mod_pagenav_main"));
-				WebElement next = pagenav.findElement(By.xpath("a[last()]"));
-				if(next != null && "下一页".equals(next.getAttribute("title"))) {
-					next.click();
-					break;
-				}
-			} catch(Exception e) {
-				ThreadUtils.tSleep(SLEEP_TIME);
-			}
-		}
-		return hasNext;
+	private static Map<String, String> _toMoodeRequest(String QQ, int page, 
+			String gtk, String qzoneToken) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(XHRAtrbt.uin, QQ);
+		request.put(XHRAtrbt.hostUin, QQ);
+		request.put(XHRAtrbt.inCharset, "utf-8");
+		request.put(XHRAtrbt.outCharset, "utf-8");
+		request.put(XHRAtrbt.notice, "0");
+		request.put(XHRAtrbt.sort, "0");
+		request.put(XHRAtrbt.pos, String.valueOf((page - 1) * EACH_PAGE_LIMIT));
+		request.put(XHRAtrbt.num, String.valueOf(EACH_PAGE_LIMIT));
+		request.put(XHRAtrbt.cgi_host, URL.MOOD_DOMAIN);
+		request.put(XHRAtrbt.code_version, "1");
+		request.put(XHRAtrbt.format, "jsonp");
+		request.put(XHRAtrbt.need_private_comment, "1");
+		request.put(XHRAtrbt.g_tk, gtk);
+		request.put(XHRAtrbt.qzonetoken, qzoneToken);
+		return request;
 	}
 	
 	/**
@@ -217,56 +215,59 @@ public class MoodAnalyzer {
 	 * @param pageAndPhotos 说说及照片集
 	 */
 	private static void download(List<Mood> moods) {
+		UIUtils.log("所有【说说】图文信息提取完成, 开始下载...");
+		
+		int idx = 1;
 		for(Mood mood : moods) {
-			_download(mood);
+			
+			UIUtils.log("正在下载说说(图片x", mood.PIC_SIZE(), "): ", mood.CONTENT());
+			int picCnt = _download(mood);
+			boolean isOk = (picCnt == mood.PIC_SIZE());
+			UIUtils.log(" 下载图片", (isOk ? "成功" : "失败"), ": ", picCnt, "/", mood.PIC_SIZE());
+			UIUtils.log(" 当前总进度: ", idx++, "/", moods.size());
+			
+			// 保存下载信息
+			String fileName = StrUtils.concat(PAGE_DIR_PREFIX, mood.PAGE(), "/", MOOD_NAME);
+			FileUtils.write(fileName, mood.toString(isOk), Charset.UTF8, true);
 		}
 	}
 	
 	/**
-	 * 下载照片
-	 * @param album 照片所属的相册信息
-	 * @param photo 照片信息
-	 * @return 是否下载成功
+	 * 下载说说图文
+	 * @param mood 说说信息
+	 * @return 成功下载的图片数
 	 */
-	private static boolean _download(Mood mood) {
-		Map<String, String> header = new HashMap<String, String>();
-		header.put(HttpUtils.HEAD.KEY.ACCEPT, "image/webp,image/*,*/*;q=0.8");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		header.put(HttpUtils.HEAD.KEY.COOKIE, Browser.COOKIE().toNVCookie());
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
+	private static int _download(Mood mood) {
+		Map<String, String> header = _toMoodHeader(Browser.COOKIE().toNVCookie());
 
 		int idx = 0, cnt = 0;
-		for(String picURL : mood.PIC_URLS()) {
-			String picName = getFileName(mood.CONTENT(), idx++);
-			cnt += (_download(mood, header, picName, picURL) ? 1 : 0);
+		for(String picURL : mood.getPicURLs()) {
+			String picName = PicUtils.getPicName(String.valueOf(idx++), mood.CONTENT());
+			cnt += (_download(header, mood.PAGE(), picName, picURL) ? 1 : 0);
 		}
-		return (cnt == mood.PIC_URLS().size());
+		return cnt;
 	}
 	
-	private static String getFileName(String desc, int idx) {
-		String name = StrUtils.concat("[", IDUtils.getTimeID(), "]-[", idx, "] ", desc);
-		name = FileUtils.delForbidCharInFileName(name, "");
-		name = StrUtils.showSummary(name);
-		name = name.concat(".png");
-		return name;
-	}
-	
-	private static boolean _download(Mood mood, 
-			Map<String, String> header, String picName, String picURL) {
+	/**
+	 * 下载单张图片到说说的分页目录，并复制到图片合集目录
+	 * @param header
+	 * @param pageNum
+	 * @param picName
+	 * @param picURL
+	 * @return
+	 */
+	private static boolean _download(Map<String, String> header, 
+			String pageNum, String picName, String picURL) {
 		header.put(HttpUtils.HEAD.KEY.HOST, RegexUtils.findFirst(picURL, "http://([^/]*)/"));
 		
 		boolean isOk = false;
-		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, mood.PAGE(), "/", picName);
+		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, pageNum, "/", picName);
 		for(int retry = 0; !isOk && retry < 3; retry++) {
 			isOk = HttpURLUtils.downloadByGet(savePath, picURL, header, null);
 			if(isOk == false) {
 				FileUtils.delete(savePath);
 				
 			} else {
-				
-				// 复制照片到合集目录
 				FileUtils.copyFile(savePath, PHOTO_DIR.concat(picName));
 			}
 		}

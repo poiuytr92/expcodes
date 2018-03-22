@@ -1,7 +1,6 @@
 package exp.crawler.qq.bean;
 
-import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.num.IDUtils;
+import exp.crawler.qq.ui.PicUtils;
 import exp.libs.utils.other.StrUtils;
 
 
@@ -22,12 +21,9 @@ public class Photo {
 		this.url = (url == null ? "" : url);
 	}
 	
-	public String getFileName() {
+	public String getPicName() {
 		if(StrUtils.isEmpty(name)) {
-			name = StrUtils.concat("[D", IDUtils.getTimeID(), "]-[U", date, "] ", desc);
-			name = FileUtils.delForbidCharInFileName(name, "");
-			name = StrUtils.showSummary(name);
-			name = name.concat(".png");
+			name = PicUtils.getPicName(date, desc);
 		}
 		return name;
 	}

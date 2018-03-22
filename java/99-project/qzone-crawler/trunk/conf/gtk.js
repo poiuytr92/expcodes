@@ -19,6 +19,7 @@ function qzonetoken(qq){
 
 /**
  * jother编码
+ * FIXME
  */
 function g_qzonetoken() { 
 	try {

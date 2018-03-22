@@ -40,7 +40,7 @@ public class AppUI extends MainWindow {
 	private final static int HEIGHT = 600;
 	
 	/** 界面文本框最大缓存行数 */
-	private final static int MAX_LINE = 200;
+	private final static int MAX_LINE = 500;
 	
 	/** 换行符 */
 	private final static String LINE_END = "\r\n";
@@ -48,13 +48,13 @@ public class AppUI extends MainWindow {
 	/** 登陆信息保存路径 */
 	private final static String LOGIN_INFO_PATH = "./conf/info.dat";
 	
-	/** 目标QQ号输入框 */
-	private JTextField targetQQTF;
+	/** 爬取数据的目标QQ号输入框 */
+	private JTextField qqTF;
 	
-	/** QQ号输入框 */
+	/** QQ登陆账号输入框 */
 	private JTextField unTF;
 	
-	/** 密码输入框 */
+	/** QQ登陆密码输入框 */
 	private JPasswordField pwTF;
 	
 	/** 【记住登陆信息】选项 */
@@ -110,12 +110,12 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.targetQQTF = new JTextField("");
+		this.qqTF = new JTextField("");
 		this.unTF = new JTextField("");
 		this.pwTF = new JPasswordField("");
 		this.rememberBtn = new JRadioButton("记住我");
 		
-		targetQQTF.setToolTipText("需要爬取数据的目标QQ号");
+		qqTF.setToolTipText("需要爬取数据的目标QQ号");
 		unTF.setToolTipText("请确保此QQ具有查看对方空间权限 (不负责权限破解)");
 		pwTF.setToolTipText("此软件不盗号, 不放心勿用");
 		recoveryLoginInfo();
@@ -150,7 +150,7 @@ public class AppUI extends MainWindow {
 		JPanel panel = SwingUtils.getVGridPanel(
 				SwingUtils.getPairsPanel("QQ账号", unTF), 
 				SwingUtils.getPairsPanel("QQ密码", pwTF), 
-				SwingUtils.getPairsPanel("目标QQ", targetQQTF), 
+				SwingUtils.getPairsPanel("目标QQ", qqTF), 
 				SwingUtils.getEBorderPanel(loginBtn, rememberBtn), 
 				SwingUtils.getHGridPanel(albumBtn, moodBtn)
 		);
@@ -167,7 +167,7 @@ public class AppUI extends MainWindow {
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
 		setNumTextFieldListener(unTF);
-		setNumTextFieldListener(targetQQTF);
+		setNumTextFieldListener(qqTF);
 		setLoginBtnListener();
 		setAlbumBtnListener();
 		setMoodBtnListener();
@@ -210,7 +210,6 @@ public class AppUI extends MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				final String username = unTF.getText();
 				final String password = String.valueOf(pwTF.getPassword());
-				final String targetQQ = targetQQTF.getText();
 				
 				if(StrUtils.isNotEmpty(username, password)) {
 					loginBtn.setEnabled(false);
@@ -218,7 +217,7 @@ public class AppUI extends MainWindow {
 						
 						@Override
 						public void run() {
-							isLogin = Landers.toLogin(username, password, targetQQ);
+							isLogin = Landers.toLogin(username, password);
 							if(isLogin == true) {
 								albumBtn.setEnabled(true);
 								moodBtn.setEnabled(true);
@@ -255,8 +254,8 @@ public class AppUI extends MainWindow {
 						
 						@Override
 						public void run() {
-							String targetQQ = targetQQTF.getText();
-							AlbumAnalyzer.downloadAlbums(targetQQ);
+							String QQ = qqTF.getText();
+							AlbumAnalyzer.downloadAlbums(QQ);
 							albumBtn.setEnabled(true);
 						}
 					});
@@ -279,8 +278,8 @@ public class AppUI extends MainWindow {
 						
 						@Override
 						public void run() {
-							String targetQQ = targetQQTF.getText();
-							MoodAnalyzer.downloadMoods(targetQQ);
+							String QQ = qqTF.getText();
+							MoodAnalyzer.downloadMoods(QQ);
 							moodBtn.setEnabled(true);
 						}
 					});
@@ -321,12 +320,12 @@ public class AppUI extends MainWindow {
 	private void backupLoginInfo() {
 		String username = unTF.getText();
 		String password = String.valueOf(pwTF.getPassword());
-		String targetQQ = targetQQTF.getText();
+		String QQ = qqTF.getText();
 		
 		String loginInfo = StrUtils.concat(
 				CryptoUtils.toDES(username), LINE_END, 
 				CryptoUtils.toDES(password), LINE_END, 
-				CryptoUtils.toDES(targetQQ)
+				CryptoUtils.toDES(QQ)
 		);
 		FileUtils.write(LOGIN_INFO_PATH, loginInfo, Charset.ISO, false);
 	}
@@ -339,7 +338,7 @@ public class AppUI extends MainWindow {
 		if(lines.size() == 3) {
 			unTF.setText(CryptoUtils.deDES(lines.get(0).trim()));
 			pwTF.setText(CryptoUtils.deDES(lines.get(1).trim()));
-			targetQQTF.setText(CryptoUtils.deDES(lines.get(2).trim()));
+			qqTF.setText(CryptoUtils.deDES(lines.get(2).trim()));
 		}
 	}
 
