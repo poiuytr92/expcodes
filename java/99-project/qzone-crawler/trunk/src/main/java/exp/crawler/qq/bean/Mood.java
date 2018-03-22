@@ -56,7 +56,6 @@ public class Mood {
 		sb.append("[下载状态] : ").append(isDownload).append("\r\n");
 		sb.append("[说说页码] : ").append(PAGE()).append("\r\n");
 		sb.append("[说说内容] : ").append(CONTENT()).append("\r\n");
-		sb.append("[说说内容] : ").append(CONTENT()).append("\r\n");
 		sb.append("[图片数量] : ").append(getPicURLs().size()).append("\r\n");
 		sb.append("[图片列表] : \r\n");
 		for(String url : picURLs) {
