@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
+import exp.crawler.qq.Config;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.AlbumAnalyzer;
 import exp.crawler.qq.core.Landers;
@@ -44,9 +45,6 @@ public class AppUI extends MainWindow {
 	
 	/** 换行符 */
 	private final static String LINE_END = "\r\n";
-	
-	/** 登陆信息保存路径 */
-	private final static String LOGIN_INFO_PATH = "./conf/info.dat";
 	
 	/** 爬取数据的目标QQ号输入框 */
 	private JTextField qqTF;
@@ -254,8 +252,9 @@ public class AppUI extends MainWindow {
 						
 						@Override
 						public void run() {
+							String username = unTF.getText();
 							String QQ = qqTF.getText();
-							AlbumAnalyzer.downloadAlbums(QQ);
+							AlbumAnalyzer.downloadAlbums(username, QQ);
 							albumBtn.setEnabled(true);
 						}
 					});
@@ -305,6 +304,10 @@ public class AppUI extends MainWindow {
 		Browser.quit();
 	}
 	
+	/**
+	 * 附加信息到控制台
+	 * @param msg
+	 */
 	public void toConsole(String msg) {
 		if(StrUtils.count(consoleTA.getText(), '\n') >= MAX_LINE) {
 			consoleTA.setText("");
@@ -327,14 +330,14 @@ public class AppUI extends MainWindow {
 				CryptoUtils.toDES(password), LINE_END, 
 				CryptoUtils.toDES(QQ)
 		);
-		FileUtils.write(LOGIN_INFO_PATH, loginInfo, Charset.ISO, false);
+		FileUtils.write(Config.LOGIN_INFO_PATH, loginInfo, Charset.ISO, false);
 	}
 	
 	/**
 	 * 还原登陆信息
 	 */
 	private void recoveryLoginInfo() {
-		List<String> lines = FileUtils.readLines(LOGIN_INFO_PATH, Charset.ISO);
+		List<String> lines = FileUtils.readLines(Config.LOGIN_INFO_PATH, Charset.ISO);
 		if(lines.size() == 3) {
 			unTF.setText(CryptoUtils.deDES(lines.get(0).trim()));
 			pwTF.setText(CryptoUtils.deDES(lines.get(1).trim()));

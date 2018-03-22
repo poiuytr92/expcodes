@@ -149,6 +149,7 @@ public class Landers {
 			Browser.setQzoneToken(qzoneToken);
 			Browser.backupCookies();
 			isOk = StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
+			Browser.quit();
 		}
 		return isOk;
 	}

@@ -19,6 +19,10 @@ public class URL {
 		return QZONE_DOMAIN.concat(QQ);
 	}
 	
+	/** 获取相册列表URL */
+	public final static String ALBUM_LIST_URL = 
+			"https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/fcg_list_album_v3";
+	
 	/**
 	 * 相册地址
 	 * @param QQ
@@ -28,6 +32,11 @@ public class URL {
 	public final static String ALBUM_URL(final String QQ, final String AID) {
 		return StrUtils.concat(QZONE_HOMR_URL(QQ), "/photo/", AID);
 	}
+	
+	/** 获取照片列表URL */
+	public final static String PHOTO_LIST_URL = 
+			"https://h5.qzone.qq.com/proxy/domain/photo.qzone.qq.com/fcgi-bin/cgi_list_photo";
+	
 	
 	/** 获取说说分页内容URL */
 	public final static String MOOD_URL = 

@@ -12,17 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.crawler.qq.bean.Mood;
+import exp.crawler.qq.bean.QQCookie;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.envm.URL;
 import exp.crawler.qq.envm.XHRAtrbt;
-import exp.crawler.qq.ui.PicUtils;
+import exp.crawler.qq.utils.PicUtils;
 import exp.crawler.qq.utils.UIUtils;
+import exp.crawler.qq.utils.XHRUtils;
 import exp.libs.envm.Charset;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
@@ -49,6 +50,9 @@ public class MoodAnalyzer {
 	
 	/** 行为休眠间隔 */
 	private final static long SLEEP_TIME = 50;
+	
+	/** 超时时间(说说有些图片可能已经失效， 超时时间可以短些) */
+	private final static int TIMEOUT = 10000;
 	
 	/** 说说保存目录 */
 	private final static String MOOD_DIR = "./data/mood/";
@@ -85,7 +89,7 @@ public class MoodAnalyzer {
 	 */
 	private static List<Mood> getAllMoods(String QQ) {
 		List<Mood> moods = new LinkedList<Mood>();
-		final int PAGE_NUM = getTotalPageNum(QQ);
+		final int PAGE_NUM = _getTotalPageNum(QQ);
 		UIUtils.log("目标QQ[", QQ, "] 的说说总页数: ", PAGE_NUM);
 		
 		for(int page = 1; page <= PAGE_NUM; page++) {
@@ -103,7 +107,7 @@ public class MoodAnalyzer {
 	 * @param QQ
 	 * @return
 	 */
-	private static int getTotalPageNum(String QQ) {
+	private static int _getTotalPageNum(String QQ) {
 		String response = _getPageMoods(QQ, 1);
 		int total = 0;
 		try {
@@ -159,10 +163,10 @@ public class MoodAnalyzer {
 	 * @return json
 	 */
 	private static String _getPageMoods(String QQ, int page) {
-		Map<String, String> header = _toMoodHeader(Browser.COOKIE().toNVCookie());
+		Map<String, String> header = _toMoodHeader(Browser.COOKIE());
 		Map<String, String> request = _toMoodeRequest(QQ, page, Browser.GTK(), Browser.QZONE_TOKEN());
 		String response = HttpURLUtils.doGet(URL.MOOD_URL, header, request);
-		return RegexUtils.findFirst(response.replace("\\/", "/"), "_Callback\\(([\\s\\S]*)\\);$");
+		return XHRUtils.toJson(response);
 	}
 	
 	/**
@@ -170,15 +174,9 @@ public class MoodAnalyzer {
 	 * @param cookie
 	 * @return
 	 */
-	private static Map<String, String> _toMoodHeader(String cookie) {
-		Map<String, String> header = new HashMap<String, String>();
-		header.put(HttpUtils.HEAD.KEY.ACCEPT, "image/webp,image/*,*/*;q=0.8");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
+	private static Map<String, String> _toMoodHeader(QQCookie cookie) {
+		Map<String, String> header = XHRUtils.getHeader(cookie);
 		header.put(HttpUtils.HEAD.KEY.REFERER, URL.MOOD_REFERER);
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
 		return header;
 	}
 	
@@ -238,12 +236,13 @@ public class MoodAnalyzer {
 	 * @return 成功下载的图片数
 	 */
 	private static int _download(Mood mood) {
-		Map<String, String> header = _toMoodHeader(Browser.COOKIE().toNVCookie());
+		Map<String, String> header = _toMoodHeader(Browser.COOKIE());
 
 		int idx = 0, cnt = 0;
 		for(String picURL : mood.getPicURLs()) {
 			String picName = PicUtils.getPicName(String.valueOf(idx++), mood.CONTENT());
 			cnt += (_download(header, mood.PAGE(), picName, picURL) ? 1 : 0);
+			ThreadUtils.tSleep(SLEEP_TIME);
 		}
 		return cnt;
 	}
@@ -258,12 +257,13 @@ public class MoodAnalyzer {
 	 */
 	private static boolean _download(Map<String, String> header, 
 			String pageNum, String picName, String picURL) {
-		header.put(HttpUtils.HEAD.KEY.HOST, RegexUtils.findFirst(picURL, "http://([^/]*)/"));
+		header.put(HttpUtils.HEAD.KEY.HOST, XHRUtils.toHost(picURL));
 		
 		boolean isOk = false;
 		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, pageNum, "/", picName);
 		for(int retry = 0; !isOk && retry < 3; retry++) {
-			isOk = HttpURLUtils.downloadByGet(savePath, picURL, header, null);
+			isOk = HttpURLUtils.downloadByGet(savePath, picURL, header, null, 
+					TIMEOUT, TIMEOUT, Charset.UTF8);
 			if(isOk == false) {
 				FileUtils.delete(savePath);
 				

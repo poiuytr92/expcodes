@@ -1,4 +1,4 @@
-package exp.crawler.qq.ui;
+package exp.crawler.qq.utils;
 
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.IDUtils;

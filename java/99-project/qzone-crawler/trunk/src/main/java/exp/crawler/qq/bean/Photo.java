@@ -1,6 +1,6 @@
 package exp.crawler.qq.bean;
 
-import exp.crawler.qq.ui.PicUtils;
+import exp.crawler.qq.utils.PicUtils;
 import exp.libs.utils.other.StrUtils;
 
 
