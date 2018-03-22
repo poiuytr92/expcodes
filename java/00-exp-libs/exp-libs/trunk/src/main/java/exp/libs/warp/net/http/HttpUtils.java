@@ -391,7 +391,7 @@ public class HttpUtils {
 	 * 把请求参数转换成URL的KV串形式并进行编码
 	 * @param request 请求参数集
 	 * @param charset 参数字符编码
-	 * @return ?&key1=val1&key2=val2&key3=val3
+	 * @return ?key1=val1&key2=val2&key3=val3
 	 */
 	public static String encodeRequests(
 			Map<String, String> request, final String charset) {
@@ -415,7 +415,12 @@ public class HttpUtils {
 				sb.append("&").append(key).append("=").append(val);
 			}
 		}
-		return sb.toString();
+		
+		String kvs = sb.toString();
+		if(kvs.length() > 1) {
+			kvs = kvs.replaceFirst("^\\?&", "?"); 
+		}
+		return kvs;
 	}
 	
 	/**
