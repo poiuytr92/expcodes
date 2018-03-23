@@ -238,6 +238,7 @@
                                 <copy todir="${release.dir}/conf">
                                     <fileset dir="conf">
                                         <exclude name="driver/chrome-driver.exe" />
+                                        <exclude name="account.dat" />
                                     </fileset>
                                 </copy>
                             </target>
