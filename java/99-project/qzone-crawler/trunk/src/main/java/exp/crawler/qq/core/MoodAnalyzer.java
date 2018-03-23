@@ -7,10 +7,7 @@ import java.util.Map;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import exp.crawler.qq.Config;
 import exp.crawler.qq.bean.Mood;
 import exp.crawler.qq.bean.QQCookie;
 import exp.crawler.qq.cache.Browser;
@@ -19,7 +16,6 @@ import exp.crawler.qq.envm.XHRAtrbt;
 import exp.crawler.qq.utils.PicUtils;
 import exp.crawler.qq.utils.UIUtils;
 import exp.crawler.qq.utils.XHRUtils;
-import exp.libs.envm.Charset;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -29,7 +25,7 @@ import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
- * 【说说】解析器
+ * 【空间说说】解析器
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
@@ -39,98 +35,94 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 public class MoodAnalyzer {
 	
-	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(MoodAnalyzer.class);
-	
-	/**
-	 * 每页最多20条说说
-	 * （但可能少于20条, 即每页的实际个数不定, 造成这种情况可能因为被删除的说说依然占位）
-	 */
-	private final static int EACH_PAGE_LIMIT = 20;
-	
-	/** 行为休眠间隔 */
-	private final static long SLEEP_TIME = 50;
-	
-	/** 超时时间(说说有些图片可能已经失效， 超时时间可以短些) */
-	private final static int TIMEOUT = 10000;
-	
-	/** 说说保存目录 */
-	private final static String MOOD_DIR = "./data/mood/";
-	
-	/** 说说每页图文信息的保存路径前缀 */
-	private final static String PAGE_DIR_PREFIX = MOOD_DIR.concat("content/page-");
-	
-	/** 说说每页所有照片的保存目录 */
-	private final static String PHOTO_DIR = MOOD_DIR.concat("photos/");
-	
 	/** 说说分页信息保存文件名 */
 	private final static String MOOD_NAME = "MoodInfo-[说说信息].txt";
 	
+	/** 被爬取数据的目标QQ */
+	private final String QQ;
+	
+	/** 说说保存目录 */
+	private final String MOOD_DIR;
+	
+	/** 说说每页图文信息的保存路径前缀 */
+	private final String PAGE_DIR_PREFIX;
+	
+	/** 说说所有照片的保存目录 */
+	private final String PHOTO_DIR;
+	
 	/**
-	 * 下载所有说说
-	 * @param QQ 目标QQ
+	 * 构造函数
+	 * @param QQ 被爬取数据的目标QQ
 	 */
-	public static void downloadMoods(String QQ) {
+	public MoodAnalyzer(String QQ) {
+		this.QQ = StrUtils.isTrimEmpty(QQ) ? "0" : QQ;
+		this.MOOD_DIR = StrUtils.concat(Config.DATA_DIR, this.QQ, "/mood/");
+		this.PAGE_DIR_PREFIX = MOOD_DIR.concat("content/page-");
+		this.PHOTO_DIR = MOOD_DIR.concat("photos/");
+	}
+	
+	/**
+	 * 执行空间说说解析, 并下载所有说说及相关照片
+	 */
+	public void execute() {
 		try {
+			
+			// 清除上次下载的数据
 			FileUtils.delete(MOOD_DIR);
-			download(getAllMoods(QQ));
-			UIUtils.log("任务完成, QQ[", QQ, "] 的【说说】数据已保存到: ", MOOD_DIR);
+			FileUtils.createDir(MOOD_DIR);
+			
+			// 下载说说及照片
+			download(getMoods());
+			UIUtils.log("任务完成: QQ [", QQ, "] 的空间说说已保存到 [", MOOD_DIR, "]");
 			
 		} catch(Exception e) {
-			UIUtils.log("下载 QQ[", QQ, "] 的空间【说说】时发生异常");
-			log.error("下载 QQ[{}] 的空间【说说】时发生异常", QQ, e);
+			UIUtils.log(e, "任务失败: 下载 QQ [", QQ, "] 的空间说说时发生异常");
 		}
 	}
 	
 	/**
-	 * 获取所有说说的图文信息
-	 * @param QQ 目标QQ
+	 * 提取所有说说及相关的照片信息
 	 * @return
 	 */
-	private static List<Mood> getAllMoods(String QQ) {
+	private List<Mood> getMoods() {
 		List<Mood> moods = new LinkedList<Mood>();
-		final int PAGE_NUM = _getTotalPageNum(QQ);
-		UIUtils.log("目标QQ[", QQ, "] 的说说总页数: ", PAGE_NUM);
+		UIUtils.log("正在提取QQ [", QQ, "] 的说说列表...");
 		
+		final int PAGE_NUM = _getPageNum();
 		for(int page = 1; page <= PAGE_NUM; page++) {
-			UIUtils.log("正在提取第 [", page, "] 页的说说数据...");
-			moods.addAll(getPageMoods(QQ, page));
-			UIUtils.log("第 [", page, "/", PAGE_NUM, "] 页说说提取完成, 累计: ", moods.size());
+			UIUtils.log(" -> 正在提取第 [", page, "] 页的说说信息...");
+			List<Mood> pageMoods = _getPageMoods(page);
+			moods.addAll(pageMoods);
 			
-			ThreadUtils.tSleep(SLEEP_TIME);
+			UIUtils.log(" -> 第 [", page, "/", PAGE_NUM, 
+					"] 页说说提取完成, 累计说说数量: ", moods.size());
+			ThreadUtils.tSleep(Config.SLEEP_TIME);
 		}
 		return moods;
 	}
 	
 	/**
-	 * 获取目标QQ空间的说说总页数
-	 * @param QQ
+	 * 获取说说总页数
 	 * @return
 	 */
-	private static int _getTotalPageNum(String QQ) {
-		String response = _getPageMoods(QQ, 1);
+	private int _getPageNum() {
+		String response = _getPageMoodJson(1);
 		int total = 0;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			total = JsonUtils.getInt(json, XHRAtrbt.total, 0);	// 总说说数量
 		} catch(Exception e) {}
-		
-		int pageNum = total / EACH_PAGE_LIMIT;
-		if(total % EACH_PAGE_LIMIT != 0) {
-			pageNum += 1;	// 向上取整
-		}
-		return pageNum;
+		return PicUtils.getPageNum(total, Config.BATCH_LIMT);
 	}
 	
 	/**
 	 * 获取分页的说说内容
-	 * @param QQ 目标QQ
-	 * @param page 页数
+	 * @param page 页码
 	 * @return 
 	 */
-	private static List<Mood> getPageMoods(String QQ, int page) {
+	private List<Mood> _getPageMoods(int page) {
 		List<Mood> moods = new LinkedList<Mood>();
-		String response = _getPageMoods(QQ, page);
+		String response = _getPageMoodJson(page);
 		
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -145,104 +137,104 @@ public class MoodAnalyzer {
 				for(int j = 0; j < pics.size(); j++) {
 					JSONObject pic = pics.getJSONObject(j);
 					String url = JsonUtils.getStr(pic, XHRAtrbt.url3);
+					url = PicUtils.convert(url);
 					mood.addPicURL(url);
 				}
-				
 				moods.add(mood);
 			}
 		} catch(Exception e) {
-			log.error("提取 QQ[{}] 第 [{}] 页的空间【说说】数据异常", QQ, page, e);
+			UIUtils.log(e, "提取第 [", page, "] 页的说说信息异常");
 		}
 		return moods;
 	}
 	
 	/**
-	 * 获取分页的说说内容
+	 * 获取分页的说说的Json
 	 * @param QQ 目标QQ
 	 * @param page 页数
 	 * @return json
 	 */
-	private static String _getPageMoods(String QQ, int page) {
-		Map<String, String> header = _toMoodHeader(Browser.COOKIE());
-		Map<String, String> request = _toMoodeRequest(QQ, page, Browser.GTK(), Browser.QZONE_TOKEN());
+	private String _getPageMoodJson(int page) {
+		Map<String, String> header = _getMoodHeader(Browser.COOKIE());
+		Map<String, String> request = _getMoodRequest(Browser.GTK(), Browser.QZONE_TOKEN(), page);
 		String response = HttpURLUtils.doGet(URL.MOOD_URL, header, request);
 		return XHRUtils.toJson(response);
 	}
 	
 	/**
-	 * 说说分页请求头
+	 * 分页说说请求头
 	 * @param cookie
 	 * @return
 	 */
-	private static Map<String, String> _toMoodHeader(QQCookie cookie) {
+	private static Map<String, String> _getMoodHeader(QQCookie cookie) {
 		Map<String, String> header = XHRUtils.getHeader(cookie);
 		header.put(HttpUtils.HEAD.KEY.REFERER, URL.MOOD_REFERER);
 		return header;
 	}
 	
 	/**
-	 * 说说分页请求参数
-	 * @param QQ
-	 * @param page
+	 * 分页说说请求参数
 	 * @param gtk
 	 * @param qzoneToken
+	 * @param page
 	 * @return
 	 */
-	private static Map<String, String> _toMoodeRequest(String QQ, int page, 
-			String gtk, String qzoneToken) {
+	private Map<String, String> _getMoodRequest(
+			String gtk, String qzoneToken, int page) {
 		Map<String, String> request = new HashMap<String, String>();
+		request.put(XHRAtrbt.g_tk, gtk);
+		request.put(XHRAtrbt.qzonetoken, qzoneToken);
 		request.put(XHRAtrbt.uin, QQ);
 		request.put(XHRAtrbt.hostUin, QQ);
-		request.put(XHRAtrbt.inCharset, "utf-8");
-		request.put(XHRAtrbt.outCharset, "utf-8");
+		request.put(XHRAtrbt.pos, String.valueOf((page - 1) * Config.BATCH_LIMT));
+		request.put(XHRAtrbt.num, String.valueOf(Config.BATCH_LIMT));
+		request.put(XHRAtrbt.cgi_host, URL.MOOD_DOMAIN);
+		request.put(XHRAtrbt.inCharset, Config.CHARSET);
+		request.put(XHRAtrbt.outCharset, Config.CHARSET);
 		request.put(XHRAtrbt.notice, "0");
 		request.put(XHRAtrbt.sort, "0");
-		request.put(XHRAtrbt.pos, String.valueOf((page - 1) * EACH_PAGE_LIMIT));
-		request.put(XHRAtrbt.num, String.valueOf(EACH_PAGE_LIMIT));
-		request.put(XHRAtrbt.cgi_host, URL.MOOD_DOMAIN);
 		request.put(XHRAtrbt.code_version, "1");
 		request.put(XHRAtrbt.format, "jsonp");
 		request.put(XHRAtrbt.need_private_comment, "1");
-		request.put(XHRAtrbt.g_tk, gtk);
-		request.put(XHRAtrbt.qzonetoken, qzoneToken);
 		return request;
 	}
 	
 	/**
-	 * 下载每一页的说说及其照片信息
-	 * @param pageAndPhotos 说说及照片集
+	 * 下载所有说说及相关的照片
+	 * @param moods 说说集（含照片信息）
 	 */
-	private static void download(List<Mood> moods) {
-		UIUtils.log("所有【说说】图文信息提取完成, 开始下载...");
+	private void download(List<Mood> moods) {
+		UIUtils.log("提取QQ [", QQ, "] 的说说及照片完成, 开始下载...");
 		
 		int idx = 1;
 		for(Mood mood : moods) {
-			
-			UIUtils.log("正在下载说说(图片x", mood.PIC_SIZE(), "): ", mood.CONTENT());
-			int picCnt = _download(mood);
-			boolean isOk = (picCnt == mood.PIC_SIZE());
-			UIUtils.log(" 下载图片", (isOk ? "成功" : "失败"), ": ", picCnt, "/", mood.PIC_SIZE());
-			UIUtils.log(" 当前总进度: ", idx++, "/", moods.size());
+			UIUtils.log("正在下载第 [", idx++, "/", moods.size(), "] 条说说: ", mood.CONTENT());
+			int cnt = _download(mood);
+			boolean isOk = (cnt == mood.PIC_NUM());
+			UIUtils.log(" -> 说说照片下载完成, 成功率: ", cnt, "/", mood.PIC_NUM());
 			
 			// 保存下载信息
-			String fileName = StrUtils.concat(PAGE_DIR_PREFIX, mood.PAGE(), "/", MOOD_NAME);
-			FileUtils.write(fileName, mood.toString(isOk), Charset.UTF8, true);
+			String savePath = StrUtils.concat(PAGE_DIR_PREFIX, mood.PAGE(), "/", MOOD_NAME);
+			FileUtils.write(savePath, mood.toString(isOk), Config.CHARSET, true);
 		}
 	}
 	
 	/**
-	 * 下载说说图文
+	 * 下载单条说说及相关的照片
 	 * @param mood 说说信息
-	 * @return 成功下载的图片数
+	 * @return 成功下载的照片数
 	 */
-	private static int _download(Mood mood) {
-		Map<String, String> header = _toMoodHeader(Browser.COOKIE());
+	private int _download(Mood mood) {
+		Map<String, String> header = _getMoodHeader(Browser.COOKIE());
 
 		int idx = 0, cnt = 0;
 		for(String picURL : mood.getPicURLs()) {
 			String picName = PicUtils.getPicName(String.valueOf(idx++), mood.CONTENT());
-			cnt += (_download(header, mood.PAGE(), picName, picURL) ? 1 : 0);
-			ThreadUtils.tSleep(SLEEP_TIME);
+			boolean isOk = _download(header, mood.PAGE(), picName, picURL);
+			cnt += (isOk ? 1 : 0);
+			
+			UIUtils.log(" -> 下载照片进度(", (isOk ? "成功" : "失败"), "): ", cnt, "/", mood.PIC_NUM());
+			ThreadUtils.tSleep(Config.SLEEP_TIME);
 		}
 		return cnt;
 	}
@@ -250,23 +242,23 @@ public class MoodAnalyzer {
 	/**
 	 * 下载单张图片到说说的分页目录，并复制到图片合集目录
 	 * @param header
-	 * @param pageNum
+	 * @param pageIdx 页码索引
 	 * @param picName
 	 * @param picURL
 	 * @return
 	 */
-	private static boolean _download(Map<String, String> header, 
-			String pageNum, String picName, String picURL) {
+	private boolean _download(Map<String, String> header, 
+			String pageIdx, String picName, String picURL) {
 		header.put(HttpUtils.HEAD.KEY.HOST, XHRUtils.toHost(picURL));
 		
 		boolean isOk = false;
-		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, pageNum, "/", picName);
-		for(int retry = 0; !isOk && retry < 3; retry++) {
+		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, pageIdx, "/", picName);
+		for(int retry = 0; !isOk && retry < Config.RETRY; retry++) {
 			isOk = HttpURLUtils.downloadByGet(savePath, picURL, header, null, 
-					TIMEOUT, TIMEOUT, Charset.UTF8);
+					Config.TIMEOUT, Config.TIMEOUT, Config.CHARSET);
+			
 			if(isOk == false) {
 				FileUtils.delete(savePath);
-				
 			} else {
 				FileUtils.copyFile(savePath, PHOTO_DIR.concat(picName));
 			}

@@ -23,6 +23,7 @@ import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.AlbumAnalyzer;
 import exp.crawler.qq.core.Landers;
 import exp.crawler.qq.core.MoodAnalyzer;
+import exp.crawler.qq.utils.UIUtils;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.io.FileUtils;
@@ -45,6 +46,12 @@ public class AppUI extends MainWindow {
 	
 	/** 换行符 */
 	private final static String LINE_END = "\r\n";
+	
+	/** 登陆说明 */
+	private final static String LOGIN_DESC = "登陆 QQ 空间";
+	
+	/** 注销登陆说明 */
+	private final static String LOGOUT_DESC = "注销";
 	
 	/** 爬取数据的目标QQ号输入框 */
 	private JTextField qqTF;
@@ -111,20 +118,22 @@ public class AppUI extends MainWindow {
 		this.qqTF = new JTextField("");
 		this.unTF = new JTextField("");
 		this.pwTF = new JPasswordField("");
-		this.rememberBtn = new JRadioButton("记住我");
-		
 		qqTF.setToolTipText("需要爬取数据的目标QQ号");
 		unTF.setToolTipText("请确保此QQ具有查看对方空间权限 (不负责权限破解)");
 		pwTF.setToolTipText("此软件不盗号, 不放心勿用");
-		recoveryLoginInfo();
 		
-		this.loginBtn = new JButton("登陆 QQ 空间");
-		this.albumBtn = new JButton("爬取【相册】图文数据");
-		this.moodBtn = new JButton("爬取【说说】图文数据");
+		this.rememberBtn = new JRadioButton("记住我");
+		if(recoveryLoginInfo()) {
+			rememberBtn.setSelected(true);
+		}
+		
+		this.loginBtn = new JButton(LOGIN_DESC);
+		this.albumBtn = new JButton("爬取【空间相册】图文数据");
+		this.moodBtn = new JButton("爬取【空间说说】图文数据");
 		
 		albumBtn.setEnabled(false);
 		moodBtn.setEnabled(false);
-		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn);
+		BeautyEyeUtils.setButtonStyle(NormalColor.green, loginBtn);
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, albumBtn);
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, moodBtn);
 		loginBtn.setForeground(Color.BLACK);
@@ -206,36 +215,71 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				final String username = unTF.getText();
-				final String password = String.valueOf(pwTF.getPassword());
-				
-				if(StrUtils.isNotEmpty(username, password)) {
-					loginBtn.setEnabled(false);
-					tp.execute(new Thread() {
-						
-						@Override
-						public void run() {
-							isLogin = Landers.toLogin(username, password);
-							if(isLogin == true) {
-								albumBtn.setEnabled(true);
-								moodBtn.setEnabled(true);
-								unTF.setEditable(false);
-								pwTF.setEditable(false);
-								
-								if(rememberBtn.isSelected()) {
-									backupLoginInfo();
-								}
-							} else {
-								Browser.quit();
-								loginBtn.setEnabled(true);
-							}
-						}
-					});
+				if(!LOGOUT_DESC.equals(loginBtn.getText())) {
+					_login();
+					
 				} else {
-					SwingUtils.warn("账号或密码不能为空");
+					_logout();
 				}
 			}
 		});
+	}
+	
+	private void _login() {
+		final String username = unTF.getText();
+		final String password = String.valueOf(pwTF.getPassword());
+		if(StrUtils.isEmpty(username, password)) {
+			SwingUtils.warn("账号或密码不能为空");
+			return;
+		}
+		
+		loginBtn.setEnabled(false);
+		tp.execute(new Thread() {
+			
+			@Override
+			public void run() {
+				UIUtils.log("正在初始化参数...");
+				Browser.init(false);
+				isLogin = Landers.toLogin(username, password);
+				
+				if(isLogin == true) {
+					loginBtn.setText(LOGOUT_DESC);
+					albumBtn.setEnabled(true);
+					moodBtn.setEnabled(true);
+					unTF.setEditable(false);
+					pwTF.setEditable(false);
+					
+					if(rememberBtn.isSelected()) {
+						backupLoginInfo();
+					} else {
+						deleteLoginInfo();
+					}
+				} else {
+					Browser.quit();
+				}
+				
+				loginBtn.setEnabled(true);
+			}
+		});
+	}
+	
+	private void _logout() {
+		if(!albumBtn.isEnabled() || !moodBtn.isEnabled()) {
+			SwingUtils.warn("任务完成后才能注销登陆 !!!");
+			return;
+		}
+		
+		if(SwingUtils.confirm("确认注销登陆吗 ?")) {
+			Browser.quit();
+			Browser.clearCookies();
+			
+			loginBtn.setText(LOGIN_DESC);
+			
+			albumBtn.setEnabled(false);
+			moodBtn.setEnabled(false);
+			unTF.setEditable(true);
+			pwTF.setEditable(true);
+		}
 	}
 	
 	private void setAlbumBtnListener() {
@@ -244,18 +288,23 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(moodBtn.isEnabled() == false) {
-					SwingUtils.warn("请先等待【说说】下载完成...");
+					SwingUtils.warn("请先等待【空间说说】下载完成...");
 					
 				} else {
 					albumBtn.setEnabled(false);
+					qqTF.setEditable(false);
+					
 					tp.execute(new Thread() {
 						
 						@Override
 						public void run() {
-							String username = unTF.getText();
 							String QQ = qqTF.getText();
-							AlbumAnalyzer.downloadAlbums(username, QQ);
+							
+							AlbumAnalyzer analyzer = new AlbumAnalyzer(QQ);
+							analyzer.execute();
+							
 							albumBtn.setEnabled(true);
+							qqTF.setEditable(true);
 						}
 					});
 				}
@@ -269,17 +318,23 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(albumBtn.isEnabled() == false) {
-					SwingUtils.warn("请先等待【相册】下载完成...");
+					SwingUtils.warn("请先等待【空间相册】下载完成...");
 					
 				} else {
 					moodBtn.setEnabled(false);
+					qqTF.setEditable(false);
+					
 					tp.execute(new Thread() {
 						
 						@Override
 						public void run() {
 							String QQ = qqTF.getText();
-							MoodAnalyzer.downloadMoods(QQ);
+							
+							MoodAnalyzer analyzer = new MoodAnalyzer(QQ);
+							analyzer.execute();
+							
 							moodBtn.setEnabled(true);
+							qqTF.setEditable(true);
 						}
 					});
 				}
@@ -336,13 +391,26 @@ public class AppUI extends MainWindow {
 	/**
 	 * 还原登陆信息
 	 */
-	private void recoveryLoginInfo() {
+	private boolean recoveryLoginInfo() {
+		boolean isOk = false;
 		List<String> lines = FileUtils.readLines(Config.LOGIN_INFO_PATH, Charset.ISO);
 		if(lines.size() == 3) {
 			unTF.setText(CryptoUtils.deDES(lines.get(0).trim()));
 			pwTF.setText(CryptoUtils.deDES(lines.get(1).trim()));
 			qqTF.setText(CryptoUtils.deDES(lines.get(2).trim()));
+			isOk = true;
+			
+		} else {
+			deleteLoginInfo();
 		}
+		return isOk;
+	}
+	
+	/**
+	 * 删除登陆信息
+	 */
+	private void deleteLoginInfo() {
+		FileUtils.delete(Config.LOGIN_INFO_PATH);
 	}
 
 }

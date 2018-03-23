@@ -22,12 +22,30 @@ public class UIUtils {
 	
 	protected UIUtils() {}
 	
+	public static void log(Throwable e, Object... msgs) {
+		log(StrUtils.concat(msgs), e);
+	}
+	
+	public static void log(Throwable e, String msg) {
+		log(msg, e);
+	}
+	
 	public static void log(Object... msgs) {
-		log(StrUtils.concat(msgs));
+		log(StrUtils.concat(msgs), null);
 	}
 	
 	public static void log(String msg) {
-		log.info(msg);
+		log(msg, null);
+	}
+	
+	private static void log(String msg, Throwable e) {
+		if(e != null) {
+			log.error("[ERROR] {}", msg, e);
+			
+		} else {
+			log.info(msg);
+		}
+		
 		msg = StrUtils.concat(TimeUtils.getCurTime(), msg);
 		AppUI.getInstn().toConsole(msg);
 	}

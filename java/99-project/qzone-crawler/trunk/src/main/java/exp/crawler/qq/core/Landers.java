@@ -5,6 +5,7 @@ import org.openqa.selenium.WebElement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.crawler.qq.Config;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.envm.URL;
 import exp.crawler.qq.utils.UIUtils;
@@ -27,12 +28,6 @@ public class Landers {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(Landers.class);
 	
-	/** 行为休眠间隔 */
-	private final static long SLEEP_TIME = 100;
-	
-	/** 登陆超时 */
-	private final static long TIMEOUT = 5000;
-	
 	/**
 	 * 登陆QQ空间
 	 * @param username 
@@ -43,9 +38,6 @@ public class Landers {
 	public static boolean toLogin(String username, String password) {
 		boolean isOk = false;
 		try {
-			Browser.reset(false);
-			Browser.clearCookies();
-			
 			isOk = _toLogin(username, password);
 			UIUtils.log("登陆QQ [", username, "] ", (isOk ? "成功" : "失败: 账号或密码错误"));
 			
@@ -69,7 +61,7 @@ public class Landers {
 		if(isOk == true) {
 			fill("u", username);	// 填写账号
 			fill("p", password);	// 填写密码
-			ThreadUtils.tSleep(SLEEP_TIME);
+			ThreadUtils.tSleep(Config.SLEEP_TIME);
 			
 			UIUtils.log("正在登陆QQ [", username, "] ...");
 			isOk = clickLoginBtn(username);	// 点击登陆并检测是否登成功
@@ -85,7 +77,7 @@ public class Landers {
 		
 		// QQ空间的【登陆操作界面】是通过【iframe】嵌套在【登陆页面】中的子页面
 		Browser.switchToFrame(By.id("login_frame"));
-		ThreadUtils.tSleep(SLEEP_TIME);
+		ThreadUtils.tSleep(Config.SLEEP_TIME);
 		
 		// 切换帐密登陆方式为 [帐密登陆]
 		boolean isOk = true;
@@ -97,7 +89,7 @@ public class Landers {
 				
 			} catch(Exception e) {
 				isOk = false;	// 有时操作过快可能会报元素不存在异常
-				ThreadUtils.tSleep(SLEEP_TIME);
+				ThreadUtils.tSleep(Config.SLEEP_TIME);
 			}
 		}
 		return isOk;
@@ -129,61 +121,25 @@ public class Landers {
 		boolean isOk = true;
 		long bgnTime = System.currentTimeMillis();
 		while(UNLOGIN_URL.equals(Browser.getCurURL())) {
-			ThreadUtils.tSleep(SLEEP_TIME);
+			ThreadUtils.tSleep(Config.SLEEP_TIME);
 			
-			if(System.currentTimeMillis() - bgnTime >= TIMEOUT) {
+			if(System.currentTimeMillis() - bgnTime >= Config.TIMEOUT) {
 				isOk = false;	// 超时未切换页面则认为登陆失败
 				break;
 			}
 		}
 		
-		// 备份登陆cookies
+		// 备份cookies（含gtk） 与 qzoneToken
 		if(isOk == true) {
 			Browser.open(URL.QZONE_HOMR_URL(QQ));
-			skipTitle();	// 跳过空间片头动画
-			skipTips();		// 跳过空间操作提示
-			
-			// 生成并备份本次登陆的 gtk 和  qzoneToken 
-			// (这两个值每次登陆都不同，但登陆后就固定了, 发起HTTP请求时需要用到)
 			String qzoneToken = getQzoneToken(Browser.getPageSource());
 			Browser.setQzoneToken(qzoneToken);
 			Browser.backupCookies();
+			
 			isOk = StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
 			Browser.quit();
 		}
 		return isOk;
-	}
-	
-	/**
-	 * 跳过片头动画(第一次打开时会触发)
-	 */
-	private static void skipTitle() {
-		try {
-			WebElement welFlash = Browser.findElement(By.name("welFlash"));
-			WebElement span = welFlash.findElement(By.tagName("span"));
-			Browser.click(span);
-			UIUtils.log("已跳过QQ空间片头动画");
-			
-		} catch(Exception e) {
-			log.warn("跳过QQ空间片头动画失败");
-		}
-	}
-	
-	/**
-	 * 跳过操作提示(第一次打开时可能会触发)
-	 */
-	private static void skipTips() {
-		try {
-			WebElement guide = Browser.findElement(By.className("fs-guide-overlay"));
-			WebElement top = guide.findElement(By.className("top"));
-			WebElement m = top.findElement(By.className("m"));
-			WebElement a = m.findElement(By.tagName("a"));
-			Browser.click(a);
-			UIUtils.log("已跳过QQ空间操作提示");
-			
-		} catch(Exception e) {
-			log.warn("跳过QQ空间操作提示失败");
-		}
 	}
 	
 	/**

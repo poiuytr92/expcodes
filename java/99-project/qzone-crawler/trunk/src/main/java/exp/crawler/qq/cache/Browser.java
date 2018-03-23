@@ -62,7 +62,7 @@ public class Browser {
 		_backupCookies();
 		_quit();
 		browser = new WebBrowser(WebDriverType.PHANTOMJS, loadImages);
-		recoveryCookies();
+		_recoveryCookies();
 	}
 	
 	public static WebDriver DRIVER() {
@@ -70,11 +70,15 @@ public class Browser {
 	}
 	
 	private WebDriver _DRIVER() {
-		return (browser == null ? null : browser.getDriver());
+		return (browser == null ? null : browser.DRIVER());
 	}
 	
 	public static QQCookie COOKIE() {
 		return INSTN().qqCookie;
+	}
+	
+	public static String UIN() {
+		return INSTN().qqCookie.UIN();
 	}
 	
 	public static String GTK() {
@@ -151,7 +155,7 @@ public class Browser {
 		}
 	}
 	
-	private void recoveryCookies() {
+	private void _recoveryCookies() {
 		if(browser != null) {
 			browser.clearCookies();
 			browser.addCookies(qqCookie.toSeleniumCookies());
@@ -174,7 +178,7 @@ public class Browser {
 	}
 	
 	private WebElement _findElement(By by) {
-		return WebUtils.findElement(browser.getDriver(), by);
+		return WebUtils.findElement(browser.DRIVER(), by);
 	}
 	
 	public static List<WebElement> findElements(By by) {
@@ -182,7 +186,7 @@ public class Browser {
 	}
 	
 	private List<WebElement> _findElements(By by) {
-		return WebUtils.findElements(browser.getDriver(), by);
+		return WebUtils.findElements(browser.DRIVER(), by);
 	}
 	
 	public static void fill(WebElement input, String data) {
@@ -194,7 +198,7 @@ public class Browser {
 	}
 	
 	private void _click(WebElement button) {
-		WebUtils.click(browser.getDriver(), button);
+		WebUtils.click(browser.DRIVER(), button);
 	}
 	
 	public static void switchToFrame(By frame) {
@@ -202,7 +206,7 @@ public class Browser {
 	}
 	
 	private void _switchToFrame(By frame) {
-		WebUtils.switchToFrame(browser.getDriver(), frame);
+		WebUtils.switchToFrame(browser.DRIVER(), frame);
 	}
 	
 	public static void switchToParentFrame() {
@@ -210,7 +214,7 @@ public class Browser {
 	}
 	
 	private void _switchToParentFrame() {
-		WebUtils.switchToParentFrame(browser.getDriver());
+		WebUtils.switchToParentFrame(browser.DRIVER());
 	}
 	
 	public static void switchToTopFrame() {
@@ -218,7 +222,7 @@ public class Browser {
 	}
 	
 	private void _switchToTopFrame() {
-		WebUtils.switchToTopFrame(browser.getDriver());
+		WebUtils.switchToTopFrame(browser.DRIVER());
 	}
 	
 	public static void scrollToBottom() {
@@ -226,7 +230,7 @@ public class Browser {
 	}
 	
 	private void _scrollToBottom() {
-		WebUtils.scrollToBottom(browser.getDriver());
+		WebUtils.scrollToBottom(browser.DRIVER());
 	}
 	
 	

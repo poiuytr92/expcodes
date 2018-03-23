@@ -18,10 +18,15 @@ public class Mood {
 	
 	public Mood(int page, String content, long createTime) {
 		this.page = StrUtils.leftPad(String.valueOf(page), '0', 4);
+		this.createTime = (createTime < 0 ? 0 : createTime);
+		
 		this.content = (content == null ? "" : content.replaceAll("[\r\n]", "").
 				replaceAll("@\\{.*?nick:(.*?),who.*?\\}", "@$1")	// @某人
 		);
-		this.createTime = (createTime < 0 ? 0 : createTime); 
+		if(StrUtils.isTrimEmpty(this.content)) {
+			this.content = TimeUtils.toStr(createTime);
+		}
+		
 		this.picURLs = new LinkedList<String>();
 	}
 	
@@ -37,7 +42,7 @@ public class Mood {
 		return TimeUtils.toStr(createTime);
 	}
 	
-	public int PIC_SIZE() {
+	public int PIC_NUM() {
 		return picURLs.size();
 	}
 	
