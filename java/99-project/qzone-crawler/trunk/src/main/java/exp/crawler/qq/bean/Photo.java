@@ -3,17 +3,36 @@ package exp.crawler.qq.bean;
 import exp.crawler.qq.utils.PicUtils;
 import exp.libs.utils.other.StrUtils;
 
-
+/**
+ * <PRE>
+ * 照片对象
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Photo {
 
+	/** 照片名称 */
 	private String name;
 	
+	/** 照片描述 */
 	private String desc;
 	
+	/** 照片上传时间 */
 	private String time;
 	
+	/** 照片地址 */
 	private String url;
 	
+	/**
+	 * 构造函数
+	 * @param desc
+	 * @param time
+	 * @param url
+	 */
 	public Photo(String desc, String time, String url) {
 		this.name = "";
 		this.desc = (desc == null ? "" : desc.replaceAll("[\r\n]", ""));

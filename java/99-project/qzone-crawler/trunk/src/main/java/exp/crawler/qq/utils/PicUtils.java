@@ -4,10 +4,22 @@ import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.IDUtils;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 图片工具类
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-03-23
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class PicUtils {
 
+	/** 图片后缀 */
 	public final static String SUFFIX = ".png";
 	
+	/** 私有化构造函数 */
 	protected PicUtils() {}
 	
 	/**
@@ -46,16 +58,16 @@ public class PicUtils {
 	 * @param url 图片地址
 	 * @return
 	 */
-	public static String convert(String url) {
-		if(url != null) {
-			url = url.replace("psbe?", "psb?");	// 去除权限加密
-			url = url.replace("/m/", "/b/");	// 缩略图变成大图
-			url = url.replace("/c/", "/b/");	// 缩略图变成大图
+	public static String convert(String picURL) {
+		if(picURL != null) {
+			picURL = picURL.replace("psbe?", "psb?");	// 去除权限加密
+			picURL = picURL.replace("/m/", "/b/");		// 缩略图变成大图
+			picURL = picURL.replace("/c/", "/b/");		// 缩略图变成大图
 			
 		} else {
-			url = "";
+			picURL = "";
 		}
-		return url;
+		return picURL;
 	}
 	
 }

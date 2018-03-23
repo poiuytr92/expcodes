@@ -28,6 +28,9 @@ public class Landers {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(Landers.class);
 	
+	/** 私有化构造函数 */
+	protected Landers() {}
+	
 	/**
 	 * 登陆QQ空间
 	 * @param username 

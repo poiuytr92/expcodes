@@ -2,6 +2,16 @@ package exp.crawler.qq;
 
 import exp.libs.envm.Charset;
 
+/**
+ * <PRE>
+ * 配置类
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-03-23
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Config {
 
 	/** 默认编码 */

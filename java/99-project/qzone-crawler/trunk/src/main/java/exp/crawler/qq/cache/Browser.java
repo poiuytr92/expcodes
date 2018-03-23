@@ -14,7 +14,7 @@ import exp.libs.warp.net.webkit.WebUtils;
 
 /**
  * <PRE>
- * 浏览器驱动管理器
+ * 仿真浏览器
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP

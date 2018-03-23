@@ -5,17 +5,31 @@ import java.util.Date;
 import exp.libs.utils.other.JSUtils;
 import exp.libs.warp.net.cookie.WebKitCookie;
 
+/**
+ * <PRE>
+ * QQ-Cookie
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class QQCookie extends WebKitCookie {
 
 	/** NULL-cookie对象 */
 	public final static QQCookie NULL = new QQCookie();
 	
+	/** 生成GTK码的JS脚本 */
 	private final static String GTK_JS_PATH = "./conf/gtk.js";
 	
+	/** 生成GTK码的JS函数 */
 	private final static String GTK_METHOD = "getACSRFToken";
 	
+	/** 登陆QQ号的cookie属性键 */
 	private final static String UIN_KEY = "uin";
 	
+	/** 用于生成GTK的cookie属性键 */
 	private final static String PSKEY_KEY = "p_skey";
 	
 	/** 当前登陆账号(即登陆的QQ号) */

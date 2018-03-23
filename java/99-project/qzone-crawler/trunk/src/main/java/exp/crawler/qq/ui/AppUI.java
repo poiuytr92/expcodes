@@ -33,12 +33,25 @@ import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
+/**
+ * <PRE>
+ * QQ空间爬虫主界面
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class AppUI extends MainWindow {
 
+	/** 唯一序列号 */
 	private static final long serialVersionUID = -7825507638221203671L;
 
+	/** 界面宽度 */
 	private final static int WIDTH = 750;
 	
+	/** 界面高度 */
 	private final static int HEIGHT = 600;
 	
 	/** 界面文本框最大缓存行数 */
@@ -86,6 +99,9 @@ public class AppUI extends MainWindow {
 	/** 单例 */
 	private static volatile AppUI instance;
 	
+	/**
+	 * 构造函数
+	 */
 	private AppUI() {
 		super("QQ空间爬虫 - By EXP", WIDTH, HEIGHT);
 	}

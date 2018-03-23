@@ -17,6 +17,10 @@ import exp.crawler.qq.ui.AppUI;
  */
 public class Main {
 
+	/**
+	 * 程序入口
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		BeautyEyeUtils.init();

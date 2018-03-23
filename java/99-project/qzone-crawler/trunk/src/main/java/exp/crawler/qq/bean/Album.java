@@ -6,20 +6,43 @@ import java.util.List;
 import exp.crawler.qq.Config;
 import exp.crawler.qq.utils.PicUtils;
 
+/**
+ * <PRE>
+ * 相册对象
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Album {
 
+	/** 相册标号 */
 	private String id;
 	
+	/** 相册名称/描述 */
 	private String name;
 	
+	/** 相册地址 */
 	private String url;
 	
-	private int totalPicNum;
-	
+	/** 相册页数 */
 	private int pageNum;
 	
+	/** 相册照片总数 */
+	private int totalPicNum;
+	
+	/** 相册照片集 */
 	private List<Photo> photos;
 	
+	/**
+	 * 构造函数
+	 * @param id
+	 * @param name
+	 * @param url
+	 * @param totalPicNum
+	 */
 	public Album(String id, String name, String url, int totalPicNum) {
 		this.id = id;
 		this.name = name;

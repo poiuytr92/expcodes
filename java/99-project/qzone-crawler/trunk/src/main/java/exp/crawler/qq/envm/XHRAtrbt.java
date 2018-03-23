@@ -1,7 +1,5 @@
 package exp.crawler.qq.envm;
 
-
-
 /**
  * <PRE>
  * QQ空间Json交互报文字段属性

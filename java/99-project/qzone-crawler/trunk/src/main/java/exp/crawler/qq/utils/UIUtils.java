@@ -18,26 +18,51 @@ import exp.crawler.qq.ui.AppUI;
  */
 public class UIUtils {
 
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(UIUtils.class);
 	
+	/** 私有化构造函数 */
 	protected UIUtils() {}
 	
+	/**
+	 * 打印异常日志到界面控制台
+	 * @param e
+	 * @param msgs
+	 */
 	public static void log(Throwable e, Object... msgs) {
 		log(StrUtils.concat(msgs), e);
 	}
 	
+	/**
+	 * 打印异常日志到界面控制台
+	 * @param e
+	 * @param msg
+	 */
 	public static void log(Throwable e, String msg) {
 		log(msg, e);
 	}
 	
+	/**
+	 * 打印日志到界面控制台
+	 * @param msgs
+	 */
 	public static void log(Object... msgs) {
 		log(StrUtils.concat(msgs), null);
 	}
 	
+	/**
+	 * 打印日志到界面控制台
+	 * @param msgs
+	 */
 	public static void log(String msg) {
 		log(msg, null);
 	}
 	
+	/**
+	 * 打印日志到界面控制台
+	 * @param msg
+	 * @param e
+	 */
 	private static void log(String msg, Throwable e) {
 		if(e != null) {
 			log.error("[ERROR] {}", msg, e);

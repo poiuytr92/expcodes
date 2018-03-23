@@ -14,10 +14,11 @@ import exp.libs.utils.other.StrUtils;
  */
 public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 
+	/** 私有化构造函数 */
 	protected TimeUtils() {}
 	
 	/**
-	 * 获取当前时间
+	 * 获取当前时间(用于打印界面日志)
 	 * @return [HH:mm:ss]
 	 */
 	public static String getCurTime() {
