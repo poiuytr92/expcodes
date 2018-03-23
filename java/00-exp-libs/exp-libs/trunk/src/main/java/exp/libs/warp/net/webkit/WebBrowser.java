@@ -19,7 +19,7 @@ import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
- * 浏览器驱动
+ * 仿真浏览器接口
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -156,7 +156,7 @@ public class WebBrowser {
 	 * 获取WEB驱动
 	 * @return
 	 */
-	public WebDriver getDriver() {
+	public WebDriver DRIVER() {
 		return driver;
 	}
 	
