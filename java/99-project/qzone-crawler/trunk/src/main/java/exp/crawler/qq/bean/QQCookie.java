@@ -26,11 +26,17 @@ public class QQCookie extends WebKitCookie {
 	/** 生成GTK码的JS函数 */
 	private final static String GTK_METHOD = "getACSRFToken";
 	
+	/** 用于登陆QQ的SIG属性键 */
+	private final static String SIG_KEY = "pt_login_sig";
+	
 	/** 登陆QQ号的cookie属性键 */
 	private final static String UIN_KEY = "uin";
 	
 	/** 用于生成GTK的cookie属性键 */
 	private final static String PSKEY_KEY = "p_skey";
+	
+	/** 用于登陆QQ的SIG码 */
+	private String sig;
 	
 	/** 当前登陆账号(即登陆的QQ号) */
 	private String uin;
@@ -43,6 +49,7 @@ public class QQCookie extends WebKitCookie {
 	
 	@Override
 	protected void init() {
+		this.sig = "";
 		this.uin = "";
 		this.gtk = "";
 		this.qzoneToken = "";
@@ -58,7 +65,10 @@ public class QQCookie extends WebKitCookie {
 	protected boolean takeCookieNVE(String name, String value, Date expires) {
 		boolean isKeep = true;
 		
-		if(UIN_KEY.equalsIgnoreCase(name)) {
+		if(SIG_KEY.equalsIgnoreCase(name)) {
+			this.sig = value;
+			
+		} else if(UIN_KEY.equalsIgnoreCase(name)) {
 			this.uin = value;
 			uin = uin.replaceFirst("^[o|O]", "");
 			uin = uin.replaceFirst("^0*", "");
@@ -107,6 +117,10 @@ public class QQCookie extends WebKitCookie {
 		}
 		gtk = String.valueOf(hash & 0x7fffffff);
 		return gtk;
+	}
+	
+	public String SIG() {
+		return sig;
 	}
 	
 	public String UIN() {
