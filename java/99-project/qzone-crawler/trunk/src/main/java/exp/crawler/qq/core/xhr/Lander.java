@@ -15,7 +15,12 @@ import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
+// 登陆分析
 // https://blog.csdn.net/M_S_W/article/details/70193899
+// http://www.vuln.cn/6454
+
+//QQ空间登录加密JS获取分析
+	// https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
 public class Lander {
 
 	public static void main(String[] args) {
@@ -115,8 +120,6 @@ public class Lander {
 	
 	// 加密算法
 	// 直接调用js中的jiami函数就可以了，参数分别为 [密码|QQ号|验证码|这个填空白文本就行]
-	// QQ空间登录加密JS获取分析
-	// https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
 	private static String step3(String pwd, String salt, String vccode) {
 		return EncryptUtils.toRSA(pwd, salt, vccode);
 	}
