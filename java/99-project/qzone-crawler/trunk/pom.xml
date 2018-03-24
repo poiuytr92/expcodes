@@ -38,14 +38,14 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
-		<jdk.version>1.7</jdk.version>
+		<jdk.version>1.8</jdk.version>
         <explibs.version>1.0-SNAPSHOT</explibs.version>
         <mrp.plugin.version>1.0-SNAPSHOT</mrp.plugin.version>
 	</properties>
 
 	<!-- 项目依赖 -->
 	<dependencies>
-	
+
 		<!-- 经验库 -->
         <dependency>
           <groupId>exp.libs</groupId>

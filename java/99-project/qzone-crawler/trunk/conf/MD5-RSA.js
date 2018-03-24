@@ -1,12 +1,14 @@
 window = {};
 navigator = {};
+
 RSA = function() {
+
     function t(t, e) {
         return new r(t, e)
     }
+
     function e(t, e) {
-        if (e < t.length + 11) return uv_alert("Message too long for RSA"),
-        null;
+        if (e < t.length + 11) return null;
         for (var i = new Array,
         n = t.length - 1; n >= 0 && e > 0;) {
             var o = t.charCodeAt(n--);
@@ -22,6 +24,7 @@ RSA = function() {
         i[--e] = 0,
         new r(i)
     }
+
     function i() {
         this.n = null,
         this.e = 0,
@@ -32,12 +35,15 @@ RSA = function() {
         this.dmq1 = null,
         this.coeff = null
     }
+
     function n(e, i) {
-        null != e && null != i && e.length > 0 && i.length > 0 ? (this.n = t(e, 16), this.e = parseInt(i, 16)) : uv_alert("Invalid RSA public key")
+        null != e && null != i && e.length > 0 && i.length > 0 ? (this.n = t(e, 16), this.e = parseInt(i, 16)) : null
     }
+
     function o(t) {
         return t.modPowInt(this.e, this.n)
     }
+
     function p(t) {
         var i = e(t, this.n.bitLength() + 7 >> 3);
         if (null == i) return null;
@@ -46,12 +52,15 @@ RSA = function() {
         var o = n.toString(16);
         return 0 == (1 & o.length) ? o: "0" + o
     }
+
     function r(t, e, i) {
         null != t && ("number" == typeof t ? this.fromNumber(t, e, i) : null == e && "string" != typeof t ? this.fromString(t, 256) : this.fromString(t, e))
     }
+
     function s() {
         return new r(null)
     }
+
     function a(t, e, i, n, o, p) {
         for (; --p >= 0;) {
             var r = e * this[t++] + i[n] + o;
@@ -60,6 +69,7 @@ RSA = function() {
         }
         return o
     }
+
     function l(t, e, i, n, o, p) {
         for (var r = 32767 & e,
         s = e >> 15; --p >= 0;) {
@@ -72,6 +82,7 @@ RSA = function() {
         }
         return o
     }
+
     function c(t, e, i, n, o, p) {
         for (var r = 16383 & e,
         s = e >> 14; --p >= 0;) {
@@ -84,28 +95,34 @@ RSA = function() {
         }
         return o
     }
+
     function u(t) {
         return ut.charAt(t)
     }
+
     function g(t, e) {
         var i = gt[t.charCodeAt(e)];
         return null == i ? -1 : i
     }
+
     function d(t) {
         for (var e = this.t - 1; e >= 0; --e) t[e] = this[e];
         t.t = this.t,
         t.s = this.s
     }
+
     function h(t) {
         this.t = 1,
         this.s = 0 > t ? -1 : 0,
         t > 0 ? this[0] = t: -1 > t ? this[0] = t + DV: this.t = 0
     }
+
     function f(t) {
         var e = s();
         return e.fromInt(t),
         e
     }
+
     function m(t, e) {
         var i;
         if (16 == e) i = 4;
@@ -129,9 +146,11 @@ RSA = function() {
         this.clamp(),
         o && r.ZERO.subTo(this, this)
     }
+
     function _() {
         for (var t = this.s & this.DM; this.t > 0 && this[this.t - 1] == t;)--this.t
     }
+
     function $(t) {
         if (this.s < 0) return "-" + this.negate().toString(t);
         var e;
@@ -153,14 +172,17 @@ RSA = function() {
         o && (p += u(i));
         return o ? p: "0"
     }
+
     function v() {
         var t = s();
         return r.ZERO.subTo(this, t),
         t
     }
+
     function y() {
         return this.s < 0 ? this.negate() : this
     }
+
     function w(t) {
         var e = this.s - t.s;
         if (0 != e) return e;
@@ -169,6 +191,7 @@ RSA = function() {
         for (; --i >= 0;) if (0 != (e = this[i] - t[i])) return e;
         return 0
     }
+
     function k(t) {
         var e, i = 1;
         return 0 != (e = t >>> 16) && (t = e, i += 16),
@@ -178,9 +201,11 @@ RSA = function() {
         0 != (e = t >> 1) && (t = e, i += 1),
         i
     }
+
     function b() {
         return this.t <= 0 ? 0 : this.DB * (this.t - 1) + k(this[this.t - 1] ^ this.s & this.DM)
     }
+
     function q(t, e) {
         var i;
         for (i = this.t - 1; i >= 0; --i) e[i + t] = this[i];
@@ -188,11 +213,13 @@ RSA = function() {
         e.t = this.t + t,
         e.s = this.s
     }
+
     function S(t, e) {
         for (var i = t; i < this.t; ++i) e[i - t] = this[i];
         e.t = Math.max(this.t - t, 0),
         e.s = this.s
     }
+
     function C(t, e) {
         var i, n = t % this.DB,
         o = this.DB - n,
@@ -207,6 +234,7 @@ RSA = function() {
         e.s = this.s,
         e.clamp()
     }
+
     function T(t, e) {
         e.s = this.s;
         var i = Math.floor(t / this.DB);
@@ -221,6 +249,7 @@ RSA = function() {
         e.t = this.t - i,
         e.clamp()
     }
+
     function x(t, e) {
         for (var i = 0,
         n = 0,
@@ -243,6 +272,7 @@ RSA = function() {
         e.t = i,
         e.clamp()
     }
+
     function L(t, e) {
         var i = this.abs(),
         n = t.abs(),
@@ -253,6 +283,7 @@ RSA = function() {
         e.clamp(),
         this.s != t.s && r.ZERO.subTo(e, e)
     }
+
     function N(t) {
         for (var e = this.abs(), i = t.t = 2 * e.t; --i >= 0;) t[i] = 0;
         for (i = 0; i < e.t - 1; ++i) {
@@ -262,6 +293,7 @@ RSA = function() {
         t.s = 0,
         t.clamp()
     }
+
     function E(t, e, i) {
         var n = t.abs();
         if (! (n.t <= 0)) {
@@ -297,32 +329,40 @@ RSA = function() {
             }
         }
     }
+
     function P(t) {
         var e = s();
         return this.abs().divRemTo(t, null, e),
         this.s < 0 && e.compareTo(r.ZERO) > 0 && t.subTo(e, e),
         e
     }
+
     function A(t) {
         this.m = t
     }
+
     function I(t) {
         return t.s < 0 || t.compareTo(this.m) >= 0 ? t.mod(this.m) : t
     }
+
     function Q(t) {
         return t
     }
+
     function M(t) {
         t.divRemTo(this.m, null, t)
     }
+
     function D(t, e, i) {
         t.multiplyTo(e, i),
         this.reduce(i)
     }
+
     function H(t, e) {
         t.squareTo(e),
         this.reduce(e)
     }
+
     function U() {
         if (this.t < 1) return 0;
         var t = this[0];
@@ -334,6 +374,7 @@ RSA = function() {
         e = e * (2 - t * e % this.DV) % this.DV,
         e > 0 ? this.DV - e: -e
     }
+
     function B(t) {
         this.m = t,
         this.mp = t.invDigit(),
@@ -342,6 +383,7 @@ RSA = function() {
         this.um = (1 << t.DB - 15) - 1,
         this.mt2 = 2 * t.t
     }
+
     function O(t) {
         var e = s();
         return t.abs().dlShiftTo(this.m.t, e),
@@ -349,12 +391,14 @@ RSA = function() {
         t.s < 0 && e.compareTo(r.ZERO) > 0 && this.m.subTo(e, e),
         e
     }
+
     function V(t) {
         var e = s();
         return t.copyTo(e),
         this.reduce(e),
         e
     }
+
     function j(t) {
         for (; t.t <= this.mt2;) t[t.t++] = 0;
         for (var e = 0; e < this.m.t; ++e) {
@@ -367,17 +411,21 @@ RSA = function() {
         t.drShiftTo(this.m.t, t),
         t.compareTo(this.m) >= 0 && t.subTo(this.m, t)
     }
+
     function R(t, e) {
         t.squareTo(e),
         this.reduce(e)
     }
+
     function F(t, e, i) {
         t.multiplyTo(e, i),
         this.reduce(i)
     }
+
     function G() {
         return 0 == (this.t > 0 ? 1 & this[0] : this.s)
     }
+
     function z(t, e) {
         if (t > 4294967295 || 1 > t) return r.ONE;
         var i = s(),
@@ -392,11 +440,13 @@ RSA = function() {
         }
         return e.revert(i)
     }
+
     function W(t, e) {
         var i;
         return i = 256 > t || e.isEven() ? new A(e) : new B(e),
         this.exp(t, i)
     }
+
     function X(t) {
         ht[ft++] ^= 255 & t,
         ht[ft++] ^= t >> 8 & 255,
@@ -404,9 +454,11 @@ RSA = function() {
         ht[ft++] ^= t >> 24 & 255,
         ft >= $t && (ft -= $t)
     }
+
     function Z() {
         X((new Date).getTime())
     }
+
     function K() {
         if (null == dt) {
             for (Z(), dt = nt(), dt.init(ht), ft = 0; ft < ht.length; ++ft) ht[ft] = 0;
@@ -414,16 +466,22 @@ RSA = function() {
         }
         return dt.next()
     }
+
     function J(t) {
         var e;
         for (e = 0; e < t.length; ++e) t[e] = K()
     }
-    function Y() {}
+
+    function Y() {
+
+    }
+
     function tt() {
         this.i = 0,
         this.j = 0,
         this.S = new Array
     }
+
     function et(t) {
         var e, i, n;
         for (e = 0; 256 > e; ++e) this.S[e] = e;
@@ -434,6 +492,7 @@ RSA = function() {
         this.i = 0,
         this.j = 0
     }
+
     function it() {
         var t;
         return this.i = this.i + 1 & 255,
@@ -443,9 +502,11 @@ RSA = function() {
         this.S[this.j] = t,
         this.S[t + this.S[this.i] & 255]
     }
+
     function nt() {
         return new tt
     }
+
     function ot(t, e, n) {
         e = "e9a815ab9d6e86abbf33a4ac64e9196d5be44a09bd0ed6ae052914e1a865ac8331fed863de8ea697e9a7f63329e5e23cda09c72570f46775b7e39ea9670086f847d3c9c51963b131409b1e04265d9747419c635404ca651bbcbc87f99b8008f7f5824653e3658be4ba73e4480156b390bb73bc1f8b33578e7a4e12440e9396f2552c1aff1c92e797ebacdc37c109ab7bce2367a19c56a033ee04534723cc2558cb27368f5b9d32c04d12dbd86bbd68b1d99b7c349a8453ea75d1b2e94491ab30acf6c46a36a75b721b312bedf4e7aad21e54e9bcbcf8144c79b6e3c05eb4a1547750d224c0085d80e6da3907c3d945051c13c7c1dcefd6520ee8379c4f5231ed",
         n = "10001";
@@ -453,6 +514,7 @@ RSA = function() {
         return o.setPublic(e, n),
         o.encrypt(t)
     }
+
     i.prototype.doPublic = o,
     i.prototype.setPublic = n,
     i.prototype.encrypt = p;
@@ -528,22 +590,28 @@ RSA = function() {
         rsa_encrypt: ot
     }
 } (),
+
+
 function(t) {
+
     function e() {
         return Math.round(4294967295 * Math.random())
     }
+
     function i(t, e, i) { (!i || i > 4) && (i = 4);
         for (var n = 0,
         o = e; e + i > o; o++) n <<= 8,
         n |= t[o];
         return (4294967295 & n) >>> 0
     }
+
     function n(t, e, i) {
         t[e + 3] = i >> 0 & 255,
         t[e + 2] = i >> 8 & 255,
         t[e + 1] = i >> 16 & 255,
         t[e + 0] = i >> 24 & 255
     }
+
     function o(t) {
         if (!t) return "";
         for (var e = "",
@@ -554,17 +622,20 @@ function(t) {
         }
         return e
     }
+
     function p(t) {
         for (var e = "",
         i = 0; i < t.length; i += 2) e += String.fromCharCode(parseInt(t.substr(i, 2), 16));
         return e
     }
+
     function r(t, e) {
         if (!t) return "";
         e && (t = s(t));
         for (var i = [], n = 0; n < t.length; n++) i[n] = t.charCodeAt(n);
         return o(i)
     }
+
     function s(t) {
         var e, i, n = [],
         o = t.length;
@@ -572,6 +643,7 @@ function(t) {
         i > 0 && 127 >= i ? n.push(t.charAt(e)) : i >= 128 && 2047 >= i ? n.push(String.fromCharCode(192 | i >> 6 & 31), String.fromCharCode(128 | 63 & i)) : i >= 2048 && 65535 >= i && n.push(String.fromCharCode(224 | i >> 12 & 15), String.fromCharCode(128 | i >> 6 & 63), String.fromCharCode(128 | 63 & i));
         return n.join("")
     }
+
     function a(t) {
         _ = new Array(8),
         $ = new Array(8),
@@ -595,6 +667,7 @@ function(t) {
         8 == m && c();
         return w
     }
+
     function l(t) {
         var e = 0,
         i = new Array(8),
@@ -617,6 +690,7 @@ function(t) {
         }
         return w
     }
+
     function c() {
         for (var t = 0; 8 > t; t++) _[t] ^= b ? $[t] : w[y + t];
         for (var e = u(_), t = 0; 8 > t; t++) w[v + t] = e[t] ^ $[t],
@@ -626,6 +700,7 @@ function(t) {
         m = 0,
         b = !1
     }
+
     function u(t) {
         for (var e = 16,
         o = i(t, 0, 4), p = i(t, 4, 4), r = i(f, 0, 4), s = i(f, 4, 4), a = i(f, 8, 4), l = i(f, 12, 4), c = 0, u = 2654435769; e-->0;) c += u,
@@ -639,6 +714,7 @@ function(t) {
         n(g, 4, p),
         g
     }
+
     function g(t) {
         for (var e = 16,
         o = i(t, 0, 4), p = i(t, 4, 4), r = i(f, 0, 4), s = i(f, 4, 4), a = i(f, 8, 4), l = i(f, 12, 4), c = 3816266640, u = 2654435769; e-->0;) p -= (o << 4) + a ^ o + c ^ (o >>> 5) + l,
@@ -652,6 +728,7 @@ function(t) {
         n(g, 4, p),
         g
     }
+
     function d() {
         for (var t = (k.length, 0); 8 > t; t++) $[t] ^= k[v + t];
         return $ = g($),
@@ -659,6 +736,7 @@ function(t) {
         m = 0,
         !0
     }
+
     function h(t, e) {
         var i = [];
         if (e) for (var n = 0; n < t.length; n++) i[n] = 255 & t.charCodeAt(n);
@@ -666,6 +744,7 @@ function(t) {
         n = 0; n < t.length; n += 2) i[o++] = parseInt(t.substr(n, 2), 16);
         return i
     }
+
     var f = "",
     m = 0,
     _ = [],
@@ -698,6 +777,7 @@ function(t) {
         bytesInStr: o,
         dataFromStr: h
     };
+
     var q = {};
     q.PADCHAR = "=",
     q.ALPHA = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
@@ -732,14 +812,16 @@ function(t) {
         return r.join("")
     },
     btoa = window.btoa || (window.btoa = q.encode)
-} (window),
+} (window)
 
 function t(t) {
     return e(t)
 }
+
 function e(t) {
     return u(i(c(t), t.length * _))
 }
+
 function i(t, e) {
     t[e >> 5] |= 128 << e % 32,
     t[(e + 64 >>> 9 << 4) + 14] = e;
@@ -823,41 +905,52 @@ function i(t, e) {
     }
     return 16 == v ? Array(n, l) : Array(i, n, l, c)
 }
+
 function n(t, e, i, n, o, p) {
     return a(l(a(a(e, t), a(n, p)), o), i)
 }
+
 function o(t, e, i, o, p, r, s) {
     return n(e & i | ~e & o, t, e, p, r, s)
 }
+
 function p(t, e, i, o, p, r, s) {
     return n(e & o | i & ~o, t, e, p, r, s)
 }
+
 function r(t, e, i, o, p, r, s) {
     return n(e ^ i ^ o, t, e, p, r, s)
 }
+
 function s(t, e, i, o, p, r, s) {
     return n(i ^ (e | ~o), t, e, p, r, s)
 }
+
 function a(t, e) {
     var i = (65535 & t) + (65535 & e),
     n = (t >> 16) + (e >> 16) + (i >> 16);
     return n << 16 | 65535 & i
 }
+
 function l(t, e) {
     return t << e | t >>> 32 - e
 }
+
 function c(t) {
     for (var e = Array(), i = (1 << _) - 1, n = 0; n < t.length * _; n += _) e[n >> 5] |= (t.charCodeAt(n / _) & i) << n % 32;
     return e
 }
+
 function u(t) {
     for (var e = m ? "0123456789ABCDEF": "0123456789abcdef", i = "", n = 0; n < 4 * t.length; n++) i += e.charAt(t[n >> 2] >> n % 4 * 8 + 4 & 15) + e.charAt(t[n >> 2] >> n % 4 * 8 & 15);
     return i
 }
+
 function g(t) {
     for (var e = [], i = 0; i < t.length; i += 2) e.push(String.fromCharCode(parseInt(t.substr(i, 2), 16)));
     return e.join("")
 }
+
 function d(t, e) {
     if (! (Math.random() > (e || 1))) try {
         var i = location.protocol + "//ui.ptlogin2.qq.com/cgi-bin/report?id=" + t,
@@ -865,7 +958,28 @@ function d(t, e) {
         n.src = i
     } catch(o) {}
 }
-function jiami(e, i, n, o) {
+
+function f(e, i, n) {
+    var o = n ? e: t(e),
+    p = o + i.toUpperCase(),
+    r = $.RSA.rsa_encrypt(p);
+    return r
+}
+
+var m = 1,
+_ = 8,
+v = 32;
+uin2hex = function(str) {
+    var maxLength = 16;
+    str = parseInt(str);
+    for (var hex = str.toString(16), len = hex.length, i = len; maxLength > i; i++) hex = "0" + hex;
+    for (var arr = [], j = 0; maxLength > j; j += 2) arr.push("\\x" + hex.substr(j, 2));
+    var result = arr.join("");
+    return eval('result="' + result + '"'),
+    result
+}
+
+function toRSA(e, i, n, o) {
     i = uin2hex(i);
     n = n || "",
     e = e || "";
@@ -883,22 +997,4 @@ function jiami(e, i, n, o) {
             "=": "_"
         } [t]
     })
-}
-function f(e, i, n) {
-    var o = n ? e: t(e),
-    p = o + i.toUpperCase(),
-    r = $.RSA.rsa_encrypt(p);
-    return r
-}
-var m = 1,
-_ = 8,
-v = 32;
-uin2hex = function(str) {
-    var maxLength = 16;
-    str = parseInt(str);
-    for (var hex = str.toString(16), len = hex.length, i = len; maxLength > i; i++) hex = "0" + hex;
-    for (var arr = [], j = 0; maxLength > j; j += 2) arr.push("\\x" + hex.substr(j, 2));
-    var result = arr.join("");
-    return eval('result="' + result + '"'),
-    result
 }

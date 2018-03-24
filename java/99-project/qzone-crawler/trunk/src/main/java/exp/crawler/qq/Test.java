@@ -18,12 +18,12 @@ import exp.libs.warp.net.http.HttpUtils;
 public class Test {
 
 	public static void main(String[] args) {
-		String qq = "121313132";
-		String pwd = "678789797";
+		String qq = "272629724";
+		String pwd = "dfmlLMH5222";
 		
 		QQCookie cookie = step1();
 		String[] rst = step2(cookie, qq);
-		String enPwd = step3(rst[1], qq, pwd);
+		String enPwd = step3(rst[0], rst[1], qq, pwd);
 		login(cookie, qq, enPwd, rst[0], rst[1]);
 	}
 	
@@ -112,20 +112,21 @@ public class Test {
 	// 直接调用js中的jiami函数就可以了，参数分别为 [密码|QQ号|验证码|这个填空白文本就行]
 	// QQ空间登录加密JS获取分析
 	// https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
-	private static String step3(String pt_verifysession_v1, String qq, String pwd) {
+	private static String step3(String vccode, String pt_verifysession_v1, String qq, String pwd) {
 		String jsPath = "./conf/MD5-RSA.js";
-		String method = "jiami";
+		String method = "toRSA";
 		
-//		String jsPath = "./conf/entry.js";
-//		String method = "h";
-		
-		Object rst = JSUtils.executeJS(jsPath, method, pwd, qq, pt_verifysession_v1, "");
-		System.out.println(rst);
+		Object rst = JSUtils.executeJS(jsPath, method, pwd, qq, vccode, "");
 		return (rst == null ? "" : rst.toString());	// 加密后的密码
 	}
 	
 	private static void login(QQCookie cookie, String qq, String enPwd, 
 			String vccode, String pt_verifysession_v1) {
+		System.out.println(qq);
+		System.out.println(enPwd);
+		System.out.println(vccode);
+		System.out.println(pt_verifysession_v1);
+		
 		String url = "https://ssl.ptlogin2.qq.com/login";
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("u", qq);
