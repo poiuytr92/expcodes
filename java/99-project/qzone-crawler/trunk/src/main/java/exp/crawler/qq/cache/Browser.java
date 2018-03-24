@@ -155,6 +155,10 @@ public class Browser {
 		}
 	}
 	
+	public static void recoveryCookies() {
+		INSTN()._recoveryCookies();
+	}
+	
 	private void _recoveryCookies() {
 		if(browser != null) {
 			browser.clearCookies();

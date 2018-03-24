@@ -140,7 +140,7 @@ public class Lander {
 			Browser.backupCookies();
 			
 			isOk = StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
-			Browser.quit();
+//			Browser.quit();	// web仿真模式下的爬虫不能关闭浏览器，否则QQ空间要重新登陆(GTK的存在使得保存cookie也无效)
 		}
 		return isOk;
 	}

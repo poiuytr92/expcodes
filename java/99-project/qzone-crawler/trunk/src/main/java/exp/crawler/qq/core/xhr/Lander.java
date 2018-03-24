@@ -20,26 +20,34 @@ import exp.libs.warp.net.http.HttpUtils;
 // http://www.vuln.cn/6454
 
 //QQ空间登录加密JS获取分析
-	// https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
+// https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
 public class Lander {
 
+	// FIXME 调试中
+	
 	public static void main(String[] args) {
-		String qq = "123742030";
+		String QQ = "123742030";
 		String pwd = "xxxxx111111";
 		
-		QQCookie cookie = step1();
-		String[] rst = step2(cookie, qq);
+		QQCookie cookie = getSIG();
+		String[] rst = getVccode(cookie, QQ);
 		String vccode = rst[0];
 		String salt = rst[1];
 		String pt_verifysession_v1 = rst[2];
+		String rsaPwd = pwdToRSA(pwd, salt, vccode);
 		
-		String enPwd = step3(pwd, salt, vccode);
-		login(cookie, qq, enPwd, vccode, pt_verifysession_v1);
+		System.out.println(QQ);
+		System.out.println(pwd);
+		System.out.println(rsaPwd);
+		System.out.println(vccode);
+		System.out.println(pt_verifysession_v1);
+		
+		login(cookie, QQ, rsaPwd, vccode, pt_verifysession_v1);
 	}
 	
 	// 获取初始COOKIE和SIG
 	// 注：获取返回的cookie和cookie里面的pt_login_sig值（以后用到）
-	private static QQCookie step1() {
+	private static QQCookie getSIG() {
 		String url = "https://xui.ptlogin2.qq.com/cgi-bin/xlogin";
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("proxy_url", "https://qzs.qq.com/qzone/v6/portal/proxy.html");
@@ -90,20 +98,25 @@ public class Lander {
 		return cookie;
 	}
 	
-	// 判断是否需要验证码
-	// 注：如果不需要验证码则返回和下面类似的信息，否则就等一会再登陆直到不需要验证码时登陆
-	//	（我太懒就不抓验证码的包了，主要是我登陆十来次都不需要验证码抓不到啊）
-	//	ptui_checkVC('0','!WCC','\x00\x00\x00\x00\x99\x07\xcc\x00','d4d6dc3ea578f17560481d67ce9070daec5bd11573a1b9cf0de8204a363b5acec30d204e240327532a59464371f08d6adb93188c8930e007','2');
-	// 在注：如果不需要验证码，则上面的!WCC就相当于验证码（取出来），
-	//	 后面的d4d6dc3ea578f17560481d67ce9070daec5bd11573a1b9cf0de8204a363b5acec30d204e240327532a59464371f08d6adb93188c8930e007
-	// 也需要取出来构造登陆网址中的pt_verifysession_v1
-	private static String[] step2(QQCookie cookie, String loginQQ) {
+	/**
+	 * 判断是否需要验证码(一般只有输入了非法QQ号时才需要真正的验证码)
+	 *   注：如果不需要验证码则返回和下面类似的信息，否则就等一会再登陆直到不需要验证码时登陆
+	 *   ptui_checkVC('0','!WCC','\x00\x00\x00\x00\x99\x07\xcc\x00','d4d6dc3ea578f17560481d67ce9070daec5bd11573a1b9cf0de8204a363b5acec30d204e240327532a59464371f08d6adb93188c8930e007','2');
+	 *   在注：如果不需要验证码，则上面的!WCC就相当于验证码（取出来），
+	 *   后面的d4d6dc3ea578f17560481d67ce9070daec5bd11573a1b9cf0de8204a363b5acec30d204e240327532a59464371f08d6adb93188c8930e007
+	 *   也需要取出来构造登陆网址中的pt_verifysession_v1
+	 *   
+	 * @param cookie
+	 * @param QQ
+	 * @return { vccode, salt, verifysession }
+	 */
+	private static String[] getVccode(QQCookie cookie, String QQ) {
 		String url = "https://ssl.ptlogin2.qq.com/check";
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("regmaster", "");
 		request.put("pt_tea", "2");
 		request.put("pt_vcode", "1");
-		request.put("uin", loginQQ);
+		request.put("uin", QQ);
 		request.put("appid", "549000912");
 		request.put("js_ver", "10215");
 		request.put("js_type", "1");
@@ -120,23 +133,18 @@ public class Lander {
 	
 	// 加密算法
 	// 直接调用js中的jiami函数就可以了，参数分别为 [密码|QQ号|验证码|这个填空白文本就行]
-	private static String step3(String pwd, String salt, String vccode) {
+	private static String pwdToRSA(String pwd, String salt, String vccode) {
 		return EncryptUtils.toRSA(pwd, salt, vccode);
 	}
 	
-	private static void login(QQCookie cookie, String qq, String enPwd, 
+	private static void login(QQCookie cookie, String QQ, String rsaPwd, 
 			String vccode, String pt_verifysession_v1) {
-		System.out.println(qq);
-		System.out.println(enPwd);
-		System.out.println(vccode);
-		System.out.println(pt_verifysession_v1);
-		
 		String url = "https://ssl.ptlogin2.qq.com/login";
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("u", qq);
+		request.put("u", QQ);
 		request.put("verifycode", vccode);
 		request.put("pt_verifysession_v1", pt_verifysession_v1);
-		request.put("p", enPwd);
+		request.put("p", rsaPwd);
 		request.put("pt_randsalt", "2");
 		request.put("u1", "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone%26from=iqq&ptredirect=0&h=1&t=1&g=1&from_ui=1&ptlang=2052&action=3-16-1492259455546&js_ver=10215&js_type=1");
 		request.put("login_sig", cookie.SIG());

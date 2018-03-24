@@ -20,8 +20,8 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.crawler.qq.Config;
 import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.core.interfaze.BaseAlbumAnalyzer;
 import exp.crawler.qq.core.web.Lander;
-import exp.crawler.qq.core.xhr.AlbumAnalyzer;
 import exp.crawler.qq.core.xhr.MoodAnalyzer;
 import exp.crawler.qq.utils.UIUtils;
 import exp.libs.envm.Charset;
@@ -74,6 +74,13 @@ public class AppUI extends MainWindow {
 	
 	/** QQ登陆密码输入框 */
 	private JPasswordField pwTF;
+	
+	/**
+	 * 【WEB模式】选项.
+	 * 	  XHR模式为后端爬虫模式(默认)
+	 *    WEB模式为前端仿真模式
+	 */
+	private JRadioButton webBtn;
 	
 	/** 【记住登陆信息】选项 */
 	private JRadioButton rememberBtn;
@@ -138,6 +145,7 @@ public class AppUI extends MainWindow {
 		unTF.setToolTipText("请确保此QQ具有查看对方空间权限 (不负责权限破解)");
 		pwTF.setToolTipText("此软件不盗号, 不放心勿用");
 		
+		this.webBtn = new JRadioButton("web模式");
 		this.rememberBtn = new JRadioButton("记住我");
 		if(recoveryLoginInfo()) {
 			rememberBtn.setSelected(true);
@@ -175,7 +183,8 @@ public class AppUI extends MainWindow {
 				SwingUtils.getPairsPanel("QQ密码", pwTF), 
 				SwingUtils.getPairsPanel("目标QQ", qqTF), 
 				SwingUtils.getEBorderPanel(loginBtn, rememberBtn), 
-				SwingUtils.getHGridPanel(albumBtn, moodBtn)
+				SwingUtils.getEBorderPanel(
+						SwingUtils.getHGridPanel(albumBtn, moodBtn), webBtn)
 		);
 		SwingUtils.addBorder(panel, "control");
 		return panel;
@@ -316,7 +325,9 @@ public class AppUI extends MainWindow {
 						public void run() {
 							String QQ = qqTF.getText();
 							
-							AlbumAnalyzer analyzer = new AlbumAnalyzer(QQ);
+							BaseAlbumAnalyzer analyzer = webBtn.isSelected() ? 
+									new exp.crawler.qq.core.web.AlbumAnalyzer(QQ) : 
+									new exp.crawler.qq.core.xhr.AlbumAnalyzer(QQ);
 							analyzer.execute();
 							
 							albumBtn.setEnabled(true);
