@@ -1,4 +1,4 @@
-package exp.crawler.qq.core;
+package exp.crawler.qq.core.web;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -151,7 +151,7 @@ public class AlbumAnalyzer {
 	 */
 	private static List<Photo> _open(Album album) {
 		List<Photo> photos = new LinkedList<Photo>();
-		UIUtils.log("正在读取相册 [", album.NAME(), "] (照片x", album.NUM(), "), 地址: ", album.URL());
+		UIUtils.log("正在读取相册 [", album.NAME(), "] (照片x", album.TOTAL_PIC_NUM(), "), 地址: ", album.URL());
 		
 		Browser.open(album.URL());
 		Browser.switchToFrame(By.id("tphoto"));
@@ -161,7 +161,7 @@ public class AlbumAnalyzer {
 			
 			UIUtils.log("正在提取第 [", page, "] 页的照片信息...");
 			photos.addAll(_getCurPagePhotoURLs());
-			UIUtils.log("第 [", page, "] 页照片提取完成, 当前进度: ", photos.size(), "/", album.NUM());
+			UIUtils.log("第 [", page, "] 页照片提取完成, 当前进度: ", photos.size(), "/", album.TOTAL_PIC_NUM());
 			
 			if(_nextPage() == false) {
 				break;

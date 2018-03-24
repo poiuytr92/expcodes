@@ -1,4 +1,4 @@
-package exp.crawler.qq.core;
+package exp.crawler.qq.core.web;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -23,13 +23,13 @@ import exp.libs.utils.verify.RegexUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class Landers {
+public class Lander {
 	
 	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(Landers.class);
+	private final static Logger log = LoggerFactory.getLogger(Lander.class);
 	
 	/** 私有化构造函数 */
-	protected Landers() {}
+	protected Lander() {}
 	
 	/**
 	 * 登陆QQ空间

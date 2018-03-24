@@ -20,9 +20,9 @@ import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
 import exp.crawler.qq.Config;
 import exp.crawler.qq.cache.Browser;
-import exp.crawler.qq.core.AlbumAnalyzer;
-import exp.crawler.qq.core.Landers;
-import exp.crawler.qq.core.MoodAnalyzer;
+import exp.crawler.qq.core.web.Lander;
+import exp.crawler.qq.core.xhr.AlbumAnalyzer;
+import exp.crawler.qq.core.xhr.MoodAnalyzer;
 import exp.crawler.qq.utils.UIUtils;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -256,7 +256,7 @@ public class AppUI extends MainWindow {
 			public void run() {
 				UIUtils.log("正在初始化参数...");
 				Browser.init(false);
-				isLogin = Landers.toLogin(username, password);
+				isLogin = Lander.toLogin(username, password);
 				
 				if(isLogin == true) {
 					loginBtn.setText(LOGOUT_DESC);

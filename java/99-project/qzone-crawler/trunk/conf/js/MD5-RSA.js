@@ -1,3 +1,12 @@
+/**
+ * QQ空间登陆一瞬间，会对密码执行RSA加密.
+ * 此函数就是RSA算法.
+ * --------------------------------------
+ * 	在登陆页面点击【登陆】后，按F12打开开发者工具，
+ * 	通过ctrl+shift+f全局搜索 【pt_verifysession_v1】，可以找到这个js脚本.
+ *  其中加密入口为 getEncryption  (可以debug定位)
+ */
+
 window = {};
 navigator = {};
 
@@ -969,18 +978,32 @@ function f(e, i, n) {
 var m = 1,
 _ = 8,
 v = 32;
-uin2hex = function(str) {
+
+/**
+ * 生成QQ号的16进制串，作为加密用的salt
+ * @param qq 
+ * @returns 如 \x00\x00\x00\x00\x10\x3f\xff\xdc
+ */
+uin2hex = function(qq) {
     var maxLength = 16;
-    str = parseInt(str);
-    for (var hex = str.toString(16), len = hex.length, i = len; maxLength > i; i++) hex = "0" + hex;
+    qq = parseInt(qq);
+    for (var hex = qq.toString(16), len = hex.length, i = len; maxLength > i; i++) hex = "0" + hex;
     for (var arr = [], j = 0; maxLength > j; j += 2) arr.push("\\x" + hex.substr(j, 2));
     var result = arr.join("");
     return eval('result="' + result + '"'),
     result
 }
 
-function toRSA(e, i, n, o) {
-    i = uin2hex(i);
+/**
+ * 对登陆密码加密（MD5+RSA）
+ * @param e 密码明文
+ * @param i salt: QQ号码的16进制(环境校验时返回)，如： \x00\x00\x00\x00\x10\x3f\xff\xdc
+ * @param n 验证码: (环境校验时返回) 只有4位字符，感叹号开头，如：!QWE
+ * @param o 空字符串""
+ * @returns
+ */
+function getEncryption(e, i, n, o) {
+//    i = uin2hex(i);
     n = n || "",
     e = e || "";
     for (var p = o ? e: t(e), r = g(p), s = t(r + i), a = TEA.strToBytes(n.toUpperCase(), !0), l = Number(a.length / 2).toString(16); l.length < 4;) l = "0" + l;

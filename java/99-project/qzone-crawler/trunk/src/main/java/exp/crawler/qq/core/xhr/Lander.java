@@ -1,4 +1,4 @@
-package exp.crawler.qq;
+package exp.crawler.qq.core.xhr;
 
 import java.util.HashMap;
 import java.util.List;
@@ -8,23 +8,28 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 
 import exp.crawler.qq.bean.QQCookie;
-import exp.libs.utils.other.JSUtils;
+import exp.crawler.qq.utils.EncryptUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
 // https://blog.csdn.net/M_S_W/article/details/70193899
-public class Test {
+public class Lander {
 
 	public static void main(String[] args) {
-		String qq = "272629724";
-		String pwd = "dfmlLMH5222";
+		String qq = "123742030";
+		String pwd = "xxxxx111111";
 		
 		QQCookie cookie = step1();
 		String[] rst = step2(cookie, qq);
-		String enPwd = step3(rst[0], rst[1], qq, pwd);
-		login(cookie, qq, enPwd, rst[0], rst[1]);
+		String vccode = rst[0];
+		String salt = rst[1];
+		String pt_verifysession_v1 = rst[2];
+		
+		String enPwd = step3(pwd, salt, vccode);
+		login(cookie, qq, enPwd, vccode, pt_verifysession_v1);
 	}
 	
 	// 获取初始COOKIE和SIG
@@ -105,19 +110,15 @@ public class Test {
 		// ptui_checkVC('0','!VAB','\x00\x00\x00\x00\x10\x3f\xff\xdc','cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33','2')
 		
 		List<String> rst = RegexUtils.findBrackets(response, "'([^']*)'");
-		return new String[] { rst.get(1), rst.get(3) };
+		return new String[] { rst.get(1), rst.get(2), rst.get(3) };
 	}
 	
 	// 加密算法
 	// 直接调用js中的jiami函数就可以了，参数分别为 [密码|QQ号|验证码|这个填空白文本就行]
 	// QQ空间登录加密JS获取分析
 	// https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
-	private static String step3(String vccode, String pt_verifysession_v1, String qq, String pwd) {
-		String jsPath = "./conf/MD5-RSA.js";
-		String method = "toRSA";
-		
-		Object rst = JSUtils.executeJS(jsPath, method, pwd, qq, vccode, "");
-		return (rst == null ? "" : rst.toString());	// 加密后的密码
+	private static String step3(String pwd, String salt, String vccode) {
+		return EncryptUtils.toRSA(pwd, salt, vccode);
 	}
 	
 	private static void login(QQCookie cookie, String qq, String enPwd, 
@@ -131,7 +132,7 @@ public class Test {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("u", qq);
 		request.put("verifycode", vccode);
-		request.put("pt_vcode_v1", pt_verifysession_v1);
+		request.put("pt_verifysession_v1", pt_verifysession_v1);
 		request.put("p", enPwd);
 		request.put("pt_randsalt", "2");
 		request.put("u1", "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone%26from=iqq&ptredirect=0&h=1&t=1&g=1&from_ui=1&ptlang=2052&action=3-16-1492259455546&js_ver=10215&js_type=1");
@@ -139,6 +140,20 @@ public class Test {
 		request.put("pt_uistyle", "4");
 		request.put("aid", "549000912");
 		request.put("daid", "5");
+		
+//		request.put("pt_jstoken", "3850832965");
+		request.put("pt_randsalt", "2");
+//		request.put("u1", "https://qzs.qq.com/qzone/v5/loginsucc.html?para=izone");
+		request.put("ptredirect", "0");
+		request.put("h", "1");
+		request.put("t", "1");
+		request.put("g", "1");
+//		request.put("from_ui", "1");
+		request.put("ptlang", "2052");
+		request.put("action", StrUtils.concat("7-35-", System.currentTimeMillis()));
+		request.put("js_ver", "10270");
+		request.put("js_type", "1");
+		request.put("pt_uistyle", "40");
 		
 		String response = HttpURLUtils.doGet(url, null, request);
 		System.out.println(response);

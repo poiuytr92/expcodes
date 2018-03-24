@@ -1,4 +1,4 @@
-package exp.crawler.qq.core;
+package exp.crawler.qq.core.xhr;
 
 import java.util.HashMap;
 import java.util.LinkedList;
