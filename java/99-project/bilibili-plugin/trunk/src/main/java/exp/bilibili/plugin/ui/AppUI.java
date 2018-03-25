@@ -433,7 +433,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(loginBtn.getText().contains("登陆")) {
+				if(isLogined() == false) {
 					_loginMain();
 					
 				} else {
