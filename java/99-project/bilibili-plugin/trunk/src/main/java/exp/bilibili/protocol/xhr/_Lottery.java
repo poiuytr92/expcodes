@@ -64,7 +64,7 @@ class _Lottery extends __XHR {
 		if(LotteryType.STORM != type) {
 			Map<String, String> request = getRequest(sRoomId, raffleId);
 			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
-				String response = HttpURLUtils.doPost(url, header, request);
+				String response = HttpURLUtils.doGet(url, header, request);
 				
 				reason = analyse(response);
 				if(StrUtils.isEmpty(reason) || !reason.contains("系统繁忙")) {

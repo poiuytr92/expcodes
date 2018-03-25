@@ -370,7 +370,7 @@ public class ActivityMgr {
 				(before % COST_UNIT + cost) >= COST_UNIT) {
 			String msg = StrUtils.concat("恭喜您本月在 [", Config.getInstn().ACTIVITY_ROOM_ID(), 
 					"] 直播间的活跃度达到 [", after, "] O(∩_∩)O 谢谢资瓷 ~");
-			XHRSender.sendPM(uid, msg);
+//			XHRSender.sendPM(uid, msg);	// FIXME 暂时不发送私信通知
 		}
 	}
 	
