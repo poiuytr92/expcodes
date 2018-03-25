@@ -380,20 +380,22 @@ public class HttpUtils {
 	
 	/**
 	 * 把请求参数转换成URL的KV串形式并进行编码
+	 * @param isGetMethod 是否为GET方法
 	 * @param request 请求参数集
 	 * @return ?&key1=val1&key2=val2&key3=val3
 	 */
-	public static String encodeRequests(Map<String, String> request) {
-		return encodeRequests(request, DEFAULT_CHARSET);
+	public static String encodeRequests(boolean isGetMethod, Map<String, String> request) {
+		return encodeRequests(isGetMethod, request, DEFAULT_CHARSET);
 	}
 	
 	/**
 	 * 把请求参数转换成URL的KV串形式并进行编码
+	 * @param isGetMethod 是否为GET方法
 	 * @param request 请求参数集
 	 * @param charset 参数字符编码
 	 * @return ?key1=val1&key2=val2&key3=val3
 	 */
-	public static String encodeRequests(
+	public static String encodeRequests(boolean isGetMethod, 
 			Map<String, String> request, final String charset) {
 		if(request == null || request.isEmpty() || 
 				CharsetUtils.isInvalid(charset)) {
@@ -417,7 +419,7 @@ public class HttpUtils {
 		}
 		
 		String kvs = sb.toString();
-		if(kvs.length() > 1) {
+		if(isGetMethod && kvs.length() > 1) {
 			kvs = kvs.replaceFirst("^\\?&", "?"); 
 		}
 		return kvs;

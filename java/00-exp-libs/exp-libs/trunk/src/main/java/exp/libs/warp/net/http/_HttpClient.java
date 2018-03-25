@@ -177,7 +177,7 @@ class _HttpClient {
 	 */
 	private String _doGet(String url, Map<String, String> header, 
 			Map<String, String> request) throws Exception {
-		String kvs = HttpUtils.encodeRequests(request, charset);	
+		String kvs = HttpUtils.encodeRequests(true, request, charset);	
 		url = url.concat(kvs);	// GET的参数是拼在url后面的
 		
 		GetMethod get = new GetMethod(url);
@@ -301,7 +301,7 @@ class _HttpClient {
 	private boolean _downloadByGet(String savePath, String url, 
 			Map<String, String> header, Map<String, String> request) 
 					throws Exception {
-		String kvs = HttpUtils.encodeRequests(request, charset);	
+		String kvs = HttpUtils.encodeRequests(true, request, charset);	
 		url = url.concat(kvs);	// GET的参数是拼在url后面的
 		
 		GetMethod get = new GetMethod(url);
