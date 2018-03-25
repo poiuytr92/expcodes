@@ -50,7 +50,6 @@ import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
 
-
 /**
  * <PRE>
  * 主应用程序窗口
@@ -153,6 +152,8 @@ public class AppUI extends MainWindow {
 	private _StormModeUI stormUI;
 	
 	private ChatColor curChatColor;
+	
+	private boolean joinLottery;
 	
 	private static volatile AppUI instance;
 	
@@ -288,6 +289,7 @@ public class AppUI extends MainWindow {
 		notifyTA.setEditable(false);
 		sttcTA.setEditable(false);
 		
+		this.joinLottery = false;
 		this.lotteryCnt = 0;
 		this.lotteryLabel = new JLabel(" 00000 ");
 		lotteryLabel.setForeground(Color.RED);
@@ -431,32 +433,44 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				// 自动登陆
-				if(CookiesMgr.MAIN() != BiliCookie.NULL || 
-						CookiesMgr.getInstn().load(CookieType.MAIN)) {
-					markLogin(CookiesMgr.MAIN().NICKNAME());
-					_loginMinis();
-				
-				// 手工登陆
+				if(loginBtn.getText().contains("登陆")) {
+					_loginMain();
+					
 				} else {
-					LoginBtn btn = new LoginBtn(CookieType.MAIN, "", new __LoginCallback() {
-						
-						@Override
-						public void afterLogin(final BiliCookie cookie) {
-							markLogin(cookie.NICKNAME());
-							_loginMinis();
-						}
-						
-						@Override
-						public void afterLogout(final BiliCookie cookie) {
-							// Undo
-						}
-					});
-					btn.doClick();
+					switchLottery();	// 登陆成功后, 变更为全局抽奖总开关
 				}
 			}
 		});
+	}
+	
+	/**
+	 * 登陆主号
+	 */
+	private void _loginMain() {
+		
+		// 自动登陆
+		if(CookiesMgr.MAIN() != BiliCookie.NULL || 
+				CookiesMgr.getInstn().load(CookieType.MAIN)) {
+			markLogin(CookiesMgr.MAIN().NICKNAME());
+			_loginMinis();
+		
+		// 手工登陆
+		} else {
+			LoginBtn btn = new LoginBtn(CookieType.MAIN, "", new __LoginCallback() {
+				
+				@Override
+				public void afterLogin(final BiliCookie cookie) {
+					markLogin(cookie.NICKNAME());
+					_loginMinis();
+				}
+				
+				@Override
+				public void afterLogout(final BiliCookie cookie) {
+					// Undo
+				}
+			});
+			btn.doClick();
+		}
 	}
 	
 	/**
@@ -1040,18 +1054,40 @@ public class AppUI extends MainWindow {
 	public void markLogin(String username) {
 		loginUser = username;
 		isLogined = true;
-		loginBtn.setEnabled(false);
+		loginBtn.setText("自动抽奖");
+		switchLottery();
 		
 		linkBtn.doClick();	// 登陆后自动连接到当前直播间
 		WebBot.getInstn()._start();	// 启动仿真机器人
 		
 		updateTitle("0000-00-00");
 		UIUtils.log("欢迎肥来: ".concat(loginUser));
-		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
-		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 		
 		// 开始监控软件授权
 		SafetyMonitor.getInstn()._start();
+	}
+	
+	/**
+	 * 切换：是否开启全局抽奖
+	 */
+	private void switchLottery() {
+		joinLottery = !joinLottery;
+		if(joinLottery == true) {
+			BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn);
+			UIUtils.log("已激活全平台自动抽奖（小电视、高能抽奖等）");
+			
+		} else {
+			BeautyEyeUtils.setButtonStyle(NormalColor.normal, loginBtn);
+			UIUtils.log("已关闭全平台自动抽奖");
+		}
+	}
+	
+	/**
+	 * 全局开关：是否参加抽奖
+	 * @return
+	 */
+	public boolean isJoinLottery() {
+		return joinLottery;
 	}
 	
 	/**

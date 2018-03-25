@@ -128,7 +128,7 @@ public class WebBot extends LoopThread {
 		
 		// 优先参与直播间抽奖
 		LotteryRoom room = RoomMgr.getInstn().getGiftRoom();
-		if(room != null) {
+		if(room != null && UIUtils.isJoinLottery()) {
 			toLottery(room);
 			
 		// 无抽奖操作则做其他事情

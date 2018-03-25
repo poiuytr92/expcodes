@@ -144,6 +144,7 @@ class _Lottery extends __XHR {
 	 * @return 失败原因
 	 */
 	private static String analyse(String response) {
+		log.info(response);
 		String reason = "";
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -153,7 +154,7 @@ class _Lottery extends __XHR {
 				
 				// 未实名认证且不填写验证码, 则会出现异常原因为空的情况
 				if(StrUtils.isEmpty(reason)) {
-					reason = "验证码错误:实名认证可跳过";
+					reason = "验证码错误";
 					
 				// 这两种异常实际上都是领不到的
 				} else if(reason.contains("错过了奖励") || reason.contains("已经领取")) {

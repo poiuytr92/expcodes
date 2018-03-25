@@ -81,6 +81,10 @@ public class UIUtils {
 		return AppUI.getInstn().isLogined();
 	}
 	
+	public static boolean isJoinLottery() {
+		return AppUI.getInstn().isJoinLottery();
+	}
+	
 	public static void updateAppTitle(String certificateTime) {
 		AppUI.getInstn().updateTitle(certificateTime);
 	}
