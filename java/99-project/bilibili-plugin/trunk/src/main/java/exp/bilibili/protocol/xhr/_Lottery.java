@@ -144,7 +144,6 @@ class _Lottery extends __XHR {
 	 * @return 失败原因
 	 */
 	private static String analyse(String response) {
-		log.info(response);
 		String reason = "";
 		try {
 			JSONObject json = JSONObject.fromObject(response);
