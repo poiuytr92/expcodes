@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.bean.ldm.HotLiveRange;
@@ -41,6 +44,9 @@ import exp.bilibili.protocol.xhr.WatchLive;
  */
 public class XHRSender {
 
+	/** 日志器 */
+	private final static Logger log = LoggerFactory.getLogger(XHRSender.class);
+	
 	/**
 	 * 获取管理员在B站link中心针对本插件的授权校验标签
 	 * @return
@@ -344,6 +350,11 @@ public class XHRSender {
 		} else {
 			int todayIntimacy = medal.getDayLimit() - medal.getTodayFeed();	// 今天可用亲密度
 			for(BagGift gift : allGifts) {
+				
+				if(gift.getIntimacy() <= 0) {
+					log.error("未登记的礼物, 不投喂: {}", gift.getGiftName());
+					continue;
+				}
 				
 				// 今天内到期的礼物, 全部选择(无视亲密度和实名)
 				if(gift.getExpire() > 0 && gift.getExpire() <= TOMORROW) {

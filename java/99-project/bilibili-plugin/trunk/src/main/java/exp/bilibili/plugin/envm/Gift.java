@@ -248,6 +248,10 @@ public class Gift {
 	
 	public final static Gift _666 = new Gift("7", "666", 666);
 	
+	public final static Gift PANGCI = new Gift("10", "蓝白胖次", 19900);
+	
+	public final static Gift LUNCH = new Gift("30", "爱心便当", 4500);
+	
 	public final static Gift CAPTAIN = new Gift("", "舰长", 198000);
 	
 	public final static Gift ADMIRAL = new Gift("", "提督", 1998000);
@@ -367,6 +371,12 @@ public class Gift {
 			
 		} else if(_666.NAME().equals(giftName)) {
 			cost = _666.COST();
+			
+		} else if(PANGCI.NAME().equals(giftName)) {
+			cost = PANGCI.COST();
+			
+		} else if(LUNCH.NAME().equals(giftName)) {
+			cost = LUNCH.COST();
 			
 		} else if(CAPTAIN.NAME().equals(giftName)) {
 			cost = CAPTAIN.COST();
