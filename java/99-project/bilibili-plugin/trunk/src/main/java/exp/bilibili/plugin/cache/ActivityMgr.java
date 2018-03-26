@@ -367,10 +367,11 @@ public class ActivityMgr {
 		curSumCost += cost;
 		
 		if(UIUtils.isLogined() && // 登陆后才能发送私信
+				ChatMgr.getInstn().isAutoThankYou() && // 开启了答谢姬
 				(before % COST_UNIT + cost) >= COST_UNIT) {
 			String msg = StrUtils.concat("恭喜您本月在 [", Config.getInstn().ACTIVITY_ROOM_ID(), 
 					"] 直播间的活跃度达到 [", after, "] O(∩_∩)O 谢谢资瓷 ~");
-//			XHRSender.sendPM(uid, msg);	// FIXME 暂时不发送私信通知
+			XHRSender.sendPM(uid, msg);
 		}
 	}
 	
