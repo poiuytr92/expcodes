@@ -100,7 +100,8 @@ class _HttpCookie {
 						this.path = val;
 						
 					} else if(EXPIRE.equalsIgnoreCase(key)) {
-						this.expiry = TimeUtils.toDate(val, TimeUtils.FORMAT_GMT);
+						this.expiry = TimeUtils.toDate(
+								val.replace('-', ' '), TimeUtils.FORMAT_GMT);
 					}
 				}
 				

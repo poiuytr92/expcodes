@@ -32,7 +32,7 @@ public class TimeUtils {
 	private final static String DEFAULT_TIME = "0000-00-00 00:00:00.000";
 	
 	/** 默认GMT时间值 */
-	private final static String DEFAULT_GMT = "Thu, 01-Jan-1970 08:00:00 GMT+08:00";
+	private final static String DEFAULT_GMT = "Thu, 01 Jan 1970 08:00:00 GMT+08:00";
 	
 	/** 日期格式： yyyy-MM-dd HH:mm:ss */
 	public final static String FORMAT_YMDHMS = DateFormat.YMDHMS;
@@ -40,7 +40,7 @@ public class TimeUtils {
 	/** 日期格式： yyyy-MM-dd HH:mm:ss.SSS */
 	public final static String FORMAT_YMDHMSS = DateFormat.YMDHMSS;
 	
-	/** GMT日期格式(多用于cookie的有效时间)： EEE, dd-MMM-yyyy HH:mm:ss z */
+	/** GMT日期格式(多用于cookie的有效时间)： EEE, dd MMM yyyy HH:mm:ss z */
 	public final static String FORMAT_GMT = DateFormat.GMT;
 	
 	/** 北京时差：8小时 */
@@ -94,7 +94,7 @@ public class TimeUtils {
 	/**
 	 * 把[Date时间]转换为[cookie有效时间]
 	 * @param date Date时间
-	 * @return cookie有效时间(转换失败则返回默认值 Thu, 01-Jan-1970 08:00:00 GMT+08:00)
+	 * @return cookie有效时间(转换失败则返回默认值 Thu, 01 Jan 1970 08:00:00 GMT+08:00)
 	 */
 	public static String toExpires(Date date) {
 		String expires = DEFAULT_GMT;
