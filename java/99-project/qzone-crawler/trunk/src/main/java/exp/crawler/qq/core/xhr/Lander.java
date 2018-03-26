@@ -266,6 +266,13 @@ public class Lander extends BaseLander {
 		// TODO Auto-generated method stub
 		System.out.println(cookie.toHeaderCookie());
 		
+		// 必须先取得p_skey，生成GTK，才能取到QzoneToken
+		
+		// 提取QzoneToken
+		Map<String, String> header = XHRUtils.getHeader(cookie);
+		String response = HttpURLUtils.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
+		System.out.println(response);
+		
 		return true;
 	}
 
