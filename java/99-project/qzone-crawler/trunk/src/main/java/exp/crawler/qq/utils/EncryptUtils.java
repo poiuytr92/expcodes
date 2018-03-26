@@ -31,13 +31,9 @@ public class EncryptUtils {
 	
 	/**
 	 * 通过 skey 计算GTK码.
-	 * 
+	 * ---------------------------------
 	 * 先用 外置的JS算法 计算 GTK， 当使用 JS计算失败 时，才使用内置算法计算。
 	 * 外置JS算法主要是为了在QQ更新了GTK算法情况下，可以对应灵活修改。
-	 * 
-	 * QQ计算GTK的JS函数获取方法：
-	 * 	在登陆页面点击【登陆后】，按F12打开开发者工具，
-	 * 	通过ctrl+shift+f全局搜索 【g_tk】，可以找到这个js函数
 	 * 
 	 * @param skey
 	 * @return
@@ -70,21 +66,19 @@ public class EncryptUtils {
 	}
 	
 	/**
-	 * 对QQ密码做RSA加密
+	 * 使用 外置的JS算法 对QQ密码做RSA加密.
+	 * ---------------------------------
+	 * 	QQ密码的加密逻辑过于复杂, 此处只能直接抽取QQ的JS脚本执行加密
+	 * 
+	 * @param QQ号 1QQ号
 	 * @param password 密码明文
-	 * @param qqSalt 16进制形式的QQ号
-	 * @param vccode 校验码
-	 * @return
+	 * @param vccode 验证码
+	 * @return RSA加密后的QQ密码
 	 */
-	public static String toRSA(String password, String qqSalt, String vccode) {
-		String rsa = "";
-		try {
-			Object rst = JSUtils.executeJS(RSA_JS_PATH, 
-					RSA_METHOD, password, qqSalt, vccode, "");
-			rsa = (rst == null ? "" : rst.toString());
-			
-		} catch (Throwable e) {}
-		return rsa;
+	public static String toRSA(String QQ, String password, String vcode) {
+		Object rsaPwd = JSUtils.executeJS(RSA_JS_PATH, 
+				RSA_METHOD, password, QQ, vcode, "");
+		return (rsaPwd == null ? "" : rsaPwd.toString());
 	}
 	
 }

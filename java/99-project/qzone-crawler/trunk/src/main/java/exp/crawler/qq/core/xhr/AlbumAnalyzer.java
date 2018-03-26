@@ -45,6 +45,9 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 		super(QQ);
 	}
 	
+	/**
+	 * 初始化
+	 */
 	@Override
 	protected void init() {
 		this.requestCnt = 0;

@@ -42,6 +42,9 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 		this.QZONE_HOMR_URL = URL.QZONE_HOMR_URL(this.QQ);
 	}
 	
+	/**
+	 * 初始化
+	 */
 	@Override
 	protected void init() {
 		// Undo

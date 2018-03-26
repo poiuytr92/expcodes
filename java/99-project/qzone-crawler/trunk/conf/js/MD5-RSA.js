@@ -1003,7 +1003,7 @@ uin2hex = function(qq) {
  * @returns
  */
 function getEncryption(e, i, n, o) {
-//    i = uin2hex(i);
+    i = uin2hex(i);
     n = n || "",
     e = e || "";
     for (var p = o ? e: t(e), r = g(p), s = t(r + i), a = TEA.strToBytes(n.toUpperCase(), !0), l = Number(a.length / 2).toString(16); l.length < 4;) l = "0" + l;

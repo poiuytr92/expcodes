@@ -4,170 +4,269 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpMethod;
-
 import exp.crawler.qq.bean.QQCookie;
+import exp.crawler.qq.cache.Browser;
+import exp.crawler.qq.core.interfaze.BaseLander;
+import exp.crawler.qq.envm.URL;
+import exp.crawler.qq.envm.XHRAtrbt;
 import exp.crawler.qq.utils.EncryptUtils;
+import exp.crawler.qq.utils.UIUtils;
+import exp.crawler.qq.utils.XHRUtils;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpURLUtils;
-import exp.libs.warp.net.http.HttpUtils;
 
-// 登陆分析
-// https://blog.csdn.net/M_S_W/article/details/70193899
-// http://www.vuln.cn/6454
+/**
+ * <PRE>
+ * QQ空间登陆器.
+ * ========================================================
+ * 	QQ空间XHR登陆分析参考(原文所说的方法已失效, 此处做过修正)：
+ * 		登陆流程拆解：https://blog.csdn.net/M_S_W/article/details/70193899
+ * 		登陆参数分析：http://www.vuln.cn/6454
+ * 		加密脚本抓取： https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
+ * 
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-03-26
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
+public class Lander extends BaseLander {
 
-//QQ空间登录加密JS获取分析
-// https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
-public class Lander {
-
-	// FIXME 调试中
+	/** 登陆成功后保存的cookie */
+	private QQCookie cookie;
 	
-	public static void main(String[] args) {
-		String QQ = "123742030";
-		String pwd = "xxxxx111111";
-		
-		QQCookie cookie = getSIG();
-		String[] rst = getVccode(cookie, QQ);
-		String vccode = rst[0];
-		String salt = rst[1];
-		String pt_verifysession_v1 = rst[2];
-		String rsaPwd = pwdToRSA(pwd, salt, vccode);
-		
-		System.out.println(QQ);
-		System.out.println(pwd);
-		System.out.println(rsaPwd);
-		System.out.println(vccode);
-		System.out.println(pt_verifysession_v1);
-		
-		login(cookie, QQ, rsaPwd, vccode, pt_verifysession_v1);
-	}
-	
-	// 获取初始COOKIE和SIG
-	// 注：获取返回的cookie和cookie里面的pt_login_sig值（以后用到）
-	private static QQCookie getSIG() {
-		String url = "https://xui.ptlogin2.qq.com/cgi-bin/xlogin";
-		Map<String, String> request = new HashMap<String, String>();
-		request.put("proxy_url", "https://qzs.qq.com/qzone/v6/portal/proxy.html");
-		request.put("daid", "5");
-		request.put("hide_title_bar", "1");
-		request.put("low_login", "0");
-		request.put("qlogin_auto_login", "1");
-		request.put("no_verifyimg", "1");
-		request.put("link_target", "blank");
-		request.put("appid", "549000912");
-		request.put("style", "22");
-		request.put("target", "self");
-		request.put("s_url", "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone&from=iqq");
-		request.put("pt_qr_app", "手机QQ空间");
-		request.put("pt_qr_link", "http://z.qzone.com/download.html");
-		request.put("self_regurl", "https://qzs.qq.com/qzone/v6/reg/index.html");
-		request.put("pt_qr_help_link", "http://z.qzone.com/download.html");
-		request.put("pt_no_auth", "0");
-		
-		
-		HttpClient client = new HttpClient();
-		String response = client.doGet(url, null, request);
-//		System.out.println(response);
-		
-		QQCookie cookie = new QQCookie();
-		HttpMethod method = client.getHttpMethod();
-		if(method != null) {
-			
-			/**
-			 *   pt_user_id=338691778658345467; EXPIRES=Mon, 20-Mar-2028 07:41:40 GMT; PATH=/; DOMAIN=ui.ptlogin2.qq.com;
-			 * , pt_login_sig=AO-f3u2Yh0jYtjSSoTp9dHgzJWWrE8*C4f-V0T1gzginpaQFl9lcsCCmNRwbwEWP; PATH=/; DOMAIN=ptlogin2.qq.com;
-			 * , pt_clientip=f1fddf683f4c9834; PATH=/; DOMAIN=ptlogin2.qq.com;
-			 * , pt_serverip=c5510ab19b5dc49f; PATH=/; DOMAIN=ptlogin2.qq.com;
-			 * , pt_local_token=240484663; PATH=/; DOMAIN=ptlogin2.qq.com;
-			 * , uikey=90ac463826f1fd3a352dbbbd3debefcb6437ed89a91bae36a674065dbdef2f35; PATH=/; DOMAIN=ptlogin2.qq.com;
-			 * , pt_guid_sig=c42d3952d08bbf7221217b6437915795729c9d6cdb01e9c186a1e5aa70302d12; EXPIRES=Sun, 22-Apr-2018 07:41:40 GMT; PATH=/; DOMAIN=ptlogin2.qq.com;
-			 * , ptui_identifier=000D50ECA596CA04BED01EC088C8C0D0C987F313BEBDC4EF29913265; PATH=/; DOMAIN=ui.ptlogin2.qq.com;
-			 */
-			
-			Header[] outHeaders = method.getResponseHeaders();
-			for(Header outHeader : outHeaders) {
-				if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
-					cookie.add(outHeader.getValue());
-				}
-			}
-		}
-		client.close();
-		return cookie;
+	/**
+	 * 构造函数
+	 * @param QQ 所登陆的QQ
+	 * @param password 所登陆的QQ密码
+	 */
+	public Lander(String QQ, String password) {
+		super(QQ, password);
 	}
 	
 	/**
-	 * 判断是否需要验证码(一般只有输入了非法QQ号时才需要真正的验证码)
-	 *   注：如果不需要验证码则返回和下面类似的信息，否则就等一会再登陆直到不需要验证码时登陆
-	 *   ptui_checkVC('0','!WCC','\x00\x00\x00\x00\x99\x07\xcc\x00','d4d6dc3ea578f17560481d67ce9070daec5bd11573a1b9cf0de8204a363b5acec30d204e240327532a59464371f08d6adb93188c8930e007','2');
-	 *   在注：如果不需要验证码，则上面的!WCC就相当于验证码（取出来），
-	 *   后面的d4d6dc3ea578f17560481d67ce9070daec5bd11573a1b9cf0de8204a363b5acec30d204e240327532a59464371f08d6adb93188c8930e007
-	 *   也需要取出来构造登陆网址中的pt_verifysession_v1
-	 *   
-	 * @param cookie
-	 * @param QQ
-	 * @return { vccode, salt, verifysession }
+	 * 初始化
 	 */
-	private static String[] getVccode(QQCookie cookie, String QQ) {
-		String url = "https://ssl.ptlogin2.qq.com/check";
+	@Override
+	protected void init() {
+		this.cookie = new QQCookie();
+	}
+	
+	/**
+	 * 执行登陆操作
+	 * @return true:登陆成功; false:登陆失败
+	 */
+	@Override
+	public boolean execute() {
+		boolean isOk = false;
+		try {
+			initCookieEnv();	// 获得本次登陆的SIG
+			String[] rst = takeVcode();	// 获得验证码与校验码
+			String vcode = rst[0];
+			String verify = rst[1];
+			String rsaPwd = encryptPassword(vcode);	// 加密登陆密码
+			String reason = login(rsaPwd, vcode, verify);	// 登陆
+			isOk = StrUtils.isTrimEmpty(reason);
+			
+			if(isOk == true) {
+				isOk = takeGTKAndToken();	// 生成GTK与QzoneToken
+				if(isOk == true) {
+					Browser.updateCookie(cookie);
+					UIUtils.log("登陆QQ [", QQ, "] 成功: ", cookie.NICKNAME());
+					
+				} else {
+					UIUtils.log("登陆QQ [", QQ, "] 失败: 无法提取GTK或QzoneToken");
+				}
+			} else {
+				UIUtils.log("登陆QQ [", QQ, "] 失败: ".concat(reason));
+			}
+		} catch(Exception e) {
+			UIUtils.log(e, "登陆QQ [", QQ, "] 失败: 仿真浏览器异常");
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 初始化登陆用的Cookie环境参数.
+	 * 	主要提取SIG值（属性名为:pt_login_sig）
+	 */
+	private void initCookieEnv() {
+		UIUtils.log("正在初始化登陆环境...");
+		
+		HttpClient client = new HttpClient();
+		client.doGet(URL.SIG_URL, null, _getSigRequest());
+		XHRUtils.takeCookies(client, cookie);	// 提取响应头中的Set-Cookie参数(含SIG)
+		client.close();
+		
+		UIUtils.log("已获得本次登陆的SIG码: ", cookie.SIG());
+	}
+	
+	/**
+	 * 获取SIG的请求参数
+	 * @return
+	 */
+	private Map<String, String> _getSigRequest() {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("regmaster", "");
-		request.put("pt_tea", "2");
-		request.put("pt_vcode", "1");
-		request.put("uin", QQ);
-		request.put("appid", "549000912");
-		request.put("js_ver", "10215");
-		request.put("js_type", "1");
-		request.put("login_sig", cookie.SIG());
-		request.put("u1", "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone&from=iqq&r=0.7018623383003015&pt_uistyle=40");
+		request.put(XHRAtrbt.proxy_url, "https://qzs.qq.com/qzone/v6/portal/proxy.html");
+		request.put(XHRAtrbt.s_url, "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone&from=iqq");
+		request.put(XHRAtrbt.pt_qr_link, "http://z.qzone.com/download.html");
+		request.put(XHRAtrbt.self_regurl, "https://qzs.qq.com/qzone/v6/reg/index.html");
+		request.put(XHRAtrbt.pt_qr_help_link, "http://z.qzone.com/download.html");
+		request.put(XHRAtrbt.pt_qr_app, "手机QQ空间");
+		request.put(XHRAtrbt.qlogin_auto_login, "1");
+		request.put(XHRAtrbt.low_login, "0");
+		request.put(XHRAtrbt.no_verifyimg, "1");
+		request.put(XHRAtrbt.daid, "5");
+		request.put(XHRAtrbt.appid, "549000912");
+		request.put(XHRAtrbt.hide_title_bar, "1");
+		request.put(XHRAtrbt.style, "22");
+		request.put(XHRAtrbt.target, "self");
+		request.put(XHRAtrbt.pt_no_auth, "0");
+		request.put(XHRAtrbt.link_target, "blank");
+		return request;
+	}
+	
+	/**
+	 * 提取登陆用的验证码.
+	 * -----------------------------
+	 * 当输入了有效的QQ号时，服务端响应值形如  (当QQ号无效时, 返回的是另一串数据)：
+	 * 	ptui_checkVC('0','!VAB','\x00\x00\x00\x00\x10\x3f\xff\xdc','cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33','2')
+	 * 
+	 * 其中: !VAB 为验证码
+	 * 		cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33
+	 * 		则为验证码的校验码
+	 * 
+	 * @return new String[] { 验证码, 校验码 }
+	 */
+	private String[] takeVcode() {
+		String response = HttpURLUtils.doGet(URL.VCODE_URL, null, _getVcodeRequest());
+		List<String> groups = RegexUtils.findBrackets(response, "'([^']*)'");
+		String[] rst = new String[] { "", "" };
+		if(groups.size() >= 4) {
+			rst[0] = groups.get(1);
+			rst[1] = groups.get(3);
+		}
+		UIUtils.log("已获得本次登陆的验证码: ", rst[0]);
+		UIUtils.log("已获得本次登陆的校验码: ", rst[1]);
+		return rst;
+	}
+	
+	/**
+	 * 获取验证码的请求参数
+	 * @return
+	 */
+	private Map<String, String> _getVcodeRequest() {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(XHRAtrbt.u1, "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone&from=iqq&r=0.7018623383003015&pt_uistyle=40");
+		request.put(XHRAtrbt.uin, QQ);
+		request.put(XHRAtrbt.login_sig, cookie.SIG());
+		request.put(XHRAtrbt.pt_vcode, "1");
+		request.put(XHRAtrbt.regmaster, "");
+		request.put(XHRAtrbt.pt_tea, "2");
+		request.put(XHRAtrbt.appid, "549000912");
+		request.put(XHRAtrbt.js_ver, "10215");
+		request.put(XHRAtrbt.js_type, "1");
+		return request;
+	}
+	
+	/**
+	 * 对QQ密码做RSA加密
+	 * @param vcode	本次登陆的验证码
+	 * @return RSA加密后的密码
+	 */
+	private String encryptPassword(String vcode) {
+		UIUtils.log("正在加密登陆密码...");
+		return EncryptUtils.toRSA(QQ, password, vcode);
+	}
+	
+	/**
+	 * 登陆.
+	 * -----------------
+	 * 	登陆成功, 服务器响应：
+	 * 		ptuiCB('0','0','https://ptlogin2.qzone.qq.com/check_sig?pttype=1&uin=272629724&service=login&nodirect=0&ptsigx=be9afd54dc7c9b05caf879056d01bff9520c147e19953b9577bf32a4a15b19f1cdfd7ceb17a27939d7596593032d4bcebfb57a4f58ae3ac6d9f078797ad04cd3&s_url=https%3A%2F%2Fqzs.qq.com%2Fqzone%2Fv5%2Floginsucc.html%3Fpara%3Dizone&f_url=&ptlang=2052&ptredirect=100&aid=549000912&daid=5&j_later=0&low_login_hour=0&regmaster=0&pt_login_type=1&pt_aid=0&pt_aaid=0&pt_light=0&pt_3rd_aid=0','0','登录成功！', 'EXP')
+	 * 
+	 * 	登陆失败, 服务器响应：
+	 * 		ptuiCB('3','0','','0','你输入的帐号或密码不正确，请重新输入。', '')
+	 * 		ptuiCB('7','0','','0','提交参数错误，请检查。(1552982056)', '')
+	 * 		ptuiCB('24','0','','0','很遗憾，网络连接出现异常，请你检查是否禁用cookies。(1479543040)', '')
+	 * 
+	 * @param rsaPwd RSA加密后的密码
+	 * @param vccode 本次登陆的验证码
+	 * @param verify 本次登陆的验证码的校验码
+	 * @return 登陆失败原因(若登陆成功则为空串)
+	 */
+	private String login(String rsaPwd, String vcode, String verify) {
+		UIUtils.log("正在登陆QQ [", QQ, "] ...");
 		
-		String response = HttpURLUtils.doGet(url, null, request);
-		System.out.println(response);
-		// ptui_checkVC('0','!VAB','\x00\x00\x00\x00\x10\x3f\xff\xdc','cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33','2')
+		HttpClient client = new HttpClient();
+		Map<String, String> request = _getLoginRequest(rsaPwd, vcode, verify);
+		String response = client.doGet(URL.XHR_LOGIN_URL, null, request);
 		
+		String reason = "";
 		List<String> rst = RegexUtils.findBrackets(response, "'([^']*)'");
-		return new String[] { rst.get(1), rst.get(2), rst.get(3) };
+		if(rst.size() >= 6) {
+			int code = NumUtils.toInt(rst.get(0), -1);
+			if(code == 0) {
+				XHRUtils.takeCookies(client, cookie);
+				cookie.setNickName(rst.get(5));
+				
+			} else {
+				reason = rst.get(4);
+			}
+		} else {
+			reason = response;
+		}
+		client.close();
+		return reason;
 	}
 	
-	// 加密算法
-	// 直接调用js中的jiami函数就可以了，参数分别为 [密码|QQ号|验证码|这个填空白文本就行]
-	private static String pwdToRSA(String pwd, String salt, String vccode) {
-		return EncryptUtils.toRSA(pwd, salt, vccode);
-	}
-	
-	private static void login(QQCookie cookie, String QQ, String rsaPwd, 
-			String vccode, String pt_verifysession_v1) {
-		String url = "https://ssl.ptlogin2.qq.com/login";
+	/**
+	 * 获取登陆请求参数
+	 * @param rsaPwd
+	 * @param vcode
+	 * @param verify
+	 * @return
+	 */
+	private Map<String, String> _getLoginRequest(String rsaPwd, String vcode, String verify) {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put("u", QQ);
-		request.put("verifycode", vccode);
-		request.put("pt_verifysession_v1", pt_verifysession_v1);
-		request.put("p", rsaPwd);
-		request.put("pt_randsalt", "2");
-		request.put("u1", "https://qzs.qzone.qq.com/qzone/v5/loginsucc.html?para=izone%26from=iqq&ptredirect=0&h=1&t=1&g=1&from_ui=1&ptlang=2052&action=3-16-1492259455546&js_ver=10215&js_type=1");
-		request.put("login_sig", cookie.SIG());
-		request.put("pt_uistyle", "4");
-		request.put("aid", "549000912");
-		request.put("daid", "5");
-		
-//		request.put("pt_jstoken", "3850832965");
-		request.put("pt_randsalt", "2");
-//		request.put("u1", "https://qzs.qq.com/qzone/v5/loginsucc.html?para=izone");
-		request.put("ptredirect", "0");
-		request.put("h", "1");
-		request.put("t", "1");
-		request.put("g", "1");
-//		request.put("from_ui", "1");
-		request.put("ptlang", "2052");
-		request.put("action", StrUtils.concat("7-35-", System.currentTimeMillis()));
-		request.put("js_ver", "10270");
-		request.put("js_type", "1");
-		request.put("pt_uistyle", "40");
-		
-		String response = HttpURLUtils.doGet(url, null, request);
-		System.out.println(response);
+		request.put(XHRAtrbt.login_sig, cookie.SIG());
+		request.put(XHRAtrbt.u, QQ);
+		request.put(XHRAtrbt.p, rsaPwd);
+		request.put(XHRAtrbt.verifycode, vcode);
+		request.put(XHRAtrbt.pt_verifysession_v1, verify);
+		request.put(XHRAtrbt.pt_vcode_v1, "0");	// 重要参数
+		request.put(XHRAtrbt.from_ui, "1");		// 重要参数
+		request.put(XHRAtrbt.u1, "https://qzs.qq.com/qzone/v5/loginsucc.html?para=izone");
+		request.put(XHRAtrbt.pt_randsalt, "2");
+		request.put(XHRAtrbt.pt_uistyle, "4");
+		request.put(XHRAtrbt.aid, "549000912");
+		request.put(XHRAtrbt.daid, "5");
+		request.put(XHRAtrbt.pt_randsalt, "2");
+		request.put(XHRAtrbt.ptredirect, "0");
+		request.put(XHRAtrbt.h, "1");
+		request.put(XHRAtrbt.t, "1");
+		request.put(XHRAtrbt.g, "1");
+		request.put(XHRAtrbt.ptlang, "2052");
+		request.put(XHRAtrbt.js_ver, "10270");
+		request.put(XHRAtrbt.js_type, "1");
+		request.put(XHRAtrbt.pt_uistyle, "40");
+//		request.put(XHRAtrbt.pt_jstoken, "3850832965");
+//		request.put(XHRAtrbt.action, StrUtils.concat("7-58-", System.currentTimeMillis()));
+		return request;
 	}
-	
+
+	@Override
+	protected boolean takeGTKAndToken() {
+		UIUtils.log("正在备份本次登陆的 GTK 与 QzoneToken ...");
+		
+		// TODO Auto-generated method stub
+		System.out.println(cookie.toHeaderCookie());
+		
+		return true;
+	}
+
 }

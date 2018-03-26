@@ -14,8 +14,17 @@ import exp.libs.utils.other.StrUtils;
  */
 public class URL {
 
-	/** QQ空间登陆页面 */
-	public final static String QZONE_LOGIN_URL = "http://qzone.qq.com/";
+	/** 获取登陆用SIG的URL */
+	public final static String SIG_URL = "https://xui.ptlogin2.qq.com/cgi-bin/xlogin";
+	
+	/** 获取登陆用验证码的URL */
+	public final static String VCODE_URL = "https://ssl.ptlogin2.qq.com/check";
+	
+	/** QQ空间登陆URL(XHR方式) */
+	public final static String XHR_LOGIN_URL = "https://ssl.ptlogin2.qq.com/login";
+	
+	/** QQ空间登陆URL(WEB方式) */
+	public final static String WEB_LOGIN_URL = "http://qzone.qq.com/";
 	
 	/** QQ空间域名地址(前缀) */
 	private final static String QZONE_DOMAIN = "https://user.qzone.qq.com/";

@@ -3,8 +3,12 @@ package exp.crawler.qq.utils;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.httpclient.Header;
+import org.apache.commons.httpclient.HttpMethod;
+
 import exp.crawler.qq.bean.QQCookie;
 import exp.libs.utils.verify.RegexUtils;
+import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpUtils;
 
 /**
@@ -36,6 +40,23 @@ public class XHRUtils {
 		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie.toNVCookie());
 		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
 		return header;
+	}
+	
+	/**
+	 * 从Http会话的响应报文中提取cookie信息
+	 * @param client Http会话客户端
+	 * @param cookie cookie对象容器
+	 */
+	public static void takeCookies(HttpClient client, QQCookie cookie) {
+		HttpMethod method = client.getHttpMethod();
+		if(method != null) {
+			Header[] outHeaders = method.getResponseHeaders();
+			for(Header outHeader : outHeaders) {
+				if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
+					cookie.add(outHeader.getValue());
+				}
+			}
+		}
 	}
 	
 	/**

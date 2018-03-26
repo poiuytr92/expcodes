@@ -77,6 +77,12 @@ public class Browser {
 		return INSTN().qqCookie;
 	}
 	
+	public static void updateCookie(QQCookie cookie) {
+		if(cookie != null && cookie != QQCookie.NULL) {
+			INSTN().qqCookie = cookie;
+		}
+	}
+	
 	public static String UIN() {
 		return INSTN().qqCookie.UIN();
 	}

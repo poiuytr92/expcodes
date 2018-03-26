@@ -116,4 +116,78 @@ public class XHRAtrbt {
 	
 	public final static String url = "url";
 	
+	public final static String proxy_url = "proxy_url";
+	
+	public final static String s_url = "s_url";
+	
+	public final static String pt_qr_link = "pt_qr_link";
+	
+	public final static String self_regurl = "self_regurl";
+	
+	public final static String pt_qr_help_link = "pt_qr_help_link";
+	
+	public final static String pt_qr_app = "pt_qr_app";
+	
+	public final static String qlogin_auto_login = "qlogin_auto_login";
+	
+	public final static String low_login = "low_login";
+	
+	public final static String no_verifyimg = "no_verifyimg";
+	
+	public final static String daid = "daid";
+	
+	public final static String hide_title_bar = "hide_title_bar";
+	
+	public final static String style = "style";
+	
+	public final static String target = "target";
+	
+	public final static String pt_no_auth = "pt_no_auth";
+	
+	public final static String link_target = "link_target";
+	
+	public final static String u1 = "u1";
+	
+	public final static String login_sig = "login_sig";
+	
+	public final static String pt_vcode = "pt_vcode";
+	
+	public final static String regmaster = "regmaster";
+	
+	public final static String pt_tea = "pt_tea";
+	
+	public final static String js_ver = "js_ver";
+	
+	public final static String js_type = "js_type";
+	
+	public final static String u = "u";
+	
+	public final static String p = "p";
+	
+	public final static String verifycode = "verifycode";
+	
+	public final static String pt_verifysession_v1 = "pt_verifysession_v1";
+	
+	public final static String pt_vcode_v1 = "pt_vcode_v1";
+	
+	public final static String from_ui = "from_ui";
+	
+	public final static String pt_randsalt = "pt_randsalt";
+	
+	public final static String pt_uistyle = "pt_uistyle";
+	
+	public final static String aid = "aid";
+	
+	public final static String ptredirect = "ptredirect";
+	
+	public final static String h = "h";
+	
+	public final static String g = "g";
+	
+	public final static String ptlang = "ptlang";
+	
+	public final static String pt_jstoken = "pt_jstoken";
+	
+	public final static String action = "action";
+	
 }

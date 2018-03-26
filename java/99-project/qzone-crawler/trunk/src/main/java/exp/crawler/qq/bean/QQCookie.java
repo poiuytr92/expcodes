@@ -41,12 +41,16 @@ public class QQCookie extends WebKitCookie {
 	/** 每次登陆QQ空间都会生成一个固定的qzonetoken, 用于其他页面操作 */
 	private String qzoneToken;
 	
+	/** QQ昵称 */
+	private String nickName;
+	
 	@Override
 	protected void init() {
 		this.sig = "";
 		this.uin = "";
 		this.gtk = "";
 		this.qzoneToken = "";
+		this.nickName = "";
 	}
 	
 	/**
@@ -66,6 +70,7 @@ public class QQCookie extends WebKitCookie {
 			this.uin = value;
 			uin = uin.replaceFirst("^[o|O]", "");
 			uin = uin.replaceFirst("^0*", "");
+			nickName = uin;
 			
 		} else if(PSKEY_KEY.equalsIgnoreCase(name)) {
 			this.gtk = EncryptUtils.toGTK(value);
@@ -91,6 +96,14 @@ public class QQCookie extends WebKitCookie {
 	
 	public void setQzoneToken(String qzoneToken) {
 		this.qzoneToken = qzoneToken;
+	}
+	
+	public String NICKNAME() {
+		return nickName;
+	}
+	
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 	
 }
