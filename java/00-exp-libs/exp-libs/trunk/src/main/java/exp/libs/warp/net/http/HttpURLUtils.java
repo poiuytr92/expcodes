@@ -97,7 +97,7 @@ public class HttpURLUtils extends HttpUtils {
 				header, connTimeout, readTimeout);
 		
 		// POST的请求参数是在结构体中发过去的
-		String kvs = encodeRequests(false, request, charset);
+		String kvs = encodeRequests(request, charset);
 		if (StrUtils.isNotEmpty(kvs)) {
 			byte[] bytes = CharsetUtils.toBytes(kvs, charset);
 			OutputStream out = conn.getOutputStream();
@@ -173,8 +173,8 @@ public class HttpURLUtils extends HttpUtils {
 	private static String _doGet(String url, 
 			Map<String, String> header, Map<String, String> request, 
 			int connTimeout, int readTimeout, String charset) throws Exception {
-		String kvs = encodeRequests(true, request, charset);	
-		url = url.concat(kvs);	// GET的参数是拼在url后面的
+		String kvs = encodeRequests(request, charset);	
+		url = HttpUtils.concatGET(url, kvs);	// GET的参数是拼在url后面的
 		
 		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_GET,
 				header, connTimeout, readTimeout);
@@ -271,7 +271,7 @@ public class HttpURLUtils extends HttpUtils {
 				header, connTimeout, readTimeout);
 		
 		// POST的请求参数是在结构体中发过去的
-		String kvs = encodeRequests(false, request, charset);
+		String kvs = encodeRequests(request, charset);
 		if (StrUtils.isNotEmpty(kvs)) {
 			byte[] bytes = CharsetUtils.toBytes(kvs, charset);
 			OutputStream out = conn.getOutputStream();
@@ -336,8 +336,8 @@ public class HttpURLUtils extends HttpUtils {
 	private static boolean _downloadByGet(String savePath, String url, 
 			Map<String, String> header, Map<String, String> request, 
 			int connTimeout, int readTimeout, String charset) throws Exception {
-		String kvs = encodeRequests(true, request, charset);	
-		url = url.concat(kvs);	// GET的参数是拼在url后面的
+		String kvs = encodeRequests(request, charset);	
+		url = HttpUtils.concatGET(url, kvs);	// GET的参数是拼在url后面的
 		
 		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_GET,
 				header, connTimeout, readTimeout);

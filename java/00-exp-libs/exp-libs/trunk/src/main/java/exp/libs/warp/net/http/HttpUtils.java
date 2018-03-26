@@ -380,22 +380,20 @@ public class HttpUtils {
 	
 	/**
 	 * 把请求参数转换成URL的KV串形式并进行编码
-	 * @param isGetMethod 是否为GET方法
 	 * @param request 请求参数集
 	 * @return ?&key1=val1&key2=val2&key3=val3
 	 */
-	public static String encodeRequests(boolean isGetMethod, Map<String, String> request) {
-		return encodeRequests(isGetMethod, request, DEFAULT_CHARSET);
+	public static String encodeRequests(Map<String, String> request) {
+		return encodeRequests(request, DEFAULT_CHARSET);
 	}
 	
 	/**
 	 * 把请求参数转换成URL的KV串形式并进行编码
-	 * @param isGetMethod 是否为GET方法
 	 * @param request 请求参数集
 	 * @param charset 参数字符编码
 	 * @return ?key1=val1&key2=val2&key3=val3
 	 */
-	public static String encodeRequests(boolean isGetMethod, 
+	public static String encodeRequests(
 			Map<String, String> request, final String charset) {
 		if(request == null || request.isEmpty() || 
 				CharsetUtils.isInvalid(charset)) {
@@ -413,16 +411,26 @@ public class HttpUtils {
 				val = "";
 			}
 			
+			// 注意：
+			//   第一个参数开头的&，对于POST请求而言是必须的
+			//   但对于GET请求则是可有可无的（但存在某些网页会强制要求不能存在）
 			if(StrUtils.isNotEmpty(key, val)) {
 				sb.append("&").append(key).append("=").append(val);
 			}
 		}
-		
-		String kvs = sb.toString();
-		if(isGetMethod && kvs.length() > 1) {
-			kvs = kvs.replaceFirst("^\\?&", "?"); 
-		}
-		return kvs;
+		return sb.toString();
+	}
+	
+	/**
+	 * 拼接GET请求的URL和参数(对于第一个参数开头的&, 强制去除)
+	 * @param url GET请求URL
+	 * @param requestKVs GET请求参数表 (需通过{@link encodeRequests}方法转码)
+	 * @return GET请求URL
+	 */
+	protected static String concatGET(String url, String requestKVs) {
+		url = StrUtils.isEmpty(url) ? "" : url;
+		String _GETURL = url.concat(requestKVs);
+		return _GETURL.replace(url.concat("?&"), url.concat("?"));	// 去掉第一个参数的&
 	}
 	
 	/**
