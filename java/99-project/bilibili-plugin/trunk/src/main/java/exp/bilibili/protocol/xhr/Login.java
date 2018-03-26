@@ -23,6 +23,10 @@ import exp.libs.warp.net.http.HttpUtils;
 /**
  * <PRE>
  * 登陆
+ * ===========================
+ * 	B站XHR登陆分析参考(原文所说的方法已失效, 此处做过修正)：
+ * 		http://www.cnblogs.com/-E6-/p/6953590.html
+ * 	
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
