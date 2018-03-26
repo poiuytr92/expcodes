@@ -155,12 +155,14 @@ public class Lander extends BaseLander {
 	protected boolean takeGTKAndToken() {
 		UIUtils.log("正在备份本次登陆的 GTK 与 QzoneToken ...");
 		
+		// 从页面源码提取QzoneToken
 		Browser.open(URL.QZONE_HOMR_URL(QQ));
 		final String RGX_QZONE_TOKEN = "window\\.g_qzonetoken[^\"]+\"([^\"]+)\"";
 		String qzoneToken = RegexUtils.findFirst(
 				Browser.getPageSource(), RGX_QZONE_TOKEN);
-		Browser.setQzoneToken(qzoneToken);	// 提取QzoneToken
-		Browser.backupCookies();	// 提取GTK
+		Browser.setQzoneToken(qzoneToken);
+		
+		Browser.backupCookies();	// 从Cookie提取p_skey，计算GTK
 		return StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
 	}
 	
