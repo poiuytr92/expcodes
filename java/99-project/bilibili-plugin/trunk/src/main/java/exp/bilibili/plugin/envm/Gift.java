@@ -252,12 +252,6 @@ public class Gift {
 	
 	public final static Gift LUNCH = new Gift("30", "爱心便当", 4500);
 	
-	public final static Gift CAPTAIN = new Gift("", "舰长", 198000);
-	
-	public final static Gift ADMIRAL = new Gift("", "提督", 1998000);
-	
-	public final static Gift GOVERNOR = new Gift("", "总督", 19998000);
-	
 	public final static Gift LANTERN = new Gift("109", "红灯笼", 2000);
 	
 	public final static Gift SQUIB = new Gift("110", "小爆竹", 2000);
@@ -265,6 +259,12 @@ public class Gift {
 	public final static Gift PEACH = new Gift("115", "桃花", 2000);
 	
 	public final static Gift LETTER = new Gift("116", "情书", 2000);
+	
+	public final static Gift CAPTAIN = new Gift("", "舰长", 198000);
+	
+	public final static Gift ADMIRAL = new Gift("", "提督", 1998000);
+	
+	public final static Gift GOVERNOR = new Gift("", "总督", 19998000);
 	
 	/** 礼物ID */
 	private String id;
@@ -326,6 +326,12 @@ public class Gift {
 			
 		} else if(_666.ID().equals(giftId)) {
 			intimacy = _666.INTIMACY();
+			
+		} else if(PANGCI.ID().equals(giftId)) {
+			intimacy = PANGCI.INTIMACY();
+			
+		} else if(LUNCH.ID().equals(giftId)) {
+			intimacy = LUNCH.INTIMACY();
 			
 		} else if(LANTERN.ID().equals(giftId)) {
 			intimacy = LANTERN.INTIMACY();
