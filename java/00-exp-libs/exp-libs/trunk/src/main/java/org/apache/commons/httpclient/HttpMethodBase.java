@@ -377,6 +377,22 @@ public abstract class HttpMethodBase implements HttpMethod {
     }
 
     /**
+     * Adds the specified response header, NOT overwriting any previous value.
+     * Note that header-name matching is case insensitive.
+     *
+     * @param header the header to add to the request
+     */
+    public void addResponseHeader(Header header) {
+        LOG.trace("HttpMethodBase.addResponseHeader(Header)");
+
+        if (header == null) {
+            LOG.debug("null header value ignored");
+        } else {
+            getResponseHeaderGroup().addHeader(header);
+        }
+    }
+    
+    /**
      * Adds the specified request header, NOT overwriting any previous value.
      * Note that header-name matching is case insensitive.
      *
@@ -926,6 +942,17 @@ public abstract class HttpMethodBase implements HttpMethod {
         return false;
     }
 
+    /**
+     * Adds the specified response header, NOT overwriting any previous value.
+     * Note that header-name matching is case insensitive.
+     *
+     * @param headerName the header's name
+     * @param headerValue the header's value
+     */
+    public void addResponseHeader(String headerName, String headerValue) {
+        addResponseHeader(new Header(headerName, headerValue));
+    }
+    
     /**
      * Adds the specified request header, NOT overwriting any previous value.
      * Note that header-name matching is case insensitive.

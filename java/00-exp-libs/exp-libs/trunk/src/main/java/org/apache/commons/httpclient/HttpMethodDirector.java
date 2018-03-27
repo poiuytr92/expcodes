@@ -104,10 +104,20 @@ public class HttpMethodDirector {
             }
         }
         
+        // by EXP: 记录本次访问的URL（若发页面生重定向）所返回的所有可能响应cookie
+        // 用于修正 commons-httpclient 自动重定向页面后导致中间页面响应的cookies丢失问题
+        Set<Header> responseCookies = new HashSet<Header>();
         try {
             int maxRedirects = this.params.getIntParameter(HttpClientParams.MAX_REDIRECTS, 100);
-
             for (int redirectCount = 0;;) {
+            	
+            	// 备份当前页面响应头中返回的cookies
+            	Header[] headers = method.getResponseHeaders();
+            	for(Header header : headers) {
+            		if(HttpUtils.HEAD.KEY.SET_COOKIE.equalsIgnoreCase(header.getName())) {
+            			responseCookies.add(header);
+            		}
+            	}
 
                 // make sure the connection we have is appropriate
                 if (this.conn != null && !hostConfiguration.hostEquals(this.conn)) {
@@ -188,6 +198,11 @@ public class HttpMethodDirector {
                 && this.conn != null
             ) {
                 this.conn.releaseConnection();
+            }
+            
+            // 把所有重定向页面的响应cookie追加到最后一个页面的响应头中
+            for(Header cookie : responseCookies) {
+            	method.addResponseHeader(cookie);
             }
         }
 
@@ -539,14 +554,6 @@ public class HttpMethodDirector {
     private boolean processRedirectResponse(final HttpMethod method)
      throws RedirectException {
     	
-    	// 追加重定向页面的响应cookie到当前的请求cookie
-    	Header[] rspHeaders = method.getResponseHeaders();
-    	for(Header rspHeader : rspHeaders) {
-			if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(rspHeader.getName())) {
-				method.addRequestHeader(HttpUtils.HEAD.KEY.COOKIE, rspHeader.getValue());
-			}
-		}
-        
         //get the location header to find out where to redirect to
         Header locationHeader = method.getResponseHeader("location");
         if (locationHeader == null) {
