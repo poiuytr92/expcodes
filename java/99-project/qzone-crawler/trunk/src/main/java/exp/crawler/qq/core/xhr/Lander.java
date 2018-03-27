@@ -71,13 +71,9 @@ public class Lander extends BaseLander {
 			String verify = rst[1];
 			
 			String rsaPwd = encryptPassword(vcode);	// 加密登陆密码
-			rst = login(rsaPwd, vcode, verify);	// 登陆
-			String reason = rst[0];
-			String redirectURL = rst[1];
-			
-			isOk = StrUtils.isTrimEmpty(reason);
+			String reason = login(rsaPwd, vcode, verify);	// 登陆
 			if(isOk == true) {
-				isOk = takeGTKAndToken(redirectURL);	// 生成GTK与QzoneToken
+				isOk = takeGTKAndToken();	// 生成GTK与QzoneToken
 				if(isOk == true) {
 					Browser.updateCookie(cookie);
 					UIUtils.log("登陆QQ [", QQ, "] 成功: ", cookie.NICKNAME());
@@ -210,9 +206,9 @@ public class Lander extends BaseLander {
 	 * @param rsaPwd RSA加密后的密码
 	 * @param vccode 本次登陆的验证码
 	 * @param verify 本次登陆的验证码的校验码
-	 * @return new String[] { 登陆失败原因(若登陆成功则为空串), 重定向页面(用于提取p_skey) }
+	 * @return 登陆失败原因(若登陆成功则为空串)
 	 */
-	private String[] login(String rsaPwd, String vcode, String verify) {
+	private String login(String rsaPwd, String vcode, String verify) {
 		UIUtils.log("正在登陆QQ [", QQ, "] ...");
 		
 		HttpClient client = new HttpClient();
@@ -220,14 +216,19 @@ public class Lander extends BaseLander {
 		String response = client.doGet(URL.XHR_LOGIN_URL, null, request);
 		
 		String reason = "";
-		String redirectURL = "";
 		List<String> rst = RegexUtils.findBrackets(response, "'([^']*)'");
 		if(rst.size() >= 6) {
 			int code = NumUtils.toInt(rst.get(0), -1);
 			if(code == 0) {
-				redirectURL = rst.get(2);
 				XHRUtils.takeResponseCookies(client, cookie);
 				cookie.setNickName(rst.get(5));
+				
+				// 从重定向页面返回的cookie中提取p_skey，并计算GTK
+				// 注意：此页面一旦访问后会马上重定向到QQ空间首页, 而p_skey则在重定向到首页前才能获取
+				// 因此要提取p_skey值, 要么禁止HTTP重定向, 要么把重定向过程中的所有cookie都记录下来
+				String redirectURL = rst.get(2);
+				client.doGet(redirectURL, XHRUtils.getHeader(cookie), null);
+				XHRUtils.takeResponseCookies(client, cookie);
 				
 			} else {
 				reason = rst.get(4);
@@ -236,7 +237,7 @@ public class Lander extends BaseLander {
 			reason = response;
 		}
 		client.close();
-		return new String[] { reason, redirectURL };
+		return reason;
 	}
 	
 	/**
@@ -275,24 +276,16 @@ public class Lander extends BaseLander {
 	}
 
 	/**
-	 * 提取GTK与QZoneToken
-	 * @param redirectURL 二次登录的重定向页面（用于获取p_skey）
+	 * 提取QZoneToken
 	 */
 	@Override
-	protected boolean takeGTKAndToken(String redirectURL) {
+	protected boolean takeGTKAndToken() {
 		UIUtils.log("正在备份本次登陆的 GTK 与 QzoneToken ...");
 		
-		// 从重定向页面返回的cookie中提取p_skey，并计算GTK
-		HttpClient client = new HttpClient();
-		Map<String, String> header = XHRUtils.getHeader(cookie);
-		client.doGet(redirectURL, header, null);
-		XHRUtils.takeRequestCookies(client, cookie, QQCookie.PSKEY_KEY.concat("=[^;]+"));
-		client.close();
-		
 		// 提取QzoneToken
-		header = XHRUtils.getHeader(cookie);
-		String response = HttpURLUtils.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
-		System.out.println(response);
+//		header = XHRUtils.getHeader(cookie);
+//		String response = HttpURLUtils.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
+//		System.out.println(response);
 		
 		return StrUtils.isNotEmpty(cookie.GTK(), cookie.QZONE_TOKEN());
 	}

@@ -60,7 +60,7 @@ public class Lander extends BaseLander {
 				
 				isOk = login();			// 登陆
 				if(isOk == true) {
-					isOk = takeGTKAndToken("");	// 生成GTK与QzoneToken
+					isOk = takeGTKAndToken();	// 生成GTK与QzoneToken
 					if(isOk == true) {
 //						Browser.quit();	// web仿真模式下不能关闭浏览器，否则QQ空间要重新登陆(GTK的存在使得保存cookie也无效)
 						UIUtils.log("登陆QQ [", QQ, "] 成功");
@@ -146,15 +146,14 @@ public class Lander extends BaseLander {
 	}
 	
 	/**
-	 * 从QQ空间首页首页源码中提取 qzonetoken.
+	 * 从QQ空间首页首页源码中提取GTK与 QZoneToken.
 	 * 	类似于gtk, qzonetoken 在每次登陆时自动生成一个固定值, 但是生成算法相对复杂（需要jother解码）, 
 	 *  因此此处取巧, 直接在页面源码中提取明文
 	 *  
-	 * @param unuse 
 	 * @return 
 	 */
 	@Override
-	protected boolean takeGTKAndToken(String unuse) {
+	protected boolean takeGTKAndToken() {
 		UIUtils.log("正在备份本次登陆的 GTK 与 QzoneToken ...");
 		
 		// 从页面源码提取QzoneToken
