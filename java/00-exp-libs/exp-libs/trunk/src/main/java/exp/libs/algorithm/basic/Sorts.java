@@ -6,6 +6,21 @@ import java.util.List;
 
 public class Sorts {
 
+	public static void radixSort() {
+		// TODO 基排
+	}
+	
+	public static void quickSort() {
+		// TODO 快排
+	}
+	
+	public static void heapSort() {
+		// TODO: 堆排
+	}
+	
+	public static void binSort() {
+		// TODO: 桶排序/箱排序
+	}
 	
 	/**
 	 * <pre>

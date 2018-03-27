@@ -10,6 +10,8 @@ public class Times {
 	
 	public final static long CONN = 100;	// ms
 	
+	public final static long WAIT = 10000;	// ms
+	
 	private Times() {}
 	
 }

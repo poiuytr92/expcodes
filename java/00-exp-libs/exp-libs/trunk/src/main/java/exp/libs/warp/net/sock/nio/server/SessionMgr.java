@@ -47,6 +47,7 @@ final class SessionMgr extends Thread {
 	/** 工作锁 */
 	private byte[] lock;
 	
+	/** 线程运行状态 */
 	private boolean running;
 	
 	/**
@@ -66,6 +67,12 @@ final class SessionMgr extends Thread {
 	
 	protected void _stop() {
 		this.running = false;
+	}
+	
+	protected void _join() {
+		try {
+			join(Times.WAIT);
+		} catch (Exception e) {}
 	}
 	
 	protected boolean isRunning() {

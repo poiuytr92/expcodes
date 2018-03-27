@@ -150,6 +150,7 @@ public class NioSocketServer extends Thread {
 		
 		// 启动会话管理线程
 		sessionMgr._start();
+		sessionMgr._join();
 		
 		// 启动会话监听服务
 		running = true;

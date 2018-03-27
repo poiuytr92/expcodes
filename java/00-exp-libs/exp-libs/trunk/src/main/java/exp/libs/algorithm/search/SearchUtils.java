@@ -6,7 +6,7 @@ import java.util.List;
 
 /**
  * <PRE>
- * 检索工具类
+ * 搜素算法工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
