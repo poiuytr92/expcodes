@@ -76,7 +76,7 @@ class _HttpClient {
 		this.charset = (CharsetUtils.isVaild(charset) ? charset : DEFAULT_CHARSET);
 		this.connTimeout = (connTimeout < 0 ? CONN_TIMEOUT : connTimeout);
 		this.callTimeout = (callTimeout < 0 ? CALL_TIMEOUT : callTimeout);
-		this.client = HttpClientUtils.createHttpClient(this.connTimeout, this.callTimeout);
+		this.client = HttpUtils.createHttpClient(this.connTimeout, this.callTimeout);
 	}
 	
 	/**
@@ -105,7 +105,7 @@ class _HttpClient {
 	 */
 	public void close() {
 		release();
-		HttpClientUtils.close(client);
+		HttpUtils.close(client);
 	}
 	
 	/**
