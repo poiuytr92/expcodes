@@ -24,6 +24,7 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * ========================================================
  * 	QQ空间XHR登陆分析参考(原文所说的方法已失效, 此处做过修正)：
  * 		登陆流程拆解：https://blog.csdn.net/M_S_W/article/details/70193899
+ * 		登陆参数分析：https://blog.csdn.net/zhujunxxxxx/article/details/29412297
  * 		登陆参数分析：http://www.vuln.cn/6454
  * 		加密脚本抓取： https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
  * 
@@ -121,7 +122,7 @@ public class Lander extends BaseLander {
 		request.put(XHRAtrbt.low_login, "0");
 		request.put(XHRAtrbt.no_verifyimg, "1");
 		request.put(XHRAtrbt.daid, "5");
-		request.put(XHRAtrbt.appid, "549000912");
+		request.put(XHRAtrbt.appid, "549000912");	// 目前是固定值
 		request.put(XHRAtrbt.hide_title_bar, "1");
 		request.put(XHRAtrbt.style, "22");
 		request.put(XHRAtrbt.target, "self");
@@ -173,6 +174,15 @@ public class Lander extends BaseLander {
 		return request;
 	}
 	
+	// FIXME : 
+	/*
+	 * ptui_checkVC('1','AAr4bdjMeh2hEa77PTuoHhqMTxbRqOp3','\x00\x00\x00\x00\x00\xa1\x92\x12');
+	 * 表示需要验证码
+	 * 
+	 * 获取验证码图片：
+	 * https://ssl.captcha.qq.com/getimage?aid=1003903&r=0.6472875226754695&uin={QQ}&cap_cd=aSD-ZVcNEcozlZUurhNYhp-MBHf4hjbJ
+	 */
+	
 	/**
 	 * 对QQ密码做RSA加密
 	 * @param vcode	本次登陆的验证码
@@ -213,6 +223,8 @@ public class Lander extends BaseLander {
 			if(code == 0) {
 				XHRUtils.takeCookies(client, cookie);
 				cookie.setNickName(rst.get(5));
+				
+				String http = rst.get(2);
 				
 			} else {
 				reason = rst.get(4);
@@ -263,17 +275,41 @@ public class Lander extends BaseLander {
 	protected boolean takeGTKAndToken() {
 		UIUtils.log("正在备份本次登陆的 GTK 与 QzoneToken ...");
 		
+		
 		// TODO Auto-generated method stub
 		System.out.println(cookie.toHeaderCookie());
 		
 		// 必须先取得p_skey，生成GTK，才能取到QzoneToken
 		
 		// 提取QzoneToken
-		Map<String, String> header = XHRUtils.getHeader(cookie);
-		String response = HttpURLUtils.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
-		System.out.println(response);
+//		Map<String, String> header = XHRUtils.getHeader(cookie);
+//		String response = HttpURLUtils.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
+//		System.out.println(response);
 		
 		return true;
 	}
 
+	// TODO 二次登陆获取p_skey
+	/**
+	 * https://ptlogin2.qzone.qq.com/check_sig
+	 * ?pttype=1
+	 * &uin=272629724
+	 * &service=login
+	 * &nodirect=0
+	 * &ptsigx=be9afd54dc7c9b05caf879056d01bff9520c147e19953b9577bf32a4a15b19f1cdfd7ceb17a27939d7596593032d4bcebfb57a4f58ae3ac6d9f078797ad04cd3
+	 * &s_url=https%3A%2F%2Fqzs.qq.com%2Fqzone%2Fv5%2Floginsucc.html%3Fpara%3Dizone
+	 * &f_url=
+	 * &ptlang=2052
+	 * &ptredirect=100
+	 * &aid=549000912
+	 * &daid=5
+	 * &j_later=0
+	 * &low_login_hour=0
+	 * &regmaster=0
+	 * &pt_login_type=1
+	 * &pt_aid=0
+	 * &pt_aaid=0
+	 * &pt_light=0
+	 * &pt_3rd_aid=0
+	 */
 }
