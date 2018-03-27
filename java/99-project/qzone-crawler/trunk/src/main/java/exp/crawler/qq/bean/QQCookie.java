@@ -27,7 +27,7 @@ public class QQCookie extends WebKitCookie {
 	private final static String UIN_KEY = "uin";
 	
 	/** 用于生成GTK的cookie属性键 */
-	private final static String PSKEY_KEY = "p_skey";
+	public final static String PSKEY_KEY = "p_skey";
 	
 	/** 用于登陆QQ的SIG码 */
 	private String sig;

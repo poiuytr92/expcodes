@@ -8,7 +8,6 @@ import java.net.ProtocolException;
  * @category  类名
  * @version   1.0     (2013-2-15 下午1:48:46)
  * @since     1.0
- * @author    liyang  (liyangchiyue@gmail.com)
  * 
  */
 public interface SetHttpConnection{

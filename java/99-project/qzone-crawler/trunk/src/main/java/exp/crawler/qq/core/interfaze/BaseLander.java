@@ -44,7 +44,8 @@ public abstract class BaseLander {
 	
 	/**
 	 * 提取GTK与QZoneToken
+	 * @param url 用于获取p_skey或QzoneToken的页面
 	 */
-	protected abstract boolean takeGTKAndToken();
+	protected abstract boolean takeGTKAndToken(String url);
 	
 }

@@ -10,8 +10,6 @@ import java.security.MessageDigest;
  * 
  * MD5加密不是我写的，膜拜下啊。。。通过JS反解析。
  *
- * @name        类名
- * @author                  ★李洋★     liyangchiyue@gmail.com
  * @createtTime 2013-10-31  下午3:47:57
  * @version     1.0
  * @since       1.0

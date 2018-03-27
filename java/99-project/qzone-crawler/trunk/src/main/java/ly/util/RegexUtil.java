@@ -7,7 +7,6 @@ import java.util.StringTokenizer;
  * 正则表达式工具类，方便在正则表达式之上一些提取字符操作
  * 
  * @name        正则表达式工具
- * @author                  ★李洋★     liyangchiyue@gmail.com
  * @createtTime 2013-5-21  下午8:25:37
  * @version     1.0
  * @since       1.0

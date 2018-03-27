@@ -8,7 +8,6 @@ import java.util.Date;
 /**
  * 
  * @category 简单工具
- * @author   李洋
  * @version  1.0
  * @date     2012-12-9
  */

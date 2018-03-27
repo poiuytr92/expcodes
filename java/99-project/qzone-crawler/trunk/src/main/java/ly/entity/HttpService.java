@@ -14,7 +14,6 @@ import ly.util.SendRequestUtil;
  * Http请求服务类,提供简单的基本请求信息封装
  * 
  * @name        Http请求服务类
- * @author                  ★李洋★     liyangchiyue@gmail.com
  * @createtTime 2013-6-17  上午9:12:50
  * @version     1.0
  * @since       1.0

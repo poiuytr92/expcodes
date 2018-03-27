@@ -69,12 +69,15 @@ public class Lander extends BaseLander {
 			String[] rst = takeVcode();	// 获得验证码与校验码
 			String vcode = rst[0];
 			String verify = rst[1];
-			String rsaPwd = encryptPassword(vcode);	// 加密登陆密码
-			String reason = login(rsaPwd, vcode, verify);	// 登陆
-			isOk = StrUtils.isTrimEmpty(reason);
 			
+			String rsaPwd = encryptPassword(vcode);	// 加密登陆密码
+			rst = login(rsaPwd, vcode, verify);	// 登陆
+			String reason = rst[0];
+			String redirectURL = rst[1];
+			
+			isOk = StrUtils.isTrimEmpty(reason);
 			if(isOk == true) {
-				isOk = takeGTKAndToken();	// 生成GTK与QzoneToken
+				isOk = takeGTKAndToken(redirectURL);	// 生成GTK与QzoneToken
 				if(isOk == true) {
 					Browser.updateCookie(cookie);
 					UIUtils.log("登陆QQ [", QQ, "] 成功: ", cookie.NICKNAME());
@@ -100,7 +103,7 @@ public class Lander extends BaseLander {
 		
 		HttpClient client = new HttpClient();
 		client.doGet(URL.SIG_URL, null, _getSigRequest());
-		XHRUtils.takeCookies(client, cookie);	// 提取响应头中的Set-Cookie参数(含SIG)
+		XHRUtils.takeResponseCookies(client, cookie);	// 提取响应头中的Set-Cookie参数(含SIG)
 		client.close();
 		
 		UIUtils.log("已获得本次登陆的SIG码: ", cookie.SIG());
@@ -207,9 +210,9 @@ public class Lander extends BaseLander {
 	 * @param rsaPwd RSA加密后的密码
 	 * @param vccode 本次登陆的验证码
 	 * @param verify 本次登陆的验证码的校验码
-	 * @return 登陆失败原因(若登陆成功则为空串)
+	 * @return new String[] { 登陆失败原因(若登陆成功则为空串), 重定向页面(用于提取p_skey) }
 	 */
-	private String login(String rsaPwd, String vcode, String verify) {
+	private String[] login(String rsaPwd, String vcode, String verify) {
 		UIUtils.log("正在登陆QQ [", QQ, "] ...");
 		
 		HttpClient client = new HttpClient();
@@ -217,14 +220,14 @@ public class Lander extends BaseLander {
 		String response = client.doGet(URL.XHR_LOGIN_URL, null, request);
 		
 		String reason = "";
+		String redirectURL = "";
 		List<String> rst = RegexUtils.findBrackets(response, "'([^']*)'");
 		if(rst.size() >= 6) {
 			int code = NumUtils.toInt(rst.get(0), -1);
 			if(code == 0) {
-				XHRUtils.takeCookies(client, cookie);
+				redirectURL = rst.get(2);
+				XHRUtils.takeResponseCookies(client, cookie);
 				cookie.setNickName(rst.get(5));
-				
-				String http = rst.get(2);
 				
 			} else {
 				reason = rst.get(4);
@@ -233,7 +236,7 @@ public class Lander extends BaseLander {
 			reason = response;
 		}
 		client.close();
-		return reason;
+		return new String[] { reason, redirectURL };
 	}
 	
 	/**
@@ -271,45 +274,27 @@ public class Lander extends BaseLander {
 		return request;
 	}
 
+	/**
+	 * 提取GTK与QZoneToken
+	 * @param redirectURL 二次登录的重定向页面（用于获取p_skey）
+	 */
 	@Override
-	protected boolean takeGTKAndToken() {
+	protected boolean takeGTKAndToken(String redirectURL) {
 		UIUtils.log("正在备份本次登陆的 GTK 与 QzoneToken ...");
 		
-		
-		// TODO Auto-generated method stub
-		System.out.println(cookie.toHeaderCookie());
-		
-		// 必须先取得p_skey，生成GTK，才能取到QzoneToken
+		// 从重定向页面返回的cookie中提取p_skey，并计算GTK
+		HttpClient client = new HttpClient();
+		Map<String, String> header = XHRUtils.getHeader(cookie);
+		client.doGet(redirectURL, header, null);
+		XHRUtils.takeRequestCookies(client, cookie, QQCookie.PSKEY_KEY.concat("=[^;]+"));
+		client.close();
 		
 		// 提取QzoneToken
-//		Map<String, String> header = XHRUtils.getHeader(cookie);
-//		String response = HttpURLUtils.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
-//		System.out.println(response);
+		header = XHRUtils.getHeader(cookie);
+		String response = HttpURLUtils.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
+		System.out.println(response);
 		
-		return true;
+		return StrUtils.isNotEmpty(cookie.GTK(), cookie.QZONE_TOKEN());
 	}
 
-	// TODO 二次登陆获取p_skey
-	/**
-	 * https://ptlogin2.qzone.qq.com/check_sig
-	 * ?pttype=1
-	 * &uin=272629724
-	 * &service=login
-	 * &nodirect=0
-	 * &ptsigx=be9afd54dc7c9b05caf879056d01bff9520c147e19953b9577bf32a4a15b19f1cdfd7ceb17a27939d7596593032d4bcebfb57a4f58ae3ac6d9f078797ad04cd3
-	 * &s_url=https%3A%2F%2Fqzs.qq.com%2Fqzone%2Fv5%2Floginsucc.html%3Fpara%3Dizone
-	 * &f_url=
-	 * &ptlang=2052
-	 * &ptredirect=100
-	 * &aid=549000912
-	 * &daid=5
-	 * &j_later=0
-	 * &low_login_hour=0
-	 * &regmaster=0
-	 * &pt_login_type=1
-	 * &pt_aid=0
-	 * &pt_aaid=0
-	 * &pt_light=0
-	 * &pt_3rd_aid=0
-	 */
 }

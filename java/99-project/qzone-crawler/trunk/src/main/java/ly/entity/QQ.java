@@ -13,7 +13,6 @@ import ly.util.Util;
  * 用于登录，及描述QQ用户信息
  *
  * @name         QQ类名
- * @author       ★李洋★     liyangchiyue@gmail.com
  * @createtTime 2013-10-31  下午3:49:30
  * @version      1.0
  * @since        1.0

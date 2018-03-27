@@ -47,18 +47,39 @@ public class XHRUtils {
 	 * @param client Http会话客户端
 	 * @param cookie cookie对象容器
 	 */
-	public static void takeCookies(HttpClient client, QQCookie cookie) {
+	public static void takeResponseCookies(HttpClient client, QQCookie cookie) {
 		HttpMethod method = client.getHttpMethod();
 		if(method != null) {
-			Header[] outHeaders = method.getResponseHeaders();
-			for(Header outHeader : outHeaders) {
-				if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
-					cookie.add(outHeader.getValue());
+			Header[] rspHeaders = method.getResponseHeaders();
+			for(Header rspHeader : rspHeaders) {
+				if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(rspHeader.getName())) {
+					cookie.add(rspHeader.getValue());
 				}
 			}
 		}
 	}
 	
+	/**
+	 * 从Http会话的请求报文中提取cookie信息.
+	 * 	(已修改过commons-httpclient的源码, 重定向页面Respone的Set-Cookie已存储到Request的Cookie中)
+	 * 
+	 * @param client Http会话客户端
+	 * @param cookie cookie对象容器
+	 * @param filterRegex 值过滤正则
+	 */
+	public static void takeRequestCookies(HttpClient client, QQCookie cookie, String filterRegex) {
+		HttpMethod method = client.getHttpMethod();
+		if(method != null) {
+			Header[] rqsHeaders = method.getRequestHeaders();
+			for(Header rqsHeader : rqsHeaders) {
+				if(HttpUtils.HEAD.KEY.COOKIE.equals(rqsHeader.getName()) && 
+						RegexUtils.contains(rqsHeader.getValue(), filterRegex)) {
+					cookie.add(rqsHeader.getValue());
+				}
+			}
+		}
+	}
+
 	/**
 	 * 从XHR响应报文中的回调函数提取JSON内容
 	 * @param callback 回调函数字符串

@@ -16,7 +16,6 @@ import java.util.Map;
  * @category  Http解析工具
  * @version   1.0     (2013-2-20 下午12:22:30)
  * @since     1.0
- * @author    liyang  (liyangchiyue@gmail.com)
  * 
  */
 public class HttpUtil {

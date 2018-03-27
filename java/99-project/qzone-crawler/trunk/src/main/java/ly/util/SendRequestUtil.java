@@ -32,7 +32,6 @@ import ly.interfaced.SetHttpConnection;
  * 
  * @since 1.0
  * @version 1.0 (2013-2-7 下午5:30:32)
- * @author 李洋
  * @see #downloadHttpPage 下载一个网页页面
  */
 public class SendRequestUtil {

@@ -6,7 +6,6 @@ import ly.entity.QQ;
  * 程序的入口
  *
  * @name        类名
- * @author                  ★李洋★     liyangchiyue@gmail.com
  * @createtTime 2013-11-2  下午5:13:35
  * @version     1.0
  * @since       1.0
