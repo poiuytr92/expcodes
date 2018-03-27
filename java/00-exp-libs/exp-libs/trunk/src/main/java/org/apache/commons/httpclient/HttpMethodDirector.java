@@ -25,6 +25,8 @@ import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import exp.libs.warp.net.http.HttpUtils;
+
 @SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 public class HttpMethodDirector {
 
@@ -536,6 +538,15 @@ public class HttpMethodDirector {
      */
     private boolean processRedirectResponse(final HttpMethod method)
      throws RedirectException {
+    	
+    	// 追加重定向页面的响应cookie到当前的请求cookie
+    	Header[] rspHeaders = method.getResponseHeaders();
+    	for(Header rspHeader : rspHeaders) {
+			if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(rspHeader.getName())) {
+				method.addRequestHeader(HttpUtils.HEAD.KEY.COOKIE, rspHeader.getValue());
+			}
+		}
+        
         //get the location header to find out where to redirect to
         Header locationHeader = method.getResponseHeader("location");
         if (locationHeader == null) {
