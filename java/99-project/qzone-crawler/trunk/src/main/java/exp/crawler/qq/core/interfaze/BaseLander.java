@@ -43,8 +43,9 @@ public abstract class BaseLander {
 	public abstract boolean execute();
 	
 	/**
-	 * 提取GTK与QZoneToken
+	 * 提取本次登陆的GTK与QzoneToken
+	 * @param url
 	 */
-	protected abstract boolean takeGTKAndToken();
+	protected abstract boolean takeGTKAndToken(String url);
 	
 }
