@@ -46,6 +46,7 @@ import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.thread.ThreadPool;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -155,6 +156,9 @@ public class AppUI extends MainWindow {
 	
 	private boolean joinLottery;
 	
+	/** 线程池 */
+	private ThreadPool tp;
+	
 	private static volatile AppUI instance;
 	
 	private AppUI() {
@@ -227,6 +231,8 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
+		this.tp = new ThreadPool(10);
+		
 		this.chatTF = new JTextField();
 		this.httpTF = new JTextField("http://live.bilibili.com/");
 		this.liveRoomTF = new JTextField(String.valueOf(Config.getInstn().SIGN_ROOM_ID()), 15);
@@ -300,7 +306,7 @@ public class AppUI extends MainWindow {
 		this.colorUI = new _ColorUI();
 		this.stormUI = new _StormModeUI();
 		this.curChatColor = ChatColor.RANDOM();
-				
+		
 		printVersionInfo();
 	}
 
@@ -477,11 +483,13 @@ public class AppUI extends MainWindow {
 	 * 异步登陆所有小号
 	 */
 	private void _loginMinis() {
-		new Thread() {
+		tp.execute(new Thread() {
+			
+			@Override
 			public void run() {
 				miniLoginMgrUI.init();
 			};
-		}.start();
+		});
 	}
 	
 	private void setLogoutBtnListener() {
@@ -699,11 +707,17 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				String msg = chatTF.getText();
+				final String msg = chatTF.getText();
 				if(StrUtils.isNotEmpty(msg)) {
-					XHRSender.sendDanmu(msg, curChatColor);
-					chatTF.setText("");
+					tp.execute(new Thread() {
+						
+						@Override
+						public void run() {
+							XHRSender.sendDanmu(msg, curChatColor);
+						}
+					});
 				}
+				chatTF.setText("");
 			}
 		});
 	}
