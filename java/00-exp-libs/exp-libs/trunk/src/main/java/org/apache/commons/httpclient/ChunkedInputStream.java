@@ -250,7 +250,6 @@ public class ChunkedInputStream extends InputStream {
         	int b = in.read();
             if (b == -1) { 
             	System.err.println("chunked stream ended unexpectedly");
-//            	continue;	// FIXME: 为什么要改成return?
             	return 0;
 //                throw new IOException("chunked stream ended unexpectedly");
             }

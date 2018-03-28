@@ -691,11 +691,11 @@ public abstract class HttpMethodBase implements HttpMethod {
                 if (contentLength > Integer.MAX_VALUE) { //guard below cast from overflow
                     throw new IOException("Content too large to be buffered: "+ contentLength +" bytes");
                 }
-                int limit = getParams().getIntParameter(HttpMethodParams.BUFFER_WARN_TRIGGER_LIMIT, 1024*1024);
-                if ((contentLength == -1) || (contentLength > limit)) {
+//                int limit = getParams().getIntParameter(HttpMethodParams.BUFFER_WARN_TRIGGER_LIMIT, 1024*1024);
+//                if ((contentLength == -1) || (contentLength > limit)) {
 //                    LOG.debug("Going to buffer response body of large or unknown size. "
 //                            +"Using getResponseBodyAsStream instead is recommended.");
-                }
+//                }
 //                LOG.debug("Buffering response body");
                 ByteArrayOutputStream outstream = new ByteArrayOutputStream(
                         contentLength > 0 ? (int) contentLength : DEFAULT_INITIAL_BUFFER_SIZE);

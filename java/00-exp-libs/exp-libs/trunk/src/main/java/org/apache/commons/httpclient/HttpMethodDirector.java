@@ -624,10 +624,8 @@ public class HttpMethodDirector {
             }
         }
 
-        if (LOG.isDebugEnabled()) {
-            LOG.debug("Redirecting from '" + currentUri.getEscapedURI()
-                + "' to '" + redirectUri.getEscapedURI());
-        }
+        LOG.info("Redirecting from '" + currentUri.getEscapedURI()
+            + "' to '" + redirectUri.getEscapedURI());
         //And finally invalidate the actual authentication scheme
         method.getHostAuthState().invalidate(); 
         return true;

@@ -1,171 +1,327 @@
+/* ====================================================================
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+==================================================================== */
 package org.apache.poi.xssf.usermodel;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.ss.usermodel.Hyperlink;
 import org.apache.poi.ss.util.CellReference;
 import org.openxmlformats.schemas.spreadsheetml.x2006.main.CTHyperlink;
 
+
+/**
+ * XSSF Implementation of a Hyperlink.
+ * Note - unlike with HSSF, many kinds of hyperlink
+ * are largely stored as relations of the sheet
+ */
 public class XSSFHyperlink implements Hyperlink {
-	private int _type;
-	private PackageRelationship _externalRel;
-	private CTHyperlink _ctHyperlink;
-	private String _location;
+    private int _type;
+    private PackageRelationship _externalRel;
+    private CTHyperlink _ctHyperlink;
+    private String _location;
 
-	public XSSFHyperlink(int type) {
-		this._type = type;
-		this._ctHyperlink = CTHyperlink.Factory.newInstance();
+    /**
+     * Create a new XSSFHyperlink. This method is protected to be used only by XSSFCreationHelper
+     *
+     * @param type - the type of hyperlink to create
+     */
+    public XSSFHyperlink(int type) {
+        _type = type;
+        _ctHyperlink = CTHyperlink.Factory.newInstance();
+    }
+
+    /**
+     * Create a XSSFHyperlink amd initialize it from the supplied CTHyperlink bean and package relationship
+     *
+     * @param ctHyperlink the xml bean containing xml properties
+     * @param hyperlinkRel the relationship in the underlying OPC package which stores the actual link's address
+     */
+    protected XSSFHyperlink(CTHyperlink ctHyperlink, PackageRelationship hyperlinkRel) {
+        _ctHyperlink = ctHyperlink;
+        _externalRel = hyperlinkRel;
+
+        // Figure out the Hyperlink type and distination
+
+        // If it has a location, it's internal
+        if (ctHyperlink.getLocation() != null) {
+            _type = Hyperlink.LINK_DOCUMENT;
+            _location = ctHyperlink.getLocation();
+        } else {
+            // Otherwise it's somehow external, check
+            //  the relation to see how
+            if (_externalRel == null) {
+                if (ctHyperlink.getId() != null) {
+                    throw new IllegalStateException("The hyperlink for cell " + ctHyperlink.getRef() +
+                            " references relation " + ctHyperlink.getId() + ", but that didn't exist!");
+                }
+                // hyperlink is internal and is not related to other parts
+                _type = Hyperlink.LINK_DOCUMENT;
+            } else {
+                URI target = _externalRel.getTargetURI();
+                _location = target.toString();
+
+                // Try to figure out the type
+                if (_location.startsWith("http://") || _location.startsWith("https://")
+                        || _location.startsWith("ftp://")) {
+                    _type = Hyperlink.LINK_URL;
+                } else if (_location.startsWith("mailto:")) {
+                    _type = Hyperlink.LINK_EMAIL;
+                } else {
+                    _type = Hyperlink.LINK_FILE;
+                }
+            }
+
+
+        }
+    }
+
+    /**
+     * @return the underlying CTHyperlink object
+     */
+    public CTHyperlink getCTHyperlink() {
+        return _ctHyperlink;
+    }
+
+    /**
+     * Do we need to a relation too, to represent
+     * this hyperlink?
+     */
+    public boolean needsRelationToo() {
+        return (_type != Hyperlink.LINK_DOCUMENT);
+    }
+
+    /**
+     * Generates the relation if required
+     */
+    protected void generateRelationIfNeeded(PackagePart sheetPart) {
+        if (_externalRel == null && needsRelationToo()) {
+            // Generate the relation
+            PackageRelationship rel =
+                    sheetPart.addExternalRelationship(_location, XSSFRelation.SHEET_HYPERLINKS.getRelation());
+
+            // Update the r:id
+            _ctHyperlink.setId(rel.getId());
+        }
+    }
+
+    /**
+     * Return the type of this hyperlink
+     *
+     * @return the type of this hyperlink
+     */
+    public int getType() {
+        return _type;
+    }
+
+    /**
+     * Get the reference of the cell this applies to,
+     * es A55
+     */
+    public String getCellRef() {
+        return _ctHyperlink.getRef();
+    }
+
+    /**
+     * Hyperlink address. Depending on the hyperlink type it can be URL, e-mail, path to a file
+     *
+     * @return the address of this hyperlink
+     */
+    public String getAddress() {
+        return _location;
+    }
+
+    /**
+     * Return text label for this hyperlink
+     *
+     * @return text to display
+     */
+    public String getLabel() {
+        return _ctHyperlink.getDisplay();
+    }
+
+    /**
+     * Location within target. If target is a workbook (or this workbook) this shall refer to a
+     * sheet and cell or a defined name. Can also be an HTML anchor if target is HTML file.
+     *
+     * @return location
+     */
+    public String getLocation() {
+        return _ctHyperlink.getLocation();
+    }
+
+    /**
+     * Sets text label for this hyperlink
+     *
+     * @param label text label for this hyperlink
+     */
+    public void setLabel(String label) {
+        _ctHyperlink.setDisplay(label);
+    }
+
+    /**
+     * Location within target. If target is a workbook (or this workbook) this shall refer to a
+     * sheet and cell or a defined name. Can also be an HTML anchor if target is HTML file.
+     *
+     * @param location - string representing a location of this hyperlink
+     */
+    public void setLocation(String location) {
+        _ctHyperlink.setLocation(location);
+    }
+
+    /**
+     * Hyperlink address. Depending on the hyperlink type it can be URL, e-mail, path to a file
+     *
+     * @param address - the address of this hyperlink
+     */
+    public void setAddress(String address) {
+        validate(address);
+
+       _location = address;
+        //we must set location for internal hyperlinks
+        if (_type == Hyperlink.LINK_DOCUMENT) {
+            setLocation(address);
+        }
+    }
+
+    private void validate(String address) {
+        switch (_type){
+            // email, path to file and url must be valid URIs
+            case Hyperlink.LINK_EMAIL:
+            case Hyperlink.LINK_FILE:
+            case Hyperlink.LINK_URL:
+                try {
+                    new URI(address);
+                } catch (URISyntaxException x) {
+                    IllegalArgumentException y = new IllegalArgumentException("Address of hyperlink must be a valid URI");
+                    y.initCause(x);
+                    throw y;
+                }
+                break;
+        }
+    }
+
+    /**
+     * Assigns this hyperlink to the given cell reference
+     */
+    protected void setCellReference(String ref) {
+        _ctHyperlink.setRef(ref);
+    }
+
+    private CellReference buildCellReference() {
+        return new CellReference(_ctHyperlink.getRef());
+    }
+
+
+    /**
+     * Return the column of the first cell that contains the hyperlink
+     *
+     * @return the 0-based column of the first cell that contains the hyperlink
+     */
+    public int getFirstColumn() {
+        return buildCellReference().getCol();
+    }
+
+
+    /**
+     * Return the column of the last cell that contains the hyperlink
+     *
+     * @return the 0-based column of the last cell that contains the hyperlink
+     */
+    public int getLastColumn() {
+        return buildCellReference().getCol();
+    }
+
+    /**
+     * Return the row of the first cell that contains the hyperlink
+     *
+     * @return the 0-based row of the cell that contains the hyperlink
+     */
+    public int getFirstRow() {
+        return buildCellReference().getRow();
+    }
+
+
+    /**
+     * Return the row of the last cell that contains the hyperlink
+     *
+     * @return the 0-based row of the last cell that contains the hyperlink
+     */
+    public int getLastRow() {
+        return buildCellReference().getRow();
+    }
+
+    /**
+     * Set the column of the first cell that contains the hyperlink
+     *
+     * @param col the 0-based column of the first cell that contains the hyperlink
+     */
+    public void setFirstColumn(int col) {
+        _ctHyperlink.setRef(
+                new CellReference(
+                        getFirstRow(), col
+                ).formatAsString()
+        );
+    }
+
+    /**
+     * Set the column of the last cell that contains the hyperlink
+     *
+     * @param col the 0-based column of the last cell that contains the hyperlink
+     */
+    public void setLastColumn(int col) {
+        setFirstColumn(col);
+    }
+
+    /**
+     * Set the row of the first cell that contains the hyperlink
+     *
+     * @param row the 0-based row of the first cell that contains the hyperlink
+     */
+    public void setFirstRow(int row) {
+        _ctHyperlink.setRef(
+                new CellReference(
+                        row, getFirstColumn()
+                ).formatAsString()
+        );
+    }
+
+    /**
+     * Set the row of the last cell that contains the hyperlink
+     *
+     * @param row the 0-based row of the last cell that contains the hyperlink
+     */
+    public void setLastRow(int row) {
+        setFirstRow(row);
 	}
 
-	protected XSSFHyperlink(CTHyperlink ctHyperlink,
-			PackageRelationship hyperlinkRel) {
-		this._ctHyperlink = ctHyperlink;
-		this._externalRel = hyperlinkRel;
-		if (ctHyperlink.getLocation() != null) {
-			this._type = 2;
-			this._location = ctHyperlink.getLocation();
-		} else if (this._externalRel == null) {
-			if (ctHyperlink.getId() != null) {
-				throw new IllegalStateException("The hyperlink for cell "
-						+ ctHyperlink.getRef() + " references relation "
-						+ ctHyperlink.getId() + ", but that didn't exist!");
-			}
-			this._type = 2;
-		} else {
-			URI target = this._externalRel.getTargetURI();
-			this._location = target.toString();
-			if ((this._location.startsWith("http://"))
-					|| (this._location.startsWith("https://"))
-					|| (this._location.startsWith("ftp://"))) {
-				this._type = 1;
-			} else if (this._location.startsWith("mailto:")) {
-				this._type = 3;
-			} else {
-				this._type = 4;
-			}
-		}
-	}
+    /**
+     * @return additional text to help the user understand more about the hyperlink
+     */
+    public String getTooltip() {
+        return _ctHyperlink.getTooltip();
+    }
 
-	public CTHyperlink getCTHyperlink() {
-		return this._ctHyperlink;
-	}
-
-	public boolean needsRelationToo() {
-		return this._type != 2;
-	}
-
-	protected void generateRelationIfNeeded(PackagePart sheetPart) {
-		if (needsRelationToo()) {
-			PackageRelationship rel = sheetPart
-					.addExternalRelationship(this._location,
-							XSSFRelation.SHEET_HYPERLINKS.getRelation());
-
-			this._ctHyperlink.setId(rel.getId());
-		}
-	}
-
-	public int getType() {
-		return this._type;
-	}
-
-	public String getCellRef() {
-		return this._ctHyperlink.getRef();
-	}
-
-	public String getAddress() {
-		return this._location;
-	}
-
-	public String getLabel() {
-		return this._ctHyperlink.getDisplay();
-	}
-
-	public String getLocation() {
-		return this._ctHyperlink.getLocation();
-	}
-
-	public void setLabel(String label) {
-		this._ctHyperlink.setDisplay(label);
-	}
-
-	public void setLocation(String location) {
-		this._ctHyperlink.setLocation(location);
-	}
-
-	public void setAddress(String address) {
-		validate(address);
-
-		this._location = address;
-		if (this._type == 2) {
-			setLocation(address);
-		}
-	}
-
-	private void validate(String address) {
-		switch (this._type) {
-		case 1:
-		case 3:
-		case 4:
-			try {
-				new URI(address);
-			} catch (URISyntaxException x) {
-				IllegalArgumentException y = new IllegalArgumentException(
-						"Address of hyperlink must be a valid URI");
-				y.initCause(x);
-				throw y;
-			}
-		}
-	}
-
-	protected void setCellReference(String ref) {
-		this._ctHyperlink.setRef(ref);
-	}
-
-	private CellReference buildCellReference() {
-		return new CellReference(this._ctHyperlink.getRef());
-	}
-
-	public int getFirstColumn() {
-		return buildCellReference().getCol();
-	}
-
-	public int getLastColumn() {
-		return buildCellReference().getCol();
-	}
-
-	public int getFirstRow() {
-		return buildCellReference().getRow();
-	}
-
-	public int getLastRow() {
-		return buildCellReference().getRow();
-	}
-
-	public void setFirstColumn(int col) {
-		this._ctHyperlink.setRef(new CellReference(getFirstRow(), col)
-				.formatAsString());
-	}
-
-	public void setLastColumn(int col) {
-		setFirstColumn(col);
-	}
-
-	public void setFirstRow(int row) {
-		this._ctHyperlink.setRef(new CellReference(row, getFirstColumn())
-				.formatAsString());
-	}
-
-	public void setLastRow(int row) {
-		setFirstRow(row);
-	}
-
-	public String getTooltip() {
-		return this._ctHyperlink.getTooltip();
-	}
-
-	public void setTooltip(String text) {
-		this._ctHyperlink.setTooltip(text);
-	}
+    /**
+     * @param text  additional text to help the user understand more about the hyperlink
+     */
+    public void setTooltip(String text) {
+        _ctHyperlink.setTooltip(text);
+    }
 }
