@@ -21,7 +21,7 @@ import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
 import exp.libs.utils.verify.RegexUtils;
-import exp.libs.warp.net.http.HttpUtils;
+import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.thread.LoopThread;
 import exp.libs.warp.ver.VersionMgr;
 
@@ -163,9 +163,9 @@ public class SafetyMonitor extends LoopThread {
 			loopCnt = 0;
 			
 			// 先尝试用Gitee(国内)获取授权页, 若失败则从GitHub(国际)获取授权页
-			String pageSource = HttpUtils.getPageSource(GITEE_URL);
+			String pageSource = HttpURLUtils.doGet(GITEE_URL, null, null);
 			if(StrUtils.isEmpty(pageSource)) {
-				pageSource = HttpUtils.getPageSource(GITHUB_URL);
+				pageSource = HttpURLUtils.doGet(GITHUB_URL, null, null);
 			}
 			
 			App app = Convertor.toApp(pageSource, appName);	// 提取软件授权信息
