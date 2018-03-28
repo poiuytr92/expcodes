@@ -7,10 +7,10 @@ import exp.crawler.qq.Config;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.interfaze.BaseLander;
 import exp.crawler.qq.envm.URL;
+import exp.crawler.qq.utils.EncryptUtils;
 import exp.crawler.qq.utils.UIUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.utils.verify.RegexUtils;
 
 /**
  * <PRE>
@@ -60,10 +60,13 @@ public class Lander extends BaseLander {
 				
 				isOk = login();			// 登陆
 				if(isOk == true) {
-					isOk = takeGTKAndToken();	// 生成GTK与QzoneToken
+					isOk = takeGTKAndToken("");	// 生成GTK与QzoneToken
 					if(isOk == true) {
-//						Browser.quit();	// web仿真模式下不能关闭浏览器，否则QQ空间要重新登陆(GTK的存在使得保存cookie也无效)
 						UIUtils.log("登陆QQ [", QQ, "] 成功");
+						
+						// web仿真模式下不能关闭浏览器，否则QQ空间要重新登陆
+						//  (GTK与的QzoneToken存在使得保存cookie也无效)
+//						Browser.quit();	
 						
 					} else {
 						isOk = false;
@@ -150,20 +153,22 @@ public class Lander extends BaseLander {
 	 * 	类似于gtk, qzonetoken 在每次登陆时自动生成一个固定值, 但是生成算法相对复杂（需要jother解码）, 
 	 *  因此此处取巧, 直接在页面源码中提取明文
 	 *  
-	 * @return 
+	 * @return unuse 无用参数
 	 */
 	@Override
-	protected boolean takeGTKAndToken() {
-		UIUtils.log("正在备份本次登陆的 GTK 与 QzoneToken ...");
+	protected boolean takeGTKAndToken(String unuse) {
+		UIUtils.log("正在提取本次登陆的 GTK 与 QzoneToken ...");
+		
+		// 从Cookie提取p_skey，计算GTK
+		Browser.backupCookies();	
+		UIUtils.log("本次登陆生成的 GTK = ", Browser.GTK());
 		
 		// 从页面源码提取QzoneToken
 		Browser.open(URL.QZONE_HOMR_URL(QQ));
-		final String RGX_QZONE_TOKEN = "window\\.g_qzonetoken[^\"]+\"([^\"]+)\"";
-		String qzoneToken = RegexUtils.findFirst(
-				Browser.getPageSource(), RGX_QZONE_TOKEN);
+		String qzoneToken = EncryptUtils.getQzoneToken(Browser.getPageSource());
 		Browser.setQzoneToken(qzoneToken);
+		UIUtils.log("本次登陆生成的 QzoneToken = ", Browser.QZONE_TOKEN());
 		
-		Browser.backupCookies();	// 从Cookie提取p_skey，计算GTK
 		return StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
 	}
 	

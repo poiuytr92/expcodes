@@ -1,6 +1,7 @@
 package exp.crawler.qq.utils;
 
 import exp.libs.utils.other.JSUtils;
+import exp.libs.utils.verify.RegexUtils;
 
 /**
  * <PRE>
@@ -14,20 +15,39 @@ import exp.libs.utils.other.JSUtils;
  */
 public class EncryptUtils {
 
-	/** 生成GTK码的JS脚本 */
-	private final static String GTK_JS_PATH = "./conf/js/GTK.js";
-	
-	/** 生成GTK码的JS函数 */
-	private final static String GTK_METHOD = "getACSRFToken";
-	
 	/** RSA加密的JS脚本 */
 	private final static String RSA_JS_PATH = "./conf/js/MD5-RSA.js";
 	
 	/** RSA加密登陆密码的JS函数 */
 	private final static String RSA_METHOD = "getEncryption";
 	
+	/** 生成GTK码的JS脚本 */
+	private final static String GTK_JS_PATH = "./conf/js/GTK.js";
+	
+	/** 生成GTK码的JS函数 */
+	private final static String GTK_METHOD = "getACSRFToken";
+	
+	/** 用于提取QzoneToken的正则表达式 */
+	private final static String RGX_QZONE_TOKEN = "window\\.g_qzonetoken[^\"]+\"([^\"]+)\"";
+	
 	/** 私有化构造函数 */
 	protected EncryptUtils() {}
+	
+	/**
+	 * 使用 外置的JS算法 对QQ密码做RSA加密.
+	 * ---------------------------------
+	 * 	QQ密码的加密逻辑过于复杂, 此处只能直接抽取QQ的JS脚本执行加密
+	 * 
+	 * @param QQ号 1QQ号
+	 * @param password 密码明文
+	 * @param vccode 验证码
+	 * @return RSA加密后的QQ密码
+	 */
+	public static String toRSA(String QQ, String password, String vcode) {
+		Object rsaPwd = JSUtils.executeJS(RSA_JS_PATH, 
+				RSA_METHOD, password, QQ, vcode, "");
+		return (rsaPwd == null ? "" : rsaPwd.toString());
+	}
 	
 	/**
 	 * 通过 skey 计算GTK码.
@@ -66,19 +86,16 @@ public class EncryptUtils {
 	}
 	
 	/**
-	 * 使用 外置的JS算法 对QQ密码做RSA加密.
-	 * ---------------------------------
-	 * 	QQ密码的加密逻辑过于复杂, 此处只能直接抽取QQ的JS脚本执行加密
+	 * 从QQ空间首页的页面源码中提取QzoneToken.
+	 * =====================================
+	 * 	类似于GTK, 这个 QzoneToken 也是在每次登陆时自动生成的一个固定值, 但是生成算法相对复杂（需要jother解码）, 
+	 *  因此此处取巧, 直接在页面源码中提取QzoneToken码
 	 * 
-	 * @param QQ号 1QQ号
-	 * @param password 密码明文
-	 * @param vccode 验证码
-	 * @return RSA加密后的QQ密码
+	 * @param homePageSource QQ空间首页的页面源码
+	 * @return QzoneToken
 	 */
-	public static String toRSA(String QQ, String password, String vcode) {
-		Object rsaPwd = JSUtils.executeJS(RSA_JS_PATH, 
-				RSA_METHOD, password, QQ, vcode, "");
-		return (rsaPwd == null ? "" : rsaPwd.toString());
+	public static String getQzoneToken(String homePageSource) {
+		return RegexUtils.findFirst(homePageSource, RGX_QZONE_TOKEN);
 	}
 	
 }

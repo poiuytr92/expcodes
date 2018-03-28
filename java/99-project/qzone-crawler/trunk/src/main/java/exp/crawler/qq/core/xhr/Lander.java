@@ -27,6 +27,7 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * 		登陆参数分析：https://blog.csdn.net/zhujunxxxxx/article/details/29412297
  * 		登陆参数分析：http://www.vuln.cn/6454
  * 		加密脚本抓取： https://baijiahao.baidu.com/s?id=1570118073573921&wfr=spider&for=pc
+ * 		重定向BUG修正: http://jingpin.jikexueyuan.com/article/13992.html
  * 
  * </PRE>
  * <B>PROJECT：</B> exp-libs
@@ -71,21 +72,22 @@ public class Lander extends BaseLander {
 			String verify = rst[1];
 			
 			String rsaPwd = encryptPassword(vcode);	// 加密登陆密码
-			String reason = login(rsaPwd, vcode, verify);	// 登陆
+			String callback = login(rsaPwd, vcode, verify);	// 登陆
+			isOk = callback.toLowerCase().startsWith("http");
 			if(isOk == true) {
-				isOk = takeGTKAndToken();	// 生成GTK与QzoneToken
+				isOk = takeGTKAndToken(callback);	// 生成GTK与QzoneToken
 				if(isOk == true) {
-					Browser.updateCookie(cookie);
+					Browser.updateCookie(cookie);	// 保存本次登陆的cookie
 					UIUtils.log("登陆QQ [", QQ, "] 成功: ", cookie.NICKNAME());
 					
 				} else {
 					UIUtils.log("登陆QQ [", QQ, "] 失败: 无法提取GTK或QzoneToken");
 				}
 			} else {
-				UIUtils.log("登陆QQ [", QQ, "] 失败: ".concat(reason));
+				UIUtils.log("登陆QQ [", QQ, "] 失败: ".concat(callback));
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "登陆QQ [", QQ, "] 失败: 仿真浏览器异常");
+			UIUtils.log(e, "登陆QQ [", QQ, "] 失败: XHR协议异常");
 		}
 		return isOk;
 	}
@@ -132,13 +134,19 @@ public class Lander extends BaseLander {
 	
 	/**
 	 * 提取登陆用的验证码.
-	 * -----------------------------
-	 * 当输入了有效的QQ号时，服务端响应值形如  (当QQ号无效时, 返回的是另一串数据)：
-	 * 	ptui_checkVC('0','!VAB','\x00\x00\x00\x00\x10\x3f\xff\xdc','cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33','2')
 	 * 
-	 * 其中: !VAB 为验证码
+	 * -----------------------------
+	 * 一般情况下, 不需要输入图片验证, 此时服务器的回调函数是：
+	 * 	ptui_checkVC('0','!VAB','\x00\x00\x00\x00\x10\x3f\xff\xdc','cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33','2')
+	 * 其中: 0 表示不需要验证码
+	 *      !VAB 为伪验证码
 	 * 		cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33
 	 * 		则为验证码的校验码
+	 * 
+	 * -----------------------------
+	 * 但有时需要输入图片验证码, 此时服务器的回调函数是：
+	 *  ptui_checkVC('1','AAr4bdjMeh2hEa77PTuoHhqMTxbRqOp3','\x00\x00\x00\x00\x00\xa1\x92\x12');
+	 * 其中: 1 表示需要验证码
 	 * 
 	 * @return new String[] { 验证码, 校验码 }
 	 */
@@ -206,7 +214,8 @@ public class Lander extends BaseLander {
 	 * @param rsaPwd RSA加密后的密码
 	 * @param vccode 本次登陆的验证码
 	 * @param verify 本次登陆的验证码的校验码
-	 * @return 登陆失败原因(若登陆成功则为空串)
+	 * @return 	若登陆成功, 则返回可提取p_skey的回调地址
+	 * 			若登陆失败， 则返回失败原因(或回调函数)
 	 */
 	private String login(String rsaPwd, String vcode, String verify) {
 		UIUtils.log("正在登陆QQ [", QQ, "] ...");
@@ -215,29 +224,23 @@ public class Lander extends BaseLander {
 		Map<String, String> request = _getLoginRequest(rsaPwd, vcode, verify);
 		String response = client.doGet(URL.XHR_LOGIN_URL, null, request);
 		
-		String reason = "";
-		List<String> rst = RegexUtils.findBrackets(response, "'([^']*)'");
-		if(rst.size() >= 6) {
-			int code = NumUtils.toInt(rst.get(0), -1);
+		String rst = "";
+		List<String> groups = RegexUtils.findBrackets(response, "'([^']*)'");
+		if(groups.size() >= 6) {
+			int code = NumUtils.toInt(groups.get(0), -1);
 			if(code == 0) {
 				XHRUtils.takeResponseCookies(client, cookie);
-				cookie.setNickName(rst.get(5));
-				
-				// 从重定向页面返回的cookie中提取p_skey，并计算GTK
-				// 注意：此页面一旦访问后会马上重定向到QQ空间首页, 而p_skey则在重定向到首页前才能获取
-				// 因此要提取p_skey值, 要么禁止HTTP重定向, 要么把重定向过程中的所有cookie都记录下来
-				String redirectURL = rst.get(2);
-				client.doGet(redirectURL, XHRUtils.getHeader(cookie), null);
-				XHRUtils.takeResponseCookies(client, cookie);
+				cookie.setNickName(groups.get(5));
+				rst = groups.get(2);	// 登陆成功: 提取p_skey的回调地址
 				
 			} else {
-				reason = rst.get(4);
+				rst = groups.get(4);	// 登陆失败原因
 			}
 		} else {
-			reason = response;
+			rst = response;	// 登陆失败的回调函数
 		}
 		client.close();
-		return reason;
+		return rst;
 	}
 	
 	/**
@@ -276,16 +279,29 @@ public class Lander extends BaseLander {
 	}
 
 	/**
-	 * 提取QZoneToken
+	 * 提取本次登陆的GTK与QzoneToken
+	 * @param callbackURL 用于提取p_skey的回调地址(p_skey用于计算GTK, GTK用于获取QzoneToken)
 	 */
 	@Override
-	protected boolean takeGTKAndToken() {
-		UIUtils.log("正在备份本次登陆的 GTK 与 QzoneToken ...");
+	protected boolean takeGTKAndToken(String callbackURL) {
+		UIUtils.log("正在提取本次登陆的 GTK 与 QzoneToken ...");
 		
-		// 提取QzoneToken
-//		header = XHRUtils.getHeader(cookie);
-//		String response = HttpURLUtils.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
-//		System.out.println(response);
+		// 提取p_skey，并计算GTK:
+		// callbackURL是一个存在重定向页面, 一旦访问后会马上重定向到QQ空间首页
+		// 但是p_skey只存在于重定向前的页面
+		// 因此要提取p_skey值, 要么禁止HTTP重定向, 要么把重定向过程中的所有cookie都记录下来(此处用的是第2种方法)
+		HttpClient client = new HttpClient();
+		Map<String, String> header = XHRUtils.getHeader(cookie);
+		client.doGet(callbackURL, header, null);
+		XHRUtils.takeResponseCookies(client, cookie);
+		UIUtils.log("本次登陆生成的 GTK = ", cookie.GTK());
+		
+		// 从QQ空间首页的页面源码中提取QzoneToken
+		header = XHRUtils.getHeader(cookie);
+		String pageSource = client.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
+		String qzoneToken = EncryptUtils.getQzoneToken(pageSource);
+		cookie.setQzoneToken(qzoneToken);
+		UIUtils.log("本次登陆生成的 QzoneToken = ", cookie.QZONE_TOKEN());
 		
 		return StrUtils.isNotEmpty(cookie.GTK(), cookie.QZONE_TOKEN());
 	}

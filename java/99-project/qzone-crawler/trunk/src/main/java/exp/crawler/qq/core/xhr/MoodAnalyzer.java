@@ -29,7 +29,7 @@ import exp.libs.warp.net.http.HttpUtils;
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
- * @version   1.0 2017-07-11
+ * @version   1.0 2018-03-23
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
