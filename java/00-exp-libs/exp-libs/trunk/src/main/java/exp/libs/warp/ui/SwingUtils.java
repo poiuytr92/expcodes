@@ -7,6 +7,7 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Toolkit;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -421,6 +422,30 @@ public class SwingUtils {
 		String input = JOptionPane.showInputDialog(
 			    null, msg, "Tips", JOptionPane.OK_CANCEL_OPTION);
 		return (input == null ? "" : input);
+	}
+	
+	/**
+	 * 输入弹窗(含图片)
+	 * @param msg 提示消息
+	 * @param icon 提示图片
+	 * @return 输入内容
+	 */
+	public static String input(String msg, Icon image) {
+		Object input = JOptionPane.showInputDialog(
+			    null, msg, "Tips", JOptionPane.OK_CANCEL_OPTION, image, null, null);
+		return (input == null ? "" : input.toString());
+	}
+	
+	/**
+	 * 输入弹窗(含图片)
+	 * @param msg 提示消息
+	 * @param imgPath 提示图片路径
+	 * @return 输入内容
+	 */
+	public static String input(String msg, String imgPath) {
+		JLabel image = new JLabel();
+		setImage(image, imgPath);
+		return input(msg, image.getIcon());
 	}
 	
 	/**

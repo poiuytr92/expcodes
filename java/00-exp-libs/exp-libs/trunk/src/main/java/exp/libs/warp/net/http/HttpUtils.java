@@ -1,12 +1,8 @@
 package exp.libs.warp.net.http;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.security.SecureRandom;
@@ -36,7 +32,6 @@ import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.utils.verify.RegexUtils;
 
 /**
  * <PRE>
@@ -136,12 +131,8 @@ public class HttpUtils {
 		
 	}
 	
-	/** 页面源码中标识编码字符集的位置正则 */
-	private final static String RGX_CHARSET = "text/html;\\s*?charset=([a-zA-Z0-9\\-]+)";
-	
 	/** 页面使用BASE64存储的图像信息正则 */
 	private final static String RGX_BASE64_IMG = "data:image/([^;]+);base64,(.*)";
-	
 	
 	/** 私有化构造函数 */
 	protected HttpUtils() {}
@@ -431,86 +422,6 @@ public class HttpUtils {
 		url = StrUtils.isEmpty(url) ? "" : url;
 		String _GETURL = url.concat(requestKVs);
 		return _GETURL.replace(url.concat("?&"), url.concat("?"));	// 去掉第一个参数的&
-	}
-	
-	/**
-	 * 获取页面编码
-	 * @param url
-	 * @return
-	 */
-	public static String getPageEncoding(final String url) {
-		String charset = Charset.UTF8;
-		try {
-			URL _URL = new URL(url);
-			URLConnection conn = _URL.openConnection();
-			conn.connect();
-			
-			charset = conn.getContentEncoding();
-			charset = (CharsetUtils.isVaild(charset) ? charset : 
-					RegexUtils.findFirst(conn.getContentType(), RGX_CHARSET));	
-			
-			if(CharsetUtils.isInvalid(charset)) {
-				InputStream is = conn.getInputStream();
-				InputStreamReader isr = new InputStreamReader(is, Charset.ISO);
-				BufferedReader buff = new BufferedReader(isr);
-				String line = null;
-				while ((line = buff.readLine()) != null) {
-					if(line.contains("<meta ")) {
-						charset = RegexUtils.findFirst(line, RGX_CHARSET);
-						if(StrUtils.isNotEmpty(charset)) {
-							break;
-						}
-					}
-				}
-				buff.close();
-				is.close();
-			}
-		} catch (Exception e) {
-			log.error("获取页面编码失败: {}", url, e);
-			charset = Charset.UTF8;
-		}
-		charset = (CharsetUtils.isVaild(charset) ? charset : Charset.UTF8);
-		return charset;
-	}
-	
-	/**
-	 * 获取页面源码
-	 * @param url
-	 * @return
-	 */
-	public static String getPageSource(final String url) {
-		String charset = getPageEncoding(url);
-		return getPageSource(url, charset);
-	}
-	
-	/**
-	 * 获取页面源码
-	 * @param url
-	 * @param charset 页面编码
-	 * @return
-	 */
-	public static String getPageSource(final String url, String charset) {
-		charset = CharsetUtils.isVaild(charset) ? charset : getPageEncoding(charset);
-		StringBuffer pageSource = new StringBuffer();
-		try {
-			URL _URL = new URL(url);
-			URLConnection conn = _URL.openConnection();
-			conn.connect();
-			
-			InputStream is = conn.getInputStream();
-			InputStreamReader isr = new InputStreamReader(is, charset);
-			BufferedReader buff = new BufferedReader(isr);
-			String line = null;
-			while ((line = buff.readLine()) != null) {
-				pageSource.append(line).append("\r\n");
-			}
-			buff.close();
-			is.close();
-			
-		} catch (Exception e) {
-			log.error("获取页面源码失败: {}", url, e);
-		}
-		return pageSource.toString();
 	}
 	
 	/**
