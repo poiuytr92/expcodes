@@ -35,7 +35,7 @@ public abstract class BaseAlbumAnalyzer {
 	protected final String QQ;
 	
 	/** 相册保存目录 */
-	protected final String ALBUM_DIR;
+	private final String ALBUM_DIR;
 	
 	/**
 	 * 构造函数

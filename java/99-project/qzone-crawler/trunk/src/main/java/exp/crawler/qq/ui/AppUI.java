@@ -22,7 +22,7 @@ import exp.crawler.qq.Config;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.interfaze.BaseAlbumAnalyzer;
 import exp.crawler.qq.core.interfaze.BaseLander;
-import exp.crawler.qq.core.xhr.MoodAnalyzer;
+import exp.crawler.qq.core.interfaze.BaseMoodAnalyzer;
 import exp.crawler.qq.utils.UIUtils;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -387,8 +387,11 @@ public class AppUI extends MainWindow {
 						public void run() {
 							String QQ = qqTF.getText();
 							
-							MoodAnalyzer analyzer = new MoodAnalyzer(QQ);
+							BaseMoodAnalyzer analyzer = webBtn.isSelected() ? 
+									new exp.crawler.qq.core.web.MoodAnalyzer(QQ) : 
+									new exp.crawler.qq.core.xhr.MoodAnalyzer(QQ);
 							analyzer.execute();
+							
 							
 							moodBtn.setEnabled(true);
 							qqTF.setEditable(true);
