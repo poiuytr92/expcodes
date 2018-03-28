@@ -190,4 +190,6 @@ public class XHRAtrbt {
 	
 	public final static String action = "action";
 	
+	public final static String cap_cd = "cap_cd";
+	
 }

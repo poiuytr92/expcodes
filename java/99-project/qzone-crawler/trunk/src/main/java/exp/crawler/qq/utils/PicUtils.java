@@ -70,4 +70,15 @@ public class PicUtils {
 		return picURL;
 	}
 	
+	/**
+	 * 判定验证码是否为伪验证码.
+	 * 
+	 * 	伪验证码以感叹号开头，如  !QWE
+	 *  真实验证码则为字符+数字组合，如 Q2R5
+	 * @return
+	 */
+	public static boolean isFalsuVcode(String vcode) {
+		return (vcode == null || vcode.startsWith("!"));
+	}
+	
 }

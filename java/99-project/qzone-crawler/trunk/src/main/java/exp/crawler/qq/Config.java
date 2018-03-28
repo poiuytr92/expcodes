@@ -23,6 +23,9 @@ public class Config {
 	/** 登陆信息保存路径 */
 	public final static String LOGIN_INFO_PATH = "./conf/account.dat";
 	
+	/** 验证码图片保存路径 */
+	public final static String VCODE_IMG_PATH = "./conf/vcode.jpg";
+	
 	/** 行为休眠间隔 */
 	public final static long SLEEP_TIME = 100;
 	

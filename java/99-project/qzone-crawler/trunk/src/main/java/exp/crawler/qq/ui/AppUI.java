@@ -23,10 +23,12 @@ import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.interfaze.BaseAlbumAnalyzer;
 import exp.crawler.qq.core.interfaze.BaseLander;
 import exp.crawler.qq.core.xhr.MoodAnalyzer;
+import exp.crawler.qq.utils.UIUtils;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.net.webkit.WebDriverType;
 import exp.libs.warp.thread.ThreadPool;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -181,9 +183,9 @@ public class AppUI extends MainWindow {
 				SwingUtils.getPairsPanel("QQ账号", unTF), 
 				SwingUtils.getPairsPanel("QQ密码", pwTF), 
 				SwingUtils.getPairsPanel("目标QQ", qqTF), 
-				SwingUtils.getEBorderPanel(loginBtn, rememberBtn), 
-				SwingUtils.getEBorderPanel(
-						SwingUtils.getHGridPanel(albumBtn, moodBtn), webBtn)
+				SwingUtils.getEBorderPanel(loginBtn, SwingUtils.addBorder(
+						SwingUtils.getHGridPanel(webBtn, rememberBtn))), 
+				SwingUtils.getHGridPanel(albumBtn, moodBtn)
 		);
 		SwingUtils.addBorder(panel, "control");
 		return panel;
@@ -199,6 +201,7 @@ public class AppUI extends MainWindow {
 	protected void setComponentsListener(JPanel rootPanel) {
 		setNumTextFieldListener(unTF);
 		setNumTextFieldListener(qqTF);
+		setWebBynListener();
 		setLoginBtnListener();
 		setAlbumBtnListener();
 		setMoodBtnListener();
@@ -231,6 +234,31 @@ public class AppUI extends MainWindow {
 		    public void keyPressed(KeyEvent e) {
 		        // TODO Auto-generated method stub
 		    }
+		});
+	}
+	
+	private void setWebBynListener() {
+		webBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(isLogin == true) {
+					SwingUtils.warn("非登录状态下才允许切换爬虫模式");
+					return;
+				}
+				
+				if(webBtn.isSelected()) {
+					if(!FileUtils.exists(WebDriverType.PHANTOMJS.DRIVER_PATH())) {
+						webBtn.setSelected(false);
+						UIUtils.log("切换爬虫模式失败: 仿真浏览器丢失");
+						
+					} else {
+						UIUtils.log("切换爬虫模式: 仿真浏览器 (速度较慢-不推荐)");
+					}
+				} else {
+					UIUtils.log("切换爬虫模式: XHR协议 (速度较快-推荐)");
+				}
+			}
 		});
 	}
 	
@@ -299,11 +327,13 @@ public class AppUI extends MainWindow {
 			Browser.clearCookies();
 			
 			loginBtn.setText(LOGIN_DESC);
+			isLogin = false;
 			
 			albumBtn.setEnabled(false);
 			moodBtn.setEnabled(false);
 			unTF.setEditable(true);
 			pwTF.setEditable(true);
+			UIUtils.log("QQ [", unTF.getText(), "] 已注销登陆");
 		}
 	}
 	

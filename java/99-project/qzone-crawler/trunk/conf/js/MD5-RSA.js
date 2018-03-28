@@ -987,37 +987,56 @@ v = 32;
 uin2hex = function(qq) {
     var maxLength = 16;
     qq = parseInt(qq);
-    for (var hex = qq.toString(16), len = hex.length, i = len; maxLength > i; i++) hex = "0" + hex;
-    for (var arr = [], j = 0; maxLength > j; j += 2) arr.push("\\x" + hex.substr(j, 2));
+    for (var hex = qq.toString(16), len = hex.length, i = len; maxLength > i; i++) { 
+    	hex = "0" + hex;
+    }
+    
+    for (var arr = [], j = 0; maxLength > j; j += 2) { 
+    	arr.push("\\x" + hex.substr(j, 2));
+    }
+    
     var result = arr.join("");
-    return eval('result="' + result + '"'),
-    result
+    return eval('result="' + result + '"'), result
 }
 
 /**
  * 对登陆密码加密（MD5+RSA）
  * @param e 密码明文
- * @param i salt: QQ号码的16进制(环境校验时返回)，如： \x00\x00\x00\x00\x10\x3f\xff\xdc
- * @param n 验证码: (环境校验时返回) 只有4位字符，感叹号开头，如：!QWE
- * @param o 空字符串""
- * @returns
+ * @param i QQ号码明文
+ * @param n 验证码，目前只有4位字符，如：!QWE
+ * @param o 空字符串 ""
+ * @returns 使用MD5与RSA加密后的密码
  */
 function getEncryption(e, i, n, o) {
-    i = uin2hex(i);
-    n = n || "",
-    e = e || "";
-    for (var p = o ? e: t(e), r = g(p), s = t(r + i), a = TEA.strToBytes(n.toUpperCase(), !0), l = Number(a.length / 2).toString(16); l.length < 4;) l = "0" + l;
+    i = uin2hex(i);	// 把QQ号码转换为16进制，如： \x00\x00\x00\x00\x10\x3f\xff\xdc
+    n = n || "",	// 验证码
+    e = e || "";	// 密码
+    for (var p = o ? e : 
+	    		t(e), 
+	    		r = g(p), 
+	    		s = t(r + i), 
+	    		a = TEA.strToBytes(n.toUpperCase(), !0), 
+	    		l = Number(a.length / 2).toString(16); 
+    		l.length < 4;) { 
+    	
+    	l = "0" + l;
+    }
+    
     TEA.initkey(s);
     var c = TEA.encrypt(p + TEA.strToBytes(i) + l + a);
+    
     TEA.initkey("");
-    for (var u = Number(c.length / 2).toString(16); u.length < 4;) u = "0" + u;
+    for (var u = Number(c.length / 2).toString(16); u.length < 4;) { 
+    	u = "0" + u;
+    }
+    
     var h = RSA.rsa_encrypt(g(u + c));
     return btoa(g(h)).replace(/[\/\+=]/g,
-    function(t) {
-        return {
-            "/": "-",
-            "+": "*",
-            "=": "_"
-        } [t]
-    })
+	    function(t) {
+	        return {
+	            "/": "-",
+	            "+": "*",
+	            "=": "_"
+	        } [t]
+	    })
 }

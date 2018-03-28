@@ -239,6 +239,13 @@
                                     <fileset dir="conf">
                                         <exclude name="driver/chrome-driver.exe" />
                                         <exclude name="account.dat" />
+                                        <exclude name="vcode.jpg" />
+                                    </fileset>
+                                </copy>
+                                <echo>拷贝数据文件</echo>
+                                <copy todir="${release.dir}/data">
+                                    <fileset dir="data">
+                                        <exclude name="*" />
                                     </fileset>
                                 </copy>
                             </target>

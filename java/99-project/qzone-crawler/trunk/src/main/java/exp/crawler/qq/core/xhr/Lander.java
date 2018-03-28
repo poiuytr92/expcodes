@@ -4,12 +4,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import exp.crawler.qq.Config;
 import exp.crawler.qq.bean.QQCookie;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.interfaze.BaseLander;
 import exp.crawler.qq.envm.URL;
 import exp.crawler.qq.envm.XHRAtrbt;
 import exp.crawler.qq.utils.EncryptUtils;
+import exp.crawler.qq.utils.PicUtils;
 import exp.crawler.qq.utils.UIUtils;
 import exp.crawler.qq.utils.XHRUtils;
 import exp.libs.utils.num.NumUtils;
@@ -17,6 +19,7 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpURLUtils;
+import exp.libs.warp.ui.SwingUtils;
 
 /**
  * <PRE>
@@ -118,7 +121,6 @@ public class Lander extends BaseLander {
 		request.put(XHRAtrbt.pt_qr_link, "http://z.qzone.com/download.html");
 		request.put(XHRAtrbt.self_regurl, "https://qzs.qq.com/qzone/v6/reg/index.html");
 		request.put(XHRAtrbt.pt_qr_help_link, "http://z.qzone.com/download.html");
-		request.put(XHRAtrbt.pt_qr_app, "手机QQ空间");
 		request.put(XHRAtrbt.qlogin_auto_login, "1");
 		request.put(XHRAtrbt.low_login, "0");
 		request.put(XHRAtrbt.no_verifyimg, "1");
@@ -138,26 +140,44 @@ public class Lander extends BaseLander {
 	 * -----------------------------
 	 * 一般情况下, 不需要输入图片验证, 此时服务器的回调函数是：
 	 * 	ptui_checkVC('0','!VAB','\x00\x00\x00\x00\x10\x3f\xff\xdc','cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33','2')
+	 * 
 	 * 其中: 0 表示不需要验证码
 	 *      !VAB 为伪验证码
 	 * 		cefb41782ce53f614e7665b5519f9858c80ab8925b8060d7a790802212da7205be1916ac4d45a77618c926c6a5fb330520b741d749519f33
 	 * 		则为验证码的校验码
 	 * 
 	 * -----------------------------
-	 * 但有时需要输入图片验证码, 此时服务器的回调函数是：
-	 *  ptui_checkVC('1','AAr4bdjMeh2hEa77PTuoHhqMTxbRqOp3','\x00\x00\x00\x00\x00\xa1\x92\x12');
+	 * 但有时需要输入图片验证码(一般是输入了无效的QQ号导致的), 此时服务器的回调函数是：
+	 *  ptui_checkVC('1','FLQ8ymCigFmw30P7YaLP6iVCZHuyzjJWN2lH4M_OMFBndsUiMY9idQ**','\x00\x00\x00\x00\x00\x12\xd6\x87','','2')
+	 *  
 	 * 其中: 1 表示需要验证码
+	 * 		FLQ8ymCigFmw30P7YaLP6iVCZHuyzjJWN2lH4M_OMFBndsUiMY9idQ** 是用于获取验证码图片的参数（随机生成）
+	 * 
+	 * 		然后代入参数访问以下地址得到验证码图片：
+	 * 		https://ssl.captcha.qq.com/getimage?uin={QQ号}&cap_cd=FLQ8ymCigFmw30P7YaLP6iVCZHuyzjJWN2lH4M_OMFBndsUiMY9idQ**
+	 * 
+	 * 		同时该地址的Response Header中带有了该验证码的校验码：
+	 * 		Set-Cookie:verifysession=h02iEMnHmjdBoYn7eDlj7AX37Lk7ORMFwJnJSlMufnESimC64Uqa2jz4gHI3ws5jlmiGq5Hg5lfs-2aMkVQ_Gu-vyR7aflns97t
 	 * 
 	 * @return new String[] { 验证码, 校验码 }
 	 */
 	private String[] takeVcode() {
 		String response = HttpURLUtils.doGet(URL.VCODE_URL, null, _getVcodeRequest());
 		List<String> groups = RegexUtils.findBrackets(response, "'([^']*)'");
-		String[] rst = new String[] { "", "" };
+		String[] rst = { "", "" };
 		if(groups.size() >= 4) {
-			rst[0] = groups.get(1);
-			rst[1] = groups.get(3);
+			
+			// 不需要输入验证码(直接使用伪验证码)
+			if("0".equals(groups.get(0))) {
+				rst[0] = groups.get(1);	// 验证码
+				rst[1] = groups.get(3);	// 校验码
+				
+			// 需要输入验证码(下载验证码图片)
+			} else if("1".equals(groups.get(0))) {
+				rst = takeVcode(groups.get(1));
+			}
 		}
+		
 		UIUtils.log("已获得本次登陆的验证码: ", rst[0]);
 		UIUtils.log("已获得本次登陆的校验码: ", rst[1]);
 		return rst;
@@ -181,14 +201,36 @@ public class Lander extends BaseLander {
 		return request;
 	}
 	
-	// FIXME : 
-	/*
-	 * ptui_checkVC('1','AAr4bdjMeh2hEa77PTuoHhqMTxbRqOp3','\x00\x00\x00\x00\x00\xa1\x92\x12');
-	 * 表示需要验证码
-	 * 
-	 * 获取验证码图片：
-	 * https://ssl.captcha.qq.com/getimage?aid=1003903&r=0.6472875226754695&uin={QQ}&cap_cd=aSD-ZVcNEcozlZUurhNYhp-MBHf4hjbJ
+	/**
+	 * 下载验证码图片及其校验码, 同时返回人工输入的验证码
+	 * @param vcodeId 用于下载验证码图片的ID
+	 * @return new String[] { 验证码, 校验码 }
 	 */
+	private String[] takeVcode(String vcodeId) {
+		HttpClient client = new HttpClient();
+		boolean isOk = client.downloadByGet(Config.VCODE_IMG_PATH, 
+				URL.VCODE_IMG_URL, null, _getVcodeRequest(vcodeId));
+		XHRUtils.takeResponseCookies(client, cookie);
+		client.close();
+		
+		String[] rst = { "", "" };
+		if(isOk == true) {
+			rst[0] = SwingUtils.input("请输入登陆验证码: ", Config.VCODE_IMG_PATH);
+			rst[1] = cookie.VERIFYSESSION();
+		}
+		return rst;
+	}
+	
+	/**
+	 * 下载验证码图片的请求参数
+	 * @return
+	 */
+	private Map<String, String> _getVcodeRequest(String vcodeId) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(XHRAtrbt.uin, QQ);
+		request.put(XHRAtrbt.cap_cd, vcodeId);
+		return request;
+	}
 	
 	/**
 	 * 对QQ密码做RSA加密
@@ -208,6 +250,7 @@ public class Lander extends BaseLander {
 	 * 
 	 * 	登陆失败, 服务器响应：
 	 * 		ptuiCB('3','0','','0','你输入的帐号或密码不正确，请重新输入。', '')
+	 * 		ptuiCB('4','0','','0','你输入的验证码不正确，请重新输入。', '')
 	 * 		ptuiCB('7','0','','0','提交参数错误，请检查。(1552982056)', '')
 	 * 		ptuiCB('24','0','','0','很遗憾，网络连接出现异常，请你检查是否禁用cookies。(1479543040)', '')
 	 * 
@@ -257,7 +300,7 @@ public class Lander extends BaseLander {
 		request.put(XHRAtrbt.p, rsaPwd);
 		request.put(XHRAtrbt.verifycode, vcode);
 		request.put(XHRAtrbt.pt_verifysession_v1, verify);
-		request.put(XHRAtrbt.pt_vcode_v1, "0");	// 重要参数
+		request.put(XHRAtrbt.pt_vcode_v1, PicUtils.isFalsuVcode(vcode) ? "0" : "1");
 		request.put(XHRAtrbt.from_ui, "1");		// 重要参数
 		request.put(XHRAtrbt.u1, "https://qzs.qq.com/qzone/v5/loginsucc.html?para=izone");
 		request.put(XHRAtrbt.pt_randsalt, "2");
@@ -273,8 +316,6 @@ public class Lander extends BaseLander {
 		request.put(XHRAtrbt.js_ver, "10270");
 		request.put(XHRAtrbt.js_type, "1");
 		request.put(XHRAtrbt.pt_uistyle, "40");
-//		request.put(XHRAtrbt.pt_jstoken, "3850832965");
-//		request.put(XHRAtrbt.action, StrUtils.concat("7-58-", System.currentTimeMillis()));
 		return request;
 	}
 

@@ -17,8 +17,11 @@ public class URL {
 	/** 获取登陆用SIG的URL */
 	public final static String SIG_URL = "https://xui.ptlogin2.qq.com/cgi-bin/xlogin";
 	
-	/** 获取登陆用验证码的URL */
+	/** 获取登陆验证码的URL */
 	public final static String VCODE_URL = "https://ssl.ptlogin2.qq.com/check";
+	
+	/** 获取登陆验证码图片的URL */
+	public final static String VCODE_IMG_URL = "https://ssl.captcha.qq.com/getimage";
 	
 	/** QQ空间登陆URL(XHR方式) */
 	public final static String XHR_LOGIN_URL = "https://ssl.ptlogin2.qq.com/login";
