@@ -243,6 +243,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(isLogin == true) {
+					webBtn.setSelected(!webBtn.isSelected());
 					SwingUtils.warn("非登录状态下才允许切换爬虫模式");
 					return;
 				}
@@ -253,10 +254,10 @@ public class AppUI extends MainWindow {
 						UIUtils.log("切换爬虫模式失败: 仿真浏览器丢失");
 						
 					} else {
-						UIUtils.log("切换爬虫模式: 仿真浏览器 (速度较慢-不推荐)");
+						UIUtils.log("切换爬虫模式: 仿真浏览器  (不推荐: 速度较慢, 成功率低)");
 					}
 				} else {
-					UIUtils.log("切换爬虫模式: XHR协议 (速度较快-推荐)");
+					UIUtils.log("切换爬虫模式: XHR协议  (推荐: 速度较快, 成功率高)");
 				}
 			}
 		});

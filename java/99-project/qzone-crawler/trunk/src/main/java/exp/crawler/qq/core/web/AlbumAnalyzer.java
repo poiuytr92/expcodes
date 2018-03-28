@@ -17,6 +17,7 @@ import exp.crawler.qq.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.net.webkit.WebUtils;
 
 /**
  * <PRE>
@@ -79,7 +80,9 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 		WebElement a = Browser.findElement(By.id("QM_Profile_Photo_A"));
 		if(a != null) {
 			isOk = true;
-			a.click();
+			WebUtils.click(Browser.DRIVER(), a);	// 选中
+			ThreadUtils.tSleep(Config.SLEEP_TIME);
+			WebUtils.click(Browser.DRIVER(), a);	// 点击
 			
 		} else {
 			UIUtils.log("切换到QQ [", QQ, "] 的相册列表失败");
@@ -97,6 +100,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 			
 		// 切换到【相册列表】的嵌套页
 		Browser.switchToFrame(By.id("tphoto"));
+		ThreadUtils.tSleep(Config.SLEEP_TIME);
 		
 		// 获取相册列表
 		List<Album> albums = new LinkedList<Album>();
@@ -216,7 +220,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	 */
 	private boolean _nextPage() {
 		boolean hasNext = false;
-		for(int retry = 1; retry <= Config.RETRY; retry++) {
+		for(int retry = 1; !hasNext && retry <= Config.RETRY; retry++) {
 			try {
 				WebElement next = Browser.findElement(By.id("pager_next_1"));
 				if(next != null) {

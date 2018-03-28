@@ -61,7 +61,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 		
 		final int PAGE_NUM = _getPageNum();
 		for(int page = 1; page <= PAGE_NUM; page++) {
-			UIUtils.log(" -> 正在提取第 [", page, "] 页的说说信息...");
+			UIUtils.log(" -> 正在提取第 [", page, "/", PAGE_NUM, "] 页的说说信息...");
 			List<Mood> pageMoods = _getPageMoods(page);
 			moods.addAll(pageMoods);
 			

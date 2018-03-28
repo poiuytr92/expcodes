@@ -16,6 +16,7 @@ import exp.crawler.qq.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.time.TimeUtils;
+import exp.libs.warp.net.webkit.WebUtils;
 
 
 /**
@@ -62,16 +63,19 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 			
 			// 切换到【说说动态】的嵌套页
 			Browser.switchToFrame(By.id("app_canvas_frame"));
+			ThreadUtils.tSleep(Config.SLEEP_TIME);
 			
 			final int PAGE_NUM = _getPageNum();
 			for(int page = 1; page <= PAGE_NUM; page++) {
-				UIUtils.log(" -> 正在提取第 [", page, "] 页的说说信息...");
+				UIUtils.log(" -> 正在提取第 [", page, "/", PAGE_NUM, "] 页的说说信息...");
 				List<Mood> pageMoods = _getPageMoods(page);
 				moods.addAll(pageMoods);
 				
 				UIUtils.log(" -> 第 [", page, "/", PAGE_NUM, 
 						"] 页说说提取完成, 累计说说数量: ", moods.size());
 				ThreadUtils.tSleep(Config.SLEEP_TIME);
+				
+				WebUtils.saveCurPage(Browser.DRIVER(), "./log/", String.valueOf(page));
 				
 				if(_nextPage() == false) {
 					break;
@@ -89,15 +93,17 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 		UIUtils.log("正在打开QQ [", QQ, "] 的空间首页...");
 		Browser.open(QZONE_HOMR_URL);
 		
-		UIUtils.log("正在切换到QQ [", QQ, "] 的说说动态...");
+		UIUtils.log("正在切换到QQ [", QQ, "] 的说说页面...");
 		boolean isOk = false;
 		WebElement a = Browser.findElement(By.id("QM_Profile_Mood_A"));
 		if(a != null) {
 			isOk = true;
-			a.click();
+			WebUtils.click(Browser.DRIVER(), a);	// 选中
+			ThreadUtils.tSleep(Config.SLEEP_TIME);
+			WebUtils.click(Browser.DRIVER(), a);	// 点击
 			
 		} else {
-			UIUtils.log("切换到QQ [", QQ, "] 的说说动态失败");
+			UIUtils.log("切换到QQ [", QQ, "] 的说说页面失败");
 		}
 		return isOk;
 	}
@@ -111,11 +117,13 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 		int pageNum = 0;
 		try {
 			WebElement last = Browser.findElement(
-					By.xpath("p[@class='mod_pagenav_main']/a[last()-1]/span"));
+					By.xpath("//p[@class='mod_pagenav_main']/a[last()-1]/span"));
 			if(last != null) {
 				pageNum = NumUtils.toInt(last.getText().trim(), 0);
 			}
-		} catch(Exception e) {}
+		} catch(Exception e) {
+			UIUtils.log(e, "提取到QQ [", QQ, "] 的说说页数失败");
+		}
 		return pageNum;
 	}
 	
@@ -128,25 +136,28 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	protected List<Mood> _getPageMoods(int page) {
 		List<Mood> moods = new LinkedList<Mood>();
 		try {
-			
-			// 提取本页所有说说的信息
 			WebElement ul = Browser.findElement(By.id("msgList"));
 			List<WebElement> list = ul.findElements(By.xpath("li"));
 			for(WebElement li : list) {
 				WebElement pre = li.findElement(By.className("content"));
-				WebElement time = li.findElement(By.className("goDetail"));
-				
 				String content = pre.getText().trim();
+				
+				WebElement time = li.findElement(By.className("goDetail"));
 				long millis = TimeUtils.toMillis(time.getAttribute("title"), "yyyy年MM月dd日 HH:mm");
 				
 				Mood mood = new Mood(page, content, millis);
-				WebElement div = li.findElement(By.className("img-attachments-inner"));
-				List<WebElement> as = div.findElements(By.xpath("a"));
-				for(WebElement a : as) {
-					String url = a.getAttribute("href");
-					url = PicUtils.convert(url);
-					mood.addPicURL(url);
+				try {
+					WebElement div = li.findElement(By.className("img-attachments-inner"));
+					List<WebElement> as = div.findElements(By.xpath("a"));
+					for(WebElement a : as) {
+						String url = a.getAttribute("href");
+						url = PicUtils.convert(url);
+						mood.addPicURL(url);
+					}
+				} catch(Exception e) {
+					// Undo 说说不一定有照片
 				}
+				
 				moods.add(mood);
 			}
 		} catch(Exception e) {
@@ -161,11 +172,11 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	 */
 	private boolean _nextPage() {
 		boolean hasNext = false;
-		for(int retry = 1; retry <= Config.RETRY; retry++) {
+		for(int retry = 1; !hasNext && retry <= Config.RETRY; retry++) {
 			try {
 				WebElement next = Browser.findElement(
-						By.xpath("p[@class='mod_pagenav_main']/a[last()]"));
-				if(next != null) {
+						By.xpath("//p[@class='mod_pagenav_main']/a[last()]"));
+				if(next != null && "下一页".equals(next.getAttribute("title"))) {
 					next.click();
 					hasNext = true;
 				}
