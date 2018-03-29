@@ -75,8 +75,6 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 						"] 页说说提取完成, 累计说说数量: ", moods.size());
 				ThreadUtils.tSleep(Config.SLEEP_TIME);
 				
-				WebUtils.saveCurPage(Browser.DRIVER(), "./log/", String.valueOf(page));
-				
 				if(_nextPage() == false) {
 					break;
 				}
@@ -122,7 +120,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 				pageNum = NumUtils.toInt(last.getText().trim(), 0);
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "提取到QQ [", QQ, "] 的说说页数失败");
+			UIUtils.log(e, "提取QQ [", QQ, "] 的说说页数失败");
 		}
 		return pageNum;
 	}
