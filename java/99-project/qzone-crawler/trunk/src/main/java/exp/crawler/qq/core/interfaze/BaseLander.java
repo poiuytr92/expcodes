@@ -6,7 +6,7 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * QQ空间登陆器: 基类
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> qzone-crawler
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-03-26
  * @author    EXP: 272629724@qq.com

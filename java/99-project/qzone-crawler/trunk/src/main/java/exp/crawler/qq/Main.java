@@ -9,7 +9,7 @@ import exp.crawler.qq.ui.AppUI;
  * QQ空间爬虫:
  * 	可爬取相册和说说图文信息
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> qzone-crawler
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-03-22
  * @author    EXP: 272629724@qq.com

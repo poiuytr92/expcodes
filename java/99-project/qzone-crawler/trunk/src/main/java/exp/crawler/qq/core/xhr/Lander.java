@@ -33,7 +33,7 @@ import exp.libs.warp.ui.SwingUtils;
  * 		重定向BUG修正: http://jingpin.jikexueyuan.com/article/13992.html
  * 
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> qzone-crawler
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-03-26
  * @author    EXP: 272629724@qq.com

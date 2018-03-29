@@ -23,7 +23,7 @@ import exp.libs.warp.net.webkit.WebUtils;
  * <PRE>
  * 【空间说说】解析器
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> qzone-crawler
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-03-23
  * @author    EXP: 272629724@qq.com

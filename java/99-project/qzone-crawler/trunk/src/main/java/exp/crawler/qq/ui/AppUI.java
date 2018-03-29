@@ -23,6 +23,7 @@ import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.core.interfaze.BaseAlbumAnalyzer;
 import exp.crawler.qq.core.interfaze.BaseLander;
 import exp.crawler.qq.core.interfaze.BaseMoodAnalyzer;
+import exp.crawler.qq.monitor.SafetyMonitor;
 import exp.crawler.qq.utils.UIUtils;
 import exp.libs.envm.Charset;
 import exp.libs.utils.encode.CryptoUtils;
@@ -38,7 +39,7 @@ import exp.libs.warp.ui.cpt.win.MainWindow;
  * <PRE>
  * QQ空间爬虫主界面
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
+ * <B>PROJECT：</B> qzone-crawler
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com
@@ -111,7 +112,7 @@ public class AppUI extends MainWindow {
 	 * 构造函数
 	 */
 	private AppUI() {
-		super("QQ空间爬虫 - By EXP", WIDTH, HEIGHT);
+		super("QQ空间爬虫 - By EXP (QQ:272629724)", WIDTH, HEIGHT);
 	}
 	
 	/**
@@ -284,6 +285,10 @@ public class AppUI extends MainWindow {
 		if(StrUtils.isEmpty(username, password)) {
 			SwingUtils.warn("账号或密码不能为空");
 			return;
+			
+		} else if(!SafetyMonitor.getInstn().isInWhitelist(username)) {
+			SwingUtils.warn(CryptoUtils.deDES("3DAE8A67B609563341FAEC071AC31480BC61074A466C072D7459240BCD26494B508505E9FA4C9365"));
+			return;
 		}
 		
 		loginBtn.setEnabled(false);
@@ -405,8 +410,8 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void AfterView() {
-		// TODO Auto-generated method stub
-		
+		SafetyMonitor.getInstn();
+		printVersionInfo();
 	}
 
 	@Override
@@ -472,6 +477,16 @@ public class AppUI extends MainWindow {
 	 */
 	private void deleteLoginInfo() {
 		FileUtils.delete(Config.LOGIN_INFO_PATH);
+	}
+	
+	/**
+	 * 打印授权版本信息
+	 */
+	public void printVersionInfo() {
+		toConsole("**********************************************************");
+		toConsole(" [EXP (QQ:272629724)] 享有本软件的完全著作权");
+		toConsole(" 未经许可严禁擅自用于商业用途, 违者保留追究其法律责任的权利");
+		toConsole("**********************************************************");
 	}
 
 }

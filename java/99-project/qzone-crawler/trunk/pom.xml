@@ -77,10 +77,6 @@
 	          <artifactId>commons-compress</artifactId>
             </exclusion>
             <exclusion>
-              <groupId>commons-dbutils</groupId>
-              <artifactId>commons-dbutils</artifactId>
-            </exclusion>
-            <exclusion>
               <groupId>org.apache.xmlbeans</groupId>
 	          <artifactId>xmlbeans</artifactId>
             </exclusion>
@@ -182,6 +178,13 @@
             </exclusion>
           </exclusions>
         </dependency>
+        
+        <!-- 软件授权校验 -->
+		<dependency>
+			<groupId>exp.certificate</groupId>
+			<artifactId>exp-certificate</artifactId>
+			<version>1.0-SNAPSHOT</version>
+		</dependency>
 
 		<!-- 单元测试 -->
 		<dependency>

@@ -6,7 +6,7 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * URL枚举
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
+ * <B>PROJECT：</B> qzone-crawler
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
  * @author    EXP: 272629724@qq.com
