@@ -179,7 +179,7 @@
 		  <classifier>rc1</classifier>
 		</dependency>
 
-		<!-- 程序校验 -->
+		<!-- 软件授权校验 -->
 		<dependency>
 			<groupId>exp.certificate</groupId>
 			<artifactId>exp-certificate</artifactId>
