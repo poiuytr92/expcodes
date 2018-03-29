@@ -112,6 +112,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	 */
 	@Override
 	protected int _getPageNum() {
+		UIUtils.log("正在提取QQ [", QQ, "] 的说说页数...");
 		int pageNum = 0;
 		try {
 			WebElement last = Browser.findElement(

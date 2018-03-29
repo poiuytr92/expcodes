@@ -95,6 +95,7 @@ public class Lander extends BaseLander {
 		// QQ空间的【登陆操作界面】是通过【iframe】嵌套在【登陆页面】中的子页面
 		UIUtils.log("正在切换为帐密登陆模式...");
 		Browser.switchToFrame(By.id("login_frame"));
+		ThreadUtils.tSleep(Config.SLEEP_TIME);
 		
 		// 切换帐密登陆方式为 [帐密登陆]
 		boolean isOk = true;

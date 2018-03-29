@@ -78,12 +78,15 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	 */
 	@Override
 	protected int _getPageNum() {
+		UIUtils.log("正在提取QQ [", QQ, "] 的说说页数...");
 		String response = _getPageMoodJson(1);
 		int total = 0;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			total = JsonUtils.getInt(json, XHRAtrbt.total, 0);	// 总说说数量
-		} catch(Exception e) {}
+		} catch(Exception e) {
+			UIUtils.log(e, "提取QQ [", QQ, "] 的说说页数失败");
+		}
 		return PicUtils.getPageNum(total, Config.BATCH_LIMT);
 	}
 	

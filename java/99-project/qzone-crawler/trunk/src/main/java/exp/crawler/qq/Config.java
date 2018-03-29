@@ -39,6 +39,6 @@ public class Config {
 	public final static int BATCH_LIMT = 20;
 	
 	/** 重试次数 */
-	public final static int RETRY = 3;
+	public final static int RETRY = 5;
 	
 }
