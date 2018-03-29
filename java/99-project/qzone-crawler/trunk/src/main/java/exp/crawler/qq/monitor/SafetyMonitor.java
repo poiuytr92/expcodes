@@ -28,15 +28,24 @@ public class SafetyMonitor {
 	private final static String GITEE_URL = CryptoUtils.deDES(
 			"4C3B7319D21E23D468926AD72569DDF8408E193F3B526A6F5EE2A5699BCCA673DC22BC762A1F149B03E39422823B4BF0");
 	
+	/** 软件名称 */
 	private String appName;
 
+	/** 单例 */
 	private static volatile SafetyMonitor instance;
 	
+	/**
+	 * 构造函数
+	 */
 	private SafetyMonitor() {
 		String verInfo =  VersionMgr.exec("-p");
 		this.appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
 	}
 	
+	/**
+	 * 获取单例
+	 * @return
+	 */
 	public static SafetyMonitor getInstn() {
 		if(instance == null) {
 			synchronized (SafetyMonitor.class) {
@@ -50,10 +59,29 @@ public class SafetyMonitor {
 	
 	/**
 	 * 检查使用软件的QQ是否在白名单内
-	 * @param whitelist 白名单列表（格式: aUser,bUser,cUser,......）
-	 * @return true:在白名单内; false:不在白名单
+	 * @param QQ 使用软件的QQ
+	 * @return true:在白名单内; false:不在白名单内
 	 */
 	public boolean isInWhitelist(String QQ) {
+		App app = getAppInfo();	// 提取软件授权信息
+		return (app != null && app.getWhitelist().contains(QQ));
+	}
+	
+	/**
+	 * 检查被爬取数据的QQ是否在黑名单内
+	 * @param QQ 被爬取数据的QQ
+	 * @return true:在黑名单内; false:不在黑名单内
+	 */
+	public boolean isInBlacklist(String QQ) {
+		App app = getAppInfo();	// 提取软件授权信息
+		return (app != null && app.getBlacklist().contains(QQ));
+	}
+	
+	/**
+	 * 提取软件授权信息
+	 * @return
+	 */
+	private App getAppInfo() {
 		
 		// 先尝试用Gitee(国内)获取授权页, 若失败则从GitHub(国际)获取授权页
 		String pageSource = HttpURLUtils.doGet(GITEE_URL, null, null);
@@ -61,12 +89,8 @@ public class SafetyMonitor {
 			pageSource = HttpURLUtils.doGet(GITHUB_URL, null, null);
 		}
 		
-		boolean isOk = false;
-		App app = Convertor.toApp(pageSource, appName);	// 提取软件授权信息
-		if(app != null && app.getWhitelist().contains(QQ)) {
-			isOk = true;
-		}
-		return isOk;
+		App app = Convertor.toApp(pageSource, appName);
+		return app;
 	}
 	
 }

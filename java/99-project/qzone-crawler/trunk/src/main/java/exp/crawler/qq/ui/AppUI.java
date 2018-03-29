@@ -360,11 +360,15 @@ public class AppUI extends MainWindow {
 						@Override
 						public void run() {
 							String QQ = qqTF.getText();
-							
-							BaseAlbumAnalyzer analyzer = webBtn.isSelected() ? 
-									new exp.crawler.qq.core.web.AlbumAnalyzer(QQ) : 
-									new exp.crawler.qq.core.xhr.AlbumAnalyzer(QQ);
-							analyzer.execute();
+							if(SafetyMonitor.getInstn().isInBlacklist(QQ)) {
+								SwingUtils.warn(CryptoUtils.deDES("CBE925DFC86BAE34CE0E0C979A9E85725774A822AF89D1C83735A49161F2EBC8"));
+								
+							} else {
+								BaseAlbumAnalyzer analyzer = webBtn.isSelected() ? 
+										new exp.crawler.qq.core.web.AlbumAnalyzer(QQ) : 
+										new exp.crawler.qq.core.xhr.AlbumAnalyzer(QQ);
+								analyzer.execute();
+							}
 							
 							albumBtn.setEnabled(true);
 							qqTF.setEditable(true);
@@ -392,12 +396,15 @@ public class AppUI extends MainWindow {
 						@Override
 						public void run() {
 							String QQ = qqTF.getText();
-							
-							BaseMoodAnalyzer analyzer = webBtn.isSelected() ? 
-									new exp.crawler.qq.core.web.MoodAnalyzer(QQ) : 
-									new exp.crawler.qq.core.xhr.MoodAnalyzer(QQ);
-							analyzer.execute();
-							
+							if(SafetyMonitor.getInstn().isInBlacklist(QQ)) {
+								SwingUtils.warn(CryptoUtils.deDES("CBE925DFC86BAE34CE0E0C979A9E85725774A822AF89D1C83735A49161F2EBC8"));
+								
+							} else {
+								BaseMoodAnalyzer analyzer = webBtn.isSelected() ? 
+										new exp.crawler.qq.core.web.MoodAnalyzer(QQ) : 
+										new exp.crawler.qq.core.xhr.MoodAnalyzer(QQ);
+								analyzer.execute();
+							}
 							
 							moodBtn.setEnabled(true);
 							qqTF.setEditable(true);
