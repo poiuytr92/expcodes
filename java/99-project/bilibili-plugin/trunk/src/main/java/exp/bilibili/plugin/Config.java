@@ -37,7 +37,7 @@ public class Config {
 	 * 连续抽奖限制：
 	 * 	每抽3次停一次(主要避免被抓到封号)
 	 */
-	public final static int LOTTERY_LIMIT = 3;
+	public final static int LOTTERY_LIMIT = 10;
 	
 	private Set<Integer> tabuAutoRoomIds;
 	

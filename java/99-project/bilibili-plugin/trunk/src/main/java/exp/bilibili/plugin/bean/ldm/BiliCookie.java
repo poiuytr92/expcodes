@@ -6,6 +6,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.envm.Danmu;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.BoolUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.cookie.HttpCookie;
@@ -232,13 +233,14 @@ public class BiliCookie extends HttpCookie {
 	public boolean allowLottery() {
 		boolean isOk = false;
 		if(++lotteryCnt <= Config.LOTTERY_LIMIT) {
-			isOk = true;
+			isOk = RandomUtils.randomBoolean();
+			
 		} else {
 			lotteryCnt = 0;
 		}
 		return isOk;
 	}
-
+	
 	@Override
 	public String toHeaderCookie() {
 		return StrUtils.concat(super.toHeaderCookie(), 
