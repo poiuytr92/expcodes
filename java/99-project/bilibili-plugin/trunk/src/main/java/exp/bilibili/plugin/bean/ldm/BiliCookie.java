@@ -76,6 +76,9 @@ public class BiliCookie extends HttpCookie {
 	/** 标识日常任务的执行状态 */
 	private TaskStatus taskStatus;
 	
+	/** 连续抽奖计数 */
+	private int lotteryCnt;
+	
 	public BiliCookie() {
 		super();
 	}
@@ -98,6 +101,7 @@ public class BiliCookie extends HttpCookie {
 		this.autoFeed = false;
 		this.feedRoomId = Config.getInstn().SIGN_ROOM_ID();
 		this.taskStatus = new TaskStatus();
+		this.lotteryCnt = 0;
 	}
 	
 	@Override
@@ -223,6 +227,16 @@ public class BiliCookie extends HttpCookie {
 	
 	public TaskStatus TASK_STATUS() {
 		return taskStatus;
+	}
+	
+	public boolean allowLottery() {
+		boolean isOk = false;
+		if(++lotteryCnt <= Config.LOTTERY_LIMIT) {
+			isOk = true;
+		} else {
+			lotteryCnt = 0;
+		}
+		return isOk;
 	}
 
 	@Override

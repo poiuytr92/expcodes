@@ -38,6 +38,10 @@ public class LotteryTV extends _Lottery {
 		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
+			if(cookie.allowLottery() == false) {
+				continue;
+			}
+			
 			String reason = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
 				log.info("[{}] 参与直播间 [{}] 抽奖成功(小电视)", cookie.NICKNAME(), roomId);

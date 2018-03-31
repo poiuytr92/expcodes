@@ -33,6 +33,12 @@ public class Config {
 	
 	public final static int DEFAULT_ROOM_ID = 390480;
 	
+	/**
+	 * 连续抽奖限制：
+	 * 	每抽3次停一次(主要避免被抓到封号)
+	 */
+	public final static int LOTTERY_LIMIT = 3;
+	
 	private Set<Integer> tabuAutoRoomIds;
 	
 	private static volatile Config instance;
