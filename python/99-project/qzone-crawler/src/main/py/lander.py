@@ -6,6 +6,7 @@ import src.main.py.config as cfg
 import re
 import execjs
 import requests
+import src.main.py.cookie as QQCookie
 
 
 
@@ -33,16 +34,11 @@ def initCookieEnv():
         'link_target' : 'blank'
     }
     response = requests.get(url=cfg.SIG_URL, params=params)
-    cookies = response.headers['Set-Cookie']
-    for cookie in cookies.split(', '):
-        rgx = re.search('pt_login_sig=([^;]+)', cookie)
-        sig = rgx.group(1)
-        print(sig)
-        if(sig != ''):
-            break
+    set_cookies = response.headers['Set-Cookie']
+    qqcookie = QQCookie.QQCookie(set_cookies)
 
-    print(sig)
-    return sig
+    print(qqcookie.sig)
+    return qqcookie.sig
 
 
 if __name__ == '__main__':
