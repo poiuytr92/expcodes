@@ -87,7 +87,7 @@ public class HttpCookie {
 	 * 添加一个cookie对象
 	 * @param cookie
 	 */
-	public boolean add(_HttpCookie cookie) {
+	protected boolean add(_HttpCookie cookie) {
 		boolean isOk = false;
 		if(cookie != null && cookie.isVaild()) {
 			isOk = takeCookieNVE(
