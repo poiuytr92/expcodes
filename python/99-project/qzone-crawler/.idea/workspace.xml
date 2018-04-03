@@ -14,10 +14,11 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/qzone-crawler$crawler__1_.coverage" NAME="crawler (1) Coverage Results" MODIFIED="1522748436530" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/main/py" />
     <SUITE FILE_PATH="coverage/qzone-crawler$crawler.coverage" NAME="crawler Coverage Results" MODIFIED="1521820621482" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/qzone-crawler$lander.coverage" NAME="lander Coverage Results" MODIFIED="1522739254384" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/main/py" />
     <SUITE FILE_PATH="coverage/qzone-crawler$config.coverage" NAME="config Coverage Results" MODIFIED="1522396205120" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/main/py" />
-    <SUITE FILE_PATH="coverage/qzone-crawler$cookie.coverage" NAME="cookie Coverage Results" MODIFIED="1522727908894" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/main/py" />
+    <SUITE FILE_PATH="coverage/qzone-crawler$cookie.coverage" NAME="cookie Coverage Results" MODIFIED="1522748884600" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/main/py" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -40,8 +41,8 @@
       <file leaf-file-name="lander.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/py/lander.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.949153" vertical-offset="0" max-vertical-offset="884">
-              <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+            <state vertical-scroll-proportion="-1.1525424" vertical-offset="0" max-vertical-offset="884">
+              <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="32" />
               <folding>
                 <element signature="e#93#125#0" expanded="true" />
               </folding>
@@ -52,10 +53,10 @@
       <file leaf-file-name="cookie.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/py/cookie.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-44.949154" vertical-offset="0" max-vertical-offset="2839">
-              <caret line="156" column="34" selection-start-line="156" selection-start-column="34" selection-end-line="156" selection-end-column="34" />
+            <state vertical-scroll-proportion="-57.050846" vertical-offset="0" max-vertical-offset="3468">
+              <caret line="198" column="0" selection-start-line="198" selection-start-column="0" selection-end-line="198" selection-end-column="0" />
               <folding>
-                <element signature="e#94#103#0" expanded="true" />
+                <element signature="e#94#126#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -74,8 +75,8 @@
       <file leaf-file-name="builtins.py" pinned="false" current-in-tab="false">
         <entry file="file://$USER_HOME$/.PyCharm40/system/python_stubs/-538436102/builtins.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="86792" max-vertical-offset="97529">
-              <caret line="5149" column="60" selection-start-line="5149" selection-start-column="60" selection-end-line="5149" selection-end-column="60" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="7623" max-vertical-offset="97529">
+              <caret line="339" column="13" selection-start-line="339" selection-start-column="9" selection-end-line="339" selection-end-column="13" />
               <folding />
             </state>
           </provider>
@@ -84,8 +85,28 @@
       <file leaf-file-name="config.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/py/config.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.7478006" vertical-offset="0" max-vertical-offset="901">
-              <caret line="15" column="67" selection-start-line="15" selection-start-column="67" selection-end-line="15" selection-end-column="67" />
+            <state vertical-scroll-proportion="0.55131966" vertical-offset="322" max-vertical-offset="969">
+              <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GTK.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/res/GTK.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
+              <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MD5-RSA.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/res/MD5-RSA.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="16800" max-vertical-offset="17799">
+              <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -104,8 +125,8 @@
       <file leaf-file-name="url.ini" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/conf/url.ini">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="682" max-vertical-offset="1056">
-              <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="816">
+              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -114,8 +135,8 @@
       <file leaf-file-name="crawler.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/py/crawler.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-2.881356" vertical-offset="0" max-vertical-offset="544">
-              <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+            <state vertical-scroll-proportion="-3.1694915" vertical-offset="0" max-vertical-offset="425">
+              <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
               <folding>
                 <element signature="e#93#125#0" expanded="true" />
               </folding>
@@ -133,11 +154,13 @@
         <option value="$PROJECT_DIR$/url.ini" />
         <option value="$PROJECT_DIR$/conf/url.ini" />
         <option value="$PROJECT_DIR$/src/main/py/QQCookie.py" />
-        <option value="$PROJECT_DIR$/src/main/py/config.py" />
-        <option value="$PROJECT_DIR$/src/main/py/crawler.py" />
-        <option value="$PROJECT_DIR$/src/main/py/cookie.py" />
-        <option value="$PROJECT_DIR$/src/main/py/lander.py" />
         <option value="$PROJECT_DIR$/src/test/py/__init__.py" />
+        <option value="$PROJECT_DIR$/src/main/py/lander.py" />
+        <option value="$PROJECT_DIR$/src/main/res/MD5-RSA.js" />
+        <option value="$PROJECT_DIR$/src/main/res/GTK.js" />
+        <option value="$PROJECT_DIR$/src/main/py/config.py" />
+        <option value="$PROJECT_DIR$/src/main/py/cookie.py" />
+        <option value="$PROJECT_DIR$/src/main/py/crawler.py" />
       </list>
     </option>
   </component>
@@ -342,7 +365,7 @@
       <recent name="D:\01_workspace\python\pycharm\qzone-crawler\src\main\py" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.lander">
+  <component name="RunManager" selected="Python.cookie">
     <configuration default="false" name="crawler" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -405,7 +428,7 @@
       <ConfigurationWrapper RunnerId="PythonRunner" />
       <method />
     </configuration>
-    <configuration default="false" name="cookie" type="PythonConfigurationType" factoryName="Python" temporary="true">
+    <configuration default="false" name="crawler (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -418,7 +441,7 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="qzone-crawler" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main/py/cookie.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main/py/crawler.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <RunnerSettings RunnerId="PythonRunner" />
@@ -613,16 +636,39 @@
       <envs />
       <method />
     </configuration>
-    <list size="4">
-      <item index="0" class="java.lang.String" itemvalue="Python.crawler" />
-      <item index="1" class="java.lang.String" itemvalue="Python.lander" />
-      <item index="2" class="java.lang.String" itemvalue="Python.config" />
-      <item index="3" class="java.lang.String" itemvalue="Python.cookie" />
+    <configuration default="false" name="cookie" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/main/py" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="qzone-crawler" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/main/py/cookie.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <RunnerSettings RunnerId="PyDebugRunner" />
+      <RunnerSettings RunnerId="PythonRunner" />
+      <ConfigurationWrapper RunnerId="PyDebugRunner" />
+      <ConfigurationWrapper RunnerId="PythonRunner" />
+      <method />
+    </configuration>
+    <list size="5">
+      <item index="0" class="java.lang.String" itemvalue="Python.cookie" />
+      <item index="1" class="java.lang.String" itemvalue="Python.crawler" />
+      <item index="2" class="java.lang.String" itemvalue="Python.lander" />
+      <item index="3" class="java.lang.String" itemvalue="Python.config" />
+      <item index="4" class="java.lang.String" itemvalue="Python.crawler (1)" />
     </list>
     <recent_temporary>
       <list size="4">
-        <item index="0" class="java.lang.String" itemvalue="Python.lander" />
-        <item index="1" class="java.lang.String" itemvalue="Python.cookie" />
+        <item index="0" class="java.lang.String" itemvalue="Python.crawler (1)" />
+        <item index="1" class="java.lang.String" itemvalue="Python.lander" />
         <item index="2" class="java.lang.String" itemvalue="Python.config" />
         <item index="3" class="java.lang.String" itemvalue="Python.crawler" />
       </list>
@@ -657,7 +703,7 @@
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299356" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39977852" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39937106" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -705,7 +751,7 @@
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="638">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#94#103#0" expanded="true" />
+            <element signature="e#94#126#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -874,20 +920,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/MD5-RSA.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-64.6196" vertical-offset="22621" max-vertical-offset="23034">
-          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/res/GTK.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="440">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://E:/03_work/python/python35/Lib/configparser.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="14818" max-vertical-offset="29436">
@@ -903,22 +935,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/conf/url.ini">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="36" max-vertical-offset="1056">
-          <caret line="31" column="0" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$USER_HOME$/.PyCharm40/system/python_stubs/-538436102/builtins.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="86792" max-vertical-offset="97529">
-          <caret line="5149" column="60" selection-start-line="5149" selection-start-column="60" selection-end-line="5149" selection-end-column="60" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/test/py/__init__.py">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="136">
@@ -929,38 +945,70 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/py/lander.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.949153" vertical-offset="0" max-vertical-offset="884">
-          <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        <state vertical-scroll-proportion="-1.1525424" vertical-offset="0" max-vertical-offset="884">
+          <caret line="4" column="0" selection-start-line="4" selection-start-column="0" selection-end-line="4" selection-end-column="32" />
           <folding>
             <element signature="e#93#125#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/conf/url.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="816">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="16" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.PyCharm40/system/python_stubs/-538436102/builtins.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="7623" max-vertical-offset="97529">
+          <caret line="339" column="13" selection-start-line="339" selection-start-column="9" selection-end-line="339" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/py/cookie.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-57.050846" vertical-offset="0" max-vertical-offset="3468">
+          <caret line="198" column="0" selection-start-line="198" selection-start-column="0" selection-end-line="198" selection-end-column="0" />
+          <folding>
+            <element signature="e#94#126#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/py/crawler.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-2.881356" vertical-offset="0" max-vertical-offset="544">
-          <caret line="10" column="30" selection-start-line="10" selection-start-column="30" selection-end-line="10" selection-end-column="30" />
+        <state vertical-scroll-proportion="-3.1694915" vertical-offset="0" max-vertical-offset="425">
+          <caret line="11" column="24" selection-start-line="11" selection-start-column="24" selection-end-line="11" selection-end-column="24" />
           <folding>
             <element signature="e#93#125#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/py/cookie.py">
+    <entry file="file://$PROJECT_DIR$/src/main/res/MD5-RSA.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-44.949154" vertical-offset="0" max-vertical-offset="2839">
-          <caret line="156" column="34" selection-start-line="156" selection-start-column="34" selection-end-line="156" selection-end-column="34" />
-          <folding>
-            <element signature="e#94#103#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="16800" max-vertical-offset="17799">
+          <caret line="9" column="12" selection-start-line="9" selection-start-column="12" selection-end-line="9" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/res/GTK.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="340">
+          <caret line="13" column="1" selection-start-line="13" selection-start-column="1" selection-end-line="13" selection-end-column="1" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/py/config.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.7478006" vertical-offset="0" max-vertical-offset="901">
-          <caret line="15" column="67" selection-start-line="15" selection-start-column="67" selection-end-line="15" selection-end-column="67" />
+        <state vertical-scroll-proportion="0.55131966" vertical-offset="322" max-vertical-offset="969">
+          <caret line="30" column="23" selection-start-line="30" selection-start-column="23" selection-end-line="30" selection-end-column="23" />
           <folding />
         </state>
       </provider>

@@ -10,7 +10,7 @@ from src.main.py.cookie import QQCookie
 
 
 
-def initCookieEnv() :
+def initCookieEnv():
     """
     初始化登陆用的Cookie环境参数.
     主要提取SIG值（属性名为:pt_login_sig）
