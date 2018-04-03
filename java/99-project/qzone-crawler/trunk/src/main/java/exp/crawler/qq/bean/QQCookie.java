@@ -26,7 +26,7 @@ public class QQCookie extends WebKitCookie {
 	/** 登陆验证码的校验码的属性键 */
 	private final static String VCODE_KEY = "verifysession";
 	
-	/** 登陆QQ号的cookie属性键 */
+	/** 当前所登陆QQ号的cookie属性键 */
 	private final static String UIN_KEY = "uin";
 	
 	/** 用于生成GTK的cookie属性键 */
