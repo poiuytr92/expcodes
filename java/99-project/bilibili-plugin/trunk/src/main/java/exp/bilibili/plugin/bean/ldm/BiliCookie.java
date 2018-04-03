@@ -77,7 +77,7 @@ public class BiliCookie extends HttpCookie {
 	/** 标识日常任务的执行状态 */
 	private TaskStatus taskStatus;
 	
-	/** 连续抽奖计数 */
+	/** 累计参与抽奖计数 */
 	private int lotteryCnt;
 	
 	public BiliCookie() {
@@ -231,12 +231,15 @@ public class BiliCookie extends HttpCookie {
 	}
 	
 	public boolean allowLottery() {
-		boolean isOk = false;
-		if(++lotteryCnt <= Config.LOTTERY_LIMIT) {
-			isOk = RandomUtils.randomBoolean();
-			
-		} else {
-			lotteryCnt = 0;
+		boolean isOk = RandomUtils.randomBoolean();
+		if(isOk == true) {
+			if(lotteryCnt >= Config.LOTTERY_LIMIT) {
+				lotteryCnt = 0;
+				isOk = false;
+				
+			} else {
+				lotteryCnt++;
+			}
 		}
 		return isOk;
 	}
