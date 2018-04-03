@@ -20,7 +20,7 @@ MOOD_REFERER = config.get('mood', 'MOOD_REFERER')       # 说说引用地址
 MOOD_DOMAIN = config.get('mood', 'MOOD_DOMAIN')         # 说说域名地址
 
 
-def QZONE_HOMR_URL(QQ):
+def QZONE_HOMR_URL(QQ) :
     '''
     获取QQ空间首页地址
 
@@ -31,7 +31,7 @@ def QZONE_HOMR_URL(QQ):
     return '%(QZONE_DOMAIN)s%(QQ)s' % { 'QZONE_DOMAIN' : QZONE_DOMAIN, 'QQ' : QQ }
 
 
-def ALBUM_URL(QQ, AID):
+def ALBUM_URL(QQ, AID) :
     '''
     获取QQ相册地址
 

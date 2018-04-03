@@ -6,7 +6,7 @@ import src.main.py.config as cfg
 import execjs
 import requests
 
-def crawler():
+def crawler() :
     response = requests.get(url=cfg.SIG_URL)
     response.encoding = 'utf-8' # Header默认是ISO编码，需要转码
     print(response.text)

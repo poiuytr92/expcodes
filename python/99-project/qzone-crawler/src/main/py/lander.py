@@ -6,11 +6,11 @@ import src.main.py.config as cfg
 import re
 import execjs
 import requests
-import src.main.py.cookie as QQCookie
+from src.main.py.cookie import QQCookie
 
 
 
-def initCookieEnv():
+def initCookieEnv() :
     """
     初始化登陆用的Cookie环境参数.
     主要提取SIG值（属性名为:pt_login_sig）
@@ -35,10 +35,10 @@ def initCookieEnv():
     }
     response = requests.get(url=cfg.SIG_URL, params=params)
     set_cookies = response.headers['Set-Cookie']
-    qqcookie = QQCookie.QQCookie(set_cookies)
+    cookie = QQCookie(set_cookies)
 
-    print(qqcookie.sig)
-    return qqcookie.sig
+    print(set_cookies)
+    print(cookie.sig)
 
 
 if __name__ == '__main__':
