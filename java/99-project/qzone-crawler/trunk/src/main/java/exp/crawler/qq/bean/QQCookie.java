@@ -41,7 +41,7 @@ public class QQCookie extends WebKitCookie {
 	/** 当前登陆账号(即登陆的QQ号) */
 	private String uin;
 	
-	/** 每次登陆QQ空间都会生成一个固定的GTK, 用于其他页面操作 */
+	/** 每次登陆QQ空间都会通过p_skey生成一个固定的GTK, 用于其他页面操作 */
 	private String gtk;
 	
 	/** 每次登陆QQ空间都会生成一个固定的qzonetoken, 用于其他页面操作 */
