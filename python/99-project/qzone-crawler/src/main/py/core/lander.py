@@ -44,9 +44,9 @@ class Lander(object):
         '''
         is_ok = False
         try:
-            self.initCookieEnv()
-            vcode, verify = self.takeVcode()
-            rsa_pwd = self.encryptPassword(vcode)
+            self.init_cookie_env()
+            vcode, verify = self.take_vcode()
+            rsa_pwd = self.encrypt_password(vcode)
             callback = self.login(rsa_pwd, vcode, verify)
 
             is_ok = not not re.search('(?i)^http', callback)
@@ -68,7 +68,7 @@ class Lander(object):
         return is_ok
 
 
-    def initCookieEnv(self):
+    def init_cookie_env(self):
         '''
         初始化登陆用的cookie环境参数.
         主要提取SIG值（cookie属性名为:pt_login_sig）
@@ -97,7 +97,7 @@ class Lander(object):
         print('已获得本次登陆的SIG码: %s' % self.cookie.sig)
 
 
-    def takeVcode(self):
+    def take_vcode(self):
         '''
         提取登陆用的验证码.
         -----------------------------
@@ -153,7 +153,7 @@ class Lander(object):
         return vcode, verify
 
 
-    def encryptPassword(self, vcode):
+    def encrypt_password(self, vcode):
         '''
         对QQ密码做RSA加密
         :param vcode: 本次登陆的验证码
@@ -243,10 +243,12 @@ class Lander(object):
         '''
         print('正在提取本次登陆的 GTK 与 QzoneToken ...')
 
+        # 从登陆回调页面中提取p_skey, 并用之计算GTK（注意callbackURL是一个存在重定向页面, 且p_skey只存在于重定向前的页面）
         response = requests.get(callback_url, headers=cfg.HEADERS(self.cookie.to_nv()))
         self.add_response_cookies(response)
         print('本次登陆生成的 GTK: %s', self.cookie.gtk)
 
+        # 从QQ空间首页的页面源码中提取QzoneToken
         response = requests.get(cfg.QZONE_HOMR_URL(self.QQ), headers=cfg.HEADERS(self.cookie.to_nv()))
         self.cookie.qzone_token = self.get_qzone_token(response.text)
         print('本次登陆生成的 QzoneToken: %s', self.cookie.qzone_token)
