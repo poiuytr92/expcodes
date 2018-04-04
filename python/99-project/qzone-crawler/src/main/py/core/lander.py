@@ -136,8 +136,8 @@ class Lander(object):
             'js_type' : '1'
         }
         response = requests.get(url=cfg.VCODE_URL, headers=cfg.HEADERS(), params=params)
-        rr = re.compile("'([^']*)'")
-        groups = rr.findall(response.text)
+        rc = re.compile("'([^']*)'")
+        groups = rc.findall(response.text)
 
         if groups[0] == '0' :
             vcode = groups[1]
@@ -209,8 +209,8 @@ class Lander(object):
             'js_type' : '1'
         }
         response = requests.get(url=cfg.XHR_LOGIN_URL, headers=cfg.HEADERS(), params=params)
-        rr = re.compile("'([^']*)'")
-        groups = rr.findall(response.text)
+        rc = re.compile("'([^']*)'")
+        groups = rc.findall(response.text)
         if len(groups) >= 6 :
             if groups[0] == '0' :
                 self.add_response_cookies(response)
