@@ -103,12 +103,17 @@ class _HttpCookie(object):
 
 
     def __eq__(self, other):
+        '''
+        用于判断两个_HttpCookie对象是否相同（仅通过键名name判断）
+        :return:
+        '''
         return isinstance(other, _HttpCookie) and (self.name == other.name)
 
 
     def __repr__(self):
         '''
         相当于toString方法
+        :return:
         '''
         return self.to_header()
 
@@ -206,6 +211,7 @@ class HttpCookie(object):
     def __repr__(self):
         '''
         相当于toString方法
+        :return:
         '''
         return self.to_header()
 
