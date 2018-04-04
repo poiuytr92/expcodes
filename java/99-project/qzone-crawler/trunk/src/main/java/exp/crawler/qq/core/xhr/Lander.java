@@ -334,14 +334,14 @@ public class Lander extends BaseLander {
 		Map<String, String> header = XHRUtils.getHeader(cookie);
 		client.doGet(callbackURL, header, null);
 		XHRUtils.takeResponseCookies(client, cookie);
-		UIUtils.log("本次登陆生成的 GTK: ", cookie.GTK());
+		UIUtils.log("本次登陆的 GTK: ", cookie.GTK());
 		
 		// 从QQ空间首页的页面源码中提取QzoneToken
 		header = XHRUtils.getHeader(cookie);
 		String pageSource = client.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
 		String qzoneToken = EncryptUtils.getQzoneToken(pageSource);
 		cookie.setQzoneToken(qzoneToken);
-		UIUtils.log("本次登陆生成的 QzoneToken: ", cookie.QZONE_TOKEN());
+		UIUtils.log("本次登陆的 QzoneToken: ", cookie.QZONE_TOKEN());
 		
 		return StrUtils.isNotEmpty(cookie.GTK(), cookie.QZONE_TOKEN());
 	}
