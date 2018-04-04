@@ -29,8 +29,7 @@ import exp.libs.warp.thread.LoopThread;
  *  1.自动晚安
  *  2.自动感谢投喂
  *  3.定时公告
- *  4.自动打call
- *  5.举报/禁言等命令检测
+ *  4.举报/禁言等命令检测
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -72,9 +71,6 @@ public class ChatMgr extends LoopThread {
 	/** 滚屏公告周期 */
 	private final static long NOTICE_TIME = 300000;
 	
-	/** 自动打call周期 */
-	private final static long CALL_TIME = 30000;
-	
 	/** 检测待发送消息间隔 */
 	private final static long SLEEP_TIME = 1000;
 	
@@ -82,22 +78,15 @@ public class ChatMgr extends LoopThread {
 	
 	private final static int NOTICE_LIMIT = (int) (NOTICE_TIME / SLEEP_TIME);
 	
-	private final static int CALL_LIMIT = (int) (CALL_TIME / SLEEP_TIME);
-	
 	private int thxCnt;
 	
 	private int noticeCnt;
-	
-	private int callCnt;
 	
 	/** 自动答谢 */
 	private boolean autoThankYou;
 	
 	/** 自动公告 */
 	private boolean autoNotice;
-	
-	/** 自动打call */
-	private boolean autoCall;
 	
 	/** 自动晚安 */
 	private boolean autoGoodNight;
@@ -123,11 +112,9 @@ public class ChatMgr extends LoopThread {
 		super("自动发言姬");
 		this.thxCnt = 0;
 		this.noticeCnt = 0;
-		this.callCnt = 0;
 		this.chatCnt = SCREEN_CHAT_LIMT;
 		this.autoThankYou = false;
 		this.autoNotice = false;
-		this.autoCall = false;
 		this.autoGoodNight = false;
 		this.nightedUsers = new HashSet<String>();
 		this.userGifts = new LinkedHashMap<String, Map<String, Integer>>();
@@ -167,12 +154,6 @@ public class ChatMgr extends LoopThread {
 		if(noticeCnt++ >= NOTICE_LIMIT && allowAutoChat()) {
 			noticeCnt = 0;
 			toNotice();
-		}
-		
-		// 定时打call（支持主播公告）
-		if(callCnt++ >= CALL_LIMIT && allowAutoChat()) {
-			callCnt = 0;
-			toCall();
 		}
 		
 		_sleep(SLEEP_TIME);
@@ -357,18 +338,6 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 定时打call
-	 */
-	private void toCall() {
-		if(!isAutoCall() || ListUtils.isEmpty(MsgKwMgr.getCalls())) {
-			return;
-		}
-		
-		String msg = RandomUtils.randomElement(MsgKwMgr.getCalls());
-		XHRSender.sendDanmu(msg);
-	}
-	
-	/**
 	 * 分析弹幕内容, 触发不同的响应机制
 	 * @param chatMsg
 	 */
@@ -517,15 +486,6 @@ public class ChatMgr extends LoopThread {
 	
 	public boolean isAutoNotice() {
 		return autoNotice;
-	}
-	
-	public void setAutoCall() {
-		autoCall = !autoCall;
-		chatCnt = SCREEN_CHAT_LIMT;
-	}
-	
-	public boolean isAutoCall() {
-		return autoCall;
 	}
 	
 	public void setAutoGoodNight() {

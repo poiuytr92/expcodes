@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -43,7 +45,9 @@ import exp.libs.envm.FileType;
 import exp.libs.utils.encode.CompressUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.thread.ThreadPool;
@@ -742,10 +746,16 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				String music = MsgKwMgr.getMusic();
-				if(StrUtils.isNotEmpty(music)) {
-					XHRSender.sendDanmu("#点歌 ".concat(music), curChatColor);
-				}
+				tp.execute(new Thread() {
+					
+					@Override
+					public void run() {
+						String music = MsgKwMgr.getMusic();
+						if(StrUtils.isNotEmpty(music)) {
+							XHRSender.sendDanmu("#点歌 ".concat(music), curChatColor);
+						}
+					}
+				});
 				lockBtn();
 			}
 		});
@@ -816,20 +826,32 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogined()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [小call姬] 哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能使用 [小call姬] 哦~");
 					return;
 				}
 				
-				ChatMgr.getInstn()._start();
-				ChatMgr.getInstn().setAutoCall();
-				if(ChatMgr.getInstn().isAutoCall()) {
-					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, callBtn);
-					UIUtils.log("[小call姬] 被召唤成功O(∩_∩)O");
+				tp.execute(new Thread() {
 					
-				} else {
-					BeautyEyeUtils.setButtonStyle(NormalColor.normal, callBtn);
-					UIUtils.log("[小call姬] 被封印啦/(ㄒoㄒ)/");
-				}
+					@Override
+					public void run() {
+						List<String> calls = new ArrayList<String>(MsgKwMgr.getCalls());
+						if(ListUtils.isEmpty(calls)) {
+							return;
+						}
+						
+						for(BiliCookie cookie : CookiesMgr.ALL()) {
+							if(!cookie.isBindTel() || RandomUtils.randomBoolean()) {
+								continue;
+							}
+							
+							String msg = RandomUtils.randomElement(calls);
+							calls.remove(msg);
+							
+							XHRSender.sendDanmu(cookie, msg);
+							ThreadUtils.tSleep(RandomUtils.randomInt(1000, 10000));
+						}
+					}
+				});
 				lockBtn();
 			}
 		});

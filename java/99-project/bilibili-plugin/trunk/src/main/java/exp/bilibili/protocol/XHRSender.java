@@ -430,6 +430,19 @@ public class XHRSender {
 	}
 	
 	/**
+	 * 使用指定账号发送弹幕消息到当前监听的直播间
+	 * @param cookie 发送弹幕的账号
+	 * @param msg 弹幕消息
+	 * @param color 弹幕颜色
+	 * @return
+	 */
+	public static boolean sendDanmu(BiliCookie cookie, String msg) {
+		int roomId = UIUtils.getLiveRoomId();
+		ChatColor color = ChatColor.RANDOM();
+		return Chat.sendDanmu(cookie, roomId, msg, color);
+	}
+	
+	/**
 	 * 发送弹幕消息
 	 * @param msg 弹幕消息
 	 * @param roomId 接收弹幕的直播间
