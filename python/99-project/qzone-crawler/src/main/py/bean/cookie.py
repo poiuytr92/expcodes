@@ -102,6 +102,10 @@ class _HttpCookie(object):
         }
 
 
+    def __eq__(self, other):
+        return isinstance(other, _HttpCookie) and (self.name == other.name)
+
+
     def __repr__(self):
         '''
         相当于toString方法
@@ -125,6 +129,15 @@ class HttpCookie(object):
         :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
         :return: None
         '''
+        self.adds(set_cookies)
+
+
+    def adds(self, set_cookies):
+        '''
+        拆解set_cookies中的多个set_cookie并解析
+        :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
+        :return: None
+        '''
         for set_cookie in set_cookies.split(';,'):
             self.add(set_cookie)
 
@@ -137,7 +150,7 @@ class HttpCookie(object):
         '''
         is_ok = False
         cookie = _HttpCookie(set_cookie)
-        if cookie.is_vaild():
+        if cookie.is_vaild() and (cookie not in self.cookies) :
             if self.take_cookie_nve(cookie.name, cookie.value, cookie.expire):
                 self.cookies.append(cookie)
                 is_ok = True
@@ -211,7 +224,7 @@ class QQCookie(HttpCookie):
     uin = ''                    # 当前登陆账号(即登陆的QQ号)
     PSKEY_KEY = "p_skey"        # 用于生成GTK的cookie属性键
     gtk = ''                    # 每次登陆QQ空间都会通过p_skey生成一个固定的GTK, 用于其他页面操作
-    qzoneToken = ''             # 每次登陆QQ空间都会生成一个固定的qzonetoken, 用于其他页面操作
+    qzone_token = ''            # 每次登陆QQ空间都会生成一个固定的qzonetoken, 用于其他页面操作
     nickName = ''               # QQ昵称
 
 
@@ -260,7 +273,7 @@ class QQCookie(HttpCookie):
         :param p_skey: 从登陆cookie中提取的标识(每次登陆时随机生成)
         :return: GTK码
         '''
-        gtk = ''
+
         try:
             js = execjs.compile(open(cfg.GTK_JS_PATH, encoding=cfg.DEFAULT_CHARSET).read())
             gtk = js.call(cfg.GTK_METHOD, p_skey)

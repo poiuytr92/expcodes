@@ -47,5 +47,21 @@ def ALBUM_URL(QQ, AID):
     return '%(QZONE_HOMR_URL)s/photo/%(AID)s' % { 'QZONE_HOMR_URL' : QZONE_HOMR_URL(QQ), 'AID' : AID }
 
 
+def HEADERS(nv_cookies=''):
+    '''
+    获取HTTP请求头(主要设置HTTP代理, 避免被反爬)
+    :return: HTTP请求头
+    '''
+    headers = {
+        'Accept' : 'image/webp,image/*,*/*;q=0.8',
+        'Accept-Encoding' : 'gzip, deflate, sdch',
+        'Accept-Language' : 'zh-CN,zh;q=0.8,en;q=0.6',
+        'Connection' : 'keep-alive',
+        'Cookie' : nv_cookies,
+        'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'
+    }
+    return headers
+
+
 
 
