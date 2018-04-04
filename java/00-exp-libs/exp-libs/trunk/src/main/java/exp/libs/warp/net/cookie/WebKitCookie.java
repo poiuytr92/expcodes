@@ -71,9 +71,7 @@ public class WebKitCookie extends HttpCookie {
 	 */
 	public void add(_WebKitCookie cookie) {
 		if(cookie != null && cookie.isVaild()) {
-			isChanged = true;
 			cookies.add(cookie);
-			
 			takeCookieNVE(cookie.getName(), cookie.getValue(), cookie.getExpiry());
 		}
 	}

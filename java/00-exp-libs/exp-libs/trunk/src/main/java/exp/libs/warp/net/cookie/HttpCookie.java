@@ -27,16 +27,12 @@ public class HttpCookie {
 	/** 多个cookie的NV组合而成的NV串 */
 	protected String nvCookies;
 	
-	/** cookies是否发生变化 */
-	protected boolean isChanged;
-	
 	/**
 	 * 构造函数
 	 */
 	public HttpCookie() {
 		this.cookies = new LinkedList<_HttpCookie>();
 		this.nvCookies = "";
-		this.isChanged = false;
 		init();
 	}
 	
@@ -93,7 +89,6 @@ public class HttpCookie {
 			isOk = takeCookieNVE(
 					cookie.getName(), cookie.getValue(), cookie.getExpiry());
 			if(isOk == true) {
-				isChanged = true;
 				cookies.add(cookie);
 			}
 		}
@@ -101,14 +96,14 @@ public class HttpCookie {
 	}
 	
 	/**
-	 * 在添加新的cookie时会触发此方法, 用于提取某些特殊的名值对作为常量, 例如CSRF
+	 * 在添加新的cookie时会触发此方法, 用于提取某些特殊的名值对作为常量
 	 * @param name cookie键名
 	 * @param value cookie键值
 	 * @param expires cookie有效期
 	 * return true:保留该cookie; false;丢弃该cookie
 	 */
 	protected boolean takeCookieNVE(String name, String value, Date expires) {
-		// Undo
+		// Undo 仅在子类实现
 		return true;
 	}
 	
@@ -117,14 +112,11 @@ public class HttpCookie {
 	 * @return cookie的名值对列表(分号分隔)
 	 */
 	public String toNVCookie() {
-		if(isChanged == true) {
-			
-			StringBuilder kvs = new StringBuilder();
-			for(_HttpCookie cookie : cookies) {
-				kvs.append(cookie.toNV()).append("; ");
-			}
-			nvCookies = kvs.toString();
+		StringBuilder kvs = new StringBuilder();
+		for(_HttpCookie cookie : cookies) {
+			kvs.append(cookie.toNV()).append("; ");
 		}
+		nvCookies = kvs.toString();
 		return nvCookies;
 	}
 	
