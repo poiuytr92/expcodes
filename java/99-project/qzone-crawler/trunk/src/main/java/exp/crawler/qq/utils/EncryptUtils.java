@@ -55,17 +55,17 @@ public class EncryptUtils {
 	 * 先用 外置的JS算法 计算 GTK， 当使用 JS计算失败 时，才使用内置算法计算。
 	 * 外置JS算法主要是为了在QQ更新了GTK算法情况下，可以对应灵活修改。
 	 * 
-	 * @param skey
-	 * @return
+	 * @param pskey 从登陆cookie中提取的标识(每次登陆时随机生成)
+	 * @return GTK码
 	 */
-	public static String toGTK(String skey) {
+	public static String toGTK(String pskey) {
 		String gtk = "";
 		try {
-			Double dNum = (Double) JSUtils.executeJS(GTK_JS_PATH, GTK_METHOD, skey);
+			Double dNum = (Double) JSUtils.executeJS(GTK_JS_PATH, GTK_METHOD, pskey);
 			gtk = String.valueOf((int) dNum.doubleValue());
 			
 		} catch (Throwable e) {
-			gtk = _toGTK(skey);
+			gtk = _toGTK(pskey);
 		}
 		return gtk;
 	}
@@ -75,11 +75,11 @@ public class EncryptUtils {
 	 * @param skey
 	 * @return
 	 */
-	private static String _toGTK(String skey) {
+	private static String _toGTK(String pskey) {
 		String gtk = "";
 		int hash = 5381;
-		for (int i = 0; i < skey.length(); ++i) {
-			hash += (hash << 5) + (int) skey.charAt(i);
+		for (int i = 0; i < pskey.length(); ++i) {
+			hash += (hash << 5) + (int) pskey.charAt(i);
 		}
 		gtk = String.valueOf(hash & 0x7fffffff);
 		return gtk;
