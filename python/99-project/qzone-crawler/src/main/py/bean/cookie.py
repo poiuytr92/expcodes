@@ -102,6 +102,11 @@ class _HttpCookie(object):
         }
 
 
+    def __repr__(self):
+        '''
+        相当于toString方法
+        '''
+        return self.to_header()
 
 
 
@@ -116,7 +121,7 @@ class HttpCookie(object):
 
     def __init__(self, set_cookies):
         '''
-        构造函数：拆解set_cookies中的多个set_cookie
+        构造函数：拆解set_cookies中的多个set_cookie并解析
         :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
         :return: None
         '''
@@ -124,28 +129,79 @@ class HttpCookie(object):
             self.add(set_cookie)
 
 
-
     def add(self, set_cookie):
+        '''
+        添加一个set-cookie串
+        :param set_cookie: HTTP响应头中的 Set-Cookie, 格式如：JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly;
+        :return: True:添加成功; False:添加失败
+        '''
+        is_ok = False
         cookie = _HttpCookie(set_cookie)
         if cookie.is_vaild():
             if self.take_cookie_nve(cookie.name, cookie.value, cookie.expire):
                 self.cookies.append(cookie)
+                is_ok = True
+        return is_ok
 
 
     @abstractmethod
     def take_cookie_nve(self, name, value, expire):
+        '''
+        在添加新的set-cookie时会触发此方法, 用于提取某些特殊的名值对作为常量
+        :param name: cookie键名
+        :param value: cookie键值
+        :param expire: cookie有效期
+        :return: True:保留该cookie; False;丢弃该cookie
+        '''
         # TODO in sub class
         return True
 
 
     def is_vaild(self):
+        '''
+        判断当前所解析的Cookie集是否有效
+        :return: True:有效, False:无效
+        '''
         return len(self.cookies) > 0
 
 
+    def to_nv(self):
+        '''
+        生成所有cookie的名值对列表(分号分隔)
+        :return: cookie的名值对列表(分号分隔)
+        '''
+        nvs = ''
+        for cookie in self.cookies:
+            nvs = '%s; %s' % (cookie.to_nv(), nvs)
+        return nvs
+
+
+    def to_header(self):
+        '''
+        生成所有cookie在Header中的字符串形式(换行符分隔)
+        :return: 形如：
+                    sid=iji8r99z ; Domain=www.baidu.com ; Path=/ ; Expires=Thu, 31-Jan-2019 21:18:46 GMT+08:00 ;
+                    JSESSIONID=87E6F83AD8F5EC3C1BF1B08736E8D28A ; Domain= ; Path=/ ; Expires=Wed, 31-Jan-2018 21:18:43 GMT+08:00 ; HttpOnly ;
+                    DedeUserID__ckMd5=14ad42f429c3e8b7 ; Domain=www.baidu.com ; Path=/ ; Expires=Fri, 02-Mar-2018 21:18:46 GMT+08:00 ;
+        '''
+        headers = ''
+        for cookie in self.cookies:
+            headers = '%s\r\n%s' % (cookie.to_header(), headers)
+        return headers
+
+
+    def __repr__(self):
+        '''
+        相当于toString方法
+        '''
+        return self.to_header()
 
 
 
 class QQCookie(HttpCookie):
+    '''
+    QQ空间Cookie专用解析器
+    '''
 
     SIG_KEY = 'pt_login_sig'    # 用于登陆QQ的SIG属性键
     sig = ''                    # 用于登陆QQ的SIG码
@@ -159,11 +215,23 @@ class QQCookie(HttpCookie):
     nickName = ''               # QQ昵称
 
 
-    def __init__(self, set_cookies):
+    def __init__(self, set_cookies=''):
+        '''
+        构造函数：拆解set_cookies中的多个set_cookie并解析
+        :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
+        :return: None
+        '''
         super(QQCookie, self).__init__(set_cookies)
 
 
     def take_cookie_nve(self, name, value, expire):
+        '''
+        在添加新的set-cookie时会触发此方法, 用于提取某些特殊的名值对作为常量
+        :param name: cookie键名
+        :param value: cookie键值
+        :param expire: cookie有效期
+        :return: True:保留该cookie; False;丢弃该cookie
+        '''
         is_keep = True
 
         if self.SIG_KEY.upper() == name.upper():
@@ -184,6 +252,14 @@ class QQCookie(HttpCookie):
 
 
     def to_gtk(self, p_skey):
+        '''
+        通过 skey 计算GTK码.
+        ---------------------------------
+        先用 外置的JS算法 计算 GTK， 当使用 JS计算失败 时，才使用内置算法计算。
+        外置JS算法主要是为了在QQ更新了GTK算法情况下，可以对应灵活修改。
+        :param p_skey: 从登陆cookie中提取的标识(每次登陆时随机生成)
+        :return: GTK码
+        '''
         gtk = ''
         try:
             js = execjs.compile(open(cfg.GTK_JS_PATH, encoding=cfg.DEFAULT_CHARSET).read())
