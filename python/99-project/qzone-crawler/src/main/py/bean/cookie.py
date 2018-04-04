@@ -279,7 +279,6 @@ class QQCookie(HttpCookie):
         :param p_skey: 从登陆cookie中提取的标识(每次登陆时随机生成)
         :return: GTK码
         '''
-
         try:
             js = execjs.compile(open(cfg.GTK_JS_PATH, encoding=cfg.DEFAULT_CHARSET).read())
             gtk = js.call(cfg.GTK_METHOD, p_skey)

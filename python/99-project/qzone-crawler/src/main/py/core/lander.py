@@ -7,7 +7,9 @@ import re
 import execjs
 import traceback
 import src.main.py.config as cfg
+import src.main.py.utils.xhr as xhr
 from src.main.py.bean.cookie import QQCookie
+from PIL import Image
 
 
 class Lander(object):
@@ -91,8 +93,8 @@ class Lander(object):
             'pt_no_auth' : '0',
             'link_target' : 'blank'
         }
-        response = requests.get(url=cfg.SIG_URL, headers=cfg.HEADERS(), params=params)
-        self.add_response_cookies(response)
+        response = requests.get(url=cfg.SIG_URL, headers=xhr.get_headers(), params=params)
+        xhr.add_response_cookies(self.cookie, response)
 
         print('已获得本次登陆的SIG码: %s' % self.cookie.sig)
 
@@ -135,7 +137,7 @@ class Lander(object):
             'js_ver' : '10215',
             'js_type' : '1'
         }
-        response = requests.get(url=cfg.VCODE_URL, headers=cfg.HEADERS(), params=params)
+        response = requests.get(url=cfg.VCODE_URL, headers=xhr.get_headers(), params=params)
         rc = re.compile("'([^']*)'")
         groups = rc.findall(response.text)
 
@@ -151,6 +153,18 @@ class Lander(object):
         print('已获得本次登陆的验证码: %s' % vcode)
         print('已获得本次登陆的校验码: %s' % verify)
         return vcode, verify
+
+
+    def take_vcode_by_image(self, vcode_id):
+        # FIXME
+        xhr.download_pic(cfg.VCODE_IMG_URL, cfg.VCODE_PATH)
+        with Image.open(cfg.VCODE_PATH) as image:
+            image.show()
+
+            vcode = input("请输入验证码:").strip()
+            print(vcode)
+
+
 
 
     def encrypt_password(self, vcode):
@@ -208,12 +222,12 @@ class Lander(object):
             'js_ver' : '10270',
             'js_type' : '1'
         }
-        response = requests.get(url=cfg.XHR_LOGIN_URL, headers=cfg.HEADERS(), params=params)
+        response = requests.get(url=cfg.XHR_LOGIN_URL, headers=xhr.get_headers(), params=params)
         rc = re.compile("'([^']*)'")
         groups = rc.findall(response.text)
         if len(groups) >= 6 :
             if groups[0] == '0' :
-                self.add_response_cookies(response)
+                xhr.add_response_cookies(self.cookie, response)
                 self.cookie.nickName = groups[5]
                 callback = groups[2]    # 登陆成功: 提取p_skey的回调地址
             else:
@@ -244,14 +258,14 @@ class Lander(object):
         print('正在提取本次登陆的 GTK 与 QzoneToken ...')
 
         # 从登陆回调页面中提取p_skey, 并用之计算GTK（注意callbackURL是一个存在重定向页面, 且p_skey只存在于重定向前的页面）
-        response = requests.get(callback_url, headers=cfg.HEADERS(self.cookie.to_nv()))
-        self.add_response_cookies(response)
-        print('本次登陆生成的 GTK: %s', self.cookie.gtk)
+        response = requests.get(callback_url, headers=xhr.get_headers(self.cookie.to_nv()))
+        xhr.add_response_cookies(self.cookie, response)
+        print('本次登陆的 GTK: %s', self.cookie.gtk)
 
         # 从QQ空间首页的页面源码中提取QzoneToken
-        response = requests.get(cfg.QZONE_HOMR_URL(self.QQ), headers=cfg.HEADERS(self.cookie.to_nv()))
+        response = requests.get(cfg.QZONE_HOMR_URL(self.QQ), headers=xhr.get_headers(self.cookie.to_nv()))
         self.cookie.qzone_token = self.get_qzone_token(response.text)
-        print('本次登陆生成的 QzoneToken: %s', self.cookie.qzone_token)
+        print('本次登陆的 QzoneToken: %s', self.cookie.qzone_token)
 
         return (not not self.cookie.gtk) and (not not self.cookie.qzone_token)
 
@@ -268,10 +282,3 @@ class Lander(object):
         return re.search('window\.g_qzonetoken[^"]+"([^"]+)"', page_source)
 
 
-    def add_response_cookies(self, response):
-        '''
-        把HTTP响应头中的Set-Cookie添加到当前cookie中
-        :param response: HTTP的响应对象
-        :return:
-        '''
-        self.cookie.adds(response.headers['Set-Cookie'])

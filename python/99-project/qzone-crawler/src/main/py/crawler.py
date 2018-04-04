@@ -13,7 +13,7 @@ def crawler():
     '''
 
     username = '272629724'
-    password = 'xyzxyzxyz'
+    password = 'xxxxxxxx'
     QQ = '87654321'
     print('登陆QQ账号: %s' % username)
     print('登陆QQ密码: %s' % password)
@@ -26,3 +26,4 @@ def crawler():
 
 if __name__ == '__main__':
     crawler()
+

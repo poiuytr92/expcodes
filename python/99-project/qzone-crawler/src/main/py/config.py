@@ -11,6 +11,8 @@ config.read(filenames='./../../../conf/url.ini', encoding='utf-8')
 
 DEFAULT_CHARSET = 'utf-8'   # 默认编码
 
+VCODE_PATH = './../../../conf/vcode.jpg'# 登陆验证码图片的存储位置
+
 RSA_JS_PATH = './../res/MD5-RSA.js'     # 登陆密码加密算法的JS脚本
 RSA_METHOD = 'getEncryption'            # RSA加密登陆密码的JS函数
 GTK_JS_PATH = './../res/GTK.js'         # GTK生成算法的JS脚本
@@ -45,23 +47,5 @@ def ALBUM_URL(QQ, AID):
     :return:
     '''
     return '%(QZONE_HOMR_URL)s/photo/%(AID)s' % { 'QZONE_HOMR_URL' : QZONE_HOMR_URL(QQ), 'AID' : AID }
-
-
-def HEADERS(nv_cookies=''):
-    '''
-    获取HTTP请求头(主要设置HTTP代理, 避免被反爬)
-    :return: HTTP请求头
-    '''
-    headers = {
-        'Accept' : 'image/webp,image/*,*/*;q=0.8',
-        'Accept-Encoding' : 'gzip, deflate, sdch',
-        'Accept-Language' : 'zh-CN,zh;q=0.8,en;q=0.6',
-        'Connection' : 'keep-alive',
-        'Cookie' : nv_cookies,
-        'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'
-    }
-    return headers
-
-
 
 
