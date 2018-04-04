@@ -238,8 +238,9 @@ public class Lander extends BaseLander {
 	 * @return RSA加密后的密码
 	 */
 	private String encryptPassword(String vcode) {
-		UIUtils.log("正在加密登陆密码...");
-		return EncryptUtils.toRSA(QQ, password, vcode);
+		String rsaPwd = EncryptUtils.toRSA(QQ, password, vcode);
+		UIUtils.log("已加密登陆密码: ", rsaPwd);
+		return rsaPwd;
 	}
 	
 	/**
@@ -304,10 +305,9 @@ public class Lander extends BaseLander {
 		request.put(XHRAtrbt.from_ui, "1");		// 重要参数
 		request.put(XHRAtrbt.u1, "https://qzs.qq.com/qzone/v5/loginsucc.html?para=izone");
 		request.put(XHRAtrbt.pt_randsalt, "2");
-		request.put(XHRAtrbt.pt_uistyle, "4");
+		request.put(XHRAtrbt.pt_uistyle, "40");
 		request.put(XHRAtrbt.aid, "549000912");
 		request.put(XHRAtrbt.daid, "5");
-		request.put(XHRAtrbt.pt_randsalt, "2");
 		request.put(XHRAtrbt.ptredirect, "0");
 		request.put(XHRAtrbt.h, "1");
 		request.put(XHRAtrbt.t, "1");
@@ -315,7 +315,6 @@ public class Lander extends BaseLander {
 		request.put(XHRAtrbt.ptlang, "2052");
 		request.put(XHRAtrbt.js_ver, "10270");
 		request.put(XHRAtrbt.js_type, "1");
-		request.put(XHRAtrbt.pt_uistyle, "40");
 		return request;
 	}
 
@@ -335,14 +334,14 @@ public class Lander extends BaseLander {
 		Map<String, String> header = XHRUtils.getHeader(cookie);
 		client.doGet(callbackURL, header, null);
 		XHRUtils.takeResponseCookies(client, cookie);
-		UIUtils.log("本次登陆生成的 GTK = ", cookie.GTK());
+		UIUtils.log("本次登陆生成的 GTK: ", cookie.GTK());
 		
 		// 从QQ空间首页的页面源码中提取QzoneToken
 		header = XHRUtils.getHeader(cookie);
 		String pageSource = client.doGet(URL.QZONE_HOMR_URL(QQ), header, null);
 		String qzoneToken = EncryptUtils.getQzoneToken(pageSource);
 		cookie.setQzoneToken(qzoneToken);
-		UIUtils.log("本次登陆生成的 QzoneToken = ", cookie.QZONE_TOKEN());
+		UIUtils.log("本次登陆生成的 QzoneToken: ", cookie.QZONE_TOKEN());
 		
 		return StrUtils.isNotEmpty(cookie.GTK(), cookie.QZONE_TOKEN());
 	}

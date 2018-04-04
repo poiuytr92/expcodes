@@ -162,13 +162,13 @@ public class Lander extends BaseLander {
 		
 		// 从Cookie提取p_skey，计算GTK
 		Browser.backupCookies();	
-		UIUtils.log("本次登陆生成的 GTK = ", Browser.GTK());
+		UIUtils.log("本次登陆生成的 GTK: ", Browser.GTK());
 		
 		// 从页面源码提取QzoneToken
 		Browser.open(URL.QZONE_HOMR_URL(QQ));
 		String qzoneToken = EncryptUtils.getQzoneToken(Browser.getPageSource());
 		Browser.setQzoneToken(qzoneToken);
-		UIUtils.log("本次登陆生成的 QzoneToken = ", Browser.QZONE_TOKEN());
+		UIUtils.log("本次登陆生成的 QzoneToken: ", Browser.QZONE_TOKEN());
 		
 		return StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
 	}
