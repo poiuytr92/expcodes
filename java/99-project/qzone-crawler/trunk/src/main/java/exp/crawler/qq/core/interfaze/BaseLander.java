@@ -27,7 +27,7 @@ public abstract class BaseLander {
 	 */
 	protected BaseLander(String QQ, String password) {
 		this.QQ = StrUtils.isTrimEmpty(QQ) ? "0" : QQ;
-		this.password = StrUtils.isTrimEmpty(password) ? "0" : password;
+		this.password = StrUtils.isTrimEmpty(password) ? "" : password;
 		init();
 	}
 	
