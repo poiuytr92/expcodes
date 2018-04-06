@@ -3,6 +3,7 @@ __author__ = 'EXP (272629724@qq.com)'
 __date__ = '2018-03-29 20:17'
 
 
+import re
 import requests
 
 
@@ -23,11 +24,11 @@ def get_headers(nv_cookies=''):
 
 
 
-def add_response_cookies(qqcookie, response):
+def take_response_cookies(response, qqcookie):
     '''
-    把HTTP响应头中的Set-Cookie添加到QQCookie中
-    :param qqcookie: QQCookie对象
+    提取HTTP响应头中的Set-Cookie添加到QQCookie中
     :param response: HTTP的响应对象
+    :param qqcookie: QQCookie对象
     :return:
     '''
     qqcookie.adds(response.headers['Set-Cookie'])
@@ -50,4 +51,25 @@ def download_pic(pic_url, headers, params, save_path):
         set_cookie = ''
 
     return set_cookie
+
+
+def to_json(callback):
+    '''
+    从XHR响应报文中的回调函数提取JSON内容
+    :param callback: 回调函数字符串
+    :return: JSON
+    '''
+    callback = re.subn('\/', '/', callback)[0]
+    match = re.search('_Callback\(([\s\S]*)\);$', callback)
+    return '{}' if not match else match.group(1)
+
+
+def to_host(url):
+    '''
+    从URL地址中提取主机Host地址
+    :param url: URL地址
+    :return: 主机Host地址
+    '''
+    match = re.search('http://([^/]*)/', url)
+    return '' if not match else match.group(1)
 

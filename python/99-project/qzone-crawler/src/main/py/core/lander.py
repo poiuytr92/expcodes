@@ -94,7 +94,7 @@ class Lander(object):
             'link_target' : 'blank'
         }
         response = requests.get(url=cfg.SIG_URL, headers=xhr.get_headers(), params=params)
-        xhr.add_response_cookies(self.cookie, response)
+        xhr.take_response_cookies(response, self.cookie)
 
         print('已获得本次登陆的SIG码: %s' % self.cookie.sig)
 
@@ -240,7 +240,7 @@ class Lander(object):
         groups = rc.findall(response.text)
         if len(groups) >= 6 :
             if groups[0] == '0' :
-                xhr.add_response_cookies(self.cookie, response)
+                xhr.take_response_cookies(response, self.cookie)
                 self.cookie.nickName = groups[5]
                 callback = groups[2]    # 登陆成功: 提取p_skey的回调地址
             else:
@@ -272,7 +272,7 @@ class Lander(object):
 
         # 从登陆回调页面中提取p_skey, 并用之计算GTK（注意callbackURL是一个存在重定向页面, 且p_skey只存在于重定向前的页面）
         response = requests.get(callback_url, headers=xhr.get_headers(self.cookie.to_nv()), allow_redirects=False)  # 关闭重定向
-        xhr.add_response_cookies(self.cookie, response)
+        xhr.take_response_cookies(response, self.cookie)
         print('本次登陆的 GTK: %s' % self.cookie.gtk)
 
         # 从QQ空间首页的页面源码中提取QzoneToken

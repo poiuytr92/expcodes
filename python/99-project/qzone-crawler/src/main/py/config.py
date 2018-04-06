@@ -11,6 +11,10 @@ config.read(filenames='./../../../conf/url.ini', encoding='utf-8')
 
 DEFAULT_CHARSET = 'utf-8'   # 默认编码
 
+BATCH_LIMT = 20     # 每次批量请求的数量限制(说说最多20, 相册是30, 此处取最小值)
+RETRY = 5           # 重试次数
+
+DATA_DIR = './../../../data/'           # 下载相册/说说数据的存储目录
 VCODE_PATH = './../../../conf/vcode.jpg'# 登陆验证码图片的存储位置
 
 RSA_JS_PATH = './../res/MD5-RSA.js'     # 登陆密码加密算法的JS脚本
