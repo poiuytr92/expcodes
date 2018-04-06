@@ -3,7 +3,7 @@ __author__ = 'EXP (272629724@qq.com)'
 __date__ = '2018-03-29 20:17'
 
 
-import urllib.request as ur
+import requests
 
 
 def get_headers(nv_cookies=''):
@@ -33,14 +33,21 @@ def add_response_cookies(qqcookie, response):
     qqcookie.adds(response.headers['Set-Cookie'])
 
 
-def download_pic(pic_url, save_path):
+def download_pic(pic_url, headers, params, save_path):
     '''
     下载图片
     :param pic_url: 图片URL
     :param save_path: 图片保存路径
-    :return: None
+    :return: HTTP响应cookie
     '''
-    with ur.urlopen(pic_url) as data:
+    response = requests.get(pic_url, headers=headers, params=params, stream=True)
+    if response.status_code == 200:
         with open(save_path, 'wb') as pic:
-            pic.write(data.read())
+            for chunk in response:
+                pic.write(chunk)
+        set_cookie = response.headers['Set-Cookie']
+    else:
+        set_cookie = ''
+
+    return set_cookie
 

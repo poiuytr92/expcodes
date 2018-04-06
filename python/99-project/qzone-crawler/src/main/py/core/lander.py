@@ -146,9 +146,7 @@ class Lander(object):
             verify = groups[3]
 
         else:
-            # FIXME 下载验证码图片并输入
-            vcode = ''
-            verify = ''
+            vcode, verify = self.take_vcode_by_image(groups[1])
 
         print('已获得本次登陆的验证码: %s' % vcode)
         print('已获得本次登陆的校验码: %s' % verify)
@@ -156,13 +154,29 @@ class Lander(object):
 
 
     def take_vcode_by_image(self, vcode_id):
-        # FIXME
-        xhr.download_pic(cfg.VCODE_IMG_URL, cfg.VCODE_PATH)
-        with Image.open(cfg.VCODE_PATH) as image:
-            image.show()
+        '''
+        下载验证码图片及其校验码, 同时返回人工输入的验证码
+        :param vcode_id: 用于下载验证码图片的ID
+        :return: 验证码:vcode, 校验码:verify
+        '''
+        params = {
+            'uin' : self.QQ,
+            'cap_cd' : vcode_id
+        }
+        set_cookie = xhr.download_pic(cfg.VCODE_IMG_URL, xhr.get_headers(), params, cfg.VCODE_PATH)
+        if not set_cookie:
+            vcode = ''
+            verify = ''
 
-            vcode = input("请输入验证码:").strip()
-            print(vcode)
+        else:
+            self.cookie.add(set_cookie)
+            verify = self.cookie.verifysession
+
+            with Image.open(cfg.VCODE_PATH) as image:
+                image.show()
+                vcode = input("请输入验证码:").strip()
+
+        return vcode, verify
 
 
 
@@ -199,7 +213,6 @@ class Lander(object):
         :return: 若登陆成功, 则返回可提取p_skey的回调地址
                  若登陆失败， 则返回失败原因(或回调函数)
         '''
-
         print('正在登陆QQ [%s] ...' % self.QQ)
         params = {
             'login_sig' : self.cookie.sig,
@@ -209,9 +222,9 @@ class Lander(object):
             'pt_verifysession_v1' : verify,
             'pt_vcode_v1' : '0' if self.is_falsu_vcode(vcode) else '1',
             'from_ui' : '1',    # 重要参数
+            'pt_uistyle' : '40',    # 重要参数
             'u1' : 'https://qzs.qq.com/qzone/v5/loginsucc.html?para=izone',
             'pt_randsalt' : '2',
-            'pt_uistyle' : '4',
             'aid' : '549000912',
             'daid' : '5',
             'ptredirect' : '0',
@@ -258,14 +271,14 @@ class Lander(object):
         print('正在提取本次登陆的 GTK 与 QzoneToken ...')
 
         # 从登陆回调页面中提取p_skey, 并用之计算GTK（注意callbackURL是一个存在重定向页面, 且p_skey只存在于重定向前的页面）
-        response = requests.get(callback_url, headers=xhr.get_headers(self.cookie.to_nv()))
+        response = requests.get(callback_url, headers=xhr.get_headers(self.cookie.to_nv()), allow_redirects=False)  # 关闭重定向
         xhr.add_response_cookies(self.cookie, response)
-        print('本次登陆的 GTK: %s', self.cookie.gtk)
+        print('本次登陆的 GTK: %s' % self.cookie.gtk)
 
         # 从QQ空间首页的页面源码中提取QzoneToken
         response = requests.get(cfg.QZONE_HOMR_URL(self.QQ), headers=xhr.get_headers(self.cookie.to_nv()))
         self.cookie.qzone_token = self.get_qzone_token(response.text)
-        print('本次登陆的 QzoneToken: %s', self.cookie.qzone_token)
+        print('本次登陆的 QzoneToken: %s' % self.cookie.qzone_token)
 
         return (not not self.cookie.gtk) and (not not self.cookie.qzone_token)
 
@@ -279,6 +292,7 @@ class Lander(object):
         :param page_source: QQ空间首页的页面源码
         :return: QzoneToken
         '''
-        return re.search('window\.g_qzonetoken[^"]+"([^"]+)"', page_source)
+        match = re.search('window\.g_qzonetoken[^"]+"([^"]+)"', page_source)
+        return '' if not match else match.group(1)
 
 
