@@ -30,9 +30,9 @@ def get_pic_name(idx, desc):
     :param desc: 图片描述
     :return: 图片名称
     '''
-    name = '[%d]-[%s] %s' % (int(time.time()), idx, desc)   # 构造文件名
-    name = re.subn('[/\\:\*"<>\|\?\r\n\t\0]', '', name)[0]  # 移除无效的文件名字符
-    name = '%s...' % name[0:128]    # 避免文件名过长
+    name = '[%d]-[%s] %s' % (int(time.time() * 1000), idx, desc)# 构造文件名
+    name = re.subn('[/\\:\*"<>\|\?\r\n\t\0]', '', name)[0]      # 移除无效的文件名字符
+    name = '%s...' % name[0:128] if len(name) > 128 else name   # 避免文件名过长
     return '%s.png' % name  # 添加后缀
 
 
@@ -43,7 +43,7 @@ def convert(pic_url):
     :return: 可下载的图片地址
     '''
     if pic_url :
-        url = re.subn('psbe?', 'psb?', pic_url)[0]  # 去除权限加密
+        url = re.subn('psbe\?', 'psb?', pic_url)[0]  # 去除权限加密
         url = re.subn('/[m|c]/', '/b/', url)[0]     # 缩略图变成大图
     else:
         url = ''

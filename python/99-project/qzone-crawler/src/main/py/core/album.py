@@ -233,7 +233,6 @@ class AlbumAnalyzer(object):
                 is_ok = self.download_photo(album, photo)
                 cnt += (1 if is_ok else 0)
                 album_infos = '%s%s' % (album_infos, photo.to_str(is_ok))
-
                 print(' -> 下载照片进度(%s): %d/%d' % ('成功' if is_ok else '失败', cnt, album.pic_num()))
                 time.sleep(cfg.SLEEP_TIME)
 

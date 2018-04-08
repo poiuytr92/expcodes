@@ -48,7 +48,10 @@ def download_pic(pic_url, headers, params, save_path):
                 pic.write(chunk)
 
         is_ok = True
-        set_cookie = response.headers['Set-Cookie']
+        try:
+            set_cookie = response.headers['Set-Cookie']
+        except:
+            set_cookie = ''
 
     else:
         is_ok = False
