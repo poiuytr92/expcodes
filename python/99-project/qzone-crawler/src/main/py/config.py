@@ -15,8 +15,9 @@ SLEEP_TIME = 0.1    # 行为休眠间隔(s)
 BATCH_LIMT = 20     # 每次批量请求的数量限制(说说最多20, 相册是30, 此处取最小值)
 RETRY = 5           # 重试次数
 
-DATA_DIR = './../../../data/'           # 下载相册/说说数据的存储目录
-VCODE_PATH = './../../../conf/vcode.jpg'# 登陆验证码图片的存储位置
+ACCOUNT_PATH = './../../../conf/account.dat'    # 登陆信息的保存位置
+VCODE_PATH = './../../../conf/vcode.jpg'        # 登陆验证码图片的存储位置
+DATA_DIR = './../../../data/'                   # 下载相册/说说数据的存储目录
 
 RSA_JS_PATH = './../res/MD5-RSA.js'     # 登陆密码加密算法的JS脚本
 RSA_METHOD = 'getEncryption'            # RSA加密登陆密码的JS函数
