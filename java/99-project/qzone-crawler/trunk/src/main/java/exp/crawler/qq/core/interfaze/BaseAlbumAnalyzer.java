@@ -120,6 +120,7 @@ public abstract class BaseAlbumAnalyzer {
 				albumInfos.append(photo.toString(isOk));
 				
 				UIUtils.log(" -> 下载照片进度(", (isOk ? "成功" : "失败"), "): ", cnt, "/", album.PIC_NUM());
+				ThreadUtils.tSleep(Config.SLEEP_TIME);
 			}
 			UIUtils.log(" -> 相册 [", album.NAME(), "] 下载完成, 成功率: ", cnt, "/", album.PIC_NUM());
 			
