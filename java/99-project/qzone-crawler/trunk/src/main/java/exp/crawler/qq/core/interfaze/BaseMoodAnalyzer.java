@@ -138,7 +138,6 @@ public abstract class BaseMoodAnalyzer {
 			cnt += (isOk ? 1 : 0);
 			
 			UIUtils.log(" -> 下载照片进度(", (isOk ? "成功" : "失败"), "): ", cnt, "/", mood.PIC_NUM());
-			ThreadUtils.tSleep(Config.SLEEP_TIME);
 		}
 		return cnt;
 	}
