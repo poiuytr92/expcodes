@@ -146,7 +146,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	
 	/**
 	 * 获取相册的分页照片信息
-	 * @param albumId 相册ID
+	 * @param album 相册信息
 	 * @param page 页数
 	 * @return
 	 */
@@ -178,6 +178,8 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	
 	/**
 	 * 分页照片的请求参数
+	 * @param albumId 相册ID
+	 * @param page 页码
 	 * @return
 	 */
 	private Map<String, String> _getPhotoRequest(String albumId, int page) {

@@ -1,7 +1,6 @@
 package exp.crawler.qq.bean;
 
 import exp.crawler.qq.utils.PicUtils;
-import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -34,16 +33,13 @@ public class Photo {
 	 * @param url
 	 */
 	public Photo(String desc, String time, String url) {
-		this.name = "";
 		this.desc = (desc == null ? "" : desc.replaceAll("[\r\n]", ""));
 		this.time = (time == null ? "" : time);
 		this.url = (url == null ? "" : url);
+		this.name = PicUtils.getPicName(this.time, this.desc);
 	}
 	
-	public String getPicName() {
-		if(StrUtils.isEmpty(name)) {
-			name = PicUtils.getPicName(time, desc);
-		}
+	public String NAME() {
 		return name;
 	}
 	

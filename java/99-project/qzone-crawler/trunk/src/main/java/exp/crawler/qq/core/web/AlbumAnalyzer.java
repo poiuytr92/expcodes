@@ -165,7 +165,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	
 	/**
 	 * 获取相册的分页照片信息
-	 * @param albumId 相册ID
+	 * @param album 相册信息
 	 * @param page 页数
 	 * @return
 	 */

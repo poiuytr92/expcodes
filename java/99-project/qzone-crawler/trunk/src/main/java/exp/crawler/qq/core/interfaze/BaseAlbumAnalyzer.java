@@ -92,7 +92,7 @@ public abstract class BaseAlbumAnalyzer {
 	
 	/**
 	 * 获取相册的分页照片信息
-	 * @param albumId 相册ID
+	 * @param album 相册信息
 	 * @param page 页数
 	 * @return
 	 */
@@ -142,7 +142,7 @@ public abstract class BaseAlbumAnalyzer {
 		header.put(HttpUtils.HEAD.KEY.REFERER, album.URL());
 
 		boolean isOk = false;
-		String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), "/", photo.getPicName());
+		String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), "/", photo.NAME());
 		for(int retry = 0; !isOk && retry < Config.RETRY; retry++) {
 			isOk = HttpURLUtils.downloadByGet(savePath, photo.URL(), header, null);
 			if(isOk == false) {
