@@ -41,21 +41,20 @@ def download_pic(pic_url, headers, params, save_path):
     :param save_path: 图片保存路径
     :return: HTTP响应cookie
     '''
-    response = requests.get(pic_url, headers=headers, params=params, stream=True)
-    if response.status_code == 200:
-        with open(save_path, 'wb') as pic:
-            for chunk in response:
-                pic.write(chunk)
+    is_ok = False
+    set_cookie = ''
 
-        is_ok = True
-        try:
+    try:
+        response = requests.get(pic_url, headers=headers, params=params, stream=True)
+        if response.status_code == 200:
+            with open(save_path, 'wb') as pic:
+                for chunk in response:
+                    pic.write(chunk)
+
+            is_ok = True
             set_cookie = response.headers['Set-Cookie']
-        except:
-            set_cookie = ''
-
-    else:
-        is_ok = False
-        set_cookie = ''
+    except:
+        pass
 
     return is_ok, set_cookie
 

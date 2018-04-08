@@ -147,7 +147,6 @@ class AlbumAnalyzer(object):
         response = requests.get(url=cfg.PHOTO_LIST_URL,
                                 headers=xhr.get_headers(self.cookie.to_nv()),
                                 params=self._get_photo_parmas(album.id, page))
-
         photos = []
         try:
             root = json.loads(xhr.to_json(response.text))
@@ -158,7 +157,6 @@ class AlbumAnalyzer(object):
                 time = photo.get('uploadtime', '')
                 url = pic.convert(photo.get('url', ''))
                 photos.append(Photo(desc, time, url))
-
         except:
             print('提取相册 [%s] 第%d页的照片信息异常' % (album.name, page))
             traceback.print_exc()

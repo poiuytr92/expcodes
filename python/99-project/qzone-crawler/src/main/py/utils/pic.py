@@ -30,6 +30,7 @@ def get_pic_name(idx, desc):
     :param desc: 图片描述
     :return: 图片名称
     '''
+    time.sleep(0.001)   # 保证所生成的文件名时序索引至少相差1ms
     name = '[%d]-[%s] %s' % (int(time.time() * 1000), idx, desc)# 构造文件名
     name = re.subn('[/\\:\*"<>\|\?\r\n\t\0]', '', name)[0]      # 移除无效的文件名字符
     name = '%s...' % name[0:128] if len(name) > 128 else name   # 避免文件名过长
