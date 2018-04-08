@@ -303,9 +303,9 @@ public class Lander extends BaseLander {
 		request.put(XHRAtrbt.pt_verifysession_v1, verify);
 		request.put(XHRAtrbt.pt_vcode_v1, PicUtils.isFalsuVcode(vcode) ? "0" : "1");
 		request.put(XHRAtrbt.from_ui, "1");		// 重要参数
+		request.put(XHRAtrbt.pt_uistyle, "40");	// 重要参数
 		request.put(XHRAtrbt.u1, "https://qzs.qq.com/qzone/v5/loginsucc.html?para=izone");
 		request.put(XHRAtrbt.pt_randsalt, "2");
-		request.put(XHRAtrbt.pt_uistyle, "40");
 		request.put(XHRAtrbt.aid, "549000912");
 		request.put(XHRAtrbt.daid, "5");
 		request.put(XHRAtrbt.ptredirect, "0");

@@ -18,7 +18,7 @@ import exp.crawler.qq.utils.PicUtils;
  */
 public class Album {
 
-	/** 相册标号 */
+	/** 相册编号 */
 	private String id;
 	
 	/** 相册名称/描述 */

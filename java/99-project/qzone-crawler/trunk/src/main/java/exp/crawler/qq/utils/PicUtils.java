@@ -47,7 +47,7 @@ public class PicUtils {
 	 */
 	public static String getPicName(String idx, String desc) {
 		String name = StrUtils.concat("[", IDUtils.getTimeID(), "]-[", idx, "] ", desc);
-		name = FileUtils.delForbidCharInFileName(name, "");	// 取出无效的文件名字符
+		name = FileUtils.delForbidCharInFileName(name, "");	// 移除无效的文件名字符
 		name = StrUtils.showSummary(name);	// 避免文件名过长
 		name = name.concat(SUFFIX);
 		return name;

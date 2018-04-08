@@ -30,7 +30,7 @@ import exp.libs.warp.net.http.HttpUtils;
 public abstract class BaseMoodAnalyzer {
 
 	/** 说说分页信息保存文件名 */
-	private final static String MOOD_NAME = "MoodInfo-[说说信息].txt";
+	private final static String MOOD_INFO_NAME = "MoodInfo-[说说信息].txt";
 	
 	/** 被爬取数据的目标QQ */
 	protected final String QQ;
@@ -117,7 +117,7 @@ public abstract class BaseMoodAnalyzer {
 			UIUtils.log(" -> 说说照片下载完成, 成功率: ", cnt, "/", mood.PIC_NUM());
 			
 			// 保存下载信息
-			String savePath = StrUtils.concat(PAGE_DIR_PREFIX, mood.PAGE(), "/", MOOD_NAME);
+			String savePath = StrUtils.concat(PAGE_DIR_PREFIX, mood.PAGE(), "/", MOOD_INFO_NAME);
 			FileUtils.write(savePath, mood.toString(isOk), Config.CHARSET, true);
 		}
 	}
@@ -163,6 +163,8 @@ public abstract class BaseMoodAnalyzer {
 			
 			if(isOk == false) {
 				FileUtils.delete(savePath);
+				ThreadUtils.tSleep(Config.SLEEP_TIME);
+				
 			} else {
 				FileUtils.copyFile(savePath, PHOTO_DIR.concat(picName));
 			}

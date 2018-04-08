@@ -114,7 +114,6 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	 */
 	private Map<String, String> _getAlbumRequest() {
 		Map<String, String> request = _getRequest();
-		request.put(XHRAtrbt.idcNum, "4");
 		request.put(XHRAtrbt.handset, "4");
 		request.put(XHRAtrbt.filter, "1");
 		request.put(XHRAtrbt.needUserInfo, "1");
@@ -122,7 +121,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 		request.put(XHRAtrbt.pageNumModeClass, "15");
 		return request;
 	}
-
+	
 	/**
 	 * 打开相册, 提取其中的所有照片信息
 	 * @param album 相册信息

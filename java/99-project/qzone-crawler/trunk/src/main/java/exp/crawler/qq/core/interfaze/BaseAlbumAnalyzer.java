@@ -29,7 +29,7 @@ import exp.libs.warp.net.http.HttpUtils;
 public abstract class BaseAlbumAnalyzer {
 
 	/** 相册信息保存文件名 */
-	private final static String ALBUM_NAME = "AlbumInfo-[相册信息].txt";
+	private final static String ALBUM_INFO_NAME = "AlbumInfo-[相册信息].txt";
 	
 	/** 被爬取数据的目标QQ */
 	protected final String QQ;
@@ -125,7 +125,7 @@ public abstract class BaseAlbumAnalyzer {
 			UIUtils.log(" -> 相册 [", album.NAME(), "] 下载完成, 成功率: ", cnt, "/", album.PIC_NUM());
 			
 			// 保存下载信息
-			String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), "/", ALBUM_NAME);
+			String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), "/", ALBUM_INFO_NAME);
 			FileUtils.write(savePath, albumInfos.toString(), Config.CHARSET, false);
 		}
 	}
@@ -147,6 +147,7 @@ public abstract class BaseAlbumAnalyzer {
 			isOk = HttpURLUtils.downloadByGet(savePath, photo.URL(), header, null);
 			if(isOk == false) {
 				FileUtils.delete(savePath);
+				ThreadUtils.tSleep(Config.SLEEP_TIME);
 			}
 		}
 		return isOk;

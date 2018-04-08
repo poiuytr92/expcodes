@@ -26,10 +26,10 @@ public class Config {
 	/** 验证码图片保存路径 */
 	public final static String VCODE_IMG_PATH = "./conf/vcode.jpg";
 	
-	/** 行为休眠间隔 */
+	/** 行为休眠间隔(ms) */
 	public final static long SLEEP_TIME = 100;
 	
-	/** 请求超时 */
+	/** 请求超时(ms) */
 	public final static int TIMEOUT = 10000;
 	
 	/**
