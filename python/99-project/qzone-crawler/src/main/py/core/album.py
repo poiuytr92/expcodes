@@ -236,7 +236,7 @@ class AlbumAnalyzer(object):
                 print(' -> 下载照片进度(%s): %d/%d' % ('成功' if is_ok else '失败', cnt, album.pic_num()))
                 time.sleep(cfg.SLEEP_TIME)
 
-            print(' -> 相册 [%d] 下载完成, 成功率: %d/%d' % (album.name, cnt, album.pic_num()))
+            print(' -> 相册 [%s] 下载完成, 成功率: %d/%d' % (album.name, cnt, album.pic_num()))
 
             # 保存下载信息
             save_path = '%s%s/%s' % (self.ALBUM_DIR, album.name, self.ALBUM_INFO_NAME)
