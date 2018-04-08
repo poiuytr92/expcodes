@@ -36,6 +36,7 @@ public class Config {
 	/** 连续抽奖限制(主要避免被抓到封号) */
 	public final static int LOTTERY_LIMIT = 10;
 	
+	/** 禁止自动发言的直播间 */
 	private Set<Integer> tabuAutoRoomIds;
 	
 	private static volatile Config instance;
@@ -305,6 +306,10 @@ public class Config {
 	
 	public boolean PROTECT_FEED() {
 		return xConf.getBool("/config/app/protectFeed");
+	}
+	
+	public boolean RANDOM_LOTTERY() {
+		return xConf.getBool("/config/app/randomLottery");
 	}
 	
 	/**

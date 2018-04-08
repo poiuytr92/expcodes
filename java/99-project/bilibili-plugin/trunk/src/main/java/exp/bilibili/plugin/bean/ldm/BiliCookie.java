@@ -231,6 +231,10 @@ public class BiliCookie extends HttpCookie {
 	}
 	
 	public boolean allowLottery() {
+		if(!Config.getInstn().RANDOM_LOTTERY()) {
+			return true;
+		}
+		
 		boolean isOk = RandomUtils.randomBoolean();
 		if(isOk == true) {
 			if(lotteryCnt >= Config.LOTTERY_LIMIT) {
