@@ -46,11 +46,15 @@ def download_pic(pic_url, headers, params, save_path):
         with open(save_path, 'wb') as pic:
             for chunk in response:
                 pic.write(chunk)
+
+        is_ok = True
         set_cookie = response.headers['Set-Cookie']
+
     else:
+        is_ok = False
         set_cookie = ''
 
-    return set_cookie
+    return is_ok, set_cookie
 
 
 def to_json(callback):

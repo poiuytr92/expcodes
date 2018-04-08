@@ -24,9 +24,9 @@ class Lander(object):
         重定向BUG修正: http://jingpin.jikexueyuan.com/article/13992.html
     '''
 
-    QQ = ''               # 所登陆的QQ
-    password = ''         # 所登陆的QQ密码
-    cookie = QQCookie()   # 登陆成功后保存的cookie
+    QQ = ''         # 所登陆的QQ
+    password = ''   # 所登陆的QQ密码
+    cookie = None   # 登陆成功后保存的cookie
 
     def __init__(self, QQ, password):
         '''
@@ -37,6 +37,7 @@ class Lander(object):
         '''
         self.QQ = '0' if not QQ else QQ.strip()
         self.password = '' if not password else password
+        self.cookie = QQCookie()
 
 
     def execute(self):
@@ -163,22 +164,19 @@ class Lander(object):
             'uin' : self.QQ,
             'cap_cd' : vcode_id
         }
-        set_cookie = xhr.download_pic(cfg.VCODE_IMG_URL, xhr.get_headers(), params, cfg.VCODE_PATH)
-        if not set_cookie:
-            vcode = ''
-            verify = ''
-
-        else:
+        is_ok, set_cookie = xhr.download_pic(cfg.VCODE_IMG_URL, xhr.get_headers(), params, cfg.VCODE_PATH)
+        if is_ok == True :
             self.cookie.add(set_cookie)
             verify = self.cookie.verifysession
 
             with Image.open(cfg.VCODE_PATH) as image:
                 image.show()
                 vcode = input("请输入验证码:").strip()
+        else:
+            vcode = ''
+            verify = ''
 
         return vcode, verify
-
-
 
 
     def encrypt_password(self, vcode):
@@ -187,8 +185,12 @@ class Lander(object):
         :param vcode: 本次登陆的验证码
         :return: RSA加密后的密码
         '''
-        js = execjs.compile(open(cfg.RSA_JS_PATH, encoding=cfg.DEFAULT_CHARSET).read())
-        rsa_pwd = js.call(cfg.RSA_METHOD, self.password, self.QQ, vcode, '')
+        try:
+            with open(cfg.RSA_JS_PATH, encoding=cfg.DEFAULT_CHARSET) as script :
+                js = execjs.compile(script.read())
+                rsa_pwd = js.call(cfg.RSA_METHOD, self.password, self.QQ, vcode, '')
+        except:
+            rsa_pwd = 'ERROR'
 
         print('已加密登陆密码: %s' % rsa_pwd)
         return rsa_pwd

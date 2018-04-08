@@ -34,6 +34,14 @@ class _HttpCookie(object):
         :param set_cookie: HTTP响应头中的 Set-Cookie, 格式如：JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly;
         :return: None
         '''
+        self.name = ''
+        self.value = ''
+        self.domain = ''
+        self.path = ''
+        self.expire = ''
+        self.is_secure = False
+        self.is_http_only = False
+
         for idx, kvs in enumerate(set_cookie.split(';')):
             kv = kvs.split('=')
             size = len(kv)
@@ -63,7 +71,6 @@ class _HttpCookie(object):
 
                 elif self.HTTPONLY.upper() == key.upper():
                     self.is_http_only = True
-
 
 
     def is_vaild(self):
@@ -125,7 +132,7 @@ class HttpCookie(object):
     '''
     __metaclass__ = ABCMeta # 定义为抽象类
 
-    cookies = []    # 存储多个_HttpCookie的列表
+    cookies = None    # 存储多个_HttpCookie的列表
 
 
     def __init__(self, set_cookies):
@@ -134,6 +141,7 @@ class HttpCookie(object):
         :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
         :return: None
         '''
+        self.cookies = []
         self.adds(set_cookies)
 
 
@@ -240,6 +248,13 @@ class QQCookie(HttpCookie):
         :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
         :return: None
         '''
+        self.sig = ''
+        self.verifysession = ''
+        self.uin = ''
+        self.gtk = ''
+        self.qzone_token = ''
+        nickName = ''
+
         super(QQCookie, self).__init__(set_cookies)
 
 
@@ -280,9 +295,9 @@ class QQCookie(HttpCookie):
         :return: GTK码
         '''
         try:
-            js = execjs.compile(open(cfg.GTK_JS_PATH, encoding=cfg.DEFAULT_CHARSET).read())
-            gtk = js.call(cfg.GTK_METHOD, p_skey)
-
+            with open(cfg.GTK_JS_PATH, encoding=cfg.DEFAULT_CHARSET) as script :
+                js = execjs.compile(script.read())
+                gtk = js.call(cfg.GTK_METHOD, p_skey)
         except:
             hash = 5381
             for c in p_skey :

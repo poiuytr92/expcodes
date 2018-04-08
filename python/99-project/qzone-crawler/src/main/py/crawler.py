@@ -14,8 +14,8 @@ def crawler():
     :return: None
     '''
     username = '272629724'
-    password = 'aaaaaaa'
-    QQ = '12345678'
+    password = 'xxxxxxxx'
+    QQ = '87654321'
     print('登陆QQ账号: %s' % username)
     print('登陆QQ密码: %s' % password)
     print('爬取数据的目标QQ号: %s' % QQ)
