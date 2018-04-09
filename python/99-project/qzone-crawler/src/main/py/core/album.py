@@ -219,7 +219,6 @@ class AlbumAnalyzer(object):
         if albums == None or len(albums) <= 0 :
             return
 
-
         print('提取QQ [%s] 的相册及照片完成, 开始下载...' % self.QQ)
         for album in albums :
             os.makedirs('%s%s' % (self.ALBUM_DIR, album.name))
