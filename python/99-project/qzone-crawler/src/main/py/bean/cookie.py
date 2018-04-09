@@ -275,8 +275,8 @@ class QQCookie(HttpCookie):
             self.verifysession = value
 
         elif self.UIN_KEY.upper() == name.upper():
-            self.uin = re.subn('^[o|O]', '', value)[0]
-            self.uin = re.subn('^0*', '', self.uin)[0]
+            self.uin = re.sub('^[o|O]', '', value)
+            self.uin = re.sub('^0*', '', self.uin)
             self.nickName = self.uin
 
         elif self.PSKEY_KEY.upper() == name.upper():

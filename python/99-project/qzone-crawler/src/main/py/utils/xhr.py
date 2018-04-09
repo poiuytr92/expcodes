@@ -65,7 +65,7 @@ def to_json(callback):
     :param callback: 回调函数字符串
     :return: JSON
     '''
-    callback = re.subn('\/', '/', callback)[0]
+    callback = re.sub('\/', '/', callback)
     match = re.search('_Callback\(([\s\S]*)\);$', callback)
     return '{}' if not match else match.group(1)
 

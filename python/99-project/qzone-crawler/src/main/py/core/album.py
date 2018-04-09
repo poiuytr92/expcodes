@@ -21,7 +21,7 @@ class AlbumAnalyzer(object):
     【空间相册】解析器
     '''
 
-    ALBUM_INFO_NAME = "AlbumInfo-[相册信息].txt" # 相册信息保存文件名
+    ALBUM_INFO_NAME = 'AlbumInfo-[相册信息].txt' # 相册信息保存文件名
     request_cnt  = 0    # 累计发起请求次数
     cookie = None       # 已登陆的QQCookie
     QQ = ''             # 被爬取数据的目标QQ

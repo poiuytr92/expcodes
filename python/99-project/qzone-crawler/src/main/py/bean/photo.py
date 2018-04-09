@@ -32,7 +32,7 @@ class Photo(object):
         :param url: 照片地址
         :return:
         '''
-        self.desc = '' if not desc else re.subn('[\r\n]', '', desc)[0]
+        self.desc = '' if not desc else re.sub('[\r\n]', '', desc)
         self.time = '' if not time else time
         self.url = '' if not url else url
         self.name = pic.get_pic_name(self.time, self.desc)
