@@ -10,8 +10,8 @@ import org.apache.commons.httpclient.HttpMethod;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.utils.RSAUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
+import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.StrUtils;
@@ -230,7 +230,7 @@ public class Login extends __XHR {
 			JSONObject json = JSONObject.fromObject(sJson);
 			String hash = JsonUtils.getStr(json, BiliCmdAtrbt.hash);
 			String pubKey = JsonUtils.getStr(json, BiliCmdAtrbt.key);
-			password = RSAUtils.encrypt(hash.concat(password), pubKey);
+			password = CryptoUtils.toRSAByPubKey(hash.concat(password), pubKey);
 			
 			// 把验证码、验证码配套的cookie、账号、RSA加密后的密码 提交到登陆服务器
 			Map<String, String> header = getHeader(vcCookies);
