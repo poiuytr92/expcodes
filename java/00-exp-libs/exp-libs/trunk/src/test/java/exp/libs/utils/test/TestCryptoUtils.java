@@ -1,5 +1,9 @@
 package exp.libs.utils.test;
 
+import java.security.Key;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -113,6 +117,38 @@ public class TestCryptoUtils {
 		
 		undes = CryptoUtils.deDES(des, "test-key", Charset.GBK);
 		System.out.println(undes);
+	}
+	
+	@Test
+	public void testRSA() {
+		String data = "abc\td中文&68.?s  a";
+		System.out.println("测试字符串：" + data);
+
+		
+//		String keys = CryptoUtils.getRSAKeyStrPair();
+		Key[] keys = CryptoUtils.getRSAKeyPair();
+		String publicKey = CryptoUtils.toRSAPublicKey((RSAPublicKey) keys[0], true);
+		String privateKey = CryptoUtils.toRSAPrivateKey((RSAPrivateKey) keys[1], true);
+		System.out.println("RSA公钥:\r\n" + publicKey);
+		System.out.println("RSA私钥:\r\n" + privateKey);
+		
+		
+		String toRSA = CryptoUtils.toRSAByPubKey(data, publicKey);
+		System.out.println("RSA公钥加密：" + toRSA);
+		String deRSA = CryptoUtils.deRSAByPriKey(toRSA, privateKey);
+		System.out.println("RSA私钥解密：" + deRSA);
+		
+		
+		toRSA = CryptoUtils.toRSAByPriKey(data, privateKey);
+		System.out.println("RSA私钥加密：" + toRSA);
+		deRSA = CryptoUtils.deRSAByPubKey(toRSA, publicKey);
+		System.out.println("RSA公钥解密：" + deRSA);
+		
+		
+		String sign = CryptoUtils.doRSASign(data, privateKey);
+		System.out.println("RSA私钥签名串：" + sign);
+		boolean isOk = CryptoUtils.checkRSASign(data, sign, publicKey);
+		System.out.println("RSA公钥签名校验：" + isOk);
 	}
 
 }

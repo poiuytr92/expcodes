@@ -1,14 +1,24 @@
 package exp.libs.utils.encode;
 
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
+import java.security.Signature;
+import java.security.interfaces.RSAPrivateKey;
+import java.security.interfaces.RSAPublicKey;
 import java.security.spec.KeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
+import org.security.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,13 +49,31 @@ public class CryptoUtils {
 	 * 	CFB：加密反馈模式
 	 * 	OFB：输出反馈模式
 	 */
-	private static final String CIPHER_MODE = "DES/ECB/NOPADDING";
+	private final static String CIPHER_MODE = "DES/ECB/NOPADDING";
 	
 	/** 加密算法: DES */
 	public static final String ALGORITHM_DES = "DES";
 	
-	/** 摘要算法: DES */
+	/** 摘要算法: MD5 */
 	public static final String ALGORITHM_MD5 = "MD5";
+	
+	/** 签名算法 */
+	public static final String ALGORITHMS_SIGN = "SHA1WithRSA";
+	
+	/** 加密算法: RSA */
+	public static final String ALGORITHM_RSA = "RSA";
+	
+	/** RSA公钥头 */
+	private final static String RSA_PUBLIC_KEY_BGN = "-----BEGIN PUBLIC KEY-----\n";
+	
+	/** RSA公钥尾 */
+	private final static String RSA_PUBLIC_KEY_END = "\n-----END PUBLIC KEY-----\n";
+	
+	/** RSA私钥头 */
+	private final static String RSA_PRIVATE_KEY_BGN = "-----BEGIN RSA PRIVATE KEY-----\n";
+	
+	/** RSA私钥尾 */
+	private final static String RSA_PRIVATE_KEY_END = "\n-----END RSA PRIVATE KEY-----\n";
 	
 	/** 默认密钥 */
 	public final static String DEFAULT_KEY = "exp-libs";
@@ -163,6 +191,12 @@ public class CryptoUtils {
 				CharsetUtils.toBytes(key, charset));
 	}
 	
+	/**
+	 * DES加密过程
+	 * @param data
+	 * @param key
+	 * @return
+	 */
 	private static String encrypt(byte[] data, byte[] key) {
 		String eData = "";
 		if(data == null || data.length <= 0) {
@@ -179,7 +213,7 @@ public class CryptoUtils {
 			for (int i = 0; i < len; i++) {
 				bytes[i] = data[i];
 			}
-			eData = BODHUtils.toHex(_encrypt(bytes, key, ALGORITHM_DES));
+			eData = BODHUtils.toHex(_encrypt(bytes, key));
 		}
 		
 		// 被加密的数据长度不为8的倍数，右补0后加密
@@ -194,28 +228,34 @@ public class CryptoUtils {
 				bytes[i++] = 0;
 			}
 			eData = StrUtils.concat(eData, 
-					BODHUtils.toHex(_encrypt(bytes, key, ALGORITHM_DES)));
+					BODHUtils.toHex(_encrypt(bytes, key)));
 		}
 		return eData;
 	}
 	
-	private static byte[] _encrypt(byte[] data, byte[] key, String algorithm) {
-		byte[] eData = {};
+	/**
+	 * DES加密过程
+	 * @param data
+	 * @param key
+	 * @return
+	 */
+	private static byte[] _encrypt(byte[] data, byte[] key) {
+		byte[] bytes = {};
 		key = zeroize(key);
 		try {
 			SecureRandom sr = new SecureRandom();
 			KeySpec ks = new DESKeySpec(key);
-			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(algorithm);
+			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM_DES);
 			SecretKey securekey = keyFactory.generateSecret(ks);
 			
 			Cipher cipher = Cipher.getInstance(CIPHER_MODE);
 			cipher.init(Cipher.ENCRYPT_MODE, securekey, sr);
-			eData = cipher.doFinal(data);
+			bytes = cipher.doFinal(data);
 			
 		} catch (Exception e) {
-			log.error("执行 [{}加密] 失败.", algorithm, e);
+			log.error("执行 [{}加密] 失败.", ALGORITHM_DES, e);
 		}
-		return eData;
+		return bytes;
 	}
 	
 	/**
@@ -252,42 +292,55 @@ public class CryptoUtils {
 				CharsetUtils.toBytes(key, charset), charset);
 	}
 	
+	/**
+	 * DES解密过程
+	 * @param des
+	 * @param key
+	 * @param charset
+	 * @return
+	 */
 	private static String decrypt(byte[] des, byte[] key, String charset) {
-		String dData = "";
+		String data = "";
 		if(des == null || des.length <= 0) {
-			return dData;
+			return data;
 		}
 		
-		byte[] buf = _decrypt(des, key, ALGORITHM_DES);
+		byte[] buf = _decrypt(des, key);
 		try {
 			int i = 0;
 			while ((i < buf.length) && 
 					(buf[buf.length - 1 - i] == 0)) {  i++; }	// 去掉末尾0
-			dData = new String(buf, 0, buf.length - i, charset);	// 解密
+			data = new String(buf, 0, buf.length - i, charset);	// 解密
 			
 		} catch (Exception e) {
 			log.error("执行 [{}解密] 失败.", ALGORITHM_DES, e);
 		}
-		return dData;
+		return data;
 	}
 	
-	private static byte[] _decrypt(byte[] des, byte[] key, String algorithm) {
-		byte[] dData = {};
+	/**
+	 * DES解密过程
+	 * @param des
+	 * @param key
+	 * @return
+	 */
+	private static byte[] _decrypt(byte[] des, byte[] key) {
+		byte[] bytes = {};
 		key = zeroize(key);
 		try {
 			SecureRandom sr = new SecureRandom();
 			KeySpec ks = new DESKeySpec(key);
-			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(algorithm);
+			SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(ALGORITHM_DES);
 			SecretKey securekey = keyFactory.generateSecret(ks);
 			
 			Cipher cipher = Cipher.getInstance(CIPHER_MODE);
 			cipher.init(Cipher.DECRYPT_MODE, securekey, sr);
-			dData = cipher.doFinal(des);
+			bytes = cipher.doFinal(des);
 			
 		} catch (Exception e) {
-			log.error("执行 [{}解密] 失败.", algorithm, e);
+			log.error("执行 [{}解密] 失败.", ALGORITHM_DES, e);
 		}
-		return dData;
+		return bytes;
 	}
 	
 	/**
@@ -306,5 +359,421 @@ public class CryptoUtils {
 		}
 		return zKey;
 	}
+	
+	/**
+	 * 对数据进行RSA公钥加密
+	 * @param data 被加密数据
+	 * @param publicKey 公钥, 形如(可无首尾串): -----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB\n-----END PUBLIC KEY-----\n
+	 * @return RSA加密后的字符串
+	 */
+	public static String toRSAByPubKey(String data, String publicKey) {
+		return toRSAByPubKey(data, publicKey, DEFAULT_CHARSET);
+	}
+	
+	/**
+	 * 对数据进行RSA公钥加密
+	 * @param data 被加密数据
+	 * @param publicKey 公钥, 形如(可无首尾串): -----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB\n-----END PUBLIC KEY-----\n
+	 * @param charset 加密数据编码
+	 * @return RSA加密后的字符串
+	 */
+	public static String toRSAByPubKey(String data, String publicKey, String charset) {
+		byte[] plainBytes = CharsetUtils.toBytes(data, charset);
+		RSAPublicKey rsaPK = toRSAPublicKey(publicKey);
+		
+		byte[] bytes = encrypt(plainBytes, rsaPK);	// RSA加密
+		return Base64.encode(bytes);	// Base64编码
+	}
+	
+	/**
+	 * RSA公钥加密过程
+	 * @param plainBytes 明文字节数据
+	 * @param publicKey RSA公钥
+	 * @return 密文字节数据
+	 */
+	private static byte[] encrypt(byte[] plainBytes, RSAPublicKey publicKey) {
+		byte[] bytes = new byte[0];
+		try {
+			Cipher cipher = Cipher.getInstance(ALGORITHM_RSA);
+			cipher.init(Cipher.ENCRYPT_MODE, publicKey);
+			bytes = cipher.doFinal(plainBytes);
+			
+		} catch(Exception e) {
+			log.error("执行 [{}公钥加密] 失败.", ALGORITHM_RSA, e);
+		} 
+		return bytes;
+	}
+	
+	/**
+	 * 对数据进行RSA私钥加密
+	 * @param data 被加密数据
+	 * @param privateKey 私钥, 形如(可无首尾串): -----BEGIN RSA PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==\n-----END RSA PRIVATE KEY-----\n
+	 * @return RSA加密后的字符串
+	 */
+	public static String toRSAByPriKey(String data, String privateKey) {
+		return toRSAByPriKey(data, privateKey, DEFAULT_CHARSET);
+	}
+	
+	/**
+	 * 对数据进行RSA私钥加密
+	 * @param data 被加密数据
+	 * @param privateKey 私钥, 形如(可无首尾串): -----BEGIN RSA PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==\n-----END RSA PRIVATE KEY-----\n
+	 * @param charset 加密数据编码
+	 * @return RSA加密后的字符串
+	 */
+	public static String toRSAByPriKey(String data, String privateKey, String charset) {
+		byte[] plainBytes = CharsetUtils.toBytes(data, charset);
+		RSAPrivateKey rsaPK = toRSAPrivateKey(privateKey);
+		
+		byte[] bytes = encrypt(plainBytes, rsaPK);	// RSA加密
+		return Base64.encode(bytes);	// Base64编码
+	}
+	
+	/**
+	 * RSA私钥加密过程
+	 * @param plainBytes 明文字节数据
+	 * @param privateKey RSA私钥
+	 * @return 密文字节数据
+	 */
+	private static byte[] encrypt(byte[] plainBytes, RSAPrivateKey privateKey) {
+		byte[] bytes = new byte[0];
+		try {
+			Cipher cipher = Cipher.getInstance(ALGORITHM_RSA);
+			cipher.init(Cipher.ENCRYPT_MODE, privateKey);
+			bytes = cipher.doFinal(plainBytes);
+			
+		} catch(Exception e) {
+			log.error("执行 [{}私钥加密] 失败.", ALGORITHM_RSA, e);
+		} 
+		return bytes;
+	}
+	
+	/**
+	 * 对 [RSA私钥加密数据] 进行 [RSA公钥解密]
+	 * @param rsa RSA私钥加密数据
+	 * @param publicKey 公钥, 形如(可无首尾串): -----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB\n-----END PUBLIC KEY-----\n
+	 * @return 加密前的明文数据
+	 */
+	public static String deRSAByPubKey(String rsa, String publicKey) {
+		return deRSAByPubKey(rsa, publicKey, DEFAULT_CHARSET);
+	}
+	
+	/**
+	 * 对 [RSA私钥加密数据] 进行 [RSA公钥解密]
+	 * @param rsa RSA私钥加密数据
+	 * @param publicKey 公钥, 形如(可无首尾串): -----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB\n-----END PUBLIC KEY-----\n
+	 * @param charset 解密编码
+	 * @return 加密前的明文数据
+	 */
+	public static String deRSAByPubKey(String rsa, String publicKey, String charset) {
+		byte[] cipherBytes = Base64.decode(rsa);
+		RSAPublicKey rsaPK = toRSAPublicKey(publicKey);
+		
+		byte[] bytes = decrypt(cipherBytes, rsaPK);
+		return CharsetUtils.toStr(bytes, charset);
+	}
+	
+	/**
+	 * RSA公钥解密过程
+	 * @param cipherBytes 密文字节数据
+	 * @param publicKey RSA公钥
+	 * @return 明文字节数据
+	 */
+	private static byte[] decrypt(byte[] cipherBytes, RSAPublicKey publicKey) {
+		byte[] bytes = new byte[0];
+		try {
+			Cipher cipher = Cipher.getInstance(ALGORITHM_RSA);
+			cipher.init(Cipher.DECRYPT_MODE, publicKey);
+			bytes = cipher.doFinal(cipherBytes);
+			
+		} catch(Exception e) {
+			log.error("执行 [{}公钥解密] 失败.", ALGORITHM_RSA, e);
+		} 
+		return bytes;
+	}
+	
+	/**
+	 * 对 [RSA公钥加密数据] 进行 [RSA私钥解密]
+	 * @param rsa RSA公钥加密数据
+	 * @param privateKey 私钥, 形如(可无首尾串): -----BEGIN RSA PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==\n-----END RSA PRIVATE KEY-----\n
+	 * @return 加密前的明文数据
+	 */
+	public static String deRSAByPriKey(String rsa, String privateKey) {
+		return deRSAByPriKey(rsa, privateKey, DEFAULT_CHARSET);
+	}
+	
+	/**
+	 * 对 [RSA公钥加密数据] 进行 [RSA私钥解密]
+	 * @param rsa RSA公钥加密数据
+	 * @param privateKey 私钥, 形如(可无首尾串): -----BEGIN RSA PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==\n-----END RSA PRIVATE KEY-----\n
+	 * @param charset 解密编码
+	 * @return 加密前的明文数据
+	 */
+	public static String deRSAByPriKey(String rsa, String privateKey, String charset) {
+		byte[] cipherBytes = Base64.decode(rsa);
+		RSAPrivateKey rsaPK = toRSAPrivateKey(privateKey);
+		
+		byte[] bytes = decrypt(cipherBytes, rsaPK);
+		return CharsetUtils.toStr(bytes, charset);
+	}
+	
+	/**
+	 * RSA私钥解密过程
+	 * @param cipherBytes 密文字节数据
+	 * @param privateKey RSA私钥
+	 * @return 明文字节数据
+	 */
+	private static byte[] decrypt(byte[] cipherBytes, RSAPrivateKey privateKey) {
+		byte[] bytes = new byte[0];
+		try {
+			Cipher cipher = Cipher.getInstance(ALGORITHM_RSA);
+			cipher.init(Cipher.DECRYPT_MODE, privateKey);
+			bytes = cipher.doFinal(cipherBytes);
+			
+		} catch(Exception e) {
+			log.error("执行 [{}私钥解密] 失败.", ALGORITHM_RSA, e);
+		} 
+		return bytes;
+	}
+	
+	/**
+	 * 对数据进行RSA私钥签名
+	 * @param data 未被签名的原始数据
+	 * @param privateKey 私钥, 形如(可无首尾串): -----BEGIN RSA PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==\n-----END RSA PRIVATE KEY-----\n
+	 * @return RSA签名后的字符串
+	 */
+	public static String doRSASign(String data, String privateKey) {
+		return doRSASign(data, privateKey, DEFAULT_CHARSET);
+	}
+	
+	/**
+	 * 对数据进行RSA私钥签名
+	 * @param data 未被签名的原始数据
+	 * @param privateKey 私钥, 形如(可无首尾串): -----BEGIN RSA PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==\n-----END RSA PRIVATE KEY-----\n
+	 * @param charset 签名数据编码
+	 * @return RSA签名后的字符串
+	 */
+	public static String doRSASign(String data, String privateKey, String charset) {
+		byte[] bytes = CharsetUtils.toBytes(data, charset);
+		RSAPrivateKey rsaPK = toRSAPrivateKey(privateKey);
+		
+		byte[] signed = sign(bytes, rsaPK);	// RSA签名
+		return Base64.encode(signed);	// Base64编码
+	}
+	
+	/**
+	 * RSA私钥签名过程
+	 * @param bytes 未被签名的原始字节数据
+	 * @param privateKey RSA私钥
+	 * @return 签名后的字节数据
+	 */
+	private static byte[] sign(byte[] bytes, RSAPrivateKey privateKey) {
+		byte[] signed = new byte[0];
+		try {
+			Signature signature = Signature.getInstance(ALGORITHMS_SIGN);
+			signature.initSign(privateKey);
+			signature.update(bytes);
+			signed = signature.sign();
 
+		} catch (Exception e) {
+			log.error("执行 [{}私钥签名] 失败.", ALGORITHMS_SIGN, e);
+		}
+		return signed;
+	}
+
+	/**
+	 * 对 [RSA私钥签名数据] 进行 [RSA公钥校验]
+	 * @param data 未被签名的原始数据
+	 * @param rsaSigned 已被RSA私钥签名数据
+	 * @param publicKey 公钥, 形如(可无首尾串): -----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB\n-----END PUBLIC KEY-----\n
+	 * @return true:通过签名校验; false:不通过签名校验
+	 */
+	public static boolean checkRSASign(String data, String rsaSigned, String publicKey) {
+		return checkRSASign(data, rsaSigned, publicKey, DEFAULT_CHARSET);
+	}
+	
+	/**
+	 * 对 [RSA私钥签名数据] 进行 [RSA公钥校验]
+	 * @param data 未被签名的原始数据
+	 * @param rsaSigned 已被RSA私钥签名数据
+	 * @param publicKey 公钥, 形如(可无首尾串): -----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB\n-----END PUBLIC KEY-----\n
+	 * @param charset 解密编码
+	 * @return true:通过签名校验; false:不通过签名校验
+	 */
+	public static boolean checkRSASign(String data, String rsaSigned, 
+			String publicKey, String charset) {
+		byte[] bytes = CharsetUtils.toBytes(data, charset);
+		byte[] signed = Base64.decode(rsaSigned);
+		RSAPublicKey rsaPK = toRSAPublicKey(publicKey);
+		return checkSign(bytes, signed, rsaPK);
+	}
+	
+	/**
+	 * RSA公钥校验签名过程
+	 * @param bytes 未被签名的原始字节数据
+	 * @param signed 已被RSA私钥签名的字节数据
+	 * @param publicKey RSA公钥
+	 * @return true:通过签名校验; false:不通过签名校验
+	 */
+	private static boolean checkSign(
+			byte[] bytes, byte[] signed, RSAPublicKey publicKey) {
+		boolean isOk = false;
+		try {
+			Signature signature = Signature.getInstance(ALGORITHMS_SIGN);
+			signature.initVerify(publicKey);
+			signature.update(bytes);
+			isOk = signature.verify(signed);
+
+		} catch (Exception e) {
+			log.error("执行 [{}公钥签名校验] 失败.", ALGORITHMS_SIGN, e);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 随机生成RSA密钥对（公钥+私钥）
+	 * 
+	 * @return 若失败返回null, 否则返回密钥对：
+	 * 		Key[2]: { RSAPublicKey, RSAPrivateKey }
+	 * 		RSAPublicKey publicKey = (RSAPublicKey) key[0];
+	 * 		RSAPrivateKey privateKey = (RSAPrivateKey) key[1];
+	 */
+	public static Key[] getRSAKeyPair() {
+		Key[] rsaKeys = new Key[2];
+		try {
+			// 基于RSA算法初始化密钥对生成器, 密钥大小为96-1024位
+			KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance(ALGORITHM_RSA);
+			keyPairGen.initialize(1024, new SecureRandom());	
+			
+			// 生成密钥对
+			KeyPair keyPair = keyPairGen.generateKeyPair();
+			rsaKeys[0] = keyPair.getPublic();
+			rsaKeys[1] = keyPair.getPrivate();
+			
+		} catch (Exception e) {
+			rsaKeys = null;
+			log.error("随机生成 [{}密钥对] 失败.", ALGORITHM_RSA, e);
+		}
+		return rsaKeys;
+	}
+	
+	/**
+	 * 随机生成RSA密钥对字符串（公钥+私钥）
+	 * 
+	 * @return 若失败则公私钥均为空串"", 否则返回密钥对：
+	 * 		String[2]: { "RSAPublicKey", "RSAPrivateKey" }
+	 * 		String rsaPublicKey = key[0];
+	 * 		String rsaPrivateKey = key[1];
+	 */
+	public static String[] getRSAKeyStrPair() {
+		String[] strKeys = { "", "" };
+		Key[] rsaKeys = getRSAKeyPair();
+		if(rsaKeys != null && rsaKeys.length == strKeys.length) {
+			RSAPublicKey rsaPublicKey = (RSAPublicKey) rsaKeys[0];
+			strKeys[0] = Base64.encode(rsaPublicKey.getEncoded());
+			
+			RSAPrivateKey rsaPrivateKey = (RSAPrivateKey) rsaKeys[1];
+			strKeys[1] = Base64.encode(rsaPrivateKey.getEncoded());
+		}
+		return strKeys;
+	}
+	
+	/**
+	 * 通过公钥字符串生成RSA公钥
+	 * @param publicKey 公钥数据字符串, 形如(可无首尾串): -----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB\n-----END PUBLIC KEY-----\n
+	 * @return RSA公钥
+	 */
+	public static RSAPublicKey toRSAPublicKey(String publicKey)  {
+		RSAPublicKey rsaPublicKey = null;
+		try {
+			publicKey = publicKey.replace(RSA_PUBLIC_KEY_BGN, "").
+					replace(RSA_PUBLIC_KEY_END, "");
+			byte[] buffer = Base64.decode(publicKey);
+			KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+			X509EncodedKeySpec keySpec = new X509EncodedKeySpec(buffer);
+			rsaPublicKey = (RSAPublicKey) keyFactory.generatePublic(keySpec);
+			
+		} catch(Exception e) {
+			log.error("生成 [{}公钥] 失败.", ALGORITHM_RSA, e);
+		} 
+		return rsaPublicKey;
+	}
+	
+	/**
+	 * 通过私钥字符串生成RSA私钥
+	 * @param privateKey 私钥数据字符串, 形如(可无首尾串): -----BEGIN RSA PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==\n-----END RSA PRIVATE KEY-----\n
+	 * @return RSA私钥
+	 */
+	public static RSAPrivateKey toRSAPrivateKey(String privateKey)  {
+		RSAPrivateKey rsaPrivateKey = null;
+		try {
+			privateKey = privateKey.replace(RSA_PRIVATE_KEY_BGN, "").
+					replace(RSA_PRIVATE_KEY_END, "");
+			byte[] buffer = Base64.decode(privateKey);
+			KeyFactory keyFactory = KeyFactory.getInstance(ALGORITHM_RSA);
+			PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(buffer);
+			rsaPrivateKey = (RSAPrivateKey) keyFactory.generatePrivate(keySpec);
+			
+		} catch(Exception e) {
+			log.error("生成 [{}私钥] 失败.", ALGORITHM_RSA, e);
+		} 
+		return rsaPrivateKey;
+	}
+	
+	/**
+	 * 把RSA公钥对象转换成字符串
+	 * @param rsaPublicKey RSA公钥对象
+	 * @return 公钥数据字符串, 形如: MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB
+	 */
+	public static String toRSAPublicKey(RSAPublicKey rsaPublicKey) {
+		return toRSAPublicKey(rsaPublicKey, false);
+	}
+	
+	/**
+	 * 把RSA公钥对象转换成字符串
+	 * @param rsaPublicKey RSA公钥对象
+	 * @param appendHeadTail 添加密钥首尾标识: "-----BEGIN PUBLIC KEY-----\n" 和 "\n-----END PUBLIC KEY-----\n"
+	 * @return 公钥数据字符串, 形如: -----BEGIN PUBLIC KEY-----\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCdScM09sZJqFPX7bvmB2y6i08J\nbHsa0v4THafPbJN9NoaZ9Djz1LmeLkVlmWx1DwgHVW+K7LVWT5FV3johacVRuV98\n37+RNntEK6SE82MPcl7fA++dmW2cLlAjsIIkrX+aIvvSGCuUfcWpWFy3YVDqhuHr\nNDjdNcaefJIQHMW+sQIDAQAB\n-----END PUBLIC KEY-----\n
+	 */
+	public static String toRSAPublicKey(
+			RSAPublicKey rsaPublicKey, boolean appendHeadTail) {
+		String publicKey = "";
+		if(rsaPublicKey != null) {
+			publicKey = Base64.encode(rsaPublicKey.getEncoded());
+			if(appendHeadTail == true) {
+				publicKey = StrUtils.concat(
+						RSA_PUBLIC_KEY_BGN, publicKey, RSA_PUBLIC_KEY_END);
+			}
+		}
+		return publicKey;
+	}
+	
+	/**
+	 * 把RSA私钥对象转换成字符串
+	 * @param rsaPrivateKey RSA私钥对象
+	 * @return 私钥数据字符串, 形如: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==
+	 */
+	public static String toRSAPrivateKey(RSAPrivateKey rsaPrivateKey) {
+		return toRSAPrivateKey(rsaPrivateKey, false);
+	}
+	
+	/**
+	 * 把RSA私钥对象转换成字符串
+	 * @param rsaPrivateKey RSA私钥对象
+	 * @param appendHeadTail 添加密钥首尾标识: "-----BEGIN RSA PRIVATE KEY-----\n" 和 "\n-----END RSA PRIVATE KEY-----\n"
+	 * @return 私钥数据字符串, 形如: -----BEGIN RSA PRIVATE KEY-----\nMIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMaKkeYlORQcJjKdJFD5RHqVVMBYA1RasnF/LTqHKaX1GO6IuRUXf5CR9b+VREG+4c+uVO/RC1k8vzOU7FtOgFXjOFqSGAJ5DKXHd1fjjFv++jjNpBScyXg7+/bjQFq8VuACSM6yG3J+Ou/ql35iRypjx3eEdeaLecHcQ7jP9l2LAgMBAAECgYAhvTCX/KFbgoEXPs8KF6IEdtYFLa+7KQKD+Qm1lXyFYEZRWtig9fJOng819Ga6CXcUNNroOg0EqCcR2+/igE+ce7PF2K+ooO2jYKKaoNmCr1xKuP1Iy8aGrcKeobN8FsWSIi5eyvB847dp/1rmAqqR9hOw5FUnblDvFf95olyvEQJBAPzxFk/Sw49AxuKXyYC6VXuH/aNu+ExK+wCdnr1pjJpW75D9xi94AqWf7XdB5PblTBKCv3aFpxhFMzTZe/1Iq7MCQQDI8RnQupWU5rwb+OGWJVyra5ApimsQidWEKORPz0U+HrhiYuTOJHa24J584EqEWu9hqm9HYWpgvSIo1rgUezrJAkEAnXUC+6vrWxjq9hGhOYZFQoIUbZHd9bhTaj20nJrBES7/MRYZMmGV3D6jV7Locp2o7nj/8SsgKqahSsv8OF7tqwJAMJBMm+ysQBtvtRb2dlI7TlaltdR1Qb7+Mn2riDpg0r2b9HNQNx4K7vHke+u9NrW/iwwk7sx1aEHtoo8aWCDcOQJAO+XdCt05WLkUKaThB3JIlgjDwTx4561+ahpJ4bLmRgC0TWJyF6IgR0/oyAweXh7m9UTxAU/n+XvB3tjieGx6QA==\n-----END RSA PRIVATE KEY-----\n
+	 */
+	public static String toRSAPrivateKey(
+			RSAPrivateKey rsaPrivateKey, boolean appendHeadTail) {
+		String privateKey = "";
+		if(rsaPrivateKey != null) {
+			privateKey = Base64.encode(rsaPrivateKey.getEncoded());
+			if(appendHeadTail == true) {
+				privateKey = StrUtils.concat(
+						RSA_PRIVATE_KEY_BGN, privateKey, RSA_PRIVATE_KEY_END);
+			}
+		}
+		return privateKey;
+	}
+	
 }
