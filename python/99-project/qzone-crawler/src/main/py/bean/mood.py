@@ -32,8 +32,8 @@ class Mood(object):
         :param create_time: 说说的创建时间
         :return: None
         '''
-        self.page = str(page).rjust(4, '0')     # 右对齐字符串(宽度为4左边补'0')
-        self.create_time = 0 if create_time < 0  else create_time
+        self.page = str(page).rjust(4, '0') # 右对齐字符串(宽度为4左边补'0')
+        self.create_time = 0 if create_time < 0 else create_time
         self.pic_urls = []
 
         self.content = '' if not content else re.sub('[\r\n]', '', content)
@@ -64,7 +64,7 @@ class Mood(object):
                '[说说页码] : %s\r\n' \
                '[说说内容] : %s\r\n' \
                '[图片数量] : %s\r\n' \
-               '[图片列表] : %s\r\n' \
+               '[图片列表] : \r\n%s\r\n' \
                '======================================================\r\n' % (
             'true' if is_download else 'false',
             self.page, self.content, self.pic_num(),

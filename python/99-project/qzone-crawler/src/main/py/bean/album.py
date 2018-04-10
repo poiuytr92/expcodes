@@ -35,9 +35,9 @@ class Album(object):
         :param total_pic_num: 相册照片总数
         :return:
         '''
-        self.id = '' if not id else id
-        self.name = '' if not name else name
-        self.url = '' if not url else url
+        self.id = '' if not id else id.strip()
+        self.name = '' if not name else name.strip()
+        self.url = '' if not url else url.strip()
         self.total_pic_num = 0 if total_pic_num < 0 else total_pic_num
         self.page_num = pic.get_page_num(total_pic_num, cfg.BATCH_LIMT)
         self.photos = []

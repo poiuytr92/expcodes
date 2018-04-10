@@ -238,8 +238,8 @@ class AlbumAnalyzer(object):
 
             # 保存下载信息
             save_path = '%s%s/%s' % (self.ALBUM_DIR, album.name, self.ALBUM_INFO_NAME)
-            with open(save_path, 'w') as file :
-                file.write(album_infos.encode(cfg.DEFAULT_CHARSET))
+            with open(save_path, 'w', encoding=cfg.DEFAULT_CHARSET) as file :
+                file.write(album_infos)
 
 
     def download_photo(self, album, photo):

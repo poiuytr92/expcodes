@@ -33,8 +33,8 @@ class Photo(object):
         :return:
         '''
         self.desc = '' if not desc else re.sub('[\r\n]', '', desc)
-        self.time = '' if not time else time
-        self.url = '' if not url else url
+        self.time = '' if not time else time.strip()
+        self.url = '' if not url else url.strip()
         self.name = pic.get_pic_name(self.time, self.desc)
 
 

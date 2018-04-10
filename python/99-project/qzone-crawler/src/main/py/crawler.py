@@ -11,7 +11,6 @@ from src.main.py.core.album import AlbumAnalyzer
 from src.main.py.core.mood import MoodAnalyzer
 
 
-
 def load_account():
     '''
     加载上次登陆信息
@@ -46,8 +45,8 @@ def save_account(username, password, QQ):
         des.encrypt(QQ)
     )
 
-    with open(cfg.ACCOUNT_PATH, 'w') as account:
-        account.write(data.encode(cfg.DEFAULT_CHARSET))
+    with open(cfg.ACCOUNT_PATH, 'w', encoding=cfg.DEFAULT_CHARSET) as account:
+        account.write(data)
 
 
 def crawler():
