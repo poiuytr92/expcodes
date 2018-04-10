@@ -111,10 +111,13 @@ public abstract class BaseMoodAnalyzer {
 		UIUtils.log("提取QQ [", QQ, "] 的说说及照片完成, 开始下载...");
 		int idx = 1;
 		for(Mood mood : moods) {
+			FileUtils.createDir(PAGE_DIR_PREFIX.concat(mood.PAGE()));
+			
 			UIUtils.log("正在下载第 [", idx++, "/", moods.size(), "] 条说说: ", mood.CONTENT());
 			int cnt = _download(mood);
 			boolean isOk = (cnt == mood.PIC_NUM());
 			UIUtils.log(" -> 说说照片下载完成, 成功率: ", cnt, "/", mood.PIC_NUM());
+			ThreadUtils.tSleep(Config.SLEEP_TIME);
 			
 			// 保存下载信息
 			String savePath = StrUtils.concat(PAGE_DIR_PREFIX, mood.PAGE(), "/", MOOD_INFO_NAME);
@@ -145,17 +148,17 @@ public abstract class BaseMoodAnalyzer {
 	/**
 	 * 下载单张图片到说说的分页目录，并复制到图片合集目录
 	 * @param header
-	 * @param pageIdx 页码索引
+	 * @param page 页码索引
 	 * @param picName
 	 * @param picURL
 	 * @return
 	 */
 	private boolean _download(Map<String, String> header, 
-			String pageIdx, String picName, String picURL) {
+			String page, String picName, String picURL) {
 		header.put(HttpUtils.HEAD.KEY.HOST, XHRUtils.toHost(picURL));
 		
 		boolean isOk = false;
-		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, pageIdx, "/", picName);
+		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, page, "/", picName);
 		for(int retry = 0; !isOk && retry < Config.RETRY; retry++) {
 			isOk = HttpURLUtils.downloadByGet(savePath, picURL, header, null, 
 					Config.TIMEOUT, Config.TIMEOUT, Config.CHARSET);
