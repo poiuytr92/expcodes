@@ -171,7 +171,7 @@ class Lander(object):
 
             with Image.open(cfg.VCODE_PATH) as image:
                 image.show()
-                vcode = input("请输入验证码:").strip()
+                vcode = input('请输入验证码: ').strip()
         else:
             vcode = ''
             verify = ''

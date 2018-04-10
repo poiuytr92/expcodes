@@ -12,6 +12,7 @@ import src.main.py.config as cfg
 import src.main.py.utils.xhr as xhr
 import src.main.py.utils.pic as pic
 from src.main.py.bean.cookie import QQCookie
+from src.main.py.bean.mood import Mood
 
 
 class MoodAnalyzer(object):
@@ -55,7 +56,7 @@ class MoodAnalyzer(object):
 
             # 下载说说及照片
             moods = self.get_moods()
-
+            self.download_moods(moods)
 
             print('任务完成: QQ [%s] 的空间说说已保存到 [%s]' % (self.QQ, self.MOOD_DIR))
 
@@ -75,8 +76,7 @@ class MoodAnalyzer(object):
         for page in range(PAGE_NUM) :
             page += 1
             print(' -> 正在提取第 [%d/%d] 页的说说信息...' % (page, PAGE_NUM))
-
-            # TODO
+            moods.extend(self.get_page_moods(page))
 
             print(' -> 第 [%d/%d] 页说说提取完成, 累计说说数量: %d' % (page, PAGE_NUM, len(moods)))
             time.sleep(cfg.SLEEP_TIME)
@@ -99,7 +99,7 @@ class MoodAnalyzer(object):
             print('提取QQ [%s] 的说说页数失败' % self.QQ)
             traceback.print_exc()
 
-        return total
+        return pic.get_page_num(total, cfg.BATCH_LIMT)
 
 
     def get_page_moods(self, page):
@@ -114,32 +114,22 @@ class MoodAnalyzer(object):
             msg_list = root['msglist']
             for msg in msg_list :
                 content = msg.get('content', '')
-                create_time = msg.get('created_time', 0) * 1000
+                create_time = msg.get('created_time', 0)
 
+                mood = Mood(page, content, create_time)
+                pics = msg.get('pic', None)
+                if pics :
+                    for p in pics :
+                        url = pic.convert(p.get('url3', ''))
+                        mood.add_pic_url(url)
+
+                moods.append(mood)
 
         except:
             print('提取第 [%d] 页的说说信息异常' % page)
             traceback.print_exc()
 
         return moods
-
-# 			JSONObject json = JSONObject.fromObject(response);
-# 			JSONArray msglist = JsonUtils.getArray(json, XHRAtrbt.msglist);
-# 			for(int i = 0; i < msglist.size(); i++) {
-# 				JSONObject msg = msglist.getJSONObject(i);
-# 				String content = JsonUtils.getStr(msg, XHRAtrbt.content);
-# 				long createTime = JsonUtils.getLong(msg, XHRAtrbt.created_time, 0) * 1000;
-#
-# 				Mood mood = new Mood(page, content, createTime);
-# 				JSONArray pics = JsonUtils.getArray(msg, XHRAtrbt.pic);
-# 				for(int j = 0; j < pics.size(); j++) {
-# 					JSONObject pic = pics.getJSONObject(j);
-# 					String url = JsonUtils.getStr(pic, XHRAtrbt.url3);
-# 					url = PicUtils.convert(url);
-# 					mood.addPicURL(url);
-# 				}
-# 				moods.add(mood);
-# 	}
 
 
     def get_page_moods_json(self, page):
@@ -155,8 +145,8 @@ class MoodAnalyzer(object):
             'qzonetoken' : self.cookie.qzone_token,
             'uin' : self.QQ,
             'hostUin' : self.QQ,
-            'pos' : '%d' % ((page - 1) * cfg.BATCH_LIMT),
-            'num' : '%d' % cfg.BATCH_LIMT,
+            'pos' : str((page - 1) * cfg.BATCH_LIMT),
+            'num' : str(cfg.BATCH_LIMT),
             'cgi_host' : cfg.MOOD_DOMAIN,
             'inCharset' : cfg.DEFAULT_CHARSET,
             'outCharset' : cfg.DEFAULT_CHARSET,
@@ -170,76 +160,74 @@ class MoodAnalyzer(object):
         return xhr.to_json(response.text)
 
 
-#
-# 	/**
-# 	 * 下载所有说说及相关的照片
-# 	 * @param moods 说说集（含照片信息）
-# 	 */
-# 	private void download(List<Mood> moods) {
-# 		if(ListUtils.isEmpty(moods)) {
-# 			return;
-# 		}
-#
-# 		UIUtils.log("提取QQ [", QQ, "] 的说说及照片完成, 开始下载...");
-# 		int idx = 1;
-# 		for(Mood mood : moods) {
-# 			UIUtils.log("正在下载第 [", idx++, "/", moods.size(), "] 条说说: ", mood.CONTENT());
-# 			int cnt = _download(mood);
-# 			boolean isOk = (cnt == mood.PIC_NUM());
-# 			UIUtils.log(" -> 说说照片下载完成, 成功率: ", cnt, "/", mood.PIC_NUM());
-#
-# 			// 保存下载信息
-# 			String savePath = StrUtils.concat(PAGE_DIR_PREFIX, mood.PAGE(), "/", MOOD_INFO_NAME);
-# 			FileUtils.write(savePath, mood.toString(isOk), Config.CHARSET, true);
-# 		}
-# 	}
-#
-# 	/**
-# 	 * 下载单条说说及相关的照片
-# 	 * @param mood 说说信息
-# 	 * @return 成功下载的照片数
-# 	 */
-# 	private int _download(Mood mood) {
-# 		Map<String, String> header = XHRUtils.getHeader(Browser.COOKIE());
-# 		header.put(HttpUtils.HEAD.KEY.REFERER, URL.MOOD_REFERER);
-#
-# 		int idx = 0, cnt = 0;
-# 		for(String picURL : mood.getPicURLs()) {
-# 			String picName = PicUtils.getPicName(String.valueOf(idx++), mood.CONTENT());
-# 			boolean isOk = _download(header, mood.PAGE(), picName, picURL);
-# 			cnt += (isOk ? 1 : 0);
-#
-# 			UIUtils.log(" -> 下载照片进度(", (isOk ? "成功" : "失败"), "): ", cnt, "/", mood.PIC_NUM());
-# 		}
-# 		return cnt;
-# 	}
-#
-# 	/**
-# 	 * 下载单张图片到说说的分页目录，并复制到图片合集目录
-# 	 * @param header
-# 	 * @param pageIdx 页码索引
-# 	 * @param picName
-# 	 * @param picURL
-# 	 * @return
-# 	 */
-# 	private boolean _download(Map<String, String> header,
-# 			String pageIdx, String picName, String picURL) {
-# 		header.put(HttpUtils.HEAD.KEY.HOST, XHRUtils.toHost(picURL));
-#
-# 		boolean isOk = false;
-# 		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, pageIdx, "/", picName);
-# 		for(int retry = 0; !isOk && retry < Config.RETRY; retry++) {
-# 			isOk = HttpURLUtils.downloadByGet(savePath, picURL, header, null,
-# 					Config.TIMEOUT, Config.TIMEOUT, Config.CHARSET);
-#
-# 			if(isOk == false) {
-# 				FileUtils.delete(savePath);
-# 				ThreadUtils.tSleep(Config.SLEEP_TIME);
-#
-# 			} else {
-# 				FileUtils.copyFile(savePath, PHOTO_DIR.concat(picName));
-# 			}
-# 		}
-# 		return isOk;
-# 	}
-#
+    def download_moods(self, moods):
+        '''
+        下载所有说说及相关的照片
+        :param moods: 说说集（含照片信息）
+        :return: None
+        '''
+        MOOD_NUM = len(moods)
+        if MOOD_NUM <= 0 :
+            return
+
+        print('提取QQ [%s] 的说说及照片完成, 开始下载...' % self.QQ)
+        os.makedirs(self.PHOTO_DIR)
+
+        for idx, mood in enumerate(moods) :
+            page_dir = '%s%s' % (self.PAGE_DIR_PREFIX, mood.page)
+            if not os.path.exists(page_dir) :
+                os.makedirs(page_dir)
+
+            print('正在下载第 [%d/%d] 条说说: ' % (idx + 1, MOOD_NUM))
+            cnt = self.download_mood(mood)
+            is_ok = (cnt == mood.pic_num())
+            print(' -> 说说照片下载完成, 成功率: %d/%d' % (cnt, mood.pic_num()))
+            time.sleep(cfg.SLEEP_TIME)
+
+            # 保存下载信息
+            save_path = '%s/%s' % (page_dir, self.MOOD_INFO_NAME)
+            with open(save_path, 'a') as file :
+                file.write(mood.to_str(is_ok))
+
+
+    def download_mood(self, mood):
+        '''
+        下载单条说说及相关的照片
+        :param mood: 说说信息
+        :return: 成功下载的照片数
+        '''
+        headers = xhr.get_headers(self.cookie.to_nv())
+        headers['Referer'] = cfg.MOOD_REFERER
+
+        cnt = 0
+        for idx, pic_url in enumerate(mood.pic_urls) :
+            pic_name = pic.get_pic_name(str(idx + 1), mood.content)
+            is_ok = self.download_photo(headers, mood.page, pic_name, pic_url)
+            cnt += (1 if is_ok else 0)
+            print(' -> 下载照片进度(%s): %d/%d' % ('成功' if is_ok else '失败', cnt, mood.pic_num()))
+
+        return cnt
+
+
+    def download_photo(self, headers, page, pic_name, pic_url):
+        '''
+        下载单张图片到说说的分页目录，并复制到图片合集目录
+        :param headers: 用于下载图片的HTTP请求头
+        :param page: 页码索引
+        :param pic_name: 图片名称
+        :param pic_url: 图片地址
+        :return: True:下载成功; False: 下载失败
+        '''
+        save_path = '%s%s/%s' % (self.PAGE_DIR_PREFIX, page, pic_name)
+
+        is_ok = False
+        for retry in range(cfg.RETRY) :
+            is_ok, set_cookie = xhr.download_pic(pic_url, headers, '{}', save_path)
+            if is_ok == True :
+                shutil.copyfile(save_path, '%s%s' % (self.PHOTO_DIR, pic_name))
+                break
+
+            elif os.path.exists(save_path) :
+                os.remove(save_path)
+
+        return is_ok

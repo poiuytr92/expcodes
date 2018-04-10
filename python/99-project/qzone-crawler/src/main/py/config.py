@@ -11,6 +11,7 @@ config.read(filenames='./../../../conf/url.ini', encoding='utf-8')
 
 DEFAULT_CHARSET = 'utf-8'   # 默认编码
 SLEEP_TIME = 0.1    # 行为休眠间隔(s)
+TIMEOUT = 10        # 请求超时(s)
 
 BATCH_LIMT = 20     # 每次批量请求的数量限制(说说最多20, 相册是30, 此处取最小值)
 RETRY = 5           # 重试次数

@@ -5,6 +5,7 @@ __date__ = '2018-03-29 20:17'
 
 import re
 import requests
+import src.main.py.config as cfg
 
 
 def get_headers(nv_cookies=''):
@@ -21,7 +22,6 @@ def get_headers(nv_cookies=''):
         'User-Agent' : 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36'
     }
     return headers
-
 
 
 def take_response_cookies(response, qqcookie):
@@ -45,7 +45,7 @@ def download_pic(pic_url, headers, params, save_path):
     set_cookie = ''
 
     try:
-        response = requests.get(pic_url, headers=headers, params=params, stream=True)
+        response = requests.get(pic_url, headers=headers, params=params, stream=True, timeout=cfg.TIMEOUT)
         if response.status_code == 200:
             with open(save_path, 'wb') as pic:
                 for chunk in response:

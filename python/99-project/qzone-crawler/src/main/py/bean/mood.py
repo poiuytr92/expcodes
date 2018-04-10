@@ -32,7 +32,7 @@ class Mood(object):
         :param create_time: 说说的创建时间
         :return: None
         '''
-        self.page = ('%d' % page).rjust(4, '0')     # 右对齐字符串(宽度为4左边补'0')
+        self.page = str(page).rjust(4, '0')     # 右对齐字符串(宽度为4左边补'0')
         self.create_time = 0 if create_time < 0  else create_time
         self.pic_urls = []
 
@@ -61,25 +61,13 @@ class Mood(object):
         :return: 照片信息
         '''
         return '[下载状态] : %s\r\n' \
-               '[上传时间] : %s\r\n' \
-               '[照片描述] : %s\r\n' \
-               '[照片路径] : %s\r\n' \
+               '[说说页码] : %s\r\n' \
+               '[说说内容] : %s\r\n' \
+               '[图片数量] : %s\r\n' \
+               '[图片列表] : %s\r\n' \
                '======================================================\r\n' % (
             'true' if is_download else 'false',
-            self.time, self.desc, self.url
+            self.page, self.content, self.pic_num(),
+            '\r\n'.join(('    %s' % pic_url) for pic_url in self.pic_urls)
         )
 
-	#
-	# public String toString(boolean isDownload) {
-	# 	StringBuilder sb = new StringBuilder();
-	# 	sb.append("[下载状态] : ").append(isDownload).append("\r\n");
-	# 	sb.append("[说说页码] : ").append(PAGE()).append("\r\n");
-	# 	sb.append("[说说内容] : ").append(CONTENT()).append("\r\n");
-	# 	sb.append("[图片数量] : ").append(getPicURLs().size()).append("\r\n");
-	# 	sb.append("[图片列表] : \r\n");
-	# 	for(String url : picURLs) {
-	# 		sb.append("   ").append(url).append("\r\n");
-	# 	}
-	# 	sb.append("======================================================\r\n");
-	# 	return sb.toString();
-	# }

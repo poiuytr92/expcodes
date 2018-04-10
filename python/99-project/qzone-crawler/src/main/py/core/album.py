@@ -54,7 +54,7 @@ class AlbumAnalyzer(object):
 
             # 下载相册
             albums = self.get_albums()
-            self.download_album(albums)
+            self.download_albums(albums)
             print('任务完成: QQ [%s] 的空间相册已保存到 [%s]' % (self.QQ, self.ALBUM_DIR))
 
         except:
@@ -157,6 +157,7 @@ class AlbumAnalyzer(object):
                 time = photo.get('uploadtime', '')
                 url = pic.convert(photo.get('url', ''))
                 photos.append(Photo(desc, time, url))
+
         except:
             print('提取相册 [%s] 第%d页的照片信息异常' % (album.name, page))
             traceback.print_exc()
@@ -210,13 +211,13 @@ class AlbumAnalyzer(object):
         return params
 
 
-    def download_album(self, albums):
+    def download_albums(self, albums):
         '''
         下载所有相册及其内的照片
         :param albums: 相册集（含照片信息）
-        :return:
+        :return: None
         '''
-        if albums == None or len(albums) <= 0 :
+        if len(albums) <= 0 :
             return
 
         print('提取QQ [%s] 的相册及照片完成, 开始下载...' % self.QQ)

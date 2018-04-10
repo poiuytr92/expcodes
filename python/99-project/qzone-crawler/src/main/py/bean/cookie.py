@@ -196,10 +196,7 @@ class HttpCookie(object):
         生成所有cookie的名值对列表(分号分隔)
         :return: cookie的名值对列表(分号分隔)
         '''
-        nvs = ''
-        for cookie in self.cookies:
-            nvs = '%s; %s' % (cookie.to_nv(), nvs)
-        return nvs
+        return '; '.join(cookie.to_nv() for cookie in self.cookies)
 
 
     def to_header(self):
@@ -210,10 +207,7 @@ class HttpCookie(object):
                     JSESSIONID=87E6F83AD8F5EC3C1BF1B08736E8D28A ; Domain= ; Path=/ ; Expires=Wed, 31-Jan-2018 21:18:43 GMT+08:00 ; HttpOnly ;
                     DedeUserID__ckMd5=14ad42f429c3e8b7 ; Domain=www.baidu.com ; Path=/ ; Expires=Fri, 02-Mar-2018 21:18:46 GMT+08:00 ;
         '''
-        headers = ''
-        for cookie in self.cookies:
-            headers = '%s\r\n%s' % (cookie.to_header(), headers)
-        return headers
+        return '\r\n'.join(cookie.to_header() for cookie in self.cookies)
 
 
     def __repr__(self):
@@ -302,6 +296,6 @@ class QQCookie(HttpCookie):
             hash = 5381
             for c in p_skey :
                 hash += (hash << 5) + ord(c)
-            gtk = '%d' % (hash & 0x7fffffff)
+            gtk = str(hash & 0x7fffffff)
 
         return gtk
