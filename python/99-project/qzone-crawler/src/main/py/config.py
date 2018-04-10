@@ -22,9 +22,9 @@ ACCOUNT_PATH = '%s%s' % (BASR_DIR, '/conf/account.dat')    # 登陆信息的保�
 VCODE_PATH = '%s%s' % (BASR_DIR, '/conf/vcode.jpg')        # 登陆验证码图片的存储位置
 DATA_DIR = '%s%s' % (BASR_DIR, '/data/')                   # 下载相册/说说数据的存储目录
 
-RSA_JS_PATH = '%s%s' % (BASR_DIR, 'src/main/res/MD5-RSA.js')    # 登陆密码加密算法的JS脚本
+RSA_JS_PATH = '%s%s' % (BASR_DIR, '/src/main/res/MD5-RSA.js')   # 登陆密码加密算法的JS脚本
 RSA_METHOD = 'getEncryption'                                    # RSA加密登陆密码的JS函数
-GTK_JS_PATH = '%s%s' % (BASR_DIR, 'src/main/res/GTK.js')        # GTK生成算法的JS脚本
+GTK_JS_PATH = '%s%s' % (BASR_DIR, '/src/main/res/GTK.js')       # GTK生成算法的JS脚本
 GTK_METHOD = 'getACSRFToken'                                    # 生成GTK码的JS函数
 
 SIG_URL = config.get('lander', 'SIG_URL')               # 获取登陆用SIG的URL
