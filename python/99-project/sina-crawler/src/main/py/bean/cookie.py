@@ -219,9 +219,9 @@ class HttpCookie(object):
 
 
 
-class QQCookie(HttpCookie):
+class SinaCookie(HttpCookie):
     '''
-    QQ空间Cookie专用解析器
+    新浪微博Cookie专用解析器
     '''
 
     SIG_KEY = 'pt_login_sig'    # 用于登陆QQ的SIG属性键
@@ -249,7 +249,7 @@ class QQCookie(HttpCookie):
         self.qzone_token = ''
         nickName = ''
 
-        super(QQCookie, self).__init__(set_cookies)
+        super(SinaCookie, self).__init__(set_cookies)
 
 
     def take_cookie_nve(self, name, value, expire):
