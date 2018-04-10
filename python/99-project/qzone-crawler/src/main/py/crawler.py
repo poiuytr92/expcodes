@@ -47,7 +47,7 @@ def save_account(username, password, QQ):
     )
 
     with open(cfg.ACCOUNT_PATH, 'w') as account:
-        account.write(data)
+        account.write(data.encode(cfg.DEFAULT_CHARSET))
 
 
 def crawler():

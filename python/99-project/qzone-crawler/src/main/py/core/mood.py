@@ -187,7 +187,7 @@ class MoodAnalyzer(object):
             # 保存下载信息
             save_path = '%s/%s' % (page_dir, self.MOOD_INFO_NAME)
             with open(save_path, 'a') as file :
-                file.write(mood.to_str(is_ok))
+                file.write(mood.to_str(is_ok).encode(cfg.DEFAULT_CHARSET))
 
 
     def download_mood(self, mood):
