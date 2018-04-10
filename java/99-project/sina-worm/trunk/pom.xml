@@ -38,22 +38,152 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
+		<jdk.version>1.7</jdk.version>
+        <explibs.version>1.0-SNAPSHOT</explibs.version>
+        <mrp.plugin.version>1.0-SNAPSHOT</mrp.plugin.version>
 	</properties>
 
 	<!-- 项目依赖 -->
 	<dependencies>
 	
+		<!-- 经验库 -->
+        <dependency>
+          <groupId>exp.libs</groupId>
+          <artifactId>exp-libs</artifactId>
+          <version>${explibs.version}</version>
+          <exclusions>
+            <exclusion>
+              <groupId>mysql</groupId>
+              <artifactId>mysql-connector-java</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>com.oracle</groupId>
+              <artifactId>ojdbc</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>redis.clients</groupId>
+              <artifactId>jedis</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.eclipse</groupId>
+              <artifactId>draw2d</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.jgraph</groupId>
+              <artifactId>jGraph</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.commons</groupId>
+	          <artifactId>commons-compress</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.xmlbeans</groupId>
+	          <artifactId>xmlbeans</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>com.realpersist</groupId>
+              <artifactId>schemaeditor</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>exp.libs</groupId>
+              <artifactId>jvm-agent</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.sf.ehcache</groupId>
+              <artifactId>ehcache</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>exp.libs</groupId>
+              <artifactId>jep</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.quartz</groupId>
+              <artifactId>quartz-all</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>jsch</groupId>
+              <artifactId>jsch</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>javax.activation</groupId>
+              <artifactId>activation</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>javax.mail</groupId>
+              <artifactId>mail</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.activemq</groupId>
+              <artifactId>activemq-all</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.axis2</groupId>
+              <artifactId>axis2-adb</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.ws.xmlschema</groupId>
+              <artifactId>xmlschema-core</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.axis2</groupId>
+              <artifactId>axis2-transport-http</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.axis2</groupId>
+              <artifactId>axis2-transport-local</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-frontend-jaxws</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-transports-http</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.webservices.client</groupId>
+              <artifactId>wsdl4j</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.webservices.client</groupId>
+              <artifactId>jabref</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.webservices.client</groupId>
+              <artifactId>soapui</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>net.webservices.client</groupId>
+              <artifactId>soapui-xmlbeans</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.seleniumhq.selenium</groupId>
+              <artifactId>selenium-chrome-driver</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.seleniumhq.selenium</groupId>
+		      <artifactId>selenium-htmlunit-driver</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.java-websocket</groupId>
+              <artifactId>Java-WebSocket</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.tensorflow</groupId>
+              <artifactId>tensorflow</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>sun.misc</groupId>
+		      <artifactId>base64</artifactId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+        
+        <!-- 软件授权校验 -->
 		<dependency>
-			<groupId>exp.libs</groupId>
-		    <artifactId>exp-libs</artifactId>
-		    <version>1.0-SNAPSHOT</version>
-		</dependency>
-		
-		<dependency>
-		  <groupId>net.sf.json-lib</groupId>
-		  <artifactId>json-lib</artifactId>
-		  <version>2.4</version>
-		  <classifier>jdk15</classifier>
+			<groupId>exp.certificate</groupId>
+			<artifactId>exp-certificate</artifactId>
+			<version>1.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- 单元测试 -->
@@ -70,6 +200,16 @@
 	<build>
 		<plugins>
 
+			<!-- 指定项目JDK版本 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
+                </configuration>
+            </plugin>
+            
 			<!-- 版本打包插件，在dos跳转到项目根目录，依次执行（需保证没有引用快照、本地与SVN服务器内容完全一致）: 
 				1 发布基线到svn: mvn release:prepare 
 				2 发布引用到私服 : mvn release:perform -->

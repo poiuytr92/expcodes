@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
@@ -88,10 +86,10 @@ final public class BrowserDriver {
 			webDriver = new PhantomJSDriver(getCapabilities());
 			
 		} else if(Chrome.equals(driverName)) {
-			webDriver = new ChromeDriver(getCapabilities());
+//			webDriver = new ChromeDriver(getCapabilities());
 			
 		} else {
-			webDriver = new HtmlUnitDriver(true);
+//			webDriver = new HtmlUnitDriver(true);
 		}
 		return webDriver;
 	}
