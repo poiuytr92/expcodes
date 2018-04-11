@@ -82,7 +82,6 @@
                            3. 仅手机绑定用户, 若此保护开关关闭, 则依然触发扭蛋、所有礼物、银瓜子投喂
                            4. 无手机绑定用户, 此开关无效, 强制触发扭蛋、永久礼物、银瓜子投喂"
         >true</protectFeed>
-        <randomLottery caption="随机抽奖" hint="只有50%几率参与每一个抽奖, 可降低被反抽奖系统抓到的几率">true</randomLottery>
     </app>
     
 </config>

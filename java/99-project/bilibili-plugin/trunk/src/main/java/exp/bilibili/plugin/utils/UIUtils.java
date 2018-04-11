@@ -105,6 +105,10 @@ public class UIUtils {
 		return AppUI.getInstn().getHotLiveRange();
 	}
 	
+	public static int getLotteryProbability() {
+		return AppUI.getInstn().getLotteryProbability();
+	}
+	
 	public static boolean isAutoFeed() {
 		return AppUI.getInstn().isAutoFeed();
 	}

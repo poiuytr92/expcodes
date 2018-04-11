@@ -15,6 +15,7 @@ import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -82,11 +83,16 @@ public class AppUI extends MainWindow {
 	
 	private final static String LINE_END = "\r\n";
 	
+	/** 主分割面板 */
+	private JSplitPane splitPanel;
+			
 	private String loginUser;
 	
 	private boolean isLogined;
 	
 	private JButton loginBtn;
+	
+	private JButton percentBtn;
 	
 	private JButton logoutBtn;
 	
@@ -147,6 +153,8 @@ public class AppUI extends MainWindow {
 	private JLabel lotteryLabel;
 	
 	private WebSockClient wsClient;
+	
+	private _ProbabilityUI probabilityUI;
 	
 	private _MiniUserMgrUI miniLoginMgrUI;
 	
@@ -245,6 +253,7 @@ public class AppUI extends MainWindow {
 		
 		this.loginUser = "";
 		this.isLogined = false;
+		this.percentBtn = new JButton("%");
 		this.loginBtn = new JButton("扫码/帐密登陆(自动抽奖)");
 		this.logoutBtn = new JButton("销");
 		this.addUserBtn = new JButton("╋");
@@ -267,6 +276,7 @@ public class AppUI extends MainWindow {
 		this.stormBtn = new JButton("节奏风暴");
 		this.eStormBtn = new JButton(">");
 		
+		percentBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
 		logoutBtn.setForeground(Color.BLACK);
 		addUserBtn.setForeground(Color.BLACK);
@@ -305,6 +315,7 @@ public class AppUI extends MainWindow {
 		lotteryLabel.setForeground(Color.RED);
 		
 		this.wsClient = new WebSockClient();
+		this.probabilityUI = new _ProbabilityUI();
 		this.miniLoginMgrUI = new _MiniUserMgrUI();
 		this.lotteryUI = new _LotteryUI();
 		this.colorUI = new _ColorUI();
@@ -316,8 +327,10 @@ public class AppUI extends MainWindow {
 
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
-		rootPanel.add(getLeftPanel(), BorderLayout.CENTER);
-		rootPanel.add(getRightPanel(), BorderLayout.EAST);
+		this.splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitPanel.setLeftComponent(getLeftPanel());
+		splitPanel.setRightComponent(getRightPanel());
+		rootPanel.add(splitPanel, BorderLayout.CENTER);
 	}
 	
 	private JPanel getLeftPanel() {
@@ -390,7 +403,8 @@ public class AppUI extends MainWindow {
 	private JPanel _getLoginPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
-		panel.add(loginBtn, BorderLayout.CENTER);
+		panel.add(SwingUtils.getWBorderPanel(
+				loginBtn, percentBtn), BorderLayout.CENTER);
 		panel.add(SwingUtils.getHGridPanel(
 				addUserBtn, exportBtn, importBtn, logoutBtn), BorderLayout.EAST);
 		return panel;
@@ -418,6 +432,7 @@ public class AppUI extends MainWindow {
 
 	@Override
 	protected void setComponentsListener(JPanel rootPanel) {
+		setPercentBtnListener();
 		setLoginBtnListener();
 		setLogoutBtnListener();
 		setAddUserBtnListener();
@@ -436,6 +451,16 @@ public class AppUI extends MainWindow {
 		setThxBtnListener();
 		setNightBtnListener();
 		setStormBtnListener();
+	}
+	
+	private void setPercentBtnListener() {
+		percentBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				probabilityUI._view();
+			}
+		});
 	}
 	
 	private void setLoginBtnListener() {
@@ -1016,7 +1041,11 @@ public class AppUI extends MainWindow {
 	}
 	
 	@Override
-	protected void AfterView() {}
+	protected void AfterView() {
+		
+		// 设置主分割面板的左右比例(只能在窗体可见时此方法才有效)
+		splitPanel.setDividerLocation(0.65);
+	}
 
 	@Override
 	protected void beforeHide() {}
@@ -1166,6 +1195,14 @@ public class AppUI extends MainWindow {
 	 */
 	public HotLiveRange getHotLiveRange() {
 		return stormUI.getHotLiveRange();
+	}
+	
+	/**
+	 * 获取参与抽奖的概率
+	 * @return 参与抽奖的概率
+	 */
+	public int getLotteryProbability() {
+		return probabilityUI.VAL();
 	}
 	
 	/**

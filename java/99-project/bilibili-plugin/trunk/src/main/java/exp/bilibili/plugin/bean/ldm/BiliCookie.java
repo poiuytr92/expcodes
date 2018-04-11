@@ -5,6 +5,7 @@ import java.util.Date;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.envm.Danmu;
+import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.BoolUtils;
@@ -231,11 +232,13 @@ public class BiliCookie extends HttpCookie {
 	}
 	
 	public boolean allowLottery() {
-		if(!Config.getInstn().RANDOM_LOTTERY()) {
-			return true;
-		}
 		
-		boolean isOk = RandomUtils.randomBoolean();
+		// 随机抽奖
+		int random = RandomUtils.randomInt(1, 100);
+		int val = UIUtils.getLotteryProbability();
+		boolean isOk = val >= random;
+		
+		// 限制连续抽奖
 		if(isOk == true) {
 			if(lotteryCnt >= Config.LOTTERY_LIMIT) {
 				lotteryCnt = 0;

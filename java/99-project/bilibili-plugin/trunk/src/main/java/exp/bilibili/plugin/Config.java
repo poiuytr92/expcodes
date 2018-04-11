@@ -308,10 +308,6 @@ public class Config {
 		return xConf.getBool("/config/app/protectFeed");
 	}
 	
-	public boolean RANDOM_LOTTERY() {
-		return xConf.getBool("/config/app/randomLottery");
-	}
-	
 	/**
 	 * 设置默认房间号（每日签到用）
 	 * (房间勋章等级越高签到奖励越多)
