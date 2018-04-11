@@ -77,7 +77,7 @@ public class _ProbabilityUI extends PopChildWindow {
 	}
 	
 	private static String getTitle(int curVal) {
-		return StrUtils.concat("设置参与抽奖的概率: ", curVal, "%");
+		return StrUtils.concat("设置随机参与抽奖的概率: ", curVal, "%");
 	}
 	
 	protected int VAL() {

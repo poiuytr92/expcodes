@@ -60,7 +60,7 @@ public class ChatMgr extends LoopThread {
 	private final static String NIGHT_KEY = "晚安(´▽`)ﾉ  ";
 	
 	/** 同一时间可以感谢的最大用户数（避免刷屏） */
-	private final static int THX_USER_LIMIT = 1;
+	private final static int THX_USER_LIMIT = 2;
 	
 	/** 发送消息间隔 */
 	private final static long SEND_TIME = 500;
@@ -298,7 +298,9 @@ public class ChatMgr extends LoopThread {
 					int cost = ActivityMgr.showCost(giftName, num);
 					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
 							(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提督/总督的弹幕长度不够, 不写形容词
-							"投喂", giftName, "x", num, ":活跃+", cost);
+							"投喂", giftName, "x", num
+//							, ":活跃+", cost
+					);
 					XHRSender.sendDanmu(msg);
 				}
 			}
@@ -317,7 +319,9 @@ public class ChatMgr extends LoopThread {
 			
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
 					(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提督/总督的弹幕长度不够, 不写形容词
-					"投喂[", sb.toString(), "]:活跃+", cost);
+					"投喂[", sb.toString(), "]"
+//					, ":活跃+", cost
+			);
 			XHRSender.sendDanmu(msg);
 		}
 		
