@@ -27,8 +27,8 @@ import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import Decoder.BASE64Decoder;
 import exp.libs.envm.Charset;
+import exp.libs.utils.encode.Base64;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
@@ -442,9 +442,8 @@ public class HttpUtils {
             savePath = StrUtils.concat(saveDir, "/", imgName, ".", ext);
             
             try {
-            	BASE64Decoder decoder = new BASE64Decoder();
-            	byte[] bytes = decoder.decodeBuffer(base64Data);  
-                FileUtils.writeByteArrayToFile(new File(savePath), bytes, false);
+            	byte[] data = Base64.decode(base64Data);  
+                FileUtils.writeByteArrayToFile(new File(savePath), data, false);
                 
             } catch (Exception e) {  
                 log.error("转换Base64编码图片数据到本地文件失败: [{}]", savePath, e);

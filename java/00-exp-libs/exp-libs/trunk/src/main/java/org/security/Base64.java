@@ -2,7 +2,10 @@ package org.security;
 
 /**
  * <PRE>
- * Base64编码/解码器
+ * Base64编码/解码器.
+ * =============================
+ *  与sun公司官方内部使用的 BASE64Encoder、BASE64Decoder 作用相同（未公开）
+ *  
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP

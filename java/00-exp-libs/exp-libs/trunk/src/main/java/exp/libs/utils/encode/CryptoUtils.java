@@ -18,7 +18,6 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 
-import org.security.Base64;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
