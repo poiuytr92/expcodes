@@ -296,11 +296,7 @@ public class ChatMgr extends LoopThread {
 				Integer num = gifts.get(giftName);
 				if(num != null && num > 0) {
 					int cost = ActivityMgr.showCost(giftName, num);
-					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-							(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提督/总督的弹幕长度不够, 不写形容词
-							"投喂", giftName, "x", num
-//							, ":活跃+", cost
-					);
+					String msg = getThxMsg(username, giftName, num, cost);
 					XHRSender.sendDanmu(msg);
 				}
 			}
@@ -317,15 +313,31 @@ public class ChatMgr extends LoopThread {
 			}
 			sb.setLength(sb.length() - 1);
 			
-			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-					(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提督/总督的弹幕长度不够, 不写形容词
-					"投喂[", sb.toString(), "]"
-//					, ":活跃+", cost
-			);
+			String msg = getThxMsg(username, sb.toString(), -1, cost);
 			XHRSender.sendDanmu(msg);
 		}
 		
 		gifts.clear();
+	}
+	
+	private String getThxMsg(String username, String gift, int num, int cost) {
+		String head = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]");
+		String tail = "";
+		if(num > 0) {
+			tail = StrUtils.concat("投喂", gift, "x", num);
+		} else {
+			tail = StrUtils.concat("投喂[", gift, "]");
+		}
+		
+		String adj = "";
+		int len = CookiesMgr.MAIN().DANMU_LEN() - head.length() - tail.length();
+		for(int retry = 0; retry < 3; retry++) {
+			adj = MsgKwMgr.getAdv();
+			if(len >= adj.length()) {
+				break;
+			}
+		}
+		return StrUtils.concat(head, adj, tail);
 	}
 	
 	/**

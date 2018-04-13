@@ -71,7 +71,7 @@ public class AppUI extends MainWindow {
 	/** serialVersionUID */
 	private final static long serialVersionUID = 2097374309672044616L;
 
-	private final static int WIDTH = 1024;
+	private final static int WIDTH = 1100;
 	
 	private final static int HEIGHT = 600;
 	
@@ -81,6 +81,7 @@ public class AppUI extends MainWindow {
 	/** 界面文本框最大缓存行数 */
 	private final static int MAX_LINE = 200;
 	
+	/** 文本框换行符 */
 	private final static String LINE_END = "\r\n";
 	
 	/** 主分割面板 */
@@ -128,7 +129,11 @@ public class AppUI extends MainWindow {
 	
 	private JButton thxBtn;
 	
+	private JButton eThxBtn;
+	
 	private JButton nightBtn;
+	
+	private JButton eNightBtn;
 	
 	private JButton stormBtn;
 	
@@ -267,12 +272,14 @@ public class AppUI extends MainWindow {
 		this.colorBtn = new JButton("●");
 		this.musicBtn = new JButton("随缘点歌姬");
 		this.eMusicBtn = new JButton(">");
-		this.thxBtn = new JButton("答谢姬");
-		this.noticeBtn = new JButton("公告姬");
-		this.eNoticeBtn = new JButton(">");
 		this.callBtn = new JButton("小call姬");
 		this.eCallBtn = new JButton(">");
+		this.noticeBtn = new JButton("公告姬");
+		this.eNoticeBtn = new JButton(">");
+		this.thxBtn = new JButton("答谢姬");
+		this.eThxBtn = new JButton(">");
 		this.nightBtn = new JButton("晚安姬");
+		this.eNightBtn = new JButton(">");
 		this.stormBtn = new JButton("节奏风暴");
 		this.eStormBtn = new JButton(">");
 		
@@ -291,12 +298,14 @@ public class AppUI extends MainWindow {
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
 		musicBtn.setForeground(Color.BLACK);
 		eMusicBtn.setForeground(Color.BLACK);
-		thxBtn.setForeground(Color.BLACK);
-		noticeBtn.setForeground(Color.BLACK);
-		eNoticeBtn.setForeground(Color.BLACK);
 		callBtn.setForeground(Color.BLACK);
 		eCallBtn.setForeground(Color.BLACK);
+		noticeBtn.setForeground(Color.BLACK);
+		eNoticeBtn.setForeground(Color.BLACK);
+		thxBtn.setForeground(Color.BLACK);
+		eThxBtn.setForeground(Color.BLACK);
 		nightBtn.setForeground(Color.BLACK);
+		eNightBtn.setForeground(Color.BLACK);
 		stormBtn.setForeground(Color.BLACK);
 		eStormBtn.setForeground(Color.BLACK);
 		
@@ -387,7 +396,8 @@ public class AppUI extends MainWindow {
 		return SwingUtils.getVGridPanel(
 				SwingUtils.getEBorderPanel(callBtn, eCallBtn), 
 				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
-				thxBtn, nightBtn, 
+				SwingUtils.getEBorderPanel(thxBtn, eThxBtn), 
+				SwingUtils.getEBorderPanel(nightBtn, eNightBtn), 
 				SwingUtils.getEBorderPanel(stormBtn, eStormBtn)
 		);
 	}
@@ -924,6 +934,16 @@ public class AppUI extends MainWindow {
 				lockBtn();
 			}
 		});
+		
+		eThxBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new _EditorUI("骚气形容词", Config.getInstn().ADV_PATH())._view();
+				lockBtn();
+			}
+			
+		});
 	}
 	
 	private void setNightBtnListener() {
@@ -957,6 +977,16 @@ public class AppUI extends MainWindow {
 				}
 				lockBtn();
 			}
+		});
+		
+		eNightBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new _EditorUI("晚安关键词", Config.getInstn().NIGHT_PATH())._view();
+				lockBtn();
+			}
+			
 		});
 	}
 	
