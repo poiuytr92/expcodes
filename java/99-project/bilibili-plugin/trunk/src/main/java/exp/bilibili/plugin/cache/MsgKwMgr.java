@@ -103,10 +103,10 @@ public class MsgKwMgr {
 		read(Config.getInstn().CALL_PATH(), calls);
 		
 		advs.clear();
-		read(Config.getInstn().CALL_PATH(), advs);
+		read(Config.getInstn().ADV_PATH(), advs);
 		
 		nights.clear();
-		read(Config.getInstn().CALL_PATH(), nights);
+		read(Config.getInstn().NIGHT_PATH(), nights);
 	}
 
 	public static String getAdv() {
