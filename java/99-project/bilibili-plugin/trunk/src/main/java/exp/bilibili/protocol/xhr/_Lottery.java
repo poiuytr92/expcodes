@@ -55,7 +55,7 @@ class _Lottery extends __XHR {
 	protected static String join(LotteryType type, BiliCookie cookie, 
 			String url, int roomId, String raffleId) {
 		final int RETRY_LIMIT = 2;
-		final int RETRY_TIME = 500;
+		final int RETRY_TIME = 200;
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);
 		String reason = "";
