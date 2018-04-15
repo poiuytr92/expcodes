@@ -224,16 +224,8 @@ class SinaCookie(HttpCookie):
     新浪微博Cookie专用解析器
     '''
 
-    SIG_KEY = 'pt_login_sig'    # 用于登陆QQ的SIG属性键
-    sig = ''                    # 用于登陆QQ的SIG码
-    VCODE_KEY = "verifysession" # 登陆验证码的校验码的属性键
-    verifysession = ''          # 登陆验证码的校验码
-    UIN_KEY = "uin"             # 当前所登陆QQ号的cookie属性键
-    uin = ''                    # 当前登陆账号(即登陆的QQ号)
-    PSKEY_KEY = "p_skey"        # 用于生成GTK的cookie属性键
-    gtk = ''                    # 每次登陆QQ空间都会通过p_skey生成一个固定的GTK, 用于其他页面操作
-    qzone_token = ''            # 每次登陆QQ空间都会生成一个固定的qzonetoken, 用于其他页面操作
-    nickName = ''               # QQ昵称
+    ULOGIN_IMG_KEY = 'ULOGIN_IMG'
+    ulogin_img = ''
 
 
     def __init__(self, set_cookies=''):
@@ -242,13 +234,7 @@ class SinaCookie(HttpCookie):
         :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
         :return: None
         '''
-        self.sig = ''
-        self.verifysession = ''
-        self.uin = ''
-        self.gtk = ''
-        self.qzone_token = ''
-        nickName = ''
-
+        self.ulogin_img = ''
         super(SinaCookie, self).__init__(set_cookies)
 
 
@@ -262,40 +248,8 @@ class SinaCookie(HttpCookie):
         '''
         is_keep = True
 
-        if self.SIG_KEY.upper() == name.upper():
-            self.sig = value
-
-        elif self.VCODE_KEY.upper() == name.upper():
-            self.verifysession = value
-
-        elif self.UIN_KEY.upper() == name.upper():
-            self.uin = re.sub('^[o|O]', '', value)
-            self.uin = re.sub('^0*', '', self.uin)
-            self.nickName = self.uin
-
-        elif self.PSKEY_KEY.upper() == name.upper():
-            self.gtk = self.to_gtk(value)
+        if self.ULOGIN_IMG_KEY.upper() == name.upper():
+            self.ulogin_img = value
 
         return is_keep
 
-
-    def to_gtk(self, p_skey):
-        '''
-        通过 skey 计算GTK码.
-        ---------------------------------
-        先用 外置的JS算法 计算 GTK， 当使用 JS计算失败 时，才使用内置算法计算。
-        外置JS算法主要是为了在QQ更新了GTK算法情况下，可以对应灵活修改。
-        :param p_skey: 从登陆cookie中提取的标识(每次登陆时随机生成)
-        :return: GTK码
-        '''
-        try:
-            with open(cfg.GTK_JS_PATH, encoding=cfg.DEFAULT_CHARSET) as script :
-                js = execjs.compile(script.read())
-                gtk = js.call(cfg.GTK_METHOD, p_skey)
-        except:
-            hash = 5381
-            for c in p_skey :
-                hash += (hash << 5) + ord(c)
-            gtk = str(hash & 0x7fffffff)
-
-        return gtk

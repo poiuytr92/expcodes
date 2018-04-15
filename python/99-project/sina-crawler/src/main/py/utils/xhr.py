@@ -24,14 +24,14 @@ def get_headers(nv_cookies=''):
     return headers
 
 
-def take_response_cookies(response, qqcookie):
+def take_response_cookies(response, sina_cookie):
     '''
-    提取HTTP响应头中的Set-Cookie添加到QQCookie中
+    提取HTTP响应头中的Set-Cookie添加到SinaCookie中
     :param response: HTTP的响应对象
-    :param qqcookie: QQCookie对象
+    :param sina_cookie: SinaCookie对象
     :return:
     '''
-    qqcookie.adds(response.headers['Set-Cookie'])
+    sina_cookie.adds(response.headers['Set-Cookie'])
 
 
 def download_pic(pic_url, headers, params, save_path):
@@ -65,17 +65,7 @@ def to_json(callback):
     :param callback: 回调函数字符串
     :return: JSON
     '''
-    callback = re.sub('\/', '/', callback)
-    match = re.search('_Callback\(([\s\S]*)\);$', callback)
+    match = re.search('CallBack\(([\s\S]*)\)$', callback)
     return '{}' if not match else match.group(1)
 
-
-def to_host(url):
-    '''
-    从URL地址中提取主机Host地址
-    :param url: URL地址
-    :return: 主机Host地址
-    '''
-    match = re.search('http://([^/]*)/', url)
-    return '' if not match else match.group(1)
 
