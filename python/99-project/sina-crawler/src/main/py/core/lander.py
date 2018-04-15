@@ -47,9 +47,9 @@ class Lander(object):
         '''
         is_ok = False
         try:
-            base64_username, servertime, nonce, pubkey, rsakv = self.init_cookie_env()
+            base64_username, servertime, pcid, nonce, pubkey, rsakv = self.init_cookie_env()
             rsa_pwd = self.to_rsa(self.password, servertime, nonce, pubkey)
-            vcode = self.get_vcode()
+            vcode = self.get_vcode(pcid)
             self.login(base64_username, rsa_pwd, vcode, servertime, nonce, rsakv)
 
         except:
@@ -64,7 +64,7 @@ class Lander(object):
         {
           "retcode": 0,
           ="servertime": 1523778685,
-          "pcid": "tc-23d819f965f02b2ed448af871b3c294864a6",
+          ="pcid": "tc-23d819f965f02b2ed448af871b3c294864a6",
           ="nonce": "5GQD1E",
           ="pubkey": "EB2A38568661887FA180BDDB5CABD5F21C7BFD59C090CB2D245A87AC253062882729293E5506350508E7F9AA3BB77F4333231490F915F6D63C55FE2F08A49B353F444AD3993CACC02DB784ABBB8E42A9B1BBFFFB38BE18D78E87A0E41B9B8F73A928EE0CCEE1F6739884B9777E4FE9E88A1BBE495927AC4A799B3181D6442443",
           ="rsakv": "1330428213",
@@ -85,14 +85,15 @@ class Lander(object):
             'rsakt' : 'mod',
             'checkpin' : '1'
         }
-        response = requests.get(url, params=params)
+        response = requests.get(url=url, headers=xhr.get_headers(), params=params)
         root = json.loads(xhr.to_json(response.text))
 
         servertime = root.get('servertime', '')
+        pcid = root.get('pcid', '')
         nonce = root.get('nonce', '')
         pubkey = root.get('pubkey', '')
         rsakv = root.get('rsakv', '')
-        return base64_username, servertime, nonce, pubkey, rsakv
+        return base64_username, servertime, pcid, nonce, pubkey, rsakv
 
 
     def to_base64(self, username):
@@ -115,17 +116,23 @@ class Lander(object):
         :param pubkey:
         :return:
         '''
-        int_pubkey = int(pubkey, 16)
-        rsa_pubkey = rsa.PublicKey(int_pubkey, 65537)  # 创建公钥
+        hex_pubkey = int(pubkey, 16)
+        rsa_exponent = int('10001', 16) # 把16进制的10001转换成十进制, 即65537
+        rsa_pubkey = rsa.PublicKey(hex_pubkey, rsa_exponent)  # 创建公钥
         data = '%s\t%s\n%s' % (servertime, nonce, password)  # 拼接明文js加密文件中得到
         data = data.encode("utf-8")
         rsa_pwd = rsa.encrypt(data, rsa_pubkey)  # 加密
         return binascii.b2a_hex(rsa_pwd)  # 将加密信息转换为16进制
 
 
-    def get_vcode(self):
+    def get_vcode(self, pcid):
         url = 'https://login.sina.com.cn/cgi/pin.php'
-        is_ok, set_cookie = xhr.download_pic(url, {}, {}, cfg.VCODE_PATH)
+        params = {
+            'r' : int(time.time()),
+            's' : '0',
+            'p' : pcid
+        }
+        is_ok, set_cookie = xhr.download_pic(pic_url=url, headers=xhr.get_headers(), params=params, save_path=cfg.VCODE_PATH)
         if is_ok == True :
             self.cookie.add(set_cookie)
 
@@ -145,13 +152,14 @@ class Lander(object):
         '''
         url = 'https://login.sina.com.cn/sso/login.php'
         params = {
+            'client' : 'ssologin.js(v1.4.18)',
             'entry' : 'weibo',
             'gateway' : '1',
             'from' : '',
             'savestate' : '7',
             'qrcode_flag' : 'false',
             'useticket' : 'useticket',
-            'pagerefer' : 'https://login.sina.com.cn/crossdomain2.php?action=logout&r=https%3A%2F%2Fweibo.com%2Flogout.php%3Fbackurl%3D%252F',
+            'pagerefer' : 'https://login.sina.com.cn/crossdomain2.php?action=logout&r=https://weibo.com/logout.php?backurl=%252F',
             'pcid' : self.cookie.ulogin_img,
             'door' : vcode,
             'vsnf' : '1',
@@ -168,7 +176,18 @@ class Lander(object):
             'url' : 'https://weibo.com/ajaxlogin.php?framelogin=1&callback=parent.sinaSSOController.feedBackUrlCallBack',
             'returntype' : 'META',
         }
-        response = requests.get(url, params=params)
+        response = requests.get(url=url, headers=xhr.get_headers(), params=params)
+        response.encoding = 'gbk'
+        xhr.take_response_cookies(response, self.cookie)
+        print(response.text)
+
+        # 新浪登陆要做3次跳转
+        # 第一次跳转
+        match = re.search('location\.replace\("([\s\S]*)"\);', response.text)
+        url = re.sub('[/r/n]', '', match.group(1))
+        print('URL=%s' % url)
+        response = requests.get(url=url, headers=xhr.get_headers(self.cookie))
+        response.encoding = 'gbk'
         print(response.text)
 
 
