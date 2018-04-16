@@ -12,11 +12,12 @@ import json
 import re
 import execjs
 import traceback
-from urllib.parse import quote_plus
 import src.main.py.config as cfg
 import src.main.py.utils.xhr as xhr
 from src.main.py.bean.cookie import SinaCookie
 from PIL import Image
+from urllib.parse import quote_plus
+from urllib.parse import unquote
 
 
 class Lander(object):
@@ -24,9 +25,13 @@ class Lander(object):
     新浪微博登陆器.
     '''
 
+    RSA_EXPONENT = int('10001', 16) # 新浪微博的RSA算法因子：把16进制的10001转换成十进制, 即65537
     username = ''   # 新浪微博账号
     password = ''   # 新浪微博密码
+    base64_un = ''  # 使用Base编码后的新浪微博账号
+    rsa_pwd = ''    # 使用RSA加密后的新浪微博密码
     cookie = None   # 登陆成功后保存的cookie
+
 
     def __init__(self, username, password):
         '''
@@ -37,7 +42,36 @@ class Lander(object):
         '''
         self.username = '' if not username else username
         self.password = '' if not password else password
+        self.base64_un = self.__to_base64__(self.username)
+        self.rsa_pwd = ''
         self.cookie = SinaCookie()
+
+
+    def __to_base64__(self, username):
+        '''
+        对登陆账号使用base64编码
+        :param username: 登陆账号
+        :return: base64编码后的账号
+        '''
+        un = quote_plus(username)       # 先对账号进行URL编码 (邮箱账号存在 '@' 等特殊字符需要转义)
+        byte = un.encode(cfg.DEFAULT_CHARSET)
+        byte = base64.b64encode(byte)   # base64编码
+        return bytes.decode(byte)       # 字节转字符串
+
+
+    def __to_rsa__(self, password):
+        '''
+        对登陆密码使用RSA加密
+        :param password: 登陆密码
+        :return: RSA加密后的登陆密码
+        '''
+        int_pubkey = int(self.cookie.pubkey, 16)    # 把十六进制的公钥转换成十进制
+        rsa_pubkey = rsa.PublicKey(int_pubkey, self.RSA_EXPONENT)   # 创建公钥
+        data = '%s\t%s\n%s' % (self.cookie.servertime, self.cookie.nonce, password) # 拼接被加密的内容（分析登陆js脚本得到）
+        data = data.encode(cfg.DEFAULT_CHARSET)
+        rsa_pwd = rsa.encrypt(data, rsa_pubkey) # 执行加密
+        hex = binascii.b2a_hex(rsa_pwd)         # 转换为16进制
+        return bytes.decode(hex)                # 字节转字符串
 
 
     def execute(self):
@@ -47,10 +81,31 @@ class Lander(object):
         '''
         is_ok = False
         try:
-            base64_username, servertime, pcid, nonce, pubkey, rsakv = self.init_cookie_env()
-            rsa_pwd = self.to_rsa(self.password, servertime, nonce, pubkey)
-            vcode = self.get_vcode(pcid)
-            self.login(base64_username, rsa_pwd, vcode, servertime, nonce, rsakv)
+            self.init_cookie_env()
+            self.rsa_pwd = self.__to_rsa__(self.password)
+
+            # 图片验证码登陆
+            if self.cookie.showpin == 1 :
+                pin_code = self.get_vcode(self.cookie.pin_code_id)
+
+            # 动态微盾码登陆
+            elif self.cookie.showpin == 2 :
+                pin_code = self.get_dymaic_code(self.cookie.pin_code_id)
+
+            # 无需验证
+            else:
+                pin_code = ''
+
+            print('微博登陆账号(Base64编码): %s' % self.base64_un)
+            print('微博登陆密码(RSA加密): %s' % self.rsa_pwd)
+            print('登陆环境参数[showpin]: %s' % self.cookie.showpin)
+            print('登陆环境参数[pcid]: %s' % self.cookie.pin_code_id)
+            print('登陆环境参数[pin_code]: %s' % pin_code)
+            print('登陆环境参数[servertime]: %s' % self.cookie.servertime)
+            print('登陆环境参数[nonce]: %s' % self.cookie.nonce)
+            print('登陆环境参数[pubkey]: %s' % self.cookie.pubkey)
+            print('登陆环境参数[rsakv]: %s' % self.cookie.rsakv)
+            is_ok = self.login(pin_code)
 
         except:
             print('登陆新浪微博账号 [%s] 失败: XHR协议异常' % self.username)
@@ -61,23 +116,11 @@ class Lander(object):
 
     def init_cookie_env(self):
         '''
-        {
-          "retcode": 0,
-          ="servertime": 1523778685,
-          ="pcid": "tc-23d819f965f02b2ed448af871b3c294864a6",
-          ="nonce": "5GQD1E",
-          ="pubkey": "EB2A38568661887FA180BDDB5CABD5F21C7BFD59C090CB2D245A87AC253062882729293E5506350508E7F9AA3BB77F4333231490F915F6D63C55FE2F08A49B353F444AD3993CACC02DB784ABBB8E42A9B1BBFFFB38BE18D78E87A0E41B9B8F73A928EE0CCEE1F6739884B9777E4FE9E88A1BBE495927AC4A799B3181D6442443",
-          ="rsakv": "1330428213",
-          "is_openlock": 0,
-          "showpin": 1,
-          "exectime": 53
-        }
-        :return:
+        获取登陆前环境参数
+        :return: None(保存到cookie中)
         '''
-        base64_username = self.to_base64(self.username)
-        url = 'http://login.sina.com.cn/sso/prelogin.php'
         params = {
-            'su' : base64_username,
+            'su' : self.base64_un,
             '_' : str(int(time.time() * 1000)),
             'callback' : 'sinaSSOController.preloginCallBack',
             'client' : 'ssologin.js(v1.4.18)',
@@ -85,54 +128,31 @@ class Lander(object):
             'rsakt' : 'mod',
             'checkpin' : '1'
         }
-        response = requests.get(url=url, headers=xhr.get_headers(), params=params)
+        response = requests.get(url=cfg.PRE_LOGIN_URL, headers=xhr.get_headers(), params=params)
         root = json.loads(xhr.to_json(response.text))
-
-        servertime = root.get('servertime', '')
-        pcid = root.get('pcid', '')
-        nonce = root.get('nonce', '')
-        pubkey = root.get('pubkey', '')
-        rsakv = root.get('rsakv', '')
-        return base64_username, servertime, pcid, nonce, pubkey, rsakv
-
-
-    def to_base64(self, username):
-        '''
-
-        :param username:
-        :return:
-        '''
-        un = quote_plus(username)       # 对账号进行URL编码 (邮箱账号存在 '@' 等特殊字符需要转移)
-        byte = un.encode(cfg.DEFAULT_CHARSET)
-        return base64.b64encode(byte)
-
-
-    def to_rsa(self, password, servertime, nonce, pubkey):
-        '''
-
-        :param password:
-        :param servertime:
-        :param nonce:
-        :param pubkey:
-        :return:
-        '''
-        hex_pubkey = int(pubkey, 16)
-        rsa_exponent = int('10001', 16) # 把16进制的10001转换成十进制, 即65537
-        rsa_pubkey = rsa.PublicKey(hex_pubkey, rsa_exponent)  # 创建公钥
-        data = '%s\t%s\n%s' % (servertime, nonce, password)  # 拼接明文js加密文件中得到
-        data = data.encode("utf-8")
-        rsa_pwd = rsa.encrypt(data, rsa_pubkey)  # 加密
-        return binascii.b2a_hex(rsa_pwd)  # 将加密信息转换为16进制
+        self.cookie.servertime = root.get('servertime', '')
+        self.cookie.vcode_id = root.get('pcid', '')
+        self.cookie.showpin = root.get('showpin', 0)
+        self.cookie.nonce = root.get('nonce', '')
+        self.cookie.pubkey = root.get('pubkey', '')
+        self.cookie.rsakv = root.get('rsakv', '')
 
 
     def get_vcode(self, pcid):
-        url = 'https://login.sina.com.cn/cgi/pin.php'
+        '''
+        获取登陆图片验证码
+        :param pcid: 图片验证码ID
+        :return: 图片验证码
+        '''
         params = {
             'r' : int(time.time()),
             's' : '0',
             'p' : pcid
         }
-        is_ok, set_cookie = xhr.download_pic(pic_url=url, headers=xhr.get_headers(), params=params, save_path=cfg.VCODE_PATH)
+        is_ok, set_cookie = xhr.download_pic(pic_url=cfg.VCODE_URL,
+                                             headers=xhr.get_headers(),
+                                             params=params,
+                                             save_path=cfg.VCODE_PATH)
         if is_ok == True :
             self.cookie.add(set_cookie)
 
@@ -145,12 +165,20 @@ class Lander(object):
         return vcode
 
 
-    def login(self, base64_username, rsa_pwd, vcode, servertime, nonce, rsakv):
+    def get_dymaic_code(self, pcid):
         '''
-
+        获取登陆微盾动态码
+        :param pcid:
         :return:
         '''
-        url = 'https://login.sina.com.cn/sso/login.php'
+        return ''
+
+
+    def login(self, pin_code):
+        '''
+        登陆
+        :return: True:登陆成功; False:登陆失败
+        '''
         params = {
             'client' : 'ssologin.js(v1.4.18)',
             'entry' : 'weibo',
@@ -160,36 +188,62 @@ class Lander(object):
             'qrcode_flag' : 'false',
             'useticket' : 'useticket',
             'pagerefer' : 'https://login.sina.com.cn/crossdomain2.php?action=logout&r=https://weibo.com/logout.php?backurl=%252F',
-            'pcid' : self.cookie.ulogin_img,
-            'door' : vcode,
+            'pcid' : self.cookie.pin_code_id,
+            'door' : pin_code,
             'vsnf' : '1',
-            'su' : base64_username,
+            'su' : self.base64_un,
             'service' : 'miniblog',
-            'servertime' : servertime,
-            'nonce' : nonce,
+            'servertime' : self.cookie.servertime,
+            'nonce' : self.cookie.nonce,
             'pwencode' : 'rsa2',
-            'rsakv' : rsakv,
-            'sp' : rsa_pwd,
+            'rsakv' : self.cookie.rsakv,
+            'sp' : self.rsa_pwd,
             'sr' : '1366*768',
             'encoding' : 'UTF-8',
             'prelt' : '7873',
             'url' : 'https://weibo.com/ajaxlogin.php?framelogin=1&callback=parent.sinaSSOController.feedBackUrlCallBack',
             'returntype' : 'META',
         }
-        response = requests.get(url=url, headers=xhr.get_headers(), params=params)
-        response.encoding = 'gbk'
-        xhr.take_response_cookies(response, self.cookie)
-        print(response.text)
-
-        # 新浪登陆要做3次跳转
-        # 第一次跳转
+        response = requests.get(url=cfg.LOGIN_URL,
+                                headers=xhr.get_headers(),
+                                params=params,
+                                allow_redirects=False)
+        response.encoding = cfg.HTTP_CHARSET
         match = re.search('location\.replace\("([\s\S]*)"\);', response.text)
-        url = re.sub('[/r/n]', '', match.group(1))
-        print('URL=%s' % url)
-        response = requests.get(url=url, headers=xhr.get_headers(self.cookie))
-        response.encoding = 'gbk'
-        print(response.text)
+        callback_url = match.group(1)
 
+        reason = self.is_logined(callback_url)
+        if not reason :
+            print('登陆成功, 还要做2次跳转')
+            response = requests.get(url=callback_url, headers=xhr.get_headers(self.cookie.to_nv()))
+            response.encoding = cfg.HTTP_CHARSET
+            # TODO
+
+        else:
+            print('登陆失败: %s' % reason)
+
+
+    def is_logined(self, callback_url):
+        '''
+        通过回调地址判断是否登陆成功
+        :param callback_url: 登陆回调地址
+        :return: 登陆失败原因（若成功则返回''）
+        '''
+        reason = ''
+        match = re.search('retcode=(\d+)', callback_url)
+        if match :
+            retcode = match.group(1)
+            if retcode != '0' :
+                match = re.search('reason=([^&]+)', callback_url)
+                if match :
+                    raw_reason = unquote(match.group(1), encoding=cfg.HTTP_CHARSET)
+                    reason = '[%s][%s]' % (retcode, raw_reason)
+                else:
+                    reason = '[unknow][%s]' % url
+        else:
+            reason = '[unknow][%s]' % url
+
+        return reason
 
 
 if __name__ == '__main__':

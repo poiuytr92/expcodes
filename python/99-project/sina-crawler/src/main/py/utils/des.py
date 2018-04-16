@@ -8,7 +8,7 @@ import base64
 import src.main.py.config as cfg
 
 
-KEY = 'EXP-QZONECRAWLER'
+KEY = 'EXP-SINA-CRAWLER'
 DES = pyDes.triple_des(
     KEY,                        # 加密密钥: 长度为16或24位, 必选
     mode=pyDes.ECB,             # 加密方式: ECB(默认), CBC(安全性好于前者)
@@ -18,7 +18,7 @@ DES = pyDes.triple_des(
 )
 
 
-def encrypt(plaint='', key=KEY):
+def to_des(plaint='', key=KEY):
     '''
     DES加密
     :param data: 明文
@@ -37,7 +37,7 @@ def encrypt(plaint='', key=KEY):
     return cipher
 
 
-def decrypt(cipher='', key=KEY):
+def un_des(cipher='', key=KEY):
     '''
     DES解密
     :param data: 密文
@@ -54,3 +54,4 @@ def decrypt(cipher='', key=KEY):
         plaint = ''
 
     return plaint
+

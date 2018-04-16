@@ -31,7 +31,10 @@ def take_response_cookies(response, sina_cookie):
     :param sina_cookie: SinaCookie对象
     :return:
     '''
-    sina_cookie.adds(response.headers['Set-Cookie'])
+    try:
+        sina_cookie.adds(response.headers['Set-Cookie'])
+    except:
+        pass    # 可能不存在Set-Cookie
 
 
 def download_pic(pic_url, headers, params, save_path):

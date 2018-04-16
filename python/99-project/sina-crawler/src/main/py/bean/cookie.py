@@ -224,8 +224,13 @@ class SinaCookie(HttpCookie):
     新浪微博Cookie专用解析器
     '''
 
-    ULOGIN_IMG_KEY = 'ULOGIN_IMG'
-    ulogin_img = ''
+    PIN_CODE_KEY = 'ULOGIN_IMG' # 登陆验证码的ID属性键
+    pin_code_id = ''            # 登陆验证码的ID
+    showpin = 0                 # 登陆PIN码选项（0:无需PIN码; 1:使用图片验证码; 2:使用微盾动态码）
+    servertime = ''             # 本次登陆的服务器时间(用于加密登陆密码的参数)
+    nonce = ''                  # 用于加密登陆密码的参数
+    pubkey = ''                 # RSA公钥(用于加密登陆密码)
+    rsakv = ''                  # RSA参数（用于登陆的参数）
 
 
     def __init__(self, set_cookies=''):
@@ -234,7 +239,12 @@ class SinaCookie(HttpCookie):
         :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
         :return: None
         '''
-        self.ulogin_img = ''
+        self.pin_code_id = ''
+        self.showpin = 0
+        self.servertime = ''
+        self.nonce = ''
+        self.pubkey = ''
+        self.rsakv = ''
         super(SinaCookie, self).__init__(set_cookies)
 
 
@@ -248,8 +258,8 @@ class SinaCookie(HttpCookie):
         '''
         is_keep = True
 
-        if self.ULOGIN_IMG_KEY.upper() == name.upper():
-            self.ulogin_img = value
+        if self.PIN_CODE_KEY.upper() == name.upper():
+            self.pin_code_id = value
 
         return is_keep
 

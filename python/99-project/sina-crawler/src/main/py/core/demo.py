@@ -8,10 +8,11 @@ import binascii
 import requests
 import re
 from urllib.parse import quote_plus
+from PIL import Image
 from src.main.py.core.code_verification import code_verificate
 
 # 构造 Request headers
-agent = 'Mozilla/5.0 (Windows NT 6.3; WOW64; rv:41.0) Gecko/20100101 Firefox/41.0'
+agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36'
 headers = {
     'User-Agent': agent
 }
@@ -107,14 +108,16 @@ def login(username, password):
 
     need_pin = sever_data['showpin']
     if need_pin == 1:
-        # 你也可以改为手动填写验证码
-        if not yundama_username:
-            raise Exception('由于本次登录需要验证码，请配置顶部位置云打码的用户名{}和及相关密码'.format(yundama_username))
         pcid = sever_data['pcid']
         postdata['pcid'] = pcid
         img_url = get_pincode_url(pcid)
         get_img(img_url)
-        verify_code = code_verificate(yundama_username, yundama_password, verify_code_path)
+        # verify_code = code_verificate(yundama_username, yundama_password, verify_code_path)
+
+        with Image.open(verify_code_path) as image:
+            image.show()
+            verify_code = input("请输入验证码:").strip()
+
         postdata['door'] = verify_code
 
     login_url = 'http://login.sina.com.cn/sso/login.php?client=ssologin.js(v1.4.18)'
@@ -122,8 +125,12 @@ def login(username, password):
     login_loop = (login_page.content.decode("GBK"))
     pa = r'location\.replace\([\'"](.*?)[\'"]\)'
     loop_url = re.findall(pa, login_loop)[0]
+    print(loop_url)
+
     login_index = session.get(loop_url, headers=headers)
     uuid = login_index.text
+    print(uuid)
+
     uuid_pa = r'"uniqueid":"(.*?)"'
     uuid_res = re.findall(uuid_pa, uuid, re.S)[0]
     web_weibo_url = "http://weibo.com/%s/profile?topnav=1&wvr=6&is_all=1" % uuid_res
@@ -131,6 +138,8 @@ def login(username, password):
     weibo_pa = r'<title>(.*?)</title>'
     user_name = re.findall(weibo_pa, weibo_page.content.decode("utf-8", 'ignore'), re.S)[0]
     print('登陆成功，你的用户名为：'+user_name)
+
+
 
 
 if __name__ == "__main__":
