@@ -31,7 +31,10 @@ def take_response_cookies(response, qqcookie):
     :param qqcookie: QQCookie对象
     :return:
     '''
-    qqcookie.adds(response.headers['Set-Cookie'])
+    try:
+        qqcookie.adds(response.headers['Set-Cookie'])
+    except:
+        pass    # 可能不存在Set-Cookie
 
 
 def download_pic(pic_url, headers, params, save_path):
