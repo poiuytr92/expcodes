@@ -148,10 +148,11 @@ class HttpCookie(object):
     def adds(self, set_cookies):
         '''
         拆解set_cookies中的多个set_cookie并解析
-        :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 ;, 分隔
+        :param set_cookies: HTTP响应头中的 Set-Cookie集合, 使用 , 分隔
         :return: None
         '''
-        for set_cookie in set_cookies.split(';,'):
+        set_cookies = re.sub('day, ', 'day ', set_cookies)  # 去掉expires中的逗号,
+        for set_cookie in set_cookies.split(','):
             self.add(set_cookie)
 
 

@@ -105,7 +105,12 @@ class Lander(object):
             print('登陆环境参数[nonce]: %s' % self.cookie.nonce)
             print('登陆环境参数[pubkey]: %s' % self.cookie.pubkey)
             print('登陆环境参数[rsakv]: %s' % self.cookie.rsakv)
-            is_ok = self.login(pin_code)
+            reason = self.login(pin_code)
+
+            if not reason :
+                print('登陆新浪微博账号 [%s] 成功' % self.username)
+            else:
+                print('登陆新浪微博账号 [%s] 失败: %s' % (self.username, reason))
 
         except:
             print('登陆新浪微博账号 [%s] 失败: XHR协议异常' % self.username)
@@ -158,7 +163,7 @@ class Lander(object):
 
             with Image.open(cfg.VCODE_PATH) as image:
                 image.show()
-                vcode = input("请输入验证码:").strip()
+                vcode = input("请输入图片验证码:").strip()
         else:
             vcode = ''
 
@@ -171,13 +176,14 @@ class Lander(object):
         :param pcid:
         :return:
         '''
-        return ''
+        dymaic_code = input("请输入微盾动态码:").strip()
+        return dymaic_code
 
 
     def login(self, pin_code):
         '''
         登陆
-        :return: True:登陆成功; False:登陆失败
+        :return: 登陆失败原因（若登陆成功返回''）
         '''
         params = {
             'client' : 'ssologin.js(v1.4.18)',
@@ -208,19 +214,37 @@ class Lander(object):
                                 headers=xhr.get_headers(),
                                 params=params,
                                 allow_redirects=False)
-        response.encoding = cfg.HTTP_CHARSET
-        match = re.search('location\.replace\("([\s\S]*)"\);', response.text)
-        callback_url = match.group(1)
+        xhr.take_response_cookies(response, self.cookie)
+        callback_url = self.get_callback_url(response.text, 'location\.replace\("([\s\S]*)"\);')
 
         reason = self.is_logined(callback_url)
         if not reason :
-            print('登陆成功, 还要做2次跳转')
-            response = requests.get(url=callback_url, headers=xhr.get_headers(self.cookie.to_nv()))
-            response.encoding = cfg.HTTP_CHARSET
-            # TODO
 
-        else:
-            print('登陆失败: %s' % reason)
+            # 登陆后, 第一次重定向
+            response = requests.get(url=callback_url, headers=xhr.get_headers(self.cookie.to_nv()))
+            xhr.take_response_cookies(response, self.cookie)
+            callback_url = self.get_callback_url(response.text, "location\.replace\('([\s\S]*)'\);")
+
+            # 第二次重定向(获取登录信息)
+            response = requests.get(url=callback_url, headers=xhr.get_headers(self.cookie.to_nv()))
+            xhr.take_response_cookies(response, self.cookie)
+            root = json.loads(xhr.to_json(response.text))
+            if root.get('result') == False :
+                reason = '登陆成功, 但获取用户信息失败'
+
+        return reason
+
+
+    def get_callback_url(self, page_source, url_regex):
+        '''
+        从页面源码中提取回调地址
+        :param page_source: 页面源码
+        :param url_regex: 回调地址提取正则
+        :return: 回调地址
+        '''
+        match = re.search(url_regex, page_source)
+        callback_url = match.group(1)
+        return callback_url
 
 
     def is_logined(self, callback_url):
@@ -239,13 +263,7 @@ class Lander(object):
                     raw_reason = unquote(match.group(1), encoding=cfg.HTTP_CHARSET)
                     reason = '[%s][%s]' % (retcode, raw_reason)
                 else:
-                    reason = '[unknow][%s]' % url
-        else:
-            reason = '[unknow][%s]' % url
+                    reason = '[unknow][%s]' % callback_url
 
         return reason
 
-
-if __name__ == '__main__':
-    lander = Lander('play00002@126.com', 'test00002')
-    lander.execute()

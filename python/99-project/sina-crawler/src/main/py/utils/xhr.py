@@ -68,7 +68,7 @@ def to_json(callback):
     :param callback: 回调函数字符串
     :return: JSON
     '''
-    match = re.search('CallBack\(([\s\S]*)\)$', callback)
+    match = re.search('CallBack\(([\s\S]*)\)', callback)
     return '{}' if not match else match.group(1)
 
 
