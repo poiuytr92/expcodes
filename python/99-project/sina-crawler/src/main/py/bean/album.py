@@ -14,13 +14,13 @@ class Album(object):
 
     id = ''             # 相册编号
     name = ''           # 相册名称/描述
-    url = ''            # 相册地址
+    type = 0            # 相册类型
     page_num = 0        # 相册页数
     total_pic_num = 0   # 相册照片总数
     photos = None       # 相册照片集
 
 
-    def __init__(self, id, name, url, total_pic_num):
+    def __init__(self, id, name, type, total_pic_num):
         '''
         构造函数
         ==========================
@@ -31,13 +31,13 @@ class Album(object):
             则必须在 __init__ 里面重新对类成员对象初始化
         :param id: 相册编号
         :param name: 相册名称/描述
-        :param url: 相册地址
+        :param type: 相册类型
         :param total_pic_num: 相册照片总数
         :return:
         '''
         self.id = '' if not id else id.strip()
         self.name = '' if not name else name.strip()
-        self.url = '' if not url else url.strip()
+        self.type = 0 if type < 0 else type
         self.total_pic_num = 0 if total_pic_num < 0 else total_pic_num
         self.page_num = pic.get_page_num(total_pic_num, cfg.BATCH_LIMT)
         self.photos = []
@@ -71,7 +71,7 @@ class Album(object):
             self.photos.extend(photos)
 
 
-    def to_str(self):
+    def to_str(self, album_url):
         '''
         打印相册信息
         :return: 相册信息
@@ -82,13 +82,5 @@ class Album(object):
                '+ [相册地址] : %s\r\n' \
                '+ [照片数量] : %s\r\n' \
                '++++++++++++++++++++++++++++++++++++++++++++++++++++++\r\n' % (
-            self.name, self.id, self.url, self.total_pic_num
+            self.name, self.id, album_url, self.total_pic_num
         )
-
-
-    def __repr__(self):
-        '''
-        相当于toString方法
-        :return:
-        '''
-        return self.to_str()

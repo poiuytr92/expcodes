@@ -11,33 +11,32 @@ import traceback
 import src.main.py.config as cfg
 import src.main.py.utils.xhr as xhr
 import src.main.py.utils.pic as pic
-from src.main.py.bean.cookie import QQCookie
+from src.main.py.bean.cookie import SinaCookie
 from src.main.py.bean.album import Album
 from src.main.py.bean.photo import Photo
 
 
 class AlbumAnalyzer(object):
     '''
-    【空间相册】解析器
+    【新浪相册专辑】解析器
     '''
 
     ALBUM_INFO_NAME = 'AlbumInfo-[相册信息].txt' # 相册信息保存文件名
-    request_cnt  = 0    # 累计发起请求次数
-    cookie = None       # 已登陆的QQCookie
-    QQ = ''             # 被爬取数据的目标QQ
+    cookie = None       # 已登陆的SinaCookie
+    sina_user_id = ''   # 被爬取相册的新浪用户ID
     ALBUM_DIR = ''      # 相册保存目录
 
-    def __init__(self, cookie, QQ):
+
+    def __init__(self, cookie, album_url):
         '''
         构造函数
-        :param cookie: 已登陆的QQCookie
-        :param QQ: 被爬取数据的目标QQ
+        :param cookie: 已登陆的SinaCookie
+        :param album_url: 爬取的相册专辑地址
         :return:None
         '''
-        self.request_cnt = 0
-        self.cookie = QQCookie() if not cookie else cookie
-        self.QQ = '0' if not QQ else QQ.strip()
-        self.ALBUM_DIR = '%s%s/album/' % (cfg.DATA_DIR, self.QQ)
+        self.cookie = SinaCookie() if not cookie else cookie
+        self.sina_user_id = pic.get_user_id(album_url)
+        self.ALBUM_DIR = '%s%s/album/' % (cfg.DATA_DIR, self.sina_user_id)
 
 
     def execute(self):
@@ -55,10 +54,10 @@ class AlbumAnalyzer(object):
             # 下载相册
             albums = self.get_albums()
             self.download_albums(albums)
-            print('任务完成: QQ [%s] 的空间相册已保存到 [%s]' % (self.QQ, self.ALBUM_DIR))
+            print('任务完成: 新浪用户 [%s] 的相册已保存到 [%s]' % (self.sina_user_id, self.ALBUM_DIR))
 
         except:
-            print('任务失败: 下载 QQ [%s] 的空间相册时发生异常' % self.QQ)
+            print('任务失败: 下载新浪用户 [%s] 的相册时发生异常' % self.sina_user_id)
             traceback.print_exc()
 
 
@@ -78,47 +77,33 @@ class AlbumAnalyzer(object):
         获取相册列表
         :return: 相册列表(仅相册信息, 不含内部照片信息)
         '''
-        print('正在提取QQ [%s] 的相册列表...' % self.QQ)
+        print('正在提取新浪用户 [%s] 的相册列表...' % self.sina_user_id)
+        params = {
+            'uid' : self.sina_user_id,
+            '__rnd' : str(int(time.time() * 1000)),
+            'page' : '1',
+            'count' : '20'
+        }
         response = requests.get(url=cfg.ALBUM_LIST_URL,
                                 headers=xhr.get_headers(self.cookie.to_nv()),
-                                params=self._get_album_parmas())
+                                params=params)
         albums = []
         try:
-            root = json.loads(xhr.to_json(response.text))
+            root = json.loads(response.text)
             data = root['data']
-            album_list = data['albumListModeSort']
+            album_list = data['album_list']
             for album in album_list :
-                name = album.get('name', '')
-                question = album.get('question', '')
+                aid = album.get('album_id', '')
+                name = album.get('caption', '')
+                type = int(album.get('type', '0'))
+                total_pic_num = album.get('count').get('photos', 0)
+                albums.append(Album(aid, name, type, total_pic_num))
 
-                if not question :
-                    total = album.get('total', 0)
-                    id = album.get('id', 'unknow')
-                    url = cfg.ALBUM_URL(self.QQ, id)
-                    albums.append(Album(id, name, url, total))
-                    print('获得相册 [%s] (照片x%d), 地址: %s' % (name, total, url))
-
-                else:
-                    print('相册 [%s] 被加密, 无法读取' % name)
         except:
-            print('提取QQ [%s] 的相册列表异常' % self.QQ)
+            print('提取新浪用户 [%s] 的相册列表异常' % self.sina_user_id)
             traceback.print_exc()
 
         return albums
-
-
-    def _get_album_parmas(self):
-        '''
-        获取相册请求参数
-        :return:
-        '''
-        params = self._get_parmas()
-        params['handset'] = '4'
-        params['filter'] = '1'
-        params['needUserInfo'] = '1'
-        params['pageNumModeSort'] = '40'
-        params['pageNumModeClass'] = '15'
-        return params
 
 
     def open(self, album):
@@ -144,71 +129,35 @@ class AlbumAnalyzer(object):
         :param page: 页数
         :return: 分页照片信息
         '''
+        params = {
+            'uid' : self.sina_user_id,
+            'album_id' : album.id,
+            '__rnd' : str(int(time.time() * 1000)),
+            'page' : str(page),
+            'count' : str(cfg.BATCH_LIMT),
+            'type' : str(album.type)
+        }
         response = requests.get(url=cfg.PHOTO_LIST_URL,
                                 headers=xhr.get_headers(self.cookie.to_nv()),
-                                params=self._get_photo_parmas(album.id, page))
+                                params=params)
         photos = []
         try:
-            root = json.loads(xhr.to_json(response.text))
+            root = json.loads(response.text)
             data = root['data']
-            photo_list = data['photoList']
+            photo_list = data['photo_list']
             for photo in photo_list :
-                desc = photo.get('desc', '')
-                time = photo.get('uploadtime', '')
-                url = pic.convert(photo.get('url', ''))
-                photos.append(Photo(desc, time, url))
+                desc = photo.get('caption_render', '')
+                upload_time = photo.get('updated_at', '')
+                pic_host = photo.get('pic_host', '')
+                pic_name = photo.get('pic_name', '')
+                url = cfg.PHOTO_URL(pic_host, pic_name)
+                photos.append(Photo(desc, upload_time, url))
 
         except:
             print('提取相册 [%s] 第%d页的照片信息异常' % (album.name, page))
             traceback.print_exc()
 
         return photos
-
-
-    def _get_photo_parmas(self, album_id, page):
-        '''
-        获取照片请求参数
-        :param album_id: 相册ID
-        :param page: 页码
-        :return:
-        '''
-        params = self._get_parmas()
-        params['topicId'] = album_id
-        params['pageStart'] = '%d' % ((page - 1) * cfg.BATCH_LIMT)
-        params['pageNum'] = '%d' % cfg.BATCH_LIMT
-        params['mode'] = '0'
-        params['noTopic'] = '0'
-        params['skipCmtCount'] = '0'
-        params['singleurl'] = '1'
-        params['outstyle'] = 'json'
-        params['json_esc'] = '1'
-        params['batchId'] = ''
-        return params
-
-
-    def _get_parmas(self):
-        '''
-        获取相册/照片请求参数
-        :return:
-        '''
-        params = {
-            'g_tk' : self.cookie.gtk,
-            'callback' : 'shine%d_Callback' % self.request_cnt,
-            'callbackFun' : 'shine%d' % self.request_cnt,
-            '_' : '%d' % int(time.time()),
-            'uin' : self.cookie.uin,
-            'hostUin' : self.QQ,
-            'inCharset' : cfg.DEFAULT_CHARSET,
-            'outCharset' : cfg.DEFAULT_CHARSET,
-            'source' : 'qzone',
-            'plat' : 'qzone',
-            'format' : 'jsonp',
-            'notice' : '0',
-            'appid' : '4',
-            'idcNum' : '4'
-        }
-        self.request_cnt += 1
-        return params
 
 
     def download_albums(self, albums):
@@ -220,10 +169,11 @@ class AlbumAnalyzer(object):
         if len(albums) <= 0 :
             return
 
-        print('提取QQ [%s] 的相册及照片完成, 开始下载...' % self.QQ)
+        print('提取新浪用户 [%s] 的相册及照片完成, 开始下载...' % self.sina_user_id)
         for album in albums :
             os.makedirs('%s%s' % (self.ALBUM_DIR, album.name))
-            album_infos = album.to_str()
+            album_url = cfg.ALBUM_URL(self.sina_user_id, album.id)
+            album_infos = album.to_str(album_url)
 
             print('正在下载相册 [%s] 的照片...' % album.name)
             cnt = 0
@@ -238,7 +188,7 @@ class AlbumAnalyzer(object):
 
             # 保存下载信息
             save_path = '%s%s/%s' % (self.ALBUM_DIR, album.name, self.ALBUM_INFO_NAME)
-            with open(save_path, 'w', encoding=cfg.DEFAULT_CHARSET) as file :
+            with open(save_path, 'w', encoding=cfg.CHARSET_UTF8) as file :
                 file.write(album_infos)
 
 
@@ -250,8 +200,6 @@ class AlbumAnalyzer(object):
         :return: 是否下载成功
         '''
         headers = xhr.get_headers(self.cookie.to_nv())
-        headers['Host'] = xhr.to_host(photo.url)
-        headers['Referer'] = album.url
         save_path = '%s%s/%s' % (self.ALBUM_DIR, album.name, photo.name)
 
         is_ok = False

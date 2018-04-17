@@ -112,9 +112,11 @@ class Lander(object):
             reason = self.login(pin_code)
 
             if not reason :
-                print('登陆新浪微博账号 [%s] 成功: %s' % (self.username, self.cookie.nickname))
+                print('登陆新浪微博账号 [%s] 成功' % self.username)
+                is_ok = True
+
             else:
-                print('登陆新浪微博账号 [%s] 失败: %s (第一次登录总是失败, 原因不明)' % (self.username, reason))
+                print('登陆新浪微博账号 [%s] 失败: %s (第奇数次登录总是失败, 原因不明)' % (self.username, reason))
 
         except:
             print('登陆新浪微博账号 [%s] 失败: XHR协议异常' % self.username)
@@ -170,7 +172,6 @@ class Lander(object):
                 vcode = input("请输入图片验证码:").strip()
         else:
             vcode = ''
-
         return vcode
 
 
@@ -234,11 +235,11 @@ class Lander(object):
             xhr.take_response_cookies(response, self.cookie)
             root = json.loads(xhr.to_json(response.text))
             if root.get('result') == True :
-                self.task_user_info(root)
+                userinfo = root.get('userinfo')
+                self.cookie.user_id = userinfo.get('uniqueid', '')  # 用户ID
 
             else:
                 reason = '登陆成功, 但获取用户信息失败'
-
         return reason
 
 
@@ -271,25 +272,5 @@ class Lander(object):
                     reason = '[%s][%s]' % (retcode, raw_reason)
                 else:
                     reason = '[unknow][%s]' % callback_url
-
         return reason
-
-
-    def task_user_info(self, json_root):
-        '''
-        提取用户信息
-        :param json_root: 登陆成功返回的json, 格式形如: {"result":true,"userinfo":{"uniqueid":"6528950229","userid":null,"displayname":null,"userdomain":"?wvr=5&lf=reg"},"redirect":"https://weibo.com/nguide/interest"}
-        :return: None(保存到cookie中)
-        '''
-        userinfo = json_root.get('userinfo')
-        uniqueid = userinfo.get('uniqueid', '')
-        self.cookie.user_id = uniqueid  # 用户ID
-
-        response = requests.get(url=cfg.ALBUM_URL(uniqueid),
-                                headers=xhr.get_headers(self.cookie.to_nv()))
-        match = re.search('"name":"([^"]+)"', response.text)
-        if match :
-            self.cookie.nickname = match.group(1).\
-                encode(cfg.CHARSET_UTF8).decode(cfg.CHARSET_UNICODE)   # 用户昵称是unicode编码, 需要转码
-
 

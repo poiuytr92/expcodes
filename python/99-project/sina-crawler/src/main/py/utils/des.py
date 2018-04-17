@@ -18,7 +18,7 @@ DES = pyDes.triple_des(
 )
 
 
-def to_des(plaint='', key=KEY):
+def encrypt(plaint='', key=KEY):
     '''
     DES加密
     :param data: 明文
@@ -26,7 +26,7 @@ def to_des(plaint='', key=KEY):
     :return: 密文
     '''
     try:
-        byte = plaint.encode(cfg.DEFAULT_CHARSET)   # 明文字符串转byte
+        byte = plaint.encode(cfg.CHARSET_UTF8)   # 明文字符串转byte
         byte = DES.encrypt(byte)        # DES加密
         byte = base64.b64encode(byte)   # base64编码
         cipher = bytes.decode(byte)     # byte转字符串
@@ -37,7 +37,7 @@ def to_des(plaint='', key=KEY):
     return cipher
 
 
-def un_des(cipher='', key=KEY):
+def decrypt(cipher='', key=KEY):
     '''
     DES解密
     :param data: 密文
@@ -45,7 +45,7 @@ def un_des(cipher='', key=KEY):
     :return: 明文
     '''
     try:
-        byte = cipher.encode(cfg.DEFAULT_CHARSET)   # 密文字符串转byte
+        byte = cipher.encode(cfg.CHARSET_UTF8)   # 密文字符串转byte
         byte = base64.b64decode(byte)   # base64解码
         byte = DES.decrypt(byte)        # DES解密
         plaint = bytes.decode(byte)     # byte转字符串

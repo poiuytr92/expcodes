@@ -37,16 +37,14 @@ def get_pic_name(idx, desc):
     return '%s.png' % name  # 添加后缀
 
 
-def convert(pic_url):
+def get_user_id(http_album_url):
     '''
-    转换图片地址
-    :param pic_url: 原图片地址
-    :return: 可下载的图片地址
+    从相册专辑地址提取用户ID
+    :param album_url: http相册专辑地址, 如： http://photo.weibo.com/000000/albums?rd=1
+    :return: 新浪用户ID
     '''
-    if pic_url :
-        url = re.sub('psbe\?', 'psb?', pic_url) # 去除权限加密
-        url = re.sub('/[m|c]/', '/b/', url)     # 缩略图变成大图
+    if http_album_url :
+        user_id = re.search('com/(\d+)/albums', http_album_url).group(1)
     else:
-        url = ''
-    return url
-
+        user_id = ''
+    return user_id
