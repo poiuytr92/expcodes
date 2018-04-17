@@ -11,8 +11,9 @@ config = configparser.ConfigParser()
 config.read(filenames=('%s%s' % (BASR_DIR, '/conf/url.ini')), encoding='utf-8')
 
 
-DEFAULT_CHARSET = 'utf-8'   # 默认编码
-HTTP_CHARSET = 'gbk'        # 新浪HTTP内容编码
+CHARSET_UTF8 = 'utf-8'   # 默认编码
+CHARSET_GBK = 'gbk'      # 新浪HTTP页面内容主要编码是GBK
+CHARSET_UNICODE = 'unicode_escape'  # UNICODE编码
 
 SLEEP_TIME = 0.1    # 行为休眠间隔(s)
 TIMEOUT = 10        # 请求超时(s)
@@ -28,22 +29,12 @@ VCODE_URL = config.get('lander', 'VCODE_URL')           # 获取登陆验证码�
 LOGIN_URL = config.get('lander', 'LOGIN_URL')           # 新浪微博登陆URL
 
 
-def QZONE_HOMR_URL(QQ):
+def ALBUM_URL(user_id):
     '''
-    获取QQ空间首页地址
-    :param QQ: QQ号
+    获取新浪相册地址
+    :param user_id: 用户ID
     :return:
     '''
-    return '%(QZONE_DOMAIN)s%(QQ)s' % { 'QZONE_DOMAIN' : 'xxx', 'QQ' : QQ }
-
-
-def ALBUM_URL(QQ, AID):
-    '''
-    获取QQ相册地址
-    :param QQ: QQ号
-    :param AID: 相册ID
-    :return:
-    '''
-    return '%(QZONE_HOMR_URL)s/photo/%(AID)s' % { 'QZONE_HOMR_URL' : QZONE_HOMR_URL(QQ), 'AID' : AID }
+    return 'http://photo.weibo.com/%s/albums?rd=1' % user_id
 
 

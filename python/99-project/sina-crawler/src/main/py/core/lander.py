@@ -54,7 +54,7 @@ class Lander(object):
         :return: base64编码后的账号
         '''
         un = quote_plus(username)       # 先对账号进行URL编码 (邮箱账号存在 '@' 等特殊字符需要转义)
-        byte = un.encode(cfg.DEFAULT_CHARSET)
+        byte = un.encode(cfg.CHARSET_UTF8)
         byte = base64.b64encode(byte)   # base64编码
         return bytes.decode(byte)       # 字节转字符串
 
@@ -68,7 +68,7 @@ class Lander(object):
         int_pubkey = int(self.cookie.pubkey, 16)    # 把十六进制的公钥转换成十进制
         rsa_pubkey = rsa.PublicKey(int_pubkey, self.RSA_EXPONENT)   # 创建公钥
         data = '%s\t%s\n%s' % (self.cookie.servertime, self.cookie.nonce, password) # 拼接被加密的内容（分析登陆js脚本得到）
-        data = data.encode(cfg.DEFAULT_CHARSET)
+        data = data.encode(cfg.CHARSET_UTF8)
         rsa_pwd = rsa.encrypt(data, rsa_pubkey) # 执行加密
         hex = binascii.b2a_hex(rsa_pwd)         # 转换为16进制
         return bytes.decode(hex)                # 字节转字符串
@@ -108,9 +108,9 @@ class Lander(object):
             reason = self.login(pin_code)
 
             if not reason :
-                print('登陆新浪微博账号 [%s] 成功' % self.username)
+                print('登陆新浪微博账号 [%s] 成功: %s' % (self.username, self.cookie.nickname))
             else:
-                print('登陆新浪微博账号 [%s] 失败: %s' % (self.username, reason))
+                print('登陆新浪微博账号 [%s] 失败: %s (第一次登录总是失败, 原因不明)' % (self.username, reason))
 
         except:
             print('登陆新浪微博账号 [%s] 失败: XHR协议异常' % self.username)
@@ -188,7 +188,7 @@ class Lander(object):
         params = {
             'client' : 'ssologin.js(v1.4.18)',
             'entry' : 'weibo',
-            'encoding' : cfg.DEFAULT_CHARSET,
+            'encoding' : cfg.CHARSET_UTF8,
             'su' : self.base64_un,
             'sp' : self.rsa_pwd,
             'pcid' : self.cookie.pin_code_id,
@@ -263,7 +263,7 @@ class Lander(object):
             if retcode != '0' :
                 match = re.search('reason=([^&]+)', callback_url)
                 if match :
-                    raw_reason = unquote(match.group(1), encoding=cfg.HTTP_CHARSET)
+                    raw_reason = unquote(match.group(1), encoding=cfg.CHARSET_GBK)
                     reason = '[%s][%s]' % (retcode, raw_reason)
                 else:
                     reason = '[unknow][%s]' % callback_url
@@ -279,20 +279,13 @@ class Lander(object):
         '''
         userinfo = json_root.get('userinfo')
         uniqueid = userinfo.get('uniqueid', '')
-        userdomain = userinfo.get('userdomain', '')
-        url = 'http://weibo.com/%s/profile%s' % (uniqueid, userdomain)
-        response = requests.get(url=url, headers=xhr.get_headers(self.cookie.to_nv()))
-        response.encoding = cfg.HTTP_CHARSET
-        print(response.text)
+        self.cookie.user_id = uniqueid  # 用户ID
 
-
-        self.cookie.user_id = uniqueid
-        self.cookie.nickname = ''
-        # url = 'http://photo.weibo.com/%s/albums' % uniqueid
-        # response = requests.get(url=url, headers=xhr.get_headers(self.cookie.to_nv()))
-        # response.encoding = cfg.HTTP_CHARSET
-        # print(response.text)
-
-
+        response = requests.get(url=cfg.ALBUM_URL(uniqueid),
+                                headers=xhr.get_headers(self.cookie.to_nv()))
+        match = re.search('"name":"([^"]+)"', response.text)
+        if match :
+            self.cookie.nickname = match.group(1).\
+                encode(cfg.CHARSET_UTF8).decode(cfg.CHARSET_UNICODE)   # 用户昵称是unicode编码, 需要转码
 
 
