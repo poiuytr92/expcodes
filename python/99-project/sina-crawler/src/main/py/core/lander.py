@@ -188,25 +188,25 @@ class Lander(object):
         params = {
             'client' : 'ssologin.js(v1.4.18)',
             'entry' : 'weibo',
+            'encoding' : cfg.DEFAULT_CHARSET,
+            'su' : self.base64_un,
+            'sp' : self.rsa_pwd,
+            'pcid' : self.cookie.pin_code_id,
+            'door' : pin_code,
+            'servertime' : self.cookie.servertime,
+            'nonce' : self.cookie.nonce,
+            'rsakv' : self.cookie.rsakv,
+            'pwencode' : 'rsa2',
             'gateway' : '1',
             'from' : '',
             'savestate' : '7',
             'qrcode_flag' : 'false',
             'useticket' : 'useticket',
-            'pagerefer' : 'https://login.sina.com.cn/crossdomain2.php?action=logout&r=https://weibo.com/logout.php?backurl=%252F',
-            'pcid' : self.cookie.pin_code_id,
-            'door' : pin_code,
             'vsnf' : '1',
-            'su' : self.base64_un,
             'service' : 'miniblog',
-            'servertime' : self.cookie.servertime,
-            'nonce' : self.cookie.nonce,
-            'pwencode' : 'rsa2',
-            'rsakv' : self.cookie.rsakv,
-            'sp' : self.rsa_pwd,
             'sr' : '1366*768',
-            'encoding' : 'UTF-8',
             'prelt' : '7873',
+            'pagerefer' : 'https://login.sina.com.cn/crossdomain2.php?action=logout&r=https://weibo.com/logout.php?backurl=%252F',
             'url' : 'https://weibo.com/ajaxlogin.php?framelogin=1&callback=parent.sinaSSOController.feedBackUrlCallBack',
             'returntype' : 'META',
         }
@@ -229,7 +229,10 @@ class Lander(object):
             response = requests.get(url=callback_url, headers=xhr.get_headers(self.cookie.to_nv()))
             xhr.take_response_cookies(response, self.cookie)
             root = json.loads(xhr.to_json(response.text))
-            if root.get('result') == False :
+            if root.get('result') == True :
+                self.task_user_info(root)
+
+            else:
                 reason = '登陆成功, 但获取用户信息失败'
 
         return reason
@@ -266,4 +269,30 @@ class Lander(object):
                     reason = '[unknow][%s]' % callback_url
 
         return reason
+
+
+    def task_user_info(self, json_root):
+        '''
+        提取用户信息
+        :param json_root: 登陆成功返回的json, 格式形如: {"result":true,"userinfo":{"uniqueid":"6528950229","userid":null,"displayname":null,"userdomain":"?wvr=5&lf=reg"},"redirect":"https://weibo.com/nguide/interest"}
+        :return: None(保存到cookie中)
+        '''
+        userinfo = json_root.get('userinfo')
+        uniqueid = userinfo.get('uniqueid', '')
+        userdomain = userinfo.get('userdomain', '')
+        url = 'http://weibo.com/%s/profile%s' % (uniqueid, userdomain)
+        response = requests.get(url=url, headers=xhr.get_headers(self.cookie.to_nv()))
+        response.encoding = cfg.HTTP_CHARSET
+        print(response.text)
+
+
+        self.cookie.user_id = uniqueid
+        self.cookie.nickname = ''
+        # url = 'http://photo.weibo.com/%s/albums' % uniqueid
+        # response = requests.get(url=url, headers=xhr.get_headers(self.cookie.to_nv()))
+        # response.encoding = cfg.HTTP_CHARSET
+        # print(response.text)
+
+
+
 

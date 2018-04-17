@@ -141,7 +141,6 @@ def login(username, password):
 
 
 
-
 if __name__ == "__main__":
     username = 'play00002@126.com'
     password = 'test00002'

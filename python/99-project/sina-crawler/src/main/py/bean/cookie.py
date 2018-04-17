@@ -232,6 +232,8 @@ class SinaCookie(HttpCookie):
     nonce = ''                  # 用于加密登陆密码的参数
     pubkey = ''                 # RSA公钥(用于加密登陆密码)
     rsakv = ''                  # RSA参数（用于登陆的参数）
+    user_id = ''                # 登陆用户ID
+    nickname = ''               # 登陆用户昵称
 
 
     def __init__(self, set_cookies=''):
@@ -246,6 +248,8 @@ class SinaCookie(HttpCookie):
         self.nonce = ''
         self.pubkey = ''
         self.rsakv = ''
+        self.user_id = ''
+        self.nickname = ''
         super(SinaCookie, self).__init__(set_cookies)
 
 
