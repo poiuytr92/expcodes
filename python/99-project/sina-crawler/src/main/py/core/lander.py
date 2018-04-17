@@ -10,7 +10,6 @@ import binascii
 import requests
 import json
 import re
-import execjs
 import traceback
 import src.main.py.config as cfg
 import src.main.py.utils.xhr as xhr
@@ -23,6 +22,11 @@ from urllib.parse import unquote
 class Lander(object):
     '''
     新浪微博登陆器.
+    ========================================================
+     新浪微博XHR登陆分析参考：
+        登陆流程拆解：https://www.cnblogs.com/xmyzero/articles/8280052.html
+        登陆流程分析：https://blog.csdn.net/u014193283/article/details/71988082
+        加密流程分析：http://python.jobbole.com/86638/
     '''
 
     RSA_EXPONENT = int('10001', 16) # 新浪微博的RSA算法因子：把16进制的10001转换成十进制, 即65537
@@ -49,7 +53,7 @@ class Lander(object):
 
     def __to_base64__(self, username):
         '''
-        对登陆账号使用base64编码
+        对登陆账号使用base64编码（加密过程是通过分析登陆ssologin.js脚本得到）
         :param username: 登陆账号
         :return: base64编码后的账号
         '''
@@ -61,13 +65,13 @@ class Lander(object):
 
     def __to_rsa__(self, password):
         '''
-        对登陆密码使用RSA加密
+        对登陆密码使用RSA加密（加密过程是通过分析登陆ssologin.js脚本得到）
         :param password: 登陆密码
         :return: RSA加密后的登陆密码
         '''
         int_pubkey = int(self.cookie.pubkey, 16)    # 把十六进制的公钥转换成十进制
         rsa_pubkey = rsa.PublicKey(int_pubkey, self.RSA_EXPONENT)   # 创建公钥
-        data = '%s\t%s\n%s' % (self.cookie.servertime, self.cookie.nonce, password) # 拼接被加密的内容（分析登陆js脚本得到）
+        data = '%s\t%s\n%s' % (self.cookie.servertime, self.cookie.nonce, password) # 拼接被加密的内容
         data = data.encode(cfg.CHARSET_UTF8)
         rsa_pwd = rsa.encrypt(data, rsa_pubkey) # 执行加密
         hex = binascii.b2a_hex(rsa_pwd)         # 转换为16进制
