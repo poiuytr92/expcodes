@@ -54,9 +54,6 @@ def del_emoji(text):
             continue
         else:
             str.append(c)
-
-    # 436029161998574100756784
-    # 101658506965809
     return ''.join(str)
 
 
