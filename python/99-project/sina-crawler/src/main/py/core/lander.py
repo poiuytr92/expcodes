@@ -85,44 +85,46 @@ class Lander(object):
         '''
         is_ok = False
         try:
-            self.init_cookie_env()
-            self.rsa_pwd = self.__to_rsa__(self.password)
 
-            # 图片验证码登陆
-            if self.cookie.showpin == 1 :
-                pin_code = self.get_vcode(self.cookie.pin_code_id)
-
-            # 动态微盾码登陆
-            elif self.cookie.showpin == 2 :
-                pin_code = self.get_dymaic_code(self.cookie.pin_code_id)
-
-            # 无需验证
-            else:
-                pin_code = ''
-
-            print('微博登陆账号(Base64编码): %s' % self.base64_un)
-            print('微博登陆密码(RSA加密): %s' % self.rsa_pwd)
-            print('登陆环境参数[showpin]: %s' % self.cookie.showpin)
-            print('登陆环境参数[pcid]: %s' % self.cookie.pin_code_id)
-            print('登陆环境参数[pin_code]: %s' % pin_code)
-            print('登陆环境参数[servertime]: %s' % self.cookie.servertime)
-            print('登陆环境参数[nonce]: %s' % self.cookie.nonce)
-            print('登陆环境参数[pubkey]: %s' % self.cookie.pubkey)
-            print('登陆环境参数[rsakv]: %s' % self.cookie.rsakv)
-            reason = self.login(pin_code)
-
+            # 第一次登陆: 高几率失败（新浪微博的登陆有问题, 就算正常浏览器登陆，也需要正确输入2次验证码）
+            reason = self.__execute__()
             if not reason :
                 print('登陆新浪微博账号 [%s] 成功' % self.username)
                 is_ok = True
 
+            # 第二次登陆： 新浪微博一般需要连续[正确]登陆两次， 第一次登陆高几率失败, 但必须登陆
             else:
-                print('登陆新浪微博账号 [%s] 失败: %s (第奇数次登录总是失败, 原因不明)' % (self.username, reason))
+                reason = self.__execute__()
+                if not reason :
+                    print('登陆新浪微博账号 [%s] 成功' % self.username)
+                    is_ok = True
+                else:
+                    print('登陆新浪微博账号 [%s] 失败: %s' % (self.username, reason))
 
         except:
             print('登陆新浪微博账号 [%s] 失败: XHR协议异常' % self.username)
             traceback.print_exc()
 
         return is_ok
+
+
+    def __execute__(self):
+        self.init_cookie_env()
+        self.rsa_pwd = self.__to_rsa__(self.password)
+        pin_code = self.get_pin_code(self.cookie.pin_code_id)
+
+        print('微博登陆账号(Base64编码): %s' % self.base64_un)
+        print('微博登陆密码(RSA加密): %s' % self.rsa_pwd)
+        print('登陆环境参数[showpin]: %s' % self.cookie.showpin)
+        print('登陆环境参数[pcid]: %s' % self.cookie.pin_code_id)
+        print('登陆环境参数[pin_code]: %s' % pin_code)
+        print('登陆环境参数[servertime]: %s' % self.cookie.servertime)
+        print('登陆环境参数[nonce]: %s' % self.cookie.nonce)
+        print('登陆环境参数[pubkey]: %s' % self.cookie.pubkey)
+        print('登陆环境参数[rsakv]: %s' % self.cookie.rsakv)
+
+        reason = self.login(pin_code)
+        return reason
 
 
     def init_cookie_env(self):
@@ -149,6 +151,28 @@ class Lander(object):
         self.cookie.rsakv = root.get('rsakv', '')
 
 
+    def get_pin_code(self, pcid):
+        '''
+        获取登陆校验码
+        :param pcid: 登陆校验码ID
+        :return: 登陆校验码
+        '''
+
+        # 图片验证码登陆
+        if self.cookie.showpin == 1 :
+            pin_code = self.get_vcode(self.cookie.pin_code_id)
+
+        # 动态微盾码登陆
+        elif self.cookie.showpin == 2 :
+            pin_code = self.get_dymaic_code(self.cookie.pin_code_id)
+
+        # 无需验证
+        else:
+            pin_code = ''
+
+        return pin_code
+
+
     def get_vcode(self, pcid):
         '''
         获取登陆图片验证码
@@ -164,22 +188,21 @@ class Lander(object):
                                              headers=xhr.get_headers(),
                                              params=params,
                                              save_path=cfg.VCODE_PATH)
+        vcode = ''
         if is_ok == True :
             self.cookie.add(set_cookie)
 
             with Image.open(cfg.VCODE_PATH) as image:
                 image.show()
                 vcode = input("请输入图片验证码:").strip()
-        else:
-            vcode = ''
         return vcode
 
 
     def get_dymaic_code(self, pcid):
         '''
         获取登陆微盾动态码
-        :param pcid:
-        :return:
+        :param pcid: 微盾动态码ID
+        :return: 微盾动态码
         '''
         dymaic_code = input("请输入微盾动态码:").strip()
         return dymaic_code
@@ -188,6 +211,7 @@ class Lander(object):
     def login(self, pin_code):
         '''
         登陆
+        :param pin_code: 登陆校验码
         :return: 登陆失败原因（若登陆成功返回''）
         '''
         params = {

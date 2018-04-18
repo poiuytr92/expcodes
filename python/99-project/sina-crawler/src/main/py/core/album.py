@@ -188,8 +188,8 @@ class AlbumAnalyzer(object):
 
             # 保存下载信息
             save_path = '%s%s/%s' % (self.ALBUM_DIR, album.name, self.ALBUM_INFO_NAME)
-            with open(save_path, 'w', encoding=cfg.CHARSET_UTF8) as file :
-                file.write(album_infos)
+            with open(save_path, 'w', encoding=cfg.CHARSET_UNICODE) as file :
+                file.write(album_infos) # 新浪微博含有emojji表情符号, 需要使用UNICODE
 
 
     def download_photo(self, album, photo):
@@ -212,3 +212,4 @@ class AlbumAnalyzer(object):
                 os.remove(save_path)
 
         return is_ok
+
