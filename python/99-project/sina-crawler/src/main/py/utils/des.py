@@ -30,10 +30,8 @@ def encrypt(plaint='', key=KEY):
         byte = DES.encrypt(byte)        # DES加密
         byte = base64.b64encode(byte)   # base64编码
         cipher = bytes.decode(byte)     # byte转字符串
-
     except:
         cipher = ''
-
     return cipher
 
 
@@ -49,9 +47,7 @@ def decrypt(cipher='', key=KEY):
         byte = base64.b64decode(byte)   # base64解码
         byte = DES.decrypt(byte)        # DES解密
         plaint = bytes.decode(byte)     # byte转字符串
-
     except:
         plaint = ''
-
     return plaint
 

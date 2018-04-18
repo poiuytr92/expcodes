@@ -5,6 +5,7 @@ __date__ = '2018-03-30 22:53'
 
 import time
 import re
+import src.main.py.config as cfg
 
 
 def get_page_num(total, batch):
@@ -34,19 +35,29 @@ def get_pic_name(idx, desc):
     name = '[%d]-[%s] %s' % (int(time.time() * 1000), idx, desc)# 构造文件名
     name = re.sub('[/\\:\*"<>\|\?\r\n\t\0]', '', name)          # 移除无效的文件名字符
     name = '%s...' % name[0:128] if len(name) > 128 else name   # 避免文件名过长
+    name = del_emoji(name)
     return '%s.png' % name  # 添加后缀
 
 
-# def remove_emoji(text):
-#     emoji_pattern = re.compile(
-#         u'(\ud83d[\ude00-\ude4f])|' # emoticons
-#         u'(\ud83c[\udf00-\uffff])|' # symbols & pictographs (1 of 2)
-#         u'(\ud83d[\u0000-\uddff])|' # symbols & pictographs (2 of 2)
-#         u'(\ud83d[\ude80-\udeff])|' # transport & map symbols
-#         u'(\ud83c[\udde0-\uddff])|' # flags (iOS)
-#         u'(\ud83e[\u0000-\uffff])'  # emoji表情字符
-#         '+', flags=re.UNICODE)
-#     return emoji_pattern.sub('', text)
+def del_emoji(text):
+    '''
+    移除新浪微博中的emoji表情字符
+    :param text: 微博内容
+    :return: 移除emoji的微博内容
+    '''
+    str = []
+    for c in text :
+        int_c = int.from_bytes(c.encode(cfg.CHARSET_UNICODE), 'big')
+        if int_c > 400000000000000000000000 :
+            # emoji是unicode双字符，转换成整型值在 436029161998574100756784 左右
+            # 其他中文、英文、表点是unicode单字符，转换成整型值在 101658422948406 左右
+            continue
+        else:
+            str.append(c)
+
+    # 436029161998574100756784
+    # 101658506965809
+    return ''.join(str)
 
 
 def get_user_id(http_album_url):

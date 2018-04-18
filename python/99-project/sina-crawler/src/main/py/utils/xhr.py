@@ -46,7 +46,6 @@ def download_pic(pic_url, headers, params, save_path):
     '''
     is_ok = False
     set_cookie = ''
-
     try:
         response = requests.get(pic_url, headers=headers, params=params, stream=True, timeout=cfg.TIMEOUT)
         if response.status_code == 200:
@@ -58,7 +57,6 @@ def download_pic(pic_url, headers, params, save_path):
             set_cookie = response.headers['Set-Cookie']
     except:
         pass
-
     return is_ok, set_cookie
 
 
