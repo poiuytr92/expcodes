@@ -265,6 +265,8 @@ public class Gift {
 	public final static Gift PEACH = new Gift("115", "桃花", 2000);
 	
 	public final static Gift LETTER = new Gift("116", "情书", 2000);
+
+	public final static Gift STAR = new Gift("121", "闪耀之星", 200);
 	
 	/** 礼物ID */
 	private String id;
@@ -350,6 +352,9 @@ public class Gift {
 			
 		} else if(LETTER.ID().equals(giftId)) {
 			intimacy = LETTER.INTIMACY();
+			
+		} else if(STAR.ID().equals(giftId)) {
+			intimacy = STAR.INTIMACY();
 			
 		}
 		return intimacy;
@@ -446,6 +451,9 @@ public class Gift {
 			
 		} else if(LETTER.NAME().equals(giftName)) {
 			cost = LETTER.COST();
+			
+		} else if(STAR.NAME().equals(giftName)) {
+			cost = STAR.COST();
 			
 		}
 		return cost;
