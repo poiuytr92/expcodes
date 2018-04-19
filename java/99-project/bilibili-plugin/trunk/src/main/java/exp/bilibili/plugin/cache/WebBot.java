@@ -179,7 +179,7 @@ public class WebBot extends LoopThread {
 				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
 					max = NumUtils.max(XHRSender.receiveHolidayGift(cookie), max);	// 活动心跳礼物
 					max = NumUtils.max(XHRSender.toAssn(cookie), max);			// 友爱社
-					max = NumUtils.max(XHRSender.doMathTask(cookie), max);		// 小学数学
+//					max = NumUtils.max(XHRSender.doMathTask(cookie), max);		// 小学数学
 				}
 				nextTaskTime = NumUtils.max(nextTaskTime, max);
 				ThreadUtils.tSleep(50);
