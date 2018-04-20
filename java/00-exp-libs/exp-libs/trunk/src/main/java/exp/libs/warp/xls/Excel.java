@@ -164,7 +164,13 @@ public class Excel {
 	}
 	
 	/**
-	 * 获取新的单元格风格
+	 * <pre>
+	 * 获取新的单元格风格.
+	 * ----------------------------
+	 *   注：默认情况下, Excel所有单元格是共享同一个CellStyle对象的, 
+	 *      因此若从单元格上getCellStyle后再修改风格, 会导致整个Excel风格同时改变.
+	 *      所以当只需要改变某个单元格风格时, 需要通过此方法新建一个CellStyle对象
+	 * </pre>
 	 * @return 单元格风格
 	 */
 	public CellStyle createCellStyle() {

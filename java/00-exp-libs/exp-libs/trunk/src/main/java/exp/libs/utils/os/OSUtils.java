@@ -1,5 +1,6 @@
 package exp.libs.utils.os;
 
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -141,4 +142,13 @@ public final class OSUtils {
 		return txt;
 	}
 
+	/**
+	 * 获取当前系统可用的字体列表
+	 * @return 可用字体列表
+	 */
+	public static String[] getSysFonts() {
+		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		return env.getAvailableFontFamilyNames();
+	}
+	
 }
