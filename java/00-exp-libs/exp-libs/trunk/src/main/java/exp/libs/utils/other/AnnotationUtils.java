@@ -8,14 +8,12 @@ import exp.libs.utils.encode.CryptoUtils;
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
+ * @version   1.0 2018-04-23
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class AnnotationUtils {
-	public static void main(String[] args) {
-		System.out.println(getBuddhaBless());
-	}
+	
 	/** 私有化构造函数 */
 	protected AnnotationUtils() {}
 	
