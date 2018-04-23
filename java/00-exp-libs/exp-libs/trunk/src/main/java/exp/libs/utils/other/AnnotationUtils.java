@@ -1,4 +1,4 @@
-package exp.libs.utils.os;
+package exp.libs.utils.other;
 
 import exp.libs.utils.encode.CryptoUtils;
 
