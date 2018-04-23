@@ -3,6 +3,8 @@ package exp.bilibili;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import net.sf.json.JSONObject;
@@ -16,6 +18,9 @@ import exp.libs.warp.net.http.HttpUtils;
 
 public class Test {
 
+	/** 当前B站小学数学验证码的干扰线颜色（深蓝） */
+	private final static int INTERFERON_COLOR = -15326125;
+	
 	/** 直播服务器主机 */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
 	
@@ -36,44 +41,32 @@ public class Test {
 //			ThreadUtils.tSleep(10);
 //		}
 		
-		File dir = new File("./log/vercode/");
+		
+		
+		File dir = new File("./log/vercode");
 		File[] files = dir.listFiles();
 		for(File file : files) {
 			if(file.isDirectory()) {
 				continue;
 			}
 			
-			BufferedImage image = ImageUtils.read(file.getAbsolutePath());
-			final int W = image.getWidth();
-			final int H = image.getHeight();
-			for (int i = 0; i < W; i++) {
-				for (int j = 0; j < H; j++) {
-					int RGB = image.getRGB(i, j);
-					if(RGB == -15326125) {	// 干扰线
-						image.setRGB(i, j, -1);
-						
-					}
-//					else if(RGB > -7000000) { // 噪点
-//						image.setRGB(i, j, -1);
-//					}
-				}
+			String imgPath = file.getAbsolutePath();
+			BufferedImage image = ImageUtils.read(imgPath);
+			removeInterferon(image);	// 去除干扰线
+			toBinary(image);
+			
+			List<BufferedImage> subImages = split(image);
+			for(int i = 0; i < subImages.size(); i++) {
+				BufferedImage subImage = subImages.get(i);
+				int count = count(subImage);
+				
+				String savePath = imgPath.replace(".jpeg", "-" + i + "-" + count + ".png");
+				ImageUtils.write(subImage, savePath, FileType.PNG);
 			}
-			ImageUtils.write(image, file.getAbsolutePath().replace("jpeg", "png"), FileType.PNG);
 		}
-		
-//		for (int j = 0; j < H; j++) {
-//			for (int i = 0; i < W; i++) {
-//				int RGB = image.getRGB(i, j);
-//				if(RGB == -15326125) {	// 干扰线
-//					RGB = -1;
-//				}
-//				RGB *= -1;
-//				System.out.print(StrUtils.leftPad(String.valueOf(RGB), '0', 8) + ",");
-//			}
-//			System.out.println();
-//		}
-		
 	}
+	
+	
 	
 	private static int calculateAnswer(Map<String, String> header, String name) {
 		Map<String, String> request = new HashMap<String, String>();
@@ -110,6 +103,154 @@ public class Test {
 		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
 		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
 		return header;
+	}
+	
+	
+	
+	/**
+	 * 移除干扰线和噪点.
+	 * 	由于干扰线和数字底色同色, 移除干扰线后剩下的数字仅有边框
+	 * @param image
+	 */
+	private static void removeInterferon(BufferedImage image) {
+		final int W = image.getWidth();
+		final int H = image.getHeight();
+		for (int i = 0; i < W; i++) {
+			for (int j = 0; j < H; j++) {
+				int RGB = image.getRGB(i, j);
+				if(RGB == INTERFERON_COLOR) {
+					image.setRGB(i, j, ImageUtils.RGB_WHITE);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 图片二值化.
+	 *  只要非白色像素，都修正为黑色, 不设置阀值
+	 * @param image
+	 */
+	private static void toBinary(BufferedImage image) {
+		final int W = image.getWidth();
+		final int H = image.getHeight();
+		for (int i = 0; i < W; i++) {
+			for (int j = 0; j < H; j++) {
+				int RGB = image.getRGB(i, j);
+				if(RGB != ImageUtils.RGB_WHITE) {
+					image.setRGB(i, j, ImageUtils.RGB_BLACK);
+				}
+			}
+		}
+	}
+	
+	/**
+	 * 把图片切割成4个字符图片
+	 * @return
+	 */
+	private static List<BufferedImage> split(BufferedImage image) {
+		final int W = image.getWidth();
+		
+		int left = -1;
+		while(isZeroPixel(image, ++left) && left <= W);
+		
+		int right = W;
+		while(isZeroPixel(image, --right) && right >= 0);
+		
+		int width = right - left + 1;
+		int avgWidth = width / 4;
+		List<BufferedImage> subImages = new LinkedList<BufferedImage>();
+		for(int w = left; w < right; w += (avgWidth + 1)) {
+			BufferedImage subImage = sub(image, w, avgWidth);
+			subImages.add(subImage);
+		}
+		return subImages;
+	}
+	
+	/**
+	 * 检查图像中的某一列是否不存在像素点
+	 * @param image
+	 * @param scanColumn 当前扫描的列
+	 * @return
+	 */
+	private static boolean isZeroPixel(BufferedImage image, int scanColumn) {
+		boolean isZero = true;
+		final int H = image.getHeight();
+		for(int row = 0; row < H; row++) {
+			int RGB = image.getRGB(scanColumn, row);
+			if(RGB != ImageUtils.RGB_WHITE) {
+				isZero = false;
+				break;
+			}
+		}
+		return isZero;
+	}
+	
+	private static BufferedImage sub(BufferedImage image, int left, int offset) {
+		final int H = image.getHeight();
+		BufferedImage subImage = new BufferedImage(offset, H, 
+				BufferedImage.TYPE_BYTE_BINARY);
+		for (int i = left; i < left + offset; i++) {
+			for (int j = 0; j < H; j++) {
+				int RGB = image.getRGB(i, j);
+				subImage.setRGB(i - left, j, RGB);
+			}
+		}
+		return subImage;
+	}
+	
+	private static int[][] toMatrix(BufferedImage image) {
+		final int W = image.getWidth();
+		final int H = image.getHeight();
+		int[][] matrix = new int[H][W];
+		for (int i = 0; i < W; i++) {
+			for (int j = 0; j < H; j++) {
+				int RGB = image.getRGB(i, j);
+				matrix[j][i] = (RGB != ImageUtils.RGB_WHITE ? 1 : 0);
+			}
+		}
+		return matrix;
+	}
+	
+	/**
+	 * 计算两个矩阵的相似度
+	 * @param aMatrix
+	 * @param bMatrix
+	 * @return
+	 */
+	private static double similarity(int[][] aMatrix, int[][] bMatrix) {
+		
+		return 0;
+	}
+	
+	private static int toNumber(BufferedImage image) {
+		int num = 0;
+		return num;
+	}
+	
+	private static boolean isAdd(BufferedImage image) {
+		boolean isAdd = true;
+		
+		return isAdd;
+	}
+	
+	/**
+	 * 计算图像中的前景色像素点
+	 * @param image
+	 * @return
+	 */
+	private static int count(BufferedImage image) {
+		int count = 0;
+		final int W = image.getWidth();
+		final int H = image.getHeight();
+		for (int i = 0; i < W; i++) {
+			for (int j = 0; j < H; j++) {
+				int RGB = image.getRGB(i, j);
+				if(RGB != ImageUtils.RGB_WHITE) {
+					count++;
+				}
+			}
+		}
+		return count;
 	}
 	
 }
