@@ -3,6 +3,7 @@ package exp.bilibili;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.envm.FileType;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.img.ImageUtils;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
@@ -41,32 +43,49 @@ public class Test {
 //			ThreadUtils.tSleep(10);
 //		}
 		
+//		File dir = new File("./log/vercode");
+//		File[] files = dir.listFiles();
+//		for(File file : files) {
+//			if(file.isDirectory()) {
+//				continue;
+//			}
+//			
+//			String imgPath = file.getAbsolutePath();
+//			BufferedImage image = ImageUtils.read(imgPath);
+//			removeInterferon(image);	// 去除干扰线
+//			toBinary(image);
+//			
+//			List<BufferedImage> subImages = split(image);
+//			for(int i = 0; i < subImages.size(); i++) {
+//				BufferedImage subImage = subImages.get(i);
+//				int count = count(subImage);
+//				
+//				String savePath = imgPath.replace(".jpeg", "-" + i + "-" + count + ".png");
+//				ImageUtils.write(subImage, savePath, FileType.PNG);
+//			}
+//		}
 		
-		
-		File dir = new File("./log/vercode");
+		Map<Integer, int[][]> matrixs = loadNumMatrixs();
+		BufferedImage image = ImageUtils.read("./log/vercode/img-0-1-94.png");
+		int num = judge(image, matrixs);
+		System.out.println(num);
+	}
+	
+	private static Map<Integer, int[][]> loadNumMatrixs() {
+		Map<Integer, int[][]> matrixs = new HashMap<Integer, int[][]>();
+		File dir = new File("./log/vercode/num");
 		File[] files = dir.listFiles();
 		for(File file : files) {
-			if(file.isDirectory()) {
+			if(file.isDirectory() || !file.getName().endsWith(".png")) {
 				continue;
 			}
 			
-			String imgPath = file.getAbsolutePath();
-			BufferedImage image = ImageUtils.read(imgPath);
-			removeInterferon(image);	// 去除干扰线
-			toBinary(image);
-			
-			List<BufferedImage> subImages = split(image);
-			for(int i = 0; i < subImages.size(); i++) {
-				BufferedImage subImage = subImages.get(i);
-				int count = count(subImage);
-				
-				String savePath = imgPath.replace(".jpeg", "-" + i + "-" + count + ".png");
-				ImageUtils.write(subImage, savePath, FileType.PNG);
-			}
+			BufferedImage image = ImageUtils.read(file.getAbsolutePath());
+			int[][] matrix = toMatrix(image);
+			matrixs.put(NumUtils.toInt(file.getName().replace(".png", "")), matrix);
 		}
+		return matrixs;
 	}
-	
-	
 	
 	private static int calculateAnswer(Map<String, String> header, String name) {
 		Map<String, String> request = new HashMap<String, String>();
@@ -104,8 +123,6 @@ public class Test {
 		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
 		return header;
 	}
-	
-	
 	
 	/**
 	 * 移除干扰线和噪点.
@@ -211,15 +228,56 @@ public class Test {
 		return matrix;
 	}
 	
+	public static int judge(BufferedImage image, Map<Integer, int[][]> matrixs) {
+		int[][] matrix = toMatrix(image);
+		
+		int num = 0;
+		int maxSimilarity = 0;
+		Iterator<Integer> keyIts = matrixs.keySet().iterator();
+		while(keyIts.hasNext()) {
+			Integer key = keyIts.next();
+			int[][] numMatrix = matrixs.get(key);
+			int similarity = similarity(matrix, numMatrix);
+			
+			if(maxSimilarity < similarity) {
+				num = key;
+				maxSimilarity = similarity;
+			}
+		}
+		return num;
+	}
+	
 	/**
 	 * 计算两个矩阵的相似度
 	 * @param aMatrix
 	 * @param bMatrix
 	 * @return
 	 */
-	private static double similarity(int[][] aMatrix, int[][] bMatrix) {
+	private static int similarity(int[][] aMatrix, int[][] bMatrix) {
+		int[][] minMatrix = (aMatrix[0].length < bMatrix[0].length ? aMatrix : bMatrix);
+		int[][] maxMatrix = (aMatrix[0].length < bMatrix[0].length ? bMatrix : aMatrix);
 		
-		return 0;
+		final int HEIGHT = minMatrix.length;
+		final int MIN_WIDTH =  minMatrix[0].length;
+		final int DIFF = maxMatrix[0].length - minMatrix[0].length;
+		
+		int maxSimilarity = 0;
+		for(int d = 0; d <= DIFF; d++) {
+			int similarity = 0;
+			for(int r = 0; r < HEIGHT; r++) {
+				for(int c = 0; c < MIN_WIDTH; c++) {
+					if(minMatrix[r][c] != ImageUtils.RGB_WHITE && 
+							minMatrix[r][c] == maxMatrix[r][c + d]) {
+						similarity++;
+					}
+				}
+			}
+			
+			if(maxSimilarity < similarity) {
+				maxSimilarity = similarity;
+			}
+		}
+		return maxSimilarity;
 	}
 	
 	private static int toNumber(BufferedImage image) {
