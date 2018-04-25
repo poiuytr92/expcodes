@@ -65,9 +65,13 @@ public class Test {
 //		}
 		
 		List<Matrix> matrixs = loadNumMatrixs();
-		BufferedImage image = ImageUtils.read("./log/vercode/img-17-0-78.png");
-		int num = judge(image, matrixs);
-		System.out.println(num);
+		File dir = new File("./log/vercode/test");
+		File[] files = dir.listFiles();
+		for(File file: files) {
+			BufferedImage image = ImageUtils.read(file.getAbsolutePath());
+			int num = judge(image, matrixs);
+			System.out.println(file.getName() + ":" + num);
+		}
 	}
 	
 	private static List<Matrix> loadNumMatrixs() {
