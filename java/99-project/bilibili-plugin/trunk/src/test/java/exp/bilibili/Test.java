@@ -3,7 +3,6 @@ package exp.bilibili;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -11,10 +10,10 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
-import exp.libs.envm.FileType;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.img.ImageUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
@@ -65,14 +64,14 @@ public class Test {
 //			}
 //		}
 		
-		Map<Integer, int[][]> matrixs = loadNumMatrixs();
-		BufferedImage image = ImageUtils.read("./log/vercode/img-0-1-94.png");
+		List<Matrix> matrixs = loadNumMatrixs();
+		BufferedImage image = ImageUtils.read("./log/vercode/img-17-0-78.png");
 		int num = judge(image, matrixs);
 		System.out.println(num);
 	}
 	
-	private static Map<Integer, int[][]> loadNumMatrixs() {
-		Map<Integer, int[][]> matrixs = new HashMap<Integer, int[][]>();
+	private static List<Matrix> loadNumMatrixs() {
+		List<Matrix> matrixs = new LinkedList<Matrix>();
 		File dir = new File("./log/vercode/num");
 		File[] files = dir.listFiles();
 		for(File file : files) {
@@ -80,9 +79,8 @@ public class Test {
 				continue;
 			}
 			
-			BufferedImage image = ImageUtils.read(file.getAbsolutePath());
-			int[][] matrix = toMatrix(image);
-			matrixs.put(NumUtils.toInt(file.getName().replace(".png", "")), matrix);
+			Matrix matrix = new Matrix(file.getName().replace(".png", ""), file.getAbsolutePath());
+			matrixs.add(matrix);
 		}
 		return matrixs;
 	}
@@ -228,19 +226,15 @@ public class Test {
 		return matrix;
 	}
 	
-	public static int judge(BufferedImage image, Map<Integer, int[][]> matrixs) {
-		int[][] matrix = toMatrix(image);
-		
+	public static int judge(BufferedImage image, List<Matrix> matrixs) {
 		int num = 0;
-		int maxSimilarity = 0;
-		Iterator<Integer> keyIts = matrixs.keySet().iterator();
-		while(keyIts.hasNext()) {
-			Integer key = keyIts.next();
-			int[][] numMatrix = matrixs.get(key);
-			int similarity = similarity(matrix, numMatrix);
-			
+		double maxSimilarity = 0;
+		
+		int[][] pixel = toMatrix(image);
+		for(Matrix matrix : matrixs) {
+			double similarity = similarity(pixel, matrix);
 			if(maxSimilarity < similarity) {
-				num = key;
+				num = NumUtils.toInt(matrix.VAL(), 0);
 				maxSimilarity = similarity;
 			}
 		}
@@ -253,7 +247,8 @@ public class Test {
 	 * @param bMatrix
 	 * @return
 	 */
-	private static int similarity(int[][] aMatrix, int[][] bMatrix) {
+	private static double similarity(int[][] aMatrix, Matrix matrix) {
+		int[][] bMatrix = matrix.PIXELS();
 		int[][] minMatrix = (aMatrix[0].length < bMatrix[0].length ? aMatrix : bMatrix);
 		int[][] maxMatrix = (aMatrix[0].length < bMatrix[0].length ? bMatrix : aMatrix);
 		
@@ -266,7 +261,7 @@ public class Test {
 			int similarity = 0;
 			for(int r = 0; r < HEIGHT; r++) {
 				for(int c = 0; c < MIN_WIDTH; c++) {
-					if(minMatrix[r][c] != ImageUtils.RGB_WHITE && 
+					if(minMatrix[r][c] != 0 && 
 							minMatrix[r][c] == maxMatrix[r][c + d]) {
 						similarity++;
 					}
@@ -277,7 +272,11 @@ public class Test {
 				maxSimilarity = similarity;
 			}
 		}
-		return maxSimilarity;
+		
+		double rst = (double) maxSimilarity / (double) matrix.PIXEL_NUM();
+		System.out.println(StrUtils.concat(matrix.VAL(), ":", 
+				maxSimilarity, "/", matrix.PIXEL_NUM(), "=", rst));
+		return rst;
 	}
 	
 	private static int toNumber(BufferedImage image) {
