@@ -21,6 +21,24 @@ public enum DBType {
 	
 	SQLITE("sqlite", "org.sqlite.JDBC", "jdbc:sqlite:<dbname>"),
 	
+	/**
+	 * Java JDBC 连接 Oracle有三种方法:
+	 * -----------------------------------------
+	 * 格式一: 使用ServiceName方式:
+	 * 		jdbc:oracle:thin:@//<host>:<port>/<service_name>
+	 * 	   如： jdbc:oracle:thin:@//xxx.xxx.xxx.xxx:1526/CDEV
+	 * 	   注： @后面有//, 这是与使用SID的主要区别。（11g在@后可不加//）
+	 *  	这是Oracle推荐的格式, 因为对于集群而言, 每个节点的SID是不一样的, 而SERVICE NAME可以包含所有节点。
+	 *  
+	 * 格式二: 使用SID方式: 
+	 * 		jdbc:oracle:thin:@<host>:<port>:<SID> 
+	 *   如： jdbc:oracle:thin:@xxx.xxx.xxx.xxx:1526:CDEV2
+	 *   
+	 * 格式三：使用TNSName方式: 
+	 * 		jdbc:oracle:thin:@<TNSName>
+	 * 	   如： jdbc:oracle:thin:@CDEV
+	 * 	   注： ORACLE从10.2.0.1后支持TNSNames
+	 */
 	ORACLE("oracle", "oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@<host>:<port>:<dbname>"),
 	
 	ORACLE_8I("oracle-8i", "oracle.jdbc.driver.OracleDriver", "jdbc:oracle:thin:@<host>:<port>:<dbname>"),
