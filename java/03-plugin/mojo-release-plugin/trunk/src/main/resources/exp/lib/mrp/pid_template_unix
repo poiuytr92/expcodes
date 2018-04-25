@@ -7,7 +7,7 @@ if [ $app_path ];then
 fi
 
 export threadname=$(cat ./_threadname)
-PID=`ps -ef|grep D${threadname}|grep -v grep|awk '{print $2}'`
+PID=`ps -ef|grep Dtn=${threadname}|grep -v grep|awk '{print $2}'`
 if [ -z $PID ];then
     echo "The program $threadname has been stoped."
 else

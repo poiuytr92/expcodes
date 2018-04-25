@@ -8,9 +8,9 @@ fi
 
 export threadname=$(cat ./_threadname)
 @{variable_declaration}@
-PID=`ps -ef|grep D@{ver}@${threadname}|grep -v grep|awk '{print $2}'`
+PID=`ps -ef|grep Dtn=@{ver}@${threadname}|grep -v grep|awk '{print $2}'`
 if [ -z $PID ];then
-    @{jdk_path}@ -D@{ver}@$threadname @{jdk_params}@ -cp @{classpath}@ @{main_method}@ @{main_method_params}@ @{stdout_ctrl}@ @{errout_ctrl}@ @{run_in_background}@
+    @{jdk_path}@ -Dtn=@{ver}@${threadname} @{jdk_params}@ -cp @{classpath}@ @{main_method}@ @{main_method_params}@ @{stdout_ctrl}@ @{errout_ctrl}@ @{run_in_background}@
 else
     echo "The program @{ver}@$threadname has been running.Please stop it firstly."
 fi

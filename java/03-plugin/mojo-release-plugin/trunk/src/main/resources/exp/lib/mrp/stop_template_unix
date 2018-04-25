@@ -7,13 +7,13 @@ if [ $app_path ];then
 fi
 
 export threadname=$(cat ./_threadname)
-PID=`ps -ef|grep D${threadname}|grep -v grep|awk '{print $2}'`
+PID=`ps -ef|grep Dtn=${threadname}|grep -v grep|awk '{print $2}'`
 if [ $PID ];then
     kill $PID
     echo "The program $threadname is being killed, please wait for 10 seconds..."
     sleep 10
 
-    PID=`ps -ef|grep D${threadname}|grep -v grep|awk '{print $2}'`
+    PID=`ps -ef|grep Dtn=${threadname}|grep -v grep|awk '{print $2}'`
     if [ $PID ];then
         kill -9 $PID
     fi
