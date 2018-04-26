@@ -18,6 +18,16 @@ import exp.libs.warp.db.sql.DBUtils;
 import exp.libs.warp.db.sql.SqliteUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 
+/**
+ * <PRE>	
+ * 版本库管理器
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-12-27
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class _VerDBMgr {
 
 	/** 版本信息库的脚本 */
