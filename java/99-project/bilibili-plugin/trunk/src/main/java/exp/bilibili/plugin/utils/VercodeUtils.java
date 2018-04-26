@@ -24,7 +24,17 @@ public class VercodeUtils {
 	 * @return 表达式计算结果
 	 */
 	public static int calculateExpressionImage(String imgPath) {
-		String expression = OCRUtils.imgToTxt(imgPath);	// 图像识别
+		String expression = ImgRecognizeUtils.analyseExpression(imgPath); // 新版图像识别(有干扰)
+		return calculate(expression);
+	}
+	
+	/**
+	 * 计算小学数学验证码图片中的表达式 (通过OCR工具识别)
+	 * @param imgPath 小学数学验证码图片路径, 目前仅有 a+b 与 a-b 两种形式的验证码
+	 * @return 表达式计算结果
+	 */
+	public static int calculateExpressionImageByOCR(String imgPath) {
+		String expression = OCRUtils.imgToTxt(imgPath);	// 旧版图像识别(无干扰)
 		expression = revise(expression);	// 修正表达式
 		return calculate(expression);
 	}

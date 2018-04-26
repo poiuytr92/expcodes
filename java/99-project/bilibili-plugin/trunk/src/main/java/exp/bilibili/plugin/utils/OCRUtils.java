@@ -8,7 +8,7 @@ import com.sun.media.OCR;
 
 /**
  * <PRE>
- * 图像字符识别工具
+ * OCR图像识别工具
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP

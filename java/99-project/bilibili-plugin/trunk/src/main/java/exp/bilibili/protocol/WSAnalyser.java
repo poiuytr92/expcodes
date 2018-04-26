@@ -217,12 +217,19 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(EnergyLottery msgBean) {
-		String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在高能抽奖中!!!");
+		String msg = "";
+		if(msgBean.getMsg().contains("20倍节奏风暴")) {
+			msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 开启了20倍节奏风暴!!!");
+			// TODO 极少人一次送20个节奏风暴, 暂没必要参加抽奖
+			
+		} else {
+			msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在高能抽奖中!!!");
+			RoomMgr.getInstn().addGiftRoom(msgBean.ROOM_ID());
+			RoomMgr.getInstn().relate(msgBean.getRoomId(), msgBean.getRealRoomId());
+		}
+		
 		UIUtils.notify(msg);
 		log.info(msg);
-		
-		RoomMgr.getInstn().addGiftRoom(msgBean.ROOM_ID());
-		RoomMgr.getInstn().relate(msgBean.getRoomId(), msgBean.getRealRoomId());
 	}
 	
 	/**
