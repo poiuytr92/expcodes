@@ -2,6 +2,7 @@ package exp.bilibili.plugin.utils;
 
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.ocr.OCRUtils;
 
 /**
  * <PRE>
