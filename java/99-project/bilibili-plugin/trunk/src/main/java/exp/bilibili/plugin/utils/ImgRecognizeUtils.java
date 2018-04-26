@@ -87,7 +87,6 @@ public class ImgRecognizeUtils {
 		List<BufferedImage> subImages = split(binImage, CHAR_NUM);
 		for(int i = 0; i < subImages.size(); i++) {
 			BufferedImage subImage = subImages.get(i);
-			ImageUtils.write(subImage, "./log/tmp-"+i+".png", FileType.PNG);
 			if(OP_IDX == i) {
 				expression.append(recognizeOperator(subImage));
 			} else {
