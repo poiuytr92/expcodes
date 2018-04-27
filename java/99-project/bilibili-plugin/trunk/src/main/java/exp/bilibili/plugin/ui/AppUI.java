@@ -259,7 +259,7 @@ public class AppUI extends MainWindow {
 		this.loginUser = "";
 		this.isLogined = false;
 		this.percentBtn = new JButton("%");
-		this.loginBtn = new JButton("扫码/帐密登陆(自动抽奖)");
+		this.loginBtn = new JButton("扫码/帐密登陆");
 		this.logoutBtn = new JButton("销");
 		this.addUserBtn = new JButton("╋");
 		this.exportBtn = new JButton("备");
