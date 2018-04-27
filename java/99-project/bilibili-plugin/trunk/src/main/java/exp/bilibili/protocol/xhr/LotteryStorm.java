@@ -127,7 +127,11 @@ public class LotteryStorm extends _Lottery {
 			boolean isExist = true;
 			while(isExist == true) {	// 对于存在节奏风暴的房间, 继续扫描(可能有人连续送节奏风暴)
 				String response = client.doGet(STORM_CHECK_URL, header, request);
-				List<String> raffleIds = getStormIds(roomId, response);
+				if(StrUtils.isTrimEmpty(response)) {	// 扫描过频, 无返回
+					ThreadUtils.tSleep(scanInterval);
+					break;
+				}
+				List<String> raffleIds = getStormRaffleIds(roomId, response);
 				isExist = join(roomId, raffleIds);
 			}
 			ThreadUtils.tSleep(scanInterval);
@@ -141,7 +145,7 @@ public class LotteryStorm extends _Lottery {
 	 * @param response {"code":0,"msg":"","message":"","data":{"id":157283,"roomid":2717660,"num":100,"time":50,"content":"康康胖胖哒……！","hasJoin":0}}
 	 * @return
 	 */
-	private static List<String> getStormIds(int roomId, String response) {
+	private static List<String> getStormRaffleIds(int roomId, String response) {
 		List<String> raffleIds = new LinkedList<String>();
 		try {
 			JSONObject json = JSONObject.fromObject(response);
