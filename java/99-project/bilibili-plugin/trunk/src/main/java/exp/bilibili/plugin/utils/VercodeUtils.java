@@ -1,7 +1,9 @@
 package exp.bilibili.plugin.utils;
 
+import exp.bilibili.plugin.cache.VercodeRecognition;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.ocr.OCR;
 
 /**
  * <PRE>
@@ -15,6 +17,15 @@ import exp.libs.utils.other.StrUtils;
  */
 public class VercodeUtils {
 	
+	/** OCR组件目录 */
+	public final static String OCR_DIR = "./conf/ocr/tesseract";
+	
+	/** OCR处理对象 (用于识别旧版无干扰的验证码) */
+	private final static OCR OCR = new OCR(OCR_DIR);
+	
+	/** B站小学数学验证码识别器 (用于识别新版有干扰的验证码) */
+	private final static VercodeRecognition RECOGNITION = VercodeRecognition.getInstn();
+	
 	/** 私有化构造函数 */
 	protected VercodeUtils() {}
 	
@@ -23,8 +34,8 @@ public class VercodeUtils {
 	 * @param imgPath 小学数学验证码图片路径, 目前仅有 a+b 与 a-b 两种形式的验证码
 	 * @return 表达式计算结果
 	 */
-	public static int calculateExpressionImage(String imgPath) {
-		String expression = ImgRecognizeUtils.analyseExpression(imgPath); // 新版图像识别(有干扰)
+	public static int calculateImageExpression(String imgPath) {
+		String expression = RECOGNITION.analyse(imgPath); // 新版图像识别(有干扰)
 		return calculate(expression);
 	}
 	
@@ -33,8 +44,8 @@ public class VercodeUtils {
 	 * @param imgPath 小学数学验证码图片路径, 目前仅有 a+b 与 a-b 两种形式的验证码
 	 * @return 表达式计算结果
 	 */
-	public static int calculateExpressionImageByOCR(String imgPath) {
-		String expression = OCRUtils.imgToTxt(imgPath);	// 旧版图像识别(无干扰)
+	public static int calculateImageExpressionByOCR(String imgPath) {
+		String expression = OCR.recognizeText(imgPath);	// 旧版图像识别(无干扰)
 		expression = revise(expression);	// 修正表达式
 		return calculate(expression);
 	}

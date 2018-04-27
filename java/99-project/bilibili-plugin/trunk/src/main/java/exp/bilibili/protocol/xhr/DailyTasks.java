@@ -325,7 +325,7 @@ public class DailyTasks extends __XHR {
 			JSONObject data = JsonUtils.getObject(json, BiliCmdAtrbt.data);
 			String img = JsonUtils.getStr(data, BiliCmdAtrbt.img);
 			String imgPath = HttpUtils.convertBase64Img(img, IMG_DIR, "vercode");
-			answer = VercodeUtils.calculateExpressionImage(imgPath);
+			answer = VercodeUtils.calculateImageExpression(imgPath);
 			
 		} catch(Exception e) {
 			log.error("下载小学数学验证码图片失败", e);

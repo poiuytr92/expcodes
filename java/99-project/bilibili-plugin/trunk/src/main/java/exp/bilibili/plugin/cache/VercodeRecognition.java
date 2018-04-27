@@ -1,9 +1,11 @@
-package exp.bilibili.plugin.utils;
+package exp.bilibili.plugin.cache;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import exp.bilibili.plugin.bean.ldm.Matrix;
 import exp.libs.envm.FileType;
@@ -13,7 +15,7 @@ import exp.libs.utils.num.NumUtils;
 
 /**
  * <PRE>
- * 图像识别工具(针对最新版的小学数学验证码)
+ * B站小学数学验证码识别器
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -21,7 +23,7 @@ import exp.libs.utils.num.NumUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class ImgRecognizeUtils {
+public class VercodeRecognition {
 	
 	/** 当前B站小学数学验证码的干扰线颜色（深蓝） */
 	private final static int INTERFERON_COLOR = -15326125;
@@ -29,28 +31,43 @@ public class ImgRecognizeUtils {
 	/** 当前B站小学数学验证码的字符个数 */
 	private final static int CHAR_NUM = 4;
 	
-	/** 前B站小学数学验证码的运算符位置索引(从0开始) */
-	private final static int OP_IDX = 2;
-	
 	/** 0-9数字的的参照图像目录 */
 	private final static String REFER_NUM_DIR = "./conf/vercode-refer/number";
-	
-	/** 0-9数字的的参照像素矩阵 */
-	private final static List<Matrix> REFER_NUM_MATRIXS = new LinkedList<Matrix>();
 	
 	/** 运算符的的参照图像目录 */
 	private final static String REFER_OP_DIR = "./conf/vercode-refer/operator";
 	
+	/** 0-9数字的的参照像素矩阵 */
+	private List<Matrix> REFER_NUM_MATRIX;
+	
 	/** 运算的的参照像素矩阵 */
-	private final static List<Matrix> REFER_OP_MATRIXS = new LinkedList<Matrix>();
+	private List<Matrix> REFER_OP_MATRIXS;
+
+	/** 单例 */
+	private static volatile VercodeRecognition instance;
 	
 	/** 私有化构造函数 */
-	protected ImgRecognizeUtils() {}
-	
-	/** 预加载参照像素矩阵 */
-	static {
-		_loadReferMatrixs(REFER_NUM_DIR, REFER_NUM_MATRIXS);// 加载0-9数字的的参照像素矩阵
+	private VercodeRecognition() {
+		this.REFER_NUM_MATRIX = new LinkedList<Matrix>();
+		this.REFER_OP_MATRIXS = new LinkedList<Matrix>();
+		
+		_loadReferMatrixs(REFER_NUM_DIR, REFER_NUM_MATRIX);	// 加载0-9数字的的参照像素矩阵
 		_loadReferMatrixs(REFER_OP_DIR, REFER_OP_MATRIXS);	// 加载+-运算符的的参照像素矩阵
+	}
+	
+	/**
+	 * 获取单例
+	 * @return 单例
+	 */
+	public static VercodeRecognition getInstn() {
+		if(instance == null) {
+			synchronized (VercodeRecognition.class) {
+				if(instance == null) {
+					instance = new VercodeRecognition();
+				}
+			}
+		}
+		return instance;
 	}
 	
 	/**
@@ -58,7 +75,7 @@ public class ImgRecognizeUtils {
 	 * @param referDir 图像目录
 	 * @param referMatrixs 存储像素矩阵的队列
 	 */
-	private static void _loadReferMatrixs(String referDir, List<Matrix> referMatrixs) {
+	private void _loadReferMatrixs(String referDir, List<Matrix> referMatrixs) {
 		File dir = new File(referDir);
 		File[] files = dir.listFiles();
 		for(File file : files) {
@@ -74,11 +91,18 @@ public class ImgRecognizeUtils {
 	}
 	
 	/**
-	 * 从小学数学验证码的图片中析取表达式
-	 * @param imgPath 小学数学验证码图片路径, 目前仅有 a+b 与 a-b 两种形式的验证码 (其中a为2位数, b为1位数)
+	 * 从小学数学验证码的图片中析取表达式.
+	 * ------------------------------------
+	 *   验证码表达式的特点:
+	 *    1. 仅有 a+b 与 a-b 两种形式的验证码 (其中a为2位数, b为1位数)
+	 *    2. a的取值范围是 [10, 99]
+	 *    3. b的取值范围是 [1, 9]
+	 *    4. 验证码结果的取值范围是 [1, 108]
+	 * 
+	 * @param imgPath 小学数学验证码图片路径
 	 * @return 数学表达式
 	 */
-	public static String analyseExpression(String imgPath) {
+	public String analyse(String imgPath) {
 		BufferedImage image = ImageUtils.read(imgPath);
 		removeInterferon(image);	// 去除干扰线
 		BufferedImage binImage = ImageUtils.toBinary(image, true);
@@ -87,10 +111,18 @@ public class ImgRecognizeUtils {
 		List<BufferedImage> subImages = split(binImage, CHAR_NUM);
 		for(int i = 0; i < subImages.size(); i++) {
 			BufferedImage subImage = subImages.get(i);
-			if(OP_IDX == i) {
+			
+			// 验证码的第三位为符号位
+			if(i == 2) {
 				expression.append(recognizeOperator(subImage));
-			} else {
+				
+			// 验证码的第二位为数字, 取值范围 [0, 9]
+			} else if(i == 1){
 				expression.append(recognizeNumber(subImage));
+				
+			// 验证码的第一、四位为数字, 取值范围 [1, 9]
+			} else {
+				expression.append(recognizeNumber(subImage, "0"));
 			}
 		}
 		return expression.toString();
@@ -101,7 +133,7 @@ public class ImgRecognizeUtils {
 	 * 	由于干扰线和数字底色同色, 移除干扰线后剩下的数字仅有边框
 	 * @param image
 	 */
-	private static void removeInterferon(BufferedImage image) {
+	private void removeInterferon(BufferedImage image) {
 		final int W = image.getWidth();
 		final int H = image.getHeight();
 		for (int i = 0; i < W; i++) {
@@ -120,7 +152,7 @@ public class ImgRecognizeUtils {
 	 * @param partNum 等分数
 	 * @return
 	 */
-	private static List<BufferedImage> split(BufferedImage image, int partNum) {
+	private List<BufferedImage> split(BufferedImage image, int partNum) {
 		final int W = image.getWidth();
 		
 		int left = -1;
@@ -145,7 +177,7 @@ public class ImgRecognizeUtils {
 	 * @param scanColumn 当前扫描的列
 	 * @return
 	 */
-	private static boolean _isZeroPixel(BufferedImage image, int scanColumn) {
+	private boolean _isZeroPixel(BufferedImage image, int scanColumn) {
 		boolean isZero = true;
 		final int H = image.getHeight();
 		for(int row = 0; row < H; row++) {
@@ -163,17 +195,25 @@ public class ImgRecognizeUtils {
 	 * @param image
 	 * @return + 或 -
 	 */
-	private static String recognizeOperator(BufferedImage image) {
-		return _compare(image, REFER_OP_MATRIXS, false);
+	private String recognizeOperator(BufferedImage image) {
+		return _compare(image, REFER_OP_MATRIXS, false, null);
 	}
 	
 	/**
 	 * 识别图像中的数字
 	 * @param image 数字图像
+	 * @param exclueNumbers 排除数值
 	 * @return
 	 */
-	private static int recognizeNumber(BufferedImage image) {
-		String value = _compare(image, REFER_NUM_MATRIXS, true);
+	private int recognizeNumber(BufferedImage image, String... exclueNumbers) {
+		Set<String> exclusions = new HashSet<String>();
+		if(exclueNumbers != null) {
+			for(String exclueNumber : exclueNumbers) {
+				exclusions.add(exclueNumber);
+			}
+		}
+		
+		String value = _compare(image, REFER_NUM_MATRIX, true, exclusions);
 		return NumUtils.toInt(value, 0);
 	}
 	
@@ -182,14 +222,20 @@ public class ImgRecognizeUtils {
 	 * @param image 待识别图像
 	 * @param referMatrixs 参照像素矩阵
 	 * @param ratio 使用重叠率作为相似度（反之使用重叠像素的个数作为相似度）
+	 * @param exclusions 排除值
 	 * @return 相似度最高的参照值
 	 */
-	private static String _compare(BufferedImage image, List<Matrix> referMatrixs, boolean ratio) {
+	private String _compare(BufferedImage image, List<Matrix> referMatrixs, 
+			boolean ratio, Set<String> exclusions) {
 		double maxSimilarity = 0;		// 最大相似度
 		String similarityValue = "";	// 最大相似度对应的参照矩阵的值
 		int[][] imgMatrix = ImageUtils.toBinaryMatrix(image);
 		
 		for(Matrix referMatrix : referMatrixs) {
+			if(exclusions != null && exclusions.contains(referMatrix.VAL())) {
+				continue;
+			}
+			
 			double similarity = _compare(imgMatrix, referMatrix, ratio);
 			if(maxSimilarity < similarity) {
 				maxSimilarity = similarity;
@@ -206,7 +252,7 @@ public class ImgRecognizeUtils {
 	 * @param ratio 使用重叠率作为相似度（反之使用重叠像素的个数作为相似度）
 	 * @return 相似度
 	 */
-	private static double _compare(int[][] imgMatrix, Matrix referMatrix, boolean ratio) {
+	private double _compare(int[][] imgMatrix, Matrix referMatrix, boolean ratio) {
 		int maxOverlap = _countOverlapPixel(imgMatrix, referMatrix.PIXELS());
 		double similarity = (double) maxOverlap / (double) referMatrix.PIXEL_NUM();
 		return (ratio ? similarity : maxOverlap);
@@ -219,7 +265,7 @@ public class ImgRecognizeUtils {
 	 * @param b 像素矩阵b
 	 * @return 最大的重叠前景色像素个数
 	 */
-	private static int _countOverlapPixel(int[][] a, int[][] b) {
+	private int _countOverlapPixel(int[][] a, int[][] b) {
 		final int AH = a.length;	// 像素矩阵a的高度（行数）
 		final int AW = a[0].length;	// 像素矩阵a的宽度（列数）
 		final int BH = b.length;	// 像素矩阵b的高度（行数）
@@ -251,7 +297,7 @@ public class ImgRecognizeUtils {
 	 * @param b 像素矩阵b
 	 * @return 最大的重叠前景色像素个数
 	 */
-	private static int _countNestOverlapPixel(int[][] a, int[][] b) {
+	private int _countNestOverlapPixel(int[][] a, int[][] b) {
 		final int H = a.length;
 		final int W = a[0].length;
 		final int H_DIFF = b.length - a.length;
@@ -286,7 +332,7 @@ public class ImgRecognizeUtils {
 	 * @param b 像素矩阵b
 	 * @return 最大的重叠前景色像素个数
 	 */
-	private static int _countCrossOverlapPixel(int[][] a, int[][] b) {
+	private int _countCrossOverlapPixel(int[][] a, int[][] b) {
 		final int H = b.length;
 		final int W = a[0].length;
 		final int H_DIFF = a.length - b.length;

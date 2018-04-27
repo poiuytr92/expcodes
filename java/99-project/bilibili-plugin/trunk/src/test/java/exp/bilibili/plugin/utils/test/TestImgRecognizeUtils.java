@@ -2,7 +2,7 @@ package exp.bilibili.plugin.utils.test;
 
 import java.io.File;
 
-import exp.bilibili.plugin.utils.ImgRecognizeUtils;
+import exp.bilibili.plugin.cache.VercodeRecognition;
 
 public class TestImgRecognizeUtils {
 
@@ -19,7 +19,7 @@ public class TestImgRecognizeUtils {
 //			}
 
 			String imgPath = file.getAbsolutePath();
-			String exp = ImgRecognizeUtils.analyseExpression(imgPath);
+			String exp = VercodeRecognition.getInstn().analyse(imgPath);
 			System.out.println(file.getName() + ":" + exp);
 		}
 	}

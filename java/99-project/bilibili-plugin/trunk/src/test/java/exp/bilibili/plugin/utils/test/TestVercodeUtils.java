@@ -15,7 +15,7 @@ public class TestVercodeUtils {
 		File dir = new File("./src/test/resources/exp/bilibili/plugin/utils/test/math/cur");
 		File[] imgs = dir.listFiles();
 		for(File img : imgs) {
-			int rst = VercodeUtils.calculateExpressionImage(img.getPath());
+			int rst = VercodeUtils.calculateImageExpression(img.getPath());
 			System.out.println(img.getName() + " : " + rst);
 		}
 	}
@@ -25,7 +25,7 @@ public class TestVercodeUtils {
 		File dir = new File("./src/test/resources/exp/bilibili/plugin/utils/test/math/ocr");
 		File[] imgs = dir.listFiles();
 		for(File img : imgs) {
-			int rst = VercodeUtils.calculateExpressionImageByOCR(img.getPath());
+			int rst = VercodeUtils.calculateImageExpressionByOCR(img.getPath());
 			System.out.println(img.getName() + " : " + rst);
 		}
 	}
