@@ -21,6 +21,7 @@ public class TestImgRecognizeUtils {
 			String imgPath = file.getAbsolutePath();
 			String exp = VercodeRecognition.getInstn().analyse(imgPath);
 			System.out.println(file.getName() + ":" + exp);
+			System.out.println("=====");
 		}
 	}
 

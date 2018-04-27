@@ -127,7 +127,8 @@ public class LotteryStorm extends _Lottery {
 			boolean isExist = true;
 			while(isExist == true) {	// 对于存在节奏风暴的房间, 继续扫描(可能有人连续送节奏风暴)
 				String response = client.doGet(STORM_CHECK_URL, header, request);
-				if(StrUtils.isTrimEmpty(response)) {	// 扫描过频, 无返回
+				if(StrUtils.isTrimEmpty(response)) {
+					log.error("提取直播间 [{}] 的节奏风暴信息失败: 请求频率过高", roomId);
 					ThreadUtils.tSleep(scanInterval);
 					break;
 				}

@@ -12,6 +12,7 @@ import exp.libs.envm.FileType;
 import exp.libs.utils.img.ImageUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.num.RandomUtils;
 
 /**
  * <PRE>
@@ -30,6 +31,12 @@ public class VercodeRecognition {
 	
 	/** 当前B站小学数学验证码的字符个数 */
 	private final static int CHAR_NUM = 4;
+	
+	/**
+	 * 置信识别率.
+	 * 	当一个字符的识别率高于25%时， 认为是这次识别是准确的.
+	 */
+	private final static double CREDIBLE_RADIO = 0.25;
 	
 	/** 0-9数字的的参照图像目录 */
 	private final static String REFER_NUM_DIR = "./conf/vercode-refer/number";
@@ -109,6 +116,18 @@ public class VercodeRecognition {
 		
 		StringBuilder expression = new StringBuilder();
 		List<BufferedImage> subImages = split(binImage, CHAR_NUM);
+		
+		// 当前小学数学验证码数字，由于字体原因不是等宽的, 除了数字1之外, 其他数字的标准宽度是15
+		// 而在当前的识别算法下, 切割验证码后的4个子图宽度必定是相同的
+		// 但是由于数字 1 的存在, 且图片存在旋转干扰, 使得子图的宽度不是准确的15, 而是平均宽度在 [10, 15] 之间
+		// 可以确定的是： 若平均宽度 <= 11， 则至少有一个1;  若平均宽度 <= 10， 则至少有两个1
+		// 但是无法确定1的位置, 且数字1可以还可能作为 0、4、6、7(旋转后)、8、9 的一部分导致识别率严重降低
+		// 因此对于存在数字1的验证码, 干脆直接不识别, 而判断是否存在数字1的依据，就是子图宽度 <= 11
+		final int AVG_WIDTH = subImages.get(0).getWidth();
+		if(AVG_WIDTH <= 11) {	// 若存在数字1, 则不识别
+			subImages.clear();
+		}
+		
 		for(int i = 0; i < subImages.size(); i++) {
 			BufferedImage subImage = subImages.get(i);
 			
@@ -118,11 +137,11 @@ public class VercodeRecognition {
 				
 			// 验证码的第二位为数字, 取值范围 [0, 9]
 			} else if(i == 1){
-				expression.append(recognizeNumber(subImage));
+				expression.append(recognizeNumber(subImage, "1"));
 				
 			// 验证码的第一、四位为数字, 取值范围 [1, 9]
 			} else {
-				expression.append(recognizeNumber(subImage, "0"));
+				expression.append(recognizeNumber(subImage, "0", "1"));
 			}
 		}
 		return expression.toString();
@@ -227,8 +246,10 @@ public class VercodeRecognition {
 	 */
 	private String _compare(BufferedImage image, List<Matrix> referMatrixs, 
 			boolean ratio, Set<String> exclusions) {
-		double maxSimilarity = 0;		// 最大相似度
-		String similarityValue = "";	// 最大相似度对应的参照矩阵的值
+		double _1stSimilarity = 0;	// 最大相似度
+		double _2ndSimilarity = 0;	// 次大相似度
+		String _1stValue = "";		// 最大相似度对应的参照矩阵的值(首选值)
+		String _2ndValue = "";		// 次大相似度对应的参照矩阵的值(被选值)
 		int[][] imgMatrix = ImageUtils.toBinaryMatrix(image);
 		
 		for(Matrix referMatrix : referMatrixs) {
@@ -237,12 +258,26 @@ public class VercodeRecognition {
 			}
 			
 			double similarity = _compare(imgMatrix, referMatrix, ratio);
-			if(maxSimilarity < similarity) {
-				maxSimilarity = similarity;
-				similarityValue = referMatrix.VAL();
+			if(_1stSimilarity < similarity) {
+				_2ndSimilarity = _1stSimilarity;
+				_2ndValue = _1stValue;
+				
+				_1stSimilarity = similarity;
+				_1stValue = referMatrix.VAL();
+				
+			} else if(_2ndSimilarity < similarity) {
+				_2ndSimilarity = similarity;
+				_2ndValue = referMatrix.VAL();
 			}
 		}
-		return similarityValue;
+		
+		// 当一个字符的识别率高于25%时， 认为是这次识别是准确的.
+		// 否则从识别率最高和次高的两个参照值中随机选择一个
+		String value = _1stValue;
+		if(ratio && _1stSimilarity < CREDIBLE_RADIO) {
+			value = RandomUtils.randomBoolean() ? _1stValue : _2ndValue;
+		}
+		return value;
 	}
 	
 	/**
