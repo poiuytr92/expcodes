@@ -7,6 +7,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exp.bilibili.plugin.bean.ldm.Matrix;
 import exp.libs.envm.FileType;
 import exp.libs.utils.img.ImageUtils;
@@ -25,6 +28,9 @@ import exp.libs.utils.num.RandomUtils;
  * @since     jdk版本：jdk1.6
  */
 public class VercodeRecognition {
+	
+	/** 日志器 */
+	private final static Logger log = LoggerFactory.getLogger(VercodeRecognition.class);
 	
 	/** 当前B站小学数学验证码的干扰线颜色（深蓝） */
 	private final static int INTERFERON_COLOR = -15326125;
@@ -110,6 +116,29 @@ public class VercodeRecognition {
 	 * @return 数学表达式
 	 */
 	public String analyse(String imgPath) {
+		String expression = "";
+		try {
+			expression = _analyse(imgPath);
+			
+		} catch(Exception e) {
+			log.error("解析小学数学验证码图片失败: {}", imgPath, e);
+		}
+		return expression;
+	}
+	
+	/**
+	 * 从小学数学验证码的图片中析取表达式.
+	 * ------------------------------------
+	 *   验证码表达式的特点:
+	 *    1. 仅有 a+b 与 a-b 两种形式的验证码 (其中a为2位数, b为1位数)
+	 *    2. a的取值范围是 [10, 99]
+	 *    3. b的取值范围是 [1, 9]
+	 *    4. 验证码结果的取值范围是 [1, 108]
+	 * 
+	 * @param imgPath 小学数学验证码图片路径
+	 * @return 数学表达式
+	 */
+	private String _analyse(String imgPath) {
 		BufferedImage image = ImageUtils.read(imgPath);
 		removeInterferon(image);	// 去除干扰线
 		BufferedImage binImage = ImageUtils.toBinary(image, true);
