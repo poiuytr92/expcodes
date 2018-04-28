@@ -77,9 +77,14 @@ public class SocketBean {
 	public final static String DEFAULT_EXIT_CMD = "exit";
 	
 	public SocketBean(String ip, int port) {
+		this(ip, port, DEFAULT_OVERTIME);
+	}
+	
+	public SocketBean(String ip, int port, int overtime) {
 		this();
 		setIp(ip);
 		setPort(port);
+		setOvertime(overtime);
 	}
 	
 	public SocketBean(SocketBean other) {
@@ -341,7 +346,7 @@ public class SocketBean {
 
 	public void setExitCmd(String exitCmd) {
 		this.exitCmd = (StrUtils.isNotEmpty(exitCmd) ? exitCmd :
-			(StrUtils.isNotEmpty(this.exitCmd) ? this.exitCmd : DEFAULT_ID));
+			(StrUtils.isNotEmpty(this.exitCmd) ? this.exitCmd : DEFAULT_EXIT_CMD));
 	}
 
 	@Override
