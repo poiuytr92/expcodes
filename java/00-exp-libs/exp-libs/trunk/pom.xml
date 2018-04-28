@@ -311,12 +311,23 @@
 		  <classifier>alpha</classifier>
 		</dependency>
 		
-        <!-- TensorFlow深度学习模型接口 -->
+        <!-- tensorflow深度学习模型接口 -->
         <dependency>
           <groupId>org.tensorflow</groupId>
           <artifactId>tensorflow</artifactId>
           <version>1.6.0-rc1</version>
         </dependency>
+        <dependency>     <!-- tensorflow本地化接口（darwin+linux+win） -->
+		  <groupId>org.tensorflow</groupId>
+		  <artifactId>libtensorflow_jni</artifactId>
+		  <version>1.6.0-rc1</version>
+		</dependency>
+		<!-- dependency>  <!-- tensorflow本地化接口（精简：仅win） -->
+          <groupId>org.tensorflow</groupId>
+          <artifactId>libtensorflow_jni-for-win</artifactId>
+          <version>1.6.0-rc1</version>
+          <classifier>rc1</classifier>
+        </dependency -->
         
         <!-- WEB-SOCKET -->
 	    <dependency>
