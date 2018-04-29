@@ -167,7 +167,7 @@ public class WebBot extends LoopThread {
 		resetDailyTasks();	// 满足某个条件则重置每日任务
 		
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
-			Set<BiliCookie> cookies = CookiesMgr.ALL();
+			Set<BiliCookie> cookies = CookiesMgr.ALL(true);
 			for(BiliCookie cookie : cookies) {
 				if(cookie.TASK_STATUS().isAllFinish()) {
 					continue;

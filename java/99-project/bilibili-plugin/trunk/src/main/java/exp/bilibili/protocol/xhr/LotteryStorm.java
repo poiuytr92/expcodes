@@ -204,7 +204,7 @@ public class LotteryStorm extends _Lottery {
 	 */
 	public static boolean toLottery(int roomId, String raffleId) {
 		int cnt = 0;
-		Set<BiliCookie> cookies = CookiesMgr.ALL();
+		Set<BiliCookie> cookies = CookiesMgr.ALL(true);
 		for(BiliCookie cookie : cookies) {
 			if(!cookie.isBindTel() || !cookie.isRealName()) {
 				continue;	// 未绑定手机或未实名认证的账号无法参与节奏风暴  (FIXME 未实名也可参加, 但是需要填验证码, 目前未能自动识别验证码)

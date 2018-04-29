@@ -234,7 +234,17 @@ public class CookiesMgr {
 	}
 	
 	public static Set<BiliCookie> ALL() {
-		Set<BiliCookie> cookies = new LinkedHashSet<BiliCookie>();
+		return ALL(false);
+	}
+	
+	/**
+	 * 获取所有Cookies
+	 * @param order 是否有序
+	 * @return
+	 */
+	public static Set<BiliCookie> ALL(boolean order) {
+		Set<BiliCookie> cookies = order ? 
+				new LinkedHashSet<BiliCookie>() : new HashSet<BiliCookie>();
 		if(BiliCookie.NULL != MAIN()) { cookies.add(MAIN()); }
 		if(BiliCookie.NULL != VEST()) { cookies.add(VEST()); }
 		cookies.addAll(MINIs());
