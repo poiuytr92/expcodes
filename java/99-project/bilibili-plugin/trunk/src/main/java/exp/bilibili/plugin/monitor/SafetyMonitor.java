@@ -13,7 +13,7 @@ import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
-import exp.certificate.bean.App;
+import exp.certificate.bean.AppInfo;
 import exp.certificate.core.Convertor;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;
@@ -168,8 +168,8 @@ public class SafetyMonitor extends LoopThread {
 				pageSource = HttpURLUtils.doGet(GITHUB_URL, null, null);
 			}
 			
-			App app = Convertor.toApp(pageSource, appName);	// 提取软件授权信息
-			if(app == null) {
+			AppInfo appInfo = Convertor.toAppInfo(pageSource, appName);	// 提取软件授权信息
+			if(appInfo == null) {
 				if(++noResponseCnt >= NO_RESPONSE_LIMIT) {
 					if(checkByBilibili() == true) {	// Github或Gitee网络不通时, 转B站校验
 						noResponseCnt = 0;
@@ -181,10 +181,10 @@ public class SafetyMonitor extends LoopThread {
 				}
 			} else {
 				noResponseCnt = 0;
-				isContinue = check(app);
+				isContinue = check(appInfo);
 			}
 			
-			updateCertificateTime(app);	// 更新授权时间
+			updateCertificateTime(appInfo);	// 更新授权时间
 			UIUtils.updateAppTitle(certificateTime); // 把授权时间更新到标题
 		}
 		return isContinue;
@@ -203,9 +203,9 @@ public class SafetyMonitor extends LoopThread {
 			
 			if(code == 0) {
 				JSONArray data = JsonUtils.getArray(json, BiliCmdAtrbt.data);
-				App app = _toApp(data);	// 生成软件授权信息
-				if(app != null) {
-					isOk = check(app);
+				AppInfo appInfo = _toAppInfo(data);	// 生成软件授权信息
+				if(appInfo != null) {
+					isOk = check(appInfo);
 				}
 			}
 		} catch(Exception e) {
@@ -219,10 +219,10 @@ public class SafetyMonitor extends LoopThread {
 	 * @param data
 	 * @return
 	 */
-	private App _toApp(JSONArray data) {
-		App app = null;
+	private AppInfo _toAppInfo(JSONArray data) {
+		AppInfo appInfo = null;
 		if(data == null || data.size() <= 0) {
-			return app;
+			return appInfo;
 		}
 		
 		String versions = "";
@@ -253,30 +253,30 @@ public class SafetyMonitor extends LoopThread {
 		
 		if(blacklist.length() > 0) { blacklist.setLength(blacklist.length() - 1); }
 		if(whitelist.length() > 0) { whitelist.setLength(whitelist.length() - 1); }
-		app = new App(appName, versions, time, blacklist.toString(), whitelist.toString());
-		return app;
+		appInfo = new AppInfo(appName, versions, time, blacklist.toString(), whitelist.toString());
+		return appInfo;
 	}
 	
 	/**
 	 * 校验当前软件是否匹配授权信息
-	 * @param app 软件授权信息
+	 * @param appInfo 软件授权信息
 	 * @return true:匹配; false:不匹配
 	 */
-	private boolean check(App app) {
+	private boolean check(AppInfo appInfo) {
 		boolean isOk = true;
-		if(checkInWhitelist(app.getWhitelist())) {
+		if(checkInWhitelist(appInfo.getWhitelist())) {
 			cause = UNCHECK_CAUSE;	// 白名单用户, 启动后则免检
 			isOk = false;
 			
-		} else if(!checkVersions(app.getVersions())) {
+		} else if(!checkVersions(appInfo.getVersions())) {
 			cause = "版本已失效";
 			isOk = false;
 			
-		} else if(!checkNotInBlacklist(app.getBlacklist())) {
+		} else if(!checkNotInBlacklist(appInfo.getBlacklist())) {
 			cause = "孩子, 你被管理员关小黑屋了";
 			isOk = false;
 			
-		} else if(!checkInTime(app.getTime())) {
+		} else if(!checkInTime(appInfo.getTime())) {
 			cause = "授权已过期";
 			isOk = false;
 		}
@@ -360,9 +360,9 @@ public class SafetyMonitor extends LoopThread {
 	/**
 	 * 更新授权时间
 	 */
-	private void updateCertificateTime(App app) {
-		if(app != null) {
-			checkInTime(app.getTime());
+	private void updateCertificateTime(AppInfo appInfo) {
+		if(appInfo != null) {
+			checkInTime(appInfo.getTime());
 		}
 	}
 	
