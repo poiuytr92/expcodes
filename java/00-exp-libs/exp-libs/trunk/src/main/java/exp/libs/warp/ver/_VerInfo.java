@@ -230,5 +230,5 @@ class _VerInfo extends PopChildWindow {
 	protected void setUpgradeStep(String upgradeStep) {
 		this.upgradeStep = upgradeStep;
 	}
-
+	
 }

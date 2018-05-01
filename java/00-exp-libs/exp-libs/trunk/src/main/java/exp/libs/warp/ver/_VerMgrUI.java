@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.sql.Connection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +20,6 @@ import javax.swing.JTabbedPane;
 
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
-import exp.libs.warp.db.sql.SqliteUtils;
-import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -75,9 +72,6 @@ class _VerMgrUI extends MainWindow {
 	/** 新增新版本信息的按钮 */
 	private JButton createVerBtn;
 	
-	/** 版本信息文件的数据源 */
-	private DataSourceBean ds;
-	
 	/** 界面单例 */
 	private static volatile _VerMgrUI instance;
 	
@@ -126,7 +120,6 @@ class _VerMgrUI extends MainWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.ds = _VerDBMgr.getInstn().getDS();
 		if(_VerDBMgr.getInstn().initVerDB()) {
 			this.prjVerInfo = loadPrjVerInfo();
 		} else {
@@ -146,19 +139,10 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	private _PrjVerInfo loadPrjVerInfo() {
-		Connection conn = SqliteUtils.getConn(ds);
-		String sql = StrUtils.concat("SELECT S_PROJECT_NAME, S_PROJECT_DESC, ", 
-				"S_TEAM_NAME, S_PROJECT_CHARSET, S_DISK_SIZE, S_CACHE_SIZE, ",
-				"S_APIS FROM T_PROJECT_INFO ORDER BY I_ID DESC LIMIT 1");
-		Map<String, String> prjInfo = SqliteUtils.queryFirstRowStr(conn, sql);
-		
-		sql = StrUtils.concat("SELECT S_AUTHOR, S_VERSION, S_DATETIME, ", 
-				"S_UPGRADE_CONTENT, S_UPGRADE_STEP FROM T_HISTORY_VERSIONS ", 
-				"ORDER BY I_ID ASC");
-		List<_VerInfo> verInfos = toVerInfos(SqliteUtils.queryKVSs(conn, sql));
-		SqliteUtils.close(conn);
-		
+		List<_VerInfo> verInfos = toVerInfos(_VerDBMgr.getInstn().getHisVerInfos());
 		_PrjVerInfo prjVerInfo = new _PrjVerInfo(verInfos);
+		
+		Map<String, String> prjInfo = _VerDBMgr.getInstn().getPrjVerInfo();
 		prjVerInfo.setPrjName(prjInfo.get("S_PROJECT_NAME"));
 		prjVerInfo.setPrjDesc(prjInfo.get("S_PROJECT_DESC"));
 		prjVerInfo.setTeamName(prjInfo.get("S_TEAM_NAME"));
@@ -322,22 +306,7 @@ class _VerMgrUI extends MainWindow {
 	 */
 	private boolean savePrjInfo() {
 		prjVerInfo.setValFromUI();
-		
-		Connection conn = SqliteUtils.getConn(ds);
-		String sql = "DELETE FROM T_PROJECT_INFO";
-		SqliteUtils.execute(conn, sql);
-		
-		sql = StrUtils.concat("INSERT INTO T_PROJECT_INFO(S_PROJECT_NAME, ", 
-				"S_PROJECT_DESC, S_TEAM_NAME, S_PROJECT_CHARSET, S_DISK_SIZE, ", 
-				"S_CACHE_SIZE, S_APIS) VALUES(?, ?, ?, ?, ?, ?, ?)");
-		boolean isOk = SqliteUtils.execute(conn, sql, new Object[] {
-				prjVerInfo.getPrjName(), prjVerInfo.getPrjDesc(), 
-				prjVerInfo.getTeamName(), prjVerInfo.getPrjCharset(), 
-				prjVerInfo.getDiskSize(), prjVerInfo.getCacheSize(),
-				prjVerInfo.getAPIs()
-		});
-		SqliteUtils.close(conn);
-		return isOk;
+		return _VerDBMgr.getInstn().savePrjInfo(prjVerInfo);
 	}
 	
 	/**
@@ -355,17 +324,7 @@ class _VerMgrUI extends MainWindow {
 	 * @return
 	 */
 	private boolean addVerInfo(_VerInfo verInfo) {
-		Connection conn = SqliteUtils.getConn(ds);
-		String sql = StrUtils.concat("INSERT INTO T_HISTORY_VERSIONS(", 
-				"S_AUTHOR, S_VERSION, S_DATETIME, S_UPGRADE_CONTENT, ", 
-				"S_UPGRADE_STEP) VALUES(?, ?, ?, ?, ?)");
-		boolean isOk = SqliteUtils.execute(conn, sql, new Object[] {
-				verInfo.getAuthor(), verInfo.getVersion(), 
-				verInfo.getDatetime(), verInfo.getUpgradeContent(), 
-				verInfo.getUpgradeStep()
-		});
-		SqliteUtils.close(conn);
-		
+		boolean isOk = _VerDBMgr.getInstn().addVerInfo(verInfo);
 		if(isOk == true) {
 			prjVerInfo.addVerInfo(verInfo);
 		}
@@ -373,19 +332,11 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	private boolean modifyCurVerInfo() {
-		_VerInfo curVer = prjVerInfo.getCurVer();
-		curVer.getDatetimeTF().setText(TimeUtils.getSysDate());
-		curVer.setValFromUI(null);
+		_VerInfo curVerInfo = prjVerInfo.getCurVer();
+		curVerInfo.getDatetimeTF().setText(TimeUtils.getSysDate());
+		curVerInfo.setValFromUI(null);
 		
-		Connection conn = SqliteUtils.getConn(ds);
-		String sql = StrUtils.concat("UPDATE T_HISTORY_VERSIONS ", 
-				"SET S_DATETIME = '", curVer.getDatetime(), "', ", 
-				"S_UPGRADE_CONTENT = '", curVer.getUpgradeContent(), "', ", 
-				"S_UPGRADE_STEP = '", curVer.getUpgradeStep(), "' ", 
-				"WHERE S_VERSION = '", curVer.getVersion(), "'");
-		boolean isOk = SqliteUtils.execute(conn, sql);
-		SqliteUtils.close(conn);
-		
+		boolean isOk = _VerDBMgr.getInstn().modifyCurVerInfo(curVerInfo);
 		if(isOk == true) {
 			prjVerInfo.modifyCurVerInfo();
 		}
@@ -398,12 +349,7 @@ class _VerMgrUI extends MainWindow {
 	 * @return
 	 */
 	private boolean delVerInfo(_VerInfo verInfo) {
-		Connection conn = SqliteUtils.getConn(ds);
-		String sql = StrUtils.concat("DELETE FROM T_HISTORY_VERSIONS ", 
-				"WHERE S_VERSION = '", verInfo.getVersion(), "'");
-		boolean isOk = SqliteUtils.execute(conn, sql);
-		SqliteUtils.close(conn);
-		
+		boolean isOk = _VerDBMgr.getInstn().delVerInfo(verInfo);
 		if(isOk == true) {
 			prjVerInfo.delVerInfo(verInfo);
 		}
@@ -423,7 +369,7 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	protected String getCurVerInfo() {
-		return _VerDBMgr.getInstn()._toCurVerInfo(
+		return _VerDBMgr.getInstn().toCurVerInfo(
 				prjVerInfo.getPrjName(), 
 				prjVerInfo.getPrjDesc(), 
 				prjVerInfo.getCurVer().getVersion(), 

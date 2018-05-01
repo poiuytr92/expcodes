@@ -1,6 +1,8 @@
 package exp.libs.warp.ver;
 
+import exp.libs.envm.Delimiter;
 import exp.libs.utils.os.OSUtils;
+import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 
 /**
@@ -24,12 +26,20 @@ import exp.libs.warp.ui.BeautyEyeUtils;
  */
 final public class VersionMgr {
 
+	/** 单例 */
 	private static volatile VersionMgr instance;
 	
+	/**
+	 * 构造函数
+	 */
 	private VersionMgr() {
 		BeautyEyeUtils.init();
 	}
 	
+	/**
+	 * 获取单例
+	 * @return
+	 */
 	private static VersionMgr getInstn() {
 		if(instance == null) {
 			synchronized (VersionMgr.class) {
@@ -81,20 +91,37 @@ final public class VersionMgr {
 	}
 	
 	/**
-	 * 打印版本信息
+	 * 打印最新版本信息
 	 * @return 最新版本信息
 	 */
 	protected String print() {
-		String curVerInfo = "";
-		
-		if(_VerDBMgr.getInstn().initVerDB()) {
-			curVerInfo = _VerDBMgr.getInstn().getCurVerInfo();
+		String curVerInfo = getVersionInfo(true, false);
+		if(StrUtils.isNotEmpty(curVerInfo)) {
 			System.out.println(curVerInfo);
 			
 		} else {
 			System.err.println("获取当前版本信息失败");
 		}
 		return curVerInfo;
+	}
+	
+	/**
+	 * 获取版本信息
+	 * @param onlyCurVersion 仅当前版本(即最新版本)
+	 * @param detaiHistoty 是否打印历史版本升级内容详单 (仅onlyCurVersion=false时有效)
+	 * @return 版本信息
+	 */
+	public static String getVersionInfo(boolean onlyCurVersion, boolean detaiHistoty) {
+		StringBuilder verInfo = new StringBuilder();
+		if(_VerDBMgr.getInstn().initVerDB()) {
+			verInfo.append(_VerDBMgr.getInstn().getCurVerInfo());
+			
+			if(onlyCurVersion == false) {
+				verInfo.append(Delimiter.CRLF).append(Delimiter.CRLF);
+				verInfo.append(_VerDBMgr.getInstn().toHisVerInfos(detaiHistoty));
+			}
+		}
+		return verInfo.toString();
 	}
 	
 }

@@ -77,6 +77,10 @@ class _PrjVerInfo {
 	/** 当前的版本信息(亦即最后一个版本) */
 	private _VerInfo curVer;
 	
+	/**
+	 * 构造函数
+	 * @param historyVers 历史版本信息
+	 */
 	protected _PrjVerInfo(List<_VerInfo> historyVers) {
 		this.prjName = "";
 		this.prjDesc = "";
