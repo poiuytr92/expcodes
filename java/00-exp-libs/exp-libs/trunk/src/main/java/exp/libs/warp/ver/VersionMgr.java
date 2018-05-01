@@ -68,6 +68,10 @@ final public class VersionMgr {
 		return (manage ? manage() : print());
 	}
 	
+	/**
+	 * 管理版本信息
+	 * @return 最新版本信息
+	 */
 	protected String manage() {
 		_VerMgrUI.getInstn()._view();
 		
@@ -76,6 +80,10 @@ final public class VersionMgr {
 		return curVerInfo;
 	}
 	
+	/**
+	 * 打印版本信息
+	 * @return 最新版本信息
+	 */
 	protected String print() {
 		String curVerInfo = "";
 		
