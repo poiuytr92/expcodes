@@ -126,8 +126,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	
 	/**
 	 * 获取分页的说说的Json
-	 * @param QQ 目标QQ
-	 * @param page 页数
+	 * @param page 页码
 	 * @return json
 	 */
 	private String _getPageMoodJson(int page) {

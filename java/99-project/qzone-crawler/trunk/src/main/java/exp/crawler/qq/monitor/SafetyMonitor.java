@@ -1,6 +1,6 @@
 package exp.crawler.qq.monitor;
 
-import exp.certificate.bean.App;
+import exp.certificate.bean.AppInfo;
 import exp.certificate.core.Convertor;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.other.StrUtils;
@@ -63,8 +63,8 @@ public class SafetyMonitor {
 	 * @return true:在白名单内; false:不在白名单内
 	 */
 	public boolean isInWhitelist(String QQ) {
-		App app = getAppInfo();	// 提取软件授权信息
-		return (app != null && app.getWhitelist().contains(QQ));
+		AppInfo appInfo = getAppInfo();	// 提取软件授权信息
+		return (appInfo != null && appInfo.getWhitelist().contains(QQ));
 	}
 	
 	/**
@@ -73,15 +73,15 @@ public class SafetyMonitor {
 	 * @return true:在黑名单内; false:不在黑名单内
 	 */
 	public boolean isInBlacklist(String QQ) {
-		App app = getAppInfo();	// 提取软件授权信息
-		return (app != null && app.getBlacklist().contains(QQ));
+		AppInfo appInfo = getAppInfo();	// 提取软件授权信息
+		return (appInfo != null && appInfo.getBlacklist().contains(QQ));
 	}
 	
 	/**
 	 * 提取软件授权信息
 	 * @return
 	 */
-	private App getAppInfo() {
+	private AppInfo getAppInfo() {
 		
 		// 先尝试用Gitee(国内)获取授权页, 若失败则从GitHub(国际)获取授权页
 		String pageSource = HttpURLUtils.doGet(GITEE_URL, null, null);
@@ -89,8 +89,8 @@ public class SafetyMonitor {
 			pageSource = HttpURLUtils.doGet(GITHUB_URL, null, null);
 		}
 		
-		App app = Convertor.toApp(pageSource, appName);
-		return app;
+		AppInfo appInfo = Convertor.toAppInfo(pageSource, appName);
+		return appInfo;
 	}
 	
 }
