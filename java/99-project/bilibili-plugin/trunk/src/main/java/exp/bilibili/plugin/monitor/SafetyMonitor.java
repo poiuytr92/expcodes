@@ -103,7 +103,7 @@ public class SafetyMonitor extends LoopThread {
 	}
 	
 	private void init() {
-		String verInfo =  VersionMgr.exec("-p");
+		String verInfo =  VersionMgr.getVersionInfo(true, false);
 		appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
 		appVersion = RegexUtils.findFirst(verInfo, "版本号[ |]*([\\d|\\.]+)");
 	}
