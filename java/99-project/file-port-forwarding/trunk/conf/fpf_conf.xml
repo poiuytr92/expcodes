@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config hint="工程配置文件（常用配置）">
+
+    <rspSock caption="用于接收响应数据的监听socket" hint="仅rspMode=1时有效">
+      <ip>0.0.0.0</ip>
+      <port>9527</port>
+    </rspSock>
+    
+	<sendDir caption="端口转发数据的发送目录" 
+		hint="每次重启程序均会清空该目录下所有内容, 
+				确保该目录有足够的读写权限, 且不能为重要文件的目录">
+		./tmp/send
+	</sendDir>
+	
+	<recvDir caption="端口转发数据的接收目录" 
+		hint="每次重启程序均会清空该目录下所有内容, 
+				确保该目录有足够的读写权限, 且不能为重要文件的目录">
+		./tmp/recv
+	</recvDir>
+	
+	<services caption="端口转发服务列表" hint="新开的转发服务直接添加到列表即可">
+	
+	  <service enable="true">
+		<name caption="服务名称" hint="随意即可, 唯一最好">to-mysql</name>
+		<localListnPort caption="本地监听端口">9998</localListnPort>
+		<remoteIP caption="远程服务IP">172.168.10.63</remoteIP>
+		<remotePort caption="远程服务端口">3306</remotePort>
+		<maxConn caption="同一时刻的最大连接数">100</maxConn>
+	  </service>
+	  
+	  <service enable="true">
+		<name caption="服务名称" hint="随意即可, 唯一最好">to-oracle</name>
+		<localListnPort caption="本地监听端口">9999</localListnPort>
+		<remoteIP caption="远程服务IP">172.168.10.63</remoteIP>
+		<remotePort caption="远程服务端口">1521</remotePort>
+		<maxConn caption="同一时刻的最大连接数">100</maxConn>
+	  </service>
+	  
+	</services>
+  
+</config>

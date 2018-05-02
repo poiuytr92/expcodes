@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config hint="程序配置文件（全量配置）">
+    
+    <rspMode default="1" caption="响应数据的接收模式" 
+          hint="1: sock监听模式 (需隔离装置开放TCP转发端口); 
+                2: file扫描模式 (需隔离装置主动扫描文件目录转发)">
+        1
+    </rspMode>
+    
+    <overtime default="10000" caption="一次请求响应的转发超时(单位ms)" 
+          hint="保持默认值即可。若文件传输效率低下则可能需适当延长超时时间">
+        10000
+    </overtime>
+    
+    <scanInterval default="1" caption="扫描文件/监听数据间隔(单位ms)">1</scanInterval>
+    
+</config>
