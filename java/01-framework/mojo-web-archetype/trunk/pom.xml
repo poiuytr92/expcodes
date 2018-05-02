@@ -19,10 +19,26 @@
 		<url>scm:svn:https://github.com/lyy289065406/expcodes/trunk/java/01-framework/mojo-web-archetype/trunk</url>
 	</scm>
 	
+	<!-- 变量定义 -->
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<jdk.version>1.7</jdk.version>
+	</properties>
+	
 	<!-- 项目构建 -->
 	<build>
 		<plugins>
 
+			<!-- 指定项目JDK版本 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>${jdk.version}</source>
+					<target>${jdk.version}</target>
+				</configuration>
+			</plugin>
+			
 			<!-- 版本打包插件，在dos跳转到项目根目录，依次执行（需保证没有引用快照、本地与SVN服务器内容完全一致）: 
 				1 发布基线到svn: mvn release:prepare 
 				2 发布引用到私服 : mvn release:perform -->
@@ -41,20 +57,22 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
                 <configuration>
                		<aggregate>true</aggregate>
                 	<charset>UTF-8</charset>
                 	<encoding>UTF-8</encoding>
                 	<docencoding>UTF-8</docencoding>
+                	<outputEncondig>UTF-8</outputEncondig>
+                	<skip>false</skip>	<!-- 是否在项目打包时跳过javadoc -->
                 </configuration>
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
+			            <id>attach-javadocs</id>
+			            <phase>install</phase>
+			            <goals>
+			                <goal>jar</goal>
+			            </goals>
+			        </execution>
                 </executions>
             </plugin>
             
