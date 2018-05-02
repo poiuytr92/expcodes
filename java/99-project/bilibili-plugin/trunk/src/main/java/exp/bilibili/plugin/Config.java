@@ -308,6 +308,10 @@ public class Config {
 		return xConf.getBool("/config/app/protectFeed");
 	}
 	
+	public long REACTION_TIME() {
+		return xConf.getLong("/config/app/reactionTime");
+	}
+	
 	/**
 	 * 设置默认房间号（每日签到用）
 	 * (房间勋章等级越高签到奖励越多)

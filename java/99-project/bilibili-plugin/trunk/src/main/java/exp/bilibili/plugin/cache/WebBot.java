@@ -148,6 +148,7 @@ public class WebBot extends LoopThread {
 		
 		// 小电视抽奖
 		if(room.TYPE() == LotteryType.TV) {
+			ThreadUtils.tSleep(Config.getInstn().REACTION_TIME());	// 限制参与抽奖的反应时间（过快反应会被禁止抽奖）
 			XHRSender.toTvLottery(roomId, raffleId);
 			
 		// 节奏风暴抽奖
@@ -156,6 +157,7 @@ public class WebBot extends LoopThread {
 			
 		// 高能抽奖
 		} else {
+			ThreadUtils.tSleep(Config.getInstn().REACTION_TIME());	// 限制参与抽奖的反应时间（过快反应会被禁止抽奖）
 			XHRSender.toEgLottery(roomId);
 		}
 	}
