@@ -147,7 +147,7 @@ public class SocketServer extends Thread {
 	
 	@Override
 	public void run() {
-		log.debug("{}", sockConf.toString());
+		log.debug(sockConf.toString());
 		log.info("Socket服务 [{}] 已启动", getName());
 		
 		running = true;
