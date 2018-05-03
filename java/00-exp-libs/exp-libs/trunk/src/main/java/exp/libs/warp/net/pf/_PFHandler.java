@@ -28,7 +28,8 @@ class _PFHandler implements IHandler {
 	
 	@Override
 	public void _handle(ISession localClient) {
-		SocketClient virtualClient = new SocketClient(ip, port);
+		int overtime = config.getOvertime();
+		SocketClient virtualClient = new SocketClient(ip, port, overtime);
 		if(!virtualClient.conn()) {
 			localClient.close();
 			log.warn("会话 [{}] 连接到真实服务端口 [{}:{}] 失败", 
@@ -37,7 +38,6 @@ class _PFHandler implements IHandler {
 		}
 		
 		// 转发本地真实客户端的IO流到虚拟客户端
-		long overtime = config.getOvertime();
 		Socket localSocket = localClient.getSocket();
 		Socket virtualSocket = virtualClient.getSocket();
 		new _TranslateData(localClient.ID(), _TranslateData.TYPE_REQUEST, 

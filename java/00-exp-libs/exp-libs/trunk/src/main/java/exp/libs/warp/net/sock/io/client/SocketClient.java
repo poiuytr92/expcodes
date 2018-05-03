@@ -74,6 +74,16 @@ public class SocketClient implements ISession {
 	
 	/**
 	 * 构造函数
+	 * @param ip 服务IP
+	 * @param port 服务端口
+	 * @param overtime 超时时间
+	 */
+	public SocketClient(String ip, int port, int overtime) {
+		this.sockConf = new SocketBean(ip, port, overtime);
+	}
+	
+	/**
+	 * 构造函数
 	 * @param sockConf socket配置信息
 	 */
 	public SocketClient(SocketBean sockConf) {
