@@ -38,53 +38,45 @@ public class TXTUtils {
 	
 	/**
 	 * 把任意文件/目录转码成TXT文件
+	 * @param filePath 文件或目录路径(对于目录会先压缩成zip文件)
+	 * @return TXT文件路径（若转码失败则返回空串）
+	 */
+	public static String toTXT(String filePath) {
+		return toTXT(new File(filePath));
+	}
+	
+	/**
+	 * 把任意文件/目录转码成TXT文件
 	 * @param file 任意文件或目录对象(对于目录会先压缩成zip文件)
 	 * @return TXT文件路径（若转码失败则返回空串）
 	 */
 	public static String toTXT(File file) {
 		String txtPath = "";
 		if(file != null) {
-			txtPath = toTXT(file.getAbsolutePath());
+			String srcPath = file.isFile() ? file.getAbsolutePath() : 
+					CompressUtils.compress(file.getAbsolutePath());
+			txtPath = srcPath.concat(FileType.TXT.EXT);
+			txtPath = (toTXT(srcPath, txtPath) ? txtPath : "");
+			
+			if(!file.getAbsolutePath().equals(srcPath)) {
+				FileUtils.delete(srcPath);
+			}
 		}
 		return txtPath;
 	}
 	
 	/**
 	 * 把任意文件/目录转码成TXT文件
-	 * @param filePath 文件或目录路径(对于目录会先压缩成zip文件)
-	 * @return TXT文件路径（若转码失败则返回空串）
-	 */
-	public static String toTXT(String filePath) {
-		String txtPath = "";
-		if(FileUtils.isDirectory(filePath)) {
-			String zipPath = CompressUtils.compress(filePath);
-			txtPath = _toTXT(new File(zipPath));
-			FileUtils.delete(zipPath);
-			
-		} else {
-			txtPath = _toTXT(new File(filePath));
-		}
-		return txtPath;
-	}
-	
-	/**
-	 * 把任意文件转码成TXT文件
-	 * @param file 任意文件对象
-	 * @return TXT文件路径（若转码失败则返回空串）
-	 */
-	private static String _toTXT(File file) {
-		String srcPath = file.getAbsolutePath();
-		String txtPath = srcPath.concat(FileType.TXT.EXT);
-		return (_toTXT(srcPath, txtPath) ? txtPath : "");
-	}
-	
-	/**
-	 * 把任意文件转码成TXT文件
-	 * @param srcPath 任意文件路径
+	 * @param srcPath 任意文件或目录路径(对于目录会先压缩成zip文件)
 	 * @param txtPath TXT文件路径
 	 * @return true:转码成功; false:转码失败
 	 */
-	private static boolean _toTXT(String srcPath, String txtPath) {
+	public static boolean toTXT(String srcPath, String txtPath) {
+		boolean isDir = FileUtils.isDirectory(srcPath);
+		if(isDir == true) {
+			srcPath = CompressUtils.compress(srcPath);
+		}
+		
 		boolean isOk = false;
 		File txtFile = FileUtils.createFile(txtPath);
 		try {
@@ -103,6 +95,10 @@ public class TXTUtils {
 			
 		} catch (Exception e) {
 			log.error("把文件 [{}] 转码为TXT失败.", srcPath, e);
+		}
+		
+		if(isDir == true) {
+			FileUtils.delete(srcPath);
 		}
 		return isOk;
 	}
@@ -127,7 +123,7 @@ public class TXTUtils {
 				txtFile.getAbsolutePath().toLowerCase().endsWith(FileType.TXT.EXT)) {
 			String txtPath = txtFile.getAbsolutePath();
 			snkPath = txtPath.replace(FileType.TXT.EXT, "");
-			snkPath = (_toFile(txtPath, snkPath) ? snkPath : "");
+			snkPath = (toFile(txtPath, snkPath) ? snkPath : "");
 		}
 		return snkPath;
 	}
@@ -138,7 +134,7 @@ public class TXTUtils {
 	 * @param snkPath 原文件路径
 	 * @return true:恢复成功; false:恢复失败
 	 */
-	private static boolean _toFile(String txtPath, String snkPath) {
+	public static boolean toFile(String txtPath, String snkPath) {
 		boolean isOk = false;
 		File snkFile = FileUtils.createFile(snkPath);
 		try {

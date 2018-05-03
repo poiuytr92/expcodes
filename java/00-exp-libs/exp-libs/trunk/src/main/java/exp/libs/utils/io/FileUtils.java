@@ -261,7 +261,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean delete(String path) {
-		return delete(new File(path));
+		return delete(path, "");
 	}
 	
 	/**
@@ -271,7 +271,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean delete(String path, String filterRegex) {
-		return delete(new File(path), filterRegex);
+		boolean isOk = true;
+		if(StrUtils.isNotEmpty(path)) {
+			isOk = delete(new File(path), filterRegex);
+		}
+		return isOk;
 	}
 	
 	/**
@@ -291,7 +295,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 */
 	public static boolean delete(File file, String filterRegex) {
 		boolean isOk = true;
-		if(file.exists()) {
+		if(file != null && file.exists()) {
 			if(file.isFile()) {
 				if(!RegexUtils.matches(file.getName(), filterRegex)) {
 					isOk &= file.delete();
