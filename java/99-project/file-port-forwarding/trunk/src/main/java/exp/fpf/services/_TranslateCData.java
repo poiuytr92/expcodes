@@ -159,7 +159,7 @@ class _TranslateCData extends Thread {
 				}
 				
 				// 删除文件
-//				FileUtils.delete(sendFilePath);	
+				FileUtils.delete(sendFilePath);
 				curTime = System.currentTimeMillis();
 			}
 		} catch (SocketTimeoutException e) {
