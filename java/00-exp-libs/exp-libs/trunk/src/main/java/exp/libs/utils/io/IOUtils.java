@@ -11,6 +11,8 @@ import java.sql.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.num.UnitUtils;
+
 /**
  * <PRE>
  * IO工具.
@@ -26,8 +28,6 @@ public class IOUtils {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(IOUtils.class);
 	
-	private final static int BUFFER_SIZE = 10240;
-	
 	/** 私有化构造函数 */
 	protected IOUtils() {}
 	
@@ -40,7 +40,7 @@ public class IOUtils {
 		StringBuilder sb = new StringBuilder();
 		try {
 			int len = 0;
-			char[] buffer = new char[BUFFER_SIZE];
+			char[] buffer = new char[UnitUtils._1_MB];
 			while((len = is.read(buffer)) != -1) {
 				sb.append(buffer, 0, len);
 			}
@@ -75,7 +75,7 @@ public class IOUtils {
 			try {
 				fos = new FileOutputStream(saveFile);
 				int len = 0;
-				byte[] buffer = new byte[BUFFER_SIZE];
+				byte[] buffer = new byte[UnitUtils._1_MB];
 				while((len = is.read(buffer)) != -1) {
 					fos.write(buffer, 0, len);
 				}

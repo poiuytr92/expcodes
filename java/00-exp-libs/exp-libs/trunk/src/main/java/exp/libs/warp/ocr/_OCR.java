@@ -56,7 +56,7 @@ final class _OCR {
 		File imgFile = new File(imgPath);
 		FileType type = FileUtils.getFileType(imgFile);	// 目前仅适用于png/jpg格式图片
 		
-		File tmpImg = ImageIOHelper.createImage(imgFile, type.NAME);
+		File tmpImg = _ImageIOHelper.createImage(imgFile, type.NAME);
 		File tmpTxt = new File(imgFile.getParentFile(), TMP_FILENAME);
 		String tmpTxtPath = tmpTxt.getAbsolutePath().concat(TMP_SUFFIX);
 		

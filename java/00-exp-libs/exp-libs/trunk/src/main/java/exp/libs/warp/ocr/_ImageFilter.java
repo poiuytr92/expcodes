@@ -20,7 +20,7 @@ import java.awt.image.PixelGrabber;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-final class ImageFilter {
+final class _ImageFilter {
 
 	private BufferedImage image;
 
@@ -28,7 +28,7 @@ final class ImageFilter {
 
 	private int[] pixels;
 
-	protected ImageFilter(BufferedImage image) {
+	protected _ImageFilter(BufferedImage image) {
 		this.image = image;
 		iw = image.getWidth();
 		ih = image.getHeight();
@@ -76,7 +76,7 @@ final class ImageFilter {
 		}
 		
 		// 将数组中的象素产生一个图像
-		return ImageIOHelper.imageProducerToBufferedImage(
+		return _ImageIOHelper.imageProducerToBufferedImage(
 				new MemoryImageSource(iw, ih, pixels, 0, iw));
 	}
 
@@ -137,7 +137,7 @@ final class ImageFilter {
 		}
 
 		// 将数组中的象素产生一个图像
-		return ImageIOHelper.imageProducerToBufferedImage(
+		return _ImageIOHelper.imageProducerToBufferedImage(
 				new MemoryImageSource(iw, ih, tempPixels, 0, iw));
 	}
 
@@ -251,7 +251,7 @@ final class ImageFilter {
 		}
 
 		// 将数组中的象素产生一个图像
-		return ImageIOHelper.imageProducerToBufferedImage(
+		return _ImageIOHelper.imageProducerToBufferedImage(
 				new MemoryImageSource(iw, ih, pixels, 0, iw));
 	}
 
@@ -291,7 +291,7 @@ final class ImageFilter {
 		}
 
 		// 将数组中的象素产生一个图像
-		return ImageIOHelper.imageProducerToBufferedImage(
+		return _ImageIOHelper.imageProducerToBufferedImage(
 				new MemoryImageSource(iw, ih, pixels, 0, iw));
 	}
 

@@ -33,9 +33,9 @@ import com.sun.media.imageio.plugins.tiff.TIFFImageWriteParam;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-final class ImageIOHelper {
+final class _ImageIOHelper {
 
-	protected ImageIOHelper() {}
+	protected _ImageIOHelper() {}
 
 	protected static File createImage(File imageFile, String imageFormat) {
 		File tempFile = null;

@@ -17,6 +17,21 @@ import exp.libs.envm.TimeUnit;
  */
 public class UnitUtils {
 
+	/** 获取 [1byte] 的数值表示 (单位:byte) */
+	public final static int _1_BYTE = 1;
+	
+	/** 获取 [1KB] 的数值表示 (单位:byte) */
+	public final static int _1_KB = 1024 * _1_BYTE;
+	
+	/** 获取 [1MB] 的数值表示 (单位:byte) */
+	public final static int _1_MB = 1024 * _1_KB;
+	
+	/** 获取 [1GB] 的数值表示 (单位:byte) */
+	public final static int _1_GB = 1024 * _1_MB;
+	
+	/** 获取 [1TB] 的数值表示 (单位:byte) */
+	public final static long _1_TB = 1024L * _1_GB;
+	
 	/** 私有化构造函数 */
 	protected UnitUtils() {}
 	

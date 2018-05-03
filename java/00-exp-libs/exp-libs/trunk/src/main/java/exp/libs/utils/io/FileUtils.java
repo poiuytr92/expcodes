@@ -777,20 +777,26 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return 文件头信息
 	 */
 	public static String getHexHeader(String filePath) {
-		String head = "";
+		String header = "";
 		if(filePath != null) {
-			head = getHexHeader(new File(filePath));
+			header = getHexHeader(new File(filePath));
 		}
-		return head;
+		return header;
 	}
 	
 	/**
-	 * 获取文件头信息
+	 * <pre>
+	 * 获取文件头信息.
+	 * -----------------------------
+	 *  FIXME: 此方法存在缺陷, 并非所有文件的文件头都是4字节的.
+	 *    各种类型文件头标准编码: https://www.cnblogs.com/gwind/p/8215771.html
+	 * 
+	 * </pre>
 	 * @param file 文件
 	 * @return 文件头信息
 	 */
 	public static String getHexHeader(File file) {
-		String head = "";
+		String header = "";
 		try {
 			FileInputStream is = new FileInputStream(file);
 			byte[] bytes = new byte[4];
@@ -798,13 +804,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			is.read(bytes, 0, bytes.length);
 			is.close();
 			
-			head = BODHUtils.toHex(bytes);
+			header = BODHUtils.toHex(bytes);
 			
 		} catch (Exception e) {
 			log.error("获取文件 [{}] 的文件头信息失败.", 
 					(file == null ? "null" : file.getAbsolutePath()), e);
 		}
-		return head;
+		return header;
 	}
 	
 	/**

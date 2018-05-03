@@ -49,7 +49,7 @@ class _TranslateData extends Thread {
 			InputStream in = src.getInputStream();
 			OutputStream out = snk.getOutputStream();
 			while (true) {
-				byte[] buffer = new byte[IO_BUFF];	//每次最多取出10K的数据
+				byte[] buffer = new byte[IO_BUFF];
 				int len = in.read(buffer);
 				if (len > 0) {
 					out.write(buffer, 0, len);

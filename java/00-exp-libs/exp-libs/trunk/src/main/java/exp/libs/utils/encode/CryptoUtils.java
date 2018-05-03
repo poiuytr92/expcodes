@@ -1,5 +1,8 @@
 package exp.libs.utils.encode;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.math.BigInteger;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyPair;
@@ -23,7 +26,9 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.Regex;
+import exp.libs.utils.io.IOUtils;
 import exp.libs.utils.num.BODHUtils;
+import exp.libs.utils.num.UnitUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -140,6 +145,52 @@ public class CryptoUtils {
 			log.error("计算MD5失败.", e);
 		}
 		return md5;
+	}
+	
+	/**
+	 * 生成文件MD5
+	 * @param filePath 文件路径
+	 * @return 文件MD5
+	 */
+	public static String toFileMD5(String filePath) {
+		return toFileMD5(new File(filePath));
+	}
+	
+	/**
+	 * 生成文件MD5.
+	 * ------------------------------------
+	 * 	注:
+	 * 	  DigestUtils.md5Hex 的作用与此方法效果是一样的, 
+	 *    但是 DigestUtils.md5Hex 有个问题: 在生成大文件的MD5时，前面会多一个0
+	 * 
+	 * @param file 文件对象
+	 * @return 文件MD5
+	 */
+	public static String toFileMD5(File file) {
+		String MD5 = "";
+		FileInputStream fis = null;
+		try {
+			fis = new FileInputStream(file);
+			MessageDigest md = MessageDigest.getInstance(ALGORITHM_MD5);
+			
+			// 分片读取文件（确保可以计算大文件的MD5）
+			byte[] buffer = new byte[UnitUtils._1_MB];
+			int len = 0;
+			while ((len = fis.read(buffer)) != -1) {
+				md.update(buffer, 0, len);
+			}
+			byte[] bytes = md.digest();
+			BigInteger bi = new BigInteger(1, bytes);
+			MD5 = bi.toString(16).toUpperCase();	// 16表示生成16进制形式的字符串
+			
+		} catch (Exception e) {
+			log.error("生成文件 [{}] 的MD5失败.", 
+					(file == null ? "null" : file.getAbsolutePath()), e);
+			
+		} finally {
+			IOUtils.close(fis);
+		}
+		return MD5;
 	}
 	
 	/**

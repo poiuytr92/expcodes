@@ -10,6 +10,7 @@ import java.net.SocketTimeoutException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.num.UnitUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.sock.bean.SocketBean;
@@ -267,7 +268,7 @@ public class SocketClient implements ISession {
 			
 		} else {
 			while(true) {
-				byte[] buffer = new byte[10240];	//每次最多取出10K的数据
+				byte[] buffer = new byte[UnitUtils._1_KB * 10];
 				readLen = input.read(buffer);
 				localBuff.append(buffer, readLen);
 				endIndex = localBuff.indexOf(delimiter);

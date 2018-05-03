@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.OSUtils;
+import exp.libs.utils.verify.RegexUtils;
 
 /**
  * <PRE>
@@ -82,6 +83,21 @@ public class PathUtils {
 			combPath = combPath.replaceAll("[\\|/]", "/");
 		}
 		return combPath;
+	}
+	
+	/**
+	 * 获取文件的父目录
+	 * @param filePath 文件路径
+	 * @return 文件的父目录
+	 */
+	public static String getParentDir(String filePath) {
+		String parentDir = "";
+		try {
+			parentDir = new File(filePath).getParent();
+		} catch(Exception e) {
+			parentDir = RegexUtils.findFirst(filePath, "(.*)[/\\\\]");
+		}
+		return parentDir;
 	}
 	
 	/**

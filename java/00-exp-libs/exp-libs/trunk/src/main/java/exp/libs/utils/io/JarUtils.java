@@ -16,6 +16,7 @@ import java.util.jar.JarFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.num.UnitUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -106,14 +107,13 @@ public class JarUtils {
 	 */
 	public static boolean copyFile(String packagePath, String snkPath) {
 		boolean isOk = false;
-		final int BUFFER_SIZE = 4096;
 		InputStream is = FileUtils.class.getResourceAsStream(packagePath);
 		File snkFile = FileUtils.createFile(snkPath);
 		try {
 			FileOutputStream fos = new FileOutputStream(snkFile);
-			byte[] buff = new byte[BUFFER_SIZE];
+			byte[] buff = new byte[UnitUtils._1_MB];
 			int rc = 0;
-			while ((rc = is.read(buff, 0, BUFFER_SIZE)) > 0) {
+			while ((rc = is.read(buff, 0, UnitUtils._1_MB)) > 0) {
 				fos.write(buff, 0, rc);
 			}
 			fos.flush();
@@ -134,14 +134,13 @@ public class JarUtils {
 	 * @return 文件内容
 	 */
 	public static String read(String packagePath, String charset) {
-		final int BUFFER_SIZE = 4096;
 		InputStream is = FileUtils.class.getResourceAsStream(packagePath);
 		String str = "";
 		try {
 			ByteArrayOutputStream bos = new ByteArrayOutputStream();
-			byte[] buff = new byte[BUFFER_SIZE];
+			byte[] buff = new byte[UnitUtils._1_MB];
 			int rc = 0;
-			while ((rc = is.read(buff, 0, BUFFER_SIZE)) > 0) {
+			while ((rc = is.read(buff, 0, UnitUtils._1_MB)) > 0) {
 				bos.write(buff, 0, rc);
 			}
 			byte[] arrByte = bos.toByteArray();

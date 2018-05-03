@@ -16,7 +16,7 @@ import exp.libs.utils.other.BoolUtils;
 
 /**
  * <PRE>
- * Json工具
+ * Json数据提取工具
  * </PRE>
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
