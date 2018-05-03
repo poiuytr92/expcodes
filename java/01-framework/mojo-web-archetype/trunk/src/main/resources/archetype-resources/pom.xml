@@ -17,24 +17,24 @@
     <inceptionYear>工程的初始时间(可选)</inceptionYear>
 
     <!--项目的问题管理系统(可选)-->
-	<issueManagement>
-		<system>EXPLIBS-API-ONLINE</system>
-		<url>https://lyy289065406.github.io/api-online/</url>
-	</issueManagement>
-	
-	<!--项目的问题追踪系统(可选)-->
-	<ciManagement>
-		<system>jenkins</system>
-		<url>http://127.0.0.1:8080/jenkins/</url>
-	</ciManagement>
+    <issueManagement>
+        <system>EXPLIBS-API-ONLINE</system>
+        <url>https://lyy289065406.github.io/api-online/</url>
+    </issueManagement>
+    
+    <!--项目的问题追踪系统(可选)-->
+    <ciManagement>
+        <system>jenkins</system>
+        <url>http://127.0.0.1:8080/jenkins/</url>
+    </ciManagement>
 
     <!-- 软件配置管理 -->
-	<scm>
-		<!-- 项目SVN主干目录（需保证目录已存在） -->
-		<connection>scm:svn:http://127.0.0.1:81/svn/release/???/trunk</connection>
-		<developerConnection>scm:svn:http://127.0.0.1:81/svn/release/???/trunk</developerConnection>
-		<url>scm:svn:http://127.0.0.1:81/svn/release/???/trunk</url>
-	</scm>
+    <scm>
+        <!-- 项目SVN主干目录（需保证目录已存在） -->
+        <connection>scm:svn:http://127.0.0.1:81/svn/release/???/trunk</connection>
+        <developerConnection>scm:svn:http://127.0.0.1:81/svn/release/???/trunk</developerConnection>
+        <url>scm:svn:http://127.0.0.1:81/svn/release/???/trunk</url>
+    </scm>
 
     <!-- 变量定义 -->
     <properties>
@@ -50,10 +50,10 @@
 
         <!-- 经验库 -->
         <dependency>
-		  <groupId>exp.libs</groupId>
-		  <artifactId>exp-libs</artifactId>
-		  <version>${symbol_dollar}{explibs.version}</version>
-		</dependency>
+          <groupId>exp.libs</groupId>
+          <artifactId>exp-libs</artifactId>
+          <version>${symbol_dollar}{explibs.version}</version>
+        </dependency>
         
         <!-- Servlet -->
         <dependency>
