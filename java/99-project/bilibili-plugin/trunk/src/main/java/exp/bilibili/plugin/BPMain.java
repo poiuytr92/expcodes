@@ -22,6 +22,8 @@ public class BPMain {
 		
 		BeautyEyeUtils.init();
 		AppUI.createInstn(args);
+		
+		// TODO 单进程运行（锁文件或锁端口）
 	}
 	
 }
