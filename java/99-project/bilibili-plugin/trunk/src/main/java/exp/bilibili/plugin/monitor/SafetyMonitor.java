@@ -344,8 +344,7 @@ public class SafetyMonitor extends LoopThread {
 		long privateTime = SafetyUtils.fileToCertificate();
 		
 		// 更新授权时间
-		long maxTime = (publicTime > privateTime ? publicTime : privateTime);
-		updateCertificateTime(maxTime);
+		updateCertificateTime(NumUtils.min(privateTime, publicTime));
 		
 		return !(now > publicTime && now > privateTime);
 	}
