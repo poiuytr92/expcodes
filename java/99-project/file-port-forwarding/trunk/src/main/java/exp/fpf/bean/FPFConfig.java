@@ -8,23 +8,36 @@ package exp.fpf.bean;
  * <B>PROJECT：</B> file-port-forwarding
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-07-28
- * @author    EXP: 272629724@qq.com
+ * @author    EXP 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class FPFConfig {
 
+	/** 默认可连接到单个代理服务的最大连接数 */
 	private final static int DEFAULT_MAX_CONN = 100;
 	
+	/** 代理服务名 */
 	private String serverName;
 	
+	/** 本地代理端口 */
 	private int localListenPort;
 	
+	/** 远程服务IP（真实IP） */
 	private String remoteIP;
 	
+	/** 远程服务端口（真实端口） */
 	private int remotePort;
 	
+	/** 可连接到单个代理服务的最大连接数 */
 	private int maxConn;
 	
+	/**
+	 * 构造函数
+	 * @param serverName
+	 * @param localListenPort
+	 * @param remoteIP
+	 * @param remotePort
+	 */
 	public FPFConfig(String serverName, int localListenPort, 
 			String remoteIP, int remotePort) {
 		this(serverName, localListenPort, 
@@ -32,7 +45,7 @@ public class FPFConfig {
 	}
 	
 	/**
-	 * 
+	 * 构造函数
 	 * @param serverName 代理服务名称（唯一即可）
 	 * @param localListenPort 本地监听端口
 	 * @param remoteIP 远程代理IP（真实服务IP）

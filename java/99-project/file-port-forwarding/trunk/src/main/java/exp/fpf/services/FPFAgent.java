@@ -87,12 +87,12 @@ public class FPFAgent {
 		boolean isOk = true;
 		if(!_init(srMgr.getSendDir())) {
 			isOk |= false;
-			log.error("初始化发送数据缓存目录失败(无读写权限): [{}]", srMgr.getSendDir());
+			log.warn("初始化发送数据缓存目录失败(未配置或无读写权限): [{}]", srMgr.getSendDir());
 		}
 		
 		if(!_init(srMgr.getRecvDir())) {
 			isOk |= false;
-			log.error("初始化接收数据缓存目录失败(无读写权限): [{}]", srMgr.getRecvDir());
+			log.warn("初始化接收数据缓存目录失败(未配置或无读写权限): [{}]", srMgr.getRecvDir());
 		}
 		
 		// 对于socket监听模式, 不需要两个目录同时配置

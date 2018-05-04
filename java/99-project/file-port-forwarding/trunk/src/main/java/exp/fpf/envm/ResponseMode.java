@@ -16,8 +16,10 @@ package exp.fpf.envm;
  */
 public class ResponseMode {
 
+	/** Socket监听模式 */
 	public final static int SOCKET = 1;
 	
+	/** 文件扫描模式 */
 	public final static int FILE = 2;
 	
 }

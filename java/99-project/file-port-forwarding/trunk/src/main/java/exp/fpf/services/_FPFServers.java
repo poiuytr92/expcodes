@@ -8,6 +8,16 @@ import exp.fpf.cache.SRMgr;
 import exp.fpf.proxy.Recver;
 import exp.libs.utils.other.ListUtils;
 
+/**
+ * <pre>
+ * [端口转发代理服务-S] 服务集管理器
+ * </pre>	
+ * <B>PROJECT：</B> file-port-forwarding
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-07-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _FPFServers {
 
 	private List<_FPFServer> servers;

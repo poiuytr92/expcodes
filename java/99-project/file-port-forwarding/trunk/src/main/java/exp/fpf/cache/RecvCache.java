@@ -1,14 +1,18 @@
 package exp.fpf.cache;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <pre>
- * 接收文件缓存区.
+ * 接收文件缓存区(非多线程安全).
  * --------------------------
  * 	第三方程序在传送数据流文件时，可能会使用并发传送使得文件时序错乱.
- * 	此缓存区目的是修正文件时序
+ * 	此缓存区目的是修正接收文件的时序
  * </pre>	
  * <B>PROJECT：</B> file-port-forwarding
  * <B>SUPPORT：</B> EXP
@@ -30,12 +34,12 @@ public class RecvCache {
 	
 	/**
 	 * 文件缓存.
-	 *  timeSequence -> file name
+	 *  timeSequence -> file name/path
 	 */
 	private Map<Integer, String> caches;
 	
 	/**
-	 * 
+	 * 构造函数
 	 */
 	public RecvCache() {
 		this.waitTimeSequence = 0;
@@ -43,10 +47,16 @@ public class RecvCache {
 		this.caches = new HashMap<Integer, String>();
 	}
 	
-	public boolean add(int timeSequence, String fileName) {
+	/**
+	 * 添加新文件到缓存, 并根据时序进行调整
+	 * @param timeSequence 文件时序
+	 * @param file 文件名称/路径
+	 * @return 是否添加成功
+	 */
+	public boolean add(int timeSequence, String file) {
 		boolean isOk = false;
 		if(timeSequence > readTimeSequence) {
-			caches.put(timeSequence, fileName);
+			caches.put(timeSequence, file);
 			isOk = true;
 			
 			// 修正等待时序
@@ -62,14 +72,41 @@ public class RecvCache {
 		return isOk;
 	}
 	
+	/**
+	 * 获取时序位置最早的一个文件
+	 * @return
+	 */
 	public String get() {
-		String fileName = "";
+		String file = "";
 		if(readTimeSequence + 1 < waitTimeSequence) {
-			fileName = caches.remove(++readTimeSequence);
+			file = caches.remove(++readTimeSequence);
 		}
-		return (fileName == null ? "" : fileName);
+		return (file == null ? "" : file);
 	}
 	
+	/**
+	 * 获取时序位置最早的多个文件, 直到出现时序断层为止.
+	 * -------------------------------
+	 * 	例如缓存了时序文件  [2、3、4、8、10], 由于时序4之后出现了断层，则返回 [2、3、4]
+	 * 	
+	 * @return
+	 */
+	public List<String> getAll() {
+		List<String> files = new LinkedList<String>();
+		while(true) {
+			String file = get();
+			if(StrUtils.isNotEmpty(file)) {
+				files.add(file);
+			} else {
+				break;
+			}
+		}
+		return files;
+	}
+	
+	/**
+	 * 清理缓存
+	 */
 	public void clear() {
 		caches.clear();
 	}

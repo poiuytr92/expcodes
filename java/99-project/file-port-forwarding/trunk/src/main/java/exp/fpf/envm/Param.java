@@ -18,20 +18,26 @@ public final class Param {
 	/** 建立连接标识 */
 	public final static String MARK_CONN = "#conn#";
 	
+	/** 发送文件前缀标识 */
 	public final static String PREFIX_SEND = "send";
 	
+	/** 接收文件前缀标识 */
 	public final static String PREFIX_RECV = "recv";
 	
+	/** 收发文件后缀 */
 	public final static String SUFFIX = ".txt";
 	
+	/** PC队列默认容量 */
 	public final static int PC_CAPACITY = 1024;
 	
-	/** 每次最多读写1MB数据 */
+	/** Socket读写缓存：每次最多读写1MB数据 */
 	public final static int IO_BUFF = SocketBean.DEFAULT_BUFF_SIZE * 
 			SocketBean.DEFAULT_BUFF_SIZE_UNIT;
 	
+	/** JSON属性：会话ID */
 	public final static String SID = "sid";
 	
+	/** JSON属性：会话数据 */
 	public final static String DATA = "data";
 	
 	/** 扫描文件/监听数据间隔: 单位ms */

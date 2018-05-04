@@ -8,6 +8,10 @@ import java.util.Map;
 import java.util.Set;
 
 import net.sf.json.JSONObject;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import exp.fpf.envm.Param;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.utils.format.JsonUtils;
@@ -27,19 +31,23 @@ import exp.libs.utils.verify.RegexUtils;
  */
 public class SRMgr {
 
+	/** 日志器 */
+	private Logger log = LoggerFactory.getLogger(SRMgr.class);
+	
+	/** 提取会话ID与文件时序的正则 */
 	private final static String REGEX = "-S(\\d+)-T(\\d+)";
 	
+	/** 发送文件目录 */
 	private String sendDir;
 	
+	/** 接收文件目录 */
 	private String recvDir;
 	
-	/**
-	 * 从真正客户端发出的请求数据文件集合
-	 */
+	/** 被第三方程序转发的、从真正客户端发出的请求数据文件集合 */
 	private PCQueue<String> sendFiles;
 	
 	/**
-	 * 从真正服务端返回的响应数据集合.
+	 * 被内置Socket转发的、从真正服务端返回的响应数据集合.
 	 * 
 	 * 适用于socket监听模式
 	 * sessionId -> recv data
@@ -47,7 +55,7 @@ public class SRMgr {
 	private Map<String, PCQueue<String>> recvDatas;
 	
 	/**
-	 * 从真正服务端返回的响应数据文件集合.
+	 * 被第三方程序转发的、从真正服务端返回的响应数据文件集合.
 	 * 
 	 * 适用于文件扫描模式.
 	 * sessionId -> recv filenames
@@ -55,7 +63,10 @@ public class SRMgr {
 	private Map<String, PCQueue<String>> recvFiles;
 	
 	/**
-	 * 缓存接收到的文件(用于调整文件时序, 避免发送时序错乱导致会话异常).
+	 * 缓存被第三方程序转发的、从真正服务端返回的文件
+	 * (用于调整文件时序, 避免发送时序错乱导致会话异常).
+	 * 
+	 * 适用于文件扫描模式.
 	 * sessionId -> recv file cache
 	 */
 	private Map<String, RecvCache> recvCaches;
@@ -71,7 +82,7 @@ public class SRMgr {
 	private Set<String> recvTabus;
 	
 	/**
-	 * 
+	 * 构造函数
 	 * @param sendDir
 	 * @param recvDir
 	 */
@@ -106,6 +117,10 @@ public class SRMgr {
 		}
 	}
 	
+	/**
+	 * 添加被第三方程序转发的、从真正客户端发出的请求数据文件到缓存队列
+	 * @param fileName
+	 */
 	public void addSendFile(String fileName) {
 		synchronized (sendTabus) {
 			if(sendTabus.remove(fileName) == true) {
@@ -116,14 +131,26 @@ public class SRMgr {
 		sendFiles.add(fileName);
 	}
 	
+	/**
+	 * 获取被第三方程序转发的、从真正客户端发出的请求数据文件
+	 * @return
+	 */
 	public String getSendFile() {
 		return sendFiles.get();	// 阻塞
 	}
 	
+	/**
+	 * 清理请求数据文件
+	 */
 	public void clearSendFiles() {
 		sendFiles.clear();
 	}
 	
+	/**
+	 * 添加被第三方程序转发的、从真正服务端返回的响应数据文件到缓存队列.
+	 * (适用于文件扫描模式)
+	 * @param fileName
+	 */
 	public void addRecvFile(String fileName) {
 		synchronized (recvTabus) {
 			if(recvTabus.remove(fileName) == true) {
@@ -153,17 +180,18 @@ public class SRMgr {
 			
 			// 在缓存调整接收文件的时序后再放进文件接收队列
 			cache.add(timeSequence, fileName);
-			while(true) {
-				fileName = cache.get();
-				if(StrUtils.isNotEmpty(fileName)) {
-					list.add(fileName);
-				} else {
-					break;
-				}
+			List<String> fileNames = cache.getAll();
+			for(String fn : fileNames) {
+				list.add(fn);
 			}
 		}
 	}
 	
+	/**
+	 * 获取被第三方程序转发的、从真正服务端返回的响应数据文件
+	 * @param sessionId
+	 * @return
+	 */
 	public String getRecvFile(String sessionId) {
 		String fileName = null;
 		PCQueue<String> list = recvFiles.get(sessionId);
@@ -173,6 +201,10 @@ public class SRMgr {
 		return fileName;
 	}
 	
+	/**
+	 * 清理某个会话响应数据文件
+	 * @param sessionId
+	 */
 	public void clearRecvFiles(String sessionId) {
 		PCQueue<String> list = recvFiles.remove(sessionId);
 		if(list != null) {
@@ -180,6 +212,10 @@ public class SRMgr {
 		}
 	}
 	
+	/**
+	 * 添加被内置Socket转发的、从真正服务端返回的响应数据到缓存队列
+	 * @param jsonData
+	 */
 	public void addRecvData(String jsonData) {
 		try {
 			JSONObject json = JSONObject.fromObject(jsonData);
@@ -195,10 +231,15 @@ public class SRMgr {
 				list.add(data);
 			}
 		} catch(Exception e) {
-			// Undo 非json数据则丢弃
+			log.warn("丢弃非JSON格式数据: [{}]", jsonData);
 		}
 	}
 	
+	/**
+	 * 获取被内置Socket转发的、从真正服务端返回的响应数据
+	 * @param sessionId
+	 * @return
+	 */
 	public String getRecvData(String sessionId) {
 		String data = null;
 		PCQueue<String> list = recvDatas.get(sessionId);
@@ -208,6 +249,10 @@ public class SRMgr {
 		return data;
 	}
 	
+	/**
+	 * 清理某个会话响应数据缓存
+	 * @param sessionId
+	 */
 	public void clearRecvDatas(String sessionId) {
 		PCQueue<String> list = recvDatas.remove(sessionId);
 		if(list != null) {
@@ -215,6 +260,9 @@ public class SRMgr {
 		}
 	}
 	
+	/**
+	 * 清理收发管理器缓存
+	 */
 	public void clear() {
 		Iterator<PCQueue<String>> dLists = recvDatas.values().iterator();
 		while(dLists.hasNext()) {

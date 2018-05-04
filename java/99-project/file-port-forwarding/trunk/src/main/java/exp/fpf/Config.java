@@ -16,11 +16,11 @@ import exp.libs.warp.conf.xml.XConfigFactory;
 
 /**
  * <pre>
- * 配置加载器
+ * 配置类
  * </pre>	
  * <B>PROJECT：</B> file-port-forwarding
  * <B>SUPPORT：</B> EXP
- * @version   1.0 2017-07-31
+ * @version   1.0 2017-07-28
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -36,8 +36,10 @@ public class Config {
 	
 	private XConfig xConf;
 	
+	/** 发送文件目录 */
 	private String sendDir;
 	
+	/** 接收文件目录 */
 	private String recvDir;
 	
 	/**
@@ -55,16 +57,19 @@ public class Config {
 	/** 用于接收返回数据的监听socket(端口): 仅rspMode=1时有效 */
 	private int rspPort;
 	
+	/** 超时时间 */
 	private int overtime;
 	
+	/** 扫描文件间隔 */
 	private long scanInterval;
 	
+	/** 代理服务配置集 */
 	private List<FPFConfig> fpfConfigs;
 	
 	private static volatile Config instance;
 	
 	private Config() {
-		this.xConf = XConfigFactory.createConfig("PFP");
+		this.xConf = XConfigFactory.createConfig("FPF");
 		this.fpfConfigs = new LinkedList<FPFConfig>();
 		this.sendDir = "./tmp/sendDir";
 		this.recvDir = "./tmp/recvDir";

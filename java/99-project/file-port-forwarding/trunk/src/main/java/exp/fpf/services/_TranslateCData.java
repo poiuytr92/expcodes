@@ -163,7 +163,7 @@ class _TranslateCData extends Thread {
 				curTime = System.currentTimeMillis();
 			}
 		} catch (SocketTimeoutException e) {
-			log.warn("Socket会话 [{}] 的{}转发通道超过 [{}ms] 无数据交互, 通道自动关闭", 
+			log.warn("Socket会话 [{}] 的{}转发通道超时 [{}ms] 无数据交互, 自动断开", 
 					sessionId, type, overtime);
 			
 		} catch (Exception e) {
@@ -270,7 +270,7 @@ class _TranslateCData extends Thread {
 				}
 			}
 		} catch (SocketTimeoutException e) {
-			log.warn("Socket会话 [{}] 的{}转发通道超过 [{}ms] 无数据交互, 通道自动关闭", 
+			log.warn("Socket会话 [{}] 的{}转发通道超时 [{}ms] 无数据交互, 自动断开", 
 					sessionId, type, overtime);
 			
 		} catch (IOException e) {
