@@ -258,4 +258,12 @@ public class PathUtils {
 		return fsv.getHomeDirectory().getPath();
 	}
 	
+	/**
+	 * 获取系统临时目录
+	 * @return 系统临时目录
+	 */
+	public static String getSysTmpDir() {
+		return System.getProperty("java.io.tmpdir");
+	}
+	
 }
