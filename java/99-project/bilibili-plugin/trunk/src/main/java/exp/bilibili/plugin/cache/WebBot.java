@@ -283,7 +283,7 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 刷新活跃值到数据库
+	 * 刷新活跃值到数据库(每天凌晨刷新一次)
 	 */
 	private void reflashActivity() {
 		ActivityMgr.getInstn().reflash();

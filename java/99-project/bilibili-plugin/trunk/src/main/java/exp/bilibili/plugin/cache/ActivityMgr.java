@@ -286,8 +286,14 @@ public class ActivityMgr {
 	public void reflash() {
 		if(isRecord() == true) {
 			save();
+			
 			lastPeriod = TimeUtils.getLastPeriod();
+			if(lastPeriod == curPeriod) {	// 已跨月
+				lastSumCost = curSumCost;
+				curSumCost = 0;
+			}
 			curPeriod = TimeUtils.getCurPeriod();
+			
 			read();
 		}
 	}

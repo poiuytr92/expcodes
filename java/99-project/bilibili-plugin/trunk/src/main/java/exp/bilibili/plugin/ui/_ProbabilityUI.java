@@ -29,8 +29,8 @@ public class _ProbabilityUI extends PopChildWindow {
 	
 	private final static int HEIGHT = 150;
 	
-	/** 默认抽奖概率：50% */
-	private final static int DEFAULT_VALUE = 50;
+	/** 默认抽奖概率：100% */
+	private final static int DEFAULT_VALUE = 100;
 	
 	private JSlider slider;
 	
