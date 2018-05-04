@@ -333,10 +333,9 @@ public class SafetyMonitor extends LoopThread {
 	}
 	
 	/**
-	 * 检查对公时间是否过期.
-	 * 	若对公时间已过期, 则检查对私时间是否过期.
+	 * 检查对公和对私时间是否已过期.
 	 * @param time 对公授权时间(格式： yyyy-MM-dd HH:mm:ss)
-	 * @return true:对公或对私时间未过期; false:对公与对私时间均过期
+	 * @return true:对公和对私时间均未过期; false:对公或对私时间过期
 	 */
 	private boolean checkInTime(String time) {
 		long now = System.currentTimeMillis();
@@ -346,7 +345,7 @@ public class SafetyMonitor extends LoopThread {
 		// 更新授权时间
 		updateCertificateTime(NumUtils.min(privateTime, publicTime));
 		
-		return !(now > publicTime && now > privateTime);
+		return (now <= publicTime && now <= privateTime);
 	}
 	
 	/**
