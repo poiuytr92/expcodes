@@ -1232,7 +1232,7 @@ public class AppUI extends MainWindow {
 	 * @return 参与抽奖的概率
 	 */
 	public int getLotteryProbability() {
-		return probabilityUI.VAL();
+		return probabilityUI.PROBABILITY();
 	}
 	
 	/**

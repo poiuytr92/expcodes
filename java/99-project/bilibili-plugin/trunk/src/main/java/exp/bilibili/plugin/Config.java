@@ -317,16 +317,29 @@ public class Config {
 	 * (房间勋章等级越高签到奖励越多)
 	 */
 	public boolean setSignRoomId(int roomId) {
+		return setValueInXml("signRoomId", String.valueOf(roomId));
+	}
+	
+	/**
+	 * 设置默认的抽奖反应时间
+	 * @param reactionTime 抽奖反应时间(ms)
+	 * @return
+	 */
+	public boolean setReactionTime(String reactionTime) {
+		return setValueInXml("reactionTime", reactionTime);
+	}
+	
+	private boolean setValueInXml(String tagName, String value) {
 		boolean isOk = false;
-		final String REGEX = "(<signRoomId[^>]+>)[^<]*(</signRoomId>)";
-		if(roomId > 0) {
+		final String REGEX = StrUtils.concat("(<", tagName, "[^>]+>)[^<]*(</", tagName, ">)");
+		if(StrUtils.isNotEmpty(value)) {
 			String xml = FileUtils.read(USER_PATH, DEFAULT_CHARSET);
 			Pattern ptn = Pattern.compile(REGEX);
 			Matcher mth = ptn.matcher(xml);
 			if(mth.find()) {
 				String head = mth.group(1);
 				String tail = mth.group(2);
-				String txt = StrUtils.concat(head, roomId, tail);
+				String txt = StrUtils.concat(head, value, tail);
 				xml = xml.replace(mth.group(0), txt);
 				
 				isOk = FileUtils.write(USER_PATH, xml, DEFAULT_CHARSET, false);

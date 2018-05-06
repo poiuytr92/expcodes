@@ -1,6 +1,7 @@
 package exp.bilibili.plugin;
 
 import exp.bilibili.plugin.ui.AppUI;
+import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 
@@ -17,13 +18,16 @@ import exp.libs.warp.ui.BeautyEyeUtils;
 public class BPMain {
 	
 	public static void main(String[] args) {
-		LogUtils.loadLogBackConfig();
-		Config.getInstn();
-		
-		BeautyEyeUtils.init();
-		AppUI.createInstn(args);
-		
-		// TODO 单进程运行（锁文件或锁端口）
+		if(OSUtils.getStartlock("BILIBILI")) {
+			LogUtils.loadLogBackConfig();
+			Config.getInstn();
+			
+			BeautyEyeUtils.init();
+			AppUI.createInstn(args);
+			
+		} else {
+			System.err.println("禁止重复启动程序");
+		}
 	}
 	
 }
