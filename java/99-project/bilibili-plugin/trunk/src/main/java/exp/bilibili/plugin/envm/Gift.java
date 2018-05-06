@@ -266,6 +266,8 @@ public class Gift {
 	
 	public final static Gift LETTER = new Gift("116", "情书", 2000);
 
+	public final static Gift GAMEBOY = new Gift("120", "游戏机", 100);
+	
 	public final static Gift STAR = new Gift("121", "闪耀之星", 200);
 	
 	/** 礼物ID */
@@ -352,6 +354,9 @@ public class Gift {
 			
 		} else if(LETTER.ID().equals(giftId)) {
 			intimacy = LETTER.INTIMACY();
+			
+		} else if(GAMEBOY.ID().equals(giftId)) {
+			intimacy = GAMEBOY.INTIMACY();
 			
 		} else if(STAR.ID().equals(giftId)) {
 			intimacy = STAR.INTIMACY();
@@ -451,6 +456,9 @@ public class Gift {
 			
 		} else if(LETTER.NAME().equals(giftName)) {
 			cost = LETTER.COST();
+			
+		} else if(GAMEBOY.NAME().equals(giftName)) {
+			cost = GAMEBOY.COST();
 			
 		} else if(STAR.NAME().equals(giftName)) {
 			cost = STAR.COST();
