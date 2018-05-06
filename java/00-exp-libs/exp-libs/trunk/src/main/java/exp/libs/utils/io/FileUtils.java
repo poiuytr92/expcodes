@@ -763,7 +763,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return 文件类型
 	 */
 	public static FileType getFileType(String filePath) {
-		return FileType.toFileType(getHexHeader(filePath));
+//		return FileType.toFileType(getHexHeader(filePath));
+		return null;
 	}
 	
 	/**
@@ -772,47 +773,86 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return 文件类型
 	 */
 	public static FileType getFileType(File file) {
-		return FileType.toFileType(getHexHeader(file));
+		FileType type = FileType.UNKNOW;
+		
+		
+		// 先获取文件后缀
+		//  再根据文件后缀获取文件头位数N，根据前N位文件头，验证文件类型
+		//  若文件头与后缀不匹配，且若文件头是唯一的，则以文件头为准。 否则无法判断文件类型
+		// 若无文件后缀 或 找不到文件后缀，则获取文件头。若文件头是唯一的，则以文件头为准。 否则无法判断文件类型
+		
+		String ext = getExtension(file);
+		int headLen = 0;	// FIXME 通过后缀预估文件头长度
+		String header = getHeader(file, headLen);
+		
+		// 先取文件头？？？ 但是长度不知道
+		
+		return type;
 	}
 	
-	/**
-	 * 获取文件头信息
-	 * @param filePath 文件路径
-	 * @return 文件头信息
-	 */
-	public static String getHexHeader(String filePath) {
-		String header = "";
-		if(filePath != null) {
-			header = getHexHeader(new File(filePath));
-		}
-		return header;
-	}
+//	public FileType toFileType(String hexHeader) {
+//		FileType type = UNKNOW;
+//		if(RAR.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = RAR;
+//			
+//		} else if(ZIP.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = ZIP;
+//			
+//		} else if(TAR.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = TAR;
+//			
+//		} else if(GZ.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = GZ;
+//			
+//		} else if(BZ2.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = BZ2;
+//			
+//		} else if(XLS.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = XLS;
+//			
+//		} else if(XLSX.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = XLSX;
+//			
+//		} else if(JPG.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = JPG;
+//			
+//		} else if(PNG.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = PNG;
+//			
+//		} else if(BMP.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
+//			type = BMP;
+//			
+//		}
+//		return type;
+//	}
 	
 	/**
 	 * <pre>
 	 * 获取文件头信息.
-	 * -----------------------------
-	 *  FIXME: 此方法存在缺陷, 并非所有文件的文件头都是4字节的.
-	 *    各种类型文件头标准编码: https://www.cnblogs.com/gwind/p/8215771.html
-	 * 
 	 * </pre>
 	 * @param file 文件
+	 * @param headLen 文件头信息长度
 	 * @return 文件头信息
 	 */
-	public static String getHexHeader(File file) {
+	private static String getHeader(File file, int headLen) {
 		String header = "";
+		if(headLen <= 0) {
+			return header;
+		}
+		
+		FileInputStream is = null;
 		try {
-			FileInputStream is = new FileInputStream(file);
-			byte[] bytes = new byte[4];
-			
+			is = new FileInputStream(file);
+			byte[] bytes = new byte[headLen];
 			is.read(bytes, 0, bytes.length);
-			is.close();
-			
 			header = BODHUtils.toHex(bytes);
 			
 		} catch (Exception e) {
 			log.error("获取文件 [{}] 的文件头信息失败.", 
 					(file == null ? "null" : file.getAbsolutePath()), e);
+			
+		} finally {
+			IOUtils.close(is);
 		}
 		return header;
 	}
@@ -820,7 +860,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * 获取文件扩展名(包括[.]符号)
 	 * @param file 文件
-	 * @return 文件扩展名(包括[.]符号)
+	 * @return 文件扩展名(全小写, 包括[.]符号)
 	 */
 	public static String getExtension(File file) {
 		return getExtension(file == null ? "" : file.getName());
@@ -829,7 +869,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * 获取文件扩展名(包括[.]符号)
 	 * @param fileName 文件名
-	 * @return 文件扩展名(包括[.]符号)
+	 * @return 文件扩展名(全小写, 包括[.]符号)
 	 */
 	public static String getExtension(String fileName) {
 		String extension = "";
