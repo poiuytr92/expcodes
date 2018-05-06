@@ -10,6 +10,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.io.IOUtils;
 import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.io.client.SocketClient;
 import exp.libs.warp.net.sock.io.common.ISession;
@@ -250,6 +251,7 @@ public class SocketServer extends Thread {
 			client.close();
 		}
 		clientProxys.clear();
+		IOUtils.close(socketServer);
 		
 		loginPool.shutdown();
 		execPool.shutdown();

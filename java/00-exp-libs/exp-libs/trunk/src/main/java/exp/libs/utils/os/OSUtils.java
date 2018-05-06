@@ -6,6 +6,13 @@ import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
+import java.io.File;
+import java.net.InetSocketAddress;
+import java.net.ServerSocket;
+
+import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.other.PathUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -149,6 +156,63 @@ public final class OSUtils {
 	public static String[] getSysFonts() {
 		GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
 		return env.getAvailableFontFamilyNames();
+	}
+	
+	/**
+	 * 获取进程启动锁(文件锁定方式).
+	 * --------------------------------------------------
+	 *   当要求程序只能在操作系统中运行一个进程时, 可使用此方法获取启动锁.
+	 *   当获取启动锁失败时, 配合System.exit终止程序即可.
+	 * --------------------------------------------------
+	 * 原理：
+	 *   程序每次运行时, 均在系统临时目录创建固有名称的临时文件, 该临时文件在程序终止时自动删除.
+	 *   由于文件不能被重复创建, 这样就确保了在系统中只能存在一个进程.
+	 *   
+	 * 缺陷:
+	 *   若使用非正常方式结束进程(如: kill -9), 会导致程序之后无法启动.
+	 *   
+	 * @param processName 进程名（任意即可，但不能为空）
+	 * @return true:获取启动锁成功(程序只运行了一次); false:获取启动锁失败(程序被第运行了2次以上)
+	 */
+	public static boolean getStartlock(String processName) {
+		boolean isOk = false;
+		if(StrUtils.isNotTrimEmpty(processName)) {
+			String tmpPath = PathUtils.combine(
+					PathUtils.getSysTmpDir(), "LOCK_".concat(processName));
+			if(!FileUtils.exists(tmpPath)) {
+				File tmpFile = FileUtils.createFile(tmpPath);
+				isOk = (tmpFile != null);
+				tmpFile.deleteOnExit(); // 程序终止时删除该临时文件
+			}
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 获取进程启动锁(端口锁定方式).
+	 * --------------------------------------------------
+	 *   当要求程序只能在操作系统中运行一个进程时, 可使用此方法获取启动锁.
+	 *   当获取启动锁失败时, 配合System.exit终止程序即可.
+	 * --------------------------------------------------
+	 * 原理：
+	 *   程序每次运行时, 会占用一个空闲端口, 该端口在程序终止时自动删除.
+	 *   由于端口不能被重复占用, 这样就确保了在系统中只能存在一个进程.
+	 *   
+	 * @param port 空闲端口
+	 * @return true:获取启动锁成功(程序只运行了一次); false:获取启动锁失败(程序被第运行了2次以上)
+	 */
+	@SuppressWarnings("resource")
+	public static boolean getStartlock(int port) {
+		boolean isOk = false;
+		if(port > 0) {
+			try {
+				InetSocketAddress socket = new InetSocketAddress(port);
+				ServerSocket server = new ServerSocket();
+				server.bind(socket);
+				isOk = true;
+			} catch (Exception e) {}
+		}
+		return isOk;
 	}
 	
 }
