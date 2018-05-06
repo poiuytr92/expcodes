@@ -68,9 +68,9 @@ public class _ProbabilityUI extends PopChildWindow {
 		rootPanel.add(slider, BorderLayout.CENTER);
 		rootPanel.add(SwingUtils.addBorder(
 				SwingUtils.getWEBorderPanel(
-					new JLabel("   参与抽奖的反应时间: "), 
+					new JLabel("   参与抽奖的反应时间:  "), 
 					reactionTF, 
-					new JLabel(" ms   ")
+					new JLabel("  毫秒   ")
 				)), BorderLayout.SOUTH
 		);
 	}
