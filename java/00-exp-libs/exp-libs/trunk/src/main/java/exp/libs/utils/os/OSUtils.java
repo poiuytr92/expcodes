@@ -7,12 +7,12 @@ import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.io.File;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
 
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.net.sock.bean.SocketBean;
+import exp.libs.warp.net.sock.io.server.SocketServer;
 
 /**
  * <PRE>
@@ -201,15 +201,21 @@ public final class OSUtils {
 	 * @param port 空闲端口
 	 * @return true:获取启动锁成功(程序只运行了一次); false:获取启动锁失败(程序被第运行了2次以上)
 	 */
-	@SuppressWarnings("resource")
 	public static boolean getStartlock(int port) {
 		boolean isOk = false;
 		if(port > 0) {
 			try {
-				InetSocketAddress socket = new InetSocketAddress(port);
-				ServerSocket server = new ServerSocket();
-				server.bind(socket);
-				isOk = true;
+				SocketBean sb = new SocketBean("0.0.0.0", port);
+				final SocketServer server = new SocketServer(sb, null);
+				isOk = server._start();
+				
+				Runtime.getRuntime().addShutdownHook(new Thread() {
+					
+					@Override
+					public void run() {
+						server._stop();
+					}
+				});
 			} catch (Exception e) {}
 		}
 		return isOk;
