@@ -18,10 +18,9 @@ import exp.libs.warp.ui.BeautyEyeUtils;
 public class BPMain {
 	
 	public static void main(String[] args) {
-		if(OSUtils.getStartlock("BILIBILI")) {
+		if(OSUtils.getStartlock(2333)) {
 			LogUtils.loadLogBackConfig();
 			Config.getInstn();
-			
 			BeautyEyeUtils.init();
 			AppUI.createInstn(args);
 			
