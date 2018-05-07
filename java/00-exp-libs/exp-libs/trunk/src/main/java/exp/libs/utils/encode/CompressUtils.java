@@ -555,9 +555,7 @@ public class CompressUtils {
 			return false;
 		}
 		
-		String header = FileUtils.getHexHeader(srcPath);
-		FileType fileType = FileType.toFileType(header);
-		
+		FileType fileType = FileUtils.getFileType(srcPath);
 		boolean isOk = false;
 		try {
 			if (FileType.ZIP == fileType) {

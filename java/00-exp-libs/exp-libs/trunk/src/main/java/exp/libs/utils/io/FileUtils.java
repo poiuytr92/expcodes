@@ -3,8 +3,11 @@ package exp.libs.utils.io;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +34,150 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(FileUtils.class);
+	
+	/**
+	 * 文件头长度表.
+	 *  文件后缀 -> 文件头长度
+	 */
+	private final static Map<String, Integer> HEAD_LENS = 
+			new HashMap<String, Integer>();
+	
+	/** 当前已知的文件类型中, 文件头最长的长度 */
+	private static int MAX_HEAD_LEN = -1;
+
+	/**
+	 * 文件类型表.
+	 *   文件头 -> 文件后缀 -> 文件类型
+	 */
+	private final static Map<String, Map<String, FileType>> FILE_TYPES = 
+			new HashMap<String, Map<String,FileType>>();
+	
+	/**
+	 * 初始化文件类型查询表单
+	 */
+	static {
+		initFileHeadLens();
+		initFileTypes();
+	}
+	
+	/**
+	 * 初始化文件头长度表
+	 */
+	private static void initFileHeadLens() {
+		HEAD_LENS.put(FileType.UNKNOW.EXT, FileType.UNKNOW.HEAD_LEN);
+		HEAD_LENS.put(FileType.TXT.EXT, FileType.TXT.HEAD_LEN);
+		HEAD_LENS.put(FileType.BAT.EXT, FileType.BAT.HEAD_LEN);
+		HEAD_LENS.put(FileType.BIN.EXT, FileType.BIN.HEAD_LEN);
+		HEAD_LENS.put(FileType.INI.EXT, FileType.INI.HEAD_LEN);
+		HEAD_LENS.put(FileType.TMP.EXT, FileType.TMP.HEAD_LEN);
+		HEAD_LENS.put(FileType.MP3.EXT, FileType.MP3.HEAD_LEN);
+		HEAD_LENS.put(FileType.WAVE.EXT, FileType.WAVE.HEAD_LEN);
+		HEAD_LENS.put(FileType.MIDI.EXT, FileType.MIDI.HEAD_LEN);
+		HEAD_LENS.put(FileType.JPG.EXT, FileType.JPG.HEAD_LEN);
+		HEAD_LENS.put(FileType.PNG.EXT, FileType.PNG.HEAD_LEN);
+		HEAD_LENS.put(FileType.BMP.EXT, FileType.BMP.HEAD_LEN);
+		HEAD_LENS.put(FileType.GIF.EXT, FileType.GIF.HEAD_LEN);
+		HEAD_LENS.put(FileType.TIFF.EXT, FileType.TIFF.HEAD_LEN);
+		HEAD_LENS.put(FileType.CAD.EXT, FileType.CAD.HEAD_LEN);
+		HEAD_LENS.put(FileType.PSD.EXT, FileType.PSD.HEAD_LEN);
+		HEAD_LENS.put(FileType.RTF.EXT, FileType.RTF.HEAD_LEN);
+		HEAD_LENS.put(FileType.XML.EXT, FileType.XML.HEAD_LEN);
+		HEAD_LENS.put(FileType.HTML.EXT, FileType.HTML.HEAD_LEN);
+		HEAD_LENS.put(FileType.EMAIL.EXT, FileType.EMAIL.HEAD_LEN);
+		HEAD_LENS.put(FileType.OUTLOOK.EXT, FileType.OUTLOOK.HEAD_LEN);
+		HEAD_LENS.put(FileType.OE.EXT, FileType.OE.HEAD_LEN);
+		HEAD_LENS.put(FileType.ACCESS.EXT, FileType.ACCESS.HEAD_LEN);
+		HEAD_LENS.put(FileType.DOC.EXT, FileType.DOC.HEAD_LEN);
+		HEAD_LENS.put(FileType.XLS.EXT, FileType.XLS.HEAD_LEN);
+		HEAD_LENS.put(FileType.PPT.EXT, FileType.PPT.HEAD_LEN);
+		HEAD_LENS.put(FileType.DOCX.EXT, FileType.DOCX.HEAD_LEN);
+		HEAD_LENS.put(FileType.XLSX.EXT, FileType.XLSX.HEAD_LEN);
+		HEAD_LENS.put(FileType.PPTX.EXT, FileType.PPTX.HEAD_LEN);
+		HEAD_LENS.put(FileType.ZIP.EXT, FileType.ZIP.HEAD_LEN);
+		HEAD_LENS.put(FileType.RAR.EXT, FileType.RAR.HEAD_LEN);
+		HEAD_LENS.put(FileType.TAR.EXT, FileType.TAR.HEAD_LEN);
+		HEAD_LENS.put(FileType.GZ.EXT, FileType.GZ.HEAD_LEN);
+		HEAD_LENS.put(FileType.BZ2.EXT, FileType.BZ2.HEAD_LEN);
+		HEAD_LENS.put(FileType.WPD.EXT, FileType.WPD.HEAD_LEN);
+		HEAD_LENS.put(FileType.EPS.EXT, FileType.EPS.HEAD_LEN);
+		HEAD_LENS.put(FileType.PS.EXT, FileType.PS.HEAD_LEN);
+		HEAD_LENS.put(FileType.PDF.EXT, FileType.PDF.HEAD_LEN);
+		HEAD_LENS.put(FileType.QDF.EXT, FileType.QDF.HEAD_LEN);
+		HEAD_LENS.put(FileType.PWL.EXT, FileType.PWL.HEAD_LEN);
+		HEAD_LENS.put(FileType.AVI.EXT, FileType.AVI.HEAD_LEN);
+		HEAD_LENS.put(FileType.RAM.EXT, FileType.RAM.HEAD_LEN);
+		HEAD_LENS.put(FileType.RM.EXT, FileType.RM.HEAD_LEN);
+		HEAD_LENS.put(FileType.MPEG_VIDEO.EXT, FileType.MPEG_VIDEO.HEAD_LEN);
+		HEAD_LENS.put(FileType.MPEG.EXT, FileType.MPEG.HEAD_LEN);
+		HEAD_LENS.put(FileType.MOV.EXT, FileType.MOV.HEAD_LEN);
+		HEAD_LENS.put(FileType.ASF.EXT, FileType.ASF.HEAD_LEN);
+		HEAD_LENS.put(FileType.DLL.EXT, FileType.DLL.HEAD_LEN);
+		HEAD_LENS.put(FileType.EXE.EXT, FileType.EXE.HEAD_LEN);
+		
+		Iterator<Integer> lens = HEAD_LENS.values().iterator();
+		while(lens.hasNext()) {
+			Integer len = lens.next().intValue();
+			MAX_HEAD_LEN = (MAX_HEAD_LEN < len ? len : MAX_HEAD_LEN);
+		}
+	}
+	
+	/**
+	 * 初始化文件类型表
+	 */
+	private static void initFileTypes() {
+		FILE_TYPES.put("", toMap(FileType.UNKNOW, FileType.TXT, FileType.BAT, 
+				FileType.BIN, FileType.INI, FileType.TMP, FileType.MP3));
+		FILE_TYPES.put("57415645", toMap(FileType.WAVE));
+		FILE_TYPES.put("4D546864", toMap(FileType.MIDI));
+		FILE_TYPES.put("FFD8FF", toMap(FileType.JPG));
+		FILE_TYPES.put("89504E47", toMap(FileType.PNG));
+		FILE_TYPES.put("424D", toMap(FileType.BMP));
+		FILE_TYPES.put("47494638", toMap(FileType.GIF));
+		FILE_TYPES.put("49492A00", toMap(FileType.TIFF));
+		FILE_TYPES.put("41433130", toMap(FileType.CAD));
+		FILE_TYPES.put("38425053", toMap(FileType.PSD));
+		FILE_TYPES.put("7B5C727466", toMap(FileType.RTF));
+		FILE_TYPES.put("3C3F786D6C", toMap(FileType.XML));
+		FILE_TYPES.put("68746D6C3E", toMap(FileType.HTML));
+		FILE_TYPES.put("44656C69766572792D646174653A", toMap(FileType.EMAIL));
+		FILE_TYPES.put("2142444E", toMap(FileType.OUTLOOK));
+		FILE_TYPES.put("CFAD12FEC5FD746F", toMap(FileType.OE));
+		FILE_TYPES.put("5374616E64617264204A", toMap(FileType.ACCESS));
+		FILE_TYPES.put("D0CF11E0", toMap(FileType.DOC, FileType.XLS, FileType.PPT));
+		FILE_TYPES.put("504B0304", toMap(FileType.DOCX, FileType.XLSX, FileType.PPTX, FileType.ZIP));
+		FILE_TYPES.put("52617221", toMap(FileType.RAR));
+		FILE_TYPES.put("1F9D", toMap(FileType.TAR));
+		FILE_TYPES.put("1F8B", toMap(FileType.GZ));
+		FILE_TYPES.put("425A68", toMap(FileType.BZ2));
+		FILE_TYPES.put("FF575043", toMap(FileType.WPD));
+		FILE_TYPES.put("252150532D41646F6265", toMap(FileType.PS, FileType.EPS));
+		FILE_TYPES.put("255044462D312E", toMap(FileType.PDF));
+		FILE_TYPES.put("AC9EBD8F", toMap(FileType.QDF));
+		FILE_TYPES.put("E3828596", toMap(FileType.PWL));
+		FILE_TYPES.put("41564920", toMap(FileType.AVI));
+		FILE_TYPES.put("2E7261FD", toMap(FileType.RAM));
+		FILE_TYPES.put("2E524D46", toMap(FileType.RM));
+		FILE_TYPES.put("000001B3", toMap(FileType.MPEG_VIDEO));
+		FILE_TYPES.put("000001BA", toMap(FileType.MPEG));
+		FILE_TYPES.put("6D6F6F76", toMap(FileType.MOV));
+		FILE_TYPES.put("3026B2758E66CF11", toMap(FileType.ASF));
+		FILE_TYPES.put("4D5A90", toMap(FileType.DLL, FileType.EXE));
+	}
+	
+	/**
+	 * 把若干个文件类型构造成Hash表单
+	 * @param fileTypes
+	 * @return Map: 文件后缀 -> 文件类型
+	 */
+	private static Map<String, FileType> toMap(FileType... fileTypes) {
+		Map<String, FileType> map = new HashMap<String, FileType>();
+		if(fileTypes != null) {
+			for(FileType fileType : fileTypes) {
+				map.put(fileType.EXT, fileType);
+			}
+		}
+		return map;
+	}
 	
 	/** 私有化构造函数 */
 	protected FileUtils() {}
@@ -763,8 +910,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return 文件类型
 	 */
 	public static FileType getFileType(String filePath) {
-//		return FileType.toFileType(getHexHeader(filePath));
-		return null;
+		FileType fileType = FileType.UNKNOW;
+		if(StrUtils.isNotTrimEmpty(filePath)) {
+			fileType = getFileType(new File(filePath));
+		}
+		return fileType;
 	}
 	
 	/**
@@ -773,58 +923,60 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return 文件类型
 	 */
 	public static FileType getFileType(File file) {
-		FileType type = FileType.UNKNOW;
+		FileType fileType = FileType.UNKNOW;
 		
-		
-		// 先获取文件后缀
-		//  再根据文件后缀获取文件头位数N，根据前N位文件头，验证文件类型
-		//  若文件头与后缀不匹配，且若文件头是唯一的，则以文件头为准。 否则无法判断文件类型
-		// 若无文件后缀 或 找不到文件后缀，则获取文件头。若文件头是唯一的，则以文件头为准。 否则无法判断文件类型
-		
+		// 基于文件后缀ext与文件头header是正确配对的前提下猜测文件类型
 		String ext = getExtension(file);
-		int headLen = 0;	// FIXME 通过后缀预估文件头长度
-		String header = getHeader(file, headLen);
+		if(StrUtils.isNotTrimEmpty(ext)) {
+			Integer headLen = HEAD_LENS.get(ext);
+			if(headLen != null) {
+				String header = _getHeader(file, headLen.intValue());
+				fileType = _toFileType(header, ext);
+			}
+		}
 		
-		// 先取文件头？？？ 但是长度不知道
-		
-		return type;
+		// 基于文件后缀ext与文件头header是不匹配的前提下猜测文件类型
+		if(fileType == FileType.UNKNOW) {
+			String fileHeader = _getHeader(file, MAX_HEAD_LEN);
+			Iterator<String> headers = FILE_TYPES.keySet().iterator();
+			while(headers.hasNext()) {
+				String header = headers.next();
+				if(StrUtils.equals("", fileHeader, header) || 
+						(!"".equals(header) && fileHeader.startsWith(header))) {
+					Map<String, FileType> types = FILE_TYPES.get(header);
+					if(types.size() == 1) {
+						fileType = types.values().iterator().next();
+						
+					} else {
+						log.error("判定文件 [{}] 的文件类型失败: 其文件后缀被篡改 (它可能是 {} 中的一个)", 
+								file.getName(), types.values().toString());
+					}
+					break;
+				}
+			}
+		}
+		return fileType;
 	}
 	
-//	public FileType toFileType(String hexHeader) {
-//		FileType type = UNKNOW;
-//		if(RAR.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = RAR;
-//			
-//		} else if(ZIP.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = ZIP;
-//			
-//		} else if(TAR.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = TAR;
-//			
-//		} else if(GZ.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = GZ;
-//			
-//		} else if(BZ2.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = BZ2;
-//			
-//		} else if(XLS.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = XLS;
-//			
-//		} else if(XLSX.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = XLSX;
-//			
-//		} else if(JPG.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = JPG;
-//			
-//		} else if(PNG.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = PNG;
-//			
-//		} else if(BMP.HEX_HEADER.equalsIgnoreCase(hexHeader)) {
-//			type = BMP;
-//			
-//		}
-//		return type;
-//	}
+	/**
+	 * 根据文件头和文件后缀转换成文件类型对象
+	 * @param header 16进制文件头
+	 * @param ext 含.的文件后缀
+	 * @return 文件类型对象
+	 */
+	private static FileType _toFileType(String header, String ext) {
+		FileType fileType = null;
+		if(StrUtils.isNotTrimEmpty(header, ext)) {
+			header = header.trim().toUpperCase();
+			ext = ext.trim().toLowerCase();
+			
+			Map<String, FileType> types = FILE_TYPES.get(header);
+			if(types != null) {
+				fileType = types.get(ext);
+			}
+		}
+		return (fileType == null ? FileType.UNKNOW : fileType);
+	}
 	
 	/**
 	 * <pre>
@@ -834,7 +986,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param headLen 文件头信息长度
 	 * @return 文件头信息
 	 */
-	private static String getHeader(File file, int headLen) {
+	private static String _getHeader(File file, int headLen) {
 		String header = "";
 		if(headLen <= 0) {
 			return header;

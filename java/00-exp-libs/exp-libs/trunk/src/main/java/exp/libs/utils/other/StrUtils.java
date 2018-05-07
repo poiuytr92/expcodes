@@ -23,24 +23,15 @@ public class StrUtils {
 	
 	/**
 	 * 判断字符串是否为空
-	 * @param s 待判断字符串
+	 * @param str 待判断字符串
 	 * @return true:字符串为null或""; false:字符串非空
 	 */
-	public static boolean isEmpty(String s) {
+	public static boolean isEmpty(String str) {
 		boolean isEmpty = false;
-		if(s == null || "".equals(s)) {
+		if(str == null || "".equals(str)) {
 			isEmpty = true;
 		}
 		return isEmpty;
-	}
-	
-	/**
-	 * 判断字符串是否非空
-	 * @param s 待判断字符串
-	 * @return true:字符串非空; false:字符串为null或""
-	 */
-	public static boolean isNotEmpty(String s) {
-		return !isEmpty(s);
 	}
 	
 	/**
@@ -62,6 +53,15 @@ public class StrUtils {
 	}
 	
 	/**
+	 * 判断字符串是否非空
+	 * @param str 待判断字符串
+	 * @return true:字符串非空; false:字符串为null或""
+	 */
+	public static boolean isNotEmpty(String str) {
+		return !isEmpty(str);
+	}
+	
+	/**
 	 * 判断所有字符串是否均为非空
 	 * @param strs 字符串集
 	 * @return true:所有字符串非空; false:存在字符串为null或""
@@ -69,8 +69,8 @@ public class StrUtils {
 	public static boolean isNotEmpty(String... strs) {
 		boolean isNotEmpty = true;
 		if(strs != null) {
-			for(String s : strs) {
-				isNotEmpty &= isNotEmpty(s);
+			for(String str : strs) {
+				isNotEmpty &= isNotEmpty(str);
 				if(isNotEmpty == false) {
 					break;
 				}
@@ -82,26 +82,32 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 判断字符串是否全为空白字符
-	 * @param s 待判断字符串
-	 * @return 是否全空白字符串
+	 * 判断trim(字符串)是否为空
+	 * @param str 待判断字符串
+	 * @return true:trim(字符串)为null或""; false:trim(字符串)非空
 	 */
-	public static boolean isBlank(String s) {
-		if (s == null) {
-			return false;
+	public static boolean isTrimEmpty(String str) {
+		boolean isTrimEmpty = false;
+		if(str == null || "".equals(str.trim())) {
+			isTrimEmpty = true;
 		}
-		return isEmpty(s.trim());
+		return isTrimEmpty;
 	}
 	
 	/**
-	 * 判断trim(字符串)是否为空
-	 * @param s 待判断字符串
-	 * @return true:trim(字符串)为null或""; false:trim(字符串)非空
+	 * 判断所有trim(字符串)是否均为空
+	 * @param strs 字符串集
+	 * @return true:所有trim(字符串)为null或""; false:存在trim(字符串)非空
 	 */
-	public static boolean isTrimEmpty(String s) {
-		boolean isTrimEmpty = false;
-		if(s == null || "".equals(s.trim())) {
-			isTrimEmpty = true;
+	public static boolean isTrimEmpty(String... strs) {
+		boolean isTrimEmpty = true;
+		if(strs != null) {
+			for(String str : strs) {
+				isTrimEmpty &= isTrimEmpty(str);
+				if(isTrimEmpty == false) {
+					break;
+				}
+			}
 		}
 		return isTrimEmpty;
 	}
@@ -111,8 +117,40 @@ public class StrUtils {
 	 * @param s 待判断字符串
 	 * @return true:trim(字符串)非空; false:trim(字符串)为null或""
 	 */
-	public static boolean isNotTrimEmpty(String s) {
-		return !isTrimEmpty(s);
+	public static boolean isNotTrimEmpty(String str) {
+		return !isTrimEmpty(str);
+	}
+	
+	/**
+	 * 判断所有trim(字符串)是否均为非空
+	 * @param strs 字符串集
+	 * @return true:所有trim(字符串)非空; false:存在trim(字符串)为null或""
+	 */
+	public static boolean isNotTrimEmpty(String... strs) {
+		boolean isNotTrimEmpty = true;
+		if(strs != null) {
+			for(String str : strs) {
+				isNotTrimEmpty &= isNotTrimEmpty(str);
+				if(isNotTrimEmpty == false) {
+					break;
+				}
+			}
+		} else {
+			isNotTrimEmpty = false;
+		}
+		return isNotTrimEmpty;
+	}
+	
+	/**
+	 * 判断字符串是否全为空白字符
+	 * @param s 待判断字符串
+	 * @return 是否全空白字符串
+	 */
+	public static boolean isBlank(String str) {
+		if (str == null) {
+			return false;
+		}
+		return isEmpty(str.trim());
 	}
 	
 	/**

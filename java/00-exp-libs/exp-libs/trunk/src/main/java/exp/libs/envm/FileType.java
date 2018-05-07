@@ -1,5 +1,6 @@
 package exp.libs.envm;
 
+
 /**
  * <PRE>
  * 枚举类：文件类型(提供文件类型后缀、以及文件头信息)
@@ -16,127 +17,152 @@ package exp.libs.envm;
  */
 public enum FileType {
 
-	UNKNOW("unknow", "", "", 0),
+	/** 未知文件类型 */
+	UNKNOW("UNKNOW", "", "", 0),
 	
-	/** TXT类的纯文本文件不存在文件头 */
-	TXT("txt", ".txt", "", 0), 
+	/** TXT类的纯文本文件不存在确定的文件头(其文件头受存储的内容影响) */
+	TXT("TXT", ".txt", "", 0), 
 	
-	BAT("bat", ".bat", "", 0), 
+	/** 批处理脚本 */
+	BAT("BAT", ".bat", "", 0), 
 	
-	BIN("bin", ".bin", "", 0), 
+	/** 二进制文件 */
+	BIN("BIN", ".bin", "", 0), 
 	
-	INI("ini", ".ini", "", 0), 
+	/** INI配置文件 */
+	INI("INI", ".ini", "", 0), 
 	
-	TMP("tmp", ".tmp", "", 0), 
+	/** 临时文件 */
+	TMP("TMP", ".tmp", "", 0), 
 	
-	JPG("jpg", ".jpg", "FFD8FF", 3), 
-
-	PNG("png", ".png", "89504E47", 4), 
-
-	BMP("bmp", ".bmp", "424D", 2), 
+	/** MP3音频文件(不存在固定文件头) */
+	MP3("MP3", ".mp3", "", 0), 
 	
-	GIF("gif", ".gif", "47494638", 4), 
-
-	TIFF("tif", ".tif", "49492A00", 4), 
-
-	CAD("dwg", ".dwg", "41433130", 4), 
-
-	/** Adobe Photoshop */
-	PSD("psd", ".psd", "38425053", 4), 
-
-	/** Rich Text Format */
-	RTF("rtf", ".rtf", "7B5C727466", 5), 
-
-	XML("xml", ".xml", "3C3F786D6C", 5), 
-
-	HTML("html", ".html", "68746D6C3E", 5), 
-
-	EMAIL("eml", ".eml", "44656C69766572792D646174653A", 14), 
-
-	/** MS Outlook */
-	OUTLOOK("pst", ".pst", "2142444E", 4), 
+	/** Wave格式音频文件 */
+	WAVE("Wave", ".wav", "57415645", 4), 
 	
-	/** MS Outlook Express */
-	OE("dbx", ".dbx", "CFAD12FEC5FD746F", 8), 
-	
-	/** MS Access */
-	ACCESS("mdb", ".mdb", "5374616E64617264204A", 10), 
-	
-	/** MS Word 2003 (DOC、XLS、PPT 的文件头是相同的) */
-	DOC("doc", ".doc", "D0CF11E0", 4), 
-	
-	/** MS Excel 2003 (DOC、XLS、PPT 的文件头是相同的) */
-	XLS("xls", ".xls", "D0CF11E0", 4), 
-	
-	/** MS Power Point 2003 (DOC、XLS、PPT 的文件头是相同的) */
-	PPT("ppt", ".ppt", "D0CF11E0", 4), 
-
-	/** MS Word (DOCX、XLSX、PPTX 的文件头与ZIP是相同的, 实际上就是ZIP文件) */
-	DOCX("docx", ".docx", "504B0304", 4), 
-	
-	/** MS Excel (DOCX、XLSX、PPTX 的文件头与ZIP是相同的, 实际上就是ZIP文件) */
-	XLSX("xlsx", ".xlsx", "504B0304", 4), 
-	
-	/** MS Power Point (DOCX、XLSX、PPTX 的文件头与ZIP是相同的, 实际上就是ZIP文件) */
-	PPTX("pptx", ".pptx", "504B0304", 4), 
-	
-	/** ZIP Archive */
-	ZIP("zip", ".zip", "504B0304", 4), 
-
-	/** RAR Archive */
-	RAR("rar", ".rar", "52617221", 4), 
-	
-	TAR("tar", ".tar", "1F9D", 2),
-	
-	GZ("gz", ".gz", "1F8B", 2),
-	
-	BZ2("bz2", ".bz2", "425A68", 3),
-
-	/** WordPerfect */
-	WPD("wpd", ".wpd", "FF575043", 4), 
-
-	/** Postscript */
-	EPS("eps", ".eps", "252150532D41646F6265", 10), 
-
-	/** Postscript */
-	PS("ps", ".ps", "252150532D41646F6265", 10), 
-	
-	/** Adobe Acrobat */
-	PDF("pdf", ".pdf", "255044462D312E", 7), 
-
-	/** Quicken */
-	QDF("qdf", ".qdf", "AC9EBD8F", 4), 
-
-	/** Windows Password */
-	PWL("pwl", ".pwl", "E3828596", 4), 
-
-	WAVE("wav", ".wav", "57415645", 4), 
-
-	AVI("avi", ".avi", "41564920", 4), 
-
-	/** Real Audio */
-	RAM("ram", ".ram", "2E7261FD", 4), 
-
-	/** Real Media */
-	RM("rm", ".rm", "2E524D46", 4), 
-
-//	/** MPEG (只包含视频数据) */
-//	MPEG("mpg", ".mpg", "000001B3", 4), 
-	
-	/** MPEG (同时包含视频数据和音频数据) */
-	MPEG("mpg", ".mpg", "000001BA", 4), 
-
-	/** Quicktime */
-	MOV("mov", ".mov", "6D6F6F76", 4), 
-
-	/** Windows Media */
-	ASF("asf", ".asf", "3026B2758E66CF11", 8), 
-
+	/** Musical Instrument Digital Interface (最小的音符文件) */
 	MIDI("mid", ".mid", "4D546864", 4), 
 	
-	DLL("dll", ".dll", "4D5A90", 3), 
+	/** 矢量图 */
+	JPG("JPG", ".jpg", "FFD8FF", 3), 
+
+	/** 无损压缩位图 */
+	PNG("PNG", ".png", "89504E47", 4), 
+
+	/** 24位位图 */
+	BMP("BMP", ".bmp", "424D", 2), 
 	
-	EXE("exe", ".exe", "4D5A90", 3), 
+	/** 动态图像 */
+	GIF("GIF", ".gif", "47494638", 4), 
+
+	/** 标签图像 */
+	TIFF("TIFF", ".tif", "49492A00", 4), 
+
+	/** Computer Aided Design */
+	CAD("Computer Aided Design", ".dwg", "41433130", 4), 
+
+	/** Adobe Photoshop */
+	PSD("Adobe Photoshop", ".psd", "38425053", 4), 
+
+	/** Rich Text Format */
+	RTF("Rich Text Format", ".rtf", "7B5C727466", 5), 
+
+	/** XML配置文件 */
+	XML("XML", ".xml", "3C3F786D6C", 5), 
+
+	/** HTML网页文件 */
+	HTML("HTML", ".html", "68746D6C3E", 5), 
+
+	/** EMAIL */
+	EMAIL("EMAIL", ".eml", "44656C69766572792D646174653A", 14), 
+
+	/** MS Outlook */
+	OUTLOOK("MS Outlook", ".pst", "2142444E", 4), 
+	
+	/** MS Outlook Express */
+	OE("MS Outlook Express", ".dbx", "CFAD12FEC5FD746F", 8), 
+	
+	/** MS Access */
+	ACCESS("MS Access", ".mdb", "5374616E64617264204A", 10), 
+	
+	/** MS Word 2003 (DOC、XLS、PPT 的文件头是相同的) */
+	DOC("MS Word 2003", ".doc", "D0CF11E0", 4), 
+	
+	/** MS Excel 2003 (DOC、XLS、PPT 的文件头是相同的) */
+	XLS("MS Excel 2003", ".xls", "D0CF11E0", 4), 
+	
+	/** MS Power Point 2003 (DOC、XLS、PPT 的文件头是相同的) */
+	PPT("MS Power Point 2003", ".ppt", "D0CF11E0", 4), 
+
+	/** MS Word (DOCX、XLSX、PPTX 的文件头与ZIP是相同的, 实际上就是ZIP文件) */
+	DOCX("MS Word", ".docx", "504B0304", 4), 
+	
+	/** MS Excel (DOCX、XLSX、PPTX 的文件头与ZIP是相同的, 实际上就是ZIP文件) */
+	XLSX("MS Excel", ".xlsx", "504B0304", 4), 
+	
+	/** MS Power Point (DOCX、XLSX、PPTX 的文件头与ZIP是相同的, 实际上就是ZIP文件) */
+	PPTX("MS Power Point", ".pptx", "504B0304", 4), 
+	
+	/** ZIP Archive */
+	ZIP("ZIP Archive", ".zip", "504B0304", 4), 
+
+	/** RAR Archive */
+	RAR("RAR Archive", ".rar", "52617221", 4), 
+	
+	/** TAR Archive */
+	TAR("TAR Archive", ".tar", "1F9D", 2),
+	
+	/** GZ Archive */
+	GZ("GZ", ".gz", "1F8B", 2),
+	
+	/** BZ2 Archive */
+	BZ2("BZ2", ".bz2", "425A68", 3),
+
+	/** WordPerfect */
+	WPD("WordPerfect", ".wpd", "FF575043", 4), 
+
+	/** Postscript */
+	PS("Postscript", ".ps", "252150532D41646F6265", 10), 
+	
+	/** Postscript */
+	EPS("Postscript", ".eps", "252150532D41646F6265", 10), 
+
+	/** Adobe Acrobat */
+	PDF("Adobe Acrobat", ".pdf", "255044462D312E", 7), 
+
+	/** Quicken */
+	QDF("Quicken", ".qdf", "AC9EBD8F", 4), 
+
+	/** Windows Password */
+	PWL("Windows Password", ".pwl", "E3828596", 4), 
+
+	/** AVI格式视音频文件 */
+	AVI("Audio Video Interleaved", ".avi", "41564920", 4), 
+
+	/** Real Audio */
+	RAM("Real Audio", ".ram", "2E7261FD", 4), 
+
+	/** Real Media */
+	RM("Real Media", ".rm", "2E524D46", 4), 
+
+	/** MPEG (只包含视频数据) */
+	MPEG_VIDEO("MPEG (Only Video)", ".mpg", "000001B3", 4), 
+	
+	/** MPEG (同时包含视频数据和音频数据) */
+	MPEG("MPEG", ".mpg", "000001BA", 4), 
+
+	/** Quicktime */
+	MOV("Quicktime", ".mov", "6D6F6F76", 4), 
+
+	/** Windows Media */
+	ASF("Windows Media", ".asf", "3026B2758E66CF11", 8), 
+
+	/** Windows 动态库文件 */
+	DLL("DLL", ".dll", "4D5A90", 3), 
+	
+	/** Windows 可执行文件 */
+	EXE("EXE", ".exe", "4D5A90", 3), 
 	
 	;
 	
@@ -165,5 +191,10 @@ public enum FileType {
 		this.HEADER = header;
 		this.HEAD_LEN = headLen;
 	}
-
+	
+	@Override
+	public String toString() {
+		return EXT;
+	}
+	
 }
