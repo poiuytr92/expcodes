@@ -60,7 +60,7 @@ public enum FileType {
 	TIFF("TIFF", ".tif", "49492A00", 4), 
 
 	/** Computer Aided Design */
-	CAD("Computer Aided Design", ".dwg", "41433130", 4), 
+	CAD("CAD", ".dwg", "41433130", 4), 
 
 	/** Adobe Photoshop */
 	PSD("Adobe Photoshop", ".psd", "38425053", 4), 
@@ -75,7 +75,7 @@ public enum FileType {
 	HTML("HTML", ".html", "68746D6C3E", 5), 
 
 	/** EMAIL */
-	EMAIL("EMAIL", ".eml", "44656C69766572792D646174653A", 14), 
+	EMAIL("Email", ".eml", "44656C69766572792D646174653A", 14), 
 
 	/** MS Outlook */
 	OUTLOOK("MS Outlook", ".pst", "2142444E", 4), 
@@ -105,13 +105,13 @@ public enum FileType {
 	PPTX("MS Power Point", ".pptx", "504B0304", 4), 
 	
 	/** ZIP Archive */
-	ZIP("ZIP Archive", ".zip", "504B0304", 4), 
+	ZIP("ZIP", ".zip", "504B0304", 4), 
 
 	/** RAR Archive */
-	RAR("RAR Archive", ".rar", "52617221", 4), 
+	RAR("RAR", ".rar", "52617221", 4), 
 	
 	/** TAR Archive */
-	TAR("TAR Archive", ".tar", "1F9D", 2),
+	TAR("TAR", ".tar", "1F9D", 2),
 	
 	/** GZ Archive */
 	GZ("GZ", ".gz", "1F8B", 2),
@@ -129,7 +129,7 @@ public enum FileType {
 	EPS("Postscript", ".eps", "252150532D41646F6265", 10), 
 
 	/** Adobe Acrobat */
-	PDF("Adobe Acrobat", ".pdf", "255044462D312E", 7), 
+	PDF("PDF", ".pdf", "255044462D312E", 7), 
 
 	/** Quicken */
 	QDF("Quicken", ".qdf", "AC9EBD8F", 4), 
@@ -137,8 +137,8 @@ public enum FileType {
 	/** Windows Password */
 	PWL("Windows Password", ".pwl", "E3828596", 4), 
 
-	/** AVI格式视音频文件 */
-	AVI("Audio Video Interleaved", ".avi", "41564920", 4), 
+	/** AVI格式视音频文件(Audio Video Interleaved) */
+	AVI("AVI", ".avi", "41564920", 4), 
 
 	/** Real Audio */
 	RAM("Real Audio", ".ram", "2E7261FD", 4), 
