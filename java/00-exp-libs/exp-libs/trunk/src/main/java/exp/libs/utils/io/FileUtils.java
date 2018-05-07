@@ -925,7 +925,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	public static FileType getFileType(File file) {
 		FileType fileType = FileType.UNKNOW;
 		
-		// 基于文件后缀ext与文件头header是正确配对的前提下猜测文件类型
+		// 基于文件后缀ext与文件头header是正确配对的前提下, 验证猜测文件类型
+		// (先用文件后缀获取理论文件头，再用实际文件头匹配理论文件头)
 		String ext = getExtension(file);
 		if(StrUtils.isNotTrimEmpty(ext)) {
 			Integer headLen = HEAD_LENS.get(ext);
@@ -935,7 +936,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			}
 		}
 		
-		// 基于文件后缀ext与文件头header是不匹配的前提下猜测文件类型
+		// 基于文件后缀ext与文件头header是不匹配的前提下, 通过文件头猜测文件类型
 		if(fileType == FileType.UNKNOW) {
 			String fileHeader = _getHeader(file, MAX_HEAD_LEN);
 			Iterator<String> headers = FILE_TYPES.keySet().iterator();
