@@ -125,43 +125,44 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 初始化文件类型表
 	 */
 	private static void initFileTypes() {
-		FILE_TYPES.put("", toMap(FileType.UNKNOW, FileType.TXT, FileType.BAT, 
-				FileType.BIN, FileType.INI, FileType.TMP, FileType.MP3));
-		FILE_TYPES.put("57415645", toMap(FileType.WAVE));
-		FILE_TYPES.put("4D546864", toMap(FileType.MIDI));
-		FILE_TYPES.put("FFD8FF", toMap(FileType.JPG));
-		FILE_TYPES.put("89504E47", toMap(FileType.PNG));
-		FILE_TYPES.put("424D", toMap(FileType.BMP));
-		FILE_TYPES.put("47494638", toMap(FileType.GIF));
-		FILE_TYPES.put("49492A00", toMap(FileType.TIFF));
-		FILE_TYPES.put("41433130", toMap(FileType.CAD));
-		FILE_TYPES.put("38425053", toMap(FileType.PSD));
-		FILE_TYPES.put("7B5C727466", toMap(FileType.RTF));
-		FILE_TYPES.put("3C3F786D6C", toMap(FileType.XML));
-		FILE_TYPES.put("68746D6C3E", toMap(FileType.HTML));
-		FILE_TYPES.put("44656C69766572792D646174653A", toMap(FileType.EMAIL));
-		FILE_TYPES.put("2142444E", toMap(FileType.OUTLOOK));
-		FILE_TYPES.put("CFAD12FEC5FD746F", toMap(FileType.OE));
-		FILE_TYPES.put("5374616E64617264204A", toMap(FileType.ACCESS));
-		FILE_TYPES.put("D0CF11E0", toMap(FileType.DOC, FileType.XLS, FileType.PPT));
-		FILE_TYPES.put("504B0304", toMap(FileType.DOCX, FileType.XLSX, FileType.PPTX, FileType.ZIP));
-		FILE_TYPES.put("52617221", toMap(FileType.RAR));
-		FILE_TYPES.put("1F9D", toMap(FileType.TAR));
-		FILE_TYPES.put("1F8B", toMap(FileType.GZ));
-		FILE_TYPES.put("425A68", toMap(FileType.BZ2));
-		FILE_TYPES.put("FF575043", toMap(FileType.WPD));
-		FILE_TYPES.put("252150532D41646F6265", toMap(FileType.PS, FileType.EPS));
-		FILE_TYPES.put("255044462D312E", toMap(FileType.PDF));
-		FILE_TYPES.put("AC9EBD8F", toMap(FileType.QDF));
-		FILE_TYPES.put("E3828596", toMap(FileType.PWL));
-		FILE_TYPES.put("41564920", toMap(FileType.AVI));
-		FILE_TYPES.put("2E7261FD", toMap(FileType.RAM));
-		FILE_TYPES.put("2E524D46", toMap(FileType.RM));
-		FILE_TYPES.put("000001B3", toMap(FileType.MPEG_VIDEO));
-		FILE_TYPES.put("000001BA", toMap(FileType.MPEG));
-		FILE_TYPES.put("6D6F6F76", toMap(FileType.MOV));
-		FILE_TYPES.put("3026B2758E66CF11", toMap(FileType.ASF));
-		FILE_TYPES.put("4D5A90", toMap(FileType.DLL, FileType.EXE));
+		FILE_TYPES.put(FileType.UNKNOW.HEADER, toMap(FileType.UNKNOW, FileType.TXT, 
+				FileType.BAT, FileType.BIN, FileType.INI, FileType.TMP, FileType.MP3));
+		FILE_TYPES.put(FileType.WAVE.HEADER, toMap(FileType.WAVE));
+		FILE_TYPES.put(FileType.MIDI.HEADER, toMap(FileType.MIDI));
+		FILE_TYPES.put(FileType.JPG.HEADER, toMap(FileType.JPG));
+		FILE_TYPES.put(FileType.PNG.HEADER, toMap(FileType.PNG));
+		FILE_TYPES.put(FileType.BMP.HEADER, toMap(FileType.BMP));
+		FILE_TYPES.put(FileType.GIF.HEADER, toMap(FileType.GIF));
+		FILE_TYPES.put(FileType.TIFF.HEADER, toMap(FileType.TIFF));
+		FILE_TYPES.put(FileType.CAD.HEADER, toMap(FileType.CAD));
+		FILE_TYPES.put(FileType.PSD.HEADER, toMap(FileType.PSD));
+		FILE_TYPES.put(FileType.RTF.HEADER, toMap(FileType.RTF));
+		FILE_TYPES.put(FileType.XML.HEADER, toMap(FileType.XML));
+		FILE_TYPES.put(FileType.HTML.HEADER, toMap(FileType.HTML));
+		FILE_TYPES.put(FileType.EMAIL.HEADER, toMap(FileType.EMAIL));
+		FILE_TYPES.put(FileType.OUTLOOK.HEADER, toMap(FileType.OUTLOOK));
+		FILE_TYPES.put(FileType.OE.HEADER, toMap(FileType.OE));
+		FILE_TYPES.put(FileType.ACCESS.HEADER, toMap(FileType.ACCESS));
+		FILE_TYPES.put(FileType.DOC.HEADER, toMap(FileType.DOC, FileType.XLS, FileType.PPT));
+		FILE_TYPES.put(FileType.ZIP.HEADER, toMap(FileType.ZIP, 
+				FileType.DOCX, FileType.XLSX, FileType.PPTX));
+		FILE_TYPES.put(FileType.RAR.HEADER, toMap(FileType.RAR));
+		FILE_TYPES.put(FileType.TAR.HEADER, toMap(FileType.TAR));
+		FILE_TYPES.put(FileType.GZ.HEADER, toMap(FileType.GZ));
+		FILE_TYPES.put(FileType.BZ2.HEADER, toMap(FileType.BZ2));
+		FILE_TYPES.put(FileType.WPD.HEADER, toMap(FileType.WPD));
+		FILE_TYPES.put(FileType.EPS.HEADER, toMap(FileType.PS, FileType.EPS));
+		FILE_TYPES.put(FileType.PDF.HEADER, toMap(FileType.PDF));
+		FILE_TYPES.put(FileType.QDF.HEADER, toMap(FileType.QDF));
+		FILE_TYPES.put(FileType.PWL.HEADER, toMap(FileType.PWL));
+		FILE_TYPES.put(FileType.AVI.HEADER, toMap(FileType.AVI));
+		FILE_TYPES.put(FileType.RAM.HEADER, toMap(FileType.RAM));
+		FILE_TYPES.put(FileType.RM.HEADER, toMap(FileType.RM));
+		FILE_TYPES.put(FileType.MPEG_VIDEO.HEADER, toMap(FileType.MPEG_VIDEO));
+		FILE_TYPES.put(FileType.MPEG.HEADER, toMap(FileType.MPEG));
+		FILE_TYPES.put(FileType.MOV.HEADER, toMap(FileType.MOV));
+		FILE_TYPES.put(FileType.ASF.HEADER, toMap(FileType.ASF));
+		FILE_TYPES.put(FileType.DLL.HEADER, toMap(FileType.DLL, FileType.EXE));
 	}
 	
 	/**
