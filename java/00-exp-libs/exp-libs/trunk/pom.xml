@@ -240,6 +240,7 @@
           <version>3.3</version>
         </dependency>
         
+        <!-- Base64编解码工具 -->
         <dependency>
           <groupId>sun.misc</groupId>
           <artifactId>base64</artifactId>

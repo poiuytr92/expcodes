@@ -23,6 +23,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 
 import exp.libs.envm.Charset;
+import exp.libs.envm.FileType;
 import exp.libs.utils.io.FileUtils;
 
 /**
@@ -50,10 +51,10 @@ public class QRCodeUtils {
 	private final static int WHITE = 0xFFFFFFFF;
 	
 	/** 所生成二维码的图像格式 */
-	public final static String TYPE_PNG = "png";
+	public final static String TYPE_PNG = FileType.PNG.NAME;
 
 	/** 所生成二维码的图像格式 */
-	public final static String TYPE_JPG = "jpg";
+	public final static String TYPE_JPG = FileType.JPG.NAME;
 	
 	/** 私有化构造函数 */
 	protected QRCodeUtils() {}
