@@ -21,6 +21,9 @@ public class LotteryRoom {
 	/** 抽奖编号 */
 	private String raffleId;
 	
+	/** 抽奖开始时间 */
+	private long startTime;
+	
 	/** 抽奖类型 */
 	private LotteryType type;
 	
@@ -31,6 +34,7 @@ public class LotteryRoom {
 	public LotteryRoom(int roomId, String raffleId, LotteryType type) {
 		this.roomId = roomId;
 		this.raffleId = (StrUtils.isEmpty(raffleId) ? "" : raffleId);
+		this.startTime = System.currentTimeMillis();
 		this.type = (type == null ? LotteryType.ENGERY : type);
 	}
 
@@ -40,6 +44,10 @@ public class LotteryRoom {
 
 	public String getRaffleId() {
 		return raffleId;
+	}
+	
+	public long getStartTime() {
+		return startTime;
 	}
 	
 	public LotteryType TYPE() {

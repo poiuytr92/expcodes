@@ -148,17 +148,30 @@ public class WebBot extends LoopThread {
 		
 		// 小电视抽奖
 		if(room.TYPE() == LotteryType.TV) {
-			ThreadUtils.tSleep(Config.getInstn().REACTION_TIME());	// 限制参与抽奖的反应时间（过快反应会被禁止抽奖）
+			_waitReactionTime(room);
 			XHRSender.toTvLottery(roomId, raffleId);
 			
 		// 节奏风暴抽奖
 		} else if(room.TYPE() == LotteryType.STORM) {
+//			_waitReactionTime(room);	// 节奏风暴无需等待, 当前环境太多机器人, 很难抢到前几名导致被捉
 			XHRSender.toStormLottery(roomId, raffleId);
 			
 		// 高能抽奖
 		} else {
-			ThreadUtils.tSleep(Config.getInstn().REACTION_TIME());	// 限制参与抽奖的反应时间（过快反应会被禁止抽奖）
+			_waitReactionTime(room);
 			XHRSender.toEgLottery(roomId);
+		}
+	}
+	
+	/**
+	 * 等待满足抽奖反应时间（过快反应会被禁止抽奖1天）
+	 * @param room 抽奖房间
+	 */
+	private void _waitReactionTime(LotteryRoom room) {
+		long waitTime = UIUtils.getReactionTime() - 
+				(System.currentTimeMillis() - room.getStartTime());
+		if(waitTime > 0) {
+			ThreadUtils.tSleep(waitTime);
 		}
 	}
 	

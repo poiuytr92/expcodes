@@ -109,6 +109,10 @@ public class UIUtils {
 		return AppUI.getInstn().getLotteryProbability();
 	}
 	
+	public static long getReactionTime() {
+		return AppUI.getInstn().getReactionTime();
+	}
+	
 	public static boolean isAutoFeed() {
 		return AppUI.getInstn().isAutoFeed();
 	}

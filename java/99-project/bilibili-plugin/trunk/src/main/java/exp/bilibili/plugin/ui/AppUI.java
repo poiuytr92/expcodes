@@ -1236,6 +1236,14 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
+	 * 获取参与抽奖的反应时间
+	 * @return 参与抽奖的反应时间
+	 */
+	public long getReactionTime() {
+		return probabilityUI.REACTION_TIME();
+	}
+	
+	/**
 	 * 是否自动投喂主播
 	 * @return
 	 */
