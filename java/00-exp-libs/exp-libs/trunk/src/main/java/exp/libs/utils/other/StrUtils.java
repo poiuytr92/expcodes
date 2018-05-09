@@ -2,6 +2,7 @@ package exp.libs.utils.other;
 
 import java.util.List;
 
+import exp.libs.envm.Delimiter;
 import exp.libs.utils.format.ESCUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.utils.verify.VerifyUtils;
@@ -398,26 +399,48 @@ public class StrUtils {
 	}
 	
 	/**
-	 * 在字符串特定距离填充1个空格
+	 * <pre>
+	 * 对字符串进行固定长度断行.
+	 * ---------------------------
+	 *  如原字符串为: ABCDEFGHIJK
+	 *  若断行长度为: 3
+	 *  则断行后的字符串为：
+	 *  		  ABC
+	 *  		  DEF
+	 *  		  GHI
+	 *  		  JK
+	 * </pre>
+	 * @param str 原字符串
+	 * @param len 断行长度
+	 * @return 断行后的字符串
+	 */
+	public static String breakLine(String str, int len) {
+		return fill(str, len, Delimiter.CRLF);
+	}
+	
+	/**
+	 * 在字符串中，每隔特定距离填充另1个字符串
 	 * @param str 原字符串
 	 * @param interval 填充间隔
-	 * @return 填充空格后的字符串
+	 * @param fillStr 填充字符串
+	 * @return 填充后的字符串
 	 */
-	public static String addSpace(final String str, final int interval) {
-		if(interval <= 0) {
-			return (str == null ? "" : str);
-		}
-		
+	public static String fill(String str, int interval, String fillStr) {
 		StringBuilder sb = new StringBuilder();
 		if(str != null) {
-			int cnt = 0;
-			char[] chs = str.toCharArray();
-			for(char c : chs) {
-				if(++cnt > interval) {	// cnt = interval + 1, 避免str末尾还补空格
-					cnt = 1;			// 从第2轮开始计数起点为1，因为上一轮会残留1个字符
-					sb.append(' ');
+			if(interval <= 0) {
+				sb.append(str);
+				
+			} else {
+				int cnt = 0;
+				char[] chs = str.toCharArray();
+				for(char ch : chs) {
+					sb.append(ch);
+					if(++cnt >= interval) {
+						cnt = 0;
+						sb.append(fillStr);
+					}
 				}
-				sb.append(c);
 			}
 		}
 		return sb.toString();
