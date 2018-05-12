@@ -84,9 +84,9 @@ public class SafetyMonitor {
 	private AppInfo getAppInfo() {
 		
 		// 先尝试用Gitee(国内)获取授权页, 若失败则从GitHub(国际)获取授权页
-		String pageSource = HttpURLUtils.doGet(GITEE_URL, null, null);
+		String pageSource = HttpURLUtils.doGet(GITEE_URL);
 		if(StrUtils.isEmpty(pageSource)) {
-			pageSource = HttpURLUtils.doGet(GITHUB_URL, null, null);
+			pageSource = HttpURLUtils.doGet(GITHUB_URL);
 		}
 		
 		AppInfo appInfo = Convertor.toAppInfo(pageSource, appName);
