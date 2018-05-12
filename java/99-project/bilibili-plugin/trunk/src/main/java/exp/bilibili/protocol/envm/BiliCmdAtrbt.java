@@ -187,6 +187,8 @@ public class BiliCmdAtrbt {
 	
 	public final static String csrf_token = "csrf_token";
 	
+	public final static String visit_id = "visit_id";
+	
 	public final static String fontsize = "fontsize";
 	
 	public final static String mode = "mode";

@@ -11,6 +11,7 @@ import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
@@ -54,8 +55,8 @@ class _Lottery extends __XHR {
 	 */
 	protected static String join(LotteryType type, BiliCookie cookie, 
 			String url, int roomId, String raffleId) {
-		final int RETRY_LIMIT = 2;
-		final int RETRY_TIME = 200;
+		final int RETRY_LIMIT = 10;
+		final int RETRY_TIME = 50;
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);
 		String reason = "";
@@ -75,11 +76,12 @@ class _Lottery extends __XHR {
 			
 		// 加入节奏风暴抽奖
 		} else {
+			String visitId = getVisitId();
 			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
 				String[] captcha = cookie.isRealName() ? // 实名认证后无需填节奏风暴验证码
 						new String[] { "", "" } : getStormCaptcha(cookie);
 				Map<String, String> request = getRequest(sRoomId, raffleId, 
-						cookie.CSRF(), captcha[0], captcha[1]);
+						cookie.CSRF(), visitId, captcha[0], captcha[1]);
 				String response = HttpURLUtils.doPost(url, header, request);
 				
 				reason = analyse(response);
@@ -90,6 +92,16 @@ class _Lottery extends __XHR {
 			}
 		}
 		return reason;
+	}
+	
+	/**
+	 * 节奏风暴的访问ID
+	 * @return 节奏风暴的访问ID
+	 */
+	private static String getVisitId() {
+		long num = System.currentTimeMillis() * 
+					(long) (Math.ceil(1e6 * RandomUtils.randomDouble()));
+		return Long.toString(num, 36);
 	}
 	
 	/**
@@ -125,14 +137,14 @@ class _Lottery extends __XHR {
 	 * @return
 	 */
 	private static Map<String, String> getRequest(String roomId, String raffleId, 
-			String csrf, String captchaToken, String captchaValue) {
+			String csrf, String visitId, String captchaToken, String captchaValue) {
 		Map<String, String> request = getRequest(roomId);
 		request.put(BiliCmdAtrbt.id, raffleId);		// 礼物编号
 		request.put(BiliCmdAtrbt.color, ChatColor.WHITE.RGB());
 		request.put(BiliCmdAtrbt.captcha_token, captchaToken);
 		request.put(BiliCmdAtrbt.captcha_phrase, captchaValue);
-		request.put(BiliCmdAtrbt.token, "");
 		request.put(BiliCmdAtrbt.csrf_token, csrf);
+		request.put(BiliCmdAtrbt.visit_id, visitId);
 		return request;
 	}
 	
