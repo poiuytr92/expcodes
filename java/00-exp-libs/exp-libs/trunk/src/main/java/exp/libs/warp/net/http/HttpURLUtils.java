@@ -31,6 +31,15 @@ public class HttpURLUtils extends HttpUtils {
 	/**
 	 * 提交POST请求
 	 * @param url 资源路径
+	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
+	 */
+	public static String doPost(String url) {
+		return doPost(url, null, null);
+	}
+	
+	/**
+	 * 提交POST请求
+	 * @param url 资源路径
 	 * @param header 请求头参数表
 	 * @param request 请求参数表
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
@@ -107,6 +116,15 @@ public class HttpURLUtils extends HttpUtils {
 		}
 		close(conn);
 		return response;
+	}
+	
+	/**
+	 * 提交GET请求
+	 * @param url 资源路径
+	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
+	 */
+	public static String doGet(String url) {
+		return doGet(url, null, null);
 	}
 	
 	/**
@@ -216,10 +234,19 @@ public class HttpURLUtils extends HttpUtils {
 	 * 下载资源，适用于返回类型是非文本的响应
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
+	 * @return 是否下载成功（下载成功会保存到savePath）
+	 */
+	public static boolean downloadByPost(String savePath, String url) {
+		return downloadByPost(savePath, url, null, null);
+	}
+	
+	/**
+	 * 下载资源，适用于返回类型是非文本的响应
+	 * @param savePath 包括文件名的保存路径
+	 * @param url 资源路径
 	 * @param header 请求头参数表
 	 * @param request 请求参数表
 	 * @return 是否下载成功（下载成功会保存到savePath）
-	 * @return
 	 */
 	public static boolean downloadByPost(String savePath, String url, 
 			Map<String, String> header, Map<String, String> request) {
@@ -281,6 +308,16 @@ public class HttpURLUtils extends HttpUtils {
 		}
 		close(conn);
 		return isOk;
+	}
+	
+	/**
+	 * 下载资源，适用于返回类型是非文本的响应
+	 * @param savePath 包括文件名的保存路径
+	 * @param url 资源路径
+	 * @return 是否下载成功（下载成功会保存到savePath）
+	 */
+	public static boolean downloadByGet(String savePath, String url) {
+		return downloadByGet(savePath, url, null, null);
 	}
 	
 	/**
