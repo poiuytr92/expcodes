@@ -29,6 +29,16 @@ public class JSUtils {
 	protected JSUtils() {}
 	
 	/**
+	 * 执行JS脚本中的方法(无参)
+	 * @param jsFilePath JS文件路径
+	 * @param jsMethod JS方法
+	 * @return Object 执行结果
+	 */
+	public static Object executeJS(String jsFilePath, String jsMethod) {
+		return executeJS(jsFilePath, jsMethod, new Object[0]);
+	}
+	
+	/**
 	 * 执行JS脚本中的方法
 	 * @param jsFilePath JS文件路径
 	 * @param jsMethod JS方法
