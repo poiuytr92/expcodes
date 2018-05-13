@@ -99,8 +99,7 @@ class _Lottery extends __XHR {
 	 * @return 节奏风暴的访问ID
 	 */
 	private static String getVisitId() {
-		long num = System.currentTimeMillis() * 
-					(long) (Math.ceil(1e6 * RandomUtils.randomDouble()));
+		long num = System.currentTimeMillis() * RandomUtils.randomInt(1000000);
 		return Long.toString(num, 36);
 	}
 	

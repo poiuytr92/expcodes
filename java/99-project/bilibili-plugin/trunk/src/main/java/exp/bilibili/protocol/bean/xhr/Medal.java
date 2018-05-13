@@ -6,7 +6,7 @@ import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
 
 /**
- * 
+ * 勋章信息
 {
   "code": 0,
   "msg": "获取成功",

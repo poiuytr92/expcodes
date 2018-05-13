@@ -192,7 +192,7 @@ public class WebBot extends LoopThread {
 				max = NumUtils.max(XHRSender.toSign(cookie), max);				// 每日签到
 				max = NumUtils.max(XHRSender.receiveDailyGift(cookie), max);	// 每日/每周礼包
 				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
-					max = NumUtils.max(XHRSender.receiveHolidayGift(cookie), max);	// 活动心跳礼物
+//					max = NumUtils.max(XHRSender.receiveHolidayGift(cookie), max);	// 活动心跳礼物
 					max = NumUtils.max(XHRSender.toAssn(cookie), max);			// 友爱社
 					max = NumUtils.max(XHRSender.doMathTask(cookie), max);		// 小学数学
 				}

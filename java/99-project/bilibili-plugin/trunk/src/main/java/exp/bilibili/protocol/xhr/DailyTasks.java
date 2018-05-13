@@ -256,7 +256,7 @@ public class DailyTasks extends __XHR {
 			nextTaskTime = task.getEndTime() * 1000;
 			
 			// 已到达任务执行时间
-			if(nextTaskTime <= System.currentTimeMillis()) {
+			if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
 				if(!doMathTask(header, cookie.NICKNAME(), task)) {
 					nextTaskTime = -1;	// 标记不存在下一轮任务
 				}
@@ -343,7 +343,7 @@ public class DailyTasks extends __XHR {
 	 * @param header
 	 * @param task
 	 * @param answer
-	 * @return
+	 * @return 是否执行成功
 	 */
 	private static boolean execMathTask(Map<String, String> header, 
 			String username, MathTask task, int answer) {
@@ -363,7 +363,7 @@ public class DailyTasks extends __XHR {
 			} else if(reason.contains("验证码错误")) {
 				isOk = false;
 				
-			} else if(reason.contains("未绑定手机")) {
+			} else if(reason.contains("未绑定手机") || reason.contains("已经领完")) {
 				isOk = true;
 				task.setExistNext(false);	// 标记不存在下一轮任务
 			}
