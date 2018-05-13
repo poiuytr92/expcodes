@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.filechooser.FileSystemView;
 
@@ -41,47 +39,42 @@ public class PathUtils {
 	 * @return true:全路径; false:非全路径
 	 */
 	public static boolean isFullPath(String path) {
-		boolean isFull = false;
-		if(path != null && !"".equals(path.trim())) {
-			Pattern ptn = Pattern.compile("^(([A-Za-z]:[/|\\\\])|/).*$");
-			Matcher mth = ptn.matcher(path);
-			
-			if(mth.find()) {
-				isFull = true;
-			}
-		}
-		return isFull;
+		return RegexUtils.matches(path, "^(([A-Za-z]:[/|\\\\])|/).*$");
 	}
 	
 	/**
 	 * <PRE>
-	 * 路径合并, 返回符合unix标准的合并路径。
-	 * 所有不满足合并条件的入参，均返回 prefixPath。
+	 * 路径合并。
 	 * <PRE>
 	 * @param prefixPath 路径前缀，全路径或相对路径
 	 * @param suffixPath 路径后缀，必须是相对路径
-	 * @return 路径前缀 + 路径分隔符 + 路径后缀 (路径不以路径分隔符结尾)
+	 * @return 路径前缀 + 路径分隔符 + 路径后缀 
 	 */
 	public static String combine(String prefixPath, String suffixPath) {
-		String combPath = prefixPath;
-		
-		if(prefixPath != null && suffixPath != null) {
+		String combPath = "";
+		if(StrUtils.isNotTrimEmpty(prefixPath, suffixPath)) {
 			prefixPath = prefixPath.trim().replace('\\', '/');
 			suffixPath = suffixPath.trim().replace('\\', '/');
 			
 			if(!isFullPath(suffixPath)) {
 				if(!prefixPath.endsWith("/")) {
-					prefixPath = StrUtils.concat(prefixPath, "/");
-				}
-				if(suffixPath.endsWith("/")) {
-					suffixPath = suffixPath.substring(
-							0, suffixPath.length() - 1);
+					prefixPath = prefixPath.concat("/");
 				}
 				combPath = StrUtils.concat(prefixPath, suffixPath);
 				combPath = combPath.replace("/./", "/");
+				
+			} else {
+				combPath = prefixPath;
 			}
-			combPath = combPath.replaceAll("[\\|/]", "/");
+			
+		} else if(StrUtils.isNotTrimEmpty(prefixPath)) {
+			combPath = suffixPath.trim();
+			
+		} else if(StrUtils.isNotTrimEmpty(suffixPath)) {
+			combPath = prefixPath.trim();
 		}
+		
+		combPath = combPath.replaceAll("[\\|/]", File.separator);
 		return combPath;
 	}
 	
