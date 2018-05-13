@@ -39,7 +39,27 @@ public class PathUtils {
 	 * @return true:全路径; false:非全路径
 	 */
 	public static boolean isFullPath(String path) {
-		return RegexUtils.matches(path, "^(([A-Za-z]:[/|\\\\])|/).*$");
+		return isWinFullPath(path) || isUnixFullPath(path);
+	}
+	
+	/**
+	 * 判断是否为Windows的全路径（即以根开始的路径）
+	 * 
+	 * @param path 路径
+	 * @return true:全路径; false:非全路径
+	 */
+	public static boolean isWinFullPath(String path) {
+		return RegexUtils.matches(path, "^[A-Za-z]:[/|\\\\].*$");
+	}
+	
+	/**
+	 * 判断是否为Unix的全路径（即以根开始的路径）
+	 * 
+	 * @param path 路径
+	 * @return true:全路径; false:非全路径
+	 */
+	public static boolean isUnixFullPath(String path) {
+		return RegexUtils.matches(path, "^/.*$");
 	}
 	
 	/**
@@ -56,15 +76,15 @@ public class PathUtils {
 			prefixPath = prefixPath.trim().replace('\\', '/');
 			suffixPath = suffixPath.trim().replace('\\', '/');
 			
-			if(!isFullPath(suffixPath)) {
+			if(isWinFullPath(suffixPath)) {
+				combPath = prefixPath;
+				
+			} else {
 				if(!prefixPath.endsWith("/")) {
 					prefixPath = prefixPath.concat("/");
 				}
 				combPath = StrUtils.concat(prefixPath, suffixPath);
-				combPath = combPath.replace("/./", "/");
-				
-			} else {
-				combPath = prefixPath;
+				combPath = combPath.replace("/./", "/").replace("//", "/");
 			}
 			
 		} else if(StrUtils.isNotTrimEmpty(prefixPath)) {
@@ -74,7 +94,7 @@ public class PathUtils {
 			combPath = prefixPath.trim();
 		}
 		
-		combPath = combPath.replaceAll("[\\|/]", File.separator);
+		combPath = combPath.replace('\\', '/');
 		return combPath;
 	}
 	

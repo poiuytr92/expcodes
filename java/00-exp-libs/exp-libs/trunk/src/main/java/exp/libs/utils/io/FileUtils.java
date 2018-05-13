@@ -2,7 +2,6 @@ package exp.libs.utils.io;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -30,6 +29,7 @@ import exp.libs.warp.io.flow.FileFlowReader;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
+@SuppressWarnings("deprecation")
 public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/** 日志器 */
@@ -255,10 +255,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcPath 源位置
 	 * @param snkPath 目标位置
 	 */
-	public static void copyFile(String srcPath, String snkPath) {
+	public static boolean copyFile(String srcPath, String snkPath) {
 		File srcFile = new File(srcPath);
 		File snkFile = new File(snkPath);
-		copyFile(srcFile, snkFile);
+		return copyFile(srcFile, snkFile);
 	}
 	
 	/**
@@ -266,15 +266,18 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcFile 源文件
 	 * @param snkFile 目标文件
 	 */
-	public static void copyFile(File srcFile, File snkFile) {
+	public static boolean copyFile(File srcFile, File snkFile) {
+		boolean isOk = true;
 		try {
 			org.apache.commons.io.FileUtils.copyFile(srcFile, snkFile);
 			
 		} catch (Exception e) {
+			isOk = false;
 			log.error("复制文件失败: 从 [{}] 到 [{}].", 
 					(srcFile == null ? "null" : srcFile.getPath()), 
 					(snkFile == null ? "null" : snkFile.getPath()), e);
 		}
+		return isOk;
 	}
 
 	/**
@@ -282,10 +285,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcPath 原位置
 	 * @param snkPath 目标位置
 	 */
-	public static void copyDirectory(String srcPath, String snkPath) {
+	public static boolean copyDirectory(String srcPath, String snkPath) {
 		File srcFile = new File(srcPath);
 		File snkFile = new File(snkPath);
-		copyDirectory(srcFile, snkFile);
+		return copyDirectory(srcFile, snkFile);
 	}
 	
 	/**
@@ -293,15 +296,18 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcDir 源目录
 	 * @param snkDir 目标目录
 	 */
-	public static void copyDirectory(File srcDir, File snkDir)  {
+	public static boolean copyDirectory(File srcDir, File snkDir)  {
+		boolean isOk = true;
 		try {
 			org.apache.commons.io.FileUtils.copyDirectory(srcDir, snkDir);
 			
 		} catch (Exception e) {
+			isOk = false;
 			log.error("复制文件夹失败: 从 [{}] 到 [{}].", 
 					(srcDir == null ? "null" : srcDir.getPath()), 
 					(snkDir == null ? "null" : snkDir.getPath()), e);
 		}
+		return isOk;
 	}
 	
 	/**
@@ -309,10 +315,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcPath 源位置
 	 * @param snkPath 目标位置
 	 */
-	public static void moveFile(String srcPath, String snkPath) {
+	public static boolean moveFile(String srcPath, String snkPath) {
 		File srcFile = new File(srcPath);
 		File snkFile = new File(snkPath);
-		moveFile(srcFile, snkFile);
+		return moveFile(srcFile, snkFile);
 	}
 	
 	/**
@@ -320,15 +326,18 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcFile 源文件
 	 * @param snkFile 目标文件
 	 */
-	public static void moveFile(File srcFile, File snkFile) {
+	public static boolean moveFile(File srcFile, File snkFile) {
+		boolean isOk = true;
 		try {
 			org.apache.commons.io.FileUtils.moveFile(srcFile, snkFile);
 			
 		} catch (Exception e) {
+			isOk = false;
 			log.error("移动文件失败: 从 [{}] 到 [{}].", 
 					(srcFile == null ? "null" : srcFile.getPath()), 
 					(snkFile == null ? "null" : snkFile.getPath()), e);
 		}
+		return isOk;
 	}
 	
 	/**
@@ -336,10 +345,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcPath 源位置
 	 * @param snkPath 目标位置
 	 */
-	public static void moveDirectory(String srcPath, String snkPath) {
+	public static boolean moveDirectory(String srcPath, String snkPath) {
 		File srcFile = new File(srcPath);
 		File snkFile = new File(snkPath);
-		moveDirectory(srcFile, snkFile);
+		return moveDirectory(srcFile, snkFile);
 	}
 	
 	/**
@@ -347,15 +356,18 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcDir 源目录
 	 * @param snkDir 目标目录
 	 */
-	public static void moveDirectory(File srcDir, File snkDir)  {
+	public static boolean moveDirectory(File srcDir, File snkDir)  {
+		boolean isOk = true;
 		try {
 			org.apache.commons.io.FileUtils.moveDirectory(srcDir, snkDir);
 			
 		} catch (Exception e) {
+			isOk = false;
 			log.error("移动文件夹失败: 从 [{}] 到 [{}].", 
 					(srcDir == null ? "null" : srcDir.getPath()), 
 					(snkDir == null ? "null" : snkDir.getPath()), e);
 		}
+		return isOk;
 	}
 	
 	/**
@@ -486,14 +498,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param file 文件
 	 * @return 文件内容
 	 */
-    public static String read(File file) {
-    	String s = "";
+	public static String read(File file) {
+    	String str = "";
         try {
-			s = org.apache.commons.io.FileUtils.readFileToString(file);
+        	str = org.apache.commons.io.FileUtils.readFileToString(file);
+        	
 		} catch (Exception e) {
 			log.error("读取文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
-        return s;
+        return str;
     }
     
     /**
@@ -522,13 +535,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @return 文件内容
      */
     public static String read(File file, String charset) {
-    	String s = "";
+    	String str = "";
         try {
-			s = org.apache.commons.io.FileUtils.readFileToString(file, charset);
+        	str = org.apache.commons.io.FileUtils.readFileToString(file, charset);
+        	
 		} catch (Exception e) {
 			log.error("读取文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
-        return s;
+        return str;
     }
     
     /**
@@ -555,6 +569,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     	List<String> lines = new LinkedList<String>();
         try {
         	lines = org.apache.commons.io.FileUtils.readLines(file);
+        	
 		} catch (Exception e) {
 			log.error("读取文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
@@ -587,44 +602,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     	List<String> lines = new LinkedList<String>();
         try {
         	lines = org.apache.commons.io.FileUtils.readLines(file, charset);
+        	
 		} catch (Exception e) {
 			log.error("读取文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
         return lines;
 	}
     
-    /**
-     * <PRE>
-	 * 分行读取文件所有内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
-	 * </PRE>
-     * @param filePath 文件路径
-     * @param charset 文件编码
-     * @return 文件内容
-     */
-    public static List<String> readLines(String filePath, Charset charset) {
-    	return readLines(new File(filePath), charset);
-	}
-    
-    /**
-     * <PRE>
-	 * 分行读取文件所有内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
-	 * </PRE>
-     * @param file 文件
-     * @param charset 文件编码
-     * @return 文件内容
-     */
-    public static List<String> readLines(File file, Charset charset) {
-    	List<String> lines = new LinkedList<String>();
-        try {
-        	lines = org.apache.commons.io.FileUtils.readLines(file, charset);
-		} catch (Exception e) {
-			log.error("读取文件失败: ", (file == null ? "null" : file.getPath()), e);
-		}
-        return lines;
-	}
-
     /**
      * <PRE>
 	 * 流式读取文件内容.
@@ -688,12 +672,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @return true：写入成功; false:写入失败
      */
 	public static boolean write(File file, String data) {
-    	boolean isOk = false;
+    	boolean isOk = true;
         try {
         	org.apache.commons.io.FileUtils.write(file, data);
-        	isOk = true;
         	
 		} catch (Exception e) {
+			isOk = false;
 			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
         return isOk;
@@ -722,12 +706,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true：写入成功; false:写入失败
 	 */
 	public static boolean write(File file, String data, boolean append) {
-    	boolean isOk = false;
+    	boolean isOk = true;
         try {
         	org.apache.commons.io.FileUtils.write(file, data, append);
-        	isOk = true;
         	
 		} catch (Exception e) {
+			isOk = false;
 			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
         return isOk;
@@ -756,46 +740,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true：写入成功; false:写入失败
 	 */
 	public static boolean write(File file, String data, String charset) {
-    	boolean isOk = false;
+    	boolean isOk = true;
         try {
         	org.apache.commons.io.FileUtils.write(file, data, charset);
-        	isOk = true;
         	
 		} catch (Exception e) {
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
-		}
-        return isOk;
-	}
-	
-	/**
-	 * <PRE>
-	 * 把数据覆写到指定文件.
-	 * </PRE>
-	 * @param filePath 文件路径
-	 * @param data 文件数据
-	 * @param charset 数据编码
-	 * @return true：写入成功; false:写入失败
-	 */
-	public static boolean write(String filePath, String data, Charset charset) {
-		return write(new File(filePath), data, charset);
-	}
-	
-	/**
-	 * <PRE>
-	 * 把数据覆写到指定文件.
-	 * </PRE>
-	 * @param file 文件
-	 * @param data 文件数据
-	 * @param charset 数据编码
-	 * @return true：写入成功; false:写入失败
-	 */
-	public static boolean write(File file, String data, Charset charset) {
-    	boolean isOk = false;
-        try {
-        	org.apache.commons.io.FileUtils.write(file, data, charset);
-        	isOk = true;
-        	
-		} catch (Exception e) {
+			isOk = false;
 			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
         return isOk;
@@ -826,48 +776,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true：写入成功; false:写入失败
 	 */
 	public static boolean write(File file, String data, String charset, boolean append) {
-    	boolean isOk = false;
+    	boolean isOk = true;
         try {
         	org.apache.commons.io.FileUtils.write(file, data, charset, append);
-        	isOk = true;
         	
 		} catch (Exception e) {
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
-		}
-        return isOk;
-	}
-	
-	/**
-	 * <PRE>
-	 * 把数据写到指定文件.
-	 * </PRE>
-	 * @param filePath 文件路径
-	 * @param data 文件数据
-	 * @param charset 数据编码
-	 * @param append true:附加到末尾; false:覆写
-	 * @return true：写入成功; false:写入失败
-	 */
-	public static boolean write(String filePath, String data, Charset charset, boolean append) {
-		return write(new File(filePath), data, charset, append);
-	}
-	
-	/**
-	 * <PRE>
-	 * 把数据写到指定文件.
-	 * </PRE>
-	 * @param file 文件
-	 * @param data 文件数据
-	 * @param charset 数据编码
-	 * @param append true:附加到末尾; false:覆写
-	 * @return true：写入成功; false:写入失败
-	 */
-	public static boolean write(File file, String data, Charset charset, boolean append) {
-    	boolean isOk = false;
-        try {
-        	org.apache.commons.io.FileUtils.write(file, data, charset, append);
-        	isOk = true;
-        	
-		} catch (Exception e) {
+			isOk = false;
 			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
 		}
         return isOk;
