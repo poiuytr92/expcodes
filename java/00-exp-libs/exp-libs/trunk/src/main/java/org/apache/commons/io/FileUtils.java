@@ -1188,7 +1188,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @since 1.2
      */
-    public static void copyDirectoryToDirectory(File srcDir, File destDir) throws IOException {
+    public static boolean copyDirectoryToDirectory(File srcDir, File destDir) throws IOException {
         if (srcDir == null) {
             throw new NullPointerException("Source must not be null");
         }
@@ -1201,7 +1201,7 @@ public class FileUtils {
         if (destDir.exists() && destDir.isDirectory() == false) {
             throw new IllegalArgumentException("Destination '" + destDir + "' is not a directory");
         }
-        copyDirectory(srcDir, new File(destDir, srcDir.getName()), true);
+        return copyDirectory(srcDir, new File(destDir, srcDir.getName()), true);
     }
 
     /**
@@ -1531,13 +1531,13 @@ public class FileUtils {
      * @param directory  directory to delete
      * @throws IOException in case deletion is unsuccessful
      */
-    public static void deleteDirectory(File directory) throws IOException {
+    public static boolean deleteDirectory(File directory) throws IOException {
         if (!directory.exists()) {
-            return;
+            return true;
         }
 
         if (!isSymlink(directory)) {
-            cleanDirectory(directory);
+            return cleanDirectory(directory);
         }
 
         if (!directory.delete()) {
@@ -1545,6 +1545,7 @@ public class FileUtils {
                 "Unable to delete directory " + directory + ".";
             throw new IOException(message);
         }
+        return true;
     }
 
     /**
@@ -1652,10 +1653,11 @@ public class FileUtils {
             throw new IOException("Failed to list contents of " + directory);
         }
 
+        boolean isOk = true;
         IOException exception = null;
         for (File file : files) {
             try {
-                forceDelete(file);
+            	isOk &= forceDelete(file);
             } catch (IOException ioe) {
                 exception = ioe;
             }
@@ -1664,7 +1666,7 @@ public class FileUtils {
         if (null != exception) {
             throw exception;
         }
-        return true;
+        return isOk;
     }
 
     //-----------------------------------------------------------------------
@@ -1903,8 +1905,9 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.4
      */
-    public static void writeStringToFile(File file, String data, Charset encoding) throws IOException {
-        writeStringToFile(file, data, encoding, false);
+    @Deprecated
+    public static boolean writeStringToFile(File file, String data, Charset encoding) throws IOException {
+        return writeStringToFile(file, data, encoding, false);
     }
 
     /**
@@ -1919,8 +1922,9 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      */
-    public static void writeStringToFile(File file, String data, String encoding) throws IOException {
-        writeStringToFile(file, data, encoding, false);
+    @Deprecated
+    public static boolean writeStringToFile(File file, String data, String encoding) throws IOException {
+        return writeStringToFile(file, data, encoding, false);
     }
 
     /**
@@ -1934,7 +1938,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.3
      */
-    public static void writeStringToFile(File file, String data, Charset encoding, boolean append) throws IOException {
+    @Deprecated
+    public static boolean writeStringToFile(File file, String data, Charset encoding, boolean append) throws IOException {
         OutputStream out = null;
         try {
             out = openOutputStream(file, append);
@@ -1943,6 +1948,7 @@ public class FileUtils {
         } finally {
             IOUtils.closeQuietly(out);
         }
+        return true;
     }
 
     /**
@@ -1959,8 +1965,9 @@ public class FileUtils {
      *             supported by the VM
      * @since 2.1
      */
-    public static void writeStringToFile(File file, String data, String encoding, boolean append) throws IOException {
-        writeStringToFile(file, data, Charsets.toCharset(encoding), append);
+    @Deprecated
+    public static boolean writeStringToFile(File file, String data, String encoding, boolean append) throws IOException {
+        return writeStringToFile(file, data, Charsets.toCharset(encoding), append);
     }
 
     /**
@@ -1970,8 +1977,9 @@ public class FileUtils {
      * @param data  the content to write to the file
      * @throws IOException in case of an I/O error
      */
-    public static void writeStringToFile(File file, String data) throws IOException {
-        writeStringToFile(file, data, Charset.defaultCharset(), false);
+    @Deprecated
+    public static boolean writeStringToFile(File file, String data) throws IOException {
+    	return writeStringToFile(file, data, Charset.defaultCharset(), false);
     }
 
     /**
@@ -1984,8 +1992,9 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeStringToFile(File file, String data, boolean append) throws IOException {
-        writeStringToFile(file, data, Charset.defaultCharset(), append);
+    @Deprecated
+    public static boolean writeStringToFile(File file, String data, boolean append) throws IOException {
+        return writeStringToFile(file, data, Charset.defaultCharset(), append);
     }
 
     /**
@@ -1997,8 +2006,8 @@ public class FileUtils {
      * @since 2.0
      */
     @Deprecated
-    public static void write(File file, CharSequence data) throws IOException {
-        write(file, data, Charset.defaultCharset(), false);
+    public static boolean write(File file, CharSequence data) throws IOException {
+        return write(file, data, Charset.defaultCharset(), false);
     }
 
     /**
@@ -2012,8 +2021,8 @@ public class FileUtils {
      * @since 2.1
      */
     @Deprecated
-    public static void write(File file, CharSequence data, boolean append) throws IOException {
-        write(file, data, Charset.defaultCharset(), append);
+    public static boolean write(File file, CharSequence data, boolean append) throws IOException {
+        return write(file, data, Charset.defaultCharset(), append);
     }
 
     /**
@@ -2026,8 +2035,8 @@ public class FileUtils {
      * @since 2.3
      */
     @Deprecated
-    public static void write(File file, CharSequence data, Charset encoding) throws IOException {
-        write(file, data, encoding, false);
+    public static boolean write(File file, CharSequence data, Charset encoding) throws IOException {
+        return write(file, data, encoding, false);
     }
 
     /**
@@ -2041,8 +2050,8 @@ public class FileUtils {
      * @since 2.0
      */
     @Deprecated
-    public static void write(File file, CharSequence data, String encoding) throws IOException {
-        write(file, data, encoding, false);
+    public static boolean write(File file, CharSequence data, String encoding) throws IOException {
+        return write(file, data, encoding, false);
     }
 
     /**
@@ -2057,9 +2066,9 @@ public class FileUtils {
      * @since 2.3
      */
     @Deprecated
-    public static void write(File file, CharSequence data, Charset encoding, boolean append) throws IOException {
+    public static boolean write(File file, CharSequence data, Charset encoding, boolean append) throws IOException {
         String str = data == null ? null : data.toString();
-        writeStringToFile(file, str, encoding, append);
+        return writeStringToFile(file, str, encoding, append);
     }
 
     /**
@@ -2077,8 +2086,8 @@ public class FileUtils {
      * @since IO 2.1
      */
     @Deprecated
-    public static void write(File file, CharSequence data, String encoding, boolean append) throws IOException {
-        write(file, data, Charsets.toCharset(encoding), append);
+    public static boolean write(File file, CharSequence data, String encoding, boolean append) throws IOException {
+        return write(file, data, Charsets.toCharset(encoding), append);
     }
 
     /**
@@ -2092,8 +2101,9 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.1
      */
-    public static void writeByteArrayToFile(File file, byte[] data) throws IOException {
-        writeByteArrayToFile(file, data, false);
+    @Deprecated
+    public static boolean writeByteArrayToFile(File file, byte[] data) throws IOException {
+        return writeByteArrayToFile(file, data, false);
     }
 
     /**
@@ -2106,7 +2116,8 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since IO 2.1
      */
-    public static void writeByteArrayToFile(File file, byte[] data, boolean append) throws IOException {
+    @Deprecated
+    public static boolean writeByteArrayToFile(File file, byte[] data, boolean append) throws IOException {
         OutputStream out = null;
         try {
             out = openOutputStream(file, append);
@@ -2115,6 +2126,7 @@ public class FileUtils {
         } finally {
             IOUtils.closeQuietly(out);
         }
+        return true;
     }
 
     /**
@@ -2132,8 +2144,9 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 1.1
      */
-    public static void writeLines(File file, String encoding, Collection<?> lines) throws IOException {
-        writeLines(file, encoding, lines, null, false);
+    @Deprecated
+    public static boolean writeLines(File file, String encoding, Collection<?> lines) throws IOException {
+        return writeLines(file, encoding, lines, null, false);
     }
 
     /**
@@ -2150,8 +2163,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeLines(File file, String encoding, Collection<?> lines, boolean append) throws IOException {
-        writeLines(file, encoding, lines, null, append);
+    public static boolean writeLines(File file, String encoding, Collection<?> lines, boolean append) throws IOException {
+        return writeLines(file, encoding, lines, null, append);
     }
 
     /**
@@ -2164,8 +2177,9 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.3
      */
-    public static void writeLines(File file, Collection<?> lines) throws IOException {
-        writeLines(file, null, lines, null, false);
+    @Deprecated
+    public static boolean writeLines(File file, Collection<?> lines) throws IOException {
+        return writeLines(file, null, lines, null, false);
     }
     
     /**
@@ -2180,8 +2194,9 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeLines(File file, Collection<?> lines, boolean append) throws IOException {
-        writeLines(file, null, lines, null, append);
+    @Deprecated
+    public static boolean writeLines(File file, Collection<?> lines, boolean append) throws IOException {
+        return writeLines(file, null, lines, null, append);
     }
 
     /**
@@ -2200,9 +2215,10 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 1.1
      */
-    public static void writeLines(File file, String encoding, Collection<?> lines, String lineEnding)
+    @Deprecated
+    public static boolean writeLines(File file, String encoding, Collection<?> lines, String lineEnding)
         throws IOException {
-        writeLines(file, encoding, lines, lineEnding, false);
+        return writeLines(file, encoding, lines, lineEnding, false);
     }
 
     /**
@@ -2220,7 +2236,8 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
-    public static void writeLines(File file, String encoding, Collection<?> lines, String lineEnding, boolean append)
+    @Deprecated
+    public static boolean writeLines(File file, String encoding, Collection<?> lines, String lineEnding, boolean append)
             throws IOException {
         FileOutputStream out = null;
         try {
@@ -2232,6 +2249,7 @@ public class FileUtils {
         } finally {
             IOUtils.closeQuietly(out);
         }
+        return true;
     }
 
     /**
@@ -2245,8 +2263,9 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.3
      */
-    public static void writeLines(File file, Collection<?> lines, String lineEnding) throws IOException {
-        writeLines(file, null, lines, lineEnding, false);
+    @Deprecated
+    public static boolean writeLines(File file, Collection<?> lines, String lineEnding) throws IOException {
+        return writeLines(file, null, lines, lineEnding, false);
     }
 
     /**
@@ -2262,9 +2281,10 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 2.1
      */
-    public static void writeLines(File file, Collection<?> lines, String lineEnding, boolean append)
+    @Deprecated
+    public static boolean writeLines(File file, Collection<?> lines, String lineEnding, boolean append)
         throws IOException {
-        writeLines(file, null, lines, lineEnding, append);
+        return writeLines(file, null, lines, lineEnding, append);
     }
 
     //-----------------------------------------------------------------------
@@ -2283,9 +2303,9 @@ public class FileUtils {
      * @throws FileNotFoundException if the file was not found
      * @throws IOException in case deletion is unsuccessful
      */
-    public static void forceDelete(File file) throws IOException {
+    public static boolean forceDelete(File file) throws IOException {
         if (file.isDirectory()) {
-            deleteDirectory(file);
+            return deleteDirectory(file);
         } else {
             boolean filePresent = file.exists();
             if (!file.delete()) {
@@ -2297,6 +2317,7 @@ public class FileUtils {
                 throw new IOException(message);
             }
         }
+        return true;
     }
 
     /**
@@ -2307,12 +2328,13 @@ public class FileUtils {
      * @throws NullPointerException if the file is {@code null}
      * @throws IOException in case deletion is unsuccessful
      */
-    public static void forceDeleteOnExit(File file) throws IOException {
+    public static boolean forceDeleteOnExit(File file) throws IOException {
         if (file.isDirectory()) {
-            deleteDirectoryOnExit(file);
+            return deleteDirectoryOnExit(file);
         } else {
             file.deleteOnExit();
         }
+        return true;
     }
 
     /**
@@ -2322,15 +2344,16 @@ public class FileUtils {
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException in case deletion is unsuccessful
      */
-    private static void deleteDirectoryOnExit(File directory) throws IOException {
+    private static boolean deleteDirectoryOnExit(File directory) throws IOException {
         if (!directory.exists()) {
-            return;
+            return true;
         }
 
         directory.deleteOnExit();
         if (!isSymlink(directory)) {
-            cleanDirectoryOnExit(directory);
+            return cleanDirectoryOnExit(directory);
         }
+        return true;
     }
 
     /**
@@ -2340,7 +2363,7 @@ public class FileUtils {
      * @throws NullPointerException if the directory is {@code null}
      * @throws IOException in case cleaning is unsuccessful
      */
-    private static void cleanDirectoryOnExit(File directory) throws IOException {
+    private static boolean cleanDirectoryOnExit(File directory) throws IOException {
         if (!directory.exists()) {
             String message = directory + " does not exist";
             throw new IllegalArgumentException(message);
@@ -2368,6 +2391,7 @@ public class FileUtils {
         if (null != exception) {
             throw exception;
         }
+        return true;
     }
 
     /**
