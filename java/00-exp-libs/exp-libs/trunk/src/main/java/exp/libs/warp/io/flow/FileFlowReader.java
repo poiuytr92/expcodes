@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.Endline;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -72,7 +73,8 @@ public class FileFlowReader {
 	 * @param charset 待读入文件的编码
 	 */
 	public FileFlowReader(String filePath, String charset) {
-		init(new File(filePath), charset);
+		File file = StrUtils.isTrimEmpty(filePath) ? null : new File(filePath);
+		init(file, charset);
 	}
 	
 	/**

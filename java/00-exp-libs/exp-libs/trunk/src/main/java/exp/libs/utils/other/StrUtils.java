@@ -69,7 +69,7 @@ public class StrUtils {
 	 */
 	public static boolean isNotEmpty(String... strs) {
 		boolean isNotEmpty = true;
-		if(strs != null) {
+		if(strs != null && strs.length > 0) {
 			for(String str : strs) {
 				isNotEmpty &= isNotEmpty(str);
 				if(isNotEmpty == false) {
@@ -129,7 +129,7 @@ public class StrUtils {
 	 */
 	public static boolean isNotTrimEmpty(String... strs) {
 		boolean isNotTrimEmpty = true;
-		if(strs != null) {
+		if(strs != null && strs.length > 0) {
 			for(String str : strs) {
 				isNotTrimEmpty &= isNotTrimEmpty(str);
 				if(isNotTrimEmpty == false) {

@@ -190,7 +190,26 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 */
 	public static boolean exists(String filePath) {
 		return (filePath != null && exists(new File(filePath)));
-		
+	}
+	
+	/**
+	 * 检查文件是否都存在
+	 * @param filePath 文件路径集
+	 * @return true:都存在; false:某些不存在
+	 */
+	public static boolean exists(String... filePaths) {
+		boolean isExists = true;
+		if(filePaths != null && filePaths.length > 0) {
+			for(String filePath : filePaths) {
+				isExists &= exists(filePath);
+				if(isExists == false) {
+					break;
+				}
+			}
+		} else {
+			isExists = false;
+		}
+		return isExists;
 	}
 	
 	/**
@@ -200,6 +219,80 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 */
 	public static boolean exists(File file) {
 		return (file != null && file.exists());
+	}
+	
+	/**
+	 * 检查文件是否都存在
+	 * @param files 文件集
+	 * @return true:都存在; false:某些不存在
+	 */
+	public static boolean exists(File... files) {
+		boolean isExists = true;
+		if(files != null && files.length > 0) {
+			for(File file : files) {
+				isExists &= exists(file);
+				if(isExists == false) {
+					break;
+				}
+			}
+		} else {
+			isExists = false;
+		}
+		return isExists;
+	}
+	
+	/**
+	 * 检查文件是否不存在
+	 * @param filePath 文件路径
+	 * @return true:不存在; false:存在
+	 */
+	public static boolean notExists(String filePath) {
+		return !exists(filePath);
+	}
+	
+	/**
+	 * 检查文件是否都不存在
+	 * @param filePath 文件路径集
+	 * @return true:都不存在; false:某些存在
+	 */
+	public static boolean notExists(String... filePaths) {
+		boolean isNotExists = true;
+		if(filePaths != null) {
+			for(String filePath : filePaths) {
+				isNotExists &= notExists(filePath);
+				if(isNotExists == false) {
+					break;
+				}
+			}
+		}
+		return isNotExists;
+	}
+	
+	/**
+	 * 检查文件是否不存在
+	 * @param file 文件对象
+	 * @return true:不存在; false:存在
+	 */
+	public static boolean notExists(File file) {
+		return !exists(file);
+	}
+	
+	/**
+	 * 检查文件是否都不存在
+	 * @param files 文件集
+	 * @return true:都不存在; false:某些存在
+	 */
+	public static boolean notExists(File... files) {
+		boolean isNotExists = true;
+		if(files != null) {
+			for(File file : files) {
+				isNotExists &= notExists(file);
+				if(isNotExists == false) {
+					break;
+				}
+			}
+		}
+		return isNotExists;
 	}
 	
 	/**
@@ -226,8 +319,59 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true:是; false:否
 	 */
 	public static boolean isFile(String filePath) {
-		File file = new File(filePath);
-		return file.isFile();
+		if(StrUtils.isTrimEmpty(filePath)) {
+			return false;
+		}
+		return new File(filePath).isFile();
+	}
+	
+	/**
+	 * 测试所有文件的类型是否均为[文件]
+	 * @param filePaths 文件路径集
+	 * @return true:都是; false:某些不是
+	 */
+	public static boolean isFile(String... filePaths) {
+		boolean isFile = true;
+		if(filePaths != null && filePaths.length > 0) {
+			for(String filePath : filePaths) {
+				isFile &= isFile(filePath);
+				if(isFile == false) {
+					break;
+				}
+			}
+		} else {
+			isFile = false;
+		}
+		return isFile;
+	}
+	
+	/**
+	 * 测试文件类型是否为[文件]
+	 * @param file 文件对象
+	 * @return true:是; false:否
+	 */
+	public static boolean isFile(File file) {
+		return (file != null && file.isFile());
+	}
+	
+	/**
+	 * 测试所有文件的类型是否均为[文件]
+	 * @param files 文件集
+	 * @return true:都是; false:某些不是
+	 */
+	public static boolean isFile(File... files) {
+		boolean isFile = true;
+		if(files != null && files.length > 0) {
+			for(File file : files) {
+				isFile &= isFile(file);
+				if(isFile == false) {
+					break;
+				}
+			}
+		} else {
+			isFile = false;
+		}
+		return isFile;
 	}
 	
 	/**
@@ -236,8 +380,59 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true:是; false:否
 	 */
 	public static boolean isDirectory(String filePath) {
-		File file = new File(filePath);
-		return file.isDirectory();
+		if(StrUtils.isTrimEmpty(filePath)) {
+			return false;
+		}
+		return new File(filePath).isDirectory();
+	}
+	
+	/**
+	 * 测试所有文件的类型是否均为[文件夹]
+	 * @param filePaths 文件路径集
+	 * @return true:都是; false:某些不是
+	 */
+	public static boolean isDirectory(String... filePaths) {
+		boolean isDirectory = true;
+		if(filePaths != null && filePaths.length > 0) {
+			for(String filePath : filePaths) {
+				isDirectory &= isDirectory(filePath);
+				if(isDirectory == false) {
+					break;
+				}
+			}
+		} else {
+			isDirectory = false;
+		}
+		return isDirectory;
+	}
+	
+	/**
+	 * 测试文件类型是否为[文件夹]
+	 * @param file 文件对象
+	 * @return true:是; false:否
+	 */
+	public static boolean isDirectory(File file) {
+		return (file != null && file.isDirectory());
+	}
+	
+	/**
+	 * 测试所有文件的类型是否均为[文件夹]
+	 * @param files 文件集
+	 * @return true:都是; false:某些不是
+	 */
+	public static boolean isDirectory(File... files) {
+		boolean isDirectory = true;
+		if(files != null && files.length > 0) {
+			for(File file : files) {
+				isDirectory &= isDirectory(file);
+				if(isDirectory == false) {
+					break;
+				}
+			}
+		} else {
+			isDirectory = false;
+		}
+		return isDirectory;
 	}
 	
 	/**
@@ -246,23 +441,64 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return 文件名（包括后缀）
 	 */
 	public static String getName(String filePath) {
+		String name = "";
+		if(StrUtils.isTrimEmpty(filePath)) {
+			return name;
+		}
+		
 		File file = new File(filePath);
-		return file.getName();
+		if(file.exists()) {
+			name = file.getName();
+			
+		} else {
+			filePath = filePath.replace('\\', '/');
+			if(name.contains("/")) {
+				name = filePath.replaceFirst("[^/]*/", "");
+						
+			} else {
+				name = filePath;
+			}
+		}
+		return name;
 	}
 
 	/**
-	 * 复制文件
+	 * <pre>
+	 * 复制文件.
+	 * ----------------------------
+	 * 复制规则:
+	 *   1.srcPath 的文件必须存在
+	 *   2.srcPath 与 snkPath 必须是文件(而非文件夹)
+	 *   3.若 snkPath 是文件夹名但不存在, 则自动变成无后缀的文件; 若是文件夹名且存在, 则报错
+	 *   4.snkPath 与 srcPath 不能同源, 但可同名
+	 *   5.若 snkFile 文件的祖先目录不存在则自动创建
+	 *   6.若 snkFile 文件已存在则覆写
+	 * </pre>
 	 * @param srcPath 源位置
 	 * @param snkPath 目标位置
 	 */
 	public static boolean copyFile(String srcPath, String snkPath) {
-		File srcFile = new File(srcPath);
-		File snkFile = new File(snkPath);
-		return copyFile(srcFile, snkFile);
+		boolean isOk = false;
+		if(StrUtils.isNotTrimEmpty(srcPath, snkPath)) {
+			File srcFile = new File(srcPath);
+			File snkFile = new File(snkPath);
+			isOk = copyFile(srcFile, snkFile);
+		}
+		return isOk;
 	}
 	
 	/**
-	 * 复制文件
+	 * <pre>
+	 * 复制文件.
+	 * ----------------------------
+	 * 复制规则:
+	 *   1.srcFile 的文件必须存在
+	 *   2.srcFile 与 snkFile 必须是文件(而非文件夹)
+	 *   3.若 snkFile 是文件夹名但不存在, 则自动变成无后缀的文件; 若是文件夹名且存在, 则报错
+	 *   4.snkFile 与 srcFile 不能同源, 但可同名
+	 *   5.若 snkFile 文件的祖先目录不存在则自动创建
+	 *   6.若 snkFile 文件已存在则覆写
+	 * </pre>
 	 * @param srcFile 源文件
 	 * @param snkFile 目标文件
 	 */
@@ -281,18 +517,42 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 
 	/**
-	 * 复制文件夹
+	 * <pre>
+	 * 复制文件夹.
+	 * ----------------------------
+	 * 复制规则:
+	 *   1.srcPath 的文件夹必须存在
+	 *   2.srcPath 与 snkPath 必须是文件夹(而非文件)
+	 *   3.若 snkPath 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报错
+	 *   4.snkPath 与 srcPath 不能同源, 但可同名
+	 *   5.若 snkPath 文件的祖先目录不存在则自动创建
+	 *   6.若 snkPath 内的子文件/文件夹已存在则自动对应覆写 (只覆写同位置的同名文件)
+	 * </pre>
 	 * @param srcPath 原位置
 	 * @param snkPath 目标位置
 	 */
 	public static boolean copyDirectory(String srcPath, String snkPath) {
-		File srcFile = new File(srcPath);
-		File snkFile = new File(snkPath);
-		return copyDirectory(srcFile, snkFile);
+		boolean isOk = false;
+		if(StrUtils.isNotTrimEmpty(srcPath, snkPath)) {
+			File srcFile = new File(srcPath);
+			File snkFile = new File(snkPath);
+			isOk = copyDirectory(srcFile, snkFile);
+		}
+		return isOk;
 	}
 	
 	/**
-	 * 复制文件夹
+	 * <pre>
+	 * 复制文件夹.
+	 * ----------------------------
+	 * 复制规则:
+	 *   1.srcDir 的文件夹必须存在
+	 *   2.srcDir 与 snkDir 必须是文件夹(而非文件)
+	 *   3.若 snkDir 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报错
+	 *   4.snkDir 与 srcDir 不能同源, 但可同名
+	 *   5.若 snkDir 文件的祖先目录不存在则自动创建
+	 *   6.若 snkDir 内的子文件/文件夹已存在则自动对应覆写 (只覆写同位置的同名文件)
+	 * </pre>
 	 * @param srcDir 源目录
 	 * @param snkDir 目标目录
 	 */
@@ -311,20 +571,42 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 移动文件
+	 * <pre>
+	 * 移动文件.
+	 * ----------------------------
+	 * 移动规则:
+	 *   1.srcPath 的文件必须存在, snkPath 的文件必须不存在
+	 *   2.srcPath 与 snkPath 必须是文件(而非文件夹)
+	 *   3.若 snkPath 是文件夹名但不存在, 则自动变成无后缀的文件; 若是文件夹名且存在, 则报错
+	 *   4.snkPath 与 srcPath 不能同源, 但可同名
+	 *   5.若 snkPath 文件的祖先目录不存在则自动创建
+	 * </pre>
 	 * @param srcPath 源位置
 	 * @param snkPath 目标位置
 	 */
 	public static boolean moveFile(String srcPath, String snkPath) {
-		File srcFile = new File(srcPath);
-		File snkFile = new File(snkPath);
-		return moveFile(srcFile, snkFile);
+		boolean isOk = false;
+		if(StrUtils.isNotTrimEmpty(srcPath, snkPath)) {
+			File srcFile = new File(srcPath);
+			File snkFile = new File(snkPath);
+			isOk = moveFile(srcFile, snkFile);
+		}
+		return isOk;
 	}
 	
 	/**
-	 * 移动文件
-	 * @param srcFile 源文件
-	 * @param snkFile 目标文件
+	 * <pre>
+	 * 移动文件.
+	 * ----------------------------
+	 * 移动规则:
+	 *   1.srcFile 的文件必须存在, snkFile 的文件必须不存在
+	 *   2.srcFile 与 snkFile 必须是文件(而非文件夹)
+	 *   3.若 snkFile 是文件夹名但不存在, 则自动变成无后缀的文件; 若是文件夹名且存在, 则报错
+	 *   4.snkFile 与 srcFile 不能同源, 但可同名
+	 *   5.若 snkFile 文件的祖先目录不存在则自动创建
+	 * </pre>
+	 * @param srcPath 源位置
+	 * @param snkPath 目标位置
 	 */
 	public static boolean moveFile(File srcFile, File snkFile) {
 		boolean isOk = true;
@@ -341,20 +623,42 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 移动文件夹
+	 * <pre>
+	 * 移动文件夹.
+	 * ----------------------------
+	 * 移动规则:
+	 *   1.srcPath 的文件夹必须存在, snkPath 的文件夹必须不存在
+	 *   2.srcPath 与 snkPath 必须是文件夹(而非文件)
+	 *   3.若 snkPath 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报错
+	 *   4.snkPath 与 srcPath 不能同源, 但可同名
+	 *   5.若 snkPath 文件的祖先目录不存在则自动创建
+	 * </pre>
 	 * @param srcPath 源位置
 	 * @param snkPath 目标位置
 	 */
 	public static boolean moveDirectory(String srcPath, String snkPath) {
-		File srcFile = new File(srcPath);
-		File snkFile = new File(snkPath);
-		return moveDirectory(srcFile, snkFile);
+		boolean isOk = false;
+		if(StrUtils.isNotTrimEmpty(srcPath, snkPath)) {
+			File srcFile = new File(srcPath);
+			File snkFile = new File(snkPath);
+			isOk = moveDirectory(srcFile, snkFile);
+		}
+		return isOk;
 	}
 	
 	/**
-	 * 移动文件夹 
-	 * @param srcDir 源目录
-	 * @param snkDir 目标目录
+	 * <pre>
+	 * 移动文件夹.
+	 * ----------------------------
+	 * 移动规则:
+	 *   1.srcDir 的文件夹必须存在, snkDir 的文件夹必须不存在
+	 *   2.srcDir 与 snkDir 必须是文件夹(而非文件)
+	 *   3.若 snkDir 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报错
+	 *   4.snkDir 与 srcDir 不能同源, 但可同名
+	 *   5.若 snkDir 文件的祖先目录不存在则自动创建
+	 * </pre>
+	 * @param srcDir 源位置
+	 * @param snkDir 目标位置
 	 */
 	public static boolean moveDirectory(File srcDir, File snkDir)  {
 		boolean isOk = true;
@@ -395,24 +699,24 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true:创建成功; false:创建失败
 	 */
 	public static File create(String path, boolean isFile) {
-		File file = new File(path);
-		file.setWritable(true, false); // 处理linux的权限问题
-
-		boolean isCreated = true;
+		File file = null;
+		boolean isCreated = false;
 		try {
+			file = new File(path);
+			file.setWritable(true, false); // 处理linux的权限问题
+			
 			if (file.exists() == false) {
 				if (false == file.getParentFile().exists()) {
 					isCreated = file.getParentFile().mkdirs();
 				}
 				isCreated = (isFile ? file.createNewFile() : file.mkdir());
+			} else {
+				isCreated = true;
 			}
 		} catch (Exception e) {
-			isCreated = false;
 			log.error("创建文件{} [{}] 失败", (isFile ? "" : "夹"), path, e);
 		}
-		
-		file = (isCreated ? file : null);
-		return file;
+		return (isCreated ? file : null);
 	}
 	
 	/**
@@ -432,7 +736,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 */
 	public static boolean delete(String path, String filterRegex) {
 		boolean isOk = true;
-		if(StrUtils.isNotEmpty(path)) {
+		if(StrUtils.isNotTrimEmpty(path)) {
 			isOk = delete(new File(path), filterRegex);
 		}
 		return isOk;
@@ -484,7 +788,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return 文件内容
 	 */
 	public static String read(String filePath) {
-		if(filePath == null) {
+		if(StrUtils.isTrimEmpty(filePath)) {
 			return "";
 		}
         return read(new File(filePath));
@@ -519,7 +823,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @return 文件内容
      */
     public static String read(String filePath, String charset) {
-    	if(filePath == null) {
+    	if(StrUtils.isTrimEmpty(filePath)) {
 			return "";
 		}
         return read(new File(filePath), charset);
@@ -554,6 +858,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @return 文件内容
      */
     public static List<String> readLines(String filePath) {
+    	if(StrUtils.isTrimEmpty(filePath)) {
+    		return new LinkedList<String>();
+    	}
         return readLines(new File(filePath));
 	}
     
@@ -586,6 +893,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @return 文件内容
      */
     public static List<String> readLines(String filePath, String charset) {
+    	if(StrUtils.isTrimEmpty(filePath)) {
+    		return new LinkedList<String>();
+    	}
     	return readLines(new File(filePath), charset);
 	}
     
@@ -660,6 +970,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
      * @return true：写入成功; false:写入失败
      */
 	public static boolean write(String filePath, String data) {
+		if(StrUtils.isTrimEmpty(filePath)) {
+    		return false;
+    	}
     	return write(new File(filePath), data);
 	}
 	
@@ -693,6 +1006,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true：写入成功; false:写入失败
 	 */
 	public static boolean write(String filePath, String data, boolean append) {
+		if(StrUtils.isTrimEmpty(filePath)) {
+    		return false;
+    	}
 		return write(new File(filePath), data, append);
 	}
 	
@@ -727,6 +1043,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true：写入成功; false:写入失败
 	 */
 	public static boolean write(String filePath, String data, String charset) {
+		if(StrUtils.isTrimEmpty(filePath)) {
+    		return false;
+    	}
 		return write(new File(filePath), data, charset);
 	}
 	
@@ -762,6 +1081,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true：写入成功; false:写入失败
 	 */
 	public static boolean write(String filePath, String data, String charset, boolean append) {
+		if(StrUtils.isTrimEmpty(filePath)) {
+    		return false;
+    	}
 		return write(new File(filePath), data, charset, append);
 	}
 	
