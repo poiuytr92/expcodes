@@ -42,10 +42,10 @@ public class SocketClient implements ISession {
 	protected Logger log = LoggerFactory.getLogger(SocketClient.class);
 	
 	/** Socket重连间隔(ms) */
-	private final static long RECONN_INTERVAL = 10000;
+	private final static long RECONN_INTERVAL = 5000;
 	
 	/** Socket连续重连次数上限 */
-	private final static int RECONN_LIMIT = 30;
+	private final static int RECONN_LIMIT = 10;
 	
 	/** Socket配置信息 */
 	protected SocketBean sockConf;
