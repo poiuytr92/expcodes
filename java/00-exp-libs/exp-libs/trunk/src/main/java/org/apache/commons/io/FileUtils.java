@@ -973,6 +973,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @see #copyFile(File, File, boolean)
      */
+    @Deprecated
     public static boolean copyFileToDirectory(File srcFile, File destDir) throws IOException {
     	return copyFileToDirectory(srcFile, destDir, true);
     }
@@ -1002,6 +1003,7 @@ public class FileUtils {
      * @see #copyFile(File, File, boolean)
      * @since 1.3
      */
+    @Deprecated
     public static boolean copyFileToDirectory(File srcFile, File destDir, boolean preserveFileDate) throws IOException {
         if (destDir == null) {
             throw new NullPointerException("Destination must not be null");
@@ -1063,6 +1065,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @see #copyFileToDirectory(File, File, boolean)
      */
+    @Deprecated
     public static boolean copyFile(File srcFile, File destFile,
             boolean preserveFileDate) throws IOException {
         if (srcFile == null) {
@@ -1109,6 +1112,7 @@ public class FileUtils {
      *             if an I/O error occurs
      * @since 2.1
      */
+    @Deprecated
     public static long copyFile(File input, OutputStream output) throws IOException {
         final FileInputStream fis = new FileInputStream(input);
         try {
@@ -1188,6 +1192,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @since 1.2
      */
+    @Deprecated
     public static boolean copyDirectoryToDirectory(File srcDir, File destDir) throws IOException {
         if (srcDir == null) {
             throw new NullPointerException("Source must not be null");
@@ -1259,6 +1264,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @since 1.1
      */
+    @Deprecated
     public static boolean copyDirectory(File srcDir, File destDir,
             boolean preserveFileDate) throws IOException {
     	return copyDirectory(srcDir, destDir, null, preserveFileDate);
@@ -1308,6 +1314,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @since 1.4
      */
+    @Deprecated
     public static boolean copyDirectory(File srcDir, File destDir,
             FileFilter filter) throws IOException {
     	return copyDirectory(srcDir, destDir, filter, true);
@@ -1359,6 +1366,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @since 1.4
      */
+    @Deprecated
     public static boolean copyDirectory(File srcDir, File destDir,
             FileFilter filter, boolean preserveFileDate) throws IOException {
         if (srcDir == null) {
@@ -1460,6 +1468,7 @@ public class FileUtils {
      * @throws IOException if <code>destination</code> needs creating but can't be
      * @throws IOException if an IO error occurs during copying
      */
+    @Deprecated
     public static boolean copyURLToFile(URL source, File destination) throws IOException {
         InputStream input = source.openStream();
         return copyInputStreamToFile(input, destination);
@@ -1485,6 +1494,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @since 2.0
      */
+    @Deprecated
     public static boolean copyURLToFile(URL source, File destination,
             int connectionTimeout, int readTimeout) throws IOException {
         URLConnection connection = source.openConnection();
@@ -1509,6 +1519,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs during copying
      * @since 2.0
      */
+    @Deprecated
     public static boolean copyInputStreamToFile(InputStream source, File destination) throws IOException {
         try {
             FileOutputStream output = openOutputStream(destination);
@@ -1531,6 +1542,7 @@ public class FileUtils {
      * @param directory  directory to delete
      * @throws IOException in case deletion is unsuccessful
      */
+    @Deprecated
     public static boolean deleteDirectory(File directory) throws IOException {
         if (!directory.exists()) {
             return true;
@@ -1563,6 +1575,7 @@ public class FileUtils {
      *
      * @since 1.4
      */
+    @Deprecated
     public static boolean deleteQuietly(File file) {
         if (file == null) {
             return false;
@@ -1605,6 +1618,7 @@ public class FileUtils {
      * @since 2.2
      * @see FilenameUtils#directoryContains(String, String)
      */
+    @Deprecated
     public static boolean directoryContains(final File directory, final File child) throws IOException {
         
         // Fail fast against NullPointerException
@@ -1637,6 +1651,7 @@ public class FileUtils {
      * @param directory directory to clean
      * @throws IOException in case cleaning is unsuccessful
      */
+    @Deprecated
     public static boolean cleanDirectory(File directory) throws IOException {
         if (!directory.exists()) {
             String message = directory + " does not exist";
@@ -1768,6 +1783,7 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.1
      */
+    @Deprecated
     public static byte[] readFileToByteArray(File file) throws IOException {
         InputStream in = null;
         try {
@@ -2163,6 +2179,7 @@ public class FileUtils {
      * @throws java.io.UnsupportedEncodingException if the encoding is not supported by the VM
      * @since 2.1
      */
+    @Deprecated
     public static boolean writeLines(File file, String encoding, Collection<?> lines, boolean append) throws IOException {
         return writeLines(file, encoding, lines, null, append);
     }
@@ -2819,6 +2836,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs moving the file
      * @since 1.4
      */
+    @Deprecated
     public static boolean moveDirectoryToDirectory(File src, File destDir, boolean createDestDir) throws IOException {
         if (src == null) {
             throw new NullPointerException("Source must not be null");
@@ -2898,6 +2916,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs moving the file
      * @since 1.4
      */
+    @Deprecated
     public static boolean moveFileToDirectory(File srcFile, File destDir, boolean createDestDir) throws IOException {
         if (srcFile == null) {
             throw new NullPointerException("Source must not be null");
@@ -2933,6 +2952,7 @@ public class FileUtils {
      * @throws IOException if an IO error occurs moving the file
      * @since 1.4
      */
+    @Deprecated
     public static boolean moveToDirectory(File src, File destDir, boolean createDestDir) throws IOException {
         if (src == null) {
             throw new NullPointerException("Source must not be null");
