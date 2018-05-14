@@ -194,7 +194,8 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(TvLottery msgBean) {
-		String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在小电视抽奖中!!!");
+		String giftName = msgBean.getMsg().contains("摩天大楼") ? "摩天大楼" : "小电视";
+		String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在", giftName, "抽奖中!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
