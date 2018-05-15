@@ -9,6 +9,7 @@ import java.awt.Toolkit;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -326,6 +327,23 @@ public class SwingUtils {
 		JPanel panel = new JPanel(new BorderLayout());
 		panel.add(center, BorderLayout.CENTER);
 		return panel;
+	}
+	
+	/**
+	 * 获取下拉组件
+	 * @param defavlt 默认值
+	 * @param items 下拉列表
+	 * @return 下拉组件
+	 */
+	public static <E> JComboBox<E> getComboBox(E defavlt, E... items) {
+		JComboBox<E> jcb = new JComboBox<E>();
+		jcb.addItem(defavlt);
+		if(items != null) {
+			for(E item : items) {
+				jcb.addItem(item);  
+			}
+		}
+		return jcb;
 	}
 	
 	/**
