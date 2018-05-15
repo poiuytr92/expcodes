@@ -83,10 +83,8 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	/**
-	 * 创建程序UI实例
-	 * @param prjName 项目名称
-	 * @param verInfos 版本信息
-	 * @return
+	 * 获取单例
+	 * @return 单例
 	 */
 	protected static _VerMgrUI getInstn() {
 		if(instance == null) {

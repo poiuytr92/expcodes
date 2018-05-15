@@ -1,11 +1,9 @@
 package exp.libs.warp.ui.cpt.win;
 
-import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.MenuItem;
 import java.awt.PopupMenu;
-import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
@@ -20,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import exp.libs.warp.ui.SwingUtils;
+import exp.libs.warp.ui.cpt.tray.SystemTray;
 
 /**
  * <PRE>
@@ -34,8 +33,8 @@ import exp.libs.warp.ui.SwingUtils;
 @SuppressWarnings("serial")
 abstract class _SwingWindow extends JFrame {
 
-	/** 系统托盘 */
-	private final static SystemTray SYSTEM_TRAY = SystemTray.getSystemTray();
+	/** 托盘图标的图片文件位置 */
+	private final static String ICON_RES = "/exp/libs/warp/ui/cpt/win/tray.png";
 	
 	/** 最小化状态：未初始化 */
 	private final static int UNINIT = 0;
@@ -232,8 +231,8 @@ abstract class _SwingWindow extends JFrame {
 				
 				@Override
 				public void windowIconified(WindowEvent e) {
-					// 在执行下面代码之前, 窗口已最小化
 					
+					// 在执行下面代码之前, 窗口已最小化
 					toMini();
 				}
 			});
@@ -254,15 +253,15 @@ abstract class _SwingWindow extends JFrame {
 	 * 初始化系统托盘事件
 	 */
 	private void initSystemTrayEvent() {
-		ImageIcon trayImg = new ImageIcon(_SwingWindow.class.
-				getResource("/exp/libs/warp/ui/cpt/win/tray.png"));	// 托盘图标
-		PopupMenu trayPop = new PopupMenu();		// 托盘右键菜单
+		ImageIcon trayImg = new ImageIcon(
+				_SwingWindow.class.getResource(ICON_RES));	// 托盘图标
+		PopupMenu popMenu = new PopupMenu();		// 托盘右键菜单
 		MenuItem resume = new MenuItem("Resume");
 		MenuItem exit = new MenuItem("Exit");
-		trayPop.add(resume);
-		trayPop.add(exit);
+		popMenu.add(resume);
+		popMenu.add(exit);
 		
-		this.trayIcon = new TrayIcon(trayImg.getImage(), name, trayPop);
+		this.trayIcon = new TrayIcon(trayImg.getImage(), name, popMenu);
 		trayIcon.setImageAutoSize(true);
 		
 		trayIcon.addMouseListener(new MouseAdapter() {
@@ -311,17 +310,22 @@ abstract class _SwingWindow extends JFrame {
 		
 		// 不重复询问
 		if(miniMode == UNINIT) {
-			miniMode = SwingUtils.confirm("请选择最小化模式 : " , "到系统托盘", "到任务栏") ? 
-					TO_TRAY : TO_MINI;
+			if(!SystemTray.isSupported()) {
+				miniMode = TO_MINI;
+				
+			} else {
+				miniMode = SwingUtils.confirm("请选择最小化模式 : " , 
+						"到系统托盘", "到任务栏") ? TO_TRAY : TO_MINI;
+			}
 		}
 		
 		// 最小化到系统托盘
 		if(miniMode == TO_TRAY) {
-			_hide();
-			try {
-				SYSTEM_TRAY.add(trayIcon);	// 添加到系统托盘
-			} catch (AWTException ex) {
-				miniMode = TO_MINI;		// 添加到系统托盘失败, 之后就不再最小化到托盘了
+			if(!SystemTray.add(trayIcon)) {	// 添加到系统托盘
+				miniMode = TO_MINI;			// 若添加到系统托盘失败, 之后就不再最小化到托盘了
+				
+			} else {
+				_hide();	// 若添加托盘成功则隐藏窗体
 			}
 		} else {
 			// Undo: 默认模式: 最小化到系统任务栏
@@ -332,7 +336,7 @@ abstract class _SwingWindow extends JFrame {
 	 * 从托盘恢复窗口
 	 */
 	private void toResume() {
-		SYSTEM_TRAY.remove(trayIcon); 		// 移去托盘图标
+		SystemTray.del(trayIcon); 	// 移去托盘图标
 		_view();
 		setExtendedState(JFrame.NORMAL);	// 还原窗口
 		toFront();	// 窗口在最前
