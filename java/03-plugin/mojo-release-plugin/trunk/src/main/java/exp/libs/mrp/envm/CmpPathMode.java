@@ -1,5 +1,15 @@
 package exp.libs.mrp.envm;
 
+/**
+ * <PRE>
+ * 枚举类:压缩路径前缀模式
+ * </PRE>
+ * <B>PROJECT：</B> mojo-release-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-05-15
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class CmpPathMode {
 
 	/**

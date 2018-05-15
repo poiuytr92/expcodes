@@ -15,6 +15,16 @@ import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.tpl.Template;
 
+/**
+ * <PRE>
+ * 脚本构造器
+ * </PRE>
+ * <B>PROJECT：</B> mojo-release-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-05-15
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class ScriptBuilder {
 
 	protected ScriptBuilder() {}

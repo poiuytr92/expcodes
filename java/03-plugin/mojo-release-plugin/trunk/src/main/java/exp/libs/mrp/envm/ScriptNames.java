@@ -6,7 +6,7 @@ package exp.libs.mrp.envm;
  * 要求所有脚本文件名称都要先在此处定义(注意末尾还有一个所有脚本清单ALL_SCRIPTS)，以便管理。
  * 
  * </PRE>
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> mojo-release-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-08-17
  * @author    EXP: 272629724@qq.com

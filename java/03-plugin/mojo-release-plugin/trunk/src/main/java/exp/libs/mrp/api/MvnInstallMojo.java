@@ -21,7 +21,7 @@ import exp.libs.utils.io.FileUtils;
  * 
  * </PRE>
  * 
- * <B>PROJECT：</B> exp-libs
+ * <B>PROJECT：</B> mojo-release-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-08-17
  * @author    EXP: 272629724@qq.com
