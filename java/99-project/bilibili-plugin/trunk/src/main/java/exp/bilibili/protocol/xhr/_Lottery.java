@@ -55,6 +55,8 @@ class _Lottery extends __XHR {
 	 */
 	protected static String join(LotteryType type, BiliCookie cookie, 
 			String url, int roomId, String raffleId) {
+		final int RETRY_LIMIT = 20;
+		final int RETRY_INTERVAL = 100;
 		String sRoomId = getRealRoomId(roomId);
 		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);
 		String reason = "";
@@ -62,20 +64,20 @@ class _Lottery extends __XHR {
 		// 加入高能/小电视抽奖
 		if(LotteryType.STORM != type) {
 			Map<String, String> request = getRequest(sRoomId, raffleId);
-			for(int retry = 0; retry < 10; retry++) {
+			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
 				String response = HttpURLUtils.doGet(url, header, request);
 				
 				reason = analyse(response);
 				if(StrUtils.isEmpty(reason) || !reason.contains("系统繁忙")) {
 					break;
 				}
-				ThreadUtils.tSleep(100);
+				ThreadUtils.tSleep(RETRY_INTERVAL);
 			}
 			
 		// 加入节奏风暴抽奖
 		} else {
 			String visitId = getVisitId();
-			for(int retry = 0; retry < 100; retry++) {	// 节奏风暴在完结前需要一直抢到系统响应为止
+			for(int retry = 0; retry < RETRY_LIMIT; retry++) {	// 理论上节奏风暴在完结前可以一直抢到成功为止
 				String[] captcha = cookie.isRealName() ? // 实名认证后无需填节奏风暴验证码
 						new String[] { "", "" } : getStormCaptcha(cookie);
 				Map<String, String> request = getRequest(sRoomId, raffleId, 
@@ -86,7 +88,7 @@ class _Lottery extends __XHR {
 				if(StrUtils.isEmpty(reason) || reason.contains("不存在")) {
 					break;
 				}
-				ThreadUtils.tSleep(50);
+				ThreadUtils.tSleep(RETRY_INTERVAL);
 			}
 		}
 		return reason;
