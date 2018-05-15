@@ -75,7 +75,7 @@ class _Lottery extends __XHR {
 		// 加入节奏风暴抽奖
 		} else {
 			String visitId = getVisitId();
-			for(int retry = 0; retry < 200; retry++) {	// 节奏风暴在完结前需要一直抢到系统响应为止
+			for(int retry = 0; retry < 100; retry++) {	// 节奏风暴在完结前需要一直抢到系统响应为止
 				String[] captcha = cookie.isRealName() ? // 实名认证后无需填节奏风暴验证码
 						new String[] { "", "" } : getStormCaptcha(cookie);
 				Map<String, String> request = getRequest(sRoomId, raffleId, 
