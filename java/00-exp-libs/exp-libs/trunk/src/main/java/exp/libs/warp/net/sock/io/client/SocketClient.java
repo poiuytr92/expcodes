@@ -41,11 +41,17 @@ public class SocketClient implements ISession {
 	/** 日志器 */
 	protected Logger log = LoggerFactory.getLogger(SocketClient.class);
 	
-	/** Socket重连间隔(ms) */
+	/** 默认Socket重连间隔(ms) */
 	private final static long RECONN_INTERVAL = 5000;
 	
-	/** Socket连续重连次数上限 */
+	/** 默认Socket连续重连次数上限 */
 	private final static int RECONN_LIMIT = 10;
+	
+	/** Socket重连间隔(ms) */
+	private long reconnInterval;
+	
+	/** Socket连续重连次数上限 */
+	private int reconnLimit;
 	
 	/** Socket配置信息 */
 	protected SocketBean sockConf;
@@ -60,7 +66,8 @@ public class SocketClient implements ISession {
 	 * 用于继承的构造函数
 	 */
 	protected SocketClient() {
-		// Undo : 继承用
+		this.reconnInterval = RECONN_INTERVAL;
+		this.reconnLimit = RECONN_LIMIT;
 	}
 	
 	/**
@@ -69,6 +76,7 @@ public class SocketClient implements ISession {
 	 * @param port 服务端口
 	 */
 	public SocketClient(String ip, int port) {
+		this();
 		this.sockConf = new SocketBean(ip, port);
 	}
 	
@@ -79,6 +87,7 @@ public class SocketClient implements ISession {
 	 * @param overtime 超时时间
 	 */
 	public SocketClient(String ip, int port, int overtime) {
+		this();
 		this.sockConf = new SocketBean(ip, port, overtime);
 	}
 	
@@ -87,6 +96,7 @@ public class SocketClient implements ISession {
 	 * @param sockConf socket配置信息
 	 */
 	public SocketClient(SocketBean sockConf) {
+		this();
 		this.sockConf = (sockConf == null ? new SocketBean() : sockConf);
 	}
 	
@@ -117,6 +127,23 @@ public class SocketClient implements ISession {
 		return socket;
 	}
 	
+	/**
+	 * 设置Socket重连间隔
+	 * @param reconnInterval Socket重连间隔(ms), 默认 5000
+	 */
+	public void setReconnInterval(long reconnInterval) {
+		this.reconnInterval = (reconnInterval <= 0 ? 
+				RECONN_INTERVAL : reconnInterval);
+	}
+
+	/**
+	 * 设置Socket重连次数上限
+	 * @param reconnLimit 重连次数上限(若<0表示无限次)
+	 */
+	public void setReconnLimit(int reconnLimit) {
+		this.reconnLimit = reconnLimit;
+	}
+
 	/**
 	 * 连接socket服务
 	 * @return true:连接成功; false:连接失败
@@ -159,12 +186,12 @@ public class SocketClient implements ISession {
 			} else {
 				close();
 				log.warn("客户端 [{}] {}ms后重连(已重试 {}/{} 次)", 
-						sockConf.getAlias(), RECONN_INTERVAL, cnt, RECONN_LIMIT);
+						sockConf.getAlias(), reconnInterval, cnt, reconnLimit);
 			}
 			
 			cnt++;
-			ThreadUtils.tSleep(RECONN_INTERVAL);
-		} while(RECONN_LIMIT < 0 || cnt < RECONN_LIMIT);
+			ThreadUtils.tSleep(reconnInterval);
+		} while(reconnLimit < 0 || cnt < reconnLimit);
 		return !isClosed();
 	}
 	
