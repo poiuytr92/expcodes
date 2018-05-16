@@ -269,7 +269,7 @@ public class _VerDBMgr {
 	 * @return 历史版本信息列表
 	 */
 	protected String toHisVerInfos(boolean detail) {
-		final String SPLIT_LINE = "========================================";
+		final String SPLIT_LINE = "============================================================";
 		StringBuilder infos = new StringBuilder(SPLIT_LINE);
 		infos.append(SPLIT_LINE).append(Delimiter.CRLF);
 		

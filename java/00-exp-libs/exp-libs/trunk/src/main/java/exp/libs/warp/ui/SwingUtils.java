@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRootPane;
 import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
@@ -129,6 +130,72 @@ public class SwingUtils {
 			scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
 		}
 		return scroll;
+	}
+	
+	/**
+	 * 获取水平切割面板（可左右拖拉切割线）
+	 * @param left 左侧组件
+	 * @param right 右侧组件
+	 * @return 水平切割面板
+	 */
+	public static JSplitPane getHSplitPane(Component left, Component right) {
+		return getHSplitPane(left, right, 0);
+	}
+	
+	/**
+	 * 获取水平切割面板（可左右拖拉切割线）
+	 * @param left 左侧组件
+	 * @param right 右侧组件
+	 * @param divide 面板呈现时的上下切割比例, 取值范围(0.0, 1.0), 默认0.5,
+	 *               只有在面板<b>可见时</b>此参数才有效(亦即只有在窗体view之后才能调用此方法)
+	 * @return 水平切割面板
+	 */
+	public static JSplitPane getHSplitPane(Component left, Component right, double divide) {
+		JSplitPane splitPanel = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitPanel.setLeftComponent(left);
+		splitPanel.setRightComponent(right);
+		return setDivider(splitPanel, divide);
+	}
+	
+	/**
+	 * 获取垂直切割面板（可上下拖拉切割线）
+	 * @param top 顶部组件
+	 * @param bottom 底部组件
+	 * @return 垂直切割面板
+	 */
+	public static JSplitPane getVSplitPane(Component top, Component bottom) {
+		return getVSplitPane(top, bottom, 0);
+	}
+	
+	/**
+	 * 获取垂直切割面板（可上下拖拉切割线）
+	 * @param top 顶部组件
+	 * @param bottom 底部组件
+	 * @param divide 面板呈现时的上下切割比例, 取值范围(0.0, 1.0), 默认0.5,
+	 *               只有在面板<b>可见时</b>此参数才有效(亦即只有在窗体view之后才能调用此方法)
+	 * @return 垂直切割面板
+	 */
+	public static JSplitPane getVSplitPane(Component top, Component bottom, double divide) {
+		JSplitPane splitPanel = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
+		splitPanel.setLeftComponent(top);
+		splitPanel.setRightComponent(bottom);
+		return setDivider(splitPanel, divide);
+	}
+	
+	/**
+	 * <pre>
+	 * 设置切割面板在呈现时的切割比例.
+	 *  只有在面板<b>可见时</b>此方法才有效(亦即只有在窗体view之后才能调用此方法).
+	 * </pre>
+	 * @param splitPanel 切割面板
+	 * @param divide 面板呈现时的切割比例, 取值范围(0.0, 1.0), 默认0.5
+	 * @return 切割面板
+	 */
+	public static JSplitPane setDivider(JSplitPane splitPanel, double divide) {
+		if(splitPanel != null && divide > 0.0 && divide < 1.0) {
+			splitPanel.setDividerLocation(divide);
+		}
+		return splitPanel;
 	}
 	
 	/**
@@ -336,14 +403,14 @@ public class SwingUtils {
 	 * @return 下拉组件
 	 */
 	public static JComboBox getComboBox(String defavlt, String... items) {
-		JComboBox jcb = new JComboBox();
-		jcb.addItem(defavlt);
+		JComboBox comboBox = new JComboBox();
+		comboBox.addItem(defavlt);
 		if(items != null) {
 			for(String item : items) {
-				jcb.addItem(item);  
+				comboBox.addItem(item);  
 			}
 		}
-		return jcb;
+		return comboBox;
 	}
 	
 	/**
@@ -362,7 +429,9 @@ public class SwingUtils {
 	 * @return 已添加边框的组件（与入参为同一对象）
 	 */
 	public static <T extends JComponent> T addBorder(T component, String borderTitle) {
-		component.setBorder(new TitledBorder(borderTitle));
+		if(component != null && borderTitle != null) {
+			component.setBorder(new TitledBorder(borderTitle));
+		}
 		return component;
 	}
 	
