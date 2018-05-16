@@ -42,10 +42,11 @@
         <stormCheckURL caption="节奏风暴检测URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/check]]></stormCheckURL>
         <stormCodeURL caption="节奏风暴验证码URL"><![CDATA[http://api.live.bilibili.com/captcha/v1/Captcha/create]]></stormCodeURL>
         <stormJoinURL caption="节奏风暴抽奖URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/join]]></stormJoinURL>
+        <guardCheckURL caption="总督检测URL"><![CDATA[https://api.live.bilibili.com/lottery/v1/lottery/check]]></guardCheckURL>
+        <guardJoinURL caption="总督领奖URL"><![CDATA[https://api.live.bilibili.com/lottery/v1/lottery/join]]></guardJoinURL>
         <egCheckURL caption="高能礼物取号URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/check]]></egCheckURL>
         <egJoinURL caption="高能礼物抽奖URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/join]]></egJoinURL>
         <tvJoinURL caption="小电视抽奖URL"><![CDATA[http://api.live.bilibili.com/gift/v2/smalltv/join]]></tvJoinURL>
-        <guardURL caption="领取总督亲密奖励URL"><![CDATA[https://api.live.bilibili.com/lottery/v1/lottery/join]]></guardURL>
         <mathCheckURL caption="数学任务检测URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/SilverBox/getCurrentTask]]></mathCheckURL>
         <mathCodeURL caption="获取数学任务校验码URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/SilverBox/getCaptcha]]></mathCodeURL>
         <mathExecURL caption="执行数学任务URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/SilverBox/getAward]]></mathExecURL>

@@ -48,7 +48,7 @@ public class Gifts extends __XHR {
 	private final static String OPEN_CAPSULE_URL = Config.getInstn().OPEN_CAPSULE_URL();
 	
 	/** 领取总督亲密度奖励URL */
-	private final static String GUARD_URL = Config.getInstn().GUARD_URL();
+	private final static String GUARD_JOIN_URL = Config.getInstn().GUARD_JOIN_URL();
 	
 	/**
 	 * 获取包裹礼物列表
@@ -330,7 +330,7 @@ public class Gifts extends __XHR {
 	public static boolean getGuardGift(BiliCookie cookie, int roomId, String guardId) {
 		Map<String, String> header = getHeader(cookie.toNVCookie());
 		Map<String, String> request = getRequest(cookie.CSRF(), getRealRoomId(roomId), guardId);
-		String response = HttpURLUtils.doGet(GUARD_URL, header, request);
+		String response = HttpURLUtils.doGet(GUARD_JOIN_URL, header, request);
 		// TODO
 		return true;
 	}

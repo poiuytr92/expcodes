@@ -1,0 +1,31 @@
+Request URL: https://api.live.bilibili.com/lottery/v1/lottery/check?roomid=70270
+Request Method: GET
+Status Code: 200 OK
+Remote Address: 36.248.28.7:443
+Referrer Policy: no-referrer-when-downgrade
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type
+Access-Control-Allow-Methods: GET,POST,OPTIONS
+Access-Control-Allow-Origin: https://live.bilibili.com
+Cache-Control: no-cache
+Connection: keep-alive
+Content-Length: 600
+Content-Type: application/json
+Date: Wed, 16 May 2018 17:03:51 GMT
+Expires: Wed, 16 May 2018 17:03:50 GMT
+Server: swoole-http-server
+Vary: Accept-Encoding,Origin
+X-Cache: BYPASS from cn-fjfz-cu-w-01.hdslb.com
+Accept: application/json, text/plain, */*
+Accept-Encoding: gzip, deflate, br
+Accept-Language: zh-CN,zh;q=0.9
+Connection: keep-alive
+Cookie: LIVE_BUVID=AUTO3315213395365143; sid=97ua765p; fts=1521339542; im_notify_type_31796320=0; im_notify_type_294338133=0; im_notify_type_284997350=0; im_seqno_284997350=106; im_local_unread_284997350=0; im_seqno_95319118=3; im_local_unread_95319118=0; UM_distinctid=162627aa60745f-0ef3006dccc45c-3f3c5501-144000-162627aa609826; im_notify_type_194082245=0; im_seqno_31796320=380; im_local_unread_31796320=0; finger=edc6ecda; DedeUserID=31796320; DedeUserID__ckMd5=7a2868581681a219; SESSDATA=b21f4571%2C1526644156%2Cf0a0c274; bili_jct=ab5b6768745183384430b7f186783e83; buvid3=0C8AEC92-2712-4DB5-A4F5-FDF725E4F37959210infoc; rpdid=oqqsiowwxidosipopsmpw; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1526300185,1526306053,1526395329,1526490206; _dfcaptcha=b408e48ef2f369a8c9034f2a2f17af8d; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1526490212
+Host: api.live.bilibili.com
+Origin: https://live.bilibili.com
+Referer: https://live.bilibili.com/189
+User-Agent: Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/65.0.3325.181 Safari/537.36
+roomid: 70270
+
+
+{"code":0,"msg":"ok","message":"ok","data":{"guard":[{"id":269320,"sender":{"uid":274755686,"uname":"狐妖家の团子","face":"https://i0.hdslb.com/bfs/face/d2dbda9cf7b859b020c3114120f557648d827774.jpg"},"keyword":"guard","time":70718,"status":1,"mobile_display_mode":2,"mobile_static_asset":"","mobile_animation_asset":""},{"id":269643,"sender":{"uid":560798,"uname":"ネヲヲ","face":"https://i0.hdslb.com/bfs/face/2ba7f78dbc93a3a17643840c72bd66a33600fbf4.jpg"},"keyword":"guard","time":77623,"status":1,"mobile_display_mode":2,"mobile_static_asset":"","mobile_animation_asset":""}],"storm":[]}}

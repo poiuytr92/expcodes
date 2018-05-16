@@ -207,6 +207,14 @@ public class Config {
 		return xConf.getVal("/config/urls/stormJoinURL");
 	}
 	
+	public String GUARD_CHECK_URL() {
+		return xConf.getVal("/config/urls/guardCheckURL");
+	}
+	
+	public String GUARD_JOIN_URL() {
+		return xConf.getVal("/config/urls/guardJoinURL");
+	}
+	
 	public String EG_CHECK_URL() {
 		return xConf.getVal("/config/urls/egCheckURL");
 	}
@@ -217,10 +225,6 @@ public class Config {
 	
 	public String TV_JOIN_URL() {
 		return xConf.getVal("/config/urls/tvJoinURL");
-	}
-	
-	public String GUARD_URL() {
-		return xConf.getVal("/config/urls/guardURL");
 	}
 	
 	public String MATH_CHECK_URL() {
