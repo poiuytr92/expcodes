@@ -203,26 +203,33 @@ public class LotteryStorm extends _Lottery {
 	 * @return
 	 */
 	public static boolean toLottery(int roomId, String raffleId) {
-		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL(true);
-		for(BiliCookie cookie : cookies) {
-			if(!cookie.isBindTel() || !cookie.isRealName()) {
-				continue;	// 未绑定手机或未实名认证的账号无法参与节奏风暴  (FIXME 未实名也可参加, 但是需要填验证码, 目前未能自动识别验证码)
-			}
+		
+		int cnt = 0;
+		boolean isExist = true;
+		while(isExist && !cookies.isEmpty()) {	// 理论上节奏风暴可以在完结前一直抢到成功为止
 			
-			String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
-			if(StrUtils.isEmpty(reason)) {
-				log.info("[{}] 参与直播间 [{}] 抽奖成功(节奏风暴)", cookie.NICKNAME(), roomId);
-				cnt++;
+			isExist = false;	// 避免cookies队列没人参与陷入死循环
+			for(BiliCookie cookie : cookies) {
+				if(!cookie.isBindTel() || !cookie.isRealName()) {
+					continue;	// 未绑定手机或未实名认证的账号无法参与节奏风暴  (FIXME 未实名也可参加, 但是需要填验证码, 目前未能自动识别验证码)
+				}
 				
-			} else {
-				log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
-				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
-						"], 账号 [", cookie.NICKNAME(), "]");
-				
-				// 节奏风暴名额已抽完, 其他账号无需参与
-				if(reason.contains("不存在")) {
-					break;
+				String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
+				if(StrUtils.isEmpty(reason)) {
+					log.info("[{}] 参与直播间 [{}] 抽奖成功(节奏风暴)", cookie.NICKNAME(), roomId);
+					isExist = true;
+					cnt++;
+					
+				} else {
+					log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
+					UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
+							"], 账号 [", cookie.NICKNAME(), "]");
+					
+					isExist = !reason.contains("不存在");
+					if(isExist == false) {
+						break;	// 节奏风暴已完结
+					}
 				}
 			}
 		}

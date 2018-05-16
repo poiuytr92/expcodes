@@ -77,7 +77,7 @@ class _Lottery extends __XHR {
 		// 加入节奏风暴抽奖
 		} else {
 			String visitId = getVisitId();
-			for(int retry = 0; retry < RETRY_LIMIT; retry++) {	// 理论上节奏风暴在完结前可以一直抢到成功为止
+			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
 				String[] captcha = cookie.isRealName() ? // 实名认证后无需填节奏风暴验证码
 						new String[] { "", "" } : getStormCaptcha(cookie);
 				Map<String, String> request = getRequest(sRoomId, raffleId, 
@@ -168,7 +168,7 @@ class _Lottery extends __XHR {
 					
 				// 这两种异常实际上是服务器没响应请求，需要一直抢
 				} else if(reason.contains("错过了奖励") || reason.contains("已经领取")) {
-					reason = "亿圆被抢光啦";
+					reason = "抽奖已失效";
 				}
 			}
 		} catch(Exception e) {
