@@ -168,7 +168,7 @@ class _Lottery extends __XHR {
 					
 				// 这两种异常实际上是服务器没响应请求，需要一直抢
 				} else if(reason.contains("错过了奖励") || reason.contains("已经领取")) {
-					reason = "抽奖已失效";
+					reason = "再接再励";
 				}
 			}
 		} catch(Exception e) {

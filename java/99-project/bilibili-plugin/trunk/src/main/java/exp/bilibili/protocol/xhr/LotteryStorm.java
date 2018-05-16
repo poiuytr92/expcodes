@@ -226,7 +226,7 @@ public class LotteryStorm extends _Lottery {
 					UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 							"], 账号 [", cookie.NICKNAME(), "]");
 					
-					isExist = !reason.contains("不存在");
+					isExist = reason.contains("再接再励");
 					if(isExist == false) {
 						break;	// 节奏风暴已完结
 					}
