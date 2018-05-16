@@ -579,14 +579,41 @@ public class SwingUtils {
 	 * @return 图片对象, 若加载失败则返回null
 	 */
 	public static ImageIcon loadImage(String imgPath) {
+		return loadImage(imgPath, -1, -1);
+	}
+	
+	/**
+	 * <PRE>
+	 * 加载图片对象(对于路径不变但图像持续变化的图片， 支持实时更新).
+	 * 
+	 * 	此方法并没有使用new ImageIcon(imgPath)的方式去读取图片文件, 这是因为：
+	 * 		对于路径不变但图像持续变化的图片, 会会因为图片路径没有变化, 而不去更新缓存, 导致显示的图片一直不变
+	 * </PRE>
+	 * @param imgPath 图片存储路径, 支持文件路径和包路径
+	 * 			文件路径，如： ./foo/bar/img.png
+	 * 			包路径，如： /foo/bar/img.png
+	 * @param width 设置所加载图像的宽度
+	 * @param height 设置所加载图像的高度
+	 * @return 图片对象, 若加载失败则返回null
+	 */
+	public static ImageIcon loadImage(String imgPath, int width, int height) {
 		ImageIcon icon = null;
 		try {
-			if(FileUtils.exists(imgPath)) {	// 文件路径
+			
+			// 文件路径
+			if(FileUtils.exists(imgPath)) {
 				Image img = Toolkit.getDefaultToolkit().createImage(imgPath);
 				icon = new ImageIcon(img);
 				
-			} else {	// 包路径
+			// 包路径
+			} else {
 				icon = new ImageIcon(SwingUtils.class.getResource(imgPath));
+			}
+			
+			// 重设图像宽高
+			if(width > 0 && height > 0) {
+				Image img = modifySize(icon.getImage(), width, height);
+				icon = new ImageIcon(img);
 			}
 		} catch(Exception e) {}
 		return icon;
