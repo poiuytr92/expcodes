@@ -1,6 +1,7 @@
 package exp.bilibili.protocol.xhr;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -203,31 +204,34 @@ public class LotteryStorm extends _Lottery {
 	 * @return
 	 */
 	public static boolean toLottery(int roomId, String raffleId) {
+		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL(true);
 		
-		int cnt = 0;
 		boolean isExist = true;
 		while(isExist && !cookies.isEmpty()) {	// 理论上节奏风暴可以在完结前一直抢到成功为止
-			
 			isExist = false;	// 避免cookies队列没人参与陷入死循环
-			for(BiliCookie cookie : cookies) {
+			
+			Iterator<BiliCookie> cookieIts = cookies.iterator();
+			while(cookieIts.hasNext()) {
+				BiliCookie cookie = cookieIts.next();
 				if(!cookie.isBindTel() || !cookie.isRealName()) {
+					cookieIts.remove();
 					continue;	// 未绑定手机或未实名认证的账号无法参与节奏风暴  (FIXME 未实名也可参加, 但是需要填验证码, 目前未能自动识别验证码)
 				}
 				
 				String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
 				if(StrUtils.isEmpty(reason)) {
 					log.info("[{}] 参与直播间 [{}] 抽奖成功(节奏风暴)", cookie.NICKNAME(), roomId);
+					cookieIts.remove();	// 已经成功抽奖的在本轮无需再抽
 					isExist = true;
 					cnt++;
 					
 				} else {
 					log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
-					UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
-							"], 账号 [", cookie.NICKNAME(), "]");
-					
 					isExist = reason.contains("再接再励");
 					if(isExist == false) {
+						UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
+								"], 账号 [", cookie.NICKNAME(), "]");
 						break;	// 节奏风暴已完结
 					}
 				}
