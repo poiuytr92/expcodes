@@ -27,10 +27,10 @@ import exp.libs.warp.ui.layout.VFlowLayout;
 public class ADPanel<T extends Component> {
 
 	/** 默认最大的行组件数(<=0表示不限) */
-	private final static int MAX = -1;
+	private final static int MAX_ROW = -1;
 	
 	/** 最大的行组件数(<=0表示不限) */
-	private int max;
+	private int maxRow;
 	
 	/** 承载面板 */
 	private JScrollPane scrollPanel;
@@ -38,20 +38,24 @@ public class ADPanel<T extends Component> {
 	/** 基准组件面板 */
 	private	JPanel basePanel; 
 	
+	/**
+	 * 构造函数
+	 * @param component 行组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
+	 */
 	public ADPanel(Class<T> component) {
-		this(component, MAX);
+		this(component, MAX_ROW);
 	}
 	
 	/**
 	 * 构造函数
-	 * @param component 每行差异化组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
-	 * @param maxNum 最多可以添加的行组件数(<=0表示不限)
+	 * @param component 行组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
+	 * @param maxRow 最多可以添加的行组件数(<=0表示不限)
 	 */
-	public ADPanel(Class<T> component, int maxNum) {
-		this.max = maxNum;
+	public ADPanel(Class<T> component, int maxRow) {
+		this.maxRow = maxRow;
 		
 		basePanel = new JPanel(new VFlowLayout());
-		_ADLine<T> firstLine = new _ADLine<T>(basePanel, component, max);
+		_ADLine<T> firstLine = new _ADLine<T>(basePanel, component, maxRow);
 		basePanel.add(firstLine.getJPanel());
 		
 		// 当出现增减行事件时，刷新滚动面板（使得滚动条动态出现）
@@ -79,6 +83,14 @@ public class ADPanel<T extends Component> {
 	}
 	
 	/**
+	 * 检查当前行组件的数量是否在允许范围内
+	 * @return true:在范围内; false:数量溢出
+	 */
+	private boolean rowInRange() {
+		return (maxRow <= 0 || size() < maxRow);
+	}
+	
+	/**
 	 * 新增行组件(程序内部接口)
 	 * @param component 行组件
 	 * @return 是否添加成功
@@ -86,8 +98,8 @@ public class ADPanel<T extends Component> {
 	public boolean add(T component) {
 		boolean isOk = false;
 		if(component != null) {
-			if(max > 0 && size() < max) {
-				_ADLine<T> line = new _ADLine<T>(basePanel, component, max);
+			if(rowInRange()) {
+				_ADLine<T> line = new _ADLine<T>(basePanel, component, maxRow);
 				basePanel.add(line.getJPanel());
 				isOk = true;
 			}
@@ -107,7 +119,7 @@ public class ADPanel<T extends Component> {
 			if(index < size()) {
 				basePanel.remove(index);
 				
-			} else if(index >= size() && size() < max) {
+			} else if(index >= size() && rowInRange()) {
 				index = size();
 				
 			} else {
@@ -115,7 +127,7 @@ public class ADPanel<T extends Component> {
 			}
 			
 			if(index >= 0) {
-				_ADLine<T> line = new _ADLine<T>(basePanel, component, max);
+				_ADLine<T> line = new _ADLine<T>(basePanel, component, maxRow);
 				basePanel.add(line.getJPanel(), index);
 				isOk = true;
 			}
