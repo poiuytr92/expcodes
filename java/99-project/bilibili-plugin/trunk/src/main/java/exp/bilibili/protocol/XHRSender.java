@@ -215,6 +215,15 @@ public class XHRSender {
 	}
 	
 	/**
+	 * 检索主播的房间号
+	 * @param liveupName 主播名称
+	 * @return 主播的房间号(长号)
+	 */
+	public static int searchRoomId(String liveupName) {
+		return Other.searchRoomId(CookiesMgr.MAIN(), liveupName);
+	}
+	
+	/**
 	 * 扫描当前的人气直播间房号列表
 	 * @param range 扫描页码范围
 	 * @return

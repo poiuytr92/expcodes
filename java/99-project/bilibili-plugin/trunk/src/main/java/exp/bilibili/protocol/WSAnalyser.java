@@ -316,8 +316,10 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(GuardMsg msgBean) {
-		UIUtils.chat(msgBean.getMsg());
+		UIUtils.notify(msgBean.getMsg());
 		log.info(msgBean.getMsg());
+		
+		int roomId = XHRSender.searchRoomId(msgBean.getLiveup());
 	}
 	
 	/**

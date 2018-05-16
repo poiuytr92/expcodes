@@ -11,7 +11,6 @@ import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
@@ -92,15 +91,6 @@ class _Lottery extends __XHR {
 			}
 		}
 		return reason;
-	}
-	
-	/**
-	 * 节奏风暴的访问ID
-	 * @return 节奏风暴的访问ID
-	 */
-	private static String getVisitId() {
-		long num = System.currentTimeMillis() * RandomUtils.randomInt(1000000);
-		return Long.toString(num, 36);
 	}
 	
 	/**

@@ -5,6 +5,7 @@ package exp.bilibili.protocol.envm;
 
 
 
+
 /**
  * <PRE>
  * B站Json交互报文字段属性
@@ -338,5 +339,13 @@ public class BiliCmdAtrbt {
 	public final static String todayFeed = "todayFeed";
 	
 	public final static String gift_list = "gift_list";
+	
+	public final static String search_type = "search_type";
+	
+	public final static String keyword = "keyword";
+	
+	public final static String result = "result";
+	
+	public final static String live_room = "live_room";
 	
 }

@@ -219,6 +219,10 @@ public class Config {
 		return xConf.getVal("/config/urls/tvJoinURL");
 	}
 	
+	public String GUARD_URL() {
+		return xConf.getVal("/config/urls/guardURL");
+	}
+	
 	public String MATH_CHECK_URL() {
 		return xConf.getVal("/config/urls/mathCheckURL");
 	}
@@ -249,6 +253,10 @@ public class Config {
 	
 	public String PC_WATCH_URL() {
 		return xConf.getVal("/config/urls/pcWatchURL");
+	}
+	
+	public String SEARCH_URL() {
+		return xConf.getVal("/config/urls/searchURL");
 	}
 	
 	public String COOKIE_DIR() {

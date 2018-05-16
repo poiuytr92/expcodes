@@ -47,6 +47,9 @@ public class Gifts extends __XHR {
 	/** 打开扭蛋URL */
 	private final static String OPEN_CAPSULE_URL = Config.getInstn().OPEN_CAPSULE_URL();
 	
+	/** 领取总督亲密度奖励URL */
+	private final static String GUARD_URL = Config.getInstn().GUARD_URL();
+	
 	/**
 	 * 获取包裹礼物列表
 	 * @param cookie
@@ -314,6 +317,37 @@ public class Gifts extends __XHR {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.page, "1");
 		request.put(BiliCmdAtrbt.pageSize, "50");	// 每页显示的勋章数（B站一般用户最多拥有20个勋章）
+		return request;
+	}
+	
+	/**
+	 * 领取总督亲密度奖励
+	 * @param cookie
+	 * @param roomId 总督开通房间
+	 * @param guardId 总督编号
+	 * @return
+	 */
+	public static boolean getGuardGift(BiliCookie cookie, int roomId, String guardId) {
+		Map<String, String> header = getHeader(cookie.toNVCookie());
+		Map<String, String> request = getRequest(cookie.CSRF(), getRealRoomId(roomId), guardId);
+		String response = HttpURLUtils.doGet(GUARD_URL, header, request);
+		// TODO
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param csrf
+	 * @param roomId
+	 * @param guardId
+	 * @return
+	 */
+	private static Map<String, String> getRequest(String csrf, String roomId, String guardId) {
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(BiliCmdAtrbt.roomid, roomId);
+		request.put(BiliCmdAtrbt.id, guardId);	// TODO总督编号
+		request.put(BiliCmdAtrbt.csrf_token, csrf);
+		request.put(BiliCmdAtrbt.visit_id, getVisitId());
 		return request;
 	}
 	

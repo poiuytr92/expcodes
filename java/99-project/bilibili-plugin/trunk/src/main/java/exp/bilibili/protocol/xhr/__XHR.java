@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.libs.utils.num.RandomUtils;
 import exp.libs.warp.net.http.HttpUtils;
 
 /**
@@ -43,6 +44,15 @@ class __XHR {
 	
 	/** 私有化构造函数 */
 	protected __XHR() {}
+	
+	/**
+	 * 获取访问ID
+	 * @return 访问ID
+	 */
+	protected static String getVisitId() {
+		long num = System.currentTimeMillis() * RandomUtils.randomInt(1000000);
+		return Long.toString(num, 36);
+	}
 	
 	/**
 	 * 获取当前监听直播间的真实房号

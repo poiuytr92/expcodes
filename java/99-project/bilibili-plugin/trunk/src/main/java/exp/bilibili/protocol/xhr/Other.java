@@ -72,6 +72,9 @@ public class Other extends __XHR {
 	/** 领取成就奖励URL */
 	private final static String DO_ACHIEVE_URL = Config.getInstn().DO_ACHIEVE_URL();
 	
+	/** 检索主播的直播间URL */
+	private final static String SEARCH_URL = Config.getInstn().SEARCH_URL();
+	
 	/** 私有化构造函数 */
 	protected Other() {}
 	
@@ -384,6 +387,10 @@ public class Other extends __XHR {
 		return achieves;
 	}
 	
+	/**
+	 * 查询成就的请求参数
+	 * @return
+	 */
 	private static Map<String, String> getRequest() {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.type, "normal");	// 普通成就
@@ -422,6 +429,38 @@ public class Other extends __XHR {
 				log.error("[{}] 领取成就 [{}] 的奖励失败: {}", cookie.NICKNAME(), achieve.getName(), response, e);
 			}
 		}
+	}
+	
+	/**
+	 * 检索主播的房间号
+	 * @param cookie
+	 * @param liveupName 主播名称
+	 * @return 主播的房间号(长号)
+	 */
+	public static int searchRoomId(BiliCookie cookie, String liveupName) {
+		Map<String, String> header = getHeader(cookie.toNVCookie());
+		Map<String, String> request = new HashMap<String, String>();
+		request.put(BiliCmdAtrbt.search_type, "live");
+		request.put(BiliCmdAtrbt.keyword, liveupName);
+		
+		int roomId = -1;
+		String response = HttpURLUtils.doGet(SEARCH_URL, header, request);
+		try {
+			JSONObject json = JSONObject.fromObject(response);
+			JSONObject result = JsonUtils.getObject(json, BiliCmdAtrbt.result);
+			JSONArray liveRooms = JsonUtils.getArray(result, BiliCmdAtrbt.live_room);
+			if(liveRooms.size() > 0) {
+				JSONObject liveRoom = liveRooms.getJSONObject(0);
+				roomId = JsonUtils.getInt(liveRoom, BiliCmdAtrbt.roomid, -1);
+				if(roomId < 0) {
+					roomId = JsonUtils.getInt(liveRoom, BiliCmdAtrbt.short_id, -1);
+				}
+			}
+			
+		} catch(Exception e) {
+			log.error("搜索主播 [{}] 的房间号失败: {}", liveupName, response, e);
+		}
+		return roomId;
 	}
 	
 }

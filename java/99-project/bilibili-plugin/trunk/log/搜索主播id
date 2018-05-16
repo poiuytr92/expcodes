@@ -1,0 +1,34 @@
+﻿{"cmd":"GUARD_MSG","msg":"\用\户 :?\阿\斗\金:? \在\主\播 \吃\不\饱\的\小\黄\瓜 \的\直\播\间\开\通\了\总\督","buy_type":1}
+
+
+Request URL:https://search.bilibili.com/api/search?search_type=live&keyword=%E5%90%83%E4%B8%8D%E9%A5%B1%E7%9A%84%E5%B0%8F%E9%BB%84%E7%93%9C
+Request Method:GET
+Status Code:200 OK
+Remote Address:36.248.28.7:443
+Response Headers
+view source
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Encoding:gzip
+Content-Type:application/json
+Date:Wed, 16 May 2018 16:18:48 GMT
+Expires:Wed, 16 May 2018 16:18:47 GMT
+Transfer-Encoding:chunked
+X-Cache:BYPASS from cn-fjfz-cu-w-01.hdslb.com
+Request Headers
+view source
+Accept:application/json, text/plain, */*
+Accept-Encoding:gzip, deflate, sdch, br
+Accept-Language:zh-CN,zh;q=0.8,en;q=0.6
+Connection:keep-alive
+Cookie:sid=lawjga7n; fts=1521879278; buvid3=DE71A8C9-C2E3-41DA-A939-3F5A42D4B0D112222infoc; rpdid=oqqsioskoldosioqqqqpw; UM_distinctid=1628085e294ea-08471bec3cc95c-6b1b1279-1fa400-1628085e2953a2; LIVE_BUVID=91ed64288d27ad74ecb82e8ab3a99f5b; LIVE_BUVID__ckMd5=b1e675949090ee67; finger=81df3ec0; pgv_pvi=8934054912; CURRENT_QUALITY=80; DedeUserID=1650868; DedeUserID__ckMd5=686caa22740f2663; SESSDATA=e6e4328c%2C1528636193%2Caa640753; bili_jct=9686a877459be818b3b00bd10c3bfdb3; im_notify_type_1650868=0; _dfcaptcha=73f99866b8384a4abcf07c3be3ae8a2a
+Host:search.bilibili.com
+Referer:https://search.bilibili.com/live?keyword=%E5%90%83%E4%B8%8D%E9%A5%B1%E7%9A%84%E5%B0%8F%E9%BB%84%E7%93%9C&order=online&coverType=user_cover&page=1&search_type=live_user
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+Query String Parameters
+view source
+view URL encoded
+search_type:live
+keyword:吃不饱的小黄瓜
+
+{"exp_list":{"5520":false,"5521":false,"5530":false,"5541":false,"6621":true,"6651":false,"6699":false},"numPages":1,"code":0,"cost_time":{"params_check":"0.000232","illegal_handler":"0.000059","as_response_format":"0.011125","as_request":"0.042537","as_doc_request":"0.0060300.003972","as_request_format":"0.000525","total":"0.054658","main_handler":"0.054306"},"pagesize":40,"suggest_keyword":"","egg_info":null,"pageinfo":{"live_room":{"numPages":1,"numResults":1,"total":1,"pages":1},"live_user":{"numPages":1,"numResults":1,"total":1,"pages":1}},"numResults":2,"result":{"live_room":[{"uid":24047117,"tags":"ASMR,lol,灵魂**,逗比,***","hit_columns":["uname"],"live_time":"2018-05-17 00:00:00","cate_name":"视频ASMR ","uname":"<em class=\"keyword\">吃不饱</em><em class=\"keyword\">的</em><em class=\"keyword\">小黄瓜</em>","uface":"//i2.hdslb.com/bfs/face/efc66f8a811aecad559d63c6f8c3962dee013cbb.jpg","user_cover":"//i0.hdslb.com/bfs/live/213a10b85f50ed6d607070179c4aee6d8930c2e9.jpg","short_id":433,"area":2,"type":"live_room","title":"ASMR 灵魂踩耳","cover":"//i0.hdslb.com/bfs/live/1621877.jpg?05170015","online":107299,"roomid":1621877,"attentions":131980}],"live_user":[{"uid":24047117,"tags":"ASMR,lol,灵魂**,逗比,***","type":"live_user","live_time":"2018-05-17 00:00:00","hit_columns":["uname"],"live_status":1,"area":2,"is_live":true,"uname":"<em class=\"keyword\">吃不饱</em><em class=\"keyword\">的</em><em class=\"keyword\">小黄瓜</em>","uface":"//i2.hdslb.com/bfs/face/efc66f8a811aecad559d63c6f8c3962dee013cbb.jpg","roomid":1621877,"attentions":131980}]},"seid":"3424568572444505812","msg":"success","egg_hit":0,"rqt_type":"search","page":1}

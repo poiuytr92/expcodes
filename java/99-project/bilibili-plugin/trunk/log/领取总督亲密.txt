@@ -1,0 +1,44 @@
+Request URL:https://api.live.bilibili.com/lottery/v1/lottery/join
+Request Method:POST
+Status Code:200 OK
+Remote Address:36.248.28.7:443
+Response Headers
+view source
+Access-Control-Allow-Credentials:true
+Access-Control-Allow-Headers:Origin,No-Cache,X-Requested-With,If-Modified-Since,Pragma,Last-Modified,Cache-Control,Expires,Content-Type
+Access-Control-Allow-Methods:GET,POST,OPTIONS
+Access-Control-Allow-Origin:https://live.bilibili.com
+Cache-Control:no-cache
+Connection:keep-alive
+Content-Length:268
+Content-Type:application/json
+Date:Wed, 16 May 2018 16:10:24 GMT
+Expires:Wed, 16 May 2018 16:10:23 GMT
+Server:swoole-http-server
+Vary:Accept-Encoding,Origin
+X-Cache:BYPASS from cn-fjfz-cu-w-02.hdslb.com
+Request Headers
+view source
+Accept:application/json, text/plain, */*
+Accept-Encoding:gzip, deflate, br
+Accept-Language:zh-CN,zh;q=0.8,en;q=0.6
+Connection:keep-alive
+Content-Length:100
+Content-Type:application/x-www-form-urlencoded
+Cookie:sid=lawjga7n; fts=1521879278; buvid3=DE71A8C9-C2E3-41DA-A939-3F5A42D4B0D112222infoc; rpdid=oqqsioskoldosioqqqqpw; UM_distinctid=1628085e294ea-08471bec3cc95c-6b1b1279-1fa400-1628085e2953a2; LIVE_BUVID=91ed64288d27ad74ecb82e8ab3a99f5b; LIVE_BUVID__ckMd5=b1e675949090ee67; finger=81df3ec0; pgv_pvi=8934054912; CURRENT_QUALITY=80; DedeUserID=1650868; DedeUserID__ckMd5=686caa22740f2663; SESSDATA=e6e4328c%2C1528636193%2Caa640753; bili_jct=9686a877459be818b3b00bd10c3bfdb3; im_notify_type_1650868=0; Hm_lvt_8a6e55dbd2870f0f5bc9194cddf32a02=1526486665,1526486969,1526486984,1526486999; Hm_lpvt_8a6e55dbd2870f0f5bc9194cddf32a02=1526486999; _dfcaptcha=73f99866b8384a4abcf07c3be3ae8a2a
+Host:api.live.bilibili.com
+Origin:https://live.bilibili.com
+Referer:https://live.bilibili.com/433?from=search&seid=14877456367411236229
+User-Agent:Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36
+Form Data
+view source
+view URL encoded
+roomid:1621877
+id:269900
+type:guard
+csrf_token:9686a877459be818b3b00bd10c3bfdb3
+visit_id:krrg7p9xj28
+
+
+{"code":0,"msg":"ok","message":"ok","data":{"id":269900,"type":"guard","award_type":2,"time":0,"message":"µ±Ç°Åå´÷µÄ·ÛË¿Ñ«ÕÂÇ×ÃÜ¶È+20~","from":"M-ÑÇ½zÄÈ","award_list":[{"name":"µ±Ç°Åå´÷µÄ·ÛË¿Ñ«ÕÂÇ×ÃÜ¶È+20~","img":"","type":0,"content":""}]}}
+
