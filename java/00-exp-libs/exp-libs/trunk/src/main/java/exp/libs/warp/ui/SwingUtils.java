@@ -335,11 +335,11 @@ public class SwingUtils {
 	 * @param items 下拉列表
 	 * @return 下拉组件
 	 */
-	public static <E> JComboBox<E> getComboBox(E defavlt, E... items) {
-		JComboBox<E> jcb = new JComboBox<E>();
+	public static JComboBox getComboBox(String defavlt, String... items) {
+		JComboBox jcb = new JComboBox();
 		jcb.addItem(defavlt);
 		if(items != null) {
-			for(E item : items) {
+			for(String item : items) {
 				jcb.addItem(item);  
 			}
 		}
@@ -351,7 +351,7 @@ public class SwingUtils {
 	 * @param component 需要添加边框的组件
 	 * @return 已添加边框的组件（与入参为同一对象）
 	 */
-	public static JComponent addBorder(JComponent component) {
+	public static <T extends JComponent> T addBorder(T component) {
 		return addBorder(component, "");
 	}
 	
@@ -361,7 +361,7 @@ public class SwingUtils {
 	 * @param borderTitle 边框提示
 	 * @return 已添加边框的组件（与入参为同一对象）
 	 */
-	public static JComponent addBorder(JComponent component, String borderTitle) {
+	public static <T extends JComponent> T addBorder(T component, String borderTitle) {
 		component.setBorder(new TitledBorder(borderTitle));
 		return component;
 	}
