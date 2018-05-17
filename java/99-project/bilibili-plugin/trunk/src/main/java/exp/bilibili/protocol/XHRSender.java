@@ -25,6 +25,7 @@ import exp.bilibili.protocol.bean.xhr.Medal;
 import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.bilibili.protocol.xhr.Gifts;
+import exp.bilibili.protocol.xhr.Guard;
 import exp.bilibili.protocol.xhr.Login;
 import exp.bilibili.protocol.xhr.LotteryEnergy;
 import exp.bilibili.protocol.xhr.LotteryStorm;
@@ -224,13 +225,43 @@ public class XHRSender {
 	}
 	
 	/**
+	 * 提取直播间内的总督ID列表
+	 * @param roomId 直播间号
+	 * @return 总督ID列表
+	 */
+	public static List<String> checkGuardIds(int roomId) {
+		return Guard.checkGuardIds(roomId);
+	}
+	
+	/**
+	 * 领取总督亲密度奖励
+	 * @param cookie
+	 * @param roomId 总督所在房间
+	 * @param guardId 总督编号
+	 * @return
+	 */
+	public static boolean getGuardGift(BiliCookie cookie, int roomId, String guardId) {
+		return Guard.getGuardGift(cookie, roomId, guardId);
+	}
+	
+	/**
+	 * 领取总督亲密度奖励
+	 * @param cookie
+	 * @param roomId 总督所在房间
+	 * @param guardId 总督编号
+	 * @return
+	 */
+	public static void getGuardGift(int roomId, String guardId) {
+		Guard.getGuardGift(roomId, guardId);
+	}
+	
+	/**
 	 * 扫描当前的人气直播间房号列表
 	 * @param range 扫描页码范围
 	 * @return
 	 */
 	public static List<Integer> queryTopLiveRoomIds(HotLiveRange range) {
-		BiliCookie cookie = CookiesMgr.VEST();
-		return LotteryStorm.queryHotLiveRoomIds(cookie, range);
+		return LotteryStorm.queryHotLiveRoomIds(range);
 	}
 	
 	/**

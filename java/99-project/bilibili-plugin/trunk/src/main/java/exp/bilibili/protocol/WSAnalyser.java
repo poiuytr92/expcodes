@@ -312,14 +312,14 @@ public class WSAnalyser {
 	}
 
 	/**
-	 * (全频道)登船消息
+	 * (全频道)总督登船消息
 	 * @param msgBean
 	 */
 	private static void toDo(GuardMsg msgBean) {
 		UIUtils.notify(msgBean.getMsg());
 		log.info(msgBean.getMsg());
 		
-		int roomId = XHRSender.searchRoomId(msgBean.getLiveup());
+		RoomMgr.getInstn().addGuardRoom(msgBean.getLiveup());
 	}
 	
 	/**

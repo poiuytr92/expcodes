@@ -27,7 +27,7 @@ public class Config {
 	
 	public final static String DEFAULT_CHARSET = Charset.UTF8;
 	
-	private final static String APP_PATH = "/exp/bilibili/plugin/bp_conf.xml";
+	private final static String APP_PATH = "/exp/bilibili/bp_conf.xml";
 	
 	private final static String USER_PATH = "./conf/bp_conf.xml";
 	

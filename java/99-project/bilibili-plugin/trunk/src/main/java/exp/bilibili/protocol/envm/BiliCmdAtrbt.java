@@ -348,4 +348,6 @@ public class BiliCmdAtrbt {
 	
 	public final static String live_room = "live_room";
 	
+	public final static String guard = "guard";
+	
 }

@@ -3,6 +3,7 @@ package exp.bilibili.plugin.cache;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -75,6 +76,15 @@ public class RoomMgr {
 	}
 	
 	/**
+	 * 添加小电视房间
+	 * @param roomId 小电视房间号
+	 * @param tvId 小电视编号
+	 */
+	public void addTvRoom(int roomId, String tvId) {
+		giftRoomIds.add(new LotteryRoom(roomId, tvId, LotteryType.TV));
+	}
+	
+	/**
 	 * 添加节奏风暴礼物房间
 	 * @param roomId 礼物房间号
 	 */
@@ -87,12 +97,15 @@ public class RoomMgr {
 	}
 	
 	/**
-	 * 添加小电视房间
-	 * @param roomId 小电视房间号
-	 * @param tvId 小电视编号
+	 * 添加总督房间
+	 * @param liveup 主播名称
 	 */
-	public void addTvRoom(int roomId, String tvId) {
-		giftRoomIds.add(new LotteryRoom(roomId, tvId, LotteryType.TV));
+	public void addGuardRoom(String liveup) {
+		int roomId = XHRSender.searchRoomId(liveup);
+		List<String> guardIds = XHRSender.checkGuardIds(roomId);
+		for(String guardId : guardIds) {
+			giftRoomIds.add(new LotteryRoom(roomId, guardId, LotteryType.GUARD));
+		}
 	}
 	
 	/**

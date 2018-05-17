@@ -51,12 +51,11 @@ public class LotteryStorm extends _Lottery {
 	
 	/**
 	 * 扫描当前的人气直播间房号列表
-	 * @param cookie
 	 * @param range 扫描范围
 	 * @return
 	 */
-	public static List<Integer> queryHotLiveRoomIds(BiliCookie cookie, HotLiveRange range) {
-		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), "all");
+	public static List<Integer> queryHotLiveRoomIds(HotLiveRange range) {
+		Map<String, String> header = GET_HEADER("", "all");
 		Map<String, String> request = getRequest();
 		
 		List<Integer> roomIds = new LinkedList<Integer>();
@@ -214,9 +213,11 @@ public class LotteryStorm extends _Lottery {
 			Iterator<BiliCookie> cookieIts = cookies.iterator();
 			while(cookieIts.hasNext()) {
 				BiliCookie cookie = cookieIts.next();
+				
+				// 未绑定手机或未实名认证的账号无法参与节奏风暴  (FIXME 未实名也可参加, 但是需要填验证码, 目前未能自动识别验证码)
 				if(!cookie.isBindTel() || !cookie.isRealName()) {
 					cookieIts.remove();
-					continue;	// 未绑定手机或未实名认证的账号无法参与节奏风暴  (FIXME 未实名也可参加, 但是需要填验证码, 目前未能自动识别验证码)
+					continue;
 				}
 				
 				String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
