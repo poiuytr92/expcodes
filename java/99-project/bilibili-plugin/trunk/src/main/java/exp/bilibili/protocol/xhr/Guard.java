@@ -73,6 +73,10 @@ public class Guard extends __XHR {
 	public static void getGuardGift(int roomId, String guardId) {
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
+			if(!cookie.isBindTel()) {
+				continue;
+			}
+			
 			getGuardGift(cookie, roomId, guardId);
 		}
 	}

@@ -306,6 +306,10 @@ public class WebBot extends LoopThread {
 			
 			List<String> guardIds = XHRSender.checkGuardIds(roomId);
 			for(BiliCookie cookie : cookies) {
+				if(!cookie.isBindTel()) {
+					continue;
+				}
+				
 				for(String guardId : guardIds) {
 					XHRSender.getGuardGift(cookie, roomId, guardId);
 				}
