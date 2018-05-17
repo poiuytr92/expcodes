@@ -89,7 +89,6 @@ public class Guard extends __XHR {
 		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
 		Map<String, String> request = getRequest(cookie.CSRF(), sRoomId, guardId);
 		String response = HttpURLUtils.doPost(GUARD_JOIN_URL, header, request);
-		xhrlog.info("{}:{}", cookie.NICKNAME(), response); // FIXME DELETE for test
 		
 		try {
 			JSONObject json = JSONObject.fromObject(response);
@@ -104,7 +103,7 @@ public class Guard extends __XHR {
 				}
 			}
 		} catch(Exception e) {
-			log.error("提取直播间 [{}] 的总督列表失败: {}", roomId, response, e);
+			log.error("[{}] 领取直播间 [{}] 的总督奖励失败: {}", cookie.NICKNAME(), roomId, response, e);
 		}
 		return true;
 	}

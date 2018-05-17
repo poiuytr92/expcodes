@@ -316,7 +316,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(GuardMsg msgBean) {
-		UIUtils.notify(msgBean.getMsg());
+		UIUtils.log(msgBean.getMsg());
 		log.info(msgBean.getMsg());
 		
 		RoomMgr.getInstn().addGuardRoom(msgBean.getLiveup());
