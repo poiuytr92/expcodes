@@ -36,14 +36,17 @@ public class Guard extends __XHR {
 	private final static String GUARD_JOIN_URL = Config.getInstn().GUARD_JOIN_URL();
 	
 	/**
-	 * 提取直播间内的总督ID列表
+	 * 提取直播间内的总督ID列表.
+	 * 	(已经领取过某个总督奖励的用户, 不会再查询到相关的总督id)
+	 * @param cookie
 	 * @param roomId 直播间号
-	 * @return 总督ID列表
+	 * @return 可以领取奖励总督ID列表
 	 */
-	public static List<String> checkGuardIds(int roomId) {
-		Map<String, String> header = GET_HEADER("");
+	public static List<String> checkGuardIds(BiliCookie cookie, int roomId) {
+		String sRoomId = getRealRoomId(roomId);
+		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);
 		Map<String, String> request = new HashMap<String, String>();
-		request.put(BiliCmdAtrbt.roomid, getRealRoomId(roomId));
+		request.put(BiliCmdAtrbt.roomid, sRoomId);
 		
 		List<String> guardIds = new LinkedList<String>();
 		String response = HttpURLUtils.doGet(GUARD_CHECK_URL, header, request);
@@ -70,14 +73,17 @@ public class Guard extends __XHR {
 	 * @param guardId 总督编号
 	 * @return
 	 */
-	public static void getGuardGift(int roomId, String guardId) {
+	public static void getGuardGift(int roomId) {
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
 			if(!cookie.isBindTel()) {
 				continue;
 			}
 			
-			getGuardGift(cookie, roomId, guardId);
+			List<String> guardIds = checkGuardIds(cookie, roomId);
+			for(String guardId : guardIds) {
+				getGuardGift(cookie, roomId, guardId);
+			}
 		}
 	}
 	

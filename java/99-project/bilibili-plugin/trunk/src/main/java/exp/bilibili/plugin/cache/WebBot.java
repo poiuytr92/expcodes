@@ -162,7 +162,7 @@ public class WebBot extends LoopThread {
 		// 总督登船领奖
 		} else if(room.TYPE() == LotteryType.GUARD) {
 			_waitReactionTime(room);
-			XHRSender.getGuardGift(roomId, raffleId);
+			XHRSender.getGuardGift(roomId);
 			
 		// 高能抽奖
 		} else {
@@ -304,12 +304,12 @@ public class WebBot extends LoopThread {
 		List<Integer> roomIds = XHRSender.queryTopLiveRoomIds(range);
 		for(Integer roomId : roomIds) {
 			
-			List<String> guardIds = XHRSender.checkGuardIds(roomId);
 			for(BiliCookie cookie : cookies) {
 				if(!cookie.isBindTel()) {
 					continue;
 				}
 				
+				List<String> guardIds = XHRSender.checkGuardIds(cookie, roomId);
 				for(String guardId : guardIds) {
 					XHRSender.getGuardGift(cookie, roomId, guardId);
 				}

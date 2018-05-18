@@ -27,8 +27,8 @@ public class LotteryRoom {
 	/** 抽奖类型 */
 	private LotteryType type;
 	
-	public LotteryRoom(int roomId) {
-		this(roomId, "", LotteryType.ENGERY);
+	public LotteryRoom(int roomId, LotteryType type) {
+		this(roomId, "", type);
 	}
 	
 	public LotteryRoom(int roomId, String raffleId, LotteryType type) {
