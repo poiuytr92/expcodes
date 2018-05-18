@@ -32,6 +32,7 @@ import exp.bilibili.protocol.xhr.LotteryStorm;
 import exp.bilibili.protocol.xhr.LotteryTV;
 import exp.bilibili.protocol.xhr.Other;
 import exp.bilibili.protocol.xhr.WatchLive;
+import exp.libs.utils.os.ThreadUtils;
 
 /**
  * <PRE>
@@ -250,10 +251,27 @@ public class XHRSender {
 	 * 领取总督亲密度奖励
 	 * @param cookie
 	 * @param roomId 总督所在房间
-	 * @return
+	 * @return 补领个数
 	 */
-	public static void getGuardGift(int roomId) {
-		Guard.getGuardGift(roomId);
+	public static int getGuardGift(int roomId) {
+		return Guard.getGuardGift(roomId);
+	}
+	
+	/**
+	 * 为所有登陆用户补领取热门直播间的总督亲密奖励
+	 */
+	public static int getGuardGift() {
+		
+		// 查询当前热梦直播间
+		HotLiveRange range = UIUtils.getHotLiveRange();
+		List<Integer> roomIds = queryTopLiveRoomIds(range);
+		
+		int cnt = 0;
+		for(Integer roomId : roomIds) {
+			cnt += getGuardGift(roomId);
+			ThreadUtils.tSleep(50);
+		}
+		return cnt;
 	}
 	
 	/**

@@ -73,7 +73,8 @@ public class Guard extends __XHR {
 	 * @param guardId 总督编号
 	 * @return
 	 */
-	public static void getGuardGift(int roomId) {
+	public static int getGuardGift(int roomId) {
+		int cnt = 0;
 		Set<BiliCookie> cookies = CookiesMgr.ALL();
 		for(BiliCookie cookie : cookies) {
 			if(!cookie.isBindTel()) {
@@ -82,9 +83,10 @@ public class Guard extends __XHR {
 			
 			List<String> guardIds = checkGuardIds(cookie, roomId);
 			for(String guardId : guardIds) {
-				getGuardGift(cookie, roomId, guardId);
+				cnt += getGuardGift(cookie, roomId, guardId) ? 1 : 0;
 			}
 		}
+		return cnt;
 	}
 	
 	/**

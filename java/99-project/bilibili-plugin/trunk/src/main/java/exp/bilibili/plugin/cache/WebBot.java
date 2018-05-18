@@ -1,6 +1,5 @@
 package exp.bilibili.plugin.cache;
 
-import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -8,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -27,12 +25,11 @@ import exp.libs.warp.thread.LoopThread;
  *   1.全平台礼物抽奖管理器（小电视/高能礼物/节奏风暴）
  *   2.日常任务(签到/友爱社/小学数学)
  *   3.自动扭蛋、投喂
- *   4.自动补领总督奖励
- *   5.自动领取成就奖励
- *   6.自动领取日常/周常礼包
- *   7.自动领取活动心跳礼物
- *   8.检查cookie有效期
- *   9.打印版权信息
+ *   4.自动领取成就奖励
+ *   5.自动领取日常/周常礼包
+ *   6.自动领取活动心跳礼物
+ *   7.检查cookie有效期
+ *   8.打印版权信息
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -242,7 +239,6 @@ public class WebBot extends LoopThread {
 			if(TimeUtils.inZeroPointRange() == false) {
 				toCapsule();	// 自动扭蛋
 				toAutoFeed();	// 自动投喂
-				toGuardGift();	// 补领总督奖励
 				takeFinishAchieve();	// 领取成就奖励
 			}
 			
@@ -291,30 +287,6 @@ public class WebBot extends LoopThread {
 				XHRSender.toFeed(cookie, roomId);
 				ThreadUtils.tSleep(50);
 			}
-		}
-	}
-	
-	/**
-	 * 自动补领取总督亲密奖励
-	 */
-	private void toGuardGift() {
-		Set<BiliCookie> cookies = CookiesMgr.ALL();
-		
-		HotLiveRange range = UIUtils.getHotLiveRange();
-		List<Integer> roomIds = XHRSender.queryTopLiveRoomIds(range);
-		for(Integer roomId : roomIds) {
-			
-			for(BiliCookie cookie : cookies) {
-				if(!cookie.isBindTel()) {
-					continue;
-				}
-				
-				List<String> guardIds = XHRSender.checkGuardIds(cookie, roomId);
-				for(String guardId : guardIds) {
-					XHRSender.getGuardGift(cookie, roomId, guardId);
-				}
-			}
-			ThreadUtils.tSleep(50);
 		}
 	}
 	

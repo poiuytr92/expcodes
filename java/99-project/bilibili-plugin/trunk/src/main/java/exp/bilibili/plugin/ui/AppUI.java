@@ -71,9 +71,9 @@ public class AppUI extends MainWindow {
 	/** serialVersionUID */
 	private final static long serialVersionUID = 2097374309672044616L;
 
-	private final static int WIDTH = 1100;
+	private final static int WIDTH = 1200;
 	
-	private final static int HEIGHT = 600;
+	private final static int HEIGHT = 700;
 	
 	/** 避免连续点击按钮的锁定时间 */
 	private final static long LOCK_TIME = 50;
@@ -138,6 +138,8 @@ public class AppUI extends MainWindow {
 	private JButton stormBtn;
 	
 	private JButton eStormBtn;
+	
+	private JButton guardBtn;
 	
 	private JTextField httpTF;
 	
@@ -282,6 +284,7 @@ public class AppUI extends MainWindow {
 		this.eNightBtn = new JButton(">");
 		this.stormBtn = new JButton("节奏风暴");
 		this.eStormBtn = new JButton(">");
+		this.guardBtn = new JButton("补领总督奖励");
 		
 		percentBtn.setForeground(Color.BLACK);
 		loginBtn.setForeground(Color.BLACK);
@@ -308,6 +311,7 @@ public class AppUI extends MainWindow {
 		eNightBtn.setForeground(Color.BLACK);
 		stormBtn.setForeground(Color.BLACK);
 		eStormBtn.setForeground(Color.BLACK);
+		guardBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -398,7 +402,8 @@ public class AppUI extends MainWindow {
 				SwingUtils.getEBorderPanel(noticeBtn, eNoticeBtn), 
 				SwingUtils.getEBorderPanel(thxBtn, eThxBtn), 
 				SwingUtils.getEBorderPanel(nightBtn, eNightBtn), 
-				SwingUtils.getEBorderPanel(stormBtn, eStormBtn)
+				SwingUtils.getEBorderPanel(stormBtn, eStormBtn), 
+				guardBtn
 		);
 	}
 	
@@ -461,6 +466,7 @@ public class AppUI extends MainWindow {
 		setThxBtnListener();
 		setNightBtnListener();
 		setStormBtnListener();
+		setGuardBtnListener();
 	}
 	
 	private void setPercentBtnListener() {
@@ -1064,10 +1070,45 @@ public class AppUI extends MainWindow {
 		}
 	}
 	
+	/**
+	 * 开启节奏风暴扫描
+	 */
 	private void _startStormScanner() {
 		StormScanner.getInstn()._start();
 		lockBtn();
 		stormBtn.doClick();
+	}
+	
+	private void setGuardBtnListener() {
+		guardBtn.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(!isLogined()) {
+					SwingUtils.warn("先登录才能 [补领总督亲密奖励] 哦~");
+					return;
+					
+				} else if(Identity.less(Identity.UPLIVE)) {
+					SwingUtils.warn("非主播用户无法 [补领总督亲密奖励] 哦~");
+					return;
+				}
+				
+				guardBtn.setEnabled(false);
+				UIUtils.log("正在扫描人气直播间的总督列表...");
+				new Thread() {
+					
+					@Override
+					public void run() {
+						int cnt = XHRSender.getGuardGift();
+						if(cnt <= 0) {
+							UIUtils.log("暂时检索不到未领取的总督奖励.");
+						}
+						
+						guardBtn.setEnabled(true);
+					};
+				}.start();
+			}
+		});
 	}
 	
 	@Override
