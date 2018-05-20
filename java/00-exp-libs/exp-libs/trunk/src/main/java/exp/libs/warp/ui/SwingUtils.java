@@ -439,27 +439,34 @@ public class SwingUtils {
 	 * 信息弹窗
 	 * @param msg 普通消息
 	 */
-	public static void info(String msg) {
+	public static void info(Object msg) {
 		JOptionPane.showMessageDialog(
 			    null, msg, "Info", JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	/**
+	 * 信息弹窗
+	 * @param msgs 普通消息
+	 */
+	public static void info(Object... msgs) {
+		info(StrUtils.concat(msgs));
 	}
 	
 	/**
 	 * 警告弹窗
 	 * @param msg 警告消息
 	 */
-	public static void warn(String msg) {
+	public static void warn(Object msg) {
 		JOptionPane.showMessageDialog(
 			    null, msg, "Warn", JOptionPane.WARNING_MESSAGE);
 	}
 	
 	/**
-	 * 异常弹窗
-	 * @param msg 异常消息
-	 * @param e 异常
+	 * 警告弹窗
+	 * @param msgs 警告消息
 	 */
-	public static void error(String msg) {
-		error(msg, null);
+	public static void warn(Object... msgs) {
+		warn(StrUtils.concat(msgs));
 	}
 	
 	/**
@@ -467,12 +474,38 @@ public class SwingUtils {
 	 * @param msg 异常消息
 	 * @param e 异常
 	 */
-	public static void error(String msg, Throwable e) {
+	public static void error(Object msg) {
+		error(null, msg);
+	}
+	
+	/**
+	 * 异常弹窗
+	 * @param msgs 异常消息
+	 */
+	public static void error(Object... msgs) {
+		error(StrUtils.concat(msgs));
+	}
+	
+	/**
+	 * 异常弹窗
+	 * @param e 异常
+	 * @param msg 异常消息
+	 */
+	public static void error(Throwable e, Object msg) {
 		JOptionPane.showMessageDialog(
 			    null, msg, "Error", JOptionPane.ERROR_MESSAGE);
 		if(e != null) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 异常弹窗
+	 * @param e 异常
+	 * @param msgs 异常消息
+	 */
+	public static void error(Throwable e, Object... msgs) {
+		error(e, StrUtils.concat(msgs));
 	}
 	
 	/**

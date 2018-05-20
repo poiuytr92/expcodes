@@ -385,7 +385,7 @@ public class TopoGraphUI extends PopChildWindow {
 				new NodeJoiningDirectedGraphLayout().visit(graphCalculator);
 				
 			} catch(Throwable ex) {
-				SwingUtils.error("计算拓扑图坐标失败", ex);
+				SwingUtils.error(ex, "计算拓扑图坐标失败");
 			}
 		}
 		return viewEgdes;

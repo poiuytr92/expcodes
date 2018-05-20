@@ -146,12 +146,13 @@ public class CompressUtils {
 	 */
 	public static boolean toZip(String srcPath, String zipPath)  {
 		boolean isOk = true;
+		File zipFile = FileUtils.createFile(zipPath);
 		FileOutputStream fos = null;
 		BufferedOutputStream bos = null;
 		ZipArchiveOutputStream zos = null;
 		
 		try {
-			fos = new FileOutputStream(new File(zipPath));
+			fos = new FileOutputStream(zipFile);
 			bos = new BufferedOutputStream(fos);
 			zos = new ZipArchiveOutputStream(bos);
 			addFileToZip(zos, "", new File(srcPath));
@@ -210,11 +211,13 @@ public class CompressUtils {
 		}
 		
 		boolean isOk = true;
+		File zipFile = FileUtils.createFile(zipPath);
 		FileOutputStream fos = null;
 		BufferedOutputStream bos = null;
 		ZipArchiveOutputStream zos = null;
+		
 		try {
-			fos = new FileOutputStream(new File(zipPath));
+			fos = new FileOutputStream(zipPath);
 			bos = new BufferedOutputStream(fos);
 			zos = new ZipArchiveOutputStream(bos);
 			for(String srcPath : srcPaths) {
