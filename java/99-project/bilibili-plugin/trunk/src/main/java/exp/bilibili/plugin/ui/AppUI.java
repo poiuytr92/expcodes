@@ -42,6 +42,7 @@ import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.ws.WebSockClient;
+import exp.libs.envm.Delimiter;
 import exp.libs.envm.FileType;
 import exp.libs.utils.encode.CompressUtils;
 import exp.libs.utils.io.FileUtils;
@@ -81,8 +82,8 @@ public class AppUI extends MainWindow {
 	/** 界面文本框最大缓存行数 */
 	private final static int MAX_LINE = 200;
 	
-	/** 文本框换行符 */
-	private final static String LINE_END = "\r\n";
+	/** 换行符 */
+	private final static char LF = '\n';
 	
 	/** 主分割面板 */
 	private JSplitPane splitPanel;
@@ -1120,39 +1121,39 @@ public class AppUI extends MainWindow {
 	
 	
 	public void toChat(String msg) {
-		if(StrUtils.count(chatTA.getText(), '\n') >= MAX_LINE) {
+		if(StrUtils.count(chatTA.getText(), LF) >= MAX_LINE) {
 			chatTA.setText("");
 		}
 		
-		chatTA.append(msg.concat(LINE_END));
+		chatTA.append(msg.concat(Delimiter.CRLF));
 		SwingUtils.toEnd(chatTA);
 	}
 	
 	public void toConsole(String msg) {
-		if(StrUtils.count(consoleTA.getText(), '\n') >= MAX_LINE) {
+		if(StrUtils.count(consoleTA.getText(), LF) >= MAX_LINE) {
 			consoleTA.setText("");
 		}
 		
-		consoleTA.append(msg.concat(LINE_END));
+		consoleTA.append(msg.concat(Delimiter.CRLF));
 		SwingUtils.toEnd(consoleTA);
 	}
 	
 	public void toNotify(String msg) {
-		if(StrUtils.count(notifyTA.getText(), '\n') >= MAX_LINE) {
+		if(StrUtils.count(notifyTA.getText(), LF) >= MAX_LINE) {
 			notifyTA.setText("");
 		}
 		
-		notifyTA.append(msg.concat(LINE_END));
+		notifyTA.append(msg.concat(Delimiter.CRLF));
 		SwingUtils.toEnd(notifyTA);
 	}
 	
 	public void toStatistics(String msg) {
 		if(isLogined() == true) {
-			if(StrUtils.count(sttcTA.getText(), '\n') >= MAX_LINE) {
+			if(StrUtils.count(sttcTA.getText(), LF) >= MAX_LINE) {
 				sttcTA.setText("");
 			}
 			
-			sttcTA.append(msg.concat(LINE_END));
+			sttcTA.append(msg.concat(Delimiter.CRLF));
 			SwingUtils.toEnd(sttcTA);
 		}
 	}
