@@ -260,58 +260,36 @@ public class AppUI extends MainWindow {
 		
 		this.loginUser = "";
 		this.isLogined = false;
-		this.percentBtn = new JButton("%");
-		this.loginBtn = new JButton("扫码/帐密登陆");
-		this.logoutBtn = new JButton("销");
-		this.addUserBtn = new JButton("╋");
-		this.exportBtn = new JButton("备");
-		this.importBtn = new JButton("导");
-		this.loveBtn = new JButton("★");
-		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
-		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
-		this.activeListBtn = new JButton("☷");
-		this.sendBtn = new JButton("发言");
-		this.colorBtn = new JButton("●");
-		this.musicBtn = new JButton("随缘点歌姬");
-		this.eMusicBtn = new JButton(">");
-		this.callBtn = new JButton("小call姬");
-		this.eCallBtn = new JButton(">");
-		this.noticeBtn = new JButton("公告姬");
-		this.eNoticeBtn = new JButton(">");
-		this.thxBtn = new JButton("答谢姬");
-		this.eThxBtn = new JButton(">");
-		this.nightBtn = new JButton("晚安姬");
-		this.eNightBtn = new JButton(">");
-		this.stormBtn = new JButton("节奏风暴");
-		this.eStormBtn = new JButton(">");
-		this.guardBtn = new JButton("补领总督奖励");
+		this.percentBtn = newButton("%");
+		this.loginBtn = newButton("扫码/帐密登陆");
+		this.logoutBtn = newButton("销");
+		this.addUserBtn = newButton("╋");
+		this.exportBtn = newButton("备");
+		this.importBtn = newButton("导");
+		this.loveBtn = newButton("★");
+		this.linkBtn = newButton("偷窥直播间 (无需登陆)");
+		this.lotteryBtn = newButton("抽奖姬 (发起直播间抽奖)");
+		this.activeListBtn = newButton("☷");
+		this.sendBtn = newButton("发言");
+		this.colorBtn = newButton("●");
+		this.musicBtn = newButton("随缘点歌姬");
+		this.eMusicBtn = newButton(">");
+		this.callBtn = newButton("小call姬");
+		this.eCallBtn = newButton(">");
+		this.noticeBtn = newButton("公告姬");
+		this.eNoticeBtn = newButton(">");
+		this.thxBtn = newButton("答谢姬");
+		this.eThxBtn = newButton(">");
+		this.nightBtn = newButton("晚安姬");
+		this.eNightBtn = newButton(">");
+		this.stormBtn = newButton("节奏风暴");
+		this.eStormBtn = newButton(">");
+		this.guardBtn = newButton("补领总督奖励");
 		
-		percentBtn.setForeground(Color.BLACK);
-		loginBtn.setForeground(Color.BLACK);
-		logoutBtn.setForeground(Color.BLACK);
-		addUserBtn.setForeground(Color.BLACK);
-		exportBtn.setForeground(Color.BLACK);
-		importBtn.setForeground(Color.BLACK);
 		loveBtn.setToolTipText("设为默认");
 		loveBtn.setForeground(Color.MAGENTA);
-		linkBtn.setForeground(Color.BLACK);
-		lotteryBtn.setForeground(Color.BLACK);
 		activeListBtn.setForeground(Color.BLUE);
-		sendBtn.setForeground(Color.BLACK);
 		colorBtn.setForeground(ChatColor.BLUE.COLOR());
-		musicBtn.setForeground(Color.BLACK);
-		eMusicBtn.setForeground(Color.BLACK);
-		callBtn.setForeground(Color.BLACK);
-		eCallBtn.setForeground(Color.BLACK);
-		noticeBtn.setForeground(Color.BLACK);
-		eNoticeBtn.setForeground(Color.BLACK);
-		thxBtn.setForeground(Color.BLACK);
-		eThxBtn.setForeground(Color.BLACK);
-		nightBtn.setForeground(Color.BLACK);
-		eNightBtn.setForeground(Color.BLACK);
-		stormBtn.setForeground(Color.BLACK);
-		eStormBtn.setForeground(Color.BLACK);
-		guardBtn.setForeground(Color.BLACK);
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -336,6 +314,12 @@ public class AppUI extends MainWindow {
 		this.curChatColor = ChatColor.RANDOM();
 		
 		printVersionInfo();
+	}
+	
+	private JButton newButton(String name) {
+		JButton btn = new JButton(name);
+		btn.setForeground(Color.BLACK);	// 处理win7按钮文本弱化问题
+		return btn; 
 	}
 
 	@Override
