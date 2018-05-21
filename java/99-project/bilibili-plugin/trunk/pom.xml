@@ -191,6 +191,13 @@
           <version>1.0-SNAPSHOT</version>
         </dependency>
         
+        <!-- 软件自动升级 -->
+        <dependency>
+          <groupId>exp.au</groupId>
+          <artifactId>auto-upgrader</artifactId>
+          <version>1.0-SNAPSHOT</version>
+        </dependency>
+        
         <!-- OCR文字识别 -->
         <dependency>
           <groupId>com.sun.media</groupId>
