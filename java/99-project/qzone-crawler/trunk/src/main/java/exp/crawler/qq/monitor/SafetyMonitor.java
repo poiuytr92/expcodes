@@ -38,8 +38,7 @@ public class SafetyMonitor {
 	 * 构造函数
 	 */
 	private SafetyMonitor() {
-		String verInfo =  VersionMgr.exec("-p");
-		this.appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
+		this.appName = RegexUtils.findFirst(VersionMgr.getAppName(), "([a-zA-Z\\-]+)");
 	}
 	
 	/**
