@@ -19,7 +19,7 @@ import exp.libs.warp.ui.layout.VFlowLayout;
 
 /**
  * <PRE>
- * 项目版本信息
+ * 项目(应用)版本信息
  * 	(包括项目信息、当前版本信息、历史版本信息)
  * </PRE>
  * <B>PROJECT：</B> exp-libs
@@ -145,8 +145,8 @@ class _PrjVerInfo {
 		setValToUI();
 		
 		JPanel panel = new JPanel(new VFlowLayout()); {
-			panel.add(SwingUtils.getPairsPanel("项目名称", prjNameTF));
-			panel.add(SwingUtils.getPairsPanel("项目简述", prjDescTF));
+			panel.add(SwingUtils.getPairsPanel("应用名称", prjNameTF));
+			panel.add(SwingUtils.getPairsPanel("应用描述", prjDescTF));
 			panel.add(SwingUtils.getPairsPanel("开发团队", teamNameTF));
 			panel.add(SwingUtils.getPairsPanel("项目编码", prjCharsetTF));
 			panel.add(SwingUtils.getPairsPanel("硬盘需求", diskSizeTF));

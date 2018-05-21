@@ -29,7 +29,17 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class _VerDBMgr {
+class _VerDBMgr {
+	
+	protected final static String APP_NAME = "应用名称";
+	
+	protected final static String APP_DESC = "应用描述";
+	
+	protected final static String LAST_VER = "版本号";
+	
+	protected final static String RELEASE = "定版时间";
+	
+	protected final static String AUTHOR = "最后责任人";
 
 	/** 版本信息库的脚本 */
 	private final static String VER_DB_SCRIPT = "/exp/libs/warp/ver/VERSION-INFO-DB.sql";
@@ -229,15 +239,15 @@ public class _VerDBMgr {
 		author = (author == null ? "" : author);
 		
 		List<List<String>> curVerInfo = new LinkedList<List<String>>();
-		curVerInfo.add(Arrays.asList(new String[] { "项目名称", prjName }));
+		curVerInfo.add(Arrays.asList(new String[] { APP_NAME, prjName }));
 		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
-		curVerInfo.add(Arrays.asList(new String[] { "项目描述", prjDesc }));
+		curVerInfo.add(Arrays.asList(new String[] { APP_DESC, prjDesc }));
 		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
-		curVerInfo.add(Arrays.asList(new String[] { "版本号", version }));
+		curVerInfo.add(Arrays.asList(new String[] { LAST_VER, version }));
 		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
-		curVerInfo.add(Arrays.asList(new String[] { "定版时间", datetime }));
+		curVerInfo.add(Arrays.asList(new String[] { RELEASE, datetime }));
 		curVerInfo.add(Arrays.asList(new String[] { "", "" }));
-		curVerInfo.add(Arrays.asList(new String[] { "最后责任人", author }));
+		curVerInfo.add(Arrays.asList(new String[] { AUTHOR, author }));
 		return ESCUtils.toTXT(curVerInfo, false);
 	}
 	

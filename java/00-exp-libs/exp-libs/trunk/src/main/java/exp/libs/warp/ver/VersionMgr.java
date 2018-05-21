@@ -3,6 +3,7 @@ package exp.libs.warp.ver;
 import exp.libs.envm.Delimiter;
 import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
 
 /**
@@ -26,6 +27,20 @@ import exp.libs.warp.ui.BeautyEyeUtils;
  */
 final public class VersionMgr {
 
+	private final static String REGEX = "\\s*\\|([^\\|]*)";
+	
+	private String curVerInfo;
+	
+	private String appName;
+	
+	private String appDesc;
+	
+	private String version;
+	
+	private String releaseTime;
+	
+	private String author;
+	
 	/** 单例 */
 	private static volatile VersionMgr instance;
 	
@@ -34,6 +49,13 @@ final public class VersionMgr {
 	 */
 	private VersionMgr() {
 		BeautyEyeUtils.init();
+		
+		this.curVerInfo = "";
+		this.appName = "";
+		this.appDesc = "";
+		this.version = "";
+		this.releaseTime = "";
+		this.author = "";
 	}
 	
 	/**
@@ -112,6 +134,20 @@ final public class VersionMgr {
 	 * @return 版本信息
 	 */
 	public static String getVersionInfo(boolean onlyCurVersion, boolean detaiHistoty) {
+		return getInstn()._getVersionInfo(onlyCurVersion, detaiHistoty);
+	}
+	
+	/**
+	 * 获取版本信息
+	 * @param onlyCurVersion 仅当前版本(即最新版本)
+	 * @param detaiHistoty 是否打印历史版本升级内容详单 (仅onlyCurVersion=false时有效)
+	 * @return 版本信息
+	 */
+	private String _getVersionInfo(boolean onlyCurVersion, boolean detaiHistoty) {
+		if(StrUtils.isNotEmpty(curVerInfo)) {
+			return curVerInfo;
+		}
+		
 		StringBuilder verInfo = new StringBuilder();
 		if(_VerDBMgr.getInstn().initVerDB()) {
 			verInfo.append(_VerDBMgr.getInstn().getCurVerInfo());
@@ -121,7 +157,68 @@ final public class VersionMgr {
 				verInfo.append(_VerDBMgr.getInstn().toHisVerInfos(detaiHistoty));
 			}
 		}
-		return verInfo.toString();
+		curVerInfo = verInfo.toString();
+		return curVerInfo;
+	}
+	
+	private String getValue(final String TAG) {
+		String verInfo = _getVersionInfo(true, false);
+		return RegexUtils.findFirst(verInfo, TAG.concat(REGEX)).trim();
+	}
+	
+	public static String getAppName() {
+		return getInstn()._getAppName();
+	}
+	
+	private String _getAppName() {
+		if(StrUtils.isEmpty(appName)) {
+			appName = getValue(_VerDBMgr.APP_NAME);
+		}
+		return appName;
+	}
+	
+	public static String getAppDesc() {
+		return getInstn()._getAppDesc();
+	}
+
+	private String _getAppDesc() {
+		if(StrUtils.isEmpty(appDesc)) {
+			appDesc = getValue(_VerDBMgr.APP_DESC);
+		}
+		return appDesc;
+	}
+
+	public static String getVersion() {
+		return getInstn()._getVersion();
+	}
+	
+	private String _getVersion() {
+		if(StrUtils.isEmpty(version)) {
+			version = getValue(_VerDBMgr.LAST_VER);
+		}
+		return version;
+	}
+
+	public static String getReleaseTime() {
+		return getInstn()._getReleaseTime();
+	}
+	
+	private String _getReleaseTime() {
+		if(StrUtils.isEmpty(releaseTime)) {
+			releaseTime = getValue(_VerDBMgr.RELEASE);
+		}
+		return releaseTime;
+	}
+
+	public static String getAuthor() {
+		return getInstn()._getAuthor();
+	}
+	
+	private String _getAuthor() {
+		if(StrUtils.isEmpty(author)) {
+			author = getValue(_VerDBMgr.AUTHOR);
+		}
+		return author;
 	}
 	
 }
