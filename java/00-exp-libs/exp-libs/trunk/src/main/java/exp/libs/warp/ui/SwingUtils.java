@@ -439,7 +439,7 @@ public class SwingUtils {
 	 * 信息弹窗
 	 * @param msg 普通消息
 	 */
-	public static void info(Object msg) {
+	public static void info(String msg) {
 		JOptionPane.showMessageDialog(
 			    null, msg, "Info", JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -456,7 +456,7 @@ public class SwingUtils {
 	 * 警告弹窗
 	 * @param msg 警告消息
 	 */
-	public static void warn(Object msg) {
+	public static void warn(String msg) {
 		JOptionPane.showMessageDialog(
 			    null, msg, "Warn", JOptionPane.WARNING_MESSAGE);
 	}
@@ -474,7 +474,7 @@ public class SwingUtils {
 	 * @param msg 异常消息
 	 * @param e 异常
 	 */
-	public static void error(Object msg) {
+	public static void error(String msg) {
 		error(null, msg);
 	}
 	
