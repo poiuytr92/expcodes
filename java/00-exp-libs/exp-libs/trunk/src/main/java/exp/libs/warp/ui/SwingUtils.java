@@ -11,6 +11,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -411,6 +412,31 @@ public class SwingUtils {
 			}
 		}
 		return comboBox;
+	}
+	
+	/**
+	 * 获取下拉组件
+	 * @param items 下拉列表
+	 * @return 下拉组件
+	 */
+	public static JComboBox getComboBox(String[] items) {
+		JComboBox comboBox = new JComboBox();
+		if(items != null) {
+			for(String item : items) {
+				comboBox.addItem(item);  
+			}
+		}
+		return comboBox;
+	}
+	
+	/**
+	 * 获取HTML编辑框
+	 * @return HTML编辑框
+	 */
+	public static JEditorPane getHtmlTextArea() {
+		JEditorPane panel = new JEditorPane();
+		panel.setContentType("text/html");	// 把编辑框设置为支持html的编辑格式
+		return panel;
 	}
 	
 	/**
