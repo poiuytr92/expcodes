@@ -3,7 +3,7 @@
 #set( $symbol_escape = '\' )
 package ${package}._demo.utils;
 
-import exp.libs.warp.net.pf.flow.PFAgent;
+import exp.libs.warp.net.pf.PFAgent;
 
 /**
  * <PRE>
