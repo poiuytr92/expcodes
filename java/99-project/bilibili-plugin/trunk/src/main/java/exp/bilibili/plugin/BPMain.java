@@ -1,6 +1,6 @@
 package exp.bilibili.plugin;
 
-import exp.au.api.ExportVerInfo;
+import exp.au.api.AppVerInfo;
 import exp.bilibili.plugin.ui.AppUI;
 import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.LogUtils;
@@ -19,13 +19,17 @@ import exp.libs.warp.ui.SwingUtils;
  */
 public class BPMain {
 	
+	/**
+	 * 程序入口
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		BeautyEyeUtils.init();
-		ExportVerInfo.exec("bilibili-plugin");
+		Config.getInstn();
+		AppVerInfo.export(Config.APP_NAME);
 		
 		if(OSUtils.getStartlock(2333)) {
-			Config.getInstn();
 			AppUI.createInstn(args);
 			
 		} else {

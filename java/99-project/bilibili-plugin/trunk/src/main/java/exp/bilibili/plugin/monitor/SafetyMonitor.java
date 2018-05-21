@@ -8,6 +8,7 @@ import net.sf.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -20,10 +21,8 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
-import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 import exp.libs.warp.thread.LoopThread;
-import exp.libs.warp.ver.VersionMgr;
 
 /**
  * <PRE>
@@ -85,10 +84,8 @@ public class SafetyMonitor extends LoopThread {
 		this.loopCnt = LOOP_LIMIT;
 		this.cause = UNCHECK_CAUSE;
 		this.loginUser = CookiesMgr.MAIN().NICKNAME();
-		this.appName = "";
-		this.appVersion = "";
-		
-		init();
+		this.appName = Config.APP_NAME;
+		this.appVersion = Config.APP_VER;
 	}
 	
 	public static SafetyMonitor getInstn() {
@@ -100,12 +97,6 @@ public class SafetyMonitor extends LoopThread {
 			}
 		}
 		return instance;
-	}
-	
-	private void init() {
-		String verInfo =  VersionMgr.getVersionInfo(true, false);
-		appName = RegexUtils.findFirst(verInfo, "项目名称[ |]*([a-z|\\-]+)");
-		appVersion = RegexUtils.findFirst(verInfo, "版本号[ |]*([\\d|\\.]+)");
 	}
 	
 	@Override
@@ -362,14 +353,6 @@ public class SafetyMonitor extends LoopThread {
 		if(appInfo != null) {
 			checkInTime(appInfo.getTime());
 		}
-	}
-	
-	/**
-	 * 获取当前版本号
-	 * @return
-	 */
-	public static String VERSION() {
-		return getInstn().appVersion;
 	}
 	
 }

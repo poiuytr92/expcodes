@@ -10,8 +10,10 @@ import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
+import exp.libs.warp.ver.VersionMgr;
 
 /**
  * <PRE>
@@ -26,6 +28,10 @@ import exp.libs.warp.conf.xml.XConfigFactory;
 public class Config {
 	
 	public final static String DEFAULT_CHARSET = Charset.UTF8;
+	
+	public final static String APP_NAME = RegexUtils.findFirst(VersionMgr.getAppName(), "([a-zA-Z\\-]+)");
+	
+	public final static String APP_VER = VersionMgr.getVersion();
 	
 	private final static String APP_PATH = "/exp/bilibili/bp_conf.xml";
 	
