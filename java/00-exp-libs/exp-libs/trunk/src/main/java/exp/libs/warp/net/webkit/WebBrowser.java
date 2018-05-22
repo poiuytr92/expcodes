@@ -13,9 +13,9 @@ import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.CapabilityType;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
+import exp.libs.envm.HTTP;
 import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
@@ -124,7 +124,7 @@ public class WebBrowser {
 			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), loadImages);		// 加载图片
 			capabilities.setCapability(PAGE_SETTINGS.concat("XSSAuditingEnabled"), false);	// 跨域请求监控
 			capabilities.setCapability(PAGE_SETTINGS.concat("localToRemoteUrlAccessEnabled"), false);	// 本地资源是否可以访问远程URL
-			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), HttpUtils.HEAD.VAL.USER_AGENT);	// 伪装浏览器
+			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), HTTP.VAL.USER_AGENT);	// 伪装浏览器
 			
 //			final String HERDER = PhantomJSDriverService.PHANTOMJS_PAGE_CUSTOMHEADERS_PREFIX;
 //			capabilities.setCapability(HERDER.concat("Accept"), "application/json, text/javascript, */*; q=0.01");

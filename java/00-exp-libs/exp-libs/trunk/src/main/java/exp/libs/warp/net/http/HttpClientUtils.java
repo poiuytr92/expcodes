@@ -12,6 +12,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 
+import exp.libs.envm.HTTP;
 import exp.libs.utils.io.IOUtils;
 
 /**
@@ -245,9 +246,9 @@ public class HttpClientUtils extends HttpUtils {
 	private static String responseAsString(HttpMethod method, String charset) {
 		
 		// 检测返回的内容是否使用gzip压缩过
-		Header header = method.getResponseHeader(HEAD.KEY.CONTENT_ENCODING);
+		Header header = method.getResponseHeader(HTTP.KEY.CONTENT_ENCODING);
 		boolean isGzip = (header == null ? false : 
-			HEAD.VAL.GZIP.equalsIgnoreCase(header.getValue()));
+			HTTP.VAL.GZIP.equalsIgnoreCase(header.getValue()));
 
 		String response = "";
 		try {

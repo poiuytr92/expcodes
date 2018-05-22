@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
+import exp.libs.envm.HTTP;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.io.IOUtils;
 import exp.libs.utils.other.StrUtils;
@@ -214,7 +215,7 @@ public class HttpURLUtils extends HttpUtils {
 		
 		// 检测返回的内容是否使用gzip压缩过
 		String encode = conn.getContentEncoding();
-		boolean isGzip = HEAD.VAL.GZIP.equalsIgnoreCase(encode);
+		boolean isGzip = HTTP.VAL.GZIP.equalsIgnoreCase(encode);
 
 		String response = "";
 		try {

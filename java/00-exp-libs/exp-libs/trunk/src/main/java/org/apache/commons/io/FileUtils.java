@@ -2132,7 +2132,6 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since IO 2.1
      */
-    @Deprecated
     public static boolean writeByteArrayToFile(File file, byte[] data, boolean append) throws IOException {
         OutputStream out = null;
         try {
