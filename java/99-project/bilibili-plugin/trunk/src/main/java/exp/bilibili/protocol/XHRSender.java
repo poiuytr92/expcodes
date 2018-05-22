@@ -14,7 +14,6 @@ import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
-import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -32,6 +31,7 @@ import exp.bilibili.protocol.xhr.LotteryStorm;
 import exp.bilibili.protocol.xhr.LotteryTV;
 import exp.bilibili.protocol.xhr.Other;
 import exp.bilibili.protocol.xhr.WatchLive;
+import exp.libs.envm.Colors;
 import exp.libs.utils.os.ThreadUtils;
 
 /**
@@ -472,7 +472,7 @@ public class XHRSender {
 	 * @return
 	 */
 	public static boolean sendDanmu(String msg) {
-		ChatColor color = ChatColor.RANDOM();
+		Colors color = Colors.RANDOM();
 		return sendDanmu(msg, color);
 	}
 	
@@ -482,7 +482,7 @@ public class XHRSender {
 	 * @param color 弹幕颜色
 	 * @return
 	 */
-	public static boolean sendDanmu(String msg, ChatColor color) {
+	public static boolean sendDanmu(String msg, Colors color) {
 		BiliCookie cookie = CookiesMgr.MAIN();
 		int roomId = UIUtils.getLiveRoomId();
 		return Chat.sendDanmu(cookie, roomId, msg, color);
@@ -497,7 +497,7 @@ public class XHRSender {
 	 */
 	public static boolean sendDanmu(BiliCookie cookie, String msg) {
 		int roomId = UIUtils.getLiveRoomId();
-		ChatColor color = ChatColor.RANDOM();
+		Colors color = Colors.RANDOM();
 		return Chat.sendDanmu(cookie, roomId, msg, color);
 	}
 	
@@ -509,7 +509,7 @@ public class XHRSender {
 	 */
 	public static boolean sendDanmu(String msg, int roomId) {
 		BiliCookie cookie = CookiesMgr.MAIN();
-		ChatColor color = ChatColor.RANDOM();
+		Colors color = Colors.RANDOM();
 		return Chat.sendDanmu(cookie, roomId, msg, color);
 	}
 	

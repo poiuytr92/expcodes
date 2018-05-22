@@ -32,7 +32,6 @@ import exp.bilibili.plugin.cache.OnlineUserMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.cache.StormScanner;
 import exp.bilibili.plugin.cache.WebBot;
-import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.envm.Danmu;
 import exp.bilibili.plugin.envm.Identity;
@@ -42,6 +41,7 @@ import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
 import exp.bilibili.protocol.ws.WebSockClient;
+import exp.libs.envm.Colors;
 import exp.libs.envm.Delimiter;
 import exp.libs.envm.FileType;
 import exp.libs.utils.encode.CompressUtils;
@@ -172,7 +172,7 @@ public class AppUI extends MainWindow {
 	
 	private _StormModeUI stormUI;
 	
-	private ChatColor curChatColor;
+	private Colors curChatColor;
 	
 	private boolean joinLottery;
 	
@@ -290,7 +290,7 @@ public class AppUI extends MainWindow {
 		loveBtn.setToolTipText("设为默认");
 		loveBtn.setForeground(Color.MAGENTA);
 		activeListBtn.setForeground(Color.BLUE);
-		colorBtn.setForeground(ChatColor.BLUE.COLOR());
+		colorBtn.setForeground(Colors.BLUE.COLOR());
 		
 		this.chatTA = new JTextArea();
 		this.consoleTA = new JTextArea(8, 10);
@@ -312,7 +312,7 @@ public class AppUI extends MainWindow {
 		this.lotteryUI = new _LotteryUI();
 		this.colorUI = new _ColorUI();
 		this.stormUI = new _StormModeUI();
-		this.curChatColor = ChatColor.RANDOM();
+		this.curChatColor = Colors.RANDOM();
 		
 		printVersionInfo();
 	}
@@ -1281,14 +1281,14 @@ public class AppUI extends MainWindow {
 	 * 更新弹幕颜色
 	 * @param color
 	 */
-	protected void updateChatColor(ChatColor color) {
+	protected void updateChatColor(Colors color) {
 		curChatColor = color;
 		colorBtn.setForeground(color.COLOR());
 		colorUI._hide();
 		UIUtils.log("当前弹幕颜色 [", curChatColor.ZH(), "]");
 	}
 	
-	public ChatColor getCurChatColor() {
+	public Colors getCurChatColor() {
 		return curChatColor;
 	}
 	

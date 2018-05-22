@@ -6,9 +6,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.bean.ldm.HotLiveRange;
-import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.ui.AppUI;
 import exp.bilibili.plugin.ui._NoticeUI;
+import exp.libs.envm.Colors;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 
@@ -117,7 +117,7 @@ public class UIUtils {
 		return AppUI.getInstn().isAutoFeed();
 	}
 	
-	public static ChatColor getCurChatColor() {
+	public static Colors getCurChatColor() {
 		return AppUI.getInstn().getCurChatColor();
 	}
 	

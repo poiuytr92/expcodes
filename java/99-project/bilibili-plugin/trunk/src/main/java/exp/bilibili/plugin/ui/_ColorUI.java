@@ -7,7 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import exp.bilibili.plugin.envm.ChatColor;
+import exp.libs.envm.Colors;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
@@ -59,48 +59,48 @@ class _ColorUI extends PopChildWindow {
 	@Override
 	protected void initComponents(Object... args) {
 		this.whiteBtn = new JButton("●");
-		whiteBtn.setForeground(ChatColor.WHITE.COLOR());
-		whiteBtn.setToolTipText(ChatColor.WHITE.ZH());
+		whiteBtn.setForeground(Colors.WHITE.COLOR());
+		whiteBtn.setToolTipText(Colors.WHITE.ZH());
 		
 		this.redBtn = new JButton("●");
-		redBtn.setForeground(ChatColor.RED.COLOR());
-		redBtn.setToolTipText(ChatColor.RED.ZH());
+		redBtn.setForeground(Colors.RED.COLOR());
+		redBtn.setToolTipText(Colors.RED.ZH());
 		
 		this.blueBtn = new JButton("●");
-		blueBtn.setForeground(ChatColor.BLUE.COLOR());
-		blueBtn.setToolTipText(ChatColor.BLUE.ZH());
+		blueBtn.setForeground(Colors.BLUE.COLOR());
+		blueBtn.setToolTipText(Colors.BLUE.ZH());
 		
 		this.purpleBtn = new JButton("●");
-		purpleBtn.setForeground(ChatColor.PURPLE.COLOR());
-		purpleBtn.setToolTipText(ChatColor.PURPLE.ZH());
+		purpleBtn.setForeground(Colors.PURPLE.COLOR());
+		purpleBtn.setToolTipText(Colors.PURPLE.ZH());
 		
 		this.cyanBtn = new JButton("●");
-		cyanBtn.setForeground(ChatColor.CYAN.COLOR());
-		cyanBtn.setToolTipText(ChatColor.CYAN.ZH());
+		cyanBtn.setForeground(Colors.CYAN.COLOR());
+		cyanBtn.setToolTipText(Colors.CYAN.ZH());
 		
 		this.greenBtn = new JButton("●");
-		greenBtn.setForeground(ChatColor.GREEN.COLOR());
-		greenBtn.setToolTipText(ChatColor.GREEN.ZH());
+		greenBtn.setForeground(Colors.GREEN.COLOR());
+		greenBtn.setToolTipText(Colors.GREEN.ZH());
 		
 		this.yellowBtn = new JButton("●");
-		yellowBtn.setForeground(ChatColor.YELLOW.COLOR());
-		yellowBtn.setToolTipText(ChatColor.YELLOW.ZH());
+		yellowBtn.setForeground(Colors.YELLOW.COLOR());
+		yellowBtn.setToolTipText(Colors.YELLOW.ZH());
 		
 		this.orangeBtn = new JButton("●");
-		orangeBtn.setForeground(ChatColor.ORANGE.COLOR());
-		orangeBtn.setToolTipText(ChatColor.ORANGE.ZH());
+		orangeBtn.setForeground(Colors.ORANGE.COLOR());
+		orangeBtn.setToolTipText(Colors.ORANGE.ZH());
 		
 		this.pinkBtn = new JButton("●");
-		pinkBtn.setForeground(ChatColor.PINK.COLOR());
-		pinkBtn.setToolTipText(ChatColor.PINK.ZH());
+		pinkBtn.setForeground(Colors.PINK.COLOR());
+		pinkBtn.setToolTipText(Colors.PINK.ZH());
 		
 		this.peachPinkBtn = new JButton("●");
-		peachPinkBtn.setForeground(ChatColor.PEACH_PINK.COLOR());
-		peachPinkBtn.setToolTipText(ChatColor.PEACH_PINK.ZH());
+		peachPinkBtn.setForeground(Colors.PEACH_PINK.COLOR());
+		peachPinkBtn.setToolTipText(Colors.PEACH_PINK.ZH());
 		
 		this.goldBtn = new JButton("●");
-		goldBtn.setForeground(ChatColor.GOLD.COLOR());
-		goldBtn.setToolTipText(ChatColor.GOLD.ZH());
+		goldBtn.setForeground(Colors.GOLD.COLOR());
+		goldBtn.setToolTipText(Colors.GOLD.ZH());
 	}
 
 	@Override
@@ -117,7 +117,7 @@ class _ColorUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.WHITE);
+				AppUI.getInstn().updateChatColor(Colors.WHITE);
 			}
 		});
 		
@@ -125,7 +125,7 @@ class _ColorUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.RED);
+				AppUI.getInstn().updateChatColor(Colors.RED);
 			}
 		});
 
@@ -133,7 +133,7 @@ class _ColorUI extends PopChildWindow {
 	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.BLUE);
+				AppUI.getInstn().updateChatColor(Colors.BLUE);
 			}
 		});
 
@@ -141,7 +141,7 @@ class _ColorUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.PURPLE);
+				AppUI.getInstn().updateChatColor(Colors.PURPLE);
 			}
 		});
 
@@ -149,7 +149,7 @@ class _ColorUI extends PopChildWindow {
 	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.CYAN);
+				AppUI.getInstn().updateChatColor(Colors.CYAN);
 			}
 		});
 
@@ -157,7 +157,7 @@ class _ColorUI extends PopChildWindow {
 	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.GREEN);
+				AppUI.getInstn().updateChatColor(Colors.GREEN);
 			}
 		});
 
@@ -165,7 +165,7 @@ class _ColorUI extends PopChildWindow {
 	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.YELLOW);
+				AppUI.getInstn().updateChatColor(Colors.YELLOW);
 			}
 		});
 
@@ -173,7 +173,7 @@ class _ColorUI extends PopChildWindow {
 	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.ORANGE);
+				AppUI.getInstn().updateChatColor(Colors.ORANGE);
 			}
 		});
 
@@ -181,7 +181,7 @@ class _ColorUI extends PopChildWindow {
 	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.PINK);
+				AppUI.getInstn().updateChatColor(Colors.PINK);
 			}
 		});
 		
@@ -189,7 +189,7 @@ class _ColorUI extends PopChildWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.PEACH_PINK);
+				AppUI.getInstn().updateChatColor(Colors.PEACH_PINK);
 			}
 		});
 
@@ -197,7 +197,7 @@ class _ColorUI extends PopChildWindow {
 	
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				AppUI.getInstn().updateChatColor(ChatColor.GOLD);
+				AppUI.getInstn().updateChatColor(Colors.GOLD);
 			}
 		});
 	}

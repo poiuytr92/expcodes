@@ -6,10 +6,10 @@ import java.util.Map;
 import net.sf.json.JSONObject;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
-import exp.bilibili.plugin.envm.ChatColor;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
+import exp.libs.envm.Colors;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
@@ -129,7 +129,7 @@ class _Lottery extends __XHR {
 			String csrf, String visitId, String captchaToken, String captchaValue) {
 		Map<String, String> request = getRequest(roomId);
 		request.put(BiliCmdAtrbt.id, raffleId);		// 礼物编号
-		request.put(BiliCmdAtrbt.color, ChatColor.WHITE.RGB());
+		request.put(BiliCmdAtrbt.color, Colors.WHITE.RGB());
 		request.put(BiliCmdAtrbt.captcha_token, captchaToken);
 		request.put(BiliCmdAtrbt.captcha_phrase, captchaValue);
 		request.put(BiliCmdAtrbt.csrf_token, csrf);
