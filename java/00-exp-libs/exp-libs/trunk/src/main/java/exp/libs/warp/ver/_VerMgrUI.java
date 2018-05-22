@@ -1,6 +1,7 @@
 package exp.libs.warp.ver;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -18,8 +19,11 @@ import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
+
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
+import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tbl.NormTable;
 import exp.libs.warp.ui.cpt.win.MainWindow;
@@ -130,10 +134,16 @@ class _VerMgrUI extends MainWindow {
 		updateTitle();
 		reflashHisVerTable();
 		
-		this.savePrjInfoBtn = new JButton("保存");
-		this.findHisVerBtn = new JButton("查找");
-		this.modifyCurVerBtn = new JButton("修改");
-		this.createVerBtn = new JButton("保存");
+		this.savePrjInfoBtn = new JButton("保  存");
+		this.findHisVerBtn = new JButton("查  找");
+		this.modifyCurVerBtn = new JButton("修  改");
+		this.createVerBtn = new JButton("保  存");
+		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, 
+				savePrjInfoBtn, findHisVerBtn, modifyCurVerBtn, createVerBtn);
+		savePrjInfoBtn.setForeground(Color.BLACK);
+		findHisVerBtn.setForeground(Color.BLACK);
+		modifyCurVerBtn.setForeground(Color.BLACK);
+		createVerBtn.setForeground(Color.BLACK);
 	}
 	
 	private _PrjVerInfo loadPrjVerInfo() {
