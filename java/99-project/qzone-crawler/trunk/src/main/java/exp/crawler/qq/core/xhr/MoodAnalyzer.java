@@ -17,10 +17,10 @@ import exp.crawler.qq.envm.XHRAtrbt;
 import exp.crawler.qq.utils.PicUtils;
 import exp.crawler.qq.utils.UIUtils;
 import exp.crawler.qq.utils.XHRUtils;
+import exp.libs.envm.HTTP;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
-import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
@@ -143,7 +143,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	 */
 	private static Map<String, String> _getMoodHeader(QQCookie cookie) {
 		Map<String, String> header = XHRUtils.getHeader(cookie);
-		header.put(HttpUtils.HEAD.KEY.REFERER, URL.MOOD_REFERER);
+		header.put(HTTP.KEY.REFERER, URL.MOOD_REFERER);
 		return header;
 	}
 	

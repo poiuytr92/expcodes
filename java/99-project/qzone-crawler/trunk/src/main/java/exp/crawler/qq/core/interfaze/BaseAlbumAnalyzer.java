@@ -9,12 +9,12 @@ import exp.crawler.qq.bean.Photo;
 import exp.crawler.qq.cache.Browser;
 import exp.crawler.qq.utils.UIUtils;
 import exp.crawler.qq.utils.XHRUtils;
+import exp.libs.envm.HTTP;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
-import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
@@ -138,8 +138,8 @@ public abstract class BaseAlbumAnalyzer {
 	 */
 	protected boolean _download(Album album, Photo photo) {
 		Map<String, String> header = XHRUtils.getHeader(Browser.COOKIE());
-		header.put(HttpUtils.HEAD.KEY.HOST, XHRUtils.toHost(photo.URL()));
-		header.put(HttpUtils.HEAD.KEY.REFERER, album.URL());
+		header.put(HTTP.KEY.HOST, XHRUtils.toHost(photo.URL()));
+		header.put(HTTP.KEY.REFERER, album.URL());
 
 		boolean isOk = false;
 		String savePath = StrUtils.concat(ALBUM_DIR, album.NAME(), "/", photo.NAME());
