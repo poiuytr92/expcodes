@@ -436,7 +436,7 @@ public class SwingUtils {
 	public static JEditorPane getHtmlTextArea() {
 		JEditorPane panel = new JEditorPane();
 		panel.setContentType("text/html");	// 把编辑框设置为支持html的编辑格式
-		return panel;
+		return addBorder(panel);
 	}
 	
 	/**
