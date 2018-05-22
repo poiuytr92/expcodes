@@ -12,6 +12,7 @@ import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.plugin.utils.VercodeUtils;
 import exp.bilibili.protocol.bean.xhr.MathTask;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
+import exp.libs.envm.HTTP;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
@@ -87,9 +88,9 @@ public class DailyTasks extends __XHR {
 	 */
 	private static Map<String, String> getHeader(String cookie) {
 		Map<String, String> header = POST_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOME);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
+		header.put(HTTP.KEY.HOST, LIVE_HOST);
+		header.put(HTTP.KEY.ORIGIN, LINK_HOME);
+		header.put(HTTP.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
 		return header;
 	}
 	

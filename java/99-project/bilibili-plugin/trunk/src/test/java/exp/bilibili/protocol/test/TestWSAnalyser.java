@@ -3,6 +3,16 @@ package exp.bilibili.protocol.test;
 import exp.libs.utils.num.BODHUtils;
 import exp.libs.utils.other.StrUtils;
 
+/**
+ * <PRE>
+ * 测试WebSocket的接收报文
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2017-12-17
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class TestWSAnalyser {
 
 	public static void main(String[] args) {

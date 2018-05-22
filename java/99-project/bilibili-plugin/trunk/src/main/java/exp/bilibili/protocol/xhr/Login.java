@@ -11,6 +11,7 @@ import org.apache.commons.httpclient.HttpMethod;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
+import exp.libs.envm.HTTP;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.num.RandomUtils;
@@ -18,7 +19,6 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpClient;
 import exp.libs.warp.net.http.HttpURLUtils;
-import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
@@ -79,7 +79,7 @@ public class Login extends __XHR {
 		if(method != null) {
 			Header[] outHeaders = method.getResponseHeaders();
 			for(Header outHeader : outHeaders) {
-				if(HttpUtils.HEAD.KEY.SET_COOKIE.equals(outHeader.getName())) {
+				if(HTTP.KEY.SET_COOKIE.equals(outHeader.getName())) {
 					cookie.add(outHeader.getValue());
 				}
 			}
@@ -142,9 +142,9 @@ public class Login extends __XHR {
 	 */
 	private static Map<String, String> getHeader() {
 		Map<String, String> header = POST_HEADER("");
-		header.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, QRLOGIN_URL);
-		header.put(HttpUtils.HEAD.KEY.REFERER, QRLOGIN_URL);
+		header.put(HTTP.KEY.HOST, LOGIN_HOST);
+		header.put(HTTP.KEY.ORIGIN, QRLOGIN_URL);
+		header.put(HTTP.KEY.REFERER, QRLOGIN_URL);
 		return header;
 	}
 	
@@ -173,14 +173,14 @@ public class Login extends __XHR {
 		
 		// 下载验证码图片（该验证码图片需要使用一个随机sid去请求）
 		Map<String, String> inHeaders = new HashMap<String, String>();
-		inHeaders.put(HttpUtils.HEAD.KEY.COOKIE, sid);
+		inHeaders.put(HTTP.KEY.COOKIE, sid);
 		boolean isOk = client.downloadByGet(imgPath, VCCODE_URL, inHeaders, null);
 		
 		// 服务端返回验证码的同时，会返回一个与之绑定的JSESSIONID
 		String jsessionId = "";
 		HttpMethod method = client.getHttpMethod();
 		if(isOk && method != null) {
-			Header outHeader = method.getResponseHeader(HttpUtils.HEAD.KEY.SET_COOKIE);
+			Header outHeader = method.getResponseHeader(HTTP.KEY.SET_COOKIE);
 			if(outHeader != null) {
 				jsessionId = RegexUtils.findFirst(outHeader.getValue(), 
 						StrUtils.concat("(", JSESSIONID, "=[^;]+)"));
@@ -260,9 +260,9 @@ public class Login extends __XHR {
 	 */
 	private static Map<String, String> getHeader(String cookie) {
 		Map<String, String> header = POST_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, LOGIN_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LINK_HOME);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
+		header.put(HTTP.KEY.HOST, LOGIN_HOST);
+		header.put(HTTP.KEY.ORIGIN, LINK_HOME);
+		header.put(HTTP.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
 		return header;
 	}
 	

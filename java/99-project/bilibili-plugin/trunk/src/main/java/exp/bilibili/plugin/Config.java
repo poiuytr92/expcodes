@@ -45,6 +45,7 @@ public class Config {
 	/** 禁止自动发言的直播间 */
 	private Set<Integer> tabuAutoRoomIds;
 	
+	/** 单例 */
 	private static volatile Config instance;
 	
 	private XConfig xConf;

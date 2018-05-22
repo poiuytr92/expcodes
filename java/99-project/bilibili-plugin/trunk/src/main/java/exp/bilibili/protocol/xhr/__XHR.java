@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.utils.UIUtils;
+import exp.libs.envm.HTTP;
 import exp.libs.utils.num.RandomUtils;
-import exp.libs.warp.net.http.HttpUtils;
 
 /**
  * <PRE>
@@ -78,12 +78,12 @@ class __XHR {
 	 */
 	protected final static Map<String, String> GET_HEADER(String cookie) {
 		Map<String, String> header = new HashMap<String, String>();
-		header.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/plain, */*");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
+		header.put(HTTP.KEY.ACCEPT, "application/json, text/plain, */*");
+		header.put(HTTP.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
+		header.put(HTTP.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		header.put(HTTP.KEY.CONNECTION, "keep-alive");
+		header.put(HTTP.KEY.COOKIE, cookie);
+		header.put(HTTP.KEY.USER_AGENT, HTTP.VAL.USER_AGENT);
 		return header;
 	}
 	
@@ -95,9 +95,9 @@ class __XHR {
 	 */
 	protected final static Map<String, String> GET_HEADER(String cookie, String uri) {
 		Map<String, String> header = GET_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_HOME);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_HOME.concat(uri));
+		header.put(HTTP.KEY.HOST, LIVE_HOST);
+		header.put(HTTP.KEY.ORIGIN, LIVE_HOME);
+		header.put(HTTP.KEY.REFERER, LIVE_HOME.concat(uri));
 		return header;
 	}
 	
@@ -108,14 +108,14 @@ class __XHR {
 	 */
 	protected final static Map<String, String> POST_HEADER(String cookie) {
 		Map<String, String> header = new HashMap<String, String>();
-		header.put(HttpUtils.HEAD.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
-		header.put(HttpUtils.HEAD.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HttpUtils.HEAD.KEY.CONNECTION, "keep-alive");
-		header.put(HttpUtils.HEAD.KEY.CONTENT_TYPE, // POST的是表单
-				HttpUtils.HEAD.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
-		header.put(HttpUtils.HEAD.KEY.COOKIE, cookie);
-		header.put(HttpUtils.HEAD.KEY.USER_AGENT, HttpUtils.HEAD.VAL.USER_AGENT);
+		header.put(HTTP.KEY.ACCEPT, "application/json, text/javascript, */*; q=0.01");
+		header.put(HTTP.KEY.ACCEPT_ENCODING, "gzip, deflate, br");
+		header.put(HTTP.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		header.put(HTTP.KEY.CONNECTION, "keep-alive");
+		header.put(HTTP.KEY.CONTENT_TYPE, // POST的是表单
+				HTTP.VAL.POST_FORM.concat(Config.DEFAULT_CHARSET));
+		header.put(HTTP.KEY.COOKIE, cookie);
+		header.put(HTTP.KEY.USER_AGENT, HTTP.VAL.USER_AGENT);
 		return header;
 	}
 	
@@ -127,9 +127,9 @@ class __XHR {
 	 */
 	protected final static Map<String, String> POST_HEADER(String cookie, String uri) {
 		Map<String, String> header = POST_HEADER(cookie);
-		header.put(HttpUtils.HEAD.KEY.HOST, LIVE_HOST);
-		header.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_HOME);
-		header.put(HttpUtils.HEAD.KEY.REFERER, LIVE_HOME.concat(uri));
+		header.put(HTTP.KEY.HOST, LIVE_HOST);
+		header.put(HTTP.KEY.ORIGIN, LIVE_HOME);
+		header.put(HTTP.KEY.REFERER, LIVE_HOME.concat(uri));
 		return header;
 	}
 	
