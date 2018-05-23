@@ -2,6 +2,7 @@ package exp.libs.warp.net.cookie;
 
 import java.util.Date;
 
+import exp.libs.envm.DateFormat;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.time.TimeUtils;
 
@@ -101,7 +102,7 @@ class _HttpCookie {
 						
 					} else if(EXPIRE.equalsIgnoreCase(key)) {
 						this.expiry = TimeUtils.toDate(
-								val.replace('-', ' '), TimeUtils.FORMAT_GMT);
+								val.replace('-', ' '), DateFormat.GMT);
 					}
 				}
 				

@@ -35,13 +35,13 @@ public class TimeUtils {
 	private final static String DEFAULT_GMT = "Thu, 01 Jan 1970 08:00:00 GMT+08:00";
 	
 	/** 日期格式： yyyy-MM-dd HH:mm:ss */
-	public final static String FORMAT_YMDHMS = DateFormat.YMDHMS;
+	private final static String FORMAT_YMDHMS = DateFormat.YMDHMS;
 	
 	/** 日期格式： yyyy-MM-dd HH:mm:ss.SSS */
-	public final static String FORMAT_YMDHMSS = DateFormat.YMDHMSS;
+	private final static String FORMAT_YMDHMSS = DateFormat.YMDHMSS;
 	
 	/** GMT日期格式(多用于cookie的有效时间)： EEE, dd MMM yyyy HH:mm:ss z */
-	public final static String FORMAT_GMT = DateFormat.GMT;
+	private final static String FORMAT_GMT = DateFormat.GMT;
 	
 	/** 北京时差：8小时 */
 	public final static int PEKING_HOUR_OFFSET = 8;

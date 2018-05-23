@@ -12,6 +12,12 @@ package exp.libs.envm;
  */
 public class DateFormat {
 
+	/** 日期格式： yyyy-MM-dd */
+	public final static String YMD = "yyyy-MM-dd";
+	
+	/** 日期格式：HH:mm:ss */
+	public final static String HMS = "HH:mm:ss";
+	
 	/** 日期格式： yyyy-MM-dd HH:mm:ss */
 	public final static String YMDHMS = "yyyy-MM-dd HH:mm:ss";
 	
