@@ -230,6 +230,10 @@ public class Config {
 		return xConf.getVal("/config/urls/egJoinURL");
 	}
 	
+	public String TV_CHECK_URL() {
+		return xConf.getVal("/config/urls/tvCheckURL");
+	}
+	
 	public String TV_JOIN_URL() {
 		return xConf.getVal("/config/urls/tvJoinURL");
 	}

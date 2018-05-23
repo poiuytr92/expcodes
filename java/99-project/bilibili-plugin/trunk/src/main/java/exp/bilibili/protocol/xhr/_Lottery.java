@@ -62,7 +62,7 @@ class _Lottery extends __XHR {
 		
 		// 加入高能/小电视抽奖
 		if(LotteryType.STORM != type) {
-			Map<String, String> request = getRequest(sRoomId, raffleId);
+			Map<String, String> request = getRequest(cookie.CSRF(), sRoomId, raffleId);
 			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
 				String response = HttpURLUtils.doGet(url, header, request);
 				
@@ -110,9 +110,12 @@ class _Lottery extends __XHR {
 	 * @param raffleId
 	 * @return
 	 */
-	private static Map<String, String> getRequest(String roomId, String raffleId) {
+	private static Map<String, String> getRequest(String csrf, String roomId, String raffleId) {
 		Map<String, String> request = getRequest(roomId);
 		request.put(BiliCmdAtrbt.raffleId, raffleId);	// 礼物编号
+		request.put(BiliCmdAtrbt.type, "Gift");	// 礼物编号
+		request.put(BiliCmdAtrbt.csrf_token, csrf);
+		request.put(BiliCmdAtrbt.visit_id, getVisitId());
 		return request;
 	}
 	

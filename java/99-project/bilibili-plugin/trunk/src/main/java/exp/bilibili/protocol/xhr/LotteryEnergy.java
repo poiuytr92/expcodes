@@ -50,7 +50,7 @@ public class LotteryEnergy extends _Lottery {
 	 */
 	public static void toLottery(int roomId) {
 		List<String> raffleIds = getRaffleId(EG_CHECK_URL, roomId, 
-				CookiesMgr.VEST().toNVCookie());
+				CookiesMgr.MAIN().toNVCookie());
 		for(String raffleId : raffleIds) {
 			int id = NumUtils.toInt(raffleId, 0);
 			if(id > LAST_RAFFLEID) {	// 礼物编号是递增的

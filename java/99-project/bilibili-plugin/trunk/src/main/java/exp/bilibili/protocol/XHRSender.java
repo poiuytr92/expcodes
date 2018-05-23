@@ -32,6 +32,7 @@ import exp.bilibili.protocol.xhr.LotteryTV;
 import exp.bilibili.protocol.xhr.Other;
 import exp.bilibili.protocol.xhr.WatchLive;
 import exp.libs.envm.Colors;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 
 /**
@@ -308,7 +309,12 @@ public class XHRSender {
 	 * @return
 	 */
 	public static void toTvLottery(int roomId, String raffleId) {
-		LotteryTV.toLottery(roomId, raffleId);
+		if(NumUtils.toInt(raffleId, -1) <= 0) {
+			LotteryTV.toLottery(roomId);
+			
+		} else {
+			LotteryTV.toLottery(roomId, raffleId);
+		}
 	}
 	
 	/**
