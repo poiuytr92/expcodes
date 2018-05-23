@@ -18,6 +18,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JRootPane;
+import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTextArea;
@@ -131,6 +132,56 @@ public class SwingUtils {
 			scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED); 
 		}
 		return scroll;
+	}
+	
+	/**
+	 * 令滚动面板的垂直和水平滚动条均自动滚动到末尾
+	 * @param scrollPanel 滚动面板
+	 */
+	public static void toEnd(JScrollPane scrollPanel) {
+		if(scrollPanel == null) {
+			return;
+		}
+		
+		toEnd(scrollPanel.getVerticalScrollBar());
+		toEnd(scrollPanel.getHorizontalScrollBar());
+	}
+	
+	/**
+	 * 令滚动面板的滚动条自动滚动到末尾
+	 * @param scrollPanel 滚动面板
+	 * @param vertical 是否为垂直方向的滚动条
+	 */
+	public static void toEnd(JScrollPane scrollPanel, boolean vertical) {
+		if(scrollPanel == null) {
+			return;
+		}
+		
+		JScrollBar scrollBar = (vertical ? 
+					scrollPanel.getVerticalScrollBar() : 
+					scrollPanel.getHorizontalScrollBar());
+		toEnd(scrollBar);
+	}
+	
+	/**
+	 * 令滚动条自动滚动到末尾
+	 * @param scrollBar 垂直或水平滚动条
+	 */
+	public static void toEnd(JScrollBar scrollBar) {
+		if(scrollBar != null) {
+			scrollBar.setValue(scrollBar.getMaximum());
+		}
+	}
+	
+	/**
+	 * 令文本区的光标移动到最后.
+	 *   每次更新文本区的内容后调用此方法, 会有文本区自动滚动到末端的效果.
+	 * @param textArea 文本区
+	 */
+	public static void toEnd(JTextArea textArea) {
+		if(textArea != null) {
+			textArea.setCaretPosition(textArea.getText().length());
+		}
 	}
 	
 	/**
@@ -615,17 +666,6 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 令文本区的光标移动到最后.
-	 *   每次更新文本区的内容后调用此方法, 会有文本区自动滚动到末端的效果.
-	 * @param textArea 文本区
-	 */
-	public static void toEnd(JTextArea textArea) {
-		if(textArea != null) {
-			textArea.setCaretPosition(textArea.getText().length());
-		}
-	}
-	
-	/**
 	 * <PRE>
 	 * 加载图片对象(对于路径不变但图像持续变化的图片， 支持实时更新).
 	 * 
@@ -723,6 +763,17 @@ public class SwingUtils {
 	 */
 	private static Image modifySize(Image img, int width, int height) {
 		return img.getScaledInstance(width, height, Image.SCALE_FAST);
+	}
+	
+	/**
+	 * 重绘组件内容(用于动态刷新组件内容).
+	 * @param component 组件
+	 */
+	public static <T extends Component> void repaint(T component) {
+		if(component != null) {
+			component.validate();	// 重构内容面板
+			component.repaint();	// 重绘内容面板
+		}
 	}
 	
 }
