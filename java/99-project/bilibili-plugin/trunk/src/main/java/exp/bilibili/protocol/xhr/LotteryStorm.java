@@ -204,9 +204,10 @@ public class LotteryStorm extends _Lottery {
 	 */
 	public static boolean toLottery(int roomId, String raffleId) {
 		int cnt = 0;
+		String reason = "未知异常";
+		boolean isExist = true;
 		Set<BiliCookie> cookies = CookiesMgr.ALL(true);
 		
-		boolean isExist = true;
 		while(isExist && !cookies.isEmpty()) {	// 理论上节奏风暴可以在完结前一直抢到成功为止
 			isExist = false;	// 避免cookies队列没人参与陷入死循环
 			
@@ -220,7 +221,7 @@ public class LotteryStorm extends _Lottery {
 					continue;
 				}
 				
-				String reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
+				reason = join(LotteryType.STORM, cookie, STORM_JOIN_URL, roomId, raffleId);
 				if(StrUtils.isEmpty(reason)) {
 					log.info("[{}] 参与直播间 [{}] 抽奖成功(节奏风暴)", cookie.NICKNAME(), roomId);
 					cookieIts.remove();	// 已经成功抽奖的在本轮无需再抽
@@ -231,8 +232,6 @@ public class LotteryStorm extends _Lottery {
 					log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
 					isExist = reason.contains("再接再励");
 					if(isExist == false) {
-						UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
-								"], 账号 [", cookie.NICKNAME(), "]");
 						break;	// 节奏风暴已完结
 					}
 				}
@@ -242,6 +241,8 @@ public class LotteryStorm extends _Lottery {
 		if(cnt > 0) {
 			UIUtils.statistics("成功(节奏风暴x", cnt, "): 直播间 [", roomId, "]");
 			UIUtils.updateLotteryCnt(cnt);
+		} else {
+			UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, "]");
 		}
 		return (cnt > 0);
 	}
