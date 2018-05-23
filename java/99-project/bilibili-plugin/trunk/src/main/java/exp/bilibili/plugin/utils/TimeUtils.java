@@ -2,6 +2,7 @@ package exp.bilibili.plugin.utils;
 
 import java.util.Date;
 
+import exp.libs.envm.DateFormat;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -24,7 +25,7 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	 * @return [HH:mm:ss]
 	 */
 	public static String getCurTime() {
-		String time = toStr(System.currentTimeMillis(), "HH:mm:ss");
+		String time = toStr(System.currentTimeMillis(), DateFormat.HMS);
 		return StrUtils.concat("[", time, "] ");
 	}
 	
