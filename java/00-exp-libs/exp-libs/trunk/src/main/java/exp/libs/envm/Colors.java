@@ -42,7 +42,7 @@ public class Colors {
 			"green", "宝强绿", 126, 255, 0);
 	
 	public final static Colors SEA_GREEN = new Colors(
-			"sea_green", "深海绿", 100, 120, 0);
+			"sea_green", "深海绿", 64, 128, 0);
 	
 	public final static Colors YELLOW = new Colors(
 			"yellow", "菊花黄", 255, 237, 79);
