@@ -459,6 +459,11 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(Identity.less(Identity.UPLIVE)) {
+					SwingUtils.warn("您未被授权更改 [抽奖参数] 哦~");
+					return;
+				}
+				
 				probabilityUI._view();
 			}
 		});
