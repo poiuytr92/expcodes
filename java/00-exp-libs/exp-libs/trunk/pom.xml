@@ -240,7 +240,7 @@
           <version>3.3</version>
         </dependency>
         
-        <!-- TLSv1.2协议工厂 -->
+        <!-- 轻量级密码术包: 用于提供对TLSv1.2协议支持 -->
         <dependency>
           <groupId>org.bouncycastle</groupId>
           <artifactId>bcprov-jdk15on</artifactId>

@@ -38,6 +38,10 @@ public final class OSUtils {
 	protected final static String OS_ENCODING = 
 			System.getProperty("sun.jnu.encoding").toUpperCase();
 	
+	/** 获取当前运行的JDK版本号 */
+	protected final static String JDK_VER = 
+			System.getProperty("java.version").toUpperCase();
+	
 	/**
 	 * 程序入口命令.
 	 *  用于判断程序运行环境：
@@ -112,6 +116,38 @@ public final class OSUtils {
 	 */
 	public static String getSysEncoding() {
 		return OS_ENCODING;
+	}
+	
+	/**
+	 * 获取当前运行的JDK版本号
+	 * @return 当前运行的JDK版本号
+	 */
+	public static String getJdkVersion() {
+		return JDK_VER;
+	}
+	
+	/**
+	 * 检测当前运行的版本是否为JDK1.6
+	 * @return true:是; false:否
+	 */
+	public static boolean isJDK16() {
+		return JDK_VER.startsWith("1.6");
+	}
+	
+	/**
+	 * 检测当前运行的版本是否为JDK1.7
+	 * @return true:是; false:否
+	 */
+	public static boolean isJDK17() {
+		return JDK_VER.startsWith("1.7");
+	}
+	
+	/**
+	 * 检测当前运行的版本是否为JDK1.8
+	 * @return true:是; false:否
+	 */
+	public static boolean isJDK18() {
+		return JDK_VER.startsWith("1.8");
 	}
 	
 	/**

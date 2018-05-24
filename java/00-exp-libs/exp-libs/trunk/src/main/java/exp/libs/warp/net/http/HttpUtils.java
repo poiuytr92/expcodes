@@ -29,6 +29,7 @@ import exp.libs.envm.Charset;
 import exp.libs.utils.encode.Base64;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -160,8 +161,7 @@ public class HttpUtils {
 	 * @throws Exception
 	 */
 	private static HttpURLConnection _createHttpConn(URL url, String method, 
-			Map<String, String> header, int connTimeout, int readTimeout) 
-					throws Exception {
+			Map<String, String> header, int connTimeout, int readTimeout) throws Exception {
 		HttpURLConnection conn = null;
 		if (url == null) {
 			return conn;
@@ -170,9 +170,12 @@ public class HttpUtils {
 		// HTTPS连接(若依然报错 protocol_version， 则调用此方法的程序需切换到JDK1.8以上, JDK1.8默认使用TLSv1.2)
 		if(HTTPS.equals(url.getProtocol())) {
 			HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
-			
-//			_bypassSSL(httpsConn);	// 绕过SSL校验
-			_addTLSv12(httpsConn);	// 追加TLSv1.2支持
+			if(OSUtils.isJDK16() || OSUtils.isJDK17()) {
+				_supportTLSv12(httpsConn);	// 追加TLSv1.2支持
+				
+			} else {
+				_bypassSSL(httpsConn);		// 绕过SSL校验(可选, JDK1.8以上不绕过也可)
+			}
 			
 			conn = httpsConn;
 			
@@ -211,7 +214,7 @@ public class HttpUtils {
 	 * </pre>
 	 * @param httpsConn
 	 */
-	private static void _addTLSv12(HttpsURLConnection httpsConn) {
+	private static void _supportTLSv12(HttpsURLConnection httpsConn) {
 		httpsConn.setSSLSocketFactory(new _TLS12_SocketFactory());
 	}
 	
