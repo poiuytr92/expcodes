@@ -16,6 +16,8 @@ import exp.libs.utils.other.StrUtils;
 /**
  * <PRE>
  * HTTP-URL工具(原生工具)
+ * -----------------------------------------------
+ *   支持TLSv1.2
  * </PRE>
  * 
  * <B>PROJECT：</B> exp-libs

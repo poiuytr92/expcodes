@@ -18,6 +18,8 @@ import exp.libs.utils.io.IOUtils;
 /**
  * <PRE>
  * HTTP-Client工具(apache工具)
+ * -----------------------------------------------
+ *   若 低于JDK1.8 则不支持TLSv1.2
  * </PRE>
  * 
  * <B>PROJECT：</B> exp-libs

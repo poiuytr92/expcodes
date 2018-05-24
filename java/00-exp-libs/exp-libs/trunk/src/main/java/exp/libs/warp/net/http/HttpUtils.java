@@ -11,11 +11,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 
 import org.apache.commons.httpclient.HttpClient;
@@ -118,7 +116,7 @@ public class HttpUtils {
 	}
 	
 	/**
-	 * 构造HTTP/HTTPS连接
+	 * 构造HTTP/HTTPS连接(支持TLSv1.2)
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
 	 * @param header 请求头参数
@@ -131,7 +129,7 @@ public class HttpUtils {
 	}
 	
 	/**
-	 * 构造HTTP/HTTPS连接
+	 * 构造HTTP/HTTPS连接(支持TLSv1.2)
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
 	 * @param header 请求头参数
@@ -152,7 +150,7 @@ public class HttpUtils {
 	}
 	
 	/**
-	 * 构造HTTP/HTTPS连接
+	 * 构造HTTP/HTTPS连接(支持TLSv1.2)
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
 	 * @param header 请求头参数
@@ -169,17 +167,13 @@ public class HttpUtils {
 			return conn;
 		}
 		
-		// HTTPS连接(若依然报错 protocol_version， 则调用此方法的程序需切换到JDK1.8以上)
+		// HTTPS连接(若依然报错 protocol_version， 则调用此方法的程序需切换到JDK1.8以上, JDK1.8默认使用TLSv1.2)
 		if(HTTPS.equals(url.getProtocol())) {
-			SSLContext ssl = SSLContext.getInstance(TLS);
-			ssl.init(new KeyManager[0], new TrustManager[] { new _X509TrustManager() }, new SecureRandom());
 			HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
-			httpsConn.setSSLSocketFactory(ssl.getSocketFactory());
-			httpsConn.setHostnameVerifier(new HostnameVerifier() {
-				public boolean verify(String hostname, SSLSession session) {
-					return true;
-				}
-			});
+			
+//			_bypassSSL(httpsConn);	// 绕过SSL校验
+			_addTLSv12(httpsConn);	// 追加TLSv1.2支持
+			
 			conn = httpsConn;
 			
 		// HTTP连接
@@ -207,6 +201,41 @@ public class HttpUtils {
 		}
 		return conn;
 	}
+	
+	/**
+	 * <pre>
+	 * 追加TLSv1.2支持.
+	 * -------------------
+	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
+	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
+	 * </pre>
+	 * @param httpsConn
+	 */
+	private static void _addTLSv12(HttpsURLConnection httpsConn) {
+		httpsConn.setSSLSocketFactory(new _TLS12_SocketFactory());
+	}
+	
+	/**
+	 * <pre>
+	 * 绕过SSL校验.
+	 * -------------------
+	 *  若服务端使用的是TLSv1.2协议, 绕过也没有用的, 在建立握手连接时, 
+	 *  服务端会认为客户端加密机制不安全而拒绝握手, 报错 Received fatal alert: protocol_version.
+	 *  由于 JDK1.6 和 JDK1.7 均不支持 TLSv1.2, 在这种情况下只能使用 JDK1.8
+	 * </pre>
+	 * @param httpsConn HTTPS连接
+	 * @throws Exception
+	 */
+	private static void _bypassSSL(HttpsURLConnection httpsConn) throws Exception {
+		
+		// 绕过SSL证书校验
+		SSLContext ssl = SSLContext.getInstance(TLS);
+		ssl.init(new KeyManager[0], new TrustManager[] { new _X509TrustManager() }, new SecureRandom());
+		httpsConn.setSSLSocketFactory(ssl.getSocketFactory());
+		
+		// 绕过SSL域名校验
+		httpsConn.setHostnameVerifier(new _X509HostnameVerifier());
+	}
 
 	/**
 	 * 关闭HTTP/HTTPS连接
@@ -219,7 +248,7 @@ public class HttpUtils {
 	}
 	
 	/**
-	 * 创建HttpClient会话
+	 * 创建HttpClient会话(不支持TLSv1.2)
 	 * @return
 	 */
 	public static HttpClient createHttpClient() {
@@ -227,7 +256,7 @@ public class HttpUtils {
 	}
 
 	/**
-	 * 创建HttpClient会话
+	 * 创建HttpClient会话(不支持TLSv1.2)
 	 * @param connTimeout
 	 * @param callTimeout
 	 * @return

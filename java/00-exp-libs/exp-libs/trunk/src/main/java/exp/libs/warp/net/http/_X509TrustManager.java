@@ -7,7 +7,7 @@ import javax.net.ssl.X509TrustManager;
 
 /**
  * <PRE>
- * HTTPS： SSL伪造证书
+ * HTTPS： 用于绕过SSL证书校验
  * </PRE>
  * 
  * <B>PROJECT：</B> exp-libs

@@ -23,6 +23,8 @@ import exp.libs.utils.io.IOUtils;
  * <PRE>
  * 封装了Apache-HttpClient.
  *  可以保持连接对象, 并介入获取连接过程中的请求/响应参数
+ * -----------------------------------------------
+ *   若 低于JDK1.8 则不支持TLSv1.2
  * </PRE>
  * 
  * <B>PROJECT：</B> exp-libs
