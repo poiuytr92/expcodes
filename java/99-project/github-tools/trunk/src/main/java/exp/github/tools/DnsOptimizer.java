@@ -17,6 +17,7 @@ import exp.libs.envm.HttpHead;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.LogUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.utils.verify.VerifyUtils;
@@ -59,6 +60,7 @@ public class DnsOptimizer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		LogUtils.loadLogBackConfig();
 		optimizeDNS();
 	}
 	
@@ -172,7 +174,7 @@ public class DnsOptimizer {
 		String bestDNS = "";
 		
 		Map<String, String> servers = _getDnsServers(host);
-		log.debug("获取hosts域名主机 [{}] 的候选DNS服务器共 [{}] 台", servers.size());
+		log.debug("获取hosts域名主机 [{}] 的候选DNS服务器共 [{}] 台", host, servers.size());
 		
 		Iterator<String> ids = servers.keySet().iterator();
 		while(ids.hasNext()) {

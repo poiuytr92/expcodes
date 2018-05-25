@@ -74,7 +74,7 @@
 	</appender>
 	
 	<!-- 主程序日志 -->
-	<logger name="exp.github" level="info" additivity="true">
+	<logger name="exp.github" level="debug" additivity="true">
 		<appender-ref ref="app" />
 	</logger>
 	

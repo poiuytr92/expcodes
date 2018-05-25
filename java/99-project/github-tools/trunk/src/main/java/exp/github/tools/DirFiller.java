@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.other.LogUtils;
 
 /**
  * <PRE>
@@ -30,6 +31,7 @@ public class DirFiller {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		LogUtils.loadLogBackConfig();
 		fillEmptyDir(PRJ_ROOT_DIR);
 	}
 	
