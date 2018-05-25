@@ -16,6 +16,7 @@ import exp.libs.envm.Delimiter;
 import exp.libs.envm.HttpHead;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.io.FileUtils;
+import exp.libs.utils.io.JarUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.utils.other.StrUtils;
@@ -72,7 +73,7 @@ public class DnsOptimizer {
 	private final static Logger log = LoggerFactory.getLogger(DnsOptimizer.class);
 	
 	/** Hosts模板文件 */
-	private final static String HOSTS_TPL = "./conf/hosts.tpl";
+	private final static String HOSTS_TPL = "/exp/github/tools/hosts.tpl";
 	
 	/** Windows本地Hosts文件位置 */
 	private final static String WIN_HOST_PATH = "C:\\Windows\\System32\\drivers\\etc\\hosts";
@@ -151,7 +152,7 @@ public class DnsOptimizer {
 	 * @return
 	 */
 	private static boolean saveHosts(Map<String, String> hosts) {
-		String hostHeader = FileUtils.read(HOSTS_TPL, Charset.ISO);
+		String hostHeader = JarUtils.read(HOSTS_TPL, Charset.ISO);
 		StringBuilder sb = new StringBuilder(hostHeader);
 		Iterator<String> hostIts = hosts.keySet().iterator();
 		while(hostIts.hasNext()) {
@@ -200,6 +201,11 @@ public class DnsOptimizer {
 				}
 			} catch(Exception e) {
 				log.error("测试host域名主机 [{}] 到DNS服务器 [{}] 的TTL失败: {}", host, id, rsts, e);
+			}
+			
+			// TTL = 1 已经极好了, 无需再继续测试
+			if(minTTL <= 1) {
+				break;
 			}
 		}
 		return bestDNS;
