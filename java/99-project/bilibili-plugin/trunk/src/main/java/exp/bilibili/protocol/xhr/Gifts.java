@@ -13,7 +13,7 @@ import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.bean.xhr.BagGift;
 import exp.bilibili.protocol.bean.xhr.Medal;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
-import exp.libs.envm.HTTP;
+import exp.libs.envm.HttpHead;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
 
@@ -115,9 +115,9 @@ public class Gifts extends __XHR {
 	 */
 	private static Map<String, String> _getHeader(String cookie) {
 		Map<String, String> header = POST_HEADER(cookie);
-		header.put(HTTP.KEY.HOST, LIVE_HOST);
-		header.put(HTTP.KEY.ORIGIN, LINK_HOME);
-		header.put(HTTP.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
+		header.put(HttpHead.KEY.HOST, LIVE_HOST);
+		header.put(HttpHead.KEY.ORIGIN, LINK_HOME);
+		header.put(HttpHead.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
 		return header;
 	}
 	
@@ -300,9 +300,9 @@ public class Gifts extends __XHR {
 	 */
 	private static Map<String, String> getHeader(String cookie) {
 		Map<String, String> header = GET_HEADER(cookie);
-		header.put(HTTP.KEY.HOST, LIVE_HOST);
-		header.put(HTTP.KEY.ORIGIN, LINK_HOME);
-		header.put(HTTP.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
+		header.put(HttpHead.KEY.HOST, LIVE_HOST);
+		header.put(HttpHead.KEY.ORIGIN, LINK_HOME);
+		header.put(HttpHead.KEY.REFERER, LINK_HOME.concat("/p/center/index"));
 		return header;
 	}
 	

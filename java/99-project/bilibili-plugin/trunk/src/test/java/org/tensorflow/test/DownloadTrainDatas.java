@@ -15,7 +15,7 @@ import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.envm.FileType;
-import exp.libs.envm.HTTP;
+import exp.libs.envm.HttpHead;
 import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.img.ImageUtils;
 import exp.libs.utils.io.FileUtils;
@@ -117,12 +117,12 @@ public class DownloadTrainDatas {
 	 */
 	protected final static Map<String, String> GET_HEADER(String cookie) {
 		Map<String, String> header = new HashMap<String, String>();
-		header.put(HTTP.KEY.ACCEPT, "application/json, text/plain, */*");
-		header.put(HTTP.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		header.put(HTTP.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HTTP.KEY.CONNECTION, "keep-alive");
-		header.put(HTTP.KEY.COOKIE, cookie);
-		header.put(HTTP.KEY.USER_AGENT, HTTP.VAL.USER_AGENT);
+		header.put(HttpHead.KEY.ACCEPT, "application/json, text/plain, */*");
+		header.put(HttpHead.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
+		header.put(HttpHead.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		header.put(HttpHead.KEY.CONNECTION, "keep-alive");
+		header.put(HttpHead.KEY.COOKIE, cookie);
+		header.put(HttpHead.KEY.USER_AGENT, HttpHead.VAL.USER_AGENT);
 		return header;
 	}
 	
@@ -134,9 +134,9 @@ public class DownloadTrainDatas {
 	 */
 	protected final static Map<String, String> GET_HEADER(String cookie, String uri) {
 		Map<String, String> header = GET_HEADER(cookie);
-		header.put(HTTP.KEY.HOST, LIVE_HOST);
-		header.put(HTTP.KEY.ORIGIN, LIVE_HOME);
-		header.put(HTTP.KEY.REFERER, LIVE_HOME.concat(uri));
+		header.put(HttpHead.KEY.HOST, LIVE_HOST);
+		header.put(HttpHead.KEY.ORIGIN, LIVE_HOME);
+		header.put(HttpHead.KEY.REFERER, LIVE_HOME.concat(uri));
 		return header;
 	}
 	
