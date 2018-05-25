@@ -10,7 +10,7 @@ import exp.crawler.qq.envm.URL;
 import exp.crawler.qq.utils.PicUtils;
 import exp.crawler.qq.utils.UIUtils;
 import exp.crawler.qq.utils.XHRUtils;
-import exp.libs.envm.HTTP;
+import exp.libs.envm.HttpHead;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ListUtils;
@@ -132,7 +132,7 @@ public abstract class BaseMoodAnalyzer {
 	 */
 	private int _download(Mood mood) {
 		Map<String, String> header = XHRUtils.getHeader(Browser.COOKIE());
-		header.put(HTTP.KEY.REFERER, URL.MOOD_REFERER);
+		header.put(HttpHead.KEY.REFERER, URL.MOOD_REFERER);
 
 		int idx = 0, cnt = 0;
 		for(String picURL : mood.getPicURLs()) {
@@ -155,7 +155,7 @@ public abstract class BaseMoodAnalyzer {
 	 */
 	private boolean _download(Map<String, String> header, 
 			String page, String picName, String picURL) {
-		header.put(HTTP.KEY.HOST, XHRUtils.toHost(picURL));
+		header.put(HttpHead.KEY.HOST, XHRUtils.toHost(picURL));
 		
 		boolean isOk = false;
 		String savePath = StrUtils.concat(PAGE_DIR_PREFIX, page, "/", picName);

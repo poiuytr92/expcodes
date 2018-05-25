@@ -7,7 +7,7 @@ import org.apache.commons.httpclient.Header;
 import org.apache.commons.httpclient.HttpMethod;
 
 import exp.crawler.qq.bean.QQCookie;
-import exp.libs.envm.HTTP;
+import exp.libs.envm.HttpHead;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpClient;
 
@@ -33,12 +33,12 @@ public class XHRUtils {
 	 */
 	public static Map<String, String> getHeader(QQCookie cookie) {
 		Map<String, String> header = new HashMap<String, String>();
-		header.put(HTTP.KEY.ACCEPT, "image/webp,image/*,*/*;q=0.8");
-		header.put(HTTP.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		header.put(HTTP.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HTTP.KEY.CONNECTION, "keep-alive");
-		header.put(HTTP.KEY.COOKIE, cookie.toNVCookie());
-		header.put(HTTP.KEY.USER_AGENT, HTTP.VAL.USER_AGENT);
+		header.put(HttpHead.KEY.ACCEPT, "image/webp,image/*,*/*;q=0.8");
+		header.put(HttpHead.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
+		header.put(HttpHead.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		header.put(HttpHead.KEY.CONNECTION, "keep-alive");
+		header.put(HttpHead.KEY.COOKIE, cookie.toNVCookie());
+		header.put(HttpHead.KEY.USER_AGENT, HttpHead.VAL.USER_AGENT);
 		return header;
 	}
 	
@@ -52,7 +52,7 @@ public class XHRUtils {
 		if(method != null) {
 			Header[] rspHeaders = method.getResponseHeaders();
 			for(Header rspHeader : rspHeaders) {
-				if(HTTP.KEY.SET_COOKIE.equals(rspHeader.getName())) {
+				if(HttpHead.KEY.SET_COOKIE.equals(rspHeader.getName())) {
 					cookie.add(rspHeader.getValue());
 				}
 			}
