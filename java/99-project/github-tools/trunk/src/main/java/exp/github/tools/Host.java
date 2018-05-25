@@ -7,7 +7,7 @@ import java.util.Map;
 
 import exp.libs.envm.Charset;
 import exp.libs.envm.Delimiter;
-import exp.libs.envm.HTTP;
+import exp.libs.envm.HttpHead;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.StrUtils;
@@ -71,13 +71,13 @@ public class Host {
 	
 	private static String findBestDNS(String host) {
 		Map<String, String> header = new HashMap<String, String>();
-		header.put(HTTP.KEY.ACCEPT, "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
-		header.put(HTTP.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
-		header.put(HTTP.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
-		header.put(HTTP.KEY.CONNECTION, "keep-alive");
-		header.put(HTTP.KEY.HOST, "tool.chinaz.com");
-		header.put(HTTP.KEY.REFERER, "http://tool.chinaz.com/dns?type=1&host=" + host + "&ip=");
-		header.put(HTTP.KEY.USER_AGENT, HTTP.VAL.USER_AGENT);
+		header.put(HttpHead.KEY.ACCEPT, "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
+		header.put(HttpHead.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
+		header.put(HttpHead.KEY.ACCEPT_LANGUAGE, "zh-CN,zh;q=0.8,en;q=0.6");
+		header.put(HttpHead.KEY.CONNECTION, "keep-alive");
+		header.put(HttpHead.KEY.HOST, "tool.chinaz.com");
+		header.put(HttpHead.KEY.REFERER, "http://tool.chinaz.com/dns?type=1&host=" + host + "&ip=");
+		header.put(HttpHead.KEY.USER_AGENT, HttpHead.VAL.USER_AGENT);
 
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("type", "1");
@@ -115,7 +115,7 @@ public class Host {
 					"&callback=jQuery", getJQueryID());
 			System.out.println(ajaxURL);
 			
-			header.put(HTTP.KEY.CONTENT_TYPE, HTTP.VAL.POST_FORM.concat(Charset.UTF8));
+			header.put(HttpHead.KEY.CONTENT_TYPE, HttpHead.VAL.POST_FORM.concat(Charset.UTF8));
 			request.clear();
 			request.put("host", host);
 			request.put("type", "1");
