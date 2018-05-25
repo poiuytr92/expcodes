@@ -209,7 +209,7 @@ public class DnsOptimizer {
 	 * @return Map: server-id -> server-name
 	 */
 	private static Map<String, String> _getDnsServers(String host) {
-		Map<String, String> header = GET_HEADER(host);
+		Map<String, String> header = _GET_HEADER(host);
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("type", "1");
 		request.put("host", host);
@@ -241,7 +241,7 @@ public class DnsOptimizer {
 	 * @return 测试结果列表, 如：{"state":1,"id":15381435,"list":[{"type":"A","result":"151.101.1.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.65.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.129.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.193.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"}]}
 	 */
 	private static String _testTTL(String host, String serverId, String serverName) {
-		Map<String, String> header = POST_HEADER(host);
+		Map<String, String> header = _POST_HEADER(host);
 		Map<String, String> request = new HashMap<String, String>();
 		request.put("host", host);
 		request.put("type", "1");
@@ -249,7 +249,7 @@ public class DnsOptimizer {
 		request.put("process", "13");
 		request.put("right", "13");
 		
-		String jQuery = "jQuery".concat(getJQueryID());
+		String jQuery = "jQuery".concat(_getJQueryID());
 		String ttlUrl = StrUtils.concat(TTL_URL, 
 				"?t=dns", 
 				"&server=", serverName, 
@@ -267,7 +267,7 @@ public class DnsOptimizer {
 	 * 生成随机JQueryID
 	 * @return
 	 */
-	private static String getJQueryID() {
+	private static String _getJQueryID() {
 		StringBuilder uniqueID = new StringBuilder("11");
 		for(int i = 0; i < 20; i++) {
 			uniqueID.append(RandomUtils.randomInt(10));
@@ -281,7 +281,7 @@ public class DnsOptimizer {
 	 * @param host
 	 * @return
 	 */
-	private static Map<String, String> GET_HEADER(String host) {
+	private static Map<String, String> _GET_HEADER(String host) {
 		Map<String, String> header = new HashMap<String, String>();
 		header.put(HttpHead.KEY.ACCEPT, "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8");
 		header.put(HttpHead.KEY.ACCEPT_ENCODING, "gzip, deflate, sdch");
@@ -298,8 +298,8 @@ public class DnsOptimizer {
 	 * @param host
 	 * @return
 	 */
-	private static Map<String, String> POST_HEADER(String host) {
-		Map<String, String> header = GET_HEADER(host);
+	private static Map<String, String> _POST_HEADER(String host) {
+		Map<String, String> header = _GET_HEADER(host);
 		header.put(HttpHead.KEY.CONTENT_TYPE, HttpHead.VAL.POST_FORM.concat(Charset.UTF8));
 		return header;
 	}
