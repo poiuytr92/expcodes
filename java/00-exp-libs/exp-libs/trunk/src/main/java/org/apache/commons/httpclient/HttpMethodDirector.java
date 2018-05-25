@@ -25,7 +25,7 @@ import org.apache.commons.httpclient.params.HttpParams;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import exp.libs.envm.HTTP;
+import exp.libs.envm.HttpHead;
 
 @SuppressWarnings({ "rawtypes", "unchecked", "deprecation" })
 public class HttpMethodDirector {
@@ -114,7 +114,7 @@ public class HttpMethodDirector {
             	// 备份当前页面响应头中返回的cookies
             	Header[] headers = method.getResponseHeaders();
             	for(Header header : headers) {
-            		if(HTTP.KEY.SET_COOKIE.equalsIgnoreCase(header.getName())) {
+            		if(HttpHead.KEY.SET_COOKIE.equalsIgnoreCase(header.getName())) {
             			responseCookies.add(header);
             		}
             	}

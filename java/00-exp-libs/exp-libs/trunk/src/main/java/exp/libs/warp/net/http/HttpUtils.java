@@ -171,7 +171,7 @@ public class HttpUtils {
 		if(HTTPS.equals(url.getProtocol())) {
 			HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
 			if(OSUtils.isJDK16() || OSUtils.isJDK17()) {
-				_supportTLSv12(httpsConn);	// 追加TLSv1.2支持
+				_supportTLSv12(httpsConn);	//  JDK1.6和JDK1.7追加TLSv1.2支持
 				
 			} else {
 				_bypassSSL(httpsConn);		// 绕过SSL校验(可选, JDK1.8以上不绕过也可)

@@ -23,8 +23,9 @@ package exp.libs.envm;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class HTTP {
+public class HttpHead {
 
+	/** 键枚举 */
 	public class KEY {
 		
 		public final static String ACCEPT = "Accept";
@@ -52,6 +53,7 @@ public class HTTP {
 		public final static String SET_COOKIE = "Set-Cookie";
 	}
 	
+	/** 值枚举 */
 	public class VAL {
 		
 		/** 浏览器代理头标识: 假装是Mac，可避免被反爬 */
@@ -59,15 +61,15 @@ public class HTTP {
 				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 //				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 		
-		/** 请求POST的数据是xml */
+		/** 请求POST的数据是xml (需补充字符集) */
 		public final static String POST_XML = 
 				"application/x-javascript text/xml; charset=";
 		
-		/** 请求POST的数据是json */
+		/** 请求POST的数据是json (需补充字符集) */
 		public final static String POST_JSON = 
 				"application/x-javascript; charset=";
 		
-		/** 请求POST的数据是表单 */
+		/** 请求POST的数据是表单 (需补充字符集) */
 		public final static String POST_FORM = 
 				"application/x-www-form-urlencoded; charset=";
 		

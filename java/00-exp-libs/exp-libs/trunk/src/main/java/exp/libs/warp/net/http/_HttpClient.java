@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
-import exp.libs.envm.HTTP;
+import exp.libs.envm.HttpHead;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.io.IOUtils;
 
@@ -219,9 +219,9 @@ class _HttpClient {
 	private String responseAsString(HttpMethod method) {
 		
 		// 检测返回的内容是否使用gzip压缩过
-		Header header = method.getResponseHeader(HTTP.KEY.CONTENT_ENCODING);
+		Header header = method.getResponseHeader(HttpHead.KEY.CONTENT_ENCODING);
 		boolean isGzip = (header == null ? false : 
-			HTTP.VAL.GZIP.equalsIgnoreCase(header.getValue()));
+			HttpHead.VAL.GZIP.equalsIgnoreCase(header.getValue()));
 
 		String response = "";
 		try {

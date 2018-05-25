@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
-import exp.libs.envm.HTTP;
+import exp.libs.envm.HttpHead;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.io.IOUtils;
 import exp.libs.utils.other.StrUtils;
@@ -17,7 +17,7 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * HTTP-URL工具(原生工具)
  * -----------------------------------------------
- *   支持TLSv1.2
+ *   在JDK1.6、JDK1.7、JDK1.8下使用均支持TLSv1.2
  * </PRE>
  * 
  * <B>PROJECT：</B> exp-libs
@@ -217,7 +217,7 @@ public class HttpURLUtils extends HttpUtils {
 		
 		// 检测返回的内容是否使用gzip压缩过
 		String encode = conn.getContentEncoding();
-		boolean isGzip = HTTP.VAL.GZIP.equalsIgnoreCase(encode);
+		boolean isGzip = HttpHead.VAL.GZIP.equalsIgnoreCase(encode);
 
 		String response = "";
 		try {

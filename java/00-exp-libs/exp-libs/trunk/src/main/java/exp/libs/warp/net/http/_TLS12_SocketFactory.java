@@ -39,12 +39,12 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
  * <PRE>
- * This Class enables TLSv1.2  connection based on BouncyCastle Providers.
+ * 引入BouncyCastle重写通信安全密级协议, 使得JDK1.6和1.7支持TLSv1.2.
+ * 注： JDK1.8本已支持TLSv1.2， 无需再使用此方法
  * ---------------------------------------------------------------------------
- * Example:
- * 
- * URL myurl = new URL( "http:// ...URL tha only Works in TLSv1.2);
- * HttpsURLConnection conn = (HttpsURLConnection) myurl.openConnection();
+ * 样例:
+ * URL url = new URL( "http:// ...URL tha only Works in TLSv1.2);
+ * HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
  * conn.setSSLSocketFactory(new _TLS12_SocketFactory());  
  * 
  * <PRE>
