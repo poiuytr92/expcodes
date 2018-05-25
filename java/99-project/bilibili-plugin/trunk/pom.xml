@@ -6,7 +6,7 @@
     <!--项目基本信息(必填)-->
     <groupId>exp.bilibili</groupId>
     <artifactId>bilibili-plugin</artifactId>
-    <version>4.2-SNAPSHOT</version>
+    <version>4.3-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>哔哩哔哩插件姬</name>
@@ -461,7 +461,7 @@
                             <xms>32m</xms>
                             <xmx>256m</xmx>
                             <jdkParams></jdkParams>
-                            <noVerJarRegex>exp-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
+                            <noVerJarRegex>(exp|auto)-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
                             <proguard>true</proguard>  <!-- 是否使用混淆包(需配置混淆打包插件) -->
                         </configuration>
                     </execution>

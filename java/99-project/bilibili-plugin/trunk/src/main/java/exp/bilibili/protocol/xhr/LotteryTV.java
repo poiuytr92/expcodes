@@ -1,5 +1,6 @@
 package exp.bilibili.protocol.xhr;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,6 @@ import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.http.HttpURLUtils;
@@ -37,8 +37,8 @@ public class LotteryTV extends _Lottery {
 	/** 小电视抽奖URL */
 	private final static String TV_JOIN_URL = Config.getInstn().TV_JOIN_URL();
 	
-	/** 最上一次抽奖过的礼物编号(礼物编号是递增的) */
-	private static int LAST_RAFFLEID = 0;
+	/** 已经抽过的小电视ID (服务返还的是乱序列表, 不能使用递增ID流水方式进行筛选) */
+	private final static Set<String> RAFFLEIDS = new HashSet<String>();
 	
 	/** 私有化构造函数 */
 	protected LotteryTV() {}
@@ -52,11 +52,14 @@ public class LotteryTV extends _Lottery {
 		List<String> raffleIds = getRaffleId(TV_CHECK_URL, roomId, 
 				CookiesMgr.MAIN().toNVCookie());
 		for(String raffleId : raffleIds) {
-			int id = NumUtils.toInt(raffleId, 0);
-			if(id > LAST_RAFFLEID) {	// 礼物编号是递增的
-				LAST_RAFFLEID = id;
+			if(RAFFLEIDS.add(raffleId)) {
 				toLottery(roomId, raffleId);
 			}
+		}
+		
+		// 避免内存溢出, 最多缓存128个小电视ID
+		if(RAFFLEIDS.size() >= 128) {
+			RAFFLEIDS.clear();
 		}
 	}
 	
