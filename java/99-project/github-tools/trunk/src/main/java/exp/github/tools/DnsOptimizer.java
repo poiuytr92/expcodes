@@ -93,7 +93,7 @@ public class DnsOptimizer {
 	 */
 	public static void optimizeDNS() {
 		if(!OSUtils.isWin()) {
-			log.warn("此功能暂时只支持windows系统...");
+			log.warn("此功能暂时只支持windows系统");
 			return;
 		}
 		
