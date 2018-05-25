@@ -79,10 +79,12 @@
 	</logger>
 	
 	<!-- 经验库日志 -->
-	<logger name="exp.libs" level="info" additivity="false">
-		<appender-ref ref="other" />
-		<appender-ref ref="exception" />
-	</logger>
+    <logger name="exp.libs.utils.io" level="debug" additivity="false" />
+    <logger name="exp.libs.utils.format.JsonUtils" level="debug" additivity="false" />
+    <logger name="exp.libs" level="info" additivity="false">
+        <appender-ref ref="other" />
+        <appender-ref ref="exception" />
+    </logger>
 	
 	<!-- 第三方日志 -->
 	<logger name="org.apache" level="error" additivity="true" />
