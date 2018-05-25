@@ -18,6 +18,7 @@ import exp.libs.utils.format.JsonUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.io.JarUtils;
 import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
@@ -91,6 +92,11 @@ public class DnsOptimizer {
 	 * 优化Hosts域名主机的DNS绑定
 	 */
 	public static void optimizeDNS() {
+		if(!OSUtils.isWin()) {
+			log.warn("此功能暂时只支持windows系统...");
+			return;
+		}
+		
 		Map<String, String> hosts = readHosts();
 		for(String host : HOSTS) {
 			log.info("正在查找hosts域名主机 [{}] 的最优DNS服务器...", host);
