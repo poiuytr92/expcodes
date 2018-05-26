@@ -165,16 +165,28 @@
 		      <artifactId>selenium-htmlunit-driver</artifactId>
             </exclusion>
             <exclusion>
-              <groupId>org.java-websocket</groupId>
-              <artifactId>Java-WebSocket</artifactId>
+              <groupId>com.sun.media</groupId>
+              <artifactId>jai-imageio</artifactId>
             </exclusion>
             <exclusion>
               <groupId>org.tensorflow</groupId>
               <artifactId>tensorflow</artifactId>
             </exclusion>
             <exclusion>
+              <groupId>org.tensorflow</groupId>
+              <artifactId>libtensorflow</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.tensorflow</groupId>
+              <artifactId>libtensorflow_jni</artifactId>
+            </exclusion>
+            <exclusion>
               <groupId>sun.misc</groupId>
-		      <artifactId>base64</artifactId>
+              <artifactId>base64</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.java-websocket</groupId>
+              <artifactId>Java-WebSocket</artifactId>
             </exclusion>
           </exclusions>
         </dependency>
