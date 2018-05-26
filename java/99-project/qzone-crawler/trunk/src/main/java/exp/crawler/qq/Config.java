@@ -1,8 +1,10 @@
 package exp.crawler.qq;
 
 import exp.libs.envm.Charset;
+import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
+import exp.libs.warp.ver.VersionMgr;
 
 /**
  * <PRE>
@@ -18,6 +20,9 @@ public class Config {
 
 	/** 默认编码 */
 	public final static String CHARSET = Charset.UTF8;
+	
+	/** 应用名称 */
+	public final static String APP_NAME = RegexUtils.findFirst(VersionMgr.getAppName(), "([a-zA-Z\\-]+)");
 	
 	/** 应用配置文件 */
 	private final static String APP_PATH = "/exp/crawler/qq/qc_conf.xml";

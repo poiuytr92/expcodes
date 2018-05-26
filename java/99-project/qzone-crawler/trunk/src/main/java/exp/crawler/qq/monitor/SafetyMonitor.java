@@ -3,8 +3,6 @@ package exp.crawler.qq.monitor;
 import exp.certificate.api.Certificate;
 import exp.certificate.bean.AppInfo;
 import exp.crawler.qq.Config;
-import exp.libs.utils.verify.RegexUtils;
-import exp.libs.warp.ver.VersionMgr;
 
 /**
  * <PRE>
@@ -34,7 +32,7 @@ public class SafetyMonitor {
 	 * 构造函数
 	 */
 	private SafetyMonitor() {
-		this.appName = RegexUtils.findFirst(VersionMgr.getAppName(), "([a-zA-Z\\-]+)");
+		this.appName = Config.APP_NAME;
 	}
 	
 	/**

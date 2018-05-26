@@ -1,5 +1,6 @@
 package exp.crawler.qq;
 
+import exp.au.api.AppVerInfo;
 import exp.crawler.qq.ui.AppUI;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
@@ -24,6 +25,8 @@ public class Main {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		BeautyEyeUtils.init();
+		Config.getInstn();
+		AppVerInfo.export(Config.APP_NAME);
 		
 		AppUI.createInstn(args);
 	}
