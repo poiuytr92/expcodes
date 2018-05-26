@@ -45,10 +45,11 @@ public class Config {
 	/** 禁止自动发言的直播间 */
 	private Set<Integer> tabuAutoRoomIds;
 	
+	/** xml配置器 */
+	private XConfig xConf;
+	
 	/** 单例 */
 	private static volatile Config instance;
-	
-	private XConfig xConf;
 	
 	private Config() {
 		this.xConf = XConfigFactory.createConfig("BILIBILI_CONF");
@@ -333,6 +334,14 @@ public class Config {
 	
 	public long REACTION_TIME() {
 		return xConf.getLong("/config/app/reactionTime");
+	}
+	
+	public String TEST_SERVER() {
+		return xConf.getVal("/config/monitor/testServer");
+	}
+	
+	public String OFFICIAL_SERVER() {
+		return xConf.getVal("/config/monitor/officialServer");
 	}
 	
 	/**
