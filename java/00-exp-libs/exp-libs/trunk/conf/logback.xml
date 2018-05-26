@@ -14,7 +14,7 @@
 	</appender>
 
     <!-- 经验库日志器  -->
-   <appender name="exp-libs"
+    <appender name="exp-libs"
       class="ch.qos.logback.core.rolling.RollingFileAppender">
       <file>${LOG_HOME}/exp-libs.log</file>
       <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -33,7 +33,7 @@
          <onMatch>ACCEPT</onMatch>
          <onMismatch>DENY</onMismatch>
       </filter>
-   </appender>
+    </appender>
    
 	<!-- 经验库日志 -->
 	<logger name="exp.libs" level="info" additivity="true">
