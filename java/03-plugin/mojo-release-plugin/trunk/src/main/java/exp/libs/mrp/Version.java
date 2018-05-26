@@ -1,5 +1,6 @@
 package exp.libs.mrp;
 
+import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ver.VersionMgr;
 
 /**
@@ -16,6 +17,7 @@ import exp.libs.warp.ver.VersionMgr;
 final class Version {
 
 	public static void main(String[] args) {
+		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
 	}
 	

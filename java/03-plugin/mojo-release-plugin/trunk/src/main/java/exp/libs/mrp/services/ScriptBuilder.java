@@ -3,6 +3,7 @@ package exp.libs.mrp.services;
 import java.util.List;
 
 import exp.libs.envm.Charset;
+import exp.libs.envm.Delimiter;
 import exp.libs.mrp.Config;
 import exp.libs.mrp.Log;
 import exp.libs.mrp.cache.JarMgr;
@@ -85,7 +86,7 @@ public class ScriptBuilder {
 		List<String> prefixs = JarMgr.getInstn().getJarPathPrefixs();
 		for(int idx = 0; idx < prefixs.size(); idx++) {
 			exports = StrUtils.concat(exports, 
-					"export lib", idx, "=", prefixs.get(idx), "\n");
+					"export lib", idx, "=", prefixs.get(idx), Delimiter.LF);
 		}
 		tpl.set(Placeholders.VARIABLE_DECLARATION, exports);
 		
@@ -143,7 +144,7 @@ public class ScriptBuilder {
 		List<String> prefixs = JarMgr.getInstn().getJarPathPrefixs();
 		for(int idx = 0; idx < prefixs.size(); idx++) {
 			exports = StrUtils.concat(exports, 
-					"export lib", idx, "=", prefixs.get(idx), "\n");
+					"export lib", idx, "=", prefixs.get(idx), Delimiter.LF);
 		}
 		tpl.set(Placeholders.VARIABLE_DECLARATION, exports);
 		
@@ -195,7 +196,7 @@ public class ScriptBuilder {
 		List<String> prefixs = JarMgr.getInstn().getJarPathPrefixs();
 		for(int idx = 0; idx < prefixs.size(); idx++) {
 			sets = StrUtils.concat(sets, 
-					"set lib", idx, "=", prefixs.get(idx), "\r\n");
+					"set lib", idx, "=", prefixs.get(idx), Delimiter.CRLF);
 		}
 		tpl.set(Placeholders.VARIABLE_DECLARATION, sets);
 				
@@ -231,8 +232,10 @@ public class ScriptBuilder {
 		tpl.set(Placeholders.STDOUT_CTRL, "");
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		
-		return createScript(ScriptNames.START_BAT, 
+		// 标准化脚本内容, 并修正脚本中的set命令
+		String scriptContent = _repairSetCmd(
 				StandardUtils.unix2dos(tpl.getContent()));
+		return createScript(ScriptNames.START_BAT, scriptContent);
 	}
 	
 	private static boolean buildDosVersion() {
@@ -244,7 +247,7 @@ public class ScriptBuilder {
 		List<String> prefixs = JarMgr.getInstn().getJarPathPrefixs();
 		for(int idx = 0; idx < prefixs.size(); idx++) {
 			sets = StrUtils.concat(sets, 
-					"set lib", idx, "=", prefixs.get(idx), "\r\n");
+					"set lib", idx, "=", prefixs.get(idx), Delimiter.CRLF);
 		}
 		tpl.set(Placeholders.VARIABLE_DECLARATION, sets);
 				
@@ -281,8 +284,23 @@ public class ScriptBuilder {
 		tpl.set(Placeholders.STDOUT_CTRL, "");
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		
-		return createScript(ScriptNames.VERSION_BAT, 
+		// 标准化脚本内容, 并修正脚本中的set命令
+		String scriptContent = _repairSetCmd(
 				StandardUtils.unix2dos(tpl.getContent()));
+		return createScript(ScriptNames.VERSION_BAT, scriptContent);
+	}
+	
+	/**
+	 * <PRE>
+	 * 修正dos脚本用于读取线程文件的 "set /p" 命令.
+	 * 该命令由于 {@link StandardUtils.unix2dos} 中的路径标准化, 
+	 * 使得反斜杠 / 变成 \\ 导致失效, 需要修正.
+	 * </PRE>
+	 * @param dosScriptContent
+	 * @return
+	 */
+	private static String _repairSetCmd(String dosScriptContent) {
+		return dosScriptContent.replace("set \\p threadname", "set /p threadname");
 	}
 	
 }
