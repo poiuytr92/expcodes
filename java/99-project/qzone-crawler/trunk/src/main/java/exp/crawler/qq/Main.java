@@ -1,8 +1,8 @@
 package exp.crawler.qq;
 
+import exp.crawler.qq.ui.AppUI;
 import exp.libs.utils.other.LogUtils;
 import exp.libs.warp.ui.BeautyEyeUtils;
-import exp.crawler.qq.ui.AppUI;
 
 /**
  * <PRE>

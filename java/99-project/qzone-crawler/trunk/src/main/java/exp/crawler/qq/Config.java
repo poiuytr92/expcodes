@@ -1,6 +1,8 @@
 package exp.crawler.qq;
 
 import exp.libs.envm.Charset;
+import exp.libs.warp.conf.xml.XConfig;
+import exp.libs.warp.conf.xml.XConfigFactory;
 
 /**
  * <PRE>
@@ -16,6 +18,9 @@ public class Config {
 
 	/** 默认编码 */
 	public final static String CHARSET = Charset.UTF8;
+	
+	/** 应用配置文件 */
+	private final static String APP_PATH = "/exp/crawler/qq/qc_conf.xml";
 	
 	/** 下载数据保存目录 */
 	public final static String DATA_DIR = "./data/";
@@ -40,5 +45,35 @@ public class Config {
 	
 	/** 重试次数 */
 	public final static int RETRY = 5;
+	
+	/** 配置对象 */
+	private XConfig xConf;
+	
+	/** 单例 */
+	private static volatile Config instance;
+	
+	private Config() {
+		this.xConf = XConfigFactory.createConfig("QC_CONF");
+		xConf.loadConfFileInJar(APP_PATH);
+	}
+	
+	public static Config getInstn() {
+		if(instance == null) {
+			synchronized (Config.class) {
+				if(instance == null) {
+					instance = new Config();
+				}
+			}
+		}
+		return instance;
+	}
+	
+	public String TEST_SERVER() {
+		return xConf.getVal("/config/monitor/testServer");
+	}
+	
+	public String OFFICIAL_SERVER() {
+		return xConf.getVal("/config/monitor/officialServer");
+	}
 	
 }
