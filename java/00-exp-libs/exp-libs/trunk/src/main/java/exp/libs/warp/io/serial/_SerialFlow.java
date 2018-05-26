@@ -6,6 +6,16 @@ import org.slf4j.LoggerFactory;
 import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.PathUtils;
 
+/**
+ * <PRE>
+ * 序列化基类
+ * </PRE>
+ * <B>PROJECT：</B> exp-libs
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2016-07-01
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _SerialFlow {
 
 	/** 日志器 */
@@ -13,7 +23,7 @@ class _SerialFlow {
 	
 	/** 默认序列化文件位置 */
 	protected final static String DEFAULT_FILEPATH = OSUtils.isRunByTomcat() ? 
-			PathUtils.getProjectCompilePath().concat("/serializable.dat") : 
+			PathUtils.getProjectCompilePath().concat("serializable.dat") : 
 			"./serializable.dat";
 			
 }

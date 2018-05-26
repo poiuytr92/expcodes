@@ -58,7 +58,7 @@ class _VerDBMgr {
 	
 	/** 临时版本库位置（仅用于查看版本信息） */
 	private final static String TMP_VER_DB = OSUtils.isRunByTomcat() ? 
-			PathUtils.getProjectCompilePath().concat("/").concat(DB_NAME) : 
+			PathUtils.getProjectCompilePath().concat(DB_NAME) : 
 			"./conf/".concat(DB_NAME);
 	
 	/** 版本信息文件的数据源 */

@@ -91,7 +91,7 @@ class _Config implements _IConfig {
 		try {
 			File confFile = new File(confFilePath);
 			String charset = XmlUtils.getCharset(confFile);
-			String xml = FileUtils.readFileToString(confFile, charset);
+			String xml = FileUtils.read(confFile, charset);
 			Document doc = DocumentHelper.parseText(xml);
 			root = doc.getRootElement();
 			xTree.update(root);
@@ -177,7 +177,7 @@ class _Config implements _IConfig {
 		try {
 			File confFile = new File(confFilePath);
 			String charset = XmlUtils.getCharset(confFile);
-			String xml = FileUtils.readFileToString(confFile, charset);
+			String xml = FileUtils.read(confFile, charset);
 			Document doc = DocumentHelper.parseText(xml);
 			root = doc.getRootElement();
 			xTree.update(root);

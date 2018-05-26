@@ -132,16 +132,20 @@ public class PathUtils {
 	 * @return 项目的根路径
 	 */
 	public static String getProjectRootPath() {
-		return System.getProperty("user.dir");
+		return System.getProperty("user.dir").concat(File.separator);
 	}
 	
 	/**
-	 * 获取项目的编译目录的根路径，如： X:/foo/bar/project/target/classes
+	 * <PRE>
+	 * 获取项目的编译目录的根路径。
+	 *   非Tomcat项目形, 如： X:/foo/bar/project/target/classes
+	 *   Tomcat项目形, 如:  %tomcat%/%wepapp%/%project%/classes
+	 * <PRE>
 	 * @return 项目的编译根路径
 	 */
 	public static String getProjectCompilePath() {
 		return new File(PathUtils.class.getResource("/").getPath()).
-				getAbsolutePath();
+				getAbsolutePath().concat(File.separator);
 	}
 	
 	/**

@@ -50,7 +50,6 @@ public final class OSUtils {
 	 */
 	private final static String SJC = System.getProperty("sun.java.command");
 	protected final static String RUN_EVN = (SJC == null ? "" : SJC);
-	
 	private final static boolean RUN_BY_TOMCAT = 
 			RUN_EVN.startsWith("org.apache.catalina.startup.Bootstrap");
 	
