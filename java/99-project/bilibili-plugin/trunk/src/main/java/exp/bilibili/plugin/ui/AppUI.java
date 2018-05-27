@@ -21,6 +21,7 @@ import javax.swing.JTextField;
 
 import org.jb2011.lnf.beautyeye.ch3_button.BEButtonUI.NormalColor;
 
+import exp.au.api.AppVerInfo;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.bean.ldm.HotLiveRange;
@@ -226,9 +227,18 @@ public class AppUI extends MainWindow {
 					Identity.set(Identity.UPLIVE);
 					
 				// 普通用户
-				} else {
+				} else if(Identity.USER.CMD().equals(args[0])) {
 					Identity.set(Identity.USER);
+					
+				// 试用用户
+				} else {
+					Identity.set(Identity.GUEST);
 				}
+			}
+			
+			// 非游客用户才启用自动升级功能
+			if(!Identity.less(Identity.USER)) {
+				AppVerInfo.export(Config.APP_NAME);
 			}
 		}
 		return isOk;
