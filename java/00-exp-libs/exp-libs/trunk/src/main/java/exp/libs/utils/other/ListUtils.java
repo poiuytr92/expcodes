@@ -32,7 +32,7 @@ public class ListUtils {
 	 * @param array 被测试数组
 	 * @return true:是; false:否
 	 */
-	public static boolean isEmpty(Object[] array) {
+	public static <E> boolean isEmpty(E[] array) {
 		return (array == null || array.length <= 0);
 	}
 	
@@ -41,7 +41,7 @@ public class ListUtils {
 	 * @param array 被测试数组
 	 * @return true:是; false:否
 	 */
-	public static boolean isNotEmpty(Object[] array) {
+	public static <E> boolean isNotEmpty(E[] array) {
 		return !isEmpty(array);
 	}
 	
