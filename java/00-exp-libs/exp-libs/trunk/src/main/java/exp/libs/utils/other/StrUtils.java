@@ -19,6 +19,30 @@ import exp.libs.utils.verify.VerifyUtils;
  */
 public class StrUtils {
 
+	/** 全角字符集 */
+	private final static char[] FULL_WIDTH_CH = {
+			'０', '１', '２', '３' , '４', '５' , '６', '７', '８', '９', 
+			'Ａ', 'Ｂ', 'Ｃ', 'Ｄ', 'Ｅ' , 'Ｆ', 'Ｇ' , 'Ｈ', 'Ｉ', 'Ｊ', 'Ｋ', 
+			'Ｌ', 'Ｍ', 'Ｎ', 'Ｏ', 'Ｐ' , 'Ｑ', 'Ｒ' , 'Ｓ', 'Ｔ', 'Ｕ', 'Ｖ', 
+			'Ｗ', 'Ｘ', 'Ｙ', 'Ｚ', 'ａ' , 'ｂ', 'ｃ' , 'ｄ', 'ｅ', 'ｆ', 'ｇ', 
+			'ｈ', 'ｉ', 'ｊ', 'ｋ', 'ｌ' , 'ｍ', 'ｎ' , 'ｏ', 'ｐ', 'ｑ', 'ｒ', 
+			'ｓ', 'ｔ', 'ｕ', 'ｖ', 'ｗ' , 'ｘ', 'ｙ' , 'ｚ', '：', '；', '，', 
+			'（', '）', '【', '】', '｛', '｝', '‘', '’', '“', '”', 
+			'＜', '＞', '《', '》', '？', '。'
+	};
+	
+	/** 半角字符集 */
+	private final static char[] HALF_WIDTH_CH = {
+			'0', '1', '2', '3' , '4', '5' , '6', '7', '8', '9', 
+			'A', 'B', 'C', 'D', 'E' , 'F', 'G' , 'H', 'I', 'J', 'K', 
+			'L', 'M', 'N', 'O', 'P' , 'Q', 'R' , 'S', 'T', 'U', 'V', 
+			'W', 'X', 'Y', 'Z', 'a' , 'b', 'c' , 'd', 'e', 'f', 'g', 
+			'h', 'i', 'j', 'k', 'l' , 'm', 'n' , 'o', 'p', 'q', 'r', 
+			's', 't', 'u', 'v', 'w' , 'x', 'y' , 'z', ':', ';', ',', 
+			'(', ')', '[', ']', '{', '}', '\'', '\'', '\"', '\"', 
+			'<', '>', '<', '>', '?', '.'
+	};
+	
 	/** 私有化构造函数 */
 	protected StrUtils() {}
 	
@@ -672,6 +696,24 @@ public class StrUtils {
 			len = s.length() + chineseCnt(s);
 		}
 		return len;
+	}
+	
+	/**
+	 * 把字符串中的 [全角/中文字符] 转换成 [半角/英文字符]
+	 * @param fullWidth 含 [全角/中文字符] 的字符串
+	 * @return 含 [半角/英文字符] 的字符串
+	 */
+	public static String toHalfWidth(final String fullWidth) {
+		String halfWidth = "";
+		if(fullWidth != null) {
+			halfWidth = fullWidth;
+			int size = FULL_WIDTH_CH.length;
+			for(int i = 0; i < size; i++) {
+				halfWidth = halfWidth.replace(
+						FULL_WIDTH_CH[i], HALF_WIDTH_CH[i]);
+			}
+		}
+		return halfWidth;
 	}
 	
 }
