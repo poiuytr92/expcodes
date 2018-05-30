@@ -1,5 +1,6 @@
 package exp.libs.utils.other;
 
+import java.util.Collection;
 import java.util.List;
 
 import exp.libs.envm.Delimiter;
@@ -287,12 +288,15 @@ public class StrUtils {
 	 * @param separator 分隔符
 	 * @return 使用分隔符依次连接所有字符串的字符串
 	 */
-	public static String concat(List<String> list, String separator) {
+	public static <E> String concat(Collection<E> list, String separator) {
 		StringBuilder sb = new StringBuilder();
-		if(list != null && !list.isEmpty()) {
+		if(ListUtils.isNotEmpty(list)) {
 			separator = (separator == null ? "" : separator);
-			for(String str : list) {
-				sb.append(str).append(separator);
+			for(E e : list) {
+				if(e == null) {
+					continue;
+				}
+				sb.append(e.toString()).append(separator);
 			}
 			
 			if(sb.length() > separator.length()) {
