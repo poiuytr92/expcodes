@@ -22,12 +22,11 @@ class _FPFServers {
 
 	private List<_FPFServer> servers;
 	
-	protected _FPFServers(SRMgr srMgr, int overtime, 
-			List<FPFConfig> serverConfigs) {
+	protected _FPFServers(SRMgr srMgr, List<FPFConfig> serverConfigs) {
 		this.servers = new LinkedList<_FPFServer>();
 		if(ListUtils.isNotEmpty(serverConfigs)) {
 			for(FPFConfig config : serverConfigs) {
-				_FPFServer server = new _FPFServer(srMgr, overtime, config);
+				_FPFServer server = new _FPFServer(srMgr, config);
 				servers.add(server);
 			}
 			

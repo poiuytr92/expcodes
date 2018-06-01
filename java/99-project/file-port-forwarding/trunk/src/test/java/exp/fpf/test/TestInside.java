@@ -14,10 +14,8 @@ public class TestInside {
 		String sendDir = "C:\\Users\\Administrator\\Desktop\\server\\send";
 		String recvDir = "C:\\Users\\Administrator\\Desktop\\server\\recv";
 		int overtime = 10000;
-		int maxConn = 100;
 		
-		FPFConfig config = new FPFConfig("test", 
-				localListenPort, remoteIP, remotePort, maxConn);
+		FPFConfig config = new FPFConfig("test", localListenPort, remoteIP, remotePort);
 		FPFAgent agents = new FPFAgent(sendDir, recvDir, overtime, config);
 		agents._start();
 	}

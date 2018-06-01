@@ -30,9 +30,8 @@ public final class Param {
 	/** PC队列默认容量 */
 	public final static int PC_CAPACITY = 1024;
 	
-	/** Socket读写缓存：每次最多读写1MB数据 */
-	public final static int IO_BUFF = SocketBean.DEFAULT_BUFF_SIZE * 
-			SocketBean.DEFAULT_BUFF_SIZE_UNIT;
+	/** Socket读写缓存：每次最多读写10KB数据 */
+	public final static int IO_BUFF = 10 * SocketBean.BUFF_SIZE_UNIT_KB;
 	
 	/** JSON属性：会话ID */
 	public final static String SID = "sid";

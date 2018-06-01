@@ -65,15 +65,10 @@ public class Recver {
 		
 		// 设置socket监听器
 		if(Config.getInstn().getRspMode() == ResponseMode.SOCKET) {
-			String ip = Config.getInstn().getRspIp();
-			int port = Config.getInstn().getRspPort();
-			int overtime = Config.getInstn().getOvertime();
-			SocketBean sockConf = new SocketBean(ip, port);
-			sockConf.setOvertime(overtime);
-			
+			SocketBean sockConf = Config.getInstn().newSocketConf();
 			IHandler handler = new _SRDataListener(srMgr);
 			this.sockListener = new SocketServer(sockConf, handler);
-			log.info("[{}]-[接收端] 已初始化, 服务socket为 [{}:{}]", NAME, ip, port);
+			log.info("[{}]-[接收端] 已初始化, 服务socket为 [{}]", NAME, sockConf.getSocket());
 			
 		// 设置收发文件目录监听器(只监听 recv 文件)
 		} else {

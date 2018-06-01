@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.fpf.Config;
+import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.io.client.SocketClient;
 
 /**
@@ -30,11 +31,9 @@ public class Sender {
 	private static volatile Sender instance;
 	
 	private Sender() {
-		String ip = Config.getInstn().getRspIp();
-		int port = Config.getInstn().getRspPort();
-		this.client = new SocketClient(ip, port, Config.getInstn().getOvertime());
-		
-		log.info("[{}]-[发送端] 已初始化, [接收端]socket为 [{}:{}]", NAME, ip, port);
+		SocketBean sockConf = Config.getInstn().newSocketConf();
+		this.client = new SocketClient(sockConf);
+		log.info("[{}]-[发送端] 已初始化, [接收端]socket为 [{}]", NAME, sockConf.getSocket());
 	}
 	
 	public static Sender getInstn() {

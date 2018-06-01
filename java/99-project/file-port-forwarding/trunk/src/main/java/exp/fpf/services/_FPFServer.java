@@ -3,7 +3,6 @@ package exp.fpf.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.fpf.Config;
 import exp.fpf.bean.FPFConfig;
 import exp.fpf.cache.SRMgr;
 import exp.libs.warp.net.sock.bean.SocketBean;
@@ -26,21 +25,24 @@ class _FPFServer {
 
 	private Logger log = LoggerFactory.getLogger(_FPFServer.class);
 	
+	private final static String LOCAL_IP = "0.0.0.0";
+	
 	/** 端口转发代理服务配置 */
 	private FPFConfig config;
 	
 	/** 本地端口侦听服务 */
 	private SocketServer listenServer;
 	
-	protected _FPFServer(SRMgr srMgr, int overtime, FPFConfig config) {
+	protected _FPFServer(SRMgr srMgr, FPFConfig config) {
 		this.config = config;
 		
 		// 设置Socket端口监听服务
 		SocketBean localSockBean = new SocketBean(); {
 			localSockBean.setId(config.getServerName());
-			localSockBean.setIp(Config.LOCAL_IP);
+			localSockBean.setIp(LOCAL_IP);
 			localSockBean.setPort(config.getLocalListenPort());
-			localSockBean.setOvertime(overtime);
+			localSockBean.setOvertime(config.getOvertime());
+			localSockBean.setBufferSize(config.getBuffSize(), SocketBean.BUFF_SIZE_UNIT_KB);
 			localSockBean.setMaxConnectionCount(config.getMaxConn());
 		}
 		_FPFSHandler fpfHandler = new _FPFSHandler(srMgr, config);

@@ -5,12 +5,14 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.fpf.Config;
 import exp.fpf.cache.RecvCache;
 import exp.fpf.cache.SRMgr;
 import exp.fpf.envm.Param;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.verify.RegexUtils;
+import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.io.client.SocketClient;
 
 /**
@@ -63,7 +65,7 @@ class _FPFClientSession extends Thread {
 	/** 响应收转器: 把[本侧真正的服务端口]返回的响应数据[收转]到[对侧] */
 	private _TranslateCData recver;
 	
-	/** 是否已初始化 */
+	/** 是否已初始化过 */
 	private boolean isInit;
 	
 	/**
@@ -81,7 +83,8 @@ class _FPFClientSession extends Thread {
 		this.sessionId = sessionId;
 		this.ip = ip;
 		this.port = port;
-		this.session = new SocketClient(ip, port, overtime);
+		SocketBean sockConf = Config.getInstn().newSocketConf(ip, port);
+		this.session = new SocketClient(sockConf);
 		this.fileList = new PCQueue<String>(Param.PC_CAPACITY);
 		this.fileCache = new RecvCache();
 		this.isInit = false;
@@ -89,17 +92,21 @@ class _FPFClientSession extends Thread {
 
 	@Override
 	public void run() {
-		if(session.conn()) {	// 此方法会阻塞, 为了不影响其他会话, 需要放在线程中运行
-			this.sender = new _TranslateCData(srMgr, sessionId, Param.PREFIX_SEND, 
-					overtime, fileList, session.getSocket());	// 请求转发
-			this.recver = new _TranslateCData(srMgr, sessionId, Param.PREFIX_RECV, 
-					overtime, fileList, session.getSocket());	// 响应转发
-			sender.start();
-			recver.start();
-			log.info("新增一个到服务端口 [{}:{}] 的会话 [{}]", ip, port, sessionId);
-			
-		} else {
-			log.warn("会话 [{}] 连接到服务端口 [{}:{}] 失败", sessionId, ip, port);
+		try {
+			if(session.conn()) {	// 此方法会阻塞, 为了不影响其他会话, 需要放在线程中运行
+				this.sender = new _TranslateCData(srMgr, sessionId, Param.PREFIX_SEND, 
+						overtime, fileList, session.getSocket());	// 请求转发
+				this.recver = new _TranslateCData(srMgr, sessionId, Param.PREFIX_RECV, 
+						overtime, fileList, session.getSocket());	// 响应转发
+				sender.start();
+				recver.start();
+				log.info("新增一个到服务端口 [{}:{}] 的会话 [{}]", ip, port, sessionId);
+				
+			} else {
+				log.warn("会话 [{}] 连接到服务端口 [{}:{}] 失败", sessionId, ip, port);
+			}
+		} catch(Throwable e) {
+			log.error("内存不足, 无法再分配代理会话", e);
 		}
 		isInit = true;
 	}

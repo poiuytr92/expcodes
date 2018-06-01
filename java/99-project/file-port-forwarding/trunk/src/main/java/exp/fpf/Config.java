@@ -13,6 +13,7 @@ import exp.fpf.envm.ResponseMode;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
+import exp.libs.warp.net.sock.bean.SocketBean;
 
 /**
  * <pre>
@@ -31,8 +32,6 @@ public class Config {
 	private final static String APP_CONF_PATH = "./conf/fpf_conf.dat";
 	
 	private final static String USE_CONF_PATH = "./conf/fpf_conf.xml";
-	
-	public final static String LOCAL_IP = "0.0.0.0";
 	
 	private XConfig xConf;
 	
@@ -57,11 +56,14 @@ public class Config {
 	/** 用于接收返回数据的监听socket(端口): 仅rspMode=1时有效 */
 	private int rspPort;
 	
-	/** 超时时间 */
-	private int overtime;
-	
 	/** 扫描文件间隔 */
 	private long scanInterval;
+	
+	/** 超时时间(ms) */
+	private int overtime;
+	
+	/** 单个代理会话的缓冲区大小(kb) */
+	private int buffSize;
 	
 	/** 代理服务配置集 */
 	private List<FPFConfig> fpfConfigs;
@@ -74,10 +76,11 @@ public class Config {
 		this.sendDir = "./tmp/sendDir";
 		this.recvDir = "./tmp/recvDir";
 		this.rspMode = ResponseMode.SOCKET;
-		this.rspIp = LOCAL_IP;
+		this.rspIp = "0.0.0.0";
 		this.rspPort = 9527;
-		this.overtime = 10000;
 		this.scanInterval = 1;
+		this.overtime = 10000;
+		this.buffSize = 20;
 	}
 	
 	public static Config getInstn() {
@@ -101,9 +104,9 @@ public class Config {
 		this.rspMode = xConf.getInt("rspMode");
 		this.rspIp = xConf.getVal("config/rspSock/ip");
 		this.rspPort = xConf.getInt("config/rspSock/port");
-		this.overtime = xConf.getInt("overtime");
 		this.scanInterval = xConf.getLong("scanInterval");
-		
+		this.overtime = xConf.getInt("overtime");
+		this.buffSize = xConf.getInt("buffSize");
 		_loadServicesConfig(root);
 	}
 	
@@ -131,7 +134,8 @@ public class Config {
 				int remotePort = NumUtils.toInt(service.elementTextTrim("remotePort"), 0);
 				int maxConn = NumUtils.toInt(service.elementTextTrim("maxConn"), 0);
 				
-				fpfc = new FPFConfig(name, localListnPort, remoteIP, remotePort, maxConn);
+				fpfc = new FPFConfig(name, localListnPort, remoteIP, remotePort, 
+						maxConn, overtime, buffSize);
 			}
 		} catch(Exception e) {
 			log.error("加载端口转发服务配置失败", e);
@@ -151,24 +155,26 @@ public class Config {
 		return rspMode;
 	}
 
-	public String getRspIp() {
-		return rspIp;
-	}
-
-	public int getRspPort() {
-		return rspPort;
-	}
-
-	public int getOvertime() {
-		return overtime;
-	}
-
 	public long getScanInterval() {
 		return scanInterval;
 	}
-
+	
+	public int getOvertime() {
+		return overtime;
+	}
+	
 	public List<FPFConfig> getFPFConfigs() {
 		return fpfConfigs;
+	}
+	
+	public SocketBean newSocketConf() {
+		return newSocketConf(rspIp, rspPort);
+	}
+	
+	public SocketBean newSocketConf(String ip, int port) {
+		SocketBean sockConf = new SocketBean(ip, port, overtime);
+		sockConf.setBufferSize(buffSize, SocketBean.BUFF_SIZE_UNIT_KB);
+		return sockConf;
 	}
 	
 }

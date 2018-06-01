@@ -26,11 +26,7 @@ public class FPFAgent {
 
 	private Logger log = LoggerFactory.getLogger(FPFAgent.class);
 	
-	private final static int DEFAULT_OVERTIME = 10000;
-	
 	private SRMgr srMgr;
-	
-	private int overtime;
 	
 	private _FPFServers servers;
 	
@@ -78,9 +74,8 @@ public class FPFAgent {
 	public FPFAgent(String sendDir, String recvDir, 
 			int overtime, List<FPFConfig> serverConfigs) {
 		this.srMgr = new SRMgr(sendDir, recvDir);
-		this.overtime = (overtime <= 0 ? DEFAULT_OVERTIME : overtime);
-		this.servers = new _FPFServers(srMgr, this.overtime, serverConfigs);
-		this.client = new _FPFClient(srMgr, this.overtime);
+		this.servers = new _FPFServers(srMgr, serverConfigs);
+		this.client = new _FPFClient(srMgr, overtime);
 	}
 	
 	private boolean _init() {
