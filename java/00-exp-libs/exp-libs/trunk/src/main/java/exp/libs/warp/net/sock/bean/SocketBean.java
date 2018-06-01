@@ -52,9 +52,17 @@ public class SocketBean {
 	
 	private int writeBufferSize;
 	
+	/** 默认缓冲区大小 */
 	public final static int DEFAULT_BUFF_SIZE = 1;
 	
-	public final static int DEFAULT_BUFF_SIZE_UNIT = 1024 * 1024;	//1MB
+	/** 缓冲区大小单位：Byte */
+	public final static int BUFF_SIZE_UNIT_BYTE = 1;
+	
+	/** 缓冲区大小单位：KB */
+	public final static int BUFF_SIZE_UNIT_KB = 1024;
+	
+	/** 缓冲区大小单位：MB */
+	public final static int BUFF_SIZE_UNIT_MB = 1024 * 1024;
 	
 	private String delimiter;
 	
@@ -237,9 +245,23 @@ public class SocketBean {
 		}
 	}
 
+	/**
+	 * 设置读写缓冲区大小（单位MB）
+	 * @param bufferSize 缓冲区大小
+	 */
 	public void setBufferSize(int bufferSize) {
+		setBufferSize(bufferSize, BUFF_SIZE_UNIT_MB);
+	}
+	
+	/**
+	 * 设置读写缓冲区大小: (bufferSize * unit) 字节
+	 * @param bufferSize 缓冲区大小
+	 * @param unit 单位:默认为 1024*1024个字节, 即1MB
+	 */
+	public void setBufferSize(int bufferSize, int unit) {
 		if(bufferSize > 0) {
-			this.bufferSize = bufferSize * DEFAULT_BUFF_SIZE_UNIT;
+			unit = (unit <= 0 ? BUFF_SIZE_UNIT_MB : unit);
+			this.bufferSize = bufferSize * unit;
 			this.readBufferSize = this.bufferSize;
 			this.writeBufferSize = this.bufferSize;
 		}
@@ -249,9 +271,23 @@ public class SocketBean {
 		return readBufferSize;
 	}
 
+	/**
+	 * 设置读缓冲区大小（单位MB）
+	 * @param bufferSize 缓冲区大小
+	 */
 	public void setReadBufferSize(int readBufferSize) {
+		setReadBufferSize(readBufferSize, BUFF_SIZE_UNIT_MB);
+	}
+	
+	/**
+	 * 设置读缓冲区大小: (bufferSize * unit) 字节
+	 * @param bufferSize 缓冲区大小
+	 * @param unit 单位:默认为 1024*1024个字节, 即1MB
+	 */
+	public void setReadBufferSize(int readBufferSize, int unit) {
 		if(readBufferSize > 0) {
-			this.readBufferSize = readBufferSize * DEFAULT_BUFF_SIZE_UNIT;
+			unit = (unit <= 0 ? BUFF_SIZE_UNIT_MB : unit);
+			this.readBufferSize = readBufferSize * unit;
 			
 			if(this.readBufferSize == this.writeBufferSize) {
 				this.bufferSize = readBufferSize;
@@ -263,9 +299,23 @@ public class SocketBean {
 		return writeBufferSize;
 	}
 
+	/**
+	 * 设置写缓冲区大小（单位MB）
+	 * @param bufferSize 缓冲区大小
+	 */
 	public void setWriteBufferSize(int writeBufferSize) {
+		setWriteBufferSize(writeBufferSize, BUFF_SIZE_UNIT_MB);
+	}
+	
+	/**
+	 * 设置写缓冲区大小: (bufferSize * unit) 字节
+	 * @param bufferSize 缓冲区大小
+	 * @param unit 单位:默认为 1024*1024个字节, 即1MB
+	 */
+	public void setWriteBufferSize(int writeBufferSize, int unit) {
 		if(writeBufferSize > 0) {
-			this.writeBufferSize = writeBufferSize * DEFAULT_BUFF_SIZE_UNIT;
+			unit = (unit <= 0 ? BUFF_SIZE_UNIT_MB : unit);
+			this.writeBufferSize = writeBufferSize * unit;
 			
 			if(this.readBufferSize == this.writeBufferSize) {
 				this.bufferSize = writeBufferSize;

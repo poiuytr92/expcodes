@@ -20,8 +20,9 @@ class _TranslateData extends Thread {
 	
 	protected final static String TYPE_RESPONE = "RESPONE";
 	
+	/** 每次最多读写1MB数据 */
 	private final static int IO_BUFF = SocketBean.DEFAULT_BUFF_SIZE * 
-			SocketBean.DEFAULT_BUFF_SIZE_UNIT;	// 每次最多读写1MB数据
+			SocketBean.BUFF_SIZE_UNIT_MB;	
 	
 	private String sessionId;
 	
