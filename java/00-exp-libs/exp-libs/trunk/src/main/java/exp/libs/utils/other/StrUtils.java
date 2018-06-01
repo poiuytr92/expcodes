@@ -2,6 +2,7 @@ package exp.libs.utils.other;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import exp.libs.envm.Delimiter;
 import exp.libs.utils.format.ESCUtils;
@@ -284,15 +285,35 @@ public class StrUtils {
 	
 	/**
 	 * 使用指定分隔符连接字符串
+	 * @param set 字符串集合
+	 * @param separator 分隔符
+	 * @return 使用分隔符依次连接所有字符串的字符串
+	 */
+	public static <E> String concat(Set<E> set, String separator) {
+		return _concat(set, separator);
+	}
+	
+	/**
+	 * 使用指定分隔符连接字符串
 	 * @param list 字符串列表
 	 * @param separator 分隔符
 	 * @return 使用分隔符依次连接所有字符串的字符串
 	 */
-	public static <E> String concat(Collection<E> list, String separator) {
+	public static <E> String concat(List<E> list, String separator) {
+		return _concat(list, separator);
+	}
+	
+	/**
+	 * 使用指定分隔符连接字符串 (此方法的入参会与 Object...冲突)
+	 * @param collection 字符串集合
+	 * @param separator 分隔符
+	 * @return 使用分隔符依次连接所有字符串的字符串
+	 */
+	private static <E> String _concat(Collection<E> collection, String separator) {
 		StringBuilder sb = new StringBuilder();
-		if(ListUtils.isNotEmpty(list)) {
+		if(ListUtils.isNotEmpty(collection)) {
 			separator = (separator == null ? "" : separator);
-			for(E e : list) {
+			for(E e : collection) {
 				if(e == null) {
 					continue;
 				}
