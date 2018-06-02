@@ -174,11 +174,8 @@ public class RandomUtils {
 	 * @return 返回随机数范围 [min,max]
 	 */
 	public static int randomInt(final int min, final int max) {
-		int num = random.nextInt(max + 1);
-		if (num < min) {
-			num += min;
-		}
-		return num;
+		int num = randomInt(max - min + 1);
+		return num + min;
 	}
 	
 	/**
@@ -233,6 +230,19 @@ public class RandomUtils {
 	 */
 	public static double randomGaussian() {
 		return random.nextGaussian();
+	}
+	
+	/**
+	 * 随机生成一个 0-9A-Za-z 内的字符
+	 * @return 返回随机单词字符
+	 */
+	public static char randomWordChar() {
+		int digit = randomInt(48, 57);	// 0-9
+		int upper = randomInt(65, 90);	// A-Z
+		int lower = randomInt(97, 122);	// a-z
+		int[] scope = new int[] { digit, upper, lower };
+		int idx = randomInt(scope.length);
+		return (char) scope[idx];
 	}
 	
 	/**

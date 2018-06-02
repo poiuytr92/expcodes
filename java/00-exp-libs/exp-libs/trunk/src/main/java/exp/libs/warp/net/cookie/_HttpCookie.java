@@ -84,10 +84,10 @@ class _HttpCookie {
 	private void init(String headerCookie) {
 		String[] vals = headerCookie.split(";");
 		for(int i = 0; i < vals.length; i++) {
-			String[] kv = vals[i].split("=");
-			if(kv.length == 2) {
-				String key = kv[0].trim();
-				String val = kv[1].trim();
+			int idx = vals[i].indexOf('=');
+			if(idx > 0) {
+				String key = vals[i].substring(0, idx).trim();
+				String val = vals[i].substring(idx + 1).trim();
 				
 				if(i == 0) {
 					this.name = key;
@@ -106,8 +106,8 @@ class _HttpCookie {
 					}
 				}
 				
-			} else if(kv.length == 1){
-				String key = kv[0].trim();
+			} else {
+				String key = vals[i].trim();
 				if(SECURE.equalsIgnoreCase(key)) {
 					this.isSecure = true;
 					
