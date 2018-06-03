@@ -234,7 +234,7 @@ public class BiliCookie extends HttpCookie {
 	public boolean allowLottery() {
 		
 		// 随机抽奖
-		int random = RandomUtils.randomInt(1, 100);
+		int random = RandomUtils.genInt(1, 100);
 		int val = UIUtils.getLotteryProbability();
 		boolean isOk = val >= random;
 		

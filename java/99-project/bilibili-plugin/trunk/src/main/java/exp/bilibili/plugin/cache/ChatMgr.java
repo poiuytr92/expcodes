@@ -174,7 +174,7 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		String card = RandomUtils.randomElement(MsgKwMgr.getCards());
+		String card = RandomUtils.genElement(MsgKwMgr.getCards());
 		String msg = "滴~".concat(card);
 		
 		int hour = TimeUtils.getCurHour(8);	// 中国8小时时差
@@ -349,7 +349,7 @@ public class ChatMgr extends LoopThread {
 		}
 		
 		String msg = NOTICE_KEY.concat(
-				RandomUtils.randomElement(MsgKwMgr.getNotices()));
+				RandomUtils.genElement(MsgKwMgr.getNotices()));
 		XHRSender.sendDanmu(msg);
 	}
 	

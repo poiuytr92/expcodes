@@ -50,7 +50,7 @@ public class VercodeUtils {
 		// 而目前识别是在仅当表达式存在数字1的时候 (因识别略低, 算法直接跳过不识别)
 		// 而当表达式至少存在一个1时, 取值范围为 [1, 100] 而非 [1, 108] 
 		if(rst <= 0) {	
-			rst = RandomUtils.randomInt(1, 100);
+			rst = RandomUtils.genInt(1, 100);
 		}
 		return rst;
 	}

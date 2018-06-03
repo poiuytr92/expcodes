@@ -50,7 +50,7 @@ class __XHR {
 	 * @return 访问ID
 	 */
 	protected static String getVisitId() {
-		long num = System.currentTimeMillis() * RandomUtils.randomInt(1000000);
+		long num = System.currentTimeMillis() * RandomUtils.genInt(1000000);
 		return Long.toString(num, 36);
 	}
 	

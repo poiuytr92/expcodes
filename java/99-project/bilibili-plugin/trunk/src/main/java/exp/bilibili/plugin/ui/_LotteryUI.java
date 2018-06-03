@@ -283,7 +283,7 @@ class _LotteryUI extends PopChildWindow {
 
 		@Override
 		protected void _loopRun() {
-			int idx = RandomUtils.randomInt(users.size());
+			int idx = RandomUtils.genInt(users.size());
 			String username = users.get(idx);
 			luckyTF.setText(username);
 		}

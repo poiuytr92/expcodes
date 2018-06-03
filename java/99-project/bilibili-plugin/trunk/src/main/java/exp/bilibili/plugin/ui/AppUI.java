@@ -881,15 +881,15 @@ public class AppUI extends MainWindow {
 						}
 						
 						for(BiliCookie cookie : CookiesMgr.ALL()) {
-							if(!cookie.isBindTel() || RandomUtils.randomBoolean()) {
+							if(!cookie.isBindTel() || RandomUtils.genBoolean()) {
 								continue;
 							}
 							
-							String msg = RandomUtils.randomElement(calls);
+							String msg = RandomUtils.genElement(calls);
 							calls.remove(msg);
 							
 							XHRSender.sendDanmu(cookie, msg);
-							ThreadUtils.tSleep(RandomUtils.randomInt(1000, 10000));
+							ThreadUtils.tSleep(RandomUtils.genInt(1000, 10000));
 						}
 					}
 				});

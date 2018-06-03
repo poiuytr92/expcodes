@@ -168,7 +168,7 @@ public class Login extends __XHR {
 	 * @return 与该验证码配套的cookies
 	 */
 	public static String downloadVccode(String imgPath) {
-		final String sid = StrUtils.concat(SID, "=", randomSID());
+		final String sid = StrUtils.concat(SID, "=", genSID());
 		HttpClient client = new HttpClient();
 		
 		// 下载验证码图片（该验证码图片需要使用一个随机sid去请求）
@@ -196,10 +196,10 @@ public class Login extends __XHR {
 	 * 生成随机SID (sid是由长度为8的由a-z0-9字符组成的字符串)
 	 * @return 随机SID
 	 */
-	private static String randomSID() {
+	private static String genSID() {
 		StringBuilder sid = new StringBuilder();
 		for(int i = 0; i < 8; i++) {	// sid长度为8
-			int n = RandomUtils.randomInt(36);	// a-z, 0-9
+			int n = RandomUtils.genInt(36);	// a-z, 0-9
 			if(n < 26) {	// a-z
 				sid.append((char) (n + 'a'));
 				

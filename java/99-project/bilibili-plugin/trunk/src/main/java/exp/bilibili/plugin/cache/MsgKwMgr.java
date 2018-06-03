@@ -118,7 +118,7 @@ public class MsgKwMgr {
 			return "";
 		}
 		
-		int idx = RandomUtils.randomInt(advs.size());
+		int idx = RandomUtils.genInt(advs.size());
 		return advs.get(idx);
 	}
 	
@@ -131,7 +131,7 @@ public class MsgKwMgr {
 			return "";
 		}
 		
-		int idx = RandomUtils.randomInt(musics.size());
+		int idx = RandomUtils.genInt(musics.size());
 		return musics.get(idx);
 	}
 	

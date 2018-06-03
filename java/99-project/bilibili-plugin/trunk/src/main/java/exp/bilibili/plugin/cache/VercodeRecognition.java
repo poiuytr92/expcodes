@@ -304,7 +304,7 @@ public class VercodeRecognition {
 		// 否则从识别率最高和次高的两个参照值中随机选择一个
 		String value = _1stValue;
 		if(ratio && _1stSimilarity < CREDIBLE_RADIO) {
-			value = RandomUtils.randomBoolean() ? _1stValue : _2ndValue;
+			value = RandomUtils.genBoolean() ? _1stValue : _2ndValue;
 		}
 		return value;
 	}
