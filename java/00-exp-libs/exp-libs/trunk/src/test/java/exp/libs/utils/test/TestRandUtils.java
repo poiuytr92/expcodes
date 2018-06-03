@@ -71,7 +71,7 @@ public class TestRandUtils {
 	@Test
 	public void testRandomChineseName() {
 		for(int i = 0; i < 100; i++) {
-			String[] name = RandomUtils.randomChineseName();
+			String[] name = RandomUtils.genChineseName();
 			System.out.println(name[0]);
 			System.out.println(name[1]);
 		}

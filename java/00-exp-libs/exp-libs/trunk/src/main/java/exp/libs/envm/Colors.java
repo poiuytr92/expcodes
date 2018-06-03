@@ -116,7 +116,7 @@ public class Colors {
 	 * @return
 	 */
 	public static Colors RANDOM() {
-		return RandomUtils.randomElement(COLORS);
+		return RandomUtils.genElement(COLORS);
 	}
 	
 }

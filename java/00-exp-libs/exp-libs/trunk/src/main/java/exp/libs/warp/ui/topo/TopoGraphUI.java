@@ -241,12 +241,12 @@ public class TopoGraphUI extends PopChildWindow {
 		if(split <= 0) {
 			return new double[0];
 		} else if(split == 1) {
-			return new double[] { RandomUtils.randomInt(CIRCLE) };
+			return new double[] { RandomUtils.genInt(CIRCLE) };
 		}
 		
 		double subTheta = 360D / split;	// 等分子角
-		subTheta = (RandomUtils.randomBoolean() ? subTheta : -subTheta); // 随机正向/反向
-		final int ROTATION = RandomUtils.randomInt(90);	// 90度以内的随机旋转角
+		subTheta = (RandomUtils.genBoolean() ? subTheta : -subTheta); // 随机正向/反向
+		final int ROTATION = RandomUtils.genInt(90);	// 90度以内的随机旋转角
 		
 		// 相对于极轴的等分角集
 		double[] thetas = new double[split]; {

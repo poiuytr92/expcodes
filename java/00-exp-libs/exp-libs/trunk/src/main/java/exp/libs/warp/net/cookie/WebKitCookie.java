@@ -45,6 +45,12 @@ public class WebKitCookie extends HttpCookie {
 		add(cookies);
 	}
 	
+	@Override
+	protected void init() {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	/**
 	 * 添加多个selenium的cookie
 	 * @param cookie
@@ -87,5 +93,5 @@ public class WebKitCookie extends HttpCookie {
 		}
 		return seleniumCookies;
 	}
-	
+
 }

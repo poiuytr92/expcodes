@@ -16,7 +16,7 @@ import exp.libs.utils.other.StrUtils;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class HttpCookie {
+public abstract class HttpCookie {
 	
 	/** 换行符 */
 	protected final static String LFCR = "\r\n";
@@ -58,9 +58,7 @@ public class HttpCookie {
 	 * 初始化.
 	 *  此方法在{@link takeCookieNVE()}之前执行
 	 */
-	protected void init() {
-		// Undo 供子类使用
-	}
+	protected abstract void init();
 	
 	/**
 	 * cookies是否有效

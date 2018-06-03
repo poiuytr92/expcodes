@@ -64,7 +64,7 @@ final class _QAnt {
 	protected _QAnt(final int antId, final _QEnv ENV) {
 		this.antId = antId;
 		this.ENV = ENV;
-		if(RandomUtils.randomBoolean()) {
+		if(RandomUtils.genBoolean()) {
 			this.SRC_ID = ENV.srcId();
 			this.SNK_ID = ENV.snkId();
 		} else {
@@ -177,7 +177,7 @@ final class _QAnt {
 			firstId = SRC_ID;
 			
 		} else {
-			firstId = RandomUtils.randomInt(ENV.size());
+			firstId = RandomUtils.genInt(ENV.size());
 		}
 		return firstId;
 	}
@@ -193,7 +193,7 @@ final class _QAnt {
 		}
 		
 		// 蚂蚁以80%的概率以信息素作为决策方式进行路径转移（协作性优先）
-		int rand = RandomUtils.randomInt(RAND_SCOPE);
+		int rand = RandomUtils.genInt(RAND_SCOPE);
 		if(rand < RAND_LIMIT) {
 			double argmax = -1;
 			for(int a = curId, z = 0; z < ENV.size(); z++) {
@@ -220,7 +220,7 @@ final class _QAnt {
 			}
 			
 			if(nextIds.size() > 0) {
-				int idx = RandomUtils.randomInt(nextIds.size());
+				int idx = RandomUtils.genInt(nextIds.size());
 				nextId = nextIds.get(idx);
 			}
 		}
