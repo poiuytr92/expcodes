@@ -284,7 +284,7 @@ public class DnsOptimizer {
 	private static String _getJQueryID() {
 		StringBuilder uniqueID = new StringBuilder("11");
 		for(int i = 0; i < 20; i++) {
-			uniqueID.append(RandomUtils.randomInt(10));
+			uniqueID.append(RandomUtils.genInt(10));
 		}
 		uniqueID.append("_").append(System.currentTimeMillis());
 		return uniqueID.toString();
