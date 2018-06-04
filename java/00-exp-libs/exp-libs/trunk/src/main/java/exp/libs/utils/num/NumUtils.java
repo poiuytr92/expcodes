@@ -361,22 +361,22 @@ public class NumUtils {
 	 * <PRE>
 	 * int递增序列压缩.
 	 * 	例如把 { 1, 2, 3, 5, 6, 8, 10 }
-	 *  压缩为 [1~3, 5~6, 8, 10]
+	 *  压缩为 [1-3, 5-6, 8, 10]
 	 * </PRE>
-	 * @param ascSeries 递增序列
+	 * @param ascSeries 递增序列(无需连续, 但必须递增)
 	 * @return
 	 */
 	public static List<String> compress(int[] ascSeries) {
-		return compress(ascSeries, '~');
+		return compress(ascSeries, '-');
 	}
 	
 	/**
 	 * <PRE>
 	 * int递增序列压缩.
 	 * 	例如把 { 1, 2, 3, 5, 6, 8, 10 }
-	 *  压缩为 [1~3, 5~6, 8, 10]
+	 *  压缩为 [1-3, 5-6, 8, 10]
 	 * </PRE>
-	 * @param ascSeries 递增序列
+	 * @param ascSeries 递增序列(无需连续, 但必须递增)
 	 * @param endash 连字符
 	 * @return 压缩序列
 	 */
