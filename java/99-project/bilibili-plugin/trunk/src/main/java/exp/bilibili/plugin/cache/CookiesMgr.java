@@ -50,8 +50,10 @@ public class CookiesMgr {
 	private final static String COOKIE_MINI_PREFIX = "cookie-mini-";
 	
 	/** 上限保存的小号Cookie个数 */
-	public final static int MAX_NUM = !Identity.less(Identity.ADMIN) ? 233 : 
-		(!Identity.less(Identity.UPLIVE) ? 15 : 8);
+	public final static int MAX_NUM = 
+			(!Identity.less(Identity.ADMIN) ? 233 : 
+			(!Identity.less(Identity.UPLIVE) ? 15 : 
+			(!Identity.less(Identity.USER) ? 8 : 3)));
 	
 	/** 主号cookie */
 	private BiliCookie mainCookie;
