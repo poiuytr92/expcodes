@@ -241,7 +241,11 @@ public class LotteryStorm extends _Lottery {
 		if(cnt > 0) {
 			UIUtils.statistics("成功(节奏风暴x", cnt, "): 直播间 [", roomId, "]");
 			UIUtils.updateLotteryCnt(cnt);
+			
 		} else {
+			if(reason.contains("不存在")) {
+				reason = "亿圆被抢光啦";
+			}
 			UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, "]");
 		}
 		return (cnt > 0);

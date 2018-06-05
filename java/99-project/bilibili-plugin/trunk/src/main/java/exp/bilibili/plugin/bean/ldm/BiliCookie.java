@@ -234,8 +234,11 @@ public class BiliCookie extends HttpCookie {
 	public boolean allowLottery() {
 		
 		// 随机抽奖
-		int random = RandomUtils.genInt(1, 100);
 		int val = UIUtils.getLotteryProbability();
+		if(!isRealName() && val >= 50) {
+			val -= 20;	// 对于未实名的账号因为被B站严格管控，此处限制最高不超过80%的抽奖概率
+		}
+		int random = RandomUtils.genInt(1, 100);
 		boolean isOk = val >= random;
 		
 		// 限制未实名账号连续抽奖 (B站严查未实名账号)
