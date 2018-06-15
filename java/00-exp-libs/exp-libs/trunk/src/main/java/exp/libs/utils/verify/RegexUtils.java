@@ -62,37 +62,29 @@ public class RegexUtils {
 	 * @return 匹配值(若无匹配返回"")
 	 */
 	public static String findFirst(String str, String regex) {
-		String value = "";
-		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
-			Pattern ptn = Pattern.compile(regex);
-			Matcher mth = ptn.matcher(str);
-			if(mth.find()) {
-				value = (mth.groupCount() >= 1 ? mth.group(1) : "");
-			}
-		}
-		return value;
+		return findGroup(str, regex, 1);
 	}
 	
 	/**
 	 * <PRE>
-	 * 取每次匹配的group(1)
+	 * 取首次匹配的group(i)
 	 * </PRE>
 	 * @param str 被匹配字符串
-	 * @param regex 正则表达式(必须至少含有1个括号)
-	 * @return 匹配值集（集合大小即为匹配次数）
+	 * @param regex 正则表达式(必须含有若干个括号)
+	 * @param groupId 第i个组号(即括号)
+	 * @return 匹配值(若无匹配返回"")
 	 */
-	public static List<String> findBrackets(String str, String regex) {
-		List<String> list = new LinkedList<String>();
+	public static String findGroup(String str, String regex, int groupId) {
+		String value = "";
 		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
+			groupId = (groupId < 0 ? 0 : groupId);
 			Pattern ptn = Pattern.compile(regex);
 			Matcher mth = ptn.matcher(str);
-			
-			while(mth.find()) {
-				String value = (mth.groupCount() >= 1 ? mth.group(1) : "");
-				list.add(value);
+			if(mth.find()) {
+				value = (mth.groupCount() >= groupId ? mth.group(groupId) : "");
 			}
 		}
-		return list;
+		return value;
 	}
 	
 	/**
@@ -114,6 +106,28 @@ public class RegexUtils {
 				for (int i = 0; i <= groupCount; i++) {
 					list.add(mth.group(i));
 				}
+			}
+		}
+		return list;
+	}
+	
+	/**
+	 * <PRE>
+	 * 取每次匹配的group(1)
+	 * </PRE>
+	 * @param str 被匹配字符串
+	 * @param regex 正则表达式(必须至少含有1个括号)
+	 * @return 匹配值集（集合大小即为匹配次数）
+	 */
+	public static List<String> findBrackets(String str, String regex) {
+		List<String> list = new LinkedList<String>();
+		if(StrUtils.isNotEmpty(str) && StrUtils.isNotEmpty(regex)) {
+			Pattern ptn = Pattern.compile(regex);
+			Matcher mth = ptn.matcher(str);
+			
+			while(mth.find()) {
+				String value = (mth.groupCount() >= 1 ? mth.group(1) : "");
+				list.add(value);
 			}
 		}
 		return list;
