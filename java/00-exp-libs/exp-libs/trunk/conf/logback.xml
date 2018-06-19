@@ -43,6 +43,7 @@
 	<!-- 第三方日志 -->
 	<logger name="org.apache" level="error" additivity="true" />
 	<logger name="org.logicalcobwebs" level="error" additivity="true" />
+	<logger name="httpclient.wire" level="error" additivity="true">
 	
 	<!-- 根日志 -->
 	<root level="debug">
