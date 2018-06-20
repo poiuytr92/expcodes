@@ -564,6 +564,14 @@
           <artifactId>cxf-rt-transports-http</artifactId>
           <version>3.0.1</version>
         </dependency>
+        
+        <!-- CXF-server -->
+        <dependency>
+	      <groupId>org.apache.cxf</groupId>
+	      <artifactId>cxf-rt-transports-http-jetty</artifactId>
+	      <version>3.0.1</version>
+	      <scope>runtime</scope>	<!-- 目前仅提供demo，不需要打包到项目 -->
+	    </dependency>
 
         <!-- logback -->
         <dependency>

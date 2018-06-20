@@ -61,6 +61,10 @@ public class HttpHead {
 				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 //				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 		
+		/** 请求GET的数据是text (需补充字符集) */
+		public final static String GET_TXT = 
+				"text/xml; charset=";
+		
 		/** 请求POST的数据是xml (需补充字符集) */
 		public final static String POST_XML = 
 				"application/x-javascript text/xml; charset=";

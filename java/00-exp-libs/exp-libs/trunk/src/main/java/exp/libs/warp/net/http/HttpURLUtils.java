@@ -4,7 +4,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 
@@ -105,7 +104,7 @@ public class HttpURLUtils extends HttpUtils {
 			Map<String, String> header, Map<String, String> request, 
 			int connTimeout, int readTimeout, String charset) throws Exception {
 		String response = "";
-		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_POST, 
+		HttpURLConnection conn = createHttpConn(url, METHOD_POST, 
 				header, connTimeout, readTimeout);
 		
 		// POST的请求参数是在结构体中发过去的
@@ -197,7 +196,7 @@ public class HttpURLUtils extends HttpUtils {
 		String kvs = encodeRequests(request, charset);	
 		url = HttpUtils.concatGET(url, kvs);	// GET的参数是拼在url后面的
 		
-		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_GET,
+		HttpURLConnection conn = createHttpConn(url, METHOD_GET,
 				header, connTimeout, readTimeout);
 		String response = responseAsString(conn, charset);
 		close(conn);
@@ -297,7 +296,7 @@ public class HttpURLUtils extends HttpUtils {
 			Map<String, String> header, Map<String, String> request, 
 			int connTimeout, int readTimeout, String charset) throws Exception {
 		boolean isOk = false;
-		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_POST, 
+		HttpURLConnection conn = createHttpConn(url, METHOD_POST, 
 				header, connTimeout, readTimeout);
 		
 		// POST的请求参数是在结构体中发过去的
@@ -379,7 +378,7 @@ public class HttpURLUtils extends HttpUtils {
 		String kvs = encodeRequests(request, charset);	
 		url = HttpUtils.concatGET(url, kvs);	// GET的参数是拼在url后面的
 		
-		HttpURLConnection conn = createHttpConn(new URL(url), METHOD_GET,
+		HttpURLConnection conn = createHttpConn(url, METHOD_GET,
 				header, connTimeout, readTimeout);
 		boolean isOk = responseAsRes(conn, savePath);
 		close(conn);

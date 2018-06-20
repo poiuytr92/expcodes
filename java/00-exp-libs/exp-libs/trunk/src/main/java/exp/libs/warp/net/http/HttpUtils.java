@@ -97,7 +97,7 @@ public class HttpUtils {
 	 * @param conn
 	 * @return
 	 */
-	protected static boolean isResponseOK(HttpURLConnection conn) {
+	public static boolean isResponseOK(HttpURLConnection conn) {
 		boolean isOk = false;
 		try {
 			isOk = (conn.getResponseCode() == HttpURLConnection.HTTP_OK);
@@ -112,8 +112,18 @@ public class HttpUtils {
 	 * @param responseCode 响应状态码
 	 * @return
 	 */
-	protected static boolean isResponseOK(int httpStatus) {
+	public static boolean isResponseOK(int httpStatus) {
 		return (httpStatus == HttpStatus.SC_OK);
+	}
+	
+	/**
+	 * 构造HTTP/HTTPS连接(支持TLSv1.2)
+	 * @param url 目标地址
+	 * @param method 请求方法：GET/POST
+	 * @return HTTP连接(失败返回null)
+	 */
+	public static HttpURLConnection createHttpConn(String url, String method) {
+		return createHttpConn(url, method, null, CONN_TIMEOUT, CALL_TIMEOUT);
 	}
 	
 	/**
@@ -123,7 +133,7 @@ public class HttpUtils {
 	 * @param header 请求头参数
 	 * @return HTTP连接(失败返回null)
 	 */
-	public static HttpURLConnection createHttpConn(URL url, 
+	public static HttpURLConnection createHttpConn(String url, 
 			String method, Map<String, String> header) {
 		return createHttpConn(url, method, header, 
 				CONN_TIMEOUT, CALL_TIMEOUT);
@@ -138,7 +148,7 @@ public class HttpUtils {
 	 * @param readTimeout 读取超时(ms)
 	 * @return HTTP连接(失败返回null)
 	 */
-	public static HttpURLConnection createHttpConn(URL url, String method, 
+	public static HttpURLConnection createHttpConn(String url, String method, 
 			Map<String, String> header, int connTimeout, int readTimeout) {
 		HttpURLConnection conn = null;
 		try {
@@ -160,16 +170,17 @@ public class HttpUtils {
 	 * @return HTTP连接(失败返回null)
 	 * @throws Exception
 	 */
-	private static HttpURLConnection _createHttpConn(URL url, String method, 
+	private static HttpURLConnection _createHttpConn(String url, String method, 
 			Map<String, String> header, int connTimeout, int readTimeout) throws Exception {
 		HttpURLConnection conn = null;
-		if (url == null) {
+		if(StrUtils.isEmpty(url)) {
 			return conn;
 		}
+		URL URL = new URL(url);
 		
 		// HTTPS连接(若依然报错 protocol_version， 则调用此方法的程序需切换到JDK1.8以上, JDK1.8默认使用TLSv1.2)
-		if(HTTPS.equals(url.getProtocol())) {
-			HttpsURLConnection httpsConn = (HttpsURLConnection) url.openConnection();
+		if(HTTPS.equals(URL.getProtocol())) {
+			HttpsURLConnection httpsConn = (HttpsURLConnection) URL.openConnection();
 			if(OSUtils.isJDK16() || OSUtils.isJDK17()) {
 				_supportTLSv12(httpsConn);	//  JDK1.6和JDK1.7追加TLSv1.2支持
 				
@@ -181,7 +192,7 @@ public class HttpUtils {
 			
 		// HTTP连接
 		} else {
-			conn = (HttpURLConnection) url.openConnection();
+			conn = (HttpURLConnection) URL.openConnection();
 		}
 
 		// 设置固有请求参数
