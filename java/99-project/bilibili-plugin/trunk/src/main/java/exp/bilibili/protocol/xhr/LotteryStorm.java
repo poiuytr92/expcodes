@@ -1,6 +1,5 @@
 package exp.bilibili.protocol.xhr;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -15,7 +14,6 @@ import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
-import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.envm.LotteryType;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.envm.BiliCmdAtrbt;
@@ -46,7 +44,7 @@ public class LotteryStorm extends _Lottery {
 	private final static String STORM_JOIN_URL = Config.getInstn().STORM_JOIN_URL();
 	
 	/** 最上一次抽奖过的节奏风暴编号(礼物编号是递增的) */
-	private static int LAST_STORMID = 0;
+	private static long LAST_STORMID = 0L;
 	
 	/** 私有化构造函数 */
 	protected LotteryStorm() {}
@@ -112,12 +110,6 @@ public class LotteryStorm extends _Lottery {
 		return roomIds;
 	}
 	
-	public static void main(String[] args) {
-		CookiesMgr.getInstn().load(CookieType.MAIN);
-		CookiesMgr.getInstn().load(CookieType.VEST);
-		toLottery(Arrays.asList(new Integer[] { 438, 387 }), 5000);
-	}
-	
 	/**
 	 * 扫描房间中是否有节奏风暴, 有则加入节奏风暴抽奖
 	 * @param hotRoomIds 热门房间列表
@@ -134,13 +126,7 @@ public class LotteryStorm extends _Lottery {
 			
 			boolean isExist = true;
 			while(isExist == true) {	// 对于存在节奏风暴的房间, 继续扫描(可能有人连续送节奏风暴)
-				String response = client.doGet(Config.getInstn().GUARD_CHECK_URL(), header, request);
-				xhrlog.info("guard: {}", response);
-				
-				response = client.doGet(STORM_CHECK_URL, header, request);
-				xhrlog.info("storm: {}", response);
-				
-				
+				String response = client.doGet(STORM_CHECK_URL, header, request);
 				if(StrUtils.isTrimEmpty(response)) {
 					log.error("提取直播间 [{}] 的节奏风暴信息失败: 请求频率过高", roomId);
 					ThreadUtils.tSleep(scanInterval);
@@ -157,7 +143,7 @@ public class LotteryStorm extends _Lottery {
 	/**
 	 * 获取节奏风暴的抽奖ID
 	 * @param roomId
-	 * @param response {"code":0,"msg":"","message":"","data":{"id":157283,"roomid":2717660,"num":100,"time":50,"content":"康康胖胖哒……！","hasJoin":0}}
+	 * @param response {"code":0,"msg":"","message":"","data":{"id":318289831272,"roomid":291623,"num":100,"send_num":"1","time":76,"content":"要优雅，不要污","hasJoin":0,"storm_gif":"https://static.hdslb.com/live-static/live-room/images/gift-section/mobilegift/2/jiezou.gif?2017011901"}}
 	 * @return
 	 */
 	private static List<String> getStormRaffleIds(int roomId, String response) {
@@ -167,7 +153,7 @@ public class LotteryStorm extends _Lottery {
 			Object data = json.get(BiliCmdAtrbt.data);
 			if(data instanceof JSONObject) {
 				JSONObject room = (JSONObject) data;
-				int raffleId = JsonUtils.getInt(room, BiliCmdAtrbt.id, 0);
+				long raffleId = JsonUtils.getLong(room, BiliCmdAtrbt.id, 0);
 				if(raffleId > LAST_STORMID) {
 					LAST_STORMID = raffleId;
 					raffleIds.add(String.valueOf(raffleId));
@@ -177,7 +163,7 @@ public class LotteryStorm extends _Lottery {
 				JSONArray array = (JSONArray) data;
 				for(int i = 0 ; i < array.size(); i++) {
 					JSONObject room = array.getJSONObject(i);
-					int raffleId = JsonUtils.getInt(room, BiliCmdAtrbt.id, 0);
+					long raffleId = JsonUtils.getLong(room, BiliCmdAtrbt.id, 0);
 					if(raffleId > LAST_STORMID) {
 						LAST_STORMID = raffleId;
 						raffleIds.add(String.valueOf(raffleId));
