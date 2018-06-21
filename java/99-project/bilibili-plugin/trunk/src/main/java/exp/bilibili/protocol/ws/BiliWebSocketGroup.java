@@ -5,20 +5,26 @@ import java.util.List;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.protocol.envm.BiliBinary;
+import exp.bilibili.protocol.xhr.Query;
 import exp.libs.warp.net.websock.WebSockClient;
 import exp.libs.warp.net.websock.bean.Frame;
+import exp.libs.warp.thread.LoopThread;
 
-public class BiliWebSocketGroup {
-
+public class BiliWebSocketGroup extends LoopThread {
+	
 	private final static String WEBSOCKET = Config.getInstn().WEBSOCKET();
 	
 	private final static Frame HB_FRAME = new Frame(BiliBinary.CLIENT_HB);
 	
 	private final static int HB_SECOND = 30;
 	
-	private final static String[] AREA = new String[] {
-		"游戏区", "手游区", "娱乐区", "绘画区"
-	};
+	private final static long REFLASH_TIME = 1800000;
+	
+	private final static long SLEEP_TIME = 1000;
+	
+	private final static int LOOP_LIMIT = (int) (REFLASH_TIME / SLEEP_TIME);
+	
+	private int loopCnt;
 	
 	/** 用于版聊直播间的websocket */
 	private WebSockClient liveClient;
@@ -30,6 +36,9 @@ public class BiliWebSocketGroup {
 	private List<WebSockClient> linstenClients;
 	
 	public BiliWebSocketGroup() {
+		super("websocket组管理器");
+		
+		this.loopCnt = 0;
 		this.linstenClients = new LinkedList<WebSockClient>();
 	}
 	
@@ -48,7 +57,6 @@ public class BiliWebSocketGroup {
 		
 		liveClient = createWebSockClient(roomId, false);
 	}
-	
 	
 	/**
 	 * 重连所有分区监听
@@ -71,8 +79,12 @@ public class BiliWebSocketGroup {
 	 * @return
 	 */
 	private int[] getAreaRoomIds() {
-		// TODO 每半小时刷新一次
-		return null;
+		int[] roomIds = new int[4];
+		roomIds[0] = Query.queryGameTop1();
+		roomIds[1] = Query.queryAppGameTop1();
+		roomIds[2] = Query.queryAmuseTop1();
+		roomIds[3] = Query.queryDrawTop1();
+		return roomIds;
 	}
 	
 	public void clear() {
@@ -82,6 +94,29 @@ public class BiliWebSocketGroup {
 			linstenClient.close();
 		}
 		linstenClients.clear();
+	}
+
+	@Override
+	protected void _before() {
+		log.info("{} 启动", getName());
+		loopCnt = LOOP_LIMIT;
+	}
+
+	@Override
+	protected void _loopRun() {
+		
+		if(++loopCnt >= LOOP_LIMIT) {
+			loopCnt = 0;
+			relinkListen();
+		}
+		
+		_sleep(SLEEP_TIME);
+	}
+
+	@Override
+	protected void _after() {
+		clear();
+		log.info("{} 停止", getName());
 	}
 	
 }

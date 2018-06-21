@@ -53,7 +53,6 @@ import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.net.websock.WebSockClient;
 import exp.libs.warp.thread.ThreadPool;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -651,6 +650,8 @@ public class AppUI extends MainWindow {
 				}
 				
 				wsClient.relinkLive(roomId);
+				wsClient._start();
+				
 				_switchRoom();	// 切换房间后的操作
 				lockBtn();
 			}
@@ -1117,7 +1118,7 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void beforeExit() {
-		wsClient.clear();
+		wsClient._stop();
 		lotteryUI.clear();
 		
 		StormScanner.getInstn()._stop();

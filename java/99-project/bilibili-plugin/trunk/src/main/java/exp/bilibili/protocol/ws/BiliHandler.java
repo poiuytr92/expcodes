@@ -39,8 +39,8 @@ public class BiliHandler implements IHandler {
 	
 	private int roomId;
 	
-	/** 是否只用于监听分区礼物 */
-	private boolean listenGift;
+	/** 此websocket会话是否只用于监听分区礼物 */
+	private boolean onlyListen;
 	
 	private final Frame CONN_FRAME;
 	
@@ -50,9 +50,9 @@ public class BiliHandler implements IHandler {
 		this(roomId, false);
 	}
 	
-	public BiliHandler(int roomId, boolean listenGift) {
+	public BiliHandler(int roomId, boolean onlyListen) {
 		this.roomId = RoomMgr.getInstn().getRealRoomId(roomId);
-		this.listenGift = listenGift;
+		this.onlyListen = onlyListen;
 		this.CONN_FRAME = new Frame(BiliBinary.CLIENT_CONNECT(this.roomId));
 		this.CLOSE_FRAME = new Frame(BiliBinary.CLIENT_CLOSE, Opcode.CLOSING);
 	}
@@ -66,7 +66,7 @@ public class BiliHandler implements IHandler {
 	public void afterConnect(ISession session) {
 		session.send(CONN_FRAME);	// B站的websocket连接成功后需要马上发送连接请求
 		
-		if(listenGift == false) {
+		if(onlyListen == false) {
 			UIUtils.log("正在尝试入侵直播间 [", roomId, "] 后台...");
 		}
 	}
@@ -88,7 +88,7 @@ public class BiliHandler implements IHandler {
 		} else if(BiliBinary.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.debug("websocket连接成功确认");
 			
-			if(listenGift == false) {
+			if(onlyListen == false) {
 				UIUtils.log("入侵直播间 [", roomId, "] 成功, 正在暗中观察...");
 			}
 			
@@ -113,9 +113,10 @@ public class BiliHandler implements IHandler {
 			String subHexMsg = hexMsg.substring(MSG_HEADER_LEN, len);
 			String msg = CharsetUtils.toStr(
 					BODHUtils.toBytes(subHexMsg), Config.DEFAULT_CHARSET);
+			
 			if(JsonUtils.isVaild(msg)) {
 				JSONObject json = JSONObject.fromObject(msg);
-				if(!WSAnalyser.toMsgBean(json, listenGift)) {
+				if(!WSAnalyser.toMsgBean(json, roomId, onlyListen)) {
 					isOk = false;
 				}
 			} else {
@@ -150,7 +151,7 @@ public class BiliHandler implements IHandler {
 
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
-		if(listenGift == false) {
+		if(onlyListen == false) {
 			UIUtils.log("与直播间 [", roomId, "] 的连接已断开 (Reason:", 
 					(remote ? "server" : "client"), ")");
 		}
@@ -158,7 +159,7 @@ public class BiliHandler implements IHandler {
 
 	@Override
 	public void onError(Exception e) {
-		if(listenGift == false) {
+		if(onlyListen == false) {
 			UIUtils.log("与直播间 [", roomId, 
 					"] 的连接已断开 (Reason:", e.getMessage(), ")");
 		}

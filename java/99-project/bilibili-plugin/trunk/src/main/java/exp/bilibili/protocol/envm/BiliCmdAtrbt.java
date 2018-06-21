@@ -357,4 +357,16 @@ public class BiliCmdAtrbt {
 	
 	public final static String combo_num = "combo_num";
 	
+	public final static String parent_area_id = "parent_area_id";
+	
+	public final static String cate_id = "cate_id";
+	
+	public final static String area_id = "area_id";
+	
+	public final static String sort_type = "sort_type";
+	
+	public final static String page_size = "page_size";
+	
+	public final static String top_recommend = "top_recommend";
+	
 }

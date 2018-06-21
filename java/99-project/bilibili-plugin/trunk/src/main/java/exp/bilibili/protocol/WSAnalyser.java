@@ -61,83 +61,83 @@ public class WSAnalyser {
 	/**
 	 * 把从ws接收到到的json消息转换为Bean对象并处理
 	 * @param json
-	 * @param listenGift 是否只监听礼物通知消息
+	 * @param onlyListen 是否只监听礼物通知消息
 	 * @return
 	 */
-	public static boolean toMsgBean(JSONObject json, boolean listenGift) {
+	public static boolean toMsgBean(JSONObject json, int roomId, boolean onlyListen) {
 		boolean isOk = true;
 		String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
 		BiliCmd biliCmd = BiliCmd.toCmd(cmd);
 		
-		if(!listenGift && biliCmd == BiliCmd.DANMU_MSG) {
+		if(!onlyListen && biliCmd == BiliCmd.DANMU_MSG) {
 			toDo(new ChatMsg(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.SEND_GIFT) {
+		} else if(!onlyListen && biliCmd == BiliCmd.SEND_GIFT) {
 			toDo(new SendGift(json));
 			
 		} else if(biliCmd == BiliCmd.SYS_MSG) {
 			if(StrUtils.isNotEmpty(_getRoomId(json))) {
-				toDo(new TvLottery(json));
+				toDo(new TvLottery(json), onlyListen);
 				
-			} else if(!listenGift) {
+			} else if(!onlyListen) {
 				toDo(new SysMsg(json));
 			}
 			
 		} else if(biliCmd == BiliCmd.SYS_GIFT) {
 			if(StrUtils.isNotEmpty(_getRoomId(json))) {
-				toDo(new EnergyLottery(json));
+				toDo(new EnergyLottery(json), onlyListen);
 				
-			} else if(!listenGift) {
+			} else if(!onlyListen) {
 				toDo(new SysGift(json));
 			}
 			
 		} else if(biliCmd == BiliCmd.SPECIAL_GIFT) {
-			toDo(new SpecialGift(json));
+			toDo(new SpecialGift(json), roomId);
 			
 		} else if(biliCmd == BiliCmd.RAFFLE_START) {
-			toDo(new RaffleStart(json), listenGift);
+			toDo(new RaffleStart(json), onlyListen);
 			
-		} else if(!listenGift && biliCmd == BiliCmd.RAFFLE_END) {
+		} else if(!onlyListen && biliCmd == BiliCmd.RAFFLE_END) {
 			toDo(new RaffleEnd(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.WELCOME) {
+		} else if(!onlyListen && biliCmd == BiliCmd.WELCOME) {
 			toDo(new WelcomeMsg(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.WELCOME_GUARD) {
+		} else if(!onlyListen && biliCmd == BiliCmd.WELCOME_GUARD) {
 			toDo(new WelcomeGuard(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.GUARD_BUY) {
+		} else if(!onlyListen && biliCmd == BiliCmd.GUARD_BUY) {
 			toDo(new GuardBuy(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.GUARD_MSG) {
+		} else if(!onlyListen && biliCmd == BiliCmd.GUARD_MSG) {
 			toDo(new GuardMsg(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.LIVE) {
+		} else if(!onlyListen && biliCmd == BiliCmd.LIVE) {
 			toDo(new LiveMsg(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.PREPARING) {
+		} else if(!onlyListen && biliCmd == BiliCmd.PREPARING) {
 			toDo(new Preparing(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.ROOM_SILENT_OFF) {
+		} else if(!onlyListen && biliCmd == BiliCmd.ROOM_SILENT_OFF) {
 			toDo(new RoomSilentOff(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.WISH_BOTTLE) {
+		} else if(!onlyListen && biliCmd == BiliCmd.WISH_BOTTLE) {
 			toDo(new WishBottle(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.ROOM_BLOCK_MSG) {
+		} else if(!onlyListen && biliCmd == BiliCmd.ROOM_BLOCK_MSG) {
 			toDo(new RoomBlock(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.ACTIVITY_EVENT) {
+		} else if(!onlyListen && biliCmd == BiliCmd.ACTIVITY_EVENT) {
 			toDo(new ActivityEvent(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.ROOM_RANK) {
+		} else if(!onlyListen && biliCmd == BiliCmd.ROOM_RANK) {
 			toDo(new RoomRank(json));
 			
-		} else if(!listenGift && biliCmd == BiliCmd.COMBO_END) {
+		} else if(!onlyListen && biliCmd == BiliCmd.COMBO_END) {
 			toDo(new ComboEnd(json));
 			
 		} else {
-			isOk = listenGift;
+			isOk = onlyListen;
 		}
 		return isOk;
 	}
@@ -202,11 +202,17 @@ public class WSAnalyser {
 	 * 小电视通知
 	 * @param msgBean
 	 */
-	private static void toDo(TvLottery msgBean) {
-		String giftName = msgBean.getMsg().contains("摩天大楼") ? "摩天大楼" : "小电视";
-		String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在", giftName, "抽奖中!!!");
-		UIUtils.notify(msg);
-		log.info(msg);
+	private static void toDo(TvLottery msgBean, boolean onlyListen) {
+		boolean isTV = !msgBean.getMsg().contains("摩天大楼");
+		if(onlyListen && isTV) {
+			// Undo: 小电视是全平台公告, 摩天大楼只是分区公告, 此处可避免重复打印小电视公告
+			
+		} else {
+			String giftName = isTV ? "小电视" : "摩天大楼";
+			String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在", giftName, "抽奖中!!!");
+			UIUtils.notify(msg);
+			log.info(msg);
+		}
 		
 		RoomMgr.getInstn().addTvRoom(msgBean.ROOM_ID(), msgBean.getTvId());
 		RoomMgr.getInstn().relate(msgBean.getRoomId(), msgBean.getRealRoomId());
@@ -226,7 +232,7 @@ public class WSAnalyser {
 	 * 高能礼物抽奖消息
 	 * @param msgBean
 	 */
-	private static void toDo(EnergyLottery msgBean) {
+	private static void toDo(EnergyLottery msgBean, boolean onlyListen) {
 		String msg = "";
 		if(msgBean.getMsg().contains("20倍节奏风暴")) {
 			msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 开启了20倍节奏风暴!!!");
@@ -238,16 +244,20 @@ public class WSAnalyser {
 			RoomMgr.getInstn().relate(msgBean.getRoomId(), msgBean.getRealRoomId());
 		}
 		
-		UIUtils.notify(msg);
-		log.info(msg);
+		if(onlyListen == false) {
+			UIUtils.notify(msg);
+			log.info(msg);
+			
+		} else {
+			// Undo: 高能礼物是全平台公告, 此处可避免重复打印高能公告
+		}
 	}
 	
 	/**
 	 * 特殊礼物：(直播间内)节奏风暴消息
 	 * @param msgBean
 	 */
-	private static void toDo(SpecialGift msgBean) {
-		int roomId = UIUtils.getLiveRoomId();
+	private static void toDo(SpecialGift msgBean, int roomId) {
 		String msg = StrUtils.concat("直播间 [", roomId, "] 开启了节奏风暴!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
@@ -259,13 +269,15 @@ public class WSAnalyser {
 	 * (直播间内)高能抽奖开始消息
 	 * @param msgBean
 	 */
-	private static void toDo(RaffleStart msgBean, boolean listenGift) {
-		String msg = StrUtils.concat("感谢[", msgBean.getFrom(), "]的高能!!!");
-		log.info(msg);
-		
-		if(listenGift == false) {
+	private static void toDo(RaffleStart msgBean, boolean onlyListen) {
+		if(onlyListen == false) {
+			String msg = StrUtils.concat("感谢[", msgBean.getFrom(), "]的高能!!!");
 			ChatMgr.getInstn().sendThxEnergy(msg);
+			log.info(msg);
+		} else {
+			// Undo: 避免把其他直播间的高能礼物在当前直播间进行感谢
 		}
+		
 		RoomMgr.getInstn().addGiftRoom(msgBean.getRoomId());
 	}
 
