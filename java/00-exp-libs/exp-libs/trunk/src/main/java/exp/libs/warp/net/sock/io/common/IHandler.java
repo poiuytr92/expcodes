@@ -1,6 +1,5 @@
-package exp.libs.warp.net.sock.io.server;
+package exp.libs.warp.net.sock.io.common;
 
-import exp.libs.warp.net.sock.io.common.ISession;
 
 /**
  * <pre>

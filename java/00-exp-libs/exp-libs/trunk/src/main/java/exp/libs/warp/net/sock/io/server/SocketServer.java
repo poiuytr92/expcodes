@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.warp.net.sock.bean.SocketBean;
 import exp.libs.warp.net.sock.io.client.SocketClient;
+import exp.libs.warp.net.sock.io.common.IHandler;
 import exp.libs.warp.net.sock.io.common.ISession;
 import exp.libs.warp.thread.ThreadPool;
 

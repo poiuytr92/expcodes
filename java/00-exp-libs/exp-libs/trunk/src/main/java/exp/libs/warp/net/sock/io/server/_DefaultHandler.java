@@ -1,5 +1,6 @@
 package exp.libs.warp.net.sock.io.server;
 
+import exp.libs.warp.net.sock.io.common.IHandler;
 import exp.libs.warp.net.sock.io.common.ISession;
 
 
