@@ -219,8 +219,9 @@ public class Gifts extends __XHR {
 	 * @return
 	 */
 	public static boolean openCapsuleCoin(BiliCookie cookie, int coin) {
-		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), "pages/playground/index");
-		Map<String, String> request = getRequest(coin);
+		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), 
+				"pages/playground/index?visit_id=".concat(getVisitId()));
+		Map<String, String> request = getRequest(cookie.CSRF(), coin);
 		String response = HttpURLUtils.doPost(OPEN_CAPSULE_URL, header, request);
 		
 		boolean isOk = false;
@@ -248,11 +249,11 @@ public class Gifts extends __XHR {
 	 * @param coin
 	 * @return
 	 */
-	private static Map<String, String> getRequest(int coin) {
+	private static Map<String, String> getRequest(String csrf, int coin) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.type, "normal");
 		request.put(BiliCmdAtrbt.count, String.valueOf(coin));
-		request.put(BiliCmdAtrbt.token, "");
+		request.put(BiliCmdAtrbt.csrf_token, csrf);
 		return request;
 	}
 	

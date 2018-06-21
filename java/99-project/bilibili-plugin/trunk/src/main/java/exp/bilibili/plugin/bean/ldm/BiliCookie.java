@@ -239,15 +239,15 @@ public class BiliCookie extends HttpCookie {
 		boolean isOk = val >= random;
 		
 		// 限制未实名账号连续抽奖 (B站严查未实名账号)
-		if(isOk == true && isRealName() == false) {
-			if(lotteryCnt >= Config.LOTTERY_LIMIT) {
-				lotteryCnt = 0;
-				isOk = false;
-				
-			} else {
-				lotteryCnt++;
-			}
-		}
+//		if(isOk == true && isRealName() == false) {
+//			if(lotteryCnt >= Config.LOTTERY_LIMIT) {
+//				lotteryCnt = 0;
+//				isOk = false;
+//				
+//			} else {
+//				lotteryCnt++;
+//			}
+//		}
 		return isOk;
 	}
 	

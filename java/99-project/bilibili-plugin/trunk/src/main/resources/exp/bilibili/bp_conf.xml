@@ -5,7 +5,7 @@
         <ws caption="websocket消息推送服务器"><![CDATA[ws://broadcastlv.chat.bilibili.com:2244/sub]]></ws>
         
         <mainHome caption="主站首页"><![CDATA[https://www.bilibili.com/]]></mainHome>
-        <liveHome caption="直播首页"><![CDATA[http://live.bilibili.com/]]></liveHome>
+        <liveHome caption="直播首页"><![CDATA[https://live.bilibili.com/]]></liveHome>
         <linkHome caption="Link首页"><![CDATA[http://link.bilibili.com]]></linkHome>
         <msgHome caption="私信首页"><![CDATA[http://message.bilibili.com]]></msgHome>
         
@@ -36,15 +36,15 @@
         <bagURL caption="查包裹礼物URL"><![CDATA[http://api.live.bilibili.com/gift/v2/gift/bag_list]]></bagURL>
         <feedURL caption="投喂URL"><![CDATA[http://api.live.bilibili.com/gift/v2/live/bag_send]]></feedURL>
         <getCapsuleURL caption="查扭蛋币URL">http://api.live.bilibili.com/api/ajaxCapsule</getCapsuleURL>
-        <openCapsuleURL caption="打开扭蛋URL">http://api.live.bilibili.com/api/ajaxCapsuleOpen</openCapsuleURL>
+        <openCapsuleURL caption="打开扭蛋URL">https://api.live.bilibili.com/api/ajaxCapsuleOpen</openCapsuleURL>
         <getAchieveURL caption="查询成就列表URL"><![CDATA[http://api.live.bilibili.com/i/api/ajaxGetAchieve]]></getAchieveURL>
         <doAchieveURL caption="领取成就奖励URL"><![CDATA[http://api.live.bilibili.com/i/ajaxGetTaskAward]]></doAchieveURL>
-        <stormCheckURL caption="节奏风暴检测URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/check]]></stormCheckURL>
+        <stormCheckURL caption="节奏风暴检测URL"><![CDATA[https://api.live.bilibili.com/lottery/v1/Storm/check]]></stormCheckURL>
         <stormCodeURL caption="节奏风暴验证码URL"><![CDATA[http://api.live.bilibili.com/captcha/v1/Captcha/create]]></stormCodeURL>
         <stormJoinURL caption="节奏风暴抽奖URL"><![CDATA[http://api.live.bilibili.com/lottery/v1/Storm/join]]></stormJoinURL>
         <guardCheckURL caption="总督检测URL"><![CDATA[https://api.live.bilibili.com/lottery/v1/lottery/check]]></guardCheckURL>
         <guardJoinURL caption="总督领奖URL"><![CDATA[https://api.live.bilibili.com/lottery/v1/lottery/join]]></guardJoinURL>
-        <egCheckURL caption="高能礼物取号URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/check]]></egCheckURL>
+        <egCheckURL caption="高能礼物取号URL"><![CDATA[https://api.live.bilibili.com/activity/v1/Raffle/check]]></egCheckURL>
         <egJoinURL caption="高能礼物抽奖URL"><![CDATA[http://api.live.bilibili.com/activity/v1/Raffle/join]]></egJoinURL>
         <tvCheckURL caption="小电视取号URL"><![CDATA[https://api.live.bilibili.com/gift/v3/smalltv/check]]></tvCheckURL>
         <tvJoinURL caption="小电视抽奖URL"><![CDATA[https://api.live.bilibili.com/gift/v3/smalltv/join]]></tvJoinURL>

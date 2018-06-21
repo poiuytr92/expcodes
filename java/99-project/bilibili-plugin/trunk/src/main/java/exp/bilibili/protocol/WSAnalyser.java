@@ -13,6 +13,7 @@ import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.bean.ws.ActivityEvent;
 import exp.bilibili.protocol.bean.ws.ChatMsg;
+import exp.bilibili.protocol.bean.ws.ComboEnd;
 import exp.bilibili.protocol.bean.ws.EnergyLottery;
 import exp.bilibili.protocol.bean.ws.GuardBuy;
 import exp.bilibili.protocol.bean.ws.GuardMsg;
@@ -21,6 +22,7 @@ import exp.bilibili.protocol.bean.ws.Preparing;
 import exp.bilibili.protocol.bean.ws.RaffleEnd;
 import exp.bilibili.protocol.bean.ws.RaffleStart;
 import exp.bilibili.protocol.bean.ws.RoomBlock;
+import exp.bilibili.protocol.bean.ws.RoomRank;
 import exp.bilibili.protocol.bean.ws.RoomSilentOff;
 import exp.bilibili.protocol.bean.ws.SendGift;
 import exp.bilibili.protocol.bean.ws.SpecialGift;
@@ -126,6 +128,12 @@ public class WSAnalyser {
 			
 		} else if(biliCmd == BiliCmd.ACTIVITY_EVENT) {
 			toDo(new ActivityEvent(json));
+			
+		} else if(biliCmd == BiliCmd.ROOM_RANK) {
+			toDo(new RoomRank(json));
+			
+		} else if(biliCmd == BiliCmd.COMBO_END) {
+			toDo(new ComboEnd(json));
 			
 		} else {
 			isOk = false;
@@ -382,6 +390,22 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(ActivityEvent msgBean) {
+		// Undo
+	}
+	
+	/**
+	 * 直播间小时榜排名通知消息
+	 * @param msgBean
+	 */
+	private static void toDo(RoomRank msgBean) {
+		// Undo
+	}
+	
+	/**
+	 * (直播间内)礼物combo连击结束消息
+	 * @param msgBean
+	 */
+	private static void toDo(ComboEnd msgBean) {
 		// Undo
 	}
 	
