@@ -41,7 +41,7 @@ import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
-import exp.bilibili.protocol.ws.WebSockClient;
+import exp.bilibili.protocol.ws.BiliWebSocketGroup;
 import exp.libs.envm.Colors;
 import exp.libs.envm.Delimiter;
 import exp.libs.envm.FileType;
@@ -53,6 +53,7 @@ import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.net.websock.WebSockClient;
 import exp.libs.warp.thread.ThreadPool;
 import exp.libs.warp.ui.BeautyEyeUtils;
 import exp.libs.warp.ui.SwingUtils;
@@ -161,7 +162,7 @@ public class AppUI extends MainWindow {
 	
 	private JLabel lotteryLabel;
 	
-	private WebSockClient wsClient;
+	private BiliWebSocketGroup wsClient;
 	
 	private _ProbabilityUI probabilityUI;
 	
@@ -316,7 +317,7 @@ public class AppUI extends MainWindow {
 		this.lotteryLabel = new JLabel(" 00000 ");
 		lotteryLabel.setForeground(Color.RED);
 		
-		this.wsClient = new WebSockClient();
+		this.wsClient = new BiliWebSocketGroup();
 		this.probabilityUI = new _ProbabilityUI();
 		this.miniLoginMgrUI = new _MiniUserMgrUI();
 		this.lotteryUI = new _LotteryUI();
@@ -649,14 +650,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				if(!wsClient.isRun()) {
-					wsClient.reset(roomId);
-					wsClient._start();
-					
-				} else {
-					wsClient.relink(roomId);
-				}
-				
+				wsClient.relinkLive(roomId);
 				_switchRoom();	// 切换房间后的操作
 				lockBtn();
 			}
@@ -1123,7 +1117,7 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void beforeExit() {
-		wsClient._stop();
+		wsClient.clear();
 		lotteryUI.clear();
 		
 		StormScanner.getInstn()._stop();

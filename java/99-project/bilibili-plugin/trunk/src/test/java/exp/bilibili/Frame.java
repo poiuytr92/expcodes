@@ -1,4 +1,4 @@
-package exp.bilibili.protocol.bean.other;
+package exp.bilibili;
 
 import java.nio.ByteBuffer;
 

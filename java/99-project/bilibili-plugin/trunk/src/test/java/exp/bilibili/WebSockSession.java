@@ -1,4 +1,4 @@
-package exp.bilibili.protocol.ws;
+package exp.bilibili;
 
 import java.net.URI;
 import java.nio.ByteBuffer;
@@ -16,7 +16,6 @@ import org.slf4j.LoggerFactory;
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.WSAnalyser;
-import exp.bilibili.protocol.bean.other.Frame;
 import exp.bilibili.protocol.envm.BiliBinary;
 import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.format.JsonUtils;
@@ -168,7 +167,7 @@ class WebSockSession extends WebSocketClient {
 					BODHUtils.toBytes(subHexMsg), Config.DEFAULT_CHARSET);
 			if(JsonUtils.isVaild(msg)) {
 				JSONObject json = JSONObject.fromObject(msg);
-				if(!WSAnalyser.toMsgBean(json)) {
+				if(!WSAnalyser.toMsgBean(json, false)) {
 					isOk = false;
 				}
 			} else {

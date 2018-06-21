@@ -61,24 +61,25 @@ public class WSAnalyser {
 	/**
 	 * 把从ws接收到到的json消息转换为Bean对象并处理
 	 * @param json
+	 * @param listenGift 是否只监听礼物通知消息
 	 * @return
 	 */
-	public static boolean toMsgBean(JSONObject json) {
+	public static boolean toMsgBean(JSONObject json, boolean listenGift) {
 		boolean isOk = true;
 		String cmd = JsonUtils.getStr(json, BiliCmdAtrbt.cmd);
 		BiliCmd biliCmd = BiliCmd.toCmd(cmd);
 		
-		if(biliCmd == BiliCmd.DANMU_MSG) {
+		if(!listenGift && biliCmd == BiliCmd.DANMU_MSG) {
 			toDo(new ChatMsg(json));
 			
-		} else if(biliCmd == BiliCmd.SEND_GIFT) {
+		} else if(!listenGift && biliCmd == BiliCmd.SEND_GIFT) {
 			toDo(new SendGift(json));
 			
 		} else if(biliCmd == BiliCmd.SYS_MSG) {
 			if(StrUtils.isNotEmpty(_getRoomId(json))) {
 				toDo(new TvLottery(json));
 				
-			} else {
+			} else if(!listenGift) {
 				toDo(new SysMsg(json));
 			}
 			
@@ -86,7 +87,7 @@ public class WSAnalyser {
 			if(StrUtils.isNotEmpty(_getRoomId(json))) {
 				toDo(new EnergyLottery(json));
 				
-			} else {
+			} else if(!listenGift) {
 				toDo(new SysGift(json));
 			}
 			
@@ -94,49 +95,49 @@ public class WSAnalyser {
 			toDo(new SpecialGift(json));
 			
 		} else if(biliCmd == BiliCmd.RAFFLE_START) {
-			toDo(new RaffleStart(json));
+			toDo(new RaffleStart(json), listenGift);
 			
-		} else if(biliCmd == BiliCmd.RAFFLE_END) {
+		} else if(!listenGift && biliCmd == BiliCmd.RAFFLE_END) {
 			toDo(new RaffleEnd(json));
 			
-		} else if(biliCmd == BiliCmd.WELCOME) {
+		} else if(!listenGift && biliCmd == BiliCmd.WELCOME) {
 			toDo(new WelcomeMsg(json));
 			
-		} else if(biliCmd == BiliCmd.WELCOME_GUARD) {
+		} else if(!listenGift && biliCmd == BiliCmd.WELCOME_GUARD) {
 			toDo(new WelcomeGuard(json));
 			
-		} else if(biliCmd == BiliCmd.GUARD_BUY) {
+		} else if(!listenGift && biliCmd == BiliCmd.GUARD_BUY) {
 			toDo(new GuardBuy(json));
 			
-		} else if(biliCmd == BiliCmd.GUARD_MSG) {
+		} else if(!listenGift && biliCmd == BiliCmd.GUARD_MSG) {
 			toDo(new GuardMsg(json));
 			
-		} else if(biliCmd == BiliCmd.LIVE) {
+		} else if(!listenGift && biliCmd == BiliCmd.LIVE) {
 			toDo(new LiveMsg(json));
 			
-		} else if(biliCmd == BiliCmd.PREPARING) {
+		} else if(!listenGift && biliCmd == BiliCmd.PREPARING) {
 			toDo(new Preparing(json));
 			
-		} else if(biliCmd == BiliCmd.ROOM_SILENT_OFF) {
+		} else if(!listenGift && biliCmd == BiliCmd.ROOM_SILENT_OFF) {
 			toDo(new RoomSilentOff(json));
 			
-		} else if(biliCmd == BiliCmd.WISH_BOTTLE) {
+		} else if(!listenGift && biliCmd == BiliCmd.WISH_BOTTLE) {
 			toDo(new WishBottle(json));
 			
-		} else if(biliCmd == BiliCmd.ROOM_BLOCK_MSG) {
+		} else if(!listenGift && biliCmd == BiliCmd.ROOM_BLOCK_MSG) {
 			toDo(new RoomBlock(json));
 			
-		} else if(biliCmd == BiliCmd.ACTIVITY_EVENT) {
+		} else if(!listenGift && biliCmd == BiliCmd.ACTIVITY_EVENT) {
 			toDo(new ActivityEvent(json));
 			
-		} else if(biliCmd == BiliCmd.ROOM_RANK) {
+		} else if(!listenGift && biliCmd == BiliCmd.ROOM_RANK) {
 			toDo(new RoomRank(json));
 			
-		} else if(biliCmd == BiliCmd.COMBO_END) {
+		} else if(!listenGift && biliCmd == BiliCmd.COMBO_END) {
 			toDo(new ComboEnd(json));
 			
 		} else {
-			isOk = false;
+			isOk = listenGift;
 		}
 		return isOk;
 	}
@@ -258,11 +259,13 @@ public class WSAnalyser {
 	 * (直播间内)高能抽奖开始消息
 	 * @param msgBean
 	 */
-	private static void toDo(RaffleStart msgBean) {
+	private static void toDo(RaffleStart msgBean, boolean listenGift) {
 		String msg = StrUtils.concat("感谢[", msgBean.getFrom(), "]的高能!!!");
 		log.info(msg);
 		
-		ChatMgr.getInstn().sendThxEnergy(msg);
+		if(listenGift == false) {
+			ChatMgr.getInstn().sendThxEnergy(msg);
+		}
 		RoomMgr.getInstn().addGiftRoom(msgBean.getRoomId());
 	}
 

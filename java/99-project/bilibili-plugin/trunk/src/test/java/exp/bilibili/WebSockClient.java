@@ -1,4 +1,4 @@
-package exp.bilibili.protocol.ws;
+package exp.bilibili;
 
 import java.net.URI;
 
@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.utils.UIUtils;
-import exp.bilibili.protocol.bean.other.Frame;
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.warp.thread.LoopThread;
 
