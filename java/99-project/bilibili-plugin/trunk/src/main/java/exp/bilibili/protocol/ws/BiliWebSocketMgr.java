@@ -75,7 +75,7 @@ public class BiliWebSocketMgr extends LoopThread {
 	 */
 	private WebSockClient createWebSocket(String name, int roomId, boolean onlyListen) {
 		BiliHandler handler = new BiliHandler(roomId, onlyListen);
-		WebSockClient client = new WebSockClient(name, WEBSOCKET, handler);
+		WebSockClient client = new WebSockClient(name.concat("监控线程"), WEBSOCKET, handler);
 		client.setHeartbeat(HB_FRAME, HB_SECOND);
 		client.conn();
 		return client;
