@@ -1,8 +1,8 @@
 package exp.fpf.proxy;
 
 import exp.fpf.cache.SRMgr;
+import exp.libs.warp.net.sock.io.common.IHandler;
 import exp.libs.warp.net.sock.io.common.ISession;
-import exp.libs.warp.net.sock.io.server.IHandler;
 
 /**
  * <pre>
