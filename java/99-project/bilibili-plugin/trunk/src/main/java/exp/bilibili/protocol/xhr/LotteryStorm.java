@@ -228,6 +228,11 @@ public class LotteryStorm extends _Lottery {
 					isExist = true;
 					cnt++;
 					
+				} else if(reason.contains("访问被拒绝")) {
+					UIUtils.statistics("失败(", reason, "): 账号 [", cookie.NICKNAME(), "]");
+					cookieIts.remove();	// 被临时封禁抽奖的账号无需再抽
+					isExist = true;
+					
 				} else {
 					log.info("[{}] 参与直播间 [{}] 抽奖失败(节奏风暴)", cookie.NICKNAME(), roomId);
 					isExist = reason.contains("再接再励");
