@@ -141,9 +141,14 @@ public class BiliWebSocketMgr extends LoopThread {
 
 	@Override
 	protected void _loopRun() {
-		if(++loopCnt >= REFLASH_LIMIT) {
-			loopCnt = 0;
-			relinkListeners();
+		if(UIUtils.isJoinLottery()) {
+			if(++loopCnt >= REFLASH_LIMIT) {
+				loopCnt = 0;
+				relinkListeners();
+			}
+		} else {
+			loopCnt = REFLASH_LIMIT;
+			clear();
 		}
 		_sleep(SLEEP_TIME);
 	}
