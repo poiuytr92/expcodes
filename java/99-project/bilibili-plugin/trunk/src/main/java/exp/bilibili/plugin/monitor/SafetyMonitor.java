@@ -255,7 +255,7 @@ public class SafetyMonitor extends LoopThread {
 			isOk = false;
 			
 		} else if(!checkVersions(appInfo.getVersions())) {
-			cause = "版本已失效";
+			cause = "版本已失效, 请升级到最新版";
 			isOk = false;
 			
 		} else if(!checkNotInBlacklist(appInfo.getBlacklist())) {
