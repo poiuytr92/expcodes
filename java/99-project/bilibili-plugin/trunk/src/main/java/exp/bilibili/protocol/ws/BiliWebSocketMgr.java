@@ -42,7 +42,7 @@ public class BiliWebSocketMgr extends LoopThread {
 	private final static long SLEEP_TIME = 1000;
 	
 	/** 心跳频率上限(轮询次数达到此上限则触发心跳) */
-	private final static int HB_LIMIT = (int) (REFLASH_TIME / SLEEP_TIME);
+	private final static int REFLASH_LIMIT = (int) (REFLASH_TIME / SLEEP_TIME);
 	
 	/** 当前轮询次数 */
 	private int loopCnt;
@@ -62,7 +62,7 @@ public class BiliWebSocketMgr extends LoopThread {
 	public BiliWebSocketMgr() {
 		super("websocket会话管理器");
 		
-		this.loopCnt = HB_LIMIT;
+		this.loopCnt = REFLASH_LIMIT;
 		this.listeners = new LinkedList<WebSockClient>();
 	}
 	
@@ -142,12 +142,12 @@ public class BiliWebSocketMgr extends LoopThread {
 	@Override
 	protected void _loopRun() {
 		if(UIUtils.isJoinLottery()) {
-			if(++loopCnt >= HB_LIMIT) {
+			if(++loopCnt >= REFLASH_LIMIT) {
 				loopCnt = 0;
 				relinkListeners();
 			}
 		} else {
-			loopCnt = HB_LIMIT;
+			loopCnt = REFLASH_LIMIT;
 			clearListeners();
 		}
 		_sleep(SLEEP_TIME);
