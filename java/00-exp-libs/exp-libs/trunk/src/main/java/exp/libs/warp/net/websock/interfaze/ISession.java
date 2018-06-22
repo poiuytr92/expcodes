@@ -27,10 +27,10 @@ public interface ISession {
 	public void debug(boolean debug);
 	
 	/**
-	 * 检查WebSocket连接是否还存活
+	 * 检查WebSocket连接是否连接中
 	 * @return
 	 */
-	public boolean isConnected();
+	public boolean isConnecting();
 	
 	/**
 	 * 向服务器发送数据帧

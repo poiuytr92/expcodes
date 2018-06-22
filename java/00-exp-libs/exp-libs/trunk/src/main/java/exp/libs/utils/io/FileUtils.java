@@ -737,7 +737,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	public static boolean delete(String path, String filterRegex) {
 		boolean isOk = true;
 		if(StrUtils.isNotTrimEmpty(path)) {
-			isOk = delete(new File(path), filterRegex);
+			isOk = delete(new File(path), filterRegex, false);
 		}
 		return isOk;
 	}
@@ -748,7 +748,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean delete(File file) {
-		return delete(file, "");
+		return delete(file, "", false);
 	}
 	
 	/**
@@ -758,21 +758,82 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean delete(File file, String filterRegex) {
+		return delete(file, filterRegex, false);
+	}
+	
+	/**
+	 * 在程序退出时删除文件/目录(包括子文件/子目录)
+	 * @param path 文件/目录路径
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
+	public static boolean deleteOnExit(String path) {
+		return deleteOnExit(path, "");
+	}
+	
+	/**
+	 * 在程序退出时删除文件/目录(包括子文件/子目录)
+	 * @param path 文件/目录路径
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
+	public static boolean deleteOnExit(String path, String filterRegex) {
+		boolean isOk = true;
+		if(StrUtils.isNotTrimEmpty(path)) {
+			isOk = delete(new File(path), filterRegex, true);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 在程序退出时删除文件/目录(包括子文件/子目录)
+	 * @param file 文件/目录
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
+	public static boolean deleteOnExit(File file) {
+		return delete(file, "", true);
+	}
+	
+	/**
+	 * 在程序退出时删除文件/目录(包括子文件/子目录)
+	 * @param file 文件/目录
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
+	public static boolean deleteOnExit(File file, String filterRegex) {
+		return delete(file, filterRegex, true);
+	}
+	
+	/**
+	 * 删除文件/目录(包括子文件/子目录)
+	 * @param file 文件/目录
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @param onExit 是否在程序退出时才删除
+	 * @return true:全部删除成功; false:全部删除失败
+	 */
+	public static boolean delete(File file, String filterRegex, boolean onExit) {
 		boolean isOk = true;
 		if(file != null && file.exists()) {
 			if(file.isFile()) {
 				if(!RegexUtils.matches(file.getName(), filterRegex)) {
-					isOk &= file.delete();
+					if(onExit == true) {
+						file.deleteOnExit();
+					} else {
+						isOk &= file.delete();
+					}
 				}
 				
 			} else if(file.isDirectory()) {
 				File[] files = file.listFiles();
 				for(File f : files) {
-					isOk &= delete(f, filterRegex);
+					isOk &= delete(f, filterRegex, onExit);
 				}
 				
 				if(!RegexUtils.matches(file.getName(), filterRegex)) {
-					isOk &= file.delete();
+					if(onExit == true) {
+						file.deleteOnExit();
+					} else {
+						isOk &= file.delete();
+					}
 				}
 			}
 		}

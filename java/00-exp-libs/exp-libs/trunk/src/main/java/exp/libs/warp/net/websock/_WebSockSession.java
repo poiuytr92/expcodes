@@ -159,7 +159,7 @@ class _WebSockSession extends WebSocketClient implements ISession {
 			}
 			ThreadUtils.tSleep(1000);
 		} while(System.currentTimeMillis() - bgnTime <= connTimeout);
-		return isConnected();
+		return isConnecting();
 	}
 	
 	/**
@@ -176,8 +176,8 @@ class _WebSockSession extends WebSocketClient implements ISession {
 	 * @return
 	 */
 	@Override
-	public boolean isConnected() {
-		return ((isOpen() || isConnecting()) && !isClosed);
+	public boolean isConnecting() {
+		return ((isOpen() || super.isConnecting()) && !isClosed);
 	}
 	
 	/**
