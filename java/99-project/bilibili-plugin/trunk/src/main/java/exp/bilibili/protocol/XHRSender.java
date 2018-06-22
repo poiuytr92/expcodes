@@ -14,6 +14,7 @@ import exp.bilibili.plugin.bean.ldm.BiliCookie;
 import exp.bilibili.plugin.bean.ldm.HotLiveRange;
 import exp.bilibili.plugin.cache.CookiesMgr;
 import exp.bilibili.plugin.cache.RoomMgr;
+import exp.bilibili.plugin.envm.Area;
 import exp.bilibili.plugin.envm.Gift;
 import exp.bilibili.plugin.utils.TimeUtils;
 import exp.bilibili.plugin.utils.UIUtils;
@@ -25,6 +26,7 @@ import exp.bilibili.protocol.xhr.Chat;
 import exp.bilibili.protocol.xhr.DailyTasks;
 import exp.bilibili.protocol.xhr.Gifts;
 import exp.bilibili.protocol.xhr.Guard;
+import exp.bilibili.protocol.xhr.LiveArea;
 import exp.bilibili.protocol.xhr.Login;
 import exp.bilibili.protocol.xhr.LotteryEnergy;
 import exp.bilibili.protocol.xhr.LotteryStorm;
@@ -273,6 +275,14 @@ public class XHRSender {
 			ThreadUtils.tSleep(50);
 		}
 		return cnt;
+	}
+	
+	/**
+	 * 查询每个直播分区的榜首房间号
+	 * @return 分区 -> 榜首房间号
+	 */
+	public static Map<Area, Integer> getAreaTopOnes() {
+		return LiveArea.getAreaTopOnes();
 	}
 	
 	/**

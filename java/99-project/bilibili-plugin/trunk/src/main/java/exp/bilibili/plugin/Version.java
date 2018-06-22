@@ -25,8 +25,6 @@ public class Version {
 	public static void main(String[] args) {
 		LogUtils.loadLogBackConfig();
 		VersionMgr.exec(args);
-		
-		// FIXME 自动抽奖总开关要控制5条WS线程
 	}
 	
 }

@@ -41,7 +41,7 @@ import exp.bilibili.plugin.ui.login.LoginBtn;
 import exp.bilibili.plugin.utils.SafetyUtils;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.bilibili.protocol.XHRSender;
-import exp.bilibili.protocol.ws.BiliWebSocketGroup;
+import exp.bilibili.protocol.ws.BiliWebSocketMgr;
 import exp.libs.envm.Colors;
 import exp.libs.envm.Delimiter;
 import exp.libs.envm.FileType;
@@ -161,7 +161,7 @@ public class AppUI extends MainWindow {
 	
 	private JLabel lotteryLabel;
 	
-	private BiliWebSocketGroup wsClient;
+	private BiliWebSocketMgr wsMgr;
 	
 	private _ProbabilityUI probabilityUI;
 	
@@ -192,6 +192,13 @@ public class AppUI extends MainWindow {
 	 */
 	public static void createInstn(String[] args) {
 		if(checkIdentity(args)) {
+			
+			// 非试用用户才 导出自动升级入口
+			if(!Identity.less(Identity.USER)) {
+				AppVerInfo.export(Config.APP_NAME);
+			}
+			
+			// 启动程序实例
 			getInstn();
 			
 		} else {
@@ -200,7 +207,13 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 身份校验
+	 * <pre>
+	 * 身份校验:
+	 *  管理员:拥有全部功能, 不受授权码和证书影响
+	 *  主播:拥有部分功能, 受授权码和授权时间影响
+	 *  普通用户:拥有部分功能, 受授权码和授权时间影响
+	 *  游客:拥有部分功能, 受授权码和授权时间影响
+	 * </pre>
 	 * @param args main入参
 	 */
 	public static boolean checkIdentity(String[] args) {
@@ -221,24 +234,20 @@ public class AppUI extends MainWindow {
 				if(StrUtils.isNotEmpty(errMsg)) {
 					SwingUtils.warn(errMsg);
 					isOk = false;
-					
+				}
+				
 				// 主播用户
-				} else if(Identity.UPLIVE.CMD().equals(args[0])) {
+				if(Identity.UPLIVE.CMD().equals(args[0])) {
 					Identity.set(Identity.UPLIVE);
 					
 				// 普通用户
 				} else if(Identity.USER.CMD().equals(args[0])) {
 					Identity.set(Identity.USER);
 					
-				// 试用用户
+				// 试用用户(游客)
 				} else {
 					Identity.set(Identity.GUEST);
 				}
-			}
-			
-			// 非游客用户才启用自动升级功能
-			if(!Identity.less(Identity.USER)) {
-				AppVerInfo.export(Config.APP_NAME);
 			}
 		}
 		return isOk;
@@ -316,7 +325,7 @@ public class AppUI extends MainWindow {
 		this.lotteryLabel = new JLabel(" 00000 ");
 		lotteryLabel.setForeground(Color.RED);
 		
-		this.wsClient = new BiliWebSocketGroup();
+		this.wsMgr = new BiliWebSocketMgr();
 		this.probabilityUI = new _ProbabilityUI();
 		this.miniLoginMgrUI = new _MiniUserMgrUI();
 		this.lotteryUI = new _LotteryUI();
@@ -649,9 +658,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				wsClient.relinkLive(roomId);
-				wsClient._start();
-				
+				wsMgr.relinkLive(roomId);	// 连接到版聊直播间
 				_switchRoom();	// 切换房间后的操作
 				lockBtn();
 			}
@@ -1118,7 +1125,7 @@ public class AppUI extends MainWindow {
 	
 	@Override
 	protected void beforeExit() {
-		wsClient._stop();
+		wsMgr._stop();
 		lotteryUI.clear();
 		
 		StormScanner.getInstn()._stop();
@@ -1205,7 +1212,8 @@ public class AppUI extends MainWindow {
 		joinLottery = !joinLottery;
 		if(joinLottery == true) {
 			BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, loginBtn);
-			UIUtils.log("已激活全平台自动抽奖（小电视、高能抽奖等）");
+			UIUtils.log("已激活全平台自动抽奖（小电视、摩天大楼、高能抽奖等）");
+			wsMgr._start();	// 启动分区监听
 			
 		} else {
 			BeautyEyeUtils.setButtonStyle(NormalColor.normal, loginBtn);

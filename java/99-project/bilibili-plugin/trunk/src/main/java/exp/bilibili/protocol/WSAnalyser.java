@@ -39,7 +39,7 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * WS接收的JSON报文解析器
+ * WebSocket接收的JSON报文解析器
  * </PRE>
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
@@ -60,9 +60,10 @@ public class WSAnalyser {
 	
 	/**
 	 * 把从ws接收到到的json消息转换为Bean对象并处理
-	 * @param json
+	 * @param json Json格式消息
+	 * @param roomId 被监听的房间号
 	 * @param onlyListen 是否只监听礼物通知消息
-	 * @return
+	 * @return 是否处理成功
 	 */
 	public static boolean toMsgBean(JSONObject json, int roomId, boolean onlyListen) {
 		boolean isOk = true;

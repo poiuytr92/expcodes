@@ -23,6 +23,16 @@ import exp.libs.warp.net.websock.bean.Frame;
 import exp.libs.warp.net.websock.interfaze.IHandler;
 import exp.libs.warp.net.websock.interfaze.ISession;
 
+/**
+ * <PRE>
+ * B站WebSocket业务逻辑
+ * </PRE>
+ * <B>PROJECT：</B> bilibili-plugin
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2018-06-22
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class BiliHandler implements IHandler {
 
 	/** 日志器 */
@@ -37,19 +47,31 @@ public class BiliHandler implements IHandler {
 	/** 子消息的前8位字节是该子消息的字符长度（含消息头） */
 	private final static int MSG_LENGTH_LEN = 8;
 	
+	/** 被监听的房间号 */
 	private int roomId;
 	
 	/** 此websocket会话是否只用于监听分区礼物 */
 	private boolean onlyListen;
 	
+	/** 连接websocket服务器后发送的数据帧 */
 	private final Frame CONN_FRAME;
 	
+	/** 断开websocket连接前发送的数据帧 */
 	private final Frame CLOSE_FRAME;
 	
+	/**
+	 * 构造函数
+	 * @param roomId 被监听的房间号
+	 */
 	public BiliHandler(int roomId) {
 		this(roomId, false);
 	}
 	
+	/**
+	 * 构造函数
+	 * @param roomId 被监听的房间号
+	 * @param onlyListen 此websocket会话是否只用于监听分区礼物
+	 */
 	public BiliHandler(int roomId, boolean onlyListen) {
 		this.roomId = RoomMgr.getInstn().getRealRoomId(roomId);
 		this.onlyListen = onlyListen;

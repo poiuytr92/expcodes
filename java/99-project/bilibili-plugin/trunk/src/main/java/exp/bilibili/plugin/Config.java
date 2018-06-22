@@ -33,6 +33,8 @@ public class Config {
 	
 	public final static String APP_VER = VersionMgr.getVersion();
 	
+	public final static String LIB_PATH = "./lib";
+	
 	private final static String APP_PATH = "/exp/bilibili/bp_conf.xml";
 	
 	private final static String USER_PATH = "./conf/bp_conf.xml";
@@ -269,6 +271,18 @@ public class Config {
 	
 	public String PC_WATCH_URL() {
 		return xConf.getVal("/config/urls/pcWatchURL");
+	}
+	
+	public String GAME_URL() {
+		return xConf.getVal("/config/urls/gameURL");
+	}
+	
+	public String AMUSE_URL() {
+		return xConf.getVal("/config/urls/amuseURL");
+	}
+	
+	public String DRAW_URL() {
+		return xConf.getVal("/config/urls/drawURL");
 	}
 	
 	public String SEARCH_URL() {

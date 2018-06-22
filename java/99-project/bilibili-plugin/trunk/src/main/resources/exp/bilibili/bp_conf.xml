@@ -54,10 +54,13 @@
         <hbURL caption="活动心跳URL"><![CDATA[http://api.live.bilibili.com/feed/v1/feed/heartBeat]]></hbURL>
         <hbGiftURL caption="领取活动心跳礼物URL"><![CDATA[http://api.live.bilibili.com/gift/v2/live/heart_gift_receive]]></hbGiftURL>
         
-        
         <appVideoURL caption="获取手机端视频地址URL"><![CDATA[http://live.bilibili.com/api/playurl]]></appVideoURL>
         <appWatchURL caption="手机端观看直播URL"><![CDATA[http://live-trace.bilibili.com/heartbeat_ext/v1/Heartbeat/player]]></appWatchURL>
         <pcWatchURL caption="PC端观看直播URL"><![CDATA[http://api.live.bilibili.com/User/userOnlineHeart]]></pcWatchURL>
+        
+        <gameURL caption="游戏区/手游区房间列表URL"><![CDATA[https://api.live.bilibili.com/room/v1/area/getRoomList]]></gameURL>
+        <amuseURL caption="娱乐区房间列表URL"><![CDATA[https://api.live.bilibili.com/room/v1/AmuseArea/allList]]></amuseURL>
+        <drawURL caption="绘画区房间列表URL"><![CDATA[https://api.live.bilibili.com/area/liveList]]></drawURL>
         
         <searchURL caption="搜索直播房间URL"><![CDATA[https://search.bilibili.com/api/search]]></searchURL>
     </urls>
