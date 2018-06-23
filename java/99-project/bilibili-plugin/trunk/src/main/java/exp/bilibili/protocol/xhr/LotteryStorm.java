@@ -206,7 +206,7 @@ public class LotteryStorm extends _Lottery {
 		int cnt = 0;
 		String reason = "未知异常";
 		boolean isExist = true;
-		Set<BiliCookie> cookies = CookiesMgr.ALL(true);
+		Set<BiliCookie> cookies = CookiesMgr.ALL(false);
 		
 		while(isExist && !cookies.isEmpty()) {	// 理论上节奏风暴可以在完结前一直抢到成功为止
 			isExist = false;	// 避免cookies队列没人参与陷入死循环

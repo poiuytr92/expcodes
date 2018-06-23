@@ -148,7 +148,7 @@ public class BiliWebSocketMgr extends LoopThread {
 			}
 		} else {
 			loopCnt = REFLASH_LIMIT;
-			clear();
+			clearListeners();
 		}
 		_sleep(SLEEP_TIME);
 	}
