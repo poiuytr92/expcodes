@@ -281,4 +281,16 @@ class _AccountWin extends PopChildWindow {
 		return edited;
 	}
 
+	@Override
+	protected void AfterView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void beforeHide() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

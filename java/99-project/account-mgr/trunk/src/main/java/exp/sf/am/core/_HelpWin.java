@@ -53,4 +53,16 @@ public class _HelpWin extends PopChildWindow {
 		
 	}
 
+	@Override
+	protected void AfterView() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	protected void beforeHide() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
