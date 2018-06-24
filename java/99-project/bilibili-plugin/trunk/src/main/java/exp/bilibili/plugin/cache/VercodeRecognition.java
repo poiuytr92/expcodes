@@ -24,7 +24,7 @@ import exp.libs.utils.num.RandomUtils;
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-04-26
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 public class VercodeRecognition {

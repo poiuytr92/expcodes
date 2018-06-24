@@ -14,7 +14,7 @@ import exp.sf.am.utils.CryptoUtils;
  * <B>PROJECT:</B> exp-libs
  * <B>SUPPORT:</B> EXP 2017
  * @version   1.0.0.0 2017-08-10 14:29:16
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk version : jdk 1.6
  */
 public class TUser  {

@@ -11,7 +11,7 @@ import javax.xml.ws.Endpoint;
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-06-20
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 public class WsdlServerDemo {  

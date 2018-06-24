@@ -23,7 +23,7 @@ import exp.libs.warp.tpl.Template;
  * <B>PROJECT：</B> mojo-release-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-05-15
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 public class ScriptBuilder {

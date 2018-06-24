@@ -11,7 +11,7 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
  * <B>PROJECT：</B> exp-xml-paper
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2015-06-01
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 public final class BeautyEye {

@@ -22,7 +22,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * <B>PROJECT：</B> file-port-forwarding
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-07-28
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 public class Config {

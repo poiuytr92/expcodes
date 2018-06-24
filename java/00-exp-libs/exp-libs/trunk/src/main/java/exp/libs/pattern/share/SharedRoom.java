@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2015-12-27
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 class SharedRoom<O> extends ArrayBlockingQueue<O> {

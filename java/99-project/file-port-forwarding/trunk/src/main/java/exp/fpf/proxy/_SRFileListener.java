@@ -15,7 +15,7 @@ import exp.fpf.envm.Param;
  * <B>PROJECT：</B> file-port-forwarding
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-01-16
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 public class _SRFileListener implements FileAlterationListener {

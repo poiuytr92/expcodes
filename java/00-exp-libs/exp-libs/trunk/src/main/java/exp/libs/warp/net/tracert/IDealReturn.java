@@ -7,7 +7,7 @@ package exp.libs.warp.net.tracert;
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2016-02-14
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 public interface IDealReturn {

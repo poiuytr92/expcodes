@@ -28,7 +28,7 @@ import org.apache.activemq.command.ActiveMQDestination;
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2016-02-14
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 public class Consumer {

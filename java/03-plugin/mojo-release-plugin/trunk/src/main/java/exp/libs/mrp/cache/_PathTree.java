@@ -20,7 +20,7 @@ import exp.libs.utils.other.PathUtils;
  * <B>PROJECT：</B> mojo-release-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-08-17
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 class _PathTree {
@@ -386,7 +386,7 @@ class _PathTree {
 	 * <B>PROJECT：</B> exp-libs
 	 * <B>SUPPORT：</B> EXP
 	 * @version   1.0 2017-08-17
-	 * @author    EXP: www.exp-blog.com
+	 * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
 	 * @since     jdk版本：jdk1.6
 	 */
 	private class StrLenSort implements Comparator<String> {

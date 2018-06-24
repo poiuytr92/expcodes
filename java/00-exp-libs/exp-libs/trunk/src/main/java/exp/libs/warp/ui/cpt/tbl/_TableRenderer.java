@@ -24,7 +24,7 @@ import javax.swing.table.TableColumnModel;
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2015-12-27
- * @author    EXP: www.exp-blog.com
+ * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
  * @since     jdk版本：jdk1.6
  */
 abstract class _TableRenderer extends JTable implements MouseMotionListener, MouseListener {
@@ -182,7 +182,7 @@ abstract class _TableRenderer extends JTable implements MouseMotionListener, Mou
 	 * <B>PROJECT：</B> exp-libs
 	 * <B>SUPPORT：</B> EXP
 	 * @version   1.0 2015-12-27
-	 * @author    EXP: www.exp-blog.com
+	 * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
 	 * @since     jdk版本：jdk1.6
 	 */
 	private class NewCellRenderer extends DefaultTableCellRenderer {
