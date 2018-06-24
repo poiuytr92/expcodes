@@ -1,12 +1,14 @@
 package exp.xp;
 
 /**
- * <pre>
- * exp 程序入口
- * </pre> 
- * @version 1.0 by 2015-06-01
- * @since   jdk版本：1.6
- * @author  Exp - liaoquanbin
+ * <PRE>
+ * 程序入口
+ * </PRE>
+ * <B>PROJECT：</B> exp-xml-paper
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-06-01
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class Main {
 

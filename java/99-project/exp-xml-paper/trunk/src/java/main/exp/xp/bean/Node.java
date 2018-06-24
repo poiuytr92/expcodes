@@ -7,6 +7,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * <PRE>
+ * XML节点
+ * </PRE>
+ * <B>PROJECT：</B> exp-xml-paper
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-06-01
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class Node {
 
 	/** 无效属性名，用于UI界面占位 */

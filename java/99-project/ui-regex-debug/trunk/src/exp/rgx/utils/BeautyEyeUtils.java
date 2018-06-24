@@ -1,4 +1,4 @@
-package com.catt.regex.utils;
+package exp.rgx.utils;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -9,10 +9,10 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
  * <PRE>
  * swing美瞳组件工具
  * </PRE>
- * <B>项    目：</B>凯通J2SE开发平台(KTJSDP)
- * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2014
- * @version   1.0 2015-05-25
- * @author    廖权斌：liaoquanbin@gdcattsoft.com
+ * <B>PROJECT：</B> ui-regex-debug
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-06-01
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public final class BeautyEyeUtils {

@@ -5,12 +5,14 @@ import javax.swing.UIManager;
 import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
 
 /**
- * <pre>
+ * <PRE>
  * 美瞳工具类
- * </pre> 
- * @version 1.0 by 2015-06-01
- * @since   jdk版本：1.6
- * @author  Exp - liaoquanbin
+ * </PRE>
+ * <B>PROJECT：</B> exp-xml-paper
+ * <B>SUPPORT：</B> EXP
+ * @version   1.0 2015-06-01
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public final class BeautyEye {
 
