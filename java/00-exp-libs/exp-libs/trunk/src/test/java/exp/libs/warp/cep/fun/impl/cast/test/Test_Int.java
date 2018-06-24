@@ -15,7 +15,7 @@ import exp.libs.warp.cep.fun.impl.cast._Int;
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2015-12-27
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 public class Test_Int {

@@ -18,7 +18,7 @@ import exp.libs.warp.net.sock.io.common.ISession;
  * <B>PROJECT：</B> file-port-forwarding
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-07-31
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 class _FPFSHandler implements IHandler {

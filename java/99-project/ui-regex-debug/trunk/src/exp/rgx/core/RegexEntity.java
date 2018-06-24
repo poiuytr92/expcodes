@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  * <B>PROJECT：</B> ui-regex-debug
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2015-06-01
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 public class RegexEntity {

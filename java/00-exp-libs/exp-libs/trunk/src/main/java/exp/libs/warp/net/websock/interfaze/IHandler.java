@@ -12,7 +12,7 @@ import org.java_websocket.handshake.ServerHandshake;
  * <B>PROJECT：</B> exp-libs
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-08-21
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 public interface IHandler {

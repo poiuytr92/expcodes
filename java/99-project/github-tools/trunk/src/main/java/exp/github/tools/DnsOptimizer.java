@@ -36,7 +36,7 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * <B>PROJECT：</B> github-fill-empty-dir
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-04-28
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 public class DnsOptimizer {

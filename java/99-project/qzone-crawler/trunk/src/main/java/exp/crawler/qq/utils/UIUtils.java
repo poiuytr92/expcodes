@@ -13,7 +13,7 @@ import exp.crawler.qq.ui.AppUI;
  * <B>PROJECT：</B> qzone-crawler
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2017-12-17
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 public class UIUtils {

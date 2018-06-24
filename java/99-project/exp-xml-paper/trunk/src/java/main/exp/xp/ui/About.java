@@ -20,7 +20,7 @@ import exp.xp.layout.VFlowLayout;
  * <B>PROJECT：</B> exp-xml-paper
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2015-06-01
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 public class About extends JFrame {

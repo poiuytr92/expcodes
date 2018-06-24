@@ -10,7 +10,7 @@ import exp.libs.utils.img.ImageUtils;
  * <B>PROJECT：</B> bilibili-plugin
  * <B>SUPPORT：</B> EXP
  * @version   1.0 2018-04-26
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 public class Matrix {

@@ -19,7 +19,7 @@ import exp.bilibili.protocol.envm.BiliCmd;
 	}
  * </PRE>
  * @version   1.0 2017-12-17
- * @author    EXP: 272629724@qq.com
+ * @author    EXP: www.exp-blog.com
  * @since     jdk版本：jdk1.6
  */
 public class ActivityEvent extends _Msg {
