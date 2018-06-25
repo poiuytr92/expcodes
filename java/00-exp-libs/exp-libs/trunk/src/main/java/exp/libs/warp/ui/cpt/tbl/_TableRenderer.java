@@ -21,10 +21,10 @@ import javax.swing.table.TableColumnModel;
  * <PRE>
  * 表单渲染器(重新渲染了JTabel的效果)
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2015-12-27
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 abstract class _TableRenderer extends JTable implements MouseMotionListener, MouseListener {
@@ -179,10 +179,10 @@ abstract class _TableRenderer extends JTable implements MouseMotionListener, Mou
 	 * <PRE>
 	 * 单元格渲染器
 	 * </PRE>
-	 * <B>PROJECT：</B> exp-libs
-	 * <B>SUPPORT：</B> EXP
-	 * @version   1.0 2015-12-27
-	 * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+	 * <B>PROJECT : </B> exp-libs
+	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+	 * @version   1.0 # 2015-12-27
+	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6
 	 */
 	private class NewCellRenderer extends DefaultTableCellRenderer {

@@ -4,10 +4,10 @@ package exp.libs.warp.net.sock.nio.common.interfaze;
  * <pre>
  * Socket业务逻辑处理接口(NIO-非阻塞模式)
  * </pre>	
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2017-08-21
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2017-08-21
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public interface IHandler {

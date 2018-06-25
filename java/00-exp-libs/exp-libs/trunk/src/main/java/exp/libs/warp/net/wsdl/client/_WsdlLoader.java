@@ -21,10 +21,10 @@ import exp.libs.warp.net.http.HttpUtils;
  * 	用于获取wsdl地址上xml文本的文件输入流(如果是文件地址，则把文件转换成文件输入流)
  * </pre>
  * 
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2018-06-20
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2018-06-20
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _WsdlLoader extends WsdlLoader {

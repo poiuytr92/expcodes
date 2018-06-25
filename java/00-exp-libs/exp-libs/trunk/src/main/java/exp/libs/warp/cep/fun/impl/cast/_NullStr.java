@@ -9,10 +9,10 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 自定函数：
  * 	强制类型转换: 强制把任何值转换为空串
  * </pre>	
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2015-12-27
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class _NullStr extends BaseFunction1 {

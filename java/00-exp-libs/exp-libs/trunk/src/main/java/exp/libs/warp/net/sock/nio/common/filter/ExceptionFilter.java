@@ -15,10 +15,10 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 
  * 在客户业务处理器之前处理异常，可针对不同类型的异常作出对应的处理
  * </pre>	
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2015-12-27
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public final class ExceptionFilter extends BaseFilter {

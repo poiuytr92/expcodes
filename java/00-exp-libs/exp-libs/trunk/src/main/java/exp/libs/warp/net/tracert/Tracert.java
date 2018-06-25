@@ -16,10 +16,10 @@ import exp.libs.warp.net.tracert.bean.TracertBean;
  * <pre>
  * 简单Tracert操作，返回Tracert字符串
  * </pre>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2016-02-14
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2016-02-14
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public  class Tracert {

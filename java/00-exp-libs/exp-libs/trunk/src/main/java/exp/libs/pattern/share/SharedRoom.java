@@ -12,10 +12,10 @@ import java.util.concurrent.TimeUnit;
  * 	只要保证[读频率] > [写频率], 则可保证每次最新的资源都被更新都临界空间.
  * 
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2015-12-27
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class SharedRoom<O> extends ArrayBlockingQueue<O> {

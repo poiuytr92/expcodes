@@ -18,10 +18,10 @@ import exp.libs.utils.verify.RegexUtils;
  * 路径处理工具.
  * 	处理原则： 本工具类的所有函数返回值, 只要是路径, 就一定【不以】 分隔符 结尾.
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2015-12-27
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class PathUtils {

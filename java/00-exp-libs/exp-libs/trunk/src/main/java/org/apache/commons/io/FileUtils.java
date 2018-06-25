@@ -1783,7 +1783,6 @@ public class FileUtils {
      * @throws IOException in case of an I/O error
      * @since 1.1
      */
-    @Deprecated
     public static byte[] readFileToByteArray(File file) throws IOException {
         InputStream in = null;
         try {

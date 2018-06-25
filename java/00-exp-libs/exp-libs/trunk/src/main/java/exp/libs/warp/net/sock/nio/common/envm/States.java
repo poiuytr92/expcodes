@@ -7,10 +7,10 @@ package exp.libs.warp.net.sock.nio.common.envm;
  * 主要用于程序执行中的即时状态定义，根据不同状态执行不同操作。
  * 对于同类型高级的状态，必定已包含低级的成功状态，且同级状态互斥。
  * </pre>	
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2015-12-27
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public enum States {

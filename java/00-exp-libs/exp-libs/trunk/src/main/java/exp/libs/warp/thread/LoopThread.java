@@ -22,10 +22,10 @@ import org.slf4j.LoggerFactory;
  *  dt._join();		// 线程加塞（某些场景下在_stop后使用, 可令调用线程等待dt线程退出后再退出）
  *  
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2015-12-27
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2015-12-27
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public abstract class LoopThread extends Thread {

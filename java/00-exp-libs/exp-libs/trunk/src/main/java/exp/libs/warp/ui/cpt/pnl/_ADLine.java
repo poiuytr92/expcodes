@@ -15,10 +15,10 @@ import javax.swing.JTextField;
  * <PRE>
  * swing动态增减行组件
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2017-08-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2017-08-17
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _ADLine<T extends Component> {

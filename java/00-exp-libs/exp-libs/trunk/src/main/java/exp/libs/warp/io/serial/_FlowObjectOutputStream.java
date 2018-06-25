@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
  * 	主要覆写 ObjectOutputStream 的 writeStreamHeader 方法，
  * 	以解决无法在同一个文件中连续序列化多个对象的问题。
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2016-07-01
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2016-07-01
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final class _FlowObjectOutputStream {
@@ -102,10 +102,10 @@ final class _FlowObjectOutputStream {
 	 * 通过重写writeStreamHeader方法，使得只在第一次写入序列化对象时带 Header，
 	 * 后续【追加】的对象均不再写入 Header。
 	 * </PRE>
-	 * <B>PROJECT：</B> exp-libs
-	 * <B>SUPPORT：</B> EXP
-	 * @version   1.0 2016-07-01
-	 * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+	 * <B>PROJECT : </B> exp-libs
+	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+	 * @version   1.0 # 2016-07-01
+	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6
 	 */
 	private class _ObjectOutputStream extends ObjectOutputStream {

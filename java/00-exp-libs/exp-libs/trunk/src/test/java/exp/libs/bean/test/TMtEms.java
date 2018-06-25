@@ -10,10 +10,10 @@ import exp.libs.warp.db.sql.DBUtils;
  * Table Name : t_mt_ems
  * Class Name : TMtEms
  * </PRE>
- * <B>PROJECT:</B> exp-libs
- * <B>SUPPORT:</B> EXP 2016
- * @version   1.0.0.0 2016-01-08 21:32:06
- * @author    Expert: 272629724@qq.com
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2016-01-08 21:32:06
+ * @author    EXP: 272629724@qq.com
  * @since     jdk version : jdk 1.6
  */
 public class TMtEms  {

@@ -9,10 +9,10 @@ package exp.libs.envm;
  *  不同不稳健类型, 可能存在相同的文件头(如：DOC、XLS、PPT)
  *  存在某些文件类型没有文件头(如：TXT)
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2018-05-07
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2018-05-07
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public enum FileType {

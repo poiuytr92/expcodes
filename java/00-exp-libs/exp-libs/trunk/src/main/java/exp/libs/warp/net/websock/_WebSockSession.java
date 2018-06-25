@@ -22,10 +22,10 @@ import exp.libs.warp.net.websock.interfaze.ISession;
  * <PRE>
  * websocket会话
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
- * @version   1.0 2018-06-21
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2018-06-21
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _WebSockSession extends WebSocketClient implements ISession {
