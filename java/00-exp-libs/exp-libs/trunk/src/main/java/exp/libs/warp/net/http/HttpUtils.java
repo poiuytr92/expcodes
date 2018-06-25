@@ -21,6 +21,7 @@ import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -218,7 +219,7 @@ public class HttpUtils {
 	
 	/**
 	 * <pre>
-	 * 追加TLSv1.2支持.
+	 * 追加TLSv1.2支持 (适用于javax.net.ssl.HttpsURLConnection).
 	 * -------------------
 	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
 	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
@@ -226,7 +227,7 @@ public class HttpUtils {
 	 * @param httpsConn
 	 */
 	private static void _supportTLSv12(HttpsURLConnection httpsConn) {
-		httpsConn.setSSLSocketFactory(new _TLS12_SocketFactory());
+		httpsConn.setSSLSocketFactory(new _TLS12_HttpURLSocketFactory());
 	}
 	
 	/**
@@ -276,9 +277,15 @@ public class HttpUtils {
 	 * @return
 	 */
 	public static HttpClient createHttpClient(int connTimeout, int callTimeout) {
+		if(OSUtils.isJDK16() || OSUtils.isJDK17()) {
+			_supportTLSv12();	//  JDK1.6和JDK1.7追加TLSv1.2支持
+			
+		} else {
+			// Undo JDK1.8以上默认支持TLSv1.2, 无需追加
+		}
+		
 		HttpConnectionManagerParams managerParams = new HttpConnectionManagerParams();
 		managerParams.setConnectionTimeout(connTimeout);
-		managerParams.setDefaultMaxConnectionsPerHost(2);
 		managerParams.setSoTimeout(callTimeout);
 		
 		HttpConnectionManager httpConnectionManager = new MultiThreadedHttpConnectionManager();
@@ -287,6 +294,24 @@ public class HttpUtils {
 		HttpClient httpClient = new HttpClient(new HttpClientParams());
 		httpClient.setHttpConnectionManager(httpConnectionManager);
 		return httpClient;
+	}
+	
+	/**
+	 * <pre>
+	 * 追加TLSv1.2支持 (适用于org.apache.commons.httpclient.HttpClient).
+	 * -------------------
+	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
+	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
+	 * </pre>
+	 * @param httpsConn
+	 */
+	private static void _supportTLSv12() {
+		String scheme = "https";
+		Protocol sslProtocol = Protocol.getProtocol(scheme);
+		int sslPort = sslProtocol.getDefaultPort();		// https的默认端口一般为443
+		_TLS12_HttpClientSocketFactory sslSocketFactory = new _TLS12_HttpClientSocketFactory();
+		Protocol https = new Protocol(scheme, sslSocketFactory, sslPort);
+		Protocol.registerProtocol(scheme, https);
 	}
 	
 	/**
