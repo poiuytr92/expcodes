@@ -12,10 +12,14 @@ import org.apache.activemq.transport.TransportListener;
  * public void transportResumed()<br/>
  * </pre>
  * 
- * @author liudl
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2016-02-14
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public interface ITransportListener extends TransportListener {
 	/**
-	 * 或许仅仅是为了使用I****来表示接口，该接口由ActiveMq提供，能 实现以上四类事件的监听。
+	 * 或许仅仅是为了使用I****来表示接口，该接口由ActiveMq提供，能 实现以上四类事件的监听�?
 	 */
 }

@@ -34,7 +34,7 @@ public class TracertBean {
 	private long payTime = 0;
 	
 	/**
-	 * 构造方法
+	 * 构造方�?
 	 */
 	public TracertBean() {
 	}

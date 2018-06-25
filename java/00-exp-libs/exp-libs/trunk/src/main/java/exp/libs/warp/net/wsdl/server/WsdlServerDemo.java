@@ -22,7 +22,7 @@ public class WsdlServerDemo {
 	/**
 	 * <pre>
 	 * 发布服务.
-	 *   发布服务后，建议切到soapUI捕获此服务, 然后停掉此处的服务, 就可以在soapUI调试.
+	 *   发布服务后，建议切到soapUI捕获此服�?, 然后停掉此处的服�?, 就可以在soapUI调试.
 	 * </pre>
 	 * @param args
 	 */

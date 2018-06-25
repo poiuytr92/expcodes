@@ -15,8 +15,8 @@ import exp.libs.warp.net.websock.bean.Frame;
 public interface ISession {
 
 	/**
-	 * 设置本地连接保活超时（0不生效，默认60，即60秒后自动断开）
-	 * @param keepTimeout 保活超时时间, 单位:秒
+	 * 设置本地连接保活超时�?0不生效，默认60，即60秒后自动断开�?
+	 * @param keepTimeout 保活超时时间, 单位:�?
 	 */
 	public void setKeepTimeout(int keepTimeout);
 	
@@ -27,7 +27,7 @@ public interface ISession {
 	public void debug(boolean debug);
 	
 	/**
-	 * 检查WebSocket连接是否连接中
+	 * 检查WebSocket连接是否连接�?
 	 * @return
 	 */
 	public boolean isConnecting();

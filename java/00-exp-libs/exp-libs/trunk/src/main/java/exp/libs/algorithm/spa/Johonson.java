@@ -17,6 +17,6 @@ public class Johonson {
 
 	/**
 	 * 先使用BellmanFord算法，使所有的边的权重变为非负值，  
-	 * 然后运用dijkstra算法依次求出每个节点的最短路径  
+	 * 然后运用dijkstra算法依次求出每个节点的最短路�?  
 	 */
 }

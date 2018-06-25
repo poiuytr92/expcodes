@@ -38,16 +38,16 @@ import exp.libs.utils.io.FileUtils;
  */
 public class QRCodeUtils {
 	
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(QRCodeUtils.class);
 	
 	/** 默认数据编码 */
 	private final static String DATA_CHARSET = Charset.UTF8;
 	
-	/** 二维码前景色(黑) */
+	/** 二维码前景色(�?) */
 	private final static int BLACK = 0xFF000000;
 	
-	/** 二维码背景色(白) */
+	/** 二维码背景色(�?) */
 	private final static int WHITE = 0xFFFFFFFF;
 	
 	/** 所生成二维码的图像格式 */
@@ -56,7 +56,7 @@ public class QRCodeUtils {
 	/** 所生成二维码的图像格式 */
 	public final static String TYPE_JPG = FileType.JPG.NAME;
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected QRCodeUtils() {}
 	
 	/**
@@ -73,7 +73,7 @@ public class QRCodeUtils {
 	}
 	
 	/**
-	 * 生成二维码图像
+	 * 生成二维码图�?
 	 * @param data 写入二维码的数据
 	 * @param width 图像宽度
 	 * @param height 图像高度
@@ -88,7 +88,7 @@ public class QRCodeUtils {
 		hints.put(EncodeHintType.CHARACTER_SET, DATA_CHARSET);
 		try {
 			
-			// 生成二维码矩阵
+			// 生成二维码矩�?
 			BitMatrix bitData = new MultiFormatWriter().encode(data,
 					BarcodeFormat.QR_CODE, width, height, hints);
 
@@ -103,21 +103,21 @@ public class QRCodeUtils {
 				}
 			}
 			
-			// 保存Image数据到文件
+			// 保存Image数据到文�?
 			File qrFile = FileUtils.createFile(savePath);
 			isOk = ImageIO.write(image, imageType, qrFile);
 			
 		} catch (Exception e) {
 			isOk = false;
-			log.error("生成二维码图片失败: {}", savePath, e);
+			log.error("生成二维码图片失�?: {}", savePath, e);
 		}
 		return isOk;
 	}
 	
 	/**
-	 * 解析二维码图片
-	 * @param qrcodePath 二维码图片路径
-	 * @return 二维码图片中的数据
+	 * 解析二维码图�?
+	 * @param qrcodePath 二维码图片路�?
+	 * @return 二维码图片中的数�?
 	 */
 	public static String toData(String qrcodePath) {
 		String data = "";
@@ -135,7 +135,7 @@ public class QRCodeUtils {
 			data = formatReader.decode(binaryBitmap, hints).getText();
 			
 		} catch (Exception e) {
-			log.error("解析二维码图片失败: {}", qrcodePath, e);
+			log.error("解析二维码图片失�?: {}", qrcodePath, e);
 		}
 		return data;
 	}

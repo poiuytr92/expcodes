@@ -32,17 +32,17 @@ import exp.libs.warp.thread.LoopThread;
  * <PRE>
  * 登陆管理器
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class LoginMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(LoginMgr.class);
 	
-	/** B站登陆页面 */
+	/** B站登陆页�? */
 	private final static String LOGIN_URL = Config.getInstn().LOGIN_URL();
 	
 	private final static String VCCODE_URL = Config.getInstn().VCCODE_URL();
@@ -61,7 +61,7 @@ public class LoginMgr extends LoopThread {
 	
 	private final static String JSESSIONID = "JSESSIONID";
 	
-	/** B站二维码有效时间是180s, 这里设置120s, 避免边界问题 */
+	/** B站二维码有效时间�?180s, 这里设置120s, 避免边界问题 */
 	private final static long UPDATE_TIME = 120000;
 	
 	private final static long LOOP_TIME = 1000;
@@ -100,18 +100,18 @@ public class LoginMgr extends LoopThread {
 	
 	@Override
 	protected void _before() {
-		log.info("{} 已启动", getName());
+		log.info("{} 已启�?", getName());
 		autoLogin();	// 尝试使用上一次登陆的cookies自动登陆
 	}
 
 	@Override
 	protected void _loopRun() {
 		if(isLogined == true) {
-			_stop();	// 若登陆成功则退出轮询
+			_stop();	// 若登陆成功则退出轮�?
 			
 		} else {
 			
-			// 在二维码失效前更新
+			// 在二维码失效前更�?
 			if(loopCnt >= LOOP_LIMIT) {
 				if(downloadQrcode()) {
 					loopCnt = 0;
@@ -119,7 +119,7 @@ public class LoginMgr extends LoopThread {
 				}
 			}
 			
-			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
+			// 若当前页面不再是登陆页（扫码成功会跳转到主页�?, 说明登陆成功
 			isLogined = isSwitch();
 			if(isLogined == true) {
 				skipUpdradeTips();	// 跳过B站的升级教程（该教程若不屏蔽会妨碍点击抽奖）
@@ -133,7 +133,7 @@ public class LoginMgr extends LoopThread {
 	@Override
 	protected void _after() {
 		saveLoginInfo();	// 备份cookies
-		log.info("{} 已停止", getName());
+		log.info("{} 已停�?", getName());
 	}
 	
 	/**
@@ -182,13 +182,13 @@ public class LoginMgr extends LoopThread {
 	}
 	
 	/**
-	 * 下载登陆二维码
+	 * 下载登陆二维�?
 	 * @return
 	 */
 	private boolean downloadQrcode() {
 		boolean isOk = false;
-		UIUtils.log("正在下载登陆二维码, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
-		log.info("正在更新登陆二维码...");
+		UIUtils.log("正在下载登陆二维�?, 请打开 [哔哩哔哩手机客户端] 扫码登陆...");
+		log.info("正在更新登陆二维�?...");
 		Browser.open(LOGIN_URL);
 		WebElement img = Browser.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
 		if(img != null) {
@@ -220,10 +220,10 @@ public class LoginMgr extends LoopThread {
 	}
 	
 	/**
-	 * 切到当前直播间, 把第一次打开直播室时的升级教程提示屏蔽掉
+	 * 切到当前直播�?, 把第一次打开直播室时的升级教程提示屏蔽掉
 	 */
 	private void skipUpdradeTips() {
-		UIUtils.log("首次登陆成功, 正在屏蔽B站拦截脚本...");
+		UIUtils.log("首次登陆成功, 正在屏蔽B站拦截脚�?...");
 		Browser.open(AppUI.getInstn().getLiveUrl());
 		By upgrade = By.className("upgrade-intro-component");
 		if(Browser.existElement(upgrade)) {
@@ -238,7 +238,7 @@ public class LoginMgr extends LoopThread {
 	 */
 	public void saveLoginInfo() {
 		UIUtils.log("正在保存cookies(用于下次自动登陆)");
-		Browser.backupCookies();	// 保存登录成功的cookies到外存, 以备下次使用
+		Browser.backupCookies();	// 保存登录成功的cookies到外�?, 以备下次使用
 		Browser.quit();	// 退出浏览器(此浏览器是加载图片的, 不加载图片的浏览器后面再延迟启动)
 		
 		loginUser = MsgSender.queryUsername(Browser.COOKIES());	// 获取当前登陆的用户名
@@ -246,7 +246,7 @@ public class LoginMgr extends LoopThread {
 	}
 	
 	/**
-	 * 下载登陆用的验证码
+	 * 下载登陆用的验证�?
 	 * @return 与该验证码配套的cookies
 	 */
 	public String downloadVccode() {
@@ -269,19 +269,19 @@ public class LoginMgr extends LoopThread {
 			}
 		}
 		
-		// SID与JSESSIONID绑定了该二维码图片, 在登陆时需要把这个信息一起POST
+		// SID与JSESSIONID绑定了该二维码图�?, 在登陆时需要把这个信息一起POST
 		final String cookies = StrUtils.concat(sid, "; ", jsessionId);
 		client.close();
 		return cookies;
 	}
 	
 	/**
-	 * 生成随机SID (sid是由长度为8的由a-z0-9字符组成的字符串)
+	 * 生成随机SID (sid是由长度�?8的由a-z0-9字符组成的字符串)
 	 * @return 随机SID
 	 */
 	private String randomSID() {
 		StringBuilder sid = new StringBuilder();
-		for(int i = 0; i < 8; i++) {	// sid长度为8
+		for(int i = 0; i < 8; i++) {	// sid长度�?8
 			int n = RandomUtils.randomInt(36);	// a-z, 0-9
 			if(n < 26) {	// a-z
 				sid.append((char) (n + 'a'));
@@ -296,7 +296,7 @@ public class LoginMgr extends LoopThread {
 	
 	/**
 	 * 使用帐密+验证码的方式登录(用于登录主号, 即获取收益的账号)
-	 * 	并把登录cookies同时转存到selenium浏览器
+	 * 	并把登录cookies同时转存到selenium浏览�?
 	 * @param username
 	 * @param password
 	 * @param vccode
@@ -322,7 +322,7 @@ public class LoginMgr extends LoopThread {
 	}
 	
 	/**
-	 * 使用帐密+验证码的方式登录(用于登录小号, 即用于扫描等行为的账号)
+	 * 使用帐密+验证码的方式登录(用于登录小号, 即用于扫描等行为的账�?)
 	 *  并把登录cookies同时转存到文件以备用
 	 * @param username
 	 * @param password

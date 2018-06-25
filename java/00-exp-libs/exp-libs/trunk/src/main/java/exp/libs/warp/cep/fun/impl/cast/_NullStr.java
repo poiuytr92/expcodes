@@ -23,15 +23,15 @@ public class _NullStr extends BaseFunction1 {
 	private static final long serialVersionUID = 6734551744369308465L;
 	
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "nullstr";
 	
 	/**
 	 * 强制类型转换: 强制把任何值转换为空串
-	 * 仅1个入参：
-	 * @param1 Object:各种类型值
+	 * �?1个入参：
+	 * @param1 Object:各种类型�?
 	 * @return String:""
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

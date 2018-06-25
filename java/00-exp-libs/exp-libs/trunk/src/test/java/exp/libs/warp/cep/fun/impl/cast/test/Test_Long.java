@@ -27,7 +27,7 @@ public class Test_Long {
 	@Test
 	public void testCastLong() throws Exception {
 		
-		//正确性测试
+		//正确性测�?
 		Object lnum1 = CEPUtils.call(
 				_Long.NAME, new Object[] {"-123456789"});
 		Assert.assertTrue(lnum1 instanceof Long);
@@ -39,7 +39,7 @@ public class Test_Long {
 		
 		//错误测试
 		try {
-			CEPUtils.call("long(\"9876543210123456789\")");	//数值溢出
+			CEPUtils.call("long(\"9876543210123456789\")");	//数值溢�?
 			Assert.assertTrue(false);
 			
 		} catch (Exception e) {

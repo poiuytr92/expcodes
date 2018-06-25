@@ -10,10 +10,10 @@ import exp.libs.utils.time.TimeUtils;
  * <PRE>
  * 说说对象
  * </PRE>
- * <B>PROJECT：</B> qzone-crawler
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> qzone-crawler
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Mood {
@@ -21,27 +21,27 @@ public class Mood {
 	/**
 	 * 此条说说所在的页码.
 	 *  
-	 *  QQ空间的说说每页最多20条, 但是数量不是固定的20.
-	 *  原因是说说被删除后, 原有的说说依然保有其自身的索引, 虽然总的排序没有变化.
+	 *  QQ空间的说说每页最�?20�?, 但是数量不是固定�?20.
+	 *  原因是说说被删除�?, 原有的说说依然保有其自身的索�?, 虽然总的排序没有变化.
 	 *  
-	 *  这就导致每条说说所在的页码是相对固定.
+	 *  这就导致每条说说所在的页码是相对固�?.
 	 */
 	private String page;
 	
 	/** 说说内容 */
 	private String content;
 	
-	/** 说说的创建时间 */
+	/** 说说的创建时�? */
 	private long createTime;
 	
 	/**
 	 * 说说中的相关图片地址.
-	 * 	(包括说说自身的 或 转发的)
+	 * 	(包括说说自身�? �? 转发�?)
 	 */
 	private List<String> picURLs;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param page
 	 * @param content
 	 * @param createTime
@@ -50,7 +50,7 @@ public class Mood {
 		this.page = StrUtils.leftPad(String.valueOf(page), '0', 4);
 		this.createTime = (createTime < 0 ? 0 : createTime);
 		
-		// 处理换行符 和 @某人 的内容 (@某人 的原文是json)
+		// 处理换行�? �? @某人 的内�? (@某人 的原文是json)
 		this.content = (content == null ? "" : content.replaceAll("[\r\n]", "").
 				replaceAll("@\\{.*?nick:(.*?),who.*?\\}", "@$1")
 		);

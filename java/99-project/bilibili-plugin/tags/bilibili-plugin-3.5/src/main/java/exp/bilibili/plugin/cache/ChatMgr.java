@@ -32,38 +32,38 @@ import exp.libs.warp.thread.LoopThread;
  *  4.自动打call
  *  5.举报/禁言等命令检测
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ChatMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(ChatMgr.class);
 	
-	/** 被其他人联名举报上限: 超过上限则临时关小黑屋1小时 */
+	/** 被其他人联名举报上限: 超过上限则临时关小黑�?1小时 */
 	private final static int COMPLAINT_LIMIT = 3;
 	
-	/** 禁言关键字 */
+	/** 禁言关键�? */
 	private final static String BAN_KEY = "#禁言";
 	
-	/** 举报关键字 */
+	/** 举报关键�? */
 	private final static String COMPLAINT_KEY = "#举报";
 	
-	/** 同屏可以显示的最大发言数 */
+	/** 同屏可以显示的最大发言�? */
 	private final static int SCREEN_CHAT_LIMT = 10;
 	
-	private final static String WARN_KEY = "【警告】";
+	private final static String WARN_KEY = "【警告�?";
 	
-	private final static String NOTICE_KEY = "【公告】";
+	private final static String NOTICE_KEY = "【公告�?";
 	
-	private final static String NIGHT_KEY = "晚安(´▽`)ﾉ  ";
+	private final static String NIGHT_KEY = "晚安(´▽`)�?  ";
 	
 	/** 同一时间可以感谢的最大用户数（避免刷屏） */
 	private final static int THX_USER_LIMIT = 1;
 	
-	/** 发送消息间隔 */
+	/** 发送消息间�? */
 	private final static long SEND_TIME = 500;
 	
 	/** 自动感谢周期 */
@@ -75,7 +75,7 @@ public class ChatMgr extends LoopThread {
 	/** 自动打call周期 */
 	private final static long CALL_TIME = 30000;
 	
-	/** 检测待发送消息间隔 */
+	/** 检测待发送消息间�? */
 	private final static long SLEEP_TIME = 1000;
 	
 	private final static int THX_LIMIT = (int) (THX_TIME / SLEEP_TIME);
@@ -102,7 +102,7 @@ public class ChatMgr extends LoopThread {
 	/** 自动晚安 */
 	private boolean autoGoodNight;
 	
-	/** 已经被晚安过的用户 */
+	/** 已经被晚安过的用�? */
 	private Set<String> nightedUsers;
 	
 	/**
@@ -112,15 +112,15 @@ public class ChatMgr extends LoopThread {
 	private Map<String, Map<String, Integer>> userGifts;
 	
 	/**
-	 * 发言计数器(主要针对定时公告和自动打call)
-	 * 	当同屏存在自己的发言时，则取消本次自动发言，避免刷屏.
+	 * 发言计数�?(主要针对定时公告和自动打call)
+	 * 	当同屏存在自己的发言时，则取消本次自动发言，避免刷�?.
 	 */
 	private int chatCnt;
 	
 	private static volatile ChatMgr instance;
 	
 	private ChatMgr() {
-		super("自动发言姬");
+		super("自动发言�?");
 		this.thxCnt = 0;
 		this.noticeCnt = 0;
 		this.callCnt = 0;
@@ -151,7 +151,7 @@ public class ChatMgr extends LoopThread {
 	
 	@Override
 	protected void _before() {
-		log.info("{} 已启动", getName());
+		log.info("{} 已启�?", getName());
 	}
 
 	@Override
@@ -181,7 +181,7 @@ public class ChatMgr extends LoopThread {
 	@Override
 	protected void _after() {
 		clear();
-		log.info("{} 已停止", getName());
+		log.info("{} 已停�?", getName());
 	}
 	
 	/**
@@ -198,13 +198,13 @@ public class ChatMgr extends LoopThread {
 		
 		int hour = TimeUtils.getCurHour(8);	// 中国8小时时差
 		if(hour >= 6 && hour < 12) {
-			msg = msg.concat("早上好");
+			msg = msg.concat("早上�?");
 			
 		} else if(hour >= 12 && hour < 18) {
-			msg = msg.concat("下午好");
+			msg = msg.concat("下午�?");
 			
 		} else if(hour >= 18 && hour < 24) {
-			msg = msg.concat("晚上好");
+			msg = msg.concat("晚上�?");
 			
 		} else {
 			msg = msg.concat("还在浪吗?");
@@ -240,7 +240,7 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 添加到投喂感谢列表
+	 * 添加到投喂感谢列�?
 	 * @param msgBean
 	 */
 	public void addThxGift(SendGift msgBean) {
@@ -275,7 +275,7 @@ public class ChatMgr extends LoopThread {
 			userGifts.clear();
 		}
 		
-		// 若短时间内投喂用户过多, 则不逐一感谢, 避免刷屏
+		// 若短时间内投喂用户过�?, 则不逐一感谢, 避免刷屏
 		int userNum = tmp.keySet().size();
 		if(userNum > THX_USER_LIMIT) {
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢前面[", userNum, 
@@ -299,7 +299,7 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 感谢某个用户的投喂
+	 * 感谢某个用户的投�?
 	 * @param username
 	 * @param gifts
 	 */
@@ -307,7 +307,7 @@ public class ChatMgr extends LoopThread {
 		if(gifts.size() <= 0) {
 			return;
 			
-		// 1个礼物多份
+		// 1个礼物多�?
 		} else if(gifts.size() == 1) {
 			Iterator<String> giftIts = gifts.keySet().iterator();
 			if(giftIts.hasNext()) {
@@ -316,7 +316,7 @@ public class ChatMgr extends LoopThread {
 				if(num != null && num > 0) {
 					int cost = ActivityMgr.showCost(giftName, num);
 					String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-							(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提督/总督的弹幕长度不够, 不写形容词
+							(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提�?/总督的弹幕长度不�?, 不写形容�?
 							"投喂", giftName, "x", num, ":活跃+", cost);
 					XHRSender.sendDanmu(msg);
 				}
@@ -335,7 +335,7 @@ public class ChatMgr extends LoopThread {
 			sb.setLength(sb.length() - 1);
 			
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢[", username, "]", 
-					(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提督/总督的弹幕长度不够, 不写形容词
+					(CookiesMgr.MAIN().isGuard() ? MsgKwMgr.getAdv() : ""), // 非提�?/总督的弹幕长度不�?, 不写形容�?
 					"投喂[", sb.toString(), "]:活跃+", cost);
 			XHRSender.sendDanmu(msg);
 		}
@@ -369,7 +369,7 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 分析弹幕内容, 触发不同的响应机制
+	 * 分析弹幕内容, 触发不同的响应机�?
 	 * @param chatMsg
 	 */
 	public void analyseDanmu(ChatMsg chatMsg) {
@@ -377,7 +377,7 @@ public class ChatMgr extends LoopThread {
 			return;
 		}
 		
-		countChatCnt(chatMsg.getUsername());	// 登陆用户发言计数器
+		countChatCnt(chatMsg.getUsername());	// 登陆用户发言计数�?
 		toNight(chatMsg.getUsername(), chatMsg.getMsg());	// 自动晚安
 		complaint(chatMsg.getUsername(), chatMsg.getMsg());	// 举报处理
 		ban(chatMsg.getUsername(), chatMsg.getMsg());	// 禁言处理
@@ -389,11 +389,11 @@ public class ChatMgr extends LoopThread {
 	 */
 	private void countChatCnt(String username) {
 		
-		// 当是登陆用户发言时, 清空计数器
+		// 当是登陆用户发言�?, 清空计数�?
 		if(CookiesMgr.MAIN().NICKNAME().equals(username)) {
 			chatCnt = 0;
 			
-		// 当是其他用户发言时, 计数器+1
+		// 当是其他用户发言�?, 计数�?+1
 		} else {
 			chatCnt++;
 		}
@@ -421,8 +421,8 @@ public class ChatMgr extends LoopThread {
 	/**
 	 * 弹幕举报.
 	 * 	借登陆用户的权限执法, 登陆用户必须是当前直播间的主播或房管.
-	 * @param username 举报人
-	 * @param msg 弹幕（消息含被举报人）
+	 * @param username 举报�?
+	 * @param msg 弹幕（消息含被举报人�?
 	 */
 	private void complaint(String username, String msg) {
 		if(Identity.less(Identity.ADMIN) || 
@@ -435,7 +435,7 @@ public class ChatMgr extends LoopThread {
 		String unameKey = RegexUtils.findFirst(msg, COMPLAINT_KEY.concat("\\s*(.+)")).trim();
 		List<String> accuseds = OnlineUserMgr.getInstn().findOnlineUser(unameKey);
 		if(accuseds.size() <= 0) {
-			log.warn("用户 [{}] 举报失败: 不存在关键字为 [{}] 的账号", accuser, unameKey);
+			log.warn("用户 [{}] 举报失败: 不存在关键字�? [{}] 的账�?", accuser, unameKey);
 			
 		} else if(accuseds.size() > 1) {
 			log.warn("用户 [{}] 举报失败: 关键字为 [{}] 的账号有多个", accuser, unameKey);
@@ -449,7 +449,7 @@ public class ChatMgr extends LoopThread {
 					
 				} else if(XHRSender.blockUser(accused)) {
 					OnlineUserMgr.getInstn().cancel(accused);
-					msg = StrUtils.concat(WARN_KEY, "[", accused, "]被", cnt, "人举报,暂时禁言");
+					msg = StrUtils.concat(WARN_KEY, "[", accused, "]�?", cnt, "人举�?,暂时禁言");
 				}
 				XHRSender.sendDanmu(msg);
 				
@@ -460,10 +460,10 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 把指定用户关小黑屋.
+	 * 把指定用户关小黑�?.
 	 *  借登陆用户的权限执法, 登陆用户必须是当前直播间的主播或房管.
 	 * @param username 举报人名称（只能是房管）
-	 * @param msg 弹幕（消息含被禁闭人）
+	 * @param msg 弹幕（消息含被禁闭人�?
 	 */
 	private void ban(String username, String msg) {
 		if(Identity.less(Identity.ADMIN) || 
@@ -478,24 +478,24 @@ public class ChatMgr extends LoopThread {
 		List<String> accuseds = OnlineUserMgr.getInstn().findOnlineUser(unameKey);
 		
 		if(accuseds.size() <= 0) {
-			msg = StrUtils.concat("【禁言失败】 不存在关键字为 [", unameKey, "] 的用户");
+			msg = StrUtils.concat("【禁言失败�? 不存在关键字�? [", unameKey, "] 的用�?");
 			
 		} else if(accuseds.size() > 1) {
-			msg = StrUtils.concat("【禁言失败】 关键字为 [", unameKey, "] 的用户有 [", accuseds.size(), 
-					"] 个, 请确认其中一个用户再执行禁言: ");
+			msg = StrUtils.concat("【禁言失败�? 关键字为 [", unameKey, "] 的用户有 [", accuseds.size(), 
+					"] �?, 请确认其中一个用户再执行禁言: ");
 			for(String accused : accuseds) {
 				msg = StrUtils.concat(msg, "[", accused, "] ");
 			}
 		} else {
 			String accused = accuseds.get(0);
 			if(OnlineUserMgr.getInstn().isManager(accused)) {
-				msg = StrUtils.concat("【禁言失败】 用户 [", accused, "] 是主播/管理员");
+				msg = StrUtils.concat("【禁言失败�? 用户 [", accused, "] 是主�?/管理�?");
 				
 			} else if(XHRSender.blockUser(accused)) {
-				msg = StrUtils.concat("【禁言成功】 用户 [", accused, "] 已暂时关到小黑屋1小时");
+				msg = StrUtils.concat("【禁言成功�? 用户 [", accused, "] 已暂时关到小黑屋1小时");
 				
 			} else {
-				msg = StrUtils.concat("【禁言失败】 用户 [", accused, "] 已被其他房管拖到小黑屋不可描述了");
+				msg = StrUtils.concat("【禁言失败�? 用户 [", accused, "] 已被其他房管拖到小黑屋不可描述了");
 			}
 		}
 		XHRSender.sendPM(managerId, msg);

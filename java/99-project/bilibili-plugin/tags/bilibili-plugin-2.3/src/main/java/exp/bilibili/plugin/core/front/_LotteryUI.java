@@ -24,10 +24,10 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * <PRE>
  * 直播间在线用户抽奖器
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _LotteryUI extends PopChildWindow {
@@ -57,14 +57,14 @@ class _LotteryUI extends PopChildWindow {
 	private NameViewer viewer;
 	
 	protected _LotteryUI() {
-		super("直播间活跃用户抽奖", WIDTH, HEIGHT);
+		super("直播间活跃用户抽�?", WIDTH, HEIGHT);
 	}
 	
 	@Override
 	protected void initComponents(Object... args) {
 		this.users = OnlineUserMgr.getInstn().getAllUsers();
 		this.userPanel = new JPanel(new GridLayout(ROW, COL));
-		SwingUtils.addBorder(userPanel, "在线活跃用户列表  (仅随机显示" +  (ROW * COL) + "名)");
+		SwingUtils.addBorder(userPanel, "在线活跃用户列表  (仅随机显�?" +  (ROW * COL) + "�?)");
 		refreshUserPanel();
 		
 		this.luckyBtn = new JButton("抽奖人数:" + users.size());
@@ -127,7 +127,7 @@ class _LotteryUI extends PopChildWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				
-				// 触发开始抽奖事件
+				// 触发开始抽奖事�?
 				if(isLottery == false) {
 					if(users.size() > 1) {
 						isLottery = true;
@@ -176,7 +176,7 @@ class _LotteryUI extends PopChildWindow {
 	
 	protected void refreshUsers() {
 		if(isLottery == true) {
-			return;	// 若在抽奖中, 则不更新用户表
+			return;	// 若在抽奖�?, 则不更新用户�?
 		}
 		
 		users.clear();
@@ -212,7 +212,7 @@ class _LotteryUI extends PopChildWindow {
 	private class NameViewer extends LoopThread {
 
 		protected NameViewer() {
-			super("名字随机闪现器");
+			super("名字随机闪现�?");
 		}
 
 		@Override

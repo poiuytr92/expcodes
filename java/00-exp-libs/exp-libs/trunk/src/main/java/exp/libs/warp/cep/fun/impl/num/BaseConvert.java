@@ -25,7 +25,7 @@ public class BaseConvert extends BaseFunctionN {
 	private static final long serialVersionUID = 7613079111724651345L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "base";
@@ -36,7 +36,7 @@ public class BaseConvert extends BaseFunctionN {
 	private final static String BASE_NUM_REGEX = "[0-9a-zA-Z]+";
 	
 	/**
-	 * 限定参数个数为2.
+	 * 限定参数个数�?2.
 	 */
 	@Override
 	public boolean checkNumberOfParameters(int inParamsNum){
@@ -44,16 +44,16 @@ public class BaseConvert extends BaseFunctionN {
     }
 	
 	/**
-	 * 进制互转:10进制正整数 <-> 任意进制数(>=2, <=36)
-	 * 共2个参数,但根据类型有2种应用：
+	 * 进制互转:10进制正整�? <-> 任意进制�?(>=2, <=36)
+	 * �?2个参�?,但根据类型有2种应用：
 	 * 
-	 * @param1 long:10进制正整数(>=0, 不在此范围则置值为0)
+	 * @param1 long:10进制正整�?(>=0, 不在此范围则置值为0)
 	 * @param2 int:转换进制基数(>=2, <=36, 不在此范围则置值为10)
-	 * @return String: x进制数
-	 * 或
+	 * @return String: x进制�?
+	 * �?
 	 * @param1 String:任意进制数字符串(空串则置返回值为0)
-	 * @param2 int:所给定字符串的进制数(>=2, <=36, 不在此范围则置返回值为0)
-	 * @return long:10进制数
+	 * @param2 int:所给定字符串的进制�?(>=2, <=36, 不在此范围则置返回值为0)
+	 * @return long:10进制�?
 	 * 
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */
@@ -62,13 +62,13 @@ public class BaseConvert extends BaseFunctionN {
 		Object param1 = params.remove(0);
 		Object result = null;
 		
-		// 任意进制数 -> 10进制正整数
+		// 任意进制�? -> 10进制正整�?
 		if(param1 instanceof String) {
 			String baseNum = asString(1, param1);
 			int base = asInt(2, params.remove(0));
 			result = base2Dec(baseNum, base);
 			
-		// 10进制正整数 -> 任意进制数
+		// 10进制正整�? -> 任意进制�?
 		} else {
 			long dec = asLong(1, param1);
 			int base = asInt(2, params.remove(0));
@@ -78,10 +78,10 @@ public class BaseConvert extends BaseFunctionN {
 	}
 	
 	/**
-	 * 进制转换: 任意进制数(>=2, <=36) -> 10进制正整数
+	 * 进制转换: 任意进制�?(>=2, <=36) -> 10进制正整�?
 	 * @param1 String:任意进制数字符串(空串则置返回值为0)
-	 * @param2 int:所给定字符串的进制数(>=2, <=36, 不在此范围则置返回值为0)
-	 * @return long:10进制数
+	 * @param2 int:所给定字符串的进制�?(>=2, <=36, 不在此范围则置返回值为0)
+	 * @return long:10进制�?
 	 */
 	private Long base2Dec(String baseNum, int base) {
 		long dec = 0L;
@@ -104,10 +104,10 @@ public class BaseConvert extends BaseFunctionN {
 	}
 	
 	/**
-	 * 进制转换:10进制正整数 -> 任意进制数(>=2, <=36)
-	 * @param1 int:10进制正整数(>=0, 不在此范围则置值为0)
+	 * 进制转换:10进制正整�? -> 任意进制�?(>=2, <=36)
+	 * @param1 int:10进制正整�?(>=0, 不在此范围则置值为0)
 	 * @param2 int:转换进制基数(>=2, <=36, 不在此范围则置值为10)
-	 * @return String: base进制数
+	 * @return String: base进制�?
 	 */
 	private String dec2Base(long dec, int base) {
 		StringBuilder sb = new StringBuilder();

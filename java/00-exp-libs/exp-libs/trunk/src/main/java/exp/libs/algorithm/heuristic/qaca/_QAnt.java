@@ -10,11 +10,19 @@ import org.slf4j.LoggerFactory;
 import exp.libs.utils.num.RandomUtils;
 
 /**
+ * <PRE>
  * 量子蚂蚁
+ * </PRE>
+ * 
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2017-06-09
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 final class _QAnt {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(_QAnt.class);
 	
 	/** ζ: 信息启发系数，反映了轨迹的重要性（协作性）, 值越小越重要 */
@@ -24,41 +32,41 @@ final class _QAnt {
 	private final double GAMMA = 2D;
 	
 	/**
-	 * 用于计算转移策略的随机值.
+	 * 用于计算转移策略的随机�?.
 	 *  通常情况下蚂蚁有 80% 的概率使用寻路决策法则转移到下一节点.
-	 *  但依然保持 20%的概率使得蚂蚁随机转移到下一个节点, 以确保创新性.
+	 *  但依然保�? 20%的概率使得蚂蚁随机转移到下一个节�?, 以确保创新�?.
 	 */
 	private final int RAND_SCOPE = 100, RAND_LIMIT = 80;
 	
 	/** 蚂蚁编号 */
 	private int antId;
 	
-	/** 该蚂蚁已进化的代数 */
+	/** 该蚂蚁已进化的代�? */
 	private int generation;
 	
 	/** 蚂蚁寻路环境 */
 	private final _QEnv ENV;
 	
-	/** 这只蚂蚁的寻路起点（第一代确定之后，后代不再变化） */
+	/** 这只蚂蚁的寻路起点（第一代确定之后，后代不再变化�? */
 	private final int SRC_ID;
 	
-	/** 这只蚂蚁的寻路终点（第一代确定之后，后代不再变化） */
+	/** 这只蚂蚁的寻路终点（第一代确定之后，后代不再变化�? */
 	private final int SNK_ID;
 	
 	/** 蚂蚁自身禁忌表（已走过的节点列入禁忌表） */
 	private boolean[] tabus;
 
-	/** 蚂蚁当前的移动数据(当前局部解) */
+	/** 蚂蚁当前的移动数�?(当前局部解) */
 	private QRst curRst;
 	
-	/** 该蚂蚁累计求得可行解的次数 */
+	/** 该蚂蚁累计求得可行解的次�? */
 	private int solveCnt;
 	
 	/** 该蚂蚁连续无解的次数 */
 	private int unsolveCnt;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param ENV
 	 */
 	protected _QAnt(final int antId, final _QEnv ENV) {
@@ -80,44 +88,44 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 尝试求一个可行解, 并遗传量子基因编码到下一代蚂蚁
+	 * 尝试求一个可行解, 并遗传量子基因编码到下一代蚂�?
 	 * @param bestRst 当前最优解（用于计算信息素的参考值）
-	 * @return 是否得到可行解
+	 * @return 是否得到可行�?
 	 */
 	protected boolean solve(final QRst bestRst) {
 		boolean isFeasible = false;
 		try {
 			isFeasible = _solve(bestRst);
 		} catch(Exception e) {
-			log.error("编号为 [{}] 的蚂蚁在第 [{}] 求解过程中发生异常.", antId, generation, e);
+			log.error("编号�? [{}] 的蚂蚁在�? [{}] 求解过程中发生异�?.", antId, generation, e);
 		}
 		return isFeasible;
 	}
 	
 	private boolean _solve(final QRst bestRst) {
 		boolean isFeasible = true;
-		evolve();	// 进化(清空父代移动痕迹, 并继承父代量子编码)
-		final double pGn = ((double) generation) / ENV.MAX_GENERATION(); // 代数比
-		int curId = move(selectFirstId());	// 移动到起始节点
+		evolve();	// 进化(清空父代移动痕迹, 并继承父代量子编�?)
+		final double pGn = ((double) generation) / ENV.MAX_GENERATION(); // 代数�?
+		int curId = move(selectFirstId());	// 移动到起始节�?
 		
-		// 计算蚂蚁之后移动的每一步(最大步长为除了起始点之外的图节点数)
+		// 计算蚂蚁之后移动的每一�?(最大步长为除了起始点之外的图节点数)
 		for(int step = 1; step < ENV.size(); step++) {
 			int nextId = selectNextId(curId);
 			
 			// 无路可走
 			if(nextId < 0) {
-				isFeasible = checkFeasible();	// 检查是否已得到一个可行解(此处只针对无源宿端的拓扑图)
+				isFeasible = checkFeasible();	// 检查是否已得到一个可行解(此处只针对无源宿端的拓扑�?)
 				if(!isFeasible) {	// 对于非可行解, 2倍挥发掉本次移动轨迹中的所有信息素（负反馈到后代）
 					minusRouteQPAs(curRst, pGn, bestRst);
 				}
 				break;
 			}
 			
-			// 蚂蚁移动到下一节点，并在路径上释放信息素
+			// 蚂蚁移动到下一节点，并在路径上释放信息�?
 			addMoveQPA(curId, nextId, pGn, bestRst);
 			curId = move(nextId);
 			
-			// 若蚂蚁移动到的下一节点就是终点，则退出寻路
+			// 若蚂蚁移动到的下一节点就是终点，则退出寻�?
 			// (前面寻路决策中已经决定了此处不可能还存在未访问的必经点的情况)
 			if(nextId == SNK_ID) {
 				isFeasible = true;
@@ -125,7 +133,7 @@ final class _QAnt {
 			}
 		}
 		
-		// 标记求得可行解
+		// 标记求得可行�?
 		if(isFeasible == true) {
 			solveCnt++;
 			unsolveCnt = 0;
@@ -143,8 +151,8 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 进化到下一代蚂蚁
-	 *  （量子编码继承遗传，移动痕迹重置）
+	 * 进化到下一代蚂�?
+	 *  （量子编码继承遗传，移动痕迹重置�?
 	 */
 	private void evolve() {
 		generation++;
@@ -166,9 +174,9 @@ final class _QAnt {
 	
 	/**
 	 * 选择第一个节点ID.
-	 *   一般的TSP问题随机选择一个节点即可.
-	 *   但若拓扑图有源宿点，则在源端或宿端随机选择一个.
-	 *   (同族蚂蚁的每一代起始点是固定的， 但是不同族蚂蚁可以有不同的起始点)
+	 *   一般的TSP问题随机选择一个节点即�?.
+	 *   但若拓扑图有源宿点，则在源端或宿端随机选择一�?.
+	 *   (同族蚂蚁的每一代起始点是固定的�? 但是不同族蚂蚁可以有不同的起始点)
 	 * @return
 	 */
 	private int selectFirstId() {
@@ -192,7 +200,7 @@ final class _QAnt {
 			return nextId;
 		}
 		
-		// 蚂蚁以80%的概率以信息素作为决策方式进行路径转移（协作性优先）
+		// 蚂蚁�?80%的概率以信息素作为决策方式进行路径转移（协作性优先）
 		int rand = RandomUtils.genInt(RAND_SCOPE);
 		if(rand < RAND_LIMIT) {
 			double argmax = -1;
@@ -209,7 +217,7 @@ final class _QAnt {
 				}
 			}
 			
-		// 蚂蚁以20%的概率以随机方式进行路径转移（保持创新性）
+		// 蚂蚁�?20%的概率以随机方式进行路径转移（保持创新性）
 		} else {
 			List<Integer> nextIds = new LinkedList<Integer>();
 			for(int a = curId, z = 0; z < ENV.size(); z++) {
@@ -228,7 +236,7 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 检查下一跳是否可行
+	 * 检查下一跳是否可�?
 	 * @param nodeId
 	 * @return
 	 */
@@ -239,19 +247,19 @@ final class _QAnt {
 		if(tabus[nextId]) {
 			isTabu = true;
 			
-		// 当前节点与下一跳节点不连通
+		// 当前节点与下一跳节点不连�?
 		} else if(!ENV.isLinked(curId, nextId)) {
 			isTabu = true;
 			
-		// 当下一跳节点为终点节点时
+		// 当下一跳节点为终点节点�?
 		} else if(nextId == SNK_ID) {
 			isTabu = true;
 			
-			// 下一跳是最后一跳
+			// 下一跳是最后一�?
 			if(curRst.getStep() + 1 == ENV.size()) {
 				isTabu = false;
 				
-			// 下一跳不是最后一条，但所有必经点已被访问过
+			// 下一跳不是最后一条，但所有必经点已被访问�?
 			} else {
 				int[] includes = ENV.getIncludes();
 				if(includes.length > 0) {
@@ -283,14 +291,14 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 当未遍历完全图时， 检查到目前为止的移动轨迹是否为一个可行解
+	 * 当未遍历完全图时�? 检查到目前为止的移动轨迹是否为一个可行解
 	 *  (剩余节点均不在必经点集中则认为已得到一个可行解)
 	 * @return
 	 */
 	private boolean checkFeasible() {
 		boolean isFeasible = true;
 		
-		// 若不存在必经点集， 则表示需要全图遍历， 亦即当前解必定不是可行解
+		// 若不存在必经点集�? 则表示需要全图遍历， 亦即当前解必定不是可行解
 		if(ENV.getIncludes().length <= 0) {
 			isFeasible = false;
 			
@@ -307,7 +315,7 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 在移动路径上释放信息素
+	 * 在移动路径上释放信息�?
 	 * @param curId
 	 * @param nextId
 	 * @param pGn
@@ -319,7 +327,7 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 当得不到可行解时，对移动轨迹上的所有路径进行2倍的信息素挥发， 以负反馈到后代
+	 * 当得不到可行解时，对移动轨迹上的所有路径进�?2倍的信息素挥发， 以负反馈到后�?
 	 * @param rst
 	 * @param pGn
 	 * @param bestRst
@@ -337,25 +345,25 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 计算量子旋转门的旋转角θ
-	 * @param pGn 该量子蚂蚁的代数 与 最大代数 的代数比
-	 * @param deltaBeta 某只量子蚂蚁当前从i->j转移时释放的信息素
-	 * @param curQPA 该量子蚂蚁当前从i->j转移的量子编码(当前的路径信息素概率幅)
-	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
-	 * @return 旋转角θ
+	 * 计算量子旋转门的旋转角�?
+	 * @param pGn 该量子蚂蚁的代数 �? 最大代�? 的代数比
+	 * @param deltaBeta 某只量子蚂蚁当前从i->j转移时释放的信息�?
+	 * @param curQPA 该量子蚂蚁当前从i->j转移的量子编�?(当前的路径信息素概率�?)
+	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率�?
+	 * @return 旋转角�?
 	 */
 	private double _getTheta(int curId, int nextId, double pGn, QRst bestRst) {
-		double deltaBeta = __getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增量
+		double deltaBeta = __getDeltaBeta(curId, nextId, bestRst); // 蚂蚁移动时释放的信息素增�?
 		double theta = (_QEnv.MAX_THETA - _QEnv.DELTA_THETA * pGn) * deltaBeta;
 		return theta;
 	}
 	
 	/**
-	 * 计算蚂蚁在srcId->snkId移动时释放的信息素
+	 * 计算蚂蚁在srcId->snkId移动时释放的信息�?
 	 * @param srcId
 	 * @param snkId
 	 * @param bestRst
-	 * @return srcId->snkId路径上的 [量子信息素增量] 的 β概率幅的平方
+	 * @return srcId->snkId路径上的 [量子信息素增量] �? β概率幅的平方
 	 */
 	private double __getDeltaBeta(int srcId, int snkId, final QRst bestRst) {
 		double beta = ENV.deltaBeta(srcId, snkId);
@@ -364,11 +372,11 @@ final class _QAnt {
 	}
 
 	/**
-	 * 使用量子旋转门更新量子编码: 
+	 * 使用量子旋转门更新量子编�?: 
 	 * 	加强src->snk的路径信息素
 	 * @param srcId 路径起点
 	 * @param snkId 路径终点
-	 * @param theta 旋转角: 正向(>0)为增加, 逆向(<0)为减少
+	 * @param theta 旋转�?: 正向(>0)为增�?, 逆向(<0)为减�?
 	 */
 	private void _updateQPA(final int srcId, final int snkId, final double theta) {
 		final __QPA azQPA = curRst.QPA(srcId, snkId);
@@ -405,11 +413,11 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 计算当前解相对于最优解的量子旋转角的旋转方向
-	 *   当前解的概率幅 大于 最优解时， 旋转角方向为负，反之为正
-	 * @param curQPA 某只量子蚂蚁当前从i->j转移的量子编码(当前的路径信息素概率幅)
-	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率幅
-	 * @return 顺时针:1; 逆时针:-1
+	 * 计算当前解相对于最优解的量子旋转角的旋转方�?
+	 *   当前解的概率�? 大于 最优解时， 旋转角方向为负，反之为正
+	 * @param curQPA 某只量子蚂蚁当前从i->j转移的量子编�?(当前的路径信息素概率�?)
+	 * @param bestQPA 最优解路径概率幅矩阵中，路径i->j的信息素概率�?
+	 * @return 顺时�?:1; 逆时�?:-1
 	 */
 	@SuppressWarnings("unused")
 	@Deprecated
@@ -431,7 +439,7 @@ final class _QAnt {
 	}
 	
 	/**
-	 * 获取本次求解过程的结果
+	 * 获取本次求解过程的结�?
 	 * @return
 	 */
 	protected QRst getResult() {

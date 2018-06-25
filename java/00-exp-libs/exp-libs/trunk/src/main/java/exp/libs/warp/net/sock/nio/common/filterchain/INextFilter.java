@@ -30,7 +30,7 @@ public interface INextFilter {
 	/**
 	 * 触发上一个业务过滤器的onMessageSent事件
 	 * @param session 会话
-	 * @param msg 发送消息
+	 * @param msg 发送消�?
 	 */
 	public void onMessageSent(ISession session, Object msg);
 

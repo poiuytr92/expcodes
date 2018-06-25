@@ -22,7 +22,7 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 public class LogFilter extends BaseFilter {
 
 	/**
-	 * 日志器
+	 * 日志�?
 	 */
 	private final static Logger log = LoggerFactory.getLogger(LogFilter.class);
 	
@@ -55,7 +55,7 @@ public class LogFilter extends BaseFilter {
 			throws Exception {
 
 		/**
-		 * 打印消息发送日志
+		 * 打印消息发送日�?
 		 */
 		log.info("Log onMessageSent");
 		

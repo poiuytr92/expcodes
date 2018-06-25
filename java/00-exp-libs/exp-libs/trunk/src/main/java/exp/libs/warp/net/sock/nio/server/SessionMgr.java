@@ -35,24 +35,24 @@ import exp.libs.warp.net.sock.nio.common.filterchain.impl.FilterChain;
  */
 final class SessionMgr extends Thread {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(SessionMgr.class);
 	
 	/** 会话列表  */
 	private List<Session> sessions;
 
-	/** Socket服务端配置 */
+	/** Socket服务端配�? */
 	private NioServerConfig sockConf;
 
-	/** 工作锁 */
+	/** 工作�? */
 	private byte[] lock;
 	
-	/** 线程运行状态 */
+	/** 线程运行状�? */
 	private boolean running;
 	
 	/**
-	 * 构造函数
-	 * @param sockConf 服务器配置
+	 * 构造函�?
+	 * @param sockConf 服务器配�?
 	 */
 	protected SessionMgr(NioServerConfig sockConf) {
 		this.sockConf = sockConf;
@@ -99,7 +99,7 @@ final class SessionMgr extends Thread {
 				synchronized (lock) {
 					for (Session session : sessions) {
 						
-						// 把未验证的会话交付到会话级事件处理
+						// 把未验证的会话交付到会话级事件处�?
 						if (session.isVerfied() == false) {
 							handleSessionEvent(session);
 							
@@ -112,7 +112,7 @@ final class SessionMgr extends Thread {
 				
 				ThreadUtils.tSleep(Times.SLEEP);
 			} catch (Exception e) {
-				log.error("会话管理器异常.", e);
+				log.error("会话管理器异�?.", e);
 				break;
 			}
 		} while (running);
@@ -122,14 +122,14 @@ final class SessionMgr extends Thread {
 	}
 
 	/**
-	 * 过滤失效的会话
+	 * 过滤失效的会�?
 	 */
 	private void filterSessions() {
 		long curTime = System.currentTimeMillis();
 		for (Iterator<Session> sIts = sessions.iterator(); sIts.hasNext();) {
 			Session session = sIts.next();
 			
-			// 若该会话处于等待关闭状态，但超时仍未被远端机关闭，则本地主动关闭
+			// 若该会话处于等待关闭状态，但超时仍未被远端机关闭，则本地主动关�?
 			if (session.isWaitingToClose() == true) {
 				if(curTime - session.getNotifyDisconTime() > sockConf.getOvertime()) {
 					close(session);
@@ -138,7 +138,7 @@ final class SessionMgr extends Thread {
 			
 			// 检查会话是否超时无动作
 			if(session.isOvertime(curTime)) {
-				log.debug("会话 [{}] 超时无动作, 关闭会话", session);
+				log.debug("会话 [{}] 超时无动�?, 关闭会话", session);
 				close(session);
 			}
 			
@@ -146,19 +146,19 @@ final class SessionMgr extends Thread {
 			if (session.isVerfied() == false) {
 				continue;
 				
-			// 把发生异常、验证失败或已关闭的会话，进行关闭确认，并从会话维护队列中移除
+			// 把发生异常、验证失败或已关闭的会话，进行关闭确认，并从会话维护队列中移�?
 			} else if (session.isError() == true || 
 					session.isPassVerfy() == false || 
 					session.isClosed() == true) {
 				close(session);
 				sIts.remove();
-				log.debug("会话 [{}]已移除", session);
+				log.debug("会话 [{}]已移�?", session);
 			}
 		}
 	}
 	
 	/**
-	 * 交付会话处理器，处理会话级事件（会话验证）
+	 * 交付会话处理器，处理会话级事件（会话验证�?
 	 * 
 	 * @param session 会话
 	 */
@@ -168,12 +168,12 @@ final class SessionMgr extends Thread {
 	}
 
 	/**
-	 * 交付消息处理器，处理会话中的消息级事件.
+	 * 交付消息处理器，处理会话中的消息级事�?.
 	 * 
 	 * 	这里没有通过while循环一次读完session的消息队列，主要是为了session间的公平性，
-	 *  避免当某个session一次有很多消息到来时，其他session要等很久。
-	 *  但此时如果某个session有很多消息、而另一个几乎没有消息，则会引起处理缓慢的假象。
-	 *  没有消息时的处理时延、主要受事件选择器的blockTime影响，其次是迭代的sleepTime。
+	 *  避免当某个session一次有很多消息到来时，其他session要等很久�?
+	 *  但此时如果某个session有很多消息、而另一个几乎没有消息，则会引起处理缓慢的假象�?
+	 *  没有消息时的处理时延、主要受事件选择器的blockTime影响，其次是迭代的sleepTime�?
 	 * 
 	 * @param session 会话
 	 */
@@ -188,13 +188,13 @@ final class SessionMgr extends Thread {
 			}
 			
 		} catch (ClosedSelectorException e) {
-			// Undo 关闭事件选择器失败, 此为可忽略异常，不影响程序运行
+			// Undo 关闭事件选择器失�?, 此为可忽略异常，不影响程序运�?
         	
 		} catch(ArrayIndexOutOfBoundsException e) {
 			log.error("会话 [{}] 的本地缓冲区溢出, 上一条消息的数据可能已丢失或缺失.", session, e);
         	
 		} catch (SocketTimeoutException e) {
-			log.error("会话 [{}] 超时无动作, 关闭会话.", session, e);
+			log.error("会话 [{}] 超时无动�?, 关闭会话.", session, e);
 			close(session);
 			
 		} catch (Exception e) {
@@ -204,11 +204,11 @@ final class SessionMgr extends Thread {
 	}
 
 	/**
-	 * 检查会话是否有新的待处理消息 首先采集会话通道中的数据，把新到得消息存放在原始消息队列末尾
-	 * 然后检查原始消息队列的队头是否为空，非空则将其作为即将处理的消息
+	 * 检查会话是否有新的待处理消�? 首先采集会话通道中的数据，把新到得消息存放在原始消息队列末尾
+	 * 然后检查原始消息队列的队头是否为空，非空则将其作为即将处理的消�?
 	 * 
 	 * @param session 会话
-	 * @return 只要原始消息队列非空，且会话未关闭，则返回成功状态
+	 * @return 只要原始消息队列非空，且会话未关闭，则返回成功状�?
 	 * @throws Exception 异常
 	 */
 	private boolean hasNewMsg(Session session) throws Exception {
@@ -236,9 +236,9 @@ final class SessionMgr extends Thread {
 	}
 
 	/**
-	 * 从会话通道采集数据，返回-1表示通道已断开
+	 * 从会话通道采集数据，返�?-1表示通道已断开
 	 * 
-	 * @param sk 关注事件键
+	 * @param sk 关注事件�?
 	 * @param session 会话
 	 * @return 
 	 * @throws Exception 异常
@@ -262,7 +262,7 @@ final class SessionMgr extends Thread {
 				int[] rdIdxs = new int[readDelimiters.length];	// 对应每个消息分隔符的索引
 				while (true) {	// 可能一次性收到多条消息，在缓冲区可读时需全部处理完，减少处理迟延
 					
-					// 枚举所有分隔符，取索引值最小的分隔符位置（索引值>=0有效）
+					// 枚举所有分隔符，取索引值最小的分隔符位置（索引�?>=0有效�?
 					int iEnd = -1;
 					for(int i = 0; i < readDelimiters.length; i++) {
 						rdIdxs[i] = socketBuffer.indexOf(readDelimiters[i]);
@@ -277,7 +277,7 @@ final class SessionMgr extends Thread {
 						}
 					}
 					
-					// 所有分隔符都无法截获消息
+					// 所有分隔符都无法截获消�?
 					if(iEnd < 0) {
 						break;
 					}
@@ -288,7 +288,7 @@ final class SessionMgr extends Thread {
 						if (!session.getMsgQueue().addNewMsg(newMsg)) {
 							session.writeErrMsg(Protocol.MSG_LIMIT);
 							
-							log.warn("会话 [{}] 连续发送超过 [{}] 条未处理消息.最新消息被抛弃:\r\n{}", 
+							log.warn("会话 [{}] 连续发送超�? [{}] 条未处理消息.最新消息被抛弃:\r\n{}", 
 									session, MsgQueue.MAX_MSG_LIMIT, newMsg);
 						}
 					}
@@ -297,7 +297,7 @@ final class SessionMgr extends Thread {
 				channelBuffer.clear();
 			}
 			
-			// Socket通道已断开(客户端主动关闭会话)
+			// Socket通道已断开(客户端主动关闭会�?)
 			if (count < 0) {
 				isOk = false;
 			}
@@ -306,9 +306,9 @@ final class SessionMgr extends Thread {
 	}
 
 	/**
-	 * 添加新客户端到会话管理队列
+	 * 添加新客户端到会话管理队�?
 	 * 
-	 * @param newSession 新客户端的
+	 * @param newSession 新客户端�?
 	 * @return true:添加成功; false:添加失败
 	 * @throws Exception 异常
 	 */
@@ -342,7 +342,7 @@ final class SessionMgr extends Thread {
 	}
 
 	/**
-	 * 移除所有前台客户代理线程
+	 * 移除所有前台客户代理线�?
 	 * 
 	 * @return true:移除成功; false:移除失败
 	 * @throws Exception 
@@ -364,9 +364,9 @@ final class SessionMgr extends Thread {
 	}
 
 	/**
-	 * 获取当前活动的客户端连接数
+	 * 获取当前活动的客户端连接�?
 	 * 
-	 * @return 当前活动的客户端连接数
+	 * @return 当前活动的客户端连接�?
 	 */
 	protected int getSessionCnt() {
 		synchronized (lock) {

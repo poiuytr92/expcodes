@@ -17,7 +17,7 @@ import exp.libs.utils.other.StrUtils;
  */
 public class OCR {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(OCR.class);
 	
 	/** 默认OCR组件目录 */
@@ -27,7 +27,7 @@ public class OCR {
 	private _OCR ocr;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param tesseractDir OCR组件驱动目录
 	 */
 	public OCR(String tesseractDir) {

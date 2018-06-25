@@ -10,8 +10,8 @@ import exp.libs.utils.other.LogUtils;
  * <PRE>
  * 程序入口
  * </PRE>
- * <B>PROJECT：</B> xxxxxx
- * <B>SUPPORT：</B> xxxxxx
+ * <B>PROJECT : </B> xxxxxx
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   xxxxxx
  * @author    xxxxxx
  * @since     jdk版本：jdk1.6

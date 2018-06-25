@@ -36,11 +36,11 @@ import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
  */
 public class NioSocketServer extends Thread {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(NioSocketServer.class);
 	
 	/**
-	 * 事件选择器
+	 * 事件选择�?
 	 */
 	private Selector selector = null;
 
@@ -60,14 +60,14 @@ public class NioSocketServer extends Thread {
 	private SessionMgr sessionMgr = null;
 
 	/**
-	 * socket服务端运行状态标识
+	 * socket服务端运行状态标�?
 	 */
 	private boolean running;
 
 	/**
-	 * 构造函数
-	 * @param sockConf 服务器配置
-	 * @param handler 业务处理器
+	 * 构造函�?
+	 * @param sockConf 服务器配�?
+	 * @param handler 业务处理�?
 	 */
 	public NioSocketServer(SocketBean sockConf, IHandler handler) {
 		this.sockConf = new NioServerConfig(sockConf, handler);
@@ -77,8 +77,8 @@ public class NioSocketServer extends Thread {
 	}
 
 	/**
-	 * 获取服务器配置
-	 * @return 服务器配置
+	 * 获取服务器配�?
+	 * @return 服务器配�?
 	 */
 	public SocketBean getSockConf() {
 		return sockConf;
@@ -93,7 +93,7 @@ public class NioSocketServer extends Thread {
 	}
 	
 	/**
-	 * 启动服务端(默认侦听所有IP上的同一端口)
+	 * 启动服务�?(默认侦听所有IP上的同一端口)
 	 * @return true:启动成功; false:启动失败
 	 */
 	public boolean _start() {
@@ -101,7 +101,7 @@ public class NioSocketServer extends Thread {
 	}
 	
 	/**
-	 * 启动服务端
+	 * 启动服务�?
 	 * @param listenAllIP 是否侦听所有IP上的同一端口(适用于多网卡)
 	 * @return true:启动成功; false:启动失败
 	 */
@@ -146,7 +146,7 @@ public class NioSocketServer extends Thread {
 	@Override
 	public void run() {
 		log.debug(sockConf.toString());
-		log.info("Socket服务 [{}] 已启动", getName());
+		log.info("Socket服务 [{}] 已启�?", getName());
 		
 		// 启动会话管理线程
 		sessionMgr._start();
@@ -161,18 +161,18 @@ public class NioSocketServer extends Thread {
 			//打印心跳
 			long curTime = System.currentTimeMillis();
             if(curTime - lastHbTime >= Times.HEART_BEAT) {
-            	log.debug("Socket服务 [{}] 当前活动会话数: [{}].", 
+            	log.debug("Socket服务 [{}] 当前活动会话�?: [{}].", 
             			getName(), sessionMgr.getSessionCnt());
                 lastHbTime = curTime;
             }
 		} while (running && sessionMgr.isRunning());
 		
 		clear();
-		log.info("Socket服务 [{}] 已停止", getName());
+		log.info("Socket服务 [{}] 已停�?", getName());
 	}
 
 	/**
-	 * 监听客户端连接请求事件
+	 * 监听客户端连接请求事�?
 	 */
 	private void listen() {
 		try {
@@ -185,13 +185,13 @@ public class NioSocketServer extends Thread {
 				selectionKeys.clear();
 			}
 		} catch (Exception e) {
-			log.error("Socket服务 [{}] 添加一个新的连接请求失败", getName(), e);
+			log.error("Socket服务 [{}] 添加一个新的连接请求失�?", getName(), e);
 		}
 	}
 
 	/**
 	 * 处理关注事件Acceptable
-	 * @param sk 事件键
+	 * @param sk 事件�?
 	 * @throws Exception
 	 */
 	private void handleSelectionKey(SelectionKey sk) throws Exception {
@@ -207,17 +207,17 @@ public class NioSocketServer extends Thread {
 			if(!sessionMgr.addSession(clientSession)) {
 				clientSession.writeErrMsg(Protocol.CONN_LIMIT);
 				clientSession.close();
-				log.warn("Socket服务 [{}] 连接数越限, 已拒绝新连接请求.", getName());
+				log.warn("Socket服务 [{}] 连接数越�?, 已拒绝新连接请求.", getName());
 				
 			} else {
-				log.debug("Socket服务 [{}] 新增会话 [{}], 当前活动会话数: [{}]", 
+				log.debug("Socket服务 [{}] 新增会话 [{}], 当前活动会话�?: [{}]", 
 						getName(), clientSession, sessionMgr.getSessionCnt());
 			}
 		}
 	}
 
 	/**
-	 * 停止服务端
+	 * 停止服务�?
 	 */
 	public void _stop() {
 		this.running = false;
@@ -243,8 +243,8 @@ public class NioSocketServer extends Thread {
 	}
 	
 	/**
-	 * 测试socket服务是否在运行
-	 * @return true:运行中; false:已停止
+	 * 测试socket服务是否在运�?
+	 * @return true:运行�?; false:已停�?
 	 */
 	public boolean isRunning() {
 		return running;

@@ -8,10 +8,10 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
  * <PRE>
  * 美瞳工具类
  * </PRE>
- * <B>PROJECT：</B> exp-xml-paper
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> exp-xml-paper
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2015-06-01
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public final class BeautyEye {
@@ -23,10 +23,10 @@ public final class BeautyEye {
 		BeautyEyeLNFHelper.frameBorderStyle = 
 				BeautyEyeLNFHelper.FrameBorderStyle.translucencyAppleLike;
 		
-		// 隐藏右上角无效按钮【设置】
+		// 隐藏右上角无效按钮【设置�?
 	    UIManager.put("RootPane.setupButtonVisible", false);
 		
-	    // 初始化 BeautyEye 外观组件
+	    // 初始�? BeautyEye 外观组件
 		try {	
 			BeautyEyeLNFHelper.launchBeautyEyeLNF();
 		} catch (Exception e) {

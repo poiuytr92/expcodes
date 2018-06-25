@@ -46,7 +46,7 @@ import exp.libs.utils.other.StrUtils;
  */
 public class HttpUtils {
 
-	/** 日志器 */
+	/** 日志�? */
 	protected final static Logger log = LoggerFactory.getLogger(HttpURLUtils.class);
 	
 	/** 默认编码 */
@@ -64,16 +64,16 @@ public class HttpUtils {
 	/** SSL实例名称 */
 	private final static String TLS = "tls";
 	
-	/** GET请求方法名 */
+	/** GET请求方法�? */
 	public final static String METHOD_GET = "GET";
 	
-	/** POST请求方法名 */
+	/** POST请求方法�? */
 	public final static String METHOD_POST = "POST";
 	
-	/** 页面使用BASE64存储的图像信息正则 */
+	/** 页面使用BASE64存储的图像信息正�? */
 	private final static String RGX_BASE64_IMG = "data:image/([^;]+);base64,(.*)";
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected HttpUtils() {}
 	
 	/**
@@ -109,7 +109,7 @@ public class HttpUtils {
 	}
 	
 	/**
-	 * 判断HTTP响应状态码是否为成功
+	 * 判断HTTP响应状态码是否为成�?
 	 * @param responseCode 响应状态码
 	 * @return
 	 */
@@ -131,7 +131,7 @@ public class HttpUtils {
 	 * 构造HTTP/HTTPS连接(支持TLSv1.2)
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
-	 * @param header 请求头参数
+	 * @param header 请求头参�?
 	 * @return HTTP连接(失败返回null)
 	 */
 	public static HttpURLConnection createHttpConn(String url, 
@@ -144,7 +144,7 @@ public class HttpUtils {
 	 * 构造HTTP/HTTPS连接(支持TLSv1.2)
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
-	 * @param header 请求头参数
+	 * @param header 请求头参�?
 	 * @param connTimeout 连接超时(ms)
 	 * @param readTimeout 读取超时(ms)
 	 * @return HTTP连接(失败返回null)
@@ -165,7 +165,7 @@ public class HttpUtils {
 	 * 构造HTTP/HTTPS连接(支持TLSv1.2)
 	 * @param url 目标地址
 	 * @param method 请求方法：GET/POST
-	 * @param header 请求头参数
+	 * @param header 请求头参�?
 	 * @param connTimeout 连接超时(ms)
 	 * @param readTimeout 读取超时(ms)
 	 * @return HTTP连接(失败返回null)
@@ -179,14 +179,14 @@ public class HttpUtils {
 		}
 		URL URL = new URL(url);
 		
-		// HTTPS连接(若依然报错 protocol_version， 则调用此方法的程序需切换到JDK1.8以上, JDK1.8默认使用TLSv1.2)
+		// HTTPS连接(若依然报�? protocol_version�? 则调用此方法的程序需切换到JDK1.8以上, JDK1.8默认使用TLSv1.2)
 		if(HTTPS.equals(URL.getProtocol())) {
 			HttpsURLConnection httpsConn = (HttpsURLConnection) URL.openConnection();
 			if(OSUtils.isJDK16() || OSUtils.isJDK17()) {
 				_supportTLSv12(httpsConn);	//  JDK1.6和JDK1.7追加TLSv1.2支持
 				
 			} else {
-				_bypassSSL(httpsConn);		// 绕过SSL校验(可选, JDK1.8以上不绕过也可)
+				_bypassSSL(httpsConn);		// 绕过SSL校验(可�?, JDK1.8以上不绕过也�?)
 			}
 			
 			conn = httpsConn;
@@ -221,7 +221,7 @@ public class HttpUtils {
 	 * <pre>
 	 * 追加TLSv1.2支持 (适用于javax.net.ssl.HttpsURLConnection).
 	 * -------------------
-	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
+	 *  主要用于解决 JDK1.6 �? JDK1.7 不支�? TLSv1.2 的问�?.
 	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
 	 * </pre>
 	 * @param httpsConn
@@ -234,9 +234,9 @@ public class HttpUtils {
 	 * <pre>
 	 * 绕过SSL校验.
 	 * -------------------
-	 *  若服务端使用的是TLSv1.2协议, 绕过也没有用的, 在建立握手连接时, 
-	 *  服务端会认为客户端加密机制不安全而拒绝握手, 报错 Received fatal alert: protocol_version.
-	 *  由于 JDK1.6 和 JDK1.7 均不支持 TLSv1.2, 在这种情况下只能使用 JDK1.8
+	 *  若服务端使用的是TLSv1.2协议, 绕过也没有用�?, 在建立握手连接时, 
+	 *  服务端会认为客户端加密机制不安全而拒绝握�?, 报错 Received fatal alert: protocol_version.
+	 *  由于 JDK1.6 �? JDK1.7 均不支持 TLSv1.2, 在这种情况下只能使用 JDK1.8
 	 * </pre>
 	 * @param httpsConn HTTPS连接
 	 * @throws Exception
@@ -300,7 +300,7 @@ public class HttpUtils {
 	 * <pre>
 	 * 追加TLSv1.2支持 (适用于org.apache.commons.httpclient.HttpClient).
 	 * -------------------
-	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
+	 *  主要用于解决 JDK1.6 �? JDK1.7 不支�? TLSv1.2 的问�?.
 	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
 	 * </pre>
 	 * @param httpsConn
@@ -336,7 +336,7 @@ public class HttpUtils {
 	/**
 	 * 对URL进行编码
 	 * @param url url路径
-	 * @param charset 编码字符集
+	 * @param charset 编码字符�?
 	 * @return 编码后URL
 	 */
 	public static String encodeURL(final String url, final String charset) {
@@ -345,7 +345,7 @@ public class HttpUtils {
 			encodeURL = URLEncoder.encode(url, charset);
 			
 		} catch (Exception e) {
-			log.error("对URL以 [{}] 编码失败: {}", charset, url, e);
+			log.error("对URL�? [{}] 编码失败: {}", charset, url, e);
 		}
 		return encodeURL;
 	}
@@ -362,7 +362,7 @@ public class HttpUtils {
 	/**
 	 * 对URL进行解码
 	 * @param url url路径
-	 * @param charset 编码字符集
+	 * @param charset 编码字符�?
 	 * @return 解码后URL
 	 */
 	public static String decodeURL(final String url, final String charset) {
@@ -371,14 +371,14 @@ public class HttpUtils {
 			decodeURL = URLDecoder.decode(url, charset);
 			
 		} catch (Exception e) {
-			log.error("对URL以 [{}] 解码失败: {}", charset, url, e);
+			log.error("对URL�? [{}] 解码失败: {}", charset, url, e);
 		}
 		return decodeURL;
 	}
 	
 	/**
 	 * 把请求参数转换成URL的KV串形式并进行编码
-	 * @param request 请求参数集
+	 * @param request 请求参数�?
 	 * @return ?&key1=val1&key2=val2&key3=val3
 	 */
 	public static String encodeRequests(Map<String, String> request) {
@@ -387,7 +387,7 @@ public class HttpUtils {
 	
 	/**
 	 * 把请求参数转换成URL的KV串形式并进行编码
-	 * @param request 请求参数集
+	 * @param request 请求参数�?
 	 * @param charset 参数字符编码
 	 * @return ?key1=val1&key2=val2&key3=val3
 	 */
@@ -409,9 +409,9 @@ public class HttpUtils {
 				val = "";
 			}
 			
-			// 注意：
+			// 注意�?
 			//   第一个参数开头的&，对于POST请求而言是必须的
-			//   但对于GET请求则是可有可无的（但存在某些网页会强制要求不能存在）
+			//   但对于GET请求则是可有可无的（但存在某些网页会强制要求不能存在�?
 			if(StrUtils.isNotEmpty(key, val)) {
 				sb.append("&").append(key).append("=").append(val);
 			}
@@ -420,9 +420,9 @@ public class HttpUtils {
 	}
 	
 	/**
-	 * 拼接GET请求的URL和参数(对于第一个参数开头的&, 强制去除)
+	 * 拼接GET请求的URL和参�?(对于第一个参数开头的&, 强制去除)
 	 * @param url GET请求URL
-	 * @param requestKVs GET请求参数表 (需通过{@link encodeRequests}方法转码)
+	 * @param requestKVs GET请求参数�? (需通过{@link encodeRequests}方法转码)
 	 * @return GET请求URL
 	 */
 	protected static String concatGET(String url, String requestKVs) {
@@ -433,9 +433,9 @@ public class HttpUtils {
 	
 	/**
 	 * 保存Base64编码的图片数据到本地
-	 * @param dataUrl 图片数据编码地址，格式形如   data:image/png;base64,base64编码的图片数据
-	 * @param saveDir 希望保存的图片目录
-	 * @param imgName 希望保存的图片名称（不含后缀，后缀通过编码自动解析）
+	 * @param dataUrl 图片数据编码地址，格式形�?   data:image/png;base64,base64编码的图片数�?
+	 * @param saveDir 希望保存的图片目�?
+	 * @param imgName 希望保存的图片名称（不含后缀，后缀通过编码自动解析�?
 	 * @return 图片保存路径（若保存失败则返回空字符串）
 	 */
 	public static String convertBase64Img(String dataUrl, 
@@ -453,7 +453,7 @@ public class HttpUtils {
                 FileUtils.writeByteArrayToFile(new File(savePath), data, false);
                 
             } catch (Exception e) {  
-                log.error("转换Base64编码图片数据到本地文件失败: [{}]", savePath, e);
+                log.error("转换Base64编码图片数据到本地文件失�?: [{}]", savePath, e);
             }
         }
         return savePath;  

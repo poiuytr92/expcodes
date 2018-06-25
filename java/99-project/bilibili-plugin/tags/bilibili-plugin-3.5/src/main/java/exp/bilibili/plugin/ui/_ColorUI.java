@@ -15,10 +15,10 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * <PRE>
  * 弹幕颜色选择窗口
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _ColorUI extends PopChildWindow {
@@ -56,34 +56,34 @@ class _ColorUI extends PopChildWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.whiteBtn = new JButton("●");
+		this.whiteBtn = new JButton("�?");
 		whiteBtn.setForeground(ChatColor.WHITE.COLOR());
 		
-		this.redBtn = new JButton("●");
+		this.redBtn = new JButton("�?");
 		redBtn.setForeground(ChatColor.RED.COLOR());
 		
-		this.blueBtn = new JButton("●");
+		this.blueBtn = new JButton("�?");
 		blueBtn.setForeground(ChatColor.BLUE.COLOR());
 		
-		this.purpleBtn = new JButton("●");
+		this.purpleBtn = new JButton("�?");
 		purpleBtn.setForeground(ChatColor.PURPLE.COLOR());
 		
-		this.cyanBtn = new JButton("●");
+		this.cyanBtn = new JButton("�?");
 		cyanBtn.setForeground(ChatColor.CYAN.COLOR());
 		
-		this.greenBtn = new JButton("●");
+		this.greenBtn = new JButton("�?");
 		greenBtn.setForeground(ChatColor.GREEN.COLOR());
 		
-		this.yellowBtn = new JButton("●");
+		this.yellowBtn = new JButton("�?");
 		yellowBtn.setForeground(ChatColor.YELLOW.COLOR());
 		
-		this.orangeBtn = new JButton("●");
+		this.orangeBtn = new JButton("�?");
 		orangeBtn.setForeground(ChatColor.ORANGE.COLOR());
 		
-		this.pinkBtn = new JButton("●");
+		this.pinkBtn = new JButton("�?");
 		pinkBtn.setForeground(ChatColor.PINK.COLOR());
 		
-		this.goldBtn = new JButton("●");
+		this.goldBtn = new JButton("�?");
 		goldBtn.setForeground(ChatColor.GOLD.COLOR());
 	}
 

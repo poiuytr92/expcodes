@@ -45,7 +45,7 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  */
 public class NioSocketClient extends Thread {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(NioSocketClient.class);
 	
 	/** Socket重连间隔(ms) */
@@ -54,22 +54,22 @@ public class NioSocketClient extends Thread {
 	/** Socket连续重连次数上限 */
 	private final static int RECONN_LIMIT = 30;
 	
-	/** 事件选择器 */
+	/** 事件选择�? */
 	private Selector selector;
 
 	/** Socket通讯通道 */
 	private SocketChannel clientSocketChannel;
 
-	/** 客户端会话对象 */
+	/** 客户端会话对�? */
 	private Session session;
 	
 	/** Socket配置 */
 	private NioClientConfig sockConf = null;
 
 	/**
-	 * 构造函数
-	 * @param socketBean 客户端配置
-	 * @param handler 业务处理器
+	 * 构造函�?
+	 * @param socketBean 客户端配�?
+	 * @param handler 业务处理�?
 	 */
 	public NioSocketClient(SocketBean sockConf, IHandler handler) {
 		this.sockConf = new NioClientConfig(sockConf, handler);
@@ -77,8 +77,8 @@ public class NioSocketClient extends Thread {
 	}
 
 	/**
-	 * 获取客户端配置
-	 * @return 客户端配置
+	 * 获取客户端配�?
+	 * @return 客户端配�?
 	 */
 	public SocketBean getSockConf() {
 		return sockConf;
@@ -86,7 +86,7 @@ public class NioSocketClient extends Thread {
 	
 	/**
 	 * <pre>
-	 * 获取客户端会话。
+	 * 获取客户端会话�?
 	 * </pre>
 	 * @return 若未连接到服务端则会返回null
 	 */
@@ -109,18 +109,18 @@ public class NioSocketClient extends Thread {
 		try {
 			selector = Selector.open();
 			clientSocketChannel = SocketChannel.open();
-			clientSocketChannel.configureBlocking(true);	// 建立连接时要为阻塞模式
+			clientSocketChannel.configureBlocking(true);	// 建立连接时要为阻塞模�?
 			clientSocketChannel.connect(socket);
 			session = new Session(clientSocketChannel, sockConf);
-			clientSocketChannel.configureBlocking(false);	// 建立连接后为非阻塞模式
+			clientSocketChannel.configureBlocking(false);	// 建立连接后为非阻塞模�?
 			
 			this.start();
-			log.info("客户端 [{}] 连接到Socket服务 [{}] 成功", 
+			log.info("客户�? [{}] 连接到Socket服务 [{}] 成功", 
 					getName(), sockConf.getSocket());
 			
 		} catch (IOException e) {
 			isOk = false;
-			log.error("客户端 [{}] 连接到Socket服务 [{}] 失败", 
+			log.error("客户�? [{}] 连接到Socket服务 [{}] 失败", 
 					getName(), sockConf.getSocket(), e);
 		}
 		return isOk;
@@ -138,7 +138,7 @@ public class NioSocketClient extends Thread {
 				
 			} else {
 				_close();
-				log.warn("客户端 [{}] {}ms后重连(已重试 {}/{} 次)", 
+				log.warn("客户�? [{}] {}ms后重�?(已重�? {}/{} �?)", 
 						getName(), RECONN_INTERVAL, cnt, RECONN_LIMIT);
 			}
 			
@@ -161,14 +161,14 @@ public class NioSocketClient extends Thread {
 	}
 	
 	/**
-	 * 断开socket连接并释放所有资源
+	 * 断开socket连接并释放所有资�?
 	 * @return true:断开成功; false:断开异常
 	 */
 	public boolean close() {
 		boolean isOk = _close();	// 关闭会话
-		sockConf.getFilterChain().clean();	// 清理过滤链
+		sockConf.getFilterChain().clean();	// 清理过滤�?
 		
-		//关闭事件选择器
+		//关闭事件选择�?
 		try {
 			if (selector != null) {
 				selector.close();
@@ -176,7 +176,7 @@ public class NioSocketClient extends Thread {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("客户端 [{}] 断开Socket连接异常", getName(), e);
+			log.error("客户�? [{}] 断开Socket连接异常", getName(), e);
 		}
 		return isOk;
 	}
@@ -189,16 +189,16 @@ public class NioSocketClient extends Thread {
 				
 			} catch (Exception e) {
 				isClose = false;
-				log.error("客户端 [{}] 断开Socket连接异常", getName(), e);
+				log.error("客户�? [{}] 断开Socket连接异常", getName(), e);
 			}
 		}
 		return isClose;
 	}
 	
 	/**
-	 * Socket写操作.
-	 * @param msg 需发送到服务端的的消息报文
-	 * @return true:发送成功; false:发送失败
+	 * Socket写操�?.
+	 * @param msg 需发送到服务端的的消息报�?
+	 * @return true:发送成�?; false:发送失�?
 	 */
 	public boolean write(Object msg) {
 		boolean isOk = false;
@@ -221,7 +221,7 @@ public class NioSocketClient extends Thread {
 		do {
 			curTime = System.currentTimeMillis();
 			
-			// 若该会话处于等待关闭状态，但超时仍未被远端机关闭，则本地主动关闭
+			// 若该会话处于等待关闭状态，但超时仍未被远端机关闭，则本地主动关�?
 			if (session.isWaitingToClose() && 
 					curTime - session.getNotifyDisconTime() > sockConf.getOvertime()) {
 				break;
@@ -230,10 +230,10 @@ public class NioSocketClient extends Thread {
 			// 打印本地心跳
             if(curTime - lastHbTime >= Times.HEART_BEAT) {
             	lastHbTime = curTime;
-            	log.info("Socket客户端 [{}] 正在监听响应消息...", getName());
+            	log.info("Socket客户�? [{}] 正在监听响应消息...", getName());
             }
 			
-            // 监听服务端返回消息
+            // 监听服务端返回消�?
 			if(listen() == false) {
 				break;
 			}
@@ -242,11 +242,11 @@ public class NioSocketClient extends Thread {
 		} while(!session.isClosed());
 		
 		close();
-		log.info("Socket客户端 [{}] 已停止", getName());
+		log.info("Socket客户�? [{}] 已停�?", getName());
 	}
 
 	/**
-	 * 监听服务端的返回消息（检查缓冲区）
+	 * 监听服务端的返回消息（检查缓冲区�?
 	 * @return
 	 */
 	private boolean listen() {
@@ -259,18 +259,18 @@ public class NioSocketClient extends Thread {
 					String msg = session.getMsgQueue().getMsg();
 					
 					if(StrUtils.isEmpty(msg)) {
-						continue;	// 丢弃空消息, 防止被攻击
+						continue;	// 丢弃空消�?, 防止被攻�?
 						
 					} else if((Protocol.CONN_LIMIT).equals(msg)) {
-						log.warn("客户端 [{}] 被拒绝连接: 连接数受限", getName());
+						log.warn("客户�? [{}] 被拒绝连�?: 连接数受�?", getName());
 						isListn = false;
 						break;
 						
 					} else if((Protocol.MSG_LIMIT).equals(msg)) {
-						log.warn("客户端 [{}] 被丢弃消息: 消息积压(请控制请求频率)", getName());
+						log.warn("客户�? [{}] 被丢弃消�?: 消息积压(请控制请求频�?)", getName());
 						
 					} else if((Protocol.HEARTBEAT).equals(msg)) {
-						log.warn("客户端 [{}] 获得服务端心跳: Socket会话正常", getName());
+						log.warn("客户�? [{}] 获得服务端心�?: Socket会话正常", getName());
 					}
 					
 					FilterChain filterChain = sockConf.getFilterChain();
@@ -279,25 +279,25 @@ public class NioSocketClient extends Thread {
 			}
 			
 		} catch (ClosedSelectorException e) {
-			// Undo 关闭事件选择器失败, 此为可忽略异常，不影响程序运行
+			// Undo 关闭事件选择器失�?, 此为可忽略异常，不影响程序运�?
         	
 		} catch(ArrayIndexOutOfBoundsException e) {
-			log.warn("客户端 [{}] 的本地缓冲区溢出, 上一条消息的数据可能已丢失或缺失.", getName(), e);
+			log.warn("客户�? [{}] 的本地缓冲区溢出, 上一条消息的数据可能已丢失或缺失.", getName(), e);
 			
 		} catch (SocketTimeoutException e) {
-			log.error("客户端 [{}] 超时无动作, 断开连接.", getName(), e);
+			log.error("客户�? [{}] 超时无动�?, 断开连接.", getName(), e);
 			isListn = false;
 			
 		} catch (Exception e) {
-			log.error("客户端 [{}] 异常, 断开连接.", getName(), e);
+			log.error("客户�? [{}] 异常, 断开连接.", getName(), e);
 			isListn = false;
 		}
 		return isListn;
 	}
 	
 	/**
-	 * 检查服务端是否有返回消息
-	 * @return 只要返回的消息队列非空，且会话未关闭，则返回成功状态
+	 * 检查服务端是否有返回消�?
+	 * @return 只要返回的消息队列非空，且会话未关闭，则返回成功状�?
 	 * @throws Exception 异常
 	 */
 	private boolean hasNewMsg() throws Exception {
@@ -326,9 +326,9 @@ public class NioSocketClient extends Thread {
 	}
 
 	/**
-	 * 从会话通道采集数据，返回-1表示通道已断开
+	 * 从会话通道采集数据，返�?-1表示通道已断开
 	 * 
-	 * @param sk 关注事件键
+	 * @param sk 关注事件�?
 	 * @return 
 	 * @throws Exception 异常
 	 */
@@ -353,7 +353,7 @@ public class NioSocketClient extends Thread {
 				int[] rdIdxs = new int[readDelimiters.length];	// 对应每个消息分隔符的索引
 				while (true) {	// 可能一次性收到多条消息，在缓冲区可读时需全部处理完，减少处理迟延
 					
-					// 枚举所有分隔符，取索引值最小的分隔符位置（索引值>=0有效）
+					// 枚举所有分隔符，取索引值最小的分隔符位置（索引�?>=0有效�?
 					int iEnd = -1;
 					for(int i = 0; i < readDelimiters.length; i++) {
 						rdIdxs[i] = socketBuffer.indexOf(readDelimiters[i]);
@@ -368,12 +368,12 @@ public class NioSocketClient extends Thread {
 						}
 					}
 					
-					// 所有分隔符都无法截获消息
+					// 所有分隔符都无法截获消�?
 					if(iEnd < 0) {
 						break;
 					}
 					
-					// 把原始消息添加到原始消息队列，剔除空消息，防止攻击
+					// 把原始消息添加到原始消息队列，剔除空消息，防止攻�?
 					String newMsg = socketBuffer.subString(iEnd).trim();
 					if(StrUtils.isNotEmpty(newMsg)) {
 						session.getMsgQueue().addNewMsg(newMsg);
@@ -383,7 +383,7 @@ public class NioSocketClient extends Thread {
 				channelBuffer.clear();
 			}
 			
-			// Socket通道已断开(服务端主动关闭会话)
+			// Socket通道已断开(服务端主动关闭会�?)
 			if (count < 0) {
 				isOk = false;
 			}

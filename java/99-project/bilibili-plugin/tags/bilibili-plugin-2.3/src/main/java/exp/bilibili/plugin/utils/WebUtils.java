@@ -13,10 +13,10 @@ import exp.libs.utils.io.FileUtils;
  * <PRE>
  * Web驱动工具类
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class WebUtils {
@@ -24,8 +24,8 @@ public class WebUtils {
 	protected WebUtils() {} 
 	
 	/**
-	 * 对浏览器的当前页面截图
-	 * @param driver 浏览器驱动
+	 * 对浏览器的当前页面截�?
+	 * @param driver 浏览器驱�?
 	 * @param imgPath 图片保存路径
 	 */
 	public static void screenshot(WebDriver driver, String imgPath) {
@@ -40,7 +40,7 @@ public class WebUtils {
 	
 	/**
 	 * 使浏览器跳转到指定页面后截图
-	 * @param driver 浏览器驱动
+	 * @param driver 浏览器驱�?
 	 * @param url 跳转页面
 	 * @param imgPath 图片保存路径
 	 */

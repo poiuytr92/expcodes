@@ -16,10 +16,10 @@ import org.slf4j.LoggerFactory;
  */
 public class ThreadUtils {
 	
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(ThreadUtils.class);
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected ThreadUtils() {}
 	
 	/**
@@ -27,7 +27,7 @@ public class ThreadUtils {
 	 * @return 线程总数
 	 */
 	public static int getTotalSize() {
-		final String MAIN_TH_NAME = "main";	// 主线程名称
+		final String MAIN_TH_NAME = "main";	// 主线程名�?
 		ThreadGroup tg = Thread.currentThread().getThreadGroup();
 		while(!MAIN_TH_NAME.equals(tg.getName()) && tg.getParent() != null) {
 			tg = tg.getParent();
@@ -68,7 +68,7 @@ public class ThreadUtils {
 	
 	/**
 	 * 唤醒对象
-	 * @param o 已阻塞对象
+	 * @param o 已阻塞对�?
 	 */
 	public static void tNotify(Object o) {
 		if(o == null) {

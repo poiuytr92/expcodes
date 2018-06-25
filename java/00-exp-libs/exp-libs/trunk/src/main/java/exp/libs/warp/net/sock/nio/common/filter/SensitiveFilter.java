@@ -28,7 +28,7 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 public class SensitiveFilter extends BaseFilter{
 
 	/**
-	 * 日志器
+	 * 日志�?
 	 */
 	private final static Logger log = LoggerFactory.getLogger(SensitiveFilter.class);
 	
@@ -38,17 +38,17 @@ public class SensitiveFilter extends BaseFilter{
 	private List<String> sensitiveTable;
 	
 	/**
-	 * 敏感词计数器属性的 键值
+	 * 敏感词计数器属性的 键�?
 	 */
 	private static final String SENSITIVE_KEY = "sensitiveKey";
 	
 	/**
-	 * 每个会话最多允许触犯敏感词的次数，-1表示不限制触犯次数
+	 * 每个会话最多允许触犯敏感词的次数，-1表示不限制触犯次�?
 	 */
 	private int maxSensitiveNum;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	public SensitiveFilter() {
 		maxSensitiveNum = 3;
@@ -56,9 +56,9 @@ public class SensitiveFilter extends BaseFilter{
 	}
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param sensitiveRules 过滤规则
-	 * @param maxSensitiveNum 允许触犯敏感规则的次数，超过则强制关闭会话，-1表示不限制触犯次数
+	 * @param maxSensitiveNum 允许触犯敏感规则的次数，超过则强制关闭会话，-1表示不限制触犯次�?
 	 */
 	public SensitiveFilter(List<String> sensitiveRules, int maxSensitiveNum) {
 		this.sensitiveTable = new ArrayList<String>();
@@ -67,9 +67,9 @@ public class SensitiveFilter extends BaseFilter{
 	}
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param sensitiveRules 过滤规则
-	 * @param maxSensitiveNum 允许触犯敏感规则的次数，超过则强制关闭会话
+	 * @param maxSensitiveNum 允许触犯敏感规则的次数，超过则强制关闭会�?
 	 */
 	public SensitiveFilter(String[] sensitiveRules, int maxSensitiveNum) {
 		this.sensitiveTable = new ArrayList<String>();
@@ -81,7 +81,7 @@ public class SensitiveFilter extends BaseFilter{
 	public void onSessionCreated(INextFilter nextFilter, ISession session)
 			throws Exception {
 				
-		// 添加session的属性键值
+		// 添加session的属性键�?
 		session.getProperties().put(SENSITIVE_KEY, new SensitiveCounter());
 				
 		nextFilter.onSessionCreated(session);
@@ -103,11 +103,11 @@ public class SensitiveFilter extends BaseFilter{
 		}
 		
 		if(isFilter == true) {
-			log.info("会话 [" + session + "] 的消息 [" + strMsg + 
-					"] 因触犯敏感词规则被过滤.");
+			log.info("会话 [" + session + "] 的消�? [" + strMsg + 
+					"] 因触犯敏感词规则被过�?.");
 			
-			//这里不打印消息，是为了避免客户端和服务端都使用了相同的敏感词过滤，而产生无限循环
-			session.write("因触犯敏感词规则,有消息被过滤.若超过 [" + 
+			//这里不打印消息，是为了避免客户端和服务端都使用了相同的敏感词过滤，而产生无限循�?
+			session.write("因触犯敏感词规则,有消息被过滤.若超�? [" + 
 					maxSensitiveNum + "] 次则断开连接.");
 			
 			Map<String, Object> property = session.getProperties();
@@ -127,16 +127,16 @@ public class SensitiveFilter extends BaseFilter{
 	}
 
 	/**
-	 * 添加多个敏感词规则
-	 * @param newSensitiveRules 敏感词规则
+	 * 添加多个敏感词规�?
+	 * @param newSensitiveRules 敏感词规�?
 	 */
 	public void addSensitiveRules(List<String> newSensitiveRules) {
 		this.sensitiveTable.addAll(newSensitiveRules);
 	}
 
 	/**
-	 * 添加多个敏感词规则
-	 * @param newSensitiveRules 敏感词规则
+	 * 添加多个敏感词规�?
+	 * @param newSensitiveRules 敏感词规�?
 	 */
 	public void addSensitiveRules(String[] newSensitiveRules) {
 		for(String rule : newSensitiveRules) {
@@ -146,14 +146,14 @@ public class SensitiveFilter extends BaseFilter{
 	
 	/**
 	 * 添加一个敏感词规则
-	 * @param newSensitiveRule 敏感词规则
+	 * @param newSensitiveRule 敏感词规�?
 	 */
 	public void addSensitiveRule(String newSensitiveRule) {
 		this.sensitiveTable.add(newSensitiveRule);
 	}
 
 	/**
-	 * 设置触犯敏感词规则的上限，超过上限作出则断开会话，-1表示不限制触犯次数
+	 * 设置触犯敏感词规则的上限，超过上限作出则断开会话�?-1表示不限制触犯次�?
 	 * @param maxSensitiveNum 触犯次数
 	 */
 	public void setMaxSensitiveNum(int maxSensitiveNum) {
@@ -163,12 +163,12 @@ public class SensitiveFilter extends BaseFilter{
 
 	/**
 	 * 敏感词计数器
-	 * @author 廖权斌
+	 * @author 廖权�?
 	 */
 	private static class SensitiveCounter {
 
 		/**
-		 * 违反敏感词规则次数
+		 * 违反敏感词规则次�?
 		 */
 		private int cnt = 0;
 

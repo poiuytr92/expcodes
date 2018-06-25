@@ -26,13 +26,13 @@ public class SprintfINT extends BaseFunctionN {
 	private static final long serialVersionUID = 2987656382495060819L;
 	
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "sprintf";
 	
 	/**
-	 * 限定参数个数为2.
+	 * 限定参数个数�?2.
 	 */
 	@Override
 	public boolean checkNumberOfParameters(int inParamsNum){
@@ -41,9 +41,9 @@ public class SprintfINT extends BaseFunctionN {
 	
 	/**
 	 * printf 风格的格式字符串
-	 * 共2个参数：
-	 * @param1 String:sprintf 表达式 C语言符号 %02d
-	 * @param2 Integer:仅支持数值入参
+	 * �?2个参数：
+	 * @param1 String:sprintf 表达�? C语言符号 %02d
+	 * @param2 Integer:仅支持数值入�?
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

@@ -14,10 +14,10 @@ import javax.swing.JTextArea;
  * <PRE>
  * 异常信息打印界面
  * </PRE>
- * <B>PROJECT：</B> exp-xml-paper
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> exp-xml-paper
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2015-06-01
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Error extends JFrame {
@@ -39,7 +39,7 @@ public class Error extends JFrame {
 	/** 界面初始高度 */
 	private int high = 500;
 	
-	/** 根面板 */
+	/** 根面�? */
 	private JPanel rootPanel;
 	
 	/** 异常信息标签 */
@@ -49,7 +49,7 @@ public class Error extends JFrame {
 	private static volatile Error instance;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	public Error() {
 		super("Error Details");
@@ -85,7 +85,7 @@ public class Error extends JFrame {
 	}
 	
 	/**
-	 * 初始化组件
+	 * 初始化组�?
 	 */
 	private void initComponents() {
 		this.errInfo = new JTextArea();

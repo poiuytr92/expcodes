@@ -39,7 +39,7 @@ public class IDUtils {
 	/**
 	 * <PRE>
 	 * 获取时间序唯一性ID（秒级）
-	 *  当频繁获取ID时，此方法会强制使得每次请求最多延迟1s以保证唯一性
+	 *  当频繁获取ID时，此方法会强制使得每次请求最多延�?1s以保证唯一�?
 	 * </PRE>
 	 * @return 时间序唯一性ID（秒级）
 	 */
@@ -59,8 +59,8 @@ public class IDUtils {
 	}
 	
 	/**
-	 * 获取时间序唯一性ID（毫秒级）
-	 * @return 时间序唯一性ID（毫秒级）
+	 * 获取时间序唯一性ID（毫秒级�?
+	 * @return 时间序唯一性ID（毫秒级�?
 	 */
 	public static long getMillisID() {
 		long id = -1;
@@ -74,8 +74,8 @@ public class IDUtils {
 	}
 	
 	/**
-	 * 获取时间序唯一性ID（yyyyMMddHHmmssSSS）
-	 * @return 时间序唯一性ID（毫秒级）
+	 * 获取时间序唯一性ID（yyyyMMddHHmmssSSS�?
+	 * @return 时间序唯一性ID（毫秒级�?
 	 */
 	public static long getTimeID() {
 		long id = -1;

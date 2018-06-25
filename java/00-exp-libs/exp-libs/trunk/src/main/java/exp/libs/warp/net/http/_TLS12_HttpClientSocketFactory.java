@@ -110,7 +110,7 @@ class _TLS12_HttpClientSocketFactory implements ProtocolSocketFactory {
 		final TlsClientProtocol tlsClientProtocol = new TlsClientProtocol(
 				socket.getInputStream(), socket.getOutputStream(), _secureRandom);
 		_TLS12_SSLSocket sslSocket = new _TLS12_SSLSocket(host, tlsClientProtocol);
-		sslSocket.startHandshake();	// 在这里必须手动调用 (这是与_TLS12_SocketFactory唯一的不同, _TLS12_SocketFactory是自动调用的)
+		sslSocket.startHandshake();	// 在这里必须手动调�? (这是与_TLS12_HttpURLSocketFactory唯一的不�?, _TLS12_HttpURLSocketFactory是自动调用的)
 		return sslSocket;
 	}
 

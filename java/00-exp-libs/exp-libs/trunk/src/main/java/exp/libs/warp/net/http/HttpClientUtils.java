@@ -30,11 +30,11 @@ import exp.libs.utils.io.IOUtils;
  */
 public class HttpClientUtils extends HttpUtils {
 
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected HttpClientUtils() {}
 	
 	/**
-	 * 添加请求头参数参数
+	 * 添加请求头参数参�?
 	 * @param method
 	 * @param params
 	 */
@@ -50,7 +50,7 @@ public class HttpClientUtils extends HttpUtils {
 	}
 	
 	/**
-	 * 添加post方法的请求参数
+	 * 添加post方法的请求参�?
 	 * @param post
 	 * @param params
 	 */
@@ -78,7 +78,7 @@ public class HttpClientUtils extends HttpUtils {
 	 * 提交POST请求
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
+	 * @param request 请求参数�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 */
 	public static String doPost(String url, Map<String, String> header, 
@@ -90,8 +90,8 @@ public class HttpClientUtils extends HttpUtils {
 	 * 提交POST请求
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param charset 字符集编码
+	 * @param request 请求参数�?
+	 * @param charset 字符集编�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 */
 	public static String doPost(String url, Map<String, String> header, 
@@ -104,10 +104,10 @@ public class HttpClientUtils extends HttpUtils {
 	 * 提交POST请求
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param connTimeout 连接超时（ms）
-	 * @param readTimeout 读取超时（ms）
-	 * @param charset 字符集编码
+	 * @param request 请求参数�?
+	 * @param connTimeout 连接超时（ms�?
+	 * @param readTimeout 读取超时（ms�?
+	 * @param charset 字符集编�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 */
 	public static String doPost(String url, 
@@ -128,10 +128,10 @@ public class HttpClientUtils extends HttpUtils {
 	 * 提交POST请求
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param connTimeout 连接超时（ms）
-	 * @param readTimeout 读取超时（ms）
-	 * @param charset 字符集编码
+	 * @param request 请求参数�?
+	 * @param connTimeout 连接超时（ms�?
+	 * @param readTimeout 读取超时（ms�?
+	 * @param charset 字符集编�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 * @throws Exception
 	 */
@@ -140,7 +140,7 @@ public class HttpClientUtils extends HttpUtils {
 			int connTimeout, int readTimeout, String charset) throws Exception {
 		PostMethod post = new PostMethod(url);
 		addParamsToHeader(post, header);
-		addParamsToBody(post, request);	// POST的请求参数是在结构体中发过去的
+		addParamsToBody(post, request);	// POST的请求参数是在结构体中发过去�?
 		
 		HttpClient client = createHttpClient(connTimeout, readTimeout);
 		int status = client.executeMethod(post);
@@ -164,7 +164,7 @@ public class HttpClientUtils extends HttpUtils {
 	 * 提交GET请求
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
+	 * @param request 请求参数�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 */
 	public static String doGet(String url, Map<String, String> header, 
@@ -176,8 +176,8 @@ public class HttpClientUtils extends HttpUtils {
 	 * 提交GET请求
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param charset 字符集编码
+	 * @param request 请求参数�?
+	 * @param charset 字符集编�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 */
 	public static String doGet(String url, Map<String, String> header, 
@@ -190,10 +190,10 @@ public class HttpClientUtils extends HttpUtils {
 	 * 提交GET请求
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param connTimeout 连接超时（ms）
-	 * @param readTimeout 读取超时（ms）
-	 * @param charset 字符集编码
+	 * @param request 请求参数�?
+	 * @param connTimeout 连接超时（ms�?
+	 * @param readTimeout 读取超时（ms�?
+	 * @param charset 字符集编�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 */
 	public static String doGet(String url, 
@@ -214,10 +214,10 @@ public class HttpClientUtils extends HttpUtils {
 	 * 提交GET请求
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param connTimeout 连接超时（ms）
-	 * @param readTimeout 读取超时（ms）
-	 * @param charset 字符集编码
+	 * @param request 请求参数�?
+	 * @param connTimeout 连接超时（ms�?
+	 * @param readTimeout 读取超时（ms�?
+	 * @param charset 字符集编�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 * @throws Exception
 	 */
@@ -225,7 +225,7 @@ public class HttpClientUtils extends HttpUtils {
 			Map<String, String> header, Map<String, String> request, 
 			int connTimeout, int readTimeout, String charset) throws Exception {
 		String kvs = encodeRequests(request, charset);	
-		url = HttpUtils.concatGET(url, kvs);	// GET的参数是拼在url后面的
+		url = HttpUtils.concatGET(url, kvs);	// GET的参数是拼在url后面�?
 		
 		GetMethod get = new GetMethod(url);
 		addParamsToHeader(get, header);
@@ -240,14 +240,14 @@ public class HttpClientUtils extends HttpUtils {
 	}
 	
 	/**
-	 *  提取HTTP连接的响应结果
+	 *  提取HTTP连接的响应结�?
 	 * @param method 请求方法
-	 * @param charset 字符集编码
+	 * @param charset 字符集编�?
 	 * @return HTTP返回的字符串（包括文本、json、xml等内容）
 	 */
 	private static String responseAsString(HttpMethod method, String charset) {
 		
-		// 检测返回的内容是否使用gzip压缩过
+		// 检测返回的内容是否使用gzip压缩�?
 		Header header = method.getResponseHeader(HttpHead.KEY.CONTENT_ENCODING);
 		boolean isGzip = (header == null ? false : 
 			HttpHead.VAL.GZIP.equalsIgnoreCase(header.getValue()));
@@ -270,7 +270,7 @@ public class HttpClientUtils extends HttpUtils {
 	 * 下载资源，适用于返回类型是非文本的响应
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
-	 * @return 是否下载成功（下载成功会保存到savePath）
+	 * @return 是否下载成功（下载成功会保存到savePath�?
 	 */
 	public static boolean downloadByPost(String savePath, String url) {
 		return downloadByPost(savePath, url, null, null);
@@ -281,8 +281,8 @@ public class HttpClientUtils extends HttpUtils {
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @return 是否下载成功（下载成功会保存到savePath）
+	 * @param request 请求参数�?
+	 * @return 是否下载成功（下载成功会保存到savePath�?
 	 * @return
 	 */
 	public static boolean downloadByPost(String savePath, String url, 
@@ -296,11 +296,11 @@ public class HttpClientUtils extends HttpUtils {
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param connTimeout 连接超时（ms）
-	 * @param readTimeout 读取超时（ms）
-	 * @param charset 字符集编码
-	 * @return 是否下载成功（下载成功会保存到savePath）
+	 * @param request 请求参数�?
+	 * @param connTimeout 连接超时（ms�?
+	 * @param readTimeout 读取超时（ms�?
+	 * @param charset 字符集编�?
+	 * @return 是否下载成功（下载成功会保存到savePath�?
 	 */
 	public static boolean downloadByPost(String savePath, String url, 
 			Map<String, String> header, Map<String, String> request, 
@@ -321,11 +321,11 @@ public class HttpClientUtils extends HttpUtils {
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param connTimeout 连接超时（ms）
-	 * @param readTimeout 读取超时（ms）
-	 * @param charset 字符集编码
-	 * @return 是否下载成功（下载成功会保存到savePath）
+	 * @param request 请求参数�?
+	 * @param connTimeout 连接超时（ms�?
+	 * @param readTimeout 读取超时（ms�?
+	 * @param charset 字符集编�?
+	 * @return 是否下载成功（下载成功会保存到savePath�?
 	 * @throws Exception
 	 */
 	private static boolean _downloadByPost(String savePath, String url, 
@@ -333,7 +333,7 @@ public class HttpClientUtils extends HttpUtils {
 			int connTimeout, int readTimeout, String charset) throws Exception {
 		PostMethod post = new PostMethod(url);
 		addParamsToHeader(post, header);
-		addParamsToBody(post, request);	// POST的请求参数是在结构体中发过去的
+		addParamsToBody(post, request);	// POST的请求参数是在结构体中发过去�?
 		
 		HttpClient client = createHttpClient(connTimeout, readTimeout);
 		int status = client.executeMethod(post);
@@ -348,7 +348,7 @@ public class HttpClientUtils extends HttpUtils {
 	 * 下载资源，适用于返回类型是非文本的响应
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
-	 * @return 是否下载成功（下载成功会保存到savePath）
+	 * @return 是否下载成功（下载成功会保存到savePath�?
 	 */
 	public static boolean downloadByGet(String savePath, String url) {
 		return downloadByGet(savePath, url, null, null);
@@ -359,8 +359,8 @@ public class HttpClientUtils extends HttpUtils {
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @return 是否下载成功（下载成功会保存到savePath）
+	 * @param request 请求参数�?
+	 * @return 是否下载成功（下载成功会保存到savePath�?
 	 */
 	public static boolean downloadByGet(String savePath, String url, 
 			Map<String, String> header, Map<String, String> request) {
@@ -373,11 +373,11 @@ public class HttpClientUtils extends HttpUtils {
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param connTimeout 连接超时（ms）
-	 * @param readTimeout 读取超时（ms）
-	 * @param charset 字符集编码
-	 * @return 是否下载成功（下载成功会保存到savePath）
+	 * @param request 请求参数�?
+	 * @param connTimeout 连接超时（ms�?
+	 * @param readTimeout 读取超时（ms�?
+	 * @param charset 字符集编�?
+	 * @return 是否下载成功（下载成功会保存到savePath�?
 	 */
 	public static boolean downloadByGet(String savePath, String url, 
 			Map<String, String> header, Map<String, String> request, 
@@ -398,18 +398,18 @@ public class HttpClientUtils extends HttpUtils {
 	 * @param savePath 包括文件名的保存路径
 	 * @param url 资源路径
 	 * @param header 请求头参数表
-	 * @param request 请求参数表
-	 * @param connTimeout 连接超时（ms）
-	 * @param readTimeout 读取超时（ms）
-	 * @param charset 字符集编码
-	 * @return 是否下载成功（下载成功会保存到savePath）
+	 * @param request 请求参数�?
+	 * @param connTimeout 连接超时（ms�?
+	 * @param readTimeout 读取超时（ms�?
+	 * @param charset 字符集编�?
+	 * @return 是否下载成功（下载成功会保存到savePath�?
 	 * @throws Exception
 	 */
 	private static boolean _downloadByGet(String savePath, String url, 
 			Map<String, String> header, Map<String, String> request, 
 			int connTimeout, int readTimeout, String charset) throws Exception {
 		String kvs = encodeRequests(request, charset);	
-		url = HttpUtils.concatGET(url, kvs);	// GET的参数是拼在url后面的
+		url = HttpUtils.concatGET(url, kvs);	// GET的参数是拼在url后面�?
 		
 		GetMethod get = new GetMethod(url);
 		addParamsToHeader(get, header);

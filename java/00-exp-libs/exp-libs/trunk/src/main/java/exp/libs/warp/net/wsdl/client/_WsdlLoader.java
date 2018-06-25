@@ -29,14 +29,14 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 class _WsdlLoader extends WsdlLoader {
 
-	/** 终止状态 */
+	/** 终止状�? */
 	private boolean isAborted;
 	
-	/** HTTP客户端 */
+	/** HTTP客户�? */
 	private HttpClient client;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param wsdlURL wsdl地址, 支持格式: 
 	 * 		http://127.0.0.1:8080/services/myService?wsdl
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
@@ -69,7 +69,7 @@ class _WsdlLoader extends WsdlLoader {
 	/**
      * <pre>
      * 加载wsdl文件，返回文件流.
-     * 	如果是本地文件，则需要全量的依赖文件（含wsdl和xsd文件）
+     * 	如果是本地文件，则需要全量的依赖文件（含wsdl和xsd文件�?
      * </pre>
      * @param wsdlURL
      * @return InputStream

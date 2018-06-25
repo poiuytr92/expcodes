@@ -30,10 +30,10 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * <PRE>
  * 小号账号管理窗口
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-01-31
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class _MiniUserMgrUI extends PopChildWindow {
@@ -96,7 +96,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 	private JPanel getSouthPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
-		panel.add(SwingUtils.getPairsPanel("挂机数", userLabel), BorderLayout.WEST);
+		panel.add(SwingUtils.getPairsPanel("挂机�?", userLabel), BorderLayout.WEST);
 		panel.add(SwingUtils.getWEBorderPanel(new JLabel("  [默认投喂房间号]: "), roomTF, 
 				SwingUtils.getHGridPanel(roomBtn, feedBtn)), BorderLayout.CENTER);
 		return panel;
@@ -112,7 +112,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				int id = NumUtils.toInt(sRoomId, 0);
 				if(RoomMgr.getInstn().isExist(id)) {
 					roomId = id;
-					String msg = StrUtils.concat("[默认投喂房间号] 变更为: ", roomId);
+					String msg = StrUtils.concat("[默认投喂房间号] 变更�?: ", roomId);
 					SwingUtils.info(msg);
 					UIUtils.log(msg);
 					
@@ -131,11 +131,11 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				autoFeed = !autoFeed;
 				if(autoFeed == true) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.blue, feedBtn);
-					UIUtils.log("[自动投喂] 已启动, 默认投喂房间号: ", roomId);
+					UIUtils.log("[自动投喂] 已启�?, 默认投喂房间�?: ", roomId);
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, feedBtn);
-					UIUtils.log("[自动投喂] 已关闭");
+					UIUtils.log("[自动投喂] 已关�?");
 				}
 			}
 		});

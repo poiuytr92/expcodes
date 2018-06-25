@@ -24,7 +24,7 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 public final class ExceptionFilter extends BaseFilter {
 
 	/**
-	 * 日志器
+	 * 日志�?
 	 */
 	private final static Logger log = LoggerFactory.getLogger(ExceptionFilter.class);
 	
@@ -68,7 +68,7 @@ public final class ExceptionFilter extends BaseFilter {
 			log.error("Exception", exception);
 		}
 		
-		//对于非致命异常，依然可以把异常抛到 业务处理器 处理
+		//对于非致命异常，依然可以把异常抛�? 业务处理�? 处理
 		if(false == session.isClosed()) {
 			nextFilter.onExceptionCaught(session, exception);
 		}

@@ -21,10 +21,10 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * <PRE>
  * 总督登船奖励协议
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-05-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Guard extends __XHR {
@@ -37,7 +37,7 @@ public class Guard extends __XHR {
 	
 	/**
 	 * 提取直播间内的总督ID列表.
-	 * 	(已经领取过某个总督奖励的用户, 不会再查询到相关的总督id)
+	 * 	(已经领取过某个总督奖励的用�?, 不会再查询到相关的总督id)
 	 * @param cookie
 	 * @param roomId 直播间号
 	 * @return 可以领取奖励总督ID列表
@@ -62,14 +62,14 @@ public class Guard extends __XHR {
 				}
 			}
 		} catch(Exception e) {
-			log.error("提取直播间 [{}] 的总督列表失败: {}", roomId, response, e);
+			log.error("提取直播�? [{}] 的总督列表失败: {}", roomId, response, e);
 		}
 		return guardIds;
 	}
 	
 	/**
-	 * 领取总督亲密度奖励
-	 * @param roomId 总督所在房间
+	 * 领取总督亲密度奖�?
+	 * @param roomId 总督所在房�?
 	 * @param guardId 总督编号
 	 * @return
 	 */
@@ -90,9 +90,9 @@ public class Guard extends __XHR {
 	}
 	
 	/**
-	 * 领取总督亲密度奖励
+	 * 领取总督亲密度奖�?
 	 * @param cookie
-	 * @param roomId 总督所在房间
+	 * @param roomId 总督所在房�?
 	 * @param guardId 总督编号
 	 * @return
 	 */
@@ -115,7 +115,7 @@ public class Guard extends __XHR {
 				}
 			}
 		} catch(Exception e) {
-			log.error("[{}] 领取直播间 [{}] 的总督奖励失败: {}", cookie.NICKNAME(), roomId, response, e);
+			log.error("[{}] 领取直播�? [{}] 的总督奖励失败: {}", cookie.NICKNAME(), roomId, response, e);
 		}
 		return true;
 	}

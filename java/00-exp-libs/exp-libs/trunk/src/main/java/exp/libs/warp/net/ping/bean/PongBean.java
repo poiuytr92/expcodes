@@ -21,19 +21,19 @@ public class PongBean {
 	/** 发起ip  */
 	private String localIp = "localhost";
 	
-	/** 已接收  */
+	/** 已接�?  */
 	private int getPack;
 	
-	/** 已发送  */
+	/** 已发�?  */
 	private int sentPack = 4;
 	
-	/** 丢包率%  */
+	/** 丢包�?%  */
 	private float discards;
 	
 	/** 包长度，单位byte  */
 	private float pksLenght;
 	
-	/** 最长返回时间 ms  */
+	/** 最长返回时�? ms  */
 	private float maxDelay;
 	
 	/** 最短返回时间ms  */

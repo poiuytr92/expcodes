@@ -13,7 +13,7 @@ package exp.libs.warp.net.jms.mq.sup;
 public abstract class AbstractConsumerCallBack {
 
 	/**
-	 * 消息消费者自动重连异常
+	 * 消息消费者自动重连异�?
 	 * 
 	 * @param e
 	 *            异常
@@ -23,6 +23,6 @@ public abstract class AbstractConsumerCallBack {
 	}
 
 	/**
-	 *  MQ 自动重连工具ConsumerHelper提供的异常回调
+	 *  MQ 自动重连工具ConsumerHelper提供的异常回�?
 	 */
 }

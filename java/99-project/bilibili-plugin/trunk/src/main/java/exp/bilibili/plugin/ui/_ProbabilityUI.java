@@ -21,10 +21,10 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * <PRE>
  * 随机抽奖概率的设置面板
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class _ProbabilityUI extends PopChildWindow {
@@ -36,16 +36,16 @@ public class _ProbabilityUI extends PopChildWindow {
 	
 	private final static int HEIGHT = 200;
 	
-	/** 默认抽奖概率：100% */
+	/** 默认抽奖概率�?100% */
 	private final static int DEFAULT_VALUE = 100;
 	
-	/** 默认参与抽奖的反应时间(ms) */
+	/** 默认参与抽奖的反应时�?(ms) */
 	private final static long REACTION_TIME = Config.getInstn().REACTION_TIME();
 	
 	/** 概率选择滑块 */
 	private JSlider slider;
 	
-	/** 抽奖反映时间设置框 */
+	/** 抽奖反映时间设置�? */
 	private JTextField reactionTF;
 	
 	protected _ProbabilityUI() {
@@ -55,8 +55,8 @@ public class _ProbabilityUI extends PopChildWindow {
 	@Override
 	protected void initComponents(Object... args) {
 		this.slider = new JSlider(JSlider.HORIZONTAL, 0, 100, DEFAULT_VALUE);
-		slider.setMajorTickSpacing(10);	// 大刻度值
-		slider.setMinorTickSpacing(5);	// 小刻度值
+		slider.setMajorTickSpacing(10);	// 大刻度�?
+		slider.setMinorTickSpacing(5);	// 小刻度�?
 		slider.setPaintTicks(true);
 		slider.setPaintLabels(true);
 		
@@ -68,7 +68,7 @@ public class _ProbabilityUI extends PopChildWindow {
 		rootPanel.add(slider, BorderLayout.CENTER);
 		rootPanel.add(SwingUtils.addBorder(
 				SwingUtils.getWEBorderPanel(
-					new JLabel("   参与抽奖的反应时间:  "), 
+					new JLabel("   参与抽奖的反应时�?:  "), 
 					reactionTF, 
 					new JLabel("  毫秒   ")
 				)), BorderLayout.SOUTH
@@ -90,14 +90,14 @@ public class _ProbabilityUI extends PopChildWindow {
 
 		    @Override
 		    public void keyTyped(KeyEvent e) {
-		        String text = reactionTF.getText();  // 当前输入框内容
-		        char ch = e.getKeyChar();   // 准备附加到输入框的字符
+		        String text = reactionTF.getText();  // 当前输入框内�?
+		        char ch = e.getKeyChar();   // 准备附加到输入框的字�?
 
-		        // 限制不能输入非数字
+		        // 限制不能输入非数�?
 		        if(!(ch >= '0' && ch <= '9')) {
-		            e.consume();    // 销毁当前输入字符
+		            e.consume();    // 销毁当前输入字�?
 
-		        // 限制不能是0开头
+		        // 限制不能�?0开�?
 		        } else if("".equals(text) && ch == '0') {   
 		            e.consume();
 		        }
@@ -127,7 +127,7 @@ public class _ProbabilityUI extends PopChildWindow {
 	}
 	
 	private static String getTitle(int curVal) {
-		return StrUtils.concat("设置随机参与抽奖的概率: ", curVal, "%");
+		return StrUtils.concat("设置随机参与抽奖的概�?: ", curVal, "%");
 	}
 	
 	protected int PROBABILITY() {

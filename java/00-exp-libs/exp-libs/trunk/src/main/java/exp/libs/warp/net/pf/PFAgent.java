@@ -30,7 +30,7 @@ public class PFAgent {
 	/**
 	 * 单个端口转发代理服务
 	 * @param localListenPort 本地监听端口
-	 * @param remoteIP 远程代理IP（真实服务IP）
+	 * @param remoteIP 远程代理IP（真实服务IP�?
 	 * @param remotePort 远程代理端口（真实服务端口）
 	 */
 	public PFAgent(int localListenPort, String remoteIP, int remotePort) {
@@ -58,7 +58,7 @@ public class PFAgent {
 		}
 		
 		if(isOk == true) {
-			log.info("所有端口转发服务启动成功");
+			log.info("所有端口转发服务启动成�?");
 		} else {
 			log.warn("存在端口转发服务启动失败");
 		}

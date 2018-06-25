@@ -25,13 +25,13 @@ public class IfElse extends BaseFunctionN {
 	private static final long serialVersionUID = -266592048304197949L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "if";
 	
 	/**
-	 * 限定参数个数为2~5.
+	 * 限定参数个数�?2~5.
 	 */
 	@Override
 	public boolean checkNumberOfParameters(int inParamsNum){
@@ -40,7 +40,7 @@ public class IfElse extends BaseFunctionN {
 	
 	/**
 	 * 条件选择函数.
-	 * 可自由选择2~5个参数,不同个数的参数,其参数类型、选择逻辑也不同.
+	 * 可自由选择2~5个参�?,不同个数的参�?,其参数类型、选择逻辑也不�?.
 	 */
 	@Override
 	protected Object eval(List<Object> params) throws EvaluationException {
@@ -69,13 +69,13 @@ public class IfElse extends BaseFunctionN {
 	}
 	
 	/**
-	 * 2参数功能：
+	 * 2参数功能�?
 	 * 	if x != empty && y != empty return x
 	 * 	if x != empty && y == empty return x
 	 * 	if x == empty && y != empty return y
 	 * 	if x == empty && y == empty return ""
 	 * 
-	 * 注:empty 指 null 或 ""
+	 * �?:empty �? null �? ""
 	 * 
 	 * @param1 String:字符串x
 	 * @param2 String:字符串y
@@ -97,11 +97,11 @@ public class IfElse extends BaseFunctionN {
 	}
 	
 	/**
-	 * 3参数功能：
+	 * 3参数功能�?
 	 * 	if x == empty return y
 	 * 	if x != empty return z
 	 * 
-	 * 注:empty 指 null 或 ""
+	 * �?:empty �? null �? ""
 	 * 
 	 * @param1 String:字符串x
 	 * @param2 String:字符串y
@@ -125,13 +125,13 @@ public class IfElse extends BaseFunctionN {
 	}
 	
 	/**
-	 * 4参数功能：
+	 * 4参数功能�?
 	 * 	if x == y return a
 	 * 	if x != y return b
 	 * 
-	 * 注:
+	 * �?:
 	 * 字符串若同为empty,则认为是相等.
-	 * empty 指 null 或 ""
+	 * empty �? null �? ""
 	 * 
 	 * @param1 String:字符串x
 	 * @param2 String:字符串y
@@ -157,7 +157,7 @@ public class IfElse extends BaseFunctionN {
 	}
 	
 	/**
-	 * 5参数功能：
+	 * 5参数功能�?
 	 * 	if x < y && x > z return a
 	 * 	if x >= y && x <= z return b
 	 * 
@@ -187,9 +187,9 @@ public class IfElse extends BaseFunctionN {
 	}
 
 	/**
-	 * 判断字符串是否为null或空串
+	 * 判断字符串是否为null或空�?
 	 * @param str 待判断字符串
-	 * @return true:空; false:非空
+	 * @return true:�?; false:非空
 	 */
 	private boolean isEmpty(String str) {
 		boolean isNull = false;

@@ -24,7 +24,7 @@ class NioClientConfig extends NioConfig {
 	}
 	
 	/**
-	 * 客户端默认移除线程池过滤器
+	 * 客户端默认移除线程池过滤�?
 	 */
 	@Override
 	protected void initFilterChain() {
@@ -32,7 +32,7 @@ class NioClientConfig extends NioConfig {
 	}
 	
 	/**
-	 * 获取过滤链
+	 * 获取过滤�?
 	 * @return
 	 */
 	protected FilterChain getFilterChain() {

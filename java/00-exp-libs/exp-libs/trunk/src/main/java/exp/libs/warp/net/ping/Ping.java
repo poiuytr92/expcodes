@@ -161,10 +161,10 @@ public class Ping {
 	}
 
 	/**
-	 * 读取流信息
+	 * 读取流信�?
 	 * 
 	 * @param ins
-	 *            输入流
+	 *            输入�?
 	 * @return 读取所有行返回字符串buffer
 	 * @throws IOException
 	 *             异常
@@ -193,7 +193,7 @@ public class Ping {
 		String sentPack = "4";
 		String getPack = "0";
 
-		if (find("packets transmitted", result)) { // linux命令行
+		if (find("packets transmitted", result)) { // linux命令�?
 			sentPack = exec(
 					".*([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+) packets.*",
 					result);
@@ -213,7 +213,7 @@ public class Ping {
 					".*mdev =.*\\/([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*)\\/.*\\/.*.*",
 					result);
 			pksLenght = exec(".*(\\d+) bytes from.*", result);
-		} else if (find("Reply from", result)) { // win en命令行
+		} else if (find("Reply from", result)) { // win en命令�?
 			sentPack = exec(".*Sent = ([\\d]+).*", result);
 			getPack = exec(".*Received = ([\\d]+).*", result);
 			discards = exec(
@@ -229,17 +229,17 @@ public class Ping {
 					".*Average = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
 					result);
 			pksLenght = exec(".*bytes=(\\d+).*", result);
-		} else { // win 中文命令行
-			sentPack = exec(".*已发送 = ([\\d]+).*", result);
-			getPack = exec(".*已接收 = ([\\d]+).*", result);
+		} else { // win 中文命令�?
+			sentPack = exec(".*已发�? = ([\\d]+).*", result);
+			getPack = exec(".*已接�? = ([\\d]+).*", result);
 			discards = exec(
 					".*丢失 = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
 					result);
 			maxDelay = exec(
-					".*最长 = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
+					".*最�? = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
 					result);
 			minDelay = exec(
-					".*最短 = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
+					".*最�? = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
 					result);
 			avgDelay = exec(
 					".*平均 = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",

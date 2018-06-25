@@ -18,10 +18,10 @@ import exp.libs.utils.other.PathUtils;
  */
 class _SerialFlow {
 
-	/** 日志器 */
+	/** 日志�? */
 	protected final static Logger log = LoggerFactory.getLogger(SerialFlowReader.class);
 	
-	/** 默认序列化文件位置 */
+	/** 默认序列化文件位�? */
 	protected final static String DEFAULT_FILEPATH = OSUtils.isRunByTomcat() ? 
 			PathUtils.getProjectCompilePath().concat("serializable.dat") : 
 			"./serializable.dat";

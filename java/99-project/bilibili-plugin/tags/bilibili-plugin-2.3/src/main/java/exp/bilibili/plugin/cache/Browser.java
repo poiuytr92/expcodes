@@ -18,10 +18,10 @@ import exp.bilibili.plugin.envm.WebDriverType;
  * <PRE>
  * 浏览器驱动管理器
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Browser {
@@ -74,7 +74,7 @@ public class Browser {
 	}
 	
 	/**
-	 * 重置浏览器驱动
+	 * 重置浏览器驱�?
 	 * @param loadImages
 	 * @return
 	 */
@@ -112,7 +112,7 @@ public class Browser {
 //	}
 //	
 //	/**
-//	 * 关闭当前页面(若是最后一个页面, 则会关闭浏览器)
+//	 * 关闭当前页面(若是最后一个页�?, 则会关闭浏览�?)
 //	 */
 //	private void _close() {
 //		if(browser != null) {
@@ -234,7 +234,7 @@ public class Browser {
 	
 	/**
 	 * 使浏览器跳转到指定页面后截图
-	 * @param driver 浏览器驱动
+	 * @param driver 浏览器驱�?
 	 * @param url 跳转页面
 	 * @param imgPath 图片保存路径
 	 */
@@ -243,7 +243,7 @@ public class Browser {
 	}
 	
 	/**
-	 * 对浏览器的当前页面截图
+	 * 对浏览器的当前页面截�?
 	 * @param imgPath 图片保存路径
 	 */
 	private void _screenshot(String imgPath) {

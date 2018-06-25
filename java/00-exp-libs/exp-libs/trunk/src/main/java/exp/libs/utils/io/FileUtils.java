@@ -32,12 +32,12 @@ import exp.libs.warp.io.flow.FileFlowReader;
 @SuppressWarnings("deprecation")
 public class FileUtils extends org.apache.commons.io.FileUtils {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(FileUtils.class);
 	
 	/**
 	 * 文件头长度表.
-	 *  文件后缀 -> 文件头长度
+	 *  文件后缀 -> 文件头长�?
 	 */
 	private final static Map<String, Integer> HEAD_LENS = 
 			new HashMap<String, Integer>();
@@ -46,14 +46,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	private static int MAX_HEAD_LEN = -1;
 
 	/**
-	 * 文件类型表.
-	 *   文件头 -> 文件后缀 -> 文件类型
+	 * 文件类型�?.
+	 *   文件�? -> 文件后缀 -> 文件类型
 	 */
 	private final static Map<String, Map<String, FileType>> FILE_TYPES = 
 			new HashMap<String, Map<String,FileType>>();
 	
 	/**
-	 * 初始化文件类型查询表单
+	 * 初始化文件类型查询表�?
 	 */
 	static {
 		initFileHeadLens();
@@ -61,7 +61,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 初始化文件头长度表
+	 * 初始化文件头长度�?
 	 */
 	private static void initFileHeadLens() {
 		HEAD_LENS.put(FileType.UNKNOW.EXT, FileType.UNKNOW.HEAD_LEN);
@@ -180,13 +180,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return map;
 	}
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected FileUtils() {}
 	
 	/**
-	 * 检查文件是否存在
+	 * 检查文件是否存�?
 	 * @param filePath 文件路径
-	 * @return true:存在; false:不存在
+	 * @return true:存在; false:不存�?
 	 */
 	public static boolean exists(String filePath) {
 		return (filePath != null && exists(new File(filePath)));
@@ -194,8 +194,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * 检查文件是否都存在
-	 * @param filePath 文件路径集
-	 * @return true:都存在; false:某些不存在
+	 * @param filePath 文件路径�?
+	 * @return true:都存�?; false:某些不存�?
 	 */
 	public static boolean exists(String... filePaths) {
 		boolean isExists = true;
@@ -213,9 +213,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 检查文件是否存在
+	 * 检查文件是否存�?
 	 * @param file 文件
-	 * @return true:存在; false:不存在
+	 * @return true:存在; false:不存�?
 	 */
 	public static boolean exists(File file) {
 		return (file != null && file.exists());
@@ -223,8 +223,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * 检查文件是否都存在
-	 * @param files 文件集
-	 * @return true:都存在; false:某些不存在
+	 * @param files 文件�?
+	 * @return true:都存�?; false:某些不存�?
 	 */
 	public static boolean exists(File... files) {
 		boolean isExists = true;
@@ -244,15 +244,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * 检查文件是否不存在
 	 * @param filePath 文件路径
-	 * @return true:不存在; false:存在
+	 * @return true:不存�?; false:存在
 	 */
 	public static boolean notExists(String filePath) {
 		return !exists(filePath);
 	}
 	
 	/**
-	 * 检查文件是否都不存在
-	 * @param filePath 文件路径集
+	 * 检查文件是否都不存�?
+	 * @param filePath 文件路径�?
 	 * @return true:都不存在; false:某些存在
 	 */
 	public static boolean notExists(String... filePaths) {
@@ -271,15 +271,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * 检查文件是否不存在
 	 * @param file 文件对象
-	 * @return true:不存在; false:存在
+	 * @return true:不存�?; false:存在
 	 */
 	public static boolean notExists(File file) {
 		return !exists(file);
 	}
 	
 	/**
-	 * 检查文件是否都不存在
-	 * @param files 文件集
+	 * 检查文件是否都不存�?
+	 * @param files 文件�?
 	 * @return true:都不存在; false:某些存在
 	 */
 	public static boolean notExists(File... files) {
@@ -296,18 +296,18 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 检查目录是否为空
+	 * 检查目录是否为�?
 	 * @param dirPath 目录路径
-	 * @return true:空或不存在; false:存在且非空
+	 * @return true:空或不存�?; false:存在且非�?
 	 */
 	public static boolean isEmpty(String dirPath) {
 		return (dirPath == null || isEmpty(new File(dirPath)));
 	}
 	
 	/**
-	 * 检查目录是否为空
+	 * 检查目录是否为�?
 	 * @param dir 目录
-	 * @return true:空或不存在; false:存在且非空
+	 * @return true:空或不存�?; false:存在且非�?
 	 */
 	public static boolean isEmpty(File dir) {
 		return (!exists(dir) || dir.listFiles().length <= 0);
@@ -316,7 +316,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * 测试文件类型是否为[文件]
 	 * @param filePath 文件路径
-	 * @return true:是; false:否
+	 * @return true:�?; false:�?
 	 */
 	public static boolean isFile(String filePath) {
 		if(StrUtils.isTrimEmpty(filePath)) {
@@ -327,7 +327,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * 测试所有文件的类型是否均为[文件]
-	 * @param filePaths 文件路径集
+	 * @param filePaths 文件路径�?
 	 * @return true:都是; false:某些不是
 	 */
 	public static boolean isFile(String... filePaths) {
@@ -348,7 +348,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * 测试文件类型是否为[文件]
 	 * @param file 文件对象
-	 * @return true:是; false:否
+	 * @return true:�?; false:�?
 	 */
 	public static boolean isFile(File file) {
 		return (file != null && file.isFile());
@@ -356,7 +356,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * 测试所有文件的类型是否均为[文件]
-	 * @param files 文件集
+	 * @param files 文件�?
 	 * @return true:都是; false:某些不是
 	 */
 	public static boolean isFile(File... files) {
@@ -377,7 +377,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * 测试文件类型是否为[文件夹]
 	 * @param filePath 文件路径
-	 * @return true:是; false:否
+	 * @return true:�?; false:�?
 	 */
 	public static boolean isDirectory(String filePath) {
 		if(StrUtils.isTrimEmpty(filePath)) {
@@ -388,7 +388,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * 测试所有文件的类型是否均为[文件夹]
-	 * @param filePaths 文件路径集
+	 * @param filePaths 文件路径�?
 	 * @return true:都是; false:某些不是
 	 */
 	public static boolean isDirectory(String... filePaths) {
@@ -409,7 +409,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * 测试文件类型是否为[文件夹]
 	 * @param file 文件对象
-	 * @return true:是; false:否
+	 * @return true:�?; false:�?
 	 */
 	public static boolean isDirectory(File file) {
 		return (file != null && file.isDirectory());
@@ -417,7 +417,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * 测试所有文件的类型是否均为[文件夹]
-	 * @param files 文件集
+	 * @param files 文件�?
 	 * @return true:都是; false:某些不是
 	 */
 	public static boolean isDirectory(File... files) {
@@ -436,9 +436,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 获取文件名
+	 * 获取文件�?
 	 * @param filePath 文件路径
-	 * @return 文件名（包括后缀）
+	 * @return 文件名（包括后缀�?
 	 */
 	public static String getName(String filePath) {
 		String name = "";
@@ -467,14 +467,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 复制文件.
 	 * ----------------------------
 	 * 复制规则:
-	 *   1.srcPath 的文件必须存在
-	 *   2.srcPath 与 snkPath 必须是文件(而非文件夹)
-	 *   3.若 snkPath 是文件夹名但不存在, 则自动变成无后缀的文件; 若是文件夹名且存在, 则报错
-	 *   4.snkPath 与 srcPath 不能同源, 但可同名
-	 *   5.若 snkFile 文件的祖先目录不存在则自动创建
-	 *   6.若 snkFile 文件已存在则覆写
+	 *   1.srcPath 的文件必须存�?
+	 *   2.srcPath �? snkPath 必须是文�?(而非文件�?)
+	 *   3.�? snkPath 是文件夹名但不存�?, 则自动变成无后缀的文�?; 若是文件夹名且存�?, 则报�?
+	 *   4.snkPath �? srcPath 不能同源, 但可同名
+	 *   5.�? snkFile 文件的祖先目录不存在则自动创�?
+	 *   6.�? snkFile 文件已存在则覆写
 	 * </pre>
-	 * @param srcPath 源位置
+	 * @param srcPath 源位�?
 	 * @param snkPath 目标位置
 	 */
 	public static boolean copyFile(String srcPath, String snkPath) {
@@ -492,14 +492,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 复制文件.
 	 * ----------------------------
 	 * 复制规则:
-	 *   1.srcFile 的文件必须存在
-	 *   2.srcFile 与 snkFile 必须是文件(而非文件夹)
-	 *   3.若 snkFile 是文件夹名但不存在, 则自动变成无后缀的文件; 若是文件夹名且存在, 则报错
-	 *   4.snkFile 与 srcFile 不能同源, 但可同名
-	 *   5.若 snkFile 文件的祖先目录不存在则自动创建
-	 *   6.若 snkFile 文件已存在则覆写
+	 *   1.srcFile 的文件必须存�?
+	 *   2.srcFile �? snkFile 必须是文�?(而非文件�?)
+	 *   3.�? snkFile 是文件夹名但不存�?, 则自动变成无后缀的文�?; 若是文件夹名且存�?, 则报�?
+	 *   4.snkFile �? srcFile 不能同源, 但可同名
+	 *   5.�? snkFile 文件的祖先目录不存在则自动创�?
+	 *   6.�? snkFile 文件已存在则覆写
 	 * </pre>
-	 * @param srcFile 源文件
+	 * @param srcFile 源文�?
 	 * @param snkFile 目标文件
 	 */
 	public static boolean copyFile(File srcFile, File snkFile) {
@@ -509,7 +509,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			
 		} catch (Exception e) {
 			isOk = false;
-			log.error("复制文件失败: 从 [{}] 到 [{}].", 
+			log.error("复制文件失败: �? [{}] �? [{}].", 
 					(srcFile == null ? "null" : srcFile.getPath()), 
 					(snkFile == null ? "null" : snkFile.getPath()), e);
 		}
@@ -518,17 +518,17 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 
 	/**
 	 * <pre>
-	 * 复制文件夹.
+	 * 复制文件�?.
 	 * ----------------------------
 	 * 复制规则:
 	 *   1.srcPath 的文件夹必须存在
-	 *   2.srcPath 与 snkPath 必须是文件夹(而非文件)
-	 *   3.若 snkPath 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报错
-	 *   4.snkPath 与 srcPath 不能同源, 但可同名
-	 *   5.若 snkPath 文件的祖先目录不存在则自动创建
-	 *   6.若 snkPath 内的子文件/文件夹已存在则自动对应覆写 (只覆写同位置的同名文件)
+	 *   2.srcPath �? snkPath 必须是文件夹(而非文件)
+	 *   3.�? snkPath 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报�?
+	 *   4.snkPath �? srcPath 不能同源, 但可同名
+	 *   5.�? snkPath 文件的祖先目录不存在则自动创�?
+	 *   6.�? snkPath 内的子文�?/文件夹已存在则自动对应覆�? (只覆写同位置的同名文�?)
 	 * </pre>
-	 * @param srcPath 原位置
+	 * @param srcPath 原位�?
 	 * @param snkPath 目标位置
 	 */
 	public static boolean copyDirectory(String srcPath, String snkPath) {
@@ -543,17 +543,17 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * <pre>
-	 * 复制文件夹.
+	 * 复制文件�?.
 	 * ----------------------------
 	 * 复制规则:
 	 *   1.srcDir 的文件夹必须存在
-	 *   2.srcDir 与 snkDir 必须是文件夹(而非文件)
-	 *   3.若 snkDir 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报错
-	 *   4.snkDir 与 srcDir 不能同源, 但可同名
-	 *   5.若 snkDir 文件的祖先目录不存在则自动创建
-	 *   6.若 snkDir 内的子文件/文件夹已存在则自动对应覆写 (只覆写同位置的同名文件)
+	 *   2.srcDir �? snkDir 必须是文件夹(而非文件)
+	 *   3.�? snkDir 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报�?
+	 *   4.snkDir �? srcDir 不能同源, 但可同名
+	 *   5.�? snkDir 文件的祖先目录不存在则自动创�?
+	 *   6.�? snkDir 内的子文�?/文件夹已存在则自动对应覆�? (只覆写同位置的同名文�?)
 	 * </pre>
-	 * @param srcDir 源目录
+	 * @param srcDir 源目�?
 	 * @param snkDir 目标目录
 	 */
 	public static boolean copyDirectory(File srcDir, File snkDir)  {
@@ -563,7 +563,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			
 		} catch (Exception e) {
 			isOk = false;
-			log.error("复制文件夹失败: 从 [{}] 到 [{}].", 
+			log.error("复制文件夹失�?: �? [{}] �? [{}].", 
 					(srcDir == null ? "null" : srcDir.getPath()), 
 					(snkDir == null ? "null" : snkDir.getPath()), e);
 		}
@@ -575,13 +575,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 移动文件.
 	 * ----------------------------
 	 * 移动规则:
-	 *   1.srcPath 的文件必须存在, snkPath 的文件必须不存在
-	 *   2.srcPath 与 snkPath 必须是文件(而非文件夹)
-	 *   3.若 snkPath 是文件夹名但不存在, 则自动变成无后缀的文件; 若是文件夹名且存在, 则报错
-	 *   4.snkPath 与 srcPath 不能同源, 但可同名
-	 *   5.若 snkPath 文件的祖先目录不存在则自动创建
+	 *   1.srcPath 的文件必须存�?, snkPath 的文件必须不存在
+	 *   2.srcPath �? snkPath 必须是文�?(而非文件�?)
+	 *   3.�? snkPath 是文件夹名但不存�?, 则自动变成无后缀的文�?; 若是文件夹名且存�?, 则报�?
+	 *   4.snkPath �? srcPath 不能同源, 但可同名
+	 *   5.�? snkPath 文件的祖先目录不存在则自动创�?
 	 * </pre>
-	 * @param srcPath 源位置
+	 * @param srcPath 源位�?
 	 * @param snkPath 目标位置
 	 */
 	public static boolean moveFile(String srcPath, String snkPath) {
@@ -599,13 +599,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 移动文件.
 	 * ----------------------------
 	 * 移动规则:
-	 *   1.srcFile 的文件必须存在, snkFile 的文件必须不存在
-	 *   2.srcFile 与 snkFile 必须是文件(而非文件夹)
-	 *   3.若 snkFile 是文件夹名但不存在, 则自动变成无后缀的文件; 若是文件夹名且存在, 则报错
-	 *   4.snkFile 与 srcFile 不能同源, 但可同名
-	 *   5.若 snkFile 文件的祖先目录不存在则自动创建
+	 *   1.srcFile 的文件必须存�?, snkFile 的文件必须不存在
+	 *   2.srcFile �? snkFile 必须是文�?(而非文件�?)
+	 *   3.�? snkFile 是文件夹名但不存�?, 则自动变成无后缀的文�?; 若是文件夹名且存�?, 则报�?
+	 *   4.snkFile �? srcFile 不能同源, 但可同名
+	 *   5.�? snkFile 文件的祖先目录不存在则自动创�?
 	 * </pre>
-	 * @param srcPath 源位置
+	 * @param srcPath 源位�?
 	 * @param snkPath 目标位置
 	 */
 	public static boolean moveFile(File srcFile, File snkFile) {
@@ -615,7 +615,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			
 		} catch (Exception e) {
 			isOk = false;
-			log.error("移动文件失败: 从 [{}] 到 [{}].", 
+			log.error("移动文件失败: �? [{}] �? [{}].", 
 					(srcFile == null ? "null" : srcFile.getPath()), 
 					(snkFile == null ? "null" : snkFile.getPath()), e);
 		}
@@ -624,16 +624,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * <pre>
-	 * 移动文件夹.
+	 * 移动文件�?.
 	 * ----------------------------
 	 * 移动规则:
-	 *   1.srcPath 的文件夹必须存在, snkPath 的文件夹必须不存在
-	 *   2.srcPath 与 snkPath 必须是文件夹(而非文件)
-	 *   3.若 snkPath 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报错
-	 *   4.snkPath 与 srcPath 不能同源, 但可同名
-	 *   5.若 snkPath 文件的祖先目录不存在则自动创建
+	 *   1.srcPath 的文件夹必须存在, snkPath 的文件夹必须不存�?
+	 *   2.srcPath �? snkPath 必须是文件夹(而非文件)
+	 *   3.�? snkPath 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报�?
+	 *   4.snkPath �? srcPath 不能同源, 但可同名
+	 *   5.�? snkPath 文件的祖先目录不存在则自动创�?
 	 * </pre>
-	 * @param srcPath 源位置
+	 * @param srcPath 源位�?
 	 * @param snkPath 目标位置
 	 */
 	public static boolean moveDirectory(String srcPath, String snkPath) {
@@ -648,16 +648,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * <pre>
-	 * 移动文件夹.
+	 * 移动文件�?.
 	 * ----------------------------
 	 * 移动规则:
-	 *   1.srcDir 的文件夹必须存在, snkDir 的文件夹必须不存在
-	 *   2.srcDir 与 snkDir 必须是文件夹(而非文件)
-	 *   3.若 snkDir 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报错
-	 *   4.snkDir 与 srcDir 不能同源, 但可同名
-	 *   5.若 snkDir 文件的祖先目录不存在则自动创建
+	 *   1.srcDir 的文件夹必须存在, snkDir 的文件夹必须不存�?
+	 *   2.srcDir �? snkDir 必须是文件夹(而非文件)
+	 *   3.�? snkDir 是文件名但不存在, 则自动变成含后缀的文件夹; 若是文件名且存在, 则报�?
+	 *   4.snkDir �? srcDir 不能同源, 但可同名
+	 *   5.�? snkDir 文件的祖先目录不存在则自动创�?
 	 * </pre>
-	 * @param srcDir 源位置
+	 * @param srcDir 源位�?
 	 * @param snkDir 目标位置
 	 */
 	public static boolean moveDirectory(File srcDir, File snkDir)  {
@@ -667,7 +667,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			
 		} catch (Exception e) {
 			isOk = false;
-			log.error("移动文件夹失败: 从 [{}] 到 [{}].", 
+			log.error("移动文件夹失�?: �? [{}] �? [{}].", 
 					(srcDir == null ? "null" : srcDir.getPath()), 
 					(snkDir == null ? "null" : snkDir.getPath()), e);
 		}
@@ -703,7 +703,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		boolean isCreated = false;
 		try {
 			file = new File(path);
-			file.setWritable(true, false); // 处理linux的权限问题
+			file.setWritable(true, false); // 处理linux的权限问�?
 			
 			if (file.exists() == false) {
 				if (false == file.getParentFile().exists()) {
@@ -714,13 +714,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 				isCreated = true;
 			}
 		} catch (Exception e) {
-			log.error("创建文件{} [{}] 失败", (isFile ? "" : "夹"), path, e);
+			log.error("创建文件{} [{}] 失败", (isFile ? "" : "�?"), path, e);
 		}
 		return (isCreated ? file : null);
 	}
 	
 	/**
-	 * 删除文件/目录(包括子文件/子目录)
+	 * 删除文件/目录(包括子文�?/子目�?)
 	 * @param path 文件/目录路径
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
@@ -729,9 +729,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 删除文件/目录(包括子文件/子目录)
+	 * 删除文件/目录(包括子文�?/子目�?)
 	 * @param path 文件/目录路径
-	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留�?
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean delete(String path, String filterRegex) {
@@ -743,7 +743,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 删除文件/目录(包括子文件/子目录)
+	 * 删除文件/目录(包括子文�?/子目�?)
 	 * @param file 文件/目录
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
@@ -752,9 +752,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 删除文件/目录(包括子文件/子目录)
+	 * 删除文件/目录(包括子文�?/子目�?)
 	 * @param file 文件/目录
-	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留�?
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean delete(File file, String filterRegex) {
@@ -762,7 +762,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 在程序退出时删除文件/目录(包括子文件/子目录)
+	 * 在程序退出时删除文件/目录(包括子文�?/子目�?)
 	 * @param path 文件/目录路径
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
@@ -771,9 +771,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 在程序退出时删除文件/目录(包括子文件/子目录)
+	 * 在程序退出时删除文件/目录(包括子文�?/子目�?)
 	 * @param path 文件/目录路径
-	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留�?
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean deleteOnExit(String path, String filterRegex) {
@@ -785,7 +785,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 在程序退出时删除文件/目录(包括子文件/子目录)
+	 * 在程序退出时删除文件/目录(包括子文�?/子目�?)
 	 * @param file 文件/目录
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
@@ -794,9 +794,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 在程序退出时删除文件/目录(包括子文件/子目录)
+	 * 在程序退出时删除文件/目录(包括子文�?/子目�?)
 	 * @param file 文件/目录
-	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留�?
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean deleteOnExit(File file, String filterRegex) {
@@ -804,10 +804,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 删除文件/目录(包括子文件/子目录)
+	 * 删除文件/目录(包括子文�?/子目�?)
 	 * @param file 文件/目录
-	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留）
-	 * @param onExit 是否在程序退出时才删除
+	 * @param filterRegex 过滤正则（匹配过滤的文件/目录保留�?
+	 * @param onExit 是否在程序退出时才删�?
 	 * @return true:全部删除成功; false:全部删除失败
 	 */
 	public static boolean delete(File file, String filterRegex, boolean onExit) {
@@ -843,7 +843,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * <PRE>
 	 * 使用系统默认编码读取文件内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * 	(此方法会一次性读取文件内所有内�?, 不适用于大文件读取)
 	 * </PRE>
 	 * @param filePath 文件路径
 	 * @return 文件内容
@@ -858,7 +858,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	/**
 	 * <PRE>
 	 * 使用系统默认编码读取文件内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * 	(此方法会一次性读取文件内所有内�?, 不适用于大文件读取)
 	 * </PRE>
 	 * @param file 文件
 	 * @return 文件内容
@@ -877,7 +877,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * <PRE>
 	 * 读取文件内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * 	(此方法会一次性读取文件内所有内�?, 不适用于大文件读取)
 	 * </PRE>
      * @param filePath 文件路径
      * @param charset 文件编码
@@ -893,7 +893,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * <PRE>
 	 * 读取文件内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * 	(此方法会一次性读取文件内所有内�?, 不适用于大文件读取)
 	 * </PRE>
      * @param file 文件
      * @param charset 文件编码
@@ -912,8 +912,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     
     /**
      * <PRE>
-	 * 使用系统默认编码分行读取文件所有内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * 使用系统默认编码分行读取文件所有内�?.
+	 * 	(此方法会一次性读取文件内所有内�?, 不适用于大文件读取)
 	 * </PRE>
      * @param filePath 文件路径
      * @return 文件内容
@@ -927,8 +927,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     
     /**
      * <PRE>
-	 * 使用系统默认编码分行读取文件所有内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * 使用系统默认编码分行读取文件所有内�?.
+	 * 	(此方法会一次性读取文件内所有内�?, 不适用于大文件读取)
 	 * </PRE>
      * @param file 文件
      * @return 文件内容
@@ -946,8 +946,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     
     /**
      * <PRE>
-	 * 分行读取文件所有内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * 分行读取文件所有内�?.
+	 * 	(此方法会一次性读取文件内所有内�?, 不适用于大文件读取)
 	 * </PRE>
      * @param filePath 文件路径
      * @param charset 文件编码
@@ -962,8 +962,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     
     /**
      * <PRE>
-	 * 分行读取文件所有内容.
-	 * 	(此方法会一次性读取文件内所有内容, 不适用于大文件读取)
+	 * 分行读取文件所有内�?.
+	 * 	(此方法会一次性读取文件内所有内�?, 不适用于大文件读取)
 	 * </PRE>
      * @param file 文件
      * @param charset 文件编码
@@ -983,7 +983,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * <PRE>
 	 * 流式读取文件内容.
-	 * 	(此方法会流式分段读取文件内容，适用于读取任意文件)
+	 * 	(此方法会流式分段读取文件内容，适用于读取任意文�?)
 	 * 
 	 * 示例:
 	 * 	FileFlowReader ffr = readFlow(FILE_PATH, Charset.UTF8);
@@ -995,7 +995,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * </PRE>
      * @param filePath 文件路径
      * @param charset 文件编码
-     * @return 文件流式读取器
+     * @return 文件流式读取�?
      */
     public static FileFlowReader readFlow(String filePath, String charset) {
     	return new FileFlowReader(filePath, charset);
@@ -1004,7 +1004,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
     /**
      * <PRE>
 	 * 流式读取文件内容.
-	 * 	(此方法会流式分段读取文件内容，适用于读取任意文件)
+	 * 	(此方法会流式分段读取文件内容，适用于读取任意文�?)
 	 * 
 	 * 示例:
 	 * 	FileFlowReader ffr = readFlow(FILE_PATH, Charset.UTF8);
@@ -1016,7 +1016,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * </PRE>
      * @param file 文件
      * @param charset 文件编码
-     * @return 文件流式读取器
+     * @return 文件流式读取�?
      */
     public static FileFlowReader readFlow(File file, String charset) {
     	return new FileFlowReader(file, charset);
@@ -1028,7 +1028,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * </PRE>
      * @param filePath 文件路径
      * @param data 文件数据(使用系统默认编码)
-     * @return true：写入成功; false:写入失败
+     * @return true：写入成�?; false:写入失败
      */
 	public static boolean write(String filePath, String data) {
 		if(StrUtils.isTrimEmpty(filePath)) {
@@ -1043,7 +1043,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * </PRE>
      * @param file 文件
      * @param data 文件数据(使用系统默认编码)
-     * @return true：写入成功; false:写入失败
+     * @return true：写入成�?; false:写入失败
      */
 	public static boolean write(File file, String data) {
     	boolean isOk = true;
@@ -1052,19 +1052,19 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         	
 		} catch (Exception e) {
 			isOk = false;
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
+			log.error("写文件失�?: ", (file == null ? "null" : file.getPath()), e);
 		}
         return isOk;
 	}
 	
 	/**
 	 * <PRE>
-	 * 把数据写到指定文件.
+	 * 把数据写到指定文�?.
 	 * </PRE>
 	 * @param filePath 文件路径
 	 * @param data 文件数据(使用系统默认编码)
-	 * @param append true:附加到末尾; false:覆写
-	 * @return true：写入成功; false:写入失败
+	 * @param append true:附加到末�?; false:覆写
+	 * @return true：写入成�?; false:写入失败
 	 */
 	public static boolean write(String filePath, String data, boolean append) {
 		if(StrUtils.isTrimEmpty(filePath)) {
@@ -1075,12 +1075,12 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * <PRE>
-	 * 把数据写到指定文件.
+	 * 把数据写到指定文�?.
 	 * </PRE>
 	 * @param file 文件
 	 * @param data 文件数据(使用系统默认编码)
-	 * @param append true:附加到末尾; false:覆写
-	 * @return true：写入成功; false:写入失败
+	 * @param append true:附加到末�?; false:覆写
+	 * @return true：写入成�?; false:写入失败
 	 */
 	public static boolean write(File file, String data, boolean append) {
     	boolean isOk = true;
@@ -1089,7 +1089,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         	
 		} catch (Exception e) {
 			isOk = false;
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
+			log.error("写文件失�?: ", (file == null ? "null" : file.getPath()), e);
 		}
         return isOk;
 	}
@@ -1101,7 +1101,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param filePath 文件路径
 	 * @param data 文件数据
 	 * @param charset 数据编码
-	 * @return true：写入成功; false:写入失败
+	 * @return true：写入成�?; false:写入失败
 	 */
 	public static boolean write(String filePath, String data, String charset) {
 		if(StrUtils.isTrimEmpty(filePath)) {
@@ -1117,7 +1117,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param file 文件
 	 * @param data 文件数据
 	 * @param charset 数据编码
-	 * @return true：写入成功; false:写入失败
+	 * @return true：写入成�?; false:写入失败
 	 */
 	public static boolean write(File file, String data, String charset) {
     	boolean isOk = true;
@@ -1126,20 +1126,20 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         	
 		} catch (Exception e) {
 			isOk = false;
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
+			log.error("写文件失�?: ", (file == null ? "null" : file.getPath()), e);
 		}
         return isOk;
 	}
 	
 	/**
 	 * <PRE>
-	 * 把数据写到指定文件.
+	 * 把数据写到指定文�?.
 	 * </PRE>
 	 * @param filePath 文件路径
 	 * @param data 文件数据
 	 * @param charset 数据编码
-	 * @param append true:附加到末尾; false:覆写
-	 * @return true：写入成功; false:写入失败
+	 * @param append true:附加到末�?; false:覆写
+	 * @return true：写入成�?; false:写入失败
 	 */
 	public static boolean write(String filePath, String data, String charset, boolean append) {
 		if(StrUtils.isTrimEmpty(filePath)) {
@@ -1150,13 +1150,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * <PRE>
-	 * 把数据写到指定文件.
+	 * 把数据写到指定文�?.
 	 * </PRE>
 	 * @param file 文件
 	 * @param data 文件数据
 	 * @param charset 数据编码
-	 * @param append true:附加到末尾; false:覆写
-	 * @return true：写入成功; false:写入失败
+	 * @param append true:附加到末�?; false:覆写
+	 * @return true：写入成�?; false:写入失败
 	 */
 	public static boolean write(File file, String data, String charset, boolean append) {
     	boolean isOk = true;
@@ -1165,7 +1165,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
         	
 		} catch (Exception e) {
 			isOk = false;
-			log.error("写文件失败: ", (file == null ? "null" : file.getPath()), e);
+			log.error("写文件失�?: ", (file == null ? "null" : file.getPath()), e);
 		}
         return isOk;
 	}
@@ -1223,7 +1223,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	public static FileType getFileType(File file) {
 		FileType fileType = FileType.UNKNOW;
 		
-		// 基于文件后缀ext与文件头header是正确配对的前提下, 验证猜测文件类型
+		// 基于文件后缀ext与文件头header是正确配对的前提�?, 验证猜测文件类型
 		// (先用文件后缀获取理论文件头，再用实际文件头匹配理论文件头)
 		String ext = getExtension(file);
 		if(StrUtils.isNotTrimEmpty(ext)) {
@@ -1234,7 +1234,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			}
 		}
 		
-		// 基于文件后缀ext与文件头header是不匹配的前提下, 通过文件头猜测文件类型
+		// 基于文件后缀ext与文件头header是不匹配的前提下, 通过文件头猜测文件类�?
 		if(fileType == FileType.UNKNOW) {
 			String fileHeader = _getHeader(file, MAX_HEAD_LEN);
 			Iterator<String> headers = FILE_TYPES.keySet().iterator();
@@ -1247,7 +1247,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 						fileType = types.values().iterator().next();
 						
 					} else {
-						log.error("判定文件 [{}] 的文件类型失败: 其文件后缀被篡改 (它可能是 {} 中的一个)", 
+						log.error("判定文件 [{}] 的文件类型失�?: 其文件后缀被篡�? (它可能是 {} 中的一�?)", 
 								file.getName(), types.values().toString());
 					}
 					break;
@@ -1258,9 +1258,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 根据文件头和文件后缀转换成文件类型对象
-	 * @param header 16进制文件头
-	 * @param ext 含.的文件后缀
+	 * 根据文件头和文件后缀转换成文件类型对�?
+	 * @param header 16进制文件�?
+	 * @param ext �?.的文件后缀
 	 * @return 文件类型对象
 	 */
 	private static FileType _toFileType(String header, String ext) {
@@ -1279,11 +1279,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * <pre>
-	 * 获取文件头信息.
+	 * 获取文件头信�?.
 	 * </pre>
 	 * @param file 文件
-	 * @param headLen 文件头信息长度
-	 * @return 文件头信息
+	 * @param headLen 文件头信息长�?
+	 * @return 文件头信�?
 	 */
 	private static String _getHeader(File file, int headLen) {
 		String header = "";
@@ -1309,18 +1309,18 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 获取文件扩展名(包括[.]符号)
+	 * 获取文件扩展�?(包括[.]符号)
 	 * @param file 文件
-	 * @return 文件扩展名(全小写, 包括[.]符号)
+	 * @return 文件扩展�?(全小�?, 包括[.]符号)
 	 */
 	public static String getExtension(File file) {
 		return getExtension(file == null ? "" : file.getName());
 	}
 	
 	/**
-	 * 获取文件扩展名(包括[.]符号)
-	 * @param fileName 文件名
-	 * @return 文件扩展名(全小写, 包括[.]符号)
+	 * 获取文件扩展�?(包括[.]符号)
+	 * @param fileName 文件�?
+	 * @return 文件扩展�?(全小�?, 包括[.]符号)
 	 */
 	public static String getExtension(String fileName) {
 		String extension = "";
@@ -1339,7 +1339,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 列举目录下的文件清单
 	 * @param dirPath 目录位置
 	 * @param extension 文件后缀
-	 * @return 后缀匹配的文件清单
+	 * @return 后缀匹配的文件清�?
 	 */
 	public static List<File> listFiles(String dirPath, String extension) {
 		return listFiles((dirPath == null ? null : new File(dirPath)), extension);
@@ -1349,7 +1349,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 列举目录下的文件清单
 	 * @param dirPath 目录位置
 	 * @param extension 文件后缀
-	 * @return 后缀匹配的文件清单
+	 * @return 后缀匹配的文件清�?
 	 */
 	public static List<File> listFiles(File dir, String extension) {
 		List<File> list = new LinkedList<File>();
@@ -1377,7 +1377,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * 检查文件与后缀是否匹配
 	 * @param file 文件
 	 * @param extension 后缀
-	 * @return true:匹配; false:不匹配
+	 * @return true:匹配; false:不匹�?
 	 */
 	private static boolean _match(File file, String extension) {
 		return (StrUtils.isEmpty(extension) || 
@@ -1386,7 +1386,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * <PRE>
-	 * 隐藏文件/文件夹
+	 * 隐藏文件/文件�?
 	 * 	此方法仅适用于win系统. 
 	 * 	linux系统直接在文件名前加.即可实现隐藏
 	 * </PRE>
@@ -1403,7 +1403,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/**
 	 * <PRE>
-	 * 隐藏文件/文件夹
+	 * 隐藏文件/文件�?
 	 * 	此方法仅适用于win系统. 
 	 * 	linux系统直接在文件名前加.即可实现隐藏
 	 * </PRE>
@@ -1426,10 +1426,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/**
-	 * 移除不允许出现在文件名中的特殊字符
-	 * @param fileName 文件名
+	 * 移除不允许出现在文件名中的特殊字�?
+	 * @param fileName 文件�?
 	 * @param symbol 用于替代被移除的特殊字符
-	 * @return 移除特殊字符后的文件名
+	 * @return 移除特殊字符后的文件�?
 	 */
 	public static String delForbidCharInFileName(String fileName, String symbol) {
 		String name = (fileName == null ? "" : fileName);

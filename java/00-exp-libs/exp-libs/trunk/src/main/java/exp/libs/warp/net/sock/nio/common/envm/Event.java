@@ -23,8 +23,8 @@ public enum Event {
 	/** 消息接收事件类型 */
 	MESSAGE_REVC(2, "消息接收事件"),
 
-	/** 消息发送事件类型 */
-	MESSAGE_SEND(3, "消息发送事件"),
+	/** 消息发送事件类�? */
+	MESSAGE_SEND(3, "消息发送事�?"),
 
 	/** 异常事件类型 */
 	EXCEPTION(4, "异常事件"),
@@ -34,15 +34,15 @@ public enum Event {
 
 	;
 
-	/** 类型值 */
+	/** 类型�? */
 	public int id;
 
 	/** 类型描述 */
 	public String desc;
 
 	/**
-	 * 构造函数
-	 * @param id 类型值
+	 * 构造函�?
+	 * @param id 类型�?
 	 * @param desc 类型描述
 	 */
 	private Event(int id, String desc) {

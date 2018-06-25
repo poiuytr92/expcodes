@@ -15,17 +15,17 @@ import org.slf4j.LoggerFactory;
  */
 public class BoolUtils {
 
-	// TODO 布隆过滤器
+	// TODO 布隆过滤�?
 	
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(BoolUtils.class);
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected BoolUtils() {}
 	
 	/**
 	 * 把字符串转换成bool对象
-	 * @param tof "true"或"false"字符串（忽略大小写）
+	 * @param tof "true"�?"false"字符串（忽略大小写）
 	 * @return true或false
 	 */
 	public static boolean toBool(String tof) {
@@ -34,9 +34,9 @@ public class BoolUtils {
 	
 	/**
 	 * 把字符串转换成bool对象
-	 * @param tof "true"或"false"字符串（忽略大小写）
-	 * @param defavlt 默认值
-	 * @return true或false, 转换失败则返回默认值
+	 * @param tof "true"�?"false"字符串（忽略大小写）
+	 * @param defavlt 默认�?
+	 * @return true或false, 转换失败则返回默认�?
 	 */
 	public static boolean toBool(String tof, boolean defavlt) {
 		boolean bool = defavlt;

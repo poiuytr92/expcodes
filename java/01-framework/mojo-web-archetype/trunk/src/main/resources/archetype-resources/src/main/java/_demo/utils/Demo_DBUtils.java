@@ -15,10 +15,10 @@ import ${package}._demo.Config;
  * <PRE>
  * DB工具 样例
  * </PRE>
- * <B>PROJECT：</B> exp-libs
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-08-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Demo_DBUtils {
@@ -32,36 +32,36 @@ public class Demo_DBUtils {
 //		ds.setDriver(DBType.MYSQL.DRIVER);	// 修改数据源配置（可选）
 //		ds.set....
 		
-		Connection conn = DBUtils.getConn(ds);	// 先用连接池、失败则用JDBC, 最多重试10次
-//		conn = DBUtils.getConn(ds, 3);		// 先用连接池、失败则用JDBC, 最多重试3次
-//		conn = DBUtils.getConnByJDBC(ds);	// 强制使用JDBC取连接, 失败不重试
-//		conn = DBUtils.getConnByPool(ds);	// 强制使用连接池取连接, 失败不重试
+		Connection conn = DBUtils.getConn(ds);	// 先用连接池、失败则用JDBC, 最多重�?10�?
+//		conn = DBUtils.getConn(ds, 3);		// 先用连接池、失败则用JDBC, 最多重�?3�?
+//		conn = DBUtils.getConnByJDBC(ds);	// 强制使用JDBC取连�?, 失败不重�?
+//		conn = DBUtils.getConnByPool(ds);	// 强制使用连接池取连接, 失败不重�?
 		
-		// 查询结果集为单个数值
+		// 查询结果集为单个数�?
 		String sql = "select count(1) from table where ...";
 		int num = DBUtils.queryInt(conn, sql);
 		
-		// 查询 【key值为key, value值为val】 的表单数据
+		// 查询 【key值为key, value值为val�? 的表单数�?
 		sql = "select key, value from table where ...";
 		Map<String, String> kvs = DBUtils.queryKVS(conn, sql);
 		Map<String, Object> kvo = DBUtils.queryKVO(conn, sql);
 		
-		// 查询 【列名为key, 列值为val】 的多行数据
+		// 查询 【列名为key, 列值为val�? 的多行数�?
 		sql = "select * from table where ...";
 		List<Map<String, String>> sDatas = DBUtils.queryKVSs(conn, sql);
 		List<Map<String, Object>> oDatas = DBUtils.queryKVOs(conn, sql);
 		
-		// 查询 【列名为key, 列值为val】 的第一行数据
+		// 查询 【列名为key, 列值为val�? 的第一行数�?
 		sql = "select * from table where ...";
 		Map<String, String> sRow = DBUtils.queryFirstRowStr(conn, sql);
 		Map<String, Object> oRow = DBUtils.queryFirstRowObj(conn, sql);
 		
-		// 查询第N列数据
+		// 查询第N列数�?
 		sql = "select col from table where ...";
 		List<String> sCol = DBUtils.queryColumnStr(conn, sql, 8);
 		List<Object> oCol = DBUtils.queryColumnObj(conn, sql, 8);
 				
-		// 增删改
+		// 增删�?
 		sql = "insert/update/delete ...";
 		boolean isOk = DBUtils.execute(conn, sql);
 		
@@ -83,7 +83,7 @@ public class Demo_DBUtils {
 		
 		// 转换物理表为JavaBean对象
 		boolean isOk = DBUtils.createBeanFromDB(conn, 
-				"foo.bar.bean", // 所生成的JaveBean类的包路径
+				"foo.bar.bean", // 所生成的JaveBean类的包路�?
 				"./src/main/java/foo/bar/bean", // JaveBean类的输出目录
 				new String[] { "table1", "table2" });	// 要转换的表名
 		

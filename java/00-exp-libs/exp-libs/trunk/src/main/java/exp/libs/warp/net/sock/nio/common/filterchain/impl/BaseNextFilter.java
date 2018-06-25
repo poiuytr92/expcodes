@@ -17,8 +17,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 class BaseNextFilter extends AbstractNextFilter {
 
 	/**
-	 * 构造函数
-	 * @param filter 业务过滤器
+	 * 构造函�?
+	 * @param filter 业务过滤�?
 	 */
 	public BaseNextFilter(IFilter filter) {
 		super(filter);
@@ -56,7 +56,7 @@ class BaseNextFilter extends AbstractNextFilter {
 	/**
 	 * 触发上一个业务过滤器的onMessageSent事件
 	 * @param session 会话
-	 * @param msg 发送消息
+	 * @param msg 发送消�?
 	 */
 	@Override
 	public void onMessageSent(ISession session, Object msg) {

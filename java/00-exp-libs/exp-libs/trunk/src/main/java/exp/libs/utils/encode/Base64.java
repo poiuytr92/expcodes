@@ -15,25 +15,25 @@ import Decoder.BASE64Encoder;
  */
 public class Base64 {
 
-	/** Base64编码器 */
+	/** Base64编码�? */
 	private final static BASE64Encoder ENCODER = new BASE64Encoder();
 	
-	/** Base64解码器 */
+	/** Base64解码�? */
 	private final static BASE64Decoder DECODER = new BASE64Decoder();
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected Base64() {}
 	
 	/**
 	 * Base64编码
 	 * @param bytes 原始字节数据
-	 * @return Base64编码字符串
+	 * @return Base64编码字符�?
 	 */
 	public static String encode(byte[] bytes) {
 		String base64 = "";
 		try {
 			base64 = ENCODER.encodeBuffer(bytes).trim();
-//			base64 = base64.replaceAll("[\r\n]", "");	// 可不去掉内部换行, 不影响
+//			base64 = base64.replaceAll("[\r\n]", "");	// 可不去掉内部换行, 不影�?
 			
 		} catch(Exception e) {}
 		return base64;
@@ -41,7 +41,7 @@ public class Base64 {
 	
 	/**
 	 * Base64解码
-	 * @param base64 Base64编码字符串
+	 * @param base64 Base64编码字符�?
 	 * @return 原始字节数据
 	 */
 	public static byte[] decode(String base64) {

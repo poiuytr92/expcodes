@@ -8,26 +8,26 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * 路径树节点
  * </PRE>
- * <B>PROJECT：</B> mojo-release-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> mojo-release-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-08-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _PathNode {
 
 	/**
-	 * 父节点
+	 * 父节�?
 	 */
 	private _PathNode parent;
 	
 	/**
-	 * 标记自身在整棵路径树的层数(根节点为第-1层)
+	 * 标记自身在整棵路径树的层�?(根节点为�?-1�?)
 	 */
 	private int level;
 	
 	/**
-	 * 标记自身是否为叶子节点
+	 * 标记自身是否为叶子节�?
 	 */
 	private boolean isLeaf;
 	
@@ -38,14 +38,14 @@ class _PathNode {
 	
 	/**
 	 * 节点压缩次数(亦即其所有分支下的叶子数).
-	 * 当路径树的相同位置已存在同名节点时,会压缩成一个.每压缩一次计数+1.
+	 * 当路径树的相同位置已存在同名节点�?,会压缩成一�?.每压缩一次计�?+1.
 	 */
 	private int compress;
 	
 	/**
-	 * 构造函数
-	 * @param parent 父节点引用
-	 * @param level 所在路径树的层数
+	 * 构造函�?
+	 * @param parent 父节点引�?
+	 * @param level 所在路径树的层�?
 	 * @param isLeaf 叶子节点标识
 	 * @param name 节点名称
 	 */
@@ -108,7 +108,7 @@ class _PathNode {
 			isSame = (isSame == true ? 
 					(this.getName().equals(that.getName())) : false);
 			
-			// 同祖先
+			// 同祖�?
 			if(isSame == true) {
 				
 				// 向上递归比较

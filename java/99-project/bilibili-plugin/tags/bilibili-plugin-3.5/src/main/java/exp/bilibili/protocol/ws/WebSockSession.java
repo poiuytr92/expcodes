@@ -28,20 +28,20 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * websocket会话
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class WebSockSession extends WebSocketClient {
 
 	private final static Logger log = LoggerFactory.getLogger(WebSockSession.class);
 	
-	/** 子消息的前32位字节是该子消息的含消息头 */
+	/** 子消息的�?32位字节是该子消息的含消息�? */
 	private final static int MSG_HEADER_LEN = 32;
 	
-	/** 子消息的前8位字节是该子消息的字符长度（含消息头） */
+	/** 子消息的�?8位字节是该子消息的字符长度（含消息头�? */
 	private final static int MSG_LENGTH_LEN = 8;
 	
 	/** 连接超时 */
@@ -57,10 +57,10 @@ class WebSockSession extends WebSocketClient {
 	 * 
 	 * @param serverUri
 	 * @param draft WebSocket协议版本
-	 * 				WebSocket协议说明可查看 http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
-	 * 				通过打开调试开关 WebSocketImpl.DEBUG = true 可以知道服务端的协议版本
+	 * 				WebSocket协议说明可查�? http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
+	 * 				通过打开调试开�? WebSocketImpl.DEBUG = true 可以知道服务端的协议版本
 	 * 				Draft_6455 为最新的WebSocket协议版本
-	 * @param timeout 本地连接保活超时（0不生效，默认60，即60秒后自动断开）
+	 * @param timeout 本地连接保活超时�?0不生效，默认60，即60秒后自动断开�?
 	 * @param debug 调试模式
 	 */
 	protected WebSockSession(URI serverURI, Draft draft, int timeout, boolean debug) {
@@ -119,29 +119,29 @@ class WebSockSession extends WebSocketClient {
 	
 	@Override
 	public void onOpen(ServerHandshake serverhandshake) {
-		log.info("正在连接websocket服务器...");
+		log.info("正在连接websocket服务�?...");
 	}
 
 	@Override
 	public void onMessage(String msg) {
-		log.debug("接收到 [String] 类型数据: {}", msg);
+		log.debug("接收�? [String] 类型数据: {}", msg);
 	}
 	
 	@Override
 	public void onMessage(ByteBuffer byteBuffer) {
 		byte[] buff = byteBuffer.array();
 		String hex = BODHUtils.toHex(buff);
-		log.debug("接收到推送消息: {}", hex);
+		log.debug("接收到推送消�?: {}", hex);
 		
 		if(hex.startsWith(Binary.SERVER_HB_CONFIRM)) {
 			log.debug("websocket连接保活确认");
 			
 		} else if(Binary.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.debug("websocket连接成功确认");
-			UIUtils.log("入侵直播间成功, 正在暗中观察...");
+			UIUtils.log("入侵直播间成�?, 正在暗中观察...");
 			
 		} else if(alalyseHexMsg(hex) == false) {
-			log.warn("存在无效的推送消息: {}", hex);
+			log.warn("存在无效的推送消�?: {}", hex);
 		}
     }
 	
@@ -153,8 +153,8 @@ class WebSockSession extends WebSocketClient {
 	private boolean alalyseHexMsg(String hexMsg) {
 		boolean isOk = true;
 		while(StrUtils.isNotEmpty(hexMsg)) {
-			int len = getHexLen(hexMsg);	// 获取子消息长度
-			if(len <= MSG_HEADER_LEN) {	// 消息的前32个字节(即16个字符)为消息头
+			int len = getHexLen(hexMsg);	// 获取子消息长�?
+			if(len <= MSG_HEADER_LEN) {	// 消息的前32个字�?(�?16个字�?)为消息头
 				break;
 			}
 			
@@ -176,24 +176,24 @@ class WebSockSession extends WebSocketClient {
 	
 	/**
 	 * 获取子消息的长度
-	 * @param hexMsg 所有消息
+	 * @param hexMsg 所有消�?
 	 * @return 子消息的16进制长度
 	 */
 	private static int getHexLen(String hexMsg) {
-		String hexLen = hexMsg.substring(0, MSG_LENGTH_LEN); // 子消息的前8位是该子消息的字符长度（含消息头）
+		String hexLen = hexMsg.substring(0, MSG_LENGTH_LEN); // 子消息的�?8位是该子消息的字符长度（含消息头�?
 		long len = BODHUtils.hexToDec(hexLen);
-		return (int) (len * 2);	// 1字符 = 2个16进制字节
+		return (int) (len * 2);	// 1字符 = 2�?16进制字节
 	}
 	
 	@Override
     public void onFragment(Framedata framedata) {
-		log.debug("接收到 [Framedata] 类型数据: {}", framedata.toString());
+		log.debug("接收�? [Framedata] 类型数据: {}", framedata.toString());
     }
 	
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		isClosed = true;
-		log.error("websocket连接断开: [错误码:{}] [发起人:{}] [原因:{}]", 
+		log.error("websocket连接断开: [错误�?:{}] [发起�?:{}] [原因:{}]", 
 				code, (remote ? "server" : "client"), reason);
 		UIUtils.log("与直播间的连接已断开 (Reason:", (remote ? "server" : "client"), ")");
 	}

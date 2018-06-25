@@ -31,12 +31,12 @@ public class JMSCommon {
 	private final static Logger LOG = LoggerFactory.getLogger(JMSCommon.class);
 
 	/**
-	 * 连接字符串
+	 * 连接字符�?
 	 */
 	private String sURI;
 
 	/**
-	 * 上下文工厂
+	 * 上下文工�?
 	 */
 	private String contextFactory;
 
@@ -61,13 +61,13 @@ public class JMSCommon {
 	private boolean isTransaction = false;
 
 	/**
-	 * 连接管理器
+	 * 连接管理�?
 	 */
 	private static Map<String, Connection> connectionManager = new HashMap<String, Connection>();
 	
 	
 	/**
-	 * 消息生产者
+	 * 消息生产�?
 	 */
 	private MessageProducer produce;
 
@@ -77,7 +77,7 @@ public class JMSCommon {
 	private Session session;
 
 	/**
-	 * 用户名
+	 * 用户�?
 	 */
 	private String sUserName;
 
@@ -87,12 +87,12 @@ public class JMSCommon {
 	private String sPassWord;
 
 	/**
-	 * 消息存活时间，单位毫秒
+	 * 消息存活时间，单位毫�?
 	 */
 	private long iTimeToLive;
 
 	/**
-	 * 优先级
+	 * 优先�?
 	 */
 	private int iPriority;
 
@@ -102,12 +102,12 @@ public class JMSCommon {
 	private String sClientID;
 
 	/**
-	 * 消息消费者
+	 * 消息消费�?
 	 */
 	private MessageConsumer consumer;
 
 	/**
-	 * 订阅者名称
+	 * 订阅者名�?
 	 */
 	private String sConsumerName;
 
@@ -122,7 +122,7 @@ public class JMSCommon {
 	private String jmsMessageID;
 
 	/**
-	 * 消息发送模式
+	 * 消息发送模�?
 	 */
 	private int iDeliveryMode = DeliveryMode.PERSISTENT;
 
@@ -142,12 +142,12 @@ public class JMSCommon {
 	protected static final String STR_SESSION_CLOSE_EXP = "The Session is closed";
 
 	/**
-	 * 生产者关闭异常
+	 * 生产者关闭异�?
 	 */
 	protected static final String STR_PROD_CLOSE_EXP = "The producer is closed";
 
 	/**
-	 * 消息生产者(回复消息使用)
+	 * 消息生产�?(回复消息使用)
 	 */
 	protected MessageProducer replyProducer;
 
@@ -167,10 +167,10 @@ public class JMSCommon {
 	protected Message messages = null;
 
 	/**
-	 * 改造方法
+	 * 改造方�?
 	 * 
 	 * @param sURI
-	 *            连接字符串
+	 *            连接字符�?
 	 */
 	public JMSCommon(String sURI) {
 		this.sURI = sURI;
@@ -181,7 +181,7 @@ public class JMSCommon {
 	 * 建立连接
 	 * 
 	 * @param isCreate
-	 *            true为创建
+	 *            true为创�?
 	 * @throws Exception
 	 */
 	protected void createConnection(String clinetId) throws Exception {
@@ -308,7 +308,7 @@ public class JMSCommon {
 	}
 	
 	/**
-	 * 消息生产者是否关闭
+	 * 消息生产者是否关�?
 	 * 
 	 * @return 是否关闭，true为是
 	 */
@@ -327,7 +327,7 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 回复消息的消息生产者是否关闭
+	 * 回复消息的消息生产者是否关�?
 	 * 
 	 * @return 是否关闭，true为是
 	 */
@@ -349,7 +349,7 @@ public class JMSCommon {
 	 * 创建会话
 	 * 
 	 * @param isCreate
-	 *            true为创建
+	 *            true为创�?
 	 * @throws Exception
 	 */
 	protected void createSession() throws Exception {
@@ -359,7 +359,7 @@ public class JMSCommon {
 				createConnection(sClientID);
 				Connection conn = connectionManager.get(sClientID);
 				if(conn == null ){
-					LOG.info("{}连接不存在", sClientID);
+					LOG.info("{}连接不存�?", sClientID);
 					LOG.info("{}创建会话失败",sClientID);
 					return ;
 				}
@@ -375,10 +375,10 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 创建生产者(Topic 方式)
+	 * 创建生产�?(Topic 方式)
 	 * 
 	 * @throws Exception
-	 *             创建生产者异常
+	 *             创建生产者异�?
 	 */
 	protected void createProducerByTopic() throws Exception {
 		if (isProducerClosed()) {
@@ -389,10 +389,10 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 创建生产者(Queue方式)
+	 * 创建生产�?(Queue方式)
 	 * 
 	 * @throws Exception
-	 *             创建生产者异常
+	 *             创建生产者异�?
 	 */
 	protected void createProducerByQueue() throws Exception {
 		if (isProducerClosed()) {
@@ -407,9 +407,9 @@ public class JMSCommon {
 	 * 回复消息到制定的队列当中
 	 * 
 	 * @param destination
-	 *            目的地
+	 *            目的�?
 	 * @param message
-	 *            字符串消息
+	 *            字符串消�?
 	 * @throws Exception
 	 */
 	protected void createProducerReplyto(Destination destination, String message)
@@ -425,7 +425,7 @@ public class JMSCommon {
 	 * 回复消息到制定的队列当中
 	 * 
 	 * @param destination
-	 *            目的地
+	 *            目的�?
 	 * @param messages
 	 *            Message消息
 	 * @throws JMSException
@@ -439,10 +439,10 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 发送回复消息
+	 * 发送回复消�?
 	 * 
 	 * @param destination
-	 *            目的地
+	 *            目的�?
 	 * @param messages
 	 *            Message消息
 	 * @throws JMSException
@@ -455,7 +455,7 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 创建持久消费者 Topic方式
+	 * 创建持久消费�? Topic方式
 	 * 
 	 * @throws Exception
 	 */
@@ -477,7 +477,7 @@ public class JMSCommon {
 	}
 	
 	/**
-	 * 创建非持久消费者 Topic方式
+	 * 创建非持久消费�? Topic方式
 	 * 
 	 * @throws Exception
 	 *             备注：当消息需要手工确认时，请调用Message.acknowledge();方法
@@ -488,7 +488,7 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 创建消费者 Queue方式
+	 * 创建消费�? Queue方式
 	 * 
 	 * @throws Exception
 	 */
@@ -498,10 +498,10 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 设置监听类
+	 * 设置监听�?
 	 * 
 	 * @param iListener
-	 *            监听实现类
+	 *            监听实现�?
 	 * @throws Exception
 	 */
 	protected void setMessageListener(IListener iListener) throws Exception {
@@ -538,12 +538,12 @@ public class JMSCommon {
 	}
 	
 	/**
-	 * 发送消息
+	 * 发送消�?
 	 * 
 	 * @param message
 	 *            消息对象
 	 * @throws Exception
-	 *             发送异常
+	 *             发送异�?
 	 */
 	protected void send(Message message) throws Exception {
 		setSystemProperty(message);
@@ -552,7 +552,7 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 设置系统变量，便于消费者获取相关信息。
+	 * 设置系统变量，便于消费者获取相关信息�?
 	 * 
 	 * @param message
 	 *            Message消息
@@ -599,7 +599,7 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 关闭消费者
+	 * 关闭消费�?
 	 * 
 	 * @throws Exception
 	 */
@@ -637,9 +637,9 @@ public class JMSCommon {
 			try {
 				connection.close();
 				connectionManager.remove(clientId);
-				LOG.info("{}释放连接成功！" , clientId);
+				LOG.info("{}释放连接成功�?" , clientId);
 			} catch (JMSException e) {
-				LOG.info("{}释放连接失败！" , clientId);
+				LOG.info("{}释放连接失败�?" , clientId);
 				LOG.error("", e);
 			}
 			
@@ -675,7 +675,7 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 获取生产者对象
+	 * 获取生产者对�?
 	 * 
 	 * @return MessageProducer
 	 */
@@ -723,7 +723,7 @@ public class JMSCommon {
 	 * 设置主题
 	 * 
 	 * @param themeName
-	 *            主题名
+	 *            主题�?
 	 */
 	protected void setsThemeName(String themeName) {
 		sThemeName = themeName;
@@ -732,14 +732,14 @@ public class JMSCommon {
 	/**
 	 * 获取是否采用事务
 	 * 
-	 * @return 是/true;否/false
+	 * @return �?/true;�?/false
 	 */
 	protected boolean isisTransaction() {
 		return isTransaction;
 	}
 
 	/**
-	 * 设置是否采用事务，缺省为否
+	 * 设置是否采用事务，缺省为�?
 	 * 
 	 * @param transaction
 	 *            是否采用事务
@@ -759,7 +759,7 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 设置消息确认机制,缺省为自动确认
+	 * 设置消息确认机制,缺省为自动确�?
 	 * 
 	 * @param acknowledgementMode
 	 *            AUTO_ACKNOWLEDGE = 1; CLIENT_ACKNOWLEDGE = 2;
@@ -770,19 +770,19 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 获取用户名
+	 * 获取用户�?
 	 * 
-	 * @return 用户名
+	 * @return 用户�?
 	 */
 	protected String getsUserName() {
 		return sUserName;
 	}
 
 	/**
-	 * 设置用户名
+	 * 设置用户�?
 	 * 
 	 * @param userName
-	 *            用户名
+	 *            用户�?
 	 */
 	protected void setsUserName(String userName) {
 		sUserName = userName;
@@ -820,7 +820,7 @@ public class JMSCommon {
 	 * 设置过期时间
 	 * 
 	 * @param timeToLive
-	 *            过期时间，单位毫秒
+	 *            过期时间，单位毫�?
 	 */
 	protected void setiTimeToLive(long timeToLive) {
 		iTimeToLive = timeToLive;
@@ -884,28 +884,28 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 获取消费者名称
+	 * 获取消费者名�?
 	 * 
-	 * @return 消费者名称
+	 * @return 消费者名�?
 	 */
 	protected String getsConsumerName() {
 		return sConsumerName;
 	}
 
 	/**
-	 * 设置消费者名称
+	 * 设置消费者名�?
 	 * 
 	 * @param name
-	 *            消费者名称
+	 *            消费者名�?
 	 */
 	protected void setsConsumerName(String name) {
 		sConsumerName = name;
 	}
 
 	/**
-	 * 获取消费者对象
+	 * 获取消费者对�?
 	 * 
-	 * @return 消费者对象
+	 * @return 消费者对�?
 	 */
 	public MessageConsumer getConsumer() {
 		return consumer;
@@ -963,19 +963,19 @@ public class JMSCommon {
 	}
 
 	/**
-	 * 获取消息优先级
+	 * 获取消息优先�?
 	 * 
-	 * @return 消息优先级
+	 * @return 消息优先�?
 	 */
 	protected int getiPriority() {
 		return iPriority;
 	}
 
 	/**
-	 * 设置消息优先级
+	 * 设置消息优先�?
 	 * 
 	 * @param priority
-	 *            消息优先级
+	 *            消息优先�?
 	 */
 	protected void setiPriority(int priority) {
 		iPriority = priority;
@@ -983,19 +983,19 @@ public class JMSCommon {
 
 
 	/**
-	 * 获取上下文工厂
+	 * 获取上下文工�?
 	 * 
-	 * @return 上下文工厂
+	 * @return 上下文工�?
 	 */
 	public String getContextFactory() {
 		return contextFactory;
 	}
 
 	/**
-	 * 设置上下文工厂
+	 * 设置上下文工�?
 	 * 
 	 * @param contextFactory
-	 *            上下文工厂
+	 *            上下文工�?
 	 */
 	public void setContextFactory(String contextFactory) {
 		this.contextFactory = contextFactory;

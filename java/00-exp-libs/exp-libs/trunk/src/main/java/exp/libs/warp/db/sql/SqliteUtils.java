@@ -17,12 +17,12 @@ import java.util.Map;
  */
 public final class SqliteUtils extends DBUtils {
 
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected SqliteUtils() {}
 	
 	/**
 	 * 强制释放磁盘库文件占用的多余空间.
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @return 是否释放成功
 	 */
 	public static boolean releaseDisk(Connection conn) {
@@ -44,7 +44,7 @@ public final class SqliteUtils extends DBUtils {
 	
 	/**
 	 * <B>暂不支持<B>
-	 * @return 空列表
+	 * @return 空列�?
 	 */
 	@Deprecated
 	public static List<Map<String, Object>> callSP(Connection conn, 

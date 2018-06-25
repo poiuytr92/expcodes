@@ -41,27 +41,27 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * WebSocket接收的JSON报文解析器
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class WSAnalyser {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(WSAnalyser.class);
 	
-	/** 上次开播时间 */
+	/** 上次开播时�? */
 	private static long lastOpenLive = 0;
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected WSAnalyser() {}
 	
 	/**
-	 * 把从ws接收到到的json消息转换为Bean对象并处理
+	 * 把从ws接收到到的json消息转换为Bean对象并处�?
 	 * @param json Json格式消息
-	 * @param roomId 被监听的房间号
+	 * @param roomId 被监听的房间�?
 	 * @param onlyListen 是否只监听礼物通知消息
 	 * @return 是否处理成功
 	 */
@@ -144,7 +144,7 @@ public class WSAnalyser {
 	}
 	
 	/**
-	 * 获取抽奖房间号
+	 * 获取抽奖房间�?
 	 * @param json
 	 * @return
 	 */
@@ -195,7 +195,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(SysMsg msgBean) {
-		UIUtils.notify(msgBean.getMsg());	// 系统公告的消息体里面自带了 [系统公告: ]
+		UIUtils.notify(msgBean.getMsg());	// 系统公告的消息体里面自带�? [系统公告: ]
 		log.info(msgBean.getMsg());
 	}
 	
@@ -206,11 +206,11 @@ public class WSAnalyser {
 	private static void toDo(TvLottery msgBean, boolean onlyListen) {
 		boolean isTV = !msgBean.getMsg().contains("摩天大楼");
 		if(onlyListen && isTV) {
-			// Undo: 小电视是全平台公告, 摩天大楼只是分区公告, 此处可避免重复打印小电视公告
+			// Undo: 小电视是全平台公�?, 摩天大楼只是分区公告, 此处可避免重复打印小电视公告
 			
 		} else {
-			String giftName = isTV ? "小电视" : "摩天大楼";
-			String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在", giftName, "抽奖中!!!");
+			String giftName = isTV ? "小电�?" : "摩天大楼";
+			String msg = StrUtils.concat("直播�? [", msgBean.ROOM_ID(), "] 正在", giftName, "抽奖�?!!!");
 			UIUtils.notify(msg);
 			log.info(msg);
 		}
@@ -224,7 +224,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(SysGift msgBean) {
-		String msg = StrUtils.concat("礼物公告：", msgBean.getMsgText());
+		String msg = StrUtils.concat("礼物公告�?", msgBean.getMsgText());
 		UIUtils.notify(msg);
 		log.info(msg);
 	}
@@ -235,12 +235,12 @@ public class WSAnalyser {
 	 */
 	private static void toDo(EnergyLottery msgBean, boolean onlyListen) {
 		String msg = "";
-		if(msgBean.getMsg().contains("20倍节奏风暴")) {
-			msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 开启了20倍节奏风暴!!!");
-			// TODO 极少人一次送20个节奏风暴, 暂没必要参加抽奖
+		if(msgBean.getMsg().contains("20倍节奏风�?")) {
+			msg = StrUtils.concat("直播�? [", msgBean.ROOM_ID(), "] 开启了20倍节奏风�?!!!");
+			// TODO 极少人一次�?20个节奏风�?, 暂没必要参加抽奖
 			
 		} else {
-			msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在高能抽奖中!!!");
+			msg = StrUtils.concat("直播�? [", msgBean.ROOM_ID(), "] 正在高能抽奖�?!!!");
 			RoomMgr.getInstn().addGiftRoom(msgBean.ROOM_ID());
 			RoomMgr.getInstn().relate(msgBean.getRoomId(), msgBean.getRealRoomId());
 		}
@@ -250,16 +250,16 @@ public class WSAnalyser {
 			log.info(msg);
 			
 		} else {
-			// Undo: 高能礼物是全平台公告, 此处可避免重复打印高能公告
+			// Undo: 高能礼物是全平台公告, 此处可避免重复打印高能公�?
 		}
 	}
 	
 	/**
-	 * 特殊礼物：(直播间内)节奏风暴消息
+	 * 特殊礼物�?(直播间内)节奏风暴消息
 	 * @param msgBean
 	 */
 	private static void toDo(SpecialGift msgBean, int roomId) {
-		String msg = StrUtils.concat("直播间 [", roomId, "] 开启了节奏风暴!!!");
+		String msg = StrUtils.concat("直播�? [", roomId, "] 开启了节奏风暴!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
@@ -267,16 +267,16 @@ public class WSAnalyser {
 	}
 
 	/**
-	 * (直播间内)高能抽奖开始消息
+	 * (直播间内)高能抽奖开始消�?
 	 * @param msgBean
 	 */
 	private static void toDo(RaffleStart msgBean, boolean onlyListen) {
 		if(onlyListen == false) {
-			String msg = StrUtils.concat("感谢[", msgBean.getFrom(), "]的高能!!!");
+			String msg = StrUtils.concat("感谢[", msgBean.getFrom(), "]的高�?!!!");
 			ChatMgr.getInstn().sendThxEnergy(msg);
 			log.info(msg);
 		} else {
-			// Undo: 避免把其他直播间的高能礼物在当前直播间进行感谢
+			// Undo: 避免把其他直播间的高能礼物在当前直播间进行感�?
 		}
 		
 		RoomMgr.getInstn().addGiftRoom(msgBean.getRoomId());
@@ -319,7 +319,7 @@ public class WSAnalyser {
 	}
 	
 	/**
-	 * (直播间内)新船员上船消息
+	 * (直播间内)新船员上船消�?
 	 * @param msgBean
 	 */
 	private static void toDo(GuardBuy msgBean) {
@@ -336,7 +336,7 @@ public class WSAnalyser {
 	}
 
 	/**
-	 * (全频道)总督登船消息
+	 * (全频�?)总督登船消息
 	 * @param msgBean
 	 */
 	private static void toDo(GuardMsg msgBean) {
@@ -351,11 +351,11 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(LiveMsg msgBean) {
-		String msg = StrUtils.concat("您关注的直播间 [", msgBean.getRoomId(), "] 开播啦!!!");
+		String msg = StrUtils.concat("您关注的直播�? [", msgBean.getRoomId(), "] 开播啦!!!");
 		UIUtils.chat(msg);
 		log.info(msg);
 		
-		// 一小时内的重复开播, 认为是房间信号调整, 不重复提示
+		// 一小时内的重复开�?, 认为是房间信号调�?, 不重复提�?
 		long curTime = System.currentTimeMillis();
 		if(curTime - lastOpenLive > 3600000L) {
 			ChatMgr.getInstn().helloLive(msgBean.getRoomId());
@@ -369,7 +369,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(Preparing msgBean) {
-		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 主播已下线.");
+		String msg = StrUtils.concat("直播�? [", msgBean.getRoomId(), "] 主播已下�?.");
 		UIUtils.chat(msg);
 		log.info(msg);
 	}
@@ -379,13 +379,13 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(RoomSilentOff msgBean) {
-		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 串流已停止.");
+		String msg = StrUtils.concat("直播�? [", msgBean.getRoomId(), "] 串流已停�?.");
 		UIUtils.chat(msg);
 		log.info(msg);
 	}
 	
 	/**
-	 * (直播间内)许愿瓶实现进度消息
+	 * (直播间内)许愿瓶实现进度消�?
 	 * @param msgBean
 	 */
 	private static void toDo(WishBottle msgBean) {
@@ -397,12 +397,12 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(RoomBlock msgBean) {
-		log.info("直播间 [{}] 的用户 [{}] 被关小黑屋了!!!", 
+		log.info("直播�? [{}] 的用�? [{}] 被关小黑屋了!!!", 
 				msgBean.getRoomId(), msgBean.getUname());
 	}
 	
 	/**
-	 * 2018春节活动(新春榜)触发事件
+	 * 2018春节活动(新春�?)触发事件
 	 * @param msgBean
 	 */
 	private static void toDo(ActivityEvent msgBean) {

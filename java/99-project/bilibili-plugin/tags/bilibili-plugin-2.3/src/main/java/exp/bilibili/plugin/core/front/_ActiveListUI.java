@@ -34,10 +34,10 @@ import exp.libs.warp.xls.Sheet;
  * <PRE>
  * 活跃榜窗口
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _ActiveListUI extends PopChildWindow {
@@ -57,11 +57,11 @@ class _ActiveListUI extends PopChildWindow {
 	/** 导出Excel详单保存路径 */
 	private final static String XLS_SAVE_PATH = PathUtils.combine(
 			PathUtils.getDesktopPath(), 
-			StrUtils.concat("[", ROOM_ID, "] 直播间活跃值排名 - ", 
+			StrUtils.concat("[", ROOM_ID, "] 直播间活跃值排�? - ", 
 					TimeUtils.getSysDate("yyyyMMdd"), ".xlsx"));
 	
 	private final static String[] HEADER = {
-		"个人排名", "昵称", "个人活跃值"
+		"个人排名", "昵称", "个人活跃�?"
 	};
 	
 	private final static int MAX_ROW = 50;
@@ -120,8 +120,8 @@ class _ActiveListUI extends PopChildWindow {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel); {
 			panel.add(SwingUtils.addBorder(SwingUtils.getVGridPanel(
-					SwingUtils.getPairsPanel(String.valueOf(lastPeriod).concat("期-总活跃值"), lastActiveTF), 
-					SwingUtils.getPairsPanel(String.valueOf(curPeriod).concat("期-总活跃值"), curActiveTF)
+					SwingUtils.getPairsPanel(String.valueOf(lastPeriod).concat("�?-总活跃�?"), lastActiveTF), 
+					SwingUtils.getPairsPanel(String.valueOf(curPeriod).concat("�?-总活跃�?"), curActiveTF)
 			)), BorderLayout.CENTER);
 			
 			panel.add(SwingUtils.getHGridPanel(SwingUtils.addBorder(
@@ -163,7 +163,7 @@ class _ActiveListUI extends PopChildWindow {
 	}
 	
 	/**
-	 * 查询活跃值数据
+	 * 查询活跃值数�?
 	 * @return
 	 */
 	private List<List<String>> getActiveDatas() {
@@ -187,14 +187,14 @@ class _ActiveListUI extends PopChildWindow {
 	}
 	
 	/**
-	 * 导出活跃值数据
+	 * 导出活跃值数�?
 	 * @return
 	 */
 	private boolean exportActiveDatas() {
 		Excel excel = new Excel(XLS_TPL_PATH);
 		Sheet sheet = excel.getSheet(0);
 		
-		// 设置头信息
+		// 设置头信�?
 		sheet.setVal(0, 1, ROOM_ID);
 		sheet.setVal(1, 1, lastSumCost);
 		sheet.setVal(1, 2, lastPeriod);
@@ -202,18 +202,18 @@ class _ActiveListUI extends PopChildWindow {
 		sheet.setVal(2, 2, curPeriod);
 		sheet.setVal(3, 2, day);
 		
-		// 设置单元格风格
+		// 设置单元格风�?
 		CellStyle cellStyle = excel.createCellStyle(); 
-		cellStyle.setBorderBottom(CellStyle.BORDER_THIN);	// 下边框    
-		cellStyle.setBorderLeft(CellStyle.BORDER_THIN);		// 左边框    
-		cellStyle.setBorderRight(CellStyle.BORDER_THIN);	// 右边框    
+		cellStyle.setBorderBottom(CellStyle.BORDER_THIN);	// 下边�?    
+		cellStyle.setBorderLeft(CellStyle.BORDER_THIN);		// 左边�?    
+		cellStyle.setBorderRight(CellStyle.BORDER_THIN);	// 右边�?    
 		cellStyle.setAlignment(CellStyle.ALIGN_CENTER);				// 水平居中
 		cellStyle.setVerticalAlignment(CellStyle.VERTICAL_CENTER);	// 垂直居中
 		Font font = excel.createFont();
 		font.setFontHeightInPoints((short) 9);
 		cellStyle.setFont(font);	// 字体大小
 		
-		// 设置排行榜
+		// 设置排行�?
 		int sortId = 1;
 		int row = 5;
 		List<Map.Entry<String, Integer>> actives = ActivityMgr.getInstn().getDSortActives();
@@ -236,7 +236,7 @@ class _ActiveListUI extends PopChildWindow {
 	 * </PRE>
 	 * 
 	 * @author Administrator
-	 * @date 2017年7月6日
+	 * @date 2017�?7�?6�?
 	 */
 	private class _HisVerTable extends NormTable {
 		

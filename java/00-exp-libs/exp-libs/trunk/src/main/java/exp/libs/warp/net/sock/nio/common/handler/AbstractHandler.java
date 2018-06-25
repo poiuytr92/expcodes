@@ -20,8 +20,8 @@ abstract class AbstractHandler implements IHandler {
 	protected IHandler handler;
 
 	/**
-	 * 构造函数
-	 * @param handler 客户业务处理器
+	 * 构造函�?
+	 * @param handler 客户业务处理�?
 	 */
 	public AbstractHandler(IHandler handler) {
 		this.handler = handler;
@@ -29,7 +29,7 @@ abstract class AbstractHandler implements IHandler {
 
 	/**
 	 * 设置客户实现的业务处理器
-	 * @param handler 业务处理器
+	 * @param handler 业务处理�?
 	 */
 	public void setHandler(IHandler handler) {
 		this.handler = handler;

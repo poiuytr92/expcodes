@@ -18,13 +18,13 @@ public class Endline {
 	/** 换行 */
 	public final static char LF = '\r';
 	
-	/** 制表符 */
+	/** 制表�? */
 	public final static char HT = '\t';
 	
 	/** 空格 */
 	public final static char SPACE = ' ';
 	
-	/** 空字符 */
+	/** 空字�? */
 	public final static char NULL = '\0';
 	
 }

@@ -4,10 +4,10 @@ package exp.bilibili.plugin.envm;
  * <PRE>
  * 抽奖类型
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class LotteryType {
@@ -16,7 +16,7 @@ public class LotteryType {
 	private final static short TYPE_EG = 0;
 	public final static LotteryType ENGERY = new LotteryType(TYPE_EG);
 	
-	/** 小电视抽奖 */
+	/** 小电视抽�? */
 	private final static short TYPE_TV = 1;
 	public final static LotteryType TV = new LotteryType(TYPE_TV);
 	

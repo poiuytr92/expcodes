@@ -33,16 +33,16 @@ import exp.libs.warp.net.http.HttpUtils;
  * <PRE>
  * 其他协议
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Other extends __XHR {
 
 	/**
-	 * 软件授权页(Bilibili-备用)
+	 * 软件授权�?(Bilibili-备用)
 	 * 	实则上是管理员的个人LINK中心
 	 */
 	private final static String ADMIN_URL = CryptoUtils.deDES(
@@ -72,12 +72,12 @@ public class Other extends __XHR {
 	/** 领取成就奖励URL */
 	private final static String DO_ACHIEVE_URL = Config.getInstn().DO_ACHIEVE_URL();
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected Other() {}
 	
 	/**
 	 * 获取管理员在B站link中心针对本插件的授权校验标签
-	 * @return {"code":0,"msg":"OK","message":"OK","data":["W:M-亚絲娜","B:","T:20180301","V:2.0"]}
+	 * @return {"code":0,"msg":"OK","message":"OK","data":["W:M-亚絲�?","B:","T:20180301","V:2.0"]}
 	 */
 	public static String queryCertificateTags() {
 		Map<String, String> header = getHeader();
@@ -97,7 +97,7 @@ public class Other extends __XHR {
 	}
 	
 	/**
-	 * 查询账号信息(并写入cookie内)
+	 * 查询账号信息(并写入cookie�?)
 	 *	 主要用于检测账号id、昵称、是否为老爷
 	 * {"code":0,"msg":"\u83b7\u53d6\u6210\u529f","data":{"achieves":960,"userInfo":{"uid":1650868,"uname":"M-\u4e9a\u7d72\u5a1c","face":"https:\/\/i1.hdslb.com\/bfs\/face\/bbfd1b5cafe4719e3a57154ac1ff16a9e4d9c6b3.jpg","rank":10000,"identification":1,"mobile_verify":1,"platform_user_level":4,"official_verify":{"type":-1,"desc":""}},"roomid":"269706","userCoinIfo":{"uid":1650868,"vip":1,"vip_time":"2018-12-12 21:56:04","svip":1,"svip_time":"2018-12-06 21:56:04","cost":63781395,"rcost":2481900,"user_score":440323260,"silver":"29902","gold":"72009","iap_gold":0,"score":24819,"master_level":{"level":10,"current":[6300,18060],"next":[9100,27160]},"user_current_score":504104655,"user_level":45,"user_next_level":46,"user_intimacy":4104655,"user_next_intimacy":50000000,"user_level_rank":4325,"bili_coins":0,"coins":475},"vipViewStatus":false,"discount":false,"svip_endtime":"2018-12-06","vip_endtime":"2018-12-12","year_price":233000,"month_price":20000,"action":"index","liveTime":0,"master":{"level":10,"current":6759,"next":9100,"medalInfo":{"id":"25072","uid":"1650868","medal_name":"\u795e\u624b","live_status":"1","master_status":"1","status":1,"reason":"0","last_rename_time":"0","time_able_change":0,"rename_status":1,"charge_num":50,"coin_num":20,"platform_status":"2"}},"san":12,"count":{"guard":2,"fansMedal":11,"title":24,"achieve":0}}}
 	 * @param cookie
@@ -142,8 +142,8 @@ public class Other extends __XHR {
 	}
 	
 	/**
-	 * 查询账号安全信息(并写入cookie内)
-	 *  主要用于检测账号是否: 绑定手机, 实名认证
+	 * 查询账号安全信息(并写入cookie�?)
+	 *  主要用于检测账号是�?: 绑定手机, 实名认证
 	 *  {"code":0,"data":{"safe_question":0,"hide_email":"272****@qq.com","hide_tel_phone":"139*****412","safe_rank":{"score":80,"level":2,"bind_tel":1,"bind_email":1,"email_veri":1,"tel_veri":1,"real_name":1,"pwd_level":3},"aso_account_sns":{"sina_bind":2,"qq_bind":2},"skipVerify":false}}
 	 * @param cookie
 	 * @return
@@ -167,14 +167,14 @@ public class Other extends __XHR {
 			}
 		} catch(Exception e) {
 			isOk = false;
-			log.error("查询账号 [{}] 的安全信息异常: {}", cookie.NICKNAME(), response, e);
+			log.error("查询账号 [{}] 的安全信息异�?: {}", cookie.NICKNAME(), response, e);
 		}
 		return isOk;
 	}
 	
 	/**
-	 * 查询用户在指定房间内的授权信息(并写入cookie内)
-	 * 	主要检测是否为房管、是否为老爷（弹幕长度上限临时+10）、是否为提督/总督老爷（弹幕长度上限临时+10）
+	 * 查询用户在指定房间内的授权信�?(并写入cookie�?)
+	 * 	主要检测是否为房管、是否为老爷（弹幕长度上限临�?+10）、是否为提督/总督老爷（弹幕长度上限临�?+10�?
 	 * @param cookie
 	 * @param roomId
 	 * @return
@@ -191,7 +191,7 @@ public class Other extends __XHR {
 			Document doc = DocumentHelper.parseText(xml);
 			Element root = doc.getRootElement();
 			int isAdmin = NumUtils.toInt(root.elementTextTrim(BiliCmdAtrbt.isadmin), 0); // 房管
-//			int vip = NumUtils.toInt(root.elementTextTrim(BiliCmdAtrbt.vip), 0); // 老爷(此值不准)
+//			int vip = NumUtils.toInt(root.elementTextTrim(BiliCmdAtrbt.vip), 0); // 老爷(此值不�?)
 			int danmuLen = NumUtils.toInt(root.elementTextTrim(BiliCmdAtrbt.msg_length), Danmu.LEN); // 弹幕长度
 			
 			cookie.setRoomAdmin(isAdmin > 0);
@@ -222,7 +222,7 @@ public class Other extends __XHR {
 	/**
 	 * 查询直播间主播的用户信息
 	 * @param roomId
-	 * @return 主播的用户信息
+	 * @return 主播的用户信�?
 	 */
 	public static User queryUpInfo(int roomId) {
 		String sRoomId = getRealRoomId(roomId);
@@ -247,16 +247,16 @@ public class Other extends __XHR {
 				
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("获取直播间 [{}] 的主播ID失败: {}", sRoomId, reason);
+				log.warn("获取直播�? [{}] 的主播ID失败: {}", sRoomId, reason);
 			}
 		} catch(Exception e) {
-			log.error("获取直播间 [{}] 的主播ID异常: {}", sRoomId, response, e);
+			log.error("获取直播�? [{}] 的主播ID异常: {}", sRoomId, response, e);
 		}
 		return up;
 	}
 	
 	/**
-	 * 查询直播间的房管（含主播）
+	 * 查询直播间的房管（含主播�?
 	 * @param roomId 直播间ID
 	 * @return 房管列表
 	 */
@@ -290,16 +290,16 @@ public class Other extends __XHR {
 				}
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("查询直播间 [{}] 的房管列表失败: {}", sRoomId, reason);
+				log.warn("查询直播�? [{}] 的房管列表失�?: {}", sRoomId, reason);
 			}
 		} catch(Exception e) {
-			log.error("查询直播间 [{}] 的房管列表失败: {}", sRoomId, response, e);
+			log.error("查询直播�? [{}] 的房管列表失�?: {}", sRoomId, response, e);
 		}
 		return managers;
 	}
 	
 	/**
-	 * 把用户关小黑屋
+	 * 把用户关小黑�?
 	 * @param cookie 房管cookie
 	 * @param roomId 
 	 * @param username 被关用户的用户名
@@ -318,18 +318,18 @@ public class Other extends __XHR {
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {
 				isOk = true;
-				log.info("直播间 [{}]: [{}] 被关小黑屋 [{}] 小时", sRoomId, username, hour);
+				log.info("直播�? [{}]: [{}] 被关小黑�? [{}] 小时", sRoomId, username, hour);
 			} else {
-				log.warn("直播间 [{}]: 把 [{}] 关小黑屋失败", sRoomId, username);
+				log.warn("直播�? [{}]: �? [{}] 关小黑屋失败", sRoomId, username);
 			}
 		} catch(Exception e) {
-			log.error("直播间 [{}]: 把 [{}] 关小黑屋异常", sRoomId, username, e);
+			log.error("直播�? [{}]: �? [{}] 关小黑屋异常", sRoomId, username, e);
 		}
 		return isOk;
 	}
 	
 	/**
-	 * 关小黑屋的请求参数
+	 * 关小黑屋的请求参�?
 	 * @param csrf
 	 * @param roomId
 	 * @param username
@@ -376,22 +376,22 @@ public class Other extends __XHR {
 				}
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.info("查询 [{}] 的成就列表失败: {}", cookie.NICKNAME(), reason);
+				log.info("查询 [{}] 的成就列表失�?: {}", cookie.NICKNAME(), reason);
 			}
 		} catch(Exception e) {
-			log.error("查询 [{}] 的成就列表失败: {}", cookie.NICKNAME(), response, e);
+			log.error("查询 [{}] 的成就列表失�?: {}", cookie.NICKNAME(), response, e);
 		}
 		return achieves;
 	}
 	
 	private static Map<String, String> getRequest() {
 		Map<String, String> request = new HashMap<String, String>();
-		request.put(BiliCmdAtrbt.type, "normal");	// 普通成就
+		request.put(BiliCmdAtrbt.type, "normal");	// 普通成�?
 		request.put(BiliCmdAtrbt.category, "all");	// 普通成就的分类
-		request.put(BiliCmdAtrbt.status, "1");		// 0:所有成就;  1：已完成成就（包括未领取）;  -1：未完成成就
+		request.put(BiliCmdAtrbt.status, "1");		// 0:所有成�?;  1：已完成成就（包括未领取�?;  -1：未完成成就
 		request.put(BiliCmdAtrbt.keywords, "");
 		request.put(BiliCmdAtrbt.page, "1");
-		request.put(BiliCmdAtrbt.pageSize, "100");	// 每页显示的成就数（B站目前最多48个成就）
+		request.put(BiliCmdAtrbt.pageSize, "100");	// 每页显示的成就数（B站目前最�?48个成就）
 		return request;
 	}
 	
@@ -412,14 +412,14 @@ public class Other extends __XHR {
 				JSONObject json = JSONObject.fromObject(response);
 				int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 				if(code == 0) {
-					UIUtils.log("[", cookie.NICKNAME(), "] 已领取成就奖励 [", achieve.getName(),"]");
+					UIUtils.log("[", cookie.NICKNAME(), "] 已领取成就奖�? [", achieve.getName(),"]");
 					
 				} else {
 					String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-					log.info("[{}] 领取成就 [{}] 的奖励失败: {}", cookie.NICKNAME(), achieve.getName(), reason);
+					log.info("[{}] 领取成就 [{}] 的奖励失�?: {}", cookie.NICKNAME(), achieve.getName(), reason);
 				}
 			} catch(Exception e) {
-				log.error("[{}] 领取成就 [{}] 的奖励失败: {}", cookie.NICKNAME(), achieve.getName(), response, e);
+				log.error("[{}] 领取成就 [{}] 的奖励失�?: {}", cookie.NICKNAME(), achieve.getName(), response, e);
 			}
 		}
 	}

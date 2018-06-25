@@ -21,13 +21,13 @@ public class Charset {
 	/** UTF-8编码 */
 	public final static String UTF8 = "UTF-8";
 	
-	/** GBK编码（繁简） */
+	/** GBK编码（繁简�? */
 	public final static String GBK = "GBK";
 	
-	/** GB2312编码（简） */
+	/** GB2312编码（简�? */
 	public final static String GB2312 = "GB2312";
 	
-	/** ASCII编码（ISO-8859-1） */
+	/** ASCII编码（ISO-8859-1�? */
 	public final static String ASCII = "ISO-8859-1";
 	
 	/** ISO-8859-1编码  */

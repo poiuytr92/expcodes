@@ -35,7 +35,7 @@ class _VerDBMgr {
 	
 	protected final static String APP_DESC = "应用描述";
 	
-	protected final static String LAST_VER = "版本号";
+	protected final static String LAST_VER = "版本�?";
 	
 	protected final static String RELEASE = "定版时间";
 	
@@ -44,7 +44,7 @@ class _VerDBMgr {
 	/** 版本信息库的脚本 */
 	private final static String VER_DB_SCRIPT = "/exp/libs/warp/ver/VERSION-INFO-DB.sql";
 	
-	/** 版本库库名 */
+	/** 版本库库�? */
 	private final static String DB_NAME = ".verinfo";
 	
 	/** 资源目录 */
@@ -52,7 +52,7 @@ class _VerDBMgr {
 	
 	/**
 	 * 存储版本信息的文件数据库位置.
-	 * 	[src/main/resources] 为Maven项目默认的资源目录位置（即使非Maven项目也可用此位置）
+	 * 	[src/main/resources] 为Maven项目默认的资源目录位置（即使非Maven项目也可用此位置�?
 	 */
 	private final static String VER_DB = RES_DIR.concat("/").concat(DB_NAME);
 	
@@ -71,7 +71,7 @@ class _VerDBMgr {
 	private static volatile _VerDBMgr instance;
 	
 	/**
-	 * 私有化构造函数
+	 * 私有化构造函�?
 	 */
 	private _VerDBMgr() {
 		initDS();
@@ -94,7 +94,7 @@ class _VerDBMgr {
 	}
 	
 	/**
-	 * 初始化版本库数据源
+	 * 初始化版本库数据�?
 	 */
 	private void initDS() {
 		this.ds = new DataSourceBean();
@@ -102,15 +102,15 @@ class _VerDBMgr {
 		ds.setCharset(Charset.UTF8);
 		ds.setName(VER_DB);
 		
-		// 对于非开发环境, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬盘
+		// 对于非开发环�?, Sqlite无法直接读取jar包内的版本库, 需要先将其拷贝到硬�?
 		if(!SqliteUtils.testConn(ds)) {
 			
-			// 对于J2SE项目, 若若同位置存在版本文件, 先删除再复制, 避免复制失败使得显示的版本依然为旧版
+			// 对于J2SE项目, 若若同位置存在版本文�?, 先删除再复制, 避免复制失败使得显示的版本依然为旧版
 			if(!OSUtils.isRunByTomcat()) {
 				FileUtils.delete(TMP_VER_DB);	
 				JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
 				
-			// 当程序运行在Tomcat时, Tomcat会自动把版本库拷贝到classes目录下, 一般无需再拷贝(但以防万一, 若不存在版本文件还是拷贝一下)
+			// 当程序运行在Tomcat�?, Tomcat会自动把版本库拷贝到classes目录�?, 一般无需再拷�?(但以防万一, 若不存在版本文件还是拷贝一�?)
 			} else if(!FileUtils.exists(TMP_VER_DB)){
 				JarUtils.copyFile(VER_DB.replace(RES_DIR, ""), TMP_VER_DB);
 			}

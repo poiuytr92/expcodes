@@ -33,14 +33,14 @@ import org.slf4j.LoggerFactory;
  */
 public class CharsetUtils {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(CharsetUtils.class);
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected CharsetUtils() {}
 	
 	/**
-	 * 检测字符编码是否有效
+	 * 检测字符编码是否有�?
 	 * @param charset 被检测的字符编码
 	 * @return true:有效; false:无效
 	 */
@@ -55,7 +55,7 @@ public class CharsetUtils {
 	}
 	
 	/**
-	 * 检查字符编码是否无效
+	 * 检查字符编码是否无�?
 	 * @param charset 被检测的字符编码
 	 * @return true:无效; false:有效
 	 */
@@ -78,7 +78,7 @@ public class CharsetUtils {
 		try {
 			str = new String(bytes, charset);
 		} catch (Exception e) {
-			log.error("把字节数组转换成 [{}] 编码字符串失败.", charset, e);
+			log.error("把字节数组转换成 [{}] 编码字符串失�?.", charset, e);
 		}
 		return str;
 	}
@@ -89,11 +89,11 @@ public class CharsetUtils {
 	 * 
 	 * 任意编码 String -> charset byte[] 
 	 * 
-	 * 在不知道str的编码时，慎用。
-	 * 因为charset可能不兼容str的编码，导致乱码。
+	 * 在不知道str的编码时，慎用�?
+	 * 因为charset可能不兼容str的编码，导致乱码�?
 	 * </pre>
 	 * @param str 源字符串
-	 * @param charset 目标字节数组的编码
+	 * @param charset 目标字节数组的编�?
 	 * @return 以charset编码的byte[]
 	 */
 	public static byte[] toBytes(String str, String charset) {
@@ -101,7 +101,7 @@ public class CharsetUtils {
 		try {
 			bytes = str.getBytes(charset);
 		} catch (Exception e) {
-			log.error("把字符串 [{}] 转换成 [{}] 编码字节数组失败.", str, charset, e);
+			log.error("把字符串 [{}] 转换�? [{}] 编码字节数组失败.", str, charset, e);
 		}
 		return bytes;
 	}
@@ -112,11 +112,11 @@ public class CharsetUtils {
 	 * 
 	 * 任意编码 String -> charset String 
 	 * 
-	 * 在不知道str的编码时，慎用。
-	 * 因为charset可能不兼容str的编码，导致乱码。
+	 * 在不知道str的编码时，慎用�?
+	 * 因为charset可能不兼容str的编码，导致乱码�?
 	 * </pre>
 	 * @param str 源字符串
-	 * @param charset 目标字符串编码
+	 * @param charset 目标字符串编�?
 	 * @return 以charset编码的字符串
 	 */
 	public static String tracnscode(String str, String charset) {
@@ -130,12 +130,12 @@ public class CharsetUtils {
 	 * 
 	 * srcCharset byte[] -> destCharset byte[]
 	 * 
-	 * 在不知道[源字节数组]的编码时，慎用。
-	 * 因为[目标编码]可能不兼容[源字节数组]的编码，导致乱码。
+	 * 在不知道[源字节数组]的编码时，慎用�?
+	 * 因为[目标编码]可能不兼容[源字节数组]的编码，导致乱码�?
 	 * </pre>
-	 * @param srcBytes 源字节数组
+	 * @param srcBytes 源字节数�?
 	 * @param srcCharset 源字节数组的编码
-	 * @param destCharset 目标字节数组的编码
+	 * @param destCharset 目标字节数组的编�?
 	 * @return 目标字节数组
 	 */
 	public static byte[] tracnscode(byte[] srcBytes, 

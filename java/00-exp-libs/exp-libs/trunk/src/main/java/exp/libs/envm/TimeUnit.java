@@ -16,17 +16,17 @@ public enum TimeUnit {
 	
 	MS("ms", "microsecond: 1ms = 1000ns", "å¾®ç§’"), 
 	
-	SECOND("s", "second: 1s = 1000ms", "ç§’"), 
+	SECOND("s", "second: 1s = 1000ms", "ç§?"), 
 	
-	MINUTE("min", "minute: 1min = 60s", "åˆ†"), 
+	MINUTE("min", "minute: 1min = 60s", "åˆ?"), 
 	
-	HOUR("H", "hour: 1H = 60min", "æ—¶"), 
+	HOUR("H", "hour: 1H = 60min", "æ—?"), 
 	
-	DAY("d", "day: 1d = 24H", "å¤©"), 
+	DAY("d", "day: 1d = 24H", "å¤?"), 
 	
-	MONTH("M", "month: 1M = 28/29/30/31d", "æœˆ"), 
+	MONTH("M", "month: 1M = 28/29/30/31d", "æœ?"), 
 	
-	YEAR("y", "year: 1y = 12M = 365/366d", "å¹´"), 
+	YEAR("y", "year: 1y = 12M = 365/366d", "å¹?"), 
 	
 	;
 	

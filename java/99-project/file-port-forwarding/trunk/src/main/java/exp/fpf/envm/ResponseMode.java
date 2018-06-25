@@ -8,10 +8,10 @@ package exp.fpf.envm;
  *  
  * 注：隔离装置的请求数据只能通过文件扫描模式发送
  * </pre>	
- * <B>PROJECT：</B> file-port-forwarding
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> file-port-forwarding
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-07-28
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ResponseMode {

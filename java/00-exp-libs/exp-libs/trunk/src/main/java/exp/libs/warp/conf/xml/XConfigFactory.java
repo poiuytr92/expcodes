@@ -38,9 +38,9 @@ final public class XConfigFactory {
 	}
 	
 	/**
-	 * 创建一个xml配置加载器
-	 * @param name 配置加载器名称（随意即可，必须唯一）
-	 * @return xml配置加载器
+	 * 创建一个xml配置加载�?
+	 * @param name 配置加载器名称（随意即可，必须唯一�?
+	 * @return xml配置加载�?
 	 */
 	public static XConfig createConfig(final String name) {
 		return getInstn()._createConfig(name);
@@ -64,16 +64,16 @@ final public class XConfigFactory {
 	}
 	
 	/**
-	 * 获取默认的xml配置加载器
-	 * @return 默认的xml配置加载器
+	 * 获取默认的xml配置加载�?
+	 * @return 默认的xml配置加载�?
 	 */
 	public static XConfig getDefaultConfig() {
 		return getInstn()._getConfig(null);
 	}
 	
 	/**
-	 * 获取xml配置加载器
-	 * @return xml配置加载器(若不存在则返回默认的xml配置加载器)
+	 * 获取xml配置加载�?
+	 * @return xml配置加载�?(若不存在则返回默认的xml配置加载�?)
 	 */
 	public static XConfig getConfig(final String name) {
 		return getInstn()._getConfig(name);
@@ -91,8 +91,8 @@ final public class XConfigFactory {
 	}
 	
 	/**
-	 * 删除xml配置加载器
-	 * @param name  xml配置加载器名称
+	 * 删除xml配置加载�?
+	 * @param name  xml配置加载器名�?
 	 */
 	public static void removeConfig(final String name) {
 		getInstn()._removeConfig(name);
@@ -106,7 +106,7 @@ final public class XConfigFactory {
 	}
 	
 	/**
-	 * 删除所有xml配置器
+	 * 删除所有xml配置�?
 	 */
 	public static void clear() {
 		getInstn()._clear();

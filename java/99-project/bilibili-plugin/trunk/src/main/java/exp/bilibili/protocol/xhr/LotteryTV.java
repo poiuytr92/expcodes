@@ -23,10 +23,10 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * <PRE>
  * 小电视抽奖
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class LotteryTV extends _Lottery {
@@ -37,14 +37,14 @@ public class LotteryTV extends _Lottery {
 	/** 小电视抽奖URL */
 	private final static String TV_JOIN_URL = Config.getInstn().TV_JOIN_URL();
 	
-	/** 已经抽过的小电视ID (服务返还的是乱序列表, 不能使用递增ID流水方式进行筛选) */
+	/** 已经抽过的小电视ID (服务返还的是乱序列表, 不能使用递增ID流水方式进行筛�?) */
 	private final static Set<String> RAFFLEIDS = new HashSet<String>();
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected LotteryTV() {}
 	
 	/**
-	 * 小电视抽奖
+	 * 小电视抽�?
 	 * @param roomId
 	 * @return
 	 */
@@ -57,7 +57,7 @@ public class LotteryTV extends _Lottery {
 			}
 		}
 		
-		// 避免内存溢出, 最多缓存128个小电视ID
+		// 避免内存溢出, 最多缓�?128个小电视ID
 		if(RAFFLEIDS.size() >= 128) {
 			RAFFLEIDS.clear();
 		}
@@ -65,7 +65,7 @@ public class LotteryTV extends _Lottery {
 	
 	/**
 	 * 获取礼物编号
-	 * @param response {"code":0,"msg":"OK","message":"OK","data":{"last_raffle_id":0,"last_raffle_type":"small_tv","asset_animation_pic":"https://i0.hdslb.com/bfs/live/746a8db0702740ec63106581825667ae525bb11a.gif","asset_tips_pic":"https://i0.hdslb.com/bfs/live/f9924d492fe8bc77bb706480d9d006aaef9ed5f3.png","list":[{"raffleId":52793,"title":"小电视飞船抽奖","type":"small_tv","from":"允宝贝爱吃梨","from_user":{"uname":"允宝贝爱吃梨","face":"https://i0.hdslb.com/bfs/face/f4506c5a8ee5b3cb82eff6093cfa2950d16022fd.jpg"},"time":119,"max_time":180,"status":1,"asset_animation_pic":"https://i0.hdslb.com/bfs/live/746a8db0702740ec63106581825667ae525bb11a.gif","asset_tips_pic":"https://i0.hdslb.com/bfs/live/f9924d492fe8bc77bb706480d9d006aaef9ed5f3.png"}]}}
+	 * @param response {"code":0,"msg":"OK","message":"OK","data":{"last_raffle_id":0,"last_raffle_type":"small_tv","asset_animation_pic":"https://i0.hdslb.com/bfs/live/746a8db0702740ec63106581825667ae525bb11a.gif","asset_tips_pic":"https://i0.hdslb.com/bfs/live/f9924d492fe8bc77bb706480d9d006aaef9ed5f3.png","list":[{"raffleId":52793,"title":"小电视飞船抽�?","type":"small_tv","from":"允宝贝爱吃梨","from_user":{"uname":"允宝贝爱吃梨","face":"https://i0.hdslb.com/bfs/face/f4506c5a8ee5b3cb82eff6093cfa2950d16022fd.jpg"},"time":119,"max_time":180,"status":1,"asset_animation_pic":"https://i0.hdslb.com/bfs/live/746a8db0702740ec63106581825667ae525bb11a.gif","asset_tips_pic":"https://i0.hdslb.com/bfs/live/f9924d492fe8bc77bb706480d9d006aaef9ed5f3.png"}]}}
 	 * @return
 	 */
 	private static List<String> getRaffleId(String url, int roomId, String cookie) {
@@ -100,7 +100,7 @@ public class LotteryTV extends _Lottery {
 	}
 	
 	/**
-	 * 参加小电视抽奖
+	 * 参加小电视抽�?
 	 * @param roomId
 	 * @param raffleId
 	 * @return
@@ -115,16 +115,16 @@ public class LotteryTV extends _Lottery {
 			
 			String reason = join(LotteryType.TV, cookie, TV_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
-				log.info("[{}] 参与直播间 [{}] 抽奖成功(小电视/摩天楼)", cookie.NICKNAME(), roomId);
+				log.info("[{}] 参与直播�? [{}] 抽奖成功(小电�?/摩天�?)", cookie.NICKNAME(), roomId);
 				cnt++;
 				
 			} else {
-				log.info("[{}] 参与直播间 [{}] 抽奖失败(小电视/摩天楼)", cookie.NICKNAME(), roomId);
-				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
+				log.info("[{}] 参与直播�? [{}] 抽奖失败(小电�?/摩天�?)", cookie.NICKNAME(), roomId);
+				UIUtils.statistics("失败(", reason, "): 直播�? [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");
 				
 				// 小电视已过期, 其他账号无需参与
-				if(reason.contains("不存在")) {
+				if(reason.contains("不存�?")) {
 					break;
 				}
 			}
@@ -133,7 +133,7 @@ public class LotteryTV extends _Lottery {
 		}
 		
 		if(cnt > 0) {
-			UIUtils.statistics("成功(小电视/摩天楼x", cnt, "): 直播间 [", roomId, "]");
+			UIUtils.statistics("成功(小电�?/摩天楼x", cnt, "): 直播�? [", roomId, "]");
 			UIUtils.updateLotteryCnt(cnt);
 		}
 	}

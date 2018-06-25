@@ -15,13 +15,13 @@ public class Delimiter {
 	/** 当前操作平台所用的默认行分隔符 */
 	public final static String DEFAULT = System.getProperty("line.separator");
 	
-	/** 回车符 */
+	/** 回车�? */
 	public final static String CR = "\r";
 	
-	/** 换行符 */
+	/** 换行�? */
 	public final static String LF = "\n";
 	
-	/** 回车换行符 */
+	/** 回车换行�? */
 	public final static String CRLF = CR.concat(LF);
 	
 	/** 无操作平台，分隔符为\0 */

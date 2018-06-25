@@ -4,29 +4,29 @@ package exp.libs.mrp.envm;
  * <PRE>
  * 枚举类:压缩路径前缀模式
  * </PRE>
- * <B>PROJECT：</B> mojo-release-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> mojo-release-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-05-15
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class CmpPathMode {
 
 	/**
-	 * 路径前缀压缩模式1：
-	 * 	提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩。
+	 * 路径前缀压缩模式1�?
+	 * 	提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩�?
 	 */
 	public final static CmpPathMode LEAST = new CmpPathMode(1, "LEAST");
 	
 	/**
-	 * 路径前缀模式2：
-	 * 	提取标准数量的路径前缀：路径中同层同名的节点至少出现2次以上才会被提取前缀，相同前缀压缩。
+	 * 路径前缀模式2�?
+	 * 	提取标准数量的路径前缀：路径中同层同名的节点至少出�?2次以上才会被提取前缀，相同前缀压缩�?
 	 */
 	public final static CmpPathMode STAND = new CmpPathMode(2, "STAND");
 	
 	/**
-	 * 路径前缀压缩模式3：
-	 * 	提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩。
+	 * 路径前缀压缩模式3�?
+	 * 	提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩�?
 	 */
 	public final static CmpPathMode MOST = new CmpPathMode(3, "MOST");
 	

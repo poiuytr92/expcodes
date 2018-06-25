@@ -16,10 +16,10 @@ import exp.libs.warp.thread.LoopThread;
  * 二维码登陆.
  *  可用于登陆主号、小号、马甲号
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class QRLogin extends LoopThread {
@@ -30,7 +30,7 @@ class QRLogin extends LoopThread {
 	
 	private final static String QRIMG_NAME = "qrcode";
 	
-	/** B站二维码有效时间是180s, 这里设置120s, 避免边界问题 */
+	/** B站二维码有效时间�?180s, 这里设置120s, 避免边界问题 */
 	private final static long UPDATE_TIME = 120000;
 	
 	private final static long LOOP_TIME = 1000;
@@ -67,11 +67,11 @@ class QRLogin extends LoopThread {
 	@Override
 	protected void _loopRun() {
 		if(isLogined == true) {
-			_stop();	// 若登陆成功则退出轮询
+			_stop();	// 若登陆成功则退出轮�?
 			
 		} else {
 			
-			// 在二维码失效前更新图片
+			// 在二维码失效前更新图�?
 			if(loopCnt >= LOOP_LIMIT) {
 				if(downloadQrcode(IMG_DIR, QRIMG_NAME)) {
 					qrUI.updateQrcodeImg(IMG_DIR, QRIMG_NAME);
@@ -79,7 +79,7 @@ class QRLogin extends LoopThread {
 				}
 			}
 			
-			// 若当前页面不再是登陆页（扫码成功会跳转到主页）, 说明登陆成功
+			// 若当前页面不再是登陆页（扫码成功会跳转到主页�?, 说明登陆成功
 			if(isSwitch() == true) {
 				mainCookies = new HttpCookies(Browser.getCookies());
 				if(LoginMgr.checkLogined(mainCookies)) {
@@ -123,14 +123,14 @@ class QRLogin extends LoopThread {
 	}
 	
 	/**
-	 * 下载登陆二维码
-	 * @param imgDir 下载二维码目录
-	 * @param qrImgName 二维码文件名称（不含后缀）
+	 * 下载登陆二维�?
+	 * @param imgDir 下载二维码目�?
+	 * @param qrImgName 二维码文件名称（不含后缀�?
 	 * @return
 	 */
 	private boolean downloadQrcode(String imgDir, String qrImgName) {
 		boolean isOk = false;
-		log.info("正在更新登陆二维码...");
+		log.info("正在更新登陆二维�?...");
 		
 		Browser.open(LOGIN_URL);
 		WebElement img = Browser.findElement(By.xpath("//div[@class='qrcode-img'][1]/img"));
@@ -144,7 +144,7 @@ class QRLogin extends LoopThread {
 	}
 	
 	/**
-	 * 检查页面是否发生了跳转, 以判定是否登陆成功
+	 * 检查页面是否发生了跳转, 以判定是否登陆成�?
 	 * @return
 	 */
 	private boolean isSwitch() {

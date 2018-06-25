@@ -15,30 +15,30 @@ import exp.libs.warp.net.http.HttpUtils;
  * <PRE>
  * B站XHR协议
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class __XHR {
 
-	/** 日志器 */
+	/** 日志�? */
 	protected final static Logger log = LoggerFactory.getLogger(__XHR.class);
 	
-	/** 直播服务器主机 */
+	/** 直播服务器主�? */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
 	
 	/** 直播首页 */
 	private final static String LIVE_HOME = Config.getInstn().LIVE_HOME();
 	
-	/** 个人Link中心服务器主机 */
+	/** 个人Link中心服务器主�? */
 	protected final static String LINK_HOST = Config.getInstn().LINK_HOST();
 	
 	/** 个人Link中心首页 */
 	protected final static String LINK_HOME = Config.getInstn().LINK_HOME();
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected __XHR() {}
 	
 	/**

@@ -35,8 +35,8 @@ public interface IHandler {
 
 	/**
 	 * <pre>
-	 * 异常事件处理逻辑。
-	 * 在实现过滤器方法时，若不捕获异常，则所有异常都会被抛到此方法中。
+	 * 异常事件处理逻辑�?
+	 * 在实现过滤器方法时，若不捕获异常，则所有异常都会被抛到此方法中�?
 	 * </pre>
 	 * @param session 会话
 	 * @param exception 异常

@@ -5,10 +5,10 @@ package exp.bilibili.plugin.bean.ldm;
  * 热门直播间的页码范围.
  * 	用于节奏风暴扫描(每页30个房间)
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-03-21
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class HotLiveRange {
@@ -18,7 +18,7 @@ public class HotLiveRange {
 	private int endPage;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param bgnPage 起始页码（包括）
 	 * @param endPage 终止页码（包括）
 	 */

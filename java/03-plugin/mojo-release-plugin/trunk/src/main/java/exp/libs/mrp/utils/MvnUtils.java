@@ -17,10 +17,10 @@ import exp.libs.utils.other.StrUtils;
  * Maven工具类。
  * 主要提供针对pom的操作方法。
  * </PRE>
- * <B>PROJECT：</B> mojo-release-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> mojo-release-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-08-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class MvnUtils {
@@ -45,10 +45,10 @@ public class MvnUtils {
 	}
 	
 	/**
-	 * 根据jar包的pom坐标，获取其在maven仓库中的相对路径。
+	 * 根据jar包的pom坐标，获取其在maven仓库中的相对路径�?
 	 * 
 	 * @param artifact jar包的pom坐标
-	 * @return jar包相对于maven仓库的相对路径
+	 * @return jar包相对于maven仓库的相对路�?
 	 */
 	private static String getRelativePath(Artifact artifact) {
 		return StrUtils.concat(getRelativeDir(artifact), 
@@ -66,7 +66,7 @@ public class MvnUtils {
 	}
 	
 	/**
-	 * 根据jar包的pom坐标，获取其包名的完整名称
+	 * 根据jar包的pom坐标，获取其包名的完整名�?
 	 *
 	 * @param artifact jar包的pom坐标
 	 * @return jar包的完整名称

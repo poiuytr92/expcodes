@@ -74,11 +74,11 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 	
 	@Override
 	public void run() {
-		ThreadUtils.tSleep(2000);	// 悬停2秒
+		ThreadUtils.tSleep(2000);	// 悬停2�?
 		
-		// 透明度渐隐(大约持续3秒)
+		// 透明度渐�?(大约持续3�?)
 		for(float opacity = 100; opacity > 0; opacity -= 2) {
-			AWTUtilities.setWindowOpacity(this, opacity / 100);	// 设置透明度
+			AWTUtilities.setWindowOpacity(this, opacity / 100);	// 设置透明�?
 			ThreadUtils.tSleep(60);
 			
 			if(isVisible() == false) {
@@ -86,7 +86,7 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 			}
 		}
 		
-		_hide();	// 销毁窗体
+		_hide();	// 销毁窗�?
 	}
 	
 	/**

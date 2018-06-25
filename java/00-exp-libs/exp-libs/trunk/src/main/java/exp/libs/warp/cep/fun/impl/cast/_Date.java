@@ -29,13 +29,13 @@ public class _Date extends BaseFunctionN {
 	private static final long serialVersionUID = 6634078944769182381L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "date";
 	
 	/**
-	 * 限定参数个数为1或2.
+	 * 限定参数个数�?1�?2.
 	 */
 	@Override
 	public boolean checkNumberOfParameters(int inParamsNum){
@@ -45,8 +45,8 @@ public class _Date extends BaseFunctionN {
 	/**
 	 * 强制类型转换: String -> Date
 	 * 1个或2个入参：
-	 * @param1 String:日期字符串
-	 * @param1 String:日期字符串的格式，无此参数则认为是 yyyy-MM-dd HH:mm:ss 格式
+	 * @param1 String:日期字符�?
+	 * @param1 String:日期字符串的格式，无此参数则认为�? yyyy-MM-dd HH:mm:ss 格式
 	 * @return Date
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

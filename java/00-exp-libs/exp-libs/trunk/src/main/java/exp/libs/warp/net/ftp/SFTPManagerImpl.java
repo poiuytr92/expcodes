@@ -49,10 +49,10 @@ public class SFTPManagerImpl implements FTPConnection {
 	public Session sshSession = null;
 
 	/**
-	 * 构造方法
+	 * 构造方�?
 	 * 
 	 * @param ftpIp ip地址
-	 * @param ftpPort 端口号
+	 * @param ftpPort 端口�?
 	 * @param ftpUsername 账号
 	 * @param ftpPassword 密码
 	 * @param timeOut 超时

@@ -19,33 +19,33 @@ import exp.libs.warp.net.http.HttpUtils;
  * <PRE>
  * 模拟在线观看直播(定时发送在线心跳)
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class WatchLive extends __XHR {
 
-	/** 手机端浏览器头 */
+	/** 手机端浏览器�? */
 	private final static String APP_USER_AGENT = "Mozilla/5.0 BiliDroid/5.22.1 (bbcallen@gmail.com)";
 	
 	/** 模拟PC端在线观看直播的心跳URL */
 	private final static String PC_WATCH_URL = Config.getInstn().PC_WATCH_URL();
 	
-	/** 取手机端直播视频地址URL(每次获取有效期为半小时) */
+	/** 取手机端直播视频地址URL(每次获取有效期为半小�?) */
 	private final static String APP_VIDEO_URL = Config.getInstn().APP_VIDEO_URL();
 	
 	/** 模拟手机端在线观看直播的心跳URL */
 	private final static String APP_WATCH_URL = Config.getInstn().APP_WATCH_URL();
 	
-	/** 当前手机直播视频的对象信息 */
+	/** 当前手机直播视频的对象信�? */
 	private final static AppVideo APP_VIDEO = new AppVideo();
 	
 	protected WatchLive() {}
 	
 	/**
-	 * 模拟PC端在线观看直播 (需每5分钟执行一次)
+	 * 模拟PC端在线观看直�? (需�?5分钟执行一�?)
 	 * @param cookie
 	 * @param roomId
 	 */
@@ -57,22 +57,22 @@ public class WatchLive extends __XHR {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {
-				log.info("[{}] 正在模拟PC端在线观看直播...", cookie.NICKNAME());
+				log.info("[{}] 正在模拟PC端在线观看直�?...", cookie.NICKNAME());
 				
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.error("[{}] 模拟PC端在线观看直播失败: {}", cookie.NICKNAME(), reason);
+				log.error("[{}] 模拟PC端在线观看直播失�?: {}", cookie.NICKNAME(), reason);
 			}
 		} catch(Exception e) {
-			log.error("[{}] 模拟PC端在线观看直播失败: {}", cookie.NICKNAME(), response, e);
+			log.error("[{}] 模拟PC端在线观看直播失�?: {}", cookie.NICKNAME(), response, e);
 		}
 	}
 	
 	/**
-	 * 模拟手机端在线观看直播 (需每15秒执行一次)
+	 * 模拟手机端在线观看直�? (需�?15秒执行一�?)
 	 * @param cookie
 	 * @param roomId
-	 * @param detailSecond 距离上次请求的时间间隔（单位:s）, 默认频率是15秒一次
+	 * @param detailSecond 距离上次请求的时间间隔（单位:s�?, 默认频率�?15秒一�?
 	 * @return
 	 */
 	public static void toWatchAppLive(BiliCookie cookie, int roomId) {
@@ -84,17 +84,17 @@ public class WatchLive extends __XHR {
 		Map<String, String> request = getRequest(cookie.UID(), APP_VIDEO);
 		String response = HttpURLUtils.doPost(APP_WATCH_URL, header, request);
 		if("ok".equals(response)) {
-			log.info("[{}] 正在模拟手机端在线观看直播...", cookie.NICKNAME());
+			log.info("[{}] 正在模拟手机端在线观看直�?...", cookie.NICKNAME());
 			
 		} else {
-			log.error("[{}] 模拟手机端在线观看直播失败: {}", cookie.NICKNAME(), response);
+			log.error("[{}] 模拟手机端在线观看直播失�?: {}", cookie.NICKNAME(), response);
 		}
 	}
 	
 	/**
 	 * 手机端观看直播请求头
 	 * @param cookie
-	 * @param watchTime 开始观看的时间点
+	 * @param watchTime 开始观看的时间�?
 	 * @return
 	 */
 	private static Map<String, String> getHeader(BiliCookie cookie, long watchTime) {
@@ -110,10 +110,10 @@ public class WatchLive extends __XHR {
 	}
 	
 	/**
-	 * 手机端观看直播请求参数
+	 * 手机端观看直播请求参�?
 	 * @param uid 观看直播的用户ID
-	 * @param appVideo 所观看的直播信息
-	 * @param detailSecond 距离上次请求的时间间隔（单位:s）
+	 * @param appVideo 所观看的直播信�?
+	 * @param detailSecond 距离上次请求的时间间隔（单位:s�?
 	 * @return
 	 */
 	private static Map<String, String> getRequest(String uid, AppVideo appVideo) {
@@ -121,22 +121,22 @@ public class WatchLive extends __XHR {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.c_time, String.valueOf(now));		// 当前时间(ms)
 		request.put(BiliCmdAtrbt.ts, String.valueOf(now / 1000));	// 当前时间(s)
-		request.put(BiliCmdAtrbt.delta_ts, String.valueOf(appVideo.getDeltaSecond()));	// 距离上次请求的时间间隔
+		request.put(BiliCmdAtrbt.delta_ts, String.valueOf(appVideo.getDeltaSecond()));	// 距离上次请求的时间间�?
 		request.put(BiliCmdAtrbt.mid, uid);		// 观看直播的用户ID
-		request.put(BiliCmdAtrbt.room_id, appVideo.getRoomId());	// 房间号
+		request.put(BiliCmdAtrbt.room_id, appVideo.getRoomId());	// 房间�?
 		request.put(BiliCmdAtrbt.up_id, appVideo.getUpId());		// 主播ID
 		request.put(BiliCmdAtrbt.up_level, String.valueOf(appVideo.getUpLv()));	// 主播等级
 		request.put(BiliCmdAtrbt.playurl, appVideo.getUrl());		// 所观看的直播视频地址
-		request.put(BiliCmdAtrbt.guid, appVideo.getGuid());	// FIXME： 随直播视频地址变化, 生成规则未知
-		request.put(BiliCmdAtrbt.area, "21");		// FIXME: 每个直播间固定, 生成规则未知, 应该是直播子分区
-		request.put(BiliCmdAtrbt.parent_area, "1");	// FIXME: 每个直播间固定, 生成规则未知, 应该是直播分区
+		request.put(BiliCmdAtrbt.guid, appVideo.getGuid());	// FIXME�? 随直播视频地址变化, 生成规则未知
+		request.put(BiliCmdAtrbt.area, "21");		// FIXME: 每个直播间固�?, 生成规则未知, 应该是直播子分区
+		request.put(BiliCmdAtrbt.parent_area, "1");	// FIXME: 每个直播间固�?, 生成规则未知, 应该是直播分�?
 		request.put(BiliCmdAtrbt.sign, IDUtils.getUUID().replace("-", ""));	// FIXME: 每次请求都会变化, 生成规则未知
-		request.put(BiliCmdAtrbt.jumpfrom, "24000");	// FIXME: 跳转到当前直播间的入口, 如从"我的关注"进入是21000, 从平台进入是24000, 具体生成规则未知
+		request.put(BiliCmdAtrbt.jumpfrom, "24000");	// FIXME: 跳转到当前直播间的入�?, 如从"我的关注"进入�?21000, 从平台进入是24000, 具体生成规则未知
 		
-		// 观看直播的手机是设备参数(相对固定值)
+		// 观看直播的手机是设备参数(相对固定�?)
 		request.put(BiliCmdAtrbt.appkey, "1d8b6e7d45233436");	// 设备唯一标识
-		request.put(BiliCmdAtrbt.version, "5.22.1");	// Bilibili-APP版本号
-		request.put(BiliCmdAtrbt.build, "5220001");		// Bilibili-APP版本号
+		request.put(BiliCmdAtrbt.version, "5.22.1");	// Bilibili-APP版本�?
+		request.put(BiliCmdAtrbt.build, "5220001");		// Bilibili-APP版本�?
 		request.put(BiliCmdAtrbt.platform, "android");
 		request.put(BiliCmdAtrbt.mobi_app, "android");
 		request.put(BiliCmdAtrbt.pid, "13");
@@ -145,7 +145,7 @@ public class WatchLive extends __XHR {
 	}
 	
 	/**
-	 * 获取手机端直播视频地址 (地址有效期是半小时)
+	 * 获取手机端直播视频地址 (地址有效期是半小�?)
 	 * @param cookie
 	 * @param roomId
 	 * @return http://qn.live-play.acgvideo.com/live-qn/710856/live_14931184_9763491.flv?wsSecret=11a51740bd1e56c46ff172cbf4318b8f&wsTime=1518314300
@@ -182,7 +182,7 @@ public class WatchLive extends __XHR {
 	}
 	
 	/**
-	 * 手机端直播视频地址的请求参数
+	 * 手机端直播视频地址的请求参�?
 	 * @param uid
 	 * @param roomId
 	 * @return

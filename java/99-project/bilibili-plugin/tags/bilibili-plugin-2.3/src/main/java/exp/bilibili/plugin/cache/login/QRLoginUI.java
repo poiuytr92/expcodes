@@ -19,10 +19,10 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * 二维码登陆窗口.
  *  暂时仅用于登陆主号
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class QRLoginUI extends PopChildWindow {
@@ -39,7 +39,7 @@ class QRLoginUI extends PopChildWindow {
 	
 	private final static String TIPS_PATH = IMG_DIR.concat("/qrTips.png");
 	
-	private final static String TIPS = "正在更新二维码...";
+	private final static String TIPS = "正在更新二维�?...";
 	
 	private final static int WIDTH = 300;
 	
@@ -104,7 +104,7 @@ class QRLoginUI extends PopChildWindow {
 			
 		} else {
 			String sTime = StrUtils.leftPad(String.valueOf(time), '0', 3);
-			tipLabel.setText(StrUtils.concat("有效时间 : ", sTime, " 秒"));
+			tipLabel.setText(StrUtils.concat("有效时间 : ", sTime, " �?"));
 		}
 	}
 

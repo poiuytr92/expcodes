@@ -10,10 +10,10 @@ import java.util.regex.Pattern;
  * 正则实体
  * 用于保存某次正则测试的匹配信息
  * </PRE>
- * <B>PROJECT：</B> ui-regex-debug
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> ui-regex-debug
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2015-06-01
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class RegexEntity {
@@ -24,7 +24,7 @@ public class RegexEntity {
 	private String content;
 	
 	/**
-	 * 正则表达式
+	 * 正则表达�?
 	 */
 	private String regex;
 	
@@ -34,7 +34,7 @@ public class RegexEntity {
 	private List<List<String>> mthList;
 	
 	/**
-	 * 总匹配项数
+	 * 总匹配项�?
 	 */
 	private int totalFindNum = 0;
 	
@@ -44,7 +44,7 @@ public class RegexEntity {
 	private int curFindNum = 0;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	public RegexEntity() {
 		this.mthList = new ArrayList<List<String>>();
@@ -53,12 +53,12 @@ public class RegexEntity {
 	}
 	
 	/**
-	 * 重做正则匹配，更新RegexEntity保存的匹配信息
+	 * 重做正则匹配，更新RegexEntity保存的匹配信�?
 	 * @param content 原始内容
-	 * @param regex 正则表达式
+	 * @param regex 正则表达�?
 	 */
 	public void redoMatch(String content, String regex) {
-		mthList.clear();	//清空上次的匹配结果
+		mthList.clear();	//清空上次的匹配结�?
 		curFindNum = 0;
 		totalFindNum = 0;
 		this.content = content;
@@ -86,7 +86,7 @@ public class RegexEntity {
 	
 	/**
 	 * 在mth.find()找到的匹配集中，
-	 * 获取当前匹配的 前一个匹配的索引
+	 * 获取当前匹配�? 前一个匹配的索引
 	 * @return mthList的索引号
 	 */
 	public int backFindIndex() {
@@ -95,7 +95,7 @@ public class RegexEntity {
 
 	/**
 	 * 在mth.find()找到的匹配集中，
-	 * 获取当前匹配的 后一个匹配的索引
+	 * 获取当前匹配�? 后一个匹配的索引
 	 * @return mthList的索引号
 	 */
 	public int nextFindIndex() {
@@ -104,9 +104,9 @@ public class RegexEntity {
 	}
 	
 	/**
-	 * 通过 find匹配索引号 和 group组号，
-	 * 定位某次匹配的指定内容
-	 * @param findIndex 匹配索引号，可理解为mth.find()执行的次数
+	 * 通过 find匹配索引�? �? group组号�?
+	 * 定位某次匹配的指定内�?
+	 * @param findIndex 匹配索引号，可理解为mth.find()执行的次�?
 	 * @param gruopIndex 组号，与正则表达式的括号有关
 	 * @return 匹配内容
 	 */

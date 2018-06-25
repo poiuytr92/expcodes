@@ -16,7 +16,7 @@ import net.sf.json.JSONObject;
 	}
  * </PRE>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class LiveMsg extends _Msg {

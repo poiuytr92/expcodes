@@ -13,9 +13,9 @@ package exp.libs.warp.net.tracert;
 public interface IDealReturn {
 	
 	/**
-	 * 控制台返回消息处理
+	 * 控制台返回消息处�?
 	 *
-	 * @param line 控制台信息
+	 * @param line 控制台信�?
 	 */
 	public void deal(String line);
 

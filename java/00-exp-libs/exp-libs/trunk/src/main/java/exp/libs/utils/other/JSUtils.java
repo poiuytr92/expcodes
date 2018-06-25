@@ -22,10 +22,10 @@ import exp.libs.utils.io.IOUtils;
  */
 public class JSUtils {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(JSUtils.class);
 	
-	/** 私有化构造函数. */
+	/** 私有化构造函�?. */
 	protected JSUtils() {}
 	
 	/**
@@ -58,7 +58,7 @@ public class JSUtils {
 			result = inv.invokeFunction(jsMethod, args);
 			
 		} catch (Exception e) {
-			log.error("执行JS方法 [{}] 失败, 所属文件: {}", jsMethod, jsFilePath, e);
+			log.error("执行JS方法 [{}] 失败, 所属文�?: {}", jsMethod, jsFilePath, e);
 		}
 		IOUtils.close(reader);
 		return result;

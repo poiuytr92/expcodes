@@ -27,15 +27,15 @@ public class Date2Sec extends BaseFunction1 {
 	private static final long serialVersionUID = 8272123829108108343L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "date2sec";
 	
 	/**
-	 * yyyy-MM-dd HH:mm:ss -> 纪元秒 转换.
-	 * 共1个入参：
-	 * @param1 String/Date: yyyy-MM-dd HH:mm:ss格式的日期
+	 * yyyy-MM-dd HH:mm:ss -> 纪元�? 转换.
+	 * �?1个入参：
+	 * @param1 String/Date: yyyy-MM-dd HH:mm:ss格式的日�?
 	 * @return Long
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

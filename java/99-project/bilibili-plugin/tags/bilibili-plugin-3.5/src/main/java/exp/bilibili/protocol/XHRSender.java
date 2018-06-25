@@ -24,10 +24,10 @@ import exp.bilibili.protocol.xhr.WatchLive;
  * <PRE>
  * XHR请求发送器
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class XHRSender {
@@ -41,7 +41,7 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 查询直播间的房管(含主播)
+	 * 查询直播间的房管(含主�?)
 	 * @param roomId 直播间ID
 	 * @return 房管列表
 	 */
@@ -51,7 +51,7 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 临时把用户关小黑屋1小时
+	 * 临时把用户关小黑�?1小时
 	 * @param username
 	 * @return
 	 */
@@ -63,7 +63,7 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 获取二维码登陆信息(用于在本地生成二维码图片)
+	 * 获取二维码登陆信�?(用于在本地生成二维码图片)
 	 * @return
 	 */
 	public static String getQrcodeInfo() {
@@ -73,14 +73,14 @@ public class XHRSender {
 	/**
 	 * 检测二维码是否扫码登陆成功
 	 * @param oauthKey 二维码登陆信息中提取的oauthKey
-	 * @return 若扫码登陆成功, 则返回有效Cookie
+	 * @return 若扫码登陆成�?, 则返回有效Cookie
 	 */
 	public static BiliCookie toLogin(String oauthKey) {
 		return Login.toLogin(oauthKey);
 	}
 	
 	/**
-	 * 下载登陆用的验证码图片
+	 * 下载登陆用的验证码图�?
 	 * @param imgPath 图片保存路径
 	 * @return 与该验证码配套的cookies
 	 */
@@ -89,10 +89,10 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 通过帐密+验证码方式登陆
+	 * 通过帐密+验证码方式登�?
 	 * @param username 账号
 	 * @param password 密码
-	 * @param vccode 验证码
+	 * @param vccode 验证�?
 	 * @param vcCookies 与验证码配套的登陆用cookie
 	 * @return 
 	 */
@@ -102,18 +102,18 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 查询账号信息(并写入cookie内)
+	 * 查询账号信息(并写入cookie�?)
 	 * @param cookie
 	 * @return username
 	 */
 	public static boolean queryUserInfo(BiliCookie cookie) {
-		boolean isOk = Other.queryUserInfo(cookie);	// 普通信息: 用户ID+昵称
-		isOk &= Other.queryUserSafeInfo(cookie);	// 安全信息: 是否绑定手机号
+		boolean isOk = Other.queryUserInfo(cookie);	// 普通信�?: 用户ID+昵称
+		isOk &= Other.queryUserSafeInfo(cookie);	// 安全信息: 是否绑定手机�?
 		return isOk;
 	}
 	
 	/**
-	 * 查询账号在当前直播间的授权信息(并写入cookie内)
+	 * 查询账号在当前直播间的授权信�?(并写入cookie�?)
 	 * @param cookie
 	 * @return
 	 */
@@ -132,18 +132,18 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 友爱社签到
+	 * 友爱社签�?
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	public static long toAssn(BiliCookie cookie) {
 		long nextTaskTime = DailyTasks.toAssn(cookie);
 		
-		// 若有爱社签到失败, 则模拟双端观看直播
+		// 若有爱社签到失败, 则模拟双端观看直�?
 		if(nextTaskTime > 0) {
 			int roomId = UIUtils.getLiveRoomId();
-			WatchLive.toWatchPCLive(cookie, roomId);	// PC端
-//			WatchLive.toWatchAppLive(cookie, roomId);	// 手机端 (FIXME: 暂时无效)
+			WatchLive.toWatchPCLive(cookie, roomId);	// PC�?
+//			WatchLive.toWatchAppLive(cookie, roomId);	// 手机�? (FIXME: 暂时无效)
 		}
 		return nextTaskTime;
 	}
@@ -168,7 +168,7 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 扫描并加入节奏风暴
+	 * 扫描并加入节奏风�?
 	 * @param hotRoomIds 热门房间列表
 	 */
 	public static void scanAndJoinStorms(List<Integer> hotRoomIds) {
@@ -185,7 +185,7 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 小电视抽奖
+	 * 小电视抽�?
 	 * @param roomId
 	 * @param raffleId
 	 * @return
@@ -206,7 +206,7 @@ public class XHRSender {
 	/**
 	 * 投喂主播
 	 * @param cookie 投喂用户cookie
-	 * @param roomId 房间号
+	 * @param roomId 房间�?
 	 */
 	public static void toFeed(BiliCookie cookie, int roomId) {
 		Gifts.toFeed(cookie, roomId);
@@ -220,7 +220,7 @@ public class XHRSender {
 		final int MAX_COIN = 100; // 每次打开扭蛋上限
 		int coin = Gifts.queryCapsuleCoin(cookie);
 		
-		// 满100个扭蛋币才执行, 可提高奖品质量
+		// �?100个扭蛋币才执�?, 可提高奖品质�?
 		while(coin >= MAX_COIN) {
 			boolean isOk = Gifts.openCapsuleCoin(cookie, MAX_COIN);
 			if(isOk == false) {
@@ -262,7 +262,7 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 发送弹幕消息
+	 * 发送弹幕消�?
 	 * @param msg 弹幕消息
 	 * @param roomId 接收弹幕的直播间
 	 * @return
@@ -274,7 +274,7 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 发送私信
+	 * 发送私�?
 	 * @param recvId 接收账号的用户ID
 	 * @param msg 私信消息
 	 * @return
@@ -290,15 +290,15 @@ public class XHRSender {
 	}
 	
 	/**
-	 * 2018春节活动：查询当前红包奖池
-	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月）","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权（1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权（1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯笼","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换池","stock_num":99999,"exchange_limit":0,"price":6666}}}
+	 * 2018春节活动：查询当前红包奖�?
+	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月�?","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权�?1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权�?1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯�?","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换�?","stock_num":99999,"exchange_limit":0,"price":6666}}}
 	 */
 	public static String queryRedbagPool(BiliCookie cookie) {
 		return Redbag.queryRedbagPool(cookie);
 	}
 	
 	/**
-	 * 2018春节活动：兑换红包
+	 * 2018春节活动：兑换红�?
 	 * @param id 奖品编号
 	 * @param num 兑换数量
 	 * @return 

@@ -23,10 +23,10 @@ import exp.libs.warp.net.webkit.WebUtils;
  * <PRE>
  * 【空间说说】解析器
  * </PRE>
- * <B>PROJECT：</B> qzone-crawler
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> qzone-crawler
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-03-23
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class MoodAnalyzer extends BaseMoodAnalyzer {
@@ -35,7 +35,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	private final String QZONE_HOMR_URL;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param QQ 被爬取数据的目标QQ
 	 */
 	public MoodAnalyzer(String QQ) {
@@ -44,7 +44,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	}
 	
 	/**
-	 * 初始化
+	 * 初始�?
 	 */
 	@Override
 	protected void init() {
@@ -52,27 +52,27 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	}
 
 	/**
-	 * 提取所有说说及相关的照片信息
+	 * 提取所有说说及相关的照片信�?
 	 * @return
 	 */
 	@Override
 	protected List<Mood> getMoods() {
 		List<Mood> moods = new LinkedList<Mood>();
 		if(switchToMoodPage() == true) {
-			UIUtils.log("正在提取QQ [", QQ, "] 的说说动态...");
+			UIUtils.log("正在提取QQ [", QQ, "] 的说说动�?...");
 			
-			// 切换到【说说动态】的嵌套页
+			// 切换到【说说动态】的嵌套�?
 			Browser.switchToFrame(By.id("app_canvas_frame"));
 			ThreadUtils.tSleep(Config.SLEEP_TIME);
 			
 			final int PAGE_NUM = _getPageNum();
 			for(int page = 1; page <= PAGE_NUM; page++) {
-				UIUtils.log(" -> 正在提取第 [", page, "/", PAGE_NUM, "] 页的说说信息...");
+				UIUtils.log(" -> 正在提取�? [", page, "/", PAGE_NUM, "] 页的说说信息...");
 				List<Mood> pageMoods = _getPageMoods(page);
 				moods.addAll(pageMoods);
 				
-				UIUtils.log(" -> 第 [", page, "/", PAGE_NUM, 
-						"] 页说说提取完成, 累计说说数量: ", moods.size());
+				UIUtils.log(" -> �? [", page, "/", PAGE_NUM, 
+						"] 页说说提取完�?, 累计说说数量: ", moods.size());
 				ThreadUtils.tSleep(Config.SLEEP_TIME);
 				
 				if(_nextPage() == false) {
@@ -84,14 +84,14 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	}
 	
 	/**
-	 * 切换到说说动态页面
+	 * 切换到说说动态页�?
 	 * @return 是否切换成功
 	 */
 	private boolean switchToMoodPage() {
-		UIUtils.log("正在打开QQ [", QQ, "] 的空间首页...");
+		UIUtils.log("正在打开QQ [", QQ, "] 的空间首�?...");
 		Browser.open(QZONE_HOMR_URL);
 		
-		UIUtils.log("正在切换到QQ [", QQ, "] 的说说页面...");
+		UIUtils.log("正在切换到QQ [", QQ, "] 的说说页�?...");
 		boolean isOk = false;
 		WebElement a = Browser.findElement(By.id("QM_Profile_Mood_A"));
 		if(a != null) {
@@ -101,18 +101,18 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 			WebUtils.click(Browser.DRIVER(), a);	// 点击
 			
 		} else {
-			UIUtils.log("切换到QQ [", QQ, "] 的说说页面失败");
+			UIUtils.log("切换到QQ [", QQ, "] 的说说页面失�?");
 		}
 		return isOk;
 	}
 	
 	/**
-	 * 获取说说总页数
+	 * 获取说说总页�?
 	 * @return
 	 */
 	@Override
 	protected int _getPageNum() {
-		UIUtils.log("正在提取QQ [", QQ, "] 的说说页数...");
+		UIUtils.log("正在提取QQ [", QQ, "] 的说说页�?...");
 		int pageNum = 0;
 		try {
 			WebElement last = Browser.findElement(
@@ -121,13 +121,13 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 				pageNum = NumUtils.toInt(last.getText().trim(), 0);
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "提取QQ [", QQ, "] 的说说页数失败");
+			UIUtils.log(e, "提取QQ [", QQ, "] 的说说页数失�?");
 		}
 		return pageNum;
 	}
 	
 	/**
-	 * 获取分页的说说内容
+	 * 获取分页的说说内�?
 	 * @param page 页码
 	 * @return 
 	 */
@@ -142,7 +142,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 				String content = pre.getText().trim();
 				
 				WebElement time = li.findElement(By.className("goDetail"));
-				long millis = TimeUtils.toMillis(time.getAttribute("title"), "yyyy年MM月dd日 HH:mm");
+				long millis = TimeUtils.toMillis(time.getAttribute("title"), "yyyy年MM月dd�? HH:mm");
 				
 				Mood mood = new Mood(page, content, millis);
 				try {
@@ -160,14 +160,14 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 				moods.add(mood);
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "提取第 [", page, "] 页的说说信息异常");
+			UIUtils.log(e, "提取�? [", page, "] 页的说说信息异常");
 		}
 		return moods;
 	}
 	
 	/**
-	 * 切换到下一页
-	 * @return true:已切换到下一页; false:已是最后一页
+	 * 切换到下一�?
+	 * @return true:已切换到下一�?; false:已是最后一�?
 	 */
 	private boolean _nextPage() {
 		boolean hasNext = false;
@@ -175,7 +175,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 			try {
 				WebElement next = Browser.findElement(
 						By.xpath("//p[@class='mod_pagenav_main']/a[last()]"));
-				if(next != null && "下一页".equals(next.getAttribute("title"))) {
+				if(next != null && "下一�?".equals(next.getAttribute("title"))) {
 					next.click();
 					hasNext = true;
 				}

@@ -10,10 +10,10 @@ import com.sun.media.OCR;
  * <PRE>
  * 图像识别工具
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class OCRUtils {
@@ -27,7 +27,7 @@ public class OCRUtils {
 	protected OCRUtils() {}
 
 	/**
-	 * 把JPG图像识别成文本内容
+	 * 把JPG图像识别成文本内�?
 	 * @param jpgPath
 	 * @return
 	 */
@@ -42,8 +42,8 @@ public class OCRUtils {
 	}
 	
 	/**
-	 * 目前验证码图片只有 a+b 与 a-b 两种形式, 由于字体问题，某些数字会被固定识别错误, 
-	 *  此方法用于修正常见的识别错误的数字/符号, 提高识别率
+	 * 目前验证码图片只�? a+b �? a-b 两种形式, 由于字体问题，某些数字会被固定识别错�?, 
+	 *  此方法用于修正常见的识别错误的数�?/符号, 提高识别�?
 	 * @param txt
 	 * @return
 	 */
@@ -55,7 +55,7 @@ public class OCRUtils {
 		
 		revise = revise.replace("'I", "7");
 		
-		revise = revise.replace("l•", "4");
+		revise = revise.replace("l�?", "4");
 		revise = revise.replace("l»", "4");
 		revise = revise.replace("b", "4");
 		revise = revise.replace("h", "4");
@@ -77,7 +77,7 @@ public class OCRUtils {
 	}
 	
 	/**
-	 * 把PNG图像识别成文本内容
+	 * 把PNG图像识别成文本内�?
 	 * @param pngPath
 	 * @return
 	 */

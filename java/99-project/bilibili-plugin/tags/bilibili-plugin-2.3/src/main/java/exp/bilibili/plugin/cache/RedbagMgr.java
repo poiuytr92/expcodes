@@ -28,10 +28,10 @@ import exp.libs.warp.thread.LoopThread;
  * <PRE>
  * 红包兑奖姬
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-01-21
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class RedbagMgr extends LoopThread {
@@ -48,11 +48,11 @@ public class RedbagMgr extends LoopThread {
 	
 	/**
 	 * 是否到了交换时间
-	 * 为了避免时差，每个小时的58分开始，尝试到下个小时的02分
+	 * 为了避免时差，每个小时的58分开始，尝试到下个小时的02�?
 	 */
 	private boolean exTime;
 	
-	/** 本轮手持红包数 */
+	/** 本轮手持红包�? */
 	private int keepRedbagNum;
 	
 	/** 本轮奖池信息 */
@@ -61,7 +61,7 @@ public class RedbagMgr extends LoopThread {
 	private static volatile RedbagMgr instance;
 	
 	private RedbagMgr() {
-		super("红包兑奖姬");
+		super("红包兑奖�?");
 		this.sleepTime = 1000;
 		this.redbags = new LinkedList<Redbag>();
 		this.exchange = false;
@@ -84,7 +84,7 @@ public class RedbagMgr extends LoopThread {
 	
 	@Override
 	protected void _before() {
-		log.info("{} 已启动", getName());
+		log.info("{} 已启�?", getName());
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class RedbagMgr extends LoopThread {
 
 	@Override
 	protected void _after() {
-		log.info("{} 已停止", getName());
+		log.info("{} 已停�?", getName());
 	}
 	
 	public boolean isExchange() {
@@ -119,7 +119,7 @@ public class RedbagMgr extends LoopThread {
 	
 	/**
 	 * 更新兑奖的执行时间段:
-	 * 	从每个小时的55分开始, 一直持续到下一个小时的02分
+	 * 	从每个小时的55分开�?, 一直持续到下一个小时的02�?
 	 */
 	public void updateExTime() {
 		int minute = TimeUtils.getCurMinute();
@@ -132,14 +132,14 @@ public class RedbagMgr extends LoopThread {
 		} else if(exTime == true && minute == 2) {
 			sleepTime = 60000;
 			exTime = false;
-			UIUtils.log("红包兑奖时间已过, 已停止兑奖.");
+			UIUtils.log("红包兑奖时间已过, 已停止兑�?.");
 		}
 	}
 	
 	/**
 	 * 查询奖池.
-	 * 	每轮只查询一次奖池
-	 * @return 手持红包数
+	 * 	每轮只查询一次奖�?
+	 * @return 手持红包�?
 	 */
 	public int queryPool() {
 		pool.clear();
@@ -174,7 +174,7 @@ public class RedbagMgr extends LoopThread {
 			return;
 		}
 		
-		// 根据期望兑换的奖品列表在奖池中进行兑换
+		// 根据期望兑换的奖品列表在奖池中进行兑�?
 		Iterator<Redbag> redbagIts = redbags.iterator();
 		while(redbagIts.hasNext()) {
 			Redbag redbag = redbagIts.next();
@@ -184,7 +184,7 @@ public class RedbagMgr extends LoopThread {
 			if(award == null) {
 				continue;
 				
-			// 该奖品在本轮奖池中已无剩余
+			// 该奖品在本轮奖池中已无剩�?
 			} else if(award.getStockNum() <= 0) {
 				continue;
 				
@@ -193,17 +193,17 @@ public class RedbagMgr extends LoopThread {
 					award.getUserExchangeCount() <= 0) {
 				continue;
 				
-			// 用户所持的红包数不足以兑换该奖品
+			// 用户所持的红包数不足以兑换该奖�?
 			} else if(keepRedbagNum < redbag.PRICE()) {
 				continue;
 			}
 			
 			// 尽可能多地兑换（若兑换成功则更新手持的红包数量）
-			int num = keepRedbagNum / redbag.PRICE();	// 手持红包可以兑换的上限
+			int num = keepRedbagNum / redbag.PRICE();	// 手持红包可以兑换的上�?
 			num = (num > award.getUserExchangeCount() ? award.getUserExchangeCount() : num);	//  用户剩余兑换上限
 			num = (num > award.getStockNum() ? award.getStockNum() : num);	// 奖池剩余数量
 			
-			log.info("正在试图兑换 [{}] 个 [{}] ...", num, redbag.DESC());
+			log.info("正在试图兑换 [{}] �? [{}] ...", num, redbag.DESC());
 			if(num > 0) {
 				if(exchange(redbag, num)) {
 					keepRedbagNum -= (redbag.PRICE() * num);
@@ -217,7 +217,7 @@ public class RedbagMgr extends LoopThread {
 	
 	/**
 	 * 兑换礼物
-	 * @param redbag 兑换的礼物
+	 * @param redbag 兑换的礼�?
 	 * @param num 兑换数量
 	 * @return true:兑换成功; false:兑换失败
 	 */
@@ -265,8 +265,8 @@ public class RedbagMgr extends LoopThread {
 	}
 	
 	/**
-	 * 对期望兑换的红包列表根据兑换价值从高到低排序
-	 * @param redbags 期望兑换的红包礼物列表
+	 * 对期望兑换的红包列表根据兑换价值从高到低排�?
+	 * @param redbags 期望兑换的红包礼物列�?
 	 */
 	private void descSort(List<Redbag> redbags) {
 		RedbagComparator rc = new RedbagComparator();

@@ -6,10 +6,10 @@ package exp.libs.mrp.envm;
  * 要求所有模板文件中用到的占位符都要先在此处定义，以便管理。
  * 
  * </PRE>
- * <B>PROJECT：</B> mojo-release-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> mojo-release-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-08-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Placeholders {
@@ -17,7 +17,7 @@ public class Placeholders {
 	/** 项目名称 */
 	public final static String PROJECT_NAME = "project_name";
 
-	/** 线程后缀, 附加在启动脚本/停止脚本的项目名称后面 */
+	/** 线程后缀, 附加在启动脚�?/停止脚本的项目名称后�? */
 	public final static String THREAD_SUFFIX = "thread_suffix";
 	
 	/** 项目版本 */
@@ -35,10 +35,10 @@ public class Placeholders {
 	/** JDK版本 */
 	public final static String JDK_VERSION = "jdk_version";
 	
-	/** JDK参数表 */
+	/** JDK参数�? */
 	public final static String JDK_PARAMS = "jdk_params";
 	
-	/** 依赖包 */
+	/** 依赖�? */
 	public final static String CLASSPATH = "classpath";
 	
 	/** main方法 */
@@ -47,13 +47,13 @@ public class Placeholders {
 	/** main方法参数 */
 	public final static String MAIN_METHOD_PARAMS = "main_method_params";
 	
-	/** 标准流输出控制 */
+	/** 标准流输出控�? */
 	public final static String STDOUT_CTRL = "stdout_ctrl";
 	
-	/** 异常流输出控制 */
+	/** 异常流输出控�? */
 	public final static String ERROUT_CTRL = "errout_ctrl";
 	
-	/** 异常流输出控制 */
+	/** 异常流输出控�? */
 	public final static String RUN_IN_BACKGROUND = "run_in_background";
 	
 	/** 源码目录 */

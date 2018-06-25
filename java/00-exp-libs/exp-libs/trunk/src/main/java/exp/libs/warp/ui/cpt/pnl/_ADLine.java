@@ -24,15 +24,15 @@ import javax.swing.JTextField;
 class _ADLine<T extends Component> {
 
 	/** 异常提示 */
-	private final static String ERR_TIPS = "警告: 自定义行组件实例化失败(没有提供public的无参构造函数), 已使用JTextField替代自定义行组件";
+	private final static String ERR_TIPS = "警告: 自定义行组件实例化失�?(没有提供public的无参构造函�?), 已使用JTextField替代自定义行组件";
 	
 	/** 最大的行组件数(<=0表示不限) */
 	private int maxRow;
 	
-	/** 父面板 */
+	/** 父面�? */
 	private JPanel father;
 	
-	/** 当前行面板 */
+	/** 当前行面�? */
 	private JPanel linePanel;
 	
 	/** 每行的差异化组件（一般用于输入） */
@@ -45,9 +45,9 @@ class _ADLine<T extends Component> {
 	private JButton delBtn;
 	
 	/**
-	 * 构造函数
-	 * @param father 父面板（用于承载所有行组件的面板, 布局模式建议使用垂直流式布局器）
-	 * @param component 行组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
+	 * 构造函�?
+	 * @param father 父面板（用于承载所有行组件的面�?, 布局模式建议使用垂直流式布局器）
+	 * @param component 行组件的�?(该组件类必须能提供public无参构造函�?, 保证组件能够被实例化和唯一�?)
 	 * @param maxRow 最多可以添加的行组件数(<=0表示不限)
 	 */
 	protected _ADLine(JPanel father, Class<T> component, int maxRow) {
@@ -62,9 +62,9 @@ class _ADLine<T extends Component> {
 	}
 	
 	/**
-	 * 构造函数
-	 * @param father 父面板（用于承载所有行组件的面板, 布局模式建议使用垂直流式布局器）
-	 * @param component 行组件的类对象
+	 * 构造函�?
+	 * @param father 父面板（用于承载所有行组件的面�?, 布局模式建议使用垂直流式布局器）
+	 * @param component 行组件的类对�?
 	 * @param maxRow 最多可以添加的行组件数(<=0表示不限)
 	 */
 	protected _ADLine(JPanel father, T component, int maxRow) {
@@ -80,13 +80,13 @@ class _ADLine<T extends Component> {
 		this.addBtn = new JButton("+");
 		this.delBtn = new JButton("-");
 		
-		// 设置按钮内边距
+		// 设置按钮内边�?
 		addBtn.setMargin(new Insets(3, 5, 3, 5));
 		delBtn.setMargin(new Insets(3, 5, 3, 5));
 	}
 	
 	/**
-	 * 获取当前行面板
+	 * 获取当前行面�?
 	 * @return 若父面板为null则返回null
 	 */
 	protected JPanel getJPanel() {
@@ -105,7 +105,7 @@ class _ADLine<T extends Component> {
 			} linePanel.add(btnPanel, BorderLayout.EAST);
 		}
 		
-		// 在指定行后增加一行
+		// 在指定行后增加一�?
 		addBtn.addActionListener(new ActionListener() {
 			
 			@SuppressWarnings("unchecked")
@@ -122,7 +122,7 @@ class _ADLine<T extends Component> {
 			}
 		});
 		
-		// 删减指定行
+		// 删减指定�?
 		delBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -137,7 +137,7 @@ class _ADLine<T extends Component> {
 	}
 	
 	/**
-	 * 重绘父面板
+	 * 重绘父面�?
 	 */
 	private void repaint() {
 		if(father == null || linePanel == null) {

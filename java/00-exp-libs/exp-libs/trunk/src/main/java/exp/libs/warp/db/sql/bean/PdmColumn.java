@@ -12,16 +12,16 @@ package exp.libs.warp.db.sql.bean;
  */
 public class PdmColumn {
 
-	/** 列编号 */
+	/** 列编�? */
 	private String code;
 	
 	/** 列名 */
 	private String name;
 	
-	/** 列类型 */
+	/** 列类�? */
 	private String type;
 	
-	/** 列解析 */
+	/** 列解�? */
 	private String comment;
 
 	public PdmColumn() {}

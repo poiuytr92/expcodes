@@ -22,13 +22,13 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 public class TranscodeFilter extends BaseFilter {
 
 	/**
-	 * 内部业务处理时使用的字符集编码
+	 * 内部业务处理时使用的字符集编�?
 	 */
 	private String hdrCharset = Charset.DEFAULT;
 	
 	/**
-	 * 构造函数
-	 * @param hdrCharset 内部业务处理时使用的字符集编码
+	 * 构造函�?
+	 * @param hdrCharset 内部业务处理时使用的字符集编�?
 	 */
 	public TranscodeFilter(String hdrCharset) {
 		this.hdrCharset = hdrCharset;

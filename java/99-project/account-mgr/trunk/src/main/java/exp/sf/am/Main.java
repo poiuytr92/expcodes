@@ -13,7 +13,7 @@ import exp.sf.am.core.AppMgr;
  * <B>项    目：</B> xxxxxxx
  * <B>技术支持：</B>广东凯通软件开发技术有限公司 (c) 2017
  * @version   1.0 2017-07-12
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Main {

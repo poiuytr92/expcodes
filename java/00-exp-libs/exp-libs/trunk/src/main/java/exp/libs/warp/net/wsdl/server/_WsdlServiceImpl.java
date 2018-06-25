@@ -14,7 +14,7 @@ import javax.jws.WebService;
  * @since     jdk版本：jdk1.6
  */
 
-// 注解中必须指定接口类位置, 否则会报错 "Could not load Webservice SEI" 
+// 注解中必须指定接口类位置, 否则会报�? "Could not load Webservice SEI" 
 @WebService(endpointInterface="exp.libs.warp.net.wsdl.server._IWsdlService")  
 public class _WsdlServiceImpl implements _IWsdlService {
 

@@ -10,9 +10,12 @@ import java.io.IOException;
  * public void onException(IOException error)<br/>
  * public void transportInterupted()<br/>
  * public void transportResumed()<br/>
- * </pre>
  * 
- * @author liudl
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2016-02-14
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public abstract class TransportListenerImpl implements ITransportListener {
 
@@ -47,6 +50,6 @@ public abstract class TransportListenerImpl implements ITransportListener {
 	}
 
 	/**
-	 * ITransportListener 的默认适配器
+	 * ITransportListener 的默认适配�?
 	 */
 }

@@ -6,10 +6,10 @@ package exp.libs.mrp.envm;
  * 要求所有脚本文件名称都要先在此处定义(注意末尾还有一个所有脚本清单ALL_SCRIPTS)，以便管理。
  * 
  * </PRE>
- * <B>PROJECT：</B> mojo-release-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> mojo-release-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-08-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ScriptNames {
@@ -25,12 +25,12 @@ public class ScriptNames {
 	public final static String BUILD_XML = "build.xml";
 	
 	/**
-	 * SQL自动化部署脚本:dos
+	 * SQL自动化部署脚�?:dos
 	 */
 	public final static String AUTODB_BAT = "autodb.bat";
 	
 	/**
-	 * SQL自动化部署脚本:unix
+	 * SQL自动化部署脚�?:unix
 	 */
 	public final static String AUTODB_SH = "autodb.sh";
 	
@@ -45,12 +45,12 @@ public class ScriptNames {
 	public final static String CRYPTO_SH = "crypto.sh";
 	
 	/**
-	 * 接入环境检查脚本:dos
+	 * 接入环境检查脚�?:dos
 	 */
 	public final static String STARTCHECK_BAT = "startcheck.bat";
 	
 	/**
-	 * 接入环境检查脚本:unix
+	 * 接入环境检查脚�?:unix
 	 */
 	public final static String STARTCHECK_SH = "startcheck.sh";
 	
@@ -60,32 +60,32 @@ public class ScriptNames {
 	public final static String APP_PATH = "_app_path";
 	
 	/**
-	 * 线程名声明脚本
+	 * 线程名声明脚�?
 	 */
 	public final static String THREAD_NAME = "_threadname";
 	
 	/**
-	 * 线程号查询脚本:unix
+	 * 线程号查询脚�?:unix
 	 */
 	public final static String ECHO_PID = "echo-pid.sh";
 	
 	/**
-	 * 项目启动脚本（含gc日志）:dos
+	 * 项目启动脚本（含gc日志�?:dos
 	 */
 	public final static String START_GC_BAT = "start_gc.bat";
 	
 	/**
-	 * 项目启动脚本（含gc日志）:unix
+	 * 项目启动脚本（含gc日志�?:unix
 	 */
 	public final static String START_GC_SH = "start_gc.sh";
 	
 	/**
-	 * 项目启动脚本（无gc日志）:dos
+	 * 项目启动脚本（无gc日志�?:dos
 	 */
 	public final static String START_BAT = "start.bat";
 	
 	/**
-	 * 项目启动脚本（无gc日志）:unix
+	 * 项目启动脚本（无gc日志�?:unix
 	 */
 	public final static String START_SH = "start.sh";
 	
@@ -105,7 +105,7 @@ public class ScriptNames {
 	public final static String VERSION_SH = "version.sh";
 	
 	/**
-	 * 所有脚本名称清单
+	 * 所有脚本名称清�?
 	 */
 	public final static String[] ALL_SCRIPTS = {
 		BUILD_BAT,

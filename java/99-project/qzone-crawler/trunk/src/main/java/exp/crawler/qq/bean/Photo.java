@@ -6,10 +6,10 @@ import exp.crawler.qq.utils.PicUtils;
  * <PRE>
  * 照片对象
  * </PRE>
- * <B>PROJECT：</B> qzone-crawler
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> qzone-crawler
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Photo {
@@ -27,7 +27,7 @@ public class Photo {
 	private String url;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param desc
 	 * @param time
 	 * @param url

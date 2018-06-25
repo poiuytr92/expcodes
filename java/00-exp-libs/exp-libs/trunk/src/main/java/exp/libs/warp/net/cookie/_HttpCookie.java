@@ -21,41 +21,41 @@ class _HttpCookie {
 	/** cookie键名 */
 	protected String name;
 	
-	/** cookie键值 */
+	/** cookie键�? */
 	protected String value;
 	
 	/** cookie域名 */
 	protected final static String DOMAIN = "Domain";
 	
-	/** cookie域值 */
+	/** cookie域�? */
 	protected String domain;
 	
-	/** cookie路径名 */
+	/** cookie路径�? */
 	protected final static String PATH = "Path";
 	
-	/** cookie路径值 */
+	/** cookie路径�? */
 	protected String path;
 	
 	/** cookie有效期名 */
 	protected final static String EXPIRE = "Expires";
 	
-	/** cookie有效期值（英文GMT格式, 如: Thu, 01-Jan-1970 08:00:00 GMT+08:00） */
+	/** cookie有效期值（英文GMT格式, �?: Thu, 01-Jan-1970 08:00:00 GMT+08:00�? */
 	protected Date expiry;
 	
-	/** cookie属性：若出现该关键字表示该cookie只会在HTTPS中进行会话验证 */
+	/** cookie属性：若出现该关键字表示该cookie只会在HTTPS中进行会话验�? */
 	protected final static String SECURE = "Secure";
 	
-	/** 是否出现了Secure关键字 */
+	/** 是否出现了Secure关键�? */
 	protected boolean isSecure;
 	
-	/** cookie属性：若出现该关键字表示该cookie无法被JS等脚本读取, 可防止XSS攻击 */
+	/** cookie属性：若出现该关键字表示该cookie无法被JS等脚本读�?, 可防止XSS攻击 */
 	protected final static String HTTPONLY = "HttpOnly";
 	
-	/** 是否出现了HttpOnly关键字 */
+	/** 是否出现了HttpOnly关键�? */
 	protected boolean isHttpOnly;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	protected _HttpCookie() {
 		this.name = "";
@@ -68,8 +68,8 @@ class _HttpCookie {
 	}
 	
 	/**
-	 * 构造函数
-	 * @param headerCookie HTTP响应头中的 Set-Cookie, 格式如：
+	 * 构造函�?
+	 * @param headerCookie HTTP响应头中�? Set-Cookie, 格式如：
 	 * 	JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
 	 */
 	protected _HttpCookie(String headerCookie) {
@@ -128,7 +128,7 @@ class _HttpCookie {
 	
 	/**
 	 * 生成该Cookie的名值对
-	 * 	在与服务端校验cookie会话时, 只需对name与value属性进行校验, 其他属性无需校验, 保存在本地即可
+	 * 	在与服务端校验cookie会话�?, 只需对name与value属性进行校�?, 其他属性无需校验, 保存在本地即�?
 	 * @return name=value
 	 */
 	protected String toNV() {
@@ -136,7 +136,7 @@ class _HttpCookie {
 	}
 
 	/**
-	 * 生成该cookie在Header中的字符串形式
+	 * 生成该cookie在Header中的字符串形�?
 	 * @return 形如：JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
 	 */
 	protected String toHeaderCookie() {

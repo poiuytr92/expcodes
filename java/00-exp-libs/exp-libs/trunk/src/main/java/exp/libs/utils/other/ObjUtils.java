@@ -37,20 +37,20 @@ import exp.libs.utils.time.TimeUtils;
  */
 public class ObjUtils {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(ObjUtils.class);
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected ObjUtils() {}
 	
 	/**
 	 * <PRE>
-	 * 把String对象转换成其他实体对象.
+	 * 把String对象转换成其他实体对�?.
 	 * 	允许转换的对象包括：Integer、Long、BigInteger、Float、Double、Date、Timestamp
 	 * </PRE>
 	 * @param s String对象
 	 * @param clazz 期望转换的对象类
-	 * @return 允许转换的对象(不支持转换则返回String)
+	 * @return 允许转换的对�?(不支持转换则返回String)
 	 */
 	public static Object toObj(String s, Class<?> clazz) {
 		if(StrUtils.isEmpty(s)) {
@@ -86,11 +86,11 @@ public class ObjUtils {
 	/**
 	 * <PRE>
 	 * 把其他实体对象转换成String.
-	 * 	(对于Date和Timestamp对象会返回 yyyy-MM-dd HH:mm:ss.SSS格式字符串)
+	 * 	(对于Date和Timestamp对象会返�? yyyy-MM-dd HH:mm:ss.SSS格式字符�?)
 	 * </PRE>
 	 * @param o 被转换的实体对象
 	 * @param clazz 被转换的实体对象类型
-	 * @return String对象(若转换失败返回"")
+	 * @return String对象(若转换失败返�?"")
 	 */
 	public static String toStr(Object o, Class<?> clazz) {
 		String s = "";
@@ -121,10 +121,10 @@ public class ObjUtils {
 	/**
 	 * <PRE>
 	 * 把其他实体对象转换成String.
-	 * 	(对于Date和Timestamp对象会返回 yyyy-MM-dd HH:mm:ss.SSS格式字符串)
+	 * 	(对于Date和Timestamp对象会返�? yyyy-MM-dd HH:mm:ss.SSS格式字符�?)
 	 * </PRE>
 	 * @param o 被转换的实体对象
-	 * @return String对象(若转换失败返回"")
+	 * @return String对象(若转换失败返�?"")
 	 */
 	public static String toStr(Object o) {
 		String s = "";
@@ -149,10 +149,10 @@ public class ObjUtils {
 	}
 	
 	/**
-	 * 检查cClazz是否为fClazz的子类
-	 * @param cClazz (期望的)子类
-	 * @param fClazz (期望的)父类
-	 * @return true:是; false:否
+	 * 检查cClazz是否为fClazz的子�?
+	 * @param cClazz (期望�?)子类
+	 * @param fClazz (期望�?)父类
+	 * @return true:�?; false:�?
 	 */
 	public static boolean isSubclass(Class<?> cClass, Class<?> fClass) {
 		boolean isChild = false;
@@ -169,16 +169,16 @@ public class ObjUtils {
 	/**
 	 * <pre>
 	 * 通过Serializable序列化方式深度克隆对象，
-	 * 要求所克隆的对象及其下所有成员都要实现Serializable接口。
+	 * 要求所克隆的对象及其下所有成员都要实现Serializable接口�?
 	 * 
-	 * 因为java的[基本数据类型]是值传递，可以直接复制，
-	 * 而其[包装类]（如String, Integer等）也都已经实现了Serializable接口，
-	 * 因此对于一般的待克隆对象，实现Serializable接口后，直接使用即可。
+	 * 因为java的[基本数据类型]是值传递，可以直接复制�?
+	 * 而其[包装类]（如String, Integer等）也都已经实现了Serializable接口�?
+	 * 因此对于一般的待克隆对象，实现Serializable接口后，直接使用即可�?
 	 * 
-	 * 若待克隆对象下存在[引用数据类型]（如自定义的class），则要求它必须实现Serializable接口。
+	 * 若待克隆对象下存在[引用数据类型]（如自定义的class），则要求它必须实现Serializable接口�?
 	 * </pre>
 	 * @param serialObject 被克隆的对象(必须实现Serializable接口)
-	 * @return 克隆的对象
+	 * @return 克隆的对�?
 	 */
 	public static Object clone(Object serialObject) {
 		Object newObj = null;
@@ -200,9 +200,9 @@ public class ObjUtils {
 	}
 	
 	/**
-	 * 实例化对象
-	 * @param clazzPath 类路径, 如: foo.bar.Test （该类必须支持无参构造函数）
-	 * @return 实例化对象（若失败则返回null）
+	 * 实例化对�?
+	 * @param clazzPath 类路�?, �?: foo.bar.Test （该类必须支持无参构造函数）
+	 * @return 实例化对象（若失败则返回null�?
 	 */
 	public static Object instanceClass(String clazzPath) {
 		Object inst = null;
@@ -217,14 +217,14 @@ public class ObjUtils {
 	
 	/**
 	 * <PRE>
-	 * 获取指定基类的所有子类.
-	 * (由于java父类不清楚其下的子孙是什么, 此方式通过递归检索编译目录判断所有类之间的关联性,以确认父子关系.)
+	 * 获取指定基类的所有子�?.
+	 * (由于java父类不清楚其下的子孙是什�?, 此方式通过递归检索编译目录判断所有类之间的关联�?,以确认父子关�?.)
 	 * </PRE>
 	 * @param baseClass 基类
 	 * @return 子类列表
 	 */
 	public static List<String> getAllChildClass(Class<?> baseClass) {
-		String compilePath = PathUtils.getProjectCompilePath();	//根编译目录
+		String compilePath = PathUtils.getProjectCompilePath();	//根编译目�?
 		File rootDir = new File(compilePath);
 		
 		// 路径分隔符转换为包分隔符
@@ -239,12 +239,12 @@ public class ObjUtils {
 	}
 	
 	/**
-	 * 递归检索所有类，并通过父转子异常测试以获取指定基类的所有子类。
+	 * 递归检索所有类，并通过父转子异常测试以获取指定基类的所有子类�?
 	 * 
 	 * @param curFile 当前处理的文件类
-	 * @param pathPrefix 路径前缀（包路径格式）
-	 * @param baseClass 需查找子类的基类
-	 * @param childClazzs 存储检索的子类列表（包路径格式）
+	 * @param pathPrefix 路径前缀（包路径格式�?
+	 * @param baseClass 需查找子类的基�?
+	 * @param childClazzs 存储检索的子类列表（包路径格式�?
 	 */
 	private static void searchChildClass(File curFile, String pathPrefix, 
 			Class<?> baseClass, List<String> childClazzs) {
@@ -259,7 +259,7 @@ public class ObjUtils {
 				searchChildClass(file, pathPrefix, baseClass, childClazzs);
 			}
 			
-		// 若是类文件,判定处理
+		// 若是类文�?,判定处理
 		} else if (curFile.getPath().endsWith(".class")) {
 			try {
 				String childClassName = curFile.getPath().
@@ -271,7 +271,7 @@ public class ObjUtils {
 				if(childClassName.equals(baseClass.getName())) {
 					// Undo
 					
-				// 实例化当前类,并尝试将指定基类做转换测试,只要不抛出异常则说明为父子关系
+				// 实例化当前类,并尝试将指定基类做转换测�?,只要不抛出异常则说明为父子关�?
 				} else {
 					Class<?> childClass = Class.forName(childClassName);
 					childClass.asSubclass(baseClass);
@@ -289,10 +289,10 @@ public class ObjUtils {
 	/**
 	 * <PRE>
 	 * 把map转换成clazz类声明的Bean实例对象.
-	 * 	(map的key为Bean的成员域，value为对应的成员值)
+	 * 	(map的key为Bean的成员域，value为对应的成员�?)
 	 * </PRE>
-	 * @param map KV表
-	 * @param clazz Bean所属类(该类需支持无参构造函数)
+	 * @param map KV�?
+	 * @param clazz Bean所属类(该类需支持无参构造函�?)
 	 * @return Bean对象(转换失败返回null)
 	 */
 	public static Object toBean(Map<String, Object> map, 
@@ -308,7 +308,7 @@ public class ObjUtils {
 			obj = clazz.newInstance();
 			
 		} catch (Exception e) {
-			log.error("构造 [{}] 实例失败.", clazz.getName(), e);
+			log.error("构�? [{}] 实例失败.", clazz.getName(), e);
 			return null;
 		}
 		
@@ -326,17 +326,17 @@ public class ObjUtils {
 					}
 				}
 				
-				// 利用setter方法对对应的成员域置值
+				// 利用setter方法对对应的成员域置�?
 				if (fieldName != null) {
 					Object value = map.get(fieldName);
 					try {
 						method.invoke(obj, value);
 					} catch (Exception e) {
-						log.error("[{}]: 为成员域 [{}] 置值失败.", 
+						log.error("[{}]: 为成员域 [{}] 置值失�?.", 
 								clazz.getName(), fieldName);
 					}
 				} else {
-					log.warn("[{}]: 不存在属性值 [{}] 对应的成员域.", 
+					log.warn("[{}]: 不存在属性�? [{}] 对应的成员域.", 
 							clazz.getName(), propertyName);
 				}
 			}
@@ -347,21 +347,21 @@ public class ObjUtils {
 	/**
 	 * <PRE>
 	 * 通过反射调用对象内部方法.
-	 * 	(私有方法也可调用, 可用于单元测试)
+	 * 	(私有方法也可调用, 可用于单元测�?)
 	 * </PRE>
 	 * @param instnOrClazz
-	 *            如果是调用实例方法，该参数为实例对象，
+	 *            如果是调用实例方法，该参数为实例对象�?
 	 *            如果调用静态方法，该参数为实例对象或对应类***.class
 	 * @param methodName 调用的方法名
-	 * @param paramVals 调用方法的参数
-	 * @param valClazzs 调用方法的参数对应的类型类
+	 * @param paramVals 调用方法的参�?
+	 * @param valClazzs 调用方法的参数对应的类型�?
 	 * @return 调用结果
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Object invokeMethod(Object instnOrClazz, String methodName,
 			Object[] paramVals, Class[] valClazzs) {
 		if(instnOrClazz == null || StrUtils.isEmpty(methodName)) {
-			log.error("反射调用方法失败: [{}.{}()], 无效的类或方法.", 
+			log.error("反射调用方法失败: [{}.{}()], 无效的类或方�?.", 
 					instnOrClazz, methodName);
 			return null;
 		}
@@ -379,7 +379,7 @@ public class ObjUtils {
 							paramVals[i].getClass() : Object.class);
 				}
 			} else {
-				log.error("反射调用方法失败: [{}.{}()], 入参与类型的个数不一致.", 
+				log.error("反射调用方法失败: [{}.{}()], 入参与类型的个数不一�?.", 
 						clazz, methodName);
 				return null;
 			}
@@ -388,7 +388,7 @@ public class ObjUtils {
 		Object result = null;
 		try {
 			Method method = clazz.getDeclaredMethod(methodName, valTypes);
-			method.setAccessible(true);	// 临时开放调用权限(针对private方法)
+			method.setAccessible(true);	// 临时开放调用权�?(针对private方法)
 			result = method.invoke(instnOrClazz, paramVals);
 			
 		} catch (Exception e) {
@@ -398,9 +398,9 @@ public class ObjUtils {
 	}
 	
 	/**
-	 * 生成Bean中的所有成员域的KV对信息（使用MULTI_LINE_STYLE风格）
+	 * 生成Bean中的所有成员域的KV对信息（使用MULTI_LINE_STYLE风格�?
 	 * @param bean bean对象
-	 * @return 所有成员域的KV对信息
+	 * @return 所有成员域的KV对信�?
 	 */
 	public static String toBeanInfo(Object bean) {
 		return new ReflectionToStringBuilder(bean, 
@@ -408,10 +408,10 @@ public class ObjUtils {
 	}
 	
 	/**
-	 * 生成Bean中的所有成员域的KV对信息
+	 * 生成Bean中的所有成员域的KV对信�?
 	 * @param bean bean对象
-	 * @param style 打印风格, 建议值 MULTI_LINE_STYLE
-	 * @return 所有成员域的KV对信息
+	 * @param style 打印风格, 建议�? MULTI_LINE_STYLE
+	 * @return 所有成员域的KV对信�?
 	 */
 	public static String toBeanInfo(Object bean, ToStringStyle style) {
 		String info = "";
@@ -423,9 +423,9 @@ public class ObjUtils {
 	
 	/**
 	 * 把内存对象序列化并保存到外存文件
-	 * @param o 内存对象（需继承Serializable接口）
+	 * @param o 内存对象（需继承Serializable接口�?
 	 * @param outFilePath 外存文件位置
-	 * @return true:序列化成功; false:序列化失败
+	 * @return true:序列化成�?; false:序列化失�?
 	 */
 	public static boolean toSerializable(Serializable o, String outFilePath) {
 		boolean isOk = false;
@@ -445,7 +445,7 @@ public class ObjUtils {
 	
 	/**
 	 * 反序列化外存文件，还原为内存对象
-	 * @param inFile 外存序列化文件
+	 * @param inFile 外存序列化文�?
 	 * @return 内存对象(失败返回null)
 	 */
 	public static Object unSerializable(String inFilePath) {
@@ -457,7 +457,7 @@ public class ObjUtils {
 			ois.close();
 			
 		} catch (Exception e) {
-			log.error("从外存文件反序列化对象失败: [{}]", inFilePath, e);
+			log.error("从外存文件反序列化对象失�?: [{}]", inFilePath, e);
 		}
 		return o;
 	}

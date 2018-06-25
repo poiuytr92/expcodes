@@ -40,9 +40,9 @@ public class PFConfig {
 	
 	/**
 	 * 
-	 * @param serverName 代理服务名称（唯一即可）
+	 * @param serverName 代理服务名称（唯一即可�?
 	 * @param localListenPort 本地监听端口
-	 * @param remoteIP 远程代理IP（真实服务IP）
+	 * @param remoteIP 远程代理IP（真实服务IP�?
 	 * @param remotePort 远程代理端口（真实服务端口）
 	 * @param overtime 超时时间(单位ms)
 	 * @param maxConn 单个代理服务的最大连接数

@@ -23,7 +23,7 @@ class _SocketClientProxy extends SocketClient implements Runnable {
 	/** 会话ID */
 	private String id;
 	
-	/** 业务处理器 */
+	/** 业务处理�? */
 	private IHandler handler;
 	
 	/** 会话是否有效 */
@@ -77,7 +77,7 @@ class _SocketClientProxy extends SocketClient implements Runnable {
 	@Deprecated
 	@Override
 	public boolean conn() {
-		// Undo 客户端代理会话已处于连接状态, 无需再连接
+		// Undo 客户端代理会话已处于连接状�?, 无需再连�?
 		return true;
 	}
 	

@@ -23,15 +23,15 @@ public class _String extends BaseFunction1 {
 	private static final long serialVersionUID = 3205146116981255386L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "str";
 	
 	/**
 	 * 强制类型转换: String
-	 * 仅1个入参：
-	 * @param1 Object:各种类型值
+	 * �?1个入参：
+	 * @param1 Object:各种类型�?
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

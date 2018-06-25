@@ -24,14 +24,14 @@ public class CopySquote extends BaseFunction1 {
 	private static final long serialVersionUID = -5796020340521420338L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "copySquote";
 	
 	/**
-	 * 单引号复制,把1个单引号替换成2个连续的单引号.
-	 * 共1个入参：
+	 * 单引号复�?,�?1个单引号替换�?2个连续的单引�?.
+	 * �?1个入参：
 	 * @param1 String:原字符串
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常

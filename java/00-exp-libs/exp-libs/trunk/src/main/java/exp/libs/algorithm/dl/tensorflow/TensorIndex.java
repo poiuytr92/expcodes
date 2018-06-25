@@ -17,11 +17,11 @@ class TensorIndex {
     /** 张量名称 */
     private String name;
     
-    /** 张量索引（默认为0） */
+    /** 张量索引（默认为0�? */
     private int index;
     
     /**
-     * 构造函数
+     * 构造函�?
      */
     private TensorIndex() {
     	this.name = "";
@@ -45,9 +45,9 @@ class TensorIndex {
     }
     
     /**
-     * 解析张量名称， 将其拆分成 name和index两部分
+     * 解析张量名称�? 将其拆分�? name和index两部�?
      * 	若张量名称中不存在index，则index取默认值为0
-     * @param tensorName 张量名称, 格式为 name:index
+     * @param tensorName 张量名称, 格式�? name:index
      * @return
      */
     protected static TensorIndex parse(String tensorName) {

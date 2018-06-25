@@ -24,15 +24,15 @@ public class Hex extends BaseFunction1 {
 	private static final long serialVersionUID = -6884126558907265608L;
 	
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "hex";
 	
 	/**
-	 * 进制转换： 10 -> 16
-	 * 仅1个入参：
-	 * @param1 Integer/String:10进制数值(字符串)
+	 * 进制转换�? 10 -> 16
+	 * �?1个入参：
+	 * @param1 Integer/String:10进制数�?(字符�?)
 	 * @return String: 16进制数值字符串
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

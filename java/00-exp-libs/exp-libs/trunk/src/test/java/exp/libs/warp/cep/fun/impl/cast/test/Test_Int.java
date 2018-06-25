@@ -27,7 +27,7 @@ public class Test_Int {
 	@Test
 	public void testCastInt() throws Exception {
 		
-		//正确性测试
+		//正确性测�?
 		Object inum1 = CEPUtils.call(
 				_Int.NAME, new Object[] {"-123"});
 		Assert.assertTrue(inum1 instanceof Integer);

@@ -19,13 +19,13 @@ import exp.libs.utils.other.StrUtils;
  */
 public class BODHUtils {
 
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected BODHUtils() {}
 	
 	/**
 	 * 将字节数组转为可视的十六进制的字符串
 	 * @param bytes 字节数组
-	 * @return 可视的十六进制的字符串
+	 * @return 可视的十六进制的字符�?
 	 */
 	public static String toHex(byte[] bytes) {
 		if(bytes == null) {
@@ -43,8 +43,8 @@ public class BODHUtils {
 	 * 将字节数组转为可视的十六进制的字符串
 	 * @param bytes 字节数组
 	 * @param offset 数组起始偏移索引
-	 * @param len 转换字节数
-	 * @return 可视的十六进制的字符串
+	 * @param len 转换字节�?
+	 * @return 可视的十六进制的字符�?
 	 */
 	public static String toHex(byte[] bytes, int offset, int len) {
 		if(bytes == null || bytes.length <= offset || len < 0) {
@@ -97,8 +97,8 @@ public class BODHUtils {
 	}
 	
 	/**
-	 * 把0-F的16进制字符转换成对应的byte
-	 * @param hex 0-F的16进制字符
+	 * �?0-F�?16进制字符转换成对应的byte
+	 * @param hex 0-F�?16进制字符
 	 * @return 对应的byte
 	 */
 	private static byte toByte(char hex) {
@@ -145,9 +145,9 @@ public class BODHUtils {
 	}
 	
 	/**
-	 * 二进制数字串 -> 十六进制数字串
+	 * 二进制数字串 -> 十六进制数字�?
 	 * @param bin 二进制数字串
-	 * @return 十六进制数字串
+	 * @return 十六进制数字�?
 	 */
 	public static String binToHex(String bin) {
 		return decToHex(binToDec(bin));
@@ -188,9 +188,9 @@ public class BODHUtils {
 	}
 	
 	/**
-	 * 八进制数字串 -> 十六进制数字串
+	 * 八进制数字串 -> 十六进制数字�?
 	 * @param oct 八进制数字串
-	 * @return 十六进制数字串
+	 * @return 十六进制数字�?
 	 */
 	public static String octToHex(String oct) {
 		return binToHex(octToBin(oct));
@@ -215,9 +215,9 @@ public class BODHUtils {
 	}
 	
 	/**
-	 * 十进制数 -> 十六进制数字串
+	 * 十进制数 -> 十六进制数字�?
 	 * @param dec 十进制数
-	 * @return 十六进制数字串
+	 * @return 十六进制数字�?
 	 */
 	public static String decToHex(long dec) {
 		return Long.toHexString(dec).toUpperCase();
@@ -242,17 +242,17 @@ public class BODHUtils {
 	}
 	
 	/**
-	 * 十进制数字串 -> 十六进制数字串
+	 * 十进制数字串 -> 十六进制数字�?
 	 * @param dec 十进制数字串
-	 * @return 十六进制数字串
+	 * @return 十六进制数字�?
 	 */
 	public static String decToHex(String dec) {
 		return Long.toHexString(NumUtils.toLong(dec)).toUpperCase();
 	}
 	
 	/**
-	 * 十六进制数字串 -> 二进制数字串
-	 * @param dec 十六进制数字串
+	 * 十六进制数字�? -> 二进制数字串
+	 * @param dec 十六进制数字�?
 	 * @return 二进制数字串
 	 */
 	public static String hexToBin(String hex) {
@@ -285,8 +285,8 @@ public class BODHUtils {
 	}
 	
 	/**
-	 * 十六进制数字串 -> 八进制数字串
-	 * @param dec 十六进制数字串
+	 * 十六进制数字�? -> 八进制数字串
+	 * @param dec 十六进制数字�?
 	 * @return 八进制数字串
 	 */
 	public static String hexToOct(String hex) {
@@ -294,8 +294,8 @@ public class BODHUtils {
 	}
 	
 	/**
-	 * 十六进制数字串 -> 十进制数字串
-	 * @param dec 十六进制数字串
+	 * 十六进制数字�? -> 十进制数字串
+	 * @param dec 十六进制数字�?
 	 * @return 十进制数字串
 	 */
 	public static long hexToDec(String hex) {

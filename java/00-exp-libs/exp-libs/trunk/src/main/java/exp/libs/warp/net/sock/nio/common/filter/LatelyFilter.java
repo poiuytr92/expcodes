@@ -24,17 +24,17 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 public class LatelyFilter extends BaseFilter {
 
 	/**
-	 * 日志器
+	 * 日志�?
 	 */
 	private final static Logger log = LoggerFactory.getLogger(LatelyFilter.class);
 	
 	/**
-	 * 最后一次接收命令时间的属性 键值
+	 * 最后一次接收命令时间的属�? 键�?
 	 */
 	private String lastRecvKey = "lastRecv";
 	
 	/**
-	 * 最后一次发送命令时间的属性 键值
+	 * 最后一次发送命令时间的属�? 键�?
 	 */
 	private String lastSendKey = "lastSend";
 	
@@ -42,7 +42,7 @@ public class LatelyFilter extends BaseFilter {
 	public void onSessionCreated(INextFilter nextFilter, ISession session)
 			throws Exception {
 				
-		// 添加session的属性键值
+		// 添加session的属性键�?
 		session.getProperties().put(lastRecvKey, new OpTime());
 		session.getProperties().put(lastSendKey, new OpTime());
 				
@@ -57,7 +57,7 @@ public class LatelyFilter extends BaseFilter {
 		OpTime lastRecvTime = (OpTime) property.get(lastRecvKey);
 
 		lastRecvTime.reFlash();
-		log.info("会话 [" + session + "] 最近一次接收消息时间 [" + 
+		log.info("会话 [" + session + "] 最近一次接收消息时�? [" + 
 				lastRecvTime.getTime() + "].");
 
 		nextFilter.onMessageReceived(session, msg);
@@ -71,15 +71,15 @@ public class LatelyFilter extends BaseFilter {
 		OpTime lastSendTime = (OpTime) property.get(lastSendKey);
 
 		lastSendTime.reFlash();
-		log.info("会话 [" + session + "] 最近一次发送消息时间 [" + 
+		log.info("会话 [" + session + "] 最近一次发送消息时�? [" + 
 				lastSendTime.getTime() + "].");
 		
 		preFilter.onMessageSent(session, msg);
 	}
 
 	/**
-	 * 内部类，用于刷新时间点
-	 * @author 廖权斌
+	 * 内部类，用于刷新时间�?
+	 * @author 廖权�?
 	 */
 	private static class OpTime {
 
@@ -89,7 +89,7 @@ public class LatelyFilter extends BaseFilter {
 		private long time = -1;
 
 		/**
-		 * 刷新操作时间点
+		 * 刷新操作时间�?
 		 */
 		public synchronized void reFlash() {
 			this.time = System.currentTimeMillis();

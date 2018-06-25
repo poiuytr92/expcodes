@@ -23,10 +23,10 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * <PRE>
  * 红包抢兑窗口
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _RedbagUI extends PopChildWindow {
@@ -84,12 +84,12 @@ class _RedbagUI extends PopChildWindow {
 					RedbagMgr.getInstn().update(redbags.getItems(true));
 					RedbagMgr.getInstn()._start();
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, exchangeBtn);
-					UIUtils.log("[红包抽奖姬] 被召唤成功O(∩_∩)O");
+					UIUtils.log("[红包抽奖姬] 被召唤成功O(∩_�?)O");
 					
 				} else {
 					redbags.setEnable(true);
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, exchangeBtn);
-					UIUtils.log("[红包抽奖姬] 被封印啦/(ㄒoㄒ)/");
+					UIUtils.log("[红包抽奖姬] 被封印啦/(ㄒo�?)/");
 				}
 			}
 		});
@@ -99,7 +99,7 @@ class _RedbagUI extends PopChildWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(SwingUtils.confirm(StrUtils.concat("确认刷新 ? (需花费", 
-						Redbag.REDBAG_POOL.PRICE(), "红包, 刷新后马上兑奖)"))) {
+						Redbag.REDBAG_POOL.PRICE(), "红包, 刷新后马上兑�?)"))) {
 					
 					if(RedbagMgr.getInstn().reflashPool()) {
 						RedbagMgr.getInstn().update(redbags.getItems(true));

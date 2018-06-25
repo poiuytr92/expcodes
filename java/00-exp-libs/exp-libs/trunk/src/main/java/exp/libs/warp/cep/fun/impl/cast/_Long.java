@@ -24,15 +24,15 @@ public class _Long extends BaseFunction1 {
 	private static final long serialVersionUID = 3376514202967586085L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "long";
 	
 	/**
 	 * 强制类型转换: String -> Long
-	 * 仅1个入参：
-	 * @param1 String:数字字符串
+	 * �?1个入参：
+	 * @param1 String:数字字符�?
 	 * @return Long
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

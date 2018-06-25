@@ -7,13 +7,15 @@ import java.util.List;
 import exp.libs.utils.format.ESCUtils;
 
 /**
- * 
  * <PRE>
  * 可行解
  * </PRE>
  * 
- * @author lqb
- * @date 2017年6月9日
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2017-06-09
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class QRst {
 
@@ -23,10 +25,10 @@ public class QRst {
 	/** 无效节点ID */
 	protected final static int INVAILD_ID = -1;
 	
-	/** 所属蚂蚁编号 */
+	/** 所属蚂蚁编�? */
 	private int antId;
 	
-	/** 拓扑图规模 */
+	/** 拓扑图规�? */
 	private int size;
 	
 	/** 蚂蚁所携带的所有路径信息素的概率幅(量子基因编码, 每代求解遗传) */

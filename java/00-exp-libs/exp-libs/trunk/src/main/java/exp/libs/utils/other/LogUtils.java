@@ -19,11 +19,11 @@ public class LogUtils {
 
 	private final static String LOGBACK_PATH = "./conf/logback.xml";
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected LogUtils() {}
 	
 	/**
-	 * 加载logback日志配置文件(默认路径为./conf/logback.xml)
+	 * 加载logback日志配置文件(默认路径�?./conf/logback.xml)
 	 */
 	public static void loadLogBackConfig() {
 		loadLogBackConfig(LOGBACK_PATH);

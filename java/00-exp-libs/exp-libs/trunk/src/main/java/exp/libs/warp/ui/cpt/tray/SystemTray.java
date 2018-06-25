@@ -21,7 +21,7 @@ public class SystemTray {
 	private static volatile SystemTray instance;
 	
 	/**
-	 * 私有化构造函数
+	 * 私有化构造函�?
 	 */
 	private SystemTray() {
 		if(java.awt.SystemTray.isSupported()) {
@@ -45,8 +45,8 @@ public class SystemTray {
 	}
 	
 	/**
-	 * 检查当前系统是否支持系统托盘
-	 * @return true:支持; false:不支持
+	 * 检查当前系统是否支持系统托�?
+	 * @return true:支持; false:不支�?
 	 */
 	public static boolean isSupported() {
 		return java.awt.SystemTray.isSupported();
@@ -78,7 +78,7 @@ public class SystemTray {
 	}
 	
 	/**
-	 * 从系统托盘移除一个图标
+	 * 从系统托盘移除一个图�?
 	 * @param trayIcon 系统托盘图标
 	 * @return 是否移除成功
 	 */
@@ -87,7 +87,7 @@ public class SystemTray {
 	}
 	
 	/**
-	 * 从系统托盘移除一个图标
+	 * 从系统托盘移除一个图�?
 	 * @param trayIcon 系统托盘图标
 	 * @return 是否移除成功
 	 */

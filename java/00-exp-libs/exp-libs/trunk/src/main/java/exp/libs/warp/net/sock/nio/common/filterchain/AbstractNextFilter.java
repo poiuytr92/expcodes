@@ -19,7 +19,7 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 public abstract class AbstractNextFilter implements INextFilter {
 
 	/**
-	 * 关系过滤器名称
+	 * 关系过滤器名�?
 	 */
 	protected String filterName;
 
@@ -34,25 +34,25 @@ public abstract class AbstractNextFilter implements INextFilter {
 	protected AbstractNextFilter preFilter;
 
 	/**
-	 * 业务过滤器
+	 * 业务过滤�?
 	 */
 	protected IFilter filter;
 
 	/**
-	 * 过滤链实例
+	 * 过滤链实�?
 	 */
 	protected FilterChain filterChain;
 
 	/**
-	 * 构造函数
-	 * @param filter 业务过滤器
+	 * 构造函�?
+	 * @param filter 业务过滤�?
 	 */
 	public AbstractNextFilter(IFilter filter) {
 		this.filter = filter;
 	}
 
 	/**
-	 * 处理异常，把异常抛给过滤链
+	 * 处理异常，把异常抛给过滤�?
 	 * @param session 会话
 	 * @param exception 异常
 	 */
@@ -61,16 +61,16 @@ public abstract class AbstractNextFilter implements INextFilter {
 	}
 
 	/**
-	 * 获取关系过滤器名称
-	 * @return 关系过滤器名称
+	 * 获取关系过滤器名�?
+	 * @return 关系过滤器名�?
 	 */
 	public String getFilterName() {
 		return filterName;
 	}
 
 	/**
-	 * 设置关系过滤器名称
-	 * @param filterName 关系过滤器名称
+	 * 设置关系过滤器名�?
+	 * @param filterName 关系过滤器名�?
 	 */
 	public void setFilterName(String filterName) {
 		this.filterName = filterName;
@@ -109,32 +109,32 @@ public abstract class AbstractNextFilter implements INextFilter {
 	}
 
 	/**
-	 * 获取业务过滤器
-	 * @return 业务过滤器
+	 * 获取业务过滤�?
+	 * @return 业务过滤�?
 	 */
 	public IFilter getFilter() {
 		return filter;
 	}
 
 	/**
-	 * 设置业务过滤器
-	 * @param filter 业务过滤器
+	 * 设置业务过滤�?
+	 * @param filter 业务过滤�?
 	 */
 	public void setFilter(IFilter filter) {
 		this.filter = filter;
 	}
 
 	/**
-	 * 获取过滤链
-	 * @return 过滤链
+	 * 获取过滤�?
+	 * @return 过滤�?
 	 */
 	public FilterChain getFilterChain() {
 		return filterChain;
 	}
 
 	/**
-	 * 设置过滤链
-	 * @param filterChain 过滤链
+	 * 设置过滤�?
+	 * @param filterChain 过滤�?
 	 */
 	public void setFilterChain(FilterChain filterChain) {
 		this.filterChain = filterChain;

@@ -59,10 +59,10 @@ import exp.xp.utils.XmlUtils;
  * <PRE>
  * 主界面
  * </PRE>
- * <B>PROJECT：</B> exp-xml-paper
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> exp-xml-paper
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2015-06-01
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class XmlPaper extends JFrame {
@@ -78,13 +78,13 @@ public class XmlPaper extends JFrame {
 	private final int winHigh = 
 			(int) Toolkit.getDefaultToolkit().getScreenSize().getHeight();
 	
-	/** 顶部菜单栏 */
+	/** 顶部菜单�? */
 	private JMenuBar menuBar;
 	
-	/** 浮动菜单栏 */
+	/** 浮动菜单�? */
 	private JPopupMenu popMenu;
 	
-	/** 根面板 - 层次:0 */
+	/** 根面�? - 层次:0 */
 	private JPanel rootPanel;
 	
 	/** tab面板 - 层次:1 */
@@ -93,37 +93,37 @@ public class XmlPaper extends JFrame {
 	/** xml源码视框 (禁止编辑) - 层次:2 */
 	private JTextArea codeTextArea;
 	
-	/** xml树编辑视框(可编辑) - 层次:2 */
+	/** xml树编辑视�?(可编�?) - 层次:2 */
 	private JSplitPane editPanel;
 	
-	/** xml树属性编辑板 - 层次:3(右) */
+	/** xml树属性编辑板 - 层次:3(�?) */
 	private JPanel formPanel;
 	
-	/** xml树形展示板 - 层次:3(左) */
+	/** xml树形展示�? - 层次:3(�?) */
 	private JScrollPane treePanel;
 	
-	/** xml树 - 层次:4 */
+	/** xml�? - 层次:4 */
 	private JTree xmlTree;
 	
 	/**
 	 * 所编辑的xml文件的字符集编码.
-	 * 加载/保存时使用.
+	 * 加载/保存时使�?.
 	 */
 	private String charset;
 	
-	/** 存储文件的路径 */
+	/** 存储文件的路�? */
 	private String saveFilePath;
 	
 	/** 单例 */
 	private static volatile XmlPaper instance;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param uiName 界面名称
 	 */
 	private XmlPaper(String uiName) {
 		super(uiName);
-		this.setSize(winWidth, winHigh - 50);	//全屏窗口 - 下方工具栏高度
+		this.setSize(winWidth, winHigh - 50);	//全屏窗口 - 下方工具栏高�?
 		this.setLocation(0, 0);
 		
 		this.rootPanel = new JPanel(new BorderLayout());
@@ -156,7 +156,7 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 初始化组件
+	 * 初始化组�?
 	 */
 	private void initComponents() {
 		/* 初始化Tab面板 */	
@@ -175,8 +175,8 @@ public class XmlPaper extends JFrame {
 					if(0 == tabPanel.getSelectedIndex()) {	// 选中了edit 视图
 						xmlTree.updateUI();
 						
-					} else if(1 == tabPanel.getSelectedIndex()) {	// 选中了 view 视图
-						applyChanges(false);// 提交最后一次节点修改
+					} else if(1 == tabPanel.getSelectedIndex()) {	// 选中�? view 视图
+						applyChanges(false);// 提交最后一次节点修�?
 						reflashXmlCode();	// 刷新xml源码
 					}
 				}
@@ -194,7 +194,7 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 初始化 xml树属性编辑板.
+	 * 初始�? xml树属性编辑板.
 	 * @return xml树属性编辑板
 	 */
 	private JPanel initFormPanel() {
@@ -203,24 +203,24 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 初始化 xml树形展示板.
-	 * @return xml树形展示板
+	 * 初始�? xml树形展示�?.
+	 * @return xml树形展示�?
 	 */
 	private JPanel initTreePanel() {
 		JPanel panel = new JPanel(new BorderLayout()); {
 			Node root = new Node("root");
 			DefaultMutableTreeNode treeRoot = new DefaultMutableTreeNode(root);
-			this.xmlTree = new JTree(treeRoot);	// 初始化时默认为空树
+			this.xmlTree = new JTree(treeRoot);	// 初始化时默认为空�?
 			this.treePanel = new JScrollPane(xmlTree);
 			
-			setTreeListener(xmlTree);	//每次创建xml树都要配监听器
+			setTreeListener(xmlTree);	//每次创建xml树都要配监听�?
 			reflashFormPanel(root);		//此时只有根节点，为根接地啊按刷新属性编辑板
 		}
 		panel.add(treePanel, BorderLayout.CENTER);
 		
 		JPanel btnPanel = new JPanel(new GridLayout(1, 2)); {
-			JButton expandBtn = new JButton("expand");		//展开树按钮
-			JButton collapseBtn = new JButton("collapse");	//折叠树按钮
+			JButton expandBtn = new JButton("expand");		//展开树按�?
+			JButton collapseBtn = new JButton("collapse");	//折叠树按�?
 			btnPanel.add(expandBtn, 0);
 			btnPanel.add(collapseBtn, 1);
 			
@@ -240,10 +240,10 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 初始化 xml树编辑视框.
-	 * @param leftPanel 左面板, 即xml树形版
-	 * @param rightPanel 右面板, 即xml属性编辑版
-	 * @return  xml树编辑视框.
+	 * 初始�? xml树编辑视�?.
+	 * @param leftPanel 左面�?, 即xml树形�?
+	 * @param rightPanel 右面�?, 即xml属性编辑版
+	 * @return  xml树编辑视�?.
 	 */
 	private JSplitPane initEditPanel(
 			Component leftPanel, Component rightPanel) {
@@ -253,7 +253,7 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 初始化 xml源码视框
+	 * 初始�? xml源码视框
 	 * @return xml源码视框
 	 */
 	private JScrollPane initCodePanel() {
@@ -277,7 +277,7 @@ public class XmlPaper extends JFrame {
 		String xml = xmlRoot.asXML();
 		xml = XmlUtils.formatXml(xml, "    ", true, charset);	//格式化xml报文
 		codeTextArea.setText(xml);
-		codeTextArea.setCaretPosition(0);	// 光标放在最开头
+		codeTextArea.setCaretPosition(0);	// 光标放在最开�?
 	}
 	
 	/**
@@ -349,7 +349,7 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 设置系统菜单监听器
+	 * 设置系统菜单监听�?
 	 * @param create [新建]菜单
 	 * @param open [打开]菜单
 	 * @param save [保存]菜单
@@ -391,7 +391,7 @@ public class XmlPaper extends JFrame {
 					saveFilePath = file.getPath();
 					try {
 						String xml = FileUtils.readFileToString(file, charset);
-						createTree(xml);	//重新创建xml树
+						createTree(xml);	//重新创建xml�?
 					} catch (Exception ex) {
 						UIUtils.error("Failed to read the file: " + file.getPath(), ex);
 					}
@@ -438,7 +438,7 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 设置编码菜单监听器
+	 * 设置编码菜单监听�?
 	 * @param utf8Btn [utf8编码]菜单
 	 * @param gbkBtn [gbk编码]菜单
 	 * @param isoBtn [iso编码]菜单
@@ -465,7 +465,7 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 设置帮助菜单监听器
+	 * 设置帮助菜单监听�?
 	 * @param update [软件升级]菜单
 	 * @param about [软件声明]菜单
 	 */
@@ -607,7 +607,7 @@ public class XmlPaper extends JFrame {
 	}
 
 	/**
-	 * 创建xml树
+	 * 创建xml�?
 	 * @param xml xml报文
 	 */
 	private void createTree(String xml) {
@@ -620,7 +620,7 @@ public class XmlPaper extends JFrame {
 			createNode(treeRoot, xmlRoot);	// 从根开始创建所有树节点
 			xmlTree = new JTree(treeRoot);
 			codeTextArea.setText(xml);		// 刷新xml源码
-			reflashNewTree(xmlTree);	//刷新新建的xml树
+			reflashNewTree(xmlTree);	//刷新新建的xml�?
 			
 		} catch (DocumentException e) {
 			UIUtils.error("Failed to parse xml file.", e);
@@ -628,13 +628,13 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 根据xml报文的节点，创建对应xml树的每个节点，并为之设定上下级关系
+	 * 根据xml报文的节点，创建对应xml树的每个节点，并为之设定上下级关�?
 	 * @param treeNode 当前的树节点
-	 * @param element xml报文的节点
+	 * @param element xml报文的节�?
 	 */
 	@SuppressWarnings("unchecked")
 	private void createNode(DefaultMutableTreeNode treeNode, Element element) {
-		// 设定当前节点的节点值和属性值
+		// 设定当前节点的节点值和属性�?
 		Node node = (Node) treeNode.getUserObject();
 		node.setText(element.getText());
 		Iterator<Attribute> attributes = element.attributeIterator();
@@ -650,22 +650,22 @@ public class XmlPaper extends JFrame {
 			Node childNode = new Node(child.getName());
 			DefaultMutableTreeNode childTreeNode = new DefaultMutableTreeNode(childNode);
 			createNode(childTreeNode, child);
-			treeNode.add(childTreeNode);	//设定上下级关系
+			treeNode.add(childTreeNode);	//设定上下级关�?
 		}
 	}
 	
 	/**
-	 * 刷新新建的xml树
-	 * @param xmlTree 新建的xml树
+	 * 刷新新建的xml�?
+	 * @param xmlTree 新建的xml�?
 	 */
 	private void reflashNewTree(JTree newXmlTree) {
-		treePanel.setViewportView(newXmlTree);	// 刷新树视图
+		treePanel.setViewportView(newXmlTree);	// 刷新树视�?
 		setTreeListener(newXmlTree);		// 为新树配置监听器
 		UIUtils.expandTree(newXmlTree);	// 展开所有树节点
 	}
 	
 	/**
-	 * 设置xml树的监听器
+	 * 设置xml树的监听�?
 	 * @param xmlTree xml树监听器
 	 */
 	private void setTreeListener(JTree xmlTree) {
@@ -673,7 +673,7 @@ public class XmlPaper extends JFrame {
 			return;
 		}
 		
-		// 选中树节点监听器 - 对应的刷新属性编辑框图
+		// 选中树节点监听器 - 对应的刷新属性编辑框�?
 		xmlTree.addTreeSelectionListener(new TreeSelectionListener() {
 			public void valueChanged(TreeSelectionEvent event) {
 				JTree tree = (JTree) event.getSource();
@@ -710,14 +710,14 @@ public class XmlPaper extends JFrame {
 		}
 		formPanel.removeAll();	// 移除原有元素
 		
-		// 节点属性编辑面板
+		// 节点属性编辑面�?
 		JPanel attsPanel = new JPanel(new BorderLayout());
 		attsPanel.setBorder(new TitledBorder("attributes")); {
-			JPanel attKeyPanel = new JPanel(new VFlowLayout());	// 左:属性键
-			JPanel attValPanel = new JPanel(new VFlowLayout());	// 中:属性值
-			JPanel attBtnPanel = new JPanel(new VFlowLayout());	// 右:属性控制按钮
+			JPanel attKeyPanel = new JPanel(new VFlowLayout());	// �?:属性键
+			JPanel attValPanel = new JPanel(new VFlowLayout());	// �?:属性�?
+			JPanel attBtnPanel = new JPanel(new VFlowLayout());	// �?:属性控制按�?
 			
-			List<String> attributes = node.getAttributeKeys();	// 列举节点所有属性
+			List<String> attributes = node.getAttributeKeys();	// 列举节点所有属�?
 			attributes.remove(Node.NEW_ATTRIBUTE);
 			for(String attribute : attributes) {
 				String value = node.getAttributeVal(attribute);
@@ -727,7 +727,7 @@ public class XmlPaper extends JFrame {
 						node, attribute, attKeyPanel, attValPanel));
 			}
 			
-			JTextField newAtt = new JTextField(Node.NEW_ATTRIBUTE);	// 至少保有一个新增属性
+			JTextField newAtt = new JTextField(Node.NEW_ATTRIBUTE);	// 至少保有一个新增属�?
 			newAtt.setForeground(Color.RED);
 			attKeyPanel.add(newAtt);	
 			attValPanel.add(new JTextField());
@@ -740,13 +740,13 @@ public class XmlPaper extends JFrame {
 		}
 		formPanel.add(attsPanel, BorderLayout.NORTH);
 		
-		// 节点值编辑面板
+		// 节点值编辑面�?
 		JPanel textPanel = new JPanel(new BorderLayout()); 
 		textPanel.setBorder(new TitledBorder("text")); {
 			final JTextArea nodeValTA = new JTextArea(node.getText());
 			textPanel.add(nodeValTA, BorderLayout.CENTER);
 			
-			nodeValTA.addMouseListener(new MouseAdapter() {	// 鼠标离开时自动保存值
+			nodeValTA.addMouseListener(new MouseAdapter() {	// 鼠标离开时自动保存�?
 				public void mouseExited(MouseEvent e) {
 					node.setText(nodeValTA.getText());
 				}
@@ -763,8 +763,8 @@ public class XmlPaper extends JFrame {
 	/**
 	 * 获取控制属性增减的按钮面板
 	 * @param node 该面板所属的节点
-	 * @param attribute 该面板对应的节点属性
-	 * @param attKeyPanel 存放了当前节点所有属性名的面板
+	 * @param attribute 该面板对应的节点属�?
+	 * @param attKeyPanel 存放了当前节点所有属性名的面�?
 	 * @param attValPanel 存放了当前节点所有属性值的面板
 	 * @return 控制属性增减的按钮面板
 	 */
@@ -773,7 +773,7 @@ public class XmlPaper extends JFrame {
 		JPanel btnPanel = new JPanel(new GridLayout(1, 2));
 		JButton addBtn = new JButton("+");
 		JButton delBtn = new JButton("-");
-		addBtn.setMargin(new Insets(3, 5, 3, 5));	//设置内边距
+		addBtn.setMargin(new Insets(3, 5, 3, 5));	//设置内边�?
 		delBtn.setMargin(new Insets(3, 5, 3, 5));
 		btnPanel.add(addBtn, 0);
 		btnPanel.add(delBtn, 1);
@@ -784,7 +784,7 @@ public class XmlPaper extends JFrame {
 					return;
 				}
 				
-				// 先保存当前所编辑的属性值
+				// 先保存当前所编辑的属性�?
 				Component[] attKeys = attKeyPanel.getComponents();
 				Component[] attVals = attValPanel.getComponents();
 				node.clearAttributes();
@@ -794,16 +794,16 @@ public class XmlPaper extends JFrame {
 					node.setAttribute(attKey, attVal);
 				}
 				
-				node.setAttribute(Node.NEW_ATTRIBUTE, "");	// 增加新属性
-				reflashFormPanel(node);	// 刷新属性编辑面板
+				node.setAttribute(Node.NEW_ATTRIBUTE, "");	// 增加新属�?
+				reflashFormPanel(node);	// 刷新属性编辑面�?
 			}
 		});
 		
 		delBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				if(attribute != null && !Node.NEW_ATTRIBUTE.endsWith(attribute)) {
-					node.delAttribute(attribute);	// 删除对应的属性值
-					reflashFormPanel(node);	// 刷新属性编辑面板
+					node.delAttribute(attribute);	// 删除对应的属性�?
+					reflashFormPanel(node);	// 刷新属性编辑面�?
 				}
 			}
 		});
@@ -811,9 +811,9 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 提交节点的属性值/节点值修改.
+	 * 提交节点的属性�?/节点值修�?.
 	 * 把在UI修改的内容保存到内存.
-	 * @param isPrintTips 是否打印提示信息: 当为自动提交时，不需要打印提示
+	 * @param isPrintTips 是否打印提示信息: 当为自动提交时，不需要打印提�?
 	 */
 	private void applyChanges(boolean isPrintTips) {
 		Object selectNode = xmlTree.getLastSelectedPathComponent();
@@ -827,7 +827,7 @@ public class XmlPaper extends JFrame {
 			Node node = (Node) treeNode.getUserObject();
 			Component[] formCmps = formPanel.getComponents();
 			
-			// 应用属性值修改
+			// 应用属性值修�?
 			JPanel attsPanel = (JPanel) formCmps[0]; {
 				Component[] attCmps = attsPanel.getComponents();
 				JPanel attKeyPanel = (JPanel) attCmps[0];
@@ -842,7 +842,7 @@ public class XmlPaper extends JFrame {
 				}
 			}
 			
-			// 应用节点值修改
+			// 应用节点值修�?
 			JScrollPane scrollPanel = (JScrollPane) formCmps[1]; {
 				JPanel textPanel = (JPanel) scrollPanel.getViewport().getComponent(0);
 				JTextArea nodeValTA = (JTextArea) textPanel.getComponent(0);
@@ -856,11 +856,11 @@ public class XmlPaper extends JFrame {
 	}
 	
 	/**
-	 * 保存xml源码到文件
+	 * 保存xml源码到文�?
 	 * @param savePath 保存位置
 	 */
 	private void saveXml(String savePath) {
-		applyChanges(false);// 提交最后一次节点修改
+		applyChanges(false);// 提交最后一次节点修�?
 		reflashXmlCode();	// 刷新xml源码
 		try {
 			String xml = codeTextArea.getText().trim();

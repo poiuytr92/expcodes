@@ -12,10 +12,10 @@ import exp.sf.am.utils.CryptoUtils;
  * Table Name : T_ACCOUNT
  * Class Name : TAccount
  * </PRE>
- * <B>PROJECT:</B> exp-libs
- * <B>SUPPORT:</B> EXP 2017
- * @version   1.0.0.0 2017-08-10 14:29:16
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2017-08-10 14:29:16
+ * @author    EXP: 272629724@qq.com
  * @since     jdk version : jdk 1.6
  */
 public class TAccount  {
@@ -1115,8 +1115,8 @@ public class TAccount  {
         sb.append(" 服务密码").append(" : ").append(this.getServicePassword()).append("\r\n");
         sb.append(" 绑定邮箱").append(" : ").append(this.getEmail()).append("\r\n");
         sb.append(" 绑定手机").append(" : ").append(this.getPhone()).append("\r\n");
-        sb.append(" 绑定身份证号码").append(" : ").append(this.getIdcardNum()).append("\r\n");
-        sb.append(" 绑定身份证姓名").append(" : ").append(this.getIdcardName()).append("\r\n");
+        sb.append(" 绑定身份证号�?").append(" : ").append(this.getIdcardNum()).append("\r\n");
+        sb.append(" 绑定身份证姓�?").append(" : ").append(this.getIdcardName()).append("\r\n");
         sb.append(" 密码提示问题1").append(" : ").append(this.getQuestion1()).append("\r\n");
         sb.append(" 密码提示答案1").append(" : ").append(this.getAnswer1()).append("\r\n");
         sb.append(" 密码提示问题2").append(" : ").append(this.getQuestion2()).append("\r\n");

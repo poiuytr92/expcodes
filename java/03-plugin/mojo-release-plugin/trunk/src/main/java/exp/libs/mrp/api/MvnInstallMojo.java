@@ -21,10 +21,10 @@ import exp.libs.utils.io.FileUtils;
  * 
  * </PRE>
  * 
- * <B>PROJECT：</B> mojo-release-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> mojo-release-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-08-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  * 
  * @goal install
@@ -34,7 +34,7 @@ import exp.libs.utils.io.FileUtils;
 public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 
 	/**
-	 * Maven所发布的项目对象
+	 * Maven所发布的项目对�?
 	 * 
 	 * @parameter default-value="${project}"
 	 * @required
@@ -45,8 +45,8 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	/**
 	 * <PRE>
 	 * 依赖类型.
-	 * 	MAVEN: 仓库依赖，所发布的项目脚本，直接依赖本地maven仓库的jar包
-	 * 	SELF: 自身依赖，所发布的项目的依赖jar包会先复制到项目私有的lib目录，再在项目脚本中依赖lib下的jar包
+	 * 	MAVEN: 仓库依赖，所发布的项目脚本，直接依赖本地maven仓库的jar�?
+	 * 	SELF: 自身依赖，所发布的项目的依赖jar包会先复制到项目私有的lib目录，再在项目脚本中依赖lib下的jar�?
 	 * </PRE>
 	 * 
 	 * @parameter default-value="SELF"
@@ -56,8 +56,8 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	
 	/**
 	 * <PRE>
-	 * 私有lib仓库的目录
-	 * dependType = self 时有效
+	 * 私有lib仓库的目�?
+	 * dependType = self 时有�?
 	 * </PRE>
 	 * 
 	 * @parameter default-value="./lib"
@@ -74,7 +74,7 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String mavenRepository;
 	
 	/**
-	 * 项目版本类路径
+	 * 项目版本类路�?
 	 * 
 	 * @parameter default-value="foo.bar.prj.Version"
 	 * @required
@@ -82,7 +82,7 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String verClass;
 	
 	/**
-	 * 项目启动类路径
+	 * 项目启动类路�?
 	 * 
 	 * @parameter default-value="foo.bar.prj.Main"
 	 * @required
@@ -107,8 +107,8 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 
 	/**
 	 * JDK路径.
-	 * 	默认为控制台模式的java（需环境变量支持）, 
-	 * 	视实际运行需求，可为全路径，如 C:\Program Files\Java\jdk1.6.0_43\bin\java
+	 * 	默认为控制台模式的java（需环境变量支持�?, 
+	 * 	视实际运行需求，可为全路径，�? C:\Program Files\Java\jdk1.6.0_43\bin\java
 	 *  或者应为UI时，可为 javaw
 	 * 
 	 * @parameter default-value="java"
@@ -117,7 +117,7 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String jdkPath;
 	
 	/**
-	 * 默认分配JVM堆空间
+	 * 默认分配JVM堆空�?
 	 * 
 	 * @parameter default-value="64m"
 	 * @required
@@ -125,7 +125,7 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String xms;
 	
 	/**
-	 * 最大分配JVM堆空间
+	 * 最大分配JVM堆空�?
 	 * 
 	 * @parameter default-value="128m"
 	 * @required
@@ -141,8 +141,8 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String jdkParams;
 	
 	/**
-	 * 项目运行时的线程名称默认为 [项目名称].
-	 * 	而 [线程后缀] 则附加在启动脚本/停止脚本的 [项目名称] 后面
+	 * 项目运行时的线程名称默认�? [项目名称].
+	 * 	�? [线程后缀] 则附加在启动脚本/停止脚本�? [项目名称] 后面
 	 * 
 	 * @parameter default-value=" "
 	 * @required
@@ -150,11 +150,11 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String threadSuffix;
 	
 	/**
-	 * 所发布项目jar包是否带版本号（只影响启动脚本-cp列表中所发布项目的jar名称）。
-	 * 对于maven项目, 主项目jar包是由第三方ant插件编译生成的，必定会带版本号。
+	 * 所发布项目jar包是否带版本号（只影响启动脚�?-cp列表中所发布项目的jar名称）�?
+	 * 对于maven项目, 主项目jar包是由第三方ant插件编译生成的，必定会带版本号�?
 	 * 
-	 * 因此若此处值为true, 需要在ant插件配置中，拷贝所发布项目jar包时去掉版本号。
-	 * 反之若此处值为false, 则需要在ant插件配置中，拷贝所发布项目jar包时加上版本号。
+	 * 因此若此处值为true, 需要在ant插件配置中，拷贝所发布项目jar包时去掉版本号�?
+	 * 反之若此处值为false, 则需要在ant插件配置中，拷贝所发布项目jar包时加上版本号�?
 	 * 
 	 * @parameter default-value="true"
 	 * @required
@@ -178,10 +178,10 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String proguard;
 	
 	/**
-	 * 路径压缩模式：
-	 * LEAST：提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩。
-	 * STAND：提取标准数量的路径前缀：路径中同层同名的节点至少出现2次以上才会被提取前缀，相同前缀压缩。
-	 * MOST：提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩。
+	 * 路径压缩模式�?
+	 * LEAST：提取尽可能少的路径前缀：各路径中相同的节点至少出现2次以上才会被提取前缀，子前缀压缩�?
+	 * STAND：提取标准数量的路径前缀：路径中同层同名的节点至少出�?2次以上才会被提取前缀，相同前缀压缩�?
+	 * MOST：提取尽可能多的路径前缀：所有路径都会被提取前缀，相同前缀压缩�?
 	 * 
 	 * @parameter default-value="STAND"
 	 * @required
@@ -189,7 +189,7 @@ public class MvnInstallMojo extends org.apache.maven.plugin.AbstractMojo {
 	private String cmpPathMode;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	public MvnInstallMojo() {}
 	

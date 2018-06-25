@@ -20,10 +20,10 @@ import exp.libs.warp.tpl.Template;
  * <PRE>
  * 脚本构造器
  * </PRE>
- * <B>PROJECT：</B> mojo-release-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> mojo-release-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-05-15
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ScriptBuilder {
@@ -81,7 +81,7 @@ public class ScriptBuilder {
 		Template tpl = new Template(TplNames.START_TEMPLATE_UNIX, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 				
-		// 声明变量（-cp路径前缀）
+		// 声明变量�?-cp路径前缀�?
 		String exports = "";
 		List<String> prefixs = JarMgr.getInstn().getJarPathPrefixs();
 		for(int idx = 0; idx < prefixs.size(); idx++) {
@@ -114,12 +114,12 @@ public class ScriptBuilder {
 		}
 		tpl.set(Placeholders.CLASSPATH, cps);
 		
-		// 设置main方法与入参
+		// 设置main方法与入�?
 		tpl.set(Placeholders.MAIN_METHOD, Config.getInstn().getMainClass());
 		tpl.set(Placeholders.MAIN_METHOD_PARAMS, Config.getInstn().getMainArgs());
 		tpl.set(Placeholders.VER, "");
 		
-		// 设置标准流和异常流输出位置
+		// 设置标准流和异常流输出位�?
 		tpl.set(Placeholders.STDOUT_CTRL, ">/dev/null");
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		tpl.set(Placeholders.RUN_IN_BACKGROUND, "&");
@@ -139,7 +139,7 @@ public class ScriptBuilder {
 		Template tpl = new Template(TplNames.START_TEMPLATE_UNIX, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 				
-		// 声明变量（-cp路径前缀）
+		// 声明变量�?-cp路径前缀�?
 		String exports = "";
 		List<String> prefixs = JarMgr.getInstn().getJarPathPrefixs();
 		for(int idx = 0; idx < prefixs.size(); idx++) {
@@ -148,7 +148,7 @@ public class ScriptBuilder {
 		}
 		tpl.set(Placeholders.VARIABLE_DECLARATION, exports);
 		
-		// 设置JDK命令（版本脚本不使用图形界面）
+		// 设置JDK命令（版本脚本不使用图形界面�?
 		tpl.set(Placeholders.JDK_PATH, 
 				Config.getInstn().getJdkPath().replace("javaw", "java"));
 		
@@ -173,12 +173,12 @@ public class ScriptBuilder {
 		}
 		tpl.set(Placeholders.CLASSPATH, cps);
 		
-		// 设置main方法与入参
+		// 设置main方法与入�?
 		tpl.set(Placeholders.MAIN_METHOD, Config.getInstn().getVerClass());
-		tpl.set(Placeholders.MAIN_METHOD_PARAMS, "-p");	// 只打印版本
-		tpl.set(Placeholders.VER, "ver-");	// 声明为版本脚本
+		tpl.set(Placeholders.MAIN_METHOD_PARAMS, "-p");	// 只打印版�?
+		tpl.set(Placeholders.VER, "ver-");	// 声明为版本脚�?
 		
-		// 设置标准流和异常流输出位置
+		// 设置标准流和异常流输出位�?
 		tpl.set(Placeholders.STDOUT_CTRL, "");
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		tpl.set(Placeholders.RUN_IN_BACKGROUND, "");
@@ -191,7 +191,7 @@ public class ScriptBuilder {
 		Template tpl = new Template(TplNames.START_TEMPLATE_DOS, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 		
-		// 声明变量（-cp路径前缀）
+		// 声明变量�?-cp路径前缀�?
 		String sets = "";
 		List<String> prefixs = JarMgr.getInstn().getJarPathPrefixs();
 		for(int idx = 0; idx < prefixs.size(); idx++) {
@@ -224,15 +224,15 @@ public class ScriptBuilder {
 		}
 		tpl.set(Placeholders.CLASSPATH, cps);
 				
-		// 设置main方法与入参
+		// 设置main方法与入�?
 		tpl.set(Placeholders.MAIN_METHOD, Config.getInstn().getMainClass());
 		tpl.set(Placeholders.MAIN_METHOD_PARAMS, Config.getInstn().getMainArgs());
 		
-		// 设置标准流和异常流输出位置
+		// 设置标准流和异常流输出位�?
 		tpl.set(Placeholders.STDOUT_CTRL, "");
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		
-		// 标准化脚本内容, 并修正脚本中的set命令
+		// 标准化脚本内�?, 并修正脚本中的set命令
 		String scriptContent = _repairSetCmd(
 				StandardUtils.unix2dos(tpl.getContent()));
 		return createScript(ScriptNames.START_BAT, scriptContent);
@@ -242,7 +242,7 @@ public class ScriptBuilder {
 		Template tpl = new Template(TplNames.START_TEMPLATE_DOS, Charset.ISO);
 		tpl.set(Placeholders.PROJECT_NAME, Config.getInstn().getPrjName());
 		
-		// 声明变量（-cp路径前缀）
+		// 声明变量�?-cp路径前缀�?
 		String sets = "";
 		List<String> prefixs = JarMgr.getInstn().getJarPathPrefixs();
 		for(int idx = 0; idx < prefixs.size(); idx++) {
@@ -251,7 +251,7 @@ public class ScriptBuilder {
 		}
 		tpl.set(Placeholders.VARIABLE_DECLARATION, sets);
 				
-		// 设置JDK命令（版本脚本不使用图形界面）
+		// 设置JDK命令（版本脚本不使用图形界面�?
 		tpl.set(Placeholders.JDK_PATH, 
 				Config.getInstn().getJdkPath().replace("javaw", "java"));
 		
@@ -276,15 +276,15 @@ public class ScriptBuilder {
 		}
 		tpl.set(Placeholders.CLASSPATH, cps);
 				
-		// 设置main方法与入参
+		// 设置main方法与入�?
 		tpl.set(Placeholders.MAIN_METHOD, Config.getInstn().getVerClass());
-		tpl.set(Placeholders.MAIN_METHOD_PARAMS, "-p");	// 只打印版本
+		tpl.set(Placeholders.MAIN_METHOD_PARAMS, "-p");	// 只打印版�?
 		
-		// 设置标准流和异常流输出位置
+		// 设置标准流和异常流输出位�?
 		tpl.set(Placeholders.STDOUT_CTRL, "");
 		tpl.set(Placeholders.ERROUT_CTRL, "2>err.log");
 		
-		// 标准化脚本内容, 并修正脚本中的set命令
+		// 标准化脚本内�?, 并修正脚本中的set命令
 		String scriptContent = _repairSetCmd(
 				StandardUtils.unix2dos(tpl.getContent()));
 		return createScript(ScriptNames.VERSION_BAT, scriptContent);
@@ -292,9 +292,9 @@ public class ScriptBuilder {
 	
 	/**
 	 * <PRE>
-	 * 修正dos脚本用于读取线程文件的 "set /p" 命令.
-	 * 该命令由于 {@link StandardUtils.unix2dos} 中的路径标准化, 
-	 * 使得反斜杠 / 变成 \\ 导致失效, 需要修正.
+	 * 修正dos脚本用于读取线程文件�? "set /p" 命令.
+	 * 该命令由�? {@link StandardUtils.unix2dos} 中的路径标准�?, 
+	 * 使得反斜�? / 变成 \\ 导致失效, 需要修�?.
 	 * </PRE>
 	 * @param dosScriptContent
 	 * @return

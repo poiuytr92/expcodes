@@ -46,7 +46,7 @@ import exp.libs.warp.net.http.HttpUtils;
  */
 public class WsdlUtils {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(WsdlUtils.class);
 	
 	/** 连接超时, 默认1分钟 */
@@ -58,17 +58,17 @@ public class WsdlUtils {
 	/** 默认编码 */
 	public final static String DEFAULT_CHARSET = HttpUtils.DEFAULT_CHARSET;
 	
-	/** 缓存区大小 */
+	/** 缓存区大�? */
 	private final static int CACHE_SIZE = 256;
 	
-	/** wsdl接口的方法集缓存(可加速访问) */
+	/** wsdl接口的方法集缓存(可加速访�?) */
 	private Map<String, WsdlInterface[]> wsdlCache;
 	
 	/** 单例 */
 	private static volatile WsdlUtils instance;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	private WsdlUtils() {
 		this.wsdlCache = new HashMap<String, WsdlInterface[]>();
@@ -96,7 +96,7 @@ public class WsdlUtils {
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
 	 * 
-	 * @param method 调用方法名
+	 * @param method 调用方法�?
 	 * @return requestXmlTpl 用于请求wsdl的soup格式的XML报文 (无参模板)
 	 */
 	public static String getRequestXmlTpl(String wsdlURL, String method) {
@@ -110,7 +110,7 @@ public class WsdlUtils {
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
 	 * 
-	 * @param method 调用方法名
+	 * @param method 调用方法�?
 	 * @return requestXmlTpl 用于请求wsdl的soup格式的XML报文 (无参模板)
 	 */
 	private String _getRequestXmlTpl(String wsdlURL, String method) {
@@ -132,7 +132,7 @@ public class WsdlUtils {
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
 	 * 
-	 * @param method 调用方法名
+	 * @param method 调用方法�?
 	 * @return requestXmlTpl 用于请求wsdl的soup格式的XML报文 (无参模板)
 	 * @throws Exception 
 	 */
@@ -175,7 +175,7 @@ public class WsdlUtils {
 	/**
 	 * 按顺序设置参数到xml请求报文模板
 	 * @param requestXmlTpl xml请求报文模板
-	 * @param params 参数表
+	 * @param params 参数�?
 	 * @return requestXml 设置参数后的请求报文
 	 */
 	public static String setParams(String requestXmlTpl, String... params) {
@@ -185,7 +185,7 @@ public class WsdlUtils {
 	/**
 	 * 按顺序设置参数到xml请求报文模板
 	 * @param requestXmlTpl xml请求报文模板
-	 * @param params 参数表
+	 * @param params 参数�?
 	 * @return requestXml 设置参数后的请求报文
 	 */
 	private String _setParams(String requestXmlTpl, String... params) {
@@ -196,7 +196,7 @@ public class WsdlUtils {
 	/**
 	 * 按顺序设置参数到xml请求报文模板
 	 * @param requestXmlTpl xml请求报文模板
-	 * @param params 参数表
+	 * @param params 参数�?
 	 * @return requestXml 设置参数后的请求报文
 	 */
 	public static String setParams(String requestXmlTpl, List<String> params) {
@@ -206,7 +206,7 @@ public class WsdlUtils {
 	/**
 	 * 按顺序设置参数到xml请求报文模板
 	 * @param requestXmlTpl xml请求报文模板
-	 * @param params 参数表
+	 * @param params 参数�?
 	 * @return requestXml 设置参数后的请求报文
 	 */
 	private String _setParams(String requestXmlTpl, List<String> params) {
@@ -222,7 +222,7 @@ public class WsdlUtils {
 	/**
 	 * 按键值设置参数到xml请求报文模板
 	 * @param requestXmlTpl xml请求报文模板
-	 * @param params 参数表
+	 * @param params 参数�?
 	 * @return requestXml 设置参数后的请求报文
 	 */
 	public static String setParams(String requestXmlTpl, Map<String, String> params) {
@@ -232,7 +232,7 @@ public class WsdlUtils {
 	/**
 	 * 按键值设置参数到xml请求报文模板
 	 * @param requestXmlTpl xml请求报文模板
-	 * @param params 参数表
+	 * @param params 参数�?
 	 * @return requestXml 设置参数后的请求报文
 	 */
 	private String _setParams(String requestXmlTpl, Map<String, String> params) {
@@ -255,8 +255,8 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
 	 * @return responseXml xml响应报文
 	 */
 	public static String doCall(String wsdlURL, String method,
@@ -272,8 +272,8 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
 	 * @return responseXml xml响应报文
 	 */
 	public static String doCall(String wsdlURL, String method,
@@ -287,9 +287,9 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
-	 * @param header 是否需要带头参数  SOAPAction:method
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
+	 * @param header 是否需要带头参�?  SOAPAction:method
 	 * @return responseXml xml响应报文
 	 */
 	public static String doCall(String wsdlURL, String method,
@@ -304,12 +304,12 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
-	 * @param header 是否需要带头参数  SOAPAction:method
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
+	 * @param header 是否需要带头参�?  SOAPAction:method
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 请求超时(ms)
-	 * @param charset 字符集编码
+	 * @param charset 字符集编�?
 	 * @return responseXml xml响应报文
 	 */
 	public static String doCall(String wsdlURL, String method,
@@ -325,12 +325,12 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
-	 * @param header 是否需要带头参数  SOAPAction:method
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
+	 * @param header 是否需要带头参�?  SOAPAction:method
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 请求超时(ms)
-	 * @param charset 字符集编码
+	 * @param charset 字符集编�?
 	 * @return responseXml xml响应报文
 	 */
 	private String _doCall(String wsdlURL, String method,
@@ -347,8 +347,8 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
 	 * @return responseXml xml响应报文
 	 */
 	public static String doCall(String wsdlURL, String method, 
@@ -362,9 +362,9 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
-	 * @param header 是否需要带头参数  SOAPAction:method
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
+	 * @param header 是否需要带头参�?  SOAPAction:method
 	 * @return responseXml xml响应报文
 	 */
 	public static String doCall(String wsdlURL, String method, 
@@ -379,12 +379,12 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
-	 * @param header 是否需要带头参数  SOAPAction:method
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
+	 * @param header 是否需要带头参�?  SOAPAction:method
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 请求超时(ms)
-	 * @param charset 字符集编码
+	 * @param charset 字符集编�?
 	 * @return responseXml xml响应报文
 	 */
 	public static String doCall(String wsdlURL, String method, 
@@ -400,12 +400,12 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
-	 * @param header 是否需要带头参数  SOAPAction:method
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
+	 * @param header 是否需要带头参�?  SOAPAction:method
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 请求超时(ms)
-	 * @param charset 字符集编码
+	 * @param charset 字符集编�?
 	 * @return responseXml xml响应报文
 	 */
 	private String _doCall(String wsdlURL, String method, 
@@ -422,12 +422,12 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
+	 * @param method 调用方法�?
 	 * @param requestXml xml请求报文
-	 * @param header 是否需要带头参数  SOAPAction:method
+	 * @param header 是否需要带头参�?  SOAPAction:method
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 请求超时(ms)
-	 * @param charset 字符集编码
+	 * @param charset 字符集编�?
 	 * @return responseXml xml响应报文
 	 */
 	private String __doCall(String wsdlURL, String method,
@@ -451,12 +451,12 @@ public class WsdlUtils {
 	 * @param wsdlURL wsdl地址, 支持格式:
 	 * 		http://172.168.10.7:8686/services/myService?wsdl
 	 * 		http://172.168.10.7:8686/services/myService
-	 * @param method 调用方法名
+	 * @param method 调用方法�?
 	 * @param requestXml xml请求报文
-	 * @param header 是否需要带头参数  SOAPAction:method
+	 * @param header 是否需要带头参�?  SOAPAction:method
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 请求超时(ms)
-	 * @param charset 字符集编码
+	 * @param charset 字符集编�?
 	 * @return responseXml xml响应报文
 	 */
 	private String __doCall__(String wsdlURL, String method,
@@ -488,15 +488,15 @@ public class WsdlUtils {
 	/**
 	 * <pre>
 	 * 调用webservices服务(axis2框架).
-	 * 此方式为应用RPC的远程调用， 即通过url定位告诉远程服务器方法名称、参数等，调用远程服务，得到结果。
-	 *  <b>注：若所调用的服务参数表非默认值（默认值为 arg0~argN）, 则此方法无法使用.</b>
+	 * 此方式为应用RPC的远程调用， 即通过url定位告诉远程服务器方法名称、参数等，调用远程服务，得到结果�?
+	 *  <b>注：若所调用的服务参数表非默认值（默认值为 arg0~argN�?, 则此方法无法使用.</b>
 	 * </pre>
 	 * @param wsdlURL wsdl地址
-	 * @param namespace 命名空间: 浏览器打开wsdlURL后在 <wsdl:definitions> 中的 targetNamespace 的值
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表: new Object[] { paramA, paramB, ... };
-	 * @param resopnseType 服务器响应数组的值类型(若无范围值该参数应设null): new Class[] { A.class, B.class, ...};
-	 * @return Object[] 响应结果集
+	 * @param namespace 命名空间: 浏览器打开wsdlURL后在 <wsdl:definitions> 中的 targetNamespace 的�?
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?: new Object[] { paramA, paramB, ... };
+	 * @param resopnseType 服务器响应数组的值类�?(若无范围值该参数应设null): new Class[] { A.class, B.class, ...};
+	 * @return Object[] 响应结果�?
 	 */
 	public static Object[] doCallAxis2(String wsdlURL, String namespace,
 			String method, Object[] requestParams, Class<?>[] resopnseType) {
@@ -507,16 +507,16 @@ public class WsdlUtils {
 	/**
 	 * <pre>
 	 * 调用webservices服务(axis2框架).
-	 * 此方式为应用RPC的远程调用， 即通过url定位告诉远程服务器方法名称、参数等，调用远程服务，得到结果。
-	 *  <b>注：若所调用的服务参数表非默认值（默认值为 arg0~argN）, 则此方法无法使用.</b>
+	 * 此方式为应用RPC的远程调用， 即通过url定位告诉远程服务器方法名称、参数等，调用远程服务，得到结果�?
+	 *  <b>注：若所调用的服务参数表非默认值（默认值为 arg0~argN�?, 则此方法无法使用.</b>
 	 * </pre>
 	 * @param wsdlURL wsdl地址
-	 * @param namespace 命名空间: 浏览器打开wsdlURL后在 <wsdl:definitions> 中的 targetNamespace 的值
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表: new Object[] { paramA, paramB, ... };
-	 * @param resopnseType 服务器响应数组的值类型(若无范围值该参数应设null): new Class[] { A.class, B.class, ...};
+	 * @param namespace 命名空间: 浏览器打开wsdlURL后在 <wsdl:definitions> 中的 targetNamespace 的�?
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?: new Object[] { paramA, paramB, ... };
+	 * @param resopnseType 服务器响应数组的值类�?(若无范围值该参数应设null): new Class[] { A.class, B.class, ...};
 	 * @param callTimeout 响应超时(ms)
-	 * @return Object[] 响应结果集
+	 * @return Object[] 响应结果�?
 	 */
 	public static Object[] doCallAxis2(String wsdlURL, String namespace,
 			String method, Object[] requestParams, 
@@ -528,15 +528,15 @@ public class WsdlUtils {
 	/**
 	 * <pre>
 	 * 调用webservices服务(axis2框架).
-	 *  注：若所调用的服务参数表非默认值（默认值为 arg0~argN）, 则此方法无法使用.
+	 *  注：若所调用的服务参数表非默认值（默认值为 arg0~argN�?, 则此方法无法使用.
 	 * </pre>
 	 * @param wsdlURL wsdl地址
-	 * @param namespace 命名空间: 浏览器打开wsdlURL后在 <wsdl:definitions> 中的 targetNamespace 的值
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表: new Object[] { paramA, paramB, ... };
-	 * @param resopnseType 服务器响应数组的值类型(若无范围值该参数应设null): new Class[] { A.class, B.class, ...};
+	 * @param namespace 命名空间: 浏览器打开wsdlURL后在 <wsdl:definitions> 中的 targetNamespace 的�?
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?: new Object[] { paramA, paramB, ... };
+	 * @param resopnseType 服务器响应数组的值类�?(若无范围值该参数应设null): new Class[] { A.class, B.class, ...};
 	 * @param callTimeout 响应超时(ms)
-	 * @return Object[] 响应结果集
+	 * @return Object[] 响应结果�?
 	 */
 	private Object[] _doCallAxis2(String wsdlURL, String namespace,
 			String method, Object[] requestParams, 
@@ -556,15 +556,15 @@ public class WsdlUtils {
 	/**
 	 * <pre>
 	 * 调用webservices服务(axis2框架).
-	 *  注：若所调用的服务参数表非默认值（默认值为 arg0~argN）, 则此方法无法使用.
+	 *  注：若所调用的服务参数表非默认值（默认值为 arg0~argN�?, 则此方法无法使用.
 	 * </pre>
 	 * @param wsdlURL wsdl地址
-	 * @param namespace 命名空间: 浏览器打开wsdlURL后在 <wsdl:definitions> 中的 targetNamespace 的值
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表: new Object[] { paramA, paramB, ... };
-	 * @param resopnseType 服务器响应数组的值类型(若无范围值该参数应设null): new Class[] { A.class, B.class, ...};
+	 * @param namespace 命名空间: 浏览器打开wsdlURL后在 <wsdl:definitions> 中的 targetNamespace 的�?
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?: new Object[] { paramA, paramB, ... };
+	 * @param resopnseType 服务器响应数组的值类�?(若无范围值该参数应设null): new Class[] { A.class, B.class, ...};
 	 * @param callTimeout 响应超时(ms)
-	 * @return Object[] 响应结果集
+	 * @return Object[] 响应结果�?
 	 * @throws Exception
 	 */
 	private Object[] __doCallAxis2(String wsdlURL, String namespace,
@@ -582,11 +582,11 @@ public class WsdlUtils {
 		QName requestMethod = new QName(namespace, method);
 		Object[] responses = new Object[0];
 		
-		// ws服务有返回值
+		// ws服务有返回�?
 		if(resopnseType != null && resopnseType.length > 0) {
 			responses = rpc.invokeBlocking(requestMethod, requestParams, resopnseType);
 			
-		// ws服务无返回值
+		// ws服务无返回�?
 		} else {
 			rpc.invokeRobust(requestMethod, requestParams);
 		}
@@ -597,9 +597,9 @@ public class WsdlUtils {
 	 * 调用webservices服务(CXF框架).
 	 * 
 	 * @param wsdlURL wsdl地址
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
-	 * @return Object[] 响应结果集
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
+	 * @return Object[] 响应结果�?
 	 */
 	public static Object[] doCallCXF(String wsdlURL, String method, 
 			Object... requestParams) {
@@ -611,11 +611,11 @@ public class WsdlUtils {
 	 * 调用webservices服务(CXF框架).
 	 * 
 	 * @param wsdlURL wsdl地址
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 响应超时(ms)
-	 * @return Object[] 响应结果集
+	 * @return Object[] 响应结果�?
 	 */
 	public static Object[] doCallCXF(String wsdlURL, String method, 
 			Object[] requestParams, int connTimeout, int callTimeout) {
@@ -627,11 +627,11 @@ public class WsdlUtils {
 	 * 调用webservices服务(CXF框架).
 	 * 
 	 * @param wsdlURL wsdl地址
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 响应超时(ms)
-	 * @return Object[] 响应结果集
+	 * @return Object[] 响应结果�?
 	 */
 	private Object[] _doCallCXF(String wsdlURL, String method, 
 			Object[] requestParams, int connTimeout, int callTimeout) {
@@ -651,11 +651,11 @@ public class WsdlUtils {
 	 * 调用webservices服务(CXF框架).
 	 * 
 	 * @param wsdlURL wsdl地址
-	 * @param method 调用方法名
-	 * @param requestParams 请求参数表
+	 * @param method 调用方法�?
+	 * @param requestParams 请求参数�?
 	 * @param connTimeout 连接超时(ms)
 	 * @param callTimeout 响应超时(ms)
-	 * @return Object[] 响应结果集
+	 * @return Object[] 响应结果�?
 	 * @throws Exception
 	 */
 	private Object[] __doCallCXF(String wsdlURL, String method, 

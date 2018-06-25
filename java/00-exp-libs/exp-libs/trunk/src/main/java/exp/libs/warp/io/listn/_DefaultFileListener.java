@@ -54,7 +54,7 @@ class _DefaultFileListener implements FileAlterationListener {
 
 	@Override
 	public void onStop(FileAlterationObserver observer) {
-		System.out.println("onStop");	// 每次扫描结束时均会触发
+		System.out.println("onStop");	// 每次扫描结束时均会触�?
 	}
 
 }

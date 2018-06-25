@@ -17,15 +17,15 @@ import org.openqa.selenium.Cookie;
 public class _WebKitCookie extends _HttpCookie {
 
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	protected _WebKitCookie() {
 		super();
 	}
 	
 	/**
-	 * 构造函数
-	 * @param headerCookie HTTP响应头中的 Set-Cookie, 格式如：
+	 * 构造函�?
+	 * @param headerCookie HTTP响应头中�? Set-Cookie, 格式如：
 	 * 	JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
 	 */
 	protected _WebKitCookie(String headerCookie) {
@@ -33,7 +33,7 @@ public class _WebKitCookie extends _HttpCookie {
 	}
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param cookie selenium的cookie对象
 	 */
 	protected _WebKitCookie(Cookie cookie) {

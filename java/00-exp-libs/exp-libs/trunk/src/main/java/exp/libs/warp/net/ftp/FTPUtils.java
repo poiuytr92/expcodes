@@ -20,7 +20,7 @@ import exp.libs.warp.net.ftp.bean.FtpBean;
 public class FTPUtils {
 
 	/**
-	 * 私有构造方法
+	 * 私有构造方�?
 	 */
 	private FTPUtils() {
 	}
@@ -111,7 +111,7 @@ public class FTPUtils {
 	 *            连接对象
 	 * @param remoteDirectory
 	 *            远程目录
-	 * @return 返回文件绝对路径名称的列表
+	 * @return 返回文件绝对路径名称的列�?
 	 * @throws Exception
 	 *             异常信息
 	 */

@@ -19,15 +19,15 @@ import org.openqa.selenium.Cookie;
 public class WebKitCookie extends HttpCookie {
 
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	public WebKitCookie() {
 		super();
 	}
 	
 	/**
-	 * 构造函数
-	 * @param headerCookies 多个HTTP响应头中的 Set-Cookie（换行分隔）, 格式如：
+	 * 构造函�?
+	 * @param headerCookies 多个HTTP响应头中�? Set-Cookie（换行分隔）, 格式如：
 	 * 	sid=iji8r99z ; Domain=www.baidu.com ; Path=/ ; Expires=Thu, 31-Jan-2019 21:18:46 GMT+08:00 ; 
 	 * 	JSESSIONID=87E6F83AD8F5EC3C1BF1B08736E8D28A ; Domain= ; Path=/ ; Expires=Wed, 31-Jan-2018 21:18:43 GMT+08:00 ; HttpOnly ; 
 	 * 	DedeUserID__ckMd5=14ad42f429c3e8b7 ; Domain=www.baidu.com ; Path=/ ; Expires=Fri, 02-Mar-2018 21:18:46 GMT+08:00 ; 
@@ -37,8 +37,8 @@ public class WebKitCookie extends HttpCookie {
 	}
 	
 	/**
-	 * 构造函数
-	 * @param cookies selenium的cookie集
+	 * 构造函�?
+	 * @param cookies selenium的cookie�?
 	 */
 	public WebKitCookie(Collection<Cookie> cookies) {
 		super();
@@ -83,8 +83,8 @@ public class WebKitCookie extends HttpCookie {
 	}
 	
 	/**
-	 * 生成selenium的cookie集
-	 * @return selenium的cookie集
+	 * 生成selenium的cookie�?
+	 * @return selenium的cookie�?
 	 */
 	public Set<Cookie> toSeleniumCookies() {
 		Set<Cookie> seleniumCookies = new HashSet<Cookie>();

@@ -149,8 +149,8 @@ class _VerInfo extends PopChildWindow {
 		datetimeTF.setEditable(isEditable);
 		
 		JPanel panel = new JPanel(new VFlowLayout()); {
-			panel.add(SwingUtils.getPairsPanel(" 责任人 ", authorTF));
-			panel.add(SwingUtils.getPairsPanel(" 版本号 ", !isEditable ? versionTF : 
+			panel.add(SwingUtils.getPairsPanel(" 责任�? ", authorTF));
+			panel.add(SwingUtils.getPairsPanel(" 版本�? ", !isEditable ? versionTF : 
 				SwingUtils.getEBorderPanel(versionTF, snapshotBtn)));
 			panel.add(SwingUtils.getPairsPanel("定版时间", !isEditable ? datetimeTF : 
 					SwingUtils.getEBorderPanel(datetimeTF, curTimeBtn)));

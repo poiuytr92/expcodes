@@ -33,10 +33,10 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * 此工具由网站 http://tool.chinaz.com 提供支持.
  * 
  * </PRE>
- * <B>PROJECT：</B> github-fill-empty-dir
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> github-fill-empty-dir
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-04-28
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class DnsOptimizer {
@@ -45,12 +45,12 @@ public class DnsOptimizer {
 	 * <PRE>
 	 * 需要测试TTL的Host域名主机列表.
 	 * ---------------------------
-	 *  <B>若需增加Host域名主机请修改此处</B>
+	 *  <B>若需增加Host域名主机请修改此�?</B>
 	 * </PRE>
 	 */
 	private final static String[] HOSTS = new String[] {
 		"github.global.ssl.fastly.net", 	// 导致Github访问慢的罪魁祸首
-		"github.com", 						// Github的SVN服务器域名
+		"github.com", 						// Github的SVN服务器域�?
 		"assets-cdn.github.com",
 		"www.github.com", 
 		"avatars0.githubusercontent.com", 
@@ -70,7 +70,7 @@ public class DnsOptimizer {
 ///////////////////////////////////////////////////////////////////////////////
 	
 	
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(DnsOptimizer.class);
 	
 	/** Hosts模板文件 */
@@ -85,7 +85,7 @@ public class DnsOptimizer {
 	/** 测试host在各个DNS服务器的TTL的URL */
 	private final static String TTL_URL = "http://tool.chinaz.com/AjaxSeo.aspx";
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected DnsOptimizer() {}
 	
 	/**
@@ -99,14 +99,14 @@ public class DnsOptimizer {
 		
 		Map<String, String> hosts = readHosts();
 		for(String host : HOSTS) {
-			log.info("正在查找hosts域名主机 [{}] 的最优DNS服务器...", host);
+			log.info("正在查找hosts域名主机 [{}] 的最优DNS服务�?...", host);
 			String bestDNS = findBestDNS(host);
 			if(VerifyUtils.isIP(bestDNS)) {
 				hosts.put(host, bestDNS);
 				log.info("优化hosts域名主机 [{}] 的最优DNS服务器为: [{}]", host, bestDNS);
 				
 			} else {
-				log.warn("优化hosts域名主机 [{}] 的DNS服务器失败", host);
+				log.warn("优化hosts域名主机 [{}] 的DNS服务器失�?", host);
 			}
 		}
 		
@@ -172,7 +172,7 @@ public class DnsOptimizer {
 	}
 	
 	/**
-	 * 寻找本地到host域名主机的最优DNS服务器
+	 * 寻找本地到host域名主机的最优DNS服务�?
 	 * @param host host域名主机
 	 * @return 当前TTL最小的DNS服务器IP
 	 */
@@ -181,7 +181,7 @@ public class DnsOptimizer {
 		String bestDNS = "";
 		
 		Map<String, String> servers = _getDnsServers(host);
-		log.debug("获取hosts域名主机 [{}] 的候选DNS服务器共 [{}] 台", host, servers.size());
+		log.debug("获取hosts域名主机 [{}] 的候选DNS服务器共 [{}] �?", host, servers.size());
 		
 		Iterator<String> ids = servers.keySet().iterator();
 		while(ids.hasNext()) {
@@ -198,18 +198,18 @@ public class DnsOptimizer {
 					String address = JsonUtils.getStr(rst, "ipaddress");
 					int ttl = JsonUtils.getInt(rst, "ttl", Integer.MAX_VALUE);
 					
-					log.debug("测试: host域名主机 [{}] 到DNS服务器 [{}({})] 的TTL值: {}", host, ip, address, ttl);
+					log.debug("测试: host域名主机 [{}] 到DNS服务�? [{}({})] 的TTL�?: {}", host, ip, address, ttl);
 					if(minTTL > ttl) {
 						minTTL = ttl;
 						bestDNS = ip;
-						log.debug("更新: host域名主机 [{}] 到DNS服务器 [{}({})] 的TTL值 [{}] 更优", host, ip, address, ttl);
+						log.debug("更新: host域名主机 [{}] 到DNS服务�? [{}({})] 的TTL�? [{}] 更优", host, ip, address, ttl);
 					}
 				}
 			} catch(Exception e) {
-				log.error("测试host域名主机 [{}] 到DNS服务器 [{}] 的TTL失败: {}", host, id, rsts, e);
+				log.error("测试host域名主机 [{}] 到DNS服务�? [{}] 的TTL失败: {}", host, id, rsts, e);
 			}
 			
-			// TTL = 1 已经极好了, 无需再继续测试
+			// TTL = 1 已经极好�?, 无需再继续测�?
 			if(minTTL <= 1) {
 				break;
 			}
@@ -218,7 +218,7 @@ public class DnsOptimizer {
 	}
 	
 	/**
-	 * 获取DNS服务器列表
+	 * 获取DNS服务器列�?
 	 * @param host host域名主机
 	 * @return Map: server-id -> server-name
 	 */
@@ -229,13 +229,13 @@ public class DnsOptimizer {
 		request.put("host", host);
 		request.put("ip", "");
 		
-		// 从返回的页面源码中提取 server 列表 (JSON串):
+		// 从返回的页面源码中提�? server 列表 (JSON�?):
 		// var servers = [{id:15381430,ip:"qSaqwKBbIMiHFNDIIIg2VA==",state:0,trytime:0},{id:15381438,ip:"pc5LXpA6Y0LtmOpoKX3zGA==",state:0,trytime:0},{id:15381439,ip:"5n2koVgLsBbs7W8XbIL2NQ==",state:0,trytime:0},{id:15381451,ip:"fL3WGCQ8i0kNrxXqCGAcpg==",state:0,trytime:0},{id:15381437,ip:"SdvPAD3yuuRRgUgJQLfaUQ==",state:0,trytime:0},{id:15381441,ip:"Rv90/Ksj1L6zXUx96XEFbA==",state:0,trytime:0},{id:15381445,ip:"UsXmWPyUMCAl22fytxVeYA==",state:0,trytime:0},{id:15381446,ip:"DiRV3R7jjMVfu0/d6bXYTg==",state:0,trytime:0},{id:15381447,ip:"wfe/baph0aVy7vSzQ8JCew==",state:0,trytime:0},{id:15381433,ip:"zFjFw1wXjPGw24s1pgwUlg==",state:0,trytime:0},{id:15381449,ip:"Tllr7HLQodVpDDFM0Ssc9A==",state:0,trytime:0},{id:15381436,ip:"lsB7oELLLoiNHPwhyWj4YA==",state:0,trytime:0},{id:15381448,ip:"eaWEej3puEKNjremlHa|0w==",state:0,trytime:0},{id:15381442,ip:"fAiZyrOZG6sOpFazf1zdVg==",state:0,trytime:0},{id:15381443,ip:"smuXAjaliTLUrOoVs/MnVQ==",state:0,trytime:0},{id:15381444,ip:"VZWE4uxPBJAKFLPTtoHyyQ==",state:0,trytime:0},{id:15381440,ip:"abaieVMlEG3aU4jEmZOZrg==",state:0,trytime:0},{id:15381434,ip:"/LqwY7|RTOTUAm/8Eln8dQ==",state:0,trytime:0},{id:15381435,ip:"FUFXcwK4d|5goTcqAeJyHA==",state:0,trytime:0},{id:15381431,ip:"kZili0C|QmwVj8/IZI9MOw==",state:0,trytime:0},{id:15381432,ip:"4|LMEILycPoa9DPxVJb3gg==",state:0,trytime:0},{id:15381450,ip:"JACYvxRvL1|CnyK9sCL7/g==",state:0,trytime:0}];
 		String RGX_SERVERS = "var servers = (.+)";
 		String response = HttpURLUtils.doGet(DNS_URL, header, request);
 		String serverJson = RegexUtils.findFirst(response, RGX_SERVERS);
 		
-		// 从JSON串中提取 server 的 id->name 关系:
+		// 从JSON串中提取 server �? id->name 关系:
 		RGX_SERVERS = "id:([^,]+),ip:\"([^\"]+)\"";
 		Map<String, String> servers = new HashMap<String, String>();
 		List<List<String>> datas = RegexUtils.findAll(serverJson, RGX_SERVERS);
@@ -251,7 +251,7 @@ public class DnsOptimizer {
 	 * 测试host域名主机到指定的DNS服务器（集群）的TTL
 	 * @param host host域名主机
 	 * @param serverId DNS服务器ID
-	 * @param serverName DNS服务器名称
+	 * @param serverName DNS服务器名�?
 	 * @return 测试结果列表, 如：{"state":1,"id":15381435,"list":[{"type":"A","result":"151.101.1.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.65.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.129.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.193.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"}]}
 	 */
 	private static String _testTTL(String host, String serverId, String serverName) {
@@ -270,7 +270,7 @@ public class DnsOptimizer {
 				"&id=", serverId, 
 				"&callback=", jQuery);
 		
-		// 测试到DNS服务器（集群）的TTL结果, 返回值形如: 
+		// 测试到DNS服务器（集群）的TTL结果, 返回值形�?: 
 		// jQuery1103390065854505800381_1527217623098({"state":1,"id":15381435,"list":[{"type":"A","result":"151.101.1.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.65.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.129.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"},{"type":"A","result":"151.101.193.194","ipaddress":"美国 Fastly公司CDN网络节点","ttl":"30"}]})
 		String REGEX = jQuery.concat("\\((.*)\\)");
 		String response = HttpURLUtils.doPost(ttlUrl, header, request);
@@ -291,7 +291,7 @@ public class DnsOptimizer {
 	}
 	
 	/**
-	 * GET请求头
+	 * GET请求�?
 	 * @param host
 	 * @return
 	 */
@@ -308,7 +308,7 @@ public class DnsOptimizer {
 	}
 	
 	/**
-	 * POST请求头
+	 * POST请求�?
 	 * @param host
 	 * @return
 	 */

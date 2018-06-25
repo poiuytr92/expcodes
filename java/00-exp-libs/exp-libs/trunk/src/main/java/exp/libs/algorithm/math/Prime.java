@@ -35,21 +35,21 @@ import java.util.List;
  */
 public class Prime {
 
-	/** 要求解的素数集的自然数范围(包含range) */
+	/** 要求解的素数集的自然数范�?(包含range) */
 	private int range;
 	
 	/** 范围内的素数个数 */
 	private int count;
 	
-	/** 素数标记集: 标记范围内的每一个数是否为素数 */
+	/** 素数标记�?: 标记范围内的每一个数是否为素�? */
 	private boolean[] isPrimes;
 	
-	/** 素数集: 依次存储范围内每一个素数 */
+	/** 素数�?: 依次存储范围内每一个素�? */
 	private List<Integer> primes;
 	
 	/**
-	 * 构造 [2, range] 范围内的素数集
-	 * @param range 自然数范围
+	 * 构�? [2, range] 范围内的素数�?
+	 * @param range 自然数范�?
 	 */
 	public Prime(int range) {
 		this.range = (range < 2 ? 2 : range + 1);
@@ -59,14 +59,14 @@ public class Prime {
 	}
 	
 	/**
-	 * 使用埃拉托斯特尼筛法求解素数集
+	 * 使用埃拉托斯特尼筛法求解素数�?
 	 */
 	public void screen() {
 		Arrays.fill(isPrimes, true);
 		isPrimes[0] = isPrimes[1] = false;
 		count = 2;
 		
-		// 根据合数定理，在 [2, range] 范围内筛掉 [2, sqrt(range)] 之间的所有数的倍数
+		// 根据合数定理，在 [2, range] 范围内筛�? [2, sqrt(range)] 之间的所有数的倍数
 		final int SQRT_NUM = (int) Math.ceil(Math.sqrt(range));
 		for(int i = 2; i <= SQRT_NUM; i++) {
 			if(isPrimes[i] == false) {
@@ -74,7 +74,7 @@ public class Prime {
 			}
 
 			// 筛掉最小素数的所有倍数
-			int multiple = 2;	// i的倍率（因不包括自身, 从2倍开始）	
+			int multiple = 2;	// i的倍率（因不包括自�?, �?2倍开始）	
 			while(true) {
 				int mNum = i * multiple;	// i的倍数
 				if(mNum >= range) {
@@ -115,7 +115,7 @@ public class Prime {
 
 	/**
 	 * 获取范围内的素数集合
-	 * @return 素数集
+	 * @return 素数�?
 	 */
 	public List<Integer> getPrimes() {
 		return new LinkedList<Integer>(primes);
@@ -123,8 +123,8 @@ public class Prime {
 	
 	/**
 	 * 检测范围内的指定整数是否为素数
-	 * @param num 被检测整数
-	 * @return true:是素数; false:不是素数 或 所检测整数不在范围内
+	 * @param num 被检测整�?
+	 * @return true:是素�?; false:不是素数 �? 所检测整数不在范围内
 	 */
 	public boolean isPrime(int num) {
 		boolean isPrime = false;

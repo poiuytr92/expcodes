@@ -21,7 +21,7 @@ public class TensorFlow {
 	private TensorFlowAPI tfAPI;
 	
 	/**
-     * 构造函数
+     * 构造函�?
      * @param pbModelFilePath 已训练好的PB模型文件路径
      */
 	public TensorFlow(String pbModelFilePath) {
@@ -29,28 +29,28 @@ public class TensorFlow {
 	}
 	
 	/**
-	 * 设置训练模型的输入变量矩阵值 （即输入张量）
+	 * 设置训练模型的输入变量矩阵�? （即输入张量�?
 	 * @param feedName 变量名称（在python训练模型时定义）
 	 * @param feedValue 变量矩阵（N维输入矩阵降维到一维矩阵的值）
-	 * @param dims 变量矩阵的维度值列表， 如 2x3矩阵，则此处为 {2, 3}
+	 * @param dims 变量矩阵的维度值列表， �? 2x3矩阵，则此处�? {2, 3}
 	 */
 	public void setInput(final String feedName, float[] feedValue, long... dims) {
 		tfAPI.feed(feedName, feedValue, dims);	// 设置输入张量
 	}
 	
 	/**
-	 * 获取输出矩阵（即输出张量）
+	 * 获取输出矩阵（即输出张量�?
 	 * @param fetchName
 	 * @return
 	 */
 	public float[] getOutput(final String fetchName) {
 		tfAPI.run(fetchName);			// 执行模型运算
-		return tfAPI.fetch(fetchName);	// 获取输出张量的矩阵值
+		return tfAPI.fetch(fetchName);	// 获取输出张量的矩阵�?
 	}
 	
 	/**
-	 * 加载单通道2D图像，并降维到一维数组
-	 * 	(模拟python的PIL组件所读取的单通道图像数据格式, 其中黑色标记值为0， 白色标记值为1)
+	 * 加载单通道2D图像，并降维到一维数�?
+	 * 	(模拟python的PIL组件所读取的单通道图像数据格式, 其中黑色标记值为0�? 白色标记值为1)
 	 * @param binaryImage 单通道图像
 	 * @return
 	 */
@@ -76,7 +76,7 @@ public class TensorFlow {
 	
 	/**
 	 * 仿照python的numpy.argmax功能.
-	 * 	求 matrix 第axis维 的最大值的索引矩阵
+	 * 	�? matrix 第axis�? 的最大值的索引矩阵
 	 * 
 	 * 此方法暂时只针对二维矩阵
 	 *  当axis=0时，求每列的的最大值的索引
@@ -85,7 +85,7 @@ public class TensorFlow {
 	 * @param matrix
 	 * @param row
 	 * @param col
-	 * @param axis 0或1
+	 * @param axis 0�?1
 	 * @return
 	 */
 	public int[] argmax(float[] matrix, int row, int col, int axis) {

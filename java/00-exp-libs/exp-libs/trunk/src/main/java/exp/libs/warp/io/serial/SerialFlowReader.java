@@ -27,22 +27,22 @@ import exp.libs.utils.other.StrUtils;
  */
 public class SerialFlowReader extends _SerialFlow {
 
-	/** 序列化文件 */
+	/** 序列化文�? */
 	private File file;
 	
 	/** 序列化输入流 */
 	private ObjectInputStream ois;
 	
-	/** 当前得到的反序列化对象 */
+	/** 当前得到的反序列化对�? */
 	private Object obj;
 	
-	/** 序列化输入流是否已关闭 */
+	/** 序列化输入流是否已关�? */
 	private boolean closed;
 	
 	/**
 	 * <PRE>
-	 * 构造函数.
-	 * 序列化文件使用默认位置: ./serializable.dat
+	 * 构造函�?.
+	 * 序列化文件使用默认位�?: ./serializable.dat
 	 * </PRE>
 	 */
 	public SerialFlowReader() {
@@ -50,8 +50,8 @@ public class SerialFlowReader extends _SerialFlow {
 	}
 	
 	/**
-	 * 构造函数
-	 * @param filePath 序列化文件存储位置
+	 * 构造函�?
+	 * @param filePath 序列化文件存储位�?
 	 */
 	public SerialFlowReader(String filePath) {
 		init(StrUtils.isEmpty(filePath) ? 
@@ -59,16 +59,16 @@ public class SerialFlowReader extends _SerialFlow {
 	}
 	
 	/**
-	 * 构造函数
-	 * @param file 序列化文件
+	 * 构造函�?
+	 * @param file 序列化文�?
 	 */
 	public SerialFlowReader(File file) {
 		init(file);
 	}
 	
 	/**
-	 * 初始化
-	 * @param file 序列化文件
+	 * 初始�?
+	 * @param file 序列化文�?
 	 */
 	private void init(File file) {
 		this.file = (file == null ? new File(DEFAULT_FILEPATH) : file);
@@ -84,7 +84,7 @@ public class SerialFlowReader extends _SerialFlow {
 	
 	/**
 	 * 检测是否还有下一个序列化对象
-	 * @return true:有; false:无
+	 * @return true:�?; false:�?
 	 */
 	public boolean hasNext() {
 		obj = get();
@@ -114,7 +114,7 @@ public class SerialFlowReader extends _SerialFlow {
 	
 	/**
 	 * 测试序列化输入流是否关闭
-	 * @return true:关闭; false:未关闭
+	 * @return true:关闭; false:未关�?
 	 */
 	public boolean isClosed() {
 		return closed;
@@ -138,8 +138,8 @@ public class SerialFlowReader extends _SerialFlow {
 	}
 
 	/**
-	 * 获取内存序列化文件对象
-	 * @return 内存序列化文件对象
+	 * 获取内存序列化文件对�?
+	 * @return 内存序列化文件对�?
 	 */
 	public File getFile() {
 		return file;

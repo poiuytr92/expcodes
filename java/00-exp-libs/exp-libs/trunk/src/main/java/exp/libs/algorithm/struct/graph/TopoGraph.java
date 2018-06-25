@@ -33,7 +33,7 @@ public class TopoGraph extends Graph {
 	
 	/**
 	 * 
-	 * @param order 必经点有序(默认false, 即无序)
+	 * @param order 必经点有�?(默认false, 即无�?)
 	 */
 	public TopoGraph(boolean order) {
 		this(order, false);
@@ -41,8 +41,8 @@ public class TopoGraph extends Graph {
 	
 	/**
 	 * 
-	 * @param order 必经点有序(默认false, 即无序)
-	 * @param arrow 有向图(默认false, 即无向图)
+	 * @param order 必经点有�?(默认false, 即无�?)
+	 * @param arrow 有向�?(默认false, 即无向图)
 	 */
 	public TopoGraph(boolean order, boolean arrow) {
 		super(arrow);
@@ -69,7 +69,7 @@ public class TopoGraph extends Graph {
 	}
 	
 	/**
-	 * 是否存在必经点
+	 * 是否存在必经�?
 	 * @return
 	 */
 	public boolean existInclusive() {
@@ -77,7 +77,7 @@ public class TopoGraph extends Graph {
 	}
 	
 	/**
-	 * 必经点是否有序
+	 * 必经点是否有�?
 	 * @return
 	 */
 	public boolean isOrderInclusive() {
@@ -85,7 +85,7 @@ public class TopoGraph extends Graph {
 	}
 	
 	/**
-	 * 必经点数量
+	 * 必经点数�?
 	 * @return
 	 */
 	public int inclusiveSize() {

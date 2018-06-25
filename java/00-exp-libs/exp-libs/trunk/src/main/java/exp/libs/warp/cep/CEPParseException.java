@@ -26,7 +26,7 @@ public final class CEPParseException extends EvaluationException {
 	private String funName;
 	
 	/**
-	 * 参数编号,从1开始
+	 * 参数编号,�?1开�?
 	 */
 	private int pidx;
 	
@@ -46,17 +46,17 @@ public final class CEPParseException extends EvaluationException {
 	private Class<?> clazz;
 	
 	/**
-	 * 引起异常的原因
+	 * 引起异常的原�?
 	 */
 	private Throwable cause;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param pmci 函数接口
-	 * @param pidx 参数编号，从1开始
+	 * @param pidx 参数编号，从1开�?
 	 * @param data 被解析的数据
 	 * @param format 解析格式
-	 * @param cause 引起异常的原因
+	 * @param cause 引起异常的原�?
 	 */
 	public CEPParseException(PostfixMathCommandI pmci, int pidx, 
 			Object data, String format, Throwable cause) {
@@ -69,12 +69,12 @@ public final class CEPParseException extends EvaluationException {
 	}
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param pmci 函数接口
-	 * @param pidx 参数编号，从1开始
+	 * @param pidx 参数编号，从1开�?
 	 * @param data 被解析的数据
 	 * @param clazz 强制类型转换的类
-	 * @param cause 引起异常的原因
+	 * @param cause 引起异常的原�?
 	 */
 	public CEPParseException(PostfixMathCommandI pmci, int pidx,  
 			Object data, Class<?> clazz, Throwable cause) {

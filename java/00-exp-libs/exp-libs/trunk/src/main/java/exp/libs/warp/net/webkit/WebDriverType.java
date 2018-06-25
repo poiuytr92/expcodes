@@ -14,30 +14,30 @@ import exp.libs.utils.other.StrUtils;
  */
 public class WebDriverType {
 
-	/** WEB驱动包目录 */
+	/** WEB驱动包目�? */
 	private final static String DRIVER_DIR = "./conf/driver/";
 	
-	/** HTML默认浏览器 */
+	/** HTML默认浏览�? */
 	private final static String HtmlUnit = "HtmlUnit";
 	public final static WebDriverType HTMLUTIL = new WebDriverType(HtmlUnit);
 	
-	/** PhantomJS无头浏览器 */
+	/** PhantomJS无头浏览�? */
 	private final static String PhantomJS = "phantomjs-driver.exe";
 	public final static WebDriverType PHANTOMJS = new WebDriverType(PhantomJS);
 	
-	/** Chrome浏览器 */
+	/** Chrome浏览�? */
 	private final static String Chrome = "chrome-driver.exe";
 	public final static WebDriverType CHROME = new WebDriverType(Chrome);
 	
-	/** 驱动名 */
+	/** 驱动�? */
 	private String driverName;
 	
 	/** 驱动路径 */
 	private String driverPath;
 	
 	/**
-	 * 构造函数
-	 * @param driverName 驱动名
+	 * 构造函�?
+	 * @param driverName 驱动�?
 	 */
 	private WebDriverType(String driverName) {
 		this.driverName = driverName;
@@ -45,7 +45,7 @@ public class WebDriverType {
 	}
 	
 	/**
-	 * WEB驱动包目录 (可重载)
+	 * WEB驱动包目�? (可重�?)
 	 * @return
 	 */
 	protected String DRIVER_DIR() {
@@ -53,7 +53,7 @@ public class WebDriverType {
 	}
 	
 	/**
-	 * 驱动名
+	 * 驱动�?
 	 * @return
 	 */
 	public String DRIVER_NAME() {

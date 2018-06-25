@@ -23,14 +23,14 @@ public class Reverse extends BaseFunction1 {
 	private static final long serialVersionUID = -2796230393987172389L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "reverse";
 
 	/**
-	 * 字符串反转.
-	 * 共1个入参：
+	 * 字符串反�?.
+	 * �?1个入参：
 	 * @param1 String:原字符串
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常

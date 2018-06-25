@@ -13,24 +13,26 @@ import exp.libs.warp.thread.BaseThreadPool;
 
 
 /**
- * 
  * <PRE>
  * 量子蚁群算法
  *  (仅适用于无向对称拓扑图)
  * </PRE>
  * 
- * @author lqb
- * @date 2017年6月8日
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2017-06-09
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public final class QACA {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(QACA.class);
 	
 	/** 默认量子蚂蚁种群规模 */
 	public final static int DEFAULT_QANT_SIZE = 10;
 	
-	/** 默认求解的收敛超时时间(ms) */
+	/** 默认求解的收敛超时时�?(ms) */
 	private final static long DEFAULT_TIMEOUT = 60000;
 	
 	/** 量子蚂蚁种群规模 */
@@ -48,29 +50,29 @@ public final class QACA {
 	/** 首次得到可行解的代数 */
 	private int firstRstGn;
 	
-	/** 首次得到最优解的代数 */
+	/** 首次得到最优解的代�? */
 	private int firstBestRstGn;
 	
 	/** 累计得到可行解的次数 */
 	private int rstCnt;
 	
-	/** 最优解的移动数据(全局最优解) */
+	/** 最优解的移动数�?(全局最优解) */
 	private QRst bestRst;
 	
 	/**
-	 * 构造函数
-	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
+	 * 构造函�?
+	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大�?
 	 */
 	public QACA(int[][] dist) {
 		this(dist, -1, -1, null, 0, 0, false);
 	}
 	
 	/**
-	 * 构造函数
-	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
-	 * @param srcId 无向拓扑图的起点（若无则为-1）
-	 * @param snkId 无向拓扑图的重点（若无则为-1）
-	 * @param includeIds 无向拓扑图的必经点集（若无则为null）
+	 * 构造函�?
+	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大�?
+	 * @param srcId 无向拓扑图的起点（若无则�?-1�?
+	 * @param snkId 无向拓扑图的重点（若无则�?-1�?
+	 * @param includeIds 无向拓扑图的必经点集（若无则为null�?
 	 */
 	public QACA(int[][] dist, int srcId, int snkId, 
 			Collection<Integer> includeIds) {
@@ -78,14 +80,14 @@ public final class QACA {
 	}
 	
 	/**
-	 * 构造函数
-	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大值
-	 * @param srcId 无向拓扑图的起点（若无则为-1）
-	 * @param snkId 无向拓扑图的重点（若无则为-1）
-	 * @param includeIds 无向拓扑图的必经点集（若无则为null）
-	 * @param qAntSize 量子蚂蚁数量（种群大小）, 默认值为10, (蚂蚁数量越多, 越注重创新性)
-	 * @param maxGeneration 单只量子蚂蚁可遗传的最大代数（单只蚂蚁的求解次数）, 默认值为10, (代数越大, 越注重协作性)
-	 * @param useQCross 是否使用量子交叉（可避免搜索陷入局部解或无解， 但降低收敛速度）, 默认不启用
+	 * 构造函�?
+	 * @param dist 无向拓扑图的邻接矩阵, 不可达节点间距为 整型最大�?
+	 * @param srcId 无向拓扑图的起点（若无则�?-1�?
+	 * @param snkId 无向拓扑图的重点（若无则�?-1�?
+	 * @param includeIds 无向拓扑图的必经点集（若无则为null�?
+	 * @param qAntSize 量子蚂蚁数量（种群大小）, 默认值为10, (蚂蚁数量越多, 越注重创新�?)
+	 * @param maxGeneration 单只量子蚂蚁可遗传的最大代数（单只蚂蚁的求解次数）, 默认值为10, (代数越大, 越注重协作�?)
+	 * @param useQCross 是否使用量子交叉（可避免搜索陷入局部解或无解， 但降低收敛速度�?, 默认不启�?
 	 */
 	public QACA(int[][] dist, int srcId, int snkId, 
 			Collection<Integer> includeIds, int qAntSize, 
@@ -115,7 +117,7 @@ public final class QACA {
 	}
 	
 	/**
-	 * 执行QACA算法求解(默认超时为1分钟)
+	 * 执行QACA算法求解(默认超时�?1分钟)
 	 * @return 得到的最优解
 	 */
 	public QRst exec() {
@@ -124,7 +126,7 @@ public final class QACA {
 	
 	/**
 	 * 执行QACA算法求解
-	 * @param timeout 求解超时(<=0表示无限制), 避免收敛过慢
+	 * @param timeout 求解超时(<=0表示无限�?), 避免收敛过慢
 	 * @return 得到的最优解
 	 */
 	public QRst exec(long timeout) {
@@ -134,7 +136,7 @@ public final class QACA {
 		
 		for(int gn = 0; gn < ENV.MAX_GENERATION(); gn++) {
 			if(timeout > 0 && System.currentTimeMillis() - bgnTime > timeout) {
-				log.error("QACA 收敛到可行解超时, 已检索代数:[{}] (TIMEOUT={}ms, ANT={})", gn, timeout, qAntSize);
+				log.error("QACA 收敛到可行解超时, 已检索代�?:[{}] (TIMEOUT={}ms, ANT={})", gn, timeout, qAntSize);
 				break;
 			}
 			
@@ -162,7 +164,7 @@ public final class QACA {
 						}
 					}
 				} catch (Exception e) {
-					log.error("获取第 [{}] 代蚂蚁搜索结果异常.", gn, e);
+					log.error("获取�? [{}] 代蚂蚁搜索结果异�?.", gn, e);
 				}
 			}
 			rsts.clear();

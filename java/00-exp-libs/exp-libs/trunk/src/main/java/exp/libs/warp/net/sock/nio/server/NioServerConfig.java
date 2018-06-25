@@ -24,7 +24,7 @@ class NioServerConfig extends NioConfig {
 	}
 	
 	/**
-	 * 服务端默认添加线程池过滤器
+	 * 服务端默认添加线程池过滤�?
 	 */
 	@Override
 	protected void initFilterChain() {
@@ -33,7 +33,7 @@ class NioServerConfig extends NioConfig {
 	}
 	
 	/**
-	 * 获取过滤链
+	 * 获取过滤�?
 	 * @return
 	 */
 	protected FilterChain getFilterChain() {

@@ -30,10 +30,10 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * 浏览器驱动
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final public class BrowserDriver {
@@ -44,7 +44,7 @@ final public class BrowserDriver {
 	
 	private WebDriver webDriver;
 	
-	/** 针对页面事件进行操作的行为对象 */
+	/** 针对页面事件进行操作的行为对�? */
 	private Actions action;
 	
 	public BrowserDriver(WebDriverType type) {
@@ -103,7 +103,7 @@ final public class BrowserDriver {
 			capabilities.setCapability(PAGE_SETTINGS.concat("loadImages"), loadImages);		// 加载图片
 			capabilities.setCapability(PAGE_SETTINGS.concat("XSSAuditingEnabled"), false);	// 跨域请求监控
 			capabilities.setCapability(PAGE_SETTINGS.concat("localToRemoteUrlAccessEnabled"), false);	// 本地资源是否可以访问远程URL
-			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), Config.USER_AGENT);	// 伪装浏览器
+			capabilities.setCapability(PAGE_SETTINGS.concat("userAgent"), Config.USER_AGENT);	// 伪装浏览�?
 			
 			
 //			final String HERDER = PhantomJSDriverService.PHANTOMJS_PAGE_CUSTOMHEADERS_PREFIX;
@@ -133,7 +133,7 @@ final public class BrowserDriver {
 	}
 	
 	/**
-	 * 隐式等待期望的元素出现
+	 * 隐式等待期望的元素出�?
 	 * @param second 最长的等待秒数
 	 */
 	public void setWaitElementTime(long second) {
@@ -157,14 +157,14 @@ final public class BrowserDriver {
 	}
 	
 	/**
-	 * 关闭浏览器
+	 * 关闭浏览�?
 	 */
 	public void quit() {
 		try {
-			webDriver.quit();	// 大部分浏览器驱动结束进程的方法
+			webDriver.quit();	// 大部分浏览器驱动结束进程的方�?
 		} catch(Throwable e) {}
 		
-		// 以防万一, 使用系统命令杀掉驱动进程 （Chrome只能通过此方法）
+		// 以防万一, 使用系统命令杀掉驱动进�? （Chrome只能通过此方法）
 		CmdUtils.kill(type.DRIVER_NAME());
 	}
 	
@@ -226,7 +226,7 @@ final public class BrowserDriver {
 	}
 
 	public void click(WebElement button) {
-		action.click(button).perform();	// 点击并提交
+		action.click(button).perform();	// 点击并提�?
 	}
 	
 	public void send(WebElement form, String msg) {
@@ -234,7 +234,7 @@ final public class BrowserDriver {
 	}
 	
 	/**
-	 * 对浏览器的当前页面截图
+	 * 对浏览器的当前页面截�?
 	 * @param imgPath 图片保存路径
 	 */
 	public void screenshot(String imgPath) {

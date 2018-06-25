@@ -29,7 +29,7 @@ public class Test_Null {
 	@Test
 	public void testCastNull() throws Exception {
 		
-		//正确性测试
+		//正确性测�?
 		Object rst = CEPUtils.call(
 				_Null.NAME, new Object[] {"-123456789"});
 		Assert.assertNull(rst);
@@ -68,7 +68,7 @@ public class Test_Null {
 		}
 		
 		try {
-			CEPUtils.call("null(\" \r\n \t \0   \")");	//参数不能有换行
+			CEPUtils.call("null(\" \r\n \t \0   \")");	//参数不能有换�?
 			Assert.assertTrue(false);
 			
 		} catch (Exception e) {

@@ -16,7 +16,7 @@ import exp.libs.warp.thread.ThreadPool;
  */
 public class SCQueue<E> {
 
-	/** 队列的默认大小 */
+	/** 队列的默认大�? */
 	private final static int DEFAULT_QUEUE_SIZE = 16;
 	
 	private int capacity;
@@ -32,8 +32,8 @@ public class SCQueue<E> {
 	}
 	
 	/**
-	 * 阻塞写.
-	 * (只允许单线程写)
+	 * 阻塞�?.
+	 * (只允许单线程�?)
 	 * @param bean 待插入队尾的元素
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
@@ -56,7 +56,7 @@ public class SCQueue<E> {
 	
 	/**
 	 * 快速写.
-	 * (只允许单线程写)
+	 * (只允许单线程�?)
 	 * @param bean 待插入队尾的元素
 	 * @return 若队列已满则返回false
 	 */
@@ -73,15 +73,15 @@ public class SCQueue<E> {
 	}
 	
 	/**
-	 * 阻塞读.
-	 * (只允许单线程读)
+	 * 阻塞�?.
+	 * (只允许单线程�?)
 	 * @return 若队列为空则返回null
 	 */
 	@SuppressWarnings("rawtypes")
 	public SCQBean get() {
 		SCQBean bean = null;
 		do {
-			bean = queue.get();	// 试探元素状态
+			bean = queue.get();	// 试探元素状�?
 			if(bean == null || bean.isDone()) { break; }
 			ThreadUtils.tSleep(10);
 		} while(true);
@@ -90,7 +90,7 @@ public class SCQueue<E> {
 	
 	/**
 	 * 快速读.
-	 * (只允许单线程读)
+	 * (只允许单线程�?)
 	 * @return 若队列为空则返回null
 	 */
 	@SuppressWarnings("rawtypes")

@@ -27,13 +27,13 @@ public class GetYear extends BaseFunctionN {
 	private static final long serialVersionUID = -732319624881462843L;
 	
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "getYear";
 	
 	/**
-	 * 限定参数个数为0或1.
+	 * 限定参数个数�?0�?1.
 	 */
 	@Override
 	public boolean checkNumberOfParameters(int inParamsNum){
@@ -42,8 +42,8 @@ public class GetYear extends BaseFunctionN {
 	
 	/**
 	 * 获取当前系统时间的字符串.
-	 * 可选0个或1个入参：
-	 * @param1 String(可选):获取时间的格式,若无此参数则默认为 yyyy-MM-dd HH:mm:ss
+	 * 可�?0个或1个入参：
+	 * @param1 String(可�?):获取时间的格�?,若无此参数则默认�? yyyy-MM-dd HH:mm:ss
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

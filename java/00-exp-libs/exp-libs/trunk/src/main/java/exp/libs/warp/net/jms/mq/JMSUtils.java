@@ -101,7 +101,7 @@ public class JMSUtils {
 	public static Consumer getConsumer(JmsBean jmsBean) throws Exception {
 
 		if (jmsBean == null) {
-			throw (new Exception("没有找到相应的JmsBean。"));
+			throw (new Exception("没有找到相应的JmsBean�?"));
 		}
 
 		Consumer consumer = new Consumer(jmsBean.getUrl());

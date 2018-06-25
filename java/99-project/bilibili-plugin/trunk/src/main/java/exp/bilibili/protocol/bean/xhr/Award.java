@@ -92,10 +92,10 @@ import net.sf.json.JSONObject;
 	  }
 	}
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Award {
@@ -107,10 +107,10 @@ public class Award {
 	/** 本轮奖池中剩余的数量 */
 	private int stockNum;
 	
-	/** 用户的总兑换上限：若为0则可无限次兑换 */
+	/** 用户的总兑换上限：若为0则可无限次兑�? */
 	private int exchangeLimit;
 	
-	/** 用户剩余可以兑换的数量 */
+	/** 用户剩余可以兑换的数�? */
 	private int userExchangeCount;
 	
 	public Award(String id, int redbagNum) {

@@ -25,13 +25,13 @@ public class Replace extends BaseFunctionN {
 	private static final long serialVersionUID = -7197942130083226335L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "replace";
 	
 	/**
-	 * 限定参数个数为3.
+	 * 限定参数个数�?3.
 	 */
 	@Override
 	public boolean checkNumberOfParameters(int inParamsNum){
@@ -39,11 +39,11 @@ public class Replace extends BaseFunctionN {
     }
 	
 	/**
-	 * 字符串正则替换.
-	 * 共3个参数：
+	 * 字符串正则替�?.
+	 * �?3个参数：
 	 * @param1 String:原字符串
-	 * @param2 String:正则表达式
-	 * @param2 String:替代字符串
+	 * @param2 String:正则表达�?
+	 * @param2 String:替代字符�?
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

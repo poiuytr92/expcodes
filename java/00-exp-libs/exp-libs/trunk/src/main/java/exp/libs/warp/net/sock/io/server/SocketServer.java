@@ -38,19 +38,19 @@ import exp.libs.warp.thread.ThreadPool;
  */
 public class SocketServer extends Thread {
 
-	/** 日志器 */
+	/** 日志�? */
 	private Logger log = LoggerFactory.getLogger(SocketServer.class);
 	
 	/** Socket配置信息 */
 	private SocketBean sockConf;
 	
-	/** Socket服务端 */
+	/** Socket服务�? */
 	private ServerSocket socketServer;
 	
-	/** 未登陆客户端的Socket会话注册线程池 */
+	/** 未登陆客户端的Socket会话注册线程�? */
 	private ThreadPool loginPool;
 	
-	/** 已登陆客户端的Socket会话执行线程池 */
+	/** 已登陆客户端的Socket会话执行线程�? */
 	private ThreadPool execPool;
 	
 	/** 已登陆客户端的Socket会话队列 */
@@ -59,11 +59,11 @@ public class SocketServer extends Thread {
 	/** 运行标识 */
 	private boolean running;
 	
-	/** 业务处理器 */
+	/** 业务处理�? */
 	private IHandler sHandler;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param sockConf socket配置信息
 	 */
 	public SocketServer(SocketBean sockConf, IHandler handler) {
@@ -111,7 +111,7 @@ public class SocketServer extends Thread {
 	}
 	
 	/**
-	 * 启动服务端(默认侦听所有IP上的同一端口)
+	 * 启动服务�?(默认侦听所有IP上的同一端口)
 	 * @return true:启动成功; false:启动失败
 	 */
 	public boolean _start() {
@@ -119,7 +119,7 @@ public class SocketServer extends Thread {
 	}
 	
 	/**
-	 * 启动服务端
+	 * 启动服务�?
 	 * @param listenAllIP 是否侦听所有IP上的同一端口(适用于多网卡)
 	 * @return true:启动成功; false:启动失败
 	 */
@@ -133,7 +133,7 @@ public class SocketServer extends Thread {
 	}
 	
 	/**
-	 * 停止服务端
+	 * 停止服务�?
 	 */
 	public void _stop() {
 		if(running == false || socketServer == null) {
@@ -150,7 +150,7 @@ public class SocketServer extends Thread {
 	@Override
 	public void run() {
 		log.debug(sockConf.toString());
-		log.info("Socket服务 [{}] 已启动", getName());
+		log.info("Socket服务 [{}] 已启�?", getName());
 		
 		running = true;
 		do {
@@ -160,7 +160,7 @@ public class SocketServer extends Thread {
 				if(isOver == true) {
 //					clientProxy.write("[ERROR] CONNECTION LIMIT");
 					clientProxy.close();
-					log.debug("Socket服务 [{}] 注册新会话失败, 连接数已达上限: [{}]", 
+					log.debug("Socket服务 [{}] 注册新会话失�?, 连接数已达上�?: [{}]", 
 							getName(), sockConf.getMaxConnectionCount());
 					
 				} else {
@@ -172,7 +172,7 @@ public class SocketServer extends Thread {
 		} while(running == true);
 		
 		clear();
-		log.info("Socket服务 [{}] 已停止", getName());
+		log.info("Socket服务 [{}] 已停�?", getName());
 	}
 	
 	private _SocketClientProxy listen() {
@@ -187,7 +187,7 @@ public class SocketServer extends Thread {
 						(cHandler == null ? sHandler : cHandler));
 				
 			} catch (Exception e) {
-				log.error("Socket服务 [{}] 添加一个新的连接请求失败", getName(), e);
+				log.error("Socket服务 [{}] 添加一个新的连接请求失�?", getName(), e);
 			}
 		}
 		
@@ -199,7 +199,7 @@ public class SocketServer extends Thread {
 	}
 	
 	/**
-	 * 检查再增加一个会话是否会导致会话数越限
+	 * 检查再增加一个会话是否会导致会话数越�?
 	 * @return
 	 */
 	private boolean checkOverLimit() {
@@ -215,17 +215,17 @@ public class SocketServer extends Thread {
 	
 	/**
 	 * <PRE>
-	 * 获取当下这一个时间点所有连接到服务端的客户端数量.
+	 * 获取当下这一个时间点所有连接到服务端的客户端数�?.
 	 * 	(可能存在部分客户端连接已失效)
 	 * <PRE>
-	 * @return 客户端数量
+	 * @return 客户端数�?
 	 */
 	public int getClientSize() {
 		return clientProxys.size();
 	}
 	
 	/**
-	 * 获取当下这一个时间点所有连接到服务端的客户端会话.
+	 * 获取当下这一个时间点所有连接到服务端的客户端会�?.
 	 * @return 客户端会话集
 	 */
 	public Iterator<ISession> getClients() {
@@ -243,7 +243,7 @@ public class SocketServer extends Thread {
 	}
 	
 	/**
-	 * 强制关闭所有会话和线程池
+	 * 强制关闭所有会话和线程�?
 	 */
 	private void clear() {
 		Iterator<_SocketClientProxy> clients = clientProxys.iterator();
@@ -262,8 +262,8 @@ public class SocketServer extends Thread {
 	}
 	
 	/**
-	 * 测试socket服务是否在运行
-	 * @return true:运行中; false:已停止
+	 * 测试socket服务是否在运�?
+	 * @return true:运行�?; false:已停�?
 	 */
 	public boolean isRunning() {
 		return running;

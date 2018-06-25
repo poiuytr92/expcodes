@@ -21,29 +21,29 @@ import exp.libs.warp.io.flow.FileFlowReader;
  * <PRE>
  * 直播房间管理器
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class RoomMgr {
 
-	/** 记录房间号（前端用）到 真实房号（后台用）的映射 */
+	/** 记录房间号（前端用）�? 真实房号（后台用）的映射 */
 	private final static String ROOM_PATH = Config.getInstn().ROOM_PATH();
 	
 	/**
-	 * 房间号（前端用）到 真实房号（后台用）的映射
+	 * 房间号（前端用）�? 真实房号（后台用）的映射
 	 * real_room_id/room_id -> real_room_id
 	 * 
 	 * 连接websocket后台只能用real_room_id,
-	 * room_id 是签约主播才有的房间号, 若通过real_room_id打开页面，会自动修正为room_id.
+	 * room_id 是签约主播才有的房间�?, 若通过real_room_id打开页面，会自动修正为room_id.
 	 * 
 	 * 目前数据来源是房间抽奖时推送过来的通知消息.
 	 */
 	private Map<Integer, Integer> realRoomIds;
 	
-	/** 按时序记录的可以抽奖礼物房间号 */
+	/** 按时序记录的可以抽奖礼物房间�? */
 	private PCQueue<LotteryRoom> giftRoomIds;
 	
 	private static volatile RoomMgr instance;
@@ -68,7 +68,7 @@ public class RoomMgr {
 	
 	/**
 	 * 添加高能礼物房间
-	 * @param roomId 礼物房间号
+	 * @param roomId 礼物房间�?
 	 */
 	public void addGiftRoom(int roomId) {
 		giftRoomIds.add(new LotteryRoom(roomId));
@@ -76,20 +76,20 @@ public class RoomMgr {
 	
 	/**
 	 * 添加节奏风暴礼物房间
-	 * @param roomId 礼物房间号
+	 * @param roomId 礼物房间�?
 	 */
 	public void addStormRoom(int roomId, String stormId) {
 		
-		// 节奏风暴 因为对点击速度要求很高, 不放到抽奖房间队列排队, 直接抽奖
+		// 节奏风暴 因为对点击速度要求很高, 不放到抽奖房间队列排�?, 直接抽奖
 //		giftRoomIds.add(new LotteryRoom(roomId, stormId, LotteryType.STORM));
 		
 		MsgSender.toStormLottery(roomId, stormId);
 	}
 	
 	/**
-	 * 添加小电视房间
+	 * 添加小电视房�?
 	 * @param roomId 小电视房间号
-	 * @param tvId 小电视编号
+	 * @param tvId 小电视编�?
 	 */
 	public void addTvRoom(int roomId, String tvId) {
 		giftRoomIds.add(new LotteryRoom(roomId, tvId, LotteryType.TV));
@@ -119,9 +119,9 @@ public class RoomMgr {
 	}
 	
 	/**
-	 * 关联 房间号 与 真实房间号
+	 * 关联 房间�? �? 真实房间�?
 	 * @param roomId 房间号（限签约主播）
-	 * @param readRoomId 真实房间号（签约主播 与 非签约主播 均拥有）
+	 * @param readRoomId 真实房间号（签约主播 �? 非签约主�? 均拥有）
 	 */
 	public void relate(int roomId, int readRoomId) {
 		if(getRealRoomId(roomId) > 0) {
@@ -146,9 +146,9 @@ public class RoomMgr {
 	}
 	
 	/**
-	 * 提取真实房间号
+	 * 提取真实房间�?
 	 * @param roomId 房间号（限签约主播）
-	 * @return 真实房间号（签约主播 与 非签约主播 均拥有）, 若未收集到该房间则返回0
+	 * @return 真实房间号（签约主播 �? 非签约主�? 均拥有）, 若未收集到该房间则返�?0
 	 */
 	public int getRealRoomId(int roomId) {
 		int realRoomId = 0;
@@ -160,7 +160,7 @@ public class RoomMgr {
 	}
 	
 	/**
-	 * 从外存读取真实房号记录
+	 * 从外存读取真实房号记�?
 	 */
 	private void readRoomIds() {
 		FileFlowReader ffr = new FileFlowReader(ROOM_PATH, Charset.ISO);
@@ -174,7 +174,7 @@ public class RoomMgr {
 	}
 	
 	/**
-	 * 把内存的真实房号记录保存到外存
+	 * 把内存的真实房号记录保存到外�?
 	 */
 	private void writeRoomIds() {
 		StringBuilder sb = new StringBuilder();

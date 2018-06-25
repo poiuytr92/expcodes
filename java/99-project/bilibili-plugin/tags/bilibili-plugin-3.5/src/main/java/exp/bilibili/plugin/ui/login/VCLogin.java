@@ -8,10 +8,10 @@ import exp.bilibili.protocol.XHRSender;
  * 帐密登陆.
  *  可用于登陆主号、小号、马甲号
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class VCLogin {
@@ -19,7 +19,7 @@ class VCLogin {
 	protected VCLogin() {}
 	
 	/**
-	 * 下载登陆用的验证码图片
+	 * 下载登陆用的验证码图�?
 	 * @param imgPath 图片保存路径
 	 * @return 与该验证码配套的cookies
 	 */
@@ -31,7 +31,7 @@ class VCLogin {
 	 * 使用帐密+验证码的方式登录
 	 * @param username 账号
 	 * @param password 密码
-	 * @param vccode 验证码
+	 * @param vccode 验证�?
 	 * @param vcCookies 与验证码配套的cookies
 	 * @return
 	 */

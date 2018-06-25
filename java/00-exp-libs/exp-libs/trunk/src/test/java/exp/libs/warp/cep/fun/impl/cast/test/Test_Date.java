@@ -29,7 +29,7 @@ public class Test_Date {
 	@Test
 	public void testCastDate() throws Exception {
 		
-		//正确性测试
+		//正确性测�?
 		Object date1 = CEPUtils.call(
 				_Date.NAME, new Object[] {"2014-09-30 14:05:16"});
 		Assert.assertTrue(date1 instanceof Date);

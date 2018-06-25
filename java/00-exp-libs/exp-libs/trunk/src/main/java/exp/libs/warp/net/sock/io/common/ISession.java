@@ -17,8 +17,8 @@ import exp.libs.warp.net.sock.bean.SocketBean;
 public interface ISession {
 
 	/**
-	 * 获取客户端标识
-	 * @return 客户端标识
+	 * 获取客户端标�?
+	 * @return 客户端标�?
 	 */
 	public String ID();
 	
@@ -41,7 +41,7 @@ public interface ISession {
 	public boolean conn();
 	
 	/**
-	 * socket会话是否有效（多用于需要登录的判定）
+	 * socket会话是否有效（多用于需要登录的判定�?
 	 * @return true:有效; false:无效
 	 */
 	public boolean isVaild();
@@ -53,27 +53,27 @@ public interface ISession {
 	public boolean isClosed();
 	
 	/**
-	 * 断开socket连接并释放所有资源
+	 * 断开socket连接并释放所有资�?
 	 * @return true:断开成功; false:断开异常
 	 */
 	public boolean close();
 	
 	/**
-	 * Socket读操作
-	 * @return 服务端返回的消息(若返回null，则出现超时等异常)
+	 * Socket读操�?
+	 * @return 服务端返回的消息(若返回null，则出现超时等异�?)
 	 */
 	public String read();
 	
 	/**
-	 * Socket写操作.
-	 * @param msg 需发送到服务端的的消息报文
-	 * @return true:发送成功; false:发送失败
+	 * Socket写操�?.
+	 * @param msg 需发送到服务端的的消息报�?
+	 * @return true:发送成�?; false:发送失�?
 	 */
 	public boolean write(String msg);
 	
 	/**
 	 * 临时清理本地缓存.
-	 * 建议完成一次完整的读写交互后执行.
+	 * 建议完成一次完整的读写交互后执�?.
 	 */
 	public void clearIOBuffer();
 	

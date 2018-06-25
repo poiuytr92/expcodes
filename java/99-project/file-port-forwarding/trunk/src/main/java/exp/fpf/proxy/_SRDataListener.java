@@ -8,10 +8,10 @@ import exp.libs.warp.net.sock.io.common.ISession;
  * <pre>
  * 收发数据监听器-socket监听模式
  * </pre>	
- * <B>PROJECT：</B> file-port-forwarding
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> file-port-forwarding
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-01-16
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _SRDataListener implements IHandler {

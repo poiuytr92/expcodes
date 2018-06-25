@@ -16,6 +16,6 @@ public interface  IListener extends MessageListener{
 	//public void onMessage(Message message);
 	
 	/**
-	 * 或许仅仅是为了使用I****来表示接口
+	 * 或许仅仅是为了使用I****来表示接�?
 	 */
 }

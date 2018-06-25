@@ -40,7 +40,7 @@ abstract class _BaseTable extends _TableRenderer {
 	}
 	
 	/**
-	 * 构造表头
+	 * 构造表�?
 	 * @param headers
 	 * @return
 	 */
@@ -91,7 +91,7 @@ abstract class _BaseTable extends _TableRenderer {
 	
 	/**
 	 * 刷新表单数据
-	 * @param newDatas 新数据
+	 * @param newDatas 新数�?
 	 */
 	protected void _reflash(Vector<Vector<String>> datas) {
 		if(datas != null) {

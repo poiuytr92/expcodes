@@ -19,10 +19,10 @@ import exp.libs.warp.ver.VersionMgr;
  * <PRE>
  * 程序配置
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Config {
@@ -41,13 +41,13 @@ public class Config {
 	
 	public final static int DEFAULT_ROOM_ID = 390480;
 	
-	/** 连续抽奖限制(主要避免被抓到封号) */
+	/** 连续抽奖限制(主要避免被抓到封�?) */
 	public final static int LOTTERY_LIMIT = 10;
 	
 	/** 禁止自动发言的直播间 */
 	private Set<Integer> tabuAutoRoomIds;
 	
-	/** xml配置器 */
+	/** xml配置�? */
 	private XConfig xConf;
 	
 	/** 单例 */
@@ -367,7 +367,7 @@ public class Config {
 	}
 	
 	/**
-	 * 设置默认的抽奖反应时间
+	 * 设置默认的抽奖反应时�?
 	 * @param reactionTime 抽奖反应时间(ms)
 	 * @return
 	 */

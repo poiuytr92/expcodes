@@ -26,10 +26,10 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * <PRE>
  * 小号账号管理窗口
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-01-31
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class _MiniUserMgrUI extends PopChildWindow {
@@ -79,7 +79,7 @@ public class _MiniUserMgrUI extends PopChildWindow {
 	private JPanel getSouthPanel() {
 		JPanel panel = new JPanel(new BorderLayout());
 		SwingUtils.addBorder(panel);
-		panel.add(SwingUtils.getPairsPanel("挂机数", userLabel), BorderLayout.WEST);
+		panel.add(SwingUtils.getPairsPanel("挂机�?", userLabel), BorderLayout.WEST);
 		panel.add(SwingUtils.getWBorderPanel(feedBtn, new JLabel("   ")), BorderLayout.CENTER);
 		return panel;
 	}
@@ -93,11 +93,11 @@ public class _MiniUserMgrUI extends PopChildWindow {
 				autoFeed = !autoFeed;
 				if(autoFeed == true) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.green, feedBtn);
-					UIUtils.log("[自动投喂姬] 被召唤成功O(∩_∩)O");
+					UIUtils.log("[自动投喂姬] 被召唤成功O(∩_�?)O");
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, feedBtn);
-					UIUtils.log("[自动投喂姬] 被封印啦/(ㄒoㄒ)/");
+					UIUtils.log("[自动投喂姬] 被封印啦/(ㄒo�?)/");
 				}
 			}
 		});

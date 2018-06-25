@@ -5,27 +5,31 @@ import java.io.IOException;
 /**
  * Consumer类的辅助类
  * 
- * @author liudl
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # 2016-02-14
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class ConsumerHelper extends TransportListenerImpl implements Runnable {
 
 	/**
-	 * 锁变量
+	 * 锁变�?
 	 */
 	private Object connectedLock = new Object();
 
 	/**
-	 * 是否连接上
+	 * 是否连接�?
 	 */
 	private Boolean connected = false;
 
 	/**
-	 * 是否需要重连
+	 * 是否需要重�?
 	 */
 	private Boolean needRetry = true;
 
 	/**
-	 * 重连次数，小于等于0则一直重连
+	 * 重连次数，小于等�?0则一直重�?
 	 */
 	private int retryCount = 10;
 
@@ -35,12 +39,12 @@ public class ConsumerHelper extends TransportListenerImpl implements Runnable {
 	private long time2Retry = 5 * 1000;
 
 	/**
-	 * 消费者
+	 * 消费�?
 	 */
 	private Consumer consumer = null;
 
 	/**
-	 * 是否是第一次检测
+	 * 是否是第一次检�?
 	 */
 	private boolean firstCheck = true;
 
@@ -50,10 +54,10 @@ public class ConsumerHelper extends TransportListenerImpl implements Runnable {
 	private String clientId;
 
 	/**
-	 * 实时监控consumer的连接，断开则尝试重连
+	 * 实时监控consumer的连接，断开则尝试重�?
 	 * 
 	 * @param consumer
-	 *            消费者
+	 *            消费�?
 	 */
 	protected void monitorTransport(Consumer consumer) {
 		this.consumer = consumer;
@@ -73,7 +77,7 @@ public class ConsumerHelper extends TransportListenerImpl implements Runnable {
 				doConnect(consumer);
 				if (!needRetry) {// 不重连，返回失败信息
 					if (consumer.getCallBack() != null) {
-						Exception e = new Exception("连接失败！超出重连次数【" + retryCount
+						Exception e = new Exception("连接失败！超出重连次数�?" + retryCount
 								+ "】！");
 						consumer.getCallBack().onReConnectionException(e);
 					}
@@ -98,7 +102,7 @@ public class ConsumerHelper extends TransportListenerImpl implements Runnable {
 	 * 尝试连接
 	 * 
 	 * @param consumer
-	 *            消费者
+	 *            消费�?
 	 */
 	private void doConnect(Consumer consumer) {
 		int tryCount = 0;// 已经尝试连接次数
@@ -108,11 +112,11 @@ public class ConsumerHelper extends TransportListenerImpl implements Runnable {
 				if (consumer.isConnectionClosed()) {
 					throw new Exception("Transport Failed!");
 				}
-				// 第一次检测不需要，由用户自己调用创建消费者方法
+				// 第一次检测不需要，由用户自己调用创建消费者方�?
 				if (!firstCheck) {
 					int createType = consumer.getCreateType();
 
-					// 断开连接时，取消ActiveMQConnectionFactory的ClientID,重连时恢复
+					// 断开连接时，取消ActiveMQConnectionFactory的ClientID,重连时恢�?
 					consumer.setsClientID(clientId);
 					if (createType == Consumer.TYPE_BYQUEUE) {
 						consumer.createConsumerByQueue();
@@ -169,7 +173,7 @@ public class ConsumerHelper extends TransportListenerImpl implements Runnable {
 	 * 设置重连次数
 	 * 
 	 * @param retryCount
-	 *            重连次数，小于等于0则一直重连
+	 *            重连次数，小于等�?0则一直重�?
 	 */
 	public void setRetryCount(int retryCount) {
 		this.retryCount = retryCount;
@@ -186,6 +190,6 @@ public class ConsumerHelper extends TransportListenerImpl implements Runnable {
 	}
 
 	/**
-	 * 该类实现了一个连接监听和重连的机制。线程确保建立连接并休眠 知道连接冲断被唤醒后重新连接。属性包括重连次数和重连间隔。
+	 * 该类实现了一个连接监听和重连的机制。线程确保建立连接并休眠 知道连接冲断被唤醒后重新连接。属性包括重连次数和重连间隔�?
 	 */
 }

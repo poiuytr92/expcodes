@@ -6,10 +6,10 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * Web驱动类型
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class WebDriverType {
@@ -20,7 +20,7 @@ public class WebDriverType {
 	private final static String PhantomJS = "phantomjs-driver.exe";
 	public final static WebDriverType PHANTOMJS = new WebDriverType(PhantomJS);
 	
-	// chrom属于真实浏览器，对JS、JQuery支持很好，但是无法正常关闭进行，必须通过命令行关闭
+	// chrom属于真实浏览器，对JS、JQuery支持很好，但是无法正常关闭进行，必须通过命令行关�?
 	private final static String Chrome = "chrome-driver.exe";
 	public final static WebDriverType CHROME = new WebDriverType(Chrome);
 	

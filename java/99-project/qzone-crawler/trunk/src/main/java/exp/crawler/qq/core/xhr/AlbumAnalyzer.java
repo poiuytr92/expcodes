@@ -26,10 +26,10 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * <PRE>
  * 【空间相册】解析器
  * </PRE>
- * <B>PROJECT：</B> qzone-crawler
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> qzone-crawler
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-03-23
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class AlbumAnalyzer extends BaseAlbumAnalyzer {
@@ -38,7 +38,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	private int requestCnt;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param QQ 被爬取数据的目标QQ
 	 */
 	public AlbumAnalyzer(String QQ) {
@@ -46,7 +46,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	}
 	
 	/**
-	 * 初始化
+	 * 初始�?
 	 */
 	@Override
 	protected void init() {
@@ -54,7 +54,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	}
 	
 	/**
-	 * 提取所有相册及其内的照片信息
+	 * 提取所有相册及其内的照片信�?
 	 * @return 
 	 */
 	@Override
@@ -67,12 +67,12 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	}
 	
 	/**
-	 * 获取相册列表(仅相册信息, 不含内部照片信息)
+	 * 获取相册列表(仅相册信�?, 不含内部照片信息)
 	 * @return
 	 */
 	@Override
 	protected List<Album> _getAlbumLists() {
-		UIUtils.log("正在提取QQ [", QQ, "] 的相册列表...");
+		UIUtils.log("正在提取QQ [", QQ, "] 的相册列�?...");
 		
 		Map<String, String> header = XHRUtils.getHeader(Browser.COOKIE());
 		Map<String, String> request = _getAlbumRequest();
@@ -97,14 +97,14 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 					UIUtils.log("获得相册 [", name, "] (照片x", total, "), 地址: ", url);
 					
 				} else {
-					UIUtils.log("相册 [", name, "] 被加密, 无法读取");
+					UIUtils.log("相册 [", name, "] 被加�?, 无法读取");
 				}
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "提取QQ [", QQ, "] 的相册列表异常");
+			UIUtils.log(e, "提取QQ [", QQ, "] 的相册列表异�?");
 		}
 		
-		UIUtils.log("提取QQ [", QQ, "] 的相册列表完成: 共 [", albums.size(), "] 个相册");
+		UIUtils.log("提取QQ [", QQ, "] 的相册列表完�?: �? [", albums.size(), "] 个相�?");
 		return albums;
 	}
 	
@@ -123,28 +123,28 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	}
 	
 	/**
-	 * 打开相册, 提取其中的所有照片信息
+	 * 打开相册, 提取其中的所有照片信�?
 	 * @param album 相册信息
 	 * @return
 	 */
 	@Override
 	protected void _open(Album album) {
-		UIUtils.log("正在读取相册 [", album.NAME(), "] (共", 
-				album.PAGE_NUM(), "页, 照片x", album.TOTAL_PIC_NUM(), ")");
+		UIUtils.log("正在读取相册 [", album.NAME(), "] (�?", 
+				album.PAGE_NUM(), "�?, 照片x", album.TOTAL_PIC_NUM(), ")");
 		
 		for(int page = 1; page <= album.PAGE_NUM(); page++) {
-			UIUtils.log(" -> 正在提取第 [", page, "] 页的照片信息...");
+			UIUtils.log(" -> 正在提取�? [", page, "] 页的照片信息...");
 			List<Photo> pagePhotos = _getPagePhotos(album, page);
 			album.addPhotos(pagePhotos);
 			
-			UIUtils.log(" -> 第 [", page, "] 页照片提取完成, 当前进度: ", 
+			UIUtils.log(" -> �? [", page, "] 页照片提取完�?, 当前进度: ", 
 					album.PIC_NUM(), "/", album.TOTAL_PIC_NUM());
 			ThreadUtils.tSleep(Config.SLEEP_TIME);
 		}
 	}
 	
 	/**
-	 * 获取相册的分页照片信息
+	 * 获取相册的分页照片信�?
 	 * @param album 相册信息
 	 * @param page 页数
 	 * @return
@@ -170,13 +170,13 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 				photos.add(new Photo(desc, time, url));
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "提取相册 [", album.NAME(), "] 第", page, "页的照片信息异常");
+			UIUtils.log(e, "提取相册 [", album.NAME(), "] �?", page, "页的照片信息异常");
 		}
 		return photos;
 	}
 	
 	/**
-	 * 分页照片的请求参数
+	 * 分页照片的请求参�?
 	 * @param albumId 相册ID
 	 * @param page 页码
 	 * @return
@@ -216,7 +216,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 		request.put(XHRAtrbt.notice, "0");
 		request.put(XHRAtrbt.appid, "4");
 		request.put(XHRAtrbt.idcNum, "4");
-//		request.put(XHRAtrbt.t, "869307580");	// 非固定, 暂未知道是什么值, 但非必填参数
+//		request.put(XHRAtrbt.t, "869307580");	// 非固�?, 暂未知道是什么�?, 但非必填参数
 		return request;
 	}
 	

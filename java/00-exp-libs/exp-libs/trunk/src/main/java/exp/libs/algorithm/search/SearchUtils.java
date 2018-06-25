@@ -17,19 +17,19 @@ import java.util.List;
 public class SearchUtils {
 	
 	/**
-	 * 递归深度上限。
-	 * 避免无限递归导致堆栈溢出。
-	 * 改为-1则不做深度限制。
+	 * 递归深度上限�?
+	 * 避免无限递归导致堆栈溢出�?
+	 * 改为-1则不做深度限制�?
 	 */
 	private final static int DEPTH_LIMIT = 50;
 	
 	/**
-	 * 在指定目录下执行 DFS 文件搜索，返回符合匹配条件的文件的绝对路径。
+	 * 在指定目录下执行 DFS 文件搜索，返回符合匹配条件的文件的绝对路径�?
 	 * 
 	 * @param fileNameRegex 所检索文件名的正则表达式，要求为完全匹配模式
 	 * @param dirPath 所检索的起始目录
-	 * @param isFirst 是否取第一个检索结果。否则返回最后一个检索结果。
-	 * @return 匹配文件的绝对路径。若无匹配则返回空串。
+	 * @param isFirst 是否取第一个检索结果。否则返回最后一个检索结果�?
+	 * @return 匹配文件的绝对路径。若无匹配则返回空串�?
 	 */
 	public static String dfs(String fileNameRegex, String dirPath, 
 			boolean isFirst) {
@@ -37,12 +37,12 @@ public class SearchUtils {
 	}
 	
 	/**
-	 * 在指定目录下执行 BFS 文件搜索，返回符合匹配条件的文件的绝对路径。
+	 * 在指定目录下执行 BFS 文件搜索，返回符合匹配条件的文件的绝对路径�?
 	 * 
 	 * @param fileNameRegex 所检索文件名的正则表达式，要求为完全匹配模式
 	 * @param dirPath 所检索的起始目录
-	 * @param isFirst 是否取第一个检索结果。否则返回最后一个检索结果。
-	 * @return 匹配文件的绝对路径。若无匹配则返回空串。
+	 * @param isFirst 是否取第一个检索结果。否则返回最后一个检索结果�?
+	 * @return 匹配文件的绝对路径。若无匹配则返回空串�?
 	 */
 	public static String bfs(String fileNameRegex, String dirPath, 
 			boolean isFirst) {
@@ -50,19 +50,19 @@ public class SearchUtils {
 	}
 	
 	/**
-	 * 在指定目录下执行文件搜索，返回符合匹配条件的文件的绝对路径。
-	 * 根据参数选择有4种返回可能：
+	 * 在指定目录下执行文件搜索，返回符合匹配条件的文件的绝对路径�?
+	 * 根据参数选择�?4种返回可能：
 	 * 
-	 * isFirst = true, topPriority = true : BFS 第一个
-	 * isFirst = true, topPriority = false : DFS 第一个
-	 * isFirst = false, topPriority = true ：  DFS 最后一个
-	 * isFirst = false, topPriority = false : BFS 最后一个
+	 * isFirst = true, topPriority = true : BFS 第一�?
+	 * isFirst = true, topPriority = false : DFS 第一�?
+	 * isFirst = false, topPriority = true �?  DFS 最后一�?
+	 * isFirst = false, topPriority = false : BFS 最后一�?
 	 * 
 	 * @param fileNameRegex 所检索文件名的正则表达式，要求为完全匹配模式
 	 * @param dirPath 所检索的起始目录
-	 * @param isFirst 是否取第一个检索结果。否则返回最后一个检索结果。
-	 * @param topPriority 是否上层目录的检索结果优先。当父目录和子目录同时存在匹配结果时据此筛选。
-	 * @return 匹配文件的绝对路径。若无匹配则返回空串。
+	 * @param isFirst 是否取第一个检索结果。否则返回最后一个检索结果�?
+	 * @param topPriority 是否上层目录的检索结果优先。当父目录和子目录同时存在匹配结果时据此筛选�?
+	 * @return 匹配文件的绝对路径。若无匹配则返回空串�?
 	 */
 	private static String search(String fileNameRegex, String dirPath, 
 			boolean isFirst, boolean topPriority) {
@@ -82,20 +82,20 @@ public class SearchUtils {
 	}
 	
 	/**
-	 * 在指定目录下执行文件搜索，返回符合匹配条件的文件的绝对路径。
-	 * 根据参数选择有4种返回可能：
+	 * 在指定目录下执行文件搜索，返回符合匹配条件的文件的绝对路径�?
+	 * 根据参数选择�?4种返回可能：
 	 * 
-	 * isFirst = true, topPriority = true : BFS 第一个
-	 * isFirst = true, topPriority = false : DFS 第一个
-	 * isFirst = false, topPriority = true ：  DFS 最后一个
-	 * isFirst = false, topPriority = false : BFS 最后一个
+	 * isFirst = true, topPriority = true : BFS 第一�?
+	 * isFirst = true, topPriority = false : DFS 第一�?
+	 * isFirst = false, topPriority = true �?  DFS 最后一�?
+	 * isFirst = false, topPriority = false : BFS 最后一�?
 	 * 
 	 * @param fileNameRegex 所检索文件名的正则表达式，要求为完全匹配模式
 	 * @param dirPath 所检索的起始目录
-	 * @param isFirst 是否取第一个检索结果。否则返回最后一个检索结果。
-	 * @param topPriority 是否上层目录的检索结果优先。当父目录和子目录同时存在匹配结果时据此筛选。
+	 * @param isFirst 是否取第一个检索结果。否则返回最后一个检索结果�?
+	 * @param topPriority 是否上层目录的检索结果优先。当父目录和子目录同时存在匹配结果时据此筛选�?
 	 * @param depth 递归深度
-	 * @return 匹配文件的绝对路径。若无匹配则返回空串。
+	 * @return 匹配文件的绝对路径。若无匹配则返回空串�?
 	 */
 	private static String search(String fileNameRegex, String dirPath, 
 			boolean isFirst, boolean topPriority, int depth) {
@@ -104,14 +104,14 @@ public class SearchUtils {
 			return "";
 		}
 		
-		String tFirstPath = "";	//本层首个检索到的路径
-		String tLastPath = "";	//本层最后检索到的路径
+		String tFirstPath = "";	//本层首个检索到的路�?
+		String tLastPath = "";	//本层最后检索到的路�?
 		File dir = new File(dirPath);
 		
 		if(dir.exists() && dir.isDirectory()) {
 			File[] files = dir.listFiles();
 			
-			//检索本层
+			//检索本�?
 			for(File file : files) {
 				if(file.exists() && !file.isDirectory()) {
 					String tmpPath = file.getAbsolutePath();
@@ -125,10 +125,10 @@ public class SearchUtils {
 				}
 			}
 			
-			//当本层检索不到、或下层优先时，检索下层
+			//当本层检索不到、或下层优先时，检索下�?
 			if("".equals(tFirstPath) || topPriority == false) {
-				String nFirstPath = "";	//下层首个检索到的路径
-				String nLastPath = "";	//下层最后检索到的路径
+				String nFirstPath = "";	//下层首个检索到的路�?
+				String nLastPath = "";	//下层最后检索到的路�?
 				
 				for(File file : files) {
 					if(file.exists() && file.isDirectory()) {
@@ -147,13 +147,13 @@ public class SearchUtils {
 					}
 				}
 				
-				//当下层优先时，只要下层检索结果不为空就覆盖本层
+				//当下层优先时，只要下层检索结果不为空就覆盖本�?
 				if(topPriority == false) {
 					tFirstPath = 
 							("".equals(nFirstPath) ? tFirstPath : nFirstPath);
 					tLastPath = ("".equals(nLastPath) ? tLastPath : nLastPath);
 					
-				//当本层优先时，只有本层检索结果为空才取下层
+				//当本层优先时，只有本层检索结果为空才取下�?
 				} else {
 					tFirstPath = 
 							("".equals(tFirstPath) ? nFirstPath : tFirstPath);
@@ -162,15 +162,15 @@ public class SearchUtils {
 			}
 		}
 		
-		//根据需要返回第一个或最后一个结果
+		//根据需要返回第一个或最后一个结�?
 		return (isFirst == true ? tFirstPath : tLastPath);
 	}
 	
 	/**
-	 * 检索指定目录下所有符合条件的文件,返回这些文件的绝对路径.
+	 * 检索指定目录下所有符合条件的文件,返回这些文件的绝对路�?.
 	 * 
 	 * @param fileNameRegex 所检索文件名的正则表达式，要求为完全匹配模式
-	 * @param dirPath 检索目录
+	 * @param dirPath 检索目�?
 	 * @return 所有被匹配的文件的绝对路径
 	 */
 	public static List<String> search(String fileNameRegex, String dirPath) {
@@ -190,10 +190,10 @@ public class SearchUtils {
 	}
 	
 	/**
-	 * 检索指定目录下所有符合条件的文件,返回这些文件的绝对路径.
+	 * 检索指定目录下所有符合条件的文件,返回这些文件的绝对路�?.
 	 * 
 	 * @param fileNameRegex 所检索文件名的正则表达式，要求为完全匹配模式
-	 * @param dirPath 检索目录
+	 * @param dirPath 检索目�?
 	 * @param filePaths 存储被匹配文件路径的队列
 	 * @param depth 递归深度
 	 * @return 所有被匹配的文件的绝对路径

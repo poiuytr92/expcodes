@@ -39,7 +39,7 @@ final class _OCR {
 	private String tesseractDir;
 
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param tesseractDir OCR组件驱动目录
 	 */
 	protected _OCR(String tesseractDir) {

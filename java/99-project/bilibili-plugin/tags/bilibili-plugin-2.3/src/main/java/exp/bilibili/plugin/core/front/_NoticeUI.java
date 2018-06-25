@@ -13,10 +13,10 @@ import exp.libs.warp.ui.cpt.win.NoticeWindow;
  * <PRE>
  * 直播通知面板
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class _NoticeUI extends NoticeWindow {
@@ -38,7 +38,7 @@ public class _NoticeUI extends NoticeWindow {
 	protected void initComponents(Object... args) {
 		this.editor = new JEditorPane();
 		editor.setEditable(false);
-		editor.setContentType("text/html");	// 将编辑框设置为支持html的编辑格式
+		editor.setContentType("text/html");	// 将编辑框设置为支持html的编辑格�?
 		
 		if(args != null && args.length > 0) {
 			Integer roomId = (Integer) args[0];
@@ -61,7 +61,7 @@ public class _NoticeUI extends NoticeWindow {
 		String text = StrUtils.concat(
 				"<html>", 
 					"<body>", 
-						"直播间 [<font color='red'>", roomId, "</font>] 开播啦!!!", 
+						"直播�? [<font color='red'>", roomId, "</font>] 开播啦!!!", 
 					"</body>", 
 				"</html>"
 		);

@@ -27,7 +27,7 @@ public class Test_String {
 	@Test
 	public void testCastString() throws Exception {
 		
-		//正确性测试
+		//正确性测�?
 		Object rst = CEPUtils.call(
 				_String.NAME, new Object[] {"-123456789"});
 		Assert.assertEquals("-123456789", rst);
@@ -61,7 +61,7 @@ public class Test_String {
 		}
 		
 		try {
-			CEPUtils.call("str(\" \r\n \t \0   \")");	//参数不能有换行
+			CEPUtils.call("str(\" \r\n \t \0   \")");	//参数不能有换�?
 			Assert.assertTrue(false);
 			
 		} catch (Exception e) {

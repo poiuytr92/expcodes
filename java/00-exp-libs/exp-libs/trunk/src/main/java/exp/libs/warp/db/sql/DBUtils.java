@@ -47,7 +47,7 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
  */
 public class DBUtils {
 
-	/** 日志器 */
+	/** 日志�? */
 	private final static Logger log = LoggerFactory.getLogger(DBUtils.class);
 	
 	/** DB重连间隔(ms) */
@@ -56,23 +56,23 @@ public class DBUtils {
 	/** DB连续重连次数上限 */
 	private final static int RECONN_LIMIT = 10;
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected DBUtils() {}
 	
 	/**
 	 * <PRE>
-	 * 设置是否自动关闭线程池.
+	 * 设置是否自动关闭线程�?.
 	 * 
-	 * 	使用场景：
+	 * 	使用场景�?
 	 *   通常当在进程销毁钩子中需要入库操作时, 若使用线程池, 则必定报错：
 	 * 		Attempt to refer to a unregistered pool by its alias xxx
 	 * 
-	 *   这是因为proxool总是最先向JVM请求销毁自身, 导致在进程销毁钩子无法使用线程池, 只能使用常规的JDBC操作.
+	 *   这是因为proxool总是最先向JVM请求销毁自�?, 导致在进程销毁钩子无法使用线程池, 只能使用常规的JDBC操作.
 	 *   
-	 *   通过此方法, 在程序使用线程池之前设置 {@link #setAutoShutdownPool() false} 可以避免这种主动销毁的行为
-	 *   但是在进程钩子的最后, 需要手动调用 {@link #shutdownPool()} 方法关闭线程池
+	 *   通过此方�?, 在程序使用线程池之前设置 {@link #setAutoShutdownPool() false} 可以避免这种主动销毁的行为
+	 *   但是在进程钩子的最�?, 需要手动调�? {@link #shutdownPool()} 方法关闭线程�?
 	 * </PRE>
-	 * @param auto true:自动关闭线程池(默认); false:手动关闭线程池
+	 * @param auto true:自动关闭线程�?(默认); false:手动关闭线程�?
 	 */
 	public static void setAutoShutdownPool(boolean auto) {
 		if(auto == true) {
@@ -83,14 +83,14 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 马上关闭线程池
+	 * 马上关闭线程�?
 	 */
 	public static void shutdownPool() {
 		shutdownPool(0);
 	}
 	
 	/**
-	 * 延迟一段时间后关闭线程池
+	 * 延迟一段时间后关闭线程�?
 	 * @param delay 延迟时间, 单位:ms
 	 */
 	public static void shutdownPool(int delay) {
@@ -98,9 +98,9 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 测试数据源连接是否可用
-	 * @param ds 数据源
-	 * @return true:连接可用; false:连接不可用
+	 * 测试数据源连接是否可�?
+	 * @param ds 数据�?
+	 * @return true:连接可用; false:连接不可�?
 	 */
 	public static boolean testConn(DataSourceBean ds) {
 		boolean isOk = false;
@@ -119,9 +119,9 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 通过Connection判断数据库类型
-	 * @param conn 数据库连接
-	 * @return 数据库类型
+	 * 通过Connection判断数据库类�?
+	 * @param conn 数据库连�?
+	 * @return 数据库类�?
 	 */
 	public static DBType judgeDBType(Connection conn) {
 		DBType db = DBType.UNKNOW;
@@ -159,18 +159,18 @@ public class DBUtils {
 				
 			}
 		} catch (SQLException e) {
-			log.error("判断数据库类型失败", e);
+			log.error("判断数据库类型失�?", e);
 		}
 		return db;
 	}
 	
 	/**
 	 * <PRE>
-	 * 获取数据库连接(先通过连接池获取，若连接池获取失败，则改用JDBC获取).
-	 * 	在连接成功前，重试若干次(默认10次)
+	 * 获取数据库连�?(先通过连接池获取，若连接池获取失败，则改用JDBC获取).
+	 * 	在连接成功前，重试若干次(默认10�?)
 	 * <PRE>
-	 * @param ds 数据库配置信息
-	 * @return 数据库连接(若连接失败返回null)
+	 * @param ds 数据库配置信�?
+	 * @return 数据库连�?(若连接失败返回null)
 	 */
 	public static Connection getConn(DataSourceBean ds) {
 		return getConn(ds, RECONN_LIMIT);
@@ -178,12 +178,12 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 获取数据库连接(先通过连接池获取，若连接池获取失败，则改用JDBC获取).
+	 * 获取数据库连�?(先通过连接池获取，若连接池获取失败，则改用JDBC获取).
 	 * 	在连接成功前，重试若干次.
 	 * </PRE>
-	 * @param ds 数据库配置信息
+	 * @param ds 数据库配置信�?
 	 * @param retry 重试次数
-	 * @return 数据库连接(若连接失败返回null)
+	 * @return 数据库连�?(若连接失败返回null)
 	 */
 	public static Connection getConn(DataSourceBean ds, int retry) {
 		Connection conn = null;
@@ -205,11 +205,11 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 获取数据库连接。
+	 * 获取数据库连接�?
 	 * 	先通过连接池获取，若连接池获取失败，则改用JDBC获取
 	 * <PRE>
-	 * @param ds 数据库配置信息
-	 * @return 数据库连接(若连接失败返回null)
+	 * @param ds 数据库配置信�?
+	 * @return 数据库连�?(若连接失败返回null)
 	 */
 	private static Connection _getConn(DataSourceBean ds) {
 		Connection conn = getConnByPool(ds);
@@ -221,8 +221,8 @@ public class DBUtils {
 	
 	/**
 	 * 通过连接池获取数据库连接
-	 * @param ds 数据库配置信息
-	 * @return 数据库连接(若连接失败返回null)
+	 * @param ds 数据库配置信�?
+	 * @return 数据库连�?(若连接失败返回null)
 	 */
 	public static Connection getConnByPool(DataSourceBean ds) {
 		Connection conn = null;
@@ -238,7 +238,7 @@ public class DBUtils {
 				if(errMsg != null && errMsg.contains("maximum connection count (0/0)")) {
 					// Undo 连接正常
 				} else {
-					log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
+					log.error("获取数据�? [{}] 连接失败.", ds.getName(), e);
 				}
 			}
 		}
@@ -247,11 +247,11 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 通过JDBC获取数据库连接.
-	 * （在shutdown等场景下无法通过连接池获取连接，此时需用JDBC方式）
+	 * 通过JDBC获取数据库连�?.
+	 * （在shutdown等场景下无法通过连接池获取连接，此时需用JDBC方式�?
 	 * <PRE>
-	 * @param ds 数据库配置信息
-	 * @return 数据库连接(若连接失败返回null)
+	 * @param ds 数据库配置信�?
+	 * @return 数据库连�?(若连接失败返回null)
 	 */
 	public static Connection getConnByJDBC(DataSourceBean ds) {
 		Connection conn = null;
@@ -262,15 +262,15 @@ public class DBUtils {
 						ds.getUrl(), ds.getUsername(), ds.getPassword());
 				
 			} catch (Throwable e) {
-				log.error("获取数据库 [{}] 连接失败.", ds.getName(), e);
+				log.error("获取数据�? [{}] 连接失败.", ds.getName(), e);
 			}
 		}
 		return conn;
 	}
 	
 	/**
-	 * 开/关 数据库自动提交
-	 * @param conn 数据库连接
+	 * 开/�? 数据库自动提�?
+	 * @param conn 数据库连�?
 	 * @param autoCommit 是否自动提交
 	 */
 	public static void setAutoCommit(Connection conn, boolean autoCommit) {
@@ -284,15 +284,15 @@ public class DBUtils {
 	}
 	
 	/**
-	 * 关闭数据库连接
-	 * @param conn 数据库连接
+	 * 关闭数据库连�?
+	 * @param conn 数据库连�?
 	 */
 	public static void close(Connection conn) {
 		if(conn != null) {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				log.error("关闭数据库连接失败.", e);
+				log.error("关闭数据库连接失�?.", e);
 			}
 		}
 	}
@@ -300,14 +300,14 @@ public class DBUtils {
 	/**
 	 * <PRE>
 	 * 根据物理表生成对应的JavaBean类文件（类似Bean与Dao的复合对象）.
-	 * 	表名和列名会自动做前缀删除和驼峰处理.
-	 * 	例如：
-	 * 		表名为 T_CP_USER， 类名则为 CpUser
-	 * 		列名为 I_ID，类成员域名则为iId
+	 * 	表名和列名会自动做前缀删除和驼峰处�?.
+	 * 	例如�?
+	 * 		表名�? T_CP_USER�? 类名则为 CpUser
+	 * 		列名�? I_ID，类成员域名则为iId
 	 * <PRE>
-	 * @param conn 数据库连接
-	 * @param packageName 所生成的JavaBean类文件的包路径, 如: foo.bar.bean
-	 * @param outDirPath 所生成的JavaBean类文件的存储路径, 如: ./src/main/java/foo/bar/bean
+	 * @param conn 数据库连�?
+	 * @param packageName 所生成的JavaBean类文件的包路�?, �?: foo.bar.bean
+	 * @param outDirPath 所生成的JavaBean类文件的存储路径, �?: ./src/main/java/foo/bar/bean
 	 * @param exportTables 需要导出为JavaBean的物理表名集（若为空则全库导出）
 	 * @return true:成功; false:失败
 	 */
@@ -329,14 +329,14 @@ public class DBUtils {
 	/**
 	 * <PRE>
 	 * 根据物理模型生成对应的JavaBean类文件（类似Bean与Dao的复合对象）.
-	 * 	表名和列名会自动做前缀删除和驼峰处理.
-	 * 	例如：
-	 * 		表名为 T_CP_USER， 类名则为 CpUser
-	 * 		列名为 I_ID，类成员域名则为iId
+	 * 	表名和列名会自动做前缀删除和驼峰处�?.
+	 * 	例如�?
+	 * 		表名�? T_CP_USER�? 类名则为 CpUser
+	 * 		列名�? I_ID，类成员域名则为iId
 	 * <PRE>
-	 * @param pdmPath 物理模型文件路径（支持PowerDesigner）
-	 * @param packageName 所生成的JavaBean类文件的包路径, 如: foo.bar.bean
-	 * @param outDirPath 所生成的JavaBean类文件的存储路径, 如: ./src/main/java/foo/bar/bean
+	 * @param pdmPath 物理模型文件路径（支持PowerDesigner�?
+	 * @param packageName 所生成的JavaBean类文件的包路�?, �?: foo.bar.bean
+	 * @param outDirPath 所生成的JavaBean类文件的存储路径, �?: ./src/main/java/foo/bar/bean
 	 * @param exportTables 需要导出为JavaBean的物理表名集（若为空则全库导出）
 	 * @return true:成功; false:失败
 	 */
@@ -357,10 +357,10 @@ public class DBUtils {
 			
 	/**
 	 * 查询一个JavaBean对应的物理表数据，并把对应列值转存到JavaBean对应的成员域.
-	 * @param clazz JavaBean类定义
-	 * @param conn 数据库连接
+	 * @param clazz JavaBean类定�?
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
-	 * @return JavaBean对象列表（查询失败返回null）
+	 * @return JavaBean对象列表（查询失败返回null�?
 	 */
 	public static <BEAN> List<BEAN> query(Class<BEAN> clazz, Connection conn, String sql) {
 		List<BEAN> beans = new LinkedList<BEAN>();
@@ -377,11 +377,11 @@ public class DBUtils {
 	/**
 	 * <PRE>
 	 * 查询键值对(其中值会被强制转换为String类型).
-	 * 	仅适用于形如 【select key, value from table where ...】 的sql
+	 * 	仅适用于形�? 【select key, value from table where ...�? 的sql
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 键值对查询SQL
-	 * @return Map<key, value> 键值对表 （不会返回null）
+	 * @return Map<key, value> 键值对�? （不会返回null�?
 	 */
 	public static Map<String, String> queryKVS(Connection conn, String sql) {
 		Map<String, String> kvo = new HashMap<String, String>();
@@ -412,12 +412,12 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询键值对(其中值会保留其原本数据类型).
-	 * 	仅适用于形如 【select key, value from table where ...】 的sql
+	 * 查询键值对(其中值会保留其原本数据类�?).
+	 * 	仅适用于形�? 【select key, value from table where ...�? 的sql
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 键值对查询SQL
-	 * @return Map<key, value> 键值对表 （不会返回null）
+	 * @return Map<key, value> 键值对�? （不会返回null�?
 	 */
 	public static Map<String, Object> queryKVO(Connection conn, String sql) {
 		Map<String, Object> kvo = new HashMap<String, Object>();
@@ -448,10 +448,10 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询多行表数据.
-	 * 	每行数据以列名为key，以列值为val（列值会被强制转换成String类型）.
+	 * 查询多行表数�?.
+	 * 	每行数据以列名为key，以列值为val（列值会被强制转换成String类型�?.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
 	 * @return List<Map<colName, colVal>> (不会返回null)
 	 */
@@ -484,10 +484,10 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询多行表数据.
+	 * 查询多行表数�?.
 	 * 	每行数据以列名为key，以列值为val（列值会保留其原本数据类型）.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
 	 * @return List<Map<colName, colVal>> (不会返回null)
 	 */
@@ -520,12 +520,12 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询一个int整数值.
-	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 * 查询一个int整数�?.
+	 *  若返回的不是 1x1 的结果集，只�? [1][1] 作为返回�?.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
-	 * @return 查询结果（查询失败则返回-1）
+	 * @return 查询结果（查询失败则返回-1�?
 	 */
 	public static int queryInt(Connection conn, String sql) {
 		int num = -1;
@@ -548,12 +548,12 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询一个long整数值.
-	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 * 查询一个long整数�?.
+	 *  若返回的不是 1x1 的结果集，只�? [1][1] 作为返回�?.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
-	 * @return 查询结果（查询失败则返回-1）
+	 * @return 查询结果（查询失败则返回-1�?
 	 */
 	public static long queryLong(Connection conn, String sql) {
 		long num = -1;
@@ -576,12 +576,12 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询[第一行][第一列]的单元格值（所得值强制转换为String类型）.
-	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 * 查询[第一行][第一列]的单元格值（所得值强制转换为String类型�?.
+	 *  若返回的不是 1x1 的结果集，只�? [1][1] 作为返回�?.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
-	 * @return 查询结果（查询失败则返回null）
+	 * @return 查询结果（查询失败则返回null�?
 	 */
 	public static String queryCellStr(Connection conn, String sql) {
 		String cell = "";
@@ -607,11 +607,11 @@ public class DBUtils {
 	/**
 	 * <PRE>
 	 * 查询[第一行][第一列]的单元格值（所得值保留其原本的数据类型）.
-	 *  若返回的不是 1x1 的结果集，只取 [1][1] 作为返回值.
+	 *  若返回的不是 1x1 的结果集，只�? [1][1] 作为返回�?.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
-	 * @return 查询结果（查询失败则返回null）
+	 * @return 查询结果（查询失败则返回null�?
 	 */
 	public static Object queryCellObj(Connection conn, String sql) {
 		Object cell = null;
@@ -636,10 +636,10 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询[第一行]表数据.
-	 * 	行数据以列名为key，以列值为val（列值会被强制转换成String类型）.
+	 * 查询[第一行]表数�?.
+	 * 	行数据以列名为key，以列值为val（列值会被强制转换成String类型�?.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
 	 * @return Map<colName, colVal> (不会返回null)
 	 */
@@ -667,10 +667,10 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询[第一行]表数据.
+	 * 查询[第一行]表数�?.
 	 * 	行数据以列名为key，以列值为val（列值保留其原本的数据类型）.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
 	 * @return Map<colName, colVal> (不会返回null)
 	 */
@@ -698,9 +698,9 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 查询[第col列]表数据（数据值会被强制转换成String类型）.
+	 * 查询[第col列]表数据（数据值会被强制转换成String类型�?.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
 	 * @return List<colVal> (不会返回null)
 	 */
@@ -732,7 +732,7 @@ public class DBUtils {
 	 * <PRE>
 	 * 查询[第col列]表数据（数据值保留其原本的数据类型）.
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 查询sql
 	 * @return List<colVal> (不会返回null)
 	 */
@@ -764,9 +764,9 @@ public class DBUtils {
 	
 	/**
 	 * 执行预编译sql
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param preSql 预编译sql
-	 * @param params 参数表
+	 * @param params 参数�?
 	 * @return true:执行成功; false:执行失败
 	 */
 	public static boolean execute(Connection conn, String preSql, Object[] params) {
@@ -794,7 +794,7 @@ public class DBUtils {
 	
 	/**
 	 * 执行普通sql
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param sql 普通sql
 	 * @return true:执行成功; false:执行sql
 	 */
@@ -815,31 +815,31 @@ public class DBUtils {
 	
 	/**
 	 * <pre>
-	 * 执行存储过程，获得简单返回值（支持[无返回值]和 [单值]返回两种形式）。
-	 * 根据数据库连接自动识别 mysql、sybase、oracle。
+	 * 执行存储过程，获得简单返回值（支持[无返回值]�? [单值]返回两种形式）�?
+	 * 根据数据库连接自动识�? mysql、sybase、oracle�?
 	 * 
-	 * 注意：
-	 * 参数如果有null，则可能出错，特别是sybase数据库
+	 * 注意�?
+	 * 参数如果有null，则可能出错，特别是sybase数据�?
 	 * 
-	 * mysql存储过程要求：
-	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
-	 * 	返回值：最后一个结果集（即SELECT语句）的第1行、第1列的值。
+	 * mysql存储过程要求�?
+	 *  入参表：proSql的占位符?个数 必须�? 入参表params长度相同，否则抛出SQLException异常�?
+	 * 	返回值：最后一个结果集（即SELECT语句）的�?1行、第1列的值�?
 	 * 
-	 * sybase存储过程要求：
-	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
-	 * 	返回值：return所指定的值。
+	 * sybase存储过程要求�?
+	 *  入参表：proSql的占位符?个数 必须�? 入参表params长度相同，否则抛出SQLException异常�?
+	 * 	返回值：return所指定的值�?
 	 * 
-	 * oracle存储过程要求：
-	 *  入参表：当proSql的占位符?个数 比 入参表params长度多0，为无返回值形式；
-	 *       多1，为有返回值形式。其余情况抛出SQLException异常。
-	 * 	返回值：当proSql的占位符?个数比入参表params多1，则认为最后1个占位符是出参。
+	 * oracle存储过程要求�?
+	 *  入参表：当proSql的占位符?个数 �? 入参表params长度�?0，为无返回值形式；
+	 *       �?1，为有返回值形式。其余情况抛出SQLException异常�?
+	 * 	返回值：当proSql的占位符?个数比入参表params�?1，则认为最�?1个占位符是出参�?
 	 * </pre>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
-	 * @param params 入参表
+	 * @param params 入参�?
 	 * @return 
-	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
-	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可。
+	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式�?
+	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可�?
 	 */
 	public static String execSP(Connection conn, String proSql, Object[] params) {
 		if(conn == null) {
@@ -871,20 +871,20 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * mysql存储过程调用，支持[无返回值]和 [单值]返回两种形式。
+	 * mysql存储过程调用，支持[无返回值]�? [单值]返回两种形式�?
 	 * 
-	 * 要求：
-	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
-	 * 	返回值：最后一个结果集（即SELECT语句）的第1行、第1列的值。
+	 * 要求�?
+	 *  入参表：proSql的占位符?个数 必须�? 入参表params长度相同，否则抛出SQLException异常�?
+	 * 	返回值：最后一个结果集（即SELECT语句）的�?1行、第1列的值�?
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
-	 * @param params 入参表
+	 * @param params 入参�?
 	 * @return 
-	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
-	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可。
+	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式�?
+	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可�?
 	 * 
-	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误。
+	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误�?
 	 */
 	private static String _execSpByMysql(Connection conn, String proSql, Object[] params) {
 		String result = null;
@@ -922,7 +922,7 @@ public class DBUtils {
 					}
 					cs.executeQuery();
 					
-					//取最后一个结果集的首行首列值
+					//取最后一个结果集的首行首列�?
 					try {
 						do {
 							rs = cs.getResultSet();
@@ -932,7 +932,7 @@ public class DBUtils {
 						} while(cs.getMoreResults() == true);
 						
 					} catch(NullPointerException e) {
-						result = "";	// 存储过程无返回值
+						result = "";	// 存储过程无返回�?
 					}
 					
 				} catch (SQLException e) {
@@ -949,20 +949,20 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * sybase存储过程调用，支持[无返回值]和 [单值]返回两种形式。
+	 * sybase存储过程调用，支持[无返回值]�? [单值]返回两种形式�?
 	 * 
-	 * 要求：
-	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
-	 * 	返回值：return所指定的值。
+	 * 要求�?
+	 *  入参表：proSql的占位符?个数 必须�? 入参表params长度相同，否则抛出SQLException异常�?
+	 * 	返回值：return所指定的值�?
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
-	 * @param params 入参表
+	 * @param params 入参�?
 	 * @return 
-	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
-	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可。
+	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式�?
+	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可�?
 	 * 
-	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误。
+	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误�?
 	 */
 	private static String _execSpBySybase(Connection conn, String proSql, Object[] params) {
 		String result = null;
@@ -1014,21 +1014,21 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * oracle存储过程调用，支持[无返回值]和 [单值]返回两种形式。
+	 * oracle存储过程调用，支持[无返回值]�? [单值]返回两种形式�?
 	 * 
-	 * 要求：
-	 *  入参表：当proSql的占位符?个数 比 入参表params长度多0，为无返回值形式；
-	 *       多1，为有返回值形式。其余情况抛出SQLException异常。
-	 * 	返回值：当proSql的占位符?个数比入参表params多1，则认为最后1个占位符是出参。
+	 * 要求�?
+	 *  入参表：当proSql的占位符?个数 �? 入参表params长度�?0，为无返回值形式；
+	 *       �?1，为有返回值形式。其余情况抛出SQLException异常�?
+	 * 	返回值：当proSql的占位符?个数比入参表params�?1，则认为最�?1个占位符是出参�?
 	 * </PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
-	 * @param params 入参表
+	 * @param params 入参�?
 	 * @return 
-	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式。
-	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可。
+	 * 		对于返回单值的存储过程，返回String类型，即兼容数字和字符、但日期类型无法保证格式�?
+	 * 		对于无返回值的存储过程，会返回任意值，不取返回值即可�?
 	 * 
-	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误。
+	 * @throws SQLException 占位符与入参表个数不一致，或执行异常则抛出错误�?
 	 */
 	private static String _execSpByOracle(Connection conn, String proSql, Object[] params) {
 		String result = null;
@@ -1041,7 +1041,7 @@ public class DBUtils {
 		} else {
 			int paramNum = (params == null ? 0 : params.length);
 			int placeNum = StrUtils.count(proSql, '?');
-			int diff = placeNum - paramNum;	// 占位符数 与 参数个数 的差异值
+			int diff = placeNum - paramNum;	// 占位符数 �? 参数个数 的差异�?
 			
 			if(diff != 0 && diff != 1) {
 				log.error("execute procedure [{}] fail: "
@@ -1067,7 +1067,7 @@ public class DBUtils {
 						}
 					}
 					
-					// 占位符数 比 参数个数 多1， 说明最后一个参数是出参
+					// 占位符数 �? 参数个数 �?1�? 说明最后一个参数是出参
 					if(diff == 1) {
 						i = (i == 0 ? 1 : ++i);
 						cs.registerOutParameter(i, Types.VARCHAR);
@@ -1089,30 +1089,30 @@ public class DBUtils {
 	
 	/**
 	 * <pre>
-	 * 调用存储过程，获取[结果集]返回。
-	 * 根据数据库连接自动识别 mysql、sybase、oracle。
+	 * 调用存储过程，获取[结果集]返回�?
+	 * 根据数据库连接自动识�? mysql、sybase、oracle�?
 	 * 
-	 * 注意：
-	 * 参数如果有null，则可能出错，特别是sybase数据库
+	 * 注意�?
+	 * 参数如果有null，则可能出错，特别是sybase数据�?
 	 * 
-	 * mysql存储过程要求：
-	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
-	 * 	返回值：最后一个结果集（即SELECT语句）的第1行、第1列的值。
+	 * mysql存储过程要求�?
+	 *  入参表：proSql的占位符?个数 必须�? 入参表params长度相同，否则抛出SQLException异常�?
+	 * 	返回值：最后一个结果集（即SELECT语句）的�?1行、第1列的值�?
 	 * 
-	 * sybase存储过程要求：
-	 *  入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
-	 * 	返回值：return所指定的值。
+	 * sybase存储过程要求�?
+	 *  入参表：proSql的占位符?个数 必须�? 入参表params长度相同，否则抛出SQLException异常�?
+	 * 	返回值：return所指定的值�?
 	 * 
-	 * oracle存储过程要求：
-	 *  入参表：当proSql的占位符?个数 比 入参表params长度多0，为无返回值形式；
-	 *       多1，为有返回值形式。其余情况抛出SQLException异常。
-	 * 	返回值：当proSql的占位符?个数比入参表params多1，则认为最后1个占位符是出参。
+	 * oracle存储过程要求�?
+	 *  入参表：当proSql的占位符?个数 �? 入参表params长度�?0，为无返回值形式；
+	 *       �?1，为有返回值形式。其余情况抛出SQLException异常�?
+	 * 	返回值：当proSql的占位符?个数比入参表params�?1，则认为最�?1个占位符是出参�?
 	 * </pre>
 	 * 
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
-	 * @param params 入参表
-	 * @return List<Map<String, Object>>结果集（不会返回null）
+	 * @param params 入参�?
+	 * @return List<Map<String, Object>>结果集（不会返回null�?
 	 */
 	public static List<Map<String, Object>> callSP(Connection conn, 
 			String proSql, Object[] params) {
@@ -1145,17 +1145,17 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * 存储过程调用，支持[结果集]返回形式。
-	 * 兼容mysql和sybase，不支持oralce。
+	 * 存储过程调用，支持[结果集]返回形式�?
+	 * 兼容mysql和sybase，不支持oralce�?
 	 * 
-	 * 要求：
-	 * 	入参表：proSql的占位符?个数 必须与 入参表params长度相同，否则抛出SQLException异常。
-	 * 	返回值：最后一个结果集（即SELECT语句）。
+	 * 要求�?
+	 * 	入参表：proSql的占位符?个数 必须�? 入参表params长度相同，否则抛出SQLException异常�?
+	 * 	返回值：最后一个结果集（即SELECT语句）�?
 	 * <PRE>
-	 * @param conn 数据库连接
+	 * @param conn 数据库连�?
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
-	 * @param params 入参表
-	 * @return 返回结果集的多行记录，每行为 列名-列值 的键值对。
+	 * @param params 入参�?
+	 * @return 返回结果集的多行记录，每行为 列名-列�? 的键值对�?
 	 */
 	private static List<Map<String, Object>> _callSpByMysqlOrSybase(
 			Connection conn, String proSql, Object[] params) {
@@ -1190,7 +1190,7 @@ public class DBUtils {
 					}
 					cs.executeQuery();
 					
-					//取最后一个结果集，拼装返回值
+					//取最后一个结果集，拼装返回�?
 					do {
 						rs = cs.getResultSet();
 						if(rs != null) {
@@ -1225,17 +1225,17 @@ public class DBUtils {
 	
 	/**
 	 * <PRE>
-	 * oracle存储过程调用，仅支持[结果集]返回。
+	 * oracle存储过程调用，仅支持[结果集]返回�?
 	 * 
-	 * 要求：
-	 *  入参表：proSql的占位符?个数 比 入参表params长度多1，且最后1个占位符为返回结果集。
-	 *  	其余情况抛出SQLException异常。
-	 * 	返回值：结果集。
+	 * 要求�?
+	 *  入参表：proSql的占位符?个数 �? 入参表params长度�?1，且最�?1个占位符为返回结果集�?
+	 *  	其余情况抛出SQLException异常�?
+	 * 	返回值：结果集�?
 	 * </PRE>
-	 * @param conn Oracle数据库连接
+	 * @param conn Oracle数据库连�?
 	 * @param proSql 存储过程SQL，占位符格式，如 SP_TEST(?,?,?)
-	 * @param params 入参表，长度必须必占位符少1
-	 * @return 返回结果集的多行记录，每行为 列名-列值 的键值对。
+	 * @param params 入参表，长度必须必占位符�?1
+	 * @return 返回结果集的多行记录，每行为 列名-列�? 的键值对�?
 	 */
 	private static List<Map<String, Object>> _callSpByOracle(
 			Connection conn, String proSql, Object[] params) {
@@ -1249,7 +1249,7 @@ public class DBUtils {
 		} else {
 			int paramNum = (params == null ? 0 : params.length);
 			int placeNum = StrUtils.count(proSql, '?');
-			int diff = placeNum - paramNum;	// 占位符数 与 参数个数 的差异值
+			int diff = placeNum - paramNum;	// 占位符数 �? 参数个数 的差异�?
 			if(diff != 1) {
 				log.error("execute procedure [{}] fail: "
 						+ "'?' count doesn't match params count.", proSql);
@@ -1271,7 +1271,7 @@ public class DBUtils {
 						}
 					}
 					
-					//注册最后一个出参（游标类型）
+					//注册最后一个出参（游标类型�?
 					cs.registerOutParameter(++i, oracle.jdbc.OracleTypes.CURSOR);
 					
 					cs.execute();

@@ -39,16 +39,16 @@ public class ADPanel<T extends Component> {
 	private	JPanel basePanel; 
 	
 	/**
-	 * 构造函数
-	 * @param component 行组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
+	 * 构造函�?
+	 * @param component 行组件的�?(该组件类必须能提供public无参构造函�?, 保证组件能够被实例化和唯一�?)
 	 */
 	public ADPanel(Class<T> component) {
 		this(component, MAX_ROW);
 	}
 	
 	/**
-	 * 构造函数
-	 * @param component 行组件的类(该组件类必须能提供public无参构造函数, 保证组件能够被实例化和唯一性)
+	 * 构造函�?
+	 * @param component 行组件的�?(该组件类必须能提供public无参构造函�?, 保证组件能够被实例化和唯一�?)
 	 * @param maxRow 最多可以添加的行组件数(<=0表示不限)
 	 */
 	public ADPanel(Class<T> component, int maxRow) {
@@ -83,7 +83,7 @@ public class ADPanel<T extends Component> {
 	}
 	
 	/**
-	 * 检查当前行组件的数量是否在允许范围内
+	 * 检查当前行组件的数量是否在允许范围�?
 	 * @return true:在范围内; false:数量溢出
 	 */
 	private boolean rowInRange() {
@@ -91,8 +91,8 @@ public class ADPanel<T extends Component> {
 	}
 	
 	/**
-	 * 新增行组件(程序内部接口)
-	 * @param component 行组件
+	 * 新增行组�?(程序内部接口)
+	 * @param component 行组�?
 	 * @return 是否添加成功
 	 */
 	public boolean add(T component) {
@@ -109,8 +109,8 @@ public class ADPanel<T extends Component> {
 	
 	
 	/**
-	 * 替换指定行的行组件（若不存在对应行, 则添加到末尾）
-	 * @param component 行组件
+	 * 替换指定行的行组件（若不存在对应�?, 则添加到末尾�?
+	 * @param component 行组�?
 	 * @return 是否替换成功
 	 */
 	public boolean set(T component, int index) {
@@ -136,8 +136,8 @@ public class ADPanel<T extends Component> {
 	}
 	
 	/**
-	 * 删除行组件(程序内部接口)
-	 * @param index 行组件索引
+	 * 删除行组�?(程序内部接口)
+	 * @param index 行组件索�?
 	 * @return 是否删除成功
 	 */
 	public boolean del(int index) {
@@ -170,7 +170,7 @@ public class ADPanel<T extends Component> {
 	}
 	
 	/**
-	 * 获取承载面板上当前的所有差异化行组件
+	 * 获取承载面板上当前的所有差异化行组�?
 	 * @return 差异化行组件集合
 	 */
 	@SuppressWarnings("unchecked")
@@ -186,15 +186,15 @@ public class ADPanel<T extends Component> {
 				}
 			}
 		} catch (Throwable e) {
-			// Undo: 自定义行组件 T 实例化失败(没有提供public的无参构造函数), 导致无法获取行组件返回值
+			// Undo: 自定义行组件 T 实例化失�?(没有提供public的无参构造函�?), 导致无法获取行组件返回�?
 		}
 		return components;
 	}
 	
 	/**
 	 * 获取承载面板上当前的所有行组件.
-	 * 	(当自定义行组件失效时，可使用此方法获取默认行组件的值)
-	 * @return 默认行组件集合
+	 * 	(当自定义行组件失效时，可使用此方法获取默认行组件的�?)
+	 * @return 默认行组件集�?
 	 */
 	public List<JTextField> getDefaultLineComponents() {
 		List<JTextField> components = new LinkedList<JTextField>();
@@ -208,7 +208,7 @@ public class ADPanel<T extends Component> {
 				}
 			}
 		} catch (Throwable e) {
-			// Undo: 自定义行组件 T 实例化失败(没有提供public的无参构造函数), 导致无法获取行组件返回值
+			// Undo: 自定义行组件 T 实例化失�?(没有提供public的无参构造函�?), 导致无法获取行组件返回�?
 		}
 		return components;
 	}

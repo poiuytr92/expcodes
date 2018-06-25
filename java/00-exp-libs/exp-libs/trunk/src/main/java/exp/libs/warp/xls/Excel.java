@@ -57,29 +57,29 @@ import exp.libs.utils.other.StrUtils;
  */
 public class Excel {
 
-	/** 日志器 */
+	/** 日志�? */
 	private Logger log = LoggerFactory.getLogger(Excel.class);
 	
 	/** 日期时间单元格的默认格式风格 */
 	private final CellStyle DEFAULT_DATETIME_STYLE;
 	
-	/** 是否初始化成功 */
+	/** 是否初始化成�? */
 	private boolean init;
 	
 	/** 最后一次保存的xls文件对象 */
 	private File xlsFile;
 	
-	/** Excel工作簿（存储xls缓存数据） */
+	/** Excel工作簿（存储xls缓存数据�? */
 	private Workbook workbook;
 	
-	/** 是否为2007版本的xlsx（反之为2003版本的xls） */
+	/** 是否�?2007版本的xlsx（反之为2003版本的xls�? */
 	private boolean is2007;
 	
-	/** sheet页集合 */
+	/** sheet页集�? */
 	private Map<org.apache.poi.ss.usermodel.Sheet, Sheet> sheets;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param xlsFilePath Excel文件路径
 	 */
 	public Excel(String xlsFilePath) {
@@ -88,7 +88,7 @@ public class Excel {
 	}
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param xlsFile Excel文件对象
 	 */
 	public Excel(File xlsFile) {
@@ -97,9 +97,9 @@ public class Excel {
 	}
 	
 	/**
-	 * 初始化
+	 * 初始�?
 	 * @param xlsFilePath Excel文件路径
-	 * @return true: 初始化成功; false:初始化失败
+	 * @return true: 初始化成�?; false:初始化失�?
 	 */
 	private boolean init(String xlsFilePath) {
 		boolean isOk = false;
@@ -116,9 +116,9 @@ public class Excel {
 	}
 
 	/**
-	 * 初始化
+	 * 初始�?
 	 * @param xlsFile Excel文件对象
-	 * @return true: 初始化成功; false:初始化失败
+	 * @return true: 初始化成�?; false:初始化失�?
 	 */
 	private boolean init(File xlsFile) {
 		boolean isOk = false;;
@@ -152,8 +152,8 @@ public class Excel {
 	}
 	
 	/**
-	 * 初始化日期时间单元格的默认格式风格
-	 * @return true: 初始化成功; false:初始化失败
+	 * 初始化日期时间单元格的默认格式风�?
+	 * @return true: 初始化成�?; false:初始化失�?
 	 */
 	private CellStyle initDateCellStyle() {
 		CellStyle dateCellStyle = workbook.createCellStyle();
@@ -164,13 +164,13 @@ public class Excel {
 	
 	/**
 	 * <pre>
-	 * 获取新的单元格风格.
+	 * 获取新的单元格风�?.
 	 * ----------------------------
-	 *   注：默认情况下, Excel所有单元格是共享同一个CellStyle对象的, 
+	 *   注：默认情况�?, Excel所有单元格是共享同一个CellStyle对象�?, 
 	 *      因此若从单元格上getCellStyle后再修改风格, 会导致整个Excel风格同时改变.
-	 *      所以当只需要改变某个单元格风格时, 需要通过此方法新建一个CellStyle对象
+	 *      所以当只需要改变某个单元格风格�?, 需要通过此方法新建一个CellStyle对象
 	 * </pre>
-	 * @return 单元格风格
+	 * @return 单元格风�?
 	 */
 	public CellStyle createCellStyle() {
 		return (init ? workbook.createCellStyle() : null);
@@ -185,16 +185,16 @@ public class Excel {
 	}
 	
 	/**
-	 * 获取Excel工作簿
-	 * @return Excel工作簿
+	 * 获取Excel工作�?
+	 * @return Excel工作�?
 	 */
 	public Workbook WORKBOOK() {
 		return (init ? workbook : null);
 	}
 	
 	/**
-	 * Excel单个Sheet页支持的最大行数
-	 * @return 若初始化失败则返回0
+	 * Excel单个Sheet页支持的最大行�?
+	 * @return 若初始化失败则返�?0
 	 */
 	public int MAX_ROW() {
 		return (!init ? 0 : (is2007 ? 
@@ -203,8 +203,8 @@ public class Excel {
 	}
 	
 	/**
-	 * Excel单个Sheet页支持的最大列数
-	 * @return 若初始化失败则返回0
+	 * Excel单个Sheet页支持的最大列�?
+	 * @return 若初始化失败则返�?0
 	 */
 	public int MAX_COL() {
 		return (!init ? 0 : (is2007 ? 
@@ -213,8 +213,8 @@ public class Excel {
 	}
 	
 	/**
-	 * 当前sheet页数量
-	 * @return 若初始化失败则返回0
+	 * 当前sheet页数�?
+	 * @return 若初始化失败则返�?0
 	 */
 	public int SHEET_SIZE() {
 		return (init ? workbook.getNumberOfSheets() : 0);
@@ -223,14 +223,14 @@ public class Excel {
 	/**
 	 * 检查sheet索引是否在有效范围内
 	 * @param index sheet索引
-	 * @return true:是;  false:否
+	 * @return true:�?;  false:�?
 	 */
 	private boolean _inRange(int index) {
 		return (index >= 0 && index < workbook.getNumberOfSheets());
 	}
 	
 	/**
-	 * 生成默认的Sheet页名称
+	 * 生成默认的Sheet页名�?
 	 * @return SheetN
 	 */
 	private String _getDefaultSheetName() {
@@ -239,8 +239,8 @@ public class Excel {
 	
 	/**
 	 * 获取Sheet页对象（若不存在则创建）
-	 * @param poiSheet POI的Sheet页对象
-	 * @return 封装的Sheet页对象
+	 * @param poiSheet POI的Sheet页对�?
+	 * @return 封装的Sheet页对�?
 	 */
 	private Sheet _getSheet(org.apache.poi.ss.usermodel.Sheet poiSheet) {
 		if(poiSheet == null) {
@@ -258,7 +258,7 @@ public class Excel {
 	/**
 	 * 获取Sheet页对象（若不存在则创建）
 	 * @param name sheet名称
-	 * @return Sheet页对象（若初始化失败则返回Sheet.NULL对象）
+	 * @return Sheet页对象（若初始化失败则返回Sheet.NULL对象�?
 	 */
 	public Sheet getSheet(String name) {
 		Sheet sheet = Sheet.NULL;
@@ -270,9 +270,9 @@ public class Excel {
 	}
 
 	/**
-	 * 获取Sheet页对象
-	 * @param index sheet页索引(从0开始)
-	 * @return Sheet页对象（若初始化失败或索引无效则返回Sheet.NULL对象）
+	 * 获取Sheet页对�?
+	 * @param index sheet页索�?(�?0开�?)
+	 * @return Sheet页对象（若初始化失败或索引无效则返回Sheet.NULL对象�?
 	 */
 	public Sheet getSheet(int index) {
 		Sheet sheet = Sheet.NULL;
@@ -283,17 +283,17 @@ public class Excel {
 	}
 	
 	/**
-	 * 创建Sheet页（Sheet页名称为默认名称"SheetN"）
-	 * @return Sheet页对象（若初始化失败则返回Sheet.NULL对象）
+	 * 创建Sheet页（Sheet页名称为默认名称"SheetN"�?
+	 * @return Sheet页对象（若初始化失败则返回Sheet.NULL对象�?
 	 */
 	public Sheet createSheet() {
 		return createSheet(_getDefaultSheetName());
 	}
 	
 	/**
-	 * 创建Sheet页
-	 * @param name Sheet页名称
-	 * @return Sheet页对象（若初始化失败则返回Sheet.NULL对象）
+	 * 创建Sheet�?
+	 * @param name Sheet页名�?
+	 * @return Sheet页对象（若初始化失败则返回Sheet.NULL对象�?
 	 */
 	public Sheet createSheet(String name) {
 		Sheet sheet = Sheet.NULL;
@@ -303,7 +303,7 @@ public class Excel {
 			sheet = _getSheet(poiSheet);
 			
 		} catch(Exception e) {
-			log.error("创建sheet页 [{}] 失败", name, e);
+			log.error("创建sheet�? [{}] 失败", name, e);
 		}
 		return sheet;
 	}
@@ -311,13 +311,13 @@ public class Excel {
 	/**
 	 * <PRE>
 	 * 根据填充的数据，创建多个Sheet分页.
-	 * 分页名称为"sheetNamePrefix-pageIdx", 每页行数不超过pageRowLimit.
+	 * 分页名称�?"sheetNamePrefix-pageIdx", 每页行数不超过pageRowLimit.
 	 * </PRE>
-	 * @param header 表头（若非空则会出现在每个Sheet页的首行）
+	 * @param header 表头（若非空则会出现在每个Sheet页的首行�?
 	 * @param datas 填充数据
 	 * @param sheetNamePrefix Sheet页名称前缀
-	 * @param pageRowLimit 每页的最大行数
-	 * @return 分页数(给定的填充数据为空、或填充失败、或初始化失败则返回0)
+	 * @param pageRowLimit 每页的最大行�?
+	 * @return 分页�?(给定的填充数据为空、或填充失败、或初始化失败则返回0)
 	 */
 	public int createPagingSheets(List<String> header, List<List<Object>> datas, 
 			String sheetNamePrefix, int pageRowLimit) {
@@ -333,7 +333,7 @@ public class Excel {
 		int pageRowCnt = 0;
 		Sheet sheet = null;
 		for(int size = datas.size(), row = 0; row < size; row++) {
-			if(pageRowCnt == 0) {	// 新建sheet页
+			if(pageRowCnt == 0) {	// 新建sheet�?
 				String sheetName = StrUtils.concat(sheetNamePrefix, ++page);
 				sheet = createSheet(sheetName);
 				if(ROW_OFFSET > 0) {	// 设置表头
@@ -351,7 +351,7 @@ public class Excel {
 	}
 	
 	/**
-	 * 删除首个Sheet页
+	 * 删除首个Sheet�?
 	 * @return true:成功; false失败
 	 */
 	public boolean delFirstSheet() {
@@ -359,8 +359,8 @@ public class Excel {
 	}
 	
 	/**
-	 * 删除Sheet页
-	 * @param index sheet页索引(从0开始)
+	 * 删除Sheet�?
+	 * @param index sheet页索�?(�?0开�?)
 	 * @return true:成功; false失败
 	 */
 	public boolean delSheet(int index) {
@@ -383,7 +383,7 @@ public class Excel {
 	}
 	
 	/**
-	 * 另存缓存内容到Excel文件(若保存成功则操作的文件对象自动变更为另存的文件)
+	 * 另存缓存内容到Excel文件(若保存成功则操作的文件对象自动变更为另存的文�?)
 	 * @param filePath 另存为的文件路径
 	 * @return true:成功; false失败
 	 */
@@ -396,7 +396,7 @@ public class Excel {
 	}
 	
 	/**
-	 * 另存缓存内容到Excel文件(若保存成功则操作的文件对象自动变更为另存的文件)
+	 * 另存缓存内容到Excel文件(若保存成功则操作的文件对象自动变更为另存的文�?)
 	 * @param file 另存为的文件对象
 	 * @return true:成功; false失败
 	 */
@@ -410,7 +410,7 @@ public class Excel {
 			String savePath = file.getAbsolutePath();
 			file = FileUtils.createFile(savePath);
 			if(file == null) {
-				log.error("保存xls到文件失败: 无法创建文件({})", savePath);
+				log.error("保存xls到文件失�?: 无法创建文件({})", savePath);
 				return isOk;
 			}
 		}
@@ -431,13 +431,13 @@ public class Excel {
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("保存xls到文件失败: [{}]", file.getAbsoluteFile(), e);
+			log.error("保存xls到文件失�?: [{}]", file.getAbsoluteFile(), e);
 			
 		} finally {
 			IOUtils.close(fos);
 		}
 		
-		// 删除临时sheet页
+		// 删除临时sheet�?
 		if(mark == true) {
 			delFirstSheet();
 		}
@@ -446,8 +446,8 @@ public class Excel {
 	
 	/**
 	 * <PRE>
-	 * 清空Excel工作簿内容.
-	 * 	（仅清空内存数据，不会影响Excel文件）
+	 * 清空Excel工作簿内�?.
+	 * 	（仅清空内存数据，不会影响Excel文件�?
 	 * </PRE>
 	 */
 	public void clear() {

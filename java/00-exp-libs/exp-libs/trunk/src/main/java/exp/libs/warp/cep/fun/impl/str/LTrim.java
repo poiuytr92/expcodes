@@ -23,14 +23,14 @@ public class LTrim extends BaseFunction1 {
 	private static final long serialVersionUID = -3842868018959587426L;
 
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "ltrim";
 	
 	/**
 	 * 去除字符串左侧空字符.
-	 * 共1个入参：
+	 * �?1个入参：
 	 * @param1 String:原字符串
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常

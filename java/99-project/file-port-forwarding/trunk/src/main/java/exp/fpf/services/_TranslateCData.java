@@ -31,21 +31,21 @@ import exp.libs.utils.other.StrUtils;
  * 	1. 请求转发器: 把[对侧]的请求[转发]到[本侧真正的服务端口].
  * 	2. 响应收转器: 把[本侧真正的服务端口]返回的响应数据[收转]到[对侧].
  * </pre>	
- * <B>PROJECT：</B> file-port-forwarding
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> file-port-forwarding
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-07-31
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _TranslateCData extends Thread {
 
-	/** 转发日志器 */
+	/** 转发日志�? */
 	private final static Logger log = LoggerFactory.getLogger(_TranslateCData.class);
 	
-	/** 会话交互日志器 */
+	/** 会话交互日志�? */
 	private final static Logger slog = LoggerFactory.getLogger("SESSION");
 	
-	/** 收发文件管理器 */
+	/** 收发文件管理�? */
 	private SRMgr srMgr;
 	
 	/** socket通道会话ID */
@@ -60,16 +60,16 @@ class _TranslateCData extends Thread {
 	/** 数据流来源的文件队列 */
 	private PCQueue<String> srcList;
 	
-	/** 数据流目的(真实的socket服务会话) */
+	/** 数据流目�?(真实的socket服务会话) */
 	private Socket snk;
 	
 	/** 数据流目的IP */
 	private String snkIP;
 	
-	/** 数据流目的端口 */
+	/** 数据流目的端�? */
 	private int snkPort;
 	
-	/** 发送文件时序 */
+	/** 发送文件时�? */
 	private int timeSequence;
 	
 	/**
@@ -115,15 +115,15 @@ class _TranslateCData extends Thread {
 	}
 	
 	/**
-	 * 【数据转发流程-2】
+	 * 【数据转发流�?-2�?
 	 * 
-	 * 请求转发器: 
+	 * 请求转发�?: 
 	 * 	从[收发目录]中获取由第三方程序送来的数据流文件, 
 	 * 	从数据流文件中读取[对侧应用程序]发送的请求数据, 
 	 * 	把请求数据[转发]到[本侧真正的服务端口]
 	 */
 	private void fileToRequest() {
-		slog.debug("会话 [{}] [转发流程2] 已就绪", sessionId);
+		slog.debug("会话 [{}] [转发流程2] 已就�?", sessionId);
 		try {
 			long curTime = System.currentTimeMillis();
 			OutputStream out = snk.getOutputStream();
@@ -138,15 +138,15 @@ class _TranslateCData extends Thread {
 					} else {
 						ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
 						if(System.currentTimeMillis() - curTime >= overtime) {
-							throw new SocketTimeoutException("超时无数据交互");
+							throw new SocketTimeoutException("超时无数据交�?");
 						}
 						continue;
 					}
 				}
 				
-				// 读取文件数据（文件已生成、但数据可能未写入到文件，需要确认数据已传输完毕）
+				// 读取文件数据（文件已生成、但数据可能未写入到文件，需要确认数据已传输完毕�?
 				String data = _readFileDatas(sendFilePath);
-				slog.debug("会话 [{}] [转发流程2] 已接收  [{}] 数据: \r\n{}", 
+				slog.debug("会话 [{}] [转发流程2] 已接�?  [{}] 数据: \r\n{}", 
 						sessionId, sendFilePath, data);
 				
 				// 解析文件数据转送到socket通道
@@ -163,7 +163,7 @@ class _TranslateCData extends Thread {
 				curTime = System.currentTimeMillis();
 			}
 		} catch (SocketTimeoutException e) {
-			log.warn("Socket会话 [{}] 的{}转发通道超时 [{}ms] 无数据交互, 自动断开", 
+			log.warn("Socket会话 [{}] 的{}转发通道超时 [{}ms] 无数据交�?, 自动断开", 
 					sessionId, type, overtime);
 			
 		} catch (Exception e) {
@@ -175,7 +175,7 @@ class _TranslateCData extends Thread {
 	}
 	
 	/**
-	 * 从文件中读取数据（至少读取2次，确保文件内的数据已传输完成）
+	 * 从文件中读取数据（至少读�?2次，确保文件内的数据已传输完成）
 	 * @param filePath 文件路径
 	 * @return 文件内容
 	 * @throws SocketTimeoutException 读取超时
@@ -199,7 +199,7 @@ class _TranslateCData extends Thread {
 			}
 		}
 		
-		// 若文件内容是连接标识, 则认为文件内容为空（仅socket会话创建连接）
+		// 若文件内容是连接标识, 则认为文件内容为空（仅socket会话创建连接�?
 		if(Param.MARK_CONN.equals(data)) {
 			data = "";
 		}
@@ -207,9 +207,9 @@ class _TranslateCData extends Thread {
 	}
 	
 	/**
-	 * 【数据转发流程-3: socket监听模式】
+	 * 【数据转发流�?-3: socket监听模式�?
 	 * 
-	 * 响应收转器:
+	 * 响应收转�?:
 	 * 	把[本侧真正的服务端口]返回的响应数据流通过[固有socket管道]送到[对侧], 
 	 * 	借由[对侧的响应接收器]把响应送到[对侧应用程序].
 	 */
@@ -218,10 +218,10 @@ class _TranslateCData extends Thread {
 	}
 
 	/**
-	 * 【数据转发流程-3: 文件扫描模式】
+	 * 【数据转发流�?-3: 文件扫描模式�?
 	 * 
-	 * 响应收转器:
-	 * 	把[本侧真正的服务端口]返回的响应数据流转换成文件, 存储到指定的[收发目录], 
+	 * 响应收转�?:
+	 * 	把[本侧真正的服务端口]返回的响应数据流转换成文�?, 存储到指定的[收发目录], 
 	 * 	由第三方程序把收发目录中的数据流文件送到[对侧], 
 	 * 	借由[对侧的响应接收器]把响应送到[对侧应用程序].
 	 */
@@ -230,11 +230,11 @@ class _TranslateCData extends Thread {
 	}
 	
 	/**
-	 * 【数据转发流程-3】
+	 * 【数据转发流�?-3�?
 	 * @param mode 转发模式
 	 */
 	private void _responseTo(int mode) {
-		slog.debug("会话 [{}] [转发流程3] 已就绪", sessionId);
+		slog.debug("会话 [{}] [转发流程3] 已就�?", sessionId);
 		try {
 			long bgnTime = System.currentTimeMillis();
 			InputStream in = snk.getInputStream();
@@ -247,13 +247,13 @@ class _TranslateCData extends Thread {
 					if(ResponseMode.SOCKET == mode) {
 						String json = _getRecvJsonData(data);
 						Sender.getInstn().send(json);
-						slog.debug("会话 [{}] [转发流程3] 已发送 [SOCKET] 数据 : \r\n{}", 
+						slog.debug("会话 [{}] [转发流程3] 已发�? [SOCKET] 数据 : \r\n{}", 
 								sessionId, json);
 						
 					} else {
 						String recvFilePath = _getRecvFilePath();
 						FileUtils.write(recvFilePath, data, Charset.ISO, false);
-						slog.debug("会话 [{}] [转发流程3] 已发送 [{}] 数据 : \r\n{}", 
+						slog.debug("会话 [{}] [转发流程3] 已发�? [{}] 数据 : \r\n{}", 
 								sessionId, recvFilePath, data);
 					}
 					bgnTime = System.currentTimeMillis();
@@ -264,13 +264,13 @@ class _TranslateCData extends Thread {
 					} else {
 						ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
 						if(System.currentTimeMillis() - bgnTime >= overtime) {
-							throw new SocketTimeoutException("超时无数据交互");
+							throw new SocketTimeoutException("超时无数据交�?");
 						}
 					}
 				}
 			}
 		} catch (SocketTimeoutException e) {
-			log.warn("Socket会话 [{}] 的{}转发通道超时 [{}ms] 无数据交互, 自动断开", 
+			log.warn("Socket会话 [{}] 的{}转发通道超时 [{}ms] 无数据交�?, 自动断开", 
 					sessionId, type, overtime);
 			
 		} catch (IOException e) {
@@ -285,7 +285,7 @@ class _TranslateCData extends Thread {
 	}
 	
 	/**
-	 * 为[本侧响应收转器]构造Json格式数据流.
+	 * 为[本侧响应收转器]构造Json格式数据�?.
 	 * @return Json格式数据
 	 */
 	private String _getRecvJsonData(String data) {
@@ -297,8 +297,8 @@ class _TranslateCData extends Thread {
 	
 	/**
 	 * 为[本侧响应收转器]构造数据流文件路径.
-	 * 	同时该数据流文件列入禁忌表, 避免被[本侧响应接收器]误读.
-	 * @return 数据流文件路径
+	 * 	同时该数据流文件列入禁忌�?, 避免被[本侧响应接收器]误读.
+	 * @return 数据流文件路�?
 	 */
 	private String _getRecvFilePath() {
 		String recvFileName = BIZUtils.toFileName(

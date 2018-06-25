@@ -27,7 +27,7 @@ public class Test_Double {
 	@Test
 	public void testCastDouble() throws Exception {
 		
-		//正确性测试
+		//正确性测�?
 		Object dnum1 = CEPUtils.call(
 				_Double.NAME, new Object[] {"-123456789"});
 		Assert.assertTrue(dnum1 instanceof Double);

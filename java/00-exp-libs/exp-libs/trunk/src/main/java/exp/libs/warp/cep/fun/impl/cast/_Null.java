@@ -23,15 +23,15 @@ public class _Null extends BaseFunction1 {
 	private static final long serialVersionUID = -4867551570914177849L;
 	
 	/**
-	 * 建议函数名,方便调用.
+	 * 建议函数�?,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "null";
 	
 	/**
 	 * 强制类型转换: 强制把任何值转换为null
-	 * 仅1个入参：
-	 * @param1 Object:各种类型值
+	 * �?1个入参：
+	 * @param1 Object:各种类型�?
 	 * @return Object:null
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

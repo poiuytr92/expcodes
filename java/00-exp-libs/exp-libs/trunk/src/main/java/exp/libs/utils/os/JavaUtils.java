@@ -26,7 +26,7 @@ import exp.libs.warp.io.flow.FileFlowReader;
  */
 public class JavaUtils {
 
-	/** Java关键字数组 */
+	/** Java关键字数�? */
 	private final static String[] JAVA_KEY_WORDS = {
 			"abstract", "assert", "boolean", "break", "byte",
 			"case", "catch", "char", "class", "const",
@@ -40,18 +40,18 @@ public class JavaUtils {
 			"transient", "try", "void", "volatile", "while",	
 	};
 	
-	/** java关键字列表 */
+	/** java关键字列�? */
 	private final static List<String> JAVA_KEY_WORD_LIST = 
 			Arrays.asList(JAVA_KEY_WORDS);
 	
-	/** 私有化构造函数 */
+	/** 私有化构造函�? */
 	protected JavaUtils() {}
 	
 	/**
-	 * 检查单词是否为java关键字
+	 * 检查单词是否为java关键�?
 	 * 
 	 * @param word 待检查字符串
-	 * @return true:是 ; false:不是
+	 * @return true:�? ; false:不是
 	 */
 	public static boolean isJavaKeyWord(String word) {
 		boolean isKeyWord = false;
@@ -65,12 +65,12 @@ public class JavaUtils {
 	 * <PRE>
 	 * 修正Java源文件的package路径.
 	 * 
-	 * 	用于解决Eclipse迁移包代码时，不能自动修改package路径的问题。
-	 * 	当要迁移整个包代码时，先在系统文件夹直接移动，再使用此方法调整所有源码文件的package路径。
-	 * 	<B>使用要求：在迁移包代码之前，代码无任何语法错误。</B>
+	 * 	用于解决Eclipse迁移包代码时，不能自动修改package路径的问题�?
+	 * 	当要迁移整个包代码时，先在系统文件夹直接移动，再使用此方法调整所有源码文件的package路径�?
+	 * 	<B>使用要求：在迁移包代码之前，代码无任何语法错误�?</B>
 	 * </PRE>
 	 * @param srcDirPath 源码根目录的绝对路径，如 D:foo/bar/project/src/main/java
-	 * @param encoding 源码文件的内容编码
+	 * @param encoding 源码文件的内容编�?
 	 */
 	public static void modifyPackagePath(String srcDirPath, String encoding) {
 		if(StrUtils.isEmpty(srcDirPath) || CharsetUtils.isInvalid(encoding)) {

@@ -18,10 +18,10 @@ import exp.libs.warp.thread.LoopThread;
  * <PRE>
  * B站WebSocket管理器
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-06-22
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class BiliWebSocketMgr extends LoopThread {
@@ -29,16 +29,16 @@ public class BiliWebSocketMgr extends LoopThread {
 	/** websocket服务器地址 */
 	private final static String WEBSOCKET = Config.getInstn().WEBSOCKET();
 	
-	/** 心跳数据帧 */
+	/** 心跳数据�? */
 	private final static Frame HB_FRAME = new Frame(BiliBinary.CLIENT_HB);
 	
-	/** 心跳间隔(秒) */
+	/** 心跳间隔(�?) */
 	private final static int HB_SECOND = 30;
 	
-	/** 刷新分区监听会话的时间(ms) */
+	/** 刷新分区监听会话的时�?(ms) */
 	private final static long REFLASH_TIME = 1800000;
 	
-	/** 每次轮询的休眠时间(ms) */
+	/** 每次轮询的休眠时�?(ms) */
 	private final static long SLEEP_TIME = 1000;
 	
 	/** 心跳频率上限(轮询次数达到此上限则触发心跳) */
@@ -57,20 +57,20 @@ public class BiliWebSocketMgr extends LoopThread {
 	private List<WebSockClient> listeners;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 */
 	public BiliWebSocketMgr() {
-		super("websocket会话管理器");
+		super("websocket会话管理�?");
 		
 		this.loopCnt = REFLASH_LIMIT;
 		this.listeners = new LinkedList<WebSockClient>();
 	}
 	
 	/**
-	 * 创建websocket会话, 并连接到服务器
+	 * 创建websocket会话, 并连接到服务�?
 	 * @param name 会话名称
-	 * @param roomId 被监听的房间号
-	 * @param onlyListen 此websocket会话是否只用于监听分区礼物
+	 * @param roomId 被监听的房间�?
+	 * @param onlyListen 此websocket会话是否只用于监听分区礼�?
 	 * @return
 	 */
 	private WebSockClient createWebSocket(String name, int roomId, boolean onlyListen) {
@@ -82,14 +82,14 @@ public class BiliWebSocketMgr extends LoopThread {
 	}
 	
 	/**
-	 * 重连版聊直播间
-	 * @param roomId 被监听的房间号
+	 * 重连版聊直播�?
+	 * @param roomId 被监听的房间�?
 	 */
 	public void relinkLive(int roomId) {
 		if(live != null) {
 			live.close();
 		}
-		live = createWebSocket("版聊直播间", roomId, false);
+		live = createWebSocket("版聊直播�?", roomId, false);
 	}
 	
 	/**
@@ -106,9 +106,9 @@ public class BiliWebSocketMgr extends LoopThread {
 			
 			if(roomId > 0) {
 				WebSockClient listener = createWebSocket(
-						area.DESC().concat("直播间"), roomId, true);
+						area.DESC().concat("直播�?"), roomId, true);
 				listeners.add(listener);
-				UIUtils.log("监听 [", area.DESC(), "] 榜首直播间 [", roomId, "] 成功");
+				UIUtils.log("监听 [", area.DESC(), "] 榜首直播�? [", roomId, "] 成功");
 				
 			} else {
 				UIUtils.log("[", area.DESC(), "] 无人直播, 取消监听");
@@ -136,7 +136,7 @@ public class BiliWebSocketMgr extends LoopThread {
 
 	@Override
 	protected void _before() {
-		log.info("[{}] 已启动", getName());
+		log.info("[{}] 已启�?", getName());
 	}
 
 	@Override
@@ -156,7 +156,7 @@ public class BiliWebSocketMgr extends LoopThread {
 	@Override
 	protected void _after() {
 		clear();
-		log.info("[{}] 已停止", getName());
+		log.info("[{}] 已停�?", getName());
 	}
 	
 }

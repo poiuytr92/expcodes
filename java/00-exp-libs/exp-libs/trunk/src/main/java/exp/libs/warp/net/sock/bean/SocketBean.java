@@ -52,7 +52,7 @@ public class SocketBean {
 	
 	private int writeBufferSize;
 	
-	/** 默认缓冲区大小 */
+	/** 默认缓冲区大�? */
 	public final static int DEFAULT_BUFF_SIZE = 1;
 	
 	/** 缓冲区大小单位：Byte */
@@ -246,17 +246,17 @@ public class SocketBean {
 	}
 
 	/**
-	 * 设置读写缓冲区大小（单位MB）
-	 * @param bufferSize 缓冲区大小
+	 * 设置读写缓冲区大小（单位MB�?
+	 * @param bufferSize 缓冲区大�?
 	 */
 	public void setBufferSize(int bufferSize) {
 		setBufferSize(bufferSize, BUFF_SIZE_UNIT_MB);
 	}
 	
 	/**
-	 * 设置读写缓冲区大小: (bufferSize * unit) 字节
-	 * @param bufferSize 缓冲区大小
-	 * @param unit 单位:默认为 1024*1024个字节, 即1MB
+	 * 设置读写缓冲区大�?: (bufferSize * unit) 字节
+	 * @param bufferSize 缓冲区大�?
+	 * @param unit 单位:默认�? 1024*1024个字�?, �?1MB
 	 */
 	public void setBufferSize(int bufferSize, int unit) {
 		if(bufferSize > 0) {
@@ -272,8 +272,8 @@ public class SocketBean {
 	}
 
 	/**
-	 * 设置读缓冲区大小（单位MB）
-	 * @param bufferSize 缓冲区大小
+	 * 设置读缓冲区大小（单位MB�?
+	 * @param bufferSize 缓冲区大�?
 	 */
 	public void setReadBufferSize(int readBufferSize) {
 		setReadBufferSize(readBufferSize, BUFF_SIZE_UNIT_MB);
@@ -281,8 +281,8 @@ public class SocketBean {
 	
 	/**
 	 * 设置读缓冲区大小: (bufferSize * unit) 字节
-	 * @param bufferSize 缓冲区大小
-	 * @param unit 单位:默认为 1024*1024个字节, 即1MB
+	 * @param bufferSize 缓冲区大�?
+	 * @param unit 单位:默认�? 1024*1024个字�?, �?1MB
 	 */
 	public void setReadBufferSize(int readBufferSize, int unit) {
 		if(readBufferSize > 0) {
@@ -300,8 +300,8 @@ public class SocketBean {
 	}
 
 	/**
-	 * 设置写缓冲区大小（单位MB）
-	 * @param bufferSize 缓冲区大小
+	 * 设置写缓冲区大小（单位MB�?
+	 * @param bufferSize 缓冲区大�?
 	 */
 	public void setWriteBufferSize(int writeBufferSize) {
 		setWriteBufferSize(writeBufferSize, BUFF_SIZE_UNIT_MB);
@@ -309,8 +309,8 @@ public class SocketBean {
 	
 	/**
 	 * 设置写缓冲区大小: (bufferSize * unit) 字节
-	 * @param bufferSize 缓冲区大小
-	 * @param unit 单位:默认为 1024*1024个字节, 即1MB
+	 * @param bufferSize 缓冲区大�?
+	 * @param unit 单位:默认�? 1024*1024个字�?, �?1MB
 	 */
 	public void setWriteBufferSize(int writeBufferSize, int unit) {
 		if(writeBufferSize > 0) {
@@ -426,9 +426,9 @@ public class SocketBean {
 
 	public SocketBean clone() {
 		
-		// 部分get/set方法含有校验逻辑，若通过setXX(getXX)可能会因为重复校验导致数据异常
-		// 如bufferSize则会因为重复乘以单位导致数值越界
-		// 因此此处采用直接赋值方式进行克隆
+		// 部分get/set方法含有校验逻辑，若通过setXX(getXX)可能会因为重复校验导致数据异�?
+		// 如bufferSize则会因为重复乘以单位导致数值越�?
+		// 因此此处采用直接赋值方式进行克�?
 		
 		SocketBean _clone = new SocketBean();
 		_clone.id = this.id;

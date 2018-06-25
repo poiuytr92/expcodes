@@ -25,39 +25,39 @@ public interface IHandler {
 
 	/**
 	 * 连接websocket服务器[成功后]触发
-	 * @param session websocket客户端会话
+	 * @param session websocket客户端会�?
 	 */
 	public void afterConnect(ISession session);
 	
 	/**
-	 * 从websocket服务器收到 [String类型] 数据时触发
+	 * 从websocket服务器收�? [String类型] 数据时触�?
 	 * @param msg
 	 */
 	public void onMessage(String msg);
 	
 	/**
-	 * 从websocket服务器收到 [ByteBuffer类型数据] 时触发
+	 * 从websocket服务器收�? [ByteBuffer类型数据] 时触�?
 	 * @param byteBuffer
 	 */
 	public void onMessage(ByteBuffer byteBuffer);
 	
 	/**
-	 * 从websocket服务器收到 [Framedata类型数据] 时触发
+	 * 从websocket服务器收�? [Framedata类型数据] 时触�?
 	 * @param framedata
 	 */
     public void onFragment(Framedata framedata);
 	
     /**
 	 * (主动)与websocket服务器[断开前]触发
-	 * @param session websocket客户端会话
+	 * @param session websocket客户端会�?
 	 */
 	public void beforeClose(ISession session);
 	
 	/**
 	 * websocket连接断开[时]触发
-	 * @param code 错误码
+	 * @param code 错误�?
 	 * @param reason 断开原因
-	 * @param remote 是否为远端导致（true:服务器导致断开; false:客户端导致断开）
+	 * @param remote 是否为远端导致（true:服务器导致断开; false:客户端导致断开�?
 	 */
 	public void onClose(int code, String reason, boolean remote);
 

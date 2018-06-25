@@ -16,16 +16,16 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * QQ空间登陆器
  * </PRE>
- * <B>PROJECT：</B> qzone-crawler
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> qzone-crawler
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-03-26
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Lander extends BaseLander {
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param QQ 所登陆的QQ
 	 * @param password 所登陆的QQ密码
 	 */
@@ -34,11 +34,11 @@ public class Lander extends BaseLander {
 	}
 	
 	/**
-	 * 初始化
+	 * 初始�?
 	 */
 	@Override
 	protected void init() {
-		UIUtils.log("正在初始化登陆环境...");
+		UIUtils.log("正在初始化登陆环�?...");
 		
 		Browser.init(false);
 		Browser.clearCookies();
@@ -64,8 +64,8 @@ public class Lander extends BaseLander {
 					if(isOk == true) {
 						UIUtils.log("登陆QQ [", QQ, "] 成功");
 						
-						// web仿真模式下不能关闭浏览器，否则QQ空间要重新登陆
-						//  (GTK与的QzoneToken存在使得保存cookie也无效)
+						// web仿真模式下不能关闭浏览器，否则QQ空间要重新登�?
+						//  (GTK与的QzoneToken存在使得保存cookie也无�?)
 //						Browser.quit();	
 						
 					} else {
@@ -73,13 +73,13 @@ public class Lander extends BaseLander {
 						UIUtils.log("登陆QQ [", QQ, "] 失败: 无法提取GTK或QzoneToken");
 					}
 				} else {
-					UIUtils.log("登陆QQ [", QQ, "] ", (isOk ? "成功" : "失败: 账号或密码错误"));
+					UIUtils.log("登陆QQ [", QQ, "] ", (isOk ? "成功" : "失败: 账号或密码错�?"));
 				}
 			} else {
 				UIUtils.log("切换帐密登陆模式失败");
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "登陆QQ [", QQ, "] 失败: 内置浏览器异常");
+			UIUtils.log(e, "登陆QQ [", QQ, "] 失败: 内置浏览器异�?");
 		}
 		return isOk;
 	}
@@ -93,11 +93,11 @@ public class Lander extends BaseLander {
 		Browser.open(URL.WEB_LOGIN_URL);
 		
 		// QQ空间的【登陆操作界面】是通过【iframe】嵌套在【登陆页面】中的子页面
-		UIUtils.log("正在切换为帐密登陆模式...");
+		UIUtils.log("正在切换为帐密登陆模�?...");
 		Browser.switchToFrame(By.id("login_frame"));
 		ThreadUtils.tSleep(Config.SLEEP_TIME);
 		
-		// 切换帐密登陆方式为 [帐密登陆]
+		// 切换帐密登陆方式�? [帐密登陆]
 		boolean isOk = true;
 		for(int retry = 1; retry <= Config.RETRY; retry++) {
 			try {
@@ -106,7 +106,7 @@ public class Lander extends BaseLander {
 				break;
 				
 			} catch(Exception e) {
-				isOk = false;	// 有时操作过快可能会报元素不存在异常
+				isOk = false;	// 有时操作过快可能会报元素不存在异�?
 				ThreadUtils.tSleep(Config.SLEEP_TIME);
 			}
 		}
@@ -114,9 +114,9 @@ public class Lander extends BaseLander {
 	}
 	
 	/**
-	 * 填写输入框的值
-	 * @param name 输入框名称
-	 * @param value 填写到输入框的值
+	 * 填写输入框的�?
+	 * @param name 输入框名�?
+	 * @param value 填写到输入框的�?
 	 */
 	private void fill(String name, String value) {
 		WebElement input = Browser.findElement(By.id(name));
@@ -150,25 +150,25 @@ public class Lander extends BaseLander {
 	}
 	
 	/**
-	 * 从QQ空间首页首页源码中提取GTK与 QZoneToken.
-	 * 	类似于gtk, qzonetoken 在每次登陆时自动生成一个固定值, 但是生成算法相对复杂（需要jother解码）, 
+	 * 从QQ空间首页首页源码中提取GTK�? QZoneToken.
+	 * 	类似于gtk, qzonetoken 在每次登陆时自动生成一个固定�?, 但是生成算法相对复杂（需要jother解码�?, 
 	 *  因此此处取巧, 直接在页面源码中提取明文
 	 *  
 	 * @return unuse 无用参数
 	 */
 	@Override
 	protected boolean takeGTKAndToken(String unuse) {
-		UIUtils.log("正在提取本次登陆的 GTK 与 QzoneToken ...");
+		UIUtils.log("正在提取本次登陆�? GTK �? QzoneToken ...");
 		
 		// 从Cookie提取p_skey，计算GTK
 		Browser.backupCookies();	
-		UIUtils.log("本次登陆生成的 GTK: ", Browser.GTK());
+		UIUtils.log("本次登陆生成�? GTK: ", Browser.GTK());
 		
 		// 从页面源码提取QzoneToken
 		Browser.open(URL.QZONE_HOMR_URL(QQ));
 		String qzoneToken = EncryptUtils.getQzoneToken(Browser.getPageSource());
 		Browser.setQzoneToken(qzoneToken);
-		UIUtils.log("本次登陆生成的 QzoneToken: ", Browser.QZONE_TOKEN());
+		UIUtils.log("本次登陆生成�? QzoneToken: ", Browser.QZONE_TOKEN());
 		
 		return StrUtils.isNotEmpty(Browser.GTK(), Browser.QZONE_TOKEN());
 	}

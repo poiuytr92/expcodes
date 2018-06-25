@@ -22,18 +22,18 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 final class TailFilter extends BaseNextFilter {
 
 	/**
-	 * 业务处理器
+	 * 业务处理�?
 	 */
 	private IHandler handler;
 	
 	/**
-	 * 基本业务处理器
+	 * 基本业务处理�?
 	 */
 	private BaseHandler bHandler;
 
 	/**
-	 * 构造函数
-	 * @param filter 业务过滤器
+	 * 构造函�?
+	 * @param filter 业务过滤�?
 	 */
 	public TailFilter(IFilter filter) {
 		super(filter);
@@ -80,7 +80,7 @@ final class TailFilter extends BaseNextFilter {
 
 	/**
 	 * 设置业务处理器，并将其封装到基本业务处理器中，以在客户的操作前后附加服务器的默认操作
-	 * @param handler 业务处理器
+	 * @param handler 业务处理�?
 	 */
 	public void setHandler(IHandler handler) {
 		this.handler = handler;

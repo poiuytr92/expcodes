@@ -28,7 +28,7 @@ public class Node {
 	
 	private int degree;
 	
-	// 仅用于在构图时保持唯一性
+	// 仅用于在构图时保持唯一�?
 	private Set<Node> neighbors;
 	
 	@SuppressWarnings("unused")

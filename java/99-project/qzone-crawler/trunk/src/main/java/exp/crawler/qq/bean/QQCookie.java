@@ -9,10 +9,10 @@ import exp.libs.warp.net.cookie.WebKitCookie;
  * <PRE>
  * QQ-Cookie
  * </PRE>
- * <B>PROJECT：</B> qzone-crawler
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> qzone-crawler
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class QQCookie extends WebKitCookie {
@@ -32,13 +32,13 @@ public class QQCookie extends WebKitCookie {
 	/** 用于生成GTK的cookie属性键 */
 	private final static String PSKEY_KEY = "p_skey";
 	
-	/** 用于登陆QQ的SIG码 */
+	/** 用于登陆QQ的SIG�? */
 	private String sig;
 	
-	/** 登陆验证码的校验码 */
+	/** 登陆验证码的校验�? */
 	private String verifysession;
 	
-	/** 当前登陆账号(即登陆的QQ号) */
+	/** 当前登陆账号(即登陆的QQ�?) */
 	private String uin;
 	
 	/** 每次登陆QQ空间都会通过p_skey生成一个固定的GTK, 用于其他页面操作 */
@@ -61,10 +61,10 @@ public class QQCookie extends WebKitCookie {
 	}
 	
 	/**
-	 * 在添加新的cookie时会触发此方法, 用于提取某些特殊的名值对作为常量, 例如CSRF
+	 * 在添加新的cookie时会触发此方�?, 用于提取某些特殊的名值对作为常量, 例如CSRF
 	 * @param name cookie键名
-	 * @param value cookie键值
-	 * @param expires cookie有效期
+	 * @param value cookie键�?
+	 * @param expires cookie有效�?
 	 * return true:保留该cookie; false;丢弃该cookie
 	 */
 	protected boolean takeCookieNVE(String name, String value, Date expires) {

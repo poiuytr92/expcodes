@@ -46,20 +46,20 @@ public class FileSegmentReader {
 	/** 段尾标识(凭[段尾所在行] endWith 进行匹配) */
 	private String segTail;
 	
-	/** 标记是否存在可读的下一段 */
+	/** 标记是否存在可读的下一�? */
 	private boolean hasNextSegment;
 	
 	/**
 	 * 所有[段]中希望被忽略的[子段]的[首尾标识].
-	 * [子段头标识]: 凭[子段首所在行] endWith 进行匹配. 不能为空串.
-	 * [子段尾标识]: 凭[子段尾所在行] endWith 进行匹配. 若尾为空串"", 则希望跳过子段是[子段头标识]的[单行].
+	 * [子段头标识]: 凭[子段首所在行] endWith 进行匹配. 不能为空�?.
+	 * [子段尾标识]: 凭[子段尾所在行] endWith 进行匹配. 若尾为空�?"", 则希望跳过子段是[子段头标识]的[单行].
 	 * 
-	 * 子段头 -> 子段尾
+	 * 子段�? -> 子段�?
 	 */
 	private Map<String, String> skipSubSegmentHTs;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param ffr 文件流读取器对象
 	 * @param lineEnd 文件流的行终止符
 	 * @param segmentHead 段首标识
@@ -71,13 +71,13 @@ public class FileSegmentReader {
 	}
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param ffr 文件流读取器对象
 	 * @param lineEnd 文件流的行终止符
 	 * @param segmentHead 段首标识
 	 * @param segmentTail 段尾标识
-	 * @param skipSubSegmentHeads 希望忽略的子段首标识集(必须与子段尾标识集一一顺序对应, 否则全部无效)
-	 * @param skipSubSegmentTails 希望忽略的子段尾标识集(必须与子段首标识集一一顺序对应, 否则全部无效)
+	 * @param skipSubSegmentHeads 希望忽略的子段首标识�?(必须与子段尾标识集一一顺序对应, 否则全部无效)
+	 * @param skipSubSegmentTails 希望忽略的子段尾标识�?(必须与子段首标识集一一顺序对应, 否则全部无效)
 	 */
 	public FileSegmentReader(FileFlowReader ffr, char lineEnd, 
 			String segmentHead, String segmentTail, 
@@ -87,13 +87,13 @@ public class FileSegmentReader {
 	}
 	
 	/**
-	 * 初始化
+	 * 初始�?
 	 * @param ffr 文件流读取器对象
 	 * @param lineEnd 文件流的行终止符
 	 * @param segmentHead 段首标识
 	 * @param segmentTail 段尾标识
-	 * @param skipSubSegmentHeads 希望忽略的子段首标识集(必须与子段尾标识集一一顺序对应, 否则全部无效)
-	 * @param skipSubSegmentTails 希望忽略的子段尾标识集(必须与子段首标识集一一顺序对应, 否则全部无效)
+	 * @param skipSubSegmentHeads 希望忽略的子段首标识�?(必须与子段尾标识集一一顺序对应, 否则全部无效)
+	 * @param skipSubSegmentTails 希望忽略的子段尾标识�?(必须与子段首标识集一一顺序对应, 否则全部无效)
 	 */
 	private void init(FileFlowReader ffr, char lineEnd, 
 			String segmentHead, String segmentTail, 
@@ -125,15 +125,15 @@ public class FileSegmentReader {
 	}
 	
 	/**
-	 * 当前文件流是否存在下一段
-	 * @return true:存在; false:不存在
+	 * 当前文件流是否存在下一�?
+	 * @return true:存在; false:不存�?
 	 */
 	public boolean hasNextSegment() {
 		return hasNextSegment;
 	}
 	
 	/**
-	 * 读取当前段.
+	 * 读取当前�?.
 	 * 	此方法需配合 hasNextSegment 方法使用（类似迭代器的使用方式）.
 	 * @return 当前段数据（希望被忽略的子段数据不会在段内）
 	 */
@@ -152,7 +152,7 @@ public class FileSegmentReader {
 			
 			// 正在找头
 			if(isFindingHeader) {
-				if(line.endsWith(segHead)) { // 找到头
+				if(line.endsWith(segHead)) { // 找到�?
 					sb.append(line);
 					
 					isFindingHeader = false;
@@ -161,7 +161,7 @@ public class FileSegmentReader {
 				continue;
 			}
 			
-			// 检查是否需要跳过子段
+			// 检查是否需要跳过子�?
 			if(skipSubSegment(line)) {
 				continue;
 			}
@@ -170,7 +170,7 @@ public class FileSegmentReader {
 			if(isFindingTail) {
 				sb.append(line);
 				
-				if(line.endsWith(segTail)) { // 找到尾
+				if(line.endsWith(segTail)) { // 找到�?
 					isFindingHeader = true;
 					isFindingTail = false;
 					break;
@@ -186,15 +186,15 @@ public class FileSegmentReader {
 		segment = sb.toString();
 		if("".equals(segment)) {
 			hasNextSegment = false;
-			ffr.close();	// 再也找不到[段]的时候就自动关闭数据流
+			ffr.close();	// 再也找不到[段]的时候就自动关闭数据�?
 		}
 		return sb.toString();
 	}
 	
 	/**
 	 * 检查该行是否会是某个应该被忽略的子段的段首 
-	 * @param line 当前行
-	 * @return true:当前行是被希望忽略的子段的起点; false:当前行不是被希望忽略的子段的起点
+	 * @param line 当前�?
+	 * @return true:当前行是被希望忽略的子段的起�?; false:当前行不是被希望忽略的子段的起点
 	 */
 	private boolean skipSubSegment(final String line) {
 		boolean isSkip = false;
@@ -212,11 +212,11 @@ public class FileSegmentReader {
 			if(subTail != null) {
 				isSkip = true;
 				
-				// 仅跳过本行
+				// 仅跳过本�?
 				if("".equals(subTail)) {
 					//Undo
 					
-				// 跳过一段
+				// 跳过一�?
 				} else {
 					while(ffr.hasNextLine()) {
 						String nextLine = ffr.readLine(lineEnd);
@@ -233,7 +233,7 @@ public class FileSegmentReader {
 	/**
 	 * 连续读取后续的若干段.
 	 * 	此方法需配合 hasNextSegment 方法使用（类似迭代器的使用方式）.
-	 * @param num 期望最大得到的段数（若文件已读到末尾，则可能不会达到该数目）
+	 * @param num 期望最大得到的段数（若文件已读到末尾，则可能不会达到该数目�?
 	 * @return 若干段数据（希望被忽略的子段数据不会在段内）
 	 */
 	public List<String> getSegments(int num) {

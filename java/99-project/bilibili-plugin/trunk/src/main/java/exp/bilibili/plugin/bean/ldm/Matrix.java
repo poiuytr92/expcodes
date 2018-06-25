@@ -7,25 +7,25 @@ import exp.libs.utils.img.ImageUtils;
  * <PRE>
  * 像素矩阵
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2018-04-26
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Matrix {
 
-	/** 像素矩阵所呈现的图片值 */
+	/** 像素矩阵所呈现的图片�? */
 	private String value;
 	
-	/** 像素矩阵(背景色0, 前景色1) */
+	/** 像素矩阵(背景�?0, 前景�?1) */
 	private int[][] pixels;
 	
-	/** 前景像素的个数 */
+	/** 前景像素的个�? */
 	private int pixelNum;
 	
 	/**
-	 * 构造函数
+	 * 构造函�?
 	 * @param imagePath 图片路径
 	 */
 	public Matrix(String value, String imagePath) {
@@ -34,7 +34,7 @@ public class Matrix {
 	}
 	
 	/**
-	 * 初始化像素矩阵
+	 * 初始化像素矩�?
 	 * @param imagePath 图片路径
 	 */
 	private void init(String imagePath) {

@@ -27,12 +27,12 @@ import javax.jms.Session;
 public class Producers implements IListener {
 
 	/**
-	 * 连接字符串
+	 * 连接字符�?
 	 */
 	private String sURI;
 
 	/**
-	 * 上下文工厂
+	 * 上下文工�?
 	 */
 	private String contextFactory;
 
@@ -42,7 +42,7 @@ public class Producers implements IListener {
 	private String connectionFactory;
 
 	/**
-	 * 发送主题
+	 * 发送主�?
 	 */
 	private String sThemeName;
 
@@ -67,7 +67,7 @@ public class Producers implements IListener {
 	private boolean isLongConnection = false;
 
 	/**
-	 * 消息发送模式
+	 * 消息发送模�?
 	 */
 	private int iDeliveryMode = DeliveryMode.PERSISTENT;
 
@@ -77,7 +77,7 @@ public class Producers implements IListener {
 	private int iAcknowledgementMode = Session.AUTO_ACKNOWLEDGE;
 
 	/**
-	 * 消息优先级
+	 * 消息优先�?
 	 */
 	private int iPriority = 0;
 
@@ -87,7 +87,7 @@ public class Producers implements IListener {
 	private Long iTimeToLive = 0L;
 
 	/**
-	 * 用户名
+	 * 用户�?
 	 */
 	private String sUserName;
 
@@ -107,17 +107,17 @@ public class Producers implements IListener {
 	private String jmsCorrelationID;
 
 	/**
-	 * 提供的重连实现中的异常处理钩子
+	 * 提供的重连实现中的异常处理钩�?
 	 */
 	private AbstractProducerCallBack callBack;
 
 	/**
-	 * 回调目的地
+	 * 回调目的�?
 	 */
 	private Destination tempDest = null;
 
 	/**
-	 * 消费者
+	 * 消费�?
 	 */
 	private MessageConsumer responseConsumer = null;
 
@@ -134,9 +134,9 @@ public class Producers implements IListener {
 	 * 指定JMS的URL地址创建实例
 	 * 
 	 * @param sURI
-	 *            格式如: tcp://IP:prot?parameter
-	 *            或failover：//(tcp://IP:prot1,tcp://IP:prot2...) 其中
-	 *            ?parameter为可选部分
+	 *            格式�?: tcp://IP:prot?parameter
+	 *            或failover�?//(tcp://IP:prot1,tcp://IP:prot2...) 其中
+	 *            ?parameter为可选部�?
 	 */
 	public Producers(String sURI) {
 		this.sURI = sURI;
@@ -158,8 +158,8 @@ public class Producers implements IListener {
 	 * 
 	 * @param message
 	 *            消息内容(String)
-	 * @return Message对象，可获取相关发送状态。 请注意 采用长连接在退出时请手工释放资源。
-	 *         备注：如有需要请设置好相关属性后才调用发送方法。
+	 * @return Message对象，可获取相关发送状态�? 请注�? 采用长连接在退出时请手工释放资源�?
+	 *         备注：如有需要请设置好相关属性后才调用发送方法�?
 	 */
 	public synchronized Message sendByTopic(String message) throws Exception {
 		Message msg = null;
@@ -175,8 +175,8 @@ public class Producers implements IListener {
 	 * 
 	 * @param message
 	 *            Message对象
-	 * @return Message对象，可获取相关发送状态。 请注意 采用长连接在退出时请手工释放资源。
-	 *         备注：如有需要请设置好相关属性后才调用发送方法。
+	 * @return Message对象，可获取相关发送状态�? 请注�? 采用长连接在退出时请手工释放资源�?
+	 *         备注：如有需要请设置好相关属性后才调用发送方法�?
 	 */
 	public Message sendByTopic(Message message) throws Exception {
 		createProducerByTopic();
@@ -189,8 +189,8 @@ public class Producers implements IListener {
 	 * 
 	 * @param message
 	 *            消息内容(String)
-	 * @return Message对象，可获取相关发送状态。 请注意 采用长连接在退出时请手工释放资源。
-	 *         备注：如有需要请设置好相关属性后才调用发送方法。
+	 * @return Message对象，可获取相关发送状态�? 请注�? 采用长连接在退出时请手工释放资源�?
+	 *         备注：如有需要请设置好相关属性后才调用发送方法�?
 	 */
 	public synchronized Message sendByQueue(String message) throws Exception {
 		Message msg = null;
@@ -206,8 +206,8 @@ public class Producers implements IListener {
 	 * 
 	 * @param message
 	 *            Message对象
-	 * @return Message对象，可获取相关发送状态。 请注意 采用长连接在退出时请手工释放资源。
-	 *         备注：如有需要请设置好相关属性后才调用发送方法。
+	 * @return Message对象，可获取相关发送状态�? 请注�? 采用长连接在退出时请手工释放资源�?
+	 *         备注：如有需要请设置好相关属性后才调用发送方法�?
 	 */
 	public Message sendByQueue(Message message) throws Exception {
 		createProducerByQueue();
@@ -219,7 +219,7 @@ public class Producers implements IListener {
 	 * 提交事务
 	 * 
 	 * @throws Exception
-	 *             备注:采用事务方式提交信息时，在提交时候才会释放连接资源。
+	 *             备注:采用事务方式提交信息时，在提交时候才会释放连接资源�?
 	 */
 	public void commit() throws Exception {
 		if (jms != null) {
@@ -232,7 +232,7 @@ public class Producers implements IListener {
 	 * 回滚事务
 	 * 
 	 * @throws Exception
-	 *             备注：该操作在回滚事务的同时会释放回话和连接资源。
+	 *             备注：该操作在回滚事务的同时会释放回话和连接资源�?
 	 */
 	public void rollback() throws Exception {
 		if (jms != null) {
@@ -242,7 +242,7 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 释放回话和连接资源 长连接时需要调用该方法,主动释放资源。
+	 * 释放回话和连接资�? 长连接时需要调用该方法,主动释放资源�?
 	 * 
 	 * @throws Exception
 	 */
@@ -254,7 +254,7 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 初始化参数
+	 * 初始化参�?
 	 */
 	private void setParameter() throws Exception {
 		if (jms == null) {
@@ -290,7 +290,7 @@ public class Producers implements IListener {
 		checkCallBack(message);
 		jms.send(message);
 		if (!isTransaction && !isLongConnection) {
-			closeAll(); // 未采用事务和长连接的情况下释放资源
+			closeAll(); // 未采用事务和长连接的情况下释放资�?
 		} 
 		return message;
 	}
@@ -316,7 +316,7 @@ public class Producers implements IListener {
 	 * 回复消息到制定的队列当中
 	 * 
 	 * @param destination
-	 *            目的地
+	 *            目的�?
 	 * @param message
 	 *            Message消息
 	 * @throws Exception
@@ -331,7 +331,7 @@ public class Producers implements IListener {
 	 * 回复消息到制定的队列当中
 	 * 
 	 * @param destination
-	 *            目的地
+	 *            目的�?
 	 * @param message
 	 *            Message消息
 	 * @throws Exception
@@ -361,7 +361,7 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 消息生产者是否关闭
+	 * 消息生产者是否关�?
 	 * 
 	 * @return 是否关闭，true为是
 	 */
@@ -370,7 +370,7 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 回复消息的消息生产者是否关闭
+	 * 回复消息的消息生产者是否关�?
 	 * 
 	 * @return 是否关闭，true为是
 	 */
@@ -383,7 +383,7 @@ public class Producers implements IListener {
 	 * 当与JMS服务器连接有异常时，可以通过onException(IOException error)方法获得回调
 	 * 
 	 * @param iListener
-	 *            实现接口 ITransportListener 或者继承 TransportListenerImpl 的实例
+	 *            实现接口 ITransportListener 或者继�? TransportListenerImpl 的实�?
 	 */
 	// public void setTransportListener(ITransportListener iListener) {
 	// jms.setTransportListener(iListener);
@@ -402,7 +402,7 @@ public class Producers implements IListener {
 	 * 设置主题名称(广播名称)
 	 * 
 	 * @param themeName
-	 *            主题名
+	 *            主题�?
 	 */
 	public void setsThemeName(String themeName) {
 		sThemeName = themeName;
@@ -430,17 +430,17 @@ public class Producers implements IListener {
 	/**
 	 * 获取是否采用事务
 	 * 
-	 * @return 是/true;否/false
+	 * @return �?/true;�?/false
 	 */
 	public boolean getisTransaction() {
 		return isTransaction;
 	}
 
 	/**
-	 * 设置是否采用事务，缺省为否
+	 * 设置是否采用事务，缺省为�?
 	 * 
 	 * @param transaction
-	 *            是否采用事务 建议：对于大批量数据需要提交时，建议采用事务的方式，达到多少条后再提交一次。用以提升性能。
+	 *            是否采用事务 建议：对于大批量数据需要提交时，建议采用事务的方式，达到多少条后再提交一次。用以提升性能�?
 	 */
 	public void setisTransaction(boolean transaction) {
 		isTransaction = transaction;
@@ -449,7 +449,7 @@ public class Producers implements IListener {
 	/**
 	 * 返回消息存储模式
 	 * 
-	 * @return 1: NON_PERSISTENT (非持久); 2:PERSISTENT(持久)
+	 * @return 1: NON_PERSISTENT (非持�?); 2:PERSISTENT(持久)
 	 */
 	public int getiDeliveryMode() {
 		return iDeliveryMode;
@@ -470,9 +470,9 @@ public class Producers implements IListener {
 	 * 
 	 * @return 消息确认机制(int) 自动确认<br/>
 	 *         AUTO_ACKNOWLEDGE = 1; <br/>
-	 *         消费者手动确认,请注意该确认机会会话层的，即确认一个代表该会话下的所有信息均被确认<br/>
+	 *         消费者手动确�?,请注意该确认机会会话层的，即确认一个代表该会话下的所有信息均被确�?<br/>
 	 *         CLIENT_ACKNOWLEDGE = 2;<br/>
-	 *         迟钝确认消息提交,如果JMS provider失败，那么可能会导致一些重复的消息。<br/>
+	 *         迟钝确认消息提交,如果JMS provider失败，那么可能会导致一些重复的消息�?<br/>
 	 *         DUPS_OK_ACKNOWLEDGE = 3;<br/>
 	 *         事务确认<br/>
 	 *         SESSION_TRANSACTED = 0;
@@ -482,14 +482,14 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 设置消息确认机制,缺省为自动确认
+	 * 设置消息确认机制,缺省为自动确�?
 	 * 
 	 * @param acknowledgementMode
 	 *            自动确认<br/>
 	 *            AUTO_ACKNOWLEDGE = 1; <br/>
-	 *            消费者手动确认,请注意该确认机会会话层的，即确认一个代表该会话下的所有信息均被确认<br/>
+	 *            消费者手动确�?,请注意该确认机会会话层的，即确认一个代表该会话下的所有信息均被确�?<br/>
 	 *            CLIENT_ACKNOWLEDGE = 2;<br/>
-	 *            迟钝确认消息提交,如果JMS provider失败，那么可能会导致一些重复的消息。<br/>
+	 *            迟钝确认消息提交,如果JMS provider失败，那么可能会导致一些重复的消息�?<br/>
 	 *            DUPS_OK_ACKNOWLEDGE = 3;<br/>
 	 *            事务确认<br/>
 	 *            SESSION_TRANSACTED = 0;
@@ -500,7 +500,7 @@ public class Producers implements IListener {
 
 	/**
 	 * 获取过期时间 <br/>
-	 * 默认为0,无过期时间
+	 * 默认�?0,无过期时�?
 	 * 
 	 * @return 过期时间 单位毫秒
 	 */
@@ -509,31 +509,31 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 设置过期时间，
+	 * 设置过期时间�?
 	 * 
 	 * @param timeToLive
-	 *            过期时间，单位毫秒，默认为0，无过期时间
+	 *            过期时间，单位毫秒，默认�?0，无过期时间
 	 */
 	public void setiTimeToLive(Long timeToLive) {
 		iTimeToLive = timeToLive;
 	}
 
 	/**
-	 * 获取用户名<br/>
-	 * 连接JMS服务器时使用,若服务器未设,可忽略
+	 * 获取用户�?<br/>
+	 * 连接JMS服务器时使用,若服务器未设,可忽�?
 	 * 
-	 * @return 用户名
+	 * @return 用户�?
 	 */
 	public String getsUserName() {
 		return sUserName;
 	}
 
 	/**
-	 * 设置用户名<br/>
-	 * 连接JMS服务器时使用,若服务器未设,可忽略
+	 * 设置用户�?<br/>
+	 * 连接JMS服务器时使用,若服务器未设,可忽�?
 	 * 
 	 * @param userName
-	 *            用户名
+	 *            用户�?
 	 */
 	public void setsUserName(String userName) {
 		sUserName = userName;
@@ -541,7 +541,7 @@ public class Producers implements IListener {
 
 	/**
 	 * 获取密码<br/>
-	 * 连接JMS服务器时使用,若服务器未设,可忽略
+	 * 连接JMS服务器时使用,若服务器未设,可忽�?
 	 * 
 	 * @return 密码
 	 */
@@ -551,7 +551,7 @@ public class Producers implements IListener {
 
 	/**
 	 * 获取密码<br/>
-	 * 连接JMS服务器时使用,若服务器未设,可忽略
+	 * 连接JMS服务器时使用,若服务器未设,可忽�?
 	 * 
 	 * @param passWord
 	 *            密码
@@ -561,20 +561,20 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 获取是否采用长连接<br/>
-	 * 对于大量消息同时发送时，建议采用长连接或事务方式提交，提升性能。<br/>
-	 * 请注意 采用长连接在退出时请手工释放资源。
+	 * 获取是否采用长连�?<br/>
+	 * 对于大量消息同时发送时，建议采用长连接或事务方式提交，提升性能�?<br/>
+	 * 请注�? 采用长连接在退出时请手工释放资源�?
 	 * 
-	 * @return 是/否
+	 * @return �?/�?
 	 */
 	public boolean isLongConnection() {
 		return isLongConnection;
 	}
 
 	/**
-	 * 设置是否采用长连接<br/>
-	 * 对于大量消息同时发送时，建议采用长连接或事务方式提交，提升性能。<br/>
-	 * 请注意 采用长连接在退出时请手工释放资源。
+	 * 设置是否采用长连�?<br/>
+	 * 对于大量消息同时发送时，建议采用长连接或事务方式提交，提升性能�?<br/>
+	 * 请注�? 采用长连接在退出时请手工释放资源�?
 	 * 
 	 * @param isLongConnection
 	 *            长连接，true为是
@@ -593,7 +593,7 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 设置相关ID 可视为属性,可根据实际需要使用
+	 * 设置相关ID 可视为属�?,可根据实际需要使�?
 	 * 
 	 * @param correlationID
 	 *            相关ID
@@ -603,38 +603,38 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 获取回复主题名
+	 * 获取回复主题�?
 	 * 
-	 * @return 返回回复主题名
+	 * @return 返回回复主题�?
 	 */
 	public String getsRThemeName() {
 		return sRThemeName;
 	}
 
 	/**
-	 * 设置返回主题名
+	 * 设置返回主题�?
 	 * 
 	 * @param themeName
-	 *            这是返回主题名
+	 *            这是返回主题�?
 	 */
 	public void setsRThemeName(String themeName) {
 		sRThemeName = themeName;
 	}
 
 	/**
-	 * 获取消息优先级
+	 * 获取消息优先�?
 	 * 
-	 * @return 消息优先级
+	 * @return 消息优先�?
 	 */
 	public int getIPriority() {
 		return iPriority;
 	}
 
 	/**
-	 * 设置消息优先级
+	 * 设置消息优先�?
 	 * 
 	 * @param priority
-	 *            消息优先级
+	 *            消息优先�?
 	 */
 	public void setIPriority(int priority) {
 		iPriority = priority;
@@ -657,17 +657,17 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 设置生产者回调
+	 * 设置生产者回�?
 	 * 
 	 * @param callBack
-	 *            生产者回调
+	 *            生产者回�?
 	 */
 	public void setCallBack(AbstractProducerCallBack callBack) {
 		this.callBack = callBack;
 	}
 
 	/**
-	 * 发送消息之前检查回调方法，如果设置回调，初始化回调需要的值
+	 * 发送消息之前检查回调方法，如果设置回调，初始化回调需要的�?
 	 * 
 	 * @param message
 	 *            Message消息
@@ -691,7 +691,7 @@ public class Producers implements IListener {
 	}
 
 	/**
-	 * 监听临时通道的消息
+	 * 监听临时通道的消�?
 	 * 
 	 * @param message
 	 *            Message消息
@@ -704,8 +704,8 @@ public class Producers implements IListener {
 
 	/**
 	 * Producers类： 1. 对producer常用功能进行封装，如：sendByTopic..../commit/
-	 * rollback/配置参数设置 2. 提供了创建指定目的的回复producers； createProducerReplyto 3.
-	 * 提供了长连接的属性，长连接时producers将保持会话，而短连接时 每一次发送完消息都是重新建立会话，发送消息，关闭会话。 4.
+	 * rollback/配置参数设置 2. 提供了创建指定目的的回复producers�? createProducerReplyto 3.
+	 * 提供了长连接的属性，长连接时producers将保持会话，而短连接�? 每一次发送完消息都是重新建立会话，发送消息，关闭会话�? 4.
 	 * 发送消息或接收到回复的回调机制。详细见AbstractProducerCallBack
 	 */
 }

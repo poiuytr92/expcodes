@@ -15,10 +15,10 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * 消息关键字管理器
  * </PRE>
- * <B>PROJECT：</B> bilibili-plugin
- * <B>SUPPORT：</B> EXP
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 2017-12-17
- * @author    EXP: <a href="http://www.exp-blog.com">www.exp-blog.com</a>
+ * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class MsgKwMgr {
@@ -26,16 +26,16 @@ public class MsgKwMgr {
 	/** 行为副词 */
 	private List<String> advs;
 	
-	/** 晚安关键词 */
+	/** 晚安关键�? */
 	private Set<String> nights;
 	
 	/** 开播上车的卡片类型 */
 	private List<String> cards;
 	
-	/** 滚屏公告的候选列表 */
+	/** 滚屏公告的候选列�? */
 	private List<String> notices;
 	
-	/** 自动打call的候选列表 */
+	/** 自动打call的候选列�? */
 	private List<String> calls;
 	
 	/** 歌单 */

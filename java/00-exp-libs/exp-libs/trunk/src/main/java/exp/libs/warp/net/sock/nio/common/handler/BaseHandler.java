@@ -19,8 +19,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
 public final class BaseHandler extends AbstractHandler {
 
 	/**
-	 * 构造函数
-	 * @param handler 客户业务处理器
+	 * 构造函�?
+	 * @param handler 客户业务处理�?
 	 */
 	public BaseHandler(IHandler handler) {
 		super(handler);
@@ -39,7 +39,7 @@ public final class BaseHandler extends AbstractHandler {
 
 		handler.onSessionCreated(session);
 		
-		//如果客户逻辑没有进行过验证，则认为验证成功
+		//如果客户逻辑没有进行过验证，则认为验证成�?
 		if(session.isVerfied() == false) {
 			session.setVerfyState(true);
 			
