@@ -266,10 +266,9 @@ final class _DBUtils {
 		//取类模板
 		Template beanClazz = new Template(TEMPLATE_DB_BEAN, Charset.ISO);
 		
-		//设置年份和日期
+		//设置日期
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date = sdf.format(new Date());
-		beanClazz.set("year", date.substring(0, 4));
 		beanClazz.set("date", date);
 		
 		//设置包路径

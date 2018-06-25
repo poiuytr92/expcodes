@@ -10,10 +10,10 @@ import exp.libs.warp.db.sql.DBUtils;
  * Table Name : @{table_name}@
  * Class Name : @{class_name}@
  * </PRE>
- * <B>PROJECT:</B> exp-libs
- * <B>SUPPORT:</B> EXP @{year}@
- * @version   1.0.0.0 @{date}@
- * @author    Expert: 272629724@qq.com
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * @version   1.0 # @{date}@
+ * @author    EXP: 272629724@qq.com
  * @since     jdk version : jdk 1.6
  */
 public class @{class_name}@  {
