@@ -6,8 +6,8 @@ package exp.bilibili.plugin.envm;
  * B站Json交互报文命令类型
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -24,15 +24,15 @@ public class BiliCmd {
 	private final static String _WELCOME_GUARD = "WELCOME_GUARD";
 	public final static BiliCmd WELCOME_GUARD = new BiliCmd(_WELCOME_GUARD);
 	
-	/** (直播间内)新船员上船消�? */
+	/** (直播间内)新船员上船消息 */
 	private final static String _GUARD_BUY = "GUARD_BUY";
 	public final static BiliCmd GUARD_BUY = new BiliCmd(_GUARD_BUY);
 	
-	/** (全频�?)登船消息 */
+	/** (全频道)登船消息 */
 	private final static String _GUARD_MSG = "GUARD_MSG";
 	public final static BiliCmd GUARD_MSG = new BiliCmd(_GUARD_MSG);
 	
-	/** 系统消息：小电视抽奖、全频道公告�? */
+	/** 系统消息：小电视抽奖、全频道公告等 */
 	private final static String _SYS_MSG = "SYS_MSG";
 	public final static BiliCmd SYS_MSG = new BiliCmd(_SYS_MSG);
 	
@@ -56,11 +56,11 @@ public class BiliCmd {
 	private final static String _PREPARING = "PREPARING";
 	public final static BiliCmd PREPARING = new BiliCmd(_PREPARING);
 	
-	/** 特殊礼物�?(直播间内)节奏风暴消息 */
+	/** 特殊礼物：(直播间内)节奏风暴消息 */
 	private final static String _SPECIAL_GIFT = "SPECIAL_GIFT";
 	public final static BiliCmd SPECIAL_GIFT = new BiliCmd(_SPECIAL_GIFT);
 	
-	/** (直播间内)高能抽奖开始消�? */
+	/** (直播间内)高能抽奖开始消息 */
 	private final static String _RAFFLE_START = "RAFFLE_START";
 	public final static BiliCmd RAFFLE_START = new BiliCmd(_RAFFLE_START);
 	
@@ -68,7 +68,7 @@ public class BiliCmd {
 	private final static String _RAFFLE_END = "RAFFLE_END";
 	public final static BiliCmd RAFFLE_END = new BiliCmd(_RAFFLE_END);
 	
-	/** (直播间内)许愿瓶实现进度消�? */
+	/** (直播间内)许愿瓶实现进度消息 */
 	private final static String _WISH_BOTTLE = "WISH_BOTTLE";
 	public final static BiliCmd WISH_BOTTLE = new BiliCmd(_WISH_BOTTLE);
 	

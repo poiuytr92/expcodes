@@ -5,8 +5,8 @@ package exp.libs.warp.net.sock.nio.common.interfaze;
  * Socket业务逻辑处理接口(NIO-非阻塞模式)
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-08-21
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -35,8 +35,8 @@ public interface IHandler {
 
 	/**
 	 * <pre>
-	 * 异常事件处理逻辑�?
-	 * 在实现过滤器方法时，若不捕获异常，则所有异常都会被抛到此方法中�?
+	 * 异常事件处理逻辑。
+	 * 在实现过滤器方法时，若不捕获异常，则所有异常都会被抛到此方法中。
 	 * </pre>
 	 * @param session 会话
 	 * @param exception 异常

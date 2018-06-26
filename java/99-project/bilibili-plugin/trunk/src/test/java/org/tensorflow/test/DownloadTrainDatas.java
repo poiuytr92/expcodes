@@ -30,14 +30,14 @@ import exp.libs.warp.net.http.HttpUtils;
  * 生成TensorFlow训练数据（节奏风暴验证码）
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class DownloadTrainDatas {
 
-	/** 直播服务器主�? */
+	/** 直播服务器主机 */
 	protected final static String LIVE_HOST = Config.getInstn().LIVE_HOST();
 	
 	/** 直播首页 */
@@ -49,15 +49,15 @@ public class DownloadTrainDatas {
 	/** 图片缓存目录 */
 	private final static String IMG_DIR = "./src/test/resources/exp/bilibili/plugin/utils/test/storm/download/";
 	
-	/** 节奏风暴验证码图片宽�? */
+	/** 节奏风暴验证码图片宽度 */
 	private final static int IMG_WIDTH = 112;
 	
-	/** 节奏风暴验证码图片高�? */
+	/** 节奏风暴验证码图片高度 */
 	private final static int IMG_HEIGHT = 32;
 	
 	/**
 	 * 下载节奏风暴验证码图片并将其二值化
-	 *  可用于深度学习训�?
+	 *  可用于深度学习训练
 	 * @param args
 	 */
 	@Test
@@ -69,7 +69,7 @@ public class DownloadTrainDatas {
 			String imgPath = getStormCaptcha(cookie);
 			BufferedImage image = ImageUtils.read(imgPath);
 			
-			FileUtils.delete(imgPath);	// 先删除原�?
+			FileUtils.delete(imgPath);	// 先删除原图
 			image = ImageUtils.toBinary(image);	// 二值化图片
 			if(isVaild(image)) {	// 检查是否为有效图片（容易辨析，可用于深度训练）
 				String savePath = StrUtils.concat(IMG_DIR, IDUtils.getMillisID(), FileType.PNG.EXT);
@@ -84,7 +84,7 @@ public class DownloadTrainDatas {
 	}
 	
 	/**
-	 * 下载节奏风暴验证码图�?
+	 * 下载节奏风暴验证码图片
 	 * @param cookie
 	 * @return
 	 */
@@ -141,7 +141,7 @@ public class DownloadTrainDatas {
 	}
 	
 	/**
-	 * 获取节奏风暴验证码参�?
+	 * 获取节奏风暴验证码参数
 	 * @return
 	 */
 	private static Map<String, String> _getRequest() {
@@ -154,7 +154,7 @@ public class DownloadTrainDatas {
 	
 	/**
 	 * 检查是否为有效图像（此方法仅仅是粗判）
-	 *   前景色（黑色）像素的个数在一定范围内时，认为是有效图�?
+	 *   前景色（黑色）像素的个数在一定范围内时，认为是有效图片
 	 * @param image
 	 * @return
 	 */
@@ -170,7 +170,7 @@ public class DownloadTrainDatas {
 			}
 		}
 		
-		// 前景色在图像占比�? 5%~25% 之间认为是有效图�?
+		// 前景色在图像占比为 5%~25% 之间认为是有效图像
 		// 过少认为二值化后图像过浅，难以辨认
 		// 过多认为二值化后图像噪点过多，干扰太多
 		boolean isVaild = false;

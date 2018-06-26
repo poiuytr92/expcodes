@@ -11,8 +11,8 @@ import java.util.Set;
  * 拓扑图模型
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-25
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-25
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -34,8 +34,8 @@ public class Graph {
 	}
 	
 	/**
-	 * 构造函�?
-	 * @param arrow 有向�?(默认false, 即无向图)
+	 * 构造函数
+	 * @param arrow 有向图(默认false, 即无向图)
 	 */
 	public Graph(boolean arrow) {
 		this.arrow = arrow;
@@ -189,7 +189,7 @@ public class Graph {
 	}
 	
 	/**
-	 * 在获取邻接矩阵后�? 若拓扑图被修改过，则需要调用此方法重新生成邻接矩阵
+	 * 在获取邻接矩阵后， 若拓扑图被修改过，则需要调用此方法重新生成邻接矩阵
 	 * @return
 	 */
 	public void resetAdjacencyMatrix() {

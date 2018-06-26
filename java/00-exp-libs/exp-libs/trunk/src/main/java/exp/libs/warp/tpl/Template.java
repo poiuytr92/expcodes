@@ -28,14 +28,14 @@ import exp.libs.utils.other.StrUtils;
  * 
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Template {
 	
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(Template.class);
 	
 	/**
@@ -44,27 +44,27 @@ public class Template {
 	public final static String DEFAULT_CHARSET = Charset.UTF8;
 	
 	/**
-	 * 占位符的左括�?
+	 * 占位符的左括号
 	 */
 	private final static String PLACEHOLDER_LEFT = "@{";
 	
 	/**
-	 * 占位符的右括�?
+	 * 占位符的右括号
 	 */
 	private final static String PLACEHOLDER_RIGHT = "}@";
 	
 	/**
-	 * 未被替换过占位符的模板内�?
+	 * 未被替换过占位符的模板内容
 	 */
 	private String tplContent;
 	
 	/**
-	 * 替换过占位符的内�?
+	 * 替换过占位符的内容
 	 */
 	private String content;
 	
 	/**
-	 * KV表：占位符名�?-�?
+	 * KV表：占位符名称-值
 	 */
 	private Map<String, String> kvMap;
 	
@@ -74,25 +74,25 @@ public class Template {
 	private String charset;
 	
 	/**
-	 * 是否需要刷新模�?
+	 * 是否需要刷新模板
 	 */
 	private boolean isFlash;
 	
 	/**
-	 * 构造函�?(默认文件内容编码为UTF-8)
-	 * @param tplFilePath 模板文件路径, 支持�?
-	 * 					1. 磁盘文件路径, �?:	./src/main/resources/foo/bar/test.txt
-	 * 					2. jar包内文件路径, �?: /foo/bar/test.txt
+	 * 构造函数(默认文件内容编码为UTF-8)
+	 * @param tplFilePath 模板文件路径, 支持：
+	 * 					1. 磁盘文件路径, 如:	./src/main/resources/foo/bar/test.txt
+	 * 					2. jar包内文件路径, 如: /foo/bar/test.txt
 	 */
 	public Template(String tplFilePath) {
 		this(tplFilePath, DEFAULT_CHARSET);
 	}
 	
 	/**
-	 * 构造函�?
-	 * @param tplFilePath 模板文件路径, 支持�?
-	 * 					1. 磁盘文件路径, �?:	./src/main/resources/foo/bar/test.txt
-	 * 					2. jar包内文件路径, �?: /foo/bar/test.txt
+	 * 构造函数
+	 * @param tplFilePath 模板文件路径, 支持：
+	 * 					1. 磁盘文件路径, 如:	./src/main/resources/foo/bar/test.txt
+	 * 					2. jar包内文件路径, 如: /foo/bar/test.txt
 	 * @param charset 文件内容编码
 	 */
 	public Template(String tplFilePath, String charset) {
@@ -105,7 +105,7 @@ public class Template {
 	
 	
 	/**
-	 * 使用指定编码读取模板文件�?
+	 * 使用指定编码读取模板文件。
 	 * @param tplFilePath 模板文件路径
 	 * @param charset 模板文件编码
 	 */
@@ -121,9 +121,9 @@ public class Template {
 	}
 	
 	/**
-	 * 设置各个占位符的值，同名占位符会被后设置的值覆�?
-	 * @param placeholder 占位�?
-	 * @param value 替换�?
+	 * 设置各个占位符的值，同名占位符会被后设置的值覆盖
+	 * @param placeholder 占位符
+	 * @param value 替换值
 	 */
 	public void set(String placeholder, String value) {
 		kvMap.put(placeholder, value);
@@ -139,7 +139,7 @@ public class Template {
 	}
 	
 	/**
-	 * 获取最后一次设值后的模板内�?
+	 * 获取最后一次设值后的模板内容
 	 * @return 模板占位符被替换后的内容
 	 */
 	public String getContent() {
@@ -163,7 +163,7 @@ public class Template {
 	}
 	
 	/**
-	 * 获取当前的占位符�? 
+	 * 获取当前的占位符表 
 	 * @return 占位符表
 	 */
 	public Map<String, String> getPlaceHolders() {

@@ -13,21 +13,21 @@ import org.dom4j.io.XMLWriter;
  * XML工具类
  * </PRE>
  * <B>PROJECT : </B> exp-xml-paper
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2015-06-01
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-06-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class XmlUtils {
 
 	/**
-	 * 私有化构造函数，避免被误�?
+	 * 私有化构造函数，避免被误用
 	 */
 	private XmlUtils() {}
 	
 	/**
 	 * 格式化xml.
-	 * 用于处理缩进、换行、子节点中多余的命名空间等格式问题�?
+	 * 用于处理缩进、换行、子节点中多余的命名空间等格式问题。
 	 * 
 	 * @param xml xml报文
 	 * @param linePrefix 在每一行前添加的前缀，亦即缩进符

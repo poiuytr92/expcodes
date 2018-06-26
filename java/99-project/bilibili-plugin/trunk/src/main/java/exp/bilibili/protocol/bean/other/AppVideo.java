@@ -11,42 +11,42 @@ import exp.libs.utils.num.IDUtils;
  * 手机直播的视频参数对象
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-02-11
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-02-11
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class AppVideo {
 
-	/** 秒单�? */
+	/** 秒单位 */
 	private final static int SEC_UNIT = 1000;
 	
-	/** URL有效期：半小�? */
+	/** URL有效期：半小时 */
 	private final static int EXPIRES = 1800;
 	
 	/** 所观看直播的真实房间号 */
 	private String roomId;
 	
-	/** 所观看直播的主播信�? */
+	/** 所观看直播的主播信息 */
 	private User up;
 	
-	/** 每次更新手机直播视频地址�?, 重新生成的GUID (FIXME: 生成规则未知) */
+	/** 每次更新手机直播视频地址后, 重新生成的GUID (FIXME: 生成规则未知) */
 	private String guid;
 	
 	/** 当前手机直播视频地址URL(每次更新后有效期为半小时) */
 	private String url;
 	
-	/** 每次更新手机直播视频地址�?, 开始观看视频的时间�? */
+	/** 每次更新手机直播视频地址后, 开始观看视频的时间点 */
 	private long createTime;
 	
-	/** 每次更新手机直播视频地址�?, 该视频可以观看的有效时间 */
+	/** 每次更新手机直播视频地址后, 该视频可以观看的有效时间 */
 	private long expiresTime;
 	
-	/** 上一次观看这个视�? 的时间点 */
+	/** 上一次观看这个视频 的时间点 */
 	private long lastViewTime;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param roomId 直播间号
 	 */
 	public AppVideo() {
@@ -59,7 +59,7 @@ public class AppVideo {
 	}
 	
 	/**
-	 * 更新所观看的直播视频信�?
+	 * 更新所观看的直播视频信息
 	 * @param cookie 观看者的cookie
 	 * @param roomId 所观看的直播房间号
 	 */

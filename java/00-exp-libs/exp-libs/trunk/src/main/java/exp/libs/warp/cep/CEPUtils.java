@@ -70,8 +70,8 @@ import exp.libs.warp.cep.fun.impl.time.Sec2Date;
  *
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -80,26 +80,26 @@ public final class CEPUtils {
 	private final static Logger log = LoggerFactory.getLogger(CEPUtils.class);
 	
 	/**
-	 * 声明变量失败提示关键�?
+	 * 声明变量失败提示关键字
 	 */
 	public final static String DECLARE_VARIABLE_ERROR = 
 			"Declare Variable Error : ";
 	
 	/**
-	 * 注册函数失败提示关键�?
+	 * 注册函数失败提示关键字
 	 */
 	public final static String REGISTER_FUNCTION_ERROR = 
 			"Register Function Error : ";
 	
 	/**
-	 * 解析表达�?/函数失败提示关键�?
+	 * 解析表达式/函数失败提示关键字
 	 */
 	public final static String PARSE_EXPRESSION_ERROR = 
 			"Parse Expression Error : ";
 	
 	/**
-	 * 执行计算发生异常得到的返回�?.
-	 * (实际上不会存在这个返回�?,所有执行异常都向外抛出,即一旦发生异常就没有返回�?)
+	 * 执行计算发生异常得到的返回值.
+	 * (实际上不会存在这个返回值,所有执行异常都向外抛出,即一旦发生异常就没有返回值)
 	 */
 	public final static String ERROR_RESULT = "NaN";
 	
@@ -114,59 +114,59 @@ public final class CEPUtils {
 	private final static Jep jep = new Jep();
 	
 	/**
-	 * 由内部定义的常用函数表名�?
+	 * 由内部定义的常用函数表名称
 	 */
 	private final static List<String> innerFunNames = 
 			new LinkedList<String>();
 	
 	/**
-	 * 自定义的函数表名�?
+	 * 自定义的函数表名称
 	 */
 	private final static List<String> customFunNames = 
 			new LinkedList<String>();
 	
 	/**
-	 * 编译时解析得到的函数�?.用于自动注册.
-	 * 函数默认�? -> 函数类路�?
+	 * 编译时解析得到的函数表.用于自动注册.
+	 * 函数默认名 -> 函数类路径
 	 */
 	private final static Map<String, String> allFunsMap = 
 			new HashMap<String, String>();
 	
 	/**
-	 * 初始�? CepUtils:
-	 * 	添加JEP自带的标准常�? �? 内部定义的常用函�?
+	 * 初始化 CepUtils:
+	 * 	添加JEP自带的标准常量 与 内部定义的常用函数
 	 */
 	static {
 		init();
 	}
 	
 	/**
-	 * 私有化构造函�?,避免误用
+	 * 私有化构造函数,避免误用
 	 */
 	private CEPUtils() {}
 	
 	/**
-	 * 初始�? CepUtils.
-	 * 一般无需调用,除非调用�? unregisterAll 方法反注册了所有变量函数后,需要恢复成初始状�?.
+	 * 初始化 CepUtils.
+	 * 一般无需调用,除非调用过 unregisterAll 方法反注册了所有变量函数后,需要恢复成初始状态.
 	 */
 	public static void init() {
 		jep.addStandardConstants();	//添加JEP自带的标准常量e与pi
-		addInnerFunctions();		//添加内部定义的默认函�?(与JEP默认函数同名则覆�?)
+		addInnerFunctions();		//添加内部定义的默认函数(与JEP默认函数同名则覆盖)
 	}
 	
 	/**
 	 * 变量声明.
-	 * 利用此方法声明的变量可直接用�? 函数/表达�? 计算.
+	 * 利用此方法声明的变量可直接用于 函数/表达式 计算.
 	 * 
-	 * 此方法会自动为变量添加首尾括�? 标识，避免复杂的嵌套调用时出现表达式解释失败引致冲突�?
-	 * 因此变量在调用时需要添�? 首尾括号 标识�?  {变量名称}
+	 * 此方法会自动为变量添加首尾括号 标识，避免复杂的嵌套调用时出现表达式解释失败引致冲突，
+	 * 因此变量在调用时需要添加 首尾括号 标识：  {变量名称}
 	 * 
-	 * 如声明为�? declare(x, 2);
-	 * 则调用为�? eval("$x$ + 100")
+	 * 如声明为： declare(x, 2);
+	 * 则调用为： eval("$x$ + 100")
 	 * 得到结果为： 102
 	 * 
 	 * @param variableName 变量名称
-	 * @param value 变量�?
+	 * @param value 变量值
 	 */
 	public static void declare(String variableName, Object value) {
 		try {
@@ -187,14 +187,14 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 表达式计�?.
-	 * 支持以下多种混合运算,常用包括�?
-	 * �?+ �?- �?* 非取整除/ 求模% 乘方^ 括号()
+	 * 表达式计算.
+	 * 支持以下多种混合运算,常用包括：
+	 * 加+ 减- 乘* 非取整除/ 求模% 乘方^ 括号()
 	 * 
 	 * @param expression 完整的表达式
 	 * @return 
-	 * 	解析正常且表达式合法:返回结果�?(一般为Double类型,除非计算失败).
-	 * 	解析正常但表达式非法：如�?0, 返回Infinity�?
+	 * 	解析正常且表达式合法:返回结果值(一般为Double类型,除非计算失败).
+	 * 	解析正常但表达式非法：如除0, 返回Infinity。
 	 */
 	public static Object eval(String expression) {
 		Object result = ERROR_RESULT;
@@ -208,11 +208,11 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 注册自定义函�?.
-	 * 可通过选择继承 BaseFunction1、BaseFunction2 �? BaseFunctionN 实现自定义函数类.
-	 * 通过此方法注册函数后,就可以使�? call 方法进行调用.
+	 * 注册自定义函数.
+	 * 可通过选择继承 BaseFunction1、BaseFunction2 或 BaseFunctionN 实现自定义函数类.
+	 * 通过此方法注册函数后,就可以使用 call 方法进行调用.
 	 * 
-	 * @param customFunctionName 注册函数名称，调用时依赖此名�?
+	 * @param customFunctionName 注册函数名称，调用时依赖此名称
 	 * @param clazzPath 自定义函数的类路径，如： foo.bar.util.expression.functions.xxx
 	 */
 	public static void register(String customFunctionName, String clazzPath) {
@@ -229,7 +229,7 @@ public final class CEPUtils {
 	
 	/**
 	 * 自动注册函数.
-	 * 当调用单个函数时,若发现函数未注册,则尝试自动注�?.
+	 * 当调用单个函数时,若发现函数未注册,则尝试自动注册.
 	 * 
 	 * @param functionName 需要注册的函数名称
 	 * @return true:注册成功; false:注册失败
@@ -246,9 +246,9 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 检查函数是否已被注�?
+	 * 检查函数是否已被注册
 	 * @param functionName 函数名称
-	 * @return true:已注�?; false:未注�?
+	 * @return true:已注册; false:未注册
 	 */
 	public static boolean checkRegister(String functionName) {
 		return getAllFunctionsName().contains(functionName);
@@ -257,9 +257,9 @@ public final class CEPUtils {
 	/**
 	 * 单个函数调用.
 	 * 若调用自定义函数,需先通过 registerCustomFunction 方法进行注册.
-	 * <B>若所传参包含非数字或非字符串类型，只能通过 declare 声明变量传参�?</B>
+	 * <B>若所传参包含非数字或非字符串类型，只能通过 declare 声明变量传参。</B>
 	 * 
-	 * @param functionName 函数名称.注册时用的名�?
+	 * @param functionName 函数名称.注册时用的名称
 	 * @param params 函数参数,支持传入变量
 	 * @return 执行结果
 	 */
@@ -274,11 +274,11 @@ public final class CEPUtils {
 	/**
 	 * 单个函数调用.
 	 * 若调用自定义函数,需先通过 registerCustomFunction 方法进行注册.
-	 * 对于未注册的函数名称,会尝试自动注册函�?,但要求functionName为函数类中的默认�?.
+	 * 对于未注册的函数名称,会尝试自动注册函数,但要求functionName为函数类中的默认名.
 	 * 
-	 * <B>若所传参包含非数字或非字符串类型，只能通过 declare 声明变量传参�?</B>
+	 * <B>若所传参包含非数字或非字符串类型，只能通过 declare 声明变量传参。</B>
 	 * 
-	 * @param functionName 函数名称.注册时用的名�?
+	 * @param functionName 函数名称.注册时用的名称
 	 * @param params 函数参数,支持传入变量
 	 * @return 执行结果
 	 */
@@ -288,7 +288,7 @@ public final class CEPUtils {
 			params = new ArrayList<Object>();
 		}
 			
-		//当函数未注册�?,尝试自动注册
+		//当函数未注册时,尝试自动注册
 		if(!checkRegister(functionName) && !autoRegister(functionName)) {
 			log.error(REGISTER_FUNCTION_ERROR.concat(
 					"The function [{}] has not been registered."), functionName);
@@ -301,7 +301,7 @@ public final class CEPUtils {
 		
 		for(Object param : params) {
 			
-			//字符串参数且不是变量名称,必须加上双引�?,否则jep认为是不存在的变�?
+			//字符串参数且不是变量名称,必须加上双引号,否则jep认为是不存在的变量
 			if(param instanceof String && 
 					!param.toString().matches(
 							"^\\" + VAR_CH + ".*\\" + VAR_CH + "$")) {
@@ -322,14 +322,14 @@ public final class CEPUtils {
 	
 	/**
 	 * 复杂函数调用.需自己拼装完整的函数表达式,支持嵌套.
-	 * 最外层函数会做注册检查，但所有函数均不支持自动注�?.
+	 * 最外层函数会做注册检查，但所有函数均不支持自动注册.
 	 * 
 	 * 建议若包含自定义函数,需先通过 registerCustomFunction 方法进行注册.
-	 * <B>若所传参包含非数字或非字符串类型，只能通过 declare 声明变量传参�?</B>
+	 * <B>若所传参包含非数字或非字符串类型，只能通过 declare 声明变量传参。</B>
 	 * 
-	 * 注意�?
-	 * (1)若入参是字符串必须加上双引号,否则会解析失�?.
-	 * (2)若入参是变量则需�?$...$包围.
+	 * 注意：
+	 * (1)若入参是字符串必须加上双引号,否则会解析失败.
+	 * (2)若入参是变量则需用$...$包围.
 	 * 
 	 * @param funExpression 完整的函数表达式,支持嵌套调用.
 	 * @return 执行结果
@@ -342,7 +342,7 @@ public final class CEPUtils {
 		} catch (Exception e) {
 			String errMsg = PARSE_EXPRESSION_ERROR.concat(funExpression);
 			
-			//检查最外层函数是否已注�?
+			//检查最外层函数是否已注册
 			Pattern ptn = Pattern.compile("^([^\\(]+)\\(.*$");
 			Matcher mth = ptn.matcher(funExpression);
 			if(mth.find()) {
@@ -358,8 +358,8 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 获取所有已声明的变量名�?
-	 * @return 所有已声明的变量名�?
+	 * 获取所有已声明的变量名称
+	 * @return 所有已声明的变量名称
 	 */
 	public static List<String> getAllVariablesName() {
 		List<String> vars = new LinkedList<String>();
@@ -372,31 +372,31 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 获取所有可用的函数名称,包括jep提供的默认函�?.
+	 * 获取所有可用的函数名称,包括jep提供的默认函数.
 	 * 
-	 * JEP-3.3.0 提供的函数表如下�?
+	 * JEP-3.3.0 提供的函数表如下：
 	 * (01)三角函数:sin(?),cos(?);
-	 * (02)反三角函�?:asin(?),acos(?);
+	 * (02)反三角函数:asin(?),acos(?);
 	 * (03)正切函数：tan(?);
 	 * (04)反正切函数：atan(x,y),atan2(y,x);
 	 * (05)余切函数:cot(?);
 	 * (06)双曲函数:sinh(?),cosh(?);
-	 * (07)反双曲函�?:asinh(?),acosh(?);
+	 * (07)反双曲函数:asinh(?),acosh(?);
 	 * (08)正切双曲函数:tanh(?);
-	 * (09)反正切双曲函�?:atanh(?);
+	 * (09)反正切双曲函数:atanh(?);
 	 * (10)正割函数:sec(?);
 	 * (11)余割函数:cosec(?);
 	 * (12)对数运算:ln(?),lg(?),log(?,?);
 	 * (13)复数运算:complex(?,?)[构造复数],arg(?)[幅角],conj(?)[共轭];
-	 * (14)幂运�?:exp(?),pow(?,?),sqrt(?,?);
-	 * (15)简单数值运�?:sum(?...),abs(?),min(?...),max(?...),mod(?,?),avg(?...);
+	 * (14)幂运算:exp(?),pow(?,?),sqrt(?,?);
+	 * (15)简单数值运算:sum(?...),abs(?),min(?...),max(?...),mod(?,?),avg(?...);
 	 * (16)其他运算:round(?,?)[四舍五入],rand()[随机数],ceil(?)[向上取整],floor(?)[向下取整];
 	 * (17)概率函数：binom(?,?,?)[二项分布];
-	 * (18)字符串运�?:cut(2?; 3?),trim(?);
+	 * (18)字符串运算:cut(2?; 3?),trim(?);
 	 * (19)强制类型转换:str(?)[字符串],re(?)[实数];
 	 * (20)未知功能函数:cmod,if,polar,im,signum;
 	 * 
-	 * @return 所有函数名�?
+	 * @return 所有函数名称
 	 */
 	public static List<String> getAllFunctionsName() {
 		List<String> funs = new LinkedList<String>();
@@ -419,7 +419,7 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 获取所有自定义的函数名�?
+	 * 获取所有自定义的函数名称
 	 * @return 所有自定义函数名称
 	 */
 	public static List<String> getAllCustomFunctionsName() {
@@ -435,9 +435,9 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 反注册指定变�?.
+	 * 反注册指定变量.
 	 * 此方法实用性不大，同名变量自动覆盖.
-	 * @param variableName 变量名称.无需�?$...$包围.
+	 * @param variableName 变量名称.无需用$...$包围.
 	 */
 	public static void unregisterVariable(String variableName) {
 		if(false == variableName.matches("^\\$.*\\$$")) {
@@ -447,14 +447,14 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 反注册所有变�?
+	 * 反注册所有变量
 	 */
 	public static void unregisterAllVariables() {
 		jep.getVariableTable().clear();
 	}
 	
 	/**
-	 * 反注册指定函�?.
+	 * 反注册指定函数.
 	 * 此方法实用性不大，同名函数自动覆盖.
 	 * @param variableName 函数名称
 	 */
@@ -463,7 +463,7 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 反注册所有函�?
+	 * 反注册所有函数
 	 */
 	public static void unregisterAllFunctions() {
 		jep.getFunctionTable().clear();
@@ -473,7 +473,7 @@ public final class CEPUtils {
 	
 	/**
 	 * 函数/表达式解析执行器
-	 * @param expression 完整的函�?/表达�?
+	 * @param expression 完整的函数/表达式
 	 * @return 执行结果
 	 * @throws Exception 执行异常
 	 */
@@ -483,7 +483,7 @@ public final class CEPUtils {
 	}
 	
 	/**
-	 * 添加内部定义的默认函�?
+	 * 添加内部定义的默认函数
 	 */
 	private static void addInnerFunctions() {
 		//强制类型转换函数
@@ -521,7 +521,7 @@ public final class CEPUtils {
 		jep.addFunction(Oct.NAME, new Oct());
 		innerFunNames.add(Oct.NAME);
 		
-		//SQL操作类函�?
+		//SQL操作类函数
 		jep.addFunction(CopyDquote.NAME, new CopyDquote());
 		innerFunNames.add(CopyDquote.NAME);
 		
@@ -556,7 +556,7 @@ public final class CEPUtils {
 		jep.addFunction(MTrim.NAME, new MTrim());
 		innerFunNames.add(MTrim.NAME);
 		
-		//时间操作类函�?
+		//时间操作类函数
 		jep.addFunction(Date2Sec.NAME, new Date2Sec());
 		innerFunNames.add(Date2Sec.NAME);
 		

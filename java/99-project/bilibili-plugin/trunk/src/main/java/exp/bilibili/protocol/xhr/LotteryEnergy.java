@@ -24,8 +24,8 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * 高能礼物抽奖
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -37,10 +37,10 @@ public class LotteryEnergy extends _Lottery {
 	/** 高能礼物抽奖URL */
 	private final static String EG_JOIN_URL = Config.getInstn().EG_JOIN_URL();
 	
-	/** 最上一次抽奖过的礼物编�?(礼物编号是递增�?) */
+	/** 最上一次抽奖过的礼物编号(礼物编号是递增的) */
 	private static int LAST_RAFFLEID = 0;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected LotteryEnergy() {}
 	
 	/**
@@ -53,7 +53,7 @@ public class LotteryEnergy extends _Lottery {
 				CookiesMgr.MAIN().toNVCookie());
 		for(String raffleId : raffleIds) {
 			int id = NumUtils.toInt(raffleId, 0);
-			if(id > LAST_RAFFLEID) {	// 礼物编号是递增�?
+			if(id > LAST_RAFFLEID) {	// 礼物编号是递增的
 				LAST_RAFFLEID = id;
 				join(roomId, raffleId);
 			}
@@ -109,16 +109,16 @@ public class LotteryEnergy extends _Lottery {
 			
 			String reason = join(LotteryType.ENGERY, cookie, EG_JOIN_URL, roomId, raffleId);
 			if(StrUtils.isEmpty(reason)) {
-				log.info("[{}] 参与直播�? [{}] 抽奖成功(高能礼物)", cookie.NICKNAME(), roomId);
+				log.info("[{}] 参与直播间 [{}] 抽奖成功(高能礼物)", cookie.NICKNAME(), roomId);
 				cnt++;
 				
-			} else if(!reason.contains("已加入抽�?")) {
-				log.info("[{}] 参与直播�? [{}] 抽奖失败(高能礼物)", cookie.NICKNAME(), roomId);
-				UIUtils.statistics("失败(", reason, "): 直播�? [", roomId, 
+			} else if(!reason.contains("已加入抽奖")) {
+				log.info("[{}] 参与直播间 [{}] 抽奖失败(高能礼物)", cookie.NICKNAME(), roomId);
+				UIUtils.statistics("失败(", reason, "): 直播间 [", roomId, 
 						"],账号[", cookie.NICKNAME(), "]");
 				
-				// 高能已过�?, 其他账号无需参与
-				if(reason.contains("不存�?")) {
+				// 高能已过期, 其他账号无需参与
+				if(reason.contains("不存在")) {
 					break;
 				}
 			}
@@ -127,7 +127,7 @@ public class LotteryEnergy extends _Lottery {
 		}
 		
 		if(cnt > 0) {
-			UIUtils.statistics("成功(高能x", cnt, "): 直播�? [", roomId, "]");
+			UIUtils.statistics("成功(高能x", cnt, "): 直播间 [", roomId, "]");
 			UIUtils.updateLotteryCnt(cnt);
 		}
 	}

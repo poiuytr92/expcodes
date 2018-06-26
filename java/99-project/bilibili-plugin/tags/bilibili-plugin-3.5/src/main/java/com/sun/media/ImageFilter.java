@@ -15,8 +15,8 @@ import java.awt.image.PixelGrabber;
  * 图像过滤器/渲染器
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -46,7 +46,7 @@ public class ImageFilter {
 		}
 		// 设定二值化的域值，默认值为100
 		int grey = 100;
-		// 对图像进行二值化处理，Alpha值保持不�?
+		// 对图像进行二值化处理，Alpha值保持不变
 		ColorModel cm = ColorModel.getRGBdefault();
 		for (int i = 0; i < iw * ih; i++) {
 			int red, green, blue;
@@ -71,13 +71,13 @@ public class ImageFilter {
 
 			pixels[i] = alpha << 24 | red << 16 | green << 8 | blue;
 		}
-		// 将数组中的象素产生一个图�?
+		// 将数组中的象素产生一个图像
 		return ImageIOHelper
 				.imageProducerToBufferedImage(new MemoryImageSource(iw, ih,
 						pixels, 0, iw));
 	}
 
-	/** 提升清晰�?,进行锐化 */
+	/** 提升清晰度,进行锐化 */
 	public BufferedImage sharp() {
 		PixelGrabber pg = new PixelGrabber(image.getSource(), 0, 0, iw, ih,
 				pixels, 0, iw);
@@ -87,12 +87,12 @@ public class ImageFilter {
 			e.printStackTrace();
 		}
 
-		// 象素的中间变�?
+		// 象素的中间变量
 		int tempPixels[] = new int[iw * ih];
 		for (int i = 0; i < iw * ih; i++) {
 			tempPixels[i] = pixels[i];
 		}
-		// 对图像进行尖锐化处理，Alpha值保持不�?
+		// 对图像进行尖锐化处理，Alpha值保持不变
 		ColorModel cm = ColorModel.getRGBdefault();
 		for (int i = 1; i < ih - 1; i++) {
 			for (int j = 1; j < iw - 1; j++) {
@@ -131,13 +131,13 @@ public class ImageFilter {
 			}
 		}
 
-		// 将数组中的象素产生一个图�?
+		// 将数组中的象素产生一个图像
 		return ImageIOHelper
 				.imageProducerToBufferedImage(new MemoryImageSource(iw, ih,
 						tempPixels, 0, iw));
 	}
 
-	/** 中值滤�? */
+	/** 中值滤波 */
 	public BufferedImage median() {
 		PixelGrabber pg = new PixelGrabber(image.getSource(), 0, 0, iw, ih,
 				pixels, 0, iw);
@@ -146,7 +146,7 @@ public class ImageFilter {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		// 对图像进行中值滤波，Alpha值保持不�?
+		// 对图像进行中值滤波，Alpha值保持不变
 		ColorModel cm = ColorModel.getRGBdefault();
 		for (int i = 1; i < ih - 1; i++) {
 			for (int j = 1; j < iw - 1; j++) {
@@ -159,7 +159,7 @@ public class ImageFilter {
 				int red6 = cm.getRed(pixels[i * iw + j + 1]);
 				// int red8 = cm.getRed(pixels[(i + 1) * iw + j]);
 
-				// 水平方向进行中值滤�?
+				// 水平方向进行中值滤波
 				if (red4 >= red5) {
 					if (red5 >= red6) {
 						red = red5;
@@ -188,7 +188,7 @@ public class ImageFilter {
 				int green6 = cm.getGreen(pixels[i * iw + j + 1]);
 				// int green8 = cm.getGreen(pixels[(i + 1) * iw + j]);
 
-				// 水平方向进行中值滤�?
+				// 水平方向进行中值滤波
 				if (green4 >= green5) {
 					if (green5 >= green6) {
 						green = green5;
@@ -217,7 +217,7 @@ public class ImageFilter {
 				int blue6 = cm.getBlue(pixels[i * iw + j + 1]);
 				// int blue8 = cm.getBlue(pixels[(i + 1) * iw + j]);
 
-				// 水平方向进行中值滤�?
+				// 水平方向进行中值滤波
 				if (blue4 >= blue5) {
 					if (blue5 >= blue6) {
 						blue = blue5;
@@ -244,13 +244,13 @@ public class ImageFilter {
 			}
 		}
 
-		// 将数组中的象素产生一个图�?
+		// 将数组中的象素产生一个图像
 		return ImageIOHelper
 				.imageProducerToBufferedImage(new MemoryImageSource(iw, ih,
 						pixels, 0, iw));
 	}
 
-	/** 线性灰度变�? */
+	/** 线性灰度变换 */
 	public BufferedImage lineGrey() {
 		PixelGrabber pg = new PixelGrabber(image.getSource(), 0, 0, iw, ih,
 				pixels, 0, iw);
@@ -259,7 +259,7 @@ public class ImageFilter {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		// 对图像进行进行线性拉伸，Alpha值保持不�?
+		// 对图像进行进行线性拉伸，Alpha值保持不变
 		ColorModel cm = ColorModel.getRGBdefault();
 		for (int i = 0; i < iw * ih; i++) {
 			int alpha = cm.getAlpha(pixels[i]);
@@ -283,7 +283,7 @@ public class ImageFilter {
 			pixels[i] = alpha << 24 | red << 16 | green << 8 | blue;
 		}
 
-		// 将数组中的象素产生一个图�?
+		// 将数组中的象素产生一个图像
 
 		return ImageIOHelper
 				.imageProducerToBufferedImage(new MemoryImageSource(iw, ih,
@@ -316,7 +316,7 @@ public class ImageFilter {
 		Graphics2D g = tmp.createGraphics();
 		for (int x = 0; x < newW; x++) {
 			g.setClip(x, 0, 1, srcH);
-			// 按比例放�?
+			// 按比例放缩
 			g.drawImage(image, x - x * srcW / newW, 0, null);
 		}
 
@@ -325,7 +325,7 @@ public class ImageFilter {
 		g = dst.createGraphics();
 		for (int y = 0; y < newH; y++) {
 			g.setClip(0, y, newW, 1);
-			// 按比例放�?
+			// 按比例放缩
 			g.drawImage(tmp, 0, y - y * srcH / newH, null);
 		}
 		return dst;

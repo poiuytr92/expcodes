@@ -11,8 +11,8 @@ import exp.libs.utils.verify.VerifyUtils;
  * 数据源配置对象.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -57,23 +57,23 @@ public class DataSourceBean {
 	
 	/**
 	 * 空闲连接保活的测试sql.
-	 * 如果发现了空闲的数据库连�?.house keeper 将会用这个语句来测试.
-	 * 这个语句最好非常快的被执行.如果没有定义,测试过程将会被忽�?
+	 * 如果发现了空闲的数据库连接.house keeper 将会用这个语句来测试.
+	 * 这个语句最好非常快的被执行.如果没有定义,测试过程将会被忽略
 	 */
 	private String houseKeepingTestSql;
 	
-	// FIXME: 此默认测试语句仅mysql可用, 其他数据库需自行设置(或关闭测�?), 
+	// FIXME: 此默认测试语句仅mysql可用, 其他数据库需自行设置(或关闭测试), 
 	// 否则连接池会报错 Created a new connection but it failed its test
 	private final static String DEFAULT_KEEP_TEST_SQL = "select 1";
 	
-	/** 空闲连接保活的测试间�?(ms) */
+	/** 空闲连接保活的测试间隔(ms) */
 	private long houseKeepingSleepTime;
 	
 	private final static long DEFAULT_KEEP_SLEEP_TIME = 300000L;
 	
 	/**
 	 * 可同时建立的最大连接数.
-	 *  即可同时新增的连接请�?, 但还没有可供使用的连�?.
+	 *  即可同时新增的连接请求, 但还没有可供使用的连接.
 	 */
 	private int simultaneousBuildThrottle;
 	
@@ -84,7 +84,7 @@ public class DataSourceBean {
 	
 	private final static int DEFAULT_MAX_CONN_COUNT = 20;
 	
-	/** (连接�?)保有的最少连接数 */
+	/** (连接池)保有的最少连接数 */
 	private int minimumConnectionCount;
 	
 	private final static int DEFAULT_MIN_CONN_COUNT = 5;
@@ -98,13 +98,13 @@ public class DataSourceBean {
 	private final static int DEFAULT_MAX_NEW_CONN = 10;
 	
 	/**
-	 * (连接�?)保有的最少空闲连接数
+	 * (连接池)保有的最少空闲连接数
 	 */
 	private int prototypeCount;
 	
 	private final static int DEFAULT_PROTOTYPE_COUNT = 2;
 	
-	/** 单个连接的最大使用寿�? */
+	/** 单个连接的最大使用寿命 */
 	private long maximumConnectionLifetime;
 	
 	private final static long DEFAULT_MAX_CONN_LIFETIME = 3600000L;
@@ -112,10 +112,10 @@ public class DataSourceBean {
 	/**
 	 * 在连接使用前测试是否可用.
 	 * 
-	 * 如果为true，在每个连接被测试前都会服务这个连接�?
-	 * 如果一个连接失败，那么将被丢弃，另一个连接将会被处理�?
-	 * 如果所有连接都失败，一个新的连接将会被建立�?
-	 * 否则将会抛出一个SQLException异常�?
+	 * 如果为true，在每个连接被测试前都会服务这个连接，
+	 * 如果一个连接失败，那么将被丢弃，另一个连接将会被处理，
+	 * 如果所有连接都失败，一个新的连接将会被建立。
+	 * 否则将会抛出一个SQLException异常。
 	 */
 	private boolean testBeforeUse;
 	
@@ -125,7 +125,7 @@ public class DataSourceBean {
 	 * 在连接使用后测试是否可用(回收到连接池复用).
 	 * 
 	 * 如果为true，在每个连接被测试后都会服务这个连接，使其回到连接池中，
-	 * 如果连接失败，那么将被废弃�?
+	 * 如果连接失败，那么将被废弃。
 	 */
 	private boolean testAfterUse;
 	
@@ -568,8 +568,8 @@ public class DataSourceBean {
 	
 	public DataSourceBean clone() {
 		
-		// 部分get/set方法含有校验逻辑，若通过setXX(getXX)可能会因为重复校验导致数据异�?
-		// 因此此处采用直接赋值方式进行克�?
+		// 部分get/set方法含有校验逻辑，若通过setXX(getXX)可能会因为重复校验导致数据异常
+		// 因此此处采用直接赋值方式进行克隆
 		
 		DataSourceBean _clone = new DataSourceBean();
 		_clone.id = this.id;

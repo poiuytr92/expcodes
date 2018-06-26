@@ -7,8 +7,8 @@ import exp.libs.utils.other.StrUtils;
  * QQ空间登陆器: 基类
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-26
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-26
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -21,7 +21,7 @@ public abstract class BaseLander {
 	protected String password;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param QQ 所登陆的QQ
 	 * @param password 所登陆的QQ密码
 	 */
@@ -32,7 +32,7 @@ public abstract class BaseLander {
 	}
 	
 	/**
-	 * 初始�?
+	 * 初始化
 	 */
 	protected abstract void init();
 	

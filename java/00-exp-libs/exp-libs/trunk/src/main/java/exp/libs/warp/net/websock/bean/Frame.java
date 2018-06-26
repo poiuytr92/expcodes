@@ -13,8 +13,8 @@ import exp.libs.utils.num.BODHUtils;
  *  所以数据帧只能在发送前new出来(<b>自动生成当时的时间戳</b>)，不能提前构造好final常量.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-08-21
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -22,16 +22,16 @@ public class Frame implements Framedata {
 
 	public final static Frame NULL = new Frame(new byte[0]);
 	
-	/** 帧内数据(字节�?) */
+	/** 帧内数据(字节码) */
 	private ByteBuffer payloadData;
 	
 	/**
-	 * 操作�?: CONTINUOUS, TEXT, BINARY, PING, PONG, CLOSING
+	 * 操作码: CONTINUOUS, TEXT, BINARY, PING, PONG, CLOSING
 	 */
 	private Opcode opcode;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param byteHex 字节数据 (16进制表示形式)
 	 */
 	public Frame(String byteHex) {
@@ -39,7 +39,7 @@ public class Frame implements Framedata {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param bytes 字节数据
 	 */
 	public Frame(byte[] bytes) {
@@ -47,18 +47,18 @@ public class Frame implements Framedata {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param byteHex 字节数据 (16进制表示形式)
-	 * @param opcode 操作�?
+	 * @param opcode 操作码
 	 */
 	public Frame(String byteHex, Opcode opcode) {
 		this(BODHUtils.toBytes(byteHex), opcode);
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param byteHex 字节数据
-	 * @param opcode 操作�?
+	 * @param opcode 操作码
 	 */
 	public Frame(byte[] bytes, Opcode opcode) {
 		this.payloadData = ByteBuffer.wrap(bytes);
@@ -67,7 +67,7 @@ public class Frame implements Framedata {
 	
 	@Override
 	public boolean isFin() {
-		return true;	// 默认不采用多帧分包发送模�?, 所以每个包都发送一个fin标识
+		return true;	// 默认不采用多帧分包发送模式, 所以每个包都发送一个fin标识
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class Frame implements Framedata {
 
 	@Override
 	public boolean getTransfereMasked() {
-		return true;	// 客户端发送的数据均需要掩�?
+		return true;	// 客户端发送的数据均需要掩码
 	}
 
 	@Override
@@ -107,8 +107,8 @@ public class Frame implements Framedata {
 	}
 	
 	/**
-	 * 克隆数据帧（数据帧时间戳取克隆时的时间点�?
-	 * @return 仅装载数据相同的全新数据�?
+	 * 克隆数据帧（数据帧时间戳取克隆时的时间点）
+	 * @return 仅装载数据相同的全新数据帧
 	 */
 	public Frame clone() {
 		return new Frame(getPayloadData().array(), getOpcode());

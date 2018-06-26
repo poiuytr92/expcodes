@@ -11,8 +11,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	主要用于处理在界面配置的sql存储到数据库后,双引号丢失问题.
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -24,14 +24,14 @@ public class CopyDquote extends BaseFunction1 {
 	private static final long serialVersionUID = -5796020340521420338L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "copyDquote";
 	
 	/**
-	 * 双引号复�?,�?1个双引号替换�?2个连续的双引�?.
-	 * �?1个入参：
+	 * 双引号复制,把1个双引号替换成2个连续的双引号.
+	 * 共1个入参：
 	 * @param1 String:原字符串
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常

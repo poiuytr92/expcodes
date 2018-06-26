@@ -14,21 +14,21 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 发送消息时：把业务处理时使用的编码，转码为发送消息时的writeCharset编码
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class TranscodeFilter extends BaseFilter {
 
 	/**
-	 * 内部业务处理时使用的字符集编�?
+	 * 内部业务处理时使用的字符集编码
 	 */
 	private String hdrCharset = Charset.DEFAULT;
 	
 	/**
-	 * 构造函�?
-	 * @param hdrCharset 内部业务处理时使用的字符集编�?
+	 * 构造函数
+	 * @param hdrCharset 内部业务处理时使用的字符集编码
 	 */
 	public TranscodeFilter(String hdrCharset) {
 		this.hdrCharset = hdrCharset;

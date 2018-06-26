@@ -14,15 +14,15 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 可用于打印消息在各个触发事件点的日志状态
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class LogFilter extends BaseFilter {
 
 	/**
-	 * 日志�?
+	 * 日志器
 	 */
 	private final static Logger log = LoggerFactory.getLogger(LogFilter.class);
 	
@@ -55,7 +55,7 @@ public class LogFilter extends BaseFilter {
 			throws Exception {
 
 		/**
-		 * 打印消息发送日�?
+		 * 打印消息发送日志
 		 */
 		log.info("Log onMessageSent");
 		

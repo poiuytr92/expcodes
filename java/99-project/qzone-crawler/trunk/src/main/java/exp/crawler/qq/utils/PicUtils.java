@@ -9,8 +9,8 @@ import exp.libs.utils.other.StrUtils;
  * 图片工具类
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-23
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-23
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -19,13 +19,13 @@ public class PicUtils {
 	/** 图片后缀 */
 	public final static String SUFFIX = ".png";
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected PicUtils() {}
 	
 	/**
 	 * 计算页数
 	 * @param total 总数
-	 * @param batch 分页�?
+	 * @param batch 分页数
 	 * @return 页数
 	 */
 	public static int getPageNum(int total, int batch) {
@@ -48,7 +48,7 @@ public class PicUtils {
 	public static String getPicName(String idx, String desc) {
 		String name = StrUtils.concat("[", IDUtils.getTimeID(), "]-[", idx, "] ", desc);
 		name = FileUtils.delForbidCharInFileName(name, "");	// 移除无效的文件名字符
-		name = StrUtils.showSummary(name);	// 避免文件名过�?
+		name = StrUtils.showSummary(name);	// 避免文件名过长
 		name = name.concat(SUFFIX);
 		return name;
 	}
@@ -61,8 +61,8 @@ public class PicUtils {
 	public static String convert(String picURL) {
 		if(picURL != null) {
 			picURL = picURL.replace("psbe?", "psb?");	// 去除权限加密
-			picURL = picURL.replace("/m/", "/b/");		// 缩略图变成大�?
-			picURL = picURL.replace("/c/", "/b/");		// 缩略图变成大�?
+			picURL = picURL.replace("/m/", "/b/");		// 缩略图变成大图
+			picURL = picURL.replace("/c/", "/b/");		// 缩略图变成大图
 			
 		} else {
 			picURL = "";
@@ -73,8 +73,8 @@ public class PicUtils {
 	/**
 	 * 判定验证码是否为伪验证码.
 	 * 
-	 * 	伪验证码以感叹号开头，�?  !QWE
-	 *  真实验证码则为字�?+数字组合，如 Q2R5
+	 * 	伪验证码以感叹号开头，如  !QWE
+	 *  真实验证码则为字符+数字组合，如 Q2R5
 	 * @return
 	 */
 	public static boolean isFalsuVcode(String vcode) {

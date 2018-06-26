@@ -15,16 +15,16 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 数据在过滤链中遇到异常事件onExceptionCaught时，将通过过滤链直接把异常抛回到链头处理
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final class HeadFilter extends BaseNextFilter {
 
 	/**
-	 * 构造函�?
-	 * @param filter 业务过滤�?
+	 * 构造函数
+	 * @param filter 业务过滤器
 	 */
 	public HeadFilter(IFilter filter) {
 		super(filter);
@@ -34,7 +34,7 @@ final class HeadFilter extends BaseNextFilter {
 	 * <pre>
 	 * 过滤链的开头，消息处理流程的入口，接收远端机的数据
 	 * 
-	 * 若接收到的消息为断开连接的命令，则会在此处进行关闭会话操作�?
+	 * 若接收到的消息为断开连接的命令，则会在此处进行关闭会话操作。
 	 * 否则会把消息交付给下一个业务过滤器
 	 * </pre>
 	 * @param session 会话
@@ -59,7 +59,7 @@ final class HeadFilter extends BaseNextFilter {
 	
 	/**
 	 * <pre>
-	 * 过滤链的末尾，消息处理流程的出口，向远端机的发送数�?
+	 * 过滤链的末尾，消息处理流程的出口，向远端机的发送数据
 	 * 
 	 * 发送的消息编码为本地机的字符集编码，至于对方怎么处理则不理会，建议通过过滤器转换对方的编码
 	 * </pre>

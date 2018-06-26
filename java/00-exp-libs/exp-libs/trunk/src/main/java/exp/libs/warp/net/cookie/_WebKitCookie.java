@@ -8,24 +8,24 @@ import org.openqa.selenium.Cookie;
  * <PRE>
  * 单个cookie属性集（兼容selenium）
  * </PRE>
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2018-01-31
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class _WebKitCookie extends _HttpCookie {
 
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	protected _WebKitCookie() {
 		super();
 	}
 	
 	/**
-	 * 构造函�?
-	 * @param headerCookie HTTP响应头中�? Set-Cookie, 格式如：
+	 * 构造函数
+	 * @param headerCookie HTTP响应头中的 Set-Cookie, 格式如：
 	 * 	JSESSIONID=4F12EEF0E5CC6E8B239906B29919D40E; Domain=www.baidu.com; Path=/; Expires=Mon, 29-Jan-2018 09:08:16 GMT+08:00; Secure; HttpOnly; 
 	 */
 	protected _WebKitCookie(String headerCookie) {
@@ -33,7 +33,7 @@ public class _WebKitCookie extends _HttpCookie {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param cookie selenium的cookie对象
 	 */
 	protected _WebKitCookie(Cookie cookie) {

@@ -22,38 +22,38 @@ import org.slf4j.LoggerFactory;
  * 	fm._stop();
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class FileMonitor {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(FileMonitor.class);
 	
 	/** 默认扫描间隔 */
 	public final static long DEFAULR_SCAN_INTERVAL = 100;
 	
-	/** 文件监控�? */
+	/** 文件监控器 */
 	private FileAlterationMonitor monitor;
 
 	/**
-	 * 构造函�?:监控指定文件/文件夹的增删改事�?(默认扫描间隔�?100ms)
+	 * 构造函数:监控指定文件/文件夹的增删改事件(默认扫描间隔为100ms)
 	 * 
-	 * @param path 所监听的文�?/文件夹位�? (若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控)
-	 * @param listener 监听�?
+	 * @param path 所监听的文件/文件夹位置 (若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控)
+	 * @param listener 监听器
 	 */
 	public FileMonitor(String path, FileAlterationListener listener) {
 		this(path, DEFAULR_SCAN_INTERVAL, listener);
 	}
 	
 	/**
-	 * 构造函�?:监控指定文件/文件夹的增删改事�?.
+	 * 构造函数:监控指定文件/文件夹的增删改事件.
 	 * 
-	 * @param path 所监听的文�?/文件夹位�? (若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控)
-	 * @param scanInterval 文件/文件夹扫描间�?(ms)
-	 * @param listener 监听�?
+	 * @param path 所监听的文件/文件夹位置 (若监控的是文件夹，则该文件夹下所有文件和子目录均会被监控)
+	 * @param scanInterval 文件/文件夹扫描间隔(ms)
+	 * @param listener 监听器
 	 */
 	public FileMonitor(String path, long scanInterval, 
 			FileAlterationListener listener) {
@@ -67,24 +67,24 @@ public class FileMonitor {
 	}
 
 	/**
-	 * 启动监听�?
+	 * 启动监听器
 	 */
 	public void _start() {
 		try {
 			monitor.start();
 		} catch (Exception e) {
-			log.error("启动文件监听器失�?.", e);
+			log.error("启动文件监听器失败.", e);
 		}
 	}
 	
 	/**
-	 * 停止监听�?
+	 * 停止监听器
 	 */
 	public void _stop() {
 		try {
 			monitor.stop();
 		} catch (Exception e) {
-			log.error("停止文件监听器失�?.", e);
+			log.error("停止文件监听器失败.", e);
 		}
 	}
 

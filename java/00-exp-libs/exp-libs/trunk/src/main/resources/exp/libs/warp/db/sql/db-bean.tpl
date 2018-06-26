@@ -11,8 +11,8 @@ import exp.libs.warp.db.sql.DBUtils;
  * Class Name : @{class_name}@
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # @{date}@
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   @{date}@
  * @author    EXP: 272629724@qq.com
  * @since     jdk version : jdk 1.6
  */

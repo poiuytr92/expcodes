@@ -10,14 +10,14 @@ import exp.libs.utils.other.StrUtils;
  * OCR图像文字识别组件
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class OCR {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(OCR.class);
 	
 	/** 默认OCR组件目录 */
@@ -27,7 +27,7 @@ public class OCR {
 	private _OCR ocr;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param tesseractDir OCR组件驱动目录
 	 */
 	public OCR(String tesseractDir) {

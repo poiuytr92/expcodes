@@ -12,8 +12,8 @@ import exp.libs.warp.cep.fun.BaseFunctionN;
  * 	字符串操作：正则替换
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -25,13 +25,13 @@ public class Replace extends BaseFunctionN {
 	private static final long serialVersionUID = -7197942130083226335L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "replace";
 	
 	/**
-	 * 限定参数个数�?3.
+	 * 限定参数个数为3.
 	 */
 	@Override
 	public boolean checkNumberOfParameters(int inParamsNum){
@@ -39,11 +39,11 @@ public class Replace extends BaseFunctionN {
     }
 	
 	/**
-	 * 字符串正则替�?.
-	 * �?3个参数：
+	 * 字符串正则替换.
+	 * 共3个参数：
 	 * @param1 String:原字符串
-	 * @param2 String:正则表达�?
-	 * @param2 String:替代字符�?
+	 * @param2 String:正则表达式
+	 * @param2 String:替代字符串
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

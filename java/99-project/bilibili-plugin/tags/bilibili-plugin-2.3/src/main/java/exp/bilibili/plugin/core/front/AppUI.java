@@ -50,8 +50,8 @@ import exp.libs.warp.ui.cpt.win.MainWindow;
  * 主应用程序窗口
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -60,10 +60,10 @@ public class AppUI extends MainWindow {
 	/** serialVersionUID */
 	private final static long serialVersionUID = 2097374309672044616L;
 
-	/** 避免连续点击按钮的锁定时�? */
+	/** 避免连续点击按钮的锁定时间 */
 	private final static long LOCK_TIME = 100;
 	
-	/** 界面文本框最大缓存行�? */
+	/** 界面文本框最大缓存行数 */
 	private final static int MAX_LINE = 200;
 	
 	private final static String LINE_END = "\r\n";
@@ -147,7 +147,7 @@ public class AppUI extends MainWindow {
 	private static volatile AppUI instance;
 	
 	private AppUI() {
-		super("哔哩哔哩插件�? - By 亚絲�?", WIDTH, HEIGHT);
+		super("哔哩哔哩插件姬 - By 亚絲娜", WIDTH, HEIGHT);
 	}
 	
 	/**
@@ -165,9 +165,9 @@ public class AppUI extends MainWindow {
 	 */
 	public static void checkIdentity(String[] args) {
 		
-		// 管理�?: 无条件开启所有功�?
+		// 管理员: 无条件开启所有功能
 		if(args == null || args.length <= 0) {	
-			if(FileUtils.exists("./doc/icon.ico")) {	// 发布的项目是不存在doc文件夹的, 避免管理员权限泄�?
+			if(FileUtils.exists("./doc/icon.ico")) {	// 发布的项目是不存在doc文件夹的, 避免管理员权限泄露
 				Config.LEVEL = Level.ADMIN;
 				
 			} else {
@@ -212,23 +212,23 @@ public class AppUI extends MainWindow {
 		chatTF.setToolTipText("内容长度限制: 20");
 		httpTF.setEditable(false);
 		
-		this.defaultBtn = new JButton("�?");
-		this.linkBtn = new JButton("偷窥直播�? (无需登陆)");
-		this.lotteryBtn = new JButton("抽奖�? (发起直播间抽�?)");
-		this.activeListBtn = new JButton("�?");
+		this.defaultBtn = new JButton("★");
+		this.linkBtn = new JButton("偷窥直播间 (无需登陆)");
+		this.lotteryBtn = new JButton("抽奖姬 (发起直播间抽奖)");
+		this.activeListBtn = new JButton("☷");
 		this.loginBtn = new JButton("扫码/帐密登陆 (自动抽奖)");
 		this.stormBtn = new JButton("节奏风暴扫描");
-		this.addUserBtn = new JButton("�?");
-		this.clrBtn = new JButton("�?");
+		this.addUserBtn = new JButton("╋");
+		this.clrBtn = new JButton("清");
 		this.sendBtn = new JButton("发言");
-		this.colorBtn = new JButton("�?");
-		this.thxBtn = new JButton("答谢�?");
-		this.noticeBtn = new JButton("公告�?");
+		this.colorBtn = new JButton("●");
+		this.thxBtn = new JButton("答谢姬");
+		this.noticeBtn = new JButton("公告姬");
 		this.eNoticeBtn = new JButton(">");
-		this.callBtn = new JButton("小call�?");
+		this.callBtn = new JButton("小call姬");
 		this.eCallBtn = new JButton(">");
-		this.nightBtn = new JButton("晚安�?");
-		this.redbagBtn = new JButton("红包兑奖�?");
+		this.nightBtn = new JButton("晚安姬");
+		this.redbagBtn = new JButton("红包兑奖姬");
 		defaultBtn.setToolTipText("设为默认");
 		defaultBtn.setForeground(Color.MAGENTA);
 		linkBtn.setForeground(Color.BLACK);
@@ -296,7 +296,7 @@ public class AppUI extends MainWindow {
 		JPanel livePanel = new JPanel(new BorderLayout()); {
 			livePanel.add(SwingUtils.getPairsPanel("直播间地址", httpTF), BorderLayout.CENTER);
 			livePanel.add(SwingUtils.getEBorderPanel(
-					SwingUtils.getPairsPanel("房间�?", ridTF), defaultBtn), 
+					SwingUtils.getPairsPanel("房间号", ridTF), defaultBtn), 
 					BorderLayout.EAST);
 		}
 		panel.add(livePanel, 1);
@@ -305,7 +305,7 @@ public class AppUI extends MainWindow {
 	
 	private JPanel _getLivePanel() {
 		JPanel panel = new JPanel(new BorderLayout());
-		SwingUtils.addBorder(panel, "直播间信�?");
+		SwingUtils.addBorder(panel, "直播间信息");
 		panel.add(SwingUtils.addAutoScroll(chatTA), BorderLayout.CENTER);
 		panel.add(_getSendPanel(), BorderLayout.SOUTH);
 		return panel;
@@ -404,7 +404,7 @@ public class AppUI extends MainWindow {
 				int roomId = getCurRoomId();
 				int realRoomId = RoomMgr.getInstn().getRealRoomId(roomId);
 				if(realRoomId <= 0) {
-					SwingUtils.warn("直播间房号无�?/未收�?");
+					SwingUtils.warn("直播间房号无效/未收录");
 					return;
 				}
 				
@@ -423,7 +423,7 @@ public class AppUI extends MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				int roomId = RoomMgr.getInstn().getRealRoomId(getCurRoomId());
 				if(roomId <= 0) {
-					SwingUtils.warn("直播间房号无�?/未收�?");
+					SwingUtils.warn("直播间房号无效/未收录");
 					return;
 				}
 				
@@ -435,7 +435,7 @@ public class AppUI extends MainWindow {
 					wsClient.relink(roomId);
 				}
 				
-				chatTA.setText("");		// 清空版聊�?
+				chatTA.setText("");		// 清空版聊区
 				OnlineUserMgr.getInstn().clear(); // 重连直播间时清空在线用户列表
 				lockBtn();
 			}
@@ -460,7 +460,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(Config.LEVEL < Level.ADMIN) {
-					SwingUtils.warn("您未被授权管�? [活跃值排行榜] 哦~");
+					SwingUtils.warn("您未被授权管理 [活跃值排行榜] 哦~");
 					return;
 				}
 				
@@ -480,7 +480,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1�?)", "帐密登陆 (30�?)")) {
+				if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1天)", "帐密登陆 (30天)")) {
 					_loginByQrcode();
 					
 				} else {
@@ -491,26 +491,26 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 二维码扫码登�?
+	 * 二维码扫码登陆
 	 */
 	private void _loginByQrcode() {
 		qrcodeUI._view();
 		
 		if(LoginMgr.getInstn().isRun() == false) {
-			UIUtils.log("正在连接登陆服务�?, 请稍�?...");
+			UIUtils.log("正在连接登陆服务器, 请稍后...");
 			LoginMgr.getInstn()._start();
 		}
 	}
 	
 	/**
-	 * 验证码帐密登�?
+	 * 验证码帐密登陆
 	 */
 	private void _loginByVccode() {
 		if(loginUI != null) {
 			loginUI._view();
 			
 		} else {
-			UIUtils.log("正在连接登陆服务�?, 请稍�?...");
+			UIUtils.log("正在连接登陆服务器, 请稍后...");
 			new Thread() {
 				public void run() {
 					loginBtn.setEnabled(false);
@@ -541,16 +541,16 @@ public class AppUI extends MainWindow {
 				if(!StormScanner.getInstn().isRun()) {
 					_loginMini();
 					
-				// 扫描器线程已启动，则纯粹切换扫描状�?
+				// 扫描器线程已启动，则纯粹切换扫描状态
 				} else {
 					StormScanner.getInstn().setScan();
 					if(StormScanner.getInstn().isScan()) {
 						BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, stormBtn);
-						UIUtils.log("[全平台节奏风暴扫描] 已启�?");
+						UIUtils.log("[全平台节奏风暴扫描] 已启动");
 						
 					} else {
 						BeautyEyeUtils.setButtonStyle(NormalColor.normal, stormBtn);
-						UIUtils.log("[全平台节奏风暴扫描] 已停�?");
+						UIUtils.log("[全平台节奏风暴扫描] 已停止");
 					}
 				}
 				lockBtn();
@@ -559,14 +559,14 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 登录马甲(用于扫描全平台节奏风�?)
+	 * 登录马甲(用于扫描全平台节奏风暴)
 	 */
 	private void _loginMini() {
 		
-		// 使用马甲号登�?
-		if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所�?)")) {
+		// 使用马甲号登录
+		if(SwingUtils.confirm("存在风险, 是否使用 [马甲号] 扫描 ? (收益归主号所有)")) {
 			
-			// 未登录过马甲�?, 则登录一个马甲号
+			// 未登录过马甲号, 则登录一个马甲号
 			if(StrUtils.isEmpty(FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO))) {
 				_LoginUI miniLogin = new _LoginUI(true);
 				
@@ -577,7 +577,7 @@ public class AppUI extends MainWindow {
 						if(StrUtils.isEmpty(FileUtils.read(LoginMgr.MINI_COOKIE_PATH, Charset.ISO))) {
 							SwingUtils.warn("登录马甲失败, 终止扫描节奏风暴");
 							
-						// 使用新登录的马甲�?(节奏风暴扫描器启动后会在内部识别)
+						// 使用新登录的马甲号(节奏风暴扫描器启动后会在内部识别)
 						} else {
 							_startStormScanner();
 						}
@@ -618,7 +618,7 @@ public class AppUI extends MainWindow {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(SwingUtils.confirm("[清除登陆信息] 后下次需重新登陆, 继续�? ?")) {
+				if(SwingUtils.confirm("[清除登陆信息] 后下次需重新登陆, 继续吗 ?")) {
 					if(LoginMgr.getInstn().clearAllCookies()) {
 						SwingUtils.info("清除登陆信息成功");
 						
@@ -666,11 +666,11 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogined()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能召�? [答谢姬] 哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [答谢姬] 哦~");
 					return;
 					
 				} else if(Config.LEVEL < Level.UPLIVE) {
-					SwingUtils.warn("为了守护直播间秩�?, 非主播用户无法召�? [答谢姬] 哦~");
+					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [答谢姬] 哦~");
 					return;
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
@@ -683,11 +683,11 @@ public class AppUI extends MainWindow {
 				ChatMgr.getInstn().setAutoThankYou();
 				if(ChatMgr.getInstn().isAutoThankYou()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, thxBtn);
-					UIUtils.log("[答谢姬] 被召唤成功O(∩_�?)O");
+					UIUtils.log("[答谢姬] 被召唤成功O(∩_∩)O");
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, thxBtn);
-					UIUtils.log("[答谢姬] 被封印啦/(ㄒo�?)/");
+					UIUtils.log("[答谢姬] 被封印啦/(ㄒoㄒ)/");
 				}
 				lockBtn();
 			}
@@ -700,11 +700,11 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogined()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能召�? [公告姬] 哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [公告姬] 哦~");
 					return;
 					
 				} else if(Config.LEVEL < Level.UPLIVE) {
-					SwingUtils.warn("为了守护直播间秩�?, 非主播用户无法召�? [公告姬] 哦~");
+					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [公告姬] 哦~");
 					return;
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
@@ -717,11 +717,11 @@ public class AppUI extends MainWindow {
 				ChatMgr.getInstn().setAutoNotice();
 				if(ChatMgr.getInstn().isAutoNotice()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, noticeBtn);
-					UIUtils.log("[公告姬] 被召唤成功O(∩_�?)O");
+					UIUtils.log("[公告姬] 被召唤成功O(∩_∩)O");
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, noticeBtn);
-					UIUtils.log("[公告姬] 被封印啦/(ㄒo�?)/");
+					UIUtils.log("[公告姬] 被封印啦/(ㄒoㄒ)/");
 				}
 				lockBtn();
 			}
@@ -734,7 +734,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogined()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能召�? [小call姬] 哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [小call姬] 哦~");
 					return;
 				}
 				
@@ -742,11 +742,11 @@ public class AppUI extends MainWindow {
 				ChatMgr.getInstn().setAutoCall();
 				if(ChatMgr.getInstn().isAutoCall()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, callBtn);
-					UIUtils.log("[小call姬] 被召唤成功O(∩_�?)O");
+					UIUtils.log("[小call姬] 被召唤成功O(∩_∩)O");
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, callBtn);
-					UIUtils.log("[小call姬] 被封印啦/(ㄒo�?)/");
+					UIUtils.log("[小call姬] 被封印啦/(ㄒoㄒ)/");
 				}
 				lockBtn();
 			}
@@ -759,11 +759,11 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogined()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能召�? [晚安姬] 哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [晚安姬] 哦~");
 					return;
 					
 				} else if(Config.LEVEL < Level.UPLIVE) {
-					SwingUtils.warn("为了守护直播间秩�?, 非主播用户无法召�? [晚安姬] 哦~");
+					SwingUtils.warn("为了守护直播间秩序, 非主播用户无法召唤 [晚安姬] 哦~");
 					return;
 					
 				} else if(Config.LEVEL < Level.ADMIN && 
@@ -776,11 +776,11 @@ public class AppUI extends MainWindow {
 				ChatMgr.getInstn().setAutoGoodNight();
 				if(ChatMgr.getInstn().isAutoGoodNight()) {
 					BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, nightBtn);
-					UIUtils.log("[晚安姬] 被召唤成功O(∩_�?)O");
+					UIUtils.log("[晚安姬] 被召唤成功O(∩_∩)O");
 					
 				} else {
 					BeautyEyeUtils.setButtonStyle(NormalColor.normal, nightBtn);
-					UIUtils.log("[晚安姬] 被封印啦/(ㄒo�?)/");
+					UIUtils.log("[晚安姬] 被封印啦/(ㄒoㄒ)/");
 				}
 				lockBtn();
 			}
@@ -793,7 +793,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(!isLogined()) {
-					SwingUtils.warn("您是个有身份的人~ 先登录才能召�? [红包兑奖姬] 哦~");
+					SwingUtils.warn("您是个有身份的人~ 先登录才能召唤 [红包兑奖姬] 哦~");
 					return;
 				}
 				
@@ -820,7 +820,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if(e.getKeyChar() == KeyEvent.VK_ENTER) {
-					sendBtn.doClick();// 监听到回车键则触发发送按�?
+					sendBtn.doClick();// 监听到回车键则触发发送按钮
 				}
 			}
 		});
@@ -835,7 +835,7 @@ public class AppUI extends MainWindow {
 					return;
 				}
 				
-				new _EditorUI("公告�?", Config.getInstn().NOTICE_PATH())._view();
+				new _EditorUI("公告姬", Config.getInstn().NOTICE_PATH())._view();
 				lockBtn();
 			}
 			
@@ -845,7 +845,7 @@ public class AppUI extends MainWindow {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new _EditorUI("打call�?", Config.getInstn().CALL_PATH())._view();
+				new _EditorUI("打call姬", Config.getInstn().CALL_PATH())._view();
 				lockBtn();
 			}
 			
@@ -926,14 +926,14 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 更新二维码图�?
+	 * 更新二维码图片
 	 */
 	public void updateQrcode() {
 		qrcodeUI.updateImg();
 	}
 	
 	/**
-	 * 更新二维码有效时�?
+	 * 更新二维码有效时间
 	 * @param time
 	 */
 	public void updateQrcodeTime(int time) {
@@ -941,7 +941,7 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 标记已登陆成�?
+	 * 标记已登陆成功
 	 */
 	public void markLogin(String username) {
 		loginUser = username;
@@ -950,20 +950,20 @@ public class AppUI extends MainWindow {
 		
 		if(loginUI != null) { loginUI._hide(); }
 		qrcodeUI._hide();
-		linkBtn.doClick();	// 登陆后自动连接到当前直播�?
-		WebBot.getInstn()._start();	// 启动仿真机器�?
+		linkBtn.doClick();	// 登陆后自动连接到当前直播间
+		WebBot.getInstn()._start();	// 启动仿真机器人
 		
 		updateTitle("0000-00-00");
 		UIUtils.log("欢迎肥来: ".concat(loginUser));
-		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等�?");
-		SwingUtils.info("登陆成功 (自动抽奖已激�?)");
+		UIUtils.log("已激活全平台自动抽奖机能（包括小电视、高能抽奖等）");
+		SwingUtils.info("登陆成功 (自动抽奖已激活)");
 		
-		// 开始监控软件授�?
+		// 开始监控软件授权
 		SafetyMonitor.getInstn()._start();
 	}
 	
 	/**
-	 * 更新软件标题(用户�?+授权时间)
+	 * 更新软件标题(用户名+授权时间)
 	 */
 	public void updateTitle(String certificateTime) {
 		String title = StrUtils.concat(getTitle().replaceFirst("    \\[.*", ""), 
@@ -1012,7 +1012,7 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
-	 * 瞬时锁定按钮，避免连续点�?
+	 * 瞬时锁定按钮，避免连续点击
 	 */
 	private void lockBtn() {
 		ThreadUtils.tSleep(LOCK_TIME);
@@ -1023,8 +1023,8 @@ public class AppUI extends MainWindow {
 	 */
 	public void printVersionInfo() {
 		toConsole("**********************************************************");
-		toConsole(" [亚絲娜] 享有本软件的完全著作�?");
-		toConsole(" 未经许可严禁擅自用于商业用�?, 违者保留追究其法律责任的权�?");
+		toConsole(" [亚絲娜] 享有本软件的完全著作权");
+		toConsole(" 未经许可严禁擅自用于商业用途, 违者保留追究其法律责任的权利");
 		toConsole("**********************************************************");
 	}
 	

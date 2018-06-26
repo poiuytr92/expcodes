@@ -15,8 +15,8 @@ import exp.libs.warp.cep.fun.impl.cast._NullStr;
  * 	强制类型转换: 强制把任何值转换为空串
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -29,7 +29,7 @@ public class Test_NullStr {
 	@Test
 	public void testCastNullStr() throws Exception {
 		
-		//正确性测�?
+		//正确性测试
 		Object rst = CEPUtils.call(
 				_NullStr.NAME, new Object[] {"-123456789"});
 		Assert.assertEquals("", rst);
@@ -68,7 +68,7 @@ public class Test_NullStr {
 		}
 		
 		try {
-			CEPUtils.call("nullstr(\" \r\n \t \0   \")");	//参数不能有换�?
+			CEPUtils.call("nullstr(\" \r\n \t \0   \")");	//参数不能有换行
 			Assert.assertTrue(false);
 			
 		} catch (Exception e) {

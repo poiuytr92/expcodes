@@ -7,8 +7,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 关系过滤器接口
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -30,7 +30,7 @@ public interface INextFilter {
 	/**
 	 * 触发上一个业务过滤器的onMessageSent事件
 	 * @param session 会话
-	 * @param msg 发送消�?
+	 * @param msg 发送消息
 	 */
 	public void onMessageSent(ISession session, Object msg);
 

@@ -11,17 +11,17 @@ import exp.crawler.qq.ui.AppUI;
  * 界面工具类
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class UIUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(UIUtils.class);
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected UIUtils() {}
 	
 	/**

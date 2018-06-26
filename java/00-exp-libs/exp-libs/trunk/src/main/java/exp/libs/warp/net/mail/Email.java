@@ -33,17 +33,17 @@ import exp.libs.utils.verify.VerifyUtils;
  * 
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Email {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(Email.class);
 	
-	/** 默认SMTP服务�? */
+	/** 默认SMTP服务器 */
 	private final static SMTP DEFAULT_SMTP = SMTP._126;
 	
 	/** 默认SMTP端口 */
@@ -52,13 +52,13 @@ public class Email {
 	/** 默认加密密钥 */
 	private final static String DEFAULT_SECRET_KEY = "EXP-MAIL";
 	
-	/** SMTP服务�? */
+	/** SMTP服务器 */
 	private String smtpServer;
 	
 	/** SMTP端口 */
 	private int smtpPort;
 	
-	/** 发件�?(邮箱账号) */
+	/** 发件人(邮箱账号) */
 	private String sender;
 	
 	/** 邮箱密码 */
@@ -80,8 +80,8 @@ public class Email {
 	private String messageType;
 	
 	/**
-	 * 构造函�?
-	 * @param smtp SMTP服务�?(发件服务�?)
+	 * 构造函数
+	 * @param smtp SMTP服务器(发件服务器)
 	 * @param sender 发送人(邮箱账号)
 	 * @param password 邮箱密码
 	 * @param receiver 默认收件人邮箱地址
@@ -96,8 +96,8 @@ public class Email {
 	}
 	
 	/**
-	 * 构造函�?
-	 * @param smtp SMTP服务�?(发件服务�?)
+	 * 构造函数
+	 * @param smtp SMTP服务器(发件服务器)
 	 * @param sender 发送人(邮箱账号)
 	 * @param password 邮箱密码
 	 * @param receivers 默认收件人邮箱地址
@@ -112,9 +112,9 @@ public class Email {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param smtpServer SMTP服务端口(发件服务器IP)
-	 * @param smtpPort SMTP服务端口(发件服务器端�?)
+	 * @param smtpPort SMTP服务端口(发件服务器端口)
 	 * @param sender 发送人(邮箱账号)
 	 * @param password 邮箱密码
 	 * @param receiver 默认收件人邮箱地址
@@ -128,9 +128,9 @@ public class Email {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param smtpServer SMTP服务端口(发件服务器IP)
-	 * @param smtpPort SMTP服务端口(发件服务器端�?)
+	 * @param smtpPort SMTP服务端口(发件服务器端口)
 	 * @param sender 发送人(邮箱账号)
 	 * @param password 邮箱密码
 	 * @param receivers 默认收件人邮箱地址
@@ -143,9 +143,9 @@ public class Email {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param smtpServer SMTP服务端口(发件服务器IP)
-	 * @param smtpPort SMTP服务端口(发件服务器端�?)
+	 * @param smtpPort SMTP服务端口(发件服务器端口)
 	 * @param sender 发送人(邮箱账号)
 	 * @param password 邮箱密码
 	 * @param receivers 默认收件人邮箱地址
@@ -174,7 +174,7 @@ public class Email {
 	}
 	
 	/**
-	 * 开关debug模式，用于查看程序发送Email的详细状�?
+	 * 开关debug模式，用于查看程序发送Email的详细状态
 	 * @param debug
 	 */
 	public void debug(boolean debug) {
@@ -185,30 +185,30 @@ public class Email {
 	 * 发送非加密邮件
 	 * @param title 标题
 	 * @param content 正文
-	 * @return true:发送成�?; false:发送失�?
+	 * @return true:发送成功; false:发送失败
 	 */
 	public boolean send(String title, String content) {
 		return send(title, content, null, null, false);
 	}
 
 	/**
-	 * 发送邮�?
+	 * 发送邮件
 	 * @param title 标题
 	 * @param content 正文
-	 * @param encrypt true:加密�? false：不加密
-	 * @return true:发送成�?; false:发送失�?
+	 * @param encrypt true:加密； false：不加密
+	 * @return true:发送成功; false:发送失败
 	 */
 	public boolean send(String title, String content, boolean encrypt) {
 		return send(title, content, null, null, encrypt);
 	}
 	
 	/**
-	 * 发送邮�?
+	 * 发送邮件
 	 * @param title 标题
 	 * @param content 正文
 	 * @param CCs 抄送人邮箱地址
-	 * @param encrypt true:加密�? false：不加密
-	 * @return true:发送成�?; false:发送失�?
+	 * @param encrypt true:加密； false：不加密
+	 * @return true:发送成功; false:发送失败
 	 */
 	public boolean send(String title, String content, 
 			String[] CCs, boolean encrypt) {
@@ -216,13 +216,13 @@ public class Email {
 	}
 	
 	/**
-	 * 发送邮�?
+	 * 发送邮件
 	 * @param title 标题
 	 * @param content 正文
 	 * @param receivers 临时收件人邮箱地址（若非空，则默认收件人不会受到此封邮件）
 	 * @param CCs 抄送人邮箱地址
-	 * @param encrypt true:加密�? false：不加密
-	 * @return true:发送成�?; false:发送失�?
+	 * @param encrypt true:加密； false：不加密
+	 * @return true:发送成功; false:发送失败
 	 */
 	public boolean send(String title, String content, 
 			String[] receivers, String[] CCs, boolean encrypt) {
@@ -236,7 +236,7 @@ public class Email {
 			isOk = true;
 			
 		} catch (Exception e){
-			log.error("使用SMTP服务 [{}] 发送邮件失�?", 
+			log.error("使用SMTP服务 [{}] 发送邮件失败", 
 					StrUtils.concat(smtpServer, ":", smtpPort), e);
 		}
 		return isOk;
@@ -283,7 +283,7 @@ public class Email {
     		try {
 				address[i] = new InternetAddress(mailAddr[i]);
 			} catch (AddressException e) {
-				log.error("转换Email地址 [{}] 为标准格式失�?.", receivers[i], e);
+				log.error("转换Email地址 [{}] 为标准格式失败.", receivers[i], e);
 			}
     	}
     	return address;

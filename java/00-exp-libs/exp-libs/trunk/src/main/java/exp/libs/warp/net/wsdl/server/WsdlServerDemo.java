@@ -9,8 +9,8 @@ import javax.xml.ws.Endpoint;
  * </PRE>
  * 
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2018-06-20
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-06-20
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -22,7 +22,7 @@ public class WsdlServerDemo {
 	/**
 	 * <pre>
 	 * 发布服务.
-	 *   发布服务后，建议切到soapUI捕获此服�?, 然后停掉此处的服�?, 就可以在soapUI调试.
+	 *   发布服务后，建议切到soapUI捕获此服务, 然后停掉此处的服务, 就可以在soapUI调试.
 	 * </pre>
 	 * @param args
 	 */

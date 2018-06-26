@@ -19,8 +19,8 @@ import exp.libs.warp.thread.LoopThread;
  * 节奏风暴扫描器
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-11
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-11
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -28,28 +28,28 @@ public class StormScanner extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(StormScanner.class);
 	
-	/** 默认扫描每个房间的间�?(风险行为�? 频率需要控制，太快可能被查出来，太慢成功率太低) */
+	/** 默认扫描每个房间的间隔(风险行为， 频率需要控制，太快可能被查出来，太慢成功率太低) */
 	private final static long MIN_SCAN_INTERVAL = Config.getInstn().STORM_FREQUENCY();
 	
-	/** 默认试探轮询行为的间�? */
+	/** 默认试探轮询行为的间隔 */
 	private final static long MIN_SLEEP_TIME = 2000;
 	
-	/** 每轮询N次所有房间，则刷新房间列�? */
+	/** 每轮询N次所有房间，则刷新房间列表 */
 	private final static int LOOP_LIMIT = 10;
 	
-	/** 轮询所有房间次�? */
+	/** 轮询所有房间次数 */
 	private int loopCnt;
 	
 	/** 总开关：是否扫描房间 */
 	private boolean scan;
 	
-	/** 人气房间�?(真实房号, 即长�?) */
+	/** 人气房间号(真实房号, 即长号) */
 	private List<Integer> hotRoomIds;
 	
 	private static volatile StormScanner instance;
 	
 	protected StormScanner() {
-		super("节奏风暴扫描�?");
+		super("节奏风暴扫描器");
 		
 		this.loopCnt = LOOP_LIMIT;
 		this.scan = false;
@@ -74,13 +74,13 @@ public class StormScanner extends LoopThread {
 	public void setScan() {
 		scan = !scan;
 		if(scan == true) {
-			loopCnt = LOOP_LIMIT;	// 触发重新扫描房间�?
+			loopCnt = LOOP_LIMIT;	// 触发重新扫描房间号
 		}
 	}
 	
 	@Override
 	protected void _before() {
-		log.info("{} 已启�?", getName());
+		log.info("{} 已启动", getName());
 	}
 
 	@Override
@@ -114,11 +114,11 @@ public class StormScanner extends LoopThread {
 
 	@Override
 	protected void _after() {
-		log.info("{} 已停�?", getName());
+		log.info("{} 已停止", getName());
 	}
 	
 	/**
-	 * 刷新热门直播�?
+	 * 刷新热门直播间
 	 * @return
 	 */
 	public boolean reflashHotLives() {
@@ -127,7 +127,7 @@ public class StormScanner extends LoopThread {
 		if(ListUtils.isNotEmpty(roomIds)) {
 			hotRoomIds.clear();
 			hotRoomIds.addAll(roomIds);
-			log.info("已更�? [Page:{}-{}] �? [{}] 个人气直播间.", 
+			log.info("已更新 [Page:{}-{}] 的 [{}] 个人气直播间.", 
 					range.BGN_PAGE(), range.END_PAGE(), hotRoomIds.size());
 		}
 		return hotRoomIds.isEmpty();

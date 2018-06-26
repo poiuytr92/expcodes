@@ -18,8 +18,8 @@ import exp.xp.layout.VFlowLayout;
  * 升级界面
  * </PRE>
  * <B>PROJECT : </B> exp-xml-paper
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2015-06-01
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-06-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -42,17 +42,17 @@ public class Update extends JFrame {
 	/** 界面初始高度 */
 	private int high = 130;
 	
-	/** 根面�? */
+	/** 根面板 */
 	private JPanel rootPanel;
 	
-	/** 进度�? */
+	/** 进度条 */
 	private JProgressBar progressBar;
 	
 	/** 提示信息 */
 	private JLabel tips;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	public Update() {
 		super("Update");
@@ -74,7 +74,7 @@ public class Update extends JFrame {
 	}
 
 	/**
-	 * 初始化组�?
+	 * 初始化组件
 	 */
 	private void initComponents() {
 		JPanel updatePanel = new JPanel(new VFlowLayout()); {
@@ -101,7 +101,7 @@ public class Update extends JFrame {
 					tSleep(500);
 				}
 				tips.setForeground(Color.RED);
-				tips.setText("老实说这升级功能并没有什么卵�?...  >o<");
+				tips.setText("老实说这升级功能并没有什么卵用...  >o<");
 			};
 		};
 		thread.start();

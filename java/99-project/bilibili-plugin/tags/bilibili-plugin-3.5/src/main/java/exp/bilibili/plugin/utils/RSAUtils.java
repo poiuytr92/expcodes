@@ -19,8 +19,8 @@ import exp.libs.utils.encode.CharsetUtils;
  * RSA密钥编解码工具
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -80,8 +80,8 @@ public class RSAUtils {
 	}
 	
 	/**
-	 * 从字符串中加载公�?
-	 * @param publicKeyStr 公钥数据字符�?
+	 * 从字符串中加载公钥
+	 * @param publicKeyStr 公钥数据字符串
 	 * @throws Exception 加载公钥时产生的异常
 	 */
 	private static RSAPublicKey toPublicKey(String publicKey)  {

@@ -39,8 +39,8 @@ import exp.libs.warp.net.http.HttpUtils;
  * B站直播版聊消息发送器
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -102,13 +102,13 @@ public class MsgSender {
 	
 	private final static String VERCODE_PATH = Config.getInstn().IMG_DIR().concat("/vercode.jpg");
 	
-	/** 最上一次抽奖过的礼物编�?(礼物编号是递增�?) */
+	/** 最上一次抽奖过的礼物编号(礼物编号是递增的) */
 	private static int LAST_RAFFLEID = 0;
 	
-	/** 最上一次抽奖过的节奏风暴编�?(礼物编号是递增�?) */
+	/** 最上一次抽奖过的节奏风暴编号(礼物编号是递增的) */
 	private static int LAST_STORMID = 0;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected MsgSender() {}
 	
 	/**
@@ -121,7 +121,7 @@ public class MsgSender {
 		Map<String, String> params = toPostHeadParams(cookies);
 		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
 		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
-		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(realRoomId));	// 发�?/接收消息的直播间地址
+		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(realRoomId));	// 发送/接收消息的直播间地址
 		return params;
 	}
 	
@@ -153,7 +153,7 @@ public class MsgSender {
 		Map<String, String> params = toGetHeadParams(cookies);
 		params.put(HttpUtils.HEAD.KEY.HOST, SSL_HOST);
 		params.put(HttpUtils.HEAD.KEY.ORIGIN, LIVE_URL);
-		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(String.valueOf(realRoomId)));	// 发�?/接收消息的直播间地址
+		params.put(HttpUtils.HEAD.KEY.REFERER, LIVE_URL.concat(String.valueOf(realRoomId)));	// 发送/接收消息的直播间地址
 		return params;
 	}
 	
@@ -174,10 +174,10 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 从后台秘密通道登陆B�?
+	 * 从后台秘密通道登陆B站
 	 * @param username 账号
 	 * @param password 密码
-	 * @param vccode 验证�?
+	 * @param vccode 验证码
 	 * @param vcCookies 与验证码配套的登陆用cookies
 	 * @return Cookie集合
 	 */
@@ -187,7 +187,7 @@ public class MsgSender {
 		HttpClient client = new HttpClient();
 		
 		try {
-			// 从服务器获取RSA公钥(公钥是固定的)和随机hash�?, 然后使用公钥对密码进行RSA加密
+			// 从服务器获取RSA公钥(公钥是固定的)和随机hash码, 然后使用公钥对密码进行RSA加密
 			String sJson = client.doGet(RSA_KEY_URL, _toLoginHeadParams(""), null);
 			JSONObject json = JSONObject.fromObject(sJson);
 			String hash = JsonUtils.getStr(json, BiliCmdAtrbt.hash);
@@ -221,7 +221,7 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 生成登陆用的请求头参�?
+	 * 生成登陆用的请求头参数
 	 * @param cookies
 	 * @return
 	 */
@@ -234,18 +234,18 @@ public class MsgSender {
 	/**
 	 * 生成登陆用的请求参数
 	 * @param username 账号
-	 * @param password 密码（RSA公钥加密密文�?
-	 * @param vccode 图片验证�?
+	 * @param password 密码（RSA公钥加密密文）
+	 * @param vccode 图片验证码
 	 * @return
 	 */
 	private static Map<String, String> _toLoginRequestParams(
 			String username, String password, String vccode) {
 		Map<String, String> requests = new HashMap<String, String>();
 		requests.put("cType", "2");
-		requests.put("vcType", "1");		// 1:验证码校验方�?;  2:二维码校验方�?
-		requests.put("captcha", vccode);	// 图片验证�?
+		requests.put("vcType", "1");		// 1:验证码校验方式;  2:二维码校验方式
+		requests.put("captcha", vccode);	// 图片验证码
 		requests.put("user", username);	// 账号（明文）
-		requests.put("pwd", password);	// 密码（RSA公钥加密密文�?
+		requests.put("pwd", password);	// 密码（RSA公钥加密密文）
 		requests.put("keep", "true");
 		requests.put("gourl", HOME_URL);	// 登录后的跳转页面
 		return requests;
@@ -312,8 +312,8 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 友爱社签�?
-	 * @return 是否需要持续测试签�?
+	 * 友爱社签到
+	 * @return 是否需要持续测试签到
 	 */
 	public static boolean toAssn() {
 		Map<String, String> headers = toPostHeadParams(Browser.COOKIES());
@@ -340,25 +340,25 @@ public class MsgSender {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			if(code == 0) {
-				goOn = false;	// 已签到成功，不需要继续签�?
+				goOn = false;	// 已签到成功，不需要继续签到
 				
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				if(reason.contains("已领�?")) {
-					goOn = false;	// 已签到过，不需要继续签�?
+				if(reason.contains("已领取")) {
+					goOn = false;	// 已签到过，不需要继续签到
 					
 				} else {
-					log.debug("友爱社签到失�?: {}", reason);
+					log.debug("友爱社签到失败: {}", reason);
 				}
 			}
 		} catch(Exception e) {
-			log.error("友爱社签到失�?: {}", response, e);
+			log.error("友爱社签到失败: {}", response, e);
 		}
 		return goOn;
 	}
 	
 	/**
-	 * 发送弹幕消�?
+	 * 发送弹幕消息
 	 * @param msg 弹幕消息
 	 * @return
 	 */
@@ -379,9 +379,9 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 发送弹幕消�?
+	 * 发送弹幕消息
 	 * @param msg 弹幕消息
-	 * @param roomId 目标直播�?
+	 * @param roomId 目标直播间
 	 * @return
 	 */
 	public static boolean sendChat(String msg, int roomId) {
@@ -389,10 +389,10 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 发送弹幕消�?
+	 * 发送弹幕消息
 	 * @param msg 弹幕消息
 	 * @param color 弹幕颜色
-	 * @param roomId 目标直播�?
+	 * @param roomId 目标直播间
 	 * @return
 	 */
 	public static boolean sendChat(String msg, ChatColor color, int roomId) {
@@ -400,10 +400,10 @@ public class MsgSender {
 	}
 
 	/**
-	 * 发送弹幕消�?
+	 * 发送弹幕消息
 	 * @param msg 弹幕消息
 	 * @param color 弹幕颜色
-	 * @param roomId 目标直播间房�?
+	 * @param roomId 目标直播间房号
 	 * @param cookies 发送用户的cookies
 	 * @return
 	 */
@@ -419,7 +419,7 @@ public class MsgSender {
 			isOk = _analyseChatResponse(response);
 			
 		} else {
-			log.warn("发送弹幕失�?: 无效的房间号 [{}]", roomId);
+			log.warn("发送弹幕失败: 无效的房间号 [{}]", roomId);
 		}
 		return isOk;
 	}
@@ -434,7 +434,7 @@ public class MsgSender {
 	private static Map<String, String> _toChatRequestParams(
 			String msg, String realRoomId, String color) {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put("rnd", String.valueOf(System.currentTimeMillis() / 1000));	// 时间�?
+		params.put("rnd", String.valueOf(System.currentTimeMillis() / 1000));	// 时间戳
 		params.put("msg", msg);		// 弹幕内容
 		params.put("color", color);	// 弹幕颜色
 		params.put("roomid", realRoomId);	// 接收消息的房间号
@@ -457,11 +457,11 @@ public class MsgSender {
 				isOk = true;
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				UIUtils.log("发送弹幕失�?: ", reason);
+				UIUtils.log("发送弹幕失败: ", reason);
 			}
 		} catch(Exception e) {
-			UIUtils.log("发送弹幕失�?: 服务器无响应");
-			log.error("发送弹幕失�?: {}", response, e);
+			UIUtils.log("发送弹幕失败: 服务器无响应");
+			log.error("发送弹幕失败: {}", response, e);
 		}
 		return isOk;
 	}
@@ -469,8 +469,8 @@ public class MsgSender {
 	/**
 	 * 扫描当前的人气直播间房号列表
 	 * @param cookies 扫描用的cookies
-	 * @param MAX_PAGES 最大的查询分页(每页最�?30个房�?)
-	 * @param MIN_ONLINE 要求房间最小人�?(达标才扫�?)
+	 * @param MAX_PAGES 最大的查询分页(每页最多30个房间)
+	 * @param MIN_ONLINE 要求房间最小人数(达标才扫描)
 	 * @return
 	 */
 	public static List<Integer> queryTopLiveRoomIds(String cookies, 
@@ -482,7 +482,7 @@ public class MsgSender {
 		
 		List<Integer> roomIds = new LinkedList<Integer>();
 		HttpClient client = new HttpClient();
-		int pageOffset = TimeUtils.isNight() ? 1 : 0;	// 当为晚上�?, 不选择首页房间(抢风暴成功率太低)
+		int pageOffset = TimeUtils.isNight() ? 1 : 0;	// 当为晚上时, 不选择首页房间(抢风暴成功率太低)
 		for(int page = 1 + pageOffset; page <= MAX_PAGES + pageOffset; page++) {
 			request.put("page", String.valueOf(page));
 			String response = client.doGet(LIVE_LIST_URL, header, request);
@@ -511,13 +511,13 @@ public class MsgSender {
 					roomIds.add(realRoomId);
 				}
 				
-				// 顺便关联房间�?(短号)与真实房�?(长号)
+				// 顺便关联房间号(短号)与真实房号(长号)
 				int shortId = JsonUtils.getInt(room, BiliCmdAtrbt.short_id, -1);
 				int roomId = (shortId > 0 ? shortId : realRoomId);
 				RoomMgr.getInstn().relate(roomId, realRoomId);
 			}
 		} catch(Exception e) {
-			log.error("提取人气直播房间号失�?: {}", response, e);
+			log.error("提取人气直播房间号失败: {}", response, e);
 		}
 		return roomIds;
 	}
@@ -542,7 +542,7 @@ public class MsgSender {
 				List<String> raffleIds = _getStormIds(roomId, response);
 				cnt = _joinStorms(roomId, raffleIds);
 				sum += cnt;
-			} while(cnt > 0);	// 对于存在节奏风暴的房�?, 再扫描一�?(可能有人连续送节奏风�?)
+			} while(cnt > 0);	// 对于存在节奏风暴的房间, 再扫描一次(可能有人连续送节奏风暴)
 			ThreadUtils.tSleep(scanInterval);
 		}
 		client.close();
@@ -580,7 +580,7 @@ public class MsgSender {
 				}
 			}
 		} catch(Exception e) {
-			log.error("提取直播�? [{}] 的节奏风暴信息失�?: {}", roomId, response, e);
+			log.error("提取直播间 [{}] 的节奏风暴信息失败: {}", roomId, response, e);
 		}
 		return raffleIds;
 	}
@@ -594,7 +594,7 @@ public class MsgSender {
 	private static int _joinStorms(int roomId, List<String> raffleIds) {
 		int cnt = 0;
 		if(raffleIds.size() > 0) {
-			String msg = StrUtils.concat("直播�? [", roomId, 
+			String msg = StrUtils.concat("直播间 [", roomId, 
 					"] 开启了节奏风暴 [x", raffleIds.size(), "] !!!");
 			UIUtils.notify(msg);
 			
@@ -614,20 +614,20 @@ public class MsgSender {
 		boolean isOk = true;
 		String errDesc = joinLottery(STORM_JOIN_URL, roomId, raffleId, Browser.COOKIES(), LotteryType.STORM);
 		if(StrUtils.isEmpty(errDesc)) {
-			log.info("参与直播�? [{}] 抽奖成功", roomId);
-			UIUtils.statistics("成功(节奏风暴): 抽奖直播�? [", roomId, "]");
+			log.info("参与直播间 [{}] 抽奖成功", roomId);
+			UIUtils.statistics("成功(节奏风暴): 抽奖直播间 [", roomId, "]");
 			UIUtils.updateLotteryCnt();
 			
 		} else {
-			log.info("参与直播�? [{}] 抽奖失败: {}", roomId, errDesc);
-			UIUtils.statistics("失败(", errDesc, "): 抽奖直播�? [", roomId, "]");
+			log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
+			UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
 			isOk = false;
 		}
 		return isOk;
 	}
 	
 	/**
-	 * 小电视抽�?
+	 * 小电视抽奖
 	 * @param roomId
 	 * @param raffleId
 	 * @return
@@ -667,9 +667,9 @@ public class MsgSender {
 						cnt++;
 					} else {
 						if(!errDesc.contains("你已加入抽奖")) {
-							UIUtils.statistics("失败(", errDesc, "): 抽奖直播�? [", roomId, "]");
+							UIUtils.statistics("失败(", errDesc, "): 抽奖直播间 [", roomId, "]");
 						}
-						log.info("参与直播�? [{}] 抽奖失败: {}", roomId, errDesc);
+						log.info("参与直播间 [{}] 抽奖失败: {}", roomId, errDesc);
 					}
 				}
 			}
@@ -678,7 +678,7 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 检查是否存在抽�?
+	 * 检查是否存在抽奖
 	 * @param url
 	 * @param roomId
 	 * @param cookies
@@ -789,8 +789,8 @@ public class MsgSender {
 	/**
 	 * 
 	 * @param response 
-	 *   小电�?     {"code":0,"msg":"加入成功","message":"加入成功","data":{"3392133":"small","511589":"small","8536920":"small","raffleId":"46506","1275939":"small","20177919":"small","12768615":"small","1698233":"small","4986301":"small","102015208":"small","40573511":"small","4799261":"small","from":"喵熊°","time":59,"30430088":"small","558038":"small","5599305":"small","8068250":"small","16293951":"small","7294374":"small","type":"openfire","7384826":"small","2229668":"small","7828145":"small","2322836":"small","915804":"small","86845000":"small","3076423":"small","roomid":"97835","5979210":"small","16345975":"small","7151219":"small","1479304":"small","19123719":"small","29129155":"small","7913373":"small","17049098":"small","9008673":"small","23406718":"small","141718":"small","27880394":"small","942837":"small","107844643":"small","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg","31437943":"small","34810599":"small","102994056":"small","31470791":"small","26643554":"small","29080508":"small","14709391":"small","14530810":"small","46520094":"small","2142310":"small","status":2,"77959868":"small","76979807":"small"}}
-	 *   节奏风暴 {"code":0,"msg":"","message":"","data":{"gift_id":39,"title":"节奏风暴","content":"<p>你是�? 35 位跟风大�?<br />恭喜你获得一个亿�?(7天有效期)</p>","mobile_content":"你是�? 35 位跟风大�?","gift_img":"http://static.hdslb.com/live-static/live-room/images/gift-section/gift-39.png?2017011901","gift_num":1,"gift_name":"亿圆"}}
+	 *   小电视     {"code":0,"msg":"加入成功","message":"加入成功","data":{"3392133":"small","511589":"small","8536920":"small","raffleId":"46506","1275939":"small","20177919":"small","12768615":"small","1698233":"small","4986301":"small","102015208":"small","40573511":"small","4799261":"small","from":"喵熊°","time":59,"30430088":"small","558038":"small","5599305":"small","8068250":"small","16293951":"small","7294374":"small","type":"openfire","7384826":"small","2229668":"small","7828145":"small","2322836":"small","915804":"small","86845000":"small","3076423":"small","roomid":"97835","5979210":"small","16345975":"small","7151219":"small","1479304":"small","19123719":"small","29129155":"small","7913373":"small","17049098":"small","9008673":"small","23406718":"small","141718":"small","27880394":"small","942837":"small","107844643":"small","face":"http://i1.hdslb.com/bfs/face/66b91fc04ccd3ccb23ad5f0966a7c3da5600b0cc.jpg","31437943":"small","34810599":"small","102994056":"small","31470791":"small","26643554":"small","29080508":"small","14709391":"small","14530810":"small","46520094":"small","2142310":"small","status":2,"77959868":"small","76979807":"small"}}
+	 *   节奏风暴 {"code":0,"msg":"","message":"","data":{"gift_id":39,"title":"节奏风暴","content":"<p>你是前 35 位跟风大师<br />恭喜你获得一个亿圆(7天有效期)</p>","mobile_content":"你是前 35 位跟风大师","gift_img":"http://static.hdslb.com/live-static/live-room/images/gift-section/gift-39.png?2017011901","gift_num":1,"gift_name":"亿圆"}}
 	 * @return
 	 */
 	private static String _analyseLotteryResponse(String response) {
@@ -828,10 +828,10 @@ public class MsgSender {
 		if(task != DailyTask.NULL) {
 			nextTaskTime = task.getEndTime() * 1000;
 			
-			// 已到达任务执行时�?
+			// 已到达任务执行时间
 			if(nextTaskTime <= System.currentTimeMillis()) {
 				if(!_doDailyTasks(header, task)) {
-					nextTaskTime = -1;	// 标记不存在下一轮任�?
+					nextTaskTime = -1;	// 标记不存在下一轮任务
 				}
 			}
 		}
@@ -842,7 +842,7 @@ public class MsgSender {
 	 * 执行小学数学日常任务
 	 * @param header
 	 * @param task
-	 * @return 是否存在下一轮任�?
+	 * @return 是否存在下一轮任务
 	 */
 	private static boolean _doDailyTasks(Map<String, String> header, DailyTask task) {
 		boolean isDone = false;
@@ -851,17 +851,17 @@ public class MsgSender {
 			do {
 				ThreadUtils.tSleep(SLEEP_TIME);
 				answer = getAnswer(header);
-			} while(answer <= 0);	// 若解析二维码图片失败, 则重新解�?
+			} while(answer <= 0);	// 若解析二维码图片失败, 则重新解析
 			
 			ThreadUtils.tSleep(SLEEP_TIME);
 			isDone = doTask(header, task, answer);
-		} while(!isDone);	// 若计算二维码结果错误, 则重新计�?
+		} while(!isDone);	// 若计算二维码结果错误, 则重新计算
 		
 		return task.existNext();
 	}
 	
 	/**
-	 * 提取当前的小学数学日常任�?
+	 * 提取当前的小学数学日常任务
 	 * 
 	 * {"code":0,"msg":"","data":{"minute":6,"silver":80,"time_start":1514015075,"time_end":1514015435,"times":3,"max_times":5}}
 	 * {"code":0,"msg":"","data":{"minute":9,"silver":190,"time_start":1514036545,"time_end":1514037085,"times":3,"max_times":5}}
@@ -902,8 +902,8 @@ public class MsgSender {
 	 * 提交小学数学日常任务
 	 * 
 	 * {"code":0,"msg":"ok","data":{"silver":7266,"awardSilver":80,"isEnd":0}}
-	 * {"code":-902,"msg":"验证码错�?","data":[]}
-	 * {"code":-903,"msg":"已经领取过这个宝�?","data":{"surplus":-25234082.15}}
+	 * {"code":-902,"msg":"验证码错误","data":[]}
+	 * {"code":-903,"msg":"已经领取过这个宝箱","data":{"surplus":-25234082.15}}
 	 * 
 	 * @param header
 	 * @param task
@@ -923,8 +923,8 @@ public class MsgSender {
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
 			isOk = (code == 0);
 			if(isOk == true) {
-				UIUtils.log("已完成小学数学任�?: ", task.getCurRound(), "/", 
-						task.getMaxRound(), "�?-", task.getStep(), "分钟");
+				UIUtils.log("已完成小学数学任务: ", task.getCurRound(), "/", 
+						task.getMaxRound(), "轮-", task.getStep(), "分钟");
 			}
 		} catch(Exception e) {
 			log.error("执行日常任务失败: {}", response, e);
@@ -935,7 +935,7 @@ public class MsgSender {
 	/**
 	 * 获取B站link中心针对本插件的授权校验标签
 	 * @param BILIBILI_URL B站link中心
-	 * @return {"code":0,"msg":"OK","message":"OK","data":["W:M-亚絲�?","B:","T:20180301","V:2.0"]}
+	 * @return {"code":0,"msg":"OK","message":"OK","data":["W:M-亚絲娜","B:","T:20180301","V:2.0"]}
 	 */
 	public static String queryCertTags(final String BILIBILI_URL) {
 		Map<String, String> headers = toGetHeadParams("");
@@ -947,10 +947,10 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 发送私�?
+	 * 发送私信
 	 * @param sendId 发送账号的用户ID
 	 * @param recvId 接收账号的用户ID
-	 * @param msg 发送消�?
+	 * @param msg 发送消息
 	 * @return
 	 */
 	public static boolean sendPrivateMsg(String sendId, String recvId, String msg) {
@@ -987,17 +987,17 @@ public class MsgSender {
 				isOk = true;
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
-				log.warn("发送私信失�?: {}", reason);
+				log.warn("发送私信失败: {}", reason);
 			}
 		} catch(Exception e) {
-			log.error("发送私信失�?: {}", response, e);
+			log.error("发送私信失败: {}", response, e);
 		}
 		return isOk;
 	}
 	
 	/**
-	 * 2018春节活动：查询当前红包奖�?
-	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月�?","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权�?1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权�?1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯�?","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换�?","stock_num":99999,"exchange_limit":0,"price":6666}}}
+	 * 2018春节活动：查询当前红包奖池
+	 * @return {"code":0,"msg":"success","message":"success","data":{"red_bag_num":2290,"round":70,"pool_list":[{"award_id":"guard-3","award_name":"舰长体验券（1个月）","stock_num":0,"exchange_limit":5,"user_exchange_count":5,"price":6699},{"award_id":"gift-113","award_name":"新春抽奖","stock_num":2,"exchange_limit":0,"user_exchange_count":0,"price":23333},{"award_id":"danmu-gold","award_name":"金色弹幕特权（1天）","stock_num":19,"exchange_limit":42,"user_exchange_count":42,"price":2233},{"award_id":"uname-gold","award_name":"金色昵称特权（1天）","stock_num":20,"exchange_limit":42,"user_exchange_count":42,"price":8888},{"award_id":"stuff-2","award_name":"经验曜石","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":233},{"award_id":"title-89","award_name":"爆竹头衔","stock_num":0,"exchange_limit":10,"user_exchange_count":10,"price":888},{"award_id":"gift-3","award_name":"B坷垃","stock_num":0,"exchange_limit":1,"user_exchange_count":1,"price":450},{"award_id":"gift-109","award_name":"红灯笼","stock_num":0,"exchange_limit":500,"user_exchange_count":500,"price":15}],"pool":{"award_id":"award-pool","award_name":"刷新兑换池","stock_num":99999,"exchange_limit":0,"price":6666}}}
 	 */
 	public static String queryRedbagPool() {
 		Map<String, String> headers = toGetHeadParams(Browser.COOKIES(), "pages/1703/spring-2018.html");
@@ -1008,7 +1008,7 @@ public class MsgSender {
 	}
 	
 	/**
-	 * 2018春节活动：兑换红�?
+	 * 2018春节活动：兑换红包
 	 * @param id 奖品编号
 	 * @param num 兑换数量
 	 * @return 

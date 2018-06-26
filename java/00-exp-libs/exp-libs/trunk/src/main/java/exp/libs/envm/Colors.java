@@ -13,53 +13,53 @@ import exp.libs.utils.other.StrUtils;
  * 颜色枚举.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Colors {
 	
 	public final static Colors BLACK = new Colors(
-			"black", "无脑�?", 0, 0, 0);
+			"black", "无脑黑", 0, 0, 0);
 	
 	public final static Colors WHITE = new Colors(
-			"white", "脑残�?", 255, 255, 255);
+			"white", "脑残白", 255, 255, 255);
 	
 	public final static Colors RED = new Colors(
-			"red", "姨妈�?", 255, 104, 104);
+			"red", "姨妈红", 255, 104, 104);
 	
 	public final static Colors BLUE = new Colors(
-			"blue", "海底�?", 102, 204, 255);
+			"blue", "海底蓝", 102, 204, 255);
 	
 	public final static Colors PURPLE = new Colors(
-			"purple", "基佬�?", 227, 63, 255);
+			"purple", "基佬紫", 227, 63, 255);
 
 	public final static Colors CYAN = new Colors(
-			"cyan", "散光�?", 0, 255, 252);
+			"cyan", "散光青", 0, 255, 252);
 	
 	public final static Colors GREEN = new Colors(
-			"green", "宝强�?", 126, 255, 0);
+			"green", "宝强绿", 126, 255, 0);
 	
 	public final static Colors SEA_GREEN = new Colors(
-			"sea_green", "深海�?", 64, 128, 0);
+			"sea_green", "深海绿", 64, 128, 0);
 	
 	public final static Colors YELLOW = new Colors(
-			"yellow", "菊花�?", 255, 237, 79);
+			"yellow", "菊花黄", 255, 237, 79);
 	
 	public final static Colors ORANGE = new Colors(
-			"orange", "柠檬�?", 255, 152, 0);
+			"orange", "柠檬橙", 255, 152, 0);
 	
 	public final static Colors PINK = new Colors(
-			"pink", "情书�?", 255, 115, 154);
+			"pink", "情书粉", 255, 115, 154);
 	
 	public final static Colors PEACH_PINK = new Colors(
-			"peachPink", "桃花�?", 250, 173, 229);
+			"peachPink", "桃花粉", 250, 173, 229);
 	
 	public final static Colors GOLD = new Colors(
-			"gold", "土豪�?", 251, 254, 182);
+			"gold", "土豪金", 251, 254, 182);
 	
-	/** 颜色�?: 用于取随机颜�? */
+	/** 颜色集: 用于取随机颜色 */
 	private final static List<Colors> COLORS = Arrays.asList(new Colors[] {
 			BLACK, WHITE, RED, BLUE, PURPLE, CYAN, GREEN, SEA_GREEN, 
 			YELLOW, ORANGE, PINK, PEACH_PINK, GOLD
@@ -81,7 +81,7 @@ public class Colors {
 	}
 	
 	/**
-	 * RGB颜色值计�?
+	 * RGB颜色值计算
 	 * @param R
 	 * @param G
 	 * @param B

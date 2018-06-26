@@ -25,39 +25,39 @@ import exp.libs.utils.other.ListUtils;
  * TensorFlow深度学习训练模型调用接口
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2018-03-04
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-04
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class TensorFlowAPI {
     
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(TensorFlowAPI.class);
 	
-    /** PB训练模型(TensorFlow用数据流图表示模�?) */
+    /** PB训练模型(TensorFlow用数据流图表示模型) */
     private final Graph graph;
     
     /** TensorFlow会话 */
     private final Session session;
     
-    /** TensorFlow执行�? */
+    /** TensorFlow执行器 */
     private Runner runner;
     
-    /** TensorFlow输入张量�? */
+    /** TensorFlow输入张量表 */
     private Map<String, Tensor<?>> feedTensors;
     
-    /** TensorFlow输出张量�? */
+    /** TensorFlow输出张量表 */
     private Map<String, Tensor<?>> fetchTensors;
     
     /** 调试模式 */
     private boolean debug;
     
-    /** 运行日志统计�? */
+    /** 运行日志统计器 */
     private RunStats runStats;
     
     /**
-     * 构造函�?
+     * 构造函数
      * @param pbModelFilePath 已训练好的PB模型文件路径
      */
     public TensorFlowAPI(String pbModelFilePath) {
@@ -65,9 +65,9 @@ public class TensorFlowAPI {
     }
     
     /**
-     * 构造函�?
+     * 构造函数
      * @param pbModelFilePath 已训练好的PB模型文件路径
-     * @param debug 是否启动调试模式：执行运行日志统�? (需调用本地化接口，建议为false)
+     * @param debug 是否启动调试模式：执行运行日志统计 (需调用本地化接口，建议为false)
      */
     public TensorFlowAPI(String pbModelFilePath, boolean debug) {
         this.graph = loadGraph(pbModelFilePath);
@@ -119,7 +119,7 @@ public class TensorFlowAPI {
     }
     
     /**
-     * 提取模型中所有张量节点的名称和类�?
+     * 提取模型中所有张量节点的名称和类型
      * @return Map: name->type
      */
     public Map<String, String> listAllShapes() {
@@ -133,9 +133,9 @@ public class TensorFlowAPI {
     }
     
     /**
-     * 设置输入张量的�?
-     * @param inputName 输入张量的名�?, 格式�? name:index (若无index则默认为0)
-     * @param datas 输入张量的值（降维�?1维矩阵的数据�?
+     * 设置输入张量的值
+     * @param inputName 输入张量的名称, 格式为 name:index (若无index则默认为0)
+     * @param datas 输入张量的值（降维到1维矩阵的数据）
      * @param dims 输入张量的原矩阵维度列表
      */
     public void feed(String inputName, float[] datas, long... dims) {
@@ -143,9 +143,9 @@ public class TensorFlowAPI {
     }
     
     /**
-     * 设置输入张量的�?
-     * @param inputName 输入张量的名�?, 格式�? name:index (若无index则默认为0)
-     * @param datas 输入张量的值（降维�?1维矩阵的数据�?
+     * 设置输入张量的值
+     * @param inputName 输入张量的名称, 格式为 name:index (若无index则默认为0)
+     * @param datas 输入张量的值（降维到1维矩阵的数据）
      */
     public void feed(String inputName, byte[] datas) {
         addFeed(inputName, Tensor.create(datas));
@@ -153,7 +153,7 @@ public class TensorFlowAPI {
     
     /**
      * 添加输入张量
-     * @param inputName 输入张量的名�?, 格式�? name:index (若无index则默认为0)
+     * @param inputName 输入张量的名称, 格式为 name:index (若无index则默认为0)
      * @param tensor 输入张量对象
      */
 	private void addFeed(String inputName, Tensor<?> tensor) {
@@ -165,7 +165,7 @@ public class TensorFlowAPI {
     
     /**
      * 运行TensorFlow模型
-     * @param outputNames 输出张量的名称列�?, 单个张量名称格式�? name:index (若无index则默认为0)
+     * @param outputNames 输出张量的名称列表, 单个张量名称格式为 name:index (若无index则默认为0)
      * @return 是否运行成功
      */
     public boolean run(String... outputNames) {
@@ -195,7 +195,7 @@ public class TensorFlowAPI {
             	tensors = runner.run();
             }
             
-            // 记录得到的所有输出张�?
+            // 记录得到的所有输出张量
             for(int i = 0; i < outputNames.length; i++) {
             	String outputName = outputNames[i];
             	Tensor<?> tensor = tensors.get(i);
@@ -207,7 +207,7 @@ public class TensorFlowAPI {
         	log.error("运行TensorFlow模型失败.\r\n输入张量列表: {}\r\n输出张量列表: {}", 
         			feedTensors.keySet(), Arrays.asList(outputNames), e);
         	
-        // 重置模型执行�?
+        // 重置模型执行器
         } finally {
             closeFeeds();
             runner = session.runner();
@@ -217,7 +217,7 @@ public class TensorFlowAPI {
     
     /**
      * 获取运行日志统计概要.
-     * 	需在执行{@link run}方法时打开debug开�?
+     * 	需在执行{@link run}方法时打开debug开关
      * @return 运行日志统计概要
      */
     public String getRunlog() {
@@ -225,21 +225,21 @@ public class TensorFlowAPI {
     }
     
     /**
-     * 获取输出张量的�?
-     * @param outputName 输出张量的名�?, 格式�? name:index (若无index则默认为0)
-     * @return 输出张量的值（降维�?1维矩阵的数据�?
+     * 获取输出张量的值
+     * @param outputName 输出张量的名称, 格式为 name:index (若无index则默认为0)
+     * @return 输出张量的值（降维到1维矩阵的数据）
      */
     public float[] fetch(String outputName) {
     	
-		// 提取输出张量的节�?
+		// 提取输出张量的节点
 		Operation op = getGraphOperation(outputName);
 		
-		// 获取输出张量降维到一维后的矩阵维�?
+		// 获取输出张量降维到一维后的矩阵维度
 		TensorIndex ti = TensorIndex.parse(outputName);
 		final int dimension = (int) op.output(ti.IDX()).
 				shape().size(1);	// FIXME 输出张量最外层默认有一个空维度, 因此不取size(0)
 		
-		// 存储输出张量的矩阵数�?
+		// 存储输出张量的矩阵数据
 		float[] output = new float[dimension];
 		FloatBuffer buffer = FloatBuffer.wrap(output);
 		Tensor<?> tensor = fetchTensors.get(outputName);
@@ -264,7 +264,7 @@ public class TensorFlowAPI {
     }
     
     /**
-     * 关闭所有输入张�?
+     * 关闭所有输入张量
      */
     private void closeFeeds() {
     	Iterator<Tensor<?>> tensors = feedTensors.values().iterator();
@@ -275,7 +275,7 @@ public class TensorFlowAPI {
     }
     
     /**
-     * 关闭所有输出张�?
+     * 关闭所有输出张量
      */
     private void closeFetches() {
     	Iterator<Tensor<?>> tensors = fetchTensors.values().iterator();

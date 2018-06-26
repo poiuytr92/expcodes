@@ -17,14 +17,14 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * 直播分区查询
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class LiveArea extends __XHR {
 
-	/** 游戏�?/手游区房间列表URL */
+	/** 游戏区/手游区房间列表URL */
 	private final static String GAME_URL = Config.getInstn().GAME_URL();
 
 	/** 娱乐区房间列表URL */
@@ -34,8 +34,8 @@ public class LiveArea extends __XHR {
 	private final static String DRAW_URL = Config.getInstn().DRAW_URL();
 	
 	/**
-	 * 获取每个直播分区的TOP1房间�?
-	 * @return TOP1房间号列�?
+	 * 获取每个直播分区的TOP1房间号
+	 * @return TOP1房间号列表
 	 */
 	public static Map<Area, Integer> getAreaTopOnes() {
 		Map<Area, Integer> roomIds = new HashMap<Area, Integer>();
@@ -47,9 +47,9 @@ public class LiveArea extends __XHR {
 	}
 	
 	/**
-	 * 获取游戏区top1房间�?
-	 * @param isApp true:手机平台（对应手游区�?; false:PC平台（对应游戏区�?
-	 * @return top1房间�?
+	 * 获取游戏区top1房间号
+	 * @param isApp true:手机平台（对应手游区）; false:PC平台（对应游戏区）
+	 * @return top1房间号
 	 */
 	private static int getGameTopOne(boolean isApp) {
 		final Area AREA = isApp ? Area.APP_GAME : Area.PC_GAME;
@@ -91,14 +91,14 @@ public class LiveArea extends __XHR {
 		request.put(BiliCmdAtrbt.cate_id, "0");
 		request.put(BiliCmdAtrbt.area_id, areaId);
 		request.put(BiliCmdAtrbt.sort_type, "online");
-		request.put(BiliCmdAtrbt.page, "1");		// 取首�?
-		request.put(BiliCmdAtrbt.page_size, "1");	// 只取1个房�?
+		request.put(BiliCmdAtrbt.page, "1");		// 取首页
+		request.put(BiliCmdAtrbt.page_size, "1");	// 只取1个房间
 		return request;
 	}
 	         
  	/**
-	 * 获取娱乐区top1房间�?
-	 * @return top1房间�?
+	 * 获取娱乐区top1房间号
+	 * @return top1房间号
 	 */
 	private static int getAmuseTopOne() {
 		Map<String, String> header = GET_HEADER("", "/pages/area/ent");
@@ -124,8 +124,8 @@ public class LiveArea extends __XHR {
 	}
 	
 	/**
-	 * 获取绘画区top1房间�?
-	 * @return top1房间�?
+	 * 获取绘画区top1房间号
+	 * @return top1房间号
 	 */
 	private static int getDrawTopOne() {
 		Map<String, String> header = GET_HEADER("", "/pages/area/draw");
@@ -160,7 +160,7 @@ public class LiveArea extends __XHR {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.area, "draw");
 		request.put(BiliCmdAtrbt.order, "live_time");
-		request.put(BiliCmdAtrbt.page, "1");		// 取首�?
+		request.put(BiliCmdAtrbt.page, "1");		// 取首页
 		return request;
 	}
 	

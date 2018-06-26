@@ -8,8 +8,8 @@ import java.util.List;
  * FTP连接操作接口
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-14
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -49,7 +49,7 @@ public interface FTPConnection {
 	 * 
 	 * @param remoteDirectory
 	 *            远程目录
-	 * @return 返回文件绝对路径名称的列�?
+	 * @return 返回文件绝对路径名称的列表
 	 * @throws Exception
 	 *             异常信息
 	 */
@@ -61,7 +61,7 @@ public interface FTPConnection {
 	 * 
 	 * @param remoteDirectory
 	 *            远程目录
-	 * @return 返回文件绝对路径名称的列�?
+	 * @return 返回文件绝对路径名称的列表
 	 * @throws IOException 
 	 */
 	public List<String> listDirs(String remoteDirectory) throws IOException;
@@ -75,16 +75,16 @@ public interface FTPConnection {
 	/**
 	 * 获取文件大小
 	 *
-	 * @param remoteFileName 远程文件�?
+	 * @param remoteFileName 远程文件名
 	 * @return
 	 * @throws IOException 
 	 */
 	public long getFileLength(String remoteFileName) throws IOException;
 	
 	/**
-	 * 获取文件最后修改时�?
+	 * 获取文件最后修改时间
 	 *
-	 * @param remoteFileName 远程文件�?
+	 * @param remoteFileName 远程文件名
 	 * @return
 	 * @throws IOException 
 	 */

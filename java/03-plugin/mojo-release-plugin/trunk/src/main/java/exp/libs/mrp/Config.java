@@ -13,8 +13,8 @@ import exp.libs.utils.other.StrUtils;
  * 配置类.
  * </PRE>
  * <B>PROJECT : </B> mojo-release-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-05-15
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-05-15
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -78,7 +78,7 @@ public class Config {
 	
 	public static Config createInstn(MvnInstallMojo mvn) {
 		if(mvn == null) {
-			Log.error("初始�? mojo-release-plugin 失败");
+			Log.error("初始化 mojo-release-plugin 失败");
 			System.exit(1);
 		}
 		
@@ -101,7 +101,7 @@ public class Config {
 		if(instance == null) {
 			synchronized (Config.class) {
 				if(instance == null) {
-					Log.error("mojo-release-plugin 尚未初始�?");
+					Log.error("mojo-release-plugin 尚未初始化");
 					System.exit(1);
 				}
 			}
@@ -129,7 +129,7 @@ public class Config {
 			this.xms = mvn.getXms().trim();
 			this.xmx = mvn.getXmx().trim();
 			this.jdkParams = mvn.getJdkParams().trim();
-			this.threadSuffix = mvn.getThreadSuffix().trim().concat(" ");	// 线程后缀必须至少有一个空�?, 便于sh脚本定位线程�?
+			this.threadSuffix = mvn.getThreadSuffix().trim().concat(" ");	// 线程后缀必须至少有一个空格, 便于sh脚本定位线程号
 			this.cmpPathMode = CmpPathMode.toMode(mvn.getCmpPathMode().trim());
 			this.proguardDir = StrUtils.concat(releaseDir, PROGUARD_SUFFIX);
 			this.proguard = BoolUtils.toBool(mvn.getProguard().trim(), false);

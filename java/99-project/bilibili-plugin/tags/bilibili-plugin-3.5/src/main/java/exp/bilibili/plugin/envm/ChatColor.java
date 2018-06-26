@@ -13,44 +13,44 @@ import exp.libs.utils.other.StrUtils;
  * 弹幕颜色.
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ChatColor {
 	
 	public final static ChatColor WHITE = new ChatColor(
-			"white", "脑残�?", 255, 255, 255);
+			"white", "脑残白", 255, 255, 255);
 	
 	public final static ChatColor RED = new ChatColor(
-			"red", "姨妈�?", 255, 104, 104);
+			"red", "姨妈红", 255, 104, 104);
 	
 	public final static ChatColor BLUE = new ChatColor(
-			"blue", "海底�?", 102, 204, 255);
+			"blue", "海底蓝", 102, 204, 255);
 	
 	public final static ChatColor PURPLE = new ChatColor(
-			"purple", "基佬�?", 227, 63, 255);
+			"purple", "基佬紫", 227, 63, 255);
 
 	public final static ChatColor CYAN = new ChatColor(
-			"cyan", "散光�?", 0, 255, 252);
+			"cyan", "散光青", 0, 255, 252);
 	
 	public final static ChatColor GREEN = new ChatColor(
-			"green", "宝强�?", 126, 255, 0);
+			"green", "宝强绿", 126, 255, 0);
 	
 	public final static ChatColor YELLOW = new ChatColor(
-			"yellow", "菊花�?", 255, 237, 79);
+			"yellow", "菊花黄", 255, 237, 79);
 	
 	public final static ChatColor ORANGE = new ChatColor(
-			"orange", "柠檬�?", 255, 152, 0);
+			"orange", "柠檬橙", 255, 152, 0);
 	
 	public final static ChatColor PINK = new ChatColor(
-			"pink", "蜜桃�?", 255, 115, 154);
+			"pink", "蜜桃粉", 255, 115, 154);
 	
 	public final static ChatColor GOLD = new ChatColor(
-			"gold", "土豪�?", 251, 254, 182);
+			"gold", "土豪金", 251, 254, 182);
 	
-	/** 颜色�?: 用于取随机颜�? */
+	/** 颜色集: 用于取随机颜色 */
 	private final static List<ChatColor> COLORS = Arrays.asList(new ChatColor[] {
 			WHITE, RED, BLUE, PURPLE, CYAN, GREEN, YELLOW, ORANGE, PINK, GOLD
 	});
@@ -71,7 +71,7 @@ public class ChatColor {
 	}
 	
 	/**
-	 * RGB颜色值计�?
+	 * RGB颜色值计算
 	 * @param R
 	 * @param G
 	 * @param B

@@ -11,8 +11,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * NioSocket客户端端业务处理器 样例
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-08-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

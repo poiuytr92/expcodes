@@ -40,30 +40,30 @@ import exp.libs.utils.other.StrUtils;
  * 压缩/解压工具
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-01-19
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-01-19
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class CompressUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(CompressUtils.class);
 	
 	/** 默认压缩编码 */
 	public final static String DEFAULT_ENCODE = Charset.UTF8;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected CompressUtils() {}
 	
 	/**
 	 * <PRE>
 	 * 压缩文件.
-	 * 	压缩算法为zip�? 得到的压缩文件与filePath同目�?.
+	 * 	压缩算法为zip， 得到的压缩文件与filePath同目录.
 	 * </PRE>
 	 * 
-	 * @param filePath 被压缩的文件路径（路径包含文件名�?
-	 * @return 压缩成功的文件路�? (若失败返回空�?)
+	 * @param filePath 被压缩的文件路径（路径包含文件名）
+	 * @return 压缩成功的文件路径 (若失败返回空串)
 	 */
 	public static String compress(String filePath) {
 		return compress(filePath, FileType.ZIP);
@@ -72,12 +72,12 @@ public class CompressUtils {
 	/**
 	 * <PRE>
 	 * 使用指定算法压缩文件.
-	 * 	得到的压缩文件与filePath同目�?.
+	 * 	得到的压缩文件与filePath同目录.
 	 * </PRE>
 	 * 
-	 * @param filePath 被压缩的文件路径（路径包含文件名�?
-	 * @param fileType 期望得到的压缩文件类�?(亦即压缩算法, 默认为zip)
-	 * @return 压缩成功的文件路�? (若失败返回空�?)
+	 * @param filePath 被压缩的文件路径（路径包含文件名）
+	 * @param fileType 期望得到的压缩文件类型(亦即压缩算法, 默认为zip)
+	 * @return 压缩成功的文件路径 (若失败返回空串)
 	 */
 	public static String compress(String filePath, FileType fileType) {
 		fileType = (fileType == null ? FileType.ZIP : fileType);
@@ -91,7 +91,7 @@ public class CompressUtils {
 	 * 	压缩算法为zip.
 	 * </PRE>
 	 * 
-	 * @param srcPath 被压缩的文件路径（路径包含文件名�?
+	 * @param srcPath 被压缩的文件路径（路径包含文件名）
 	 * @param snkPath 得到压缩文件的路径（路径包含文件名）
 	 * @return true:压缩成功; false:压缩失败
 	 */
@@ -102,9 +102,9 @@ public class CompressUtils {
 	/**
 	 * 使用指定算法压缩文件.
 	 * 
-	 * @param srcPath 被压缩的文件路径（路径包含文件名�?
+	 * @param srcPath 被压缩的文件路径（路径包含文件名）
 	 * @param snkPath 得到压缩文件的路径（路径包含文件名）
-	 * @param fileType 期望得到的压缩文件类�?(亦即压缩算法, 默认为zip)
+	 * @param fileType 期望得到的压缩文件类型(亦即压缩算法, 默认为zip)
 	 * @return true:压缩成功; false:压缩失败
 	 */
 	public static boolean compress(String srcPath, String snkPath, FileType fileType) {
@@ -129,10 +129,10 @@ public class CompressUtils {
 				isOk = toBZ2(srcPath, snkPath);
 				
 			} else {
-				log.warn("压缩文件 [{}] 失败�? 不支持的压缩格式 [{}].", srcPath, fileType.NAME);
+				log.warn("压缩文件 [{}] 失败： 不支持的压缩格式 [{}].", srcPath, fileType.NAME);
 			}
 		} catch(Exception e){
-			log.error("压缩文件 [{}] �? [{}] 失败.", srcPath, snkPath, e);
+			log.error("压缩文件 [{}] 到 [{}] 失败.", srcPath, snkPath, e);
 		}
 		return isOk;
 	}
@@ -140,7 +140,7 @@ public class CompressUtils {
 	/**
 	 * 使用zip算法压缩文件
 	 * 
-	 * @param srcPath 被压缩的文件路径（路径包含文件名�?
+	 * @param srcPath 被压缩的文件路径（路径包含文件名）
 	 * @param zipPath 得到压缩文件的路径（路径包含文件名）
 	 * @return true:压缩成功; false:压缩失败
 	 */
@@ -160,7 +160,7 @@ public class CompressUtils {
 			
 		} catch(Exception e){
 			isOk = false;
-			log.error("[ERROR-ZIP] 压缩文件 [{}] �? [{}] 失败.", srcPath, zipPath, e);
+			log.error("[ERROR-ZIP] 压缩文件 [{}] 到 [{}] 失败.", srcPath, zipPath, e);
 			
 		} finally {
 			if(zos != null){
@@ -168,7 +168,7 @@ public class CompressUtils {
 					zos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-ZIP] 关闭文件压缩流失�?: [{}].", zipPath, e);
+					log.error("[ERROR-ZIP] 关闭文件压缩流失败: [{}].", zipPath, e);
 				}
 			}
 			
@@ -177,7 +177,7 @@ public class CompressUtils {
 					bos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-ZIP] 关闭文件压缩流失�?: [{}].", zipPath, e);
+					log.error("[ERROR-ZIP] 关闭文件压缩流失败: [{}].", zipPath, e);
 				}
 			}
 			
@@ -186,7 +186,7 @@ public class CompressUtils {
 					fos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-ZIP] 关闭文件压缩流失�?: [{}].", zipPath, e);
+					log.error("[ERROR-ZIP] 关闭文件压缩流失败: [{}].", zipPath, e);
 				}
 			}
 		}
@@ -217,7 +217,7 @@ public class CompressUtils {
 		ZipArchiveOutputStream zos = null;
 		
 		try {
-			fos = new FileOutputStream(zipFile);
+			fos = new FileOutputStream(zipPath);
 			bos = new BufferedOutputStream(fos);
 			zos = new ZipArchiveOutputStream(bos);
 			for(String srcPath : srcPaths) {
@@ -235,7 +235,7 @@ public class CompressUtils {
 					zos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-ZIP] 关闭文件压缩流失�?: [{}].", zipPath, e);
+					log.error("[ERROR-ZIP] 关闭文件压缩流失败: [{}].", zipPath, e);
 				}
 			}
 			
@@ -244,7 +244,7 @@ public class CompressUtils {
 					bos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-ZIP] 关闭文件压缩流失�?: [{}].", zipPath, e);
+					log.error("[ERROR-ZIP] 关闭文件压缩流失败: [{}].", zipPath, e);
 				}
 			}
 			
@@ -253,7 +253,7 @@ public class CompressUtils {
 					fos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-ZIP] 关闭文件压缩流失�?: [{}].", zipPath, e);
+					log.error("[ERROR-ZIP] 关闭文件压缩流失败: [{}].", zipPath, e);
 				}
 			}
 		}
@@ -261,7 +261,7 @@ public class CompressUtils {
 	}
 	
 	/**
-	 * 添加文件到zip压缩�?
+	 * 添加文件到zip压缩包
 	 * @param zos
 	 * @param baseDir
 	 * @param file
@@ -291,7 +291,7 @@ public class CompressUtils {
 	/**
 	 * 使用tar算法压缩文件
 	 * 
-	 * @param srcPath 被压缩的文件路径（路径包含文件名�?
+	 * @param srcPath 被压缩的文件路径（路径包含文件名）
 	 * @param tarPath 得到压缩文件的路径（路径包含文件名）
 	 * @return true:压缩成功; false:压缩失败
 	 */
@@ -310,7 +310,7 @@ public class CompressUtils {
 			
 		} catch(Exception e){
 			isOk = false;
-			log.error("[ERROR-TAR] 压缩文件 [{}] �? [{}] 失败.", srcPath, tarPath, e);
+			log.error("[ERROR-TAR] 压缩文件 [{}] 到 [{}] 失败.", srcPath, tarPath, e);
 			
 		} finally {
 			if(tos != null){
@@ -318,7 +318,7 @@ public class CompressUtils {
 					tos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-TAR] 关闭文件压缩流失�?: [{}].", tarPath, e);
+					log.error("[ERROR-TAR] 关闭文件压缩流失败: [{}].", tarPath, e);
 				}
 			}
 			
@@ -327,7 +327,7 @@ public class CompressUtils {
 					fos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-TAR] 关闭文件压缩流失�?: [{}].", tarPath, e);
+					log.error("[ERROR-TAR] 关闭文件压缩流失败: [{}].", tarPath, e);
 				}
 			}
 		}
@@ -374,7 +374,7 @@ public class CompressUtils {
 					tos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-TAR] 关闭文件压缩流失�?: [{}].", tarPath, e);
+					log.error("[ERROR-TAR] 关闭文件压缩流失败: [{}].", tarPath, e);
 				}
 			}
 			
@@ -383,7 +383,7 @@ public class CompressUtils {
 					fos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-TAR] 关闭文件压缩流失�?: [{}].", tarPath, e);
+					log.error("[ERROR-TAR] 关闭文件压缩流失败: [{}].", tarPath, e);
 				}
 			}
 		}
@@ -414,7 +414,7 @@ public class CompressUtils {
 	/**
 	 * 使用gzip算法压缩文件
 	 * 
-	 * @param srcPath 被压缩的文件路径（路径包含文件名�?
+	 * @param srcPath 被压缩的文件路径（路径包含文件名）
 	 * @param gzipPath 得到压缩文件的路径（路径包含文件名）
 	 * @return true:压缩成功; false:压缩失败
 	 */
@@ -441,7 +441,7 @@ public class CompressUtils {
 			
 		} catch(Exception e){
 			isOk = false;
-			log.error("[ERROR-GZIP] 压缩文件 [{}] �? [{}] 失败.", srcPath, gzipPath, e);
+			log.error("[ERROR-GZIP] 压缩文件 [{}] 到 [{}] 失败.", srcPath, gzipPath, e);
 			
 		} finally {
 			if (gos != null) {
@@ -449,7 +449,7 @@ public class CompressUtils {
 					gos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-GZIP] 关闭文件输出流失�?: [{}].", gzipPath, e);
+					log.error("[ERROR-GZIP] 关闭文件输出流失败: [{}].", gzipPath, e);
 				}
 			}
 			
@@ -458,7 +458,7 @@ public class CompressUtils {
 					bis.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-GZIP] 关闭文件输入流失�?: [{}].", srcFile, e);
+					log.error("[ERROR-GZIP] 关闭文件输入流失败: [{}].", srcFile, e);
 				}
 			}
 		}
@@ -468,7 +468,7 @@ public class CompressUtils {
 	/**
 	 * 使用bz2算法压缩文件
 	 * 
-	 * @param srcPath 被压缩的文件路径（路径包含文件名�?
+	 * @param srcPath 被压缩的文件路径（路径包含文件名）
 	 * @param bzPath 得到压缩文件的路径（路径包含文件名）
 	 * @return true:压缩成功; false:压缩失败
 	 */
@@ -498,7 +498,7 @@ public class CompressUtils {
 			
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-BZ2] 压缩文件 [{}] �? [{}] 失败.", srcPath, bzPath, e);
+			log.error("[ERROR-BZ2] 压缩文件 [{}] 到 [{}] 失败.", srcPath, bzPath, e);
 			
 		} finally {
 			if(bos != null){
@@ -506,7 +506,7 @@ public class CompressUtils {
 					bos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-BZ2] 关闭文件压缩流失�?: [{}].", bzPath, e);
+					log.error("[ERROR-BZ2] 关闭文件压缩流失败: [{}].", bzPath, e);
 				}
 			}
 			
@@ -515,7 +515,7 @@ public class CompressUtils {
 					os.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-BZ2] 关闭文件输出流失�?: [{}].", bzPath, e);
+					log.error("[ERROR-BZ2] 关闭文件输出流失败: [{}].", bzPath, e);
 				}
 			}
 			
@@ -524,7 +524,7 @@ public class CompressUtils {
 					is.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-BZ2] 关闭文件输入流失�?: [{}].", srcFile, e);
+					log.error("[ERROR-BZ2] 关闭文件输入流失败: [{}].", srcFile, e);
 				}
 			}
 		}
@@ -534,11 +534,11 @@ public class CompressUtils {
 	/**
 	 * <PRE>
 	 * 解压文件.
-	 * 	得到的解压文件与filePath同目�?.
+	 * 	得到的解压文件与filePath同目录.
 	 * </PRE>
 	 * 
-	 * @param filePath 被解压的文件路径（路径包含文件名�?
-	 * @return 解压文件所在的目录（若解压失败返回空串�?
+	 * @param filePath 被解压的文件路径（路径包含文件名）
+	 * @return 解压文件所在的目录（若解压失败返回空串）
 	 */
 	public static String extract(String filePath) {
 		String snkDir = PathUtils.getParentDir(filePath);
@@ -548,8 +548,8 @@ public class CompressUtils {
 	/**
 	 * 使用指定算法解压文件.
 	 * 
-	 * @param srcPath 被解压的文件路径（路径包含文件名�?
-	 * @param snkDir 得到解压文件的目�?
+	 * @param srcPath 被解压的文件路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean extract(String srcPath, String snkDir) {
@@ -574,17 +574,17 @@ public class CompressUtils {
 				isOk = unBZ2(srcPath, snkDir);
 				
 			} else {
-				log.warn("解压文件 [{}] 失败�? 不支持的压缩格式 [{}].", srcPath, fileType.NAME);
+				log.warn("解压文件 [{}] 失败： 不支持的压缩格式 [{}].", srcPath, fileType.NAME);
 			}
 		} catch (Exception e) {
-			log.error("解压文件 [{}] �? [{}] 失败.", srcPath, snkDir, e);
+			log.error("解压文件 [{}] 到 [{}] 失败.", srcPath, snkDir, e);
 		}
 		return isOk;
 	}
 	
 	/**
 	 * 使用zip算法解压文件到zipPath所在的目录
-	 * @param zipPath 被解压的文件路径（路径包含文件名�?
+	 * @param zipPath 被解压的文件路径（路径包含文件名）
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean unZip(String zipPath) {
@@ -595,8 +595,8 @@ public class CompressUtils {
 	/**
 	 * 使用zip算法解压文件
 	 * 
-	 * @param zipPath 被解压的文件路径（路径包含文件名�?
-	 * @param snkDir 得到解压文件的目�?
+	 * @param zipPath 被解压的文件路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean unZip(String zipPath, String snkDir) {
@@ -619,7 +619,7 @@ public class CompressUtils {
 					destFile.mkdirs();
 					continue;
 
-				// 所解压的是文件, 先创建其所有祖先目�?
+				// 所解压的是文件, 先创建其所有祖先目录
 				} else if (name.indexOf('/') != -1) {
 					File parentDir = destFile.getParentFile();
 					if (!parentDir.exists() && !parentDir.mkdirs()) {
@@ -639,7 +639,7 @@ public class CompressUtils {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-ZIP] 解压文件 [{}] �? [{}] 失败.", zipPath, snkDir, e);
+			log.error("[ERROR-ZIP] 解压文件 [{}] 到 [{}] 失败.", zipPath, snkDir, e);
 			
 		} finally {
 			if (zip != null) {
@@ -647,7 +647,7 @@ public class CompressUtils {
 					zip.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-ZIP] 关闭文件压缩流失�?: [{}].", zipPath, e);
+					log.error("[ERROR-ZIP] 关闭文件压缩流失败: [{}].", zipPath, e);
 				}
 			}
 		}
@@ -656,7 +656,7 @@ public class CompressUtils {
 
 	/**
 	 * 使用tar算法解压文件到tarPath所在的目录
-	 * @param tarPath 被解压的文件路径（路径包含文件名�?
+	 * @param tarPath 被解压的文件路径（路径包含文件名）
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean unTar(String tarPath) {
@@ -667,8 +667,8 @@ public class CompressUtils {
 	/**
 	 * 使用tar算法解压文件
 	 * 
-	 * @param tarPath 被解压的文件路径（路径包含文件名�?
-	 * @param snkDir 得到解压文件的目�?
+	 * @param tarPath 被解压的文件路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean unTar(String tarPath, String snkDir) {
@@ -689,7 +689,7 @@ public class CompressUtils {
 					destFile.mkdirs();
 					continue;
 
-				// 所解压的是文件, 先创建其所有祖先目�?
+				// 所解压的是文件, 先创建其所有祖先目录
 				} else if (name.indexOf('/') != -1) {
 					File parentDir = destFile.getParentFile();
 					if (!parentDir.exists() && !parentDir.mkdirs()) {
@@ -710,7 +710,7 @@ public class CompressUtils {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-TAR] 解压文件 [{}] �? [{}] 失败.", tarPath, snkDir, e);
+			log.error("[ERROR-TAR] 解压文件 [{}] 到 [{}] 失败.", tarPath, snkDir, e);
 			
 		} finally {
 			if (tis != null) {
@@ -718,7 +718,7 @@ public class CompressUtils {
 					tis.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-TAR] 关闭文件压缩流失�?: [{}].", tarPath, e);
+					log.error("[ERROR-TAR] 关闭文件压缩流失败: [{}].", tarPath, e);
 				}
 			}
 		}
@@ -727,7 +727,7 @@ public class CompressUtils {
 
 	/**
 	 * 使用gzip算法解压文件到gzipPath所在的目录
-	 * @param gzipPath 被解压的文件路径（路径包含文件名�?
+	 * @param gzipPath 被解压的文件路径（路径包含文件名）
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean unGZip(String gzipPath) {
@@ -738,8 +738,8 @@ public class CompressUtils {
 	/**
 	 * 使用gzip算法解压文件
 	 * 
-	 * @param gzipPath 被解压的文件路径（路径包含文件名�?
-	 * @param snkDir 得到解压文件的目�?
+	 * @param gzipPath 被解压的文件路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean unGZip(String gzipPath, String snkDir) {
@@ -760,7 +760,7 @@ public class CompressUtils {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-GZIP] 解压文件 [{}] �? [{}] 失败.", gzipPath, snkDir, e);
+			log.error("[ERROR-GZIP] 解压文件 [{}] 到 [{}] 失败.", gzipPath, snkDir, e);
 			
 		} finally {
 			if (fos != null) {
@@ -768,7 +768,7 @@ public class CompressUtils {
 					fos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-GZIP] 关闭文件输出流失�?: [{}].", snkDir, e);
+					log.error("[ERROR-GZIP] 关闭文件输出流失败: [{}].", snkDir, e);
 				}
 			}
 			
@@ -777,7 +777,7 @@ public class CompressUtils {
 					bis.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-GZIP] 关闭文件输入流失�?: [{}].", gzipPath, e);
+					log.error("[ERROR-GZIP] 关闭文件输入流失败: [{}].", gzipPath, e);
 				}
 			}
 			
@@ -786,7 +786,7 @@ public class CompressUtils {
 					gis.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-GZIP] 关闭文件输入流失�?: [{}].", gzipPath, e);
+					log.error("[ERROR-GZIP] 关闭文件输入流失败: [{}].", gzipPath, e);
 				}
 			}
 		}
@@ -795,7 +795,7 @@ public class CompressUtils {
 
 	/**
 	 * 使用bz2算法解压文件到bzPath所在的目录
-	 * @param bzPath 被解压的文件路径（路径包含文件名�?
+	 * @param bzPath 被解压的文件路径（路径包含文件名）
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean unBZ2(String bzPath) {
@@ -806,8 +806,8 @@ public class CompressUtils {
 	/**
 	 * 使用bz2算法解压文件
 	 * 
-	 * @param bzPath 被解压的文件路径（路径包含文件名�?
-	 * @param snkDir 得到解压文件的目�?
+	 * @param bzPath 被解压的文件路径（路径包含文件名）
+	 * @param snkDir 得到解压文件的目录
 	 * @return true:解压成功; false:解压失败
 	 */
 	public static boolean unBZ2(String bzPath, String snkDir) {
@@ -828,7 +828,7 @@ public class CompressUtils {
 			}
 		} catch (Exception e) {
 			isOk = false;
-			log.error("[ERROR-BZ2] 解压文件 [{}] �? [{}] 失败.", bzPath, snkDir, e);
+			log.error("[ERROR-BZ2] 解压文件 [{}] 到 [{}] 失败.", bzPath, snkDir, e);
 			
 		} finally {
 			if (fos != null) {
@@ -836,7 +836,7 @@ public class CompressUtils {
 					fos.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-BZ2] 关闭文件输出流失�?: [{}].", snkDir, e);
+					log.error("[ERROR-BZ2] 关闭文件输出流失败: [{}].", snkDir, e);
 				}
 			}
 			
@@ -845,7 +845,7 @@ public class CompressUtils {
 					bis.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-BZ2] 关闭文件输入流失�?: [{}].", bzPath, e);
+					log.error("[ERROR-BZ2] 关闭文件输入流失败: [{}].", bzPath, e);
 				}
 			}
 			
@@ -854,7 +854,7 @@ public class CompressUtils {
 					bzis.close();
 				} catch (IOException e) {
 					isOk = false;
-					log.error("[ERROR-BZ2] 关闭文件输入流失�?: [{}].", bzPath, e);
+					log.error("[ERROR-BZ2] 关闭文件输入流失败: [{}].", bzPath, e);
 				}
 			}
 		}
@@ -863,18 +863,18 @@ public class CompressUtils {
 
 	/**
 	 * <PRE>
-	 * 把字符串以【GZIP方式】进行压缩，并得到【压缩串】的�?16进制表示形式�?.
+	 * 把字符串以【GZIP方式】进行压缩，并得到【压缩串】的【16进制表示形式】.
 	 * 
-	 * 被压缩的字符串越长，压缩率越高�?
-	 * 对于很短的字符串，压缩后可能变得更大，因为GZIP的文件头需要存储压缩字典（�?20字节�?
+	 * 被压缩的字符串越长，压缩率越高。
+	 * 对于很短的字符串，压缩后可能变得更大，因为GZIP的文件头需要存储压缩字典（约20字节）
 	 * 
-	 * 返回16进制的表示形式是为了便于对压缩串进行存储、复制等�?
-	 * 否则一堆乱码是不便于处理的�?
-	 * 但缺点是16进制显示形式会直接把压缩串的长度在原来基础上扩�?1倍（原本1个字节被拆分成高低位两个字符）�?
+	 * 返回16进制的表示形式是为了便于对压缩串进行存储、复制等，
+	 * 否则一堆乱码是不便于处理的。
+	 * 但缺点是16进制显示形式会直接把压缩串的长度在原来基础上扩展1倍（原本1个字节被拆分成高低位两个字符）。
 	 * </PRE>
 	 * 
-	 * @param str 原字符串（默认为UTF-8编码�?
-	 * @return 【压缩串】的�?16进制表示形式�?, 压缩失败则返回空串（非null�?
+	 * @param str 原字符串（默认为UTF-8编码）
+	 * @return 【压缩串】的【16进制表示形式】, 压缩失败则返回空串（非null）
 	 */
 	public static String toGZipString(final String str) {
 		return toGZipString(str, DEFAULT_ENCODE);
@@ -882,19 +882,19 @@ public class CompressUtils {
 	
 	/**
 	 * <PRE>
-	 * 把字符串以【GZIP方式】进行压缩，并得到【压缩串】的�?16进制表示形式�?.
+	 * 把字符串以【GZIP方式】进行压缩，并得到【压缩串】的【16进制表示形式】.
 	 * ---------------------------------------------------------
-	 * 被压缩的字符串越长，压缩率越高�?
-	 * 对于很短的字符串，压缩后可能变得更大，因为GZIP的文件头需要存储压缩字典（�?20字节�?
+	 * 被压缩的字符串越长，压缩率越高。
+	 * 对于很短的字符串，压缩后可能变得更大，因为GZIP的文件头需要存储压缩字典（约20字节）
 	 * 
-	 * 返回16进制的表示形式是为了便于对压缩串进行存储、复制等�?
-	 * 否则一堆乱码是不便于处理的�?
-	 * 但缺点是16进制显示形式会直接把压缩串的长度在原来基础上扩�?1倍（原本1个字节被拆分成高低位两个字符）�?
+	 * 返回16进制的表示形式是为了便于对压缩串进行存储、复制等，
+	 * 否则一堆乱码是不便于处理的。
+	 * 但缺点是16进制显示形式会直接把压缩串的长度在原来基础上扩展1倍（原本1个字节被拆分成高低位两个字符）。
 	 * </PRE>
 	 * 
 	 * @param str 原字符串
 	 * @param encode 原字符串编码
-	 * @return 【压缩串】的�?16进制表示形式�?, 压缩失败则返回空串（非null�?
+	 * @return 【压缩串】的【16进制表示形式】, 压缩失败则返回空串（非null）
 	 */
 	public static String toGZipString(final String str, final String encode) {
 		String hex = "";
@@ -908,28 +908,28 @@ public class CompressUtils {
 				hex = BODHUtils.toHex(bos.toByteArray());
 				
 			} catch (Exception e) {
-				log.error("压缩字符串失�?: [{}]", StrUtils.showSummary(str), e);
+				log.error("压缩字符串失败: [{}]", StrUtils.showSummary(str), e);
 			}
 		}
 		return hex;
 	}
 	
 	/**
-	 * 把�?16进制表示形式】的、以【GZIP方式】压缩的【压缩串】还原为原字符串（默认原字符串的编码方式为UTF-8�?
+	 * 把【16进制表示形式】的、以【GZIP方式】压缩的【压缩串】还原为原字符串（默认原字符串的编码方式为UTF-8）
 	 * 
-	 * @param hex �?16进制表示形式】的、以【GZIP方式】压缩的【压缩串�?
-	 * @return 原字符串, 还原失败则返回空串（非null�?
+	 * @param hex 【16进制表示形式】的、以【GZIP方式】压缩的【压缩串】
+	 * @return 原字符串, 还原失败则返回空串（非null）
 	 */
 	public static String unGZipString(final String hex) {
 		return unGZipString(hex, DEFAULT_ENCODE);
 	}
 
 	/**
-	 * 把�?16进制表示形式】的、以【GZIP方式】压缩的【压缩串】还原为原字符串
+	 * 把【16进制表示形式】的、以【GZIP方式】压缩的【压缩串】还原为原字符串
 	 * 
-	 * @param hex �?16进制表示形式】的、以【GZIP方式】压缩的【压缩串�?
-	 * @param encode 原字符串的编码方�?
-	 * @return 原字符串, 还原失败则返回空串（非null�?
+	 * @param hex 【16进制表示形式】的、以【GZIP方式】压缩的【压缩串】
+	 * @param encode 原字符串的编码方式
+	 * @return 原字符串, 还原失败则返回空串（非null）
 	 */
 	public static String unGZipString(String hex, final String encode) {
 		String str = "";
@@ -959,7 +959,7 @@ public class CompressUtils {
 				bis.close();
 				
 			} catch (Exception e) {
-				log.error("解压字符串失�?: [{}]", StrUtils.showSummary(hex), e);
+				log.error("解压字符串失败: [{}]", StrUtils.showSummary(hex), e);
 			}
 		}
 		return str;

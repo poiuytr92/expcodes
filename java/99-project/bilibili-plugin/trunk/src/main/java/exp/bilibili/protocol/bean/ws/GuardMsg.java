@@ -16,7 +16,7 @@ import net.sf.json.JSONObject;
 	  "msg": "用户 :?阿斗金:? 在主播 吃不饱的小黄瓜 的直播间开通了总督"
 	}
  * </PRE>
- * @version   1.0 2017-12-17
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

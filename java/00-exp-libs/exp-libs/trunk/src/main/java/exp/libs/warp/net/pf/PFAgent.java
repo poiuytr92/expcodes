@@ -16,8 +16,8 @@ import org.slf4j.LoggerFactory;
  * 	agent._start();
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-07-28
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-28
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -30,7 +30,7 @@ public class PFAgent {
 	/**
 	 * 单个端口转发代理服务
 	 * @param localListenPort 本地监听端口
-	 * @param remoteIP 远程代理IP（真实服务IP�?
+	 * @param remoteIP 远程代理IP（真实服务IP）
 	 * @param remotePort 远程代理端口（真实服务端口）
 	 */
 	public PFAgent(int localListenPort, String remoteIP, int remotePort) {
@@ -58,7 +58,7 @@ public class PFAgent {
 		}
 		
 		if(isOk == true) {
-			log.info("所有端口转发服务启动成�?");
+			log.info("所有端口转发服务启动成功");
 		} else {
 			log.warn("存在端口转发服务启动失败");
 		}

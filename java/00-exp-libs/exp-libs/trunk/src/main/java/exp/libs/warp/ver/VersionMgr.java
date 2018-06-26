@@ -20,8 +20,8 @@ import exp.libs.warp.ui.BeautyEyeUtils;
  * 
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-08-22
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-22
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -45,7 +45,7 @@ final public class VersionMgr {
 	private static volatile VersionMgr instance;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	private VersionMgr() {
 		BeautyEyeUtils.init();
@@ -74,9 +74,9 @@ final public class VersionMgr {
 	}
 	
 	/**
-	 * @param args 入口参数（win下默认为-m, linux下强制为-p�?
-	 * 		[-p] 打印最后的版本信息（DOS界面�?
-	 * 		[-m] 版本管理（UI界面�?
+	 * @param args 入口参数（win下默认为-m, linux下强制为-p）
+	 * 		[-p] 打印最后的版本信息（DOS界面）
+	 * 		[-m] 版本管理（UI界面）
 	 * @return 当前版本信息
 	 */
 	public static String exec(String... args) {
@@ -85,8 +85,8 @@ final public class VersionMgr {
 	
 	/**
 	 * @param args main函数入参: 
-	 * 		[-p] 打印最后的版本信息（DOS界面�?
-	 * 		[-m] 版本管理（UI界面�?
+	 * 		[-p] 打印最后的版本信息（DOS界面）
+	 * 		[-m] 版本管理（UI界面）
 	 * @return 当前版本信息
 	 */
 	private String _exec(String... args) {
@@ -102,7 +102,7 @@ final public class VersionMgr {
 	
 	/**
 	 * 管理版本信息
-	 * @return 最新版本信�?
+	 * @return 最新版本信息
 	 */
 	protected String manage() {
 		_VerMgrUI.getInstn()._view();
@@ -113,8 +113,8 @@ final public class VersionMgr {
 	}
 	
 	/**
-	 * 打印最新版本信�?
-	 * @return 最新版本信�?
+	 * 打印最新版本信息
+	 * @return 最新版本信息
 	 */
 	protected String print() {
 		String curVerInfo = getVersionInfo(true, false);
@@ -129,8 +129,8 @@ final public class VersionMgr {
 	
 	/**
 	 * 获取版本信息
-	 * @param onlyCurVersion 仅当前版�?(即最新版�?)
-	 * @param detaiHistoty 是否打印历史版本升级内容详单 (仅onlyCurVersion=false时有�?)
+	 * @param onlyCurVersion 仅当前版本(即最新版本)
+	 * @param detaiHistoty 是否打印历史版本升级内容详单 (仅onlyCurVersion=false时有效)
 	 * @return 版本信息
 	 */
 	public static String getVersionInfo(boolean onlyCurVersion, boolean detaiHistoty) {
@@ -139,8 +139,8 @@ final public class VersionMgr {
 	
 	/**
 	 * 获取版本信息
-	 * @param onlyCurVersion 仅当前版�?(即最新版�?)
-	 * @param detaiHistoty 是否打印历史版本升级内容详单 (仅onlyCurVersion=false时有�?)
+	 * @param onlyCurVersion 仅当前版本(即最新版本)
+	 * @param detaiHistoty 是否打印历史版本升级内容详单 (仅onlyCurVersion=false时有效)
 	 * @return 版本信息
 	 */
 	private String _getVersionInfo(boolean onlyCurVersion, boolean detaiHistoty) {

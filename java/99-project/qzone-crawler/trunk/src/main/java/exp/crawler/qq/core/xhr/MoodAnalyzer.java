@@ -27,15 +27,15 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * 【空间说说】解析器
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-23
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-23
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class MoodAnalyzer extends BaseMoodAnalyzer {
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param QQ 被爬取数据的目标QQ
 	 */
 	public MoodAnalyzer(String QQ) {
@@ -43,7 +43,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	}
 	
 	/**
-	 * 初始�?
+	 * 初始化
 	 */
 	@Override
 	protected void init() {
@@ -51,47 +51,47 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	}
 	
 	/**
-	 * 提取所有说说及相关的照片信�?
+	 * 提取所有说说及相关的照片信息
 	 * @return
 	 */
 	@Override
 	protected List<Mood> getMoods() {
 		List<Mood> moods = new LinkedList<Mood>();
-		UIUtils.log("正在提取QQ [", QQ, "] 的说说动�?...");
+		UIUtils.log("正在提取QQ [", QQ, "] 的说说动态...");
 		
 		final int PAGE_NUM = _getPageNum();
 		for(int page = 1; page <= PAGE_NUM; page++) {
-			UIUtils.log(" -> 正在提取�? [", page, "/", PAGE_NUM, "] 页的说说信息...");
+			UIUtils.log(" -> 正在提取第 [", page, "/", PAGE_NUM, "] 页的说说信息...");
 			List<Mood> pageMoods = _getPageMoods(page);
 			moods.addAll(pageMoods);
 			
-			UIUtils.log(" -> �? [", page, "/", PAGE_NUM, 
-					"] 页说说提取完�?, 累计说说数量: ", moods.size());
+			UIUtils.log(" -> 第 [", page, "/", PAGE_NUM, 
+					"] 页说说提取完成, 累计说说数量: ", moods.size());
 			ThreadUtils.tSleep(Config.SLEEP_TIME);
 		}
 		return moods;
 	}
 	
 	/**
-	 * 获取说说总页�?
+	 * 获取说说总页数
 	 * @return
 	 */
 	@Override
 	protected int _getPageNum() {
-		UIUtils.log("正在提取QQ [", QQ, "] 的说说页�?...");
+		UIUtils.log("正在提取QQ [", QQ, "] 的说说页数...");
 		String response = _getPageMoodJson(1);
 		int total = 0;
 		try {
 			JSONObject json = JSONObject.fromObject(response);
-			total = JsonUtils.getInt(json, XHRAtrbt.total, 0);	// 总说说数�?
+			total = JsonUtils.getInt(json, XHRAtrbt.total, 0);	// 总说说数量
 		} catch(Exception e) {
-			UIUtils.log(e, "提取QQ [", QQ, "] 的说说页数失�?");
+			UIUtils.log(e, "提取QQ [", QQ, "] 的说说页数失败");
 		}
 		return PicUtils.getPageNum(total, Config.BATCH_LIMT);
 	}
 	
 	/**
-	 * 获取分页的说说内�?
+	 * 获取分页的说说内容
 	 * @param page 页码
 	 * @return 
 	 */
@@ -119,7 +119,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 				moods.add(mood);
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "提取�? [", page, "] 页的说说信息异常");
+			UIUtils.log(e, "提取第 [", page, "] 页的说说信息异常");
 		}
 		return moods;
 	}
@@ -137,7 +137,7 @@ public class MoodAnalyzer extends BaseMoodAnalyzer {
 	}
 	
 	/**
-	 * 分页说说请求�?
+	 * 分页说说请求头
 	 * @param cookie
 	 * @return
 	 */

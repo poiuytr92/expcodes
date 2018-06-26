@@ -7,8 +7,8 @@ import exp.crawler.qq.utils.PicUtils;
  * 照片对象
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -27,7 +27,7 @@ public class Photo {
 	private String url;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param desc
 	 * @param time
 	 * @param url

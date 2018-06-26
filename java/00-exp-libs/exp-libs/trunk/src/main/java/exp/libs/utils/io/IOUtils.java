@@ -18,22 +18,22 @@ import exp.libs.utils.num.UnitUtils;
  * IO工具.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-02
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-02
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class IOUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(IOUtils.class);
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected IOUtils() {}
 	
 	/**
 	 * 保存流式数据到字符串
-	 * @param is 流式数据读取�?
+	 * @param is 流式数据读取器
 	 * @return 若保存失败则返回空字符串""
 	 */
 	public static String toStr(InputStreamReader is) {
@@ -51,7 +51,7 @@ public class IOUtils {
 	}
 	
 	/**
-	 * 保存流式数据到文�?
+	 * 保存流式数据到文件
 	 * @param is 流式数据通道
 	 * @param savePath 保存文件位置
 	 * @return true:保存成功; false:保存失败
@@ -62,7 +62,7 @@ public class IOUtils {
 	}
 	
 	/**
-	 * 保存流式数据到文�?
+	 * 保存流式数据到文件
 	 * @param is 流式数据通道
 	 * @param saveFile 保存文件对象
 	 * @return true:保存成功; false:保存失败
@@ -83,7 +83,7 @@ public class IOUtils {
 				isOk = true;
 				
 			} catch (Exception e) {
-				log.error("保存流式数据到文�? [{}] 失败.", saveFile.getAbsolutePath(), e);
+				log.error("保存流式数据到文件 [{}] 失败.", saveFile.getAbsolutePath(), e);
 				
 			} finally {
 				isOk = close(fos);
@@ -93,8 +93,8 @@ public class IOUtils {
 	}
 	
 	/**
-	 * 关闭IO�?
-	 * @param closeable IO流接�?
+	 * 关闭IO流
+	 * @param closeable IO流接口
 	 * @return true:关闭成功; false:关闭失败
 	 */
 	public static boolean close(Closeable closeable) {
@@ -103,7 +103,7 @@ public class IOUtils {
 			try {
                 closeable.close();
 	        } catch (Exception e) {
-	        	log.error("IO流关闭失�?.", e);
+	        	log.error("IO流关闭失败.", e);
 	        	isOk = false;
 	        }
 		}
@@ -121,7 +121,7 @@ public class IOUtils {
 			try {
 				statement.close();
 	        } catch (Exception e) {
-	        	log.error("IO流关闭失�?.", e);
+	        	log.error("IO流关闭失败.", e);
 	        	isOk = false;
 	        }
 		}
@@ -139,7 +139,7 @@ public class IOUtils {
 			try {
 				resultSet.close();
 	        } catch (Exception e) {
-	        	log.error("IO流关闭失�?.", e);
+	        	log.error("IO流关闭失败.", e);
 	        	isOk = false;
 	        }
 		}

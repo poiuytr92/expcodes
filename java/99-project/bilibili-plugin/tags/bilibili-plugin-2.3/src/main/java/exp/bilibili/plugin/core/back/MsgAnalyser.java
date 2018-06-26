@@ -38,8 +38,8 @@ import exp.libs.utils.other.StrUtils;
  * B站json命令报文解析器
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -152,7 +152,7 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(SysMsg msgBean) {
-		UIUtils.notify(msgBean.getMsg());	// 系统公告的消息体里面自带�? [系统公告: ]
+		UIUtils.notify(msgBean.getMsg());	// 系统公告的消息体里面自带了 [系统公告: ]
 		log.info(msgBean.getMsg());
 	}
 	
@@ -161,7 +161,7 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(TvLottery msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.ROOM_ID(), "] 正在小电视抽奖中!!!");
+		String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在小电视抽奖中!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
@@ -174,7 +174,7 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(SysGift msgBean) {
-		String msg = StrUtils.concat("礼物公告�?", msgBean.getMsgText());
+		String msg = StrUtils.concat("礼物公告：", msgBean.getMsgText());
 		UIUtils.notify(msg);
 		log.info(msg);
 	}
@@ -184,7 +184,7 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(EnergyLottery msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.ROOM_ID(), "] 正在高能抽奖�?!!!");
+		String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在高能抽奖中!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
@@ -193,11 +193,11 @@ public class MsgAnalyser {
 	}
 	
 	/**
-	 * 特殊礼物�?(直播间内)节奏风暴消息
+	 * 特殊礼物：(直播间内)节奏风暴消息
 	 * @param msgBean
 	 */
 	private static void toDo(SpecialGift msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.getRoomId(), "] 开启了节奏风暴!!!");
+		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 开启了节奏风暴!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
@@ -205,11 +205,11 @@ public class MsgAnalyser {
 	}
 
 	/**
-	 * (直播间内)高能抽奖开始消�?
+	 * (直播间内)高能抽奖开始消息
 	 * @param msgBean
 	 */
 	private static void toDo(RaffleStart msgBean) {
-		String msg = StrUtils.concat("感谢 [", msgBean.getFrom(), "] 的嗨翻全�?!!!");
+		String msg = StrUtils.concat("感谢 [", msgBean.getFrom(), "] 的嗨翻全场!!!");
 		log.info(msg);
 		
 		ChatMgr.getInstn().sendThxEnergy(msg);
@@ -253,7 +253,7 @@ public class MsgAnalyser {
 	}
 	
 	/**
-	 * (直播间内)新船员上船消�?
+	 * (直播间内)新船员上船消息
 	 * @param msgBean
 	 */
 	private static void toDo(GuardBuy msgBean) {
@@ -270,7 +270,7 @@ public class MsgAnalyser {
 	}
 
 	/**
-	 * (全频�?)登船消息
+	 * (全频道)登船消息
 	 * @param msgBean
 	 */
 	private static void toDo(GuardMsg msgBean) {
@@ -283,7 +283,7 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(LiveMsg msgBean) {
-		String msg = StrUtils.concat("您关注的直播�? [", msgBean.getRoomId(), "] 开播啦!!!");
+		String msg = StrUtils.concat("您关注的直播间 [", msgBean.getRoomId(), "] 开播啦!!!");
 		UIUtils.chat(msg);
 		log.info(msg);
 		
@@ -296,13 +296,13 @@ public class MsgAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(Preparing msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.getRoomId(), "] 主播已下�?.");
+		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 主播已下线.");
 		UIUtils.chat(msg);
 		log.info(msg);
 	}
 	
 	/**
-	 * (直播间内)许愿瓶实现进度消�?
+	 * (直播间内)许愿瓶实现进度消息
 	 * @param wishBottle
 	 */
 	private static void toDo(WishBottle msgBean) {
@@ -310,7 +310,7 @@ public class MsgAnalyser {
 	}
 	
 	/**
-	 * 2018春节活动(新春�?)触发事件
+	 * 2018春节活动(新春榜)触发事件
 	 * @param wishBottle
 	 */
 	private static void toDo(ActivityEvent msgBean) {
@@ -318,7 +318,7 @@ public class MsgAnalyser {
 	}
 	
 	/**
-	 * 获取抽奖房间�?
+	 * 获取抽奖房间号
 	 * @param json
 	 * @return
 	 */

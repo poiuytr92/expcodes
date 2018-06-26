@@ -15,17 +15,17 @@ import exp.libs.utils.io.IOUtils;
  * javascript工具
  * 
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class JSUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(JSUtils.class);
 	
-	/** 私有化构造函�?. */
+	/** 私有化构造函数. */
 	protected JSUtils() {}
 	
 	/**
@@ -58,7 +58,7 @@ public class JSUtils {
 			result = inv.invokeFunction(jsMethod, args);
 			
 		} catch (Exception e) {
-			log.error("执行JS方法 [{}] 失败, 所属文�?: {}", jsMethod, jsFilePath, e);
+			log.error("执行JS方法 [{}] 失败, 所属文件: {}", jsMethod, jsFilePath, e);
 		}
 		IOUtils.close(reader);
 		return result;

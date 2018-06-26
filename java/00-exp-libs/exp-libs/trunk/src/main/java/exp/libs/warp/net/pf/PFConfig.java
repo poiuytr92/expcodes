@@ -7,8 +7,8 @@ import exp.libs.utils.other.StrUtils;
  * (数据流)端口转发代理服务配置
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-07-28
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-28
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -40,9 +40,9 @@ public class PFConfig {
 	
 	/**
 	 * 
-	 * @param serverName 代理服务名称（唯一即可�?
+	 * @param serverName 代理服务名称（唯一即可）
 	 * @param localListenPort 本地监听端口
-	 * @param remoteIP 远程代理IP（真实服务IP�?
+	 * @param remoteIP 远程代理IP（真实服务IP）
 	 * @param remotePort 远程代理端口（真实服务端口）
 	 * @param overtime 超时时间(单位ms)
 	 * @param maxConn 单个代理服务的最大连接数

@@ -10,8 +10,8 @@ import java.util.Vector;
  * 表单组件
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-07-05
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-05
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -63,8 +63,8 @@ public abstract class AbstractTable extends _BaseTable {
 	}
 	
 	/**
-	 * 新增一行数�?
-	 * @param rowData 行数�?
+	 * 新增一行数据
+	 * @param rowData 行数据
 	 * @param rowIdx 插入位置
 	 */
 	public void add(List<String> rowData, int rowIdx) {
@@ -75,7 +75,7 @@ public abstract class AbstractTable extends _BaseTable {
 	}
 	
 	/**
-	 * 插入到顶�?
+	 * 插入到顶端
 	 * @param rowData
 	 */
 	public void addTop(List<String> rowData) {
@@ -83,7 +83,7 @@ public abstract class AbstractTable extends _BaseTable {
 	}
 	
 	/**
-	 * 插入到底�?
+	 * 插入到底部
 	 * @param rowData
 	 */
 	public void addBtm(List<String> rowData) {
@@ -99,8 +99,8 @@ public abstract class AbstractTable extends _BaseTable {
 	}
 	
 	/**
-	 * 删除行数�?
-	 * @param rowIdx 行索�?
+	 * 删除行数据
+	 * @param rowIdx 行索引
 	 * @return
 	 */
 	public List<String> del(int rowIdx) {
@@ -113,8 +113,8 @@ public abstract class AbstractTable extends _BaseTable {
 	}
 	
 	/**
-	 * 获取行数�?
-	 * @param rowIdx 行索�?
+	 * 获取行数据
+	 * @param rowIdx 行索引
 	 * @return
 	 */
 	public List<String> getRowData(int rowIdx) {
@@ -127,7 +127,7 @@ public abstract class AbstractTable extends _BaseTable {
 	}
 	
 	/**
-	 * 获取当前选择行的行数�?
+	 * 获取当前选择行的行数据
 	 * @return
 	 */
 	public List<String> getSelectedRowData() {

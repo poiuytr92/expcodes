@@ -13,8 +13,8 @@ import exp.libs.warp.cep.fun.impl.cast._Double;
  * 	强制类型转换: String -> Double
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -27,7 +27,7 @@ public class Test_Double {
 	@Test
 	public void testCastDouble() throws Exception {
 		
-		//正确性测�?
+		//正确性测试
 		Object dnum1 = CEPUtils.call(
 				_Double.NAME, new Object[] {"-123456789"});
 		Assert.assertTrue(dnum1 instanceof Double);

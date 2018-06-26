@@ -66,14 +66,14 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * 
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-08-25
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-25
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class XConfig implements Runnable, _IConfig {
 
-	/** 日志�? */
+	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(_Config.class);
 	
 	public final static XNode NULL_XNODE = _Config.NULL_XNODE;
@@ -96,18 +96,18 @@ public class XConfig implements Runnable, _IConfig {
 	
 	private long reflashTime;
 	
-	/** 线程�? */
+	/** 线程锁 */
 	private byte[] tLock;
 	
-	/** 刷新�? */
+	/** 刷新锁 */
 	private byte[] rLock;
 	
 	/** 保存最近查找过的配置值（用于快速检索重复配置） */
 	private Map<String, Object> nearValues;
 	
 	/**
-	 * 构造函�?
-	 * @param name 配置器名�?
+	 * 构造函数
+	 * @param name 配置器名称
 	 */
 	protected XConfig(String name) {
 		this.name = name;
@@ -126,7 +126,7 @@ public class XConfig implements Runnable, _IConfig {
 	
 	/**
 	 * <PRE>
-	 * 刷新配置文件(�?60秒刷新一�?).
+	 * 刷新配置文件(每60秒刷新一次).
 	 * 	刷新操作会对所加载过的配置文件依次重新加载.
 	 * <PRE>
 	 */
@@ -151,18 +151,18 @@ public class XConfig implements Runnable, _IConfig {
 					isInit = true;
 					isRun = true;
 					new Thread(this).start();
-					ThreadUtils.tSleep(2000);	// 初次启动, 用时间差保证先让线程陷入第一次无限阻塞状�?
+					ThreadUtils.tSleep(2000);	// 初次启动, 用时间差保证先让线程陷入第一次无限阻塞状态
 				}
 			}
 		}
 		
 		if(!isReflash) {
 			isReflash = true;
-			ThreadUtils.tNotify(tLock);	// 退出无限阻塞， 进入限时阻塞状�?
-			log.info("配置 [{}] 自动刷新被激�?, 刷新间隔�? [{} ms].", name, reflashTime);
+			ThreadUtils.tNotify(tLock);	// 退出无限阻塞， 进入限时阻塞状态
+			log.info("配置 [{}] 自动刷新被激活, 刷新间隔为 [{} ms].", name, reflashTime);
 			
 		} else {
-			log.info("配置 [{}] 刷新间隔变更�? [{} ms], 下个刷新周期生效.", name, reflashTime);
+			log.info("配置 [{}] 刷新间隔变更为 [{} ms], 下个刷新周期生效.", name, reflashTime);
 		}
 	}
 	
@@ -171,8 +171,8 @@ public class XConfig implements Runnable, _IConfig {
 	 */
 	public void pause() {
 		isReflash = false;
-		ThreadUtils.tNotify(tLock);	// 退出限时阻塞， 进入无限阻塞状�?
-		log.info("配置 [{}] 自动刷新被暂�?.", name);
+		ThreadUtils.tNotify(tLock);	// 退出限时阻塞， 进入无限阻塞状态
+		log.info("配置 [{}] 自动刷新被暂停.", name);
 	}
 	
 	/**
@@ -181,11 +181,11 @@ public class XConfig implements Runnable, _IConfig {
 	public void destroy() {
 		isReflash = false;
 		isRun = false;
-		ThreadUtils.tNotify(tLock);	// 退出阻塞�?, 通过掉落陷阱终止线程
+		ThreadUtils.tNotify(tLock);	// 退出阻塞态, 通过掉落陷阱终止线程
 		
 		nearValues.clear();
 		config.clear();
-		log.info("配置 [{}] 内容已销�?.", name);
+		log.info("配置 [{}] 内容已销毁.", name);
 	}
 	
 	@Override
@@ -206,9 +206,9 @@ public class XConfig implements Runnable, _IConfig {
 	 * 重载配置文件
 	 */
 	private void reload() {
-		log.info("配置 [{}] 开始重载文�?...", name);
+		log.info("配置 [{}] 开始重载文件...", name);
 		if(config.getConfFiles() == null || config.getConfFiles().isEmpty()) {
-			log.info("配置 [{}] 并未加载过任何文�?(或文件已被删�?), 取消重载操作.", name);
+			log.info("配置 [{}] 并未加载过任何文件(或文件已被删除), 取消重载操作.", name);
 			return;
 		}
 		
@@ -222,7 +222,7 @@ public class XConfig implements Runnable, _IConfig {
 			
 			File file = new File(filxPath);
 			if(!file.exists()) {
-				log.info("配置文件 [{}] 已不存在, 不重�?.", filxPath);
+				log.info("配置文件 [{}] 已不存在, 不重载.", filxPath);
 				fileInfos.remove();
 			}
 			
@@ -235,7 +235,7 @@ public class XConfig implements Runnable, _IConfig {
 				log.info("配置 [{}] 重载文件 [{}] {}.", name, filxPath, (isOk ? "成功" : "失败"));
 				
 			} else {
-				log.info("配置文件 [{}] 类型异常, 不重�?.", filxPath);
+				log.info("配置文件 [{}] 类型异常, 不重载.", filxPath);
 				fileInfos.remove();
 			}
 		}
@@ -247,11 +247,11 @@ public class XConfig implements Runnable, _IConfig {
 			config = conf;
 		}
 		reflashing = false;
-		log.info("配置 [{}] 重载所有文件完�?.", name);
+		log.info("配置 [{}] 重载所有文件完成.", name);
 	}
 	
 	/**
-	 * 获取配置加载器名�?
+	 * 获取配置加载器名称
 	 */
 	@Override
 	public String NAME() {
@@ -265,7 +265,7 @@ public class XConfig implements Runnable, _IConfig {
 	 * 
 	 * 该方法会自动判断当前是否通过tomcat启动，若是则自动切换到loadConfFilesByTomcat
 	 * </PRE>
-	 * @param confFilePaths 配置文件路径�?, 形如: ./conf/config.xml
+	 * @param confFilePaths 配置文件路径集, 形如: ./conf/config.xml
 	 * @return true:全部加载成功; false:存在加载失败
 	 */
 	@Override
@@ -281,7 +281,7 @@ public class XConfig implements Runnable, _IConfig {
 	 * 该方法会自动判断当前是否通过tomcat启动，若是则自动切换到loadConfFileByTomcat
 	 * </PRE>
 	 * @param confFilePath 配置文件路径, 形如: ./conf/config.xml
-	 * @return 若为null则加载失�?; 否则为配置文件的根节�?
+	 * @return 若为null则加载失败; 否则为配置文件的根节点
 	 */
 	@Override
 	public Element loadConfFile(String confFilePath) {
@@ -290,10 +290,10 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * <PRE>
-	 * 加载多个jar内配置文�?.
+	 * 加载多个jar内配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
-	 * @param confFilePaths 配置文件路径�?, 形如: /foo/bar/config.xml
+	 * @param confFilePaths 配置文件路径集, 形如: /foo/bar/config.xml
 	 * @return true:全部加载成功; false:存在加载失败
 	 */
 	@Override
@@ -303,11 +303,11 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * <PRE>
-	 * 加载jar内配置文�?.
+	 * 加载jar内配置文件.
 	 * 	后加载的配置文件若与前面加载的配置文件存在同位置配置项，则覆盖之.
 	 * </PRE>
 	 * @param confFilePath 配置文件路径, 形如: /foo/bar/config.xml
-	 * @return 若为null则加载失�?; 否则为配置文件的根节�?
+	 * @return 若为null则加载失败; 否则为配置文件的根节点
 	 */
 	@Override
 	public Element loadConfFileInJar(String confFilePath) {
@@ -321,8 +321,8 @@ public class XConfig implements Runnable, _IConfig {
 	 * 
 	 * 该方法会自动判断当前是否通过tomcat启动，若否则自动切换到loadConfFiles
 	 * </PRE>
-	 * @param confFilePaths 配置文件路径�?, 形如: ./conf/config.xml
-	 * 			方法内会自动在配置文件路径前拼接前缀�? %tomcat%/%wepapp%/%project%/classes
+	 * @param confFilePaths 配置文件路径集, 形如: ./conf/config.xml
+	 * 			方法内会自动在配置文件路径前拼接前缀： %tomcat%/%wepapp%/%project%/classes
 	 * 			若拼接前缀后找不到配置文件, 会修正前缀为：%tomcat%/%wepapp%/%project%
 	 * @return true:全部加载成功; false:存在加载失败
 	 */
@@ -339,9 +339,9 @@ public class XConfig implements Runnable, _IConfig {
 	 * 该方法会自动判断当前是否通过tomcat启动，若否则自动切换到loadConfFile
 	 * </PRE>
 	 * @param confFilePath 配置文件路径, 形如: ./conf/config.xml
-	 * 			方法内会自动在配置文件路径前拼接前缀�? %tomcat%/%wepapp%/%project%/classes
+	 * 			方法内会自动在配置文件路径前拼接前缀： %tomcat%/%wepapp%/%project%/classes
 	 * 			若拼接前缀后找不到配置文件, 会修正前缀为：%tomcat%/%wepapp%/%project%
-	 * @return 若为null则加载失�?; 否则为配置文件的根节�?
+	 * @return 若为null则加载失败; 否则为配置文件的根节点
 	 */
 	@Override
 	public Element loadConfFileByTomcat(String confFilePath) {
@@ -350,8 +350,8 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * 获取节点.
-	 * @param xPath Element对象的标签路�?, 形如: /foo/bar@id/xx@xId/yy@yId/tag
-	 * @return 若节点不存在则返回无效对象节�? NULL_XNODE (绝不返回null)
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若节点不存在则返回无效对象节点 NULL_XNODE (绝不返回null)
 	 */
 	@Override
 	public XNode getNode(String xPath) {
@@ -370,9 +370,9 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * 获取节点.
-	 * @param xName Element对象的标签名�?
-	 * @param xId Element对象的标签名称的id属性�?
-	 * @return 若节点不存在则返回无效对象节�? NULL_XNODE (绝不返回null)
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @return 若节点不存在则返回无效对象节点 NULL_XNODE (绝不返回null)
 	 */
 	@Override
 	public XNode getNode(String xName, String xId) {
@@ -381,9 +381,9 @@ public class XConfig implements Runnable, _IConfig {
 	}
 	
 	/**
-	 * 获取String标签�?(使用trim处理).
-	 * @param xPath Element对象的标签路�?, 形如: /foo/bar@id/xx@xId/yy@yId/tag
-	 * @return 若标签无值则返回default属性�?, 若default无值则返回"" (绝不返回null)
+	 * 获取String标签值(使用trim处理).
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若标签无值则返回default属性值, 若default无值则返回"" (绝不返回null)
 	 */
 	@Override
 	public String getVal(String xPath) {
@@ -401,10 +401,10 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取String标签�?(使用trim处理).
-	 * @param xName Element对象的标签名�?
-	 * @param xId Element对象的标签名称的id属性�?
-	 * @return 若标签无值则返回default属性�?, 若default无值则返回"" (绝不返回null)
+	 * 获取String标签值(使用trim处理).
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @return 若标签无值则返回default属性值, 若default无值则返回"" (绝不返回null)
 	 */
 	@Override
 	public String getVal(String xName, String xId) {
@@ -413,9 +413,9 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取int标签�?(原值使用trim处理).
-	 * @param xPath Element对象的标签路�?, 形如: /foo/bar@id/xx@xId/yy@yId/tag
-	 * @return 若标签无值则返回default属性�?, 若default无值或异常则返�?0
+	 * 获取int标签值(原值使用trim处理).
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
 	 */
 	@Override
 	public int getInt(String xPath) {
@@ -433,10 +433,10 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取int标签�?(原值使用trim处理).
-	 * @param xName Element对象的标签名�?
-	 * @param xId Element对象的标签名称的id属性�?
-	 * @return 若标签无值则返回default属性�?, 若default无值或异常则返�?0
+	 * 获取int标签值(原值使用trim处理).
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
 	 */
 	@Override
 	public int getInt(String xName, String xId) {
@@ -445,9 +445,9 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取long标签�?(原值使用trim处理).
-	 * @param xPath Element对象的标签路�?, 形如: /foo/bar@id/xx@xId/yy@yId/tag
-	 * @return 若标签无值则返回default属性�?, 若default无值或异常则返�?0
+	 * 获取long标签值(原值使用trim处理).
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
 	 */
 	@Override
 	public long getLong(String xPath) {
@@ -465,10 +465,10 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取long标签�?(原值使用trim处理).
-	 * @param xName Element对象的标签名�?
-	 * @param xId Element对象的标签名称的id属性�?
-	 * @return 若标签无值则返回default属性�?, 若default无值或异常则返�?0
+	 * 获取long标签值(原值使用trim处理).
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回0
 	 */
 	@Override
 	public long getLong(String xName, String xId) {
@@ -477,9 +477,9 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取bool标签�?(原值使用trim处理).
-	 * @param xPath Element对象的标签路�?, 形如: /foo/bar@id/xx@xId/yy@yId/tag
-	 * @return 若标签无值则返回default属性�?, 若default无值或异常则返回false
+	 * 获取bool标签值(原值使用trim处理).
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回false
 	 */
 	@Override
 	public boolean getBool(String xPath) {
@@ -497,10 +497,10 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取bool标签�?(原值使用trim处理).
-	 * @param xName Element对象的标签名�?
-	 * @param xId Element对象的标签名称的id属性�?
-	 * @return 若标签无值则返回default属性�?, 若default无值或异常则返回false
+	 * 获取bool标签值(原值使用trim处理).
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @return 若标签无值则返回default属性值, 若default无值或异常则返回false
 	 */
 	@Override
 	public boolean getBool(String xName, String xId) {
@@ -510,8 +510,8 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * <PRE>
-	 * 枚举Element节点下所有子节点的配置�?(使用trim处理).
-	 * 	<B>若子节点同名, 则被枚举节点Element要声明属�? type="enum"</B>
+	 * 枚举Element节点下所有子节点的配置值(使用trim处理).
+	 * 	<B>若子节点同名, 则被枚举节点Element要声明属性 type="enum"</B>
 	 * 
 	 * 子节点同名，父节点需要声明枚举属性：
 	 * &lt;tag type="enum"&gt;
@@ -535,8 +535,8 @@ public class XConfig implements Runnable, _IConfig {
 	 * &lt;/tag&gt;
 	 * 
 	 * </PRE>
-	 * @param xPath Element对象的标签路�?, 形如: /foo/bar@id/xx@xId/yy@yId/tag
-	 * @return 若标签无效则返回无元素的List<String> （绝不返回null�?
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若标签无效则返回无元素的List<String> （绝不返回null）
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -556,8 +556,8 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * <PRE>
-	 * 枚举Element节点下所有子节点的配置�?(使用trim处理).
-	 * 	<B>若子节点同名, 则被枚举节点Element要声明属�? type="enum"</B>
+	 * 枚举Element节点下所有子节点的配置值(使用trim处理).
+	 * 	<B>若子节点同名, 则被枚举节点Element要声明属性 type="enum"</B>
 	 * 
 	 * 子节点同名，父节点需要声明枚举属性：
 	 * &lt;tag type="enum"&gt;
@@ -581,9 +581,9 @@ public class XConfig implements Runnable, _IConfig {
 	 * &lt;/tag&gt;
 	 * 
 	 * </PRE>
-	 * @param xName Element对象的标签名�?
-	 * @param xId Element对象的标签名称的id属性�?
-	 * @return 若标签无效则返回无元素的List<String> （绝不返回null�?
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @return 若标签无效则返回无元素的List<String> （绝不返回null）
 	 */
 	@Override
 	public List<String> getEnums(String xName, String xId) {
@@ -592,10 +592,10 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取标签属性�?.
-	 * @param xPath Element对象的标签路�?, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * 获取标签属性值.
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
 	 * @param attributxName 标签的属性名
-	 * @return 若无效则返回"" （绝不返回null�?
+	 * @return 若无效则返回"" （绝不返回null）
 	 */
 	@Override
 	public String getAttribute(String xPath, String attributxName) {
@@ -614,11 +614,11 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取标签属性�?.
-	 * @param xName Element对象的标签名�?
-	 * @param xId Element对象的标签名称的id属性�?
+	 * 获取标签属性值.
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
 	 * @param attributxName 标签的属性名
-	 * @return 若无效则返回"" （绝不返回null�?
+	 * @return 若无效则返回"" （绝不返回null）
 	 */
 	@Override
 	public String getAttribute(String xName, String xId, String attributxName) {
@@ -628,8 +628,8 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * 获取标签属性表.
-	 * @param xPath Element对象的标签路�?, 形如: /foo/bar@id/xx@xId/yy@yId/tag
-	 * @return 若无效则返回无元素的Map<String, String> （绝不返回null�?
+	 * @param xPath Element对象的标签路径, 形如: /foo/bar@id/xx@xId/yy@yId/tag
+	 * @return 若无效则返回无元素的Map<String, String> （绝不返回null）
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
@@ -649,9 +649,9 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * 获取标签属性表.
-	 * @param xName Element对象的标签名�?
-	 * @param xId Element对象的标签名称的id属性�?
-	 * @return 若无效则返回无元素的Map<String, String> （绝不返回null�?
+	 * @param xName Element对象的标签名称
+	 * @param xId Element对象的标签名称的id属性值
+	 * @return 若无效则返回无元素的Map<String, String> （绝不返回null）
 	 */
 	@Override
 	public Map<String, String> getAttributes(String xName, String xId) {
@@ -660,9 +660,9 @@ public class XConfig implements Runnable, _IConfig {
 	}
 
 	/**
-	 * 获取固定格式配置对象 - 数据�?.
-	 * @param dsId 数据源标签的id属性�?
-	 * @return 若无效则返回默认数据源对�? (绝对不返回null)
+	 * 获取固定格式配置对象 - 数据源.
+	 * @param dsId 数据源标签的id属性值
+	 * @return 若无效则返回默认数据源对象 (绝对不返回null)
 	 */
 	@Override
 	public DataSourceBean getDataSourceBean(String dsId) {
@@ -684,7 +684,7 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * 获取固定格式配置对象 - socket.
-	 * @param sockId socket标签的id属性�?
+	 * @param sockId socket标签的id属性值
 	 * @return 若无效则返回默认socket对象 (绝对不返回null)
 	 */
 	@Override
@@ -707,7 +707,7 @@ public class XConfig implements Runnable, _IConfig {
 
 	/**
 	 * 获取固定格式配置对象 - jms.
-	 * @param jmsId jms标签的id属性�?
+	 * @param jmsId jms标签的id属性值
 	 * @return 若无效则返回默认jms对象 (绝对不返回null)
 	 */
 	@Override

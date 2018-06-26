@@ -12,8 +12,8 @@ import exp.libs.utils.other.LogUtils;
  * 程序入口
  * </PRE>
  * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-07-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

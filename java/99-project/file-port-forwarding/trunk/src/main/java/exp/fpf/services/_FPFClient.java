@@ -27,14 +27,14 @@ import exp.libs.warp.thread.LoopThread;
  *  
  * </pre>	
  * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-07-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class _FPFClient extends LoopThread {
 
-	/** 日志�? */
+	/** 日志器 */
 	private Logger log = LoggerFactory.getLogger(_FPFClient.class);
 	
 	/** [对侧]请求文件名称正则 */
@@ -43,12 +43,12 @@ class _FPFClient extends LoopThread {
 	/**
 	 * [对侧]请求文件名称正则组ID
 	 * 	1: [本侧]真正的服务IP
-	 * 	2: [本侧]真正的服务端�?
+	 * 	2: [本侧]真正的服务端口
 	 * 	3: [对侧]的会话ID
 	 */
 	private final static int IDX_IP = 1, IDX_PORT = 2, IDX_SID = 3;
 	
-	/** 收发管理�? */
+	/** 收发管理器 */
 	private SRMgr srMgr;
 	
 	/** 超时时间 */
@@ -57,11 +57,11 @@ class _FPFClient extends LoopThread {
 	/** 对侧会话ID -> 本侧与真正服务的会话 */
 	private Map<String, _FPFClientSession> sessions;
 	
-	/** 收发目录文件监听�? */
+	/** 收发目录文件监听器 */
 	private FileMonitor srFileMonitor;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param srMgr
 	 * @param overtime
 	 */
@@ -72,7 +72,7 @@ class _FPFClient extends LoopThread {
 		this.overtime = overtime;
 		this.sessions = new HashMap<String, _FPFClientSession>();
 		
-		// 设置收发文件目录监听�?(只监�? send 文件)
+		// 设置收发文件目录监听器(只监听 send 文件)
 		_SRFileListener fileListener = new _SRFileListener(srMgr, 
 				Param.PREFIX_SEND, Param.SUFFIX);
 		this.srFileMonitor = new FileMonitor(srMgr.getRecvDir(), 
@@ -82,7 +82,7 @@ class _FPFClient extends LoopThread {
 	@Override
 	protected void _before() {
 		srFileMonitor._start();
-		log.info("端口转发数据接收器启动成�?");
+		log.info("端口转发数据接收器启动成功");
 	}
 
 	@Override

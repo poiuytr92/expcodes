@@ -31,25 +31,25 @@ import exp.libs.warp.io.flow.StringFlowReader;
  * xml处理工具
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-01-19
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-01-19
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class XmlUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(XmlUtils.class);
 	
 	/** 默认编码 */
 	private final static String DEFAULT_CHARSET = Charset.UTF8;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected XmlUtils() {}
 	
 	/**
-	 * 是否为合法的xml格式字符�?
-	 * @param xml xml格式字符�?
+	 * 是否为合法的xml格式字符串
+	 * @param xml xml格式字符串
 	 * @return true:合法; false:非法
 	 */
 	public static boolean isVaild(String xml) {
@@ -63,8 +63,8 @@ public class XmlUtils {
 	}
 	
 	/**
-	 * 是否为非法的xml格式字符�?
-	 * @param xml xml格式字符�?
+	 * 是否为非法的xml格式字符串
+	 * @param xml xml格式字符串
 	 * @return true:非法; false:合法
 	 */
 	public static boolean isInvaild(String xml) {
@@ -91,7 +91,7 @@ public class XmlUtils {
 	/**
 	 * <PRE>
 	 * 格式化xml.
-	 * 	(缩进、换行、删除子节点中多余的命名空间�?)
+	 * 	(缩进、换行、删除子节点中多余的命名空间等)
 	 * </PRE>
 	 * @param xml xml报文
 	 * @param linePrefix 在每一行前添加的前缀，亦即缩进符
@@ -172,9 +172,9 @@ public class XmlUtils {
 	}
 	
 	/**
-	 * 检查节点下是否存在子节�?
+	 * 检查节点下是否存在子节点
 	 * @param e 指定节点
-	 * @return true:存在子节�?; false:不存在子节点
+	 * @return true:存在子节点; false:不存在子节点
 	 */
 	@SuppressWarnings("unchecked")
 	public static boolean hasChilds(Element e) {
@@ -188,7 +188,7 @@ public class XmlUtils {
 	
 	/**
 	 * 获取第一个子节点
-	 * @param father 父节�?
+	 * @param father 父节点
 	 * @return 第一个子节点; 若父节点为null或无子节点，则返回null
 	 */
 	public static Element getFirstChild(Element father) {
@@ -204,7 +204,7 @@ public class XmlUtils {
 	}
 	
 	/**
-	 * 获取元素名称（优先取带命名空间的名称�?
+	 * 获取元素名称（优先取带命名空间的名称）
 	 * @param e 元素对象
 	 * @return 元素名称
 	 */
@@ -222,7 +222,7 @@ public class XmlUtils {
 	/**
 	 * 取[指定节点]的节点值（去除前后空字符）.
 	 * @param e 指定节点
-	 * @return 节点�?, 若为null则替换为""
+	 * @return 节点值, 若为null则替换为""
 	 */
 	public static String getValue(Element e) {
 		String val = "";
@@ -236,8 +236,8 @@ public class XmlUtils {
 	/**
 	 * 取[指定节点]下[指定路径]的节点值（去除前后空字符）.
 	 * @param e 指定节点
-	 * @param ePath 指定路径, �? "/" 作为路径分隔�?
-	 * @return 节点�?, 若为null则替换为""
+	 * @param ePath 指定路径, 以 "/" 作为路径分隔符
+	 * @return 节点值, 若为null则替换为""
 	 */
 	public static String getValue(Element e, String ePath) {
 		String val = "";
@@ -266,8 +266,8 @@ public class XmlUtils {
 	/**
 	 * 取[指定节点]的子节点的节点值（去除前后空字符）.
 	 * @param e 指定节点
-	 * @param childName 子节点名�?
-	 * @return 节点�?, 若为null则替换为""
+	 * @param childName 子节点名称
+	 * @return 节点值, 若为null则替换为""
 	 */
 	public static String getChildValue(Element e, String childName) {
 		String val = "";
@@ -281,8 +281,8 @@ public class XmlUtils {
 	/**
 	 * 取[指定节点]的[指定属性]的属性值（去除前后空字符）.
 	 * @param e 指定节点
-	 * @param attributeName 指定属性名�?
-	 * @return 属性�?, 若为null则替换为""
+	 * @param attributeName 指定属性名称
+	 * @return 属性值, 若为null则替换为""
 	 */
 	public static String getAttribute(Element e, String attributeName) {
 		String val = "";
@@ -294,9 +294,9 @@ public class XmlUtils {
 	}
 	
 	/**
-	 * 移除元素中的属�?
+	 * 移除元素中的属性
 	 * @param e 元素对象
-	 * @param attributeName 属性名�?
+	 * @param attributeName 属性名称
 	 * @return true:移除成功; false:移除失败
 	 */
 	public static boolean removeAttribute(Element e, String attributeName) {
@@ -310,9 +310,9 @@ public class XmlUtils {
 	}
 	
 	/**
-	 * 获取某个节点自身所属的命名空间地址�?
+	 * 获取某个节点自身所属的命名空间地址串
 	 * @param element 节点
-	 * @return 命名空间地址�?
+	 * @return 命名空间地址串
 	 */
 	public static String getSelfNamespace(Element element) {
 		if(element == null) {
@@ -322,9 +322,9 @@ public class XmlUtils {
 	}
 	
 	/**
-	 * 获取在某个节点上定义的所有命名空间地址�?
+	 * 获取在某个节点上定义的所有命名空间地址串
 	 * @param element 节点
-	 * @return 所有命名空间地址�?
+	 * @return 所有命名空间地址串
 	 */
 	public static String getAllNamespace(Element element) {
 		if(element == null) {
@@ -359,7 +359,7 @@ public class XmlUtils {
 	/**
 	 * 构造命名空间地址
 	 * @param prefix 地址前缀
-	 * @param _URI 唯一地址标识�?
+	 * @param _URI 唯一地址标识值
 	 * @return 命名空间地址
 	 */
 	private static String toNamespaceURL(String prefix, String _URI)  {
@@ -380,7 +380,7 @@ public class XmlUtils {
 	
 	/**
 	 * <PRE>
-	 * 构造xml完整路径对应的压缩路�?.
+	 * 构造xml完整路径对应的压缩路径.
 	 * 	如完整路径为 /root/test/one
 	 *  则压缩路径为/r/t/one
 	 * </PRE>
@@ -411,10 +411,10 @@ public class XmlUtils {
 	}
 	
 	/**
-	 * 校验xml完整路径和压缩路径是否匹�?
+	 * 校验xml完整路径和压缩路径是否匹配
 	 * @param path xml完整路径
 	 * @param compressPath xml压缩路径
-	 * @return true:匹配; false:不匹�?
+	 * @return true:匹配; false:不匹配
 	 */
 	public static boolean matches(String path, String compressPath) {
 		boolean isMatches = false;

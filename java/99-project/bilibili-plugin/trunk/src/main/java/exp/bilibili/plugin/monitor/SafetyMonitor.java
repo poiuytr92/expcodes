@@ -27,8 +27,8 @@ import exp.libs.warp.thread.LoopThread;
  * 软件授权监控线程
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -36,16 +36,16 @@ public class SafetyMonitor extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(SafetyMonitor.class);
 	
-	/** 软件授权�?(Github) : 测试服务�? (需支持TLSv1.2协议才能访问此网址) */
+	/** 软件授权页(Github) : 测试服务器 (需支持TLSv1.2协议才能访问此网址) */
 	private final static String GITHUB_URL = Config.getInstn().TEST_SERVER();
 	
-	/** 软件授权�?(Gitee) : 正式服务�? */
+	/** 软件授权页(Gitee) : 正式服务器 */
 	private final static String GITEE_URL = Config.getInstn().OFFICIAL_SERVER();
 	
 	/** 免检原因 */
 	private final static String UNCHECK_CAUSE = "UNCHECK";
 	
-	/** 允许授权页连续无响应的上限次�? */
+	/** 允许授权页连续无响应的上限次数 */
 	private final static int NO_RESPONSE_LIMIT = 3;
 	
 	/** 校验授权间隔 */
@@ -54,7 +54,7 @@ public class SafetyMonitor extends LoopThread {
 	/** 线程轮询间隔 */
 	private final static long LOOP_TIME = 1000;
 	
-	/** 校验行为的累计周�?(达到周期则触发校�?) */
+	/** 校验行为的累计周期(达到周期则触发校验) */
 	private final static int LOOP_LIMIT = (int) (CHECK_TIME / LOOP_TIME);
 	
 	private int noResponseCnt;
@@ -98,7 +98,7 @@ public class SafetyMonitor extends LoopThread {
 	@Override
 	protected void _before() {
 		updateCertificateTime(SafetyUtils.fileToCertificate());
-		log.info("{} 已启�?", getName());
+		log.info("{} 已启动", getName());
 	}
 
 	@Override
@@ -126,12 +126,12 @@ public class SafetyMonitor extends LoopThread {
 	
 	@Override
 	protected void _after() {
-		log.info("{} 已停�?, CAUSE: {}", getName(), cause);
+		log.info("{} 已停止, CAUSE: {}", getName(), cause);
 		
-		// 若非免检原因导致的终�?, 则需要弹出提示面�?
+		// 若非免检原因导致的终止, 则需要弹出提示面板
 		if(!UNCHECK_CAUSE.equals(cause)) {
 			
-			// 使用渐隐自动关闭的提示窗�?, 可避免用户卡着提示窗口导致程序不退出的问题
+			// 使用渐隐自动关闭的提示窗口, 可避免用户卡着提示窗口导致程序不退出的问题
 			_ExitNoticeUI exit = new _ExitNoticeUI(cause);
 			exit._view();
 			exit._join();
@@ -149,7 +149,7 @@ public class SafetyMonitor extends LoopThread {
 		if(++loopCnt >= LOOP_LIMIT) {
 			loopCnt = 0;
 			
-			// 先尝试用Gitee(国内)获取授权�?, 若失败则从GitHub(国际)获取授权�?
+			// 先尝试用Gitee(国内)获取授权页, 若失败则从GitHub(国际)获取授权页
 			AppInfo appInfo = Certificate.getAppInfo(GITEE_URL, appName);
 			if(appInfo == null) {
 				appInfo = Certificate.getAppInfo(GITHUB_URL, appName);
@@ -157,7 +157,7 @@ public class SafetyMonitor extends LoopThread {
 			
 			if(appInfo == null) {
 				if(++noResponseCnt >= NO_RESPONSE_LIMIT) {
-					if(checkByBilibili() == true) {	// Github或Gitee网络不通时, 转B站校�?
+					if(checkByBilibili() == true) {	// Github或Gitee网络不通时, 转B站校验
 						noResponseCnt = 0;
 						
 					} else {
@@ -177,7 +177,7 @@ public class SafetyMonitor extends LoopThread {
 	}
 	
 	/**
-	 * 软件授权校验（通过Bilibili授权信息-作为备用校验�?
+	 * 软件授权校验（通过Bilibili授权信息-作为备用校验）
 	 * @return 是否继续校验
 	 */
 	private boolean checkByBilibili() {
@@ -195,7 +195,7 @@ public class SafetyMonitor extends LoopThread {
 				}
 			}
 		} catch(Exception e) {
-			log.error("从B站提取应�? [{}] 信息失败", appName, e);
+			log.error("从B站提取应用 [{}] 信息失败", appName, e);
 		}
 		return isOk;
 	}
@@ -246,16 +246,16 @@ public class SafetyMonitor extends LoopThread {
 	/**
 	 * 校验当前软件是否匹配授权信息
 	 * @param appInfo 软件授权信息
-	 * @return true:匹配; false:不匹�?
+	 * @return true:匹配; false:不匹配
 	 */
 	private boolean check(AppInfo appInfo) {
 		boolean isOk = true;
 		if(checkInWhitelist(appInfo.getWhitelist())) {
-			cause = UNCHECK_CAUSE;	// 白名单用�?, 启动后则免检
+			cause = UNCHECK_CAUSE;	// 白名单用户, 启动后则免检
 			isOk = false;
 			
 		} else if(!checkVersions(appInfo.getVersions())) {
-			cause = "版本已失�?, 请升级到最新版";
+			cause = "版本已失效, 请升级到最新版";
 			isOk = false;
 			
 		} else if(!checkNotInBlacklist(appInfo.getBlacklist())) {
@@ -263,7 +263,7 @@ public class SafetyMonitor extends LoopThread {
 			isOk = false;
 			
 		} else if(!checkInTime(appInfo.getTime())) {
-			cause = "授权已过�?";
+			cause = "授权已过期";
 			isOk = false;
 		}
 		return isOk;
@@ -271,8 +271,8 @@ public class SafetyMonitor extends LoopThread {
 	
 	/**
 	 * 检查使用软件的用户是否在白名单内（白名单内用户可无视所有校验）
-	 * @param whitelist 白名单列表（格式: aUser,bUser,cUser,......�?
-	 * @return true:在白名单�?; false:不在白名�?
+	 * @param whitelist 白名单列表（格式: aUser,bUser,cUser,......）
+	 * @return true:在白名单内; false:不在白名单
 	 */
 	private boolean checkInWhitelist(String whitelist) {
 		boolean isIn = false;
@@ -285,7 +285,7 @@ public class SafetyMonitor extends LoopThread {
 	/**
 	 * 检查软件的当前版本是否大于等于授权版本
 	 * @param versions 授权版本(格式: major.minor ，如: 1.9)
-	 * @return true:当前版本在授权范围内; false:当前版本已失�?
+	 * @return true:当前版本在授权范围内; false:当前版本已失效
 	 */
 	private boolean checkVersions(String versions) {
 		String[] appVers = appVersion.split("\\.");
@@ -307,8 +307,8 @@ public class SafetyMonitor extends LoopThread {
 	
 	/**
 	 * 检查使用软件的用户是否不在黑名单内
-	 * @param blacklist 黑名单列表（格式: aUser,bUser,cUser,......�?
-	 * @return true:不在黑名�?; false:在黑名单�?
+	 * @param blacklist 黑名单列表（格式: aUser,bUser,cUser,......）
+	 * @return true:不在黑名单; false:在黑名单内
 	 */
 	private boolean checkNotInBlacklist(String blacklist) {
 		boolean isNotIn = true;
@@ -319,9 +319,9 @@ public class SafetyMonitor extends LoopThread {
 	}
 	
 	/**
-	 * 检查对公和对私时间是否已过�?.
-	 * @param time 对公授权时间(格式�? yyyy-MM-dd HH:mm:ss)
-	 * @return true:对公和对私时间均未过�?; false:对公或对私时间过�?
+	 * 检查对公和对私时间是否已过期.
+	 * @param time 对公授权时间(格式： yyyy-MM-dd HH:mm:ss)
+	 * @return true:对公和对私时间均未过期; false:对公或对私时间过期
 	 */
 	private boolean checkInTime(String time) {
 		long now = System.currentTimeMillis();

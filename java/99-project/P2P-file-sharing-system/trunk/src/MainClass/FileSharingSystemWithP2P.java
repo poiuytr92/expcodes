@@ -5,9 +5,7 @@ import Windows.MainWindow;
 
 /**
  * @Object: 基于P2P技术的文件共享系统
- * @author  林蔓虹
- * @class:  08计算机1班
- * @number: 2008314122
+ * @author  EXP: 272629724@qq.com
  */
 
 /*

@@ -8,8 +8,8 @@ import exp.libs.utils.other.StrUtils;
  * 校验码计算工具
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -19,7 +19,7 @@ public class VercodeUtils {
 	
 	/**
 	 * 计算验证码图片中的表达式
-	 * @param vercodeImgPath 验证码图片路�?, 目前仅有 a+b �? a-b 两种形式的验证码
+	 * @param vercodeImgPath 验证码图片路径, 目前仅有 a+b 与 a-b 两种形式的验证码
 	 * @return
 	 */
 	public static int calculateImage(String vercodeImgPath) {
@@ -27,8 +27,8 @@ public class VercodeUtils {
 	}
 	
 	/**
-	 * 计算表达�?
-	 * @param expression 表达�?, 目前仅有 a+b �? a-b 两种形式
+	 * 计算表达式
+	 * @param expression 表达式, 目前仅有 a+b 与 a-b 两种形式
 	 * @return
 	 */
 	public static int calculate(String expression) {

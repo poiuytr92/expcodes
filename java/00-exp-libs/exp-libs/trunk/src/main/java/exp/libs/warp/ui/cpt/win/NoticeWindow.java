@@ -12,8 +12,8 @@ import exp.libs.utils.os.ThreadUtils;
  *   (使用_show方法显示窗体, 可触发自动渐隐消失)
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-26
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-26
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -74,11 +74,11 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 	
 	@Override
 	public void run() {
-		ThreadUtils.tSleep(2000);	// 悬停2�?
+		ThreadUtils.tSleep(2000);	// 悬停2秒
 		
-		// 透明度渐�?(大约持续3�?)
+		// 透明度渐隐(大约持续3秒)
 		for(float opacity = 100; opacity > 0; opacity -= 2) {
-			AWTUtilities.setWindowOpacity(this, opacity / 100);	// 设置透明�?
+			AWTUtilities.setWindowOpacity(this, opacity / 100);	// 设置透明度
 			ThreadUtils.tSleep(60);
 			
 			if(isVisible() == false) {
@@ -86,7 +86,7 @@ public abstract class NoticeWindow extends PopChildWindow implements Runnable {
 			}
 		}
 		
-		_hide();	// 销毁窗�?
+		_hide();	// 销毁窗体
 	}
 	
 	/**

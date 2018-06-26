@@ -11,9 +11,16 @@ import javax.naming.NamingException;
 /**
  * jms工厂类
  * 
+ * <pre>
+ * public void onCommand(Object command)<br/>
+ * public void onException(IOException error)<br/>
+ * public void transportInterupted()<br/>
+ * public void transportResumed()<br/>
+ * </pre>
+ * 
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -30,12 +37,12 @@ public class JMSFactory {
 	private String contextFactory;
 
 	/**
-	 * 连接工厂字符�?
+	 * 连接工厂字符串
 	 */
 	private String connectionFactory;
 
 	/**
-	 * 上下文工厂对�?
+	 * 上下文工厂对象
 	 */
 	private Context context;
 
@@ -45,14 +52,14 @@ public class JMSFactory {
 	private ConnectionFactory factory;
 
 	/**
-	 * 构造方�?
+	 * 构造方法
 	 * 
 	 * @param url
 	 *            jms的url
 	 * @param contextFactory
 	 *            上下文工厂字符串
 	 * @param connectionFactory
-	 *            连接工厂字符�?
+	 *            连接工厂字符串
 	 */
 	public JMSFactory(String url, String contextFactory,
 			String connectionFactory) {
@@ -93,7 +100,7 @@ public class JMSFactory {
 	 * 创建连接
 	 * 
 	 * @param user
-	 *            用户�?
+	 *            用户名
 	 * @param password
 	 *            密码
 	 * @return 连接

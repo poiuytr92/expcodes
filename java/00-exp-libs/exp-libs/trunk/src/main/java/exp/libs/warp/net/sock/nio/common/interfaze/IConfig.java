@@ -5,8 +5,8 @@ package exp.libs.warp.net.sock.nio.common.interfaze;
  * NioSocket配置接口
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -26,8 +26,8 @@ public interface IConfig {
 
 	/**
 	 * <pre>
-	 * 获取接收消息时使用的字符集编码�?
-	 * 接收到消息字节流后，会使用这个编码读取字节�?
+	 * 获取接收消息时使用的字符集编码。
+	 * 接收到消息字节流后，会使用这个编码读取字节。
 	 * </pre>
 	 * @return 远端机字符集
 	 */
@@ -36,7 +36,7 @@ public interface IConfig {
 	/**
 	 * <pre>
 	 * 获取发送消息时使用的字符集编码
-	 * 发送消息前，会把消息转换为这个编码的字节流�?
+	 * 发送消息前，会把消息转换为这个编码的字节流。
 	 * </pre>
 	 * @return 本地机字符集
 	 */
@@ -55,14 +55,14 @@ public interface IConfig {
 	public int getWriteBufferSize();
 	
 	/**
-	 * 获取接收消息分隔�?
-	 * @return 接收消息分隔�?
+	 * 获取接收消息分隔符
+	 * @return 接收消息分隔符
 	 */
 	public String getReadDelimiter();
 	
 	/**
 	 * 获取发送消息分隔符
-	 * @return 接收消息分隔�?
+	 * @return 接收消息分隔符
 	 */
 	public String getWriteDelimiter();
 	

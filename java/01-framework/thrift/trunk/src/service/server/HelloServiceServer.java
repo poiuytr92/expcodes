@@ -2,25 +2,24 @@ package service.server;
 
 import java.net.InetSocketAddress;
 
-import org.apache.thrift.TProcessor; 
-import org.apache.thrift.protocol.TBinaryProtocol; 
-import org.apache.thrift.protocol.TBinaryProtocol.Factory; 
-import org.apache.thrift.server.TServer; 
-import org.apache.thrift.server.TThreadPoolServer; 
-import org.apache.thrift.server.TThreadPoolServer.Args;  
-import org.apache.thrift.transport.TServerSocket; 
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.protocol.TBinaryProtocol.Factory;
+import org.apache.thrift.server.TServer;
+import org.apache.thrift.server.TThreadPoolServer;
+import org.apache.thrift.server.TThreadPoolServer.Args;
+import org.apache.thrift.transport.TServerSocket;
 import org.apache.thrift.transport.TServerTransport;
-import org.apache.thrift.transport.TTransportException; 
-import org.apache.thrift.transport.TTransportFactory;
 
-import service.demo.Hello; 
-import service.demo.HelloServiceImpl; 
+import service.demo.Hello;
+import service.demo.HelloServiceImpl;
 
-/** 
- * @author 李军
- * @version 1.0
- * @datetime 2015-12-28 下午02:51:31 
- * 类说明 
+/**
+ * 
+ * <B>PROJECT : </B> thrift
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-28
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class HelloServiceServer {
 

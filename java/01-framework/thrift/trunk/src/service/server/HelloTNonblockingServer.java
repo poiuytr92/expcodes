@@ -1,21 +1,24 @@
 package service.server;
 
 import java.net.InetSocketAddress;
-import org.apache.thrift.TException;
+
 import org.apache.thrift.TProcessor;
 import org.apache.thrift.protocol.TCompactProtocol;
 import org.apache.thrift.server.TNonblockingServer;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.transport.TFramedTransport;
 import org.apache.thrift.transport.TNonblockingServerSocket;
-import service.demo.Hello; 
-import service.demo.HelloServiceImpl; 
 
-/** 
- * @author 李军
- * @version 1.0
- * @datetime 2015-12-30 上午09:01:27 
- * 类说明 
+import service.demo.Hello;
+import service.demo.HelloServiceImpl;
+
+/**
+ * 
+ * <B>PROJECT : </B> thrift
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-28
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class HelloTNonblockingServer {
 

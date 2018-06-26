@@ -7,8 +7,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
  * 业务处理抽象类
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -20,8 +20,8 @@ abstract class AbstractHandler implements IHandler {
 	protected IHandler handler;
 
 	/**
-	 * 构造函�?
-	 * @param handler 客户业务处理�?
+	 * 构造函数
+	 * @param handler 客户业务处理器
 	 */
 	public AbstractHandler(IHandler handler) {
 		this.handler = handler;
@@ -29,7 +29,7 @@ abstract class AbstractHandler implements IHandler {
 
 	/**
 	 * 设置客户实现的业务处理器
-	 * @param handler 业务处理�?
+	 * @param handler 业务处理器
 	 */
 	public void setHandler(IHandler handler) {
 		this.handler = handler;

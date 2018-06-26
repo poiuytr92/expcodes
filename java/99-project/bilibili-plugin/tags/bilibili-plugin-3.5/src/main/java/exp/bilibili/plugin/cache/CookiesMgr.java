@@ -24,8 +24,8 @@ import exp.libs.utils.other.StrUtils;
  * 账号cookie管理器
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -58,7 +58,7 @@ public class CookiesMgr {
 	/** 马甲号cookie */
 	private BiliCookie vestCookie;
 	
-	/** 小号cookie�? */
+	/** 小号cookie集 */
 	private Set<BiliCookie> miniCookies;
 	
 	/** 小号cookie保存路径 */
@@ -71,7 +71,7 @@ public class CookiesMgr {
 	private static volatile CookiesMgr instance;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	private CookiesMgr() {
 		this.mainCookie = BiliCookie.NULL;
@@ -236,7 +236,7 @@ public class CookiesMgr {
 	}
 	
 	/**
-	 * 持有cookie�?
+	 * 持有cookie数
 	 * @return
 	 */
 	public static int SIZE() {
@@ -248,7 +248,7 @@ public class CookiesMgr {
 	}
 	
 	/**
-	 * 持有小号的cookie�?
+	 * 持有小号的cookie数
 	 * @return
 	 */
 	public static int MINI_SIZE() {
@@ -256,7 +256,7 @@ public class CookiesMgr {
 	}
 	
 	/**
-	 * 获取最近一次添加cookie的时�?
+	 * 获取最近一次添加cookie的时间
 	 * @return
 	 */
 	public long getLastAddCookieTime() {
@@ -285,7 +285,7 @@ public class CookiesMgr {
 	
 	/**
 	 * 检查cookie是否可以登陆成功
-	 *  若成功则把账号ID和昵称也更新到cookie�?
+	 *  若成功则把账号ID和昵称也更新到cookie中
 	 * @param cookie
 	 * @return
 	 */

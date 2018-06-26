@@ -18,8 +18,8 @@ import exp.libs.warp.net.http.HttpUtils;
  * 版聊弹幕/私信消息
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -34,13 +34,13 @@ public class Chat extends __XHR {
 	/** 私信URL */
 	private final static String MSG_URL = Config.getInstn().MSG_URL();
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected Chat() {}
 	
 	/**
-	 * 发送弹幕消�?
+	 * 发送弹幕消息
 	 * @param cookie 发送弹幕的账号cookie
-	 * @param roomId 目标直播间房�?
+	 * @param roomId 目标直播间房号
 	 * @param msg 弹幕消息
 	 * @param color 弹幕颜色
 	 * @return
@@ -62,7 +62,7 @@ public class Chat extends __XHR {
 	 */
 	private static Map<String, String> getRequest(String msg, String roomId, String color) {
 		Map<String, String> params = new HashMap<String, String>();
-		params.put(BiliCmdAtrbt.rnd, String.valueOf(System.currentTimeMillis() / 1000));	// 时间�?
+		params.put(BiliCmdAtrbt.rnd, String.valueOf(System.currentTimeMillis() / 1000));	// 时间戳
 		params.put(BiliCmdAtrbt.msg, msg);			// 弹幕内容
 		params.put(BiliCmdAtrbt.color, color);		// 弹幕颜色
 		params.put(BiliCmdAtrbt.roomid, roomId);	// 接收消息的房间号
@@ -72,11 +72,11 @@ public class Chat extends __XHR {
 	}
 	
 	/**
-	 * 发送私�?
+	 * 发送私信
 	 * @param cookie 发送账号的cookie
 	 * @param sendId 发送账号的用户ID
 	 * @param recvId 接收账号的用户ID
-	 * @param msg 发送消�?
+	 * @param msg 发送消息
 	 * @return
 	 */
 	public static boolean sendPM(BiliCookie cookie, String recvId, String msg) {
@@ -87,7 +87,7 @@ public class Chat extends __XHR {
 	}
 	
 	/**
-	 * 私信头参�?
+	 * 私信头参数
 	 * @param cookie
 	 * @return
 	 */
@@ -125,7 +125,7 @@ public class Chat extends __XHR {
 	}
 	
 	/**
-	 * 弹幕/消息发送结果解�?
+	 * 弹幕/消息发送结果解析
 	 * @param response  
 	 * 		弹幕: {"code":-101,"msg":"请先登录","data":[]}
 	 * 		私信: {"code":0,"msg":"ok","message":"ok","data":{"msg_key":6510413634042085687,"_gt_":0}}
@@ -141,10 +141,10 @@ public class Chat extends __XHR {
 			} else {
 				String reason = JsonUtils.getStr(json, BiliCmdAtrbt.msg);
 				reason = (StrUtils.isEmpty(reason) ? String.valueOf(code) : reason);
-				log.warn("发送消息失�?({}): {}", reason, msg);
+				log.warn("发送消息失败({}): {}", reason, msg);
 			}
 		} catch(Exception e) {
-			log.error("发送消息失�?: {}", msg, e);
+			log.error("发送消息失败: {}", msg, e);
 		}
 		return isOk;
 	}

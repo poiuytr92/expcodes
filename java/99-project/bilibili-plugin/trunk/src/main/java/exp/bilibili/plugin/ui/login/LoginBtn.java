@@ -20,8 +20,8 @@ import exp.libs.warp.ui.SwingUtils;
  * 	封装了 二维码扫码登陆 和 帐密登陆 两种方式
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -110,7 +110,7 @@ public class LoginBtn {
 	}
 	
 	private void login() {
-		if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1�?)", "帐密登陆 (30�?)")) {
+		if(SwingUtils.confirm("请选择登陆方式 : ", "扫码登陆 (1天)", "帐密登陆 (30天)")) {
 			initQRLoginUI();	// QR登陆时的检测线程不能重复启动，只能每次新建对象
 			qrLoginUI._view();
 			

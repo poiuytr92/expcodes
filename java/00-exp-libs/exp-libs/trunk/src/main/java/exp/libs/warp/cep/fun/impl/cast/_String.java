@@ -10,8 +10,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	强制类型转换: 调用入参的toString方法得到其 String 类型
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -23,15 +23,15 @@ public class _String extends BaseFunction1 {
 	private static final long serialVersionUID = 3205146116981255386L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "str";
 	
 	/**
 	 * 强制类型转换: String
-	 * �?1个入参：
-	 * @param1 Object:各种类型�?
+	 * 仅1个入参：
+	 * @param1 Object:各种类型值
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

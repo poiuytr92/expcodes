@@ -20,8 +20,8 @@ import exp.libs.warp.net.http.HttpUtils;
  * 日常任务
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -48,14 +48,14 @@ public class DailyTasks extends __XHR {
 	/** 小学数学任务重试间隔(验证码计算成功率只有90%左右, 失败后需重试) */
 	private final static long SLEEP_TIME = 500L;
 	
-	/** 执行下次任务的延迟时间点�?5分钟后） */
+	/** 执行下次任务的延迟时间点（5分钟后） */
 	private final static long NEXT_TASK_DELAY = 300000L;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected DailyTasks() {}
 	
 	/**
-	 * 友爱社签�?
+	 * 友爱社签到
 	 * @param cookie
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
@@ -80,7 +80,7 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 友爱社请求参�?
+	 * 友爱社请求参数
 	 * @param csrf
 	 * @return
 	 */
@@ -104,13 +104,13 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * （友爱社/每日）签到结果解�?
+	 * （友爱社/每日）签到结果解析
 	 * @param response  {"code":0,"msg":"","message":"","data":[]}
 	 * @return 返回执行下次任务的时间点(<=0表示已完成该任务)
 	 */
 	private static long analyse(String response, String username, boolean assn) {
 		long nextTaskTime = -1;
-		String signType = (assn ? "友爱�?" : "每日");
+		String signType = (assn ? "友爱社" : "每日");
 		try {
 			JSONObject json = JSONObject.fromObject(response);
 			int code = JsonUtils.getInt(json, BiliCmdAtrbt.code, -1);
@@ -118,7 +118,7 @@ public class DailyTasks extends __XHR {
 			if(code == 0) {
 				UIUtils.log("[", username, "] ", signType, "签到完成");
 				
-			} else if(!reason.contains("已签�?") && !reason.contains("已领�?")) {
+			} else if(!reason.contains("已签到") && !reason.contains("已领取")) {
 				log.warn("[{}] {}签到失败: {}", username, signType, reason);
 				if(!reason.contains("需要绑定手机号")) {
 					nextTaskTime = System.currentTimeMillis() + NEXT_TASK_DELAY;
@@ -145,10 +145,10 @@ public class DailyTasks extends __XHR {
 		if(task != MathTask.NULL) {
 			nextTaskTime = task.getEndTime() * 1000;
 			
-			// 已到达任务执行时�?
+			// 已到达任务执行时间
 			if(nextTaskTime <= System.currentTimeMillis()) {
 				if(!doMathTask(header, cookie.NICKNAME(), task)) {
-					nextTaskTime = -1;	// 标记不存在下一轮任�?
+					nextTaskTime = -1;	// 标记不存在下一轮任务
 				}
 			}
 		}
@@ -160,11 +160,11 @@ public class DailyTasks extends __XHR {
 	 * @param header
 	 * @param username
 	 * @param task
-	 * @return 是否存在下一轮任�?
+	 * @return 是否存在下一轮任务
 	 */
 	private static boolean doMathTask(Map<String, String> header, 
 			String username, MathTask task) {
-		for(int retry = 0; retry < 5; retry++) {	// 最多重�?5次验证码, 避免阻塞抽奖
+		for(int retry = 0; retry < 5; retry++) {	// 最多重试5次验证码, 避免阻塞抽奖
 			int answer = calculateAnswer(header);
 			if(answer >= 0) {
 				if(execMathTask(header, username, task, answer)) {
@@ -200,7 +200,7 @@ public class DailyTasks extends __XHR {
 	}
 	
 	/**
-	 * 计算验证码图片的小学数学�?
+	 * 计算验证码图片的小学数学题
 	 * @param header
 	 * @return
 	 */
@@ -217,8 +217,8 @@ public class DailyTasks extends __XHR {
 	 * 提交小学数学日常任务
 	 * 
 	 * {"code":0,"msg":"ok","data":{"silver":7266,"awardSilver":80,"isEnd":0}}
-	 * {"code":-902,"msg":"验证码错�?","data":[]}
-	 * {"code":-903,"msg":"已经领取过这个宝�?","data":{"surplus":-25234082.15}}
+	 * {"code":-902,"msg":"验证码错误","data":[]}
+	 * {"code":-903,"msg":"已经领取过这个宝箱","data":{"surplus":-25234082.15}}
 	 * 
 	 * @param header
 	 * @param task
@@ -238,14 +238,14 @@ public class DailyTasks extends __XHR {
 			if(code == 0) {
 				isOk = true;
 				UIUtils.log("[", username, "] 小学数学任务进度: ", task.getCurRound(), "/", 
-						task.getMaxRound(), "�?-", task.getStep(), "分钟");
+						task.getMaxRound(), "轮-", task.getStep(), "分钟");
 				
-			} else if(reason.contains("验证码错�?")) {
+			} else if(reason.contains("验证码错误")) {
 				isOk = false;
 				
-			} else if(reason.contains("未绑定手�?")) {
+			} else if(reason.contains("未绑定手机")) {
 				isOk = true;
-				task.setExistNext(false);	// 标记不存在下一轮任�?
+				task.setExistNext(false);	// 标记不存在下一轮任务
 			}
 		} catch(Exception e) {
 			log.error("[{}] 执行小学数学任务失败: {}", username, response, e);

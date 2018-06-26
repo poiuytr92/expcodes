@@ -11,8 +11,8 @@ import exp.libs.utils.other.StrUtils;
  * 时间工具类
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -48,20 +48,20 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	}
 	
 	/**
-	 * 检查当前时间是否为0点附�?(23:00~1:00)
+	 * 检查当前时间是否为0点附近(23:00~1:00)
 	 * @return
 	 */
 	public static boolean inZeroPointRange() {
-		final long ZERO = TimeUtils.getZeroPointMillis(PEKING_HOUR_OFFSET) + DAY_UNIT;	// 当前24�?
-		final long RANGE_BGN = ZERO - HOUR_UNIT;	// 当天23�?
-		final long RANGE_END = ZERO + HOUR_UNIT;	// 明天1�?
+		final long ZERO = TimeUtils.getZeroPointMillis(PEKING_HOUR_OFFSET) + DAY_UNIT;	// 当前24点
+		final long RANGE_BGN = ZERO - HOUR_UNIT;	// 当天23点
+		final long RANGE_END = ZERO + HOUR_UNIT;	// 明天1点
 		long now = System.currentTimeMillis();
 		return (now >= RANGE_BGN && now <= RANGE_END);
 	}
 	
 	/**
 	 * 获取本期时间
-	 * @return yyyyMM 格式, �?: 201801
+	 * @return yyyyMM 格式, 如: 201801
 	 */
 	public static int getCurPeriod() {
 		return NumUtils.toInt(TimeUtils.toStr(new Date(), "yyyyMM"), 0);
@@ -69,7 +69,7 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	
 	/**
 	 * 获取上期时间
-	 * @return yyyyMM 格式, �?: 201712
+	 * @return yyyyMM 格式, 如: 201712
 	 */
 	public static int getLastPeriod() {
 		return getLastPeriod(getCurPeriod());
@@ -77,8 +77,8 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	
 	/**
 	 * 获取上期时间
-	 * @param curPeriod 本期时间, yyyyMM 格式, �?: 201801
-	 * @return yyyyMM 格式, �?: 201712
+	 * @param curPeriod 本期时间, yyyyMM 格式, 如: 201801
+	 * @return yyyyMM 格式, 如: 201712
 	 */
 	public static int getLastPeriod(int curPeriod) {
 		int period = curPeriod;

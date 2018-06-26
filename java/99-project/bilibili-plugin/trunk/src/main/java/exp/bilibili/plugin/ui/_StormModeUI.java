@@ -29,8 +29,8 @@ import exp.libs.warp.ui.layout.VFlowLayout;
  * 节奏风暴扫描策略选择窗口
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-21
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -73,7 +73,7 @@ class _StormModeUI extends PopChildWindow {
 	
 	@Override
 	protected void initComponents(Object... args) {
-		this.okBtn = new JButton("�? �?");
+		this.okBtn = new JButton("确 认");
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, okBtn);
 		okBtn.setForeground(Color.BLACK);
 		
@@ -81,7 +81,7 @@ class _StormModeUI extends PopChildWindow {
 		this.top50Btn = new JRadioButton("TOP-50  ( 固定扫描排名1-50的人气直播间 )");
 		this.top100Btn = new JRadioButton("TOP-100  ( 固定扫描排名1-100的人气直播间 )");
 		this.sec100Btn = new JRadioButton("SEC-100  ( 固定扫描排名100-200的人气直播间 )");
-		this.customBtn = new JRadioButton("自定�?  ( 仅对主播版开�?, 每页固定30个直播间 )");
+		this.customBtn = new JRadioButton("自定义  ( 仅对主播版开放, 每页固定30个直播间 )");
 		autoBtn.setForeground(Color.BLACK);
 		top50Btn.setForeground(Color.BLACK);
 		top100Btn.setForeground(Color.BLACK);
@@ -115,8 +115,8 @@ class _StormModeUI extends PopChildWindow {
 		panel.add(sec100Btn);
 		panel.add(customBtn);
 		panel.add(SwingUtils.getHGridPanel(
-				SwingUtils.getPairsPanel("始页�?", bgnTF), 
-				SwingUtils.getPairsPanel("止页�?", endTF)
+				SwingUtils.getPairsPanel("始页码", bgnTF), 
+				SwingUtils.getPairsPanel("止页码", endTF)
 		));
 		SwingUtils.addBorder(panel);
 		
@@ -150,7 +150,7 @@ class _StormModeUI extends PopChildWindow {
 				if(customBtn.isSelected()) {
 					int bgn = NumUtils.toInt(bgnTF.getText(), 1);
 					int end = NumUtils.toInt(endTF.getText(), 0);
-					bgn = (bgn > 99 ? 99 : bgn);	// 限制范围 (超过100页意义不�?)
+					bgn = (bgn > 99 ? 99 : bgn);	// 限制范围 (超过100页意义不大)
 					end = (end < bgn ? (bgn + 1) : end);
 					
 					bgnTF.setText(String.valueOf(bgn));
@@ -165,14 +165,14 @@ class _StormModeUI extends PopChildWindow {
 
 		    @Override
 		    public void keyTyped(KeyEvent e) {
-		        String text = textField.getText();  // 当前输入框内�?
-		        char ch = e.getKeyChar();   // 准备附加到输入框的字�?
+		        String text = textField.getText();  // 当前输入框内容
+		        char ch = e.getKeyChar();   // 准备附加到输入框的字符
 
-		        // 限制不能输入非数�?
+		        // 限制不能输入非数字
 		        if(!(ch >= '0' && ch <= '9')) {
-		            e.consume();    // 销毁当前输入字�?
+		            e.consume();    // 销毁当前输入字符
 
-		        // 限制不能�?0开�?
+		        // 限制不能是0开头
 		        } else if("".equals(text) && ch == '0') {   
 		            e.consume();
 		        }

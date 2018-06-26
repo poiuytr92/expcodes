@@ -12,8 +12,8 @@ import exp.libs.warp.cep.fun.BaseFunctionN;
  * 	字符串操作： 无限拼接
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -25,17 +25,17 @@ public class Concat extends BaseFunctionN {
 	private static final long serialVersionUID = -8008474521815772996L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "concat";
 	
 	/**
-	 * 字符串拼�?.若出现null串则跳过.
+	 * 字符串拼接.若出现null串则跳过.
 	 * N个入参：
-	 * @param1 String:字符�?1
-	 * @param2 String:字符�?2
-	 * @param... String:字符�?...
+	 * @param1 String:字符串1
+	 * @param2 String:字符串2
+	 * @param... String:字符串...
 	 * @paramN String:字符串N
 	 * @return String: 所有字符串顺序拼接
 	 * @throws EvaluationException 若执行失败则抛出异常

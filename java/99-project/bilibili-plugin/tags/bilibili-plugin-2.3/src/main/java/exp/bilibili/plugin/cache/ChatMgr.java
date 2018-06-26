@@ -28,8 +28,8 @@ import exp.libs.warp.thread.LoopThread;
  *  4.自动打call
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -37,17 +37,17 @@ public class ChatMgr extends LoopThread {
 
 	private final static Logger log = LoggerFactory.getLogger(ChatMgr.class);
 	
-	/** 同屏可以显示的最大发言�? */
+	/** 同屏可以显示的最大发言数 */
 	private final static int SCREEN_CHAT_LIMT = 7;
 	
-	private final static String NOTICE_KEY = "【公告�?";
+	private final static String NOTICE_KEY = "【公告】";
 	
-	private final static String NIGHT_KEY = "晚安(´▽`)�?  ";
+	private final static String NIGHT_KEY = "晚安(´▽`)ﾉ  ";
 	
 	/** 同一时间可以感谢的最大用户数（避免刷屏） */
 	private final static int THX_USER_LIMIT = 2;
 	
-	/** 发送消息间�? */
+	/** 发送消息间隔 */
 	private final static long SEND_TIME = 500;
 	
 	/** 自动感谢周期 */
@@ -59,7 +59,7 @@ public class ChatMgr extends LoopThread {
 	/** 自动打call周期 */
 	private final static long CALL_TIME = 30000;
 	
-	/** 检测待发送消息间�? */
+	/** 检测待发送消息间隔 */
 	private final static long SLEEP_TIME = 1000;
 	
 	private final static int THX_LIMIT = (int) (THX_TIME / SLEEP_TIME);
@@ -86,7 +86,7 @@ public class ChatMgr extends LoopThread {
 	/** 自动晚安 */
 	private boolean autoGoodNight;
 	
-	/** 已经被晚安过的用�? */
+	/** 已经被晚安过的用户 */
 	private Set<String> nightedUsers;
 	
 	/**
@@ -96,15 +96,15 @@ public class ChatMgr extends LoopThread {
 	private Map<String, Map<String, Integer>> userGifts;
 	
 	/**
-	 * 发言计数�?(主要针对定时公告和自动打call)
-	 * 	当同屏存在自己的发言时，则取消本次自动发言，避免刷�?.
+	 * 发言计数器(主要针对定时公告和自动打call)
+	 * 	当同屏存在自己的发言时，则取消本次自动发言，避免刷屏.
 	 */
 	private int chatCnt;
 	
 	private static volatile ChatMgr instance;
 	
 	private ChatMgr() {
-		super("自动发言�?");
+		super("自动发言姬");
 		this.thxCnt = 0;
 		this.noticeCnt = 0;
 		this.callCnt = 0;
@@ -135,7 +135,7 @@ public class ChatMgr extends LoopThread {
 	
 	@Override
 	protected void _before() {
-		log.info("{} 已启�?", getName());
+		log.info("{} 已启动", getName());
 	}
 
 	@Override
@@ -165,7 +165,7 @@ public class ChatMgr extends LoopThread {
 	@Override
 	protected void _after() {
 		clear();
-		log.info("{} 已停�?", getName());
+		log.info("{} 已停止", getName());
 	}
 	
 	/**
@@ -178,13 +178,13 @@ public class ChatMgr extends LoopThread {
 		
 		int hour = TimeUtils.getCurHour(8);	// 中国8小时时差
 		if(hour >= 6 && hour < 12) {
-			msg = msg.concat("早上�?");
+			msg = msg.concat("早上好");
 			
 		} else if(hour >= 12 && hour < 18) {
-			msg = msg.concat("下午�?");
+			msg = msg.concat("下午好");
 			
 		} else if(hour >= 18 && hour < 24) {
-			msg = msg.concat("晚上�?");
+			msg = msg.concat("晚上好");
 			
 		} else {
 			msg = msg.concat("还在浪吗?");
@@ -239,7 +239,7 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 添加到投喂感谢列�?
+	 * 添加到投喂感谢列表
 	 * @param msgBean
 	 */
 	public void addThxGift(SendGift msgBean) {
@@ -274,7 +274,7 @@ public class ChatMgr extends LoopThread {
 			userGifts.clear();
 		}
 		
-		// 若短时间内投喂用户过�?, 则不逐一感谢, 避免刷屏
+		// 若短时间内投喂用户过多, 则不逐一感谢, 避免刷屏
 		int userNum = tmp.keySet().size();
 		if(userNum > THX_USER_LIMIT) {
 			String msg = StrUtils.concat(NOTICE_KEY, "感谢前面[", userNum, 
@@ -298,7 +298,7 @@ public class ChatMgr extends LoopThread {
 	}
 	
 	/**
-	 * 感谢某个用户的投�?
+	 * 感谢某个用户的投喂
 	 * @param username
 	 * @param gifts
 	 */
@@ -306,7 +306,7 @@ public class ChatMgr extends LoopThread {
 		if(gifts.size() <= 0) {
 			return;
 			
-		// 1个礼物多�?
+		// 1个礼物多份
 		} else if(gifts.size() == 1) {
 			Iterator<String> giftIts = gifts.keySet().iterator();
 			if(giftIts.hasNext()) {
@@ -406,11 +406,11 @@ public class ChatMgr extends LoopThread {
 	 */
 	public void countChatCnt(String chatUser) {
 		
-		// 当是登陆用户发言�?, 清空计数�?
+		// 当是登陆用户发言时, 清空计数器
 		if(LoginMgr.getInstn().getLoginUser().equals(chatUser)) {
 			chatCnt = 0;
 			
-		// 当是其他用户发言�?, 计数�?+1
+		// 当是其他用户发言时, 计数器+1
 		} else {
 			chatCnt++;
 		}

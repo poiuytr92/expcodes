@@ -10,29 +10,29 @@ import exp.libs.envm.TimeUnit;
  * 单位转换工具.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class UnitUtils {
 
-	/** 获取 [1byte] 的数值表�? (单位:byte) */
+	/** 获取 [1byte] 的数值表示 (单位:byte) */
 	public final static int _1_BYTE = 1;
 	
-	/** 获取 [1KB] 的数值表�? (单位:byte) */
+	/** 获取 [1KB] 的数值表示 (单位:byte) */
 	public final static int _1_KB = 1024 * _1_BYTE;
 	
-	/** 获取 [1MB] 的数值表�? (单位:byte) */
+	/** 获取 [1MB] 的数值表示 (单位:byte) */
 	public final static int _1_MB = 1024 * _1_KB;
 	
-	/** 获取 [1GB] 的数值表�? (单位:byte) */
+	/** 获取 [1GB] 的数值表示 (单位:byte) */
 	public final static int _1_GB = 1024 * _1_MB;
 	
-	/** 获取 [1TB] 的数值表�? (单位:byte) */
+	/** 获取 [1TB] 的数值表示 (单位:byte) */
 	public final static long _1_TB = 1024L * _1_GB;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected UnitUtils() {}
 	
 	/**
@@ -129,7 +129,7 @@ public class UnitUtils {
 	
 	/**
 	 * 毫秒单位转换
-	 * @param millis 毫秒�?
+	 * @param millis 毫秒值
 	 * @return 根据毫秒值大小自动调整为ms、s、minute、hour、day等单位字符串
 	 */
 	public static String convertMills(long millis) {
@@ -160,8 +160,8 @@ public class UnitUtils {
 	
 	/**
 	 * millis -> second
-	 * @param millis 毫秒�?
-	 * @return 秒�?
+	 * @param millis 毫秒值
+	 * @return 秒值
 	 */
 	public static double toSecond(long millis) {
 		return millis / 1000.0;
@@ -169,7 +169,7 @@ public class UnitUtils {
 	
 	/**
 	 * millis -> minute
-	 * @param millis 毫秒�?
+	 * @param millis 毫秒值
 	 * @return 分钟
 	 */
 	public static double toMinute(long millis) {
@@ -178,7 +178,7 @@ public class UnitUtils {
 	
 	/**
 	 * millis -> hour
-	 * @param millis 毫秒�?
+	 * @param millis 毫秒值
 	 * @return 小时
 	 */
 	public static double toHour(long millis) {
@@ -187,8 +187,8 @@ public class UnitUtils {
 	
 	/**
 	 * millis -> day
-	 * @param millis 毫秒�?
-	 * @return �?
+	 * @param millis 毫秒值
+	 * @return 天
 	 */
 	public static double toDay(long millis) {
 		return millis / 86400000.0;

@@ -16,8 +16,8 @@ import exp.libs.warp.net.sock.io.common.ISession;
  * [端口转发代理服务-S] 业务处理器
  * </pre>	
  * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-07-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -44,7 +44,7 @@ class _FPFSHandler implements IHandler {
 	public void _handle(ISession session) {
 		long overtime = session.getSocketBean().getOvertime();
 		Socket socket = session.getSocket();
-		log.info("新增一个到转发端口 [{}-{}:{}] 的会�? [{}], 本地socket�? [{}:{}]", 
+		log.info("新增一个到转发端口 [{}-{}:{}] 的会话 [{}], 本地socket为 [{}:{}]", 
 				session.getSocketBean().getPort(), 
 				config.getRemoteIP(), config.getRemotePort(), session.ID(), 
 				socket.getInetAddress().getHostAddress(), socket.getPort());

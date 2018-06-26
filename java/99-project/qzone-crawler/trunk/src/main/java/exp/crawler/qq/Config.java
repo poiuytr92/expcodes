@@ -11,8 +11,8 @@ import exp.libs.warp.ver.VersionMgr;
  * 配置类
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-23
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-23
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -33,7 +33,7 @@ public class Config {
 	/** 登陆信息保存路径 */
 	public final static String LOGIN_INFO_PATH = "./conf/account.dat";
 	
-	/** 验证码图片保存路�? */
+	/** 验证码图片保存路径 */
 	public final static String VCODE_IMG_PATH = "./conf/vcode.jpg";
 	
 	/** 行为休眠间隔(ms) */
@@ -43,8 +43,8 @@ public class Config {
 	public final static int TIMEOUT = 10000;
 	
 	/**
-	 * 每次批量请求的数量限�?
-	 * 	(说说最�?20, 相册�?30, 此处取最小�?)
+	 * 每次批量请求的数量限制
+	 * 	(说说最多20, 相册是30, 此处取最小值)
 	 */
 	public final static int BATCH_LIMT = 20;
 	

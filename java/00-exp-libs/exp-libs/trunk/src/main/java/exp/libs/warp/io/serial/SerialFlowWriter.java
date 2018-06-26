@@ -23,14 +23,14 @@ import exp.libs.utils.other.StrUtils;
  * 	sfw.close();
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-07-01
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-07-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class SerialFlowWriter extends _SerialFlow {
 
-	/** 序列化文�? */
+	/** 序列化文件 */
 	private File file;
 	
 	/** 序列化输出流 */
@@ -38,8 +38,8 @@ public class SerialFlowWriter extends _SerialFlow {
 	
 	/**
 	 * <PRE>
-	 * 构造函�?.
-	 * 序列化文件使用默认位�?: ./serializable.dat
+	 * 构造函数.
+	 * 序列化文件使用默认位置: ./serializable.dat
 	 * 存储模式为：以覆写方式保存最后一个序列化对象
 	 * </PRE>
 	 */
@@ -49,8 +49,8 @@ public class SerialFlowWriter extends _SerialFlow {
 	
 	/**
 	 * <PRE>
-	 * 构造函�?.
-	 * 序列化文件使用默认位�?: ./serializable.dat
+	 * 构造函数.
+	 * 序列化文件使用默认位置: ./serializable.dat
 	 * </PRE>
 	 * @param append 存储模式, true:以附加方式保存序列化对象; false:以覆写方式保存最后一个序列化对象
 	 */
@@ -60,10 +60,10 @@ public class SerialFlowWriter extends _SerialFlow {
 	
 	/**
 	 * <PRE>
-	 * 构造函�?.
+	 * 构造函数.
 	 * 存储模式为：以覆写方式保存最后一个序列化对象
 	 * </PRE>
-	 * @param filePath 序列化文件存储位�?
+	 * @param filePath 序列化文件存储位置
 	 */
 	public SerialFlowWriter(String filePath) {
 		init(StrUtils.isEmpty(filePath) ? 
@@ -71,8 +71,8 @@ public class SerialFlowWriter extends _SerialFlow {
 	}
 	
 	/**
-	 * 构造函�?
-	 * @param filePath 序列化文件存储位�?
+	 * 构造函数
+	 * @param filePath 序列化文件存储位置
 	 * @param append 存储模式, true:以附加方式保存序列化对象; false:以覆写方式保存最后一个序列化对象
 	 */
 	public SerialFlowWriter(String filePath, boolean append) {
@@ -82,18 +82,18 @@ public class SerialFlowWriter extends _SerialFlow {
 	
 	/**
 	 * <PRE>
-	 * 构造函�?.
+	 * 构造函数.
 	 * 存储模式为：以覆写方式保存最后一个序列化对象
 	 * </PRE>
-	 * @param file 序列化文�?
+	 * @param file 序列化文件
 	 */
 	public SerialFlowWriter(File file) {
 		init(file, false);
 	}
 	
 	/**
-	 * 构造函�?
-	 * @param file 序列化文�?
+	 * 构造函数
+	 * @param file 序列化文件
 	 * @param append 存储模式, true:以附加方式保存序列化对象; false:以覆写方式保存最后一个序列化对象
 	 */
 	public SerialFlowWriter(File file, boolean append) {
@@ -101,8 +101,8 @@ public class SerialFlowWriter extends _SerialFlow {
 	}
 	
 	/**
-	 * 初始�?
-	 * @param file 序列化文�?
+	 * 初始化
+	 * @param file 序列化文件
 	 * @param append 存储模式, true:以附加方式保存序列化对象; false:以覆写方式保存最后一个序列化对象
 	 */
 	private void init(File file, boolean append) {
@@ -112,8 +112,8 @@ public class SerialFlowWriter extends _SerialFlow {
 	}
 	
 	/**
-	 * 把序列化对象写到序列化文�?
-	 * @param o 序列化对�?
+	 * 把序列化对象写到序列化文件
+	 * @param o 序列化对象
 	 * @return true:写入成功; false:写入失败
 	 */
 	public boolean write(Serializable o) {
@@ -125,7 +125,7 @@ public class SerialFlowWriter extends _SerialFlow {
 	}
 	
 	/**
-	 * 刷新序列化输出流（即把内存序列化数据强制写到外存�?
+	 * 刷新序列化输出流（即把内存序列化数据强制写到外存）
 	 * @return true:成功; false:写入
 	 */
 	public boolean flush() {
@@ -138,14 +138,14 @@ public class SerialFlowWriter extends _SerialFlow {
 	
 	/**
 	 * 测试序列化输出流是否关闭
-	 * @return true:关闭; false:未关�?
+	 * @return true:关闭; false:未关闭
 	 */
 	public boolean isClosed() {
 		return foos.isClosed();
 	}
 	
 	/**
-	 * 关闭序列化输出流, 并强制把内存序列化数据写到外�?
+	 * 关闭序列化输出流, 并强制把内存序列化数据写到外存
 	 * @return true:成功; false:写入
 	 */
 	public boolean close() {
@@ -158,8 +158,8 @@ public class SerialFlowWriter extends _SerialFlow {
 	}
 
 	/**
-	 * 获取内存序列化文件对�?
-	 * @return 内存序列化文件对�?
+	 * 获取内存序列化文件对象
+	 * @return 内存序列化文件对象
 	 */
 	public File getFile() {
 		return file;

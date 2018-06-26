@@ -1,19 +1,19 @@
 package service.client;
 
-import org.apache.thrift.TException; 
-import org.apache.thrift.protocol.TBinaryProtocol; 
-import org.apache.thrift.protocol.TProtocol; 
-import org.apache.thrift.transport.TSocket; 
-import org.apache.thrift.transport.TTransport; 
-import org.apache.thrift.transport.TTransportException; 
-import service.demo.Hello; 
-import service.demo.Person;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.apache.thrift.protocol.TProtocol;
+import org.apache.thrift.transport.TSocket;
+import org.apache.thrift.transport.TTransport;
 
-/** 
- * @author 李军
- * @version 1.0
- * @datetime 2015-12-28 下午03:28:03 
- * 类说明 
+import service.demo.Hello;
+
+/**
+ * 
+ * <B>PROJECT : </B> thrift
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-28
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class HelloServiceClient {
 

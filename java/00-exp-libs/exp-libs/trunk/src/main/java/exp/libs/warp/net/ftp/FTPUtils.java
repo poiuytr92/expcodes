@@ -12,15 +12,15 @@ import exp.libs.warp.net.ftp.bean.FtpBean;
  * FTP工具类
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-14
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class FTPUtils {
 
 	/**
-	 * 私有构造方�?
+	 * 私有构造方法
 	 */
 	private FTPUtils() {
 	}
@@ -111,7 +111,7 @@ public class FTPUtils {
 	 *            连接对象
 	 * @param remoteDirectory
 	 *            远程目录
-	 * @return 返回文件绝对路径名称的列�?
+	 * @return 返回文件绝对路径名称的列表
 	 * @throws Exception
 	 *             异常信息
 	 */

@@ -19,44 +19,44 @@ import exp.libs.utils.verify.RegexUtils;
  * 	处理原则： 本工具类的所有函数返回值, 只要是路径, 就一定【不以】 分隔符 结尾.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class PathUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(PathUtils.class);
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected PathUtils() {}
 	
 	/**
-	 * 判断是否为全路径（即以根开始的路径�?
+	 * 判断是否为全路径（即以根开始的路径）
 	 * 
 	 * @param path 路径
-	 * @return true:全路�?; false:非全路径
+	 * @return true:全路径; false:非全路径
 	 */
 	public static boolean isFullPath(String path) {
 		return isWinFullPath(path) || isUnixFullPath(path);
 	}
 	
 	/**
-	 * 判断是否为Windows的全路径（即以根开始的路径�?
+	 * 判断是否为Windows的全路径（即以根开始的路径）
 	 * 
 	 * @param path 路径
-	 * @return true:全路�?; false:非全路径
+	 * @return true:全路径; false:非全路径
 	 */
 	public static boolean isWinFullPath(String path) {
 		return RegexUtils.matches(path, "^[A-Za-z]:[/|\\\\].*$");
 	}
 	
 	/**
-	 * 判断是否为Unix的全路径（即以根开始的路径�?
+	 * 判断是否为Unix的全路径（即以根开始的路径）
 	 * 
 	 * @param path 路径
-	 * @return true:全路�?; false:非全路径
+	 * @return true:全路径; false:非全路径
 	 */
 	public static boolean isUnixFullPath(String path) {
 		return RegexUtils.matches(path, "^/.*$");
@@ -64,11 +64,11 @@ public class PathUtils {
 	
 	/**
 	 * <PRE>
-	 * 路径合并�?
+	 * 路径合并。
 	 * <PRE>
-	 * @param prefixPath 路径前缀，全路径或相对路�?
+	 * @param prefixPath 路径前缀，全路径或相对路径
 	 * @param suffixPath 路径后缀，必须是相对路径
-	 * @return 路径前缀 + 路径分隔�? + 路径后缀 
+	 * @return 路径前缀 + 路径分隔符 + 路径后缀 
 	 */
 	public static String combine(String prefixPath, String suffixPath) {
 		String combPath = "";
@@ -114,8 +114,8 @@ public class PathUtils {
 	}
 	
 	/**
-	 * 取得项目的绝对路�?, �?: X:\foo\project
-	 * @return 项目的绝对路�?
+	 * 取得项目的绝对路径, 如: X:\foo\project
+	 * @return 项目的绝对路径
 	 */
 	public static String getProjectPath() {
 		String path = "";
@@ -128,7 +128,7 @@ public class PathUtils {
 	}
 	
 	/**
-	 * 获取 项目的根路径，如�? X:\foo\project
+	 * 获取 项目的根路径，如： X:\foo\project
 	 * @return 项目的根路径
 	 */
 	public static String getProjectRootPath() {
@@ -137,9 +137,9 @@ public class PathUtils {
 	
 	/**
 	 * <PRE>
-	 * 获取项目的编译目录的根路径�?
-	 *   非Tomcat项目�?, 如： X:/foo/bar/project/target/classes
-	 *   Tomcat项目�?, �?:  %tomcat%/%wepapp%/%project%/classes
+	 * 获取项目的编译目录的根路径。
+	 *   非Tomcat项目形, 如： X:/foo/bar/project/target/classes
+	 *   Tomcat项目形, 如:  %tomcat%/%wepapp%/%project%/classes
 	 * <PRE>
 	 * @return 项目的编译根路径
 	 */
@@ -150,7 +150,7 @@ public class PathUtils {
 	
 	/**
 	 * 获取 类的编译路径，如：X:/workspace/project/target/classes/foo/bar
-	 * @param clazz �?
+	 * @param clazz 类
 	 * @return 类的编译路径
 	 */
 	public static String getClassCompilePath(Class<?> clazz) {
@@ -160,27 +160,27 @@ public class PathUtils {
 	
 	/**
 	 * <PRE>
-	 * 获取项目自身引用的所有jar包的路径�?
-	 * 只能获取运行main方法的项目所需要的jar包路径，而不能获取其他项目的jar包类路径�?
+	 * 获取项目自身引用的所有jar包的路径。
+	 * 只能获取运行main方法的项目所需要的jar包路径，而不能获取其他项目的jar包类路径。
 	 * (如果是外部jdk调用，则返回的是 -cp 的参数表)
 	 * </PRE>
-	 * @return 项目引用的所有包的路�?
+	 * @return 项目引用的所有包的路径
 	 */
 	public static String[] getAllClassPaths() {
 		return System.getProperty("java.class.path").split(";");
 	}
 	
 	/**
-	 * 把路径转换为运行平台的标准路径�?
-	 * @param paths 路径�?
-	 * @return 标准路径�?
+	 * 把路径转换为运行平台的标准路径。
+	 * @param paths 路径集
+	 * @return 标准路径集
 	 */
 	public static List<String> toStandard(List<String> paths) {
 		return (OSUtils.isWin() ? toWin(paths) : toLinux(paths));
 	}
 	
 	/**
-	 * 把路径转换为运行平台的标准路径�?
+	 * 把路径转换为运行平台的标准路径。
 	 * @param path 路径
 	 * @return 标准路径
 	 */
@@ -190,8 +190,8 @@ public class PathUtils {
 	
 	/**
 	 * 把linux路径转换为win路径
-	 * @param linuxPaths linux路径�?
-	 * @return win路径�?
+	 * @param linuxPaths linux路径集
+	 * @return win路径集
 	 */
 	public static List<String> toWin(List<String> linuxPaths) {
 		List<String> winPaths = new LinkedList<String>();
@@ -216,8 +216,8 @@ public class PathUtils {
 	
 	/**
 	 * 把win路径转换为linux路径
-	 * @param winPaths win路径�?
-	 * @return linux路径�?
+	 * @param winPaths win路径集
+	 * @return linux路径集
 	 */
 	public static List<String> toLinux(List<String> winPaths) {
 		List<String> linuxPaths = new LinkedList<String>();
@@ -241,7 +241,7 @@ public class PathUtils {
 	}
 	
 	/**
-	 * 获取 [当前代码运行处] 的调用堆栈路�?, 并用“|”将堆栈路径拼接起来�?
+	 * 获取 [当前代码运行处] 的调用堆栈路径, 并用“|”将堆栈路径拼接起来。
 	 * @return 用“|”连接的堆栈路径
 	 */
 	public static String getCallStackPath() {

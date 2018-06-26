@@ -10,8 +10,8 @@ import org.apache.commons.io.monitor.FileAlterationObserver;
  * 文件监控器的默认事件监听器
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -54,7 +54,7 @@ class _DefaultFileListener implements FileAlterationListener {
 
 	@Override
 	public void onStop(FileAlterationObserver observer) {
-		System.out.println("onStop");	// 每次扫描结束时均会触�?
+		System.out.println("onStop");	// 每次扫描结束时均会触发
 	}
 
 }

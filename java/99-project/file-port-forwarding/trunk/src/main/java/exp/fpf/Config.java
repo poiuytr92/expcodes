@@ -20,8 +20,8 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * 配置类
  * </pre>	
  * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-07-28
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-28
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -35,25 +35,25 @@ public class Config {
 	
 	private XConfig xConf;
 	
-	/** 发送文件目�? */
+	/** 发送文件目录 */
 	private String sendDir;
 	
 	/** 接收文件目录 */
 	private String recvDir;
 	
 	/**
-	 * 响应数据的接收模�?:
+	 * 响应数据的接收模式:
 	 *  1: sock监听模式 (需隔离装置开放TCP转发端口)
 	 *  2: file扫描模式 (需隔离装置主动扫描文件目录转发)
 	 *  
-	 * 注：隔离装置的请求数据只能通过文件扫描模式发�?
+	 * 注：隔离装置的请求数据只能通过文件扫描模式发送
 	 */
 	private int rspMode;
 	
-	/** 用于接收返回数据的监听socket(IP): 仅rspMode=1时有�? */
+	/** 用于接收返回数据的监听socket(IP): 仅rspMode=1时有效 */
 	private String rspIp;
 	
-	/** 用于接收返回数据的监听socket(端口): 仅rspMode=1时有�? */
+	/** 用于接收返回数据的监听socket(端口): 仅rspMode=1时有效 */
 	private int rspPort;
 	
 	/** 扫描文件间隔 */
@@ -65,7 +65,7 @@ public class Config {
 	/** 单个代理会话的缓冲区大小(kb) */
 	private int buffSize;
 	
-	/** 代理服务配置�? */
+	/** 代理服务配置集 */
 	private List<FPFConfig> fpfConfigs;
 	
 	private static volatile Config instance;

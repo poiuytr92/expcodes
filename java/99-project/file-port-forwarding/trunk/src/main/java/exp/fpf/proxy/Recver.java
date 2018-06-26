@@ -24,8 +24,8 @@ import exp.libs.warp.net.sock.io.server.SocketServer;
  * 
  * </pre>	
  * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-16
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-16
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -35,10 +35,10 @@ public class Recver {
 	
 	private final static String NAME = "响应数据传输管道";
 	
-	/** sock监听�? */
+	/** sock监听器 */
 	private SocketServer sockListener;
 	
-	/** 文件监听�? */
+	/** 文件监听器 */
 	private FileMonitor fileListener;
 	
 	private boolean isInit;
@@ -63,14 +63,14 @@ public class Recver {
 	public void _init(SRMgr srMgr) {
 		isInit = true;
 		
-		// 设置socket监听�?
+		// 设置socket监听器
 		if(Config.getInstn().getRspMode() == ResponseMode.SOCKET) {
 			SocketBean sockConf = Config.getInstn().newSocketConf();
 			IHandler handler = new _SRDataListener(srMgr);
 			this.sockListener = new SocketServer(sockConf, handler);
-			log.info("[{}]-[接收端] 已初始化, 服务socket�? [{}]", NAME, sockConf.getSocket());
+			log.info("[{}]-[接收端] 已初始化, 服务socket为 [{}]", NAME, sockConf.getSocket());
 			
-		// 设置收发文件目录监听�?(只监�? recv 文件)
+		// 设置收发文件目录监听器(只监听 recv 文件)
 		} else {
 			_SRFileListener fileListener = new _SRFileListener(srMgr, 
 					Param.PREFIX_RECV, Param.SUFFIX);
@@ -86,7 +86,7 @@ public class Recver {
 		
 		if(Config.getInstn().getRspMode() == ResponseMode.SOCKET) {
 			sockListener._start();
-			log.info("[{}]-[接收端] 服务已启�?", NAME);
+			log.info("[{}]-[接收端] 服务已启动", NAME);
 			
 		} else {
 			fileListener._start();
@@ -100,7 +100,7 @@ public class Recver {
 		
 		if(Config.getInstn().getRspMode() == ResponseMode.SOCKET) {
 			sockListener._stop();
-			log.info("[{}]-[接收端] 服务已停�?", NAME);
+			log.info("[{}]-[接收端] 服务已停止", NAME);
 			
 		} else {
 			fileListener._stop();

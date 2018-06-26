@@ -16,18 +16,18 @@ import exp.libs.warp.net.http.HttpClient;
  * XHR工具类
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-23
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-23
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class XHRUtils {
 
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected XHRUtils() {}
 	
 	/**
-	 * 获取XHR请求�?
+	 * 获取XHR请求头
 	 * @param cookie
 	 * @return
 	 */
@@ -44,7 +44,7 @@ public class XHRUtils {
 	
 	/**
 	 * 从Http会话的响应报文中提取cookie信息
-	 * @param client Http会话客户�?
+	 * @param client Http会话客户端
 	 * @param cookie cookie对象容器
 	 */
 	public static void takeResponseCookies(HttpClient client, QQCookie cookie) {
@@ -61,7 +61,7 @@ public class XHRUtils {
 	
 	/**
 	 * 从XHR响应报文中的回调函数提取JSON内容
-	 * @param callback 回调函数字符�?
+	 * @param callback 回调函数字符串
 	 * @return JSON
 	 */
 	public static String toJson(String callback) {

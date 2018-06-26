@@ -6,38 +6,38 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * Web驱动类型
  * </PRE>
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-17
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class WebDriverType {
 
-	/** WEB驱动包目�? */
+	/** WEB驱动包目录 */
 	private final static String DRIVER_DIR = "./conf/driver/";
 	
-	/** HTML默认浏览�? */
+	/** HTML默认浏览器 */
 	private final static String HtmlUnit = "HtmlUnit";
 	public final static WebDriverType HTMLUTIL = new WebDriverType(HtmlUnit);
 	
-	/** PhantomJS无头浏览�? */
+	/** PhantomJS无头浏览器 */
 	private final static String PhantomJS = "phantomjs-driver.exe";
 	public final static WebDriverType PHANTOMJS = new WebDriverType(PhantomJS);
 	
-	/** Chrome浏览�? */
+	/** Chrome浏览器 */
 	private final static String Chrome = "chrome-driver.exe";
 	public final static WebDriverType CHROME = new WebDriverType(Chrome);
 	
-	/** 驱动�? */
+	/** 驱动名 */
 	private String driverName;
 	
 	/** 驱动路径 */
 	private String driverPath;
 	
 	/**
-	 * 构造函�?
-	 * @param driverName 驱动�?
+	 * 构造函数
+	 * @param driverName 驱动名
 	 */
 	private WebDriverType(String driverName) {
 		this.driverName = driverName;
@@ -45,7 +45,7 @@ public class WebDriverType {
 	}
 	
 	/**
-	 * WEB驱动包目�? (可重�?)
+	 * WEB驱动包目录 (可重载)
 	 * @return
 	 */
 	protected String DRIVER_DIR() {
@@ -53,7 +53,7 @@ public class WebDriverType {
 	}
 	
 	/**
-	 * 驱动�?
+	 * 驱动名
 	 * @return
 	 */
 	public String DRIVER_NAME() {

@@ -10,8 +10,8 @@ import exp.libs.utils.time.TimeUtils;
  * 唯一性ID生成器工具.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-02
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-02
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -39,7 +39,7 @@ public class IDUtils {
 	/**
 	 * <PRE>
 	 * 获取时间序唯一性ID（秒级）
-	 *  当频繁获取ID时，此方法会强制使得每次请求最多延�?1s以保证唯一�?
+	 *  当频繁获取ID时，此方法会强制使得每次请求最多延迟1s以保证唯一性
 	 * </PRE>
 	 * @return 时间序唯一性ID（秒级）
 	 */
@@ -59,8 +59,8 @@ public class IDUtils {
 	}
 	
 	/**
-	 * 获取时间序唯一性ID（毫秒级�?
-	 * @return 时间序唯一性ID（毫秒级�?
+	 * 获取时间序唯一性ID（毫秒级）
+	 * @return 时间序唯一性ID（毫秒级）
 	 */
 	public static long getMillisID() {
 		long id = -1;
@@ -74,8 +74,8 @@ public class IDUtils {
 	}
 	
 	/**
-	 * 获取时间序唯一性ID（yyyyMMddHHmmssSSS�?
-	 * @return 时间序唯一性ID（毫秒级�?
+	 * 获取时间序唯一性ID（yyyyMMddHHmmssSSS）
+	 * @return 时间序唯一性ID（毫秒级）
 	 */
 	public static long getTimeID() {
 		long id = -1;

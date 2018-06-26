@@ -17,8 +17,8 @@ import exp.libs.warp.net.cookie.HttpCookie;
  * B站账号的cookie集
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -33,10 +33,10 @@ public class BiliCookie extends HttpCookie {
 	/** B站用户ID标识 */
 	private final static String UID_KEY = "DedeUserID";
 	
-	/** 自动投喂开�? */
+	/** 自动投喂开关 */
 	private final static String FEED_KEY = "AutoFeed";
 	
-	/** 自动投喂房间号标�? */
+	/** 自动投喂房间号标识 */
 	private final static String RID_KEY = "RoomID";
 	
 	/** 登陆类型 */
@@ -51,31 +51,31 @@ public class BiliCookie extends HttpCookie {
 	/** 从cookies提取的用户ID */
 	private String uid;
 	
-	/** 该cookie对应的用户昵�? */
+	/** 该cookie对应的用户昵称 */
 	private String nickName;
 	
-	/** 是否已绑定手�? */
+	/** 是否已绑定手机 */
 	private boolean isBindTel;
 	
-	/** 是否已实名认�? */
+	/** 是否已实名认证 */
 	private boolean isRealName;
 	
-	/** 是否为房�? */
+	/** 是否为房管 */
 	private boolean isRoomAdmin;
 	
 	/** 是否为老爷/年费老爷 */
 	private boolean isVip;
 	
-	/** 是否为提�?/总督 */
+	/** 是否为提督/总督 */
 	private boolean isGuard;
 	
 	/** 自动投喂 */
 	private boolean autoFeed;
 	
-	/** 投喂房间�? */
+	/** 投喂房间号 */
 	private int feedRoomId;
 
-	/** 标识日常任务的执行状�? */
+	/** 标识日常任务的执行状态 */
 	private TaskStatus taskStatus;
 	
 	/** 累计参与抽奖计数 */
@@ -118,11 +118,11 @@ public class BiliCookie extends HttpCookie {
 			
 		} else if(FEED_KEY.equals(name)) {
 			this.autoFeed = BoolUtils.toBool(value, false);
-			isKeep = false;	// 属于自定义的cookie属�?, 不保持到cookie会话�?(即不会发送到服务�?)
+			isKeep = false;	// 属于自定义的cookie属性, 不保持到cookie会话中(即不会发送到服务器)
 			
 		} else if(RID_KEY.equals(name)) {
 			this.feedRoomId = NumUtils.toInt(value, 0);
-			isKeep = false;	// 属于自定义的cookie属�?, 不保持到cookie会话�?(即不会发送到服务�?)
+			isKeep = false;	// 属于自定义的cookie属性, 不保持到cookie会话中(即不会发送到服务器)
 		}
 		return isKeep;
 	}
@@ -238,7 +238,7 @@ public class BiliCookie extends HttpCookie {
 		int random = RandomUtils.genInt(1, 100);
 		boolean isOk = val >= random;
 		
-		// 限制未实名账号连续抽�? (B站严查未实名账号)
+		// 限制未实名账号连续抽奖 (B站严查未实名账号)
 //		if(isOk == true && isRealName() == false) {
 //			if(lotteryCnt >= Config.LOTTERY_LIMIT) {
 //				lotteryCnt = 0;

@@ -11,8 +11,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	强制类型转换: String -> Double
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -24,15 +24,15 @@ public class _Double extends BaseFunction1 {
 	private static final long serialVersionUID = -6336189456459865860L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "double";
 	
 	/**
 	 * 强制类型转换: String -> Double
-	 * �?1个入参：
-	 * @param1 String:数字字符�?
+	 * 仅1个入参：
+	 * @param1 String:数字字符串
 	 * @return Double
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

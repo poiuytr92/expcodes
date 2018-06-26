@@ -23,22 +23,22 @@ import exp.libs.utils.num.UnitUtils;
  *  
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2018-05-03
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-05-03
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class TXTUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(TXTUtils.class);
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected TXTUtils() {}
 	
 	/**
-	 * 把任意文�?/目录转码成TXT文件
-	 * @param filePath 文件或目录路�?(对于目录会先压缩成zip文件)
+	 * 把任意文件/目录转码成TXT文件
+	 * @param filePath 文件或目录路径(对于目录会先压缩成zip文件)
 	 * @return TXT文件路径（若转码失败则返回空串）
 	 */
 	public static String toTXT(String filePath) {
@@ -46,8 +46,8 @@ public class TXTUtils {
 	}
 	
 	/**
-	 * 把任意文�?/目录转码成TXT文件
-	 * @param file 任意文件或目录对�?(对于目录会先压缩成zip文件)
+	 * 把任意文件/目录转码成TXT文件
+	 * @param file 任意文件或目录对象(对于目录会先压缩成zip文件)
 	 * @return TXT文件路径（若转码失败则返回空串）
 	 */
 	public static String toTXT(File file) {
@@ -66,8 +66,8 @@ public class TXTUtils {
 	}
 	
 	/**
-	 * 把任意文�?/目录转码成TXT文件
-	 * @param srcPath 任意文件或目录路�?(对于目录会先压缩成zip文件)
+	 * 把任意文件/目录转码成TXT文件
+	 * @param srcPath 任意文件或目录路径(对于目录会先压缩成zip文件)
 	 * @param txtPath TXT文件路径
 	 * @return true:转码成功; false:转码失败
 	 */
@@ -94,7 +94,7 @@ public class TXTUtils {
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("把文�? [{}] 转码为TXT失败.", srcPath, e);
+			log.error("把文件 [{}] 转码为TXT失败.", srcPath, e);
 		}
 		
 		if(isDir == true) {
@@ -131,7 +131,7 @@ public class TXTUtils {
 	/**
 	 * 把TXT转码文件恢复为原文件（若原文件是目录, 则恢复为zip压缩包）
 	 * @param txtPath TXT文件路径
-	 * @param snkPath 原文件路�?
+	 * @param snkPath 原文件路径
 	 * @return true:恢复成功; false:恢复失败
 	 */
 	public static boolean toFile(String txtPath, String snkPath) {

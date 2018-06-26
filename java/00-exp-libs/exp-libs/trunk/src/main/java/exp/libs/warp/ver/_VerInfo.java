@@ -21,8 +21,8 @@ import exp.libs.warp.ui.layout.VFlowLayout;
  * 单次版本信息
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -149,8 +149,8 @@ class _VerInfo extends PopChildWindow {
 		datetimeTF.setEditable(isEditable);
 		
 		JPanel panel = new JPanel(new VFlowLayout()); {
-			panel.add(SwingUtils.getPairsPanel(" 责任�? ", authorTF));
-			panel.add(SwingUtils.getPairsPanel(" 版本�? ", !isEditable ? versionTF : 
+			panel.add(SwingUtils.getPairsPanel(" 责任人 ", authorTF));
+			panel.add(SwingUtils.getPairsPanel(" 版本号 ", !isEditable ? versionTF : 
 				SwingUtils.getEBorderPanel(versionTF, snapshotBtn)));
 			panel.add(SwingUtils.getPairsPanel("定版时间", !isEditable ? datetimeTF : 
 					SwingUtils.getEBorderPanel(datetimeTF, curTimeBtn)));

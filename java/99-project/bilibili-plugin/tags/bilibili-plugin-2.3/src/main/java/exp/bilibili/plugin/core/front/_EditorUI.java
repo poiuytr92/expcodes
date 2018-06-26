@@ -21,8 +21,8 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * 公告/打call机编辑窗口
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -41,7 +41,7 @@ class _EditorUI extends PopChildWindow {
 	private String filePath;
 	
 	protected _EditorUI(String name, String filePath) {
-		super(StrUtils.concat("[", name, "] 编辑�?"), WIDTH, HEIGHT, false, filePath);
+		super(StrUtils.concat("[", name, "] 编辑器"), WIDTH, HEIGHT, false, filePath);
 	}
 	
 	@Override

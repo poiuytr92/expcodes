@@ -14,8 +14,8 @@ import exp.libs.utils.num.BODHUtils;
  *  所以数据帧只能在发送前new出来，不能提前构造好final常量.
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -64,7 +64,7 @@ public class Frame implements Framedata {
 
 	@Override
 	public boolean getTransfereMasked() {
-		return true;	// 客户端发送的数据均需要掩�?
+		return true;	// 客户端发送的数据均需要掩码
 	}
 
 	@Override

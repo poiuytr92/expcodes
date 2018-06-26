@@ -18,21 +18,21 @@ import exp.libs.utils.io.IOUtils;
  * 退出程序工具
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final public class ExitUtils extends Thread {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(ExitUtils.class);
 	
 	/** 被监听的停止命令文件位置 */
 	private final static String EXIT_CMD_FILE_PATH = "./exit.cmd";
 	
 	/**
-	 * 监听停止命令文件是否存在的间�?(ms).
+	 * 监听停止命令文件是否存在的间隔(ms).
 	 * 最小值为1000ms, 不必过于频繁.
 	 */
 	private long millis;
@@ -41,15 +41,15 @@ final public class ExitUtils extends Thread {
 	private static volatile ExitUtils instance;
 	
 	/**
-	 * 构造函�?
-	 * @param millis 监听停止命令文件是否存在的间�?(ms) - 最小值为1000ms, 不必过于频繁
+	 * 构造函数
+	 * @param millis 监听停止命令文件是否存在的间隔(ms) - 最小值为1000ms, 不必过于频繁
 	 */
 	private ExitUtils(long millis) {
 		this.millis = (millis >= 1000 ? millis : 1000);
 	}
 	
 	/**
-	 * 设置控制台输入[任意命令(包括无命�?)+回车], 可触发正常退出程序逻辑.
+	 * 设置控制台输入[任意命令(包括无命令)+回车], 可触发正常退出程序逻辑.
 	 */
 	public static void setConsoleExit() {
 		setConsoleExit(null);
@@ -57,7 +57,7 @@ final public class ExitUtils extends Thread {
 	
 	/**
 	 * 设置控制台输入[指定命令+回车], 可触发正常退出程序逻辑.
-	 * @param cmd 退出程序命�?
+	 * @param cmd 退出程序命令
 	 */
 	public static void setConsoleExit(final String cmd) {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -79,7 +79,7 @@ final public class ExitUtils extends Thread {
 	}
 	
 	/**
-	 * 添加终止程序监听�?(会构造一个仅适用于win环境的stop.bat脚本)
+	 * 添加终止程序监听器(会构造一个仅适用于win环境的stop.bat脚本)
 	 * @param millis 监听间隔(ms)
 	 */
 	public static void addWinExitListener(long millis) {
@@ -120,7 +120,7 @@ final public class ExitUtils extends Thread {
 			out.close();
 			
 		} catch (Exception e) {
-			log.error("构造停止脚�? [./stop.bat] 失败.", e);
+			log.error("构造停止脚本 [./stop.bat] 失败.", e);
 			isOk = false;
 		}
 		return isOk;
@@ -140,7 +140,7 @@ final public class ExitUtils extends Thread {
 	}
 	
 	/**
-	 * 检查被监听的停止命令文件是否存�?
+	 * 检查被监听的停止命令文件是否存在
 	 * @return 是否存在
 	 */
 	private static boolean checkExitCmdFile() {
@@ -149,7 +149,7 @@ final public class ExitUtils extends Thread {
 	}
 	
 	/**
-	 * 定时检查被监听的停止命令文件是否存在（由停止脚本运行时创建�?
+	 * 定时检查被监听的停止命令文件是否存在（由停止脚本运行时创建）
 	 */
 	@Override
 	public void run() {

@@ -5,23 +5,23 @@ package exp.libs.warp.db.sql.bean;
  * PDM物理模型 - 列.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class PdmColumn {
 
-	/** 列编�? */
+	/** 列编号 */
 	private String code;
 	
 	/** 列名 */
 	private String name;
 	
-	/** 列类�? */
+	/** 列类型 */
 	private String type;
 	
-	/** 列解�? */
+	/** 列解析 */
 	private String comment;
 
 	public PdmColumn() {}

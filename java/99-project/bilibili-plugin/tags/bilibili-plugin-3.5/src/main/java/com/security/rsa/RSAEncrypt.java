@@ -27,8 +27,8 @@ import javax.crypto.NoSuchPaddingException;
  * RSA加解密算法
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -43,7 +43,7 @@ public class RSAEncrypt {
 	};
 
 	/**
-	 * 随机生成密钥�?
+	 * 随机生成密钥对
 	 */
 	public static void genKeyPair(String filePath) {
 		// KeyPairGenerator类用于生成公钥和私钥对，基于RSA算法生成对象
@@ -54,20 +54,20 @@ public class RSAEncrypt {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		// 初始化密钥对生成器，密钥大小�?96-1024�?
+		// 初始化密钥对生成器，密钥大小为96-1024位
 		keyPairGen.initialize(1024,new SecureRandom());
-		// 生成一个密钥对，保存在keyPair�?
+		// 生成一个密钥对，保存在keyPair中
 		KeyPair keyPair = keyPairGen.generateKeyPair();
 		// 得到私钥
 		RSAPrivateKey privateKey = (RSAPrivateKey) keyPair.getPrivate();
 		// 得到公钥
 		RSAPublicKey publicKey = (RSAPublicKey) keyPair.getPublic();
 		try {
-			// 得到公钥字符�?
+			// 得到公钥字符串
 			String publicKeyString = Base64.encode(publicKey.getEncoded());
-			// 得到私钥字符�?
+			// 得到私钥字符串
 			String privateKeyString = Base64.encode(privateKey.getEncoded());
-			// 将密钥对写入到文�?
+			// 将密钥对写入到文件
 			FileWriter pubfw = new FileWriter(filePath + "/publicKey.keystore");
 			FileWriter prifw = new FileWriter(filePath + "/privateKey.keystore");
 			BufferedWriter pubbw = new BufferedWriter(pubfw);
@@ -87,7 +87,7 @@ public class RSAEncrypt {
 
 	/**
 	 * 从文件中输入流中加载公钥
-	 * @param in 公钥输入�?
+	 * @param in 公钥输入流
 	 * @throws Exception 加载公钥时产生的异常
 	 */
 	public static String loadPublicKeyByFile(String path) throws Exception {
@@ -102,16 +102,16 @@ public class RSAEncrypt {
 			br.close();
 			return sb.toString();
 		} catch (IOException e) {
-			throw new Exception("公钥数据流读取错�?");
+			throw new Exception("公钥数据流读取错误");
 		} catch (NullPointerException e) {
-			throw new Exception("公钥输入流为�?");
+			throw new Exception("公钥输入流为空");
 		}
 	}
 
 	/**
-	 * 从字符串中加载公�?
+	 * 从字符串中加载公钥
 	 * 
-	 * @param publicKeyStr 公钥数据字符�?
+	 * @param publicKeyStr 公钥数据字符串
 	 * @throws Exception 加载公钥时产生的异常
 	 */
 	public static RSAPublicKey loadPublicKeyByStr(String publicKeyStr)
@@ -133,7 +133,7 @@ public class RSAEncrypt {
 	/**
 	 * 从文件中加载私钥
 	 * 
-	 * @param keyFileName 私钥文件�?
+	 * @param keyFileName 私钥文件名
 	 * @return 是否成功
 	 * @throws Exception
 	 */
@@ -151,7 +151,7 @@ public class RSAEncrypt {
 		} catch (IOException e) {
 			throw new Exception("私钥数据读取错误");
 		} catch (NullPointerException e) {
-			throw new Exception("私钥输入流为�?");
+			throw new Exception("私钥输入流为空");
 		}
 	}
 
@@ -182,7 +182,7 @@ public class RSAEncrypt {
 	public static byte[] encrypt(RSAPublicKey publicKey, byte[] plainTextData)
 			throws Exception {
 		if (publicKey == null) {
-			throw new Exception("加密公钥为空, 请设�?");
+			throw new Exception("加密公钥为空, 请设置");
 		}
 		Cipher cipher = null;
 		try {
@@ -198,11 +198,11 @@ public class RSAEncrypt {
 			e.printStackTrace();
 			return null;
 		} catch (InvalidKeyException e) {
-			throw new Exception("加密公钥非法,请检�?");
+			throw new Exception("加密公钥非法,请检查");
 		} catch (IllegalBlockSizeException e) {
 			throw new Exception("明文长度非法");
 		} catch (BadPaddingException e) {
-			throw new Exception("明文数据已损�?");
+			throw new Exception("明文数据已损坏");
 		}
 	}
 
@@ -217,7 +217,7 @@ public class RSAEncrypt {
 	public static byte[] encrypt(RSAPrivateKey privateKey, byte[] plainTextData)
 			throws Exception {
 		if (privateKey == null) {
-			throw new Exception("加密私钥为空, 请设�?");
+			throw new Exception("加密私钥为空, 请设置");
 		}
 		Cipher cipher = null;
 		try {
@@ -232,11 +232,11 @@ public class RSAEncrypt {
 			e.printStackTrace();
 			return null;
 		} catch (InvalidKeyException e) {
-			throw new Exception("加密私钥非法,请检�?");
+			throw new Exception("加密私钥非法,请检查");
 		} catch (IllegalBlockSizeException e) {
 			throw new Exception("明文长度非法");
 		} catch (BadPaddingException e) {
-			throw new Exception("明文数据已损�?");
+			throw new Exception("明文数据已损坏");
 		}
 	}
 
@@ -251,7 +251,7 @@ public class RSAEncrypt {
 	public static byte[] decrypt(RSAPrivateKey privateKey, byte[] cipherData)
 			throws Exception {
 		if (privateKey == null) {
-			throw new Exception("解密私钥为空, 请设�?");
+			throw new Exception("解密私钥为空, 请设置");
 		}
 		Cipher cipher = null;
 		try {
@@ -267,11 +267,11 @@ public class RSAEncrypt {
 			e.printStackTrace();
 			return null;
 		} catch (InvalidKeyException e) {
-			throw new Exception("解密私钥非法,请检�?");
+			throw new Exception("解密私钥非法,请检查");
 		} catch (IllegalBlockSizeException e) {
 			throw new Exception("密文长度非法");
 		} catch (BadPaddingException e) {
-			throw new Exception("密文数据已损�?");
+			throw new Exception("密文数据已损坏");
 		}
 	}
 
@@ -286,7 +286,7 @@ public class RSAEncrypt {
 	public static byte[] decrypt(RSAPublicKey publicKey, byte[] cipherData)
 			throws Exception {
 		if (publicKey == null) {
-			throw new Exception("解密公钥为空, 请设�?");
+			throw new Exception("解密公钥为空, 请设置");
 		}
 		Cipher cipher = null;
 		try {
@@ -302,11 +302,11 @@ public class RSAEncrypt {
 			e.printStackTrace();
 			return null;
 		} catch (InvalidKeyException e) {
-			throw new Exception("解密公钥非法,请检�?");
+			throw new Exception("解密公钥非法,请检查");
 		} catch (IllegalBlockSizeException e) {
 			throw new Exception("密文长度非法");
 		} catch (BadPaddingException e) {
-			throw new Exception("密文数据已损�?");
+			throw new Exception("密文数据已损坏");
 		}
 	}
 
@@ -319,7 +319,7 @@ public class RSAEncrypt {
 	public static String byteArrayToString(byte[] data) {
 		StringBuilder stringBuilder = new StringBuilder();
 		for (int i = 0; i < data.length; i++) {
-			// 取出字节的高四位 作为索引得到相应的十六进制标识符 注意无符号右�?
+			// 取出字节的高四位 作为索引得到相应的十六进制标识符 注意无符号右移
 			stringBuilder.append(HEX_CHAR[(data[i] & 0xf0) >>> 4]);
 			// 取出字节的低四位 作为索引得到相应的十六进制标识符
 			stringBuilder.append(HEX_CHAR[(data[i] & 0x0f)]);

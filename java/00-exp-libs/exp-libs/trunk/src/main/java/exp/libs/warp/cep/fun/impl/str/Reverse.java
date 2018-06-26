@@ -10,8 +10,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	字符串操作：反转
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -23,14 +23,14 @@ public class Reverse extends BaseFunction1 {
 	private static final long serialVersionUID = -2796230393987172389L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "reverse";
 
 	/**
-	 * 字符串反�?.
-	 * �?1个入参：
+	 * 字符串反转.
+	 * 共1个入参：
 	 * @param1 String:原字符串
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常

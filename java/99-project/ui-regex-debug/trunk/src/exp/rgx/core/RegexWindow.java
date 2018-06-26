@@ -25,8 +25,8 @@ import javax.swing.border.TitledBorder;
  * 主界面
  * </PRE>
  * <B>PROJECT : </B> ui-regex-debug
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2015-06-01
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-06-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -65,7 +65,7 @@ public class RegexWindow extends JFrame {
 	private RegexEntity regexObj;
 	
 	/**
-	 * 根面�?
+	 * 根面板
 	 */
 	private JPanel rootPanel;
 	
@@ -97,35 +97,35 @@ public class RegexWindow extends JFrame {
 	/**
 	 * 总匹配项数的文字
 	 */
-	private final String totalMthMsg = "总匹配项�?: ";
+	private final String totalMthMsg = "总匹配项数: ";
 	
 	/**
-	 * 显示当前匹配项数的标�?
+	 * 显示当前匹配项数的标签
 	 */
 	private JLabel curMthLb;
 	
 	/**
-	 * 当前匹配项数的文�?
+	 * 当前匹配项数的文字
 	 */
-	private final String curMthMsg = "当前匹配�?: ";
+	private final String curMthMsg = "当前匹配项: ";
 	
 	/**
-	 * 显示上一个匹配项的按�?
+	 * 显示上一个匹配项的按钮
 	 */
 	private JButton backBtn;
 	
 	/**
-	 * 显示下一个匹配项的按�?
+	 * 显示下一个匹配项的按钮
 	 */
 	private JButton nextBtn;
 	
 	/**
-	 * 下拉框组件：显示当前的group�?
+	 * 下拉框组件：显示当前的group号
 	 */
 	private JComboBox grpComboBox;
 	
 	/**
-	 * 界面构造函�?
+	 * 界面构造函数
 	 * @param winName 界面窗口名称
 	 */
 	public RegexWindow(String winName) {
@@ -151,7 +151,7 @@ public class RegexWindow extends JFrame {
 	}
 
 	/**
-	 * 初始化界面组�?
+	 * 初始化界面组件
 	 */
 	private void initComponents() {
 		//输入区布局面板：Border相对布局方式布置输入组件
@@ -174,10 +174,10 @@ public class RegexWindow extends JFrame {
 		}
 		
 		regexTF = new JTextField();
-		reMthBtn = new JButton("开始匹�?");
+		reMthBtn = new JButton("开始匹配");
 		{
 			JPanel regexPanel = new JPanel();
-			regexPanel.setBorder(new TitledBorder("正则表达�?"));
+			regexPanel.setBorder(new TitledBorder("正则表达式"));
 			regexPanel.setLayout(new BorderLayout());
 			{
 				JPanel txtPanel = new JPanel(new BorderLayout());
@@ -218,8 +218,8 @@ public class RegexWindow extends JFrame {
 		
 		totalMthLb = new JLabel(totalMthMsg + "0");
 		curMthLb = new JLabel(curMthMsg + "0");
-		backBtn = new JButton("上一次匹�?");
-		nextBtn = new JButton("下一次匹�?");
+		backBtn = new JButton("上一次匹配");
+		nextBtn = new JButton("下一次匹配");
 		grpComboBox = new JComboBox(new String[]{"group 0"});
 		{
 			JPanel opPanel = new JPanel(new BorderLayout());
@@ -239,8 +239,8 @@ public class RegexWindow extends JFrame {
 	}
 
 	/**
-	 * 重置 显示当前的group�? 的下拉框组件
-	 * 每次重新匹配时都会触�?
+	 * 重置 显示当前的group号 的下拉框组件
+	 * 每次重新匹配时都会触发
 	 * @return 是否重置成功
 	 */
 	private boolean resetGroupCBItem() {
@@ -262,7 +262,7 @@ public class RegexWindow extends JFrame {
 	}
 	
 	/**
-	 * 设置各个组件的监听动�?
+	 * 设置各个组件的监听动作
 	 */
 	private void setComponentsListener() {
 		reMthBtn.addActionListener(new ActionListener() {

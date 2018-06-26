@@ -33,8 +33,8 @@ import exp.libs.warp.ui.cpt.win.MainWindow;
  * 程序版本管理界面
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -44,7 +44,7 @@ class _VerMgrUI extends MainWindow {
 	private static final long serialVersionUID = -3365462601777108786L;
 	
 	private final static String[] HEADER = {
-		"版本�?", "责任�?", "定版时间", "升级内容概要"
+		"版本号", "责任人", "定版时间", "升级内容概要"
 	};
 	
 	private final static String DEFAULT_TITLE = "版本管理";
@@ -61,16 +61,16 @@ class _VerMgrUI extends MainWindow {
 	/** 历史版本表单 */
 	private _HisVerTable hisVerTable;
 	
-	/** 用于编辑新增版本的临时对�? */
+	/** 用于编辑新增版本的临时对象 */
 	private _VerInfo tmpVerInfo;
 	
-	/** 保存项目信息的按�? */
+	/** 保存项目信息的按钮 */
 	private JButton savePrjInfoBtn;
 	
-	/** 查找历史版本的按�? */
+	/** 查找历史版本的按钮 */
 	private JButton findHisVerBtn;
 	
-	/** 修改当前版本信息的按�? */
+	/** 修改当前版本信息的按钮 */
 	private JButton modifyCurVerBtn;
 	
 	/** 新增新版本信息的按钮 */
@@ -80,7 +80,7 @@ class _VerMgrUI extends MainWindow {
 	private static volatile _VerMgrUI instance;
 	
 	/**
-	 * 私有化构造函�?
+	 * 私有化构造函数
 	 */
 	private _VerMgrUI() {
 		super(DEFAULT_TITLE, 700, 430);
@@ -102,8 +102,8 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	/**
-	 * 覆写窗口的退出模�?
-	 * 	（不自动显示窗体�? 且增�? System.exit, 因为单纯的隐藏窗体无法结束数据库进程�?
+	 * 覆写窗口的退出模式
+	 * 	（不自动显示窗体， 且增加 System.exit, 因为单纯的隐藏窗体无法结束数据库进程）
 	 */
 	@Override
 	protected void initCloseWindowMode() {
@@ -112,7 +112,7 @@ class _VerMgrUI extends MainWindow {
 			
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if(SwingUtils.confirm("退�? ?")) {
+				if(SwingUtils.confirm("退出 ?")) {
 					_hide();
 					System.exit(0);
 				}
@@ -134,10 +134,10 @@ class _VerMgrUI extends MainWindow {
 		updateTitle();
 		reflashHisVerTable();
 		
-		this.savePrjInfoBtn = new JButton("�?  �?");
-		this.findHisVerBtn = new JButton("�?  �?");
-		this.modifyCurVerBtn = new JButton("�?  �?");
-		this.createVerBtn = new JButton("�?  �?");
+		this.savePrjInfoBtn = new JButton("保  存");
+		this.findHisVerBtn = new JButton("查  找");
+		this.modifyCurVerBtn = new JButton("修  改");
+		this.createVerBtn = new JButton("保  存");
 		BeautyEyeUtils.setButtonStyle(NormalColor.lightBlue, 
 				savePrjInfoBtn, findHisVerBtn, modifyCurVerBtn, createVerBtn);
 		savePrjInfoBtn.setForeground(Color.BLACK);
@@ -171,7 +171,7 @@ class _VerMgrUI extends MainWindow {
 			verInfo.setUpgradeContent(verData.get("S_UPGRADE_CONTENT"));
 			verInfo.setUpgradeStep(verData.get("S_UPGRADE_STEP"));
 			
-			verInfo.setValToUI();	// 把读取到的值设置到界面容器�?
+			verInfo.setValToUI();	// 把读取到的值设置到界面容器中
 			verInfos.add(verInfo);
 		}
 		return verInfos;
@@ -290,7 +290,7 @@ class _VerMgrUI extends MainWindow {
 						SwingUtils.info("新增版本成功");
 						
 					} else {
-						SwingUtils.warn("保存新版本信息失�?");
+						SwingUtils.warn("保存新版本信息失败");
 					}
 				} else {
 					SwingUtils.warn("新增版本失败: ".concat(errDesc));
@@ -318,7 +318,7 @@ class _VerMgrUI extends MainWindow {
 	}
 	
 	/**
-	 * 检查版本信�?
+	 * 检查版本信息
 	 * @param verInfo
 	 * @return 非空则通过
 	 */
@@ -392,7 +392,7 @@ class _VerMgrUI extends MainWindow {
 	 * </PRE>
 	 * 
 	 * @author Administrator
-	 * @date 2017�?7�?6�?
+	 * @date 2017年7月6日
 	 */
 	private class _HisVerTable extends NormTable {
 		

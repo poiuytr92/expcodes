@@ -17,14 +17,14 @@ import org.slf4j.LoggerFactory;
  * 	以解决无法在同一个文件中连续序列化多个对象的问题。
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-07-01
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-07-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final class _FlowObjectOutputStream {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(_FlowObjectOutputStream.class);
 	
 	private File file;
@@ -43,7 +43,7 @@ final class _FlowObjectOutputStream {
 			this.closed = false;
 			
 		} catch (Exception e) {
-			log.error("初始�? FlowObjectOutputStream 对象失败.", e);
+			log.error("初始化 FlowObjectOutputStream 对象失败.", e);
 			this.closed = true;
 		}
 	}
@@ -56,7 +56,7 @@ final class _FlowObjectOutputStream {
 				isOk = true;
 				
 			} catch (Exception e) {
-				log.error("序列化对�? [{}] 到文�? [{}] 失败.", 
+				log.error("序列化对象 [{}] 到文件 [{}] 失败.", 
 						obj, file.getAbsoluteFile(), e);
 			}
 		}
@@ -96,15 +96,15 @@ final class _FlowObjectOutputStream {
 	
 	/**
 	 * <PRE>
-	 * 默认情况下，ObjectOutputStream 在往文件写入序列化对象时，默认都会带文件 Header�?
-	 * 导致若以【追加】方式往同一个文件写入多个对象时，会无法读取�?
+	 * 默认情况下，ObjectOutputStream 在往文件写入序列化对象时，默认都会带文件 Header，
+	 * 导致若以【追加】方式往同一个文件写入多个对象时，会无法读取。
 	 * 
-	 * 通过重写writeStreamHeader方法，使得只在第一次写入序列化对象时带 Header�?
-	 * 后续【追加】的对象均不再写�? Header�?
+	 * 通过重写writeStreamHeader方法，使得只在第一次写入序列化对象时带 Header，
+	 * 后续【追加】的对象均不再写入 Header。
 	 * </PRE>
 	 * <B>PROJECT : </B> exp-libs
-	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
-	 * @version   1.0 # 2016-07-01
+	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+	 * @version   2016-07-01
 	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6
 	 */
@@ -115,9 +115,9 @@ final class _FlowObjectOutputStream {
 		}
 		
 		/**
-		 * 此方法会�? ObjectOutputStream 构造函数中被调用，
-		 * 	即使继承覆写，也无法在构造函数为参数 file �? append 进行传参�?
-		 * 	因此只能通过内联类方式间接传参�?
+		 * 此方法会在 ObjectOutputStream 构造函数中被调用，
+		 * 	即使继承覆写，也无法在构造函数为参数 file 和 append 进行传参，
+		 * 	因此只能通过内联类方式间接传参。
 		 */
 		@Override
 		protected void writeStreamHeader() throws IOException {

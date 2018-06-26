@@ -14,28 +14,28 @@ import exp.libs.envm.FileType;
  * <PRE>
  * 图像处理工具
  * </PRE>
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-17
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ImageUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(ImageUtils.class);
 	
-	/** javax.imageio.ImageIO 的黑色RGB(应该是反�?, 理论值应�?0) */
+	/** javax.imageio.ImageIO 的黑色RGB(应该是反码, 理论值应为0) */
 	public final static int RGB_BLACK = -16777216;
 	
-	/** javax.imageio.ImageIO 的白色RGB�?(应该是反�?, 理论值应�?16777215) */
+	/** javax.imageio.ImageIO 的白色RGB值(应该是反码, 理论值应为16777215) */
 	public final static int RGB_WHITE = -1;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	private ImageUtils() {}
 	
 	/**
-	 * 构造默认图�?
+	 * 构造默认图像
 	 * @return 二值化1x1图像
 	 */
 	private static BufferedImage createDefaultImage() {
@@ -75,7 +75,7 @@ public class ImageUtils {
 	}
 	
 	/**
-	 * 图像二值化(背景色为白色，前景色为黑�?)
+	 * 图像二值化(背景色为白色，前景色为黑色)
 	 * @param image 原图
 	 * @return 二值化图像
 	 */
@@ -84,10 +84,10 @@ public class ImageUtils {
 	}
 	
 	/**
-	 * 图像二值化(背景色为白色，前景色为黑�?)
+	 * 图像二值化(背景色为白色，前景色为黑色)
 	 * @param image 原图
-	 * @param nWoB 非白即黑模式（此模式下只要不是白色均视为黑色�?; 
-	 *             反之会根据二值化算法会把阀值范围内的颜色认为是黑色或白�?
+	 * @param nWoB 非白即黑模式（此模式下只要不是白色均视为黑色）; 
+	 *             反之会根据二值化算法会把阀值范围内的颜色认为是黑色或白色
 	 * @return 二值化图像
 	 */
 	public static BufferedImage toBinary(BufferedImage image, boolean nWoB) {
@@ -101,15 +101,15 @@ public class ImageUtils {
 		try {
 
 			// 把原图转换为二值化图像
-			int whiteCnt = 0; // 白色像素计数�?
+			int whiteCnt = 0; // 白色像素计数器
 			int blackCnt = 0; // 黑色像素极速器
 			binaryImage = new BufferedImage(W, H,
-					BufferedImage.TYPE_BYTE_BINARY); // 可选择模式: 二值化/灰度�?
+					BufferedImage.TYPE_BYTE_BINARY); // 可选择模式: 二值化/灰度化
 			for (int i = 0; i < W; i++) {
 				for (int j = 0; j < H; j++) {
 					int RGB = image.getRGB(i, j);
 					RGB = (nWoB && RGB != RGB_WHITE ? RGB_BLACK : RGB);
-					binaryImage.setRGB(i, j, RGB); // 根据图像模式, RGB会自动转换为�?/�?
+					binaryImage.setRGB(i, j, RGB); // 根据图像模式, RGB会自动转换为黑/白
 
 					RGB = binaryImage.getRGB(i, j);
 					if (RGB == RGB_WHITE) {
@@ -120,7 +120,7 @@ public class ImageUtils {
 				}
 			}
 
-			// 默认白色为背景色, 黑色为前景色, 当背景色像素小于前景色时�? 则对图像取反
+			// 默认白色为背景色, 黑色为前景色, 当背景色像素小于前景色时， 则对图像取反
 			if (whiteCnt < blackCnt) {
 				for (int i = 0; i < W; i++) {
 					for (int j = 0; j < H; j++) {
@@ -163,9 +163,9 @@ public class ImageUtils {
 	
 	/**
 	 * 垂直切割图像
-	 * @param image 原图�?
-	 * @param left 左起始边界索�?, 取值范围：[0, image.Width)
-	 * @return 切割子图, 切割范围�? [left, left + offset)
+	 * @param image 原图像
+	 * @param left 左起始边界索引, 取值范围：[0, image.Width)
+	 * @return 切割子图, 切割范围为 [left, left + offset)
 	 */
 	public static BufferedImage cutVertical(BufferedImage image, int left) {
 		return cutVertical(image, left, -1);
@@ -173,10 +173,10 @@ public class ImageUtils {
 	
 	/**
 	 * 垂直切割图像
-	 * @param image 原图�?
-	 * @param left 左起始边界索�?, 取值范围：[0, image.Width)
+	 * @param image 原图像
+	 * @param left 左起始边界索引, 取值范围：[0, image.Width)
 	 * @param offset 切割宽度(-1表示切到末尾)
-	 * @return 切割子图, 切割范围�? [left, left + offset)
+	 * @return 切割子图, 切割范围为 [left, left + offset)
 	 */
 	public static BufferedImage cutVertical(BufferedImage image, int left, int offset) {
 		if(image == null) {
@@ -202,10 +202,10 @@ public class ImageUtils {
 	
 	/**
 	 * 水平切割图像
-	 * @param image 原图�?
-	 * @param top 上起始边界索�?, 取值范围：[0, image.Height)
+	 * @param image 原图像
+	 * @param top 上起始边界索引, 取值范围：[0, image.Height)
 	 * @param offset 切割高度(-1表示切到末尾)
-	 * @return 切割子图, 切割范围�? [top, top + offset)
+	 * @return 切割子图, 切割范围为 [top, top + offset)
 	 */
 	public static BufferedImage cutHorizontal(BufferedImage image, int top) {
 		return cutHorizontal(image, top, -1);
@@ -213,10 +213,10 @@ public class ImageUtils {
 	
 	/**
 	 * 水平切割图像
-	 * @param image 原图�?
-	 * @param top 上起始边界索�?, 取值范围：[0, image.Height)
+	 * @param image 原图像
+	 * @param top 上起始边界索引, 取值范围：[0, image.Height)
 	 * @param offset 切割高度(-1表示切到末尾)
-	 * @return 切割子图, 切割范围�? [top, top + offset)
+	 * @return 切割子图, 切割范围为 [top, top + offset)
 	 */
 	public static BufferedImage cutHorizontal(BufferedImage image, int top, int offset) {
 		if(image == null) {

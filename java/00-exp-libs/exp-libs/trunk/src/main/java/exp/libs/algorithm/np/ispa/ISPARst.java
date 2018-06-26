@@ -5,6 +5,17 @@ import java.util.List;
 
 import exp.libs.algorithm.struct.graph.Node;
 
+/**
+ * <PRE>
+ * ISPA问题的可行解
+ * </PRE>
+ * 
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-06-13
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public final class ISPARst {
 
 	/** 是否为可行解 */

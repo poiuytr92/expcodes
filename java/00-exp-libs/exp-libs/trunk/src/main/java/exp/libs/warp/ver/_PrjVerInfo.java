@@ -23,8 +23,8 @@ import exp.libs.warp.ui.layout.VFlowLayout;
  * 	(包括项目信息、当前版本信息、历史版本信息)
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -68,17 +68,17 @@ class _PrjVerInfo {
 	
 	private CheckBoxGroup<String> _APIsCB;
 	
-	/** 显示用的历史版本数据(与界面过滤结果一�?) */
+	/** 显示用的历史版本数据(与界面过滤结果一致) */
 	private List<_VerInfo> viewHistoryVers;
 	
-	/** 实际的历史版本数�?(与库存一�?) */
+	/** 实际的历史版本数据(与库存一致) */
 	private List<_VerInfo> historyVers;
 
-	/** 当前的版本信�?(亦即最后一个版�?) */
+	/** 当前的版本信息(亦即最后一个版本) */
 	private _VerInfo curVer;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param historyVers 历史版本信息
 	 */
 	protected _PrjVerInfo(List<_VerInfo> historyVers) {
@@ -147,10 +147,10 @@ class _PrjVerInfo {
 		JPanel panel = new JPanel(new VFlowLayout()); {
 			panel.add(SwingUtils.getPairsPanel("应用名称", prjNameTF));
 			panel.add(SwingUtils.getPairsPanel("应用描述", prjDescTF));
-			panel.add(SwingUtils.getPairsPanel("开发团�?", teamNameTF));
+			panel.add(SwingUtils.getPairsPanel("开发团队", teamNameTF));
 			panel.add(SwingUtils.getPairsPanel("项目编码", prjCharsetTF));
-			panel.add(SwingUtils.getPairsPanel("硬盘需�?", diskSizeTF));
-			panel.add(SwingUtils.getPairsPanel("内存需�?", cacheSizeTF));
+			panel.add(SwingUtils.getPairsPanel("硬盘需求", diskSizeTF));
+			panel.add(SwingUtils.getPairsPanel("内存需求", cacheSizeTF));
 			panel.add(SwingUtils.getPairsPanel("相关接口", _APIsCB.toHGridPanel()));
 		}
 		return SwingUtils.addAutoScroll(panel);
@@ -159,7 +159,7 @@ class _PrjVerInfo {
 	protected String checkVersion(_VerInfo verInfo) {
 		String errDesc = "";
 		if(verInfo == null) {
-			errDesc = "版本对象�? null";
+			errDesc = "版本对象为 null";
 			
 		} else if(StrUtils.isTrimEmpty(verInfo.getAuthor())) {
 			errDesc = "[责任人] 不能为空";
@@ -181,8 +181,8 @@ class _PrjVerInfo {
 			List<String> newVerIDs = RegexUtils.findGroups(newVer, regex);
 			if(newVerIDs.isEmpty()) {
 				errDesc = StrUtils.concat("[版本号] 格式错误\r\n", 
-						"参考格�?: Major.Minor{-SNAPSHOT}  (主版�?.次版�?-快照标识)\r\n", 
-						"�?:  1.0-SNAPSHOT�? 2.1�? 2.2-SNAPSHOT �?");
+						"参考格式: Major.Minor{-SNAPSHOT}  (主版本.次版本-快照标识)\r\n", 
+						"如:  1.0-SNAPSHOT、 2.1、 2.2-SNAPSHOT 等");
 				
 			} else {
 				curVer = (StrUtils.isTrimEmpty(curVer) ? "0.0" : curVer);
@@ -271,7 +271,7 @@ class _PrjVerInfo {
 	
 	/**
 	 * 
-	 * @param row 此行数为界面的版本列表行数， 对此处的历史版本列表而言是倒序�?
+	 * @param row 此行数为界面的版本列表行数， 对此处的历史版本列表而言是倒序的
 	 * @return
 	 */
 	protected _VerInfo getVerInfo(int row) {

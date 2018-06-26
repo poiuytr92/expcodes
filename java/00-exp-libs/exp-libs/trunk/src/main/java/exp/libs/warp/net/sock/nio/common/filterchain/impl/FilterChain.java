@@ -17,20 +17,20 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 过滤链实际也是一个关系过滤器
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public final class FilterChain implements INextFilter {
 
 	/**
-	 * 链头，必�?
+	 * 链头，必须
 	 */
 	private HeadFilter headFilter;
 
 	/**
-	 * 链尾，必�?
+	 * 链尾，必须
 	 */
 	private TailFilter tailFilter;
 
@@ -40,13 +40,13 @@ public final class FilterChain implements INextFilter {
 	private IHandler handler;
 
 	/**
-	 * 过滤链主�?
+	 * 过滤链主体
 	 */
 	private Map<String, AbstractNextFilter> filterChain;
 
 	/**
 	 * <pre>
-	 * 构造函�?
+	 * 构造函数
 	 * </pre>
 	 */
 	public FilterChain() {
@@ -103,7 +103,7 @@ public final class FilterChain implements INextFilter {
 			   filter.getFilter().clean();
 			}
 			
-			// 不清空过滤器，确保重启服务时过滤链仍然可�?
+			// 不清空过滤器，确保重启服务时过滤链仍然可用
 //			this.filterChain.clear();
 //			this.filterChain = null;
 		}
@@ -116,7 +116,7 @@ public final class FilterChain implements INextFilter {
 	 * 建议过滤器名称与过滤器的类名保持一致，使得在添加同名过滤器时，可以覆盖
 	 * </pre>
 	 * 
-	 * @param filterName 过滤器名�?
+	 * @param filterName 过滤器名称
 	 * @param newFilter 新过滤器
 	 */
 	public void addFilter(String filterName, IFilter newFilter) {
@@ -145,7 +145,7 @@ public final class FilterChain implements INextFilter {
 	 * 根据过滤器名称移除过滤器，并释放相关资源
 	 * </pre>
 	 * 
-	 * @param filterName 过滤器名�?
+	 * @param filterName 过滤器名称
 	 * @return true:移除成功; false:移除失败
 	 */
 	public boolean removeFilter(String filterName) {
@@ -205,7 +205,7 @@ public final class FilterChain implements INextFilter {
 
 	/**
 	 * <pre>
-	 * 过滤链是消息发送事件的入口，交付链尾处�?
+	 * 过滤链是消息发送事件的入口，交付链尾处理
 	 * </pre>
 	 * 
 	 * @param session 会话
@@ -218,8 +218,8 @@ public final class FilterChain implements INextFilter {
 
 	/**
 	 * <pre>
-	 * 过滤链是异常事件的入口，交付链头处理�?
-	 * 使得异常可以通过中间所有过滤器，以便被某些需要处理异常的过滤器捕�?
+	 * 过滤链是异常事件的入口，交付链头处理，
+	 * 使得异常可以通过中间所有过滤器，以便被某些需要处理异常的过滤器捕获
 	 * </pre>
 	 * 
 	 * @param session 会话

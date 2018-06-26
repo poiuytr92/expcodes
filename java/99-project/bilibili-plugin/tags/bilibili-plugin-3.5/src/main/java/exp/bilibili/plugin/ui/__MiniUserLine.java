@@ -25,8 +25,8 @@ import exp.libs.warp.ui.SwingUtils;
  * 小号账号管理窗口的单行组件
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -71,7 +71,7 @@ public class __MiniUserLine extends JPanel {
 		
 		this.loginBtn = new LoginBtn(CookieType.MINI, "登陆", new Callback());
 		if(loginBtn.markLogined(miniCookie)) {	
-			_afterLogin();	// 自动登陆时触�?
+			_afterLogin();	// 自动登陆时触发
 		}
 		
 		// 布局
@@ -90,7 +90,7 @@ public class __MiniUserLine extends JPanel {
 		@Override
 		public void afterLogin(final BiliCookie cookie) {
 			miniCookie = cookie;
-			_afterLogin();	// 手动登陆时触�?
+			_afterLogin();	// 手动登陆时触发
 		}
 
 		@Override
@@ -137,7 +137,7 @@ public class __MiniUserLine extends JPanel {
 				if(RoomMgr.getInstn().isExist(roomId)) {
 					miniCookie.setFeedRoomId(roomId);
 					String msg = StrUtils.concat("[", miniCookie.NICKNAME(), 
-							"] �? [投喂房间号] 变更�?: ", roomId);
+							"] 的 [投喂房间号] 变更为: ", roomId);
 					SwingUtils.info(msg);
 					UIUtils.log(msg);
 					

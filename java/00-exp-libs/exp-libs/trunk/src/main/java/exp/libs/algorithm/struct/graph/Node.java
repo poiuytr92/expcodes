@@ -13,8 +13,8 @@ import exp.libs.utils.other.StrUtils;
  * 拓扑图的节点模型
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-25
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-25
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -28,7 +28,7 @@ public class Node {
 	
 	private int degree;
 	
-	// 仅用于在构图时保持唯一�?
+	// 仅用于在构图时保持唯一性
 	private Set<Node> neighbors;
 	
 	@SuppressWarnings("unused")

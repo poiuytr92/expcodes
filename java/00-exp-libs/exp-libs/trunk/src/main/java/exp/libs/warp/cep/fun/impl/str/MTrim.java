@@ -10,8 +10,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	去换行，去空格
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -23,14 +23,14 @@ public class MTrim extends BaseFunction1 {
 	private static final long serialVersionUID = 8381083020732955709L;
 	
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "mtrim";
 	
 	/**
 	 * 去除字符串头尾空字符.
-	 * �?1个入参：
+	 * 共1个入参：
 	 * @param1 String:原字符串
 	 * @return String
 	 * @throws EvaluationException 若执行失败则抛出异常

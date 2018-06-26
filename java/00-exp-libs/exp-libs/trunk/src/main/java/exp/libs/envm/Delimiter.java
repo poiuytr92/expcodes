@@ -5,8 +5,8 @@ package exp.libs.envm;
  * 枚举类：分隔符
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -15,13 +15,13 @@ public class Delimiter {
 	/** 当前操作平台所用的默认行分隔符 */
 	public final static String DEFAULT = System.getProperty("line.separator");
 	
-	/** 回车�? */
+	/** 回车符 */
 	public final static String CR = "\r";
 	
-	/** 换行�? */
+	/** 换行符 */
 	public final static String LF = "\n";
 	
-	/** 回车换行�? */
+	/** 回车换行符 */
 	public final static String CRLF = CR.concat(LF);
 	
 	/** 无操作平台，分隔符为\0 */

@@ -16,8 +16,8 @@ import exp.libs.warp.thread.LoopThread;
  *  可用于登陆主号、小号、马甲号
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -33,7 +33,7 @@ class QRLogin extends LoopThread {
 	
 	private final static String RGX_OAUTH = "oauthKey=([^&]+)";
 	
-	/** B站二维码有效时间�?180s, 这里设置120s, 避免边界问题 */
+	/** B站二维码有效时间是180s, 这里设置120s, 避免边界问题 */
 	private final static long UPDATE_TIME = 120000;
 	
 	private final static long LOOP_TIME = 1000;
@@ -70,11 +70,11 @@ class QRLogin extends LoopThread {
 	@Override
 	protected void _loopRun() {
 		if(isLogined == true) {
-			_stop();	// 若登陆成功则退出轮�?
+			_stop();	// 若登陆成功则退出轮询
 			
 		} else {
 			
-			// 在二维码失效前更新图�?
+			// 在二维码失效前更新图片
 			if(loopCnt >= LOOP_LIMIT) {
 				if(downloadQrcode(QRIMG_PATH)) {
 					qrUI.updateQrcodeImg(QRIMG_PATH);
@@ -109,8 +109,8 @@ class QRLogin extends LoopThread {
 	}
 	
 	/**
-	 * 下载登陆二维�?
-	 * @param imgPath 下载二维码路�?
+	 * 下载登陆二维码
+	 * @param imgPath 下载二维码路径
 	 * @return 
 	 */
 	private boolean downloadQrcode(String imgPath) {

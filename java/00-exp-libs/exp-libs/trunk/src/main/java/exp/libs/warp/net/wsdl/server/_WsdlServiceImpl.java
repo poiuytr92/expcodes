@@ -8,13 +8,13 @@ import javax.jws.WebService;
  * </PRE>
  * 
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2018-06-20
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-06-20
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 
-// 注解中必须指定接口类位置, 否则会报�? "Could not load Webservice SEI" 
+// 注解中必须指定接口类位置, 否则会报错 "Could not load Webservice SEI" 
 @WebService(endpointInterface="exp.libs.warp.net.wsdl.server._IWsdlService")  
 public class _WsdlServiceImpl implements _IWsdlService {
 

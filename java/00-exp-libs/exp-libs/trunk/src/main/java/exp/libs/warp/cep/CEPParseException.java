@@ -8,8 +8,8 @@ import com.singularsys.jep.PostfixMathCommandI;
  * 函数解析异常类。
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -26,7 +26,7 @@ public final class CEPParseException extends EvaluationException {
 	private String funName;
 	
 	/**
-	 * 参数编号,�?1开�?
+	 * 参数编号,从1开始
 	 */
 	private int pidx;
 	
@@ -46,17 +46,17 @@ public final class CEPParseException extends EvaluationException {
 	private Class<?> clazz;
 	
 	/**
-	 * 引起异常的原�?
+	 * 引起异常的原因
 	 */
 	private Throwable cause;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param pmci 函数接口
-	 * @param pidx 参数编号，从1开�?
+	 * @param pidx 参数编号，从1开始
 	 * @param data 被解析的数据
 	 * @param format 解析格式
-	 * @param cause 引起异常的原�?
+	 * @param cause 引起异常的原因
 	 */
 	public CEPParseException(PostfixMathCommandI pmci, int pidx, 
 			Object data, String format, Throwable cause) {
@@ -69,12 +69,12 @@ public final class CEPParseException extends EvaluationException {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param pmci 函数接口
-	 * @param pidx 参数编号，从1开�?
+	 * @param pidx 参数编号，从1开始
 	 * @param data 被解析的数据
 	 * @param clazz 强制类型转换的类
-	 * @param cause 引起异常的原�?
+	 * @param cause 引起异常的原因
 	 */
 	public CEPParseException(PostfixMathCommandI pmci, int pidx,  
 			Object data, Class<?> clazz, Throwable cause) {

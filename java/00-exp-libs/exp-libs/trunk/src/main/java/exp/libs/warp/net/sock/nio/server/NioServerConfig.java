@@ -12,8 +12,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
  * NIOSocket服务器配置类。
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -24,7 +24,7 @@ class NioServerConfig extends NioConfig {
 	}
 	
 	/**
-	 * 服务端默认添加线程池过滤�?
+	 * 服务端默认添加线程池过滤器
 	 */
 	@Override
 	protected void initFilterChain() {
@@ -33,7 +33,7 @@ class NioServerConfig extends NioConfig {
 	}
 	
 	/**
-	 * 获取过滤�?
+	 * 获取过滤链
 	 * @return
 	 */
 	protected FilterChain getFilterChain() {

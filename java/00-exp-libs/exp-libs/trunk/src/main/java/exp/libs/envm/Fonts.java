@@ -5,8 +5,8 @@ package exp.libs.envm;
  * 枚举类：字体
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2018-04-20
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-04-20
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -30,11 +30,11 @@ public enum Fonts {
 	/** 字体: Aparajita */
 	Aparajita("Aparajita", "Aparajita"), 
 
-	/** 字体: 苹果俪中�? */
-	Apple_LiGothic_Medium("苹果俪中�?", "Apple LiGothic Medium"), 
+	/** 字体: 苹果俪中黑 */
+	Apple_LiGothic_Medium("苹果俪中黑", "Apple LiGothic Medium"), 
 
-	/** 字体: 苹果俪细�? */
-	Apple_LiSung_Light("苹果俪细�?", "Apple LiSung Light"), 
+	/** 字体: 苹果俪细宋 */
+	Apple_LiSung_Light("苹果俪细宋", "Apple LiSung Light"), 
 
 	/** 字体: Arabic Typesetting */
 	Arabic_Typesetting("Arabic Typesetting", "Arabic Typesetting"), 
@@ -60,8 +60,8 @@ public enum Fonts {
 	/** 字体: BatangChe */
 	BatangChe("BatangChe", "BatangChe"), 
 
-	/** 字体: 标楷�? */
-	BiauKai("标楷�?", "BiauKai"), 
+	/** 字体: 标楷体 */
+	BiauKai("标楷体", "BiauKai"), 
 
 	/** 字体: Book Antiqua */
 	Book_Antiqua("Book Antiqua", "Book Antiqua"), 
@@ -120,8 +120,8 @@ public enum Fonts {
 	/** 字体: David */
 	David("David", "David"), 
 
-	/** 字体: 标楷�? */
-	DFKai_SB("标楷�?", "DFKai-SB"), 
+	/** 字体: 标楷体 */
+	DFKai_SB("标楷体", "DFKai-SB"), 
 
 	/** 字体: Dialog */
 	Dialog("Dialog", "Dialog"), 
@@ -171,8 +171,8 @@ public enum Fonts {
 	/** 字体: 方正舒体 */
 	FZShuTi("方正舒体", "FZShuTi"), 
 
-	/** 字体: 宋体-方正超大字符�? */
-	FZSong_Superfont("宋体-方正超大字符�?", "FZSong_Superfont"), 
+	/** 字体: 宋体-方正超大字符集 */
+	FZSong_Superfont("宋体-方正超大字符集", "FZSong_Superfont"), 
 
 	/** 字体: 方正姚体 */
 	FZYaoti("方正姚体", "FZYaoti"), 
@@ -294,8 +294,8 @@ public enum Fonts {
 	/** 字体: Microsoft Himalaya */
 	Microsoft_Himalaya("Microsoft Himalaya", "Microsoft Himalaya"), 
 
-	/** 字体: 微软正黑�? */
-	Microsoft_JhengHei("微软正黑�?", "Microsoft JhengHei"), 
+	/** 字体: 微软正黑体 */
+	Microsoft_JhengHei("微软正黑体", "Microsoft JhengHei"), 
 
 	/** 字体: Microsoft New Tai Lue */
 	Microsoft_New_Tai_Lue("Microsoft New Tai Lue", "Microsoft New Tai Lue"), 
@@ -318,8 +318,8 @@ public enum Fonts {
 	/** 字体: Microsoft Yi Baiti */
 	Microsoft_Yi_Baiti("Microsoft Yi Baiti", "Microsoft Yi Baiti"), 
 
-	/** 字体: 细明�? */
-	MingLiU("细明�?", "MingLiU"), 
+	/** 字体: 细明体 */
+	MingLiU("细明体", "MingLiU"), 
 
 	/** 字体: MingLiU-ExtB */
 	MingLiU_ExtB("MingLiU-ExtB", "MingLiU-ExtB"), 
@@ -381,8 +381,8 @@ public enum Fonts {
 	/** 字体: Nina */
 	Nina("Nina", "Nina"), 
 
-	/** 字体: 新宋�? */
-	NSimSun("新宋�?", "NSimSun"), 
+	/** 字体: 新宋体 */
+	NSimSun("新宋体", "NSimSun"), 
 
 	/** 字体: Nyala */
 	Nyala("Nyala", "Nyala"), 

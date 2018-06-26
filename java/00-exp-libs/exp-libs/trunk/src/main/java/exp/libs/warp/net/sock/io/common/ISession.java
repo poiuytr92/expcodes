@@ -9,16 +9,16 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * Socket客户端会话接口(阻塞模式)
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public interface ISession {
 
 	/**
-	 * 获取客户端标�?
-	 * @return 客户端标�?
+	 * 获取客户端标识
+	 * @return 客户端标识
 	 */
 	public String ID();
 	
@@ -41,7 +41,7 @@ public interface ISession {
 	public boolean conn();
 	
 	/**
-	 * socket会话是否有效（多用于需要登录的判定�?
+	 * socket会话是否有效（多用于需要登录的判定）
 	 * @return true:有效; false:无效
 	 */
 	public boolean isVaild();
@@ -53,27 +53,27 @@ public interface ISession {
 	public boolean isClosed();
 	
 	/**
-	 * 断开socket连接并释放所有资�?
+	 * 断开socket连接并释放所有资源
 	 * @return true:断开成功; false:断开异常
 	 */
 	public boolean close();
 	
 	/**
-	 * Socket读操�?
-	 * @return 服务端返回的消息(若返回null，则出现超时等异�?)
+	 * Socket读操作
+	 * @return 服务端返回的消息(若返回null，则出现超时等异常)
 	 */
 	public String read();
 	
 	/**
-	 * Socket写操�?.
-	 * @param msg 需发送到服务端的的消息报�?
-	 * @return true:发送成�?; false:发送失�?
+	 * Socket写操作.
+	 * @param msg 需发送到服务端的的消息报文
+	 * @return true:发送成功; false:发送失败
 	 */
 	public boolean write(String msg);
 	
 	/**
 	 * 临时清理本地缓存.
-	 * 建议完成一次完整的读写交互后执�?.
+	 * 建议完成一次完整的读写交互后执行.
 	 */
 	public void clearIOBuffer();
 	

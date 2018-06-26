@@ -7,8 +7,8 @@ import exp.libs.utils.num.NumUtils;
  * 张量索引
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2018-03-04
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-04
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -17,11 +17,11 @@ class TensorIndex {
     /** 张量名称 */
     private String name;
     
-    /** 张量索引（默认为0�? */
+    /** 张量索引（默认为0） */
     private int index;
     
     /**
-     * 构造函�?
+     * 构造函数
      */
     private TensorIndex() {
     	this.name = "";
@@ -45,9 +45,9 @@ class TensorIndex {
     }
     
     /**
-     * 解析张量名称�? 将其拆分�? name和index两部�?
+     * 解析张量名称， 将其拆分成 name和index两部分
      * 	若张量名称中不存在index，则index取默认值为0
-     * @param tensorName 张量名称, 格式�? name:index
+     * @param tensorName 张量名称, 格式为 name:index
      * @return
      */
     protected static TensorIndex parse(String tensorName) {

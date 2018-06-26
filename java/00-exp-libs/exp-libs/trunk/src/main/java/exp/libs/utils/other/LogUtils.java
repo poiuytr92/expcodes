@@ -10,8 +10,8 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
  * 日志工具
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-08-18
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-18
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -19,11 +19,11 @@ public class LogUtils {
 
 	private final static String LOGBACK_PATH = "./conf/logback.xml";
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected LogUtils() {}
 	
 	/**
-	 * 加载logback日志配置文件(默认路径�?./conf/logback.xml)
+	 * 加载logback日志配置文件(默认路径为./conf/logback.xml)
 	 */
 	public static void loadLogBackConfig() {
 		loadLogBackConfig(LOGBACK_PATH);

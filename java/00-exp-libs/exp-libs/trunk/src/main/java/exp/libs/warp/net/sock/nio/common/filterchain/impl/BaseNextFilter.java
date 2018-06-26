@@ -9,16 +9,16 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 基本关系过滤器，用于封装业务过滤器
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class BaseNextFilter extends AbstractNextFilter {
 
 	/**
-	 * 构造函�?
-	 * @param filter 业务过滤�?
+	 * 构造函数
+	 * @param filter 业务过滤器
 	 */
 	public BaseNextFilter(IFilter filter) {
 		super(filter);
@@ -56,7 +56,7 @@ class BaseNextFilter extends AbstractNextFilter {
 	/**
 	 * 触发上一个业务过滤器的onMessageSent事件
 	 * @param session 会话
-	 * @param msg 发送消�?
+	 * @param msg 发送消息
 	 */
 	@Override
 	public void onMessageSent(ISession session, Object msg) {

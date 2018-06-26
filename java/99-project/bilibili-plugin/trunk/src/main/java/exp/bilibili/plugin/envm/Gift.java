@@ -5,8 +5,8 @@ package exp.bilibili.plugin.envm;
  * 各种礼物对应的活跃度枚举
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -36,19 +36,19 @@ public class Gift {
 	
 	public final static Gift PANGCI = new Gift("10", "蓝白胖次", 19900);
 	
-	public final static Gift TV = new Gift("25", "小电�?", 1245000);
+	public final static Gift TV = new Gift("25", "小电视", 1245000);
 	
 	public final static Gift STORM = new Gift("39", "节奏风暴", 100000);
 	
-	public final static Gift LANTERN = new Gift("109", "红灯�?", 2000);
+	public final static Gift LANTERN = new Gift("109", "红灯笼", 2000);
 	
-	public final static Gift SQUIB = new Gift("110", "小爆�?", 2000);
+	public final static Gift SQUIB = new Gift("110", "小爆竹", 2000);
 	
 	public final static Gift PEACH = new Gift("115", "桃花", 2000);
 	
 	public final static Gift LETTER = new Gift("116", "情书", 2000);
 
-	public final static Gift GAMEBOY = new Gift("120", "游戏�?", 100);
+	public final static Gift GAMEBOY = new Gift("120", "游戏机", 100);
 	
 	public final static Gift STAR = new Gift("121", "闪耀之星", 200);
 	
@@ -60,9 +60,9 @@ public class Gift {
 	
 	public final static Gift COIN = new Gift("20005", "金币", 1000);
 	
-	public final static Gift BQM = new Gift("20007", "？？�?", 100);
+	public final static Gift BQM = new Gift("20007", "？？？", 100);
 	
-	public final static Gift COLA = new Gift("20008", "冰阔�?", 1000);
+	public final static Gift COLA = new Gift("20008", "冰阔乐", 1000);
 	
 	public final static Gift SPRAY = new Gift("20009", "变欧喷雾", 12000);
 	
@@ -72,7 +72,7 @@ public class Gift {
 	
 	public final static Gift KEYBOARD = new Gift("20012", "氪金键盘", 38000);
 	
-	public final static Gift FLOWER = new Gift("20013", "小花�?", 2000);
+	public final static Gift FLOWER = new Gift("20013", "小花花", 2000);
 	
 	public final static Gift HEART = new Gift("20014", "比心", 100);
 	
@@ -82,10 +82,10 @@ public class Gift {
 	/** 礼物名称 */
 	private String name;
 	
-	/** 价�?/活跃�? */
+	/** 价值/活跃值 */
 	private int cost;
 	
-	/** 亲密度（礼物价�?/100�? */
+	/** 亲密度（礼物价值/100） */
 	private int intimacy;
 	
 	private Gift(String id, String name, int cost) {

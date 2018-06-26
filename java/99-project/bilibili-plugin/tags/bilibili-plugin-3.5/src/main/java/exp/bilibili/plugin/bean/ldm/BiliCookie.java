@@ -12,8 +12,8 @@ import exp.libs.warp.net.http.cookie.HttpCookie;
  * B站账号的cookie集
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-31
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -40,28 +40,28 @@ public class BiliCookie extends HttpCookie {
 	/** 从cookies提取的用户ID */
 	private String uid;
 	
-	/** 该cookie对应的用户昵�? */
+	/** 该cookie对应的用户昵称 */
 	private String nickName;
 	
-	/** 是否已绑定手�? */
+	/** 是否已绑定手机 */
 	private boolean isBindTel;
 	
-	/** 是否已实名认�? */
+	/** 是否已实名认证 */
 	private boolean isRealName;
 	
-	/** 是否为房�? */
+	/** 是否为房管 */
 	private boolean isRoomAdmin;
 	
 	/** 是否为老爷/年费老爷 */
 	private boolean isVip;
 	
-	/** 是否为提�?/总督 */
+	/** 是否为提督/总督 */
 	private boolean isGuard;
 	
 	/** 自动投喂 */
 	private boolean autoFeed;
 	
-	/** 投喂房间�? */
+	/** 投喂房间号 */
 	private int feedRoomId;
 	
 	public BiliCookie() {
@@ -85,7 +85,7 @@ public class BiliCookie extends HttpCookie {
 		this.autoFeed = false;
 		this.feedRoomId = 0;
 		
-		// 以下值可能先�? {@link takeCookieNVE} 中被初始�?
+		// 以下值可能先在 {@link takeCookieNVE} 中被初始化
 		this.expires = (expires == null ? new Date() : expires);
 		this.csrf = (StrUtils.isEmpty(csrf) ? "" : csrf);
 		this.uid = (StrUtils.isEmpty(uid) ? "" : uid);

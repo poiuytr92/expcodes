@@ -8,8 +8,8 @@ import java.util.Map;
  * Tracert测试返回结果对象
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-14
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -34,7 +34,7 @@ public class TracertBean {
 	private long payTime = 0;
 	
 	/**
-	 * 构造方�?
+	 * 构造方法
 	 */
 	public TracertBean() {
 	}

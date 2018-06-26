@@ -13,8 +13,8 @@ import exp.libs.warp.net.sock.io.common.IHandler;
  * 客户端会话代理对象
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -23,7 +23,7 @@ class _SocketClientProxy extends SocketClient implements Runnable {
 	/** 会话ID */
 	private String id;
 	
-	/** 业务处理�? */
+	/** 业务处理器 */
 	private IHandler handler;
 	
 	/** 会话是否有效 */
@@ -77,7 +77,7 @@ class _SocketClientProxy extends SocketClient implements Runnable {
 	@Deprecated
 	@Override
 	public boolean conn() {
-		// Undo 客户端代理会话已处于连接状�?, 无需再连�?
+		// Undo 客户端代理会话已处于连接状态, 无需再连接
 		return true;
 	}
 	

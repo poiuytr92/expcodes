@@ -22,8 +22,8 @@ import exp.libs.utils.verify.RegexUtils;
  * Jar包管理器
  * </PRE>
  * <B>PROJECT : </B> mojo-release-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-08-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -73,7 +73,7 @@ public class JarMgr {
 			
 			if(DependType.SELF == Config.getInstn().getDependType()) {
 				String jarName = PathUtils.toLinux(srcPath).replaceFirst(".*/", "");
-				jarName = _cutVer(jarName);	// 版本号裁�?
+				jarName = _cutVer(jarName);	// 版本号裁剪
 				jarNames.put(srcPath, jarName);
 				
 				String jarDir = Config.getInstn().getJarLibDir();
@@ -121,7 +121,7 @@ public class JarMgr {
 					concat(snkPath).concat("]"));
 			
 			if(DependType.SELF != Config.getInstn().getDependType()) {
-				break;	// 若不使用私有仓库�? 则只复制项目jar�?
+				break;	// 若不使用私有仓库， 则只复制项目jar包
 			}
 		}
 	}

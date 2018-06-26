@@ -12,24 +12,24 @@ import org.slf4j.LoggerFactory;
  * 生产者消费者队列
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class PCQueue<E> extends ArrayBlockingQueue<E> {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(PCQueue.class);
 	
-	/** 序列化标�? */
+	/** 序列化标识 */
 	private static final long serialVersionUID = 4960086438647523367L;
 
-	/** 生产�?/消费者队列的默认大小 */
+	/** 生产者/消费者队列的默认大小 */
 	private final static int DEFAULT_PC_QUEUE_SIZE = 1024;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param capacity 队列容量
 	 */
 	public PCQueue(final int capacity) {
@@ -38,7 +38,7 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	}
 	
 	/**
-	 * 往队尾放入一个元�?.
+	 * 往队尾放入一个元素.
 	 * （阻塞操作）
 	 * 
 	 * @param e 元素
@@ -60,11 +60,11 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	}
 	
 	/**
-	 * 往队尾放入一个元�?.
+	 * 往队尾放入一个元素.
 	 * （阻塞操作）
 	 * @param e 元素
 	 * @param timeout 超时时间(ms)
-	 * @return 是否添加成功 （若超时未能插入则返回false�?
+	 * @return 是否添加成功 （若超时未能插入则返回false）
 	 */
 	public final boolean add(E e, long timeout) {
 		boolean isAdd = false;
@@ -81,11 +81,11 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	}
 	
 	/**
-	 * 往队尾放入一个元�?.
-	 * （非阻塞操作�?
+	 * 往队尾放入一个元素.
+	 * （非阻塞操作）
 	 * 
 	 * @param e 元素
-	 * @return 是否添加成功 （若队列已满则马上返回false�?
+	 * @return 是否添加成功 （若队列已满则马上返回false）
 	 */
 	public final boolean addQuickly(E e) {
 		boolean isAdd = false;
@@ -96,10 +96,10 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	}
 	
 	/**
-	 * 从队头取出一个元�?.
+	 * 从队头取出一个元素.
 	 * （阻塞操作）
 	 * 
-	 * @return 元素（若发生内部异常，返回null�?
+	 * @return 元素（若发生内部异常，返回null）
 	 */
 	public final E get() {
 		E e = null;
@@ -113,11 +113,11 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	}
 	
 	/**
-	 * 从队头取出一个元�?.
+	 * 从队头取出一个元素.
 	 * （阻塞操作）
 	 * 
 	 * @param timeout 超时时间(ms)
-	 * @return 元素（若超时或发生内部异常，返回null�?
+	 * @return 元素（若超时或发生内部异常，返回null）
 	 */
 	public final E get(long timeout) {
 		E e = null;
@@ -132,10 +132,10 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	}
 	
 	/**
-	 * 从队头取出一个元�?.
-	 * （非阻塞操作�?
+	 * 从队头取出一个元素.
+	 * （非阻塞操作）
 	 * 
-	 * @return 元素（若队列为空、或发生内部异常，返回null�?
+	 * @return 元素（若队列为空、或发生内部异常，返回null）
 	 */
 	public final E getQuickly() {
 		return super.poll();
@@ -149,7 +149,7 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	}
 	
 	//////////////////////////////////////////////////////////////
-	// 为了控制队列中的对象，禁止基类提供的其他增减对象的方�?  ///////////////////
+	// 为了控制队列中的对象，禁止基类提供的其他增减对象的方法  ///////////////////
 	//////////////////////////////////////////////////////////////
 	
 	/**
@@ -186,7 +186,7 @@ public class PCQueue<E> extends ArrayBlockingQueue<E> {
 	}
 	
 	/**
-	 * 不执行任何处�?
+	 * 不执行任何处理
 	 */
 	@Override
 	@Deprecated

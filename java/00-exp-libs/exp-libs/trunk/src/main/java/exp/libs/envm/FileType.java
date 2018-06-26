@@ -10,8 +10,8 @@ package exp.libs.envm;
  *  存在某些文件类型没有文件头(如：TXT)
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2018-05-07
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-05-07
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -23,10 +23,10 @@ public enum FileType {
 	/** TXT类的纯文本文件不存在确定的文件头(其文件头受存储的内容影响) */
 	TXT("TXT", ".txt", "", 0), 
 	
-	/** 批处理脚�? */
+	/** 批处理脚本 */
 	BAT("BAT", ".bat", "", 0), 
 	
-	/** 二进制文�? */
+	/** 二进制文件 */
 	BIN("BIN", ".bin", "", 0), 
 	
 	/** INI配置文件 */
@@ -44,16 +44,16 @@ public enum FileType {
 	/** Musical Instrument Digital Interface (最小的音符文件) */
 	MIDI("mid", ".mid", "4D546864", 4), 
 	
-	/** 矢量�? */
+	/** 矢量图 */
 	JPG("JPG", ".jpg", "FFD8FF", 3), 
 
 	/** 无损压缩位图 */
 	PNG("PNG", ".png", "89504E47", 4), 
 
-	/** 24位位�? */
+	/** 24位位图 */
 	BMP("BMP", ".bmp", "424D", 2), 
 	
-	/** 动态图�? */
+	/** 动态图像 */
 	GIF("GIF", ".gif", "47494638", 4), 
 
 	/** 标签图像 */
@@ -137,7 +137,7 @@ public enum FileType {
 	/** Windows Password */
 	PWL("Windows Password", ".pwl", "E3828596", 4), 
 
-	/** AVI格式视音频文�?(Audio Video Interleaved) */
+	/** AVI格式视音频文件(Audio Video Interleaved) */
 	AVI("AVI", ".avi", "41564920", 4), 
 
 	/** Real Audio */
@@ -146,10 +146,10 @@ public enum FileType {
 	/** Real Media */
 	RM("Real Media", ".rm", "2E524D46", 4), 
 
-	/** MPEG (只包含视频数�?) */
+	/** MPEG (只包含视频数据) */
 	MPEG_VIDEO("MPEG (Only Video)", ".mpg", "000001B3", 4), 
 	
-	/** MPEG (同时包含视频数据和音频数�?) */
+	/** MPEG (同时包含视频数据和音频数据) */
 	MPEG("MPEG", ".mpg", "000001BA", 4), 
 
 	/** Quicktime */
@@ -161,7 +161,7 @@ public enum FileType {
 	/** Windows 动态库文件 */
 	DLL("DLL", ".dll", "4D5A90", 3), 
 	
-	/** Windows 可执行文�? */
+	/** Windows 可执行文件 */
 	EXE("EXE", ".exe", "4D5A90", 3), 
 	
 	;
@@ -172,18 +172,18 @@ public enum FileType {
 	/** 文件类型后缀 */
 	public String EXT;
 	
-	/** 16进制文件�?(存在相同文件头的不同文件类型) */
+	/** 16进制文件头(存在相同文件头的不同文件类型) */
 	public String HEADER;
 	
-	/** 文件头的字节�? (1字节=2�?16进制字符) */
+	/** 文件头的字节数 (1字节=2个16进制字符) */
 	public int HEAD_LEN;
 	
 	/**
-	 * 私有化构造函�?
+	 * 私有化构造函数
 	 * @param name 文件类型名称
 	 * @param ext 文件类型后缀 
-	 * @param header 16进制文件�?
-	 * @param headLen 文件头的字节�? (1字节=2�?16进制字符)
+	 * @param header 16进制文件头
+	 * @param headLen 文件头的字节数 (1字节=2个16进制字符)
 	 */
 	private FileType(String name, String ext, String header, int headLen) {
 		this.NAME = name;

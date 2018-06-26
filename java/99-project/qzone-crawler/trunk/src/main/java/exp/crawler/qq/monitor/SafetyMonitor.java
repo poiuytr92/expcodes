@@ -9,17 +9,17 @@ import exp.crawler.qq.Config;
  * 软件授权监控
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-29
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-29
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class SafetyMonitor {
 
-	/** 软件授权�?(Github) : 测试服务�? (需支持TLSv1.2协议才能访问此网址) */
+	/** 软件授权页(Github) : 测试服务器 (需支持TLSv1.2协议才能访问此网址) */
 	private final static String GITHUB_URL = Config.getInstn().TEST_SERVER();
 	
-	/** 软件授权�?(Gitee) : 正式服务�? */
+	/** 软件授权页(Gitee) : 正式服务器 */
 	private final static String GITEE_URL = Config.getInstn().OFFICIAL_SERVER();
 	
 	/** 软件名称 */
@@ -29,7 +29,7 @@ public class SafetyMonitor {
 	private static volatile SafetyMonitor instance;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	private SafetyMonitor() {
 		this.appName = Config.APP_NAME;
@@ -51,9 +51,9 @@ public class SafetyMonitor {
 	}
 	
 	/**
-	 * 检查使用软件的QQ是否在白名单�?
+	 * 检查使用软件的QQ是否在白名单内
 	 * @param QQ 使用软件的QQ
-	 * @return true:在白名单�?; false:不在白名单内
+	 * @return true:在白名单内; false:不在白名单内
 	 */
 	public boolean isInWhitelist(String QQ) {
 		AppInfo appInfo = getAppInfo();	// 提取软件授权信息
@@ -61,9 +61,9 @@ public class SafetyMonitor {
 	}
 	
 	/**
-	 * 检查被爬取数据的QQ是否在黑名单�?
+	 * 检查被爬取数据的QQ是否在黑名单内
 	 * @param QQ 被爬取数据的QQ
-	 * @return true:在黑名单�?; false:不在黑名单内
+	 * @return true:在黑名单内; false:不在黑名单内
 	 */
 	public boolean isInBlacklist(String QQ) {
 		AppInfo appInfo = getAppInfo();	// 提取软件授权信息
@@ -76,7 +76,7 @@ public class SafetyMonitor {
 	 */
 	private AppInfo getAppInfo() {
 		
-		// 先尝试用Gitee(国内)获取授权�?, 若失败则从GitHub(国际)获取授权�?
+		// 先尝试用Gitee(国内)获取授权页, 若失败则从GitHub(国际)获取授权页
 		AppInfo appInfo = Certificate.getAppInfo(GITEE_URL, appName);
 		if(appInfo == null) {
 			appInfo = Certificate.getAppInfo(GITHUB_URL, appName);

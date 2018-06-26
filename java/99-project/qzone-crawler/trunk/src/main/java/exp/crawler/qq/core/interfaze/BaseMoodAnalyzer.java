@@ -22,14 +22,14 @@ import exp.libs.warp.net.http.HttpURLUtils;
  * 【空间说说】解析器: 基类
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-23
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-23
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public abstract class BaseMoodAnalyzer {
 
-	/** 说说分页信息保存文件�? */
+	/** 说说分页信息保存文件名 */
 	private final static String MOOD_INFO_NAME = "MoodInfo-[说说信息].txt";
 	
 	/** 被爬取数据的目标QQ */
@@ -45,7 +45,7 @@ public abstract class BaseMoodAnalyzer {
 	private final String PHOTO_DIR;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param QQ 被爬取数据的目标QQ
 	 */
 	protected BaseMoodAnalyzer(String QQ) {
@@ -57,7 +57,7 @@ public abstract class BaseMoodAnalyzer {
 	}
 	
 	/**
-	 * 初始�?
+	 * 初始化
 	 */
 	protected abstract void init();
 	
@@ -67,13 +67,13 @@ public abstract class BaseMoodAnalyzer {
 	public void execute() {
 		try {
 			
-			// 清除上次下载的数�?
+			// 清除上次下载的数据
 			FileUtils.delete(MOOD_DIR);
 			FileUtils.createDir(MOOD_DIR);
 			
-			// 下载说说及照�?
+			// 下载说说及照片
 			download(getMoods());
-			UIUtils.log("任务完成: QQ [", QQ, "] 的空间说说已保存�? [", MOOD_DIR, "]");
+			UIUtils.log("任务完成: QQ [", QQ, "] 的空间说说已保存到 [", MOOD_DIR, "]");
 			
 		} catch(Exception e) {
 			UIUtils.log(e, "任务失败: 下载 QQ [", QQ, "] 的空间说说时发生异常");
@@ -81,26 +81,26 @@ public abstract class BaseMoodAnalyzer {
 	}
 	
 	/**
-	 * 提取所有说说及相关的照片信�?
+	 * 提取所有说说及相关的照片信息
 	 * @return
 	 */
 	protected abstract List<Mood> getMoods();
 	
 	/**
-	 * 获取说说总页�?
+	 * 获取说说总页数
 	 * @return
 	 */
 	protected abstract int _getPageNum();
 	
 	/**
-	 * 获取分页的说说内�?
+	 * 获取分页的说说内容
 	 * @param page 页码
 	 * @return 
 	 */
 	protected abstract List<Mood> _getPageMoods(int page);
 	
 	/**
-	 * 下载所有说说及相关的照�?
+	 * 下载所有说说及相关的照片
 	 * @param moods 说说集（含照片信息）
 	 */
 	private void download(List<Mood> moods) {
@@ -108,15 +108,15 @@ public abstract class BaseMoodAnalyzer {
 			return;
 		}
 		
-		UIUtils.log("提取QQ [", QQ, "] 的说说及照片完成, 开始下�?...");
+		UIUtils.log("提取QQ [", QQ, "] 的说说及照片完成, 开始下载...");
 		int idx = 1;
 		for(Mood mood : moods) {
 			FileUtils.createDir(PAGE_DIR_PREFIX.concat(mood.PAGE()));
 			
-			UIUtils.log("正在下载�? [", idx++, "/", moods.size(), "] 条说�?: ", mood.CONTENT());
+			UIUtils.log("正在下载第 [", idx++, "/", moods.size(), "] 条说说: ", mood.CONTENT());
 			int cnt = _download(mood);
 			boolean isOk = (cnt == mood.PIC_NUM());
-			UIUtils.log(" -> 说说照片下载完成, 成功�?: ", cnt, "/", mood.PIC_NUM());
+			UIUtils.log(" -> 说说照片下载完成, 成功率: ", cnt, "/", mood.PIC_NUM());
 			ThreadUtils.tSleep(Config.SLEEP_TIME);
 			
 			// 保存下载信息
@@ -146,7 +146,7 @@ public abstract class BaseMoodAnalyzer {
 	}
 	
 	/**
-	 * 下载单张图片到说说的分页目录，并复制到图片合集目�?
+	 * 下载单张图片到说说的分页目录，并复制到图片合集目录
 	 * @param header
 	 * @param page 页码索引
 	 * @param picName

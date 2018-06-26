@@ -5,8 +5,8 @@ package exp.libs.warp.net.ping.bean;
  * ping测试返回结果对象
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-14
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -21,19 +21,19 @@ public class PongBean {
 	/** 发起ip  */
 	private String localIp = "localhost";
 	
-	/** 已接�?  */
+	/** 已接收  */
 	private int getPack;
 	
-	/** 已发�?  */
+	/** 已发送  */
 	private int sentPack = 4;
 	
-	/** 丢包�?%  */
+	/** 丢包率%  */
 	private float discards;
 	
 	/** 包长度，单位byte  */
 	private float pksLenght;
 	
-	/** 最长返回时�? ms  */
+	/** 最长返回时间 ms  */
 	private float maxDelay;
 	
 	/** 最短返回时间ms  */

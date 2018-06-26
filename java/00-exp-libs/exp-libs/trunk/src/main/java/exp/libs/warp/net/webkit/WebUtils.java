@@ -22,23 +22,23 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * Web驱动工具类
  * </PRE>
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-17
+ * <B>PROJECT : </B> bilibili-plugin
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class WebUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(WebUtils.class);
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected WebUtils() {} 
 	
 	/**
-	 * 对浏览器的当前页面截�?
-	 * @param driver 浏览器驱�?
+	 * 对浏览器的当前页面截图
+	 * @param driver 浏览器驱动
 	 * @param imgPath 图片保存路径
 	 */
 	public static void screenshot(WebDriver driver, String imgPath) {
@@ -53,7 +53,7 @@ public class WebUtils {
 	
 	/**
 	 * 使浏览器跳转到指定页面后截图
-	 * @param driver 浏览器驱�?
+	 * @param driver 浏览器驱动
 	 * @param url 跳转页面
 	 * @param imgPath 图片保存路径
 	 */
@@ -67,7 +67,7 @@ public class WebUtils {
 	}
 	
 	/**
-	 * 保存当前页面（包括页面截图和页面源码�?
+	 * 保存当前页面（包括页面截图和页面源码）
 	 * @param saveDir 保存目录
 	 * @param saveName 保存名称
 	 */
@@ -83,7 +83,7 @@ public class WebUtils {
 			screenshot(driver, StrUtils.concat(saveDir, saveName, ".png"));
 			
 		} catch(Exception e) {
-			log.error("保存当前页面 [{}] �? [{}] 失败: {}", URL, saveDir, e);
+			log.error("保存当前页面 [{}] 到 [{}] 失败: {}", URL, saveDir, e);
 		}
 	}
 	
@@ -98,7 +98,7 @@ public class WebUtils {
 			driver.switchTo().frame(findElement(driver, frame));
 			
 		} catch(Exception e) {
-			log.error("切换到嵌套页面驱动失�?: [{}]", frame.toString(), e);
+			log.error("切换到嵌套页面驱动失败: [{}]", frame.toString(), e);
 		}
 	}
 	
@@ -111,12 +111,12 @@ public class WebUtils {
 			driver.switchTo().parentFrame();
 			
 		} catch(Exception e) {
-			log.error("切换到上层页面驱动失�?: [{}]", e);
+			log.error("切换到上层页面驱动失败: [{}]", e);
 		}
 	}
 	
 	/**
-	 * 切换到顶层frame（默认层�?
+	 * 切换到顶层frame（默认层）
 	 * @param driver
 	 */
 	public static void switchToTopFrame(WebDriver driver) {
@@ -124,7 +124,7 @@ public class WebUtils {
 			driver.switchTo().defaultContent();
 			
 		} catch(Exception e) {
-			log.error("切换到上层页面驱动失�?: [{}]", e);
+			log.error("切换到上层页面驱动失败: [{}]", e);
 		}
 	}
 	
@@ -156,7 +156,7 @@ public class WebUtils {
 	/**
 	 * 查找页面元素列表
 	 * @param by 元素位置
-	 * @return 若不存在返回空队�?
+	 * @return 若不存在返回空队列
 	 */
 	public static List<WebElement> findElements(WebDriver driver, By by) {
 		List<WebElement> elements = null;
@@ -172,7 +172,7 @@ public class WebUtils {
 	
 	/**
 	 * 填写数据到页面输入框元素
-	 * @param input 页面输入框元�?
+	 * @param input 页面输入框元素
 	 * @param data 数据
 	 */
 	public static void fill(WebElement input, String data) {
@@ -186,7 +186,7 @@ public class WebUtils {
 	}
 	
 	/**
-	 * 填写数据到页面表单元�?
+	 * 填写数据到页面表单元素
 	 * @param form 页面表单元素
 	 * @param data 表单数据
 	 */
@@ -194,7 +194,7 @@ public class WebUtils {
 		try {
 			Actions action = new Actions(driver);
 			form.clear();
-			action.sendKeys(form, data, Keys.ENTER, Keys.NULL).perform();	// 填写并提�?
+			action.sendKeys(form, data, Keys.ENTER, Keys.NULL).perform();	// 填写并提交
 			
 		} catch(Exception e) {
 			log.error("填写表单数据失败", e);
@@ -202,13 +202,13 @@ public class WebUtils {
 	}
 	
 	/**
-	 * 点击按钮并提�?
+	 * 点击按钮并提交
 	 * @param button 页面按钮元素
 	 */
 	public static void click(WebDriver driver, WebElement button) {
 		try {
 			Actions action = new Actions(driver);
-			action.click(button).perform();	// 点击并提�?
+			action.click(button).perform();	// 点击并提交
 			
 		} catch(Exception e) {
 			log.error("点击页面元素失败", e);
@@ -216,8 +216,8 @@ public class WebUtils {
 	}
 	
 	/**
-	 * 点击超链�?
-	 * @param aLink 页面超链接元�?
+	 * 点击超链接
+	 * @param aLink 页面超链接元素
 	 */
 	public static void click(WebElement aLink) {
 		try {
@@ -229,7 +229,7 @@ public class WebUtils {
 	}
 	
 	/**
-	 * 滚动到页面顶�?
+	 * 滚动到页面顶部
 	 * @param driver
 	 */
 	public static void scrollToTop(WebDriver driver) {
@@ -237,7 +237,7 @@ public class WebUtils {
 	}
 	
 	/**
-	 * 滚动到页面底�?
+	 * 滚动到页面底部
 	 * @param driver
 	 */
 	public static void scrollToBottom(WebDriver driver) {

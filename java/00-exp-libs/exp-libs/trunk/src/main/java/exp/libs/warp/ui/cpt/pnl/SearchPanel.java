@@ -21,8 +21,8 @@ import exp.libs.warp.ui.SwingUtils;
  * swing动态检索的承载面板
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-08-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -31,7 +31,7 @@ public class SearchPanel {
 	/** 承载面板 */
 	private JPanel panel;
 	
-	/** 搜索输入�? */
+	/** 搜索输入框 */
 	private JTextField searchTF;
 	
 	/** 搜索列表组件 */
@@ -41,8 +41,8 @@ public class SearchPanel {
 	private List<String> candidateList;
 	
 	/**
-	 * 构造函�?
-	 * @param candidateList 被检索的候选内容集�?
+	 * 构造函数
+	 * @param candidateList 被检索的候选内容集合
 	 */
 	public SearchPanel(List<String> candidateList) {
 		this.candidateList = (candidateList == null ? 
@@ -61,7 +61,7 @@ public class SearchPanel {
 	}
 	
 	/**
-	 * 刷新搜索列表组件的内�?
+	 * 刷新搜索列表组件的内容
 	 * @param keyword 当前输入的关键字
 	 */
 	private void reflashList(String keyword) {
@@ -82,7 +82,7 @@ public class SearchPanel {
 	}
 	
 	/**
-	 * 设置组件监听�?
+	 * 设置组件监听器
 	 */
 	private void setListener() {
 		final SearchListener searchListener = new SearchListener();
@@ -97,7 +97,7 @@ public class SearchPanel {
 					Object select = list.getSelectedValue();
 					if(select != null) {
 						
-						// 先移除输入框的监听器, 待JList设置输入框的值后再恢复监听器，避免陷入无限事件触发循�?
+						// 先移除输入框的监听器, 待JList设置输入框的值后再恢复监听器，避免陷入无限事件触发循环
 						searchTF.getDocument().removeDocumentListener(searchListener);
 						searchTF.setText(list.getSelectedValue().toString());
 						searchTF.getDocument().addDocumentListener(searchListener);
@@ -108,7 +108,7 @@ public class SearchPanel {
 	}
 	
 	/**
-	 * 获取搜索面板的承载面�?
+	 * 获取搜索面板的承载面板
 	 * @return 承载面板
 	 */
 	public JPanel getJPanel() {
@@ -116,8 +116,8 @@ public class SearchPanel {
 	}
 	
 	/**
-	 * 获取当前搜索框的检索�?
-	 * @return 检索�?
+	 * 获取当前搜索框的检索值
+	 * @return 检索值
 	 */
 	public String getText() {
 		return searchTF.getText();
@@ -125,7 +125,7 @@ public class SearchPanel {
 	
 	//////////////////////////////////////////////////////
 	
-	/** 索输入框监听�? */
+	/** 索输入框监听器 */
 	private class SearchListener implements DocumentListener {
 
 		@Override

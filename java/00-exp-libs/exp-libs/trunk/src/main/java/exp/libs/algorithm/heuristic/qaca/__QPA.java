@@ -11,20 +11,20 @@ package exp.libs.algorithm.heuristic.qaca;
  * </PRE>
  * 
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-06-09
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-06-08
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final class __QPA {
 
-	/** 量子概率幅初始�?(1/�?2) */
+	/** 量子概率幅初始值(1/√2) */
 	private final static double DEFAULT_QPA = 1.0D / Math.sqrt(2.0D);
 	
-	/** 路径信息素的α概率�?(不选择的概�?)  */
+	/** 路径信息素的α概率幅(不选择的概率)  */
 	private double alpha;
 	
-	/** 路径信息素的β概率�?(选择的概�?)  */
+	/** 路径信息素的β概率幅(选择的概率)  */
 	private double beta;
 	
 	protected __QPA() {

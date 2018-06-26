@@ -11,14 +11,14 @@ import com.sun.media.OCR;
  * 图像字符识别工具
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class OCRUtils {
 	
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(OCRUtils.class);
 	
 	/** OCR组件目录 */
@@ -27,7 +27,7 @@ public class OCRUtils {
 	/** OCR处理对象 */
 	private final static OCR _OCR = new OCR(OCR_DIR);
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected OCRUtils() {}
 
 	/**

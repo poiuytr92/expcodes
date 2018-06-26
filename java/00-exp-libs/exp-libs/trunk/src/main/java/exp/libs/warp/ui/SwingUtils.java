@@ -33,14 +33,14 @@ import exp.libs.utils.other.StrUtils;
  * swing组件工具
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class SwingUtils {
 
-	/** 滚动条模式：自动(当内容越界时自动出现滚动�?) */
+	/** 滚动条模式：自动(当内容越界时自动出现滚动条) */
 	public static final int AUTO_SCROLL_MODE = 0;
 	
 	/** 滚动条模式：显式(无论内容是否越界均显示滚动条) */
@@ -49,11 +49,11 @@ public class SwingUtils {
 	/** 滚动条模式：无滚动条 */
 	public static final int HIDE_SCROLL_MODE = -1;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected SwingUtils() {}
 	
 	/**
-	 * 设置窗口无边框（需要在显示窗口前调用此方法�?
+	 * 设置窗口无边框（需要在显示窗口前调用此方法）
 	 * @param frame 窗口组件
 	 */
 	public static void setNoFrame(JFrame frame) {
@@ -66,18 +66,18 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 为指定组件添加自动滚动条（当文本超过�?/高边界时自动出现水平/垂直滚动条）
+	 * 为指定组件添加自动滚动条（当文本超过宽/高边界时自动出现水平/垂直滚动条）
 	 * @param component 组件
-	 * @return 已添加滚动条的组�?
+	 * @return 已添加滚动条的组件
 	 */
 	public static JScrollPane addScroll(Component component) {
 		return addAutoScroll(component);
 	}
 	
 	/**
-	 * 为指定组件添加自动滚动条（当内容超过�?/高边界时自动出现水平/垂直滚动条）
+	 * 为指定组件添加自动滚动条（当内容超过宽/高边界时自动出现水平/垂直滚动条）
 	 * @param component 组件
-	 * @return 已添加滚动条的组�?
+	 * @return 已添加滚动条的组件
 	 */
 	public static JScrollPane addAutoScroll(Component component) {
 		return addScroll(component, AUTO_SCROLL_MODE);
@@ -86,7 +86,7 @@ public class SwingUtils {
 	/**
 	 * 为指定组件添加显式滚动条（总是显示水平/垂直滚动条）
 	 * @param component 组件
-	 * @return 已添加滚动条的组�?
+	 * @return 已添加滚动条的组件
 	 */
 	public static JScrollPane addShowScroll(Component component) {
 		return addScroll(component, SHOW_SCROLL_MODE);
@@ -95,7 +95,7 @@ public class SwingUtils {
 	/**
 	 * 为指定组件添加隐式滚动条（总是隐藏水平/垂直滚动条）
 	 * @param component 组件
-	 * @return 已添加滚动条的组�?
+	 * @return 已添加滚动条的组件
 	 */
 	public static JScrollPane addHideScroll(Component component) {
 		return addScroll(component, HIDE_SCROLL_MODE);
@@ -105,10 +105,10 @@ public class SwingUtils {
 	 * 为指定组件添加滚动条
 	 * @param component 组件
 	 * @param mode 
-	 * 		0:AUTO_SCROLL_MODE, 自动模式（当内容超过�?/高边界时自动出现水平/垂直滚动条）.
+	 * 		0:AUTO_SCROLL_MODE, 自动模式（当内容超过宽/高边界时自动出现水平/垂直滚动条）.
 	 * 		1:SHOW_SCROLL_MODE, 显式模式（总是出现水平/垂直滚动条）.
 	 * 		-1:HIDE_SCROLL_MODE, 隐式模式（总是隐藏水平/垂直滚动条）
-	 * @return 已添加滚动条的组�?
+	 * @return 已添加滚动条的组件
 	 */
 	public static JScrollPane addScroll(Component component, int mode) {
 		component = (component == null ? new JTextArea() : component);
@@ -150,7 +150,7 @@ public class SwingUtils {
 	/**
 	 * 令滚动面板的滚动条自动滚动到末尾
 	 * @param scrollPanel 滚动面板
-	 * @param vertical 是否为垂直方向的滚动�?
+	 * @param vertical 是否为垂直方向的滚动条
 	 */
 	public static void toEnd(JScrollPane scrollPanel, boolean vertical) {
 		if(scrollPanel == null) {
@@ -164,7 +164,7 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 令滚动条自动滚动到末�?
+	 * 令滚动条自动滚动到末尾
 	 * @param scrollBar 垂直或水平滚动条
 	 */
 	public static void toEnd(JScrollBar scrollBar) {
@@ -174,9 +174,9 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 令文本区的光标移动到最�?.
-	 *   每次更新文本区的内容后调用此方法, 会有文本区自动滚动到末端的效�?.
-	 * @param textArea 文本�?
+	 * 令文本区的光标移动到最后.
+	 *   每次更新文本区的内容后调用此方法, 会有文本区自动滚动到末端的效果.
+	 * @param textArea 文本区
 	 */
 	public static void toEnd(JTextArea textArea) {
 		if(textArea != null) {
@@ -198,8 +198,8 @@ public class SwingUtils {
 	 * 获取水平切割面板（可左右拖拉切割线）
 	 * @param left 左侧组件
 	 * @param right 右侧组件
-	 * @param divide 面板呈现时的上下切割比例, 取值范�?(0.0, 1.0), 默认0.5,
-	 *               只有在面�?<b>可见�?</b>此参数才有效(亦即只有在窗体view之后才能调用此方�?)
+	 * @param divide 面板呈现时的上下切割比例, 取值范围(0.0, 1.0), 默认0.5,
+	 *               只有在面板<b>可见时</b>此参数才有效(亦即只有在窗体view之后才能调用此方法)
 	 * @return 水平切割面板
 	 */
 	public static JSplitPane getHSplitPane(Component left, Component right, double divide) {
@@ -223,8 +223,8 @@ public class SwingUtils {
 	 * 获取垂直切割面板（可上下拖拉切割线）
 	 * @param top 顶部组件
 	 * @param bottom 底部组件
-	 * @param divide 面板呈现时的上下切割比例, 取值范�?(0.0, 1.0), 默认0.5,
-	 *               只有在面�?<b>可见�?</b>此参数才有效(亦即只有在窗体view之后才能调用此方�?)
+	 * @param divide 面板呈现时的上下切割比例, 取值范围(0.0, 1.0), 默认0.5,
+	 *               只有在面板<b>可见时</b>此参数才有效(亦即只有在窗体view之后才能调用此方法)
 	 * @return 垂直切割面板
 	 */
 	public static JSplitPane getVSplitPane(Component top, Component bottom, double divide) {
@@ -236,11 +236,11 @@ public class SwingUtils {
 	
 	/**
 	 * <pre>
-	 * 设置切割面板在呈现时的切割比�?.
-	 *  只有在面�?<b>可见�?</b>此方法才有效(亦即只有在窗体view之后才能调用此方�?).
+	 * 设置切割面板在呈现时的切割比例.
+	 *  只有在面板<b>可见时</b>此方法才有效(亦即只有在窗体view之后才能调用此方法).
 	 * </pre>
 	 * @param splitPanel 切割面板
-	 * @param divide 面板呈现时的切割比例, 取值范�?(0.0, 1.0), 默认0.5
+	 * @param divide 面板呈现时的切割比例, 取值范围(0.0, 1.0), 默认0.5
 	 * @return 切割面板
 	 */
 	public static JSplitPane setDivider(JSplitPane splitPanel, double divide) {
@@ -251,9 +251,9 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取配对组件面板（提示组�?+输入组件�?
+	 * 获取配对组件面板（提示组件+输入组件）
 	 *  布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
-	 * @param label 提示组件的提示信�? ( 自动添加 [...] 包围 )
+	 * @param label 提示组件的提示信息 ( 自动添加 [...] 包围 )
 	 * @return JLabel + JTextFields
 	 */
 	public static JPanel getPairsPanel(String label) {
@@ -261,10 +261,10 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取配对组件面板（提示组�?+输入组件�?
+	 * 获取配对组件面板（提示组件+输入组件）
 	 * 	布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
-	 * @param label 提示组件的提示信�? ( 自动添加 [...] 包围 )
-	 * @param textField 输入组件的默认输入�?
+	 * @param label 提示组件的提示信息 ( 自动添加 [...] 包围 )
+	 * @param textField 输入组件的默认输入值
 	 * @return JLabel + JTextFields
 	 */
 	public static JPanel getPairsPanel(String label, String textField) {
@@ -272,9 +272,9 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取配对组件面板（提示组�?+输入组件�?
+	 * 获取配对组件面板（提示组件+输入组件）
 	 * 	布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
-	 * @param label 提示组件的提示信�? ( 自动添加 [...] 包围 )
+	 * @param label 提示组件的提示信息 ( 自动添加 [...] 包围 )
 	 * @param component 输入组件
 	 * @return JLabel + 自定义的输入组件
 	 */
@@ -283,7 +283,7 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取配对组件面板（提示组�?+输入组件�?
+	 * 获取配对组件面板（提示组件+输入组件）
 	 * 	布局风格为BorderLayout: 提示组件WEST, 输入组件CENTER
 	 * @param label 提示组件
 	 * @param component 输入组件
@@ -295,7 +295,7 @@ public class SwingUtils {
 	
 	/**
 	 * 获取水平流式布局面板
-	 * @param components 添加到该面板的组件集�?
+	 * @param components 添加到该面板的组件集合
 	 * @return 水平流式布局面板
 	 */
 	public static JPanel getHFlowPanel(Component... components) {
@@ -310,7 +310,7 @@ public class SwingUtils {
 	
 	/**
 	 * 获取垂直流式布局面板
-	 * @param components 添加到该面板的组件集�?
+	 * @param components 添加到该面板的组件集合
 	 * @return 垂直流式布局面板
 	 */
 	public static JPanel getVFlowPanel(Component... components) {
@@ -324,9 +324,9 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取水平表格布局面板(1行N�?)
-	 * @param components 添加到该面板的组件集�?
-	 * @return 水平表格布局面板(1行N�?)
+	 * 获取水平表格布局面板(1行N列)
+	 * @param components 添加到该面板的组件集合
+	 * @return 水平表格布局面板(1行N列)
 	 */
 	public static JPanel getHGridPanel(Component... components) {
 		int num = (components == null ? 1 : components.length);
@@ -340,9 +340,9 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取垂直表格布局面板(N�?1�?)
-	 * @param components 添加到该面板的组件集�?
-	 * @return 垂直表格布局面板(N�?1�?)
+	 * 获取垂直表格布局面板(N行1列)
+	 * @param components 添加到该面板的组件集合
+	 * @return 垂直表格布局面板(N行1列)
 	 */
 	public static JPanel getVGridPanel(Component... components) {
 		int num = (components == null ? 1 : components.length);
@@ -408,11 +408,11 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取 [�?-中心-东] 边框布局面板
+	 * 获取 [西-中心-东] 边框布局面板
 	 * @param west 期望置放到西方的组件
 	 * @param center 期望置放到中心的组件
 	 * @param east 期望置放到东方的组件
-	 * @return [�?-中心-东] 边框布局面板
+	 * @return [西-中心-东] 边框布局面板
 	 */
 	public static JPanel getWEBorderPanel(Component west, Component center, Component east) {
 		JPanel panel = new JPanel(new BorderLayout());
@@ -423,11 +423,11 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取 [�?-中心-南] 边框布局面板
+	 * 获取 [北-中心-南] 边框布局面板
 	 * @param north 期望置放到北方的组件
 	 * @param center 期望置放到中心的组件
 	 * @param south 期望置放到南方的组件
-	 * @return [�?-中心-南] 边框布局面板
+	 * @return [北-中心-南] 边框布局面板
 	 */
 	public static JPanel getNSBorderPanel(Component north, Component center, Component south) {
 		JPanel panel = new JPanel(new BorderLayout());
@@ -438,7 +438,7 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 为组件添加边框布局面板，并将其置放到中�?
+	 * 为组件添加边框布局面板，并将其置放到中心
 	 * @param center 期望置放到中心的组件
 	 * @return [中心] 边框布局面板
 	 */
@@ -450,7 +450,7 @@ public class SwingUtils {
 	
 	/**
 	 * 获取下拉组件
-	 * @param defavlt 默认�?
+	 * @param defavlt 默认值
 	 * @param items 下拉列表
 	 * @return 下拉组件
 	 */
@@ -481,29 +481,29 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 获取HTML编辑�?
-	 * @return HTML编辑�?
+	 * 获取HTML编辑框
+	 * @return HTML编辑框
 	 */
 	public static JEditorPane getHtmlTextArea() {
 		JEditorPane panel = new JEditorPane();
-		panel.setContentType("text/html");	// 把编辑框设置为支持html的编辑格�?
+		panel.setContentType("text/html");	// 把编辑框设置为支持html的编辑格式
 		return addBorder(panel);
 	}
 	
 	/**
-	 * 为组件添加边�?
+	 * 为组件添加边框
 	 * @param component 需要添加边框的组件
-	 * @return 已添加边框的组件（与入参为同一对象�?
+	 * @return 已添加边框的组件（与入参为同一对象）
 	 */
 	public static <T extends JComponent> T addBorder(T component) {
 		return addBorder(component, "");
 	}
 	
 	/**
-	 * 为组件添加边�?
+	 * 为组件添加边框
 	 * @param component 需要添加边框的组件
 	 * @param borderTitle 边框提示
-	 * @return 已添加边框的组件（与入参为同一对象�?
+	 * @return 已添加边框的组件（与入参为同一对象）
 	 */
 	public static <T extends JComponent> T addBorder(T component, String borderTitle) {
 		if(component != null && borderTitle != null) {
@@ -514,7 +514,7 @@ public class SwingUtils {
 	
 	/**
 	 * 信息弹窗
-	 * @param msg 普通消�?
+	 * @param msg 普通消息
 	 */
 	public static void info(String msg) {
 		JOptionPane.showMessageDialog(
@@ -523,7 +523,7 @@ public class SwingUtils {
 	
 	/**
 	 * 信息弹窗
-	 * @param msgs 普通消�?
+	 * @param msgs 普通消息
 	 */
 	public static void info(Object... msgs) {
 		info(StrUtils.concat(msgs));
@@ -588,7 +588,7 @@ public class SwingUtils {
 	/**
 	 * 确认弹窗
 	 * @param msg 确认消息
-	 * @param true:�?; false:�?
+	 * @param true:是; false:否
 	 */
 	public static boolean confirm(String msg) {
 		return (0 == JOptionPane.showConfirmDialog(
@@ -598,9 +598,9 @@ public class SwingUtils {
 	/**
 	 * 确认弹窗
 	 * @param msg 确认消息
-	 * @param yesBtnText [�?(yes)] 按钮的文�?
-	 * @param noBtnText [�?(no)] 按钮的文�?
-	 * @return true:�?; false:�?
+	 * @param yesBtnText [是(yes)] 按钮的文字
+	 * @param noBtnText [否(no)] 按钮的文字
+	 * @return true:是; false:否
 	 */
 	public static boolean confirm(String msg, String yesBtnText, String noBtnText) {
 		Object[] options = { yesBtnText, noBtnText };
@@ -622,7 +622,7 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 输入弹窗(含图�?)
+	 * 输入弹窗(含图片)
 	 * @param msg 提示消息
 	 * @param icon 提示图片
 	 * @return 输入内容
@@ -634,7 +634,7 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 输入弹窗(含图�?)
+	 * 输入弹窗(含图片)
 	 * @param msg 提示消息
 	 * @param imgPath 提示图片路径
 	 * @return 输入内容
@@ -646,8 +646,8 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 隐藏密码框内�?
-	 * @param password 密码框组�?
+	 * 隐藏密码框内容
+	 * @param password 密码框组件
 	 */
 	public static void hide(JPasswordField password) {
 		if(password != null) {
@@ -656,8 +656,8 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 显示密码框内�?
-	 * @param password 密码框组�?
+	 * 显示密码框内容
+	 * @param password 密码框组件
 	 */
 	public static void view(JPasswordField password) {
 		if(password != null) {
@@ -667,13 +667,13 @@ public class SwingUtils {
 	
 	/**
 	 * <PRE>
-	 * 加载图片对象(对于路径不变但图像持续变化的图片�? 支持实时更新).
+	 * 加载图片对象(对于路径不变但图像持续变化的图片， 支持实时更新).
 	 * 
-	 * 	此方法并没有使用new ImageIcon(imgPath)的方式去读取图片文件, 这是因为�?
-	 * 		对于路径不变但图像持续变化的图片, 会会因为图片路径没有变化, 而不去更新缓�?, 导致显示的图片一直不�?
+	 * 	此方法并没有使用new ImageIcon(imgPath)的方式去读取图片文件, 这是因为：
+	 * 		对于路径不变但图像持续变化的图片, 会会因为图片路径没有变化, 而不去更新缓存, 导致显示的图片一直不变
 	 * </PRE>
 	 * @param imgPath 图片存储路径, 支持文件路径和包路径
-	 * 			文件路径，如�? ./foo/bar/img.png
+	 * 			文件路径，如： ./foo/bar/img.png
 	 * 			包路径，如： /foo/bar/img.png
 	 * @return 图片对象, 若加载失败则返回null
 	 */
@@ -683,16 +683,16 @@ public class SwingUtils {
 	
 	/**
 	 * <PRE>
-	 * 加载图片对象(对于路径不变但图像持续变化的图片�? 支持实时更新).
+	 * 加载图片对象(对于路径不变但图像持续变化的图片， 支持实时更新).
 	 * 
-	 * 	此方法并没有使用new ImageIcon(imgPath)的方式去读取图片文件, 这是因为�?
-	 * 		对于路径不变但图像持续变化的图片, 会会因为图片路径没有变化, 而不去更新缓�?, 导致显示的图片一直不�?
+	 * 	此方法并没有使用new ImageIcon(imgPath)的方式去读取图片文件, 这是因为：
+	 * 		对于路径不变但图像持续变化的图片, 会会因为图片路径没有变化, 而不去更新缓存, 导致显示的图片一直不变
 	 * </PRE>
 	 * @param imgPath 图片存储路径, 支持文件路径和包路径
-	 * 			文件路径，如�? ./foo/bar/img.png
+	 * 			文件路径，如： ./foo/bar/img.png
 	 * 			包路径，如： /foo/bar/img.png
-	 * @param width 设置所加载图像的宽�?
-	 * @param height 设置所加载图像的高�?
+	 * @param width 设置所加载图像的宽度
+	 * @param height 设置所加载图像的高度
 	 * @return 图片对象, 若加载失败则返回null
 	 */
 	public static ImageIcon loadImage(String imgPath, int width, int height) {
@@ -704,7 +704,7 @@ public class SwingUtils {
 				Image img = Toolkit.getDefaultToolkit().createImage(imgPath);
 				icon = new ImageIcon(img);
 				
-			// 包路�?
+			// 包路径
 			} else {
 				icon = new ImageIcon(SwingUtils.class.getResource(imgPath));
 			}
@@ -719,10 +719,10 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 设置JLabel上的图片(对于路径不变但图像持续变化的图片�? 支持实时更新)
+	 * 设置JLabel上的图片(对于路径不变但图像持续变化的图片， 支持实时更新)
 	 * @param label JLabel标签对象
 	 * @param imgPath 图片存储路径, 支持文件路径和包路径
-	 * 			文件路径，如�? ./foo/bar/img.png
+	 * 			文件路径，如： ./foo/bar/img.png
 	 * 			包路径，如： /foo/bar/img.png
 	 */
 	public static void setImage(JLabel label, String imgPath) {
@@ -733,7 +733,7 @@ public class SwingUtils {
 	 * 设置JLabel上的图片(支持实时更新)
 	 * @param label JLabel标签对象
 	 * @param imgPath 图片存储路径, 支持文件路径和包路径
-	 * 			文件路径，如�? ./foo/bar/img.png
+	 * 			文件路径，如： ./foo/bar/img.png
 	 * 			包路径，如： /foo/bar/img.png
 	 */
 	public static boolean setImage(JLabel label, String imgPath, int width, int height) {
@@ -755,18 +755,18 @@ public class SwingUtils {
 	}
 	
 	/**
-	 * 修改图片尺寸（原图对象的尺寸不会变化�?
+	 * 修改图片尺寸（原图对象的尺寸不会变化）
 	 * @param img 图片对象
-	 * @param width �?
-	 * @param height �?
-	 * @return 修改尺寸后的新图�?
+	 * @param width 宽
+	 * @param height 高
+	 * @return 修改尺寸后的新图片
 	 */
 	private static Image modifySize(Image img, int width, int height) {
 		return img.getScaledInstance(width, height, Image.SCALE_FAST);
 	}
 	
 	/**
-	 * 重绘组件内容(用于动态刷新组件内�?).
+	 * 重绘组件内容(用于动态刷新组件内容).
 	 * @param component 组件
 	 */
 	public static <T extends Component> void repaint(T component) {

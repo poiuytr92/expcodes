@@ -30,8 +30,8 @@ import exp.libs.utils.verify.RegexUtils;
  * websocket会话
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -62,12 +62,12 @@ class WebSockSession extends WebSocketClient {
 	 * 
 	 * @param serverUri
 	 * @param draft WebSocket协议版本
-	 * 				WebSocket协议说明可查�? http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
-	 * 				通过打开调试开�? WebSocketImpl.DEBUG = true 可以知道服务端的协议版本
+	 * 				WebSocket协议说明可查看 http://github.com/TooTallNate/Java-WebSocket/wiki/Drafts
+	 * 				通过打开调试开关 WebSocketImpl.DEBUG = true 可以知道服务端的协议版本
 	 * 				Draft_6455 为最新的WebSocket协议版本
-	 * @param timeout 本地连接保活超时�?0不生效，默认60，即60秒后自动断开�?
+	 * @param timeout 本地连接保活超时（0不生效，默认60，即60秒后自动断开）
 	 * @param roomId 所连接的房间号
-	 * @param onlyStorm 仅用于监听节奏风�?
+	 * @param onlyStorm 仅用于监听节奏风暴
 	 * @param debug 调试模式
 	 */
 	protected WebSockSession(URI serverURI, Draft draft, int timeout, 
@@ -129,19 +129,19 @@ class WebSockSession extends WebSocketClient {
 	
 	@Override
 	public void onOpen(ServerHandshake serverhandshake) {
-		log.info("正在连接websocket服务�?...");
+		log.info("正在连接websocket服务器...");
 	}
 
 	@Override
 	public void onMessage(String msg) {
-		log.debug("接收�? [String] 类型数据: {}", msg);
+		log.debug("接收到 [String] 类型数据: {}", msg);
 	}
 	
 	@Override
 	public void onMessage(ByteBuffer byteBuffer) {
 		byte[] buff = byteBuffer.array();
 		String hex = BODHUtils.toHex(buff);
-		log.debug("接收到推送消�?: {}", hex);
+		log.debug("接收到推送消息: {}", hex);
 		
 		if(hex.startsWith(Binary.SERVER_HB_CONFIRM)) {
 			log.debug("websocket连接保活确认");
@@ -149,7 +149,7 @@ class WebSockSession extends WebSocketClient {
 		} else if(Binary.SERVER_CONN_CONFIRM.equals(hex)) {
 			log.debug("websocket连接成功确认");
 			if(onlyStorm == false) {
-				UIUtils.log("入侵直播间成�?, 正在暗中观察...");
+				UIUtils.log("入侵直播间成功, 正在暗中观察...");
 			}
 		} else {
 			String msg = CharsetUtils.toStr(buff, Config.DEFAULT_CHARSET);
@@ -170,23 +170,23 @@ class WebSockSession extends WebSocketClient {
 						// Undo 节奏风暴模式下，无视其他消息
 					}
 				} else if(!MsgAnalyser.toMsgBean(biliCmd, json)) {
-					log.info("无效的推送消�?: {}", hex);
+					log.info("无效的推送消息: {}", hex);
 				}
 			} else {
-				log.info("无效的推送消�?: {}", hex);
+				log.info("无效的推送消息: {}", hex);
 			}
 		}
     }
 	
 	@Override
     public void onFragment(Framedata framedata) {
-		log.debug("接收�? [Framedata] 类型数据: {}", framedata.toString());
+		log.debug("接收到 [Framedata] 类型数据: {}", framedata.toString());
     }
 	
 	@Override
 	public void onClose(int code, String reason, boolean remote) {
 		isClosed = true;
-		log.info("websocket连接正在断开: [错误�?:{}] [发起�?:{}] [原因:{}]", 
+		log.info("websocket连接正在断开: [错误码:{}] [发起人:{}] [原因:{}]", 
 				code, (remote ? "server" : "client"), reason);
 		if(onlyStorm == false) {
 			UIUtils.log("与直播间的连接已断开 (Reason:", (remote ? "server" : "client"), ")");

@@ -24,24 +24,24 @@ import exp.libs.utils.other.StrUtils;
  * jar工具
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-02
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-02
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class JarUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(JarUtils.class);
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected JarUtils() {}
 	
 	/**
 	 * <PRE>
 	 * 获取Jar文件的类加载器（用于动态加载jar文件中的类）.
 	 * 
-	 * 示例�?
+	 * 示例：
 	 * 	File jarFile = new File(JAR_FILE_PATH);
 	 * 	URLClassLoader load = JarUtils.getURLClassLoader(jarFile);
 	 * 	Class<?> clazz = load.loadClass("foo.bar.TTest");
@@ -59,7 +59,7 @@ public class JarUtils {
 	 * <PRE>
 	 * 获取Jar文件的类加载器（用于动态加载jar文件中的类）.
 	 * 
-	 * 示例�?
+	 * 示例：
 	 * 	File jarFile = new File(JAR_FILE_PATH);
 	 * 	URLClassLoader load = JarUtils.getURLClassLoader(jarFile);
 	 * 	Class<?> clazz = load.loadClass("foo.bar.TTest");
@@ -67,7 +67,7 @@ public class JarUtils {
 	 * 	System.out.println(test.toString());
 	 * </PRE>
 	 * @param jarFile jar文件/jar文件目录
-	 * @return 类加载器（失败返回null�? 
+	 * @return 类加载器（失败返回null） 
 	 */
 	public static URLClassLoader getURLClassLoader(File jarFile) {
 		List<File> jarFiles = FileUtils.listFiles(jarFile, ".jar");
@@ -100,8 +100,8 @@ public class JarUtils {
 	}
 
 	/**
-	 * 复制jar包内中的文件到磁�?
-	 * @param packagePath 包内文件的包路径, �?: /foo/bar/test.txt
+	 * 复制jar包内中的文件到磁盘
+	 * @param packagePath 包内文件的包路径, 如: /foo/bar/test.txt
 	 * @param snkPath 磁盘文件路径
 	 * @return true:复制成功; false:复制失败
 	 */
@@ -121,15 +121,15 @@ public class JarUtils {
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("复制文件失败: �? [{}] �? [{}].", packagePath, snkPath, e);
+			log.error("复制文件失败: 从 [{}] 到 [{}].", packagePath, snkPath, e);
 		}
 		IOUtils.close(is);
 		return isOk;
 	}
 	
 	/**
-	 * 读取jar包中的文�?
-	 * @param packagePath 包内文件的包路径, �?: /foo/bar/test.txt
+	 * 读取jar包中的文件
+	 * @param packagePath 包内文件的包路径, 如: /foo/bar/test.txt
 	 * @param charset 文件编码
 	 * @return 文件内容
 	 */
@@ -148,36 +148,36 @@ public class JarUtils {
 			bos.close();
 			
 		} catch (Exception e) {
-			log.error("读取Jar内文件失�?: ", packagePath, e);
+			log.error("读取Jar内文件失败: ", packagePath, e);
 		}
 		IOUtils.close(is);
 		return str;
 	}
 	
 	/**
-	 * 列举jar包内的文件清�?
-	 * @param jarFilePath jar文件的磁盘位�?
-	 * @return jar内文件清�?
+	 * 列举jar包内的文件清单
+	 * @param jarFilePath jar文件的磁盘位置
+	 * @return jar内文件清单
 	 */
 	public static List<String> listFiles(String jarFilePath) {
 		return listFiles(jarFilePath, null);
 	}
 
 	/**
-	 * 列举jar包内的文件清�?
-	 * @param jarFilePath jar文件的磁盘位�?
+	 * 列举jar包内的文件清单
+	 * @param jarFilePath jar文件的磁盘位置
 	 * @param extension 文件后缀
-	 * @return 后缀匹配的文件清�?
+	 * @return 后缀匹配的文件清单
 	 */
 	public static List<String> listFiles(String jarFilePath, String extension) {
 		return listFiles(new File(jarFilePath), extension);
 	}
 	
 	/**
-	 * 列举jar包内的文件清�?
+	 * 列举jar包内的文件清单
 	 * @param jarFile jar文件
 	 * @param extension 文件后缀
-	 * @return 后缀匹配的文件清�?
+	 * @return 后缀匹配的文件清单
 	 */
 	public static List<String> listFiles(File jarFile, String extension) {
 		List<String> list = new LinkedList<String>();
@@ -195,7 +195,7 @@ public class JarUtils {
 			}
 			jar.close();
 		} catch (Exception e) {
-			log.error("读取Jar内文件列表失�?: ", 
+			log.error("读取Jar内文件列表失败: ", 
 					(jarFile == null ? "null" : jarFile.getPath()), e);
 		}
 		return list;

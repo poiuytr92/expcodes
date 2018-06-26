@@ -16,8 +16,8 @@ import exp.libs.warp.cep.fun.BaseFunctionN;
  * 	强制类型转换: String -> Date
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -29,13 +29,13 @@ public class _Date extends BaseFunctionN {
 	private static final long serialVersionUID = 6634078944769182381L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "date";
 	
 	/**
-	 * 限定参数个数�?1�?2.
+	 * 限定参数个数为1或2.
 	 */
 	@Override
 	public boolean checkNumberOfParameters(int inParamsNum){
@@ -45,8 +45,8 @@ public class _Date extends BaseFunctionN {
 	/**
 	 * 强制类型转换: String -> Date
 	 * 1个或2个入参：
-	 * @param1 String:日期字符�?
-	 * @param1 String:日期字符串的格式，无此参数则认为�? yyyy-MM-dd HH:mm:ss 格式
+	 * @param1 String:日期字符串
+	 * @param1 String:日期字符串的格式，无此参数则认为是 yyyy-MM-dd HH:mm:ss 格式
 	 * @return Date
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

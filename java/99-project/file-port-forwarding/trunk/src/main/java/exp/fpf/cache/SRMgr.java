@@ -24,20 +24,20 @@ import exp.libs.utils.verify.RegexUtils;
  * 收发数据管理器
  * </pre>	
  * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-16
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-16
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class SRMgr {
 
-	/** 日志�? */
+	/** 日志器 */
 	private Logger log = LoggerFactory.getLogger(SRMgr.class);
 	
 	/** 提取会话ID与文件时序的正则 */
 	private final static String REGEX = "-S(\\d+)-T(\\d+)";
 	
-	/** 发送文件目�? */
+	/** 发送文件目录 */
 	private String sendDir;
 	
 	/** 接收文件目录 */
@@ -57,32 +57,32 @@ public class SRMgr {
 	/**
 	 * 被第三方程序转发的、从真正服务端返回的响应数据文件集合.
 	 * 
-	 * 适用于文件扫描模�?.
+	 * 适用于文件扫描模式.
 	 * sessionId -> recv filenames
 	 */
 	private Map<String, PCQueue<String>> recvFiles;
 	
 	/**
 	 * 缓存被第三方程序转发的、从真正服务端返回的文件
-	 * (用于调整文件时序, 避免发送时序错乱导致会话异�?).
+	 * (用于调整文件时序, 避免发送时序错乱导致会话异常).
 	 * 
-	 * 适用于文件扫描模�?.
+	 * 适用于文件扫描模式.
 	 * sessionId -> recv file cache
 	 */
 	private Map<String, RecvCache> recvCaches;
 	
 	/**
-	 * 禁忌�?: 存储本侧服务端写到外存的流文�?, 避免该文件被本侧客户端重新读�?
+	 * 禁忌表: 存储本侧服务端写到外存的流文件, 避免该文件被本侧客户端重新读入
 	 */
 	private Set<String> sendTabus;
 	
 	/**
-	 * 禁忌�?: 存储本侧客户端写到外存的流文�?, 避免该文件被本侧服务端重新读�?
+	 * 禁忌表: 存储本侧客户端写到外存的流文件, 避免该文件被本侧服务端重新读入
 	 */
 	private Set<String> recvTabus;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param sendDir
 	 * @param recvDir
 	 */
@@ -118,7 +118,7 @@ public class SRMgr {
 	}
 	
 	/**
-	 * 添加被第三方程序转发的、从真正客户端发出的请求数据文件到缓存队�?
+	 * 添加被第三方程序转发的、从真正客户端发出的请求数据文件到缓存队列
 	 * @param fileName
 	 */
 	public void addSendFile(String fileName) {
@@ -147,8 +147,8 @@ public class SRMgr {
 	}
 	
 	/**
-	 * 添加被第三方程序转发的、从真正服务端返回的响应数据文件到缓存队�?.
-	 * (适用于文件扫描模�?)
+	 * 添加被第三方程序转发的、从真正服务端返回的响应数据文件到缓存队列.
+	 * (适用于文件扫描模式)
 	 * @param fileName
 	 */
 	public void addRecvFile(String fileName) {
@@ -213,7 +213,7 @@ public class SRMgr {
 	}
 	
 	/**
-	 * 添加被内置Socket转发的、从真正服务端返回的响应数据到缓存队�?
+	 * 添加被内置Socket转发的、从真正服务端返回的响应数据到缓存队列
 	 * @param jsonData
 	 */
 	public void addRecvData(String jsonData) {
@@ -261,7 +261,7 @@ public class SRMgr {
 	}
 	
 	/**
-	 * 清理收发管理器缓�?
+	 * 清理收发管理器缓存
 	 */
 	public void clear() {
 		Iterator<PCQueue<String>> dLists = recvDatas.values().iterator();

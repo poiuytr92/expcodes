@@ -32,8 +32,8 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  *  可用于登陆主号、小号、马甲号
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -151,12 +151,12 @@ public class VCLoginUI extends PopChildWindow {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				SwingUtils.hide(passwordTXT);	// 鼠标释放时隐藏明�?
+				SwingUtils.hide(passwordTXT);	// 鼠标释放时隐藏明文
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				SwingUtils.view(passwordTXT);	// 鼠标按下时显示明�?
+				SwingUtils.view(passwordTXT);	// 鼠标按下时显示明文
 			}
 			
 			@Override
@@ -170,7 +170,7 @@ public class VCLoginUI extends PopChildWindow {
 			
 		});
 				
-		// 设置二维码刷新按钮监�?
+		// 设置二维码刷新按钮监听
 		reflashBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -198,7 +198,7 @@ public class VCLoginUI extends PopChildWindow {
 					SwingUtils.warn("密码不能为空");
 					
 				} else if(StrUtils.isEmpty(vccode)) {
-					SwingUtils.warn("验证码不能为�?");
+					SwingUtils.warn("验证码不能为空");
 					
 				} else {
 					toLogin(username, password, vccode);
@@ -210,7 +210,7 @@ public class VCLoginUI extends PopChildWindow {
 	}
 	
 	/**
-	 * 更新验证码图�?, 同时获取配套的验证码cookie
+	 * 更新验证码图片, 同时获取配套的验证码cookie
 	 */
 	private void updateVccodeImg() {
 		this.vcCookies = VCLogin.downloadVccode(VCIMG_PATH);
@@ -221,12 +221,12 @@ public class VCLoginUI extends PopChildWindow {
 	 * 登陆
 	 * @param username 账号
 	 * @param password 密码
-	 * @param vccode 验证�?
+	 * @param vccode 验证码
 	 */
 	private void toLogin(String username, String password, String vccode) {
 		cookie = VCLogin.toLogin(username, password, vccode, vcCookies);
 		if(!cookie.isVaild()) {
-			SwingUtils.warn("登陆失败: 账号/密码/验证码错�?");
+			SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
 			reflashBtn.doClick();
 			
 		} else {

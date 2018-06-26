@@ -24,8 +24,8 @@ import exp.libs.warp.net.webkit.WebUtils;
  * 【空间相册】解析器
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-23
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-23
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -35,7 +35,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	private final String QZONE_HOMR_URL;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param QQ 被爬取数据的目标QQ
 	 */
 	public AlbumAnalyzer(String QQ) {
@@ -44,7 +44,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	}
 	
 	/**
-	 * 初始�?
+	 * 初始化
 	 */
 	@Override
 	protected void init() {
@@ -52,7 +52,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	}
 
 	/**
-	 * 提取所有相册及其内的照片信�?
+	 * 提取所有相册及其内的照片信息
 	 * @return 
 	 */
 	@Override
@@ -68,14 +68,14 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	}
 	
 	/**
-	 * 切换到相册列表页�?
+	 * 切换到相册列表页面
 	 * @return 是否切换成功
 	 */
 	private boolean switchToAlbumPage() {
-		UIUtils.log("正在打开QQ [", QQ, "] 的空间首�?...");
+		UIUtils.log("正在打开QQ [", QQ, "] 的空间首页...");
 		Browser.open(QZONE_HOMR_URL);
 		
-		UIUtils.log("正在切换到QQ [", QQ, "] 的相册列�?...");
+		UIUtils.log("正在切换到QQ [", QQ, "] 的相册列表...");
 		boolean isOk = false;
 		WebElement a = Browser.findElement(By.id("QM_Profile_Photo_A"));
 		if(a != null) {
@@ -85,20 +85,20 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 			WebUtils.click(Browser.DRIVER(), a);	// 点击
 			
 		} else {
-			UIUtils.log("切换到QQ [", QQ, "] 的相册列表失�?");
+			UIUtils.log("切换到QQ [", QQ, "] 的相册列表失败");
 		}
 		return isOk;
 	}
 	
 	/**
-	 * 获取相册列表(仅相册信�?, 不含内部照片信息)
+	 * 获取相册列表(仅相册信息, 不含内部照片信息)
 	 * @return
 	 */
 	@Override
 	protected List<Album> _getAlbumLists() {
-		UIUtils.log("正在提取QQ [", QQ, "] 的相册列�?...");
+		UIUtils.log("正在提取QQ [", QQ, "] 的相册列表...");
 			
-		// 切换到【相册列表】的嵌套�?
+		// 切换到【相册列表】的嵌套页
 		Browser.switchToFrame(By.id("tphoto"));
 		ThreadUtils.tSleep(Config.SLEEP_TIME);
 		
@@ -124,36 +124,36 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 					UIUtils.log("获得相册 [", name, "] (照片x", total, "), 地址: ", url);
 					
 				} else {
-					UIUtils.log("相册 [", name, "] 被加�?, 无法读取");
+					UIUtils.log("相册 [", name, "] 被加密, 无法读取");
 				}
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "提取QQ [", QQ, "] 的相册列表异�?");
+			UIUtils.log(e, "提取QQ [", QQ, "] 的相册列表异常");
 		}
 		
-		UIUtils.log("提取QQ [", QQ, "] 的相册列表完�?: �? [", albums.size(), "] 个相�?");
+		UIUtils.log("提取QQ [", QQ, "] 的相册列表完成: 共 [", albums.size(), "] 个相册");
 		return albums;
 	}
 
 	/**
-	 * 打开相册, 提取其中的所有照片信�?
+	 * 打开相册, 提取其中的所有照片信息
 	 * @param album 相册信息
 	 * @return
 	 */
 	@Override
 	protected void _open(Album album) {
-		UIUtils.log("正在读取相册 [", album.NAME(), "] (�?", 
-				album.PAGE_NUM(), "�?, 照片x", album.TOTAL_PIC_NUM(), ")");
+		UIUtils.log("正在读取相册 [", album.NAME(), "] (共", 
+				album.PAGE_NUM(), "页, 照片x", album.TOTAL_PIC_NUM(), ")");
 		Browser.open(album.URL());
 		Browser.switchToFrame(By.id("tphoto"));
 		
-		// 提取相册内所有照片信�?
+		// 提取相册内所有照片信息
 		for(int page = 1; ; page++) {
-			UIUtils.log(" -> 正在提取�? [", page, "] 页的照片信息...");
+			UIUtils.log(" -> 正在提取第 [", page, "] 页的照片信息...");
 			List<Photo> pagePhotos = _getPagePhotos(album, page);
 			album.addPhotos(pagePhotos);
 			
-			UIUtils.log(" -> �? [", page, "] 页照片提取完�?, 当前进度: ", 
+			UIUtils.log(" -> 第 [", page, "] 页照片提取完成, 当前进度: ", 
 					album.PIC_NUM(), "/", album.TOTAL_PIC_NUM());
 			ThreadUtils.tSleep(Config.SLEEP_TIME);
 			
@@ -164,7 +164,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 	}
 	
 	/**
-	 * 获取相册的分页照片信�?
+	 * 获取相册的分页照片信息
 	 * @param album 相册信息
 	 * @param page 页数
 	 * @return
@@ -174,7 +174,7 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 		List<Photo> photos = new LinkedList<Photo>();
 		try {
 			
-			// 加载本页所有照�?
+			// 加载本页所有照片
 			while(true) {
 				WebElement more = Browser.findElement(By.className("j-pl-photolist-tip-more"));
 				if(more == null) {
@@ -189,11 +189,11 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 			List<WebElement> list = ul.findElements(By.xpath("li"));
 			for(WebElement li : list) {
 				
-				// 取照片描�?
+				// 取照片描述
 				WebElement title = li.findElement(By.xpath("div/div[1]/div/div"));
 				String desc = title.getAttribute("title");
 				
-				// 取照片上传日�?
+				// 取照片上传日期
 				WebElement span = li.findElement(By.xpath("div/div[2]/div/span"));
 				String time = span.getAttribute("title");
 				
@@ -209,14 +209,14 @@ public class AlbumAnalyzer extends BaseAlbumAnalyzer {
 				photos.add(new Photo(desc, time, url));
 			}
 		} catch(Exception e) {
-			UIUtils.log(e, "提取相册 [", album.NAME(), "] �?", page, "页的照片信息异常");
+			UIUtils.log(e, "提取相册 [", album.NAME(), "] 第", page, "页的照片信息异常");
 		}
 		return photos;
 	}
 	
 	/**
-	 * 切换到下一�?
-	 * @return true:已切换到下一�?; false:已是最后一�?
+	 * 切换到下一页
+	 * @return true:已切换到下一页; false:已是最后一页
 	 */
 	private boolean _nextPage() {
 		boolean hasNext = false;

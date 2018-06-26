@@ -12,14 +12,14 @@ import exp.libs.utils.other.StrUtils;
  * 数值处理工具
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-01-19
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-01-19
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class NumUtils {
 
-	/** 最小精�? */
+	/** 最小精度 */
 	private final static double PRECISION = 1.0e-6D;
 	
 	/** 自然底数e */
@@ -28,23 +28,23 @@ public class NumUtils {
 	/** 圆周率π */
 	public final static double PI = Math.PI;
 	
-	/** 角度转弧度公式常�? */
+	/** 角度转弧度公式常量 */
 	private final static double TO_RADIAN = PI / 180;
 	
-	/** 弧度转角度公式常�? */
+	/** 弧度转角度公式常量 */
 	private final static double TO_ANGEL = 180 / PI;
 	
-	/** 私有化构造函�?. */
+	/** 私有化构造函数. */
 	protected NumUtils() {}
 	
 	/**
-	 * 比较a与b的大�?
+	 * 比较a与b的大小
 	 * @param a 比较参数a
 	 * @param b 比较参数b
 	 * @return 1:a>b; 0:a=b; -1:a<b
 	 */
 	public static int compare(double a, double b) {
-		final double PRECISION = 0.0000001D;	// 精度阀�?
+		final double PRECISION = 0.0000001D;	// 精度阀值
 		
 		int rst = 0;
 		double diff = a - b;
@@ -68,7 +68,7 @@ public class NumUtils {
 	
 	/**
 	 * 把[浮点数]转换为[百分比格式字符串]
-	 * @param n 浮点�?
+	 * @param n 浮点数
 	 * @return 百分比格式字符串
 	 */
 	public static String numToPrecent(final double n) {
@@ -79,7 +79,7 @@ public class NumUtils {
 	/**
 	 * 把[百分比格式字符串]转换为[浮点数]
 	 * @param precent 百分比格式字符串
-	 * @return 浮点�?
+	 * @return 浮点数
 	 */
 	public static double precentToNum(String precent) {
 		double n = 0;
@@ -94,8 +94,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[短整型]
-	 * @param s 数字字符�?
-	 * @return 整型（若转换失败返回0�?
+	 * @param s 数字字符串
+	 * @return 整型（若转换失败返回0）
 	 */
 	public static short toShort(final String s) {
 		return toShort(s, ((short) 0));
@@ -103,8 +103,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[短整型]
-	 * @param s 数字字符�?
-	 * @param defavlt 默认�?
+	 * @param s 数字字符串
+	 * @param defavlt 默认值
 	 * @return 整型（若转换失败返回默认值）
 	 */
 	public static short toShort(final String s, final short defavlt) {
@@ -117,8 +117,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[整型]
-	 * @param s 数字字符�?
-	 * @return 整型（若转换失败返回0�?
+	 * @param s 数字字符串
+	 * @return 整型（若转换失败返回0）
 	 */
 	public static int toInt(final String s) {
 		return toInt(s, 0);
@@ -126,8 +126,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[整型]
-	 * @param s 数字字符�?
-	 * @param defavlt 默认�?
+	 * @param s 数字字符串
+	 * @param defavlt 默认值
 	 * @return 整型（若转换失败返回默认值）
 	 */
 	public static int toInt(final String s, final int defavlt) {
@@ -140,8 +140,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[长整型]
-	 * @param s 数字字符�?
-	 * @return 长整型（若转换失败返�?0�?
+	 * @param s 数字字符串
+	 * @return 长整型（若转换失败返回0）
 	 */
 	public static long toLong(final String s) {
 		return toLong(s, 0L);
@@ -149,8 +149,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[长整型]
-	 * @param s 数字字符�?
-	 * @param defavlt 默认�?
+	 * @param s 数字字符串
+	 * @param defavlt 默认值
 	 * @return 长整型（若转换失败返回默认值）
 	 */
 	public static long toLong(final String s, final long defavlt) {
@@ -163,8 +163,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[单精度浮点数]
-	 * @param s 数字字符�?
-	 * @return 单精度浮点数（若转换失败返回0�?
+	 * @param s 数字字符串
+	 * @return 单精度浮点数（若转换失败返回0）
 	 */
 	public static float toFloat(final String s) {
 		return toFloat(s , 0F);
@@ -172,8 +172,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[单精度浮点数]
-	 * @param s 数字字符�?
-	 * @param defavlt 默认�?
+	 * @param s 数字字符串
+	 * @param defavlt 默认值
 	 * @return 单精度浮点数（若转换失败返回默认值）
 	 */
 	public static float toFloat(final String s, final float defavlt) {
@@ -186,8 +186,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[双精度浮点数]
-	 * @param s 数字字符�?
-	 * @return 双精度浮点数（若转换失败返回0�?
+	 * @param s 数字字符串
+	 * @return 双精度浮点数（若转换失败返回0）
 	 */
 	public static double toDouble(final String s) {
 		return toDouble(s, 0D);
@@ -195,8 +195,8 @@ public class NumUtils {
 	
 	/**
 	 * 把[数字字符串]转换为[双精度浮点数]
-	 * @param s 数字字符�?
-	 * @param defavlt 默认�?
+	 * @param s 数字字符串
+	 * @param defavlt 默认值
 	 * @return 双精度浮点数（若转换失败返回默认值）
 	 */
 	public static double toDouble(final String s, final double defavlt) {
@@ -208,8 +208,8 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 数字字符串自�?1
-	 * @param sNum 数字字符�?
+	 * 数字字符串自增1
+	 * @param sNum 数字字符串
 	 * @return 自增1的数字字符串
 	 */
 	public static String increment(final String sNum) {
@@ -218,7 +218,7 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 返回[int]的负�?
+	 * 返回[int]的负数
 	 * @param n int整数
 	 * @return 负数
 	 */
@@ -227,7 +227,7 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 返回[long]的负�?
+	 * 返回[long]的负数
 	 * @param n long整数
 	 * @return 负数
 	 */
@@ -236,7 +236,7 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 返回[int]的正�?
+	 * 返回[int]的正数
 	 * @param n int整数
 	 * @return 正数
 	 */
@@ -245,7 +245,7 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 返回[long]的正�?
+	 * 返回[long]的正数
 	 * @param n long整数
 	 * @return 正数
 	 */
@@ -254,19 +254,19 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 返回int最大�?
+	 * 返回int最大值
 	 * @param a 数字A
 	 * @param b 数字B 
-	 * @return 最大�?
+	 * @return 最大值
 	 */
 	public static int max(int a, int b) {
 		return a > b ? a : b;
 	}
 	
 	/**
-	 * 返回int最大�?
+	 * 返回int最大值
 	 * @param nums 数字序列
-	 * @return 最大�?
+	 * @return 最大值
 	 */
 	public static int max(int... nums) {
 		int max = 0;
@@ -280,19 +280,19 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 返回long最大�?
+	 * 返回long最大值
 	 * @param a 数字A
 	 * @param b 数字B 
-	 * @return 最大�?
+	 * @return 最大值
 	 */
 	public static long max(long a, long b) {
 		return a > b ? a : b;
 	}
 	
 	/**
-	 * 返回long最大�?
+	 * 返回long最大值
 	 * @param nums 数字序列
-	 * @return 最大�?
+	 * @return 最大值
 	 */
 	public static long max(long... nums) {
 		long max = 0;
@@ -306,19 +306,19 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 返回int最小�?
+	 * 返回int最小值
 	 * @param a 数字A
 	 * @param b 数字B 
-	 * @return 最大�?
+	 * @return 最大值
 	 */
 	public static int min(int a, int b) {
 		return a < b ? a : b;
 	}
 	
 	/**
-	 * 返回int最小�?
+	 * 返回int最小值
 	 * @param nums 数字序列
-	 * @return 最大�?
+	 * @return 最大值
 	 */
 	public static int min(int... nums) {
 		int min = 0;
@@ -332,19 +332,19 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 返回long最小�?
+	 * 返回long最小值
 	 * @param a 数字A
 	 * @param b 数字B 
-	 * @return 最大�?
+	 * @return 最大值
 	 */
 	public static long min(long a, long b) {
 		return a < b ? a : b;
 	}
 	
 	/**
-	 * 返回long最小�?
+	 * 返回long最小值
 	 * @param nums 数字序列
-	 * @return 最大�?
+	 * @return 最大值
 	 */
 	public static long min(long... nums) {
 		long min = 0;
@@ -360,8 +360,8 @@ public class NumUtils {
 	/**
 	 * <PRE>
 	 * int递增序列压缩.
-	 * 	例如�? { 1, 2, 3, 5, 6, 8, 10 }
-	 *  压缩�? [1-3, 5-6, 8, 10]
+	 * 	例如把 { 1, 2, 3, 5, 6, 8, 10 }
+	 *  压缩为 [1-3, 5-6, 8, 10]
 	 * </PRE>
 	 * @param ascSeries 递增序列(无需连续, 但必须递增)
 	 * @return
@@ -373,11 +373,11 @@ public class NumUtils {
 	/**
 	 * <PRE>
 	 * int递增序列压缩.
-	 * 	例如�? { 1, 2, 3, 5, 6, 8, 10 }
-	 *  压缩�? [1-3, 5-6, 8, 10]
+	 * 	例如把 { 1, 2, 3, 5, 6, 8, 10 }
+	 *  压缩为 [1-3, 5-6, 8, 10]
 	 * </PRE>
 	 * @param ascSeries 递增序列(无需连续, 但必须递增)
-	 * @param endash 连字�?
+	 * @param endash 连字符
 	 * @return 压缩序列
 	 */
 	public static List<String> compress(int[] ascSeries, char endash) {
@@ -409,18 +409,18 @@ public class NumUtils {
 	
 	/**
 	 * <PRE>
-	 * 判断双精度数是否�?0或近似于0.
-	 * 	(默认最小精度为1.0e-6D，绝对�? 小于最小精度则判定�?0)
+	 * 判断双精度数是否为0或近似于0.
+	 * 	(默认最小精度为1.0e-6D，绝对值 小于最小精度则判定为0)
 	 * </PRE>
 	 * @param num 双精度数
-	 * @return true: 等于或近似于0; false:�?0
+	 * @return true: 等于或近似于0; false:非0
 	 */
 	public static boolean isZero(double num) {
 		return (Math.abs(num) < PRECISION)? true : false;
 	}
 	
 	/**
-	 * 角度转弧�?
+	 * 角度转弧度
 	 * @param angel 角度
 	 * @return 弧度
 	 */
@@ -429,7 +429,7 @@ public class NumUtils {
 	}
 	
 	/**
-	 * 弧度转角�?
+	 * 弧度转角度
 	 * @param radian 弧度
 	 * @return 角度
 	 */
@@ -439,13 +439,13 @@ public class NumUtils {
 	
 	/**
 	 * <PRE>
-	 * 生成从bgn到end的范围数�?.
+	 * 生成从bgn到end的范围数组.
 	 * 	例如:
-	 *    �? 1...5 的范围数组为 [1, 2, 3, 4, 5]
-	 *    �? 2...-2 的的范围数组�? [2, 1, 0, -1, 2]
+	 *    从 1...5 的范围数组为 [1, 2, 3, 4, 5]
+	 *    从 2...-2 的的范围数组为 [2, 1, 0, -1, 2]
 	 * </PRE>
-	 * @param bgn 范围数组起始值（包括�?
-	 * @param end 范围数组终止值（包括�?
+	 * @param bgn 范围数组起始值（包括）
+	 * @param end 范围数组终止值（包括）
 	 * @return 范围数组
 	 */
 	public static int[] toRangeArray(int bgn, int end) {
@@ -459,13 +459,13 @@ public class NumUtils {
 	
 	/**
 	 * <PRE>
-	 * 生成从bgn到end的范围数�?.
+	 * 生成从bgn到end的范围数组.
 	 * 	例如:
-	 *    �? 1...5 的范围数组为 [1, 2, 3, 4, 5]
-	 *    �? 2...-2 的的范围数组�? [2, 1, 0, -1, 2]
+	 *    从 1...5 的范围数组为 [1, 2, 3, 4, 5]
+	 *    从 2...-2 的的范围数组为 [2, 1, 0, -1, 2]
 	 * </PRE>
-	 * @param bgn 范围数组起始值（包括�?
-	 * @param end 范围数组终止值（包括�?
+	 * @param bgn 范围数组起始值（包括）
+	 * @param end 范围数组终止值（包括）
 	 * @return 范围数组
 	 */
 	public static long[] toRangeArray(long bgn, long end) {

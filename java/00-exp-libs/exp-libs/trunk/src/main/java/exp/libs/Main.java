@@ -7,8 +7,8 @@ import exp.libs.utils.other.LogUtils;
  * 此类无任何作用.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-07-11 
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-11
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

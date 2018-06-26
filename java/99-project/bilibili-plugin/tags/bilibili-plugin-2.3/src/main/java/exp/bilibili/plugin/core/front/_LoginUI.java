@@ -32,8 +32,8 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * 帐密登陆窗口
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -67,15 +67,15 @@ public class _LoginUI extends PopChildWindow {
 	/** 与验证码配套的登陆用cookie */
 	private String vcCookies;
 	
-	/** 是否用于登录马甲�? */
+	/** 是否用于登录马甲号 */
 	private boolean isMini;
 	
 	/**
 	 * 
-	 * @param isMini 是否用于登录马甲�?
+	 * @param isMini 是否用于登录马甲号
 	 */
 	public _LoginUI(boolean isMini) {
-		super("B站PC端帐密登�?", WIDTH, HEIGH, false, isMini);
+		super("B站PC端帐密登陆", WIDTH, HEIGH, false, isMini);
 	}
 	
 	@Override
@@ -151,12 +151,12 @@ public class _LoginUI extends PopChildWindow {
 			
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				SwingUtils.hide(passwordTXT);	// 鼠标释放时隐藏明�?
+				SwingUtils.hide(passwordTXT);	// 鼠标释放时隐藏明文
 			}
 			
 			@Override
 			public void mousePressed(MouseEvent e) {
-				SwingUtils.view(passwordTXT);	// 鼠标按下时显示明�?
+				SwingUtils.view(passwordTXT);	// 鼠标按下时显示明文
 			}
 			
 			@Override
@@ -188,7 +188,7 @@ public class _LoginUI extends PopChildWindow {
 					SwingUtils.warn("密码不能为空");
 					
 				} else if(StrUtils.isEmpty(vccode)) {
-					SwingUtils.warn("验证码不能为�?");
+					SwingUtils.warn("验证码不能为空");
 					
 				} else {
 					toLogin(username, password, vccode);
@@ -198,7 +198,7 @@ public class _LoginUI extends PopChildWindow {
 			}
 		});
 		
-		// 设置二维码刷新按钮监�?
+		// 设置二维码刷新按钮监听
 		reflashBtn.addActionListener(new ActionListener() {
 			
 			@Override
@@ -221,7 +221,7 @@ public class _LoginUI extends PopChildWindow {
 		}
 		
 		if(isOk == false) {
-			SwingUtils.warn("登陆失败: 账号/密码/验证码错�?");
+			SwingUtils.warn("登陆失败: 账号/密码/验证码错误");
 			reflashBtn.doClick();
 			
 		} else {
@@ -232,8 +232,8 @@ public class _LoginUI extends PopChildWindow {
 	private void updateImg() {
 		this.vcCookies = LoginMgr.getInstn().downloadVccode();
 		
-		// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图�?
-		// 因为这种方式会因为图片路径没有变�?, 而不去更新缓�?, 导致显示的二维码一直不�?
+		// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图片
+		// 因为这种方式会因为图片路径没有变化, 而不去更新缓存, 导致显示的二维码一直不变
 		Image img = Toolkit.getDefaultToolkit().createImage(VCIMG_PATH);
 		imgLabel.setIcon(new ImageIcon(modifySize(img)));
 	}

@@ -11,8 +11,8 @@ import exp.libs.warp.net.jms.mq.sup.Producers;
  * JMS工具类
  * </pre>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-14
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -101,7 +101,7 @@ public class JMSUtils {
 	public static Consumer getConsumer(JmsBean jmsBean) throws Exception {
 
 		if (jmsBean == null) {
-			throw (new Exception("没有找到相应的JmsBean�?"));
+			throw (new Exception("没有找到相应的JmsBean。"));
 		}
 
 		Consumer consumer = new Consumer(jmsBean.getUrl());

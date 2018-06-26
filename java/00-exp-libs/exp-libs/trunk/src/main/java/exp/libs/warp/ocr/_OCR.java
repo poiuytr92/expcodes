@@ -14,8 +14,8 @@ import exp.libs.utils.other.PathUtils;
  * OCR图像文字识别组件
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -39,7 +39,7 @@ final class _OCR {
 	private String tesseractDir;
 
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param tesseractDir OCR组件驱动目录
 	 */
 	protected _OCR(String tesseractDir) {

@@ -8,8 +8,8 @@ import java.util.Set;
  * JMSBean
  * </pre>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-14
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -39,7 +39,7 @@ public class JmsBean {
 	protected String password;
 
 	/**
-	 * 上下文工�?
+	 * 上下文工厂
 	 */
 	protected String contextFactory = "org.apache.activemq.jndi.ActiveMQInitialContextFactory";
 
@@ -49,7 +49,7 @@ public class JmsBean {
 	protected String connectionFactory = "ConnectionFactory";
 
 	/**
-	 * 是否会话事务，会话事务需要手动提交，保证多个消息的事务�?
+	 * 是否会话事务，会话事务需要手动提交，保证多个消息的事务性
 	 */
 	protected boolean transcation = false;
 
@@ -59,28 +59,28 @@ public class JmsBean {
 	protected boolean longConnection = false;
 
 	/**
-	 * 1:NON_PERSISTENT:不要求将消息记录到稳定存储器�?(非持�?)
+	 * 1:NON_PERSISTENT:不要求将消息记录到稳定存储器中(非持久)
 	 * 2:PERSISTENT：保证不能要求JMS提供商失败而造成的消息丢失（持久化）
 	 */
 	protected int deliveryMode = 1;
 
 	/**
-	 * 确认模式�? 3:DUPS_OK_ACKNOWLEDGE：懒惰确认消息的传递，可能会造成消息的重复传�?
-	 * 1:AUTO_ACKNOWLEDGE:客户端自动确�?
-	 * 2:CLIENT_ACKNOWLEDGE:客户端通过调用消息的acknowledge方法来确认消�?
+	 * 确认模式： 3:DUPS_OK_ACKNOWLEDGE：懒惰确认消息的传递，可能会造成消息的重复传递
+	 * 1:AUTO_ACKNOWLEDGE:客户端自动确认
+	 * 2:CLIENT_ACKNOWLEDGE:客户端通过调用消息的acknowledge方法来确认消息
 	 */
 	@Deprecated
 	protected int iAcknowledgementMode = 1;
 
 	/**
-	 * 确认模式�? 3:DUPS_OK_ACKNOWLEDGE：懒惰确认消息的传递，可能会造成消息的重复传�?
-	 * 1:AUTO_ACKNOWLEDGE:客户端自动确�?
-	 * 2:CLIENT_ACKNOWLEDGE:客户端通过调用消息的acknowledge方法来确认消�?
+	 * 确认模式： 3:DUPS_OK_ACKNOWLEDGE：懒惰确认消息的传递，可能会造成消息的重复传递
+	 * 1:AUTO_ACKNOWLEDGE:客户端自动确认
+	 * 2:CLIENT_ACKNOWLEDGE:客户端通过调用消息的acknowledge方法来确认消息
 	 */
 	protected int acknowledgementMode = 1;
 
 	/**
-	 * 消息的生存时�?,单位毫秒
+	 * 消息的生存时间,单位毫秒
 	 */
 	protected long timeToLive = 1800000;
 
@@ -100,12 +100,12 @@ public class JmsBean {
 	protected String sendTheme;
 
 	/**
-	 * producer设置的相应主�?
+	 * producer设置的相应主题
 	 */
 	protected String replyTheme;
 
 	/**
-	 * JMS类型，队列、主题、持久主�? 1:QUEUE,2:TOPIC,3:DURABLETOPIC
+	 * JMS类型，队列、主题、持久主题 1:QUEUE,2:TOPIC,3:DURABLETOPIC
 	 */
 	protected int type = 1;
 
@@ -130,7 +130,7 @@ public class JmsBean {
 	protected String selector;
 
 	/**
-	 * priority 优先�?
+	 * priority 优先级
 	 */
 	protected int priority = 1;
 

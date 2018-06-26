@@ -14,8 +14,8 @@ import exp.libs.warp.ui.cpt.win.NoticeWindow;
  * 授权无效导致程序自动退出的通知面板
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-11
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-11
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -38,7 +38,7 @@ public class _ExitNoticeUI extends NoticeWindow {
 	protected void initComponents(Object... args) {
 		this.editor = new JEditorPane();
 		editor.setEditable(false);
-		editor.setContentType("text/html");	// 将编辑框设置为支持html的编辑格�?
+		editor.setContentType("text/html");	// 将编辑框设置为支持html的编辑格式
 		
 		if(args != null && args.length > 0) {
 			String cause = (String) args[0];
@@ -66,7 +66,7 @@ public class _ExitNoticeUI extends NoticeWindow {
 				"<html>", 
 					"<body>", 
 						"<div style='text-align:center'>", 
-							"哔哩哔哩插件�? 即将停止 <br/>", 
+							"哔哩哔哩插件姬 即将停止 <br/>", 
 							"[<font color='red'>", cause, "</font>]",
 						"</div>", 
 					"</body>", 

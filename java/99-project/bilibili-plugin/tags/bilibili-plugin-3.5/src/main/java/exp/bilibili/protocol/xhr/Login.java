@@ -25,17 +25,17 @@ import exp.libs.warp.net.http.HttpUtils;
  * 登陆
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Login extends __XHR {
 
-	/** B站主站首�? */
+	/** B站主站首页 */
 	private final static String MAIN_HOME = Config.getInstn().MAIN_HOME();
 	
-	/** 登陆主机服务�? */
+	/** 登陆主机服务器 */
 	private final static String LOGIN_HOST = Config.getInstn().LOGIN_HOST();
 	
 	/** 获取二维码图片信息的URL */
@@ -62,12 +62,12 @@ public class Login extends __XHR {
 	/** 使用帐密+验证码登陆的URL */
 	private final static String VCLOGIN_URL = Config.getInstn().VCLOGIN_URL();
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected Login() {}
 	
 	/**
 	 * 从Http会话的响应报文中提取cookie信息
-	 * @param client Http会话客户�?
+	 * @param client Http会话客户端
 	 * @param cookie cookie对象容器
 	 */
 	private static void takeCookies(HttpClient client, BiliCookie cookie) {
@@ -83,7 +83,7 @@ public class Login extends __XHR {
 	}
 	
 	/**
-	 * 获取二维码登陆信�?(用于在本地生成二维码图片)
+	 * 获取二维码登陆信息(用于在本地生成二维码图片)
 	 * @return https://passport.bilibili.com/qrcode/h5/login?oauthKey=b2fd47ca9a9fcb5a5943782d54ac3022
 	 */
 	public static String getQrcodeInfo() {
@@ -97,7 +97,7 @@ public class Login extends __XHR {
 			url = JsonUtils.getStr(data, BiliCmdAtrbt.url);
 			
 		} catch(Exception e) {
-			log.error("获取二维码登陆信息失�?: {}", response, e);
+			log.error("获取二维码登陆信息失败: {}", response, e);
 		}
 		return url;
 	}
@@ -105,7 +105,7 @@ public class Login extends __XHR {
 	/**
 	 * 检测二维码是否扫码登陆成功
 	 * @param oauthKey 二维码登陆信息中提取的oauthKey
-	 * @return 若扫码登陆成�?, 则返回有效Cookie
+	 * @return 若扫码登陆成功, 则返回有效Cookie
 	 */
 	public static BiliCookie toLogin(String oauthKey) {
 		BiliCookie cookie = new BiliCookie();
@@ -125,7 +125,7 @@ public class Login extends __XHR {
 			}
 		} catch(Exception e) {
 			cookie = BiliCookie.NULL;
-			log.error("获取二维码登陆信息失�?: {}", response, e);
+			log.error("获取二维码登陆信息失败: {}", response, e);
 		}
 		client.close();
 		return cookie;
@@ -145,10 +145,10 @@ public class Login extends __XHR {
 	}
 	
 	/**
-	 * 生成二维码登陆用的请求参�?
+	 * 生成二维码登陆用的请求参数
 	 * @param username 账号
-	 * @param password 密码（RSA公钥加密密文�?
-	 * @param vccode 图片验证�?
+	 * @param password 密码（RSA公钥加密密文）
+	 * @param vccode 图片验证码
 	 * @return
 	 */
 	private static Map<String, String> getRequest(String oauthKey) {
@@ -159,8 +159,8 @@ public class Login extends __XHR {
 	}
 	
 	/**
-	 * 下载登陆用的验证码图�?
-	 * @param imgPath 验证码图片保存路�?
+	 * 下载登陆用的验证码图片
+	 * @param imgPath 验证码图片保存路径
 	 * @return 与该验证码配套的cookies
 	 */
 	public static String downloadVccode(String imgPath) {
@@ -184,17 +184,17 @@ public class Login extends __XHR {
 		}
 		client.close();
 		
-		// SID与JSESSIONID绑定了该验证码图�?, 在登陆时需要把这个信息一起POST
+		// SID与JSESSIONID绑定了该验证码图片, 在登陆时需要把这个信息一起POST
 		return StrUtils.concat(sid, "; ", jsessionId);
 	}
 	
 	/**
-	 * 生成随机SID (sid是由长度�?8的由a-z0-9字符组成的字符串)
+	 * 生成随机SID (sid是由长度为8的由a-z0-9字符组成的字符串)
 	 * @return 随机SID
 	 */
 	private static String randomSID() {
 		StringBuilder sid = new StringBuilder();
-		for(int i = 0; i < 8; i++) {	// sid长度�?8
+		for(int i = 0; i < 8; i++) {	// sid长度为8
 			int n = RandomUtils.randomInt(36);	// a-z, 0-9
 			if(n < 26) {	// a-z
 				sid.append((char) (n + 'a'));
@@ -208,10 +208,10 @@ public class Login extends __XHR {
 	}
 	
 	/**
-	 * 通过帐密+验证码方式登�?
+	 * 通过帐密+验证码方式登陆
 	 * @param username 账号
 	 * @param password 密码
-	 * @param vccode 验证�?
+	 * @param vccode 验证码
 	 * @param vcCookies 与验证码配套的登陆用cookie
 	 * @return 
 	 */
@@ -221,7 +221,7 @@ public class Login extends __XHR {
 		HttpClient client = new HttpClient();
 		
 		try {
-			// 从服务器获取RSA公钥(公钥是固定的)和随机hash�?, 然后使用公钥对密码进行RSA加密
+			// 从服务器获取RSA公钥(公钥是固定的)和随机hash码, 然后使用公钥对密码进行RSA加密
 			String sJson = client.doGet(RSA_KEY_URL, getHeader(""), null);
 			JSONObject json = JSONObject.fromObject(sJson);
 			String hash = JsonUtils.getStr(json, BiliCmdAtrbt.hash);
@@ -263,20 +263,20 @@ public class Login extends __XHR {
 	}
 	
 	/**
-	 * 生成验证码登陆用的请求参�?
+	 * 生成验证码登陆用的请求参数
 	 * @param username 账号
-	 * @param password 密码（RSA公钥加密密文�?
-	 * @param vccode 图片验证�?
+	 * @param password 密码（RSA公钥加密密文）
+	 * @param vccode 图片验证码
 	 * @return
 	 */
 	private static Map<String, String> getRequest(
 			String username, String password, String vccode) {
 		Map<String, String> request = new HashMap<String, String>();
 		request.put(BiliCmdAtrbt.cType, "2");
-		request.put(BiliCmdAtrbt.vcType, "1");		// 1:验证码校验方�?;  2:二维码校验方�?
-		request.put(BiliCmdAtrbt.captcha, vccode);	// 图片验证�?
+		request.put(BiliCmdAtrbt.vcType, "1");		// 1:验证码校验方式;  2:二维码校验方式
+		request.put(BiliCmdAtrbt.captcha, vccode);	// 图片验证码
 		request.put(BiliCmdAtrbt.user, username);	// 账号（明文）
-		request.put(BiliCmdAtrbt.pwd, password);	// 密码（RSA公钥加密密文�?
+		request.put(BiliCmdAtrbt.pwd, password);	// 密码（RSA公钥加密密文）
 		request.put(BiliCmdAtrbt.keep, "true");
 		request.put(BiliCmdAtrbt.gourl, MAIN_HOME);	// 登录后的跳转页面
 		return request;

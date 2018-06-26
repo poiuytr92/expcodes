@@ -15,20 +15,20 @@ import exp.libs.utils.other.StrUtils;
  * 	此缓存区目的是修正接收文件的时序
  * </pre>	
  * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-01-16
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-01-16
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class RecvCache {
 
-	/** 当前等待的文件时�? */
+	/** 当前等待的文件时序 */
 	private int waitTimeSequence;
 	
 	/**
 	 * 当前已读取的文件时序.
 	 *   <= readTimeSequence 的必定已读取
-	 *   且必�? readTimeSequence < waitTimeSequence
+	 *   且必有 readTimeSequence < waitTimeSequence
 	 */
 	private int readTimeSequence;
 	
@@ -39,7 +39,7 @@ public class RecvCache {
 	private Map<Integer, String> caches;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	public RecvCache() {
 		this.waitTimeSequence = 0;
@@ -48,7 +48,7 @@ public class RecvCache {
 	}
 	
 	/**
-	 * 添加新文件到缓存, 并根据时序进行调�?
+	 * 添加新文件到缓存, 并根据时序进行调整
 	 * @param timeSequence 文件时序
 	 * @param file 文件名称/路径
 	 * @return 是否添加成功
@@ -73,7 +73,7 @@ public class RecvCache {
 	}
 	
 	/**
-	 * 获取时序位置最早的一个文�?
+	 * 获取时序位置最早的一个文件
 	 * @return
 	 */
 	public String get() {
@@ -87,7 +87,7 @@ public class RecvCache {
 	/**
 	 * 获取时序位置最早的多个文件, 直到出现时序断层为止.
 	 * -------------------------------
-	 * 	例如缓存了时序文�?  [2�?3�?4�?8�?10], 由于时序4之后出现了断层，则返�? [2�?3�?4]
+	 * 	例如缓存了时序文件  [2、3、4、8、10], 由于时序4之后出现了断层，则返回 [2、3、4]
 	 * 	
 	 * @return
 	 */

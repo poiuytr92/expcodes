@@ -40,24 +40,24 @@ import exp.libs.utils.other.StrUtils;
  * WS接收的JSON报文解析器
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class WSAnalyser {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(WSAnalyser.class);
 	
-	/** 上次开播时�? */
+	/** 上次开播时间 */
 	private static long lastOpenLive = 0;
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected WSAnalyser() {}
 	
 	/**
-	 * 把从ws接收到到的json消息转换为Bean对象并处�?
+	 * 把从ws接收到到的json消息转换为Bean对象并处理
 	 * @param json
 	 * @return
 	 */
@@ -134,7 +134,7 @@ public class WSAnalyser {
 	}
 	
 	/**
-	 * 获取抽奖房间�?
+	 * 获取抽奖房间号
 	 * @param json
 	 * @return
 	 */
@@ -185,7 +185,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(SysMsg msgBean) {
-		UIUtils.notify(msgBean.getMsg());	// 系统公告的消息体里面自带�? [系统公告: ]
+		UIUtils.notify(msgBean.getMsg());	// 系统公告的消息体里面自带了 [系统公告: ]
 		log.info(msgBean.getMsg());
 	}
 	
@@ -194,7 +194,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(TvLottery msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.ROOM_ID(), "] 正在小电视抽奖中!!!");
+		String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在小电视抽奖中!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
@@ -207,7 +207,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(SysGift msgBean) {
-		String msg = StrUtils.concat("礼物公告�?", msgBean.getMsgText());
+		String msg = StrUtils.concat("礼物公告：", msgBean.getMsgText());
 		UIUtils.notify(msg);
 		log.info(msg);
 	}
@@ -217,7 +217,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(EnergyLottery msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.ROOM_ID(), "] 正在高能抽奖�?!!!");
+		String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在高能抽奖中!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
@@ -226,11 +226,11 @@ public class WSAnalyser {
 	}
 	
 	/**
-	 * 特殊礼物�?(直播间内)节奏风暴消息
+	 * 特殊礼物：(直播间内)节奏风暴消息
 	 * @param msgBean
 	 */
 	private static void toDo(SpecialGift msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.getRoomId(), "] 开启了节奏风暴!!!");
+		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 开启了节奏风暴!!!");
 		UIUtils.notify(msg);
 		log.info(msg);
 		
@@ -238,11 +238,11 @@ public class WSAnalyser {
 	}
 
 	/**
-	 * (直播间内)高能抽奖开始消�?
+	 * (直播间内)高能抽奖开始消息
 	 * @param msgBean
 	 */
 	private static void toDo(RaffleStart msgBean) {
-		String msg = StrUtils.concat("感谢[", msgBean.getFrom(), "]的高�?!!!");
+		String msg = StrUtils.concat("感谢[", msgBean.getFrom(), "]的高能!!!");
 		log.info(msg);
 		
 		ChatMgr.getInstn().sendThxEnergy(msg);
@@ -286,7 +286,7 @@ public class WSAnalyser {
 	}
 	
 	/**
-	 * (直播间内)新船员上船消�?
+	 * (直播间内)新船员上船消息
 	 * @param msgBean
 	 */
 	private static void toDo(GuardBuy msgBean) {
@@ -303,7 +303,7 @@ public class WSAnalyser {
 	}
 
 	/**
-	 * (全频�?)登船消息
+	 * (全频道)登船消息
 	 * @param msgBean
 	 */
 	private static void toDo(GuardMsg msgBean) {
@@ -316,11 +316,11 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(LiveMsg msgBean) {
-		String msg = StrUtils.concat("您关注的直播�? [", msgBean.getRoomId(), "] 开播啦!!!");
+		String msg = StrUtils.concat("您关注的直播间 [", msgBean.getRoomId(), "] 开播啦!!!");
 		UIUtils.chat(msg);
 		log.info(msg);
 		
-		// 一小时内的重复开�?, 认为是房间信号调�?, 不重复提�?
+		// 一小时内的重复开播, 认为是房间信号调整, 不重复提示
 		long curTime = System.currentTimeMillis();
 		if(curTime - lastOpenLive > 3600000L) {
 			ChatMgr.getInstn().helloLive(msgBean.getRoomId());
@@ -334,7 +334,7 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(Preparing msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.getRoomId(), "] 主播已下�?.");
+		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 主播已下线.");
 		UIUtils.chat(msg);
 		log.info(msg);
 	}
@@ -344,13 +344,13 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(RoomSilentOff msgBean) {
-		String msg = StrUtils.concat("直播�? [", msgBean.getRoomId(), "] 串流已停�?.");
+		String msg = StrUtils.concat("直播间 [", msgBean.getRoomId(), "] 串流已停止.");
 		UIUtils.chat(msg);
 		log.info(msg);
 	}
 	
 	/**
-	 * (直播间内)许愿瓶实现进度消�?
+	 * (直播间内)许愿瓶实现进度消息
 	 * @param msgBean
 	 */
 	private static void toDo(WishBottle msgBean) {
@@ -362,12 +362,12 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(RoomBlock msgBean) {
-		log.info("直播�? [{}] 的用�? [{}] 被关小黑屋了!!!", 
+		log.info("直播间 [{}] 的用户 [{}] 被关小黑屋了!!!", 
 				msgBean.getRoomId(), msgBean.getUname());
 	}
 	
 	/**
-	 * 2018春节活动(新春�?)触发事件
+	 * 2018春节活动(新春榜)触发事件
 	 * @param msgBean
 	 */
 	private static void toDo(ActivityEvent msgBean) {

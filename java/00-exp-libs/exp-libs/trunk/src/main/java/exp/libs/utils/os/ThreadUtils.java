@@ -9,17 +9,17 @@ import org.slf4j.LoggerFactory;
  * 线程工具.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ThreadUtils {
 	
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(ThreadUtils.class);
 	
-	/** 私有化构造函�? */
+	/** 私有化构造函数 */
 	protected ThreadUtils() {}
 	
 	/**
@@ -27,7 +27,7 @@ public class ThreadUtils {
 	 * @return 线程总数
 	 */
 	public static int getTotalSize() {
-		final String MAIN_TH_NAME = "main";	// 主线程名�?
+		final String MAIN_TH_NAME = "main";	// 主线程名称
 		ThreadGroup tg = Thread.currentThread().getThreadGroup();
 		while(!MAIN_TH_NAME.equals(tg.getName()) && tg.getParent() != null) {
 			tg = tg.getParent();
@@ -68,7 +68,7 @@ public class ThreadUtils {
 	
 	/**
 	 * 唤醒对象
-	 * @param o 已阻塞对�?
+	 * @param o 已阻塞对象
 	 */
 	public static void tNotify(Object o) {
 		if(o == null) {

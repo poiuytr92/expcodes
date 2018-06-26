@@ -40,14 +40,14 @@ import exp.libs.warp.ui.cpt.win.MainWindow;
  * QQ空间爬虫主界面
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class AppUI extends MainWindow {
 
-	/** 唯一序列�? */
+	/** 唯一序列号 */
 	private static final long serialVersionUID = -7825507638221203671L;
 
 	/** 界面宽度 */
@@ -56,10 +56,10 @@ public class AppUI extends MainWindow {
 	/** 界面高度 */
 	private final static int HEIGHT = 600;
 	
-	/** 界面文本框最大缓存行�? */
+	/** 界面文本框最大缓存行数 */
 	private final static int MAX_LINE = 500;
 	
-	/** 换行�? */
+	/** 换行符 */
 	private final static String LINE_END = "\r\n";
 	
 	/** 登陆说明 */
@@ -71,16 +71,16 @@ public class AppUI extends MainWindow {
 	/** 爬取数据的目标QQ号输入框 */
 	private JTextField qqTF;
 	
-	/** QQ登陆账号输入�? */
+	/** QQ登陆账号输入框 */
 	private JTextField unTF;
 	
-	/** QQ登陆密码输入�? */
+	/** QQ登陆密码输入框 */
 	private JPasswordField pwTF;
 	
 	/**
 	 * 【WEB模式】选项.
-	 * 	  XHR模式为后端爬虫模�?(默认)
-	 *    WEB模式为前端仿真模�?
+	 * 	  XHR模式为后端爬虫模式(默认)
+	 *    WEB模式为前端仿真模式
 	 */
 	private JRadioButton webBtn;
 	
@@ -93,23 +93,23 @@ public class AppUI extends MainWindow {
 	/** 是否登陆成功 */
 	private boolean isLogin;
 	
-	/** 【相册】爬取按�? */
+	/** 【相册】爬取按钮 */
 	private JButton albumBtn;
 	
-	/** 【说说】爬取按�? */
+	/** 【说说】爬取按钮 */
 	private JButton moodBtn;
 	
-	/** 日志输出�? */
+	/** 日志输出区 */
 	private JTextArea consoleTA;
 	
-	/** 线程�? */
+	/** 线程池 */
 	private ThreadPool tp;
 	
 	/** 单例 */
 	private static volatile AppUI instance;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	private AppUI() {
 		super("QQ空间爬虫 - By EXP (QQ:272629724)", WIDTH, HEIGHT);
@@ -143,19 +143,19 @@ public class AppUI extends MainWindow {
 		this.qqTF = new JTextField("");
 		this.unTF = new JTextField("");
 		this.pwTF = new JPasswordField("");
-		qqTF.setToolTipText("需要爬取数据的目标QQ�?");
-		unTF.setToolTipText("请确保此QQ具有查看对方空间权限 (不负责权限破�?)");
-		pwTF.setToolTipText("此软件不盗号, 不放心勿�?");
+		qqTF.setToolTipText("需要爬取数据的目标QQ号");
+		unTF.setToolTipText("请确保此QQ具有查看对方空间权限 (不负责权限破解)");
+		pwTF.setToolTipText("此软件不盗号, 不放心勿用");
 		
 		this.webBtn = new JRadioButton("web模式");
-		this.rememberBtn = new JRadioButton("记住�?");
+		this.rememberBtn = new JRadioButton("记住我");
 		if(recoveryLoginInfo()) {
 			rememberBtn.setSelected(true);
 		}
 		
 		this.loginBtn = new JButton(LOGIN_DESC);
-		this.albumBtn = new JButton("爬取【空间相册】图文数�?");
-		this.moodBtn = new JButton("爬取【空间说说】图文数�?");
+		this.albumBtn = new JButton("爬取【空间相册】图文数据");
+		this.moodBtn = new JButton("爬取【空间说说】图文数据");
 		
 		albumBtn.setEnabled(false);
 		moodBtn.setEnabled(false);
@@ -213,14 +213,14 @@ public class AppUI extends MainWindow {
 
 		    @Override
 		    public void keyTyped(KeyEvent e) {
-		        String text = textField.getText();  // 当前输入框内�?
-		        char ch = e.getKeyChar();   // 准备附加到输入框的字�?
+		        String text = textField.getText();  // 当前输入框内容
+		        char ch = e.getKeyChar();   // 准备附加到输入框的字符
 
-		        // 限制不能输入非数�?
+		        // 限制不能输入非数字
 		        if(!(ch >= '0' && ch <= '9')) {
-		            e.consume();    // 销毁当前输入字�?
+		            e.consume();    // 销毁当前输入字符
 
-		        // 限制不能�?0开�?
+		        // 限制不能是0开头
 		        } else if("".equals(text) && ch == '0') {   
 		            e.consume();
 		        }
@@ -245,17 +245,17 @@ public class AppUI extends MainWindow {
 			public void actionPerformed(ActionEvent e) {
 				if(isLogin == true) {
 					webBtn.setSelected(!webBtn.isSelected());
-					SwingUtils.warn("非登录状态下才允许切换爬虫模�?");
+					SwingUtils.warn("非登录状态下才允许切换爬虫模式");
 					return;
 				}
 				
 				if(webBtn.isSelected()) {
 					if(!FileUtils.exists(WebDriverType.PHANTOMJS.DRIVER_PATH())) {
 						webBtn.setSelected(false);
-						UIUtils.log("切换爬虫模式失败: 仿真浏览器丢�?");
+						UIUtils.log("切换爬虫模式失败: 仿真浏览器丢失");
 						
 					} else {
-						UIUtils.log("切换爬虫模式: 仿真浏览�?  (不推�?: 速度较慢, 成功率低)");
+						UIUtils.log("切换爬虫模式: 仿真浏览器  (不推荐: 速度较慢, 成功率低)");
 					}
 				} else {
 					UIUtils.log("切换爬虫模式: XHR协议  (推荐: 速度较快, 成功率高)");
@@ -283,7 +283,7 @@ public class AppUI extends MainWindow {
 		final String username = unTF.getText();
 		final String password = String.valueOf(pwTF.getPassword());
 		if(StrUtils.isEmpty(username, password)) {
-			SwingUtils.warn("账号或密码不能为�?");
+			SwingUtils.warn("账号或密码不能为空");
 			return;
 			
 		} else if(!SafetyMonitor.getInstn().isInWhitelist(username)) {
@@ -328,7 +328,7 @@ public class AppUI extends MainWindow {
 			return;
 		}
 		
-		if(SwingUtils.confirm("确认注销登陆�? ?")) {
+		if(SwingUtils.confirm("确认注销登陆吗 ?")) {
 			Browser.quit();
 			Browser.clearCookies();
 			
@@ -349,7 +349,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(moodBtn.isEnabled() == false) {
-					SwingUtils.warn("请先等待【空间说说】下载完�?...");
+					SwingUtils.warn("请先等待【空间说说】下载完成...");
 					
 				} else {
 					albumBtn.setEnabled(false);
@@ -385,7 +385,7 @@ public class AppUI extends MainWindow {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if(albumBtn.isEnabled() == false) {
-					SwingUtils.warn("请先等待【空间相册】下载完�?...");
+					SwingUtils.warn("请先等待【空间相册】下载完成...");
 					
 				} else {
 					moodBtn.setEnabled(false);
@@ -491,8 +491,8 @@ public class AppUI extends MainWindow {
 	 */
 	public void printVersionInfo() {
 		toConsole("**********************************************************");
-		toConsole(" [EXP (QQ:272629724)] 享有本软件的完全著作�?");
-		toConsole(" 未经许可严禁擅自用于商业用�?, 违者保留追究其法律责任的权�?");
+		toConsole(" [EXP (QQ:272629724)] 享有本软件的完全著作权");
+		toConsole(" 未经许可严禁擅自用于商业用途, 违者保留追究其法律责任的权利");
 		toConsole("**********************************************************");
 	}
 

@@ -12,8 +12,8 @@ import java.util.Set;
  * 含源宿、必经点标记的拓扑图
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-25
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-25
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -33,7 +33,7 @@ public class TopoGraph extends Graph {
 	
 	/**
 	 * 
-	 * @param order 必经点有�?(默认false, 即无�?)
+	 * @param order 必经点有序(默认false, 即无序)
 	 */
 	public TopoGraph(boolean order) {
 		this(order, false);
@@ -41,8 +41,8 @@ public class TopoGraph extends Graph {
 	
 	/**
 	 * 
-	 * @param order 必经点有�?(默认false, 即无�?)
-	 * @param arrow 有向�?(默认false, 即无向图)
+	 * @param order 必经点有序(默认false, 即无序)
+	 * @param arrow 有向图(默认false, 即无向图)
 	 */
 	public TopoGraph(boolean order, boolean arrow) {
 		super(arrow);
@@ -69,7 +69,7 @@ public class TopoGraph extends Graph {
 	}
 	
 	/**
-	 * 是否存在必经�?
+	 * 是否存在必经点
 	 * @return
 	 */
 	public boolean existInclusive() {
@@ -77,7 +77,7 @@ public class TopoGraph extends Graph {
 	}
 	
 	/**
-	 * 必经点是否有�?
+	 * 必经点是否有序
 	 * @return
 	 */
 	public boolean isOrderInclusive() {
@@ -85,7 +85,7 @@ public class TopoGraph extends Graph {
 	}
 	
 	/**
-	 * 必经点数�?
+	 * 必经点数量
 	 * @return
 	 */
 	public int inclusiveSize() {

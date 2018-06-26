@@ -17,8 +17,8 @@ import exp.libs.warp.ui.SwingUtils;
  * 界面工具类
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -123,7 +123,7 @@ public class UIUtils {
 	
 	public static void notityLive(int roomId) {
 		new _NoticeUI(roomId)._view();		// 右下角通知提示
-		Toolkit.getDefaultToolkit().beep();	// 蜂鸣音提�?
+		Toolkit.getDefaultToolkit().beep();	// 蜂鸣音提示
 	}
 	
 	public static void notityExit(String msg) {

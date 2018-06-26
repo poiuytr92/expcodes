@@ -23,36 +23,36 @@ import org.slf4j.LoggerFactory;
  *  
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public abstract class LoopThread extends Thread {
 	
-	/** 日志�? */
+	/** 日志器 */
 	protected final static Logger log = LoggerFactory.getLogger(LoopThread.class);
 	
 	/**
 	 * 线程默认休眠时间.
-	 * 一般不要修改这个�?,【默认�?1】可以保证在任何数据压下,线程可以用最大效能处理任�?,同时又不会永久占用CPU.
+	 * 一般不要修改这个值,【默认值1】可以保证在任何数据压下,线程可以用最大效能处理任务,同时又不会永久占用CPU.
 	 * 
-	 * 这个值若减少�?0,会导致CPU占用过频（甚�?100%�?.
+	 * 这个值若减少到0,会导致CPU占用过频（甚至100%）.
 	 * 这个值若增大,会导致线程处理任务能力下降（即会降低线程吞吐量）.
 	 * 
-	 * 除非机器资源（尤其CPU）很紧张，可考虑适当增加这个�?.
+	 * 除非机器资源（尤其CPU）很紧张，可考虑适当增加这个值.
 	 * -----------------------------------------------------------------------
 	 * 
-	 * 线程【吞吐量】计�?:
+	 * 线程【吞吐量】计算:
 	 * 	若线程每秒的【吞入量】为 N，则【吐出量】为  N/DEFAULT_SLEEP_MILLIS
-	 *  【吞吐比�? = 【吐出量�? / 【吞入量�?
-	 *  即当 DEFAULT_SLEEP_MILLIS=1 �?, 【吞吐比】为1, 此时线程性能达到峰�?.
+	 *  【吞吐比】 = 【吐出量】 / 【吞入量】
+	 *  即当 DEFAULT_SLEEP_MILLIS=1 时, 【吞吐比】为1, 此时线程性能达到峰值.
 	 */
 	protected final int DEFAULT_SLEEP_MILLIS = 1;
 	
 	/**
-	 * 线程默认加塞等待的最长时�?.
-	 * 超时则不再加塞等�?.
+	 * 线程默认加塞等待的最长时间.
+	 * 超时则不再加塞等待.
 	 */
 	protected final int DEFAULT_JOIN_MILLIS = 60000;
 	
@@ -77,12 +77,12 @@ public abstract class LoopThread extends Thread {
 	private volatile boolean isPause;
 	
 	/**
-	 * 暂停�?
+	 * 暂停锁
 	 */
 	private byte[] pauseLock;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param name 线程名称
 	 */
 	protected LoopThread(final String name) {
@@ -96,7 +96,7 @@ public abstract class LoopThread extends Thread {
 	
 	/**
 	 * 运行线程.
-	 * 固化为模板模�?.
+	 * 固化为模板模式.
 	 */
 	@Override
 	public final void run() {
@@ -164,12 +164,12 @@ public abstract class LoopThread extends Thread {
 	 */
 	public final void _stop() {
 		isStop = true;
-		_resume();	// 避免通知停止�?, 线程已陷入了阻塞状�?
+		_resume();	// 避免通知停止时, 线程已陷入了阻塞状态
 	}
 	
 	/**
 	 * 线程加塞.
-	 * 一般用于调用层在调用_stop()�?, 在调用_join()可确实等待线程真正停�?.
+	 * 一般用于调用层在调用_stop()后, 在调用_join()可确实等待线程真正停止.
 	 */
 	public final void _join() {
 		_join(DEFAULT_JOIN_MILLIS);
@@ -177,7 +177,7 @@ public abstract class LoopThread extends Thread {
 	
 	/**
 	 * 线程加塞.
-	 * 一般用于调用层在调用_stop()�?, 在调用_join()可确实等待线程真正停�?.
+	 * 一般用于调用层在调用_stop()后, 在调用_join()可确实等待线程真正停止.
 	 * @param millis 加塞等待超时(ms)
 	 */
 	public final void _join(int millis) {
@@ -249,8 +249,8 @@ public abstract class LoopThread extends Thread {
 	}
 	
 	/**
-	 * 检测线程是否正在运�?
-	 * @return true:�?; false:�?
+	 * 检测线程是否正在运行
+	 * @return true:是; false:否
 	 */
 	public final boolean isRun() {
 		return !isStop && !isPause;
@@ -258,7 +258,7 @@ public abstract class LoopThread extends Thread {
 	
 	/**
 	 * 检测线程是否已停止
-	 * @return true:�?; false:�?
+	 * @return true:是; false:否
 	 */
 	public final boolean isStop() {
 		return isStop;
@@ -266,7 +266,7 @@ public abstract class LoopThread extends Thread {
 	
 	/**
 	 * 父线程的启动方法.
-	 * 已遗�?.调用也不会有任何效果.
+	 * 已遗弃.调用也不会有任何效果.
 	 */
 	@Override
 	@Deprecated

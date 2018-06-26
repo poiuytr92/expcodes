@@ -17,8 +17,8 @@ import exp.libs.warp.net.tracert.bean.TracertBean;
  * 简单Tracert操作，返回Tracert字符串
  * </pre>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-14
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -112,10 +112,10 @@ public  class Tracert {
 	}
 
 	/**
-	 * 读取流信�?
+	 * 读取流信息
 	 * 
 	 * @param ins
-	 *            输入�?
+	 *            输入流
 	 * @param deal 消息返回处理方法接口
 	 * @return 读取所有行返回字符串buffer
 	 * @throws IOException
@@ -138,10 +138,10 @@ public  class Tracert {
 	}
 	
 	/**
-	 * 读取流信�?
+	 * 读取流信息
 	 * 
 	 * @param ins
-	 *            输入�?
+	 *            输入流
 	 * @return 读取所有行返回字符串buffer
 	 * @throws IOException
 	 *             异常
@@ -178,7 +178,7 @@ public  class Tracert {
 			}
 		});
 		System.out.println(str);
-		System.out.println("耗时�?" + trc.getPayTime());
+		System.out.println("耗时：" + trc.getPayTime());
 		
 		
 //		TracertReturnBean pr = Tracert.parserTracertReturn(str);
@@ -186,7 +186,7 @@ public  class Tracert {
 	}
 
 	/**
-	 * 把返回的报文转成bean�?
+	 * 把返回的报文转成bean类
 	 *
 	 * @param result tracert返回报文
 	 * @return
@@ -195,13 +195,13 @@ public  class Tracert {
 		TracertBean trb = null;
 
 		if (result.contains("traceroute to")
-				|| result.contains("Cannot handle")) { // linux命令�?
+				|| result.contains("Cannot handle")) { // linux命令行
 			trb = createBeanForLinuxEn(result);
 		} else if (result.contains("Tracing route")
-				|| result.contains("Unable to resolve target")) { // win en命令�?
+				|| result.contains("Unable to resolve target")) { // win en命令行
 			trb = createBeanForWinEn(result);
-		} else if (result.contains("通过最�?")
-				|| result.contains("无法解析目标")) { // win 中文命令�?
+		} else if (result.contains("通过最多")
+				|| result.contains("无法解析目标")) { // win 中文命令行
 			trb = createBeanForWinCn(result);
 		}
 //		trb.setHost(this.host);
@@ -211,10 +211,10 @@ public  class Tracert {
 	}
 	
 	//
-	//通过最�? 30 个跃点跟踪到 115.239.211.110 的路�?
+	//通过最多 30 个跃点跟踪到 115.239.211.110 的路由
 	//
 	//  1     4 ms     6 ms     4 ms  172.168.8.1 
-	//  2     *        *        *     请求超时�?
+	//  2     *        *        *     请求超时。
 	//  3     3 ms     2 ms     3 ms  183.62.48.225 
 	//  4     3 ms     2 ms     3 ms  58.62.111.249 
 	//  5    27 ms    85 ms    25 ms  183.56.31.17 
@@ -223,15 +223,15 @@ public  class Tracert {
 	//  8    25 ms    30 ms    24 ms  61.164.13.166 
 	//  9    51 ms    37 ms    59 ms  115.233.23.214 
 	// 10    53 ms    37 ms    37 ms  115.239.209.18 
-	// 11     *        *        *     请求超时�?
+	// 11     *        *        *     请求超时。
 	// 12     *        *       35 ms  115.239.211.110 
 	//
-	//跟踪完成�?
+	//跟踪完成。
 	//		
 	/**
 	 * 解析win中文报文
 	 *
-	 * @param result 解析字符�?
+	 * @param result 解析字符串
 	 * @return
 	 */
 	public TracertBean createBeanForWinCn(String result) {
@@ -248,9 +248,9 @@ public  class Tracert {
 			String ip = null;
 			for (int i = 0; i < len; i++) {
 				String line = datas[i];
-				//不处理空行和结果�?,还有首行
-				if (line.length() > 5 && !line.contains("通过最�?")
-						&& !line.contains("�?")) {
+				//不处理空行和结果行,还有首行
+				if (line.length() > 5 && !line.contains("通过最多")
+						&& !line.contains("到")) {
 					lineNum++;
 					if (line.contains("请求超时")) {
 						ip = lineNum + "";
@@ -301,7 +301,7 @@ public  class Tracert {
 	/**
 	 * 解析win英文报文
 	 *
-	 * @param result 解析字符�?
+	 * @param result 解析字符串
 	 * @return
 	 */
 	public TracertBean createBeanForWinEn(String result) {
@@ -318,7 +318,7 @@ public  class Tracert {
 			int lineNum = 0;
 			for (int i = 0; i < len; i++) {
 				String line = datas[i];
-				//不处理空行和结果�?
+				//不处理空行和结果行
 				if (line.length() > 15 && !line.contains("Tracing")
 						&& !line.contains("over")) {
 					lineNum++;
@@ -359,7 +359,7 @@ public  class Tracert {
 	/**
 	 * 解析Linux英文报文
 	 *
-	 * @param result 解析字符�?
+	 * @param result 解析字符串
 	 * @return
 	 */
 	public TracertBean createBeanForLinuxEn(String result) {
@@ -376,7 +376,7 @@ public  class Tracert {
 			String ip = null;
 			for (int i = 0; i < len; i++) {
 				String line = datas[i];
-				//不处理首�?
+				//不处理首行
 				if (!line.contains("traceroute to")) {
 					lineNum++;
 					if (line.contains("*")) {

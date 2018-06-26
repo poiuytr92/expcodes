@@ -13,8 +13,8 @@ import exp.libs.warp.thread.ThreadPool;
  * 	用于异步处理Socket客户端的登陆操作
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -41,16 +41,16 @@ class _ReserveThread implements Runnable {
 	
 	@Override
 	public void run() {
-		boolean isOk = clientProxy.login();	// 客户端注册（阻塞操作�?
+		boolean isOk = clientProxy.login();	// 客户端注册（阻塞操作）
 		if(isOk == true) {
-			clientProxys.add(clientProxy);	// 放入客户端会话队�?
-			execPool.execute(clientProxy);	// 放入客户端业务逻辑执行线程�?
+			clientProxys.add(clientProxy);	// 放入客户端会话队列
+			execPool.execute(clientProxy);	// 放入客户端业务逻辑执行线程池
 		} else {
 //			clientProxy.write("[ERROR] REFUSE TO LOGIN");
 			clientProxy.close();
 		}
 		
-		log.debug("Socket服务 [{}] 注册新会�? [{}] {}, 当前活动会话�?: [{}]", serverName, 
+		log.debug("Socket服务 [{}] 注册新会话 [{}] {}, 当前活动会话数: [{}]", serverName, 
 				clientProxy.ID(), (isOk ? "成功" : "失败"), clientProxys.size());
 	}
 	

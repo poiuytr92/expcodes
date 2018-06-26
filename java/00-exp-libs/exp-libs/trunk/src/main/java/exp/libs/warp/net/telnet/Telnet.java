@@ -22,8 +22,8 @@ import exp.libs.warp.net.tracert.bean.TracertBean;
  * new String(old.getBytes("ISO8859-1"),"GBK")。
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-02-14
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-14
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -57,10 +57,10 @@ public class Telnet {
 	public static String encoding = System
 			.getProperty("sun.jnu.encoding");
 	
-	/** 系统编码，中�?  */
+	/** 系统编码，中文  */
 	public final static String CONNECT_CHARACTER_CN_GBK = "zh_CN.gbk";
 	
-	/** 系统编码，英�?  */
+	/** 系统编码，英文  */
 	public final static String CONNECT_CHARACTER_EN_UTF8 = "en_US.UTF-8";
 	
 	/** 发送指令的字符编码 */
@@ -69,33 +69,33 @@ public class Telnet {
 	/** apache commons TelnetClinet对象  */
 	private TelnetClient telnet;
 	
-	/** 输入�?  */
+	/** 输入流  */
 	private InputStream in;
 	
-	/** 输出�?  */
+	/** 输出流  */
 	private PrintStream out;
 	
-	/** 结束判断�?  */
+	/** 结束判断符  */
 	private char prompt = PROMPT_DOLLAR_SIGN;
 	
-	/** 连接状�?  */
+	/** 连接状态  */
 	private boolean connectFlag = false;
 	
-	/** 连接超时，默�?5�?	 */
+	/** 连接超时，默认5秒	 */
 	private int connectTimeOut = 5000;
 
-	/** 返回超时，默�?5�?	 */
+	/** 返回超时，默认5秒	 */
 	private int soTimeOut = 5000;
 	
 	/**
-	 * 构造方�?
+	 * 构造方法
 	 */
 	public Telnet() {
 		telnet = new TelnetClient(PROTOCOL_VT100);
 	}
 	
 	/**
-	 * 构造方�?
+	 * 构造方法
 	 * @param termtype 终端类型,win访问linux请使用PROTOCOL_VT220
 	 */
 	public Telnet(String termtype) {
@@ -122,7 +122,7 @@ public class Telnet {
 			out = new PrintStream(telnet.getOutputStream());
 		} catch (SocketException e) {
 			connectFlag = false;
-			throw new IOException("ip地址或端口出�?", e);
+			throw new IOException("ip地址或端口出错", e);
 		} catch (IOException e) {
 			connectFlag = false;
 			throw new IOException("连接telnet的时候IO出现异常", e);
@@ -137,7 +137,7 @@ public class Telnet {
 	 *            
 	 * @param port 端口
 	 *            
-	 * @param user	用户�?
+	 * @param user	用户名
 	 *            
 	 * @param password	密码
 	 *            
@@ -157,7 +157,7 @@ public class Telnet {
 			connectFlag = login(user, password);
 		} catch (SocketException e) {
 			connectFlag = false;
-			throw new IOException("ip地址或端口出�?", e);
+			throw new IOException("ip地址或端口出错", e);
 		} catch (IOException e) {
 			connectFlag = false;
 			throw new IOException("连接telnet的时候IO出现异常", e);
@@ -224,7 +224,7 @@ public class Telnet {
 	/**
 	 * 登陆
 	 * 
-	 * @param user 用户�?
+	 * @param user 用户名
 	 * @param password 密码
 	 * @return boolean
 	 * @throws IOException 
@@ -241,7 +241,7 @@ public class Telnet {
 	/**
 	 * 读取返回信息,出错则返回null
 	 * 
-	 * @param pattern 结束�?
+	 * @param pattern 结束符
 	 * @return String
 	 * @throws IOException 
 	 */
@@ -254,7 +254,7 @@ public class Telnet {
 			while (true) {
 				sb.append(ch);
 				if (sb.length() > 1024 * 3) {
-					throw new IOException("返回信息过长，请检查是否用户名或密码错误，或者指令错�?");
+					throw new IOException("返回信息过长，请检查是否用户名或密码错误，或者指令错误");
 				}
 				if (ch == lastChar) {
 					if (sb.toString().endsWith(pattern)) {
@@ -291,7 +291,7 @@ public class Telnet {
 	/**
 	 * 去掉返回头尾
 	 * （头：发送的命令单独一行）
-	 * （尾：返回内容会多出一行命令输入行，例如[用户名@计算机名 ~]$ �?
+	 * （尾：返回内容会多出一行命令输入行，例如[用户名@计算机名 ~]$ ）
 	 * @param str  返回内容
 	 * @param command	发送的命令
 	 * @return String
@@ -299,11 +299,11 @@ public class Telnet {
 	private String replaceHeadAndTail(String str, String command) {
 //		String strTemp = null;
 		if (str != null) {
-			// 去掉‘回车’字符和‘空格加回车’字�?
+			// 去掉‘回车’字符和‘空格加回车’字符
 //			str = str.replaceAll(" \r", "");
 //			str = str.replaceAll("\r", "");
 //			String regex = 
-//			".*没有那个文件或目�?.*\n|.*没有那个文件或目�?.*|.*No such file or directory.*\n|.*No such file or directory.*";
+//			".*没有那个文件或目录.*\n|.*没有那个文件或目录.*|.*No such file or directory.*\n|.*No such file or directory.*";
 //			Pattern prn = Pattern.compile(regex);
 //			Matcher matcher = prn.matcher(str);
 //			if (matcher.find()) {
@@ -383,7 +383,7 @@ public class Telnet {
 	}
 
 	/**
-	 * 转换为超级用户登陆，并修改其结束�?
+	 * 转换为超级用户登陆，并修改其结束符
 	 * 
 	 * @param password 密码
 	 * @throws IOException 
@@ -397,9 +397,9 @@ public class Telnet {
 	}
 
 	/**
-	 * 发送指�?
+	 * 发送指令
 	 * 
-	 * @param value 发送的字符�?
+	 * @param value 发送的字符串
 	 */
 	private void write(String value) {
 		out.println(value);
@@ -408,7 +408,7 @@ public class Telnet {
 	}
 
 	/**
-	 * 主方法是拿来做测试用�?
+	 * 主方法是拿来做测试用的
 	 * 
 	 * @param args null
 	 */
@@ -423,13 +423,13 @@ public class Telnet {
 			/* 登录超时 */
 			telnet.setConnectTimeOut(3000);
 			
-			/* ping 和traceroute 等命令，要注意返回超时设�? */
+			/* ping 和traceroute 等命令，要注意返回超时设置 */
 			telnet.setSoTimeOut(15 * 1000);
 			
 			if (telnet.connect("172.168.10.95", 23, "username", "password")) {
 				System.out.println("连接成功");
 				
-				// col -b 去掉控制�?
+				// col -b 去掉控制符
 				String str = telnet.sendCommand(command);
 
 				System.out.println("开始~~~~~~~~~~~~~~~~~~~~~~~~~~~~");

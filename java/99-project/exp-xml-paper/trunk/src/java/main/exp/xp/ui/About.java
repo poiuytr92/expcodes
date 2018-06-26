@@ -18,8 +18,8 @@ import exp.xp.layout.VFlowLayout;
  * 版本界面
  * </PRE>
  * <B>PROJECT : </B> exp-xml-paper
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2015-06-01
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-06-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -42,11 +42,11 @@ public class About extends JFrame {
 	/** 界面初始高度 */
 	private int high = 180;
 	
-	/** 根面�? */
+	/** 根面板 */
 	private JPanel rootPanel;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	public About() {
 		super("About");
@@ -68,7 +68,7 @@ public class About extends JFrame {
 	}
 
 	/**
-	 * 初始化组�?
+	 * 初始化组件
 	 */
 	private void initComponents() {
 		JPanel iconPanel = new JPanel(new BorderLayout()); {

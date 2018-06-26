@@ -18,14 +18,14 @@ package exp.libs.envm;
  * </PRE>
  * 
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class HttpHead {
 
-	/** 键枚�? */
+	/** 键枚举 */
 	public class KEY {
 		
 		public final static String ACCEPT = "Accept";
@@ -53,27 +53,27 @@ public class HttpHead {
 		public final static String SET_COOKIE = "Set-Cookie";
 	}
 	
-	/** 值枚�? */
+	/** 值枚举 */
 	public class VAL {
 		
-		/** 浏览器代理头标识: 假装是Mac，可避免被反�? */
+		/** 浏览器代理头标识: 假装是Mac，可避免被反爬 */
 		public final static String USER_AGENT = 
 				"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36";
 //				"Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36";
 		
-		/** 请求GET的数据是text (需补充字符�?) */
+		/** 请求GET的数据是text (需补充字符集) */
 		public final static String GET_TXT = 
 				"text/xml; charset=";
 		
-		/** 请求POST的数据是xml (需补充字符�?) */
+		/** 请求POST的数据是xml (需补充字符集) */
 		public final static String POST_XML = 
 				"application/x-javascript text/xml; charset=";
 		
-		/** 请求POST的数据是json (需补充字符�?) */
+		/** 请求POST的数据是json (需补充字符集) */
 		public final static String POST_JSON = 
 				"application/x-javascript; charset=";
 		
-		/** 请求POST的数据是表单 (需补充字符�?) */
+		/** 请求POST的数据是表单 (需补充字符集) */
 		public final static String POST_FORM = 
 				"application/x-www-form-urlencoded; charset=";
 		

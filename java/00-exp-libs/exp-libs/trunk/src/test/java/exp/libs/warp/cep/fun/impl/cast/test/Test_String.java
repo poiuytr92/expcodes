@@ -13,8 +13,8 @@ import exp.libs.warp.cep.fun.impl.cast._String;
  * 	强制类型转换: 调用入参的toString方法得到其 String 类型
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -27,7 +27,7 @@ public class Test_String {
 	@Test
 	public void testCastString() throws Exception {
 		
-		//正确性测�?
+		//正确性测试
 		Object rst = CEPUtils.call(
 				_String.NAME, new Object[] {"-123456789"});
 		Assert.assertEquals("-123456789", rst);
@@ -61,7 +61,7 @@ public class Test_String {
 		}
 		
 		try {
-			CEPUtils.call("str(\" \r\n \t \0   \")");	//参数不能有换�?
+			CEPUtils.call("str(\" \r\n \t \0   \")");	//参数不能有换行
 			Assert.assertTrue(false);
 			
 		} catch (Exception e) {

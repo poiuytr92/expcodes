@@ -11,20 +11,20 @@ import java.util.Set;
  * </PRE>
  * 
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-06-09
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-06-08
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final class __QGraph {
 
-	/** 拓扑图规�?(节点�?) */
+	/** 拓扑图规模(节点数) */
 	private int size;
 	
-	/** 拓扑图源点编�? */
+	/** 拓扑图源点编号 */
 	private int srcId;
 	
-	/** 拓扑图终点编�? */
+	/** 拓扑图终点编号 */
 	private int snkId;
 	
 	/** 拓扑图的必经点集 */
@@ -37,23 +37,23 @@ final class __QGraph {
 	private int[][] dist;
 	
 	/**
-	 * 某节点到其他节点的平均距�? 
+	 * 某节点到其他节点的平均距离 
 	 *  avgDist[i] = ∑distances[i][0~size] / size
 	 */
 	private double[] avgDist;
 	
 	/**
-	 * 某节点到其他各个节点中的最大距�? 
+	 * 某节点到其他各个节点中的最大距离 
 	 * 	maxDist[i] =  max{distances[i][0~size]} 
 	 */
 	private int[] maxDist;
 	
 	/**
-	 * 构造函�?
-	 * @param dist 拓扑图节点间�?
-	 * @param srcId 拓扑图源点编�?
-	 * @param snkId 拓扑图终点编�?
-	 * @param includeIds 拓扑图必经点�?
+	 * 构造函数
+	 * @param dist 拓扑图节点间距
+	 * @param srcId 拓扑图源点编号
+	 * @param snkId 拓扑图终点编号
+	 * @param includeIds 拓扑图必经点集
 	 */
 	protected __QGraph(int[][] dist, int srcId, int snkId, 
 			Collection<Integer> includeIds) {
@@ -141,7 +141,7 @@ final class __QGraph {
 	
 	/**
 	 * 获取必经点集
-	 * @return 不包括源宿点的必经点�?
+	 * @return 不包括源宿点的必经点集
 	 */
 	protected int[] getIncludes() {
 		return _includeIds;

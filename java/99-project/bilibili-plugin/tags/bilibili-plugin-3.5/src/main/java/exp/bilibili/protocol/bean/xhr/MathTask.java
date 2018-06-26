@@ -9,8 +9,8 @@ import exp.libs.utils.format.JsonUtils;
  * 小学数学日常任务
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -20,7 +20,7 @@ public class MathTask {
 	
 	private final static int MAX_STEP = 9;
 	
-	/** 是否存在下一轮任�? */
+	/** 是否存在下一轮任务 */
 	private boolean existNext;
 	
 	private long bgnTime;
@@ -30,7 +30,7 @@ public class MathTask {
 	/** 当前任务轮数 */
 	private int curRound;
 	
-	/** 最大任务轮�? */
+	/** 最大任务轮数 */
 	private int maxRound;
 	
 	/** 当前轮的执行阶段:3min/6min/9min */

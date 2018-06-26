@@ -1,10 +1,15 @@
 package exp.libs.algorithm.dl.tensorflow;
 
 /**
- *
- * @author yangzhenggang
- * @since jdk1.7
- * @version 2017年4月17日 yangzhenggang
+ * <PRE>
+ * 运行状态
+ * </PRE>
+ * 
+ * <B>PROJECT : </B> exp-libs
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-04
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 class RunStats {
     

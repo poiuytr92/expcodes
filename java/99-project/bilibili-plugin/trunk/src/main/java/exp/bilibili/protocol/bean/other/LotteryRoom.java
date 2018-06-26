@@ -8,20 +8,20 @@ import exp.libs.utils.other.StrUtils;
  * 抽奖房间
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class LotteryRoom {
 
-	/** 抽奖房间�? */
+	/** 抽奖房间号 */
 	private int roomId;
 	
 	/** 抽奖编号 */
 	private String raffleId;
 	
-	/** 抽奖开始时�? */
+	/** 抽奖开始时间 */
 	private long startTime;
 	
 	/** 抽奖类型 */

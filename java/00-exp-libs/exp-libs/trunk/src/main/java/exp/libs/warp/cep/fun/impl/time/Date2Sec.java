@@ -14,8 +14,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	yyyy-MM-dd HH:mm:ss -> 纪元秒 转换
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -27,15 +27,15 @@ public class Date2Sec extends BaseFunction1 {
 	private static final long serialVersionUID = 8272123829108108343L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "date2sec";
 	
 	/**
-	 * yyyy-MM-dd HH:mm:ss -> 纪元�? 转换.
-	 * �?1个入参：
-	 * @param1 String/Date: yyyy-MM-dd HH:mm:ss格式的日�?
+	 * yyyy-MM-dd HH:mm:ss -> 纪元秒 转换.
+	 * 共1个入参：
+	 * @param1 String/Date: yyyy-MM-dd HH:mm:ss格式的日期
 	 * @return Long
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

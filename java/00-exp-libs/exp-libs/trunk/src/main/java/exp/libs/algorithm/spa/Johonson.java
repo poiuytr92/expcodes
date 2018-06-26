@@ -8,8 +8,8 @@ package exp.libs.algorithm.spa;
  * 空间复杂度: 
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-07-25
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-07-25
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -17,6 +17,6 @@ public class Johonson {
 
 	/**
 	 * 先使用BellmanFord算法，使所有的边的权重变为非负值，  
-	 * 然后运用dijkstra算法依次求出每个节点的最短路�?  
+	 * 然后运用dijkstra算法依次求出每个节点的最短路径  
 	 */
 }

@@ -18,8 +18,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.IHandler;
  * Socket公共配置继承自SocketBean类。
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -36,15 +36,15 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 	 */
 	private String[] readDelimiters;
 	
-	/** 业务处理�?  */
+	/** 业务处理器  */
 	private IHandler handler;
 
-	/** 过滤�? */
+	/** 过滤链 */
 	protected FilterChain filterChain;
 
 	/**
 	 * @param sb 从配置文件获取的配置实体
-	 * @param handler 业务处理�?
+	 * @param handler 业务处理器
 	 */
 	public NioConfig(SocketBean socketBean, IHandler handler) {
 		super(socketBean);
@@ -79,20 +79,20 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 	protected abstract void initFilterChain();
 	
 	/**
-	 * 添加过滤�?.
+	 * 添加过滤器.
 	 * 此方法只在服务端启动前调用才生效.
-	 * @param name 过滤器名�?
-	 * @param filter 过滤器接�?
+	 * @param name 过滤器名称
+	 * @param filter 过滤器接口
 	 */
 	public void addFilter(String name, IFilter filter) {
 		filterChain.addFilter(name, filter);
 	}
 	
 	/**
-	 * 移除过滤�?.
+	 * 移除过滤器.
 	 * 此方法只在服务端启动前调用才生效.
-	 * @param name 过滤器名�?
-	 * @param filter 过滤器接�?
+	 * @param name 过滤器名称
+	 * @param filter 过滤器接口
 	 */
 	public void delFilter(String name) {
 		filterChain.removeFilter(name);
@@ -105,13 +105,13 @@ public abstract class NioConfig extends SocketBean implements IConfig {
 		try {
 			filterChain.clean();
 		} catch(Exception e) {
-			log.error("清理过滤器资源失�?", e);
+			log.error("清理过滤器资源失败", e);
 		}
 	}
 	
 	/**
-	 * 获取业务逻辑处理�?
-	 * @return 业务逻辑处理�?
+	 * 获取业务逻辑处理器
+	 * @return 业务逻辑处理器
 	 */
 	public IHandler getHandler() {
 		return handler;

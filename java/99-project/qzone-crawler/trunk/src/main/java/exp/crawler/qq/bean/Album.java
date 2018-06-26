@@ -11,8 +11,8 @@ import exp.crawler.qq.utils.PicUtils;
  * 相册对象
  * </PRE>
  * <B>PROJECT : </B> qzone-crawler
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -33,11 +33,11 @@ public class Album {
 	/** 相册照片总数 */
 	private int totalPicNum;
 	
-	/** 相册照片�? */
+	/** 相册照片集 */
 	private List<Photo> photos;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param id
 	 * @param name
 	 * @param url

@@ -23,15 +23,15 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 底层负责通信的是SocketChannel，封装了会话级别的相关操作
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final class Session implements ISession {
 
 	/**
-	 * 日志�?
+	 * 日志器
 	 */
 	private final static Logger log = LoggerFactory.getLogger(Session.class);
 	
@@ -46,17 +46,17 @@ final class Session implements ISession {
 	private SocketChannel socketChannel;
 
 	/**
-	 * 会话状�?
+	 * 会话状态
 	 */
 	private States state;
 
 	/**
-	 * Socket服务端配�?
+	 * Socket服务端配置
 	 */
 	private NioClientConfig sockConf;
 
 	/**
-	 * 用于保存SocketChannel返回的数据的网络字节缓冲�?
+	 * 用于保存SocketChannel返回的数据的网络字节缓冲区
 	 */
 	private ByteBuffer channelBuffer;
 
@@ -66,12 +66,12 @@ final class Session implements ISession {
 	private SocketByteBuffer socketBuffer;
 
 	/**
-	 * 从socketBuffer中根据消息分隔符提取的消息队�?
+	 * 从socketBuffer中根据消息分隔符提取的消息队列
 	 */
 	private MsgQueue recvMsgQueue;
 
 	/**
-	 * 会话属性集�?
+	 * 会话属性集合
 	 */
 	private Map<String, Object> properties;
 	
@@ -81,9 +81,9 @@ final class Session implements ISession {
 	private long notifyDisconTime;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param socketChannel Socket通讯通道
-	 * @param sockConf 服务器配�?
+	 * @param sockConf 服务器配置
 	 */
 	protected Session(SocketChannel socketChannel, NioClientConfig sockConf) {
 		this.pack(socketChannel);
@@ -148,9 +148,9 @@ final class Session implements ISession {
 	}
 
 	/**
-	 * 获取远端机端�?
+	 * 获取远端机端口
 	 * 
-	 * @return 远端机端�?
+	 * @return 远端机端口
 	 * @throws Exception 异常
 	 */
 	@Override
@@ -160,8 +160,8 @@ final class Session implements ISession {
 	}
 	
 	/**
-	 * 获取会话状�?
-	 * @return 会话状�?
+	 * 获取会话状态
+	 * @return 会话状态
 	 */
 	@Override
 	public Object getState() {
@@ -172,10 +172,10 @@ final class Session implements ISession {
 	 * <pre>
 	 * 检查会话是否已经执行过验证操作
 	 * 
-	 * 会话�?3种状态：未验证，验证成功、验证失�?
+	 * 会话有3种状态：未验证，验证成功、验证失败
 	 * </pre>
 	 * 
-	 * @return 验证成功、验证失�?:true; 未验�?:false
+	 * @return 验证成功、验证失败:true; 未验证:false
 	 */
 	@Override
 	public boolean isVerfied() {
@@ -190,10 +190,10 @@ final class Session implements ISession {
 	 * <pre>
 	 * 检查会话是否通过验证
 	 * 
-	 * 会话�?3种状态：未验证，验证成功、验证失�?
+	 * 会话有3种状态：未验证，验证成功、验证失败
 	 * </pre>
 	 * 
-	 * @return  未验证、验证失�?:false; 其他会话状�?:true
+	 * @return  未验证、验证失败:false; 其他会话状态:true
 	 */
 	public boolean isPassVerfy() {
 		boolean isPassVerfy = false;
@@ -206,7 +206,7 @@ final class Session implements ISession {
 	
 	/**
 	 * <pre>
-	 * 设置会话验证状�?
+	 * 设置会话验证状态
 	 * </pre>
 	 * 
 	 * @param isVerfy true:验证成功; false:验证失败
@@ -229,8 +229,8 @@ final class Session implements ISession {
 	}
 	
 	/**
-	 * 检查会话是否发送异�?
-	 * @return 是否发送异�?
+	 * 检查会话是否发送异常
+	 * @return 是否发送异常
 	 */
 	public boolean isError() {
 		boolean isError = false;
@@ -274,8 +274,8 @@ final class Session implements ISession {
 	}
 	
 	/**
-	 * 获取会话属性集�?
-	 * @return 会话属性集�?
+	 * 获取会话属性集合
+	 * @return 会话属性集合
 	 */
 	@Override
 	public Map<String, Object> getProperties() {
@@ -292,9 +292,9 @@ final class Session implements ISession {
 
 	/**
 	 * <pre>
-	 * 向远端机发送消�?
+	 * 向远端机发送消息
 	 * 
-	 * 此方法会触发过滤链的onMessageSent事件，即onMessageSent的入�?
+	 * 此方法会触发过滤链的onMessageSent事件，即onMessageSent的入口
 	 * </pre>
 	 * 
 	 * @param msg 消息
@@ -310,16 +310,16 @@ final class Session implements ISession {
 		}
 		else {
 			log.debug("会话 [" + this.getName() + 
-					"] 存在异常、或等待关闭、或已关�?.无法发送消�?.");
+					"] 存在异常、或等待关闭、或已关闭.无法发送消息.");
 		}
 	}
 	
 	/**
 	 * <pre>
-	 * 向远端机发送最后一条消�?
+	 * 向远端机发送最后一条消息
 	 * 
-	 * 此方法会做两件事�?
-	 * 发送消�? + 调用closeNotify方法
+	 * 此方法会做两件事：
+	 * 发送消息 + 调用closeNotify方法
 	 * </pre>
 	 * 
 	 * @param msg 消息
@@ -327,21 +327,21 @@ final class Session implements ISession {
 	 */
 	@Override
 	public void writeClose(Object msg) throws Exception {
-		write(msg);		//发送最后一条命�?
-		closeNotify();	//通知远端机可以断开连接�?
+		write(msg);		//发送最后一条命令
+		closeNotify();	//通知远端机可以断开连接了
 	}
 
 	/**
 	 * <pre>
-	 * 通知断开连接，被动的断开连接方式�?
+	 * 通知断开连接，被动的断开连接方式。
 	 * 
-	 * 此方法会发送一条断开连接命令到远端机，通知远端机：本地已经准备好断开连接�?
-	 * 此时会话进入等待关闭状态，禁止再发送任何消息�?
-	 * 远端机收到断开连接命令后，会调用close方法断开连接（此机制已内嵌到过滤链链头）�?
-	 * 在本地检测到连接被断开后，会关闭会话并清空资源�?
+	 * 此方法会发送一条断开连接命令到远端机，通知远端机：本地已经准备好断开连接。
+	 * 此时会话进入等待关闭状态，禁止再发送任何消息。
+	 * 远端机收到断开连接命令后，会调用close方法断开连接（此机制已内嵌到过滤链链头）。
+	 * 在本地检测到连接被断开后，会关闭会话并清空资源。
 	 * 
-	 * 建议的关闭会话方法�?
-	 * 若双方没有定义断开连接命令，则在超时后会断开连接，期间只能接收消息，无法发送消息�?
+	 * 建议的关闭会话方法。
+	 * 若双方没有定义断开连接命令，则在超时后会断开连接，期间只能接收消息，无法发送消息。
 	 * </pre>
 	 */
 	@Override
@@ -351,17 +351,17 @@ final class Session implements ISession {
 		if(isWaitingToClose() == false) {
 			write(sockConf.getExitCmd());		//发送一条断开命令
 			this.notifyDisconTime = System.currentTimeMillis();
-			this.state = States.WAIT_TO_CLOSE;	//进入等待断开状�?
+			this.state = States.WAIT_TO_CLOSE;	//进入等待断开状态
 		}
 	}
 	
 	/**
 	 * <pre>
-	 * 马上断开连接�?
-	 * 关闭会话并清空资源，可能会导致未处理消息全部丢失�?
+	 * 马上断开连接。
+	 * 关闭会话并清空资源，可能会导致未处理消息全部丢失。
 	 * 
-	 * 此方法在连接发生异常时（如断开）会被动调用。但不建议的主动调用�?
-	 * 建议仅在收到远端机的断开命令时、或远端机超时时才主动调用�?
+	 * 此方法在连接发生异常时（如断开）会被动调用。但不建议的主动调用。
+	 * 建议仅在收到远端机的断开命令时、或远端机超时时才主动调用。
 	 * </pre>
 	 * 
 	 * @throws Exception 异常
@@ -387,9 +387,9 @@ final class Session implements ISession {
 	}
 
 	/**
-	 * 检查会话是否处于等待关闭状�?
+	 * 检查会话是否处于等待关闭状态
 	 * 
-	 * @return true:等待关闭; false:非等待关�?
+	 * @return true:等待关闭; false:非等待关闭
 	 */
 	@Override
 	public boolean isWaitingToClose() {
@@ -405,7 +405,7 @@ final class Session implements ISession {
 	 * 检查会话是否已关闭
 	 * </pre>
 	 * 
-	 * @return true:已关�?; false:未关�?
+	 * @return true:已关闭; false:未关闭
 	 */
 	@Override
 	public boolean isClosed() {
@@ -417,7 +417,7 @@ final class Session implements ISession {
 	}
 	
 	/**
-	 * 重载toString，返回会话名�?
+	 * 重载toString，返回会话名称
 	 * @return 会话名称
 	 */
 	@Override

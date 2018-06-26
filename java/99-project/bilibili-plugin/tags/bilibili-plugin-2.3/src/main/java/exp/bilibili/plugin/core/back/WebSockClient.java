@@ -18,8 +18,8 @@ import exp.libs.warp.thread.LoopThread;
  * websocket客户端
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -31,7 +31,7 @@ public class WebSockClient extends LoopThread {
 	
 	private final static Draft DRAFT = new Draft_6455();
 	
-	/** B站维持websocket的心跳间隔是30�? */
+	/** B站维持websocket的心跳间隔是30秒 */
 	private final static long HB_TIME = 30000;
 	
 	private final static long SLEEP_TIME = 1000;
@@ -59,7 +59,7 @@ public class WebSockClient extends LoopThread {
 	
 	@Override
 	protected void _before() {
-		log.info("{} 已启�?", getName());
+		log.info("{} 已启动", getName());
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class WebSockClient extends LoopThread {
 			ThreadUtils.tSleep(SLEEP_TIME);
 		}
 		
-		// B站的websocket需要每30秒发送一次心跳保�?
+		// B站的websocket需要每30秒发送一次心跳保活
 		if(loopCnt >= LOOP_CNT) {
 			loopCnt = 0;
 			session.send(Frame.C2S_HB());
@@ -81,7 +81,7 @@ public class WebSockClient extends LoopThread {
 	@Override
 	protected void _after() {
 		close();
-		log.info("{} 已停�?", getName());
+		log.info("{} 已停止", getName());
 	}
 	
 	private boolean conn() {
@@ -97,12 +97,12 @@ public class WebSockClient extends LoopThread {
 		try {
 			this.session = new WebSockSession(new URI(WS_URL), DRAFT, roomId, onlyStorm);
 			if(session.conn()) {
-				session.send(Frame.C2S_CONN(roomId));	// B站的websocket连接成功后需要马上发送连接请�?
+				session.send(Frame.C2S_CONN(roomId));	// B站的websocket连接成功后需要马上发送连接请求
 				isOk = true;
 				
 				log.info("连接/重连到直播间 [{}] 的websocket成功: [{}]", roomId, WS_URL);
 				if(onlyStorm == false) {
-					UIUtils.log("正在尝试入侵直播�? [", roomId, "] 后台...");
+					UIUtils.log("正在尝试入侵直播间 [", roomId, "] 后台...");
 				}
 			}
 		} catch (Exception e) {

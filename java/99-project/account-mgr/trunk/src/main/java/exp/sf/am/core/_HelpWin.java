@@ -39,7 +39,7 @@ public class _HelpWin extends PopChildWindow {
 					"<p>  ● 登记的帐密会 <b>加密存储</b> 以确保帐密存档安全", 
 					"<p>", 
 					"<p> 释放你的记忆~ 更方便地管理你的密码吧 O(∩_∩)O", 
-					"<p> <em> -- 版权所有: EXP</em>", 
+					"<p> <em> -- 版权所有: EXP (www.exp-blog.com)</em>", 
 					"<p>", 
 				"</body>", 
 			"</html>")

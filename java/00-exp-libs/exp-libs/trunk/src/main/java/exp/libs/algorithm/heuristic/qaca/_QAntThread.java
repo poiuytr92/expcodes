@@ -4,12 +4,12 @@ import java.util.concurrent.Callable;
 
 /**
  * <PRE>
- * 量子蚂蚁求解线程
+ * 量子蚂蚁行为执行线程
  * </PRE>
  * 
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-06-09
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-06-08
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

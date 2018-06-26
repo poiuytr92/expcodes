@@ -16,25 +16,25 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 记录会话最后一次接收/发送命令的时间
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class LatelyFilter extends BaseFilter {
 
 	/**
-	 * 日志�?
+	 * 日志器
 	 */
 	private final static Logger log = LoggerFactory.getLogger(LatelyFilter.class);
 	
 	/**
-	 * 最后一次接收命令时间的属�? 键�?
+	 * 最后一次接收命令时间的属性 键值
 	 */
 	private String lastRecvKey = "lastRecv";
 	
 	/**
-	 * 最后一次发送命令时间的属�? 键�?
+	 * 最后一次发送命令时间的属性 键值
 	 */
 	private String lastSendKey = "lastSend";
 	
@@ -42,7 +42,7 @@ public class LatelyFilter extends BaseFilter {
 	public void onSessionCreated(INextFilter nextFilter, ISession session)
 			throws Exception {
 				
-		// 添加session的属性键�?
+		// 添加session的属性键值
 		session.getProperties().put(lastRecvKey, new OpTime());
 		session.getProperties().put(lastSendKey, new OpTime());
 				
@@ -57,7 +57,7 @@ public class LatelyFilter extends BaseFilter {
 		OpTime lastRecvTime = (OpTime) property.get(lastRecvKey);
 
 		lastRecvTime.reFlash();
-		log.info("会话 [" + session + "] 最近一次接收消息时�? [" + 
+		log.info("会话 [" + session + "] 最近一次接收消息时间 [" + 
 				lastRecvTime.getTime() + "].");
 
 		nextFilter.onMessageReceived(session, msg);
@@ -71,15 +71,21 @@ public class LatelyFilter extends BaseFilter {
 		OpTime lastSendTime = (OpTime) property.get(lastSendKey);
 
 		lastSendTime.reFlash();
-		log.info("会话 [" + session + "] 最近一次发送消息时�? [" + 
+		log.info("会话 [" + session + "] 最近一次发送消息时间 [" + 
 				lastSendTime.getTime() + "].");
 		
 		preFilter.onMessageSent(session, msg);
 	}
 
 	/**
-	 * 内部类，用于刷新时间�?
-	 * @author 廖权�?
+	 * <PRE>
+	 * 内部类，用于刷新时间点
+	 * </PRE>
+	 * <B>PROJECT : </B> exp-libs
+	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+	 * @version   2015-12-27
+	 * @author    EXP: 272629724@qq.com
+	 * @since     jdk版本：jdk1.6
 	 */
 	private static class OpTime {
 
@@ -89,7 +95,7 @@ public class LatelyFilter extends BaseFilter {
 		private long time = -1;
 
 		/**
-		 * 刷新操作时间�?
+		 * 刷新操作时间点
 		 */
 		public synchronized void reFlash() {
 			this.time = System.currentTimeMillis();

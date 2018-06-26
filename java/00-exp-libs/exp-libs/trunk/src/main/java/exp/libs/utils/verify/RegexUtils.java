@@ -13,21 +13,21 @@ import exp.libs.utils.other.StrUtils;
  * 正则表达式工具
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class RegexUtils {
 
-	/** 私有化构造方�? */
+	/** 私有化构造方法 */
 	protected RegexUtils() {}
 	
 	/**
 	 * 完全匹配
 	 * @param str 被匹配字符串
-	 * @param regex 正则表达�?
-	 * @return true:完全匹配; false:非完全匹�?
+	 * @param regex 正则表达式
+	 * @return true:完全匹配; false:非完全匹配
 	 */
 	public static boolean matches(String str, String regex) {
 		boolean isMatch = false;
@@ -40,8 +40,8 @@ public class RegexUtils {
 	/**
 	 * 部分匹配
 	 * @param str 被匹配字符串
-	 * @param regex 正则表达�?
-	 * @return true:存在子串匹配; false:完全不匹�?
+	 * @param regex 正则表达式
+	 * @return true:存在子串匹配; false:完全不匹配
 	 */
 	public static boolean contains(String str, String regex) {
 		boolean isMatch = false;
@@ -58,8 +58,8 @@ public class RegexUtils {
 	 * 取首次匹配的group(1)
 	 * </PRE>
 	 * @param str 被匹配字符串
-	 * @param regex 正则表达�?(必须至少含有1个括�?)
-	 * @return 匹配�?(若无匹配返回"")
+	 * @param regex 正则表达式(必须至少含有1个括号)
+	 * @return 匹配值(若无匹配返回"")
 	 */
 	public static String findFirst(String str, String regex) {
 		return findGroup(str, regex, 1);
@@ -70,9 +70,9 @@ public class RegexUtils {
 	 * 取首次匹配的group(i)
 	 * </PRE>
 	 * @param str 被匹配字符串
-	 * @param regex 正则表达�?(必须含有若干个括�?)
-	 * @param groupId 第i个组�?(即括�?)
-	 * @return 匹配�?(若无匹配返回"")
+	 * @param regex 正则表达式(必须含有若干个括号)
+	 * @param groupId 第i个组号(即括号)
+	 * @return 匹配值(若无匹配返回"")
 	 */
 	public static String findGroup(String str, String regex, int groupId) {
 		String value = "";
@@ -92,7 +92,7 @@ public class RegexUtils {
 	 * 取首次匹配的group(0...n)
 	 * </PRE>
 	 * @param str 被匹配字符串
-	 * @param regex 正则表达�?
+	 * @param regex 正则表达式
 	 * @return 匹配值集(集合索引值对应正则式括号次序)
 	 */
 	public static List<String> findGroups(String str, String regex) {
@@ -116,7 +116,7 @@ public class RegexUtils {
 	 * 取每次匹配的group(1)
 	 * </PRE>
 	 * @param str 被匹配字符串
-	 * @param regex 正则表达�?(必须至少含有1个括�?)
+	 * @param regex 正则表达式(必须至少含有1个括号)
 	 * @return 匹配值集（集合大小即为匹配次数）
 	 */
 	public static List<String> findBrackets(String str, String regex) {
@@ -138,7 +138,7 @@ public class RegexUtils {
 	 * 取每次匹配的group(0...n)
 	 * </PRE>
 	 * @param str 被匹配字符串
-	 * @param regex 正则表达�?
+	 * @param regex 正则表达式
 	 * @return 匹配值集(行索引对应匹配次数，列索引值对应正则式括号次序)
 	 */
 	public static List<List<String>> findAll(String str, String regex) {

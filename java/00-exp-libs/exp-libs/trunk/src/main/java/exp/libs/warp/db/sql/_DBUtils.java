@@ -37,19 +37,9 @@ import exp.libs.warp.db.sql.bean.PdmColumn;
 import exp.libs.warp.db.sql.bean.PdmTable;
 import exp.libs.warp.tpl.Template;
 
-/**
- * <PRE>
- * 数据库工具.
- * </PRE>
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
- * @author    EXP: 272629724@qq.com
- * @since     jdk版本：jdk1.6
- */
 final class _DBUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(_DBUtils.class);
 	
 	private final static String TEMPLATE_DB_BEAN = "/exp/libs/warp/db/sql/db-bean.tpl";
@@ -90,7 +80,7 @@ final class _DBUtils {
 					isOk = true;
 					
 				} catch (Exception e) {
-					log.error("注册数据源到proxool连接池失�?.", e);
+					log.error("注册数据源到proxool连接池失败.", e);
 				}
 			}
 		}
@@ -120,11 +110,11 @@ final class _DBUtils {
 		return tpl.getContent();
 	}
 	
-	// FIXME: 当表中存在不同类型、但同名属性时，如 i_num �? s_num�? 则去除前缀后所生成的BEAN会报�?
+	// FIXME: 当表中存在不同类型、但同名属性时，如 i_num 和 s_num， 则去除前缀后所生成的BEAN会报错
 	/**
 	 * 从数据库中的表信息创建javabean
 	 * 
-	 * @param conn 数据库连�?
+	 * @param conn 数据库连接
 	 * @param packageName 导出实体类所在的包名,如：foo.bar.db.bean
 	 * @param outDirPath 导出实体类的路径,如：./src/main/java/foo/bar/db/bean
 	 * @param exportTableList 选择要导出的表，为空则导出所有表
@@ -146,7 +136,7 @@ final class _DBUtils {
 				continue;
 			}
 			
-			List<String> colNameList = new LinkedList<String>();//列名�?
+			List<String> colNameList = new LinkedList<String>();//列名表
 			Map<String, String> colTypeMap = 					//列名 - java类型
 					new HashMap<String, String>();
 			
@@ -170,7 +160,7 @@ final class _DBUtils {
 			String outData = createBeanData(tableName, colNameList, colTypeMap,
 					pkColumnName, packageName);
 			
-			//生成JavaBean类文�?
+			//生成JavaBean类文件
 			String outFilePath = StrUtils.concat(outDirPath, "/", 
 					getHumpTableName(tableName), ".java");
 			File outFile = FileUtils.createFile(outFilePath);
@@ -181,8 +171,8 @@ final class _DBUtils {
 	/**
 	 * 从PDM文件解析表信息创建javabean
 	 * 
-	 * @param pdmPath PDM文件所在路�?
-	 * @param conn 数据库连�?
+	 * @param pdmPath PDM文件所在路径
+	 * @param conn 数据库连接
 	 * @param packageName 导出实体类所在的包名,如：foo.bar.db.bean
 	 * @param outDirPath 导出实体类的路径,如：./src/main/java/foo/bar/db/bean
 	 * @param exportTableList 选择要导出的表，为空则导出所有表
@@ -227,7 +217,7 @@ final class _DBUtils {
 				continue;
 			}
 
-			List<String> colNameList = new LinkedList<String>();//列名�?
+			List<String> colNameList = new LinkedList<String>();//列名表
 			Map<String, String> colTypeMap = 					//列名 - java类型
 					new HashMap<String, String>();
 			
@@ -242,14 +232,14 @@ final class _DBUtils {
 				colTypeMap.put(colName, colType);
 			}
 			
-			//获取主键列名(FIXME:暂未有获取pdm文件主键的方�?)
+			//获取主键列名(FIXME:暂未有获取pdm文件主键的方法)
 			String pkColumnName = "";
 			
 			//生成JavaBean内容
 			String outData = createBeanData(tableName, colNameList, colTypeMap,
 					pkColumnName, packageName);
 			
-			//生成JavaBean类文�?
+			//生成JavaBean类文件
 			String outFilePath = StrUtils.concat(outDirPath, "/", 
 					getHumpTableName(tableName), ".java");
 			File outFile = FileUtils.createFile(outFilePath);
@@ -258,11 +248,11 @@ final class _DBUtils {
 	}
 	
 	/**
-	 * 根据模板生成JavaBean类的内容�?
+	 * 根据模板生成JavaBean类的内容。
 	 * 
 	 * @param tableName 表名
-	 * @param colNameList 表的列名�?
-	 * @param colTypeMap 每个列对应的类型映射�?
+	 * @param colNameList 表的列名集
+	 * @param colTypeMap 每个列对应的类型映射表
 	 * @param pkColumnName 主键列名,根据是否为空影响update语句
 	 * @param packageName 类所属的包名
 	 * @return bean类的内容
@@ -276,15 +266,15 @@ final class _DBUtils {
 		//取类模板
 		Template beanClazz = new Template(TEMPLATE_DB_BEAN, Charset.ISO);
 		
-		//设置日期
+		//设置年份和日期
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String date = sdf.format(new Date());
 		beanClazz.set("date", date);
 		
-		//设置包路�?
+		//设置包路径
 		beanClazz.set("package_path", packageName);
 		
-		//设置类名：去前缀的驼峰表�?
+		//设置类名：去前缀的驼峰表名
 		String clazzName = getHumpTableName(tableName);
 		beanClazz.set("class_name", clazzName);
 		
@@ -297,7 +287,7 @@ final class _DBUtils {
 			sb.append("    private ").append(colType).append(" ");
 			sb.append(humpColName).append(";\r\n\r\n");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? "\r\n"
+		sb.setLength(sb.length() - 2);	//移除最后一个 "\r\n"
 		beanClazz.set("class_member", sb.toString());
 
 		//设置getter setter
@@ -330,32 +320,32 @@ final class _DBUtils {
 			sb.append("        this.").append(lowHumpColName).append(" = ");
 			sb.append(lowHumpColName).append(";\r\n    }\r\n\r\n");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? "\r\n"
+		sb.setLength(sb.length() - 2);	//移除最后一个 "\r\n"
 		beanClazz.set("getter_and_setter", sb.toString());
 		
 		//设置表名
 		beanClazz.set("table_name", tableName);
 		
-		//设置insert�?
+		//设置insert列
 		sb.setLength(0);
 		for(String colName : colNameList) {
 			sb.append(colName).append(", ");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? ", "
+		sb.setLength(sb.length() - 2);	//移除最后一个 ", "
 		beanClazz.set("insert_column", sb.toString());
 		
-		//设置insert占位�?
+		//设置insert占位符
 		sb.setLength(0);
 		for(int i = 0; i < colNum; i++) {
 			sb.append("?, ");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? ", "
+		sb.setLength(sb.length() - 2);	//移除最后一个 ", "
 		beanClazz.set("insert_column_placeholder", sb.toString());
 		
-		//设置update�?
+		//设置update列
 		sb.setLength(0);
 		for(String colName : colNameList) {
-			if(colNum > 1 && //当只�?1列时，不做主键判�?
+			if(colNum > 1 && //当只有1列时，不做主键判断
 					pkColumnName != null && !"".equals(pkColumnName)) { //不update主键
 				if(pkColumnName.equals(colName)) {
 					continue;
@@ -363,10 +353,10 @@ final class _DBUtils {
 			}
 			sb.append(colName).append(" = ?, ");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? ", "
+		sb.setLength(sb.length() - 2);	//移除最后一个 ", "
 		beanClazz.set("update_column", sb.toString());
 		
-		//设置select�?
+		//设置select列
 		sb.setLength(0);
 		for(String colName : colNameList) {
 			String lowHumpColName = getHumpColumnName(colName, false);
@@ -374,7 +364,7 @@ final class _DBUtils {
 			sb.append(colName).append(" AS '");
 			sb.append(lowHumpColName).append("', ");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? ", "
+		sb.setLength(sb.length() - 2);	//移除最后一个 ", "
 		beanClazz.set("select_column", sb.toString());
 		
 		//设置 insert用于替换占位符的参数 
@@ -385,13 +375,13 @@ final class _DBUtils {
 			sb.append("                bean.get").append(uppHumpColName);
 			sb.append("(),\r\n");
 		}
-		sb.setLength(sb.length() - 3);	//移除最后一�? ",\r\n"
+		sb.setLength(sb.length() - 3);	//移除最后一个 ",\r\n"
 		beanClazz.set("insert_params", sb.toString());
 		
 		//设置 update用于替换占位符的参数 
 		sb.setLength(0);
 		for(String colName : colNameList) {
-			if(colNum > 1 && //当只�?1列时，不做主键判�?
+			if(colNum > 1 && //当只有1列时，不做主键判断
 					pkColumnName != null && !"".equals(pkColumnName)) { //不update主键
 				if(pkColumnName.equals(colName)) {
 					continue;
@@ -402,10 +392,10 @@ final class _DBUtils {
 			sb.append("                bean.get").append(uppHumpColName);
 			sb.append("(),\r\n");
 		}
-		sb.setLength(sb.length() - 3);	//移除最后一�? ",\r\n"
+		sb.setLength(sb.length() - 3);	//移除最后一个 ",\r\n"
 		beanClazz.set("update_params", sb.toString());
 		
-		//设置 获取单个数据库字段域名称的方�?
+		//设置 获取单个数据库字段域名称的方法
 		sb.setLength(0);
 		for(String colName : colNameList) {
 			sb.append("    /**\r\n");
@@ -417,7 +407,7 @@ final class _DBUtils {
 			sb.append("        return \"").append(colName);
 			sb.append("\";\r\n    }\r\n\r\n");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? "\r\n"
+		sb.setLength(sb.length() - 2);	//移除最后一个 "\r\n"
 		beanClazz.set("get_column_name", sb.toString());
 		
 		//设置 获取单个类成员变量名称的方法
@@ -433,7 +423,7 @@ final class _DBUtils {
 			sb.append("        return \"").append(lowHumpColName);
 			sb.append("\";\r\n    }\r\n\r\n");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? "\r\n"
+		sb.setLength(sb.length() - 2);	//移除最后一个 "\r\n"
 		beanClazz.set("get_java_name", sb.toString());
 		
 		//设置 获取所有数据库字段域名称的方法
@@ -441,16 +431,16 @@ final class _DBUtils {
 		for(String colName : colNameList) {
 			sb.append(colName).append(", ");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? ", "
+		sb.setLength(sb.length() - 2);	//移除最后一个 ", "
 		beanClazz.set("all_column_names", sb.toString());
 		
-		//设置 获取所有类成员变量名称的方�?
+		//设置 获取所有类成员变量名称的方法
 		sb.setLength(0);
 		for(String colName : colNameList) {
 			String lowHumpColName = getHumpColumnName(colName, false);
 			sb.append(lowHumpColName).append(", ");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? ", "
+		sb.setLength(sb.length() - 2);	//移除最后一个 ", "
 		beanClazz.set("all_java_names", sb.toString());
 		
 		//设置 toString方法
@@ -465,7 +455,7 @@ final class _DBUtils {
 			sb.append(uppHumpColName).append("()).append(\"\\r\\n\");");
 			sb.append("\r\n");
 		}
-		sb.setLength(sb.length() - 2);	//移除最后一�? "\r\n"
+		sb.setLength(sb.length() - 2);	//移除最后一个 "\r\n"
 		beanClazz.set("to_string", sb.toString());
 		
 		//模板占位符替换完成，返回替换内容
@@ -474,7 +464,7 @@ final class _DBUtils {
 	
 	@SuppressWarnings("unchecked")
 	private static void setColumnInfo(PdmTable pdmTable, Element eColumns) {
-		if (eColumns.getName().equals("Columns")) { // 获取列集�?
+		if (eColumns.getName().equals("Columns")) { // 获取列集合
 			List<PdmColumn> columnList = new ArrayList<PdmColumn>();
 
 			for (Iterator<Element> childColumns = eColumns.elementIterator(); 
@@ -498,17 +488,17 @@ final class _DBUtils {
 	 * 
 	 * 若处理完得到的名称是java关键字，则前面补 $
 	 * 
-	 * @param tableName 原表�?
-	 * @return 若表名不含下划线则原样返回；否则返回驼峰结构的表�?
+	 * @param tableName 原表名
+	 * @return 若表名不含下划线则原样返回；否则返回驼峰结构的表名
 	 */
 	private static String getHumpTableName(final String tableName) {
 		String tmpName = tableName;
 		
-		//含下划线的表�?
+		//含下划线的表名
 		if(tmpName != null && tmpName.contains("_")) {
 			StringBuffer sb = new StringBuffer();
 			
-			//若表名以下划线开头，剔除�?
+			//若表名以下划线开头，剔除之
 			while(tmpName.startsWith("_")) {
 				tmpName = tmpName.substring(1);
 			}
@@ -518,7 +508,7 @@ final class _DBUtils {
 				tmpName = tmpName.substring(0, tmpName.length() - 1);
 			}
 			
-			//若表名以下划线开头，剔除�?
+			//若表名以下划线开头，剔除之
 			while(tmpName.startsWith("_")) {
 				tmpName = tmpName.substring(1);
 			}
@@ -526,7 +516,7 @@ final class _DBUtils {
 			tmpName = tmpName.toLowerCase();
 			char[] charArray = tmpName.toCharArray();
 			
-			//表名首字母大�?
+			//表名首字母大写
 			sb.append((char) (charArray[0] - 32));
 			
 			//把下划线删除，其后的字母转为大写
@@ -543,7 +533,7 @@ final class _DBUtils {
 		//不含下划线的表名
 		} else {
 			
-			//首字母大�?
+			//首字母大写
 			tmpName = StrUtils.upperAtFirst(tmpName);
 		}
 		
@@ -561,28 +551,28 @@ final class _DBUtils {
 	 * 若处理完得到的名称是java关键字，则前面补 _
 	 * 
 	 * @param columnName 列名
-	 * @param firstUpper 开头字母是否需要大�?
+	 * @param firstUpper 开头字母是否需要大写
 	 * @return 驼峰形式列名
 	 */
 	private static String getHumpColumnName(
 			String columnName, boolean firstUpper) {
 		String tmpName = columnName;
 		
-		//含下划线的列�?
+		//含下划线的列名
 		if(tmpName != null && tmpName.contains("_")) {
 			StringBuilder sb = new StringBuilder();
 			
-			//若列名以下划开头，剔除�?
+			//若列名以下划开头，剔除之
 			while(tmpName.startsWith("_")) {
 				tmpName = tmpName.substring(1);
 			}
 			
-			//删除字段类型前缀 I_ �? S_ 、D_ �?
+			//删除字段类型前缀 I_ 、 S_ 、D_ 等
 			if(tmpName.charAt(1) == '_') {
 				tmpName = tmpName.substring(2);
 			}
 			
-			//若列名以下划结尾，剔除之，防止下面操作数组越�?
+			//若列名以下划结尾，剔除之，防止下面操作数组越界
 			while(tmpName.endsWith("_")) {
 				tmpName = tmpName.substring(0, tmpName.length() - 1);
 			}
@@ -590,11 +580,11 @@ final class _DBUtils {
 			tmpName = tmpName.toLowerCase();
 			char[] charArray = tmpName.toCharArray();
 			
-			//首字母大�?
+			//首字母大写
 			if(firstUpper == true) {
 				sb.append((char) (charArray[0] - 32));
 				
-			//首字母小�?
+			//首字母小写
 			} else {
 				sb.append(charArray[0]);	
 			}
@@ -675,7 +665,7 @@ final class _DBUtils {
 	}
 	
 	/**
-	 * 数据库的数据类型转换java的数据类�?
+	 * 数据库的数据类型转换java的数据类型
 	 * @param dbType
 	 * @return
 	 */

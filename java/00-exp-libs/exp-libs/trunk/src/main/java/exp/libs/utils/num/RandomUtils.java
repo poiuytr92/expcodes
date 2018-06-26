@@ -11,8 +11,8 @@ import exp.libs.utils.other.StrUtils;
  * 随机生成器工具.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2016-01-19
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2016-02-02
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

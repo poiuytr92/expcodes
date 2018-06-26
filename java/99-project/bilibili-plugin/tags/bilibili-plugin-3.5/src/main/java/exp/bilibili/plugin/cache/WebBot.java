@@ -29,20 +29,20 @@ import exp.libs.warp.thread.LoopThread;
  *   6.打印版权信息
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class WebBot extends LoopThread {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(WebBot.class);
 	
 	/** 单位时间：天 */
 	private final static long DAY_UNIT = 86400000L;
 	
-	/** 单位时间：小�? */
+	/** 单位时间：小时 */
 	private final static long HOUR_UNIT = 3600000L;
 	
 	/** 北京时间时差 */
@@ -54,10 +54,10 @@ public class WebBot extends LoopThread {
 	/** 轮询间隔 */
 	private final static long LOOP_TIME = 1000L;
 	
-	/** 定时触发事件的间�? */
+	/** 定时触发事件的间隔 */
 	private final static long EVENT_TIME = 3600000L;
 	
-	/** 定时触发事件的周�? */
+	/** 定时触发事件的周期 */
 	private final static int EVENT_LIMIT = (int) (EVENT_TIME / LOOP_TIME);
 	
 	/** 轮询次数 */
@@ -79,24 +79,24 @@ public class WebBot extends LoopThread {
 	private static volatile WebBot instance;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	private WebBot() {
-		super("Web行为模拟�?");
+		super("Web行为模拟器");
 		this.loopCnt = 0;
 		this.finCookies = new HashSet<BiliCookie>();
 		this.lastAddCookieTime = System.currentTimeMillis();
-		this.nextTaskTime = System.currentTimeMillis() + DELAY_TIME;	// 首次打开软件�?, 延迟一点时间再执行任务
+		this.nextTaskTime = System.currentTimeMillis() + DELAY_TIME;	// 首次打开软件时, 延迟一点时间再执行任务
 		initResetTaskTime();
 	}
 	
 	/**
-	 * 把上次任务重置时间初始化为当�?0�?
+	 * 把上次任务重置时间初始化为当天0点
 	 */
 	private void initResetTaskTime() {
 		resetTaskTime = System.currentTimeMillis() / DAY_UNIT * DAY_UNIT;
 		resetTaskTime -= HOUR_UNIT * HOUR_OFFSET;
-		resetTaskTime += DELAY_TIME;	// 避免临界点时�?, 后延一点时�?
+		resetTaskTime += DELAY_TIME;	// 避免临界点时差, 后延一点时间
 	}
 	
 	/**
@@ -116,7 +116,7 @@ public class WebBot extends LoopThread {
 
 	@Override
 	protected void _before() {
-		log.info("{} 已启�?", getName());
+		log.info("{} 已启动", getName());
 	}
 
 	@Override
@@ -132,17 +132,17 @@ public class WebBot extends LoopThread {
 	@Override
 	protected void _after() {
 		finCookies.clear();
-		log.info("{} 已停�?", getName());
+		log.info("{} 已停止", getName());
 	}
 	
 	private void toDo() {
 		
-		// 优先参与直播间抽�?
+		// 优先参与直播间抽奖
 		LotteryRoom room = RoomMgr.getInstn().getGiftRoom();
 		if(room != null) {
 			toLottery(room);
 			
-		// 无抽奖操作则做其他事�?
+		// 无抽奖操作则做其他事情
 		} else {
 			doDailyTasks();	// 执行每日任务
 			doEvent();		// 定时触发事件
@@ -150,14 +150,14 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 通过后端注入服务器参与抽�?
+	 * 通过后端注入服务器参与抽奖
 	 * @param room
 	 */
 	private void toLottery(LotteryRoom room) {
 		final int roomId = room.getRoomId();
 		final String raffleId = room.getRaffleId();
 		
-		// 小电视抽�?
+		// 小电视抽奖
 		if(room.TYPE() == LotteryType.TV) {
 			XHRSender.toTvLottery(roomId, raffleId);
 			
@@ -175,7 +175,7 @@ public class WebBot extends LoopThread {
 	 * 执行每日任务
 	 */
 	private void doDailyTasks() {
-		resetDailyTasks();	// 满足某个条件则重置每日任�?
+		resetDailyTasks();	// 满足某个条件则重置每日任务
 		
 		if(nextTaskTime > 0 && nextTaskTime <= System.currentTimeMillis()) {
 			Set<BiliCookie> cookies = CookiesMgr.ALL();
@@ -186,8 +186,8 @@ public class WebBot extends LoopThread {
 				
 				long max = -1;
 				max = NumUtils.max(XHRSender.toSign(cookie), max);		// 每日签到
-				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参�?
-					max = NumUtils.max(XHRSender.toAssn(cookie), max);		// 友爱�?
+				if(cookie.isBindTel()) {	// 仅绑定了手机的账号才能参与
+					max = NumUtils.max(XHRSender.toAssn(cookie), max);		// 友爱社
 					max = NumUtils.max(XHRSender.doMathTask(cookie), max);	// 小学数学
 				}
 				nextTaskTime = NumUtils.max(nextTaskTime, max);
@@ -200,7 +200,7 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 当cookies发生变化�?, 重置每日任务
+	 * 当cookies发生变化时, 重置每日任务
 	 */
 	private void resetDailyTasks() {
 		
@@ -211,7 +211,7 @@ public class WebBot extends LoopThread {
 			nextTaskTime = now;
 			finCookies.clear();
 			
-		// 当cookie发生变化�?, 仅重置任务时�?
+		// 当cookie发生变化时, 仅重置任务时间
 		} else if(nextTaskTime <= 0 && 
 				lastAddCookieTime != CookiesMgr.getInstn().getLastAddCookieTime()) {
 			lastAddCookieTime = CookiesMgr.getInstn().getLastAddCookieTime();
@@ -229,10 +229,10 @@ public class WebBot extends LoopThread {
 			toCapsule();	// 自动扭蛋
 			toAutoFeed();	// 自动投喂
 			takeFinishAchieve();	// 领取成就奖励
-			checkCookieExpires();	// 检查Cookie有效�?
+			checkCookieExpires();	// 检查Cookie有效期
 			
 			// 打印心跳
-			log.info("{} 活动�?...", getName());
+			log.info("{} 活动中...", getName());
 			UIUtils.printVersionInfo();
 		}
 	}
@@ -254,11 +254,11 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 自动投喂（仅小号�?
+	 * 自动投喂（仅小号）
 	 */
 	private void toAutoFeed() {
 		if(UIUtils.isAutoFeed() == false) {
-			return;	// 总开�?
+			return;	// 总开关
 		}
 		
 		int defaultRoomId = UIUtils.getFeedRoomId();
@@ -283,13 +283,13 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 检查Cookie有效�?
+	 * 检查Cookie有效期
 	 */
 	private void checkCookieExpires() {
-		final long WARN_MILLIS = 48 * HOUR_UNIT;	// 有效期到期前48小时开始警�?
+		final long WARN_MILLIS = 48 * HOUR_UNIT;	// 有效期到期前48小时开始警告
 		final long now = System.currentTimeMillis();
 		
-		// 检查小号的登陆有效�?
+		// 检查小号的登陆有效期
 		Set<BiliCookie> cookies = CookiesMgr.MINIs();
 		for(BiliCookie cookie : cookies) {
 			long expires = TimeUtils.toMillis(cookie.EXPIRES());
@@ -300,12 +300,12 @@ public class WebBot extends LoopThread {
 							(diff / HOUR_UNIT), "小时 (到期自动注销)");
 				} else {
 					CookiesMgr.getInstn().del(cookie);
-					UIUtils.log("小号 [", cookie.NICKNAME(), "] 登陆已过�?: 请重新登�?");
+					UIUtils.log("小号 [", cookie.NICKNAME(), "] 登陆已过期: 请重新登陆");
 				}
 			}
 		}
 		
-		// 检查主号和马甲号的登陆有效�?(取两者最小值作为共同有效期)
+		// 检查主号和马甲号的登陆有效期(取两者最小值作为共同有效期)
 		long mainExpires = TimeUtils.toMillis(CookiesMgr.MAIN().EXPIRES());
 		if(CookiesMgr.VEST() != BiliCookie.NULL) {
 			long vestExpires = TimeUtils.toMillis(CookiesMgr.VEST().EXPIRES());
@@ -315,10 +315,10 @@ public class WebBot extends LoopThread {
 		if(diff <= WARN_MILLIS) {
 			if(diff > HOUR_UNIT) {
 				UIUtils.log("主号 [", CookiesMgr.MAIN().NICKNAME(), "] 剩余的登陆有效期: ", 
-						(diff / HOUR_UNIT), "小时 (到期自动注销并退出程�?)");
+						(diff / HOUR_UNIT), "小时 (到期自动注销并退出程序)");
 				
 			} else {
-				String msg = StrUtils.concat("主号 [", CookiesMgr.MAIN().NICKNAME(), "] 登陆已过�?: 重启后请重新登陆");
+				String msg = StrUtils.concat("主号 [", CookiesMgr.MAIN().NICKNAME(), "] 登陆已过期: 重启后请重新登陆");
 				CookiesMgr.getInstn().del(CookiesMgr.MAIN());
 				CookiesMgr.getInstn().del(CookiesMgr.VEST());
 				

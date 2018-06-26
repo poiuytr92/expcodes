@@ -6,11 +6,14 @@ import org.apache.commons.pool.impl.GenericObjectPool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-/** 
- * @author 李军
- * @version 1.0
- * @datetime 2015-12-30 上午09:33:58 
+/**
  * 实现连接池
+ * 
+ * <B>PROJECT : </B> thrift
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-28
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class GenericConnectionProvider implements ConnectionProvider {
 	

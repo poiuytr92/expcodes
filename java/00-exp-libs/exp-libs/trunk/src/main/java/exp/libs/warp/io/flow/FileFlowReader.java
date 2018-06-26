@@ -27,40 +27,40 @@ import exp.libs.utils.other.StrUtils;
  *  ffr.close();
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class FileFlowReader {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(FileFlowReader.class);
 	
-	/** 所读入文件的默认编�? */
+	/** 所读入文件的默认编码 */
 	public final static String DEFAULT_ENCODE = Charset.ISO;
 	
 	/**
 	 * 所读入文件的默认[行终止符].
-	 * (默认为换行符, 但存在无换行符的流式文件需要另外指�?)
+	 * (默认为换行符, 但存在无换行符的流式文件需要另外指定)
 	 */
 	public final static char DEFAULT_LINE_END = Endline.CR;
 	
-	/** 所读入的文件对�? */
+	/** 所读入的文件对象 */
 	private File file;
 	
-	/** 所读入的文件编�? */
+	/** 所读入的文件编码 */
 	private String charset;
 	
 	/** 文件流读取器 */
 	private InputStreamReader fileReader;
 	
-	/** 标记是否存在可读的下一�? */
+	/** 标记是否存在可读的下一行 */
 	private boolean hasNextLine;
 	
 	/**
-	 * 构造函�?
-	 * @param file 待读入文�?
+	 * 构造函数
+	 * @param file 待读入文件
 	 * @param charset 待读入文件的编码
 	 */
 	public FileFlowReader(File file, String charset) {
@@ -68,7 +68,7 @@ public class FileFlowReader {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param filePath 待读入文件的路径
 	 * @param charset 待读入文件的编码
 	 */
@@ -78,8 +78,8 @@ public class FileFlowReader {
 	}
 	
 	/**
-	 * 初始�?
-	 * @param file 待读入文�?
+	 * 初始化
+	 * @param file 待读入文件
 	 * @param charset 待读入文件的编码
 	 */
 	private void init(File file, String charset) {
@@ -99,14 +99,14 @@ public class FileFlowReader {
 		}
 		
 		if(!hasNextLine) {
-			log.error("构造文�? [{}] 的流式读取器失败.", 
+			log.error("构造文件 [{}] 的流式读取器失败.", 
 					(file == null ? "null" : file.getPath()));
 		}
 	}
 	
 	/**
 	 * 测试编码是否合法.
-	 * @param charset 被测试编�?
+	 * @param charset 被测试编码
 	 * @return true:编码合法; false:编码非法
 	 */
 	private boolean testEncode(String charset) {
@@ -120,27 +120,27 @@ public class FileFlowReader {
 	}
 	
 	/**
-	 * 当前文件流是否存在下一行（以实际的[行终止符]标记[行]�?
-	 * @return true:存在; false:不存�?
+	 * 当前文件流是否存在下一行（以实际的[行终止符]标记[行]）
+	 * @return true:存在; false:不存在
 	 */
 	public boolean hasNextLine() {
 		return hasNextLine;
 	}
 	
 	/**
-	 * 读取当前行（使用[换行符]作为[行终止符]�?.
+	 * 读取当前行（使用[换行符]作为[行终止符]）.
 	 * 	此方法需配合 hasNextLine 方法使用（类似迭代器的使用方式）.
-	 * @return 当前行数�?
+	 * @return 当前行数据
 	 */
 	public String readLine() {
 		return readLine(DEFAULT_LINE_END);
 	}
 	
 	/**
-	 * 读取当前行（使用[自定义符号]作为[行终止符]�?.
+	 * 读取当前行（使用[自定义符号]作为[行终止符]）.
 	 * 	此方法需配合 hasNextLine 方法使用（类似迭代器的使用方式）.
-	 * @param lineEnd 自定义行终止�?
-	 * @return 当前行数�?
+	 * @param lineEnd 自定义行终止符
+	 * @return 当前行数据
 	 */
 	public String readLine(char lineEnd) {
 		if(!hasNextLine) {
@@ -163,7 +163,7 @@ public class FileFlowReader {
 				}
 			}
 		} catch (IOException e) {
-			log.error("流式读取文件 [{}] 过程中发生异�?.", file.getPath(), e);
+			log.error("流式读取文件 [{}] 过程中发生异常.", file.getPath(), e);
 			close();
 		}
 		return line.toString();

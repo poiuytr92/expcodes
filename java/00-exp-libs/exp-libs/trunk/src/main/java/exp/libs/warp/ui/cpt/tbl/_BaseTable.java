@@ -9,8 +9,8 @@ import java.util.Vector;
  * 表单组件
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -40,7 +40,7 @@ abstract class _BaseTable extends _TableRenderer {
 	}
 	
 	/**
-	 * 构造表�?
+	 * 构造表头
 	 * @param headers
 	 * @return
 	 */
@@ -91,7 +91,7 @@ abstract class _BaseTable extends _TableRenderer {
 	
 	/**
 	 * 刷新表单数据
-	 * @param newDatas 新数�?
+	 * @param newDatas 新数据
 	 */
 	protected void _reflash(Vector<Vector<String>> datas) {
 		if(datas != null) {

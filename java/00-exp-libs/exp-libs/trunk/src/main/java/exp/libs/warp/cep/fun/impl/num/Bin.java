@@ -11,8 +11,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	进制转换： 10 -> 2
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -24,15 +24,15 @@ public class Bin extends BaseFunction1 {
 	private static final long serialVersionUID = 8438227776608140579L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "bin";
 	
 	/**
-	 * 进制转换�? 10 -> 2
-	 * �?1个入参：
-	 * @param1 Integer/String:10进制数�?(字符�?)
+	 * 进制转换： 10 -> 2
+	 * 仅1个入参：
+	 * @param1 Integer/String:10进制数值(字符串)
 	 * @return String: 2进制数值字符串
 	 * @throws EvaluationException 若解析失败则抛出异常
 	 */

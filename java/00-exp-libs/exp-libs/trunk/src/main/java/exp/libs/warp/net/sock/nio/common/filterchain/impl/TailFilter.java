@@ -14,26 +14,26 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * onMessageSent事件则把消息返回到客户端
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 final class TailFilter extends BaseNextFilter {
 
 	/**
-	 * 业务处理�?
+	 * 业务处理器
 	 */
 	private IHandler handler;
 	
 	/**
-	 * 基本业务处理�?
+	 * 基本业务处理器
 	 */
 	private BaseHandler bHandler;
 
 	/**
-	 * 构造函�?
-	 * @param filter 业务过滤�?
+	 * 构造函数
+	 * @param filter 业务过滤器
 	 */
 	public TailFilter(IFilter filter) {
 		super(filter);
@@ -80,7 +80,7 @@ final class TailFilter extends BaseNextFilter {
 
 	/**
 	 * 设置业务处理器，并将其封装到基本业务处理器中，以在客户的操作前后附加服务器的默认操作
-	 * @param handler 业务处理�?
+	 * @param handler 业务处理器
 	 */
 	public void setHandler(IHandler handler) {
 		this.handler = handler;

@@ -10,30 +10,30 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
  * swing美瞳组件工具
  * </PRE>
  * <B>PROJECT : </B> ui-regex-debug
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2015-06-01
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-06-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public final class BeautyEyeUtils {
 
 	/**
-	 * 私有化构造函�?
+	 * 私有化构造函数
 	 */
 	private BeautyEyeUtils() {}
 	
 	/**
-	 * 初始�? BeautyEye
+	 * 初始化 BeautyEye
 	 */
 	public static void init() {
 		// 选择苹果风格边框类型
 		BeautyEyeLNFHelper.frameBorderStyle = 
 				BeautyEyeLNFHelper.FrameBorderStyle.translucencyAppleLike;
 		
-		// 隐藏右上角无效按钮【设置�?
+		// 隐藏右上角无效按钮【设置】
 	    UIManager.put("RootPane.setupButtonVisible", false);
 		
-	    // 初始�? BeautyEye 外观组件
+	    // 初始化 BeautyEye 外观组件
 		try {	
 			BeautyEyeLNFHelper.launchBeautyEyeLNF();
 		} catch (Exception e) {

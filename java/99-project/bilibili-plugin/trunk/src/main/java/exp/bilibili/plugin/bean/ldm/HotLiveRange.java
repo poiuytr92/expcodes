@@ -6,8 +6,8 @@ package exp.bilibili.plugin.bean.ldm;
  * 	用于节奏风暴扫描(每页30个房间)
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2018-03-21
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-03-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -18,7 +18,7 @@ public class HotLiveRange {
 	private int endPage;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param bgnPage 起始页码（包括）
 	 * @param endPage 终止页码（包括）
 	 */

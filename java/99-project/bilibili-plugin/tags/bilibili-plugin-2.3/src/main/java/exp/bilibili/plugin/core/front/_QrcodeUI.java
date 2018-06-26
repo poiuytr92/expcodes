@@ -22,8 +22,8 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * 登陆二维码展示界面
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -52,7 +52,7 @@ class _QrcodeUI extends PopChildWindow {
 	protected void initComponents(Object... args) {
 		this.imgLabel = new JLabel(new ImageIcon(TIPS_PATH));
 		this.timeLabel = new JLabel(FileUtils.isEmpty(COOKIE_DIR) ? 
-				"正在更新二维�?..." : "正在尝试自动登录...");
+				"正在更新二维码..." : "正在尝试自动登录...");
 		timeLabel.setForeground(Color.RED);
 	}
 
@@ -87,8 +87,8 @@ class _QrcodeUI extends PopChildWindow {
 		for(File file : files) {
 			if(file.getName().contains(LoginMgr.QRIMG_NAME)) {
 				
-				// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图�?
-				// 因为这种方式会因为图片路径没有变�?, 而不去更新缓�?, 导致显示的二维码一直不�?
+				// 注意: 这里不能通过new ImageIcon(ImgPath)的方式更新图片
+				// 因为这种方式会因为图片路径没有变化, 而不去更新缓存, 导致显示的二维码一直不变
 				Image img = Toolkit.getDefaultToolkit().createImage(file.getPath());
 				imgLabel.setIcon(new ImageIcon(img));
 				break;
@@ -98,11 +98,11 @@ class _QrcodeUI extends PopChildWindow {
 	
 	protected void updateTime(int time) {
 		if(time < 0) {
-			timeLabel.setText("正在更新二维�?...");
+			timeLabel.setText("正在更新二维码...");
 			
 		} else {
 			String sTime = StrUtils.leftPad(String.valueOf(time), '0', 3);
-			timeLabel.setText(StrUtils.concat("有效时间 : ", sTime, " �?"));
+			timeLabel.setText(StrUtils.concat("有效时间 : ", sTime, " 秒"));
 		}
 	}
 	

@@ -20,8 +20,8 @@ import exp.libs.warp.thread.ThreadPool;
  * 若有些事件不需要放入线程池处理，只需要继承这个类，重写那些事件的处理逻辑即可。
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -29,25 +29,25 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 
 	/**
 	 * <pre>
-	 * 构造函�?
+	 * 构造函数
 	 * 
-	 * 根据八二定律初始化线程池�?80%的任务可以由20%的核心线程处理）
+	 * 根据八二定律初始化线程池（80%的任务可以由20%的核心线程处理）
 	 * 作为基数的任务量 taskNum = maxClientLinkNum * maxEachClientTaskNum
 	 * 则：
-	 * 	核心线程�? corePoolSize = taskNum * 20%
+	 * 	核心线程数 corePoolSize = taskNum * 20%
 	 * 	最大线程数 maxPoolSize = taskNum
 	 * 	任务队列容量workQueueSize = taskNum * 80%
-	 * 计算值不�?1的，�?1处理�?
+	 * 计算值不足1的，按1处理。
 	 * 
-	 * 若maxClientLinkNum <= 0（不受限连接），则以maxClientLinkNum = 10时处�?
-	 * 若maxEachClientTaskNum <= 0（不受限连接），则以maxEachClientTaskNum = 10时处�?
+	 * 若maxClientLinkNum <= 0（不受限连接），则以maxClientLinkNum = 10时处理
+	 * 若maxEachClientTaskNum <= 0（不受限连接），则以maxEachClientTaskNum = 10时处理
 	 * 
-	 * 另外�?
+	 * 另外：
 	 * 	线程允许空闲时间keepAliveTime = 5s
-	 * 	对拒绝任务的处理策略为CallerRunsPolicy（重试添加当前的任务�?
+	 * 	对拒绝任务的处理策略为CallerRunsPolicy（重试添加当前的任务）
 	 * </pre>
-	 * @param maxClientLinkNum 最大客户端连接�?
-	 * @param maxEachClientTaskNum 允许单个客户端连续发送的任务�?
+	 * @param maxClientLinkNum 最大客户端连接数
+	 * @param maxEachClientTaskNum 允许单个客户端连续发送的任务数
 	 */
 	public ThreadPoolFilter(int maxClientLinkNum, int maxEachClientTaskNum) {
 		super(maxClientLinkNum * maxEachClientTaskNum);
@@ -55,16 +55,16 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 	
 	/**
 	 * <pre>
-	 * 构造函�?
+	 * 构造函数
 	 * 
 	 * 线程允许空闲时间keepAliveTime = 5s
-	 * 对拒绝任务的处理策略为CallerRunsPolicy（重试添加当前的任务�?
+	 * 对拒绝任务的处理策略为CallerRunsPolicy（重试添加当前的任务）
 	 * </pre>
 	 * 
-	 * @param corePoolSize 核心线程�?
-	 * @param maxPoolSize 线程池维护线程的最大数�?
-	 * @param keepAliveTime 线程池维护线程所允许的空闲时�?
-	 * @param workQueueSize 线程池所使用的任务队列容�?
+	 * @param corePoolSize 核心线程数
+	 * @param maxPoolSize 线程池维护线程的最大数量
+	 * @param keepAliveTime 线程池维护线程所允许的空闲时间
+	 * @param workQueueSize 线程池所使用的任务队列容量
 	 */
 	public ThreadPoolFilter(int corePoolSize, int maxPoolSize,
 			long keepAliveTime, int workQueueSize) {
@@ -73,15 +73,15 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 
 	/**
 	 * <pre>
-	 * 构造函�?
+	 * 构造函数
 	 * </pre>
 	 * 
-	 * @param corePoolSize 核心线程�?
-	 * @param maxPoolSize 线程池维护线程的最大数�?
-	 * @param keepAliveTime 线程池维护线程所允许的空闲时�?
+	 * @param corePoolSize 核心线程数
+	 * @param maxPoolSize 线程池维护线程的最大数量
+	 * @param keepAliveTime 线程池维护线程所允许的空闲时间
 	 * @param unit 线程池维护线程所允许的空闲时间的单位
-	 * @param workQueueSize 线程池所使用的任务队列容�?
-	 * @param reHandler 线程池对拒绝任务的处理策�?
+	 * @param workQueueSize 线程池所使用的任务队列容量
+	 * @param reHandler 线程池对拒绝任务的处理策略
 	 */
 	public ThreadPoolFilter(int corePoolSize, int maxPoolSize,
 			long keepAliveTime, TimeUnit unit, int workQueueSize,
@@ -102,7 +102,7 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 
 	/**
 	 * <pre>
-	 * 关闭线程池（会自动等待所有线程运行结束再关闭�?
+	 * 关闭线程池（会自动等待所有线程运行结束再关闭）
 	 * </pre>
 	 */
 	public void shutdown() {
@@ -113,10 +113,10 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 	 * <pre>
 	 * 会话验证事件
 	 * 
-	 * 使用过滤器事件执行器封装会话验证事件方法为线程，再交由线程池处理�?
+	 * 使用过滤器事件执行器封装会话验证事件方法为线程，再交由线程池处理。
 	 * </pre>
 	 * 
-	 * @param nextFilter 关系过滤�?
+	 * @param nextFilter 关系过滤器
 	 * @param session 会话
 	 * @throws Exception 异常
 	 */
@@ -133,10 +133,10 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 	 * <pre>
 	 * 消息接收事件
 	 * 
-	 * 使用过滤器事件执行器封装消息接收事件方法为线程，再交由线程池处理�?
+	 * 使用过滤器事件执行器封装消息接收事件方法为线程，再交由线程池处理。
 	 * </pre>
 	 * 
-	 * @param nextFilter 关系过滤�?
+	 * @param nextFilter 关系过滤器
 	 * @param session 会话
 	 * @param msg 消息
 	 * @throws Exception 异常
@@ -152,12 +152,12 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 
 	/**
 	 * <pre>
-	 * 消息发送事�?
+	 * 消息发送事件
 	 * 
-	 * 使用过滤器事件执行器封装发送事件方法为线程，再交由线程池处理�?
+	 * 使用过滤器事件执行器封装发送事件方法为线程，再交由线程池处理。
 	 * </pre>
 	 * 
-	 * @param preFilter 关系过滤�?
+	 * @param preFilter 关系过滤器
 	 * @param session 会话
 	 * @param msg 消息
 	 * @throws Exception 异常
@@ -175,10 +175,10 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 	 * <pre>
 	 * 异常处理事件
 	 * 
-	 * 使用过滤器事件执行器封装异常处理事件方法为线程，再交由线程池处理�?
+	 * 使用过滤器事件执行器封装异常处理事件方法为线程，再交由线程池处理。
 	 * </pre>
 	 * 
-	 * @param nextFilter 关系过滤�?
+	 * @param nextFilter 关系过滤器
 	 * @param session 会话
 	 * @param exception 异常
 	 */
@@ -193,7 +193,7 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 
 	/**
 	 * <pre>
-	 * 过滤器被移除时清空相关资�?
+	 * 过滤器被移除时清空相关资源
 	 * </pre>
 	 */
 	@Override
@@ -207,23 +207,23 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 	 * <pre>
 	 * 过滤器事件执行器
 	 * 
-	 * 可以把过滤器的事件触发方法封装为线程，以便提交线程池处理�?
+	 * 可以把过滤器的事件触发方法封装为线程，以便提交线程池处理。
 	 * </pre>	
 	 * <B>PROJECT : </B> exp-libs
-	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
-	 * @version   1.0 # 2015-12-27
+	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+	 * @version   2015-12-27
 	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6
 	 */
 	private class FilterEventExecutor implements Runnable {
 
 		/**
-		 * 关系过滤器接�?
+		 * 关系过滤器接口
 		 */
 		private INextFilter filter;
 
 		/**
-		 * 事件类型（根据事件类型选择封装的过滤器方法�?
+		 * 事件类型（根据事件类型选择封装的过滤器方法）
 		 */
 		private Event eventType;
 
@@ -244,11 +244,11 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 
 		/**
 		 * <pre>
-		 * 构造函�?
+		 * 构造函数
 		 * </pre>
 		 * 
-		 * @param filter 关系过滤器接�?
-		 * @param eventType 事件类型（根据事件类型选择封装的过滤器方法�?
+		 * @param filter 关系过滤器接口
+		 * @param eventType 事件类型（根据事件类型选择封装的过滤器方法）
 		 * @param session 会话
 		 * @param msg 消息
 		 * @param exception 异常
@@ -272,7 +272,7 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 		}
 
 		/**
-		 * 根据事件类型筛选执行方�?
+		 * 根据事件类型筛选执行方法
 		 */
 		private void executor() {
 

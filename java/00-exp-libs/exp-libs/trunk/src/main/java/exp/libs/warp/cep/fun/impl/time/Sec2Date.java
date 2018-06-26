@@ -13,8 +13,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	纪元秒 -> yyyy-MM-dd HH:mm:ss 转换
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -26,16 +26,16 @@ public class Sec2Date extends BaseFunction1 {
 	private static final long serialVersionUID = -4753226223001415587L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "sec2date";
 	
 	/**
-	 * 纪元�? -> yyyy-MM-dd HH:mm:ss 转换.
-	 * �?1个入参：
-	 * @param1 Long: 纪元�?
-	 * @return String: yyyy-MM-dd HH:mm:ss格式的日�?
+	 * 纪元秒 -> yyyy-MM-dd HH:mm:ss 转换.
+	 * 共1个入参：
+	 * @param1 Long: 纪元秒
+	 * @return String: yyyy-MM-dd HH:mm:ss格式的日期
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */
 	@Override

@@ -18,8 +18,8 @@ import exp.libs.utils.other.StrUtils;
  * 在线用户管理器
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -29,12 +29,12 @@ public class OnlineUserMgr {
 	private Set<String> users;
 	
 	/**
-	 * 当前监听直播间的房管列表(含主�?)
+	 * 当前监听直播间的房管列表(含主播)
 	 * uname -> uid
 	 */
 	private Map<String, String> managers;
 	
-	/** 被举报用�? -> 举报群众列表 */
+	/** 被举报用户 -> 举报群众列表 */
 	private Map<String, Set<String>> blacks;
 	
 	private static volatile OnlineUserMgr instance;
@@ -67,8 +67,8 @@ public class OnlineUserMgr {
 	}
 	
 	/**
-	 * 从当前直播间的在线用户列表中, 找到昵称最接近的用�?
-	 * @param unameKey 目标用户名的关键�?
+	 * 从当前直播间的在线用户列表中, 找到昵称最接近的用户
+	 * @param unameKey 目标用户名的关键字
 	 * @return 
 	 */
 	public List<String> findOnlineUser(String unameKey) {
@@ -114,9 +114,9 @@ public class OnlineUserMgr {
 	
 	/**
 	 * 举报
-	 * @param accuser 举报�?
+	 * @param accuser 举报人
 	 * @param accused 被举报人
-	 * @return 被举报次�?
+	 * @return 被举报次数
 	 */
 	public int complaint(String accuser, String accused) {
 		Set<String> accusers = blacks.get(accused);

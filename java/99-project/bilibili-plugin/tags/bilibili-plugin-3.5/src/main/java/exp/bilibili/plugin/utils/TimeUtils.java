@@ -10,8 +10,8 @@ import exp.libs.utils.other.StrUtils;
  * 时间工具类
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -35,7 +35,7 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	
 	/**
 	 * 获取本期时间
-	 * @return yyyyMM 格式, �?: 201801
+	 * @return yyyyMM 格式, 如: 201801
 	 */
 	public static int getCurPeriod() {
 		return NumUtils.toInt(TimeUtils.toStr(new Date(), "yyyyMM"), 0);
@@ -43,7 +43,7 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	
 	/**
 	 * 获取上期时间
-	 * @return yyyyMM 格式, �?: 201712
+	 * @return yyyyMM 格式, 如: 201712
 	 */
 	public static int getLastPeriod() {
 		return getLastPeriod(getCurPeriod());
@@ -51,8 +51,8 @@ public class TimeUtils extends exp.libs.utils.time.TimeUtils {
 	
 	/**
 	 * 获取上期时间
-	 * @param curPeriod 本期时间, yyyyMM 格式, �?: 201801
-	 * @return yyyyMM 格式, �?: 201712
+	 * @param curPeriod 本期时间, yyyyMM 格式, 如: 201801
+	 * @return yyyyMM 格式, 如: 201712
 	 */
 	public static int getLastPeriod(int curPeriod) {
 		int period = curPeriod;

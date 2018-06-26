@@ -7,8 +7,8 @@ import java.awt.TrayIcon;
  * 系统托盘 (使得程序出现在系统桌面右下角)
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2017-08-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-08-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -21,7 +21,7 @@ public class SystemTray {
 	private static volatile SystemTray instance;
 	
 	/**
-	 * 私有化构造函�?
+	 * 私有化构造函数
 	 */
 	private SystemTray() {
 		if(java.awt.SystemTray.isSupported()) {
@@ -45,8 +45,8 @@ public class SystemTray {
 	}
 	
 	/**
-	 * 检查当前系统是否支持系统托�?
-	 * @return true:支持; false:不支�?
+	 * 检查当前系统是否支持系统托盘
+	 * @return true:支持; false:不支持
 	 */
 	public static boolean isSupported() {
 		return java.awt.SystemTray.isSupported();
@@ -78,7 +78,7 @@ public class SystemTray {
 	}
 	
 	/**
-	 * 从系统托盘移除一个图�?
+	 * 从系统托盘移除一个图标
 	 * @param trayIcon 系统托盘图标
 	 * @return 是否移除成功
 	 */
@@ -87,7 +87,7 @@ public class SystemTray {
 	}
 	
 	/**
-	 * 从系统托盘移除一个图�?
+	 * 从系统托盘移除一个图标
 	 * @param trayIcon 系统托盘图标
 	 * @return 是否移除成功
 	 */

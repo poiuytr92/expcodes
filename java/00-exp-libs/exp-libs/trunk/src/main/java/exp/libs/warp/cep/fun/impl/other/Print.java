@@ -15,8 +15,8 @@ import exp.libs.utils.io.FileUtils;
  * 	调试配置时可用.
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -28,20 +28,20 @@ public class Print extends BaseFunctionN {
 	private static final long serialVersionUID = 2264898922532103999L;
 
 	/**
-	 * 建议函数�?,方便调用.
+	 * 建议函数名,方便调用.
 	 * 可不使用.
 	 */
 	public final static String NAME = "wait";
 	
 	/**
-	 * 打印消息�? 标准流、异常流、或文件.
-	 * �?2个入参：
+	 * 打印消息到 标准流、异常流、或文件.
+	 * 共2个入参：
 	 * @param1 String:需要打印的消息
 	 * @param2 String:
 	 * 	输出位置:
-	 * 	"out":标准�?
-	 * 	"err":异常�?(默认)
-	 * 	两者都不是:认为是文件路�?(若路径异常自动切回默认�?,并打印异常原�?)
+	 * 	"out":标准流
+	 * 	"err":异常流(默认)
+	 * 	两者都不是:认为是文件路径(若路径异常自动切回默认值,并打印异常原因)
 	 * @return Boolean: true:打印成功; false:打印失败
 	 * @throws EvaluationException 若执行失败则抛出异常
 	 */

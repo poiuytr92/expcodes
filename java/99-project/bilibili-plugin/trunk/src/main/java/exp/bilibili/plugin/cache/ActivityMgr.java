@@ -38,8 +38,8 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
  * 用户活跃度管理器.
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -61,34 +61,34 @@ public class ActivityMgr {
 		DS.setName(ENV_DB_PATH);
 	}
 	
-	/** 总活跃值每20W可兑换软件使用期1�? */
+	/** 总活跃值每20W可兑换软件使用期1天 */
 	public final static int DAY_UNIT = 200000;
 	
-	/** 触发个人私信的活跃值单�?(即每至少超过50W活跃值时发送一次私�?) */
+	/** 触发个人私信的活跃值单位(即每至少超过50W活跃值时发送一次私信) */
 	private final static int COST_UNIT = 500000;
 	
-	/** 打印活跃值时需要除掉的单位�?100�? */
+	/** 打印活跃值时需要除掉的单位（100） */
 	private final static int SHOW_UNIT = 100;
 	
-	/** 只针对此直播间计算活跃度, 在其他直播间的行为不计算活跃�?. */
+	/** 只针对此直播间计算活跃度, 在其他直播间的行为不计算活跃度. */
 	public final static int ROOM_ID = RoomMgr.getInstn().getRealRoomId(
 			Config.getInstn().ACTIVITY_ROOM_ID());
 	
-	/** 特殊用户: 所有用户的活跃值累�? */
+	/** 特殊用户: 所有用户的活跃值累计 */
 	public final static String UNAME_SUM_COST = "ACTIVE_SUM_COST";
 	
 	/** 特殊用户的ID */
 	public final static String UID_SUM_COST = "0";
 	
 	/**
-	 * 用户�?
+	 * 用户集
 	 *  UID -> username
 	 */
 	private Map<String, String> users;
 	
 	/**
-	 * 用户活跃�?:
-	 *  UID -> 累计活跃�?
+	 * 用户活跃度:
+	 *  UID -> 累计活跃度
 	 */
 	private Map<String, Integer> costs;
 	
@@ -98,10 +98,10 @@ public class ActivityMgr {
 	/** 本期期数 */
 	private int curPeriod;
 	
-	/** 上期所有用户的活跃值累�? */
+	/** 上期所有用户的活跃值累计 */
 	private int lastSumCost;
 	
-	/** 本期所有用户的活跃值累�? */
+	/** 本期所有用户的活跃值累计 */
 	private int curSumCost;
 	
 	private boolean isInit;
@@ -132,7 +132,7 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 初始�?
+	 * 初始化
 	 */
 	public boolean init() {
 		if(isInit == false) {
@@ -175,7 +175,7 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 读取历史活跃�?
+	 * 读取历史活跃值
 	 */
 	private void read() {
 		int sum = 0;
@@ -193,7 +193,7 @@ public class ActivityMgr {
 		curSumCost = (curSumCost <= 0 ? sum : curSumCost);
 		lastSumCost = _queryLastPeriodData();
 		
-		log.info("已读取直播间 [{}] 的历史活跃�?", ROOM_ID);
+		log.info("已读取直播间 [{}] 的历史活跃值", ROOM_ID);
 	}
 	
 	private List<TActivity> _queryCurPeriodData() {
@@ -217,7 +217,7 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 更新保存活跃�?
+	 * 更新保存活跃值
 	 */
 	public void save() {
 		if(users.size() <= 0 || costs.size() <= 0) {
@@ -244,7 +244,7 @@ public class ActivityMgr {
 		
 		boolean isOk = _truncate();
 		isOk &= _saveAll(activitys);
-		log.info("更新直播�? [{}] 的活跃值{}", ROOM_ID, (isOk ? "成功" : "失败"));
+		log.info("更新直播间 [{}] 的活跃值{}", ROOM_ID, (isOk ? "成功" : "失败"));
 		
 		users.clear();
 		costs.clear();
@@ -270,7 +270,7 @@ public class ActivityMgr {
 			conn.commit();
 			
 		} catch(Exception e) {
-			log.error("更新直播�? [{}] 的活跃值异�?", ROOM_ID, e);
+			log.error("更新直播间 [{}] 的活跃值异常", ROOM_ID, e);
 			isOk = false;
 		}
 		
@@ -281,14 +281,14 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 刷新活跃值到数据�?
+	 * 刷新活跃值到数据库
 	 */
 	public void reflash() {
 		if(isRecord() == true) {
 			save();
 			
 			lastPeriod = TimeUtils.getLastPeriod();
-			if(lastPeriod == curPeriod) {	// 已跨�?
+			if(lastPeriod == curPeriod) {	// 已跨月
 				lastSumCost = curSumCost;
 				curSumCost = 0;
 			}
@@ -299,8 +299,8 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 是否记录活跃�?
-	 *  当且仅当是管理员身份, 且在监听特定直播间时才记�?
+	 * 是否记录活跃值
+	 *  当且仅当是管理员身份, 且在监听特定直播间时才记录
 	 * @return
 	 */
 	private boolean isRecord() {
@@ -315,7 +315,7 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 增加的活跃值（弹幕�?
+	 * 增加的活跃值（弹幕）
 	 * @param gift 弹幕信息
 	 */
 	public void add(ChatMsg gift) {
@@ -329,7 +329,7 @@ public class ActivityMgr {
 	}
 
 	/**
-	 * 增加的活跃值（投喂�?
+	 * 增加的活跃值（投喂）
 	 * @param gift 投喂信息
 	 */
 	public void add(SendGift gift) {
@@ -343,7 +343,7 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 增加的活跃值（船员�?
+	 * 增加的活跃值（船员）
 	 * @param gift 船员信息
 	 */
 	public void add(GuardBuy gift) {
@@ -357,9 +357,9 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 增加活跃�?(达到一定活跃值则发送私�?)
+	 * 增加活跃值(达到一定活跃值则发送私信)
 	 * @param uid 用户ID
-	 * @param cost 活跃�?
+	 * @param cost 活跃值
 	 */
 	private void add(String uid, int cost) {
 		if(cost <= 0) {
@@ -372,17 +372,17 @@ public class ActivityMgr {
 		costs.put(uid, after);
 		curSumCost += cost;
 		
-		if(UIUtils.isLogined() && // 登陆后才能发送私�?
-				ChatMgr.getInstn().isAutoThankYou() && // 开启了答谢�?
+		if(UIUtils.isLogined() && // 登陆后才能发送私信
+				ChatMgr.getInstn().isAutoThankYou() && // 开启了答谢姬
 				(before % COST_UNIT + cost) >= COST_UNIT) {
 			String msg = StrUtils.concat("恭喜您本月在 [", Config.getInstn().ACTIVITY_ROOM_ID(), 
-					"] 直播间的活跃度达�? [", after, "] O(∩_�?)O 谢谢资瓷 ~");
+					"] 直播间的活跃度达到 [", after, "] O(∩_∩)O 谢谢资瓷 ~");
 			XHRSender.sendPM(uid, msg);
 		}
 	}
 	
 	/**
-	 * 计算活跃�?
+	 * 计算活跃值
 	 * @param giftName
 	 * @param num
 	 * @return
@@ -392,7 +392,7 @@ public class ActivityMgr {
 	}
 	
 	/**
-	 * 在版聊区显示活跃值（为实际�?/100�?
+	 * 在版聊区显示活跃值（为实际值/100）
 	 * @param giftName
 	 * @param num
 	 * @return

@@ -15,7 +15,7 @@ import net.sf.json.JSONObject;
 	  "msg": "乘客 :?期货大佬:? 成功购买5311231房间总督船票1张，欢迎登船！"
 	}
  * </PRE>
- * @version   1.0 2017-12-17
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

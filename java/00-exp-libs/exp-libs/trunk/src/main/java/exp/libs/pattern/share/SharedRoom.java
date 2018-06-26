@@ -13,30 +13,30 @@ import java.util.concurrent.TimeUnit;
  * 
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 class SharedRoom<O> extends ArrayBlockingQueue<O> {
 
-	/** 序列化标�? */
+	/** 序列化标识 */
 	private static final long serialVersionUID = 5794323087794769975L;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 */
 	public SharedRoom() {
 		super(1, 	// 由于模拟临界资源，因此空间永远是1. 
-			true);	// 大小�?1的空�?, 是否FIFO也无所�?.
+			true);	// 大小为1的空间, 是否FIFO也无所谓.
 	}
 	
 	/**
-	 * 往临界资源放入一个资源对�?.
-	 * （非阻塞操作�?
+	 * 往临界资源放入一个资源对象.
+	 * （非阻塞操作）
 	 * 
 	 * @param o 资源对象
-	 * @return 是否放入成功 （若队列已满则马上返回false�?
+	 * @return 是否放入成功 （若队列已满则马上返回false）
 	 */
 	public final boolean add(O o) {
 		boolean isAdd = false;
@@ -47,10 +47,10 @@ class SharedRoom<O> extends ArrayBlockingQueue<O> {
 	}
 	
 	/**
-	 * 从临界资源取出一个资源对�?.
-	 * （非阻塞等待�?
+	 * 从临界资源取出一个资源对象.
+	 * （非阻塞等待）
 	 * 
-	 * @return 资源对象（若无资源马上返回null�?
+	 * @return 资源对象（若无资源马上返回null）
 	 */
 	public final O get() {
 		return super.poll();
@@ -58,7 +58,7 @@ class SharedRoom<O> extends ArrayBlockingQueue<O> {
 	
 	
 	//////////////////////////////////////////////////////////////
-	// 为了控制队列中的对象，禁止基类提供的其他增减对象的方�?  ///////////////////
+	// 为了控制队列中的对象，禁止基类提供的其他增减对象的方法  ///////////////////
 	//////////////////////////////////////////////////////////////
 
 	/**
@@ -95,7 +95,7 @@ class SharedRoom<O> extends ArrayBlockingQueue<O> {
 	}
 
 	/**
-	 * 不执行任何处�?
+	 * 不执行任何处理
 	 */
 	@Override
 	@Deprecated

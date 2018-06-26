@@ -24,22 +24,22 @@ import exp.libs.utils.other.StrUtils;
  * 数据格式转换工具.
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class ESCUtils {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(ESCUtils.class);
 	
-	/** 私有化构造函�?. */
+	/** 私有化构造函数. */
 	protected ESCUtils() {}
 
 	/**
 	 * <PRE>
-	 * 把字符串中的特殊字符转义为xml的转义字�?.
+	 * 把字符串中的特殊字符转义为xml的转义字符.
 	 * 
 	 * [&] 转义 [&amp;] 意为 [地址符].
 	 * [<] 转义 [&lt;] 意为 [小于].
@@ -51,7 +51,7 @@ public class ESCUtils {
 	 * [®] 转义 [&reg;] 意为 [注册符].
 	 * 
 	 * @param str 原字符串 
-	 * @return 转义后的字符�?
+	 * @return 转义后的字符串
 	 */
 	public static String toXmlESC(final String str) {
 		String xml = "";
@@ -71,14 +71,14 @@ public class ESCUtils {
 	/**
 	 * 把含有xml转义字符的字符串还原成普通字符串
 	 * 
-	 * [&amp;] 反转�? [&] 意为 [地址符].
-	 * [&lt;] 反转�? [<] 意为 [小于].
-	 * [&gt;] 反转�? [>] 意为 [大于号].
-	 * [&apos;] 反转�? ['] 意为 [单引号].
-	 * [&quot;] 反转�? ["] 意为 [双引号].
-	 * [&nbsp;] 反转�? [ ] 意为 [空格].
-	 * [&copy;] 反转�? [©] 意为 [版权符].
-	 * [&reg;] 反转�? [®] 意为 [注册符].
+	 * [&amp;] 反转义 [&] 意为 [地址符].
+	 * [&lt;] 反转义 [<] 意为 [小于].
+	 * [&gt;] 反转义 [>] 意为 [大于号].
+	 * [&apos;] 反转义 ['] 意为 [单引号].
+	 * [&quot;] 反转义 ["] 意为 [双引号].
+	 * [&nbsp;] 反转义 [ ] 意为 [空格].
+	 * [&copy;] 反转义 [©] 意为 [版权符].
+	 * [&reg;] 反转义 [®] 意为 [注册符].
 	 * </PRE>
 	 * 
 	 * @param 含有xml转义字符的字符串
@@ -134,7 +134,7 @@ public class ESCUtils {
 	
 	/**
 	 * <PRE>
-	 * 为正则表达式中所有特殊字符添加前置反斜杠, 使其转义为普通字�?
+	 * 为正则表达式中所有特殊字符添加前置反斜杠, 使其转义为普通字符
 	 * 
 	 * 	[ \ ] -> [ \\ ]
 	 * 	[ ( ] -> [ \( ]
@@ -152,8 +152,8 @@ public class ESCUtils {
 	 *  [ $ ] -> [ \$ ]
 	 * </PRE>
 	 * 
-	 * @param regex 正则表达�?
-	 * @return 转义后的正则表达�?
+	 * @param regex 正则表达式
+	 * @return 转义后的正则表达式
 	 */
 	public static String toRegexESC(final String regex) {
 		String str = "";
@@ -179,7 +179,7 @@ public class ESCUtils {
 	
 	/**
 	 * <PRE>
-	 * 为json串中所有特殊字符添加前置反斜杠, 使其转义为普通字�?, 同时删除所有空字符
+	 * 为json串中所有特殊字符添加前置反斜杠, 使其转义为普通字符, 同时删除所有空字符
 	 * 
 	 * 	[ \ ] -> [ \\ ]
 	 * 	[ , ] -> [ \, ]
@@ -211,12 +211,12 @@ public class ESCUtils {
 	
 	/**
 	 * <PRE>
-	 * 把一个对象转换成json字符�?.
+	 * 把一个对象转换成json字符串.
 	 * 
-	 * 	此方法仅适用于简单对象的转换, �? String、Integer�? Map<?, ?>等， 且Map对象不允许嵌�?.
+	 * 	此方法仅适用于简单对象的转换, 如 String、Integer、 Map<?, ?>等， 且Map对象不允许嵌套.
 	 * <PRE>
-	 * @param obj 简单对�?
-	 * @return 若转换失败返�?""
+	 * @param obj 简单对象
+	 * @return 若转换失败返回""
 	 */
 	@SuppressWarnings("deprecation")
 	public static String toJson(Object obj) {
@@ -240,21 +240,21 @@ public class ESCUtils {
 		try {
 			writer.close();
 		} catch (IOException e) {
-			log.error("转换JSON异常: 关闭输入流失�?.", e);
+			log.error("转换JSON异常: 关闭输入流失败.", e);
 		}
 		return json;
 	}
 	
 	/**
 	 * <PRE>
-	 * 把一个对象转换成json字符�?.
-	 * 若对象中存在日期属�?, 则使用指定日期格式转�?.
+	 * 把一个对象转换成json字符串.
+	 * 若对象中存在日期属性, 则使用指定日期格式转换.
 	 * 
-	 * 	此方法仅适用于简单对象的转换, �? String、Integer�? Map<?, ?>等， 且Map对象不允许嵌�?.
+	 * 	此方法仅适用于简单对象的转换, 如 String、Integer、 Map<?, ?>等， 且Map对象不允许嵌套.
 	 * <PRE>
-	 * @param obj 简单对�?
+	 * @param obj 简单对象
 	 * @param dateFormat 日期格式
-	 * @return 若转换失败返�?""
+	 * @return 若转换失败返回""
 	 */
 	@SuppressWarnings("deprecation")
 	public static String toJson(Object obj, String dateFormat) {
@@ -278,7 +278,7 @@ public class ESCUtils {
 		try {
 			writer.close();
 		} catch (IOException e) {
-			log.error("转换JSON异常: 关闭输入流失�?.", e);
+			log.error("转换JSON异常: 关闭输入流失败.", e);
 		}
 		return json;
 	}
@@ -287,9 +287,9 @@ public class ESCUtils {
 	 * <PRE>
 	 * 把json字符串转换成Map对象.
 	 * 
-	 * 	此方法仅适用于纯KV键值对的json字符�?, 多重嵌套的json字符串可能会转换失败.
+	 * 	此方法仅适用于纯KV键值对的json字符串, 多重嵌套的json字符串可能会转换失败.
 	 * <PRE>
-	 * @param json 纯KV键值对的json字符�?
+	 * @param json 纯KV键值对的json字符串
 	 * @return 若转换失败返回null
 	 */
 	public static Map<?, ?> unJson(String json) {
@@ -305,12 +305,12 @@ public class ESCUtils {
 	}
 	
 	/**
-	 * 把二维数组转换成BCP格式字符�?
+	 * 把二维数组转换成BCP格式字符串
 	 * 
 	 * @param table 二维数组
 	 * @param rowDelimiter 行分隔符
 	 * @param colDelimiter 列分隔符
-	 * @return BCP字符�?
+	 * @return BCP字符串
 	 */
 	public static String toBCP(List<List<Object>> table, 
 			String rowDelimiter, String colDelimiter) {
@@ -343,7 +343,7 @@ public class ESCUtils {
 	/**
 	 * 把BCP字符串还原成二维数组
 	 * 
-	 * @param bcpString BCP字符�?
+	 * @param bcpString BCP字符串
 	 * @param rowDelimiter 行分隔符
 	 * @param colDelimiter 列分隔符
 	 * @return 二维数组
@@ -362,11 +362,11 @@ public class ESCUtils {
 	}
 	
 	/**
-	 * 把一维队列转换成BCP格式字符�?
+	 * 把一维队列转换成BCP格式字符串
 	 * 
-	 * @param list 一维队�?
-	 * @param delimiter 分隔�?
-	 * @return BCP字符�?
+	 * @param list 一维队列
+	 * @param delimiter 分隔符
+	 * @return BCP字符串
 	 */
 	public static String toBCP(List<Object> list, String delimiter) {
 		if(list == null || list.size() <= 0) {
@@ -384,11 +384,11 @@ public class ESCUtils {
 	}
 	
 	/**
-	 * 把BCP字符串还原成一维队�?
+	 * 把BCP字符串还原成一维队列
 	 * 
-	 * @param bcpString BCP字符�?
-	 * @param delimiter 分隔�?
-	 * @return 一维队�?
+	 * @param bcpString BCP字符串
+	 * @param delimiter 分隔符
+	 * @return 一维队列
 	 */
 	public static List<String> unBCP(String bcpString, String delimiter) {
 		bcpString = (bcpString == null ? "" : bcpString);
@@ -398,9 +398,9 @@ public class ESCUtils {
 	}
 
 	/**
-	 * 把二维数组转换成CSV字符�?
+	 * 把二维数组转换成CSV字符串
 	 * @param table 二维数组
-	 * @return CSV字符�?
+	 * @return CSV字符串
 	 */
 	public static String toCSV(List<List<Object>> table) {
 		if(table == null) {
@@ -431,7 +431,7 @@ public class ESCUtils {
 
 	/**
 	 * 把CSV字符串转换成二维数组
-	 * @param csv CSV字符�?
+	 * @param csv CSV字符串
 	 * @return 二维数组
 	 */
 	public static List<List<String>> unCsvTable(String csv) {
@@ -447,9 +447,9 @@ public class ESCUtils {
 	}
 	
 	/**
-	 * 把一维队列转换成CSV字符�?
-	 * @param list 一维队�?
-	 * @return CSV字符�?
+	 * 把一维队列转换成CSV字符串
+	 * @param list 一维队列
+	 * @return CSV字符串
 	 */
 	public static String toCsv(List<Object> list) {
 		if(list == null || list.size() <= 0) {
@@ -467,9 +467,9 @@ public class ESCUtils {
 	}
 
 	/**
-	 * 把CSV字符串转换成一维队�?
-	 * @param csv CSV字符�?
-	 * @return 一维队�?
+	 * 把CSV字符串转换成一维队列
+	 * @param csv CSV字符串
+	 * @return 一维队列
 	 */
 	public static List<String> unCsvList(String csv) {
 		csv = (csv == null ? "" : csv);
@@ -484,9 +484,9 @@ public class ESCUtils {
 	}
 	
 	/**
-	 * 把普通字符串转换成CSV格式字符�?
+	 * 把普通字符串转换成CSV格式字符串
 	 * @param s 普通字符串
-	 * @return CSV格式字符�?
+	 * @return CSV格式字符串
 	 */
 	private static String _toCSV(String str) {
 		return StringEscapeUtils.escapeCsv(str);
@@ -494,7 +494,7 @@ public class ESCUtils {
 	
 	/**
 	 * 把CSV格式字符串转换成普通字符串
-	 * @param csv CSV格式字符�?
+	 * @param csv CSV格式字符串
 	 * @return 普通字符串
 	 */
 	private static String _unCSV(String csv) {
@@ -502,9 +502,9 @@ public class ESCUtils {
 	}
 	
 	/**
-	 * 把二维数组转换成TSV格式字符�?
+	 * 把二维数组转换成TSV格式字符串
 	 * @param table 二维数组
-	 * @return TSV格式字符�?
+	 * @return TSV格式字符串
 	 */
 	public static String toTSV(List<List<Object>> table) {
 		return toBCP(table, "\r\n", "\t");
@@ -512,7 +512,7 @@ public class ESCUtils {
 
 	/**
 	 * 把TSV格式字符串转换成二维数组
-	 * @param tsv TSV字符�?
+	 * @param tsv TSV字符串
 	 * @return 二维数组
 	 */
 	public static List<List<String>> unTsvTable(String tsv) {
@@ -521,17 +521,17 @@ public class ESCUtils {
 	
 	/**
 	 * 把一维队列转换成TSV格式
-	 * @param list 一维队�?
-	 * @return TSV字符�?
+	 * @param list 一维队列
+	 * @return TSV字符串
 	 */
 	public static String toTsv(List<Object> list) {
 		return toBCP(list, "\t");
 	}
 	
 	/**
-	 * 把TSV字符串转换成一维队�?
-	 * @param tsv TSV字符�?
-	 * @return 一维队�?
+	 * 把TSV字符串转换成一维队列
+	 * @param tsv TSV字符串
+	 * @return 一维队列
 	 */
 	public static List<String> unTsvList(String tsv) {
 		return unBCP(tsv, "\t");
@@ -539,13 +539,13 @@ public class ESCUtils {
 	
 	/**
 	 * <PRE>
-	 * 把二维数组转换成TXT表单字符�?.
-	 * 	生成的TXT表单是行列对齐的,若不对齐则是字体等宽问题, 宋体为非等宽字体�? 幼圆则为等宽字体.
+	 * 把二维数组转换成TXT表单字符串.
+	 * 	生成的TXT表单是行列对齐的,若不对齐则是字体等宽问题, 宋体为非等宽字体， 幼圆则为等宽字体.
 	 * <PRE>
 	 * 
 	 * @param table 二维数组
 	 * @param header 是否存在表头(若为true则取第一行为表头)
-	 * @return TXT表单字符�?
+	 * @return TXT表单字符串
 	 */
 	public static <T> String toTXT(List<List<T>> table, boolean header) {
 		if(table == null || table.size() <= 0) {

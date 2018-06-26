@@ -11,8 +11,8 @@ import java.security.spec.X509EncodedKeySpec;
  * RSA签名
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -26,10 +26,10 @@ public class RSASignature {
 	/**
 	 * RSA签名
 	 * 
-	 * @param content 待签名数�?
+	 * @param content 待签名数据
 	 * @param privateKey 商户私钥
-	 * @param encode 字符集编�?
-	 * @return 签名�?
+	 * @param encode 字符集编码
+	 * @return 签名值
 	 */
 	public static String sign(String content, String privateKey, String encode) {
 		try {
@@ -74,13 +74,13 @@ public class RSASignature {
 	}
 
 	/**
-	 * RSA验签名检�?
+	 * RSA验签名检查
 	 * 
-	 * @param content 待签名数�?
-	 * @param sign 签名�?
+	 * @param content 待签名数据
+	 * @param sign 签名值
 	 * @param publicKey 分配给开发商公钥
-	 * @param encode 字符集编�?
-	 * @return 布尔�?
+	 * @param encode 字符集编码
+	 * @return 布尔值
 	 */
 	public static boolean doCheck(String content, String sign,
 			String publicKey, String encode) {

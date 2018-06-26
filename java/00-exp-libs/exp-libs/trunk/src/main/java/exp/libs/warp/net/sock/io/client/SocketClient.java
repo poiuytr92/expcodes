@@ -31,14 +31,14 @@ import exp.libs.warp.net.sock.io.common.ISession;
  * 	client.close();
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class SocketClient implements ISession {
 
-	/** 日志�? */
+	/** 日志器 */
 	protected Logger log = LoggerFactory.getLogger(SocketClient.class);
 	
 	/** 默认Socket重连间隔(ms) */
@@ -59,11 +59,11 @@ public class SocketClient implements ISession {
 	/** Socket会话 */
 	protected Socket socket;
 	
-	/** Socket本地读缓�? */
+	/** Socket本地读缓存 */
 	protected SocketByteBuffer localBuffer;
 	
 	/**
-	 * 用于继承的构造函�?
+	 * 用于继承的构造函数
 	 */
 	protected SocketClient() {
 		this.reconnInterval = RECONN_INTERVAL;
@@ -71,7 +71,7 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param ip 服务IP
 	 * @param port 服务端口
 	 */
@@ -81,7 +81,7 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param ip 服务IP
 	 * @param port 服务端口
 	 * @param overtime 超时时间
@@ -92,7 +92,7 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param sockConf socket配置信息
 	 */
 	public SocketClient(SocketBean sockConf) {
@@ -101,8 +101,8 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 获取客户端标�?
-	 * @return 客户端标�?
+	 * 获取客户端标识
+	 * @return 客户端标识
 	 */
 	@Override
 	public String ID() {
@@ -138,7 +138,7 @@ public class SocketClient implements ISession {
 
 	/**
 	 * 设置Socket重连次数上限
-	 * @param reconnLimit 重连次数上限(�?<0表示无限�?)
+	 * @param reconnLimit 重连次数上限(若<0表示无限次)
 	 */
 	public void setReconnLimit(int reconnLimit) {
 		this.reconnLimit = reconnLimit;
@@ -162,12 +162,12 @@ public class SocketClient implements ISession {
 			socket.setReceiveBufferSize(sockConf.getReadBufferSize());
 			localBuffer = new SocketByteBuffer(	//本地缓存要比Socket缓存稍大
 					sockConf.getReadBufferSize() * 2, sockConf.getReadCharset());
-			log.info("客户�? [{}] 连接到Socket服务 [{}] 成功", 
+			log.info("客户端 [{}] 连接到Socket服务 [{}] 成功", 
 					sockConf.getAlias(), sockConf.getSocket());
 			
 		} catch (Exception e) {
 			isOk = false;
-			log.error("客户�? [{}] 连接到Socket服务 [{}] 失败", 
+			log.error("客户端 [{}] 连接到Socket服务 [{}] 失败", 
 					sockConf.getAlias(), sockConf.getSocket(), e);
 		}
 		return isOk;
@@ -185,7 +185,7 @@ public class SocketClient implements ISession {
 				
 			} else {
 				close();
-				log.warn("客户�? [{}] {}ms后重�?(已重�? {}/{} �?)", 
+				log.warn("客户端 [{}] {}ms后重连(已重试 {}/{} 次)", 
 						sockConf.getAlias(), reconnInterval, cnt, reconnLimit);
 			}
 			
@@ -196,7 +196,7 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * socket会话是否有效（多用于需要登录的判定�?
+	 * socket会话是否有效（多用于需要登录的判定）
 	 * @return true:有效; false:无效
 	 */
 	@Override
@@ -218,7 +218,7 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 断开socket连接并释放所有资�?
+	 * 断开socket连接并释放所有资源
 	 * @return true:断开成功; false:断开异常
 	 */
 	@Override
@@ -229,7 +229,7 @@ public class SocketClient implements ISession {
 				socket.close();
 			} catch (Exception e) {
 				isClosed = false;
-				log.error("客户�? [{}] 断开Socket连接异常", sockConf.getAlias(), e);
+				log.error("客户端 [{}] 断开Socket连接异常", sockConf.getAlias(), e);
 			}
 		}
 		
@@ -240,8 +240,8 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * Socket读操�?
-	 * @return 服务端返回的消息(若返回null，则出现超时等异�?)
+	 * Socket读操作
+	 * @return 服务端返回的消息(若返回null，则出现超时等异常)
 	 */
 	@Override
 	public String read() {
@@ -256,7 +256,7 @@ public class SocketClient implements ISession {
 					sockConf.getReadDelimiter(), sockConf.getOvertime());
 			
 		} catch (ArrayIndexOutOfBoundsException e) {
-			log.error("Socket [{}] 本地缓冲区溢�?(单条报文过长), 当前缓冲区大�?: {}KB.", 
+			log.error("Socket [{}] 本地缓冲区溢出(单条报文过长), 当前缓冲区大小: {}KB.", 
 					sockConf.getId(), (sockConf.getReadBufferSize() * 2), e);
 						
 		} catch (UnsupportedEncodingException e) {
@@ -264,12 +264,12 @@ public class SocketClient implements ISession {
 					sockConf.getId(), sockConf.getReadCharset(), e);
 					
 		} catch (SocketTimeoutException e) {
-			log.error("Socket [{}] 读操作超�?, 自动断开会话. 当前超时上限: {}ms.", 
+			log.error("Socket [{}] 读操作超时, 自动断开会话. 当前超时上限: {}ms.", 
 					sockConf.getId(), sockConf.getOvertime(), e);
 			close();
 			
 		} catch (Exception e) {
-			log.error("Socket [{}] 读操作异�?, 自动断开会话.", sockConf.getId(), e);
+			log.error("Socket [{}] 读操作异常, 自动断开会话.", sockConf.getId(), e);
 			close();
 		}
 		return msg;
@@ -277,22 +277,22 @@ public class SocketClient implements ISession {
 	
 	/**
 	 * <pre>
-	 * Socket读操�?.
+	 * Socket读操作.
 	 * 
-	 * 此方法会阻塞调用，直到从input读到的字节流中包含delimiter才会返回�?
+	 * 此方法会阻塞调用，直到从input读到的字节流中包含delimiter才会返回，
 	 * 返回的String编码就是在sockBuff初始化时定义的编码，
-	 * 返回后String后，sockBuff会保留剩下的字节�?
+	 * 返回后String后，sockBuff会保留剩下的字节。
 	 * 
-	 * 必须保证一次读取的消息不能大于sockBuff的size�?
-	 * 否则会抛出溢出异常ArrayIndexOutOfBoundsException�?
-	 * 并且sockBuff被重置，所有已读取的字节丢失�?
+	 * 必须保证一次读取的消息不能大于sockBuff的size，
+	 * 否则会抛出溢出异常ArrayIndexOutOfBoundsException，
+	 * 并且sockBuff被重置，所有已读取的字节丢失。
 	 * </pre>
 	 * @param input 消息流入管道
-	 * @param localBuff 本地缓冲�?
-	 * @param delimiter 结束�?
-	 * @param timeout 读操作超�?(ms)
-	 * @return 以delimiter结束的单条消�?(绝不返回null)
-	 * @throws IOException 读操作异�?
+	 * @param localBuff 本地缓冲区
+	 * @param delimiter 结束符
+	 * @param timeout 读操作超时(ms)
+	 * @return 以delimiter结束的单条消息(绝不返回null)
+	 * @throws IOException 读操作异常
 	 */
 	private String read(InputStream input, SocketByteBuffer localBuff, 
 			final String delimiter, final long timeout) throws IOException {
@@ -301,7 +301,7 @@ public class SocketClient implements ISession {
 		int readLen = 0;
 		
 		if(endIndex != -1) {
-			// None: 本地缓冲�? localBuff 中仍有完整的数据未取�?
+			// None: 本地缓冲区 localBuff 中仍有完整的数据未取出
 			
 		} else {
 			while(true) {
@@ -309,13 +309,13 @@ public class SocketClient implements ISession {
 				readLen = input.read(buffer);
 				localBuff.append(buffer, readLen);
 				endIndex = localBuff.indexOf(delimiter);
-				if(endIndex != -1) {	// 当存在结束符时，退出循�?
+				if(endIndex != -1) {	// 当存在结束符时，退出循环
 					break;
 				}
 				
 				if(timeout > 0) {
 					if(System.currentTimeMillis() - bgnTime > timeout) {
-						throw new SocketTimeoutException("Socket服务端超时未返回消息终止�?.");
+						throw new SocketTimeoutException("Socket服务端超时未返回消息终止符.");
 						
 					} else {
 						ThreadUtils.tSleep(1);
@@ -335,9 +335,9 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * Socket写操�?.
-	 * @param msg 需发送到服务端的的消息报�?
-	 * @return true:发送成�?; false:发送失�?
+	 * Socket写操作.
+	 * @param msg 需发送到服务端的的消息报文
+	 * @return true:发送成功; false:发送失败
 	 */
 	@Override
 	public boolean write(final String msg) {
@@ -355,18 +355,18 @@ public class SocketClient implements ISession {
 					
 		} catch (Exception e) {
 			isOk = false;
-			log.error("Socket [{}] 写操作异�?.", sockConf.getId(), e);
+			log.error("Socket [{}] 写操作异常.", sockConf.getId(), e);
 			close();
 		}
 		return isOk;
 	}
 	
 	/**
-	 * Socket写操�?.
+	 * Socket写操作.
 	 * @param output 消息流出管道
 	 * @param msg 需要发送的消息
 	 * @param charset 消息编码
-	 * @throws IOException 写操作异�?
+	 * @throws IOException 写操作异常
 	 */
 	private void write(OutputStream output, final String msg, final String charset) 
 			throws IOException {
@@ -376,7 +376,7 @@ public class SocketClient implements ISession {
 	
 	/**
 	 * 临时清理本地缓存.
-	 * 建议完成一次完整的读写交互后执�?.
+	 * 建议完成一次完整的读写交互后执行.
 	 */
 	@Override
 	public void clearIOBuffer() {

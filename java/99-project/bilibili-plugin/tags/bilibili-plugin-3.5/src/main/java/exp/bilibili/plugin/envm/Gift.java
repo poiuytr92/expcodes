@@ -5,8 +5,8 @@ package exp.bilibili.plugin.envm;
  * 各种礼物对应的活跃度枚举
  * </PRE>
  * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 2017-12-17
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -24,7 +24,7 @@ public class Gift {
 	
 	public final static Gift STORM = new Gift("39", "节奏风暴", 100000);
 	
-	public final static Gift TV = new Gift("25", "小电�?", 1245000);
+	public final static Gift TV = new Gift("25", "小电视", 1245000);
 	
 	public final static Gift _233 = new Gift("8", "233", 233);
 	
@@ -36,9 +36,9 @@ public class Gift {
 	
 	public final static Gift GOVERNOR = new Gift("", "总督", 19998000);
 	
-	public final static Gift LANTERN = new Gift("109", "红灯�?", 2000);
+	public final static Gift LANTERN = new Gift("109", "红灯笼", 2000);
 	
-	public final static Gift SQUIB = new Gift("110", "小爆�?", 2000);
+	public final static Gift SQUIB = new Gift("110", "小爆竹", 2000);
 	
 	/** 礼物ID */
 	private String id;
@@ -46,7 +46,7 @@ public class Gift {
 	/** 礼物名称 */
 	private String name;
 	
-	/** 价�?/活跃�? */
+	/** 价值/活跃值 */
 	private int cost;
 	
 	private Gift(String id, String name, int cost) {

@@ -5,11 +5,13 @@ import java.util.List;
 
 import org.apache.thrift.TException;
 
-/** 
- * @author 李军
- * @version 1.0
- * @datetime 2015-12-28 下午02:39:42 
- * 类说明 
+/**
+ * 
+ * <B>PROJECT : </B> thrift
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-28
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class HelloServiceImpl implements Hello.Iface {
 

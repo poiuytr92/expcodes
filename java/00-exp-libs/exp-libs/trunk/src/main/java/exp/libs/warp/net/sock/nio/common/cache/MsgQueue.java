@@ -10,14 +10,14 @@ import java.util.List;
  * 封装了采集和处理会话所接收到的原始消息的基本方法
  * </pre>	
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public final class MsgQueue {
 
-	/** 允许缓存的最大未处理消息�? */
+	/** 允许缓存的最大未处理消息数 */
 	public final static int MAX_MSG_LIMIT = 100;
 	
 	/**
@@ -36,13 +36,13 @@ public final class MsgQueue {
 	private int handledMsgCnt;
 
 	/**
-	 * 读写�?
+	 * 读写锁
 	 */
 	private byte[] lock;
 
 	/**
 	 * <pre>
-	 * 构造函�?
+	 * 构造函数
 	 * </pre>
 	 */
 	public MsgQueue() {
@@ -54,7 +54,7 @@ public final class MsgQueue {
 
 	/**
 	 * <pre>
-	 * 检查是否有新消�?
+	 * 检查是否有新消息
 	 * </pre>
 	 * 
 	 * @return true:有新消息; false:无新消息
@@ -76,7 +76,7 @@ public final class MsgQueue {
 	 * </pre>
 	 * 
 	 * @param newMsg
-	 *            新消�?
+	 *            新消息
 	 */
 	public boolean addNewMsg(String newMsg) {
 		boolean isOk = false;
@@ -106,7 +106,7 @@ public final class MsgQueue {
 
 	/**
 	 * <pre>
-	 * 释放消息队列对象占用的资�?
+	 * 释放消息队列对象占用的资源
 	 * </pre>
 	 */
 	public void clear() {
@@ -131,10 +131,10 @@ public final class MsgQueue {
 
 	/**
 	 * <pre>
-	 * 获取已执行的消息�?
+	 * 获取已执行的消息数
 	 * </pre>
 	 * 
-	 * @return 已执行的消息�?
+	 * @return 已执行的消息数
 	 */
 	public int getHandledMsgCnt() {
 		synchronized (lock) {
@@ -147,7 +147,7 @@ public final class MsgQueue {
 	 * 获取等待执行的消息数
 	 * </pre>
 	 * 
-	 * @return 已执行的消息�?
+	 * @return 已执行的消息数
 	 */
 	private int getWaitCnt() {
 		return totalMsgCnt - handledMsgCnt;

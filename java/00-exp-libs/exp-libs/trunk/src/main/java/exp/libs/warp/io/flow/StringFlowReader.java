@@ -25,14 +25,14 @@ import exp.libs.envm.Endline;
  *  sfr.close();
  * </PRE>
  * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
- * @version   1.0 # 2015-12-27
+ * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class StringFlowReader {
 
-	/** 日志�? */
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(StringFlowReader.class);
 	
 	/** 所读入字符串的默认编码 */
@@ -40,7 +40,7 @@ public class StringFlowReader {
 	
 	/**
 	 * 所读入字符串的默认[行终止符].
-	 * (默认为换行符, 但存在无换行符的流式文件需要另外指�?)
+	 * (默认为换行符, 但存在无换行符的流式文件需要另外指定)
 	 */
 	public final static char DEFAULT_LINE_END = Endline.CR;
 	
@@ -50,11 +50,11 @@ public class StringFlowReader {
 	/** 流读取器 */
 	private InputStreamReader strReader;
 	
-	/** 标记是否存在可读的下一�? */
+	/** 标记是否存在可读的下一行 */
 	private boolean hasNextLine;
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param str 待读入字符串
 	 */
 	public StringFlowReader(String str) {
@@ -62,18 +62,18 @@ public class StringFlowReader {
 	}
 	
 	/**
-	 * 构造函�?
+	 * 构造函数
 	 * @param str 待读入字符串
-	 * @param charset 待读入字符串的编�?
+	 * @param charset 待读入字符串的编码
 	 */
 	public StringFlowReader(String str, String charset) {
 		init(str, charset);
 	}
 	
 	/**
-	 * 初始�?
+	 * 初始化
 	 * @param str 待读入字符串
-	 * @param charset 待读入字符串的编�?
+	 * @param charset 待读入字符串的编码
 	 */
 	public void init(String str, String charset) {
 		this.charset = testEncode(charset) ? charset : DEFAULT_CHARSET;
@@ -86,7 +86,7 @@ public class StringFlowReader {
 						this.charset);
 				this.hasNextLine = true;
 			} catch (Exception e) {
-				log.error("读取字符�? [{}] 失败.", str, e);
+				log.error("读取字符串 [{}] 失败.", str, e);
 				close();
 			}
 		}
@@ -98,7 +98,7 @@ public class StringFlowReader {
 	
 	/**
 	 * 测试编码是否合法.
-	 * @param charset 被测试编�?
+	 * @param charset 被测试编码
 	 * @return true:编码合法; false:编码非法
 	 */
 	private boolean testEncode(String charset) {
@@ -112,27 +112,27 @@ public class StringFlowReader {
 	}
 	
 	/**
-	 * 当前文件流是否存在下一行（以实际的[行终止符]标记[行]�?
-	 * @return true:存在; false:不存�?
+	 * 当前文件流是否存在下一行（以实际的[行终止符]标记[行]）
+	 * @return true:存在; false:不存在
 	 */
 	public boolean hasNextLine() {
 		return hasNextLine;
 	}
 	
 	/**
-	 * 读取当前行（使用[换行符]作为[行终止符]�?.
+	 * 读取当前行（使用[换行符]作为[行终止符]）.
 	 * 	此方法需配合 hasNextLine 方法使用（类似迭代器的使用方式）.
-	 * @return 当前行数�?
+	 * @return 当前行数据
 	 */
 	public String readLine() {
 		return readLine(DEFAULT_LINE_END);
 	}
 	
 	/**
-	 * 读取当前行（使用[自定义符号]作为[行终止符]�?.
+	 * 读取当前行（使用[自定义符号]作为[行终止符]）.
 	 * 	此方法需配合 hasNextLine 方法使用（类似迭代器的使用方式）.
-	 * @param lineEnd 自定义行终止�?
-	 * @return 当前行数�?
+	 * @param lineEnd 自定义行终止符
+	 * @return 当前行数据
 	 */
 	public String readLine(char lineEnd) {
 		if(!hasNextLine) {
@@ -155,7 +155,7 @@ public class StringFlowReader {
 				}
 			}
 		} catch (IOException e) {
-			log.error("读取字符串流过程中发生异�?.", e);
+			log.error("读取字符串流过程中发生异常.", e);
 			close();
 		}
 		return line.toString();
