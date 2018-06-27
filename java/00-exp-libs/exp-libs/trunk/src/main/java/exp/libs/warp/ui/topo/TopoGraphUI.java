@@ -33,7 +33,7 @@ import exp.libs.algorithm.struct.graph.Edge;
 import exp.libs.algorithm.struct.graph.Node;
 import exp.libs.algorithm.struct.graph.TopoGraph;
 import exp.libs.utils.num.NumUtils;
-import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.RandomUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 

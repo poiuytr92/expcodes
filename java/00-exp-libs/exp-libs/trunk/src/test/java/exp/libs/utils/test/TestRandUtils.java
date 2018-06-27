@@ -6,7 +6,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.RandomUtils;
 
 public class TestRandUtils {
 

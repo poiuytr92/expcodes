@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import exp.libs.utils.num.BODHUtils;
-import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**

@@ -1,10 +1,7 @@
-package exp.libs.utils.num;
+package exp.libs.utils.other;
 
 import java.util.List;
 import java.util.Random;
-
-import exp.libs.utils.other.ListUtils;
-import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
