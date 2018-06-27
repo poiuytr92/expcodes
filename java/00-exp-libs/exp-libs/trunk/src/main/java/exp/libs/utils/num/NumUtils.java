@@ -1,5 +1,6 @@
 package exp.libs.utils.num;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.LinkedList;
 import java.util.List;
@@ -90,6 +91,17 @@ public class NumUtils {
 			n /= 100.0D;
 		}
 		return n;
+	}
+	
+	/**
+	 * 设置浮点数的精度(四舍五入)
+	 * @param num 浮点数
+	 * @param decimal 最多保留的小数位
+	 * @return 改变精度后的浮点数
+	 */
+	public static double setPrecision(double num, int decimal) {
+		BigDecimal bd = new BigDecimal(num);
+		return bd.setScale(decimal, BigDecimal.ROUND_HALF_UP).doubleValue();        
 	}
 	
 	/**

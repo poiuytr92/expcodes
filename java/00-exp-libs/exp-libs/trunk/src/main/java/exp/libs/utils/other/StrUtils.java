@@ -696,7 +696,7 @@ public class StrUtils {
 	 * @param s 原字符串
 	 * @return 中文个数
 	 */
-	public static int chineseCnt(final String s) {
+	public static int countCh(final String s) {
 		int cnt = 0;
 		if(s != null) {
 			char[] cs = s.toCharArray();
@@ -708,6 +708,25 @@ public class StrUtils {
 	}
 	
 	/**
+	 * 检查字符串中是否包含了中文
+	 * @param s 原字符串
+	 * @return true:含中文; false:不含
+	 */
+	public static boolean containsCh(final String s) {
+		boolean isContains = false;
+		if(s != null) {
+			char[] cs = s.toCharArray();
+			for(char c : cs) {
+				if(VerifyUtils.isChinese(c)) {
+					isContains = true;
+					break;
+				}
+			}
+		}
+		return isContains;
+	}
+	
+	/**
 	 * <PRE>
 	 * 计算字符串的中文长度.
 	 * 	（默认情况下java的中文字符和英文字符均占长度为1字符，此方法以 [1中文长度=2英文长度] 换算字符串长度）
@@ -715,10 +734,10 @@ public class StrUtils {
 	 * @param s 原字符串
 	 * @return 中文长度
 	 */
-	public static int chineseLen(final String s) {
+	public static int chLen(final String s) {
 		int len = 0;
 		if(s != null) {
-			len = s.length() + chineseCnt(s);
+			len = s.length() + countCh(s);
 		}
 		return len;
 	}

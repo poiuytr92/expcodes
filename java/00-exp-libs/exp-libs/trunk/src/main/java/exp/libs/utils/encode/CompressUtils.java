@@ -217,7 +217,7 @@ public class CompressUtils {
 		ZipArchiveOutputStream zos = null;
 		
 		try {
-			fos = new FileOutputStream(zipPath);
+			fos = new FileOutputStream(zipFile);
 			bos = new BufferedOutputStream(fos);
 			zos = new ZipArchiveOutputStream(bos);
 			for(String srcPath : srcPaths) {

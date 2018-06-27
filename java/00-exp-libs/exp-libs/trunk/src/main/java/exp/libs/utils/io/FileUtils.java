@@ -13,10 +13,10 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.FileType;
 import exp.libs.utils.num.BODHUtils;
-import exp.libs.utils.os.CmdUtils;
 import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
+import exp.libs.warp.cmd.CmdUtils;
 import exp.libs.warp.io.flow.FileFlowReader;
 
 /**
@@ -1416,7 +1416,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			if(OSUtils.isWin()) {
 				String cmd = StrUtils.concat("attrib +H \"", 
 						file.getAbsolutePath(), "\"");
-				isOk = StrUtils.isTrimEmpty(CmdUtils.execute(cmd));
+				isOk = StrUtils.isTrimEmpty(CmdUtils.execute(cmd).getInfo());
 				
 			} else if(OSUtils.isUnix()) {
 				isOk = file.getName().startsWith(".");

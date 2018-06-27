@@ -572,7 +572,7 @@ public class ESCUtils {
 				T col = row.get(c);
 				txtTable[r][c] = ObjUtils.toStr(col);
 				colLens[c] = NumUtils.max(colLens[c], 
-						StrUtils.chineseLen(txtTable[r][c]));
+						StrUtils.chLen(txtTable[r][c]));
 			}
 		}
 		
@@ -587,7 +587,7 @@ public class ESCUtils {
 				txt.append("| ");
 				txt.append(txtTable[r][c]);
 				int whitespace = colLens[c] - 
-						StrUtils.chineseLen(txtTable[r][c]) + 1;
+						StrUtils.chLen(txtTable[r][c]) + 1;
 				txt.append(StrUtils.multiChar(' ', whitespace));
 			}
 			txt.append("|\r\n");

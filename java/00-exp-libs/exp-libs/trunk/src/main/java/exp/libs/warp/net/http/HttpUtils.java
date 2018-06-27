@@ -2,6 +2,7 @@ package exp.libs.warp.net.http;
 
 import java.io.File;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -21,6 +22,7 @@ import org.apache.commons.httpclient.HttpConnectionManager;
 import org.apache.commons.httpclient.MultiThreadedHttpConnectionManager;
 import org.apache.commons.httpclient.params.HttpClientParams;
 import org.apache.commons.httpclient.params.HttpConnectionManagerParams;
+import org.apache.commons.httpclient.protocol.Protocol;
 import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -68,6 +70,9 @@ public class HttpUtils {
 	
 	/** POST请求方法名 */
 	public final static String METHOD_POST = "POST";
+	
+	/** 默认本地IP  */
+	public final static String LOCAL_IP = "127.0.0.1";
 	
 	/** 页面使用BASE64存储的图像信息正则 */
 	private final static String RGX_BASE64_IMG = "data:image/([^;]+);base64,(.*)";
@@ -218,15 +223,15 @@ public class HttpUtils {
 	
 	/**
 	 * <pre>
-	 * 追加TLSv1.2支持.
+	 * 追加TLSv1.2支持 (适用于javax.net.ssl.HttpsURLConnection).
 	 * -------------------
 	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
 	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
 	 * </pre>
-	 * @param httpsConn
+	 * @param httpsConn HTTPS连接
 	 */
 	private static void _supportTLSv12(HttpsURLConnection httpsConn) {
-		httpsConn.setSSLSocketFactory(new _TLS12_SocketFactory());
+		httpsConn.setSSLSocketFactory(new _TLS12_HttpURLSocketFactory());
 	}
 	
 	/**
@@ -276,9 +281,15 @@ public class HttpUtils {
 	 * @return
 	 */
 	public static HttpClient createHttpClient(int connTimeout, int callTimeout) {
+		if(OSUtils.isJDK16() || OSUtils.isJDK17()) {
+			_supportTLSv12();	//  JDK1.6和JDK1.7追加TLSv1.2支持
+			
+		} else {
+			// Undo JDK1.8以上默认支持TLSv1.2, 无需追加
+		}
+		
 		HttpConnectionManagerParams managerParams = new HttpConnectionManagerParams();
 		managerParams.setConnectionTimeout(connTimeout);
-		managerParams.setDefaultMaxConnectionsPerHost(2);
 		managerParams.setSoTimeout(callTimeout);
 		
 		HttpConnectionManager httpConnectionManager = new MultiThreadedHttpConnectionManager();
@@ -287,6 +298,23 @@ public class HttpUtils {
 		HttpClient httpClient = new HttpClient(new HttpClientParams());
 		httpClient.setHttpConnectionManager(httpConnectionManager);
 		return httpClient;
+	}
+	
+	/**
+	 * <pre>
+	 * 追加TLSv1.2支持 (适用于org.apache.commons.httpclient.HttpClient).
+	 * -------------------
+	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
+	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
+	 * </pre>
+	 * @param httpsConn
+	 */
+	private static void _supportTLSv12() {
+		Protocol sslProtocol = Protocol.getProtocol(HTTPS);
+		int sslPort = sslProtocol.getDefaultPort();		// https的默认端口一般为443
+		_TLS12_HttpClientSocketFactory sslSocketFactory = new _TLS12_HttpClientSocketFactory();
+		Protocol https = new Protocol(HTTPS, sslSocketFactory, sslPort);
+		Protocol.registerProtocol(HTTPS, https);
 	}
 	
 	/**
@@ -404,6 +432,17 @@ public class HttpUtils {
 		url = StrUtils.isEmpty(url) ? "" : url;
 		String _GETURL = url.concat(requestKVs);
 		return _GETURL.replace(url.concat("?&"), url.concat("?"));	// 去掉第一个参数的&
+	}
+	
+	/** 获取本地IP  */
+	public static String getLocalIP() {
+		String localIP = LOCAL_IP;
+		try {
+			InetAddress addr = InetAddress.getLocalHost();
+			localIP = addr.getHostAddress().toString();
+			
+		} catch (Exception e) {}
+		return localIP;
 	}
 	
 	/**

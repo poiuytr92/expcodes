@@ -1,369 +1,358 @@
 package exp.libs.warp.net.ping;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.List;
 
 import exp.libs.envm.Charset;
+import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.OSUtils;
-import exp.libs.warp.net.ping.bean.PongBean;
+import exp.libs.utils.other.StrUtils;
+import exp.libs.utils.verify.RegexUtils;
+import exp.libs.warp.cmd.CmdUtils;
+import exp.libs.warp.io.flow.StringFlowReader;
 
 /**
  * <pre>
- * 简单ping操作，返回ping字符串
+ * 简单的ping操作
  * </pre>
  * <B>PROJECT : </B> exp-libs
  * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
- * @version   2016-02-14
+ * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Ping {
-
-	/**
-	 * test main
-	 * 
-	 * @param args
-	 */
+	
 	public static void main(String[] args) {
-		Ping ping = new Ping();
-		String str = ping.ping("172.168.10.100");
-		System.out.println(str);
-		PongBean pr = ping.parsePingReturn(str);
-		System.out.println(pr);
+		System.out.println(ping("203.195.132.63"));
 	}
 	
-	/** 本地IP  */
-	public static String localIp = "127.0.0.1";
-
 	/** ping命令 */
-	public static String PING_COMMAND = "ping";
-
-	/**
-	 * 等待时间，单位为毫秒
-	 */
-	private int deadTime;
+	private final static String PING_COMMAND = "ping";
 	
 	/**
-	 * ping次数
+	 * 执行ping操作
+	 * @param address 被ping的地址, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @return ping结果
 	 */
-	private int count;
+	public static Pong ping(String address) {
+		return ping(address, 4, 0, 0);
+	}
 	
 	/**
-	 * ping间隔,单位为秒
+	 * 执行ping操作
+	 * @param address 被ping的地址, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @param count 执行ping的次数(默认4次)
+	 * @param timeout 仅linux有效:命令超时(s). 若超过这个时间则ping命令强制结束
+	 * @param intervalSecond 仅linux有效:执行ping的间隔(s), 默认值1秒
+	 * @return ping结果
 	 */
-	private double interval = 0.2;
+	public static Pong ping(String address, int count) {
+		return ping(address, count, 0, 0);
+	}
 	
-	/** Ping ip */
-	private String ip = "";
-	
-	/** 获取本地IP  */
-	static {
-		InetAddress addr = null;
-		try {
-			addr = InetAddress.getLocalHost();
-			localIp = addr.getHostAddress().toString();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+	/**
+	 * 执行ping操作
+	 * @param address 被ping的地址, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @param count 执行ping的次数(默认4次)
+	 * @param timeout 仅linux有效:命令超时(s). 若超过这个时间则ping命令强制结束
+	 * @param intervalSecond 仅linux有效:执行ping的间隔(s), 默认值1秒
+	 * @return ping结果
+	 */
+	public static Pong ping(String address, 
+			int count, int timeout, double intervalSecond) {
+		String cmd = getPingCommand(address, count, timeout, intervalSecond);
+		return toPong(CmdUtils.execute(cmd).getInfo());
 	}
 
 	/**
-	 * ping操作
-	 * 
-	 * @param ip
-	 * @return String
+	 * 组装ping命令
+	 * @param address 被ping的地址, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @param count 执行ping的次数(默认4次)
+	 * @param timeout 仅linux有效:命令超时(s). 若超过这个时间则ping命令强制结束
+	 * @param intervalSecond 仅linux有效:执行ping的间隔(s), 默认值1秒
+	 * @return ping命令
 	 */
-	public String ping(String ip) {
-		this.ip = ip;
-		String command = resolvePingCommand(ip);
-	
-		Process process = null;
-		InputStream is = null;
-		try {
-			process = Runtime.getRuntime().exec(command);
-			is = process.getInputStream();
-			StringBuffer sub = new StringBuffer();
-			sub = readLine(is);
-			return sub.toString();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			process.destroy();
-			try {
-				is.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+	private static String getPingCommand(String address, 
+			int count, int timeout, double intervalSecond) {
+		StringBuilder cmd = new StringBuilder(PING_COMMAND);
+		cmd.append(" ").append(address);
+		
+		count = (count <= 0 ? 4 : count);	// 默认ping 4次
+		cmd.append(OSUtils.isWin() ? " -n " : " -c ").append(count);
+		
+		if(OSUtils.isUnix()) {
+			if(timeout > 0) {
+				cmd.append(" -w ").append(timeout);
+				
+			} else if(OSUtils.isUnix()) {
+				cmd.append(" -w 10");	// linux环境强制指定超时(否则会无限阻塞)
+			}
+			
+			if(intervalSecond > 0) {
+				cmd.append(" -i ").append(intervalSecond);
 			}
 		}
-		return null;
+		return cmd.toString();
 	}
-
-	/**
-	 * 
-	 * resolvePingCommand
-	 * @param ip2
-	 * @return
-	 */
-	private String resolvePingCommand(String ip2) {
-		if (OSUtils.isWin()) {
-			return resolveWinPing(ip);
-		}else{
-			return resolveLinuxPing(ip);
-		}
-	}
-
-	/**
-	 * resolveLinuxPing
-	 * @param ip2
-	 * @return
-	 */
-	private String resolveLinuxPing(String ip) {
-		String result = PING_COMMAND;
-		if(this.deadTime != 0){
-			result += " -w " + this.deadTime;
-		}
-		
-		if(this.count != 0){
-			result += " -c " + this.count;
-		}
-		
-		if(this.interval != 0){
-			result += " -i " + this.interval;
-		}
-		return result + " " + ip;
-	}
-
-	/**
-	 * resolveWinPing
-	 * @param ip2
-	 * @return
-	 */
-	private String resolveWinPing(String ip2) {
-		String result = PING_COMMAND;
-		if(this.deadTime != 0){
-			result += " -w "+this.deadTime;
-		}
-		
-		if(this.count != 0){
-			result += " -n "+this.count;
-		}
-		
-//		if(this.interval != 0){
-//			
-//		}
-		return result + " " + ip;
-	}
-
-	/**
-	 * 读取流信息
-	 * 
-	 * @param ins
-	 *            输入流
-	 * @return 读取所有行返回字符串buffer
-	 * @throws IOException
-	 *             异常
-	 */
-	private static StringBuffer readLine(InputStream ins) throws IOException {
-		StringBuffer buf = new StringBuffer();
-		// 读取process信息
-		BufferedReader reader = new BufferedReader(new InputStreamReader(ins,
-				Charset.DEFAULT));
-		String line = null;
-
-		while ((line = reader.readLine()) != null) {
-			buf.append(line).append("\n");
-		}
-
-		return buf;
-	}
-
-	public PongBean parsePingReturn(String result) {
-		PongBean prb = new PongBean();
-		String discards = "0";
-		String maxDelay = "0";
-		String minDelay = "0";
-		String avgDelay = "0";
-		String pksLenght = "0";
-		String sentPack = "4";
-		String getPack = "0";
-
-		if (find("packets transmitted", result)) { // linux命令行
-			sentPack = exec(
-					".*([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+) packets.*",
-					result);
-			getPack = exec(
-					".*([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+) received.*",
-					result);
-			discards = exec(
-					".*([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+)% packet loss.*",
-					result);
-			maxDelay = exec(
-					".*\\/([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*)\\/.* ms.*",
-					result);
-			minDelay = exec(
-					".*mdev = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			avgDelay = exec(
-					".*mdev =.*\\/([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*)\\/.*\\/.*.*",
-					result);
-			pksLenght = exec(".*(\\d+) bytes from.*", result);
-		} else if (find("Reply from", result)) { // win en命令行
-			sentPack = exec(".*Sent = ([\\d]+).*", result);
-			getPack = exec(".*Received = ([\\d]+).*", result);
-			discards = exec(
-					".*Lost = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			maxDelay = exec(
-					".*Maximum = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			minDelay = exec(
-					".*Minimum = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			avgDelay = exec(
-					".*Average = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			pksLenght = exec(".*bytes=(\\d+).*", result);
-		} else { // win 中文命令行
-			sentPack = exec(".*已发送 = ([\\d]+).*", result);
-			getPack = exec(".*已接收 = ([\\d]+).*", result);
-			discards = exec(
-					".*丢失 = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			maxDelay = exec(
-					".*最长 = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			minDelay = exec(
-					".*最短 = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			avgDelay = exec(
-					".*平均 = ([1-9]\\d*\\.\\d*|0\\.\\d*[1-9]\\d*|[\\d]+).*",
-					result);
-			pksLenght = exec(".*字节=(\\d+).*", result);
-		}
-		prb.setDiscards(Float.parseFloat(discards));
-		prb.setMaxDelay(Float.parseFloat(maxDelay));
-		prb.setMinDelay(Float.parseFloat(minDelay));
-		prb.setAvgDelay(Float.parseFloat(avgDelay));
-		prb.setPksLenght(Float.parseFloat(pksLenght));
-		prb.setSentPack(Integer.parseInt(sentPack));
-		prb.setGetPack(Integer.parseInt(getPack));
-		prb.setCount(Integer.parseInt(sentPack));
-		prb.setLocalIp(localIp);
-		prb.setIp(ip);
-		
-		if(prb.getSentPack() == -1 ||prb.getGetPack() == -1){
-			prb.setError(true);
-			prb.setErrMsg(result);
-		}
-		return prb;
-	}
-
-	/**
-	 * exec
-	 * 
-	 * @param string
-	 * @param result
-	 * @return
-	 */
-	private String exec(String string, String result) {
-		Pattern pattern = Pattern.compile(string);
-		Matcher matcher = pattern.matcher(result);
-		if (matcher.find()) {
-//			for (int i = 0; i < matcher.groupCount(); i++) {
-//				System.out.print(matcher.group(i));
-//			}
-//			System.out.println(matcher.group(1));
-			return matcher.group(1);
-		}
-		return "-1";
-	}
-
-	/**
-	 * find
-	 * 
-	 * @param string
-	 * @param result
-	 * @return
-	 */
-	private boolean find(String string, String result) {
-		if (result.contains(string)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * ip
-	 * @return the ip
-	 */
-	public String getIp() {
-		return ip;
-	}
-
-	/**
-	 * ip
-	 * @param ip the ip to set
-	 */
-	public void setIp(String ip) {
-		this.ip = ip;
-	}
-
-	/**
-	 * getDeadTime
-	 * @return the deadTime
-	 */
-	public int getDeadTime() {
-		return deadTime;
-	}
-
-	/**
-	 * setDeadTime
-	 * @param deadTime the deadTime to set
-	 */
-	public void setDeadTime(int deadTime) {
-		this.deadTime = deadTime;
-	}
-
-	/**
-	 * getCount
-	 * @return the count
-	 */
-	public int getCount() {
-		return count;
-	}
-
-	/**
-	 * setCount
-	 * @param count the count to set
-	 */
-	public void setCount(int count) {
-		this.count = count;
-	}
-
-	/**
-	 * getInterval
-	 * @return the interval
-	 */
-	public double getInterval() {
-		return interval;
-	}
-
-	/**
-	 * setInterval
-	 * @param interval the interval to set
-	 */
-	public void setInterval(double interval) {
-		if(interval>0.2){
-			this.interval = interval;
-		}
-	}
-
 	
+	/**
+	 * 把 [ping执行结果] 转换成 [pong对象]
+	 * @param pingRst ping执行结果
+	 * @return pong对象
+	 */
+	protected static Pong toPong(String pingRst) {
+		return OSUtils.isWin() ? 
+				_toPongByWin(pingRst) : _toPongByLinux(pingRst);
+	}
 	
+	/**
+	 * 把 [win平台下的ping执行结果] 转换成 [pong对象]
+	 * @param pingRst win平台下的ping执行结果
+	 * @return
+	 */
+	private static Pong _toPongByWin(String pingRst) {
+		return StrUtils.containsCh(pingRst) ? 
+				_toPongByWinCh(pingRst) : _toPongByWinEn(pingRst);
+	}
+	
+	/**
+	 * 把 [(英文版)win平台下的ping执行结果] 转换成 [pong对象]
+	 * @param pingRst (英文版)win平台下的ping执行结果
+	 * <PRE>
+	 * PING IP：
+	    	Pinging 183.232.231.173 with 32 bytes of data:
+	    	
+	 * 或 PING 域名：
+			Pinging www.exp-blog.com [183.232.231.173] with 32 bytes of data:
+			Reply from 183.232.231.173: bytes=32 time<1ms TTL=50
+			Reply from 183.232.231.173: bytes=32 time=6ms TTL=50
+			Reply from 183.232.231.173: bytes=32 time=7ms TTL=50
+			Request timed out.
+			
+			Ping statistics for 183.232.231.173:
+			    Packets: Sent = 4, Received = 3, Lost = 1 (25% loss),
+			Approximate round trip times in milli-seconds:
+			    Minimum = 6ms, Maximum = 10ms, Average = 8ms
+		</PRE>
+	 * @return pong对象
+	 */
+	private static Pong _toPongByWinEn(String pingRst) {
+		Pong pong = new Pong();
+		StringFlowReader sfr = new StringFlowReader(pingRst, Charset.DEFAULT);
+		while(sfr.hasNextLine()) {
+			String line = sfr.readLine().trim();
+			
+			if(StrUtils.isEmpty(line)) {
+				continue;
+				
+			} else if(line.startsWith("Pinging")) {
+				int bytes = NumUtils.toInt(
+						RegexUtils.findFirst(line, "(\\d+) bytes"), -1);
+				pong.setPacketBytes(bytes);
+				
+			} else if(line.startsWith("Reply")) {
+				line = line.replace("<1ms", "=0ms");
+				List<String> nums = RegexUtils.findGroups(line, 
+						"time=([\\d\\.]+)ms TTL=(\\d+)");
+				double rtt = NumUtils.toDouble(nums.get(1), 0);
+				int ttl = NumUtils.toInt(nums.get(2), 0);
+				
+				pong.addRTT(rtt);
+				pong.setTTL(ttl);
+				
+			} else if(line.startsWith("Request timed out")) {
+				pong.addRTT(-1);
+				
+			} else if(line.contains("statistics")) {
+				String snkIp = RegexUtils.findFirst(line, "for ([\\d\\.]+)");
+				pong.setSnkIp(snkIp);
+				
+			} else if(line.startsWith("Packets")) {
+				List<String> nums = RegexUtils.findGroups(line, 
+						"Sent = (\\d+), Received = (\\d+), Lost = (\\d+) \\(([\\d\\.]+)% loss");
+				int sent = NumUtils.toInt(nums.get(1), 0);
+				int recv = NumUtils.toInt(nums.get(2), 0);
+				int lost = NumUtils.toInt(nums.get(3), 0);
+				double loss = NumUtils.toDouble(nums.get(4), 0);
+				
+				pong.setSent(sent);
+				pong.setRecv(recv);
+				pong.setLost(lost);
+				pong.setLoss(loss);
+				
+			} else if(line.startsWith("Minimum")) {
+				List<String> nums = RegexUtils.findGroups(line, 
+						"Minimum = (\\d+)ms, Maximum = (\\d+)ms, Average = (\\d+)ms");
+				double minRTT = NumUtils.toDouble(nums.get(1), 0);
+				double maxRTT = NumUtils.toDouble(nums.get(2), 0);
+				double avgRTT = NumUtils.toDouble(nums.get(3), 0);
+				
+				pong.setMinRTT(minRTT);
+				pong.setMaxRTT(maxRTT);
+				pong.setAvgRTT(avgRTT);
+			}
+		}
+		sfr.close();
+		return pong;
+	}
+	
+	/**
+	 * 把 [(中文版)win平台下的ping执行结果] 转换成 [pong对象]
+	 * @param pingRst (中文版)win平台下的ping执行结果
+	 * <PRE>
+	 * PING IP：
+	    	正在 Ping 183.232.231.173 具有 32 字节的数据:
+	    	
+	 * 或 PING 域名：
+			正在 Ping www.exp-blog.com [183.232.231.172] 具有 32 字节的数据:
+			来自 183.232.231.172 的回复: 字节=32 时间<1ms TTL=54
+			来自 183.232.231.172 的回复: 字节=32 时间=58ms TTL=54
+			来自 183.232.231.172 的回复: 字节=32 时间=69ms TTL=54
+			请求超时。
+			
+			183.232.231.172 的 Ping 统计信息:
+			    数据包: 已发送 = 4，已接收 = 3，丢失 = 1 (25% 丢失)，
+			往返行程的估计时间(以毫秒为单位):
+			    最短 = 51ms，最长 = 69ms，平均 = 59ms
+		</PRE>
+	 * @return pong对象
+	 */
+	private static Pong _toPongByWinCh(String pingRst) {
+		Pong pong = new Pong();
+		StringFlowReader sfr = new StringFlowReader(pingRst, Charset.DEFAULT);
+		while(sfr.hasNextLine()) {
+			String line = sfr.readLine().trim();
+			
+			if(StrUtils.isEmpty(line)) {
+				continue;
+				
+			} else if(line.startsWith("正在 Ping")) {
+				int bytes = NumUtils.toInt(
+						RegexUtils.findFirst(line, "(\\d+) 字节"), -1);
+				pong.setPacketBytes(bytes);
+				
+			} else if(line.startsWith("来自")) {
+				line = line.replace("<1ms", "=0ms");
+				List<String> nums = RegexUtils.findGroups(line, 
+						"时间=([\\d\\.]+)ms TTL=(\\d+)");
+				double rtt = NumUtils.toDouble(nums.get(1), 0);
+				int ttl = NumUtils.toInt(nums.get(2), 0);
+				
+				pong.addRTT(rtt);
+				pong.setTTL(ttl);
+				
+			} else if(line.startsWith("请求超时")) {
+				pong.addRTT(-1);
+				
+			} else if(line.contains("统计")) {
+				String snkIp = RegexUtils.findFirst(line, "([\\d\\.]+) 的 Ping");
+				pong.setSnkIp(snkIp);
+				
+			} else if(line.startsWith("数据包")) {
+				List<String> nums = RegexUtils.findGroups(line, 
+						"已发送 = (\\d+)，已接收 = (\\d+)，丢失 = (\\d+) \\(([\\d\\.]+)% 丢失");
+				int sent = NumUtils.toInt(nums.get(1), 0);
+				int recv = NumUtils.toInt(nums.get(2), 0);
+				int lost = NumUtils.toInt(nums.get(3), 0);
+				double loss = NumUtils.toDouble(nums.get(4), 0);
+				
+				pong.setSent(sent);
+				pong.setRecv(recv);
+				pong.setLost(lost);
+				pong.setLoss(loss);
+				
+			} else if(line.startsWith("最短")) {
+				List<String> nums = RegexUtils.findGroups(line, 
+						"最短 = (\\d+)ms，最长 = (\\d+)ms，平均 = (\\d+)ms");
+				double minRTT = NumUtils.toDouble(nums.get(1), 0);
+				double maxRTT = NumUtils.toDouble(nums.get(2), 0);
+				double avgRTT = NumUtils.toDouble(nums.get(3), 0);
+				
+				pong.setMinRTT(minRTT);
+				pong.setMaxRTT(maxRTT);
+				pong.setAvgRTT(avgRTT);
+			}
+		}
+		sfr.close();
+		return pong;
+	}
+	
+	/**
+	 * 把 [linux平台下的ping执行结果] 转换成 [pong对象]
+	 * @param pingRst linux平台下的ping执行结果
+	 * <PRE>
+	 * PING IP：
+	    	PING 220.181.112.244 (220.181.112.244) 56(84) bytes of data.
+	    	
+	 * 或 PING 域名：
+		 	PING www.exp-blog.com (220.181.112.244) 56(84) bytes of data.
+			64 bytes from 220.181.112.244 (220.181.112.244): icmp_seq=1 ttl=55 time<1 ms
+			64 bytes from 220.181.112.244 (220.181.112.244): icmp_seq=2 ttl=55 time=43.9 ms
+			64 bytes from 220.181.112.244 (220.181.112.244): icmp_seq=3 ttl=55 time=43.9 ms
+			64 bytes from 220.181.112.244 (220.181.112.244): icmp_seq=4 ttl=55 time=43.9 ms
+			
+			--- www.exp-blog.com ping statistics ---
+			4 packets transmitted, 4 received, 0% packet loss, time 3003ms
+			rtt min/avg/max/mdev = 43.928/43.953/43.989/0.257 ms 
+		</PRE>
+	 * @return pong对象
+	 */
+	private static Pong _toPongByLinux(String pingRst) {
+		Pong pong = new Pong();
+		StringFlowReader sfr = new StringFlowReader(pingRst, Charset.DEFAULT);
+		while(sfr.hasNextLine()) {
+			String line = sfr.readLine().trim();
+			
+			if(StrUtils.isEmpty(line)) {
+				continue;
+				
+			} else if(line.startsWith("PING")) {
+				String snkIp = RegexUtils.findFirst(line, " \\(([\\d\\.]+)\\) ");
+				pong.setSnkIp(snkIp);
+				
+			} else if(line.contains("bytes from")) {
+				line = line.replace("<1 ms", "=0 ms");
+				List<String> nums = RegexUtils.findGroups(line, 
+						"(\\d+) bytes from.*?ttl=(\\d+) time=([\\d\\.]+) ms");
+				int bytes = NumUtils.toInt(nums.get(1), 0);
+				int ttl = NumUtils.toInt(nums.get(2), 0);
+				double rtt = NumUtils.toDouble(nums.get(3), 0);
+				
+				pong.setPacketBytes(bytes);
+				pong.setTTL(ttl);
+				pong.addRTT(rtt);
+				
+			} else if(line.contains("packets transmitted")) {
+				List<String> nums = RegexUtils.findGroups(line, 
+						"(\\d+) packets transmitted, (\\d+) received, ([\\d\\.]+)% packet loss, time ([\\d\\.]+)ms");
+				
+				int sent = NumUtils.toInt(nums.get(1), 0);
+				int recv = NumUtils.toInt(nums.get(2), 0);
+				double loss = NumUtils.toDouble(nums.get(3), 0);
+				double totalRTT = NumUtils.toDouble(nums.get(4), 0);
+				
+				pong.setSent(sent);
+				pong.setRecv(recv);
+				pong.setLost(sent - recv);
+				pong.setLoss(loss);
+				pong.setTotalRTT(totalRTT);
+				
+			} else if(line.startsWith("rtt")) {
+				List<String> nums = RegexUtils.findGroups(line, 
+						"([\\d\\.]+)/([\\d\\.]+)/([\\d\\.]+)/([\\d\\.]+) ms");
+				double minRTT = NumUtils.toDouble(nums.get(1), 0);
+				double avgRTT = NumUtils.toDouble(nums.get(2), 0);
+				double maxRTT = NumUtils.toDouble(nums.get(3), 0);
+				double mdevRTT = NumUtils.toDouble(nums.get(4), 0);
+				
+				pong.setMinRTT(minRTT);
+				pong.setMaxRTT(maxRTT);
+				pong.setAvgRTT(avgRTT);
+				pong.setMdevRTT(mdevRTT);
+			}
+		}
+		sfr.close();
+		return pong;
+	}
+
 }

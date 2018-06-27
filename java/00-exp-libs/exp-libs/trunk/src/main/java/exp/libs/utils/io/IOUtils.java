@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -30,6 +31,22 @@ public class IOUtils {
 	
 	/** 私有化构造函数 */
 	protected IOUtils() {}
+	
+	/**
+	 * 保存流式数据到字符串
+	 * @param is 流式数据读取器
+	 * @return 若保存失败则返回空字符串""
+	 */
+	public static String toStr(InputStream is, String charset) {
+		String str = "";
+		try {
+			str = toStr(new InputStreamReader(is, charset));
+			
+		} catch (UnsupportedEncodingException e) {
+			log.error("无效编码: {}", charset, e);
+		}
+		return str;
+	}
 	
 	/**
 	 * 保存流式数据到字符串
