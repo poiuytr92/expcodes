@@ -10,7 +10,7 @@ import exp.bilibili.plugin.Config;
 import exp.bilibili.plugin.cache.RoomMgr;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.envm.HttpHead;
-import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.RandomUtils;
 
 /**
  * <PRE>

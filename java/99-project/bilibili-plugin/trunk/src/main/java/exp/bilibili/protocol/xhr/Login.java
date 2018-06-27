@@ -14,7 +14,7 @@ import exp.bilibili.protocol.envm.BiliCmdAtrbt;
 import exp.libs.envm.HttpHead;
 import exp.libs.utils.encode.CryptoUtils;
 import exp.libs.utils.format.JsonUtils;
-import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.http.HttpClient;

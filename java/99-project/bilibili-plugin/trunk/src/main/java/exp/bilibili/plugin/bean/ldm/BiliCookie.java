@@ -7,8 +7,8 @@ import exp.bilibili.plugin.envm.CookieType;
 import exp.bilibili.plugin.envm.Danmu;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
-import exp.libs.utils.num.RandomUtils;
 import exp.libs.utils.other.BoolUtils;
+import exp.libs.utils.other.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.cookie.HttpCookie;
 

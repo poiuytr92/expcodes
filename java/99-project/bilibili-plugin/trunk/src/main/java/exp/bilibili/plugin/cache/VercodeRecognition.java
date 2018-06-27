@@ -15,7 +15,7 @@ import exp.libs.envm.FileType;
 import exp.libs.utils.img.ImageUtils;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
-import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.RandomUtils;
 
 /**
  * <PRE>

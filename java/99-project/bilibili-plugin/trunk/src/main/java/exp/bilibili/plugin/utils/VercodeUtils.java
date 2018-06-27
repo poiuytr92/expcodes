@@ -2,7 +2,7 @@ package exp.bilibili.plugin.utils;
 
 import exp.bilibili.plugin.cache.VercodeRecognition;
 import exp.libs.utils.num.NumUtils;
-import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ocr.OCR;
 

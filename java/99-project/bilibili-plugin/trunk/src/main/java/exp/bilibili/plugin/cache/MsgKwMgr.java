@@ -8,7 +8,7 @@ import java.util.Set;
 
 import exp.bilibili.plugin.Config;
 import exp.libs.utils.io.FileUtils;
-import exp.libs.utils.num.RandomUtils;
+import exp.libs.utils.other.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
