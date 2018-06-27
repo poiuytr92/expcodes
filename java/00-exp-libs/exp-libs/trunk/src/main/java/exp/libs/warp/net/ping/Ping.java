@@ -45,8 +45,6 @@ public class Ping {
 	 * 执行ping操作
 	 * @param host 被ping的主机, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
 	 * @param count 执行ping的次数(默认4次)
-	 * @param timeout 仅linux有效:命令超时(s). 若超过这个时间则ping命令强制结束
-	 * @param intervalSecond 仅linux有效:执行ping的间隔(s), 默认值1秒
 	 * @return ping结果
 	 */
 	public static Pong ping(String host, int count) {
