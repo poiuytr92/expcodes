@@ -57,7 +57,7 @@ public class IOUtils {
 		StringBuilder sb = new StringBuilder();
 		try {
 			int len = 0;
-			char[] buffer = new char[UnitUtils._1_MB];
+			char[] buffer = new char[UnitUtils._1_KB];
 			while((len = is.read(buffer)) != -1) {
 				sb.append(buffer, 0, len);
 			}

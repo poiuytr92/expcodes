@@ -1,7 +1,10 @@
 package exp.libs.warp.cmd;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.Charset;
-import exp.libs.utils.io.IOUtils;
+import exp.libs.envm.Delimiter;
 import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -66,11 +69,11 @@ public class CmdUtils {
 		CmdResult cmdRst = new CmdResult();
 		try {
 			InputStream infoIs = process.getInputStream();
-			cmdRst.setInfo(IOUtils.toStr(infoIs, Charset.DEFAULT));
+			cmdRst.setInfo(_readProcessLine(infoIs));
 			
 			if(debug == true) {
 				InputStream errIs = process.getErrorStream();
-				cmdRst.setErr(IOUtils.toStr(errIs, Charset.DEFAULT));
+				cmdRst.setErr(_readProcessLine(errIs));
 				
 				int errCode = process.waitFor();	// 此方法会阻塞, 直到命令执行结束
 				cmdRst.setErrCode(errCode);
@@ -84,6 +87,25 @@ public class CmdUtils {
 			log.error("执行控制台命令失败", e);
 		}
 		return cmdRst;
+	}
+	
+	/**
+	 * 读取(同时打印)命令行的信息流
+	 * @param is 信息流/异常流
+	 * @return 执行结果
+	 * @throws IOException
+	 */
+	private static String _readProcessLine(InputStream is) throws IOException {
+		StringBuilder sb = new StringBuilder();
+		BufferedReader reader = new BufferedReader(
+				new InputStreamReader(is, Charset.DEFAULT));
+		
+		String line = null;
+		while ((line = reader.readLine()) != null) {
+			sb.append(line).append(Delimiter.CRLF);
+			System.out.println(line);	// 实时打印命令行执行结果
+		}
+		return sb.toString();
 	}
 
 	/**

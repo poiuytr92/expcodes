@@ -16,66 +16,69 @@ import exp.libs.warp.io.flow.StringFlowReader;
  * </pre>
  * <B>PROJECT : </B> exp-libs
  * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
- * @version   2015-12-27
+ * @version   2018-06-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class Ping {
 	
-	public static void main(String[] args) {
-		System.out.println(ping("203.195.132.63"));
-	}
-	
 	/** ping命令 */
-	private final static String PING_COMMAND = "ping";
+	private final static String CMD_PING = "ping";
+	
+	/** tracert命令 */
+	private final static String CMD_TRACERT = OSUtils.isWin() ? 
+			"tracert -d -w 1 " : "traceroute -w 0.1 -n -q 1 ";
+	
+	/** 私有化构造函数 */
+	protected Ping() {}
 	
 	/**
 	 * 执行ping操作
-	 * @param address 被ping的地址, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @param host 被ping的主机, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
 	 * @return ping结果
 	 */
-	public static Pong ping(String address) {
-		return ping(address, 4, 0, 0);
+	public static Pong ping(String host) {
+		return ping(host, 4, 0, 0);
 	}
 	
 	/**
 	 * 执行ping操作
-	 * @param address 被ping的地址, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @param host 被ping的主机, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
 	 * @param count 执行ping的次数(默认4次)
 	 * @param timeout 仅linux有效:命令超时(s). 若超过这个时间则ping命令强制结束
 	 * @param intervalSecond 仅linux有效:执行ping的间隔(s), 默认值1秒
 	 * @return ping结果
 	 */
-	public static Pong ping(String address, int count) {
-		return ping(address, count, 0, 0);
+	public static Pong ping(String host, int count) {
+		return ping(host, count, 0, 0);
 	}
 	
 	/**
 	 * 执行ping操作
-	 * @param address 被ping的地址, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @param host 被ping的主机, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
 	 * @param count 执行ping的次数(默认4次)
 	 * @param timeout 仅linux有效:命令超时(s). 若超过这个时间则ping命令强制结束
 	 * @param intervalSecond 仅linux有效:执行ping的间隔(s), 默认值1秒
 	 * @return ping结果
 	 */
-	public static Pong ping(String address, 
+	public static Pong ping(String host, 
 			int count, int timeout, double intervalSecond) {
-		String cmd = getPingCommand(address, count, timeout, intervalSecond);
+		String cmd = getPingCommand(host, count, timeout, intervalSecond);
 		return toPong(CmdUtils.execute(cmd).getInfo());
 	}
 
 	/**
 	 * 组装ping命令
-	 * @param address 被ping的地址, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @param host 被ping的主机, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
 	 * @param count 执行ping的次数(默认4次)
 	 * @param timeout 仅linux有效:命令超时(s). 若超过这个时间则ping命令强制结束
 	 * @param intervalSecond 仅linux有效:执行ping的间隔(s), 默认值1秒
 	 * @return ping命令
 	 */
-	private static String getPingCommand(String address, 
+	private static String getPingCommand(String host, 
 			int count, int timeout, double intervalSecond) {
-		StringBuilder cmd = new StringBuilder(PING_COMMAND);
-		cmd.append(" ").append(address);
+		StringBuilder cmd = new StringBuilder(CMD_PING);
+		cmd.append(" ").append(host);
 		
 		count = (count <= 0 ? 4 : count);	// 默认ping 4次
 		cmd.append(OSUtils.isWin() ? " -n " : " -c ").append(count);
@@ -353,6 +356,17 @@ public class Ping {
 		}
 		sfr.close();
 		return pong;
+	}
+	
+	/**
+	 * 执行tracert操作
+	 * 
+	 * @param host 被tracert的主机, 可以是IP(如192.168.11.22) 或 域名(如:www.exp-blog.com)
+	 * @return tracert结果
+	 */
+	public static String tracert(String host) {
+		String cmd = StrUtils.concat(CMD_TRACERT, host);
+		return CmdUtils.execute(cmd).getInfo();
 	}
 
 }

@@ -8,9 +8,6 @@ import java.net.SocketException;
 
 import org.apache.commons.net.telnet.TelnetClient;
 
-import exp.libs.warp.net.tracert.Tracert;
-import exp.libs.warp.net.tracert.bean.TracertBean;
-
 /**
  * <PRE>
  * telnet客户端类，里面提供连接，发指令、获取返回信息，断开连接
@@ -436,9 +433,6 @@ public class Telnet {
 
 				System.out.println(str);
 				
-				TracertBean trb = new Tracert().parseTracertReturn(str);
-				
-				System.out.println("#############\n" + trb);
 				System.out.println("结束~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 			} else {
 				System.out.println("连接错误");
