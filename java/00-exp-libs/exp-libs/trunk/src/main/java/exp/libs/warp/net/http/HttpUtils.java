@@ -72,7 +72,7 @@ public class HttpUtils {
 	public final static String METHOD_POST = "POST";
 	
 	/** 默认本地IP  */
-	public final static String LOCAL_IP = "127.0.0.1";
+	private final static String LOCAL_IP = "127.0.0.1";
 	
 	/** 页面使用BASE64存储的图像信息正则 */
 	private final static String RGX_BASE64_IMG = "data:image/([^;]+);base64,(.*)";
