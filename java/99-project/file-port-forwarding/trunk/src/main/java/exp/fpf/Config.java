@@ -19,8 +19,8 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * <pre>
  * 配置类
  * </pre>	
- * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> file-port-forwarding
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-07-28
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

@@ -27,8 +27,8 @@ import java.util.List;
  * 		使用定义+定理求解素数，时间复杂度约为O(n*sqrt(n))，超过千万级的话短时间内跑不动
  * 		使用筛法求解素数，时间复杂度可达到O(n)，但空间复杂度也达到了O(n)
  * </PRE>
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-11-30
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

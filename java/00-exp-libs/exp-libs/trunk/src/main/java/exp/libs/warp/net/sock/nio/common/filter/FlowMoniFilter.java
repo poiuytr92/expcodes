@@ -13,8 +13,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * <pre>
  * 流量监控过滤器 （监控单位：字节）
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
@@ -120,8 +120,8 @@ public class FlowMoniFilter extends BaseFilter {
 	 * <PRE>
 	 * 内部统计类，用于计算流量
 	 * </PRE>
-	 * <B>PROJECT : </B> exp-libs
-	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+	 * <br/><B>PROJECT : </B> exp-libs
+	 * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
 	 * @version   2015-12-27
 	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6

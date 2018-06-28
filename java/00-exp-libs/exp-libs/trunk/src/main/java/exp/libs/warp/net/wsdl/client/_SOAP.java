@@ -5,8 +5,8 @@ package exp.libs.warp.net.wsdl.client;
  * SOAP协议版本枚举
  * </PRE>
  * 
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2018-06-20
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

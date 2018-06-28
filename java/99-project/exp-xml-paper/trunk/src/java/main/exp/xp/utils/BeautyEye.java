@@ -8,8 +8,8 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
  * <PRE>
  * 美瞳工具类
  * </PRE>
- * <B>PROJECT : </B> exp-xml-paper
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-xml-paper
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-06-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

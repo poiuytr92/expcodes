@@ -6,8 +6,8 @@ package exp.libs.mrp.envm;
  * 要求所有模板文件名称都要先在此处定义，以便管理。
  * 
  * </PRE>
- * <B>PROJECT : </B> mojo-release-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> mojo-release-plugin
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-08-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

@@ -14,8 +14,8 @@ import exp.libs.warp.net.sock.io.client.SocketClient;
  * 
  * 仅用于[接收模式]为socket监听模式的情况下 (文件扫描模式由第三方程序负责传输)
  * </pre>	
- * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> file-port-forwarding
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2018-01-16
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

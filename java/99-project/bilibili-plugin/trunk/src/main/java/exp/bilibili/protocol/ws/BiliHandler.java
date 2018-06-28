@@ -27,8 +27,8 @@ import exp.libs.warp.net.websock.interfaze.ISession;
  * <PRE>
  * B站WebSocket业务逻辑
  * </PRE>
- * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> bilibili-plugin
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2018-06-22
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

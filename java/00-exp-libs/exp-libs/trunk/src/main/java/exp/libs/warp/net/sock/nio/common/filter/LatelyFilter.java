@@ -15,8 +15,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 
  * 记录会话最后一次接收/发送命令的时间
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
@@ -81,8 +81,8 @@ public class LatelyFilter extends BaseFilter {
 	 * <PRE>
 	 * 内部类，用于刷新时间点
 	 * </PRE>
-	 * <B>PROJECT : </B> exp-libs
-	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+	 * <br/><B>PROJECT : </B> exp-libs
+	 * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
 	 * @version   2015-12-27
 	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6

@@ -14,8 +14,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 事件onMessageSent的出口
  * 数据在过滤链中遇到异常事件onExceptionCaught时，将通过过滤链直接把异常抛回到链头处理
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

@@ -18,8 +18,8 @@ import org.apache.poi.xssf.usermodel.XSSFHyperlink;
  * Sheet页，需配合Excel工作簿使用.
  * 	(对Sheet页的所有操作均只影响内存数据，对外存文件无影响)
  * </PRE>
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-08-22
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

@@ -33,8 +33,8 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
  * <PRE>
  * 直播间在线用户抽奖器
  * </PRE>
- * <B>PROJECT : </B> bilibili-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> bilibili-plugin
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-12-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
@@ -266,8 +266,8 @@ class _LotteryUI extends PopChildWindow {
 	 * <PRE>
 	 * 名字闪现器
 	 * </PRE>
-	 * <B>PROJECT : </B> bilibili-plugin
-	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+	 * <br/><B>PROJECT : </B> bilibili-plugin
+	 * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
 	 * @version   2017-12-17
 	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6

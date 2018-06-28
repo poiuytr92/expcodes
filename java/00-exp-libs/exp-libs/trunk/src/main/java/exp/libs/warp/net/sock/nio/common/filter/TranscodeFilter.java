@@ -13,8 +13,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 接收消息时：把接收到的消息字符串的recvCharset编码，转码为业务处理时使用的编码
  * 发送消息时：把业务处理时使用的编码，转码为发送消息时的writeCharset编码
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

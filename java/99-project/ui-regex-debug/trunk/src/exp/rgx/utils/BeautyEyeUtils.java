@@ -9,8 +9,8 @@ import org.jb2011.lnf.beautyeye.BeautyEyeLNFHelper;
  * <PRE>
  * swing美瞳组件工具
  * </PRE>
- * <B>PROJECT : </B> ui-regex-debug
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> ui-regex-debug
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-06-01
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

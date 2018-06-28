@@ -21,8 +21,8 @@ import exp.libs.warp.net.http.HttpUtils;
  * 	用于获取wsdl地址上xml文本的文件输入流(如果是文件地址，则把文件转换成文件输入流)
  * </pre>
  * 
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2018-06-20
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

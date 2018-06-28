@@ -12,8 +12,8 @@ import exp.fpf.envm.Param;
  * <pre>
  * 收发数据监听器-文件扫描模式
  * </pre>	
- * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> file-port-forwarding
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2018-01-16
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

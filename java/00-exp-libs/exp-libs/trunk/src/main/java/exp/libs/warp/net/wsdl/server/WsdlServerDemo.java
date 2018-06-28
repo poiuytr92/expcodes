@@ -8,8 +8,8 @@ import javax.xml.ws.Endpoint;
  * 此类的作用是【演示】如何通过 JAX-WS 发布一个超轻量级的Websevices服务.
  * </PRE>
  * 
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2018-06-20
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

@@ -27,12 +27,12 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * 
  * URL url = new URL( "https:// ...URL that only Works in TLSv1.2" );
  * HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
- * conn.setSSLSocketFactory(new _TLS12_SocketFactory());  
+ * conn.setSSLSocketFactory(new _TLS12_HttpURLSocketFactory());  
  * 
  * <PRE>
  * 
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 # 2017-12-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

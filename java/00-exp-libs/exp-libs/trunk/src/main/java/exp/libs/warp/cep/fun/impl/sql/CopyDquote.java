@@ -10,8 +10,8 @@ import exp.libs.warp.cep.fun.BaseFunction1;
  * 	双引号复制,即1个双引号替换成2个连续的双引号.
  * 	主要用于处理在界面配置的sql存储到数据库后,双引号丢失问题.
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

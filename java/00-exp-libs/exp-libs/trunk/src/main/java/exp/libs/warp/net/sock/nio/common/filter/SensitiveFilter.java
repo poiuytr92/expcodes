@@ -19,8 +19,8 @@ import exp.libs.warp.net.sock.nio.common.interfaze.ISession;
  * 若达到触犯敏感词规则的上限，则断开会话。
  * 此过滤器暂时只能针对String类型的msg处理。
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
@@ -165,8 +165,8 @@ public class SensitiveFilter extends BaseFilter{
 	 * <PRE>
 	 * 内部类，敏感词计数器
 	 * </PRE>
-	 * <B>PROJECT : </B> exp-libs
-	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+	 * <br/><B>PROJECT : </B> exp-libs
+	 * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
 	 * @version   2015-12-27
 	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6

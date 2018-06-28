@@ -19,8 +19,8 @@ import exp.libs.utils.other.StrUtils;
  *   在JDK1.6、JDK1.7、JDK1.8下使用均支持TLSv1.2
  * </PRE>
  * 
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-12-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

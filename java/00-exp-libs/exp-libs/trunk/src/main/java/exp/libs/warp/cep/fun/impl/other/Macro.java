@@ -12,8 +12,8 @@ import exp.libs.warp.cep.fun.BaseFunctionN;
  * 自定函数：
  * 	宏定义函数:给定多个无直接关系的函数，连续执行.期间只要有一个执行失败则中断.
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

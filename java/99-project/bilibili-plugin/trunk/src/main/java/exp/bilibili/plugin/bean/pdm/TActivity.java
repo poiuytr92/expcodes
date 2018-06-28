@@ -10,8 +10,8 @@ import exp.libs.warp.db.sql.DBUtils;
  * Table Name : T_ACTIVITY
  * Class Name : TActivity
  * </PRE>
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2018-01-23 14:46:29
  * @author    EXP: 272629724@qq.com
  * @since     jdk version : jdk 1.6

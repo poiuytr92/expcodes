@@ -7,8 +7,8 @@ package ${package};
  * <PRE>
  * 配置加载器
  * </PRE>
- * <B>PROJECT : </B> xxxxxxx
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> xxxxxxx
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   xxxxxxx
  * @author    xxxxxxx
  * @since     jdk版本：jdk1.6

@@ -19,8 +19,8 @@ import exp.libs.warp.thread.ThreadPool;
  * 该过滤器默认对于所有触发事件都会放入线程池。
  * 若有些事件不需要放入线程池处理，只需要继承这个类，重写那些事件的处理逻辑即可。
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2015-12-27
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
@@ -209,8 +209,8 @@ public final class ThreadPoolFilter extends ThreadPool implements IFilter {
 	 * 
 	 * 可以把过滤器的事件触发方法封装为线程，以便提交线程池处理。
 	 * </pre>	
-	 * <B>PROJECT : </B> exp-libs
-	 * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+	 * <br/><B>PROJECT : </B> exp-libs
+	 * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
 	 * @version   2015-12-27
 	 * @author    EXP: 272629724@qq.com
 	 * @since     jdk版本：jdk1.6

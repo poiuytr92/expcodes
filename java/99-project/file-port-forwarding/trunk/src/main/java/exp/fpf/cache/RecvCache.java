@@ -14,8 +14,8 @@ import exp.libs.utils.other.StrUtils;
  * 	第三方程序在传送数据流文件时，可能会使用并发传送使得文件时序错乱.
  * 	此缓存区目的是修正接收文件的时序
  * </pre>	
- * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> file-port-forwarding
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2018-01-16
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

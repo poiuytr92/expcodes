@@ -28,8 +28,8 @@ import exp.libs.utils.other.StrUtils;
  * 	1. 请求发送器: 把[本侧应用程序]的请求[发送]到[对侧真正的服务端口].
  * 	2. 响应接收器: 把[对侧真正的服务端口]返回的响应数据[回传]到[本侧应用程序].
  * </pre>	
- * <B>PROJECT : </B> file-port-forwarding
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> file-port-forwarding
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-07-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

@@ -6,8 +6,8 @@ import exp.libs.warp.net.websock.bean.Frame;
  * <pre>
  * WebSocket客户端会话接口
  * </pre>	
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-08-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

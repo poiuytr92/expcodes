@@ -17,8 +17,8 @@ import exp.libs.utils.other.StrUtils;
  * Maven工具类。
  * 主要提供针对pom的操作方法。
  * </PRE>
- * <B>PROJECT : </B> mojo-release-plugin
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * <br/><B>PROJECT : </B> mojo-release-plugin
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
  * @version   2017-08-17
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6

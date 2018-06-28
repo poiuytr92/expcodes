@@ -24,7 +24,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * 引入BouncyCastle重写通信安全密级协议, 使得JDK1.6和1.7支持TLSv1.2.
  * 注： JDK1.8本已支持TLSv1.2， 无需再使用此方法
  * ---------------------------------------------------------------------------
- * 样例 （只需在连接HTTP前注册_TLS12_ProtocolSocketFactory到https即可）:
+ * 样例 （只需在连接HTTP前注册_TLS12_HttpClientSocketFactory到https即可）:
  * 
  * String scheme = "https";
  * Protocol sslProtocol = Protocol.getProtocol(scheme);
@@ -41,8 +41,8 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * 
  * <PRE>
  * 
- * <B>PROJECT : </B> exp-libs
- * <B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a>
  * @version   1.0 # 2017-12-21
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
