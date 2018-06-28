@@ -17,7 +17,7 @@ import javax.xml.ws.Endpoint;
 public class WsdlServerDemo {  
 	
 	/** 自定义发布Websevices的地址 */
-	public final static String WSDL_URL = "http://127.0.0.1:8082/wsdemo?wsdl";
+	public final static String WSDL_URL = "http://127.0.0.1:8080/wsdemo?wsdl";
 	
 	/**
 	 * <pre>

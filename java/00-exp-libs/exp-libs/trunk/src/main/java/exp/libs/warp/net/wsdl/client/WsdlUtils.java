@@ -49,6 +49,12 @@ public class WsdlUtils {
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(WsdlUtils.class);
 	
+	/** (SSL环境)密钥库类型/模式: JKS */
+	private static final String JKS = "JKS";
+	
+	/** (SSL环境)密钥库类型/模式: PKCS12 */
+	private static final String PKCS12= "PKCS12";
+	
 	/** 连接超时, 默认1分钟 */
 	public final static int CONN_TIMEOUT = HttpUtils.CONN_TIMEOUT;
 
@@ -90,9 +96,64 @@ public class WsdlUtils {
 	}
 	
 	/**
+	 * <PRE>
+	 * JSK模式: <br/>
+	 * 对于采用HTTPS的WSDL，需要初始化受信环境: 此方法用于导入证书.
+	 * 只需要在调用WSDL服务接口前初始化一次此方法即可.
+	 * </PRE>
+	 *
+	 * @param keyStore 密钥库文件, 指向文件路径即可, 如 X:/foo/bar/xyz.keyStore
+	 * @param keyStorePassword 密钥库文件密码, 根据实际情况设置
+	 */
+	public static void initSSLEnvByJKS(String keyStore, String keyStorePassword) {
+		initSSLEnv(JKS, JKS, keyStore, keyStorePassword, keyStore, keyStorePassword);
+	}
+	
+	/**
+	 * <PRE>
+	 * PKCS12模式: <br/>
+	 * 对于采用HTTPS的WSDL，需要初始化受信环境: 此方法用于导入证书.
+	 * 只需要在调用WSDL服务接口前初始化一次此方法即可.
+	 * </PRE>
+	 *
+	 * @param trustStore 受信任密钥库文件, 指向文件路径即可, 如 X:/foo/bar/xyz.truststore
+	 * @param trustStorePassword 受信任密钥库文件密码, 根据实际情况设置
+	 * @param keyStore 密钥库文件, 指向文件路径即可, 如 X:/foo/bar/xyz.keyStore
+	 * @param keyStorePassword 密钥库文件密码, 根据实际情况设置
+	 */
+	public static void initSSLEnvByPKCS12(String trustStore,
+			String trustStorePassword, String keyStore, String keyStorePassword) {
+		initSSLEnv(PKCS12, JKS, trustStore, trustStorePassword, keyStore, keyStorePassword);
+	}
+	
+	/**
+	 * <PRE>
+	 * 对于采用HTTPS的WSDL，需要初始化受信环境: 此方法用于导入证书.
+	 * 只需要在调用WSDL服务接口前初始化一次此方法即可.
+	 * </PRE>
+	 *
+	 * @param keyStoreType 密钥库类型/模式: JKS 或 PKCS12
+	 * @param trustStoreType 受信任密钥库类型: 不管是JKS或PKCS12模式, 只能固定值为"JKS"或不设值
+	 * @param trustStore 受信任密钥库文件, 指向文件路径即可, 如 X:/foo/bar/xyz.truststore
+	 * @param trustStorePassword 受信任密钥库文件密码, 根据实际情况设置
+	 * @param keyStore 密钥库文件(在JKS模式下与trustStore是相同值), 指向文件路径即可, 如 X:/foo/bar/xyz.keyStore
+	 * @param keyStorePassword 密钥库文件密码(在JKS模式下与trustStorePassword是相同值), 根据实际情况设置
+	 */
+	public static void initSSLEnv(String keyStoreType, String trustStoreType, 
+			String trustStore,	String trustStorePassword, String keyStore, 
+			String keyStorePassword) {
+		System.setProperty("javax.net.ssl.trustStoreType", trustStoreType);
+		System.setProperty("javax.net.ssl.trustStore", trustStore);
+		System.setProperty("javax.net.ssl.trustStorePassword", trustStorePassword);
+		System.setProperty("javax.net.ssl.keyStoreType", keyStoreType);
+		System.setProperty("javax.net.ssl.keyStore", keyStore);
+		System.setProperty("javax.net.ssl.keyStorePassword", keyStorePassword);
+	}
+	
+	/**
 	 * 创建用于请求wsdl的soap格式的XML报文模板(无参)
 	 * @param wsdlURL wsdl地址, 支持格式: 
-	 * 		http://127.0.0.1:8080/services/myService?wsdl
+	 * 		http://127.0.0.1:8080/services/customService?wsdl
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
 	 * 
@@ -106,7 +167,7 @@ public class WsdlUtils {
 	/**
 	 * 创建用于请求wsdl的soap格式的XML报文模板(无参)
 	 * @param wsdlURL wsdl地址, 支持格式: 
-	 * 		http://127.0.0.1:8080/services/myService?wsdl
+	 * 		http://127.0.0.1:8080/services/customService?wsdl
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
 	 * 
@@ -128,7 +189,7 @@ public class WsdlUtils {
 	/**
 	 * 创建用于请求wsdl的soap格式的XML报文模板(无参)
 	 * @param wsdlURL wsdl地址, 支持格式: 
-	 * 		http://127.0.0.1:8080/services/myService?wsdl
+	 * 		http://127.0.0.1:8080/services/customService?wsdl
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
 	 * 
@@ -253,8 +314,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @return responseXml xml响应报文
@@ -270,8 +331,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @return responseXml xml响应报文
@@ -285,8 +346,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @param header 是否需要带头参数  SOAPAction:method
@@ -302,8 +363,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @param header 是否需要带头参数  SOAPAction:method
@@ -323,8 +384,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @param header 是否需要带头参数  SOAPAction:method
@@ -345,8 +406,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @return responseXml xml响应报文
@@ -360,8 +421,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @param header 是否需要带头参数  SOAPAction:method
@@ -377,8 +438,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @param header 是否需要带头参数  SOAPAction:method
@@ -398,8 +459,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestParams 请求参数表
 	 * @param header 是否需要带头参数  SOAPAction:method
@@ -420,8 +481,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestXml xml请求报文
 	 * @param header 是否需要带头参数  SOAPAction:method
@@ -449,8 +510,8 @@ public class WsdlUtils {
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
 	 * @param wsdlURL wsdl地址, 支持格式:
-	 * 		http://172.168.10.7:8686/services/myService?wsdl
-	 * 		http://172.168.10.7:8686/services/myService
+	 * 		http://172.168.10.7:8686/services/customService?wsdl
+	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
 	 * @param requestXml xml请求报文
 	 * @param header 是否需要带头参数  SOAPAction:method
