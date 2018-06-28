@@ -180,10 +180,13 @@ public class Login extends __XHR {
 		String jsessionId = "";
 		HttpMethod method = client.getHttpMethod();
 		if(isOk && method != null) {
-			Header outHeader = method.getResponseHeader(HttpHead.KEY.SET_COOKIE);
-			if(outHeader != null) {
-				jsessionId = RegexUtils.findFirst(outHeader.getValue(), 
-						StrUtils.concat("(", JSESSIONID, "=[^;]+)"));
+			Header[] outHeaders = method.getResponseHeaders(HttpHead.KEY.SET_COOKIE);
+			for(Header outHeader : outHeaders) {
+				String value = outHeader.getValue();
+				if(value.contains(JSESSIONID)) {
+					jsessionId = RegexUtils.findFirst(value, 
+							StrUtils.concat("(", JSESSIONID, "=[^;]+)"));
+				}
 			}
 		}
 		client.close();

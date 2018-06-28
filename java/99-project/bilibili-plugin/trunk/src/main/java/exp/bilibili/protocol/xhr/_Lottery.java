@@ -57,14 +57,14 @@ class _Lottery extends __XHR {
 		final int RETRY_LIMIT = 20;
 		final int RETRY_INTERVAL = 100;
 		String sRoomId = getRealRoomId(roomId);
-		Map<String, String> header = GET_HEADER(cookie.toNVCookie(), sRoomId);
+		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
 		String reason = "";
 		
 		// 加入高能/小电视抽奖
 		if(LotteryType.STORM != type) {
 			Map<String, String> request = getRequest(cookie.CSRF(), sRoomId, raffleId);
 			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
-				String response = HttpURLUtils.doGet(url, header, request);
+				String response = HttpURLUtils.doPost(url, header, request);
 				
 				reason = analyse(response);
 				if(StrUtils.isEmpty(reason) || !reason.contains("系统繁忙")) {
