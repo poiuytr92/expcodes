@@ -49,6 +49,7 @@ public class TaskMgr {
 		cron.Month().withEvery();
 		cron.Week().withAny();
 		cron.Year().withList(2014, 2018);
+		cron.Year().setSubExpression("*");
 		
 		System.out.println(cron);
 	}
