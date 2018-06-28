@@ -37,6 +37,22 @@ import exp.libs.utils.other.StrUtils;
  */
 public class TaskMgr {
 
+	// FIXME 规则为步长的时候还需指定  触发器的起止时间 ？
+	
+	
+	public static void main(String[] args) {
+		Cron cron = new Cron();
+		cron.Second().withRange(1, 3);
+		cron.Minute().withList(4, 5, 6);
+		cron.Hour().withStep(2, 5);
+		cron.Day().withAny();
+		cron.Month().withEvery();
+		cron.Week().withAny();
+		cron.Year().withList(2014, 2018);
+		
+		System.out.println(cron);
+	}
+	
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(TaskMgr.class);
 	
@@ -135,9 +151,22 @@ public class TaskMgr {
 	
 	/**
 	 * 添加计划任务
-	 * @param job 任务执行接口(需提供org.quartz.Job的接口实现类)
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
 	 * @param params 任务执行参数.
-	 * 		[接口org.quartz.Job] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param cronExpression 定义任务触发时机的corn表达式
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean add(Job job, Map<Object, Object> params, String cronExpression) {
+		return add("", job, params, cronExpression);
+	}
+	
+	/**
+	 * 添加计划任务
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
 	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
 	 * @param cron 定义任务触发时机的corn规则
 	 * @return true:添加成功; false:添加失败
@@ -149,9 +178,25 @@ public class TaskMgr {
 	/**
 	 * 添加计划任务
 	 * @param taskName 任务名称
-	 * @param job 任务执行接口(需提供org.quartz.Job的接口实现类)
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
 	 * @param params 任务执行参数.
-	 * 		[接口org.quartz.Job] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param cronExpression 定义任务触发时机的corn表达式
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean add(String taskName, Job job, 
+			Map<Object, Object> params, String cronExpression) {
+		return add(taskName, job, params, new Cron(cronExpression));
+	}
+	
+	
+	/**
+	 * 添加计划任务
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
 	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
 	 * @param cron 定义任务触发时机的corn规则
 	 * @return true:添加成功; false:添加失败
@@ -172,9 +217,9 @@ public class TaskMgr {
 	/**
 	 * 添加计划任务
 	 * @param taskName 任务名称
-	 * @param job 任务执行接口(需提供org.quartz.Job的接口实现类)
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
 	 * @param params 任务执行参数.
-	 * 		[接口org.quartz.Job] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
 	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
 	 * @param cron 定义任务触发时机的corn规则
 	 * @throws Exception
@@ -265,6 +310,40 @@ public class TaskMgr {
 		for(String taskName : taskNames) {
 			remove(taskName);
 		}
+	}
+	
+	/**
+	 * 修改已有的计划任务(若不存在则新增一个计划任务)
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param cronExpression 定义任务触发时机的corn表达式
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean modify(String taskName, Job job, 
+			Map<Object, Object> params, String cronExpression) {
+		return modify(taskName, job, params, new Cron(cronExpression));
+	}
+	
+	/**
+	 * 修改已有的计划任务(若不存在则新增一个计划任务)
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param cron 定义任务触发时机的corn规则
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean modify(String taskName, Job job, 
+			Map<Object, Object> params, Cron cron) {
+		boolean isOk = remove(taskName);
+		if(isOk == true) {
+			isOk = add(taskName, job, params, cron);
+		}
+		return isOk;
 	}
 	
 }

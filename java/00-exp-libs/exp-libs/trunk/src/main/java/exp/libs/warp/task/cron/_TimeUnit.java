@@ -1,5 +1,12 @@
 package exp.libs.warp.task.cron;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import exp.libs.utils.other.StrUtils;
+
 
 /*
 秒（0~59） 
@@ -43,14 +50,53 @@ package exp.libs.warp.task.cron;
 //	Cron表达式对特殊字符的大小写不敏感，对代表星期的缩写英文大小写也不敏感。
 
 
-// 子表达式
-class _CronUnit {
+abstract class _TimeUnit {
 
+	protected String subExpression;
+	
+	protected _TimeUnit() {
+		this.subExpression = "*";
+	}
+	
 	/** 每值: 根据时间单位不同, 可表示 "每秒/每分/每小时/每日/每月/每周/每年" */
-	protected final static String VAL_EVERY = "*";
+	public String withEvery() {
+		subExpression = "*";
+		return subExpression;
+	}
 	
-	/** 任意值: 即此位置的时间值对最终的cron规则无约束 */
-	protected final static String VAL_ANY = "?";
+	public String withRange(int from, int to) {
+		subExpression = StrUtils.concat(from, "-", to);
+		return subExpression;
+	}
 	
-	protected String value;
+	public String withList(int... list) {
+		if(list != null) {
+			List<Integer> _list = new LinkedList<Integer>();
+			for(int e : list) {
+				_list.add(e);
+			}
+			Collections.sort(_list);
+			subExpression = StrUtils.concat(_list, ",");
+		}
+		return subExpression;
+	}
+	
+	public String withStep(int from, int interval) {
+		subExpression = StrUtils.concat(from, "/", interval);
+		return subExpression;
+	}
+	
+	// 子类用正则校验
+	// 其他方法的取值范围也让子类实现
+	public abstract String setSubExpression(String subExpression);
+		
+	public String toExpression() {
+		return subExpression;
+	}
+	
+	@Override
+	public String toString() {
+		return toExpression();
+	}
+	
 }

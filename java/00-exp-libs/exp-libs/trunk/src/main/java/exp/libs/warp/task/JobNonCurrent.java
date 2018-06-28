@@ -18,7 +18,7 @@ import org.quartz.JobExecutionException;
  * @since     jdk版本：jdk1.6
  */
 @DisallowConcurrentExecution	// 声明此任务接口不允许并发执行
-public interface NonCurrentJob extends Job {
+public interface JobNonCurrent extends Job {
 
 	/**
 	 * <PRE>
