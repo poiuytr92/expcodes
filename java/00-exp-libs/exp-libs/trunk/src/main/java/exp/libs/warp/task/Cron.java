@@ -16,6 +16,8 @@ import org.quartz.CronExpression;
  */
 public class Cron {
 
+	// FIXME 规则为步长的时候还需指定  触发器的起止时间 ？
+	
 	private String expression;
 	
 	public Cron() {
