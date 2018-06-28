@@ -186,7 +186,7 @@ public class AnnotationUtils {
 	}
 	
 	/**
-	 * 佛祖保佑注释
+	 * 佛祖保佑注释(样式1)
 	 * @return 佛祖保佑, 代码无BUG
 	 */
 	public static String getBuddhaBless1() {
@@ -216,7 +216,7 @@ public class AnnotationUtils {
 	}
 	
 	/**
-	 * 佛祖保佑注释
+	 * 佛祖保佑注释(样式2)
 	 * @return 佛祖保佑, 代码无BUG
 	 */
 	public static String getBuddhaBless2() {
@@ -246,7 +246,7 @@ public class AnnotationUtils {
 	}
 	
 	/**
-	 * 佛祖保佑注释
+	 * 佛祖保佑注释(样式3)
 	 * @return 佛祖保佑, 代码无BUG
 	 * <pre>
 	 *                             _ooOoo_

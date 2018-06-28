@@ -1,459 +1,270 @@
 package exp.libs.warp.task;
 
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import org.quartz.CronExpression;
+import org.quartz.CronScheduleBuilder;
 import org.quartz.CronTrigger;
 import org.quartz.Job;
+import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
+import org.quartz.JobKey;
 import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
 import org.quartz.SchedulerFactory;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.envm.DateFormat;
-import exp.libs.utils.time.TimeUtils;
+import exp.libs.utils.num.IDUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * 定时任务管理
- * 依赖包：
- *  quartz-all-1.8.3.jar
- * 	slf4j-api-1.5.8.jar
- * 	slf4j-log4j12-1.5.8.jar
+ * 定时任务调度管理器
  * </PRE>
  * <br/><B>PROJECT : </B> exp-libs
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
- * @version   2015-12-27
+ * @version   2018-06-28
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
 public class TaskMgr {
-	
+
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(TaskMgr.class);
 	
+	/** 默认计划组(即任务触发器) */
+	private final static String DEFAULT_TRIGGER_GROUP = "DEFAULT_TRIGGER_GROUP";
+	
+	/** 默认工作组(即任务执行器) */
+	private final static String DEFAULT_JOB_GROUP = "DEFAULT_JOB_GROUP";
+	
+	/** 触发器组组名 */
+	private String triggerGroupName;
+	
+	/** 执行器组组名 */
+	private String jobGroupName;
+	
 	/** 任务调度管理器 */
-	private static SchedulerFactory sf = new StdSchedulerFactory();
+	private SchedulerFactory schedulerFactory;
 	
-	/** 工作分组 */
-	public final static String JOB_GROUP_NAME = "_default_group1";
-
-	/** 触发器分组 */
-	public final static String TRIGGER_GROUP_NAME = "_default_trigger1";
-
-	/** 任务信息队列，taskName是任务标识，value是Scheduler对象 */
-//	public static Map<String, Scheduler> taskMap = new HashMap<String, Scheduler>();
+	/** 任务名称集 */
+	private Set<String> taskNames;
 	
-	/** cron构造类型，按分钟  */
-	public static final int TYPE_MINUTE = 1;
-
-	/** cron构造类型 ，按小时  */
-	public static final int TYPE_HOUR = 2;
-
 	/**
-	 * 私有 构造方法
+	 * 构造函数
 	 */
-	private TaskMgr() {
+	public TaskMgr() {
+		this(DEFAULT_TRIGGER_GROUP, DEFAULT_JOB_GROUP);
 	}
 	
 	/**
-	 * 获取所有任务名称
-	 *
-	 * @return
-	 * @throws SchedulerException
+	 * 构造函数
+	 * @param triggerGroupName 触发器组组名
+	 * @param jobGroupName 执行器组组名
 	 */
-	public static String[] getTaskNames() throws SchedulerException {
-		String[] trigs = null;
-		Scheduler sd = sf.getScheduler();
-		trigs = sd.getTriggerNames(TRIGGER_GROUP_NAME);
-//		print(Arrays.toString(trigs));
-		return trigs;
+	public TaskMgr(String triggerGroupName, String jobGroupName) {
+		this.triggerGroupName = (triggerGroupName == null ? 
+				DEFAULT_TRIGGER_GROUP : triggerGroupName);
+		this.jobGroupName = (jobGroupName == null ? 
+				DEFAULT_JOB_GROUP : jobGroupName);
+		
+		this.schedulerFactory = new StdSchedulerFactory();
+		this.taskNames = new HashSet<String>();
 	}
 	
 	/**
 	 * <PRE>
-	 * 获取任务状态
-		Trigger.Trigger.STATE_NONE: -1	任务不存在
-		STATE_NORMAL: 0	正常
-		Trigger.STATE_PAUSED: 1	暂停
-		Trigger.STATE_COMPLETE: 2	完成
-		Trigger.STATE_ERROR: 3	异常
-		Trigger.STATE_BLOCKED: 4	阻塞
-		</PRE>
-	 *
-	 * @param taskName	任务标识
-	 * @return
-	 * @throws SchedulerException
+	 * 启动任务调度器.
+	 * ----------------------
+	 *  注意：调度器 [启动前] 或 [启动后] 均可添加任务.
+	 * </PRE>
 	 */
-	public static int getTaskState(String taskName) throws SchedulerException {
-		return sf.getScheduler().getTriggerState(taskName, TRIGGER_GROUP_NAME);
-	}
-	
-	/**
-	 * 获取所有任务状态
-	 *
-	 * @return
-	 * @throws SchedulerException
-	 */
-	public static Map<String, Integer> getTaskStates() throws SchedulerException {
-		Map<String, Integer> map = new HashMap<String, Integer>();
-		for (String name : getTaskNames()) {
-			map.put(name, getTaskState(name));
-		}
-		return map;
-	}
-	
-	/**
-	 * 获取任务计划
-	 *
-	 * @param taskName	任务标识
-	 * @return
-	 * @throws SchedulerException
-	 */
-	public static Trigger getTrigger(String taskName) throws SchedulerException {
-		Trigger trig = null;
-		trig = sf.getScheduler().getTrigger(taskName, TRIGGER_GROUP_NAME);
-		return trig;
-	}
-	
-	/**
-	 * 获取所有任务计划
-	 *
-	 * @return
-	 * @throws SchedulerException
-	 */
-	public static List<Trigger> getTriggers() throws SchedulerException {
-		List<Trigger> trigs = new ArrayList<Trigger>();
-		Trigger trig = null;
-		for (String name : getTaskNames()) {
-			trig = getTrigger(name);
-			trigs.add(trig);
-		}
-		return trigs;
-	}
-	
-	/**
-	 * 添加任务
-	 * 
-	 * @param taskName
-	 *            任务标识
-	 * @param job
-	 *            工作处理类
-	 * @param intervalTime
-	 *            时间间隔，单位秒
-	 * @param params
-	 *            任务处理参数，可以为空
-	 * @throws ParseException
-	 * @throws SchedulerException
-	 */
-	public static void add(String taskName, Job job, int intervalTime,
-			Map<String, Object> params) throws ParseException,
-			SchedulerException {
-		Scheduler sched = null;
-		sched = sf.getScheduler();
-		JobDetail jobDetail = new JobDetail(taskName, JOB_GROUP_NAME,
-				job.getClass());
-
-		if (params != null) {
-			jobDetail.getJobDataMap().putAll(params);
-		}
-
-		SimpleTrigger trigger = new SimpleTrigger(taskName, TRIGGER_GROUP_NAME);
-		trigger.setStartTime(new Date());
-
-		// 如果设置时间间隔为0，则任务只执行一次，不放入任务队列
-		if (intervalTime == 0) {
-			trigger.setRepeatCount(0);
-		} else {
-			trigger.setRepeatCount(-1);
-			trigger.setRepeatInterval(intervalTime * 1000);
-		}
-		sched.scheduleJob(jobDetail, trigger);
-		// 启动
-		if (!sched.isShutdown()) {
-			sched.start();
-		}
-	}
-
-	/**
-	 * 添加任务,并启动
-	 * 
-	 * @param taskName
-	 *            任务标识
-	 * @param job
-	 *            工作处理类
-	 * @param cron
-	 *            定时规则Cron
-	 * @param params
-	 *            任务处理参数，可以为空
-	 * @throws ParseException
-	 * @throws SchedulerException
-	 */
-	public static void add(String taskName, Job job, String cron,
-			Map<String, Object> params) throws ParseException,
-			SchedulerException {
-		add(taskName, job, cron, params, null, null);
-	}
-
-	/**
-	 * 添加任务,并启动
-	 * 
-	 * @param taskName
-	 *            任务标识
-	 * @param job
-	 *            工作处理类
-	 * @param cron
-	 *            定时规则Cron
-	 * @param params
-	 *            任务处理参数，可以为空
-	 * @param startTime
-	 * @param endTime
-	 * @throws ParseException
-	 * @throws SchedulerException
-	 */
-	public static void add(String taskName, Job job, String cron,
-			Map<String, Object> params, Date startTime, Date endTime)
-			throws ParseException, SchedulerException {
-
-		Scheduler sched = null;
-			sched = sf.getScheduler();
-			JobDetail jobDetail = new JobDetail(taskName, JOB_GROUP_NAME,
-					job.getClass());
-
-			if (params != null) {
-				jobDetail.getJobDataMap().putAll(params);
+	public boolean _start() {
+		boolean isOk = true;
+		try {
+			
+			// 若调度器已被shutdown, 会返回一个新的调度器实例
+			Scheduler scheduler = schedulerFactory.getScheduler();
+			
+			// 检查调度器是否已被启动过(含shutdown状态)
+			if(!scheduler.isStarted()) {	
+				scheduler.start();
 			}
-
-			if (isEmpty(cron)) {
-				throw new SchedulerException("Cron is not null！");
-			} else {
-				CronTrigger trigger = new CronTrigger(taskName, TRIGGER_GROUP_NAME);
-				trigger.setCronExpression(cron);// 触发器时间设定
-				if (startTime != null) {
-					trigger.setStartTime(startTime);
-				}
-				if (endTime != null) {
-					trigger.setEndTime(endTime);
-				}
-				sched.scheduleJob(jobDetail, trigger);
-			}
-		// 启动
-		if (!sched.isShutdown()) {
-			sched.start();
+			
+		} catch (Exception e) {
+			isOk = false;
+			log.error("启动计划任务调度器失败", e);
 		}
-	}
-
-	/**
-	 * 获取下个触发时间
-	 * 
-	 * @param date	计算开始时间
-	 * @param cron	cron表达式
-	 * @return
-	 * @throws ParseException
-	 */
-	public static String getNextValidTimeAfter(Date date, String cron)
-			throws ParseException {
-//		CronExpression cronExpression = new CronExpression(cron);
-//		Date next = cronExpression.getNextValidTimeAfter(date);
-		return TimeUtils.toStr(getNextValidTimeAfterDate(date, cron), 
-				DateFormat.YMDHMS);
+		return isOk;
 	}
 	
 	/**
-	 * 获取下个触发时间
-	 * 
-	 * @param date	计算开始时间
-	 * @param cron	cron表达式
-	 * @return
-	 * @throws ParseException
+	 * <PRE>
+	 * 停止任务调度器.
+	 * ----------------------
+	 *  注意：调度器停止后, 之前已添加的所有计划任务会同时被移除.
+	 * </PRE>
 	 */
-	public static Date getNextValidTimeAfterDate(Date date, String cron)
-			throws ParseException {
-		CronExpression cronExpression = new CronExpression(cron);
-		return cronExpression.getNextValidTimeAfter(date);
-	}
-
-	/**
-	 * 判断字符串是否为空
-	 *
-	 * @param cs
-	 *            字符串序列
-	 * @return boolean
-	 */
-	private static boolean isEmpty(CharSequence cs) {
-		return cs == null || cs.length() == 0;
-	}
-
-	/**
-	 * 关闭任务管理器
-	 * 
-	 * @throws SchedulerException
-	 */
-	public static void kill() throws SchedulerException {
-
-		// 删除所有任务
-		removeAll();
-
-		Scheduler sched = sf.getScheduler();
-		// 关闭
-		sched.shutdown();
-
-		sched = null;
-
-		sf = null;
-	}
-
-	/**
-	 * 删除任务
-	 * 
-	 * @param taskName
-	 *            任务标识
-	 * @return true成功 false失败
-	 * @throws SchedulerException
-	 */
-	public static boolean remove(String taskName) throws SchedulerException {
-		Scheduler sched = sf.getScheduler();
-		// 停止触发器
-		sched.pauseTrigger(taskName, TRIGGER_GROUP_NAME);
-		// 移除触发器
-		boolean flag = sched.unscheduleJob(taskName, TRIGGER_GROUP_NAME);
-		if (flag) {
-			// 删除任务
-			flag = sched.deleteJob(taskName, JOB_GROUP_NAME);
+	public boolean _stop() {
+		boolean isOk = true;
+		try {
+			
+			// 若调度器已被shutdown, 会返回一个新的调度器实例
+			Scheduler scheduler = schedulerFactory.getScheduler();
+			
+			// 检查调度器是否已被启动过(含shutdown状态)
+			if(scheduler.isStarted()) {
+				removeAll();
+				scheduler.shutdown();
+			}
+			
+		} catch (Exception e) {
+			isOk = false;
+			log.error("停止计划任务调度器失败", e);
 		}
-		return flag;
+		return isOk;
 	}
-
+	
 	/**
-	 * 删除任务所有任务
-	 * 
-	 * @return true成功 false失败
-	 * @throws SchedulerException
+	 * 添加计划任务
+	 * @param job 任务执行接口(需提供org.quartz.Job的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口org.quartz.Job] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param cron 定义任务触发时机的corn规则
+	 * @return true:添加成功; false:添加失败
 	 */
-	public static boolean removeAll() throws SchedulerException {
-		boolean flag = true;
-		String[] tasknames = getTaskNames();
-		for (String taskName : tasknames) {
-			flag = remove(taskName);
+	public boolean add(Job job, Map<Object, Object> params, Cron cron) {
+		return add("", job, params, cron);
+	}
+	
+	/**
+	 * 添加计划任务
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口org.quartz.Job] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param cron 定义任务触发时机的corn规则
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean add(String taskName, Job job, 
+			Map<Object, Object> params, Cron cron) {
+		boolean isOk = true;
+		try {
+			_add(taskName, job, params, cron);
+			
+		} catch (Exception e) {
+			isOk = false;
+			log.error("添加计划任务 [", taskName, "] 失败", e);
 		}
-		tasknames = null;
-		return flag;
+		return isOk;
 	}
-
+	
 	/**
-	 * 更新任务
-	 * 
-	 * @param taskName
-	 *            任务标识
-	 * @param job
-	 *            工作处理类
-	 * @param intervalTime
-	 *            时间间隔，单位秒
-	 * @param params
-	 *            任务处理参数，可以为空
-	 * @throws ParseException
-	 * @throws SchedulerException
+	 * 添加计划任务
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口org.quartz.Job] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param cron 定义任务触发时机的corn规则
+	 * @throws Exception
 	 */
-	public static void update(String taskName, Job job, int intervalTime,
-			Map<String, Object> params) throws ParseException,
-			SchedulerException {
-
-		Scheduler sched = sf.getScheduler();
-		JobDetail jobDetail = new JobDetail(taskName, JOB_GROUP_NAME, job.getClass());
-		if (params != null) {
-			jobDetail.getJobDataMap().putAll(params);
+	private void _add(String taskName, Job job, Map<Object, Object> params, 
+			Cron cron) throws Exception {
+		if(job == null) {
+			throw new RuntimeException("任务实现接口不能为空");
 		}
-
-		SimpleTrigger trigger = (SimpleTrigger) sched.getTrigger(taskName,
-				TRIGGER_GROUP_NAME);
-		trigger.setStartTime(new Date());
-
-		// 如果设置时间间隔为0，则任务只执行一次，不放入任务队列
-		if (intervalTime == 0) {
-			trigger.setRepeatCount(0);
-		} else {
-			trigger.setRepeatCount(-1);
-			trigger.setRepeatInterval(intervalTime * 1000);
-		}
-		sched.addJob(jobDetail, true);
-		sched.rescheduleJob(taskName, TRIGGER_GROUP_NAME, trigger);
-
-	}
-
-	/**
-	 * 更新任务
-	 * 
-	 * @param taskName
-	 *            任务标识
-	 * @param job
-	 *            工作处理类
-	 * @param cron
-	 *            定时规则Cron
-	 * @param params
-	 *            任务处理参数，可以为空
-	 * @throws ParseException
-	 * @throws SchedulerException
-	 */
-	public static void update(String taskName, Job job, String cron,
-			Map<String, Object> params) throws ParseException,
-			SchedulerException {
-		update(taskName, job, cron, params, null, null);
-	}
-
-	/**
-	 * 更新任务
-	 * 
-	 * @param taskName
-	 *            任务标识
-	 * @param job
-	 *            工作处理类
-	 * @param cron
-	 *            定时规则Cron
-	 * @param params
-	 *            任务处理参数，可以为空
-	 * @param startTime
-	 *            开始时间
-	 * @param endTime
-	 *            结束时间
-	 * @throws ParseException
-	 * @throws SchedulerException
-	 */
-	public static void update(String taskName, Job job, String cron,
-			Map<String, Object> params, Date startTime, Date endTime)
-			throws ParseException, SchedulerException {
 		
-		//FIXME 使用先删除再添加的方法进行任务更新，否则会出现更新时重复多次执行任务的情况
-		remove(taskName);
-		add(taskName, job, cron, params , startTime, endTime);
-/*		
- 		Scheduler sched = sf.getScheduler();
-		JobDetail jobDetail = new JobDetail(taskName, JOB_GROUP_NAME,
-				job.getClass());
-		if (params != null)
-			jobDetail.getJobDataMap().putAll(params);
-		if (isEmpty(cron))
-			throw new SchedulerException("Cron is not null\uFF01");
-		CronTrigger trigger = (CronTrigger) sched.getTrigger(taskName,
-				TRIGGER_GROUP_NAME);
-		trigger.setCronExpression(cron);
-		if (startTime != null)
-			trigger.setStartTime(startTime);
-		if (endTime != null)
-			trigger.setEndTime(endTime);
-		sched.addJob(jobDetail, true);
-		sched.rescheduleJob(taskName, TRIGGER_GROUP_NAME, trigger);
-		*/
-
+		if(cron == null) {
+			throw new RuntimeException("Cron规则不能为空");
+		}
+		
+		if(StrUtils.isTrimEmpty(taskName)) {
+			taskName = String.valueOf(IDUtils.getTimeID());
+		}
+		
+		if(taskNames.contains(taskName)) {
+			throw new RuntimeException(StrUtils.concat("任务 [", taskName, "] 已存在"));
+		}
+		
+		Scheduler scheduler = schedulerFactory.getScheduler();
+		CronTrigger trigger = TriggerBuilder.newTrigger().	// 定义任务触发器
+				withIdentity(taskName, triggerGroupName).
+				withSchedule(CronScheduleBuilder.cronSchedule(cron.toExpression())).
+				build();
+				
+		JobDetail jobDetail = JobBuilder.newJob().	// 定义任务执行对象
+				ofType(job.getClass()).
+				withIdentity(taskName, jobGroupName).
+				usingJobData(new JobDataMap(params == null ? 
+						new HashMap<Object, Object>() : params)).
+				build();
+		
+		// 添加任务
+		scheduler.scheduleJob(jobDetail, trigger);
+		taskNames.add(taskName);
 	}
-
+	
+	/**
+	 * 删除计划任务
+	 * @param taskName 任务名称
+	 * @return true:删除成功; false:删除失败
+	 */
+	public boolean remove(String taskName) {
+		boolean isOk = true;
+		try {
+			_remove(taskName);
+			
+		} catch (Exception e) {
+			isOk = false;
+			log.error("删除计划任务 [", taskName, "] 失败", e);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 删除计划任务
+	 * @param taskName 任务名称
+	 * @throws Exception
+	 */
+	private void _remove(String taskName) throws Exception {
+		if(StrUtils.isTrimEmpty(taskName)) {
+			throw new RuntimeException("任务名称不能为空");
+		}
+		
+		Scheduler scheduler = schedulerFactory.getScheduler();
+		TriggerKey tk = new TriggerKey(taskName, triggerGroupName);
+		JobKey jk = new JobKey(taskName, jobGroupName);
+		
+		if(!taskNames.contains(taskName)) {
+			throw new RuntimeException(StrUtils.concat("任务 [", taskName, "] 不存在"));
+		}
+		
+		scheduler.pauseTrigger(tk);		// 暂停触发器
+		scheduler.pauseJob(jk);			// 暂停执行器
+		scheduler.unscheduleJob(tk);	// 移除触发器
+		scheduler.deleteJob(jk);		// 移除执行器
+		taskNames.remove(taskName);
+	}
+	
+	/**
+	 * 删除所有计划任务(但不停止任务调度器)
+	 */
+	public void removeAll() {
+		List<String> taskNames = new LinkedList<String>(this.taskNames);
+		for(String taskName : taskNames) {
+			remove(taskName);
+		}
+	}
+	
 }
