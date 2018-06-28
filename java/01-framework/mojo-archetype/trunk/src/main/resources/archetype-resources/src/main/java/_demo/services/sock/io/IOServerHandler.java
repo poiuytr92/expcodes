@@ -4,7 +4,7 @@
 package ${package}._demo.services.sock.io;
 
 import exp.libs.warp.net.sock.io.common.ISession;
-import exp.libs.warp.net.sock.io.server.IHandler;
+import exp.libs.warp.net.sock.io.common.IHandler;
 
 /**
  * <PRE>
