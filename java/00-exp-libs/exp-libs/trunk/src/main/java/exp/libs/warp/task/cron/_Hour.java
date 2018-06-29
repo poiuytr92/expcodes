@@ -33,10 +33,10 @@ import exp.libs.utils.other.StrUtils;
 public class _Hour extends __TimeUnit {
 
 	/** [小时] 的最小值 */
-	private final static int MIN = 0;
+	protected final static int MIN = 0;
 	
 	/** [小时] 的最大值 */
-	private final static int MAX = 23;
+	protected final static int MAX = 23;
 	
 	/**
 	 * 构造函数
@@ -109,11 +109,15 @@ public class _Hour extends __TimeUnit {
 		
 		// [小时]字段的子表达式为: [*] 时, 比[小时]大的时间单位不再有参考意义
 		if(EVERY.equals(subExpression)) {
-			cron.Day().withEvery();
-			cron.Month().withEvery();
-			cron.Week().withNone();
-			cron.Year().withEvery();
+			cron.Day()._setSubExpression(EVERY);
+			cron.Month()._setSubExpression(EVERY);
+			cron.Week()._setSubExpression(NONE);
+			cron.Year()._setSubExpression(EVERY);
 		}
+		
+		// 比[小时]小的时间单位若为 [*] 则自动变成 [最小值]
+		if(cron.Second().isEvery()) { cron.Second()._setSubExpression(_Second.MIN); }
+		if(cron.Minute().isEvery()) { cron.Minute()._setSubExpression(_Minute.MIN); }
 	}
 
 }

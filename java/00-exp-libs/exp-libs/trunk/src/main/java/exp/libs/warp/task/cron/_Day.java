@@ -115,10 +115,9 @@ public class _Day extends __TimeUnit {
 	protected boolean _checkSubExpression(String subExpression) {
 		boolean isOk = false;
 		
-		// 子表达式为: [*] 或 [L] 或 [LW]
-		if(EVERY.equals(subExpression) || 
-				L.equals(subExpression) || 
-				LW.equals(subExpression)) {
+		// 子表达式为: [*] 或 [?] 或 [L] 或 [LW]
+		if(EVERY.equals(subExpression) || NONE.equals(subExpression) || 
+				L.equals(subExpression) || LW.equals(subExpression)) {
 			isOk = true;
 		
 		// 子表达式为: [xW] 或  [xC]
@@ -161,15 +160,20 @@ public class _Day extends __TimeUnit {
 		
 		// [日期]字段的子表达式为: [*] 时, 比[日期]大的时间单位不再有参考意义
 		if(EVERY.equals(subExpression)) {
-			cron.Month().withEvery();
-			cron.Week().withNone();
-			cron.Year().withEvery();
+			cron.Month()._setSubExpression(EVERY);
+			cron.Week()._setSubExpression(NONE);
+			cron.Year()._setSubExpression(EVERY);
 			
 		// [日期]字段的子表达式为"有效值"时, [星期]字段的子表达式为要变成"无效值"
 		} else if(!NONE.equals(subExpression)) {
-			cron.Week().withNone();
+			cron.Week()._setSubExpression(NONE);
 			
 		}
+		
+		// 比[日期]小的时间单位若为 [*] 则自动变成 [最小值]
+		if(cron.Second().isEvery()) { cron.Second()._setSubExpression(_Second.MIN); }
+		if(cron.Minute().isEvery()) { cron.Minute()._setSubExpression(_Minute.MIN); }
+		if(cron.Hour().isEvery()) { cron.Hour()._setSubExpression(_Hour.MIN); }
 	}
 
 }

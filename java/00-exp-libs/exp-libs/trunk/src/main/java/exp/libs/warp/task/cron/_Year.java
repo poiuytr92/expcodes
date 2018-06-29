@@ -33,10 +33,10 @@ import exp.libs.utils.other.StrUtils;
 public class _Year extends __TimeUnit {
 
 	/** [年份] 的最小值 */
-	private final static int MIN = 1970;
+	protected final static int MIN = 1970;
 	
 	/** [年份] 的最大值 */
-	private final static int MAX = 2099;
+	protected final static int MAX = 2099;
 	
 	/**
 	 * 构造函数
@@ -114,7 +114,14 @@ public class _Year extends __TimeUnit {
 
 	@Override
 	protected void _trigger(Cron cron, String subExpression) {
-		// Undo
+		
+		// 比[年份]小的时间单位若为 [*] 则自动变成 [最小值]
+		if(cron.Second().isEvery()) { cron.Second()._setSubExpression(_Second.MIN); }
+		if(cron.Minute().isEvery()) { cron.Minute()._setSubExpression(_Minute.MIN); }
+		if(cron.Hour().isEvery()) { cron.Hour()._setSubExpression(_Hour.MIN); }
+		if(cron.Day().isEvery()) { cron.Day()._setSubExpression(_Day.MIN); }
+		if(cron.Month().isEvery()) { cron.Month()._setSubExpression(_Month.MIN); }
+		if(cron.Week().isEvery()) { cron.Week()._setSubExpression(_Week.MIN); }
 	}
 	
 }

@@ -70,10 +70,10 @@ public class _Month extends __TimeUnit {
 	}
 	
 	/** [月份] 的最小值 */
-	private final static int MIN = 1;
+	protected final static int MIN = 1;
 	
 	/** [月份] 的最大值 */
-	private final static int MAX = 12;
+	protected final static int MAX = 12;
 	
 	/**
 	 * 构造函数
@@ -218,8 +218,15 @@ public class _Month extends __TimeUnit {
 		
 		// [月份]字段的子表达式为: [*] 时, 比[月份]大的时间单位不再有参考意义
 		if(EVERY.equals(subExpression)) {
-			cron.Year().withEvery();
+			cron.Year()._setSubExpression(EVERY);
 		}
+		
+		// 比[月份]小的时间单位若为 [*] 则自动变成 [最小值]
+		if(cron.Second().isEvery()) { cron.Second()._setSubExpression(_Second.MIN); }
+		if(cron.Minute().isEvery()) { cron.Minute()._setSubExpression(_Minute.MIN); }
+		if(cron.Hour().isEvery()) { cron.Hour()._setSubExpression(_Hour.MIN); }
+		if(cron.Day().isEvery()) { cron.Day()._setSubExpression(_Day.MIN); }
+		if(cron.Week().isEvery()) { cron.Week()._setSubExpression(_Week.MIN); }
 	}
 
 }

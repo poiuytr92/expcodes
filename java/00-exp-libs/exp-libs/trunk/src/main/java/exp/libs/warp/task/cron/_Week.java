@@ -60,10 +60,10 @@ public class _Week extends __TimeUnit {
 	}
 	
 	/** [星期] 的最小值 */
-	private final static int MIN = 1;
+	protected final static int MIN = 1;
 	
 	/** [星期] 的最大值 */
-	private final static int MAX = 7;
+	protected final static int MAX = 7;
 	
 	/**
 	 * 构造函数
@@ -213,8 +213,10 @@ public class _Week extends __TimeUnit {
 	protected boolean _checkSubExpression(String subExpression) {
 		boolean isOk = false;
 		
-		// 子表达式为: [*] 或 [L] 
-		if(EVERY.equals(subExpression) || L.equals(subExpression)) {
+		// 子表达式为: [*] 或 [?] 或 [L] 
+		if(EVERY.equals(subExpression) || 
+				NONE.equals(subExpression) || 
+				L.equals(subExpression)) {
 			isOk = true;
 		
 		// 子表达式为: [xC]
@@ -282,14 +284,19 @@ public class _Week extends __TimeUnit {
 		
 		// [星期]字段的子表达式为: [*] 时, 比[星期]大的时间单位不再有参考意义
 		if(EVERY.equals(subExpression)) {
-			cron.Day().withNone();
-			cron.Year().withEvery();
+			cron.Day()._setSubExpression(NONE);
+			cron.Year()._setSubExpression(EVERY);
 			
 		// [星期]字段的子表达式为"有效值"时, [日期]字段的子表达式为要变成"无效值"
 		} else if(!NONE.equals(subExpression)) {
-			cron.Day().withNone();
+			cron.Day()._setSubExpression(NONE);
 			
 		}
+		
+		// 比[星期]小的时间单位若为 [*] 则自动变成 [最小值]
+		if(cron.Second().isEvery()) { cron.Second()._setSubExpression(_Second.MIN); }
+		if(cron.Minute().isEvery()) { cron.Minute()._setSubExpression(_Minute.MIN); }
+		if(cron.Hour().isEvery()) { cron.Hour()._setSubExpression(_Hour.MIN); }
 	}
 	
 }

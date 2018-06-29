@@ -43,13 +43,14 @@ public class TaskMgr {
 	
 	public static void main(String[] args) {
 		Cron cron = new Cron();
-		cron.Second().withRange(1, 3);
-		cron.Minute().withSequence(4, 5, 6);
-		cron.Hour().withStep(2, 5);
-		cron.Day().withLastWorkday();
-		cron.Month().withEvery();
-		cron.Week().withLastDay();
-		cron.Year().withSequence(2014, 2018);
+//		cron.Year().withSequence(2014, 2018);
+		
+//		cron.Month().withEvery();
+//		cron.Day().withLastWorkday();
+		cron.Week().withEvery();
+//		cron.Hour().withStep(2, 5);
+//		cron.Minute().withEvery();
+//		cron.Second().withRange(1, 3);
 		
 		System.out.println(cron);
 	}

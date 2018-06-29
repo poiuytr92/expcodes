@@ -161,12 +161,29 @@ abstract class __TimeUnit {
 		this.subExpression = "";
 	}
 	
+	protected boolean isEvery() {
+		return EVERY.equals(getSubExpression());
+	}
+	
+	protected boolean isNone() {
+		return NONE.equals(getSubExpression());
+	}
+	
 	/**
 	 * 设置为每个时间单位触发
 	 * @return
 	 */
 	public String withEvery() {
 		return setSubExpression(EVERY);
+	}
+	
+	/**
+	 * 设置为指定时间点触发
+	 * @param value 指定时间点
+	 * @return
+	 */
+	public String withValue(int value) {
+		return withSequence(value);
 	}
 	
 	/**
@@ -221,7 +238,7 @@ abstract class __TimeUnit {
 			if(_checkSubExpression(subExpression)) {
 				_setSubExpression(subExpression);
 				
-				if(cron != null) {	// 构造函数无需触发
+				if(cron != null) {	// 构造函数时不触发
 					_trigger(cron, getSubExpression());
 				}
 			}
@@ -229,8 +246,14 @@ abstract class __TimeUnit {
 		return getSubExpression();
 	}
 	
-	protected void _setSubExpression(String subExpression) {
+	protected String _setSubExpression(String subExpression) {
 		this.subExpression = subExpression;
+		return this.subExpression;
+	}
+	
+	protected String _setSubExpression(int subExpression) {
+		this.subExpression = String.valueOf(subExpression);
+		return this.subExpression;
 	}
 	
 	/**

@@ -33,10 +33,10 @@ import exp.libs.utils.other.StrUtils;
 public class _Second extends __TimeUnit {
 
 	/** [秒] 的最小值 */
-	private final static int MIN = 0;
+	protected final static int MIN = 0;
 	
 	/** [秒] 的最大值 */
-	private final static int MAX = 59;
+	protected final static int MAX = 59;
 	
 	/**
 	 * 构造函数
@@ -109,12 +109,12 @@ public class _Second extends __TimeUnit {
 		
 		// [秒]字段的子表达式为: [*] 时, 比[秒]大的时间单位不再有参考意义
 		if(EVERY.equals(subExpression)) {
-			cron.Minute().withEvery();
-			cron.Hour().withEvery();
-			cron.Day().withEvery();
-			cron.Month().withEvery();
-			cron.Week().withNone();
-			cron.Year().withEvery();
+			cron.Minute()._setSubExpression(EVERY);
+			cron.Hour()._setSubExpression(EVERY);
+			cron.Day()._setSubExpression(EVERY);
+			cron.Month()._setSubExpression(EVERY);
+			cron.Week()._setSubExpression(NONE);
+			cron.Year()._setSubExpression(EVERY);
 		}
 	}
 
