@@ -4,106 +4,267 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.plaf.ListUI;
-
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 
-
-/*
-秒（0~59） 
-分钟（0~59） 
-小时（0~23） 
-天（月）（0~31，但是你需要考虑你月的天数）
-月（0~11） 
-天（星期）（1~7 1=SUN 或 SUN，MON，TUE，WED，THU，FRI，SAT） 
-年份（1970－2099） 
+/**
+ * <PRE>
+ * cron表达式的中某个时间字段的子表达式.
+ * ----------------------------
+ * cron表达式共有7个时间字段, 依次为:
+ * 	秒, 分, 时, 日, 月, 周, 年
+ * ----------------------------
+ * 每个时间字段的取值范围如下:<br/>
++--------------------+---------------------------+------------------+
+| [时间字段]         | [取值范围]                | [允许的特殊字符] |
++--------------------+---------------------------+------------------+
+| 秒(Second)         | 0-59                      | , - * /          |
+| 分(Minute)         | 0-59                      | , - * /          |
+| 小时(Hour)         | 0-23                      | , - * /          |
+| 日期(DayOfMonth)   | 1-31                      | , - * / ? L W C  |
+| 月份(Month)        | 1-12(或JAN-DEC)           | , - * /          |
+| 星期(Week)         | 1-7(或SUN-SAT, 其中1=SUN) | , - * / ? L C #  |
+| 年(Year)[可选字段] | 空值或1970-2099           | , - * /          |
++--------------------+---------------------------+------------------+
+ * <br/>
+ * </PRE>
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-06-28
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
-
-// * * * * * ? *
-//	位置	时间域	允许值		特殊值
-//	1	秒		0-59	    , - * /
-//	2	分钟		0-59	    , - * /
-//	3	小时		0-23	    , - * /
-//	4	日期		1-31	    , - * ? / L W C
-//	5	月份		1-12	    , - * /
-//	6	星期		1-7	        , - * ? / L C #
-//	7	年份（可选）1970－2099	, - * /
-//	星号(*)：可用在所有字段中，表示对应时间域的每一个时刻，例如， 在分钟字段时，表示“每分钟”；
-//	
-//	问号（?）：该字符只在日期和星期字段中使用，它通常指定为“无意义的值”，相当于点位符；
-//	
-//	减号(-)：表达一个范围，如在小时字段中使用“10-12”，则表示从10到12点，即10,11,12；
-//	
-//	逗号(,)：表达一个列表值，如在星期字段中使用“MON,WED,FRI”，则表示星期一，星期三和星期五；
-//	
-//	斜杠(/)：x/y表达一个等步长序列，x为起始值，y为增量步长值。如在分钟字段中使用0/15，则表示为0,15,30和45秒，而5/15在分钟字段中表示5,20,35,50，你也可以使用*/y，它等同于0/y；
-//	
-//	L：该字符只在日期和星期字段中使用，代表“Last”的意思，但它在两个字段中意思不同。L在日期字段中，表示这个月份的最后一天，如一月的31号，非闰年二月的28号；如果L用在星期中，则表示星期六，等同于7。但是，如果L出现在星期字段里，而且在前面有一个数值X，则表示“这个月的最后X天”，例如，6L表示该月的最后星期五；
-//	
-//	W：该字符只能出现在日期字段里，是对前导日期的修饰，表示离该日期最近的工作日。例如15W表示离该月15号最近的工作日，如果该月15号是星期六，则匹配14号星期五；如果15日是星期日，则匹配16号星期一；如果15号是星期二，那结果就是15号星期二。但必须注意关联的匹配日期不能够跨月，如你指定1W，如果1号是星期六，结果匹配的是3号星期一，而非上个月最后的那天。W字符串只能指定单一日期，而不能指定日期范围；
-//	
-//	LW组合：在日期字段可以组合使用LW，它的意思是当月的最后一个工作日；
-//	
-//	井号(#)：该字符只能在星期字段中使用，表示当月某个工作日。如6#3表示当月的第三个星期五(6表示星期五，#3表示当前的第三个)，而4#5表示当月的第五个星期三，假设当月没有第五个星期三，忽略不触发；
-//	
-//	C：该字符只在日期和星期字段中使用，代表“Calendar”的意思。它的意思是计划所关联的日期，如果日期没有被关联，则相当于日历中所有日期。例如5C在日期字段中就相当于日历5日以后的第一天。1C在星期字段中相当于星期日后的第一天。
-//	
-//	Cron表达式对特殊字符的大小写不敏感，对代表星期的缩写英文大小写也不敏感。
-
-
 abstract class __TimeUnit {
 
-	protected String subExpression;
+	/**
+	 * <PRE>
+	 * 特殊值：星号(*), 表示 "每..."。
+	 * 可用在所有字段中，表示对应时间域的每一个时刻，例如， 在分钟字段时，表示"每分钟"
+	 * </PRE>
+	 */
+	protected final static String EVERY = "*";
 	
-	protected Cron cron;
+	/**
+	 * <PRE>
+	 * 特殊值：问号(?)：表示"无意义"的值, 亦即为"非参考值", 取任何值均对表达式规则无影响。
+	 * 只在日期和星期字段中使用（这两个字段由于存在冲突, 只要其中一个有具体值, 另一个必为 ?值）
+	 * </PRE>
+	 */
+	protected final static String NONE = "?";
 	
+	/**
+	 * <PRE>
+	 * 特殊值：减号(-)：表达一个范围。
+	 * 如在小时字段中使用"10-12", 则表示从10到12点
+	 * </PRE>
+	 */
+	protected final static String RANGE = "-";
+	
+	/**
+	 * <PRE>
+	 * 特殊值：逗号(,)：表达一个列表值。
+	 * 如在星期字段中使用"MON,WED,FRI", 则表示星期一，星期三和星期五
+	 * </PRE>
+	 */
+	protected final static String SEQUENCE = ",";
+	
+	/**
+	 * <PRE>
+	 * 特殊值：斜杠(/)： x/y 表示一个等步长序列, x为起始值, y为增量步长值。
+	 * 如在分钟字段中使用0/15, 则表示为0,15,30和45分钟;
+	 * 而在分钟字段中使用5/15, 则表示5,20,35,50分钟;
+	 * 注意：  "0 / y" 等价于 "* / y"
+	 * </PRE>
+	 */
+	protected final static String STEP = "/";
+	
+	/**
+	 * <PRE>
+	 * 特殊值：井号(#)：x/y 表示第y个星期x。
+	 * 该字符只能在星期字段中使用，如: 
+	 * 	6#3表示当月的第三个星期五(6表示星期五，#3表示当前的第三个);
+	 * 	而4#5表示当月的第五个星期三，假设当月没有第五个星期三，忽略不触发。
+	 * --------------------------------------------------
+	 * 注意： 星期字段的取值范围为 1-7 或 SUN-SAT （其中1=SUN）
+	 * </PRE>
+	 */
+	protected final static String ORDER = "#";
+	
+	/**
+	 * <PRE>
+	 * 特殊值：L: 表示"Last", 该字符只能在日期和星期字段中使用。
+	 *  在日期字段中, 表示这个月份的最后一天, 如一月的31号, 非闰年二月的28号;
+	 *  在星期字段中, 表示星期六, 等同于7。
+	 *  
+	 * 特别地，如果L出现在星期字段里，而且在前面有一个数值X, 则表示"这个月的最后的周X", 例如: 6L表示该月的最后一个星期五.
+	 * L 只能指定单一日期/星期, 而不能指定日期/星期范围。
+	 * </PRE>
+	 */
+	protected final static String L = "L";
+	
+	/**
+	 * <PRE>
+	 * 特殊值：W: 该字符只能在日期字段中使用, 表示离该日期最近的"工作日"。
+	 * 	例如: 15W表示离该月15号最近的工作日，
+	 * 		如果该月15号是星期六, 则匹配14号星期五;
+	 * 		如果15日是星期日, 则匹配16号星期一;
+	 * 		如果15号是星期二, 那结果就是15号星期二。
+	 * 
+	 * 但必须注意关联的匹配日期不能够跨月，如你指定1W，如果1号是星期六，结果匹配的是3号星期一，而非上个月最后的那天。
+	 * W 只能指定单一日期, 而不能指定日期范围。
+	 * 
+	 * 特别地, 在日期字段可以组合使用LW，它的意思是当月的最后一个工作日。
+	 * </PRE>
+	 */
+	protected final static String W = "W";
+	
+	/**
+	 * 特殊值：LW: 表示某月的最后一个"工作日"。
+	 * 该字符只能在日期字段中使用。
+	 */
+	protected final static String LW = L.concat(W);
+	
+	/**
+	 * <PRE>
+	 * 特殊值：C: 表示"Calendar", 该字符只在日期和星期字段中使用。
+	 * 	它用于修饰前导时间值, 表示日历在该时间点之后的第一天。
+	 * 
+	 * 	例如: 在日期字段中, 5C就相当于"日历5日以后的第一天"。
+	 * 		在星期字段中, 1C相当于"星期日后的第一天"。
+	 * </PRE>
+	 */
+	protected final static String C = "C";
+	
+	/**
+	 * <PRE>
+	 * 特殊值：空值: 该字符只在年份字段中使用。
+	 * 	年份字段是可选字段, 可不设值。
+	 * </PRE>
+	 */
+	protected final static String EMPTY = "";
+	
+	/** 空格符，用于分割每个字段的子表达式 */
+	protected final static String SPACE = " ";
+	
+	/** 当前时间字段的子表达式 */
+	private String subExpression;
+	
+	/** 所属的Cron表达式对象 */
+	private Cron cron;
+	
+	/**
+	 * 构造函数
+	 * @param cron 所属的Cron表达式对象
+	 */
 	protected __TimeUnit(Cron cron) {
 		this.cron = cron;
-		this.subExpression = "*";
+		this.subExpression = "";
 	}
 	
-	/** 每值: 根据时间单位不同, 可表示 "每秒/每分/每小时/每日/每月/每周/每年" */
+	/**
+	 * 设置为每个时间单位触发
+	 * @return
+	 */
 	public String withEvery() {
-		subExpression = "*";
-		return subExpression;
+		return setSubExpression(EVERY);
 	}
 	
+	/**
+	 * 设置为 [from-to] 时间范围内触发
+	 * @param from
+	 * @param to
+	 * @return
+	 */
 	public String withRange(int from, int to) {
-		subExpression = StrUtils.concat(from, "-", to);
-		return subExpression;
+		return !(from <= to && _checkRange(from, to)) ? subExpression : 
+			setSubExpression(StrUtils.concat(from, RANGE, to));
 	}
 	
-	public String withList(int... list) {
-		if(list != null) {
-			List<Integer> _list = new LinkedList<Integer>();
-			for(int e : list) {
-				_list.add(e);
+	/**
+	 * 设置为若干个时间点触发
+	 * @param sequence
+	 * @return
+	 */
+	public String withSequence(int... sequence) {
+		if(sequence != null && _checkRange(sequence)) {
+			List<Integer> list = new LinkedList<Integer>();
+			for(int e : sequence) {
+				list.add(e);
 			}
-			ListUtils.removeDuplicate(_list);	// 去重
-			Collections.sort(_list);	// 排序
+			ListUtils.removeDuplicate(list);	// 去重
+			Collections.sort(list);	// 排序
 			
-			subExpression = StrUtils.concat(_list, ",");
+			setSubExpression(StrUtils.concat(list, SEQUENCE));
 		}
 		return subExpression;
 	}
 	
+	/**
+	 * 设置为从 from 时间点开始, 每间隔 interval 步长触发
+	 * @param from
+	 * @param interval
+	 * @return
+	 */
 	public String withStep(int from, int interval) {
-		subExpression = StrUtils.concat(from, "/", interval);
-		return subExpression;
+		return !_checkRange(from, interval) ? subExpression : 
+				setSubExpression(StrUtils.concat(from, STEP, interval));
+	}
+
+	/**
+	 * 强制设置当前时间字段的子表达式的值
+	 * @param subExpression
+	 * @return
+	 */
+	public String setSubExpression(String subExpression) {
+		if(subExpression != null) {
+			subExpression = StrUtils.trimAll(subExpression);
+			if(_checkSubExpression(subExpression)) {
+				_setSubExpression(subExpression);
+				
+				if(cron != null) {	// 构造函数无需触发
+					_trigger(cron, getSubExpression());
+				}
+			}
+		}
+		return getSubExpression();
 	}
 	
-	// 子类用正则校验
-	// 其他方法的取值范围也让子类实现
-	public abstract String setSubExpression(String subExpression);
-		
-	public String toExpression() {
+	protected void _setSubExpression(String subExpression) {
+		this.subExpression = subExpression;
+	}
+	
+	/**
+	 * 检查子表达式的数字取值是否在范围内
+	 * @param value
+	 * @return
+	 */
+	protected abstract boolean _checkRange(int... values);
+	
+	/**
+	 * 校验设置的子表达式是否合法
+	 * @param subExpression
+	 * @return
+	 */
+	protected abstract boolean _checkSubExpression(String subExpression);
+	
+	/**
+	 * 当前字段的子表达式发生变化时的触发器（使得其他时间字段可以对应发生变化）
+	 * @param cron
+	 * @param subExpression
+	 */
+	protected abstract void _trigger(Cron cron, String subExpression);
+	
+	/**
+	 * 获取子表达式
+	 * @return
+	 */
+	public String getSubExpression() {
 		return subExpression;
 	}
 	
 	@Override
 	public String toString() {
-		return toExpression();
+		return getSubExpression();
 	}
 	
 }

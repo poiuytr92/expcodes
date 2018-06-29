@@ -93,7 +93,7 @@ public class ListUtils {
 	 * 	此方法[会修改]list的内容.
 	 * <PRE>
 	 * @param list 需要移除重复元素的list
-	 * @param 移除元素个数
+	 * @return 移除元素个数
 	 */
 	public static <E> int removeDuplicate(List<E> list) {
 		int cnt = 0;
@@ -117,7 +117,7 @@ public class ListUtils {
 	 * 	此方法[不会修改]array的内容.
 	 * <PRE>
 	 * @param array 需要移除重复元素的array
-	 * @param 移除重复元素后的array
+	 * @return 移除重复元素后的array
 	 */
 	public static <E> E[] removeDuplicate(E[] array) {
 		E[] ary = null;
