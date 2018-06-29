@@ -1,10 +1,12 @@
 package exp.libs.warp.task.cron;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.plaf.ListUI;
+
+import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.StrUtils;
 
 
@@ -50,11 +52,14 @@ import exp.libs.utils.other.StrUtils;
 //	Cron表达式对特殊字符的大小写不敏感，对代表星期的缩写英文大小写也不敏感。
 
 
-abstract class _TimeUnit {
+abstract class __TimeUnit {
 
 	protected String subExpression;
 	
-	protected _TimeUnit() {
+	protected Cron cron;
+	
+	protected __TimeUnit(Cron cron) {
+		this.cron = cron;
 		this.subExpression = "*";
 	}
 	
@@ -75,7 +80,9 @@ abstract class _TimeUnit {
 			for(int e : list) {
 				_list.add(e);
 			}
-			Collections.sort(_list);
+			ListUtils.removeDuplicate(_list);	// 去重
+			Collections.sort(_list);	// 排序
+			
 			subExpression = StrUtils.concat(_list, ",");
 		}
 		return subExpression;

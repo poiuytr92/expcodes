@@ -1,6 +1,11 @@
 package exp.libs.warp.task.cron;
 
-public class Hour extends _TimeUnit {
+
+public class _Hour extends __TimeUnit {
+
+	protected _Hour(Cron cron) {
+		super(cron);
+	}
 
 	@Override
 	public String setSubExpression(String subExpression) {

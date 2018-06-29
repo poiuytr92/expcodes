@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.num.IDUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.task.cron.Cron;
 
 /**
  * <PRE>
@@ -45,9 +46,9 @@ public class TaskMgr {
 		cron.Second().withRange(1, 3);
 		cron.Minute().withList(4, 5, 6);
 		cron.Hour().withStep(2, 5);
-		cron.Day().withAny();
+		cron.Day().withNone();
 		cron.Month().withEvery();
-		cron.Week().withAny();
+		cron.Week().withNone();
 		cron.Year().withList(2014, 2018);
 		cron.Year().setSubExpression("*");
 		
