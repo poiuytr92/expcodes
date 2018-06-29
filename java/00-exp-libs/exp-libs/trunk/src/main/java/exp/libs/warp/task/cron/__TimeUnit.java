@@ -228,7 +228,7 @@ abstract class __TimeUnit {
 	}
 
 	/**
-	 * 强制设置当前时间字段的子表达式的值
+	 * 设置当前时间字段的子表达式的值
 	 * @param subExpression
 	 * @return
 	 */
@@ -246,11 +246,21 @@ abstract class __TimeUnit {
 		return getSubExpression();
 	}
 	
+	/**
+	 * 强制设置当前时间字段的子表达式的值（不会触发触发器）
+	 * @param subExpression
+	 * @return
+	 */
 	protected String _setSubExpression(String subExpression) {
 		this.subExpression = subExpression;
 		return this.subExpression;
 	}
 	
+	/**
+	 * 强制设置当前时间字段的子表达式的值（不会触发触发器）
+	 * @param subExpression
+	 * @return
+	 */
 	protected String _setSubExpression(int subExpression) {
 		this.subExpression = String.valueOf(subExpression);
 		return this.subExpression;

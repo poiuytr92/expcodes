@@ -44,6 +44,13 @@ public class _Year extends __TimeUnit {
 	 */
 	protected _Year(Cron cron) {
 		super(cron);
+		reset();
+	}
+	
+	/**
+	 * 重置子表达式的初始值
+	 */
+	protected void reset() {
 		_setSubExpression(EVERY);
 	}
 

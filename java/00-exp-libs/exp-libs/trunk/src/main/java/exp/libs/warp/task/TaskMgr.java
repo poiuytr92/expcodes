@@ -1,5 +1,6 @@
 package exp.libs.warp.task;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -16,6 +17,8 @@ import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerFactory;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.SimpleTrigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.quartz.impl.StdSchedulerFactory;
@@ -38,23 +41,6 @@ import exp.libs.warp.task.cron.Cron;
  */
 public class TaskMgr {
 
-	// FIXME 规则为步长的时候还需指定  触发器的起止时间 ？
-	
-	
-	public static void main(String[] args) {
-		Cron cron = new Cron();
-//		cron.Year().withSequence(2014, 2018);
-		
-//		cron.Month().withEvery();
-//		cron.Day().withLastWorkday();
-		cron.Week().withEvery();
-//		cron.Hour().withStep(2, 5);
-//		cron.Minute().withEvery();
-//		cron.Second().withRange(1, 3);
-		
-		System.out.println(cron);
-	}
-	
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(TaskMgr.class);
 	
@@ -226,8 +212,8 @@ public class TaskMgr {
 	 * @param cron 定义任务触发时机的corn规则
 	 * @throws Exception
 	 */
-	private void _add(String taskName, Job job, Map<Object, Object> params, 
-			Cron cron) throws Exception {
+	private void _add(String taskName, Job job, 
+			Map<Object, Object> params, Cron cron) throws Exception {
 		if(job == null) {
 			throw new RuntimeException("任务实现接口不能为空");
 		}
@@ -244,13 +230,141 @@ public class TaskMgr {
 			throw new RuntimeException(StrUtils.concat("任务 [", taskName, "] 已存在"));
 		}
 		
+		// 调度器
 		Scheduler scheduler = schedulerFactory.getScheduler();
-		CronTrigger trigger = TriggerBuilder.newTrigger().	// 定义任务触发器
+		
+		// 定义任务触发器
+		CronTrigger trigger = TriggerBuilder.newTrigger().	
 				withIdentity(taskName, triggerGroupName).
 				withSchedule(CronScheduleBuilder.cronSchedule(cron.toExpression())).
 				build();
 				
-		JobDetail jobDetail = JobBuilder.newJob().	// 定义任务执行对象
+		// 定义任务执行对象
+		JobDetail jobDetail = JobBuilder.newJob().	
+				ofType(job.getClass()).
+				withIdentity(taskName, jobGroupName).
+				usingJobData(new JobDataMap(params == null ? 
+						new HashMap<Object, Object>() : params)).
+				build();
+		
+		// 添加任务
+		scheduler.scheduleJob(jobDetail, trigger);
+		taskNames.add(taskName);
+	}
+	
+	/**
+	 * 添加计划任务
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param intervalMillis 任务执行间隔(单位: ms)
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean add(Job job, Map<Object, Object> params, long intervalMillis) {
+		return add("", job, params, intervalMillis, null, null);
+	}
+	
+	/**
+	 * 添加计划任务
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param intervalMillis 任务执行间隔(单位: ms)
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean add(String taskName, Job job, 
+			Map<Object, Object> params, long intervalMillis) {
+		return add(taskName, job, params, intervalMillis, null, null);
+	}
+	
+	/**
+	 * 添加计划任务
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param intervalMillis 任务执行间隔(单位: ms)
+	 * @param startAt 任务启动时间点(若为null表示立即执行)
+	 * @param endAt 任务结束时间点(若为null表示无限期执行)
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean add(Job job, Map<Object, Object> params, 
+			long intervalMillis, Date startAt, Date endAt) {
+		return add("", job, params, intervalMillis, startAt, endAt);
+	}
+	
+	/**
+	 * 添加计划任务
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param intervalMillis 任务执行间隔(单位: ms)
+	 * @param startAt 任务启动时间点(若为null表示立即执行)
+	 * @param endAt 任务结束时间点(若为null表示无限期执行)
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean add(String taskName, Job job, Map<Object, Object> params, 
+			long intervalMillis, Date startAt, Date endAt) {
+		boolean isOk = true;
+		try {
+			_add(taskName, job, params, intervalMillis, startAt, endAt);
+			
+		} catch (Exception e) {
+			isOk = false;
+			log.error("添加计划任务 [", taskName, "] 失败", e);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 添加计划任务
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param intervalMillis 任务执行间隔(单位: ms)
+	 * @param startAt 任务启动时间点(若为null表示立即执行)
+	 * @param endAt 任务结束时间点(若为null表示无限期执行)
+	 * @throws Exception
+	 */
+	private void _add(String taskName, Job job, Map<Object, Object> params, 
+			long intervalMillis, Date startAt, Date endAt) throws Exception {
+		if(job == null) {
+			throw new RuntimeException("任务实现接口不能为空");
+		}
+		
+		if(StrUtils.isTrimEmpty(taskName)) {
+			taskName = String.valueOf(IDUtils.getTimeID());
+		}
+		
+		if(taskNames.contains(taskName)) {
+			throw new RuntimeException(StrUtils.concat("任务 [", taskName, "] 已存在"));
+		}
+		
+		if(startAt == null) {
+			startAt = new Date();
+		}
+		
+		// 调度器
+		Scheduler scheduler = schedulerFactory.getScheduler();
+		
+		// 定义任务触发器
+		SimpleTrigger trigger = TriggerBuilder.newTrigger().
+				withIdentity(taskName, triggerGroupName).
+				startAt(startAt).	// 启动时间点
+				endAt(endAt).		// 终止时间点
+				withSchedule(SimpleScheduleBuilder.simpleSchedule().
+						withIntervalInMilliseconds(intervalMillis)).	// 执行间隔
+				build();
+				
+		// 定义任务执行对象
+		JobDetail jobDetail = JobBuilder.newJob().
 				ofType(job.getClass()).
 				withIdentity(taskName, jobGroupName).
 				usingJobData(new JobDataMap(params == null ? 
@@ -344,6 +458,42 @@ public class TaskMgr {
 		boolean isOk = remove(taskName);
 		if(isOk == true) {
 			isOk = add(taskName, job, params, cron);
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 修改已有的计划任务(若不存在则新增一个计划任务)
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param intervalMillis 任务执行间隔(单位: ms)
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean modify(String taskName, Job job, Map<Object, Object> params, 
+			long intervalMillis) {
+		return modify(taskName, job, params, intervalMillis, null, null);
+	}
+	
+	/**
+	 * 修改已有的计划任务(若不存在则新增一个计划任务)
+	 * @param taskName 任务名称
+	 * @param job 任务执行接口(需提供org.quartz.Job 或 JobNonCurrent 的接口实现类)
+	 * @param params 任务执行参数.
+	 * 		[接口Job/JobNonCurrent] 的实现类可在 [execute方法] 中提取这些参数:
+	 * 		JobExecutionContext.getJobDetail().getJobDataMap().get("key")
+	 * @param intervalMillis 任务执行间隔(单位: ms)
+	 * @param startAt 任务启动时间点(若为null表示立即执行)
+	 * @param endAt 任务结束时间点(若为null表示无限期执行)
+	 * @return true:添加成功; false:添加失败
+	 */
+	public boolean modify(String taskName, Job job, Map<Object, Object> params, 
+			long intervalMillis, Date startAt, Date endAt) {
+		boolean isOk = remove(taskName);
+		if(isOk == true) {
+			isOk = add(taskName, job, params, intervalMillis, startAt, endAt);
 		}
 		return isOk;
 	}

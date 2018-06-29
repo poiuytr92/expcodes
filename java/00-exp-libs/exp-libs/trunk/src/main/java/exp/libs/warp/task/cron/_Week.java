@@ -71,6 +71,13 @@ public class _Week extends __TimeUnit {
 	 */
 	protected _Week(Cron cron) {
 		super(cron);
+		reset();
+	}
+	
+	/**
+	 * 重置子表达式的初始值
+	 */
+	protected void reset() {
 		_setSubExpression(NONE);
 	}
 

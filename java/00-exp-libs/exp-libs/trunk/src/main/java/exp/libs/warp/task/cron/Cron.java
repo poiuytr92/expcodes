@@ -31,22 +31,33 @@ import exp.libs.utils.other.StrUtils;
  */
 public class Cron {
 
+	/** [秒]字段的表达式对象 */
 	private final _Second second;
 	
+	/** [分钟]字段的表达式对象 */
 	private final _Minute minute;
 	
+	/** [小时]字段的表达式对象 */
 	private final _Hour hour;
 	
+	/** [日期]字段的表达式对象 */
 	private final _Day day;
 	
+	/** [月份]字段的表达式对象 */
 	private final _Month month;
 	
+	/** [星期]字段的表达式对象 */
 	private final _Week week;
 	
+	/** [年份]字段的表达式对象 */
 	private final _Year year;
 	
+	/** cron表达式 */
 	private String expression;
 	
+	/**
+	 * 构造函数
+	 */
 	public Cron() {
 		this.second = new _Second(this);
 		this.minute = new _Minute(this);
@@ -57,18 +68,27 @@ public class Cron {
 		this.year = new _Year(this);
 	}
 	
+	/**
+	 * 构造函数
+	 * @param expression cron表达式
+	 */
 	public Cron(String expression) {
 		this();
+		
+		// FIXME 逆解析表达式
 	}
 	
+	/**
+	 * 重置cron表达式
+	 */
 	public void reset() {
-		second.withEvery();
-		minute.withEvery();
-		hour.withEvery();
-		day.withEvery();
-		month.withEvery();
-		week.withNone();
-		year.withEvery();
+		second.reset();
+		minute.reset();
+		hour.reset();
+		day.reset();
+		month.reset();
+		week.reset();
+		year.reset();
 	}
 	
 	final public _Second Second() {
@@ -101,11 +121,10 @@ public class Cron {
 	
 	public Cron setExpression(String expression) {
 		this.expression = (expression == null ? "" : expression);
-		// FIXME 同时修改每个字段对象
+		// FIXME 同时修改每个字段对象  ， 从低位到高位设值，不回避触发器
 		return this;
 	}
 	
-	// FIXME 冲突约束
 	public String toExpression() {
 		this.expression = StrUtils.concat(
 				second.getSubExpression(), " ", 
@@ -117,6 +136,12 @@ public class Cron {
 				year.getSubExpression()
 		);
 		return expression;
+	}
+	
+	public String toDesc() {
+		
+		// 打印表达式含义
+		return "";
 	}
 	
 	@Override

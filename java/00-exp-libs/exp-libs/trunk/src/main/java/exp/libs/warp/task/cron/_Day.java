@@ -44,6 +44,13 @@ public class _Day extends __TimeUnit {
 	 */
 	protected _Day(Cron cron) {
 		super(cron);
+		reset();
+	}
+	
+	/**
+	 * 重置子表达式的初始值
+	 */
+	protected void reset() {
 		_setSubExpression(EVERY);
 	}
 
