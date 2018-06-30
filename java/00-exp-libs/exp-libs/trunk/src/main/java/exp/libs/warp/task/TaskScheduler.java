@@ -39,10 +39,10 @@ import exp.libs.warp.task.cron.Cron;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class TaskMgr {
+public class TaskScheduler {
 
 	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(TaskMgr.class);
+	private final static Logger log = LoggerFactory.getLogger(TaskScheduler.class);
 	
 	/** 默认计划组(即任务触发器) */
 	private final static String DEFAULT_TRIGGER_GROUP = "DEFAULT_TRIGGER_GROUP";
@@ -65,7 +65,7 @@ public class TaskMgr {
 	/**
 	 * 构造函数
 	 */
-	public TaskMgr() {
+	public TaskScheduler() {
 		this(DEFAULT_TRIGGER_GROUP, DEFAULT_JOB_GROUP);
 	}
 	
@@ -74,7 +74,7 @@ public class TaskMgr {
 	 * @param triggerGroupName 触发器组组名
 	 * @param jobGroupName 执行器组组名
 	 */
-	public TaskMgr(String triggerGroupName, String jobGroupName) {
+	public TaskScheduler(String triggerGroupName, String jobGroupName) {
 		this.triggerGroupName = (triggerGroupName == null ? 
 				DEFAULT_TRIGGER_GROUP : triggerGroupName);
 		this.jobGroupName = (jobGroupName == null ? 
@@ -146,7 +146,7 @@ public class TaskMgr {
 	 * @param cronExpression 定义任务触发时机的corn表达式
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean add(Job job, Map<Object, Object> params, String cronExpression) {
+	public boolean add(Job job, Map<?, ?> params, String cronExpression) {
 		return add("", job, params, cronExpression);
 	}
 	
@@ -159,7 +159,7 @@ public class TaskMgr {
 	 * @param cron 定义任务触发时机的corn规则
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean add(Job job, Map<Object, Object> params, Cron cron) {
+	public boolean add(Job job, Map<?, ?> params, Cron cron) {
 		return add("", job, params, cron);
 	}
 	
@@ -174,7 +174,7 @@ public class TaskMgr {
 	 * @return true:添加成功; false:添加失败
 	 */
 	public boolean add(String taskName, Job job, 
-			Map<Object, Object> params, String cronExpression) {
+			Map<?, ?> params, String cronExpression) {
 		return add(taskName, job, params, new Cron(cronExpression));
 	}
 	
@@ -190,7 +190,7 @@ public class TaskMgr {
 	 * @return true:添加成功; false:添加失败
 	 */
 	public boolean add(String taskName, Job job, 
-			Map<Object, Object> params, Cron cron) {
+			Map<?, ?> params, Cron cron) {
 		boolean isOk = true;
 		try {
 			_add(taskName, job, params, cron);
@@ -213,7 +213,7 @@ public class TaskMgr {
 	 * @throws Exception
 	 */
 	private void _add(String taskName, Job job, 
-			Map<Object, Object> params, Cron cron) throws Exception {
+			Map<?, ?> params, Cron cron) throws Exception {
 		if(job == null) {
 			throw new RuntimeException("任务实现接口不能为空");
 		}
@@ -261,7 +261,7 @@ public class TaskMgr {
 	 * @param intervalMillis 任务执行间隔(单位: ms)
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean add(Job job, Map<Object, Object> params, long intervalMillis) {
+	public boolean add(Job job, Map<?, ?> params, long intervalMillis) {
 		return add("", job, params, intervalMillis, null, null);
 	}
 	
@@ -276,7 +276,7 @@ public class TaskMgr {
 	 * @return true:添加成功; false:添加失败
 	 */
 	public boolean add(String taskName, Job job, 
-			Map<Object, Object> params, long intervalMillis) {
+			Map<?, ?> params, long intervalMillis) {
 		return add(taskName, job, params, intervalMillis, null, null);
 	}
 	
@@ -291,7 +291,7 @@ public class TaskMgr {
 	 * @param endAt 任务结束时间点(若为null表示无限期执行)
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean add(Job job, Map<Object, Object> params, 
+	public boolean add(Job job, Map<?, ?> params, 
 			long intervalMillis, Date startAt, Date endAt) {
 		return add("", job, params, intervalMillis, startAt, endAt);
 	}
@@ -308,7 +308,7 @@ public class TaskMgr {
 	 * @param endAt 任务结束时间点(若为null表示无限期执行)
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean add(String taskName, Job job, Map<Object, Object> params, 
+	public boolean add(String taskName, Job job, Map<?, ?> params, 
 			long intervalMillis, Date startAt, Date endAt) {
 		boolean isOk = true;
 		try {
@@ -333,7 +333,7 @@ public class TaskMgr {
 	 * @param endAt 任务结束时间点(若为null表示无限期执行)
 	 * @throws Exception
 	 */
-	private void _add(String taskName, Job job, Map<Object, Object> params, 
+	private void _add(String taskName, Job job, Map<?, ?> params, 
 			long intervalMillis, Date startAt, Date endAt) throws Exception {
 		if(job == null) {
 			throw new RuntimeException("任务实现接口不能为空");
@@ -439,7 +439,7 @@ public class TaskMgr {
 	 * @return true:添加成功; false:添加失败
 	 */
 	public boolean modify(String taskName, Job job, 
-			Map<Object, Object> params, String cronExpression) {
+			Map<?, ?> params, String cronExpression) {
 		return modify(taskName, job, params, new Cron(cronExpression));
 	}
 	
@@ -454,7 +454,7 @@ public class TaskMgr {
 	 * @return true:添加成功; false:添加失败
 	 */
 	public boolean modify(String taskName, Job job, 
-			Map<Object, Object> params, Cron cron) {
+			Map<?, ?> params, Cron cron) {
 		boolean isOk = remove(taskName);
 		if(isOk == true) {
 			isOk = add(taskName, job, params, cron);
@@ -472,7 +472,7 @@ public class TaskMgr {
 	 * @param intervalMillis 任务执行间隔(单位: ms)
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean modify(String taskName, Job job, Map<Object, Object> params, 
+	public boolean modify(String taskName, Job job, Map<?, ?> params, 
 			long intervalMillis) {
 		return modify(taskName, job, params, intervalMillis, null, null);
 	}
@@ -489,7 +489,7 @@ public class TaskMgr {
 	 * @param endAt 任务结束时间点(若为null表示无限期执行)
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean modify(String taskName, Job job, Map<Object, Object> params, 
+	public boolean modify(String taskName, Job job, Map<?, ?> params, 
 			long intervalMillis, Date startAt, Date endAt) {
 		boolean isOk = remove(taskName);
 		if(isOk == true) {

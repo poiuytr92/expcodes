@@ -1,5 +1,7 @@
 package exp.libs.warp.task.cron;
 
+import org.quartz.CronExpression;
+
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -52,9 +54,6 @@ public class Cron {
 	/** [年份]字段的表达式对象 */
 	private final _Year year;
 	
-	/** cron表达式 */
-	private String expression;
-	
 	/**
 	 * 构造函数
 	 */
@@ -74,8 +73,7 @@ public class Cron {
 	 */
 	public Cron(String expression) {
 		this();
-		
-		// FIXME 逆解析表达式
+		setExpression(expression);
 	}
 	
 	/**
@@ -91,57 +89,104 @@ public class Cron {
 		year.reset();
 	}
 	
+	/**
+	 * 设置cron表达式
+	 * @param expression
+	 * @return
+	 */
+	public Cron setExpression(String expression) {
+		if(expression != null && CronExpression.isValidExpression(expression)) {
+			expression = expression.trim();
+			String[] subExpressions = expression.split(__TimeUnit.SPACE);
+			
+			boolean isOk = (subExpressions.length >= 6);
+			if(isOk == true) {
+				second._setSubExpression(subExpressions[0]);
+				minute._setSubExpression(subExpressions[1]);
+				hour._setSubExpression(subExpressions[2]);
+				day._setSubExpression(subExpressions[3]);
+				month._setSubExpression(subExpressions[4]);
+				week._setSubExpression(subExpressions[5]);
+				
+				if(subExpressions.length == 7) {
+					second._setSubExpression(subExpressions[6]);
+				}
+			}
+		}
+		return this;
+	}
+	
+	/**
+	 * [秒] 时间字段
+	 * @return [秒] 时间字段
+	 */
 	final public _Second Second() {
 		return second;
 	}
 	
+	/**
+	 * [分钟] 时间字段
+	 * @return [分钟] 时间字段
+	 */
 	final public _Minute Minute() {
 		return minute;
 	}
 	
+	/**
+	 * [小时] 时间字段
+	 * @return [小时] 时间字段
+	 */
 	final public _Hour Hour() {
 		return hour;
 	}
 	
+	/**
+	 * [日期] 时间字段
+	 * @return [日期] 时间字段
+	 */
 	final public _Day Day() {
 		return day;
 	}
 	
+	/**
+	 * [月份] 时间字段
+	 * @return [月份] 时间字段
+	 */
 	final public _Month Month() {
 		return month;
 	}
 	
+	/**
+	 * [星期] 时间字段
+	 * @return [星期] 时间字段
+	 */
 	final public _Week Week() {
 		return week;
 	}
 	
+	/**
+	 * [年份] 时间字段
+	 * @return [年份] 时间字段
+	 */
 	final public _Year Year() {
 		return year;
 	}
 	
-	public Cron setExpression(String expression) {
-		this.expression = (expression == null ? "" : expression);
-		// FIXME 同时修改每个字段对象  ， 从低位到高位设值，不回避触发器
-		return this;
-	}
-	
+	/**
+	 * 生成cron表达式
+	 * @return cron表达式
+	 */
 	public String toExpression() {
-		this.expression = StrUtils.concat(
-				second.getSubExpression(), " ", 
-				minute.getSubExpression(), " ", 
-				hour.getSubExpression(), " ", 
-				day.getSubExpression(), " ", 
-				month.getSubExpression(), " ", 
-				week.getSubExpression(), " ", 
+		String expression = StrUtils.concat(
+				second.getSubExpression(), __TimeUnit.SPACE, 
+				minute.getSubExpression(), __TimeUnit.SPACE, 
+				hour.getSubExpression(), __TimeUnit.SPACE, 
+				day.getSubExpression(), __TimeUnit.SPACE, 
+				month.getSubExpression(), __TimeUnit.SPACE, 
+				week.getSubExpression(), __TimeUnit.SPACE, 
 				year.getSubExpression()
 		);
 		return expression;
-	}
-	
-	public String toDesc() {
-		
-		// 打印表达式含义
-		return "";
 	}
 	
 	@Override

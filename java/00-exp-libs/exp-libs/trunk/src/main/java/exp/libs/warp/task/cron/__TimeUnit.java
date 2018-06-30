@@ -161,36 +161,44 @@ abstract class __TimeUnit {
 		this.subExpression = "";
 	}
 	
+	/**
+	 * 当前时间字段的值是否为 [*]
+	 * @return true:是; false:否
+	 */
 	protected boolean isEvery() {
 		return EVERY.equals(getSubExpression());
 	}
 	
+	/**
+	 * 当前时间字段的值是否为 [?]
+	 * @return true:是; false:否
+	 */
 	protected boolean isNone() {
 		return NONE.equals(getSubExpression());
 	}
 	
 	/**
-	 * 设置为每个时间单位触发
-	 * @return
+	 * 当前时间字段的值为 [*]
+	 * @return 当前时间字段的子表达式
 	 */
 	public String withEvery() {
 		return setSubExpression(EVERY);
 	}
 	
 	/**
-	 * 设置为指定时间点触发
-	 * @param value 指定时间点
-	 * @return
+	 * 设置当前时间字段的值为 [某个时间点]
+	 * @param timePoint 指定时间点
+	 * @return 当前时间字段的子表达式
 	 */
-	public String withValue(int value) {
-		return withSequence(value);
+	public String withTimePoint(int timePoint) {
+		return withSequence(timePoint);
 	}
 	
 	/**
-	 * 设置为 [from-to] 时间范围内触发
-	 * @param from
-	 * @param to
-	 * @return
+	 * 设置当前时间字段的值为 [from-to] 的时间范围
+	 * @param from 开始时间点(包括)
+	 * @param to 结束时间点(包括)
+	 * @return 当前时间字段的子表达式
 	 */
 	public String withRange(int from, int to) {
 		return !(from <= to && _checkRange(from, to)) ? subExpression : 
@@ -198,9 +206,9 @@ abstract class __TimeUnit {
 	}
 	
 	/**
-	 * 设置为若干个时间点触发
-	 * @param sequence
-	 * @return
+	 * 设置当前时间字段的值为 [若干个时间点序列]
+	 * @param sequence 指定的时间点序列
+	 * @return 当前时间字段的子表达式
 	 */
 	public String withSequence(int... sequence) {
 		if(sequence != null && _checkRange(sequence)) {
@@ -217,10 +225,10 @@ abstract class __TimeUnit {
 	}
 	
 	/**
-	 * 设置为从 from 时间点开始, 每间隔 interval 步长触发
-	 * @param from
-	 * @param interval
-	 * @return
+	 * 设置当前时间字段的值为 [from/interval] 的时间步长
+	 * @param from 开始时间点(包括)
+	 * @param interval 步长
+	 * @return 当前时间字段的子表达式
 	 */
 	public String withStep(int from, int interval) {
 		return !_checkRange(from, interval) ? subExpression : 
@@ -228,9 +236,9 @@ abstract class __TimeUnit {
 	}
 
 	/**
-	 * 设置当前时间字段的子表达式的值
-	 * @param subExpression
-	 * @return
+	 * 设置当前时间字段的子表达式的值(会触发内置触发器, 影响相关时间字段的值)
+	 * @param subExpression cron子表达式
+	 * @return 当前时间字段的子表达式
 	 */
 	public String setSubExpression(String subExpression) {
 		if(subExpression != null) {
@@ -248,8 +256,8 @@ abstract class __TimeUnit {
 	
 	/**
 	 * 强制设置当前时间字段的子表达式的值（不会触发触发器）
-	 * @param subExpression
-	 * @return
+	 * @param subExpression cron子表达式
+	 * @return 当前时间字段的子表达式
 	 */
 	protected String _setSubExpression(String subExpression) {
 		this.subExpression = subExpression;
@@ -257,39 +265,39 @@ abstract class __TimeUnit {
 	}
 	
 	/**
-	 * 强制设置当前时间字段的子表达式的值（不会触发触发器）
-	 * @param subExpression
-	 * @return
+	 * 强制设置当前时间字段的子表达式的值为 [某个时间点]（不会触发触发器）
+	 * @param timePoint 指定时间点
+	 * @return 当前时间字段的子表达式
 	 */
-	protected String _setSubExpression(int subExpression) {
-		this.subExpression = String.valueOf(subExpression);
+	protected String _setSubExpression(int timePoint) {
+		this.subExpression = String.valueOf(timePoint);
 		return this.subExpression;
 	}
 	
 	/**
 	 * 检查子表达式的数字取值是否在范围内
-	 * @param value
-	 * @return
+	 * @param values 数字值列表
+	 * @return true:在范围内; false:不在范围内
 	 */
 	protected abstract boolean _checkRange(int... values);
 	
 	/**
 	 * 校验设置的子表达式是否合法
-	 * @param subExpression
-	 * @return
+	 * @param subExpression 准备设值的cron子表达式
+	 * @return true:合法; false:非法
 	 */
 	protected abstract boolean _checkSubExpression(String subExpression);
 	
 	/**
 	 * 当前字段的子表达式发生变化时的触发器（使得其他时间字段可以对应发生变化）
-	 * @param cron
-	 * @param subExpression
+	 * @param cron 所属的Cron表达式对象
+	 * @param subExpression 刚设值的cron子表达式
 	 */
 	protected abstract void _trigger(Cron cron, String subExpression);
 	
 	/**
-	 * 获取子表达式
-	 * @return
+	 * 获取当前时间字段的子表达式
+	 * @return 当前时间字段的子表达式
 	 */
 	public String getSubExpression() {
 		return subExpression;
