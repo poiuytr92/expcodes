@@ -55,6 +55,9 @@ public class TimeUtils {
 	/** "分钟"换算为millis单位 */
 	public final static long MIN_UNIT = 60000L;
 	
+	/** "秒"换算为millis单位 */
+	public final static long SECOND_UNIT = 1000L;
+	
 	/** 私有化构造函数 */
 	protected TimeUtils() {}
 	
@@ -374,6 +377,30 @@ public class TimeUtils {
 	}
 	
 	/**
+	 * 获取今年的年份
+	 * @return 今年的年份
+	 */
+	public static int getCurYear() {
+		return NumUtils.toInt(getSysDate("yyyy"), 1970);
+	}
+	
+	/**
+	 * 获取当前的月份
+	 * @return 当前的月份
+	 */
+	public static int getCurMonth() {
+		return NumUtils.toInt(getSysDate("MM").replaceFirst("^0", ""), 1);
+	}
+	
+	/**
+	 * 获取今天的日期
+	 * @return 今天的日期
+	 */
+	public static int getCurDay() {
+		return NumUtils.toInt(getSysDate("dd").replaceFirst("^0", ""), 1);
+	}
+	
+	/**
 	 * 获取当前的小时值（默认为北京时间8小时时差）
 	 * @return 当前小时
 	 */
@@ -398,6 +425,14 @@ public class TimeUtils {
 	 */
 	public static int getCurMinute() {
 		return (int) (System.currentTimeMillis() % DAY_UNIT % HOUR_UNIT / MIN_UNIT);
+	}
+	
+	/**
+	 * 获取当前的秒数
+	 * @return 当前秒数
+	 */
+	public static int getCurSecond() {
+		return (int) (System.currentTimeMillis() % DAY_UNIT % HOUR_UNIT % MIN_UNIT / SECOND_UNIT);
 	}
 	
 	/**

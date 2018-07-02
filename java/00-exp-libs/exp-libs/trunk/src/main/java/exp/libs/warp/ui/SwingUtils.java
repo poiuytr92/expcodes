@@ -27,6 +27,7 @@ import javax.swing.border.TitledBorder;
 
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.ui.layout.VFlowLayout;
 
 /**
  * <PRE>
@@ -299,7 +300,17 @@ public class SwingUtils {
 	 * @return 水平流式布局面板
 	 */
 	public static JPanel getHFlowPanel(Component... components) {
-		JPanel panel = new JPanel(new FlowLayout());
+		return getHFlowPanel(FlowLayout.CENTER, components);
+	}
+	
+	/**
+	 * 获取水平流式布局面板
+	 * @param align 对齐模式(默认居中): FlowLayout.CENTER|LEFT|RIGHT
+	 * @param components 添加到该面板的组件集合
+	 * @return 水平流式布局面板
+	 */
+	public static JPanel getHFlowPanel(int align, Component... components) {
+		JPanel panel = new JPanel(new FlowLayout(align));
 		if(components != null) {
 			for(Component component : components) {
 				panel.add(component);
@@ -314,7 +325,17 @@ public class SwingUtils {
 	 * @return 垂直流式布局面板
 	 */
 	public static JPanel getVFlowPanel(Component... components) {
-		JPanel panel = new JPanel(new FlowLayout());
+		return getVFlowPanel(VFlowLayout.TOP, components);
+	}
+	
+	/**
+	 * 获取垂直流式布局面板
+	 * @param align 对齐模式(默认置顶): VFlowLayout.TOP|MIDDLE|BOTTOM
+	 * @param components 添加到该面板的组件集合
+	 * @return 垂直流式布局面板
+	 */
+	public static JPanel getVFlowPanel(int align, Component... components) {
+		JPanel panel = new JPanel(new VFlowLayout(align));
 		if(components != null) {
 			for(Component component : components) {
 				panel.add(component);

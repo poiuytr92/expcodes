@@ -151,8 +151,8 @@ public class WebSockClient extends LoopThread {
 		if(isConnecting()) {
 			return true;
 			
-		} else if(session != null) {
-			session.close();
+		} else {
+			_close();
 		}
 		
 		boolean isOk = false;
