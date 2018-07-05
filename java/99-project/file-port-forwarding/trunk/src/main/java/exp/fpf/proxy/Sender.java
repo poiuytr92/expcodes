@@ -28,11 +28,14 @@ public class Sender {
 	
 	private SocketClient client;
 	
+	private byte[] lock;
+	
 	private static volatile Sender instance;
 	
 	private Sender() {
 		SocketBean sockConf = Config.getInstn().newSocketConf();
 		this.client = new SocketClient(sockConf);
+		this.lock = new byte[0];
 		log.info("[{}]-[发送端] 已初始化, [接收端]socket为 [{}]", NAME, sockConf.getSocket());
 	}
 	
@@ -54,8 +57,11 @@ public class Sender {
 			}
 		}
 		
-		if(!client.write(data)) {
-			log.error("[{}] 发送数据失败: {}", NAME, data);
+		// 由于有多个线程共用此会话转发数据, 这里必须加锁, 否则可能出现前后两条消息错位异常
+		synchronized (lock) {
+			if(!client.write(data)) {
+				log.error("[{}] 发送数据失败: {}", NAME, data);
+			}
 		}
 	}
 	
