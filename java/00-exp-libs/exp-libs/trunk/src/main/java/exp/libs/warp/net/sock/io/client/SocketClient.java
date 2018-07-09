@@ -307,6 +307,10 @@ public class SocketClient implements ISession {
 			while(true) {
 				byte[] buffer = new byte[UnitUtils._1_KB * 10];
 				readLen = input.read(buffer);
+				if(readLen < 0) {
+					throw new IOException("IO管道已断开");
+				}
+				
 				localBuff.append(buffer, readLen);
 				endIndex = localBuff.indexOf(delimiter);
 				if(endIndex != -1) {	// 当存在结束符时，退出循环
