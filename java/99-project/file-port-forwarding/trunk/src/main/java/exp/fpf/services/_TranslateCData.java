@@ -236,12 +236,11 @@ class _TranslateCData extends Thread {
 	private void _responseTo(int mode) {
 		slog.debug("会话 [{}] [转发流程3] 已就绪", sessionId);
 		try {
-			long bgnTime = System.currentTimeMillis();
 			InputStream in = snk.getInputStream();
 			while (!snk.isClosed()) {
 				byte[] buffer = new byte[Param.IO_BUFF];
 				int len = in.read(buffer);	// 阻塞
-				if (len > 0) {
+				if (len >= 0) {
 					String data = BIZUtils.encode(buffer, 0, len);
 					
 					if(ResponseMode.SOCKET == mode) {
@@ -256,17 +255,9 @@ class _TranslateCData extends Thread {
 						slog.debug("会话 [{}] [转发流程3] 已发送 [{}] 数据 : \r\n{}", 
 								sessionId, recvFilePath, data);
 					}
-					bgnTime = System.currentTimeMillis();
 					
 				} else {
-					if(overtime <= 0) {
-						break;
-					} else {
-						ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
-						if(System.currentTimeMillis() - bgnTime >= overtime) {
-							throw new SocketTimeoutException("超时无数据交互");
-						}
-					}
+					break;
 				}
 			}
 		} catch (SocketTimeoutException e) {
@@ -286,9 +277,20 @@ class _TranslateCData extends Thread {
 	
 	/**
 	 * 为[本侧响应收转器]构造Json格式数据流.
-	 * @return Json格式数据
+	 * @param data 需要封装的原数据
+	 * @return
 	 */
 	private String _getRecvJsonData(String data) {
+		return _getRecvJsonData(sessionId, data);
+	}
+	
+	/**
+	 * 为[本侧响应收转器]构造Json格式数据流.
+	 * @param sessionId 会话ID
+	 * @param data 需要封装的原数据
+	 * @return
+	 */
+	protected static String _getRecvJsonData(String sessionId, String data) {
 		JSONObject json = new JSONObject();
 		json.put(Param.SID, sessionId);
 		json.put(Param.DATA, data);
@@ -296,11 +298,26 @@ class _TranslateCData extends Thread {
 	}
 	
 	/**
-	 * 为[本侧响应收转器]构造数据流文件路径.
+	 * 
 	 * 	同时该数据流文件列入禁忌表, 避免被[本侧响应接收器]误读.
 	 * @return 数据流文件路径
 	 */
 	private String _getRecvFilePath() {
+		return _getRecvFilePath(srMgr, sessionId, timeSequence++, type, snkIP, snkPort);
+	}
+	
+	/**
+	 * 为[本侧响应收转器]构造数据流文件路径.
+	 * @param srMgr
+	 * @param sessionId
+	 * @param timeSequence
+	 * @param type
+	 * @param snkIP
+	 * @param snkPort
+	 * @return
+	 */
+	protected static String _getRecvFilePath(SRMgr srMgr, String sessionId, 
+			int timeSequence, String type, String snkIP, int snkPort) {
 		String recvFileName = BIZUtils.toFileName(
 				sessionId, timeSequence++, type, snkIP, snkPort);
 		srMgr.addRecvTabu(recvFileName);

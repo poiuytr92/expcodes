@@ -116,8 +116,8 @@ class _TranslateSData extends Thread {
 	 */
 	private void conn() {
 		slog.debug("会话 [{}] 正在建立连接...", sessionId);
-		String emptyFilePath = _getSendFilePath();
-		FileUtils.write(emptyFilePath, Param.MARK_CONN, Charset.ISO, false);
+		String connFilePath = _getSendFilePath();
+		FileUtils.write(connFilePath, Param.MARK_CONN, Charset.ISO, false);
 	}
 	
 	/**
@@ -242,18 +242,24 @@ class _TranslateSData extends Thread {
 				slog.debug("会话 [{}] [转发流程4] 已接收 [{}] 数据 : \r\n{}", sessionId, 
 						(ResponseMode.SOCKET == mode ? "SOCKET" : tmp), data);
 				
-				// 解析数据转送到本地socket通道
-				byte[] buffer = BIZUtils.decode(data);
-				for(int offset = 0, len = 0; offset < buffer.length; offset += len) {
-					len = buffer.length - offset;
-					len = (len > Param.IO_BUFF ? Param.IO_BUFF : len);
-					out.write(buffer, offset, len);
-					out.flush();
-				}
-				
 				// 删除文件
 				if(ResponseMode.FILE == mode) {
 					FileUtils.delete(tmp);
+				}
+				
+				// 对端真正的服务会话已断开
+				if(Param.MARK_EXIT.equals(data)) {
+					break;
+					
+				// 解析数据转送到本地socket通道
+				} else {
+					byte[] buffer = BIZUtils.decode(data);
+					for(int offset = 0, len = 0; offset < buffer.length; offset += len) {
+						len = buffer.length - offset;
+						len = (len > Param.IO_BUFF ? Param.IO_BUFF : len);
+						out.write(buffer, offset, len);
+						out.flush();
+					}
 				}
 				curTime = System.currentTimeMillis();
 			}

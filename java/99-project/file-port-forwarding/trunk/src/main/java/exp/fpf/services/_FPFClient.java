@@ -92,6 +92,7 @@ class _FPFClient extends LoopThread {
 			ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
 			return;
 		}
+		delInvaildSession();
 		
 		String sendFilePath = PathUtils.combine(srMgr.getRecvDir(), sendFileName);
 		List<String> features = RegexUtils.findGroups(sendFilePath, REGEX);
@@ -126,14 +127,35 @@ class _FPFClient extends LoopThread {
 	protected void _after() {
 		srFileMonitor._stop();
 		
+		delAllSession();
+		log.info("端口转发数据接收器已停止");
+	}
+	
+	/**
+	 * 清理无效会话
+	 */
+	private void delInvaildSession() {
+		Iterator<_FPFClientSession> sessIts = sessions.values().iterator();
+		while(sessIts.hasNext()) {
+			_FPFClientSession session = sessIts.next();
+			if(session.isClosed()) {
+				session.clear();
+				sessIts.remove();
+			}
+		}
+	}
+	
+	/**
+	 * 清理所有会话
+	 */
+	private void delAllSession() {
 		Iterator<_FPFClientSession> sessIts = sessions.values().iterator();
 		while(sessIts.hasNext()) {
 			_FPFClientSession session = sessIts.next();
 			session.clear();
+			sessIts.remove();
 		}
 		sessions.clear();
-		
-		log.info("端口转发数据接收器已停止");
 	}
 	
 }

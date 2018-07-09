@@ -9,7 +9,11 @@ import exp.fpf.Config;
 import exp.fpf.cache.RecvCache;
 import exp.fpf.cache.SRMgr;
 import exp.fpf.envm.Param;
+import exp.fpf.envm.ResponseMode;
+import exp.fpf.proxy.Sender;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
+import exp.libs.envm.Charset;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.verify.RegexUtils;
 import exp.libs.warp.net.sock.bean.SocketBean;
@@ -104,6 +108,7 @@ class _FPFClientSession extends Thread {
 				
 			} else {
 				log.warn("会话 [{}] 连接到服务端口 [{}:{}] 失败", sessionId, ip, port);
+				notifyExit();
 			}
 		} catch(Throwable e) {
 			log.error("内存不足, 无法再分配代理会话", e);
@@ -125,6 +130,27 @@ class _FPFClientSession extends Thread {
 		List<String> filePaths = fileCache.getAll();
 		for(String fp : filePaths) {
 			fileList.add(fp);
+		}
+	}
+	
+	/**
+	 * 会话连接到真正的服务端口失败, [转发流程2] 和 [转发流程3] 均不执行.
+	 * 直接反馈断开连接通知.
+	 */
+	private void notifyExit() {
+		String data = Param.MARK_EXIT;
+		if(ResponseMode.SOCKET == Config.getInstn().getRspMode()) {
+			String json = _TranslateCData._getRecvJsonData(sessionId, data);
+			Sender.getInstn().send(json);
+			log.debug("会话 [{}] 已反馈 [SOCKET] 终止通知 : \r\n{}", 
+					sessionId, json);
+			
+		} else {
+			String recvFilePath = _TranslateCData._getRecvFilePath(
+					srMgr, data, 0, Param.PREFIX_RECV, ip, port);
+			FileUtils.write(recvFilePath, data, Charset.ISO, false);
+			log.debug("会话 [{}] 已反馈 [{}] 终止通知 : \r\n{}", 
+					sessionId, recvFilePath, data);
 		}
 	}
 	

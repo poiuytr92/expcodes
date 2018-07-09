@@ -18,6 +18,9 @@ public final class Param {
 	/** 建立连接标识 */
 	public final static String MARK_CONN = "#conn#";
 	
+	/** 断开连接标识 */
+	public final static String MARK_EXIT = "#exit#";
+	
 	/** 发送文件前缀标识 */
 	public final static String PREFIX_SEND = "send";
 	
