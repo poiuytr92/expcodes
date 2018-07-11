@@ -436,7 +436,7 @@
           <groupId>org.apache</groupId>
           <artifactId>log4j</artifactId>
           <version>1.2.17</version>
-          <scope>runtime</scope>
+          <!-- scope>runtime</scope -->	<!-- wsdl等第三方包需要用 -->
         </dependency>
     
         <!-- axis2-client -->
