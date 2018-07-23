@@ -152,7 +152,7 @@ public class WsdlUtils {
 	
 	/**
 	 * 创建用于请求wsdl的soap格式的XML报文模板(无参)
-	 * @param wsdlURL wsdl地址, 支持格式: 
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同: 
 	 * 		http://127.0.0.1:8080/services/customService?wsdl
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
@@ -166,7 +166,7 @@ public class WsdlUtils {
 	
 	/**
 	 * 创建用于请求wsdl的soap格式的XML报文模板(无参)
-	 * @param wsdlURL wsdl地址, 支持格式: 
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同: 
 	 * 		http://127.0.0.1:8080/services/customService?wsdl
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
@@ -188,7 +188,7 @@ public class WsdlUtils {
 	
 	/**
 	 * 创建用于请求wsdl的soap格式的XML报文模板(无参)
-	 * @param wsdlURL wsdl地址, 支持格式: 
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同: 
 	 * 		http://127.0.0.1:8080/services/customService?wsdl
 	 * 		E:\ManagedElementRetrievalHttp.wsdl
 	 * 		file:///E:/ManagedElementRetrievalHttp.wsdl 
@@ -274,7 +274,7 @@ public class WsdlUtils {
 		String requestXml = requestXmlTpl;
 		if(params != null && !params.isEmpty()) {
 			for(String param : params) {
-				requestXml.replaceFirst("\\?", param);
+				requestXml = requestXml.replaceFirst("\\?", param);
 			}
 		}
 		return requestXml;
@@ -313,7 +313,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -330,7 +330,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -345,7 +345,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -362,7 +362,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -383,7 +383,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -397,15 +397,15 @@ public class WsdlUtils {
 	private String _doCall(String wsdlURL, String method,
 			List<String> requestParams, 
 			boolean header, int connTimeout, int callTimeout, String charset) {
-		String requestXmlTpl = getRequestXmlTpl(wsdlURL, method);
-		String requestXml = setParams(requestXmlTpl, requestParams);
+		String requestXmlTpl = _getRequestXmlTpl(wsdlURL, method);
+		String requestXml = _setParams(requestXmlTpl, requestParams);
 		return __doCall(wsdlURL, method, requestXml, header, connTimeout, callTimeout, charset);
 	}
 	
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -420,7 +420,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -437,7 +437,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -458,7 +458,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -480,7 +480,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -509,7 +509,7 @@ public class WsdlUtils {
 	/**
 	 * 调用webservices接口(通过HTTP协议)
 	 * 
-	 * @param wsdlURL wsdl地址, 支持格式:
+	 * @param wsdlURL wsdl地址, 根据不同的wsdl服务器要求格式不同:
 	 * 		http://172.168.10.7:8686/services/customService?wsdl
 	 * 		http://172.168.10.7:8686/services/customService
 	 * @param method 调用方法名
@@ -524,7 +524,6 @@ public class WsdlUtils {
 			String requestXml, boolean header, int connTimeout,
 			int callTimeout, String charset) throws Exception {
 		final String CONTENT_TYPE = HttpHead.VAL.GET_TXT.concat(charset);
-		wsdlURL = wsdlURL.replaceFirst("(?i)\\?wsdl$", "");
 		String responseXml = "";
 		
 		HttpClient httpClient = HttpUtils.createHttpClient(connTimeout, callTimeout);
