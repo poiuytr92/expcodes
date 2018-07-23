@@ -41,15 +41,15 @@ public class ESCUtils {
 	 * <PRE>
 	 * 把字符串中的特殊字符转义为xml的转义字符.
 	 * 
-	 * [&] 转义 [&amp;] 意为 [地址符].
-	 * [<] 转义 [&lt;] 意为 [小于].
-	 * [>] 转义 [&gt;] 意为 [大于号].
-	 * ['] 转义 [&apos;] 意为 [单引号].
-	 * ["] 转义 [&quot;] 意为 [双引号].
-	 * [ ] 转义 [&nbsp;] 意为 [空格].
-	 * [©] 转义 [&copy;] 意为 [版权符].
-	 * [®] 转义 [&reg;] 意为 [注册符].
-	 * 
+	 * [&] 转义 [&amp;amp;] 意为 [地址符].
+	 * [<] 转义 [&amp;lt;] 意为 [小于].
+	 * [>] 转义 [&amp;gt;] 意为 [大于号].
+	 * ['] 转义 [&amp;apos;] 意为 [单引号].
+	 * ["] 转义 [&amp;quot;] 意为 [双引号].
+	 * [ ] 转义 [&amp;nbsp;] 意为 [空格].
+	 * [©] 转义 [&amp;copy;] 意为 [版权符].
+	 * [®] 转义 [&amp;reg;] 意为 [注册符].
+	 * </PRE>
 	 * @param str 原字符串 
 	 * @return 转义后的字符串
 	 */
@@ -69,16 +69,17 @@ public class ESCUtils {
 	}
 	
 	/**
+	 * <PRE>
 	 * 把含有xml转义字符的字符串还原成普通字符串
 	 * 
-	 * [&amp;] 反转义 [&] 意为 [地址符].
-	 * [&lt;] 反转义 [<] 意为 [小于].
-	 * [&gt;] 反转义 [>] 意为 [大于号].
-	 * [&apos;] 反转义 ['] 意为 [单引号].
-	 * [&quot;] 反转义 ["] 意为 [双引号].
-	 * [&nbsp;] 反转义 [ ] 意为 [空格].
-	 * [&copy;] 反转义 [©] 意为 [版权符].
-	 * [&reg;] 反转义 [®] 意为 [注册符].
+	 * [&amp;amp;] 反转义 [&] 意为 [地址符].
+	 * [&amp;lt;] 反转义 [<] 意为 [小于].
+	 * [&amp;gt;] 反转义 [>] 意为 [大于号].
+	 * [&amp;apos;] 反转义 ['] 意为 [单引号].
+	 * [&amp;quot;] 反转义 ["] 意为 [双引号].
+	 * [&amp;nbsp;] 反转义 [ ] 意为 [空格].
+	 * [&amp;copy;] 反转义 [©] 意为 [版权符].
+	 * [&amp;reg;] 反转义 [®] 意为 [注册符].
 	 * </PRE>
 	 * 
 	 * @param 含有xml转义字符的字符串
@@ -95,6 +96,38 @@ public class ESCUtils {
 			str = str.replace("&quot;", "\"");
 			str = str.replace("&copy;", "©");
 			str = str.replace("&reg;", "®");
+		}
+		return str;
+	}
+	
+	/**
+	 * <PRE>
+	 * 把字符串中的特殊字符转义为html的转义字符.
+	 * </PRE>
+	 * @param str 原字符串 
+	 * @return 转义后的字符串
+	 */
+	public static String toHtmlESC(final String str) {
+		String html = "";
+		if(str != null) {
+			html = StringEscapeUtils.escapeHtml4(str);
+		}
+		return html;
+	}
+	
+	/**
+	 * <PRE>
+	 * 把含有html转义字符的字符串还原成普通字符串。
+	 * （若含有 &amp;#21378; 这里unicode编码也会被还原成原本字符）
+	 * </PRE>
+	 * 
+	 * @param 含有html转义字符的字符串
+	 * @return 普通字符串
+	 */
+	public static String unHtmlESC(final String htmlStr) {
+		String str = "";
+		if(htmlStr != null) {
+			str = StringEscapeUtils.unescapeHtml4(htmlStr);
 		}
 		return str;
 	}
