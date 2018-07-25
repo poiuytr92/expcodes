@@ -1,5 +1,5 @@
 ﻿/*****************************************
-  Description: 动态令牌生成器DLL库
+  Description: OTP动态令牌: DLL/SO动态链接库
   Authod     : EXP | http://exp-blog.com
   Modify By  : None
   Date       : 2015-07-20
