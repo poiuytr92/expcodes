@@ -489,4 +489,36 @@ public class NumUtils {
 		return array;
 	}
 	
+	/**
+	 * 检查变量的值是否在指定的范围数组内
+	 * @param variable 变量
+	 * @param ranges 范围数组
+	 * @return true:在范围内; false:在范围外
+	 */
+	public static boolean inRange(int variable, int... ranges) {
+		boolean inRange = false;
+		if(ranges != null && ranges.length > 0) {
+			for(int i = 0; !inRange && i < ranges.length; i++) {
+				inRange = (variable == ranges[i]);
+			}
+		}
+		return inRange;
+	}
+	
+	/**
+	 * 检查变量的值是否在指定的范围数组内
+	 * @param variable 变量
+	 * @param ranges 范围数组
+	 * @return true:在范围内; false:在范围外
+	 */
+	public static boolean inRange(long variable, long... ranges) {
+		boolean inRange = false;
+		if(ranges != null && ranges.length > 0) {
+			for(int i = 0; !inRange && i < ranges.length; i++) {
+				inRange = (variable == ranges[i]);
+			}
+		}
+		return inRange;
+	}
+	
 }

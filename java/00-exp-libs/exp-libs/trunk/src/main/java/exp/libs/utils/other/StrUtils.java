@@ -1,6 +1,8 @@
 package exp.libs.utils.other;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -758,6 +760,21 @@ public class StrUtils {
 			}
 		}
 		return halfWidth;
+	}
+	
+	/**
+	 * 检查变量的值是否在指定的范围数组内
+	 * @param variable 变量（允许为null值）
+	 * @param ranges 范围数组
+	 * @return true:在范围内; false:在范围外
+	 */
+	public static boolean inRange(String variable, String... ranges) {
+		boolean inRange = false;
+		if(ranges != null && ranges.length > 0) {
+			inRange = new HashSet<String>(Arrays.asList(ranges)).
+					contains(variable);
+		}
+		return inRange;
 	}
 	
 }

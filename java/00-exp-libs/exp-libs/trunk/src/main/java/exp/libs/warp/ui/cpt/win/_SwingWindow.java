@@ -17,6 +17,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import exp.libs.utils.num.NumUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.tray.SystemTray;
 
@@ -37,13 +38,13 @@ abstract class _SwingWindow extends JFrame {
 	private final static String ICON_RES = "/exp/libs/warp/ui/cpt/win/tray.png";
 	
 	/** 最小化状态：未初始化 */
-	private final static int UNINIT = 0;
+	protected final static int UNINIT = 0;
 	
 	/** 最小化状态：到系统托盘 */
-	private final static int TO_TRAY = 1;
+	protected final static int TO_TRAY = 1;
 	
 	/** 最小化状态：到任务栏 */
-	private final static int TO_MINI = -1;
+	protected final static int TO_MINI = -1;
 	
 	/** 窗口出现位置（屏幕中心:默认） */
 	protected final static int LOCATION_CENTER = 0;
@@ -300,6 +301,19 @@ abstract class _SwingWindow extends JFrame {
 			_hide();
 			beforeExit();
 			System.exit(0);
+		}
+	}
+	
+	/**
+	 * 强制设置最小化模式
+	 * @param mode 最小化模式, 可选值:
+	 * 		使用时自选: _SwingWindow.UNINIT
+	 * 		到任务栏: _SwingWindow.TO_MINI
+	 * 		到系统托盘: _SwingWindow.TO_TRAY
+	 */
+	protected final void setMini(int mode) {
+		if(NumUtils.inRange(mode, UNINIT, TO_MINI, TO_TRAY)) {
+			miniMode = mode;
 		}
 	}
 	
