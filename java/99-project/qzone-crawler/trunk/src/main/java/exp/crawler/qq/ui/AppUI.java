@@ -132,6 +132,7 @@ public class AppUI extends MainWindow {
 			synchronized (AppUI.class) {
 				if(instance == null) {
 					instance = new AppUI();
+					instance.setMini(TO_MINI);
 				}
 			}
 		}
