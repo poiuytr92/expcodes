@@ -45,14 +45,6 @@
 	<!-- 项目依赖 -->
     <dependencies>
     
-        <!-- 经验库 -->
-        <dependency>
-          <groupId>exp.libs</groupId>
-          <artifactId>exp-libs</artifactId>
-          <version>${explibs.version}</version>
-          <scope>runtime</scope>	<!-- 仅使用其中的版本记录功能, 不参与打包 -->
-        </dependency>
-        
 		<!-- Junit4 -->
 		<dependency>
 			<groupId>junit</groupId>
