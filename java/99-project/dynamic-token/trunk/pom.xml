@@ -8,8 +8,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>动态令牌生成/校验工具</name>
-    <description>配合C++的动态链接库生成/校验动态令牌</description>
+    <name>动态令牌生成/校验API</name>
+    <description>此构件仅用于对外提供能力：配合C++的动态链接库生成/校验动态令牌</description>
     <url>https://github.com/lyy289065406/expcodes/trunk/java/99-project/dynamic-token</url>
     <inceptionYear>2015-07-25</inceptionYear>
 
@@ -42,7 +42,17 @@
         <mrp.plugin.version>1.0-SNAPSHOT</mrp.plugin.version>
     </properties>
 
-	<dependencies>
+	<!-- 项目依赖 -->
+    <dependencies>
+    
+        <!-- 经验库 -->
+        <dependency>
+          <groupId>exp.libs</groupId>
+          <artifactId>exp-libs</artifactId>
+          <version>${explibs.version}</version>
+          <scope>runtime</scope>	<!-- 仅使用其中的版本记录功能, 不参与打包 -->
+        </dependency>
+        
 		<!-- Junit4 -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -52,6 +62,7 @@
 		</dependency>
 	</dependencies>
 
+	<!-- 项目构建 -->
 	<build>
 		<plugins>
 		
@@ -98,24 +109,75 @@
                 </configuration>
             </plugin>
             
+            <!-- Ant插件：项目部署文件复制 -->
+            <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-antrun-plugin</artifactId>
+                <version>1.7</version>
+                <executions>
+                    <execution>
+                        <id>ant-build</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo>拷贝文档</echo>
+                                <copy todir="${release.dir}/doc">
+                                    <fileset dir="doc/06_使用文档" />
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <!-- 项目发布插件(自动生成脚本) -->
+            <plugin>
+                <groupId>exp.libs</groupId>
+              <artifactId>mojo-release-plugin</artifactId>
+                <version>${mrp.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>mrp</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>install</goal>
+                        </goals>
+                        <configuration>
+                            <mavenRepository>D:\mavenRepository</mavenRepository>
+                            <verClass>exp.token.Version</verClass>
+                            <mainClass>exp.token.Main</mainClass>
+                            <mainArgs></mainArgs>
+                            <charset>UTF-8</charset>
+                            <jdkPath>java</jdkPath>
+                            <xms>32m</xms>
+                            <xmx>64m</xmx>
+                            <jdkParams></jdkParams>
+                            <noVerJarRegex>(exp|auto)-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
+                            <proguard>false</proguard>  <!-- 是否使用混淆包(需配置混淆打包插件) -->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
             <!-- 打包javadoc: 项目发布基线版本时会自动打包javadoc，若报错不要启用此插件 -->
             <!-- javadoc插件会强制使用GBK读取pom文件的内容, 若得到的html网页标题乱码,  -->
             <!-- 则需要通过Run Configurations -> 自定义Maven install命令 -> Common -> Encoding:GBK 确保不会乱码 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
                 <configuration>
                     <aggregate>true</aggregate>
                     <charset>UTF-8</charset>
                     <encoding>UTF-8</encoding>
                     <docencoding>UTF-8</docencoding>
-                    <outputEncondig>UTF-8</outputEncondig>
-                    <skip>false</skip>    <!-- 是否在项目打包时跳过javadoc -->
                 </configuration>
                 <executions>
                     <execution>
                         <id>attach-javadocs</id>
-                        <phase>install</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
