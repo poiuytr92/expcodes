@@ -1,0 +1,47 @@
+﻿生成启动时间为 2018-07-24 20:39:43。
+     1>项目“D:\01_workspace\c\vs2010\dt_otp\dt_otp\dt_otp.vcxproj”在节点 2 上(rebuild 个目标)。
+     1>PrepareForBuild:
+         正在创建目录“D:\01_workspace\c\vs2010\dt_otp\x64\Release\”。
+       InitializeBuildStatus:
+         正在创建“x64\Release\dt_otp.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       ClCompile:
+         E:\04_work\vs\2010\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D DT_OTP_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MTd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yc"StdAfx.h" /Fp"x64\Release\dt_otp.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TP /errorReport:prompt stdafx.cpp
+         stdafx.cpp
+         E:\04_work\vs\2010\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D DT_OTP_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MTd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TP /errorReport:prompt dllmain.cpp
+         dllmain.cpp
+         E:\04_work\vs\2010\VC\bin\x86_amd64\CL.exe /c /Zi /nologo /W3 /WX- /O2 /Oi /GL /D WIN32 /D NDEBUG /D _WINDOWS /D _USRDLL /D DT_OTP_EXPORTS /D _WINDLL /D _UNICODE /D UNICODE /Gm- /EHsc /MTd /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Yu"StdAfx.h" /Fp"x64\Release\dt_otp.pch" /Fo"x64\Release\\" /Fd"x64\Release\vc100.pdb" /Gd /TP /errorReport:prompt dt_otp.cpp otp_impl.cpp crypto_utils.cpp jni_utils.cpp num_utils.cpp str_utils.cpp time_utils.cpp digital_watermark.cpp md5.cpp
+         dt_otp.cpp
+         otp_impl.cpp
+         crypto_utils.cpp
+         jni_utils.cpp
+         num_utils.cpp
+         str_utils.cpp
+         time_utils.cpp
+         digital_watermark.cpp
+         md5.cpp
+       Link:
+         E:\04_work\vs\2010\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\01_workspace\c\vs2010\dt_otp\x64\Release\dt_otp.dll" /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /ManifestFile:"x64\Release\dt_otp.dll.intermediate.manifest" /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /DEBUG /PDB:"D:\01_workspace\c\vs2010\dt_otp\x64\Release\dt_otp.pdb" /SUBSYSTEM:WINDOWS /OPT:REF /OPT:ICF /LTCG /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\01_workspace\c\vs2010\dt_otp\x64\Release\dt_otp.lib" /MACHINE:X64 /DLL x64\Release\dllmain.obj
+         x64\Release\dt_otp.obj
+         x64\Release\otp_impl.obj
+         x64\Release\crypto_utils.obj
+         x64\Release\jni_utils.obj
+         x64\Release\num_utils.obj
+         x64\Release\str_utils.obj
+         x64\Release\time_utils.obj
+         x64\Release\stdafx.obj
+         x64\Release\digital_watermark.obj
+         x64\Release\md5.obj
+            正在创建库 D:\01_workspace\c\vs2010\dt_otp\x64\Release\dt_otp.lib 和对象 D:\01_workspace\c\vs2010\dt_otp\x64\Release\dt_otp.exp
+         正在生成代码
+         已完成代码的生成
+         dt_otp.vcxproj -> D:\01_workspace\c\vs2010\dt_otp\x64\Release\dt_otp.dll
+       Manifest:
+         C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A\bin\mt.exe /nologo /verbose /outputresource:"D:\01_workspace\c\vs2010\dt_otp\x64\Release\dt_otp.dll;#2" /manifest x64\Release\dt_otp.dll.intermediate.manifest
+       FinalizeBuildStatus:
+         正在删除文件“x64\Release\dt_otp.unsuccessfulbuild”。
+         正在对“x64\Release\dt_otp.lastbuildstate”执行 Touch 任务。
+     1>已完成生成项目“D:\01_workspace\c\vs2010\dt_otp\dt_otp\dt_otp.vcxproj”(rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:02.02
