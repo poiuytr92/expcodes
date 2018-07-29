@@ -14,8 +14,11 @@ import org.apache.zookeeper.data.Stat;
 public class HelloZooKeeper {
 	 
     public static void main(String[] args) throws IOException, InterruptedException, KeeperException {
+    	
         ZooKeeper zk = new ZooKeeper("127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183", 
         		300000, new DemoWatcher());//连接zk server集群
+        
+        // 阻塞等待连接到zookeeper集群
         if (!zk.getState().equals(ZooKeeper.States.CONNECTED)) {
             while (true) {
                 if (zk.getState().equals(ZooKeeper.States.CONNECTED)) {
@@ -29,12 +32,12 @@ public class HelloZooKeeper {
             }
         }
         
-        String node = "/app2";
+        String node = "/app1";
         Stat stat = zk.exists(node, false);//检测/app1是否存在
         if (stat == null) {
             //创建节点
-            String createResult = zk.create(node, "test".getBytes(), 
-            		ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
+            String createResult = zk.create(node, "hello zk".getBytes(), 
+            		ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);	// 持久化节点
             System.out.println(createResult);
         }
         //获取节点的值
