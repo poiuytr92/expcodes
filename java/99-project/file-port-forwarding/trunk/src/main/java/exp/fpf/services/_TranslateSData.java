@@ -118,6 +118,8 @@ class _TranslateSData extends Thread {
 		slog.debug("会话 [{}] 正在建立连接...", sessionId);
 		String connFilePath = _getSendFilePath();
 		FileUtils.write(connFilePath, Param.MARK_CONN, Charset.ISO, false);
+		slog.debug("会话 [{}] [转发流程1] 已发送  [{}] 数据: \r\n{}", 
+				sessionId, connFilePath, Param.MARK_CONN);
 	}
 	
 	/**
@@ -131,7 +133,7 @@ class _TranslateSData extends Thread {
 	private void requestToFile() {
 		slog.debug("会话 [{}] [转发流程1] 已就绪", sessionId);
 		try {
-			long bgnTime = System.currentTimeMillis();
+			long lastTime = System.currentTimeMillis();
 			InputStream in = src.getInputStream();
 			while (!src.isClosed()) {
 				byte[] buffer = new byte[Param.IO_BUFF];
@@ -140,7 +142,7 @@ class _TranslateSData extends Thread {
 					String data = BIZUtils.encode(buffer, 0, len);
 					String sendFilePath = _getSendFilePath();
 					FileUtils.write(sendFilePath, data, Charset.ISO, false);
-					bgnTime = System.currentTimeMillis();
+					lastTime = System.currentTimeMillis();
 					slog.debug("会话 [{}] [转发流程1] 已发送  [{}] 数据: \r\n{}", 
 							sessionId, sendFilePath, data);
 					
@@ -149,7 +151,7 @@ class _TranslateSData extends Thread {
 						break;
 					} else {
 						ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
-						if(System.currentTimeMillis() - bgnTime >= overtime) {
+						if(System.currentTimeMillis() - lastTime >= overtime) {
 							throw new SocketTimeoutException("超时无数据交互");
 						}
 					}
@@ -214,7 +216,7 @@ class _TranslateSData extends Thread {
 	private void _toResponse(int mode) {
 		slog.debug("会话 [{}] [转发流程4] 已就绪", sessionId);
 		try {
-			long curTime = System.currentTimeMillis();
+			long lastTime = System.currentTimeMillis();
 			OutputStream out = src.getOutputStream();
 			while(!src.isClosed()) {
 				
@@ -228,7 +230,7 @@ class _TranslateSData extends Thread {
 						
 					} else {
 						ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
-						if(System.currentTimeMillis() - curTime >= overtime) {
+						if(System.currentTimeMillis() - lastTime >= overtime) {
 							throw new SocketTimeoutException("超时无数据交互");
 						}
 						continue;
@@ -261,7 +263,7 @@ class _TranslateSData extends Thread {
 						out.flush();
 					}
 				}
-				curTime = System.currentTimeMillis();
+				lastTime = System.currentTimeMillis();
 			}
 		} catch (SocketTimeoutException e) {
 			log.warn("Socket会话 [{}] 的{}转发通道超时 [{}ms] 无数据交互, 自动断开", 

@@ -92,7 +92,7 @@ class _FPFClient extends LoopThread {
 			ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
 			return;
 		}
-		delInvaildSession();
+		delInvaildSession();	// 耗时太多 FIXME 改成惰性删除/随机删除/按最后一次使用时间排序删除
 		
 		String sendFilePath = PathUtils.combine(srMgr.getRecvDir(), sendFileName);
 		List<String> features = RegexUtils.findGroups(sendFilePath, REGEX);
@@ -106,19 +106,23 @@ class _FPFClient extends LoopThread {
 			int port = NumUtils.toInt(features.get(IDX_PORT), 0);
 			
 			// 分配代理会话
+			boolean isNewSession = false;
 			_FPFClientSession session = sessions.get(sessionId);
 			if(session == null) {
 				session = new _FPFClientSession(srMgr, overtime, sessionId, ip, port);
 				sessions.put(sessionId, session);
 				session.start();	// 通过异步方式建立会话连接, 避免阻塞其他会话
+				isNewSession = true;
 			}
 			
-			if(session.isClosed()) {
-				session.clear();
-				sessions.remove(sessionId);
-				
-			} else {
-				session.add(sendFilePath);	// 分配请求
+			// 分配请求
+			int timeSequence = session.add(sendFilePath);
+			
+			// FIXME: 临时手段，现场长时间运行会出现一个异常： 同一个会话的多次请求
+			// 会在前面 sessions.get拆分成多个会话，间接产生多对收发线程，导致转发不通
+			if(isNewSession == true && timeSequence > 0) {
+				log.error("会话 [{}] 发生并发错位, 程序终止.", sessionId);
+				System.exit(1);
 			}
 		}
 	}

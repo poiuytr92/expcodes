@@ -63,12 +63,6 @@ class _FPFClientSession extends Thread {
 	/** 缓存接收到的对侧请求文件(用于调整文件时序, 避免发送时序错乱导致会话异常) */
 	private RecvCache fileCache;
 	
-	/** 请求转发器: 把[对侧]的请求[转发]到[本侧真正的服务端口] */
-	private _TranslateCData sender;
-	
-	/** 响应收转器: 把[本侧真正的服务端口]返回的响应数据[收转]到[对侧] */
-	private _TranslateCData recver;
-	
 	/** 是否已初始化过 */
 	private boolean isInit;
 	
@@ -98,10 +92,13 @@ class _FPFClientSession extends Thread {
 	public void run() {
 		try {
 			if(session.conn()) {	// 此方法会阻塞, 为了不影响其他会话, 需要放在线程中运行
-				this.sender = new _TranslateCData(srMgr, sessionId, Param.PREFIX_SEND, 
+				_TranslateCData sender = new _TranslateCData(
+						srMgr, sessionId, Param.PREFIX_SEND, 
 						overtime, fileList, session.getSocket());	// 请求转发
-				this.recver = new _TranslateCData(srMgr, sessionId, Param.PREFIX_RECV, 
+				_TranslateCData recver = new _TranslateCData(
+						srMgr, sessionId, Param.PREFIX_RECV, 
 						overtime, fileList, session.getSocket());	// 响应转发
+				
 				sender.start();
 				recver.start();
 				log.info("新增一个到服务端口 [{}:{}] 的会话 [{}]", ip, port, sessionId);
@@ -119,18 +116,18 @@ class _FPFClientSession extends Thread {
 	/**
 	 * 添加 [对侧] 请求文件
 	 * @param filePath  [对侧] 请求文件
+	 * @return 该文件的时序
 	 */
-	protected void add(String filePath) {
+	protected int add(String filePath) {
 		int timeSequence = NumUtils.toInt(RegexUtils.findFirst(filePath, REGEX), -1);
-		if(timeSequence < 0) {
-			return;
+		if(timeSequence >= 0) {
+			fileCache.add(timeSequence, filePath);
+			List<String> filePaths = fileCache.getAll();
+			for(String fp : filePaths) {
+				fileList.add(fp);
+			}
 		}
-		
-		fileCache.add(timeSequence, filePath);
-		List<String> filePaths = fileCache.getAll();
-		for(String fp : filePaths) {
-			fileList.add(fp);
-		}
+		return timeSequence;
 	}
 	
 	/**

@@ -125,7 +125,7 @@ class _TranslateCData extends Thread {
 	private void fileToRequest() {
 		slog.debug("会话 [{}] [转发流程2] 已就绪", sessionId);
 		try {
-			long curTime = System.currentTimeMillis();
+			long lastTime = System.currentTimeMillis();
 			OutputStream out = snk.getOutputStream();
 			while(!snk.isClosed()) {
 				
@@ -137,7 +137,7 @@ class _TranslateCData extends Thread {
 						
 					} else {
 						ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
-						if(System.currentTimeMillis() - curTime >= overtime) {
+						if(System.currentTimeMillis() - lastTime >= overtime) {
 							throw new SocketTimeoutException("超时无数据交互");
 						}
 						continue;
@@ -160,7 +160,7 @@ class _TranslateCData extends Thread {
 				
 				// 删除文件
 				FileUtils.delete(sendFilePath);
-				curTime = System.currentTimeMillis();
+				lastTime = System.currentTimeMillis();
 			}
 		} catch (SocketTimeoutException e) {
 			log.warn("Socket会话 [{}] 的{}转发通道超时 [{}ms] 无数据交互, 自动断开", 
