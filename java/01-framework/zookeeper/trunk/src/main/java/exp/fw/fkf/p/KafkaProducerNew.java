@@ -23,7 +23,7 @@ public class KafkaProducerNew {
  
     private KafkaProducerNew() {
         Properties props = new Properties();
-        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183");
+        props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
  
@@ -32,7 +32,7 @@ public class KafkaProducerNew {
  
     public void produce() {
         int messageNo = 1;
-        final int COUNT = 10;
+        final int COUNT = 1000;
  
         while(messageNo < COUNT) {
             String key = String.valueOf(messageNo);
@@ -40,11 +40,8 @@ public class KafkaProducerNew {
             System.out.println(data);
             
             try {
-            	System.out.println(1);
             	producer.send(new ProducerRecord<String, String>(TOPIC, data));
-                System.out.println(2);
-                Thread.sleep(1000);
-                System.out.println(3);
+                Thread.sleep(10);
             } catch (Exception e) {
                 e.printStackTrace();
             }

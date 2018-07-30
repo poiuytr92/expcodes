@@ -22,7 +22,7 @@ public class KafkaConsumerNew {
  
     private KafkaConsumerNew() {
         Properties props = new Properties();
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183");
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         props.put(ConsumerConfig.GROUP_ID_CONFIG, group);
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true"); // 自动commit
@@ -38,10 +38,11 @@ public class KafkaConsumerNew {
  
         while (true) {
             ConsumerRecords<String, String> records = consumer.poll(1000);
+            System.out.println("size:" + records.count());
             for (ConsumerRecord<String, String> record : records) {
                 System.out.printf("offset = %d, key = %s, value = %s \n", record.offset(), record.key(), record.value());
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(10);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
