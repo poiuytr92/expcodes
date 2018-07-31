@@ -32,7 +32,7 @@ public class HelloZooKeeper {
             }
         }
         
-        String node = "/app1";
+        String node = "/app2";
         Stat stat = zk.exists(node, false);//检测/app1是否存在
         if (stat == null) {
             //创建节点

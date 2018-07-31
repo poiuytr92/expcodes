@@ -10,7 +10,7 @@ public class HelloZooKeeperClient {
 	 
     public static void main(String[] args) throws IOException, InterruptedException, KeeperException {
     	ZkClient zkClient = new ZkClient("127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183");
-        String node = "/server/hadoop030000000000";
+        String node = "/hadoop030";
         if (!zkClient.exists(node)) {
             zkClient.createPersistent(node, "hello hadoop03 ...".getBytes());
         }
