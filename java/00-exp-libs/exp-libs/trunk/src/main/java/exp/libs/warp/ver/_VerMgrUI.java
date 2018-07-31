@@ -95,6 +95,7 @@ class _VerMgrUI extends MainWindow {
 			synchronized (_VerMgrUI.class) {
 				if(instance == null) {
 					instance = new _VerMgrUI();
+					instance.setMini(TO_MINI);
 				}
 			}
 		}
