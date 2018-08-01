@@ -34,7 +34,7 @@ public class Config {
 	
 	private final static String SOCK_NAME = "TEST-SOCK";
 	
-	private final static String DS_NAME = "TEST-DS";
+	private final static String DS_NAME = "TEST-DS-SQL";
 	
 	/** XML配置加载器 */
 	private XConfig xConf;
