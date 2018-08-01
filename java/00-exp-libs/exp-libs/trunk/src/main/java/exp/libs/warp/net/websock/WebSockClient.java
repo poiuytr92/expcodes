@@ -1,14 +1,5 @@
 package exp.libs.warp.net.websock;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.security.cert.CertificateException;
-import javax.security.cert.X509Certificate;
-
-import org.java_websocket.drafts.Draft_6455;
-import org.java_websocket.server.DefaultSSLWebSocketServerFactory;
-import org.java_websocket.server.WebSocketServer.WebSocketServerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,59 +72,9 @@ public class WebSockClient extends LoopThread {
 		try {
 			this.session = new _WebSockSession(wsURL, handler);
 			
-			// FIXME
-			initSSL();
-			
-			
 		} catch (Exception e) {
 			log.error("初始化websocket客户端失败, 服务器地址格式异常: {}", wsURL, e);
 		}
-	}
-	
-	private void initSSL() throws Exception {
-		session.debug(true);
-		
-		// WebSocket连接wss链接
-		// This part is needed in case you are going to use self-signed
-		// certificates
-		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
-			public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-				return new java.security.cert.X509Certificate[] {};
-			}
-
-			public void checkClientTrusted(X509Certificate[] chain,
-					String authType) throws CertificateException {
-			}
-
-			public void checkServerTrusted(X509Certificate[] chain,
-					String authType) throws CertificateException {
-			}
-
-			@Override
-			public void checkClientTrusted(
-					java.security.cert.X509Certificate[] arg0, String arg1)
-					throws java.security.cert.CertificateException {
-				// TODO Auto-generated method stub
-				
-			}
-
-			@Override
-			public void checkServerTrusted(
-					java.security.cert.X509Certificate[] arg0, String arg1)
-					throws java.security.cert.CertificateException {
-				// TODO Auto-generated method stub
-				
-			}
-		} };
-		SSLContext sc = SSLContext.getInstance("TLS");
-		sc.init(null, trustAllCerts, new java.security.SecureRandom());
-		// Otherwise the line below is all that is needed.
-		// sc.init(null, null, null);
-//		wsc.setWebSocketFactory(new DefaultSSLWebSocketClientFactory(sc));
-
-		
-		WebSocketServerFactory wsf = new DefaultSSLWebSocketServerFactory(sc);
-		wsf.createWebSocket(session, new Draft_6455());
 	}
 	
 	/**
@@ -210,8 +151,8 @@ public class WebSockClient extends LoopThread {
 		if(isConnecting()) {
 			return true;
 			
-		} else {
-			_close();
+		} else if(session != null) {
+			session.close();
 		}
 		
 		boolean isOk = false;
