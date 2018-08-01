@@ -77,6 +77,21 @@ public class RedisUtils {
 		return isOk;
 	}
 	
+	/**
+	 * 获取Redis连接
+	 * @param ip redis IP
+	 * @param port redis端口
+	 * @param password redis密码
+	 * @return
+	 */
+	public static Jedis getConn(String ip, int port, String password) {
+		Jedis jedis = new Jedis(ip, port);
+		if(StrUtils.isNotTrimEmpty(password)) {
+			jedis.auth(password);
+		}
+		return jedis;
+	}
+	
 	public static boolean existKey(Jedis jedis, String key) {
 		boolean isExist = false;
 		if(jedis != null && key != null) {
@@ -278,9 +293,8 @@ public class RedisUtils {
 		String ip = "192.168.177.131";
 		int port = 6379;
 		String pswd = "123456";
-		
-		Jedis jedis = new Jedis(ip, port);
-		jedis.auth(pswd);
+		RedisPool pool = new RedisPool(ip, port, pswd);
+		Jedis jedis = pool.getConn();
 		
 		System.out.println(addToSet(jedis, "set1", "dff", "Sdfa"));
 		

@@ -2,9 +2,9 @@
 <config hint="全量配置"> 
   
   <datasources caption="数据源列表" hint="">
-    <datasource id="TEST" caption="示例配置" hint="">
+    <datasource id="TEST-DS-SQL" caption="示例配置" hint="">
       <driver default="mysql" caption="数据源驱动类型" hint="常用枚举:
-      	oracle/sybase_ase/sybase_iq/mysql/sqlite">mysql</driver>
+      	oracle/mysql/sqlite/redis">mysql</driver>
       <ip caption="数据库IP">127.0.0.1</ip>
       <port caption="数据库端口">3306</port>
       <name caption="库名/实例名">test</name>
@@ -24,10 +24,23 @@
       <test-after-use default="false" caption="在连接使用后测试是否可用(回收到连接池复用)">false</test-after-use>
       <trace default="false" caption="DEBUG模式" hint="使用log记录执行的sql">false</trace>
     </datasource>
+    
+    <datasource id="TEST-DS-NOSQL" caption="示例配置" hint="">
+      <driver default="mysql" caption="数据源驱动类型" hint="常用枚举:
+      	oracle/mysql/sqlite/redis">redis</driver>
+      <ip caption="数据库IP">127.0.0.1</ip>
+      <port caption="数据库端口">6379</port>
+      <password caption="登录密码">123456</password>
+      <maximum-active-time default="10000" caption="连接超时时间(ms)">10000</maximum-active-time>
+      <maximum-connection-count default="20" caption="可同时存在的最大连接数">20</maximum-connection-count> 
+      <maximum-connection-lifetime default="10000" caption="池满时,等待可用连接的最大时间(ms)">10000</maximum-connection-lifetime>
+      <prototype-count default="8" caption="(连接池)最多可保有的空闲连接数">8</prototype-count>
+      <test-before-use default="true" caption="在连接使用前测试是否可用">true</test-before-use>
+    </datasource>
   </datasources>
   
   <sockets caption="Socket列表">
-    <socket id="TEST" caption="示例配置" hint="">
+    <socket id="TEST-SOCK" caption="示例配置" hint="">
       <ip default="127.0.0.1" caption="服务IP">127.0.0.1</ip>
       <port default="9998" caption="服务端口">9998</port>
       <username caption="登陆账号"></username>
