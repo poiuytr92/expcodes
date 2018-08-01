@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import exp.libs.envm.DateFormat;
+import exp.libs.utils.io.IOUtils;
 import exp.libs.utils.time.TimeUtils;
 
 /**
@@ -423,7 +424,7 @@ public class ObjUtils {
 	
 	/**
 	 * 把内存对象序列化并保存到外存文件
-	 * @param o 内存对象（需继承Serializable接口）
+	 * @param o 内存对象（需实现Serializable接口）
 	 * @param outFilePath 外存文件位置
 	 * @return true:序列化成功; false:序列化失败
 	 */
@@ -460,6 +461,56 @@ public class ObjUtils {
 			log.error("从外存文件反序列化对象失败: [{}]", inFilePath, e);
 		}
 		return o;
+	}
+	
+	/**
+	 * 把内存对象序列化为byte[]字节数组
+	 * @param object 内存对象（需实现Serializable接口）
+	 * @return byte[]字节数组 （失败返回null）
+	 */
+	public static byte[] toSerializable(Serializable object) {
+		byte[] bytes = null;
+		ByteArrayOutputStream baos = null;
+		ObjectOutputStream oos = null;
+		try {
+			baos = new ByteArrayOutputStream();
+			oos = new ObjectOutputStream(baos);
+			oos.writeObject(object);
+			bytes = baos.toByteArray();
+			
+		} catch (Exception e) {
+			log.error("序列化对象为字节数组失败", e);
+			
+		} finally {
+			IOUtils.close(oos);
+			IOUtils.close(baos);
+		}
+		return bytes;
+
+	}
+
+	/**
+	 * 反序列化byte[]字节数组，还原为内存对象
+	 * @param bytes 序列化的字节数组
+	 * @return 内存对象(失败返回null)
+	 */
+	public static Object unSerializable(byte[] bytes) {
+		Object object = null;
+		ByteArrayInputStream bais = null;
+		ObjectInputStream ois = null;
+		try {
+			bais = new ByteArrayInputStream(bytes);
+			ois = new ObjectInputStream(bais);
+			object = ois.readObject();
+			
+		} catch (Exception e) {
+			log.error("从字节数组反序列化对象失败", e);
+			
+		} finally {
+			IOUtils.close(ois);
+			IOUtils.close(bais);
+		}
+		return object;
 	}
 	
 }

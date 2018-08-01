@@ -1,5 +1,7 @@
 package exp.libs.warp.db.nosql;
 
+import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -7,6 +9,8 @@ import java.util.Map;
 import java.util.Set;
 
 import redis.clients.jedis.Jedis;
+import exp.libs.envm.Charset;
+import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -21,10 +25,13 @@ import exp.libs.utils.other.StrUtils;
  */
 public class RedisUtils {
 
+	/** Redis部分接口的返回值 */
 	private final static String OK = "OK";
-	
+
+	/** 测试Redis连接有效性的返回值 */
 	private final static String PONG = "PONG";
 	
+	/** 私有化构造函数 */
 	protected RedisUtils() {}
 	
 	/**
@@ -92,6 +99,25 @@ public class RedisUtils {
 		return jedis;
 	}
 	
+	/**
+	 * 清空Redis库中所有数据
+	 * @param jedis redis连接对象
+	 * @return true:清空成功; false:清空失败
+	 */
+	public static boolean clearAllDatas(Jedis jedis) {
+		boolean isOk = false;
+		if(jedis != null) {
+			isOk = OK.equalsIgnoreCase(jedis.flushAll());
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 检查Redis库里面是否存在某个键值
+	 * @param jedis redis连接对象
+	 * @param key 被检查的键值
+	 * @return true:存在; false:不存在
+	 */
 	public static boolean existKey(Jedis jedis, String key) {
 		boolean isExist = false;
 		if(jedis != null && key != null) {
@@ -101,11 +127,25 @@ public class RedisUtils {
 	}
 	
 	/**
+	 * 删除若干个键（及其对应的内容）
+	 * @param jedis redis连接对象
+	 * @param keys 指定的键集
+	 * @return 删除成功的个数
+	 */
+	public static long delKeys(Jedis jedis, String... keys) {
+		long size = 0;
+		if(jedis != null && keys != null) {
+			size = jedis.del(keys);
+		}
+		return size;
+	}
+	
+	/**
 	 * 新增一个键值对
-	 * @param jedis
-	 * @param key
-	 * @param value
-	 * @return
+	 * @param jedis redis连接对象
+	 * @param key 新的键
+	 * @param value 新的值
+	 * @return true:新增成功; false:新增失败
 	 */
 	public static boolean addKV(Jedis jedis, String key, String value) {
 		boolean isOk = false;
@@ -116,11 +156,11 @@ public class RedisUtils {
 	}
 	
 	/**
-	 * 在已有的键key的原值的末尾附加value
-	 * @param jedis
-	 * @param key
-	 * @param value
-	 * @return
+	 * 在已有的键key的原值的末尾附加value（仅针对键值对使用）
+	 * @param jedis redis连接对象
+	 * @param key 已有/新的键
+	 * @param value 附加的值
+	 * @return 附加值后，该键上最新的值的总长度
 	 */
 	public static long appendKV(Jedis jedis, String key, String value) {
 		long len = -1;
@@ -130,6 +170,12 @@ public class RedisUtils {
 		return len;
 	}
 	
+	/**
+	 * 获取指定键的值
+	 * @param jedis redis连接对象
+	 * @param key 指定的键
+	 * @return 对应的值
+	 */
 	public static String getVal(Jedis jedis, String key) {
 		String value = "";
 		if(jedis != null && key != null) {
@@ -139,19 +185,54 @@ public class RedisUtils {
 	}
 	
 	/**
-	 * 删除若干个键
-	 * @param jedis
-	 * @param keys
+	 * <pre>
+	 * 新增一个对象（该对象须实现Serializable接口）。
+	 * 该对象会以序列化形式存储到Redis。
+	 * </pre>
+	 * @param jedis redis连接对象
+	 * @param key 指定的键
+	 * @param object 新增的对象（须实现Serializable接口）
 	 * @return
 	 */
-	public static long delKeys(Jedis jedis, String... keys) {
-		long size = 0;
-		if(jedis != null && keys != null) {
-			size = jedis.del(keys);
+	public static boolean addObj(Jedis jedis, String key, Serializable object) {
+		boolean isOk = false;
+		if(jedis != null && key != null && object != null) {
+			try {
+				isOk = OK.equalsIgnoreCase(
+						jedis.set(key.getBytes(Charset.UTF8), 
+								ObjUtils.toSerializable(object)));
+			} catch (UnsupportedEncodingException e) {}
 		}
-		return size;
+		return isOk;
 	}
 	
+	/**
+	 * <pre>
+	 * 获取指定键的对象。
+	 * 该对象会从Redis反序列化。
+	 * </pre>
+	 * @param jedis redis连接对象
+	 * @param key 指定的键
+	 * @return 反序列化的对象（若失败则返回null）
+	 */
+	public static Object getObj(Jedis jedis, String key) {
+		Object object = null;
+		if(jedis != null && key != null) {
+			try {
+				object = ObjUtils.unSerializable(
+						jedis.get(key.getBytes(Charset.UTF8)));
+			} catch (UnsupportedEncodingException e) {}
+		}
+		return object;
+	}
+	
+	/**
+	 * 新增一个 键->哈希表
+	 * @param jedis redis连接对象
+	 * @param key 键值
+	 * @param map 哈希表
+	 * @return true:新增成功; false:新增失败
+	 */
 	public static boolean addMap(Jedis jedis, String key, Map<String, String> map) {
 		boolean isOk = false;
 		if(jedis != null && key != null && map != null) {
@@ -160,6 +241,13 @@ public class RedisUtils {
 		return isOk;
 	}
 	
+	/**
+	 * 获取某个哈希表中的若干个键的值
+	 * @param jedis redis连接对象
+	 * @param mapKey 哈希表的键
+	 * @param inMapKeys 哈希表中的一些键
+	 * @return 哈希表中对应的一些值
+	 */
 	public static List<String> getMapVals(Jedis jedis, String mapKey, String... inMapKeys) {
 		List<String> values = new LinkedList<String>();
 		if(jedis != null && mapKey != null && inMapKeys != null) {
@@ -168,6 +256,13 @@ public class RedisUtils {
 		return values;
 	}
 	
+	/**
+	 * 删除某个哈希表中的若干个键（及其对应的值）
+	 * @param jedis redis连接对象
+	 * @param mapKey 哈希表的键
+	 * @param inMapKeys 哈希表中的一些键
+	 * @return 删除成功的个数
+	 */
 	public static long delMapKeys(Jedis jedis, String mapKey, String... inMapKeys) {
 		long size = 0;
 		if(jedis != null && mapKey != null && inMapKeys != null) {
@@ -177,22 +272,22 @@ public class RedisUtils {
 	}
 	
 	/**
-	 * 
-	 * @param jedis
-	 * @param listKey
-	 * @param listValues
-	 * @return 所操作的队列的总长度
+	 * 添加一些值到列表
+	 * @param jedis redis连接对象
+	 * @param listKey 列表的键
+	 * @param listValues 添加的值
+	 * @return 添加后，该的队列的总长度
 	 */
 	public static long addToList(Jedis jedis, String listKey, String... listValues) {
 		return addToListHead(jedis, listKey, listValues);
 	}
 	
 	/**
-	 * 
-	 * @param jedis
-	 * @param listKey
-	 * @param listValues
-	 * @return 所操作的队列的总长度
+	 * 添加一些值到列表头部
+	 * @param jedis redis连接对象
+	 * @param listKey 列表的键
+	 * @param listValues 添加的值
+	 * @return 添加后，该的队列的总长度
 	 */
 	public static long addToListHead(Jedis jedis, String listKey, String... listValues) {
 		long size = 0;
@@ -208,11 +303,11 @@ public class RedisUtils {
 	}
 	
 	/**
-	 * 
-	 * @param jedis
-	 * @param listKey
-	 * @param listValues
-	 * @return 所操作的队列的总长度
+	 * 添加一些值到列表尾部
+	 * @param jedis redis连接对象
+	 * @param listKey 列表的键
+	 * @param listValues 添加的值
+	 * @return 添加后，该的队列的总长度
 	 */
 	public static long addToListTail(Jedis jedis, String listKey, String... listValues) {
 		long size = 0;
@@ -227,6 +322,12 @@ public class RedisUtils {
 		return size;
 	}
 	
+	/**
+	 * 获取列表中的所有值
+	 * @param jedis redis连接对象
+	 * @param listKey 列表的键
+	 * @return 列表中的所有值
+	 */
 	public static List<String> getListVals(Jedis jedis, String listKey) {
 		List<String> values = new LinkedList<String>();
 		if(jedis != null && listKey != null) {
@@ -236,11 +337,11 @@ public class RedisUtils {
 	}
 	
 	/**
-	 * 
-	 * @param jedis
-	 * @param setKey
-	 * @param setValues
-	 * @return 成功添加到所操作的set的值个数
+	 * 添加一些值到集合
+	 * @param jedis redis连接对象
+	 * @param setKey 集合的键
+	 * @param setValues 添加的值
+	 * @return 成功添加到该集合的值个数
 	 */
 	public static long addToSet(Jedis jedis, String setKey, String... setValues) {
 		long addNum = 0;
@@ -250,6 +351,12 @@ public class RedisUtils {
 		return addNum;
 	}
 	
+	/**
+	 * 获取集合中的值
+	 * @param jedis redis连接对象
+	 * @param setKey 集合的键
+	 * @return 集合中的值
+	 */
 	public static Set<String> getSetVals(Jedis jedis, String setKey) {
 		Set<String> values = new HashSet<String>();
 		if(jedis != null && setKey != null) {
@@ -258,6 +365,13 @@ public class RedisUtils {
 		return values;
 	}
 	
+	/**
+	 * 检测某个值是否在指定集合中
+	 * @param jedis redis连接对象
+	 * @param setKey 集合的键
+	 * @param setValue 被检测的值
+	 * @return true:在集合中; false:不在集合中
+	 */
 	public static boolean inSet(Jedis jedis, String setKey, String setValue) {
 		boolean isExist = false;
 		if(jedis != null && setKey != null && setValue != null) {
@@ -266,6 +380,12 @@ public class RedisUtils {
 		return isExist;
 	}
 	
+	/**
+	 * 获取集合的大小
+	 * @param jedis redis连接对象
+	 * @param setKey 集合的键
+	 * @return 集合的大小
+	 */
 	public static long getSetSize(Jedis jedis, String setKey) {
 		long size = 0;
 		if(jedis != null && setKey != null) {
@@ -275,11 +395,11 @@ public class RedisUtils {
 	}
 	
 	/**
-	 * 
-	 * @param jedis
-	 * @param setKey
-	 * @param setValues
-	 * @return 从所操作的set中删除的值个数
+	 * 删除集合中的一些值
+	 * @param jedis redis连接对象
+	 * @param setKey 集合的键
+	 * @param setValues 被删除的值
+	 * @return 成功从改集合中删除的值个数
 	 */
 	public static long delSetVals(Jedis jedis, String setKey, String... setValues) {
 		long size = 0;
@@ -287,23 +407,6 @@ public class RedisUtils {
 			size = jedis.srem(setKey, setValues);
 		}
 		return size;
-	}
-	
-	public static void main(String[] args) {
-		String ip = "192.168.177.131";
-		int port = 6379;
-		String pswd = "123456";
-		RedisPool pool = new RedisPool(ip, port, pswd);
-		Jedis jedis = pool.getConn();
-		
-		System.out.println(addToSet(jedis, "set1", "dff", "Sdfa"));
-		
-		System.out.println(jedis.sadd("set1", "xyz", "tte", "sada"));
-		System.out.println(delSetVals(jedis, "set1", "sada"));
-		System.out.println(getSetVals(jedis, "set1"));
-		System.out.println(jedis.scard("set1"));
-		
-		jedis.close();
 	}
 	
 }
