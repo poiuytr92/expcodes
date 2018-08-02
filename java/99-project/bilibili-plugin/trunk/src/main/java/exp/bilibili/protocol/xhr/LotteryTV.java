@@ -124,12 +124,12 @@ public class LotteryTV extends _Lottery {
 						"],账号[", cookie.NICKNAME(), "]");
 				
 				// 小电视已过期, 其他账号无需参与
-				if(reason.contains("不存在")) {
+				if(reason.contains("已过期") || reason.contains("不存在")) {
 					break;
 				}
 			}
 			
-			ThreadUtils.tSleep(1000);
+			ThreadUtils.tSleep(200);
 		}
 		
 		if(cnt > 0) {
