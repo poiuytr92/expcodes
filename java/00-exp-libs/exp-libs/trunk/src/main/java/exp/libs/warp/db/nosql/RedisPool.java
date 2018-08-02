@@ -160,8 +160,13 @@ public class RedisPool {
         config.setMaxWaitMillis(getMaxWaitMillis());
         config.setTestOnBorrow(isTestOnBorrow());
         
-        this.pool = new JedisPool(config, 
-        		getIp(), getPort(), getTimeout(), getPassword());
+        if(StrUtils.isTrimEmpty(getPassword())) {
+        	this.pool = new JedisPool(config, getIp(), getPort(), getTimeout());
+        	
+        } else {
+        	this.pool = new JedisPool(config, 
+            		getIp(), getPort(), getTimeout(), getPassword());
+        }
     }
     
     /**
