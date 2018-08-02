@@ -312,7 +312,7 @@ abstract class _SwingWindow extends JFrame {
 	 * 		到系统托盘: _SwingWindow.TO_TRAY
 	 */
 	protected final void setMini(int mode) {
-		if(NumUtils.inRange(mode, UNINIT, TO_MINI, TO_TRAY)) {
+		if(NumUtils.inIRange(mode, UNINIT, TO_MINI, TO_TRAY)) {
 			miniMode = mode;
 		}
 	}

@@ -495,7 +495,7 @@ public class NumUtils {
 	 * @param ranges 范围数组
 	 * @return true:在范围内; false:在范围外
 	 */
-	public static boolean inRange(int variable, int... ranges) {
+	public static boolean inIRange(int variable, int... ranges) {
 		boolean inRange = false;
 		if(ranges != null && ranges.length > 0) {
 			for(int i = 0; !inRange && i < ranges.length; i++) {
@@ -511,7 +511,7 @@ public class NumUtils {
 	 * @param ranges 范围数组
 	 * @return true:在范围内; false:在范围外
 	 */
-	public static boolean inRange(long variable, long... ranges) {
+	public static boolean inLRange(long variable, long... ranges) {
 		boolean inRange = false;
 		if(ranges != null && ranges.length > 0) {
 			for(int i = 0; !inRange && i < ranges.length; i++) {
