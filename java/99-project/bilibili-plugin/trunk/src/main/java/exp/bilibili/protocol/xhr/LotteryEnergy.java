@@ -123,7 +123,7 @@ public class LotteryEnergy extends _Lottery {
 				}
 			}
 			
-			ThreadUtils.tSleep(50);
+			ThreadUtils.tSleep(1000);
 		}
 		
 		if(cnt > 0) {

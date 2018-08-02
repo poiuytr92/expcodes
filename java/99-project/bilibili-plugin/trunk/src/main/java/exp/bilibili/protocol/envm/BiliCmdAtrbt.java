@@ -1,12 +1,6 @@
 package exp.bilibili.protocol.envm;
 
 
-
-
-
-
-
-
 /**
  * <PRE>
  * B站Json交互报文字段属性

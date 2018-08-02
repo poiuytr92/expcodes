@@ -204,15 +204,14 @@ public class WSAnalyser {
 	 * @param msgBean
 	 */
 	private static void toDo(TvLottery msgBean, boolean onlyListen) {
-		boolean isTV = !msgBean.getMsg().contains("摩天大楼");
-		if(onlyListen && isTV) {
-			// Undo: 小电视是全平台公告, 摩天大楼只是分区公告, 此处可避免重复打印小电视公告
-			
-		} else {
-			String giftName = isTV ? "小电视" : "摩天大楼";
+		boolean isBuilding = msgBean.getMsg().contains("大楼");
+		if(isBuilding || !onlyListen) {
+			String giftName = isBuilding ? "摩天大楼" : "小电视/C位光环";
 			String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在", giftName, "抽奖中!!!");
 			UIUtils.notify(msg);
 			log.info(msg);
+		} else {
+			// Undo: 小电视/C位光环 是全平台公告, 摩天大楼只是分区公告, 此处可避免重复打印 小电视/C位光环 公告
 		}
 		
 		RoomMgr.getInstn().addTvRoom(msgBean.ROOM_ID(), msgBean.getTvId());
