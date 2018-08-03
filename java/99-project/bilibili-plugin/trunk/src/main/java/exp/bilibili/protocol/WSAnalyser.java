@@ -206,7 +206,8 @@ public class WSAnalyser {
 	private static void toDo(TvLottery msgBean, boolean onlyListen) {
 		boolean isBuilding = msgBean.getMsg().contains("大楼");
 		if(isBuilding || !onlyListen) {
-			String giftName = isBuilding ? "摩天大楼" : "小电视/C位光环";
+			String giftName = isBuilding ? "摩天大楼" : (
+					msgBean.getMsg().contains("光环") ? "C位光环" : "小电视");
 			String msg = StrUtils.concat("直播间 [", msgBean.ROOM_ID(), "] 正在", giftName, "抽奖中!!!");
 			UIUtils.notify(msg);
 			log.info(msg);

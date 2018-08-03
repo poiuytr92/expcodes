@@ -118,7 +118,7 @@ public class LotteryEnergy extends _Lottery {
 						"],账号[", cookie.NICKNAME(), "]");
 				
 				// 高能已过期, 其他账号无需参与
-				if(reason.contains("不存在")) {
+				if(reason.contains("已过期") || reason.contains("不存在")) {
 					break;
 				}
 			}
