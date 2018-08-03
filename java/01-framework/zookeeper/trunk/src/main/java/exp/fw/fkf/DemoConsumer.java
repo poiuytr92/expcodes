@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringSerializer;
  
 /**
  * <PRE>
@@ -48,8 +49,10 @@ public class DemoConsumer {
         props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "true");	// 自动提交
         props.put(ConsumerConfig.AUTO_COMMIT_INTERVAL_MS_CONFIG, "1000");	// 自动提交间隔(ms)
         props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, "30000");	// 会话超时(ms)
-        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
+        props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, 
+        		StringSerializer.class.getName());
+        props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, 
+        		StringSerializer.class.getName());
         
         this.consumer = new KafkaConsumer<String, String>(props);
     }
