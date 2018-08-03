@@ -31,6 +31,8 @@ public class DemoConsumer {
 		consumer.consume(TOPIC);
     }
 	
+	
+	
 	/** kafka消费者对象 */
     private Consumer<String, String> consumer;
  
@@ -62,7 +64,8 @@ public class DemoConsumer {
      * @param TOPICS 消息主题集, 当主题只有一个分区时, 逻辑上可以认为主题是一个队列
      * @throws Exception 
      */
-    private void consume(final String... TOPICS) throws Exception {
+    @SuppressWarnings("deprecation")
+	private void consume(final String... TOPICS) throws Exception {
         consumer.subscribe(Arrays.asList(TOPICS)); // 可同时消费多个topic
         
         while(true) {

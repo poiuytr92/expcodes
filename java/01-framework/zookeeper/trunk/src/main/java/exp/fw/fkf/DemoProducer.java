@@ -28,6 +28,8 @@ public class DemoProducer {
 		producer.close();
     }
 	
+	
+	
 	/** kafka生产者对象 */
     private KafkaProducer<String, String> producer;
  
