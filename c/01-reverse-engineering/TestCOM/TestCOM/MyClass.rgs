@@ -1,0 +1,26 @@
+HKCR
+{
+	TestCOM.math.1 = s 'MyClass Class'
+	{
+		CLSID = s '{B316F12A-378A-455A-AC9F-5EBA24340B90}'
+	}
+	TestCOM.math = s 'MyClass Class'
+	{		
+		CurVer = s 'TestCOM.math.1'
+	}
+	NoRemove CLSID
+	{
+		ForceRemove {B316F12A-378A-455A-AC9F-5EBA24340B90} = s 'MyClass Class'
+		{
+			ProgID = s 'TestCOM.math.1'
+			VersionIndependentProgID = s 'TestCOM.math'
+			ForceRemove Programmable
+			InprocServer32 = s '%MODULE%'
+			{
+				val ThreadingModel = s 'Apartment'
+			}
+			TypeLib = s '{10E94D51-059F-484D-BFDB-B41B5D5CEF36}'
+			Version = s '1.0'
+		}
+	}
+}
