@@ -1,0 +1,217 @@
+﻿生成启动时间为 2017-10-11 16:50:22。
+     1>项目“D:\workspace\VC\RE\VS2010_WDK_Demo\VS2010_WDK_Demo.vcxproj”在节点 2 上(rebuild 个目标)。
+     1>InitializeBuildStatus:
+         正在创建“x64\amd64\VS2010_WDK_Demo.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       _MASM:
+         Assembling [Inputs]...
+         cmd.exe /C "C:\Users\Administrator\AppData\Local\Temp\tmp2de7e048eab043209b9081d6a6470941.cmd"
+         ml64.exe /c /nologo /Zi /Fo"x64\amd64\fun.obj" /W3 /errorReport:prompt  /Tafun.asm
+       ClCompile:
+         E:\07_reverse-engineering\WDK7600\bin\x86\amd64\CL.exe /c /ZI /nologo /W1 /WX- /Od /D _AMD64_ /D DBG=1 /Gm- /MD /GS- /fp:precise /Zc:wchar_t /Zc:forScope /Fo"x64\amd64\\" /Fd"x64\amd64\vc100.pdb" /Gz /TC /errorReport:prompt .\VS2010_WDK_Demo.cpp .\VS2010_WDK_Demo.h .\common.h
+     1>cl : Command line warning D9038: /ZI is not supported on this platform; enabling /Zi instead
+         VS2010_WDK_Demo.cpp
+         VS2010_WDK_Demo.h
+         common.h
+         Generating Code...
+       Link:
+         E:\07_reverse-engineering\WDK7600\bin\x86\amd64\link.exe /ERRORREPORT:PROMPT /OUT:"D:\workspace\VC\RE\VS2010_WDK_Demo\x64\amd64\VS2010_WDK_Demo.sys" /NOLOGO ntoskrnl.lib hal.lib wdm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB /MANIFEST:NO /DEBUG /PDB:"D:\workspace\VC\RE\VS2010_WDK_Demo\x64\amd64\VS2010_WDK_Demo.pdb" /SUBSYSTEM:NATIVE /Driver /TLBID:1 /ENTRY:"DriverEntry" /RELEASE /BASE:"0x10000" /IMPLIB:"D:\workspace\VC\RE\VS2010_WDK_Demo\x64\amd64\VS2010_WDK_Demo.lib" /MACHINE:X64 x64\amd64\VS2010_WDK_Demo.obj
+         x64\amd64\VS2010_WDK_Demo.obj
+         x64\amd64\common.obj
+         x64\amd64\fun.obj
+     1>x64\amd64\VS2010_WDK_Demo.obj : warning LNK4042: object specified more than once; extras ignored
+     1>LINK : warning LNK4078: multiple 'INIT' sections found with different attributes (E2000020)
+         VS2010_WDK_Demo.vcxproj -> D:\workspace\VC\RE\VS2010_WDK_Demo\x64\amd64\VS2010_WDK_Demo.sys
+       PostBuildEvent:
+         BuildDrv.bat amd64 win7
+         :VCEnd
+         
+         
+          delete "objchk_win7_amd64" ... 
+          构建 x64 驱动中...
+         'doskey' 不是内部或外部命令，也不是可运行的程序
+         或批处理文件。
+         ____________________________________________________________________________
+         
+         Microsoft (R) Program Maintenance Utility Version 9.00.30729.207
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+         BUILD: Compile and Link for AMD64
+         
+         D:\workspace\VC\RE\VS2010_WDK_Demo: TARGETPATH is obj
+         	cl @d:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64\cl.rsp
+         Microsoft (R) C/C++ Optimizing Compiler Version 15.00.30729.207 for x64
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+         cl /Fo"d:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64/"
+            /FC
+            
+            /Iamd64\
+            /I.
+            /I.
+            /Id:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64
+            /IE:\07_reverse-engineering\WDK7600\inc\api
+            /IE:\07_reverse-engineering\WDK7600\inc\api
+            /IE:\07_reverse-engineering\WDK7600\inc\ddk
+            /IE:\07_reverse-engineering\WDK7600\inc\ddk
+            /IE:\07_reverse-engineering\WDK7600\inc\crt
+            /D_WIN64
+            /D_AMD64_
+            /DAMD64
+            
+            
+            /DCONDITION_HANDLING=1
+            /DNT_UP=1
+            
+            /DNT_INST=0
+            /DWIN32=100
+            /D_NT1X_=100
+            /DWINNT=1
+            /D_WIN32_WINNT=0x0601
+            /DWINVER=0x0601
+            /D_WIN32_IE=0x0800
+            
+            
+            
+            /DWIN32_LEAN_AND_MEAN=1
+            
+            /DDEVL=1
+            /DDBG=1
+            /D__BUILDMACHINE__=WinDDK
+            
+            
+            /D_DLL=1
+            /DNDEBUG
+            
+            /DDEPRECATE_DDK_FUNCTIONS=1
+            /DMSC_NOOPT
+            /DNTDDI_VERSION=0x06010000
+            
+            
+            
+            
+            /c
+            /Zc:wchar_t-
+            /Zl
+            /Zp8
+            /Gy
+            -cbstring
+            /W3
+            
+            
+            
+            
+            
+            /EHs-c-
+            
+            /GR-
+            /GF
+            /GS
+            /Zi
+            /Od
+            /Oi
+            
+            /GL
+            /Zi
+            /Fdd:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64\
+            
+            
+            /DKMDF_MAJOR_VERSION_STRING=01
+            /DKMDF_MINOR_VERSION_STRING=009
+            /typedil-
+            /wd4603
+            /wd4627
+            /homeparams
+            /FIE:\07_reverse-engineering\WDK7600\inc\api\warning.h
+            
+            
+            
+            
+            
+            .\vs2010_wdk_demo.cpp 
+         
+         vs2010_wdk_demo.cpp
+         	link.exe /out:d:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64\VS2010_WDK_Demo.sys /machine:amd64 @d:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64\lnk.rsp
+         Microsoft (R) Incremental Linker Version 9.00.30729.207
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+         /MERGE:_PAGE=PAGE 
+         /MERGE:_TEXT=.text 
+         /SECTION:INIT,d 
+         /OPT:REF 
+         /OPT:ICF 
+         /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221,4108,4088,4218,4218,4235 
+         /INCREMENTAL:NO 
+         /release 
+         /NODEFAULTLIB 
+         /WX 
+         /debug 
+         /debugtype:cv,fixup,pdata 
+         /version:6.1 
+         /osversion:6.1 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\hotpatch.obj 
+         /functionpadmin:6 
+         /pdbcompress 
+         /STACK:0x40000,0x1000 
+         /driver 
+         /base:0x10000 
+         /subsystem:native,6.01 
+         /entry:GsDriverEntry 
+         /out:d:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64\VS2010_WDK_Demo.sys 
+         d:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64\vs2010_wdk_demo.obj 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\BufferOverflowK.lib 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\ntoskrnl.lib 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\hal.lib 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\wmilib.lib 
+         .\x64\amd64\fun.obj 
+         vs2010_wdk_demo.obj : MSIL .netmodule or module compiled with /GL found; restarting link with /LTCG; add /LTCG to the link command line to improve linker performance
+         Microsoft (R) Incremental Linker Version 9.00.30729.207
+         Copyright (C) Microsoft Corporation.  All rights reserved.
+         
+         /MERGE:_PAGE=PAGE 
+         /MERGE:_TEXT=.text 
+         /SECTION:INIT,d 
+         /OPT:REF 
+         /OPT:ICF 
+         /IGNORE:4198,4010,4037,4039,4065,4070,4078,4087,4089,4221,4108,4088,4218,4218,4235 
+         /INCREMENTAL:NO 
+         /release 
+         /NODEFAULTLIB 
+         /WX 
+         /debug 
+         /debugtype:cv,fixup,pdata 
+         /version:6.1 
+         /osversion:6.1 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\hotpatch.obj 
+         /functionpadmin:6 
+         /pdbcompress 
+         /STACK:0x40000,0x1000 
+         /driver 
+         /base:0x10000 
+         /subsystem:native,6.01 
+         /entry:GsDriverEntry 
+         /out:d:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64\VS2010_WDK_Demo.sys 
+         d:\workspace\vc\re\vs2010_wdk_demo\objchk_win7_AMD64\amd64\vs2010_wdk_demo.obj 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\BufferOverflowK.lib 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\ntoskrnl.lib 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\hal.lib 
+         E:\07_reverse-engineering\WDK7600\lib\win7\amd64\wmilib.lib 
+         .\x64\amd64\fun.obj 
+         Generating code
+         Finished generating code
+         ____________________________________________________________________________
+         
+         编译成功!!!
+         另一个程序正在使用此文件，进程无法访问。
+         
+         ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+         
+             build for win7 amd64 chk driver success.
+         
+         ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+       FinalizeBuildStatus:
+         正在删除文件“x64\amd64\VS2010_WDK_Demo.unsuccessfulbuild”。
+     1>已完成生成项目“D:\workspace\VC\RE\VS2010_WDK_Demo\VS2010_WDK_Demo.vcxproj”(rebuild 个目标)的操作。
+
+生成成功。
+
+已用时间 00:00:01.87
