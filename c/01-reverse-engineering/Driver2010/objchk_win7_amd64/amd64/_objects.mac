@@ -1,0 +1,16 @@
+
+
+AMD64_OBJECTS=\
+ $(OBJ_PATH)\$O\driver2010.obj \
+
+
+
+
+
+# lowercased
+BASEDIR=e:\07_reverse-engineering\wdk7600
+OBJECT_ROOT=e:\07_reverse-engineering\wdk7600
+MAKEDIR_LOWERCASE=d:\workspace\vc\re\driver2010
+OBJ_PATH=d:\workspace\vc\re\driver2010
+CONCURRENT_MIDL=0
+CONCURRENT_MANIFEST_BUILD=0

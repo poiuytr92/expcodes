@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{D2D0AF80-4CE4-4e6f-9B3D-82E02CC263B0}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl</Extensions>
+    </Filter>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{FF4D01D0-9644-413e-868A-CE05BDAA742C}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="WDK">
+      <UniqueIdentifier>{0b5c9858-d877-4825-a175-b1a71e9c3024}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ASM">
+      <UniqueIdentifier>{0c9672f5-fd33-4732-81ae-e92cffd38f44}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include=".\common.h">
+      <Filter>头文件</Filter>
+    </ClCompile>
+    <ClCompile Include=".\Driver2010.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include=".\Driver2010.h">
+      <Filter>头文件</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="BuildDrv.bat">
+      <Filter>WDK</Filter>
+    </None>
+    <None Include="clean.bat">
+      <Filter>WDK</Filter>
+    </None>
+    <None Include="makefile">
+      <Filter>WDK</Filter>
+    </None>
+    <None Include="sources">
+      <Filter>WDK</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="fun.asm">
+      <Filter>ASM</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>

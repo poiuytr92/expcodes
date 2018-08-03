@@ -1,0 +1,20 @@
+﻿生成启动时间为 2017-11-08 14:33:53。
+     1>项目“D:\workspace\VC\RE\Driver2010\Driver2010.vcxproj”在节点 2 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在对“x64\amd64\Driver2010.unsuccessfulbuild”执行 Touch 任务。
+       CustomBuild:
+         所有输出均为最新。
+       ClCompile:
+         所有输出均为最新。
+       Link:
+         C:\Windows\system32\link.exe /ERRORREPORT:PROMPT /OUT:"D:\workspace\VC\RE\Driver2010\x64\amd64\Driver2010.sys" /NOLOGO ntoskrnl.lib hal.lib wdm.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /NODEFAULTLIB /MANIFEST:NO /PDB:"D:\workspace\VC\RE\Driver2010\x64\amd64\Driver2010.pdb" /SUBSYSTEM:NATIVE /Driver /TLBID:1 /ENTRY:"DriverEntry" /RELEASE /BASE:"0x10000" /IMPLIB:"D:\workspace\VC\RE\Driver2010\x64\amd64\Driver2010.lib" /MACHINE:X64 x64\amd64\fun.obj
+         x64\amd64\Driver2010.obj
+         x64\amd64\Driver2010.obj
+         x64\amd64\common.obj
+         TRACKER : 
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Platforms\x64\Microsoft.Cpp.x64.Targets(265,5): error MSB6006: “link.exe”已退出，代码为 2。
+     1>已完成生成项目“D:\workspace\VC\RE\Driver2010\Driver2010.vcxproj”(build 个目标)的操作 - 失败。
+
+生成失败。
+
+已用时间 00:00:00.10
