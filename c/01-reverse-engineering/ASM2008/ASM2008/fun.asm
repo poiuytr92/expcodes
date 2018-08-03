@@ -1,0 +1,14 @@
+.CODE
+
+Int_3 PROC
+		MOV RAX, 1234  ;·µ»Ø1234
+		RET
+Int_3 ENDP
+
+
+MY_TEST PROC
+		MOV RAX, 23 ;·µ»Ø23
+		RET
+MY_TEST ENDP
+
+END
