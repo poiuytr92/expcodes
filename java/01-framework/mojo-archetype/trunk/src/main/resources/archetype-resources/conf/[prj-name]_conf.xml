@@ -22,7 +22,7 @@
       	oracle/mysql/sqlite/redis">redis</driver>
       <ip caption="数据库IP">127.0.0.1</ip>
       <port caption="数据库端口">6379</port>
-      <password caption="登录密码">123456</password>
+      <password caption="登录密码"></password>
       <maximum-active-time default="10000" caption="连接超时时间(ms)">10000</maximum-active-time>
     </datasource>
   </datasources>
