@@ -3,6 +3,7 @@ package exp.libs.warp.db.nosql;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
+import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.VerifyUtils;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
@@ -267,6 +268,11 @@ public class RedisPool {
 
 	public void setTestOnBorrow(boolean testOnBorrow) {
 		this.testOnBorrow = testOnBorrow;
+	}
+	
+	@Override
+	public String toString() {
+		return ObjUtils.toBeanInfo(this);
 	}
 
 }

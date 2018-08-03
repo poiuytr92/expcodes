@@ -64,8 +64,14 @@ public class WsdlUtils {
 	/** 默认编码 */
 	public final static String DEFAULT_CHARSET = HttpUtils.DEFAULT_CHARSET;
 	
-	/** 缓存区大小 */
+	/** WSDL缓存区大小 */
 	private final static int CACHE_SIZE = 256;
+	
+	/** WSDL缓存区有效时长 */
+	private final static long CACHE_LIMIT_TIME = 600000L;
+	
+	/** 上次刷新WSDL缓存区的时间 */
+	private long lastCacheTime;
 	
 	/** wsdl接口的方法集缓存(可加速访问) */
 	private Map<String, WsdlInterface[]> wsdlCache;
@@ -78,6 +84,7 @@ public class WsdlUtils {
 	 */
 	private WsdlUtils() {
 		this.wsdlCache = new HashMap<String, WsdlInterface[]>();
+		this.lastCacheTime = System.currentTimeMillis();
 	}
 	
 	/**
@@ -198,6 +205,11 @@ public class WsdlUtils {
 	 * @throws Exception 
 	 */
 	private String __getRequestXmlTpl(String wsdlURL, String method) throws Exception {
+		if(lastCacheTime + CACHE_LIMIT_TIME < System.currentTimeMillis()) {
+			wsdlCache.clear();
+			lastCacheTime = System.currentTimeMillis();
+		}
+		
 		WsdlInterface[] wsdlInterfaces = wsdlCache.get(wsdlURL);
 		if (wsdlInterfaces == null) {
 			WsdlProject wsdlProject = new WsdlProject();
