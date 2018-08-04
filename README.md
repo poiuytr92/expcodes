@@ -55,7 +55,7 @@
 　┃　　　　┣ ━ ━ ━ [03-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin)：*插件* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)：*Maven项目发布插件* <br/>
-　┃　　　　┃　　　　　　　　└ ─ *支持一键发布项目，自动组织：Jar（支持混淆）、配置、项目文档、数据库脚本、启动/停止脚本、版本说明* <br/>
+　┃　　　　┃　　　　　　　　└ ─ *支持一键发布项目，自动组织：Jar（支持混淆）、配置、文档、版本、启动/停止脚本* <br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*项目* <br/>
 　┃<br/>
 　┣ ━ ━ ━ [python](https://github.com/lyy289065406/expcodes/tree/master/python) <br/>
