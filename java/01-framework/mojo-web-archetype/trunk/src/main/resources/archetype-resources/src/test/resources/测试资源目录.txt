@@ -1,4 +1,4 @@
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-只有在这个目录下的非java文件，才会在打包时，打入jar包中。
+这个目录下的资源文件，在打包时会被忽略。

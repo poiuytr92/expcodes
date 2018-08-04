@@ -49,6 +49,7 @@ public class DemoProducer {
     /**
      * 连续发送消息到指定主题
      * @param TOPIC 消息主题, 当主题只有一个分区时, 逻辑上可以认为主题是一个队列
+     * 		（当前版本的kafka默认会自动创建不存在的主题, 无需预建）
      * @throws Exception
      */
     public void produce(final String TOPIC) throws Exception {
