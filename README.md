@@ -18,13 +18,13 @@
 
 ## 索引
 
-<font size="2">2大小</font>
+<p style="font-size:2">2大小</p>
 
-<font size="4">4大小</font>
+<p style="font-size:4">4大小</p>
 
-<font size="8">8大小</font>
+<p style="font-size:8">8大小</p>
 
-<font size="16">16大小</font>
+<p style="font-size:16">16大小</p>
 
 [root](https://github.com/lyy289065406/expcodes) <br/>
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
