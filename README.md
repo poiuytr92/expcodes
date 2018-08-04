@@ -53,7 +53,7 @@
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm)：*算法* <br/>
 　　　　　　┃<br/>
-　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The C++ Programming Language)：*《C++程序设计语言》（课后习题）* <br/>
+　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The%20C%2B%2B%20Programming%20Language)：*《C++程序设计语言》（课后习题）* <br/>
 　　　　　　┃<br/>
 　　　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/c/99-project)：*项目* <br/>
 
