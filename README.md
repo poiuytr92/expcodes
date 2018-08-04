@@ -71,9 +71,6 @@
 　┃　　　　　　　　　┣ ━ [exp-xml-paper](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/exp-xml-paper)：*XML文本编辑器* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*哔哩哔哩插件姬* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
-　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [file-port-forwarding](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/file-port-forwarding)：*双机文件流端口转发程序* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
 　┃　　　　　　　　　┃<br/>
