@@ -33,14 +33,20 @@
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [01-framework](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework)：*架构/框架* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件* <br/>
-　┃　　　　┃　　　　┃　　　┗ ━ *根据多年开发经验积累整理的常用功能组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
+　┃　　　　┃　　　　┣ ━ [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype)：*Maven项目规范骨架* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *默认已配置： [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)（经验库构件）、混淆打包插件、[mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)（Maven项目发布插件）、基线发布插件* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
-　┃　　　　┃　　　　┃　　　┗ ━ *exp-libs 的子项目，过滤了一些相对少用的第三方构件* <br/>
+　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版本）* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *默认已配置： [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)（经验库构件）、混淆打包插件、[mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)（Maven项目发布插件）、基线发布插件* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┗ ━ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent)：*JVM代理构件* <br/>
-　┃　　　　┃　　　　　　　　┗ ━ *用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）* <br/>
+　┃　　　　┃　　　　┣ ━ [zookeeper-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/zookeeper-demo)：*经验库构件（基础包）* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *zookeeper入门示例代码，配套博文：《[快速部署单机zookeeper集群（win环境）](http://exp-blog.com/2018/08/03/pid-2173/)》* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┣ ━ [kafka-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/kafka-demo)：*经验库构件（基础包）* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *kafka入门示例代码，配套博文：《[快速部署单机kafka集群（win环境）](http://exp-blog.com/2018/08/03/pid-2187/)》* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┗ ━ [thrift](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/thrift)：*JVM代理构件* <br/>
+　┃　　　　┃　　　　　　　　┗ ━ *thrift入门示例代码* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-pattern](https://github.com/lyy289065406/expcodes/tree/master/java/02-pattern)：*设计模式* <br/>
 　┃　　　　┃<br/>
