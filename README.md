@@ -14,7 +14,7 @@
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件* <br/>
-　┃　　　　┃　　　　┃　　　┗ ━ *根据多年开发经验积累的常用功能组件API库：[在线Javadoc](https://lyy289065406.github.io/api-online/)* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *根据多年开发经验积累的常用功能组件API库：[在线 Javadoc](https://lyy289065406.github.io/api-online/)* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
 　┃　　　　┃　　　　┃　　　┗ ━ *exp-libs 的子项目，过滤了一些相对少用的第三方构件* <br/>
@@ -31,28 +31,28 @@
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*项目* <br/>
 　┃<br/>
 　┣ ━ ━ ━ [python](https://github.com/lyy289065406/expcodes/tree/master/python) <br/>
-　┃　　　　┣ ━ ━ ━ [00-exp-libs]()：*经验库* <br/>
+　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/python/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃<br/>
-　┃　　　　┣ ━ ━ ━ [01-deep-learning]()：*深度学习* <br/>
+　┃　　　　┣ ━ ━ ━ [01-deep-learning](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning)：*深度学习* <br/>
 　┃　　　　┃<br/>
-　┃　　　　┣ ━ ━ ━ [02-algorithm]()：*算法* <br/>
+　┃　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm)：*算法* <br/>
 　┃　　　　┃<br/>
-　┃　　　　┣ ━ ━ ━ [03-lovely-python]()：*《可爱的python》（课后习题）* <br/>
+　┃　　　　┣ ━ ━ ━ [03-lovely-python](https://github.com/lyy289065406/expcodes/tree/master/python/03-lovely-python)：*《可爱的python》（课后习题）* <br/>
 　┃　　　　┃<br/>
-　┃　　　　┣ ━ ━ ━ [04-HeadFirst]()：*《python深入浅出》（课后习题）* <br/>
+　┃　　　　┣ ━ ━ ━ [04-HeadFirst](https://github.com/lyy289065406/expcodes/tree/master/python/04-HeadFirst)：*《python深入浅出》（课后习题）* <br/>
 　┃　　　　┃<br/>
-　┃　　　　┗ ━ ━ ━ [99-project]()：*项目* <br/>
+　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/python/99-project)：*项目* <br/>
 　┃<br/>
 　┗ ━ ━ ━ [C/C++](https://github.com/lyy289065406/expcodes/tree/master/c) <br/>
-　　　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs)：*经验库* <br/>
+　　　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs/00-exp-libs)：*经验库* <br/>
 　　　　　　┃<br/>
-　　　　　　┣ ━ ━ ━ [01-reverse-engineering]()：*逆向工程* <br/>
+　　　　　　┣ ━ ━ ━ [01-reverse-engineering](https://github.com/lyy289065406/expcodes/tree/master/c/01-reverse-engineering)：*逆向工程* <br/>
 　　　　　　┃<br/>
-　　　　　　┣ ━ ━ ━ [02-algorithm]()：*算法* <br/>
+　　　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm)：*算法* <br/>
 　　　　　　┃<br/>
-　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language]()：*《C++程序设计语言》（课后习题）* <br/>
+　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The C++ Programming Language)：*《C++程序设计语言》（课后习题）* <br/>
 　　　　　　┃<br/>
-　　　　　　┗ ━ ━ ━ [99-project]()：*项目* <br/>
+　　　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/c/99-project)：*项目* <br/>
 
 ## 相关项目
 
