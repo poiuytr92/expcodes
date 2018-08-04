@@ -6,7 +6,7 @@
 
 ## 简介
 
-超级经验代码仓库
+<font color="red">超级经验代码仓库</font>
 
 
 ## 相关
@@ -18,13 +18,7 @@
 
 ## 索引
 
-<p style="font-size:2">2大小</p>
 
-<p style="font-size:4">4大小</p>
-
-<p style="font-size:8">8大小</p>
-
-<p style="font-size:16">16大小</p>
 
 [root](https://github.com/lyy289065406/expcodes) <br/>
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
