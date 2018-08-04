@@ -11,7 +11,7 @@
 
 ## 相关
 
-- 在线管理页面 ：[Management-Page](https://lyy289065406.github.io/api-online/)
+- 在线管理页面 : [Management-Page](https://lyy289065406.github.io/api-online/)
 - 软件授权插件 : [certificate](https://github.com/lyy289065406/certificate)
 - 自动升级插件 : [auto-upgrader](https://github.com/lyy289065406/auto-upgrader)
 
@@ -34,10 +34,10 @@
 　┃　　　　┣ ━ ━ ━ [01-framework](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework)：*架构/框架* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype)：*Maven项目规范骨架* <br/>
-　┃　　　　┃　　　　┃　　　┗ ━ *默认已配置： [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)（经验库构件）、混淆打包插件、[mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)（Maven项目发布插件）、基线发布插件* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版本）* <br/>
-　┃　　　　┃　　　　┃　　　┗ ━ *默认已配置： [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)（经验库构件）、混淆打包插件、[mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)（Maven项目发布插件）、基线发布插件* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [zookeeper-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/zookeeper-demo)：*经验库构件（基础包）* <br/>
 　┃　　　　┃　　　　┃　　　┗ ━ *zookeeper入门示例代码，配套博文：《[快速部署单机zookeeper集群（win环境）](http://exp-blog.com/2018/08/03/pid-2173/)》* <br/>
