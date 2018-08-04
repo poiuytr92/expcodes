@@ -50,6 +50,7 @@
 　┃　　　　┃　　　　┗ ━ [thrift](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/thrift)：*入门示例代码* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-pattern](https://github.com/lyy289065406/expcodes/tree/master/java/02-pattern)：*设计模式* <br/>
+　┃　　　　┃　　　　└ ─ *《Head First : 设计模式》（课后习题）* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin)：*插件* <br/>
 　┃　　　　┃<br/>
@@ -64,7 +65,7 @@
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-lovely-python](https://github.com/lyy289065406/expcodes/tree/master/python/03-lovely-python)：*《可爱的python》（课后习题）* <br/>
 　┃　　　　┃<br/>
-　┃　　　　┣ ━ ━ ━ [04-HeadFirst](https://github.com/lyy289065406/expcodes/tree/master/python/04-HeadFirst)：*《python深入浅出》（课后习题）* <br/>
+　┃　　　　┣ ━ ━ ━ [04-HeadFirst](https://github.com/lyy289065406/expcodes/tree/master/python/04-HeadFirst)：*《Head First : Python》（课后习题）* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/python/99-project)：*项目* <br/>
 　┃<br/>
