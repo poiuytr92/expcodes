@@ -18,8 +18,6 @@
 
 ## 索引
 
-
-
 [root](https://github.com/lyy289065406/expcodes) <br/>
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
@@ -96,6 +94,21 @@
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/python/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [01-deep-learning](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning)：*深度学习* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┣ ━ [tensorflow-animal](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-animal)：*图像识别训练-动物识别* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-demo](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo)：*验证码识别训练-示例代码* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train)：*任意验证码图片训练* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┣ ━ [tensorflow-digit-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-digit-train)：*数字图片识别训练* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┗ ━ [tensorflow-mnist](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-mnist)：*机器学习入门-MNIST* <br/>
+　┃　　　　┃　　　　　　　　└ ─ *xxx* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm)：*算法* <br/>
 　┃　　　　┃<br/>
