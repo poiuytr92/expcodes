@@ -9,6 +9,12 @@
 超级经验代码仓库
 
 
+## 相关
+
+- 在线管理页面 ：[Management-Page](https://lyy289065406.github.io/api-online/)
+- 软件授权插件 : [certificate](https://github.com/lyy289065406/certificate)
+- 自动升级插件 : [auto-upgrader](https://github.com/lyy289065406/auto-upgrader)
+
 
 ## 索引
 
@@ -17,7 +23,7 @@
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件* <br/>
-　┃　　　　┃　　　　┃　　　┗ ━ *根据多年开发经验积累的常用功能组件API库：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *根据多年开发经验积累整理的常用功能组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
 　┃　　　　┃　　　　┃　　　┗ ━ *exp-libs 的子项目，过滤了一些相对少用的第三方构件* <br/>
@@ -26,6 +32,15 @@
 　┃　　　　┃　　　　　　　　┗ ━ *用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [01-framework](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework)：*架构/框架* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *根据多年开发经验积累整理的常用功能组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
+　┃　　　　┃　　　　┃　　　┗ ━ *exp-libs 的子项目，过滤了一些相对少用的第三方构件* <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┗ ━ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent)：*JVM代理构件* <br/>
+　┃　　　　┃　　　　　　　　┗ ━ *用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-pattern](https://github.com/lyy289065406/expcodes/tree/master/java/02-pattern)：*设计模式* <br/>
 　┃　　　　┃<br/>
@@ -57,12 +72,6 @@
 　　　　　　┃<br/>
 　　　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/c/99-project)：*项目* <br/>
 
-
-## 相关
-
-- 在线管理页面 ：[Management-Page](https://lyy289065406.github.io/api-online/)
-- 软件授权插件 : [certificate](https://github.com/lyy289065406/certificate)
-- 自动升级插件 : [auto-upgrader](https://github.com/lyy289065406/auto-upgrader)
 
 
 ## 声明
