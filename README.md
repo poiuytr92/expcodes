@@ -9,9 +9,15 @@ xxxx
 
 ## 项目索引
 
-[root](https://github.com/lyy289065406/expcodes):经验库根目录 <br/>
-　┣ ━ ━ ━ [java经验库](https://github.com/lyy289065406/expcodes/tree/master/java): <br/>
-　┃　　　　┣ ━ ━ ━ 00-exp-libs <br/>
+[root](https://github.com/lyy289065406/expcodes) <br/>
+　┣ ━ ━ ━ [java经验库](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
+　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs) <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┣ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) ： 经验库构件 <br/>
+　┃　　　　┃　　　　┃　　　　┗ 多年开发经验下累积的常用原子功能API库 ： [在线Javadoc](https://lyy289065406.github.io/api-online/) <br/>
+　┃　　　　┃　　　　┣ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base) <br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┗ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent) <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ 01-framework <br/>
 　┃　　　　┃<br/>
