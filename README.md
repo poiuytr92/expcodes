@@ -36,10 +36,10 @@
 　┃　　　　┣ ━ ━ ━ [01-framework](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework)：*架构/框架* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype)：*Maven项目规范骨架* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[Maven项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版本）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[Maven项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [zookeeper-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/zookeeper-demo)：*入门示例代码* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *配套博文：《[快速部署单机zookeeper集群（win环境）](http://exp-blog.com/2018/08/03/pid-2173/)》* <br/>
@@ -50,10 +50,12 @@
 　┃　　　　┃　　　　┗ ━ [thrift](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/thrift)：*入门示例代码* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-pattern](https://github.com/lyy289065406/expcodes/tree/master/java/02-pattern)：*设计模式* <br/>
-　┃　　　　┃　　　　└ ─ *《Head First : 设计模式》（课后习题）* <br/>
+　┃　　　　┃　　　　　└ ─ *《Head First : 设计模式》（课后习题）* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin)：*插件* <br/>
-　┃　　　　┃<br/>
+　┃　　　　┃　　　　┃<br/>
+　┃　　　　┃　　　　┗ ━ [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)：*Maven项目发布插件* <br/>
+　┃　　　　┃　　　　　　　　└ ─ *一键发布项目，自动组织：Jar代码（支持混淆打包）、配置文件、项目文档、数据库脚本、启动/停止脚本、版本说明* <br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*项目* <br/>
 　┃<br/>
 　┣ ━ ━ ━ [python](https://github.com/lyy289065406/expcodes/tree/master/python) <br/>
