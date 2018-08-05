@@ -9,21 +9,36 @@
 <font color="red">超级经验代码仓库</font>
 
 
-## 相关
+## 项目相关
 
-- 在线管理页面 : [Management-Page](https://lyy289065406.github.io/api-online/)
+- 经验库导航页 : [Navigation-Page](https://lyy289065406.github.io/api-online/)
 - 软件授权插件 : [certificate](https://github.com/lyy289065406/certificate)
 - 自动升级插件 : [auto-upgrader](https://github.com/lyy289065406/auto-upgrader)
 
 
-## 索引
+## 核心子项目
+
+- [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM) [ACM-POJ训练（C/C++版）] ：
+- [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架] ：
+- [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）] ：
+- [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件] ：
+- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ：
+- [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具] ：
+- [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬] ：
+- [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler) [QQ空间爬虫（Java版] ：
+- [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler) [QQ空间爬虫（Python版）] ：
+- [sina-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/sina-crawler) [新浪微博爬虫] ：
+- [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train) [任意验证码图片训练] ：
+ 
+
+## 子项目索引
 
 [root](https://github.com/lyy289065406/expcodes) <br/>
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *根据多年开发经验积累整理的常用功能组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *多年经验积累整理的常用组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html) （被本站多数项目调用）* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *exp-libs 的子项目，过滤了一些相对少用的第三方构件* <br/>
@@ -36,7 +51,7 @@
 　┃　　　　┃　　　　┣ ━ [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype)：*Maven项目规范骨架* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[Maven项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版本）* <br/>
+　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版）* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[Maven项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [zookeeper-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/zookeeper-demo)：*入门示例代码* <br/>
@@ -112,7 +127,7 @@
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm)：*算法* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm/ACM)：*ACM特训练习* <br/>
+　┃　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm/ACM)：*ACM-OJ训练* <br/>
 　┃　　　　┃　　　　　　　　└ ─ *xxx* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-lovely-python](https://github.com/lyy289065406/expcodes/tree/master/python/03-lovely-python) <br/>
@@ -145,7 +160,7 @@
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm)：*算法* <br/>
 　　　　　　┃　　　　┃<br/>
-　　　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM)：*ACM特训练习* <br/>
+　　　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM)：*ACM-POJ训练* <br/>
 　　　　　　┃　　　　　　　　└ ─ *xxx* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The%20C%2B%2B%20Programming%20Language) <br/>
@@ -157,7 +172,7 @@
 　　　　　　　　　　　　　　　└ ─ *xxx* <br/>
 
 
-## 声明
+## 版权声明
 
 　Copyright (C) 2016-2018 By EXP
 
