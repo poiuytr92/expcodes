@@ -25,7 +25,7 @@
 - [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： *此项目被本站多数项目调用*
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具]
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬]
-- [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler) [QQ空间爬虫（Java版]
+- [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler) [QQ空间爬虫（Java版）]
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler) [QQ空间爬虫（Python版）]
 - [sina-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/sina-crawler) [新浪微博爬虫]
 - [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train) [任意验证码图片训练]
