@@ -128,7 +128,7 @@
 　┃　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm)：*算法* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm/ACM)：*ACM-OJ训练* <br/>
-　┃　　　　┃　　　　　　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　　　　　└ ─ *配套博文：《[北大ACM – POJ试题分类](http://exp-blog.com/2018/06/28/pid-38/)》* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-lovely-python](https://github.com/lyy289065406/expcodes/tree/master/python/03-lovely-python) <br/>
 　┃　　　　┃　　　　　└ ─ *《可爱的python》（课后习题）* <br/>
@@ -161,7 +161,7 @@
 　　　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm)：*算法* <br/>
 　　　　　　┃　　　　┃<br/>
 　　　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM)：*ACM-POJ训练* <br/>
-　　　　　　┃　　　　　　　　└ ─ *配套博文：《[北大ACM – POJ试题分类）](http://exp-blog.com/2018/06/28/pid-38/)》* <br/>
+　　　　　　┃　　　　　　　　└ ─ *配套博文：《[北大ACM – POJ试题分类](http://exp-blog.com/2018/06/28/pid-38/)》* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The%20C%2B%2B%20Programming%20Language) <br/>
 　　　　　　┃　　　　　└ ─ *《C++程序设计语言-十周年纪念版》（课后习题）* <br/>
