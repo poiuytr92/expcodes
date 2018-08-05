@@ -18,11 +18,11 @@
 
 ## 核心子项目
 
-- [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM) [ACM-POJ训练（C/C++版）] ：
-- [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架] ：
-- [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）] ：
-- [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件] ：
-- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ：
+- [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM) [ACM-POJ训练（C/C++版）] ：*POJ解题报告答案，配套博文《[北大ACM – POJ试题分类）](http://exp-blog.com/2018/06/28/pid-38/)》*
+- [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架] ：*默认已配置： [经验库构件 exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[Maven项目发布插件 mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件*
+- [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）] ：*默认已配置： [经验库构件 exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[Maven项目发布插件 mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件*
+- [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件] ：*支持一键发布项目，自动组织：Jar（支持混淆）、配置、文档、版本、启动/停止脚本*
+- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ：*多年经验积累整理的常用组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html) （此项目被本站多数项目调用）*
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具] ：
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬] ：
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler) [QQ空间爬虫（Java版] ：
@@ -31,7 +31,7 @@
 - [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train) [任意验证码图片训练] ：
  
 
-## 子项目索引
+## 全子项目索引
 
 [root](https://github.com/lyy289065406/expcodes) <br/>
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
@@ -161,7 +161,7 @@
 　　　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm)：*算法* <br/>
 　　　　　　┃　　　　┃<br/>
 　　　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM)：*ACM-POJ训练* <br/>
-　　　　　　┃　　　　　　　　└ ─ *xxx* <br/>
+　　　　　　┃　　　　　　　　└ ─ *配套博文：《[北大ACM – POJ试题分类）](http://exp-blog.com/2018/06/28/pid-38/)》* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The%20C%2B%2B%20Programming%20Language) <br/>
 　　　　　　┃　　　　　└ ─ *《C++程序设计语言-十周年纪念版》（课后习题）* <br/>
