@@ -6,7 +6,7 @@
 
 ## 简介
 
-<font color="red>编辑中</font>
+<font color="red">编辑中</font>
 
 
 ## 环境
