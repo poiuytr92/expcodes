@@ -6,7 +6,7 @@
 
 ## 简介
 
-<font color="red">编辑中</font>
+<font color="red>编辑中</font>
 
 
 ## 环境
@@ -29,7 +29,7 @@
 - [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架]
 - [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）]
 - [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件]
-- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： `*此项目被本站多数项目调用*`
+- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： `此项目被本站多数项目调用`
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具]
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬]
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler) [QQ空间爬虫（Java版）]
@@ -44,8 +44,8 @@
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件 （被本站多数项目调用）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ `*多年经验积累整理的常用组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)*` <br/>
+　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件 `（被本站多数项目调用）`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *多年经验积累整理的常用组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *exp-libs 的子项目，过滤了一些相对少用的第三方构件* <br/>
