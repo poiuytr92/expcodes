@@ -11,7 +11,7 @@
 
 ## 环境
 
-![](https://img.shields.io/badge/platform-windows|linux-brightgreen.svg) <br/>
+![](https://img.shields.io/badge/Platform-Windows|Linux-brightgreen.svg) <br/>
 ![](https://img.shields.io/badge/IDE-VS2010|Eclipse|PyCharm-brightgreen.svg) <br/>
 ![](https://img.shields.io/badge/C%2B%2B-VC10-brightgreen.svg) ![](https://img.shields.io/badge/JDK-1.6%2B-brightgreen.svg) ![](https://img.shields.io/badge/Python-3.5-brightgreen.svg) <br/>
 
