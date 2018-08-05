@@ -9,6 +9,13 @@
 <font color="red">超级经验代码仓库</font>
 
 
+## 环境
+
+![](https://img.shields.io/badge/platform-win|linux%2B-brightgreen.svg) <br/>
+![](https://img.shields.io/badge/IDE-VS2010|Eclipse|PyCharm-brightgreen.svg) <br/>
+![](https://img.shields.io/badge/C%2B%2B-VC10-brightgreen.svg) ![](https://img.shields.io/badge/JDK-1.6%2B-brightgreen.svg) ![](https://img.shields.io/badge/Python-3.5-brightgreen.svg) <br/>
+
+
 ## 项目相关
 
 - 经验库导航页 : [Navigation-Page](https://lyy289065406.github.io/api-online/)
