@@ -29,7 +29,7 @@
 - [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架]
 - [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）]
 - [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件]
-- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用`*
+- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验构件库（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>*
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具]
 - [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba) [百度贴吧顶贴机]
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬]
@@ -45,11 +45,11 @@
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件 `（作为此仓库多个Java项目的基础功能组件包被使用）`* <br/>
+　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验构件库 `（作为此仓库多个Java项目的基础功能组件包被使用）`* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`多年经验积累整理的常用组件API库，适用于敏捷开发：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`exp-libs 的子项目，过滤了一些相对少用的第三方构件`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *[`exp-libs`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)` 的子项目，过滤了一些相对少用的第三方构件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent)：*JVM代理构件* <br/>
 　┃　　　　┃　　　　　　　　└ ─ *`用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）`* <br/>
@@ -57,10 +57,10 @@
 　┃　　　　┣ ━ ━ ━ [01-framework](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework)：*架构/框架* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype)：*Maven项目规范骨架* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`默认已配置： `[`经验库构件`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`默认已配置： `[`经验构件库(exp-libs)`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件(mojo-release-plugin)`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`默认已配置： `[`经验库构件`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`默认已配置： `[`经验构件库`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [zookeeper-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/zookeeper-demo)：*入门示例代码* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`配套博文：《`[`快速部署单机zookeeper集群（win环境）`](http://exp-blog.com/2018/08/03/pid-2173/)`》`* <br/>
@@ -84,13 +84,13 @@
 　┃　　　　　　　　　┃　　　└ ─ *`友好的Swing交互界面，轻松管理大量个人帐密信息（不联网）`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba)：*百度贴吧顶贴机* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`爬虫工具：指定一个贴吧（需无吧务）和一个帖子，让其永久置顶`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`指定一个贴吧（需无吧务）和一个帖子，让其永久置顶`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin)：*哔哩哔哩插件姬* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`爬虫工具：多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [dynamic-token](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)：*嵌入式：动态令牌API* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┣ ━ [dynamic-token](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)：*动态令牌生成/校验API* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`此构件仅用于对外提供能力：配合C++的动态链接库生成/校验动态令牌`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [exp-xml-paper](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/exp-xml-paper)：*XML文本编辑器* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
@@ -164,7 +164,7 @@
 　┗ ━ ━ ━ [C/C++](https://github.com/lyy289065406/expcodes/tree/master/c) <br/>
 　　　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs/00-exp-libs)：*经验库* <br/>
 　　　　　　┃　　　　┃<br/>
-　　　　　　┃　　　　┗ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs)：*经验库构件* <br/>
+　　　　　　┃　　　　┗ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs)：*经验构件库* <br/>
 　　　　　　┃　　　　　　　　└ ─ *`DLL动态链接库`* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [01-reverse-engineering](https://github.com/lyy289065406/expcodes/tree/master/c/01-reverse-engineering)：*逆向工程* <br/>
