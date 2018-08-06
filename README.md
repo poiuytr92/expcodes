@@ -132,7 +132,8 @@
 　┃　　　　┃　　　　┃　　　└ ─ *`第三方共享的图像识别训练的参考代码，本人仅对其梳理`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train)：*任意验证码图片识别训练* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`本人在 `[`tensorflow-captcha-demo`](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo) `基础上改进，可对任意大小的验证码进行识别训练，产生的训练库可供其他项目使用`* <br/>
+　┃　　　　　　　　　┃　　　├ ─ *`本人在`[`tensorflow-captcha-demo`](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo)`基础上改进，可训练任意大小的验证码`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`在`[`Java版的经验构件库(exp-libs)`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`中已封装了针对此训练库的加载/使用的API`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [tensorflow-digit-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-digit-train)：*数字图片识别训练* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
