@@ -29,7 +29,7 @@
 - [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架]
 - [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）]
 - [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件]
-- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： `作为此仓库多个Java项目的基础功能组件包被使用`
+- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用`*
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具]
 - [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba) [百度贴吧顶贴机]
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬]
@@ -71,7 +71,7 @@
 　┃　　　　┃　　　　┗ ━ [thrift](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/thrift)：*入门示例代码* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-pattern](https://github.com/lyy289065406/expcodes/tree/master/java/02-pattern)：*设计模式* <br/>
-　┃　　　　┃　　　　　└ ─ *`《Head First : 设计模式》（课后习题）`* <br/>
+　┃　　　　┃　　　　　└ ─ *`《 Head First : 设计模式 》（课后习题）`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin)：*插件* <br/>
 　┃　　　　┃　　　　┃<br/>
@@ -145,7 +145,7 @@
 　┃　　　　┃　　　　　└ ─ *`《可爱的python》（课后习题）`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [04-HeadFirst](https://github.com/lyy289065406/expcodes/tree/master/python/04-HeadFirst) <br/>
-　┃　　　　┃　　　　　└ ─ *`《Head First : Python》（课后习题）`* <br/>
+　┃　　　　┃　　　　　└ ─ *`《 Head First : Python 》（课后习题）`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/python/99-project)：*项目* <br/>
 　┃　　　　　　　　　┃<br/>
@@ -175,7 +175,7 @@
 　　　　　　┃　　　　　　　　└ ─ *`配套博文：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The%20C%2B%2B%20Programming%20Language) <br/>
-　　　　　　┃　　　　　└ ─ *`《C++程序设计语言-十周年纪念版》（课后习题）`* <br/>
+　　　　　　┃　　　　　└ ─ *`《 C++程序设计语言-十周年纪念版 》（课后习题）`* <br/>
 　　　　　　┃<br/>
 　　　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/c/99-project)：*项目* <br/>
 　　　　　　　　　　　┃<br/>
