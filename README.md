@@ -48,7 +48,7 @@
 　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验构件库 `（作为此仓库多个Java项目的基础功能组件包被使用）`* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`多年经验积累整理的常用组件API库，适用于敏捷开发：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
+　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验构件库（基础包）* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *[`exp-libs`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)` 的子项目，过滤了一些相对少用的第三方构件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent)：*JVM代理构件* <br/>
@@ -125,14 +125,14 @@
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [01-deep-learning](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning)：*深度学习* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [tensorflow-animal](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-animal)：*图像识别训练-动物识别* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┣ ━ [tensorflow-animal](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-animal)：*动物图像识别训练* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`第三方共享的图像识别训练的参考代码，本人仅对其梳理`* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-demo](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo)：*验证码识别训练-示例代码* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-demo](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo)：*验证码图片识别训练-示例代码* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`第三方共享的图像识别训练的参考代码，本人仅对其梳理`* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train)：*任意验证码图片训练* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train)：*任意验证码图片识别训练* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`本人在 `[`tensorflow-captcha-demo`](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo) `基础上改进，可对任意大小的验证码进行识别训练，产生的训练库可供其他项目使用`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [tensorflow-digit-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-digit-train)：*数字图片识别训练* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
