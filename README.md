@@ -100,12 +100,10 @@
 　┃　　　　　　　　　┃　　　└ ─ *`通过文本流方式在两台机器之间搭建端口转发，实现内外网跨越访问`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [github-tools](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/github-tools)：*Github工具包* <br/>
-　┃　　　　　　　　　┃　　　├ ─ *`目前提供功能：`* <br/>
-　┃　　　　　　　　　┃　　　├ ─ *` (1) 自动填充项目内的空文件夹`* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *` (2) 自动修正 Hosts 文件的 DNS 服务器，实现国内加速访问G ithub`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`当前功能：(1)提交 Github 项目前填充空文件夹； (2)自动修正 DNS 实现国内加速访问 Github`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [goas](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/goas)：*政府在线自动化办公系统* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`本人大四在实训基地做的 Java-web 项目，通过 struct 实现的一个简单OA系统`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`本人大四时在实训基地做的 Java-web 项目，通过 struct 实现的一个简单 OA系统`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [pssms](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/pssms)：*进销存管理系统* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
