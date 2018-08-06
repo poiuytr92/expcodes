@@ -29,7 +29,7 @@
 - [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架]
 - [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）]
 - [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件]
-- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： `此项目被本站多数项目调用`
+- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： `作为此仓库多个Java项目的基础功能组件包被使用`
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具]
 - [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba) [百度贴吧顶贴机]
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬]
@@ -45,38 +45,38 @@
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件 `（被本站多数项目调用）`* <br/>
+　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件 `（作为此仓库多个Java项目的基础功能组件包被使用）`* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`多年经验积累整理的常用组件API库，适用于敏捷开发：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`exp-libs 的子项目，过滤了一些相对少用的第三方构件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent)：*JVM代理构件* <br/>
-　┃　　　　┃　　　　　　　　└ ─ *用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）* <br/>
+　┃　　　　┃　　　　　　　　└ ─ *`用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [01-framework](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework)：*架构/框架* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype)：*Maven项目规范骨架* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[Maven项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`默认已配置： `[`经验库构件`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *默认已配置： [经验库构件](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)、混淆打包插件、[Maven项目发布插件](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)、基线发布插件* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`默认已配置： `[`经验库构件`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [zookeeper-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/zookeeper-demo)：*入门示例代码* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *配套博文：《[快速部署单机zookeeper集群（win环境）](http://exp-blog.com/2018/08/03/pid-2173/)》* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`配套博文：《`[`快速部署单机zookeeper集群（win环境）`](http://exp-blog.com/2018/08/03/pid-2173/)`》`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [kafka-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/kafka-demo)：*入门示例代码* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *配套博文：《[快速部署单机kafka集群（win环境）](http://exp-blog.com/2018/08/03/pid-2187/)》* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`配套博文：《`[`快速部署单机kafka集群（win环境）`](http://exp-blog.com/2018/08/03/pid-2187/)`》`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [thrift](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/thrift)：*入门示例代码* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-pattern](https://github.com/lyy289065406/expcodes/tree/master/java/02-pattern)：*设计模式* <br/>
-　┃　　　　┃　　　　　└ ─ *《Head First : 设计模式》（课后习题）* <br/>
+　┃　　　　┃　　　　　└ ─ *`《Head First : 设计模式》（课后习题）`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin)：*插件* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)：*Maven项目发布插件* <br/>
-　┃　　　　┃　　　　　　　　└ ─ *支持一键发布项目，自动组织：Jar（支持混淆）、配置、文档、版本、启动/停止脚本* <br/>
+　┃　　　　┃　　　　　　　　└ ─ *`支持一键发布项目，自动组织：Jar（支持混淆）、配置、文档、版本、启动/停止脚本`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*项目* <br/>
 　┃　　　　　　　　　┃<br/>
@@ -139,13 +139,13 @@
 　┃　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm)：*算法* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm/ACM)：*ACM-OJ训练* <br/>
-　┃　　　　┃　　　　　　　　└ ─ *配套博文：《[北大ACM – POJ试题分类](http://exp-blog.com/2018/06/28/pid-38/)》* <br/>
+　┃　　　　┃　　　　　　　　└ ─ *`配套博文：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-lovely-python](https://github.com/lyy289065406/expcodes/tree/master/python/03-lovely-python) <br/>
-　┃　　　　┃　　　　　└ ─ *《可爱的python》（课后习题）* <br/>
+　┃　　　　┃　　　　　└ ─ *`《可爱的python》（课后习题）`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [04-HeadFirst](https://github.com/lyy289065406/expcodes/tree/master/python/04-HeadFirst) <br/>
-　┃　　　　┃　　　　　└ ─ *《Head First : Python》（课后习题）* <br/>
+　┃　　　　┃　　　　　└ ─ *`《Head First : Python》（课后习题）`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/python/99-project)：*项目* <br/>
 　┃　　　　　　　　　┃<br/>
@@ -165,17 +165,17 @@
 　　　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs/00-exp-libs)：*经验库* <br/>
 　　　　　　┃　　　　┃<br/>
 　　　　　　┃　　　　┗ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs)：*经验库构件* <br/>
-　　　　　　┃　　　　　　　　└ ─ *DLL动态链接库* <br/>
+　　　　　　┃　　　　　　　　└ ─ *`DLL动态链接库`* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [01-reverse-engineering](https://github.com/lyy289065406/expcodes/tree/master/c/01-reverse-engineering)：*逆向工程* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm)：*算法* <br/>
 　　　　　　┃　　　　┃<br/>
 　　　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM)：*ACM-POJ训练* <br/>
-　　　　　　┃　　　　　　　　└ ─ *配套博文：《[北大ACM – POJ试题分类](http://exp-blog.com/2018/06/28/pid-38/)》* <br/>
+　　　　　　┃　　　　　　　　└ ─ *`配套博文：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The%20C%2B%2B%20Programming%20Language) <br/>
-　　　　　　┃　　　　　└ ─ *《C++程序设计语言-十周年纪念版》（课后习题）* <br/>
+　　　　　　┃　　　　　└ ─ *`《C++程序设计语言-十周年纪念版》（课后习题）`* <br/>
 　　　　　　┃<br/>
 　　　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/c/99-project)：*项目* <br/>
 　　　　　　　　　　　┃<br/>
