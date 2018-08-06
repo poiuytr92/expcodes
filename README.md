@@ -90,20 +90,22 @@
 　┃　　　　　　　　　┃　　　└ ─ *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [dynamic-token](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)：*动态令牌生成/校验API* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`此构件仅用于对外提供接口能力：配合C++的动态链接库(`[`dt_otp`](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)`)生成或校验动态令牌`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`此构件仅用于对外提供接口能力：配合另一个C++的动态链接库项目 (`[`dt_otp`](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)`) 生成或校验动态令牌`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [exp-xml-paper](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/exp-xml-paper)：*XML文本编辑器* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`Mac风格的Swing交互界面，主要用于编辑项目中的xml配置文件，更效率地增删改配置项`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [file-port-forwarding](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/file-port-forwarding)：*双机文件流端口转发程序 * <br/>
+　┃　　　　　　　　　┣ ━ [file-port-forwarding](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/file-port-forwarding)：*双机文件流端口转发程序* <br/>
 　┃　　　　　　　　　┃　　　├ ─ *`适用场景（如宿主虚拟机）：机器A在内网、机器B在外网，AB间被限制网络、仅能共享文件`* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`通过文本流方式在两台机器之间搭建端口转发，实现内外网跨越访问`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [github-tools](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/github-tools)：*Github工具包* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┃　　　├ ─ *`目前提供功能：`* <br/>
+　┃　　　　　　　　　┃　　　├ ─ *` (1) 自动填充项目内的空文件夹`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *` (2) 自动修正 Hosts 文件的 DNS 服务器，实现国内加速访问G ithub`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [goas](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/goas)：*政府在线自动化办公系统* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`本人大四在实训基地做的 Java-web 项目，通过 struct 实现的一个简单OA系统`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [pssms](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/pssms)：*进销存管理系统* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
