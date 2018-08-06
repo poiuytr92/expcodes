@@ -192,7 +192,7 @@
 　　　　　　　　　　　┃<br/>
 　　　　　　　　　　　┗ ━ [dt_otp](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)：*动态令牌-dll/so实现库* <br/>
 　　　　　　　　　　　　　　　├ ─ *`仿 QQ等登陆令牌 实现，可生成或校验在误差时间范围内有效的动态令牌`* <br/>
-　　　　　　　　　　　　　　　├ ─ *`此项目本质是 DLL动态链接库, 可在 win/linux 环境编译成 32/64 位`* <br/>
+　　　　　　　　　　　　　　　├ ─ *`本质是 DLL动态链接库, 可在 win/linux 环境编译成 32/64 位（已内置 make 脚本）`* <br/>
 　　　　　　　　　　　　　　　├ ─ *`此项目仅实现核心功能，需配合另一个Java项目 (`[`dynamic-token`](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)`) 对外提供接口能力使用`* <br/>
 　　　　　　　　　　　　　　　└ ─ *`配套博文：《`[`嵌入式开发学习笔记 ( java – c/c++：从入门到入门 )`](http://exp-blog.com/2018/07/25/pid-2090/)`》`* <br/>
 
