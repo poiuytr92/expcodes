@@ -6,7 +6,15 @@
 
 ## 简介
 
-<font color="red">一个项目就是一个历程</font>
+此代码仓库本质上是由多个有代表性的子项目整合而成的超级集，这里记录了我自学习编程以来所学所做的冰山一角。
+
+相关的子项目代码目前以 C/C++、Java、Python 为主，涉及到的领域谈不上包罗万象，但毕竟是我多年来点滴积累的成果，偶尔回首，无悔，足矣。
+
+承诺不会放弃更新这个仓库，所以包含的子项目会越来越多。
+
+但是如果某些子项目到了应该被独立出来的时候，会对其进行抽离，以便更好地开源共享。
+
+> 一个代码就是一个脚印，这些脚印就是寻找过程中留下的人生
 
 
 ## 环境
@@ -25,7 +33,7 @@
 
 ## 核心子项目
 
-- **[exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验构件库（Java版）]** ： *`作为此仓库多个Java项目的基础功能组件包被使用，相关API详见：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
+- **[exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)** [**经验构件库**（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用，相关API详见：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具] ： *`轻松管理大量个人帐密信息（不联网、信息加密）`* <br/>
 - [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba) [百度贴吧顶贴机] ： *`指定一个贴吧（最好无吧务）和一个帖子，可实时检测其状态并将其置顶`* <br/>
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬] ： *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
