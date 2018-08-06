@@ -136,14 +136,15 @@
 　┃　　　　┃　　　　┃　　　└ ─ *`备：在`[`Java版的经验构件库(exp-libs)`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`中已封装了针对tensorflow训练库的加载和使用的API`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [tensorflow-digit-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-digit-train)：*数字图片识别训练* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`由第三方共享的图像识别训练的参考代码，本人仅对其梳理`* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┗ ━ [tensorflow-mnist](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-mnist)：*机器学习入门-MNIST* <br/>
-　┃　　　　┃　　　　　　　　└ ─ *xxx* <br/>
+　┃　　　　┃　　　　┗ ━ [tensorflow-mnist](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-mnist)：*MNIST* <br/>
+　┃　　　　┃　　　　　　　　└ ─ *`机器学习的入门样例代码，由第三方共享，本人仅对其梳理`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm)：*算法* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/python/02-algorithm/ACM)：*ACM-OJ训练* <br/>
+　┃　　　　┃　　　　　　　　├ ─ *`本人大学期间用于参加ACM竞赛的训练题目源码`* <br/>
 　┃　　　　┃　　　　　　　　└ ─ *`配套博文：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-lovely-python](https://github.com/lyy289065406/expcodes/tree/master/python/03-lovely-python) <br/>
@@ -154,23 +155,23 @@
 　┃　　　　┃<br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/python/99-project)：*项目* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [django-web](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/django-web)：*django入门-CMS网站* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┣ ━ [django-web](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/django-web)：*django入门-CMS网站 `（已废弃）`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`尝试用 django 搭建个人网站时写的一个简单 CMS`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler)：*QQ空间爬虫 （Swing界面）* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┣ ━ [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler)：*QQ空间爬虫* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [sina-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/sina-crawler)：*新浪微博爬虫* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`可爬取新浪微博相册的图文数据并进行归整`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┗ ━ [wx-exp-backstage](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/wx-exp-backstage)：*微信公众平台后台* <br/>
-　┃　　　　　　　　　　　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┗ ━ [wx-exp-backstage](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/wx-exp-backstage)：*微信公众平台后台 `（已废弃）`* <br/>
+　┃　　　　　　　　　　　　　└ ─ *`使用 python + PHP 实现微信订阅号后台的部分 API 功能`* <br/>
 　┃<br/>
 　┗ ━ ━ ━ [C/C++](https://github.com/lyy289065406/expcodes/tree/master/c) <br/>
 　　　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs/00-exp-libs)：*经验库* <br/>
 　　　　　　┃　　　　┃<br/>
-　　　　　　┃　　　　┗ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs)：*经验构件库* <br/>
-　　　　　　┃　　　　　　　　└ ─ *`DLL动态链接库`* <br/>
+　　　　　　┃　　　　┗ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/c/00-exp-libs)：*经验构件库 `（完善中）`* <br/>
+　　　　　　┃　　　　　　　　└ ─ *`本质是一个 DLL动态链接库，意图封装为常用组件 API库，以用于敏捷开发`* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [01-reverse-engineering](https://github.com/lyy289065406/expcodes/tree/master/c/01-reverse-engineering)：*逆向工程* <br/>
 　　　　　　┃<br/>
