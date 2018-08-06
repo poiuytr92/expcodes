@@ -45,7 +45,7 @@
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ <a name="exp-libs" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs">exp-libs</a>)：*经验构件库 `（作为此仓库多个Java项目的基础功能组件包被使用）`* <br/>
+　┃　　　　┃　　　　┣ ━ <a name="exp-libs" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs">exp-libs</a>：*经验构件库 `（作为此仓库多个Java项目的基础功能组件包被使用）`* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`多年经验积累整理的常用组件API库，适用于敏捷开发：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验构件库（基础包）* <br/>
@@ -57,10 +57,10 @@
 　┃　　　　┣ ━ ━ ━ [01-framework](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework)：*架构/框架* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype)：*Maven项目规范骨架* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`骨架中默认已配置： `[`经验构件库`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`骨架中默认已配置： `[`经验构件库`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [zookeeper-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/zookeeper-demo)：*入门示例代码* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`配套博文：《`[`快速部署单机zookeeper集群（win环境）`](http://exp-blog.com/2018/08/03/pid-2173/)`》`* <br/>
@@ -75,7 +75,7 @@
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [03-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin)：*插件* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┗ ━ [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)：*Maven项目发布插件* <br/>
+　┃　　　　┃　　　　┗ ━ <a name="mojo-release-plugin" href="https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin">mojo-release-plugin</a>：*Maven项目发布插件* <br/>
 　┃　　　　┃　　　　　　　　└ ─ *`支持一键发布项目，自动组织：Jar（支持混淆）、配置、文档、版本、启动/停止脚本`* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*项目* <br/>
@@ -89,9 +89,9 @@
 　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin)：*哔哩哔哩插件姬 （含Swing界面）* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [dynamic-token](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)：*动态令牌生成/校验API* <br/>
+　┃　　　　　　　　　┣ ━ <a name="dynamic-token" href="https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token">dynamic-token</a>：*动态令牌生成/校验API* <br/>
 　┃　　　　　　　　　┃　　　├ ─ *`仿 QQ等登陆令牌 实现的 API构件，生成或校验在误差时间范围内有效的动态令牌`* <br/>
-　┃　　　　　　　　　┃　　　├ ─ *`此项目仅对外提供接口能力，需配合另一个C++的动态链接库项目 (`[`dt_otp`](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)`) 使用`* <br/>
+　┃　　　　　　　　　┃　　　├ ─ *`此项目仅对外提供接口能力，需配合另一个C++的动态链接库项目 (`[`dt_otp`](#dt_otp)`) 使用`* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`配套博文：《`[`嵌入式开发学习笔记 ( java – c/c++：从入门到入门 )`](http://exp-blog.com/2018/07/25/pid-2090/)`》`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [exp-xml-paper](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/exp-xml-paper)：*XML文本编辑器 （含Swing界面）* <br/>
@@ -128,12 +128,12 @@
 　┃　　　　┃　　　　┣ ━ [tensorflow-animal](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-animal)：*动物图像识别训练* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`由第三方共享的图像识别训练的参考代码，本人仅对其梳理`* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-demo](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo)：*验证码图片识别训练-示例代码* <br/>
+　┃　　　　┃　　　　┣ ━ <a name="tensorflow-captcha-demo" href="https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo">tensorflow-captcha-demo</a>：*验证码图片识别训练-示例代码* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`由第三方共享的图像识别训练的参考代码，本人仅对其梳理`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train)：*任意验证码图片识别训练* <br/>
-　┃　　　　┃　　　　┃　　　├ ─ *`本人在`[`tensorflow-captcha-demo`](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-demo)`基础上改进，可训练任意大小的验证码`* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`备：在`[`Java版的经验构件库(exp-libs)`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`中已封装了针对tensorflow训练库的加载和使用的API`* <br/>
+　┃　　　　┃　　　　┃　　　├ ─ *`本人在`[`tensorflow-captcha-demo`](#tensorflow-captcha-demo)`基础上改进，可训练任意大小的验证码`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`备：在`[`Java版的经验构件库(exp-libs)`](#exp-libs)`中已封装了针对tensorflow训练库的加载和使用的API`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [tensorflow-digit-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-digit-train)：*数字图片识别训练* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`由第三方共享的图像识别训练的参考代码，本人仅对其梳理`* <br/>
@@ -190,10 +190,10 @@
 　　　　　　┃<br/>
 　　　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/c/99-project)：*项目* <br/>
 　　　　　　　　　　　┃<br/>
-　　　　　　　　　　　┗ ━ [dt_otp](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)：*动态令牌-dll/so实现库* <br/>
+　　　　　　　　　　　┗ ━ <a name="dt_otp" href="https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp">dt_otp</a>：*动态令牌-dll/so实现库* <br/>
 　　　　　　　　　　　　　　　├ ─ *`仿 QQ等登陆令牌 实现，可生成或校验在误差时间范围内有效的动态令牌`* <br/>
 　　　　　　　　　　　　　　　├ ─ *`本质是 DLL动态链接库, 可在 win/linux 环境编译成 32/64 位（已内置 make 脚本）`* <br/>
-　　　　　　　　　　　　　　　├ ─ *`此项目仅实现核心功能，需配合另一个Java项目 (`[`dynamic-token`](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)`) 对外提供接口能力使用`* <br/>
+　　　　　　　　　　　　　　　├ ─ *`此项目仅实现核心功能，需配合另一个Java项目 (`[`dynamic-token`](#dynamic-token)`) 对外提供接口能力使用`* <br/>
 　　　　　　　　　　　　　　　└ ─ *`配套博文：《`[`嵌入式开发学习笔记 ( java – c/c++：从入门到入门 )`](http://exp-blog.com/2018/07/25/pid-2090/)`》`* <br/>
 
 
