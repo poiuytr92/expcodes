@@ -9,10 +9,10 @@
 	<version>1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>项目名称(可选)</name>
-	<description>项目描述(可选)</description>
-	<url>项目SVN路径(可选)</url>
-	<inceptionYear>工程的初始时间(可选)</inceptionYear>
+	<name>帐密管理器</name>
+	<description>管理个人帐密信息（信息加密、不联网）</description>
+	<url>https://github.com/lyy289065406/expcodes/trunk/java/99-project/account-mgr</url>
+	<inceptionYear>2017-07-11</inceptionYear>
 
 	<!--项目的问题管理系统(可选)-->
 	<issueManagement>
