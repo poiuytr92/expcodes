@@ -25,10 +25,6 @@
 
 ## 核心子项目
 
-- [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM) [ACM-POJ训练（C/C++版）] ： <br/>　　　　*`本人大学期间用于参加ACM竞赛的训练题目源码，解题报告索引详见：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`* <br/>
-- [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
-- [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
-- [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件] ： <br/>　　　　*`支持一键发布，自动组织并整合到项目：Jar（支持混淆打包）、配置、文档、版本、启动/停止脚本等`* <br/>
 - **[exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验构件库（Java版）]** ： *`作为此仓库多个Java项目的基础功能组件包被使用，相关API详见：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具] ： *`轻松管理大量个人帐密信息（不联网、信息加密）`* <br/>
 - [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba) [百度贴吧顶贴机] ： *`指定一个贴吧（最好无吧务）和一个帖子，可实时检测其状态并将其置顶`* <br/>
@@ -36,8 +32,12 @@
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler) [QQ空间爬虫（Java版）] ： *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler) [QQ空间爬虫（Python版）] ： *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 - [sina-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/sina-crawler) [新浪微博爬虫] ： *`可爬取新浪微博相册的图文数据并进行归整`* <br/>
+- [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
+- [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
+- [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件] ： <br/>　　　　*`支持一键发布，自动组织并整合到项目：Jar（支持混淆打包）、配置、文档、版本、启动/停止脚本等`* <br/>
 - [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train) [任意验证码图片训练] ： <br/>　　　　*`本人在`[`tensorflow-captcha-demo`](#tensorflow-captcha-demo)`基础上改进，可训练任意大小的图片验证码`* <br/>
- 
+- [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM) [ACM-POJ训练（C/C++版）] ： <br/>　　　　*`本人大学期间用于参加ACM竞赛的训练题目源码，解题报告索引详见：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`* <br/>
+
 
 ## 全子项目索引
 
