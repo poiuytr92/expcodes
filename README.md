@@ -19,8 +19,8 @@
 ## 项目相关
 
 - 经验库导航页 : [Navigation-Page](https://lyy289065406.github.io/api-online/)
-- 软件授权插件 : [certificate](https://github.com/lyy289065406/certificate)
-- 自动升级插件 : [auto-upgrader](https://github.com/lyy289065406/auto-upgrader)
+- 软件授权插件 : [Software-Certificate](https://github.com/lyy289065406/certificate)
+- 自动升级插件 : [Auto-Upgrader](https://github.com/lyy289065406/auto-upgrader)
 
 
 ## 核心子项目
@@ -31,6 +31,7 @@
 - [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件]
 - [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验库构件（Java版）] ： `此项目被本站多数项目调用`
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具]
+- [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba) [百度贴吧顶贴机]
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬]
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler) [QQ空间爬虫（Java版）]
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler) [QQ空间爬虫（Python版）]
@@ -45,10 +46,10 @@
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)：*经验库构件 `（被本站多数项目调用）`* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *多年经验积累整理的常用组件API库，适用于敏捷开发：[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`多年经验积累整理的常用组件API库，适用于敏捷开发：`[在线 Javadoc](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验库构件（基础包）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *exp-libs 的子项目，过滤了一些相对少用的第三方构件* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`exp-libs 的子项目，过滤了一些相对少用的第三方构件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent)：*JVM代理构件* <br/>
 　┃　　　　┃　　　　　　　　└ ─ *用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）* <br/>
@@ -80,6 +81,9 @@
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*项目* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr)：*帐密管理工具* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┃<br/>
+　┃　　　　　　　　　┣ ━ [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba)：*百度贴吧顶贴机* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin)：*哔哩哔哩插件姬* <br/>
