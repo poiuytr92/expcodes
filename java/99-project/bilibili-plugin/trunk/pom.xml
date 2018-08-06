@@ -6,7 +6,7 @@
     <!--项目基本信息(必填)-->
     <groupId>exp.bilibili</groupId>
     <artifactId>bilibili-plugin</artifactId>
-    <version>5.5-SNAPSHOT</version>
+    <version>5.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>哔哩哔哩插件姬</name>
@@ -171,6 +171,10 @@
             <exclusion>
               <groupId>com.sun.media</groupId>
               <artifactId>jai-imageio</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache</groupId>
+              <artifactId>log4j</artifactId>
             </exclusion>
             <exclusion>    <!-- tensorflow本地化接口（darwin+linux+win） -->
               <groupId>org.tensorflow</groupId>
@@ -465,7 +469,7 @@
                             <xms>32m</xms>
                             <xmx>256m</xmx>
                             <jdkParams></jdkParams>
-                            <noVerJarRegex>(exp|auto)-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
+                            <noVerJarRegex>(exp|auto|software)-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
                             <proguard>true</proguard>  <!-- 是否使用混淆包(需配置混淆打包插件) -->
                         </configuration>
                     </execution>
