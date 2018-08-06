@@ -6,7 +6,7 @@
 
 ## 简介
 
-<font color="red">编辑中</font>
+<font color="red">一个项目就是一个历程</font>
 
 
 ## 环境
@@ -105,10 +105,10 @@
 　┃　　　　　　　　　┃　　　└ ─ *`当前功能：(1)提交Github项目前填充空文件夹；(2)自动修正DNS实现国内加速访问Github`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [goas](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/goas)：*政府在线自动化办公系统 （含BS界面）* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`本人大四时在实训基地做的 Java-web 项目，通过 struct 实现的一个简单 OA系统`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`本人大四时在实训基地做的 Java-web 协同项目，通过 struct 实现的一个简单 OA系统`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [pssms](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/pssms)：*进销存管理系统 （含Swing界面）* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`本人大三时的课程设计项目，具备角色权限、仓管、统计等功能的进销存管理系统`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`本人大三时的课程设计协同项目，具备角色权限、仓管、统计等功能的进销存管理系统`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [P2P-file-sharing-system](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/P2P-file-sharing-system)：*P2P文件共享系统 （含Swing界面）* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`本人的其中一个毕业设计项目，参照P2P原理实现的文件共享工具`* <br/>
