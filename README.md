@@ -80,20 +80,22 @@
 　┃　　　　┃<br/>
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*项目* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr)：*帐密管理工具* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`Mac风格的Swing交互界面，轻松管理大量个人帐密信息（不联网、信息加密）`* <br/>
+　┃　　　　　　　　　┣ ━ [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr)：*帐密管理工具 （含Swing界面）* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`轻松管理大量个人帐密信息（不联网、信息加密）`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba)：*百度贴吧顶贴机* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`指定一个贴吧（需无吧务）和一个帖子，让其永久置顶`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`指定一个贴吧（最好无吧务）和一个帖子，让其永久置顶`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin)：*哔哩哔哩插件姬* <br/>
+　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin)：*哔哩哔哩插件姬 （含Swing界面）* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [dynamic-token](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)：*动态令牌生成/校验API* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`此构件仅用于对外提供接口能力：配合另一个C++的动态链接库项目 (`[`dt_otp`](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)`) 生成或校验动态令牌`* <br/>
+　┃　　　　　　　　　┃　　　├ ─ *`仿 QQ等登陆令牌 实现的 API构件，生成或校验在误差时间范围内有效的动态令牌`* <br/>
+　┃　　　　　　　　　┃　　　├ ─ *`此项目仅对外提供接口能力，需配合另一个C++的动态链接库项目 (`[`dt_otp`](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)`) 使用`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`配套博文：《`[`嵌入式开发学习笔记 ( java – c/c++：从入门到入门 )`](http://exp-blog.com/2018/07/25/pid-2090/)`》`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [exp-xml-paper](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/exp-xml-paper)：*XML文本编辑器* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`Mac风格的Swing交互界面，主要用于编辑项目中的xml配置文件，更效率地增删改配置项`* <br/>
+　┃　　　　　　　　　┣ ━ [exp-xml-paper](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/exp-xml-paper)：*XML文本编辑器 （含Swing界面）* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`用于编辑项目中的xml配置文件，更效率地增删改配置项`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [file-port-forwarding](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/file-port-forwarding)：*双机文件流端口转发程序* <br/>
 　┃　　　　　　　　　┃　　　├ ─ *`适用场景（如宿主虚拟机）：机器A在内网、机器B在外网，AB间被限制网络、仅能共享文件`* <br/>
@@ -102,20 +104,21 @@
 　┃　　　　　　　　　┣ ━ [github-tools](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/github-tools)：*Github工具包* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`当前功能：(1)提交Github项目前填充空文件夹；(2)自动修正DNS实现国内加速访问Github`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [goas](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/goas)：*政府在线自动化办公系统* <br/>
+　┃　　　　　　　　　┣ ━ [goas](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/goas)：*政府在线自动化办公系统 （含BS界面）* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`本人大四时在实训基地做的 Java-web 项目，通过 struct 实现的一个简单 OA系统`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [pssms](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/pssms)：*进销存管理系统* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┣ ━ [pssms](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/pssms)：*进销存管理系统 （含Swing界面）* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`本人大三时的课程设计项目，具备角色权限、仓管、统计等功能的进销存管理系统`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [P2P-file-sharing-system](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/P2P-file-sharing-system)：*P2P文件共享系统* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┣ ━ [P2P-file-sharing-system](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/P2P-file-sharing-system)：*P2P文件共享系统 （含Swing界面）* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`本人的其中一个毕业设计项目，参照P2P原理实现的文件共享工具`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler)：*QQ空间爬虫* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┣ ━ [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler)：*QQ空间爬虫 （含Swing界面）* <br/>
+　┃　　　　　　　　　┃　　　├ ─ *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`含 phantomjs仿真 与 纯http协议 两种实现方式`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┗ ━ [ui-regex-debug](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*正则测试工具（UI版）* <br/>
-　┃　　　　　　　　　　　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┗ ━ [ui-regex-debug](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*正则测试工具 （含Swing界面）* <br/>
+　┃　　　　　　　　　　　　　└ ─ *`用于测试正则表达式的可用性，另有功能相似的 `[`在线版本`](https://lyy289065406.github.io/site-package/tool/regex/index.html)* <br/>
 　┃<br/>
 　┣ ━ ━ ━ [python](https://github.com/lyy289065406/expcodes/tree/master/python) <br/>
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/python/00-exp-libs)：*经验库* <br/>
@@ -153,7 +156,7 @@
 　┃　　　　　　　　　┣ ━ [django-web](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/django-web)：*django入门-CMS网站* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler)：*QQ空间爬虫* <br/>
+　┃　　　　　　　　　┣ ━ [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler)：*QQ空间爬虫 （Swing界面）* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [sina-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/sina-crawler)：*新浪微博爬虫* <br/>
