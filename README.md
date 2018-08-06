@@ -29,7 +29,7 @@
 - [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架]
 - [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）]
 - [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件]
-- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验构件库（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>*
+- [exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs) [经验构件库（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用，相关API详见：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>*
 - [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr) [帐密管理工具]
 - [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba) [百度贴吧顶贴机]
 - [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin) [哔哩哔哩插件姬]
@@ -57,10 +57,10 @@
 　┃　　　　┣ ━ ━ ━ [01-framework](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework)：*架构/框架* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype)：*Maven项目规范骨架* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`默认已配置： `[`经验构件库(exp-libs)`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件(mojo-release-plugin)`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`骨架中默认已配置： `[`经验构件库`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype)：*Maven项目规范骨架（Web版）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`默认已配置： `[`经验构件库`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`骨架中默认已配置： `[`经验构件库`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)`、基线发布插件`* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ [zookeeper-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/zookeeper-demo)：*入门示例代码* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`配套博文：《`[`快速部署单机zookeeper集群（win环境）`](http://exp-blog.com/2018/08/03/pid-2173/)`》`* <br/>
@@ -81,7 +81,7 @@
 　┃　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/java/99-project)：*项目* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [account-mgr](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/account-mgr)：*帐密管理工具* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`友好的Swing交互界面，轻松管理大量个人帐密信息（不联网）`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`Mac风格的Swing交互界面，轻松管理大量个人帐密信息（不联网、信息加密）`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba)：*百度贴吧顶贴机* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`指定一个贴吧（需无吧务）和一个帖子，让其永久置顶`* <br/>
@@ -90,13 +90,14 @@
 　┃　　　　　　　　　┃　　　└ ─ *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [dynamic-token](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)：*动态令牌生成/校验API* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`此构件仅用于对外提供能力：配合C++的动态链接库生成/校验动态令牌`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`此构件仅用于对外提供接口能力：配合C++的动态链接库(`[`dt_otp`](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)`)生成或校验动态令牌`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [exp-xml-paper](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/exp-xml-paper)：*XML文本编辑器* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`Mac风格的Swing交互界面，主要用于编辑项目中的xml配置文件，更效率地增删改配置项`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [file-port-forwarding](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/file-port-forwarding)：*双机文件流端口转发程序* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
+　┃　　　　　　　　　┣ ━ [file-port-forwarding](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/file-port-forwarding)：*双机文件流端口转发程序 * <br/>
+　┃　　　　　　　　　┃　　　├ ─ *`适用场景（如宿主虚拟机）：机器A在内网、机器B在外网，AB间被限制网络、仅能共享文件`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`通过文本流方式在两台机器之间搭建端口转发，实现内外网跨越访问`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [github-tools](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/github-tools)：*Github工具包* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *xxx* <br/>
