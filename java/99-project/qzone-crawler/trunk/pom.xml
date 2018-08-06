@@ -6,11 +6,11 @@
 	<!--项目基本信息(必填)-->
 	<groupId>exp.crawler</groupId>
 	<artifactId>qzone-crawler</artifactId>
-	<version>2.0-SNAPSHOT</version>
+	<version>2.2-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>QQ空间爬虫</name>
-	<description>QQ空间爬虫</description>
+	<description>可爬取QQ相册和说说的图文数据并进行归整</description>
 	<url>https://github.com/lyy289065406/expcodes.git/trunk/java/99-project/qzone-worm</url>
 	<inceptionYear>2016-06-09</inceptionYear>
 
@@ -171,6 +171,10 @@
             <exclusion>
               <groupId>com.sun.media</groupId>
               <artifactId>jai-imageio</artifactId>
+            </exclusion>
+            <exclusion>
+              <groupId>org.apache</groupId>
+              <artifactId>log4j</artifactId>
             </exclusion>
             <exclusion>
               <groupId>org.tensorflow</groupId>
@@ -450,7 +454,7 @@
                             <xms>32m</xms>
                             <xmx>256m</xmx>
                             <jdkParams></jdkParams>
-                            <noVerJarRegex>(exp|auto)-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
+                            <noVerJarRegex>(exp|auto|software)-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
                             <proguard>true</proguard>  <!-- 是否使用混淆包(需配置混淆打包插件) -->
                         </configuration>
                     </execution>
