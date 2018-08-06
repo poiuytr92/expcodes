@@ -84,7 +84,7 @@
 　┃　　　　　　　　　┃　　　└ ─ *`轻松管理大量个人帐密信息（不联网、信息加密）`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [top-baidu-tieba](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/top-baidu-tieba)：*百度贴吧顶贴机* <br/>
-　┃　　　　　　　　　┃　　　└ ─ *`指定一个贴吧（最好无吧务）和一个帖子，让其永久置顶`* <br/>
+　┃　　　　　　　　　┃　　　└ ─ *`指定一个贴吧（最好无吧务）和一个帖子，可实时检测其置顶状态并将其置顶`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/bilibili-plugin)：*哔哩哔哩插件姬 （含Swing界面）* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
@@ -174,10 +174,15 @@
 　　　　　　┃　　　　　　　　└ ─ *`本质是一个 DLL动态链接库，意图封装为常用组件 API库，以用于敏捷开发`* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [01-reverse-engineering](https://github.com/lyy289065406/expcodes/tree/master/c/01-reverse-engineering)：*逆向工程* <br/>
+　　　　　　┃　　　　　　　　├ ─ *`入门逆向工程开发的一些相关代码`* <br/>
+　　　　　　┃　　　　　　　　├ ─ *`配套博文：《`[`WINDOWS内核学习顺序指引清单`](http://exp-blog.com/2018/07/26/pid-2124/)`》`* <br/>
+　　　　　　┃　　　　　　　　├ ─ *`配套博文：《`[`驱动开发入门 – 之一：Win7 SP1 x64 驱动开发环境搭建`](http://exp-blog.com/2018/07/26/pid-2137/)`》`* <br/>
+　　　　　　┃　　　　　　　　└ ─ *`配套博文：《`[`驱动开发入门 – 之二：Win7-x64 + VMWare (Win7-x64) + WinDbg 双机调试环境搭建`](http://exp-blog.com/2018/07/26/pid-2146/)`》`* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [02-algorithm](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm)：*算法* <br/>
 　　　　　　┃　　　　┃<br/>
 　　　　　　┃　　　　┗ ━ [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM)：*ACM-POJ训练* <br/>
+　　　　　　┃　　　　　　　　├ ─ *`本人大学期间用于参加ACM竞赛的训练题目源码`* <br/>
 　　　　　　┃　　　　　　　　└ ─ *`配套博文：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`* <br/>
 　　　　　　┃<br/>
 　　　　　　┣ ━ ━ ━ [03-The C++ Programming Language](https://github.com/lyy289065406/expcodes/tree/master/c/03-The%20C%2B%2B%20Programming%20Language) <br/>
@@ -185,8 +190,11 @@
 　　　　　　┃<br/>
 　　　　　　┗ ━ ━ ━ [99-project](https://github.com/lyy289065406/expcodes/tree/master/c/99-project)：*项目* <br/>
 　　　　　　　　　　　┃<br/>
-　　　　　　　　　　　┗ ━ [dt_otp](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)：*嵌入式：动态令牌-动态链接库* <br/>
-　　　　　　　　　　　　　　　└ ─ *xxx* <br/>
+　　　　　　　　　　　┗ ━ [dt_otp](https://github.com/lyy289065406/expcodes/tree/master/c/99-project/dt_otp)：*动态令牌-dll/so实现库* <br/>
+　　　　　　　　　　　　　　　├ ─ *`仿 QQ等登陆令牌 实现，可生成或校验在误差时间范围内有效的动态令牌`* <br/>
+　　　　　　　　　　　　　　　├ ─ *`此项目本质是 DLL动态链接库, 可在 win/linux 环境编译成 32/64 位`* <br/>
+　　　　　　　　　　　　　　　├ ─ *`此项目仅实现核心功能，需配合另一个Java项目 (`[`dynamic-token`](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token)`) 对外提供接口能力使用`* <br/>
+　　　　　　　　　　　　　　　└ ─ *`配套博文：《`[`嵌入式开发学习笔记 ( java – c/c++：从入门到入门 )`](http://exp-blog.com/2018/07/25/pid-2090/)`》`* <br/>
 
 
 ## 版权声明
