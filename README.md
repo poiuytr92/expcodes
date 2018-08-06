@@ -25,7 +25,7 @@
 
 ## 核心子项目
 
-- [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM) [ACM-POJ训练（C/C++版）] ： <br/><span style="float:right">*`本人大学期间用于参加ACM竞赛的训练题目源码，解题报告索引详见：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`*</span> <br/>
+- [ACM](https://github.com/lyy289065406/expcodes/tree/master/c/02-algorithm/ACM) [ACM-POJ训练（C/C++版）] ： <br/><p style="text-align:right">*`本人大学期间用于参加ACM竞赛的训练题目源码，解题报告索引详见：《`[`北大ACM – POJ试题分类`](http://exp-blog.com/2018/06/28/pid-38/)`》`*</p> <br/>
 - [mojo-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-archetype) [Maven项目规范骨架] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
 - [mojo-web-archetype](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/mojo-web-archetype) [Maven项目规范骨架（Web版）] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
 - [mojo-release-plugin](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin) [Maven项目发布插件] ： <br/>　　　　*`支持一键发布项目，自动组织：Jar（支持混淆）、配置、文档、版本、启动/停止脚本`* <br/>
