@@ -36,7 +36,7 @@
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/java/99-project/qzone-crawler) [QQ空间爬虫（Java版）] ： *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 - [qzone-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/qzone-crawler) [QQ空间爬虫（Python版）] ： *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 - [sina-crawler](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/sina-crawler) [新浪微博爬虫] ： *`可爬取新浪微博相册的图文数据并进行归整`* <br/>
-- [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train) [任意验证码图片训练] ： *`本人在`[`tensorflow-captcha-demo`](#tensorflow-captcha-demo)`基础上改进，可训练任意大小的图片验证码`* <br/>
+- [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train) [任意验证码图片训练] ： <br/>　　　　*`本人在`[`tensorflow-captcha-demo`](#tensorflow-captcha-demo)`基础上改进，可训练任意大小的图片验证码`* <br/>
  
 
 ## 全子项目索引
