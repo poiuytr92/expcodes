@@ -1,4 +1,4 @@
-package exp.libs.warp.net.jms.mq.bean;
+package exp.libs.warp.net.mq.jms.bean;
 
 import java.util.HashSet;
 import java.util.Set;

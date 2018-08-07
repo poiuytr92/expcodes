@@ -1,4 +1,4 @@
-package exp.libs.warp.net.jms.mq.sup;
+package exp.libs.warp.net.mq.jms.sup;
 
 import javax.jms.Connection;
 import javax.jms.DeliveryMode;

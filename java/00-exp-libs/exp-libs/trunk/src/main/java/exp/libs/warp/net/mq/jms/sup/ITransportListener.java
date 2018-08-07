@@ -1,4 +1,4 @@
-package exp.libs.warp.net.jms.mq.sup;
+package exp.libs.warp.net.mq.jms.sup;
 
 import org.apache.activemq.transport.TransportListener;
 

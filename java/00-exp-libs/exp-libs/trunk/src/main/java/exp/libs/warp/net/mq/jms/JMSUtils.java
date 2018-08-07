@@ -1,4 +1,4 @@
-package exp.libs.warp.net.jms.mq;
+package exp.libs.warp.net.mq.jms;
 
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
