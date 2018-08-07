@@ -20,9 +20,9 @@
 
 | 主模块 | 子模块 | 组件包/类 | 说明 |
 |:---:|:---:|:---:|:---:|
-| 常用工具包<br/>[exp.libs.algorithm](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | &nbsp; | &nbsp; | &nbsp; |
-| 二次封装组件<br/>[exp.libs.algorithm](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | &nbsp; | &nbsp; | &nbsp; |
-| 算法包<br/>[exp.libs.algorithm](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | &nbsp; | &nbsp; | &nbsp; |
+| 常用工具包<br/>[exp.libs.utils](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | &nbsp; | &nbsp; | &nbsp; |
+| 二次封装组件<br/>[exp.libs.warp](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | &nbsp; | &nbsp; | &nbsp; |
+| 算法包<br/>[exp.libs.algorithm](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | &nbsp; | &nbsp; | &nbsp; |
 
 
 # 修正
