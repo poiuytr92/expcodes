@@ -19,9 +19,8 @@
 ## 功能模块
 
 | 主模块 | 子模块 | 组件包/类 | 说明 |
-|:---:|:---:|:---:|:---:|
-| 常用工具包<br/>[`exp.libs.utils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | &nbsp; | &nbsp; | &nbsp; |
-| &nbsp; | 编码工具 | [`exp.libs.utils.encode.Base64`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/Base64.java) | Base64编解码 |
+|:---:|:---:|:---|:---|
+| 常用工具包<br/>[`exp.libs.utils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | 编码工具 | [`exp.libs.utils.encode.Base64`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/Base64.java) | Base64编解码 |
 | &nbsp; | &nbsp; | [`exp.libs.utils.encode.CharsetUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CharsetUtils.java) | 字符集编码转换 |
 | &nbsp; | &nbsp; | [`exp.libs.utils.encode.CompressUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CompressUtils.java) | 压缩/解压(zip,gzip,tar,bz2) |
 | &nbsp; | &nbsp; | [`exp.libs.utils.encode.CryptoUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CryptoUtils.java) | 加解密(MD5,DES,RSA) |
