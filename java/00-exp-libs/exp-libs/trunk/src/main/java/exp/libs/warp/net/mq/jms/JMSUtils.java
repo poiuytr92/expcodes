@@ -2,9 +2,9 @@ package exp.libs.warp.net.mq.jms;
 
 import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.conf.xml.XConfigFactory;
-import exp.libs.warp.net.jms.mq.bean.JmsBean;
-import exp.libs.warp.net.jms.mq.sup.Consumer;
-import exp.libs.warp.net.jms.mq.sup.Producers;
+import exp.libs.warp.net.mq.jms.bean.JmsBean;
+import exp.libs.warp.net.mq.jms.sup.Consumer;
+import exp.libs.warp.net.mq.jms.sup.Producers;
 
 /**
  * <pre>
