@@ -16,14 +16,16 @@
 过程中尽量确保了低耦合、高性能、强稳健、高复用、更易用等，确保能够满足日常开发需要、提高开发效率。
 
 
-## 子模块
+## 功能模块
 
-根据功能分类，此构件库主要可划分为3个大模块，而每个模块又会延展出多个组件分支：
-- 常用工具模块：exp.libs.utils
-- 二次封装模块：exp.libs.warp
-- 算法模块：exp.libs.algorithm
+| 主模块 | 子模块 | 组件包/类 | 说明 |
+|:---:|:---:|:---:|:---:|
+| 常用工具包<br/>[exp.libs.algorithm](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | &nbsp; | &nbsp; | &nbsp; |
+| 二次封装组件<br/>[exp.libs.algorithm](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | &nbsp; | &nbsp; | &nbsp; |
+| 算法包<br/>[exp.libs.algorithm](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | &nbsp; | &nbsp; | &nbsp; |
 
 
+# 修正
 
 
 ## 版权声明
