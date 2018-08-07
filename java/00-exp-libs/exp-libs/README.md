@@ -4,14 +4,23 @@
 
 ------
 
-## 简介
-
-xxxxxxxxxxx
-
 
 ## 环境
 
 ![](https://img.shields.io/badge/Platform-Windows|Linux-brightgreen.svg) ![](https://img.shields.io/badge/IDE-Eclipse-brightgreen.svg) ![](https://img.shields.io/badge/Maven-3.2.5-brightgreen.svg) ![](https://img.shields.io/badge/JDK-1.6%2B-brightgreen.svg)
+
+## 简介
+
+此构件库为本人多年编程总结提炼而成，把常用的功能模块作为原子API进行封装，尽量确保了低耦合、高性能、强稳健、高复用、更易用等，可显著提高开发效率。
+
+同时，此构件库也借用了不少出色的第三方构件功能，且在其之上进行二次封装，包括但不限于：滤掉不常用的模块、贴合使用习惯重新封装某些模块、重写某些模块以修正BUG等等。
+
+## 子模块
+
+根据功能分类，此构件库主要可划分为3个大模块，而每个模块又会延展出多个组件分支：
+- 常用工具模块：exp.libs.utils
+- 二次封装模块：exp.libs.warp
+- 算法模块：exp.libs.algorithm
 
 
 ## 版权声明
