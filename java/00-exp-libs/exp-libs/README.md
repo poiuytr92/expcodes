@@ -18,6 +18,11 @@
 
 ## 功能模块
 
+<style>
+	table th:first-of-type(4) {
+	    width: 50px;
+	}
+</style>
 | 主模块 | 子模块 | 组件包/类 | 说明 | 测试/样例 |
 |:---:|:---:|:---:|:---|:---:|
 | **常用工具包**<br/>[`exp.libs.utils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | 编码工具<br/>[`encode`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode) | [`Base64`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/Base64.java) | Base64编解码 | &nbsp; |
@@ -58,7 +63,7 @@
 | **二次封装组件**<br/>[`exp.libs.warp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | 版本管理组件<br/>[`ver`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ver) | &nbsp; | 借助Sqlite以UI方式管理项目版本信息，[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)与[`自动化升级插件`](https://github.com/lyy289065406/auto-upgrader)的部分功能也依赖此组件实现 | &nbsp; |
 | &nbsp; | 函数解析组件<br/>[`cep`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cep) | &nbsp; | 基于com.singularsys.jep(3.3.1)封装，去除了时效限制，并新增多种自定义函数 | &nbsp; |
 | &nbsp; | 命令行组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cmd) | &nbsp; | 封装系统命令行操作 | &nbsp; |
-| &nbsp; | 配置解析组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf) | xml配置文件解析<br/>[`xml`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/xml) | 基于org.dom4j(1.6.1)封装，支持定时刷新配置项，支持读入固有格式的配置区块。<br/>[`数据库组件`]（#db）、[`网络组件`](#net)等均可利用此组件加载完整的配置区块 | &nbsp; |
+| &nbsp; | 配置解析组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf) | xml配置文件解析<br/>[`xml`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/xml) | 基于org.dom4j(1.6.1)封装，支持定时刷新配置项，支持读入固有格式的配置区块。<br/>[`数据库组件`](#db)、[`网络组件`](#net)等均可利用此组件加载完整的配置区块 | &nbsp; |
 | &nbsp; | &nbsp; | ini配置文件解析<br/>[`ini`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/ini) | 未实装 | &nbsp; |
 | &nbsp; | &nbsp; | kv配置文件解析<br/>[`kv`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/kv) | 未实装 | &nbsp; |
 | &nbsp; | 数据库组件<br/><a name="db" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db">`db`</a> | 关系型数据库工具<br/>[`sql`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db/sql) | 针对多种数据库、提供连接池与JDBC两种数据库连接方式、及多种常用的增删改查操作，且可根据物理表模型反向生成JavaBean代码。<br/>连接池基于com.cloudhopper.proxool(0.9.1)封装 | &nbsp; |
