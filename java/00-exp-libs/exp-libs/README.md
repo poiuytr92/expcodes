@@ -19,7 +19,7 @@
 ## 功能模块
 
 
-| 主模块 | 子模块 | 组件包/类 | 说明 | 测试<br/>样例 |
+| 主模块 | 子模块 | 组件包/类 | 说明 | 测试/<br/>样例 |
 |:---:|:---:|:---:|:---|:---:|
 | **常用工具包**<br/>[`exp.libs.utils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | 编码工具<br/>[`encode`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode) | [`Base64`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/Base64.java) | Base64编解码 | &nbsp; |
 | &nbsp; | &nbsp; | [`CharsetUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CharsetUtils.java) | 字符集编码转换 | &nbsp; |
@@ -57,7 +57,7 @@
 | &nbsp; | &nbsp; | [`RandomUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/other/RandomUtils.java) | 随机生成器 | &nbsp; |
 | &nbsp; | &nbsp; | [`StrUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/other/StrUtils.java) | 字符串处理 | &nbsp; |
 | **二次封装组件**<br/>[`exp.libs.warp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | 版本管理组件<br/>[`ver`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ver) | &nbsp; | 借助Sqlite以UI方式管理项目版本信息，<br/>[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)与[`自动化升级插件`](https://github.com/lyy289065406/auto-upgrader)<br/>的部分功能也依赖此组件实现 | &nbsp; |
-| &nbsp; | 函数解析组件<br/>[`cep`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cep) | &nbsp; | 基于com.singularsys.jep(3.3.1)封装，<br/>去除了时效限制，并新增多种自定义函数 | &nbsp; |
+| &nbsp; | 函数解析组件<br/>[`cep`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cep) | &nbsp; | 基于com.singularsys.jep(3.3.1)封装，<br/>去除时效限制，并新增多种自定义函数 | &nbsp; |
 | &nbsp; | 命令行组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cmd) | &nbsp; | 封装系统命令行操作 | &nbsp; |
 | &nbsp; | 配置解析组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf) | xml配置文件解析<br/>[`xml`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/xml) | 基于org.dom4j(1.6.1)封装，支持定时<br/>刷新配置项、加载固有格式的配置区块。<br/>[`数据库组件`](#db)、[`网络组件`](#net)等均利用此组件<br/>加载独立的配置区块 | &nbsp; |
 | &nbsp; | &nbsp; | ini配置文件解析<br/>[`ini`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/ini) | 未实装 | &nbsp; |
