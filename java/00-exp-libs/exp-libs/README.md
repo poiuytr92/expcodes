@@ -18,12 +18,8 @@
 
 ## 功能模块
 
-<style>
-	table th:first-of-type(4) {
-	    width: 50px;
-	}
-</style>
-| 主模块 | 子模块 | 组件包/类 | 说明 | 测试/样例 |
+
+| 主模块 | 子模块 | 组件包/类 | 说明 | 测试<br/>样例 |
 |:---:|:---:|:---:|:---|:---:|
 | **常用工具包**<br/>[`exp.libs.utils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | 编码工具<br/>[`encode`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode) | [`Base64`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/Base64.java) | Base64编解码 | &nbsp; |
 | &nbsp; | &nbsp; | [`CharsetUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CharsetUtils.java) | 字符集编码转换 | &nbsp; |
@@ -60,17 +56,17 @@
 | &nbsp; | &nbsp; | [`PathUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/other/PathUtils.java) | 路径处理 | &nbsp; |
 | &nbsp; | &nbsp; | [`RandomUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/other/RandomUtils.java) | 随机生成器 | &nbsp; |
 | &nbsp; | &nbsp; | [`StrUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/other/StrUtils.java) | 字符串处理 | &nbsp; |
-| **二次封装组件**<br/>[`exp.libs.warp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | 版本管理组件<br/>[`ver`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ver) | &nbsp; | 借助Sqlite以UI方式管理项目版本信息，[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)与[`自动化升级插件`](https://github.com/lyy289065406/auto-upgrader)的部分功能也依赖此组件实现 | &nbsp; |
-| &nbsp; | 函数解析组件<br/>[`cep`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cep) | &nbsp; | 基于com.singularsys.jep(3.3.1)封装，去除了时效限制，并新增多种自定义函数 | &nbsp; |
+| **二次封装组件**<br/>[`exp.libs.warp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | 版本管理组件<br/>[`ver`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ver) | &nbsp; | 借助Sqlite以UI方式管理项目版本信息，<br/>[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)与[`自动化升级插件`](https://github.com/lyy289065406/auto-upgrader)<br/>的部分功能也依赖此组件实现 | &nbsp; |
+| &nbsp; | 函数解析组件<br/>[`cep`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cep) | &nbsp; | 基于com.singularsys.jep(3.3.1)封装，<br/>去除了时效限制，并新增多种自定义函数 | &nbsp; |
 | &nbsp; | 命令行组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cmd) | &nbsp; | 封装系统命令行操作 | &nbsp; |
-| &nbsp; | 配置解析组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf) | xml配置文件解析<br/>[`xml`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/xml) | 基于org.dom4j(1.6.1)封装，支持定时刷新配置项，支持读入固有格式的配置区块。<br/>[`数据库组件`](#db)、[`网络组件`](#net)等均可利用此组件加载完整的配置区块 | &nbsp; |
+| &nbsp; | 配置解析组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf) | xml配置文件解析<br/>[`xml`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/xml) | 基于org.dom4j(1.6.1)封装，支持定时<br/>刷新配置项、加载固有格式的配置区块。<br/>[`数据库组件`](#db)、[`网络组件`](#net)等均利用此组件<br/>加载独立的配置区块 | &nbsp; |
 | &nbsp; | &nbsp; | ini配置文件解析<br/>[`ini`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/ini) | 未实装 | &nbsp; |
 | &nbsp; | &nbsp; | kv配置文件解析<br/>[`kv`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/kv) | 未实装 | &nbsp; |
-| &nbsp; | 数据库组件<br/><a name="db" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db">`db`</a> | 关系型数据库工具<br/>[`sql`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db/sql) | 针对多种数据库、提供连接池与JDBC两种数据库连接方式、及多种常用的增删改查操作，且可根据物理表模型反向生成JavaBean代码。<br/>连接池基于com.cloudhopper.proxool(0.9.1)封装 | &nbsp; |
-| &nbsp; | &nbsp; | 非关系型数据库工具<br/>[`nosql`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db/nosql) | 基于redis.clients.jedis(2.7.3)封装，支持连接池或常规方式获取连接实例 | &nbsp; |
-| &nbsp; | 网络组件<br/><a name="net" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net">`net`</a> | Cookie组件<br/>[`cookie`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/cookie) | 用于解析HTTP响应头中的Set-Cookie参数 | &nbsp; |
+| &nbsp; | 数据库组件<br/><a name="db" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db">`db`</a> | 关系型数据库工具<br/>[`sql`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db/sql) | 基于com.cloudhopper.proxool(0.9.1)<br/>封装，支持mysql/oracle/sqlite等。<br/>提供连接池与JDBC两种数据库连接方<br/>式、及多种常用的增删改查操作，且可<br/>根据物理表模型反向生成JavaBean代码 | &nbsp; |
+| &nbsp; | &nbsp; | 非关系型数据库工具<br/>[`nosql`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db/nosql) | 基于redis.clients.jedis(2.7.3)封装，<br/>支持连接池或常规方式获取连接实例 | &nbsp; |
+| &nbsp; | 网络组件<br/><a name="net" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net">`net`</a> | Cookie组件<br/>[`cookie`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/cookie) | 用于解析HTTP响应头中的Set-Cookie<br/>参数 | &nbsp; |
 | &nbsp; | &nbsp; | FTP组件<br/>[`ftp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/ftp) | 未实装 | &nbsp; |
-| &nbsp; | &nbsp; | HTTP/HTTPS组件<br/>[`http`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/http) | 提供在HTTP/HTTPS协议下，以长连接/短连接实现的GET、POST方法，并支持Download、Gzip等非文本形式的响应流。<br/>基于java.net.HttpURLConnection(JDK1.6+)与commons-httpclient(3.1-rc1)封装，更借助org.bouncycastle.bcprov-jdk15on(1.54)使得可以在JDK1.6+环境均支持HTTPS-TLSv1.2协议（`详见`(#TLSv12)） | &nbsp; |
+| &nbsp; | &nbsp; | HTTP/HTTPS组件<br/>[`http`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/http) | 提供在HTTP/HTTPS协议下，以长/短<br/>连接实现的GET、POST方法，并支持<br/>Download、Gzip等非文本形式的响应流解析。<br/>基于java.net.HttpURLConnection与<br/>commons-httpclient(3.1-rc1)封装，<br/>更借助org.bouncycastle.bcprov<br/>-jdk15on(1.54)使得可以在JDK1.6+环<br/>境均支持HTTPS-TLSv1.2协议（[`详见`](#TLSv12)） | &nbsp; |
 | &nbsp; | &nbsp; | Email组件<br/>[`mail`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/mail) | 未实装 | &nbsp; |
 | &nbsp; | &nbsp; | MQ组件<br/>[`mq`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/mq) | 未实装 | &nbsp; |
 | &nbsp; | &nbsp; | 端口转发器<br/>[`pf`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/pf) | 未实装 | &nbsp; |
