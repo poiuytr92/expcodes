@@ -263,14 +263,14 @@
         
         <!-- mail -->
         <dependency>
-          <groupId>javax.activation</groupId>
-          <artifactId>activation</artifactId>
-          <version>1.1.1</version>
-        </dependency>
-        <dependency>
            <groupId>javax.mail</groupId>
            <artifactId>mail</artifactId>
            <version>1.4.1</version>
+        </dependency>
+        <dependency>
+          <groupId>javax.activation</groupId>
+          <artifactId>activation</artifactId>
+          <version>1.1.1</version>
         </dependency>
         
         <!-- apache-jms -->
@@ -446,60 +446,64 @@
           <version>1.6.2</version>
           <exclusions>
             <exclusion>
+              <groupId>org.apache.geronimo.specs</groupId>
               <artifactId>geronimo-activation_1.1_spec</artifactId>
-              <groupId>org.apache.geronimo.specs</groupId>
             </exclusion>
             <exclusion>
-              <artifactId>apache-mime4j-core</artifactId>
+              <groupId>org.apache.geronimo.specs</groupId>
+              <artifactId>geronimo-javamail_1.4_spec</artifactId>
+            </exclusion>
+            <exclusion>
               <groupId>org.apache.james</groupId>
+              <artifactId>apache-mime4j-core</artifactId>
             </exclusion>
             <exclusion>
-              <artifactId>geronimo-stax-api_1.0_spec</artifactId>
               <groupId>org.apache.geronimo.specs</groupId>
+              <artifactId>geronimo-stax-api_1.0_spec</artifactId>
             </exclusion>
             <exclusion>
-              <artifactId>jaxen</artifactId>
               <groupId>jaxen</groupId>
+              <artifactId>jaxen</artifactId>
             </exclusion>
             <exclusion>
-              <artifactId>commons-fileupload</artifactId>
               <groupId>commons-fileupload</groupId>
+              <artifactId>commons-fileupload</artifactId>
             </exclusion>
             <exclusion>
               <artifactId>geronimo-jta_1.1_spec</artifactId>
               <groupId>org.apache.geronimo.specs</groupId>
             </exclusion>
             <exclusion>
-              <artifactId>geronimo-ws-metadata_2.0_spec</artifactId>
               <groupId>org.apache.geronimo.specs</groupId>
+              <artifactId>geronimo-ws-metadata_2.0_spec</artifactId>
             </exclusion>
             <exclusion>
-              <artifactId>jsr311-api</artifactId>
               <groupId>javax.ws.rs</groupId>
+              <artifactId>jsr311-api</artifactId>
             </exclusion>
             <exclusion>
-              <artifactId>servlet-api</artifactId>
               <groupId>javax.servlet</groupId>
+              <artifactId>servlet-api</artifactId>
             </exclusion>
             <exclusion>
+              <groupId>org.apache.woden</groupId>
               <artifactId>woden-api</artifactId>
-              <groupId>org.apache.woden</groupId>
             </exclusion>
             <exclusion>
-              <artifactId>wstx-asl</artifactId>
               <groupId>org.codehaus.woodstox</groupId>
+              <artifactId>wstx-asl</artifactId>
             </exclusion>
             <exclusion>
+              <groupId>org.apache.woden</groupId>
               <artifactId>woden-impl-commons</artifactId>
-              <groupId>org.apache.woden</groupId>
             </exclusion>
             <exclusion>
+              <groupId>org.apache.woden</groupId>
               <artifactId>woden-impl-dom</artifactId>
-              <groupId>org.apache.woden</groupId>
             </exclusion>
             <exclusion>
-              <artifactId>XmlSchema</artifactId>
               <groupId>org.apache.ws.commons.schema</groupId>
+              <artifactId>XmlSchema</artifactId>
             </exclusion>
           </exclusions>
         </dependency>
