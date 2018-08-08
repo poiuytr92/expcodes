@@ -20,7 +20,7 @@
 
 | 主模块 | 子模块 | 组件包/类 | 说明 | 测试/样例 |
 |:---:|:---:|:---:|:---|:---:|
-| 常用工具包<br/>[`exp.libs.utils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | 编码工具<br/>[`encode`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode) | [`Base64`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/Base64.java) | Base64编解码 | &nbsp; |
+| **常用工具包**<br/>[`exp.libs.utils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | 编码工具<br/>[`encode`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode) | [`Base64`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/Base64.java) | Base64编解码 | &nbsp; |
 | &nbsp; | &nbsp; | [`CharsetUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CharsetUtils.java) | 字符集编码转换 | &nbsp; |
 | &nbsp; | &nbsp; | [`CompressUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CompressUtils.java) | 压缩/解压(zip,gzip,tar,bz2) | &nbsp; |
 | &nbsp; | &nbsp; | [`CryptoUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CryptoUtils.java) | 加解密(MD5,DES,RSA) | &nbsp; |
@@ -55,7 +55,7 @@
 | &nbsp; | &nbsp; | [`PathUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/other/PathUtils.java) | 路径处理 | &nbsp; |
 | &nbsp; | &nbsp; | [`RandomUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/other/RandomUtils.java) | 随机生成器 | &nbsp; |
 | &nbsp; | &nbsp; | [`StrUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/other/StrUtils.java) | 字符串处理 | &nbsp; |
-| 二次封装组件<br/>[`exp.libs.warp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | 版本管理组件<br/>[`ver`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ver) | &nbsp; | 未实装 | &nbsp; |
+| **二次封装组件**<br/>[`exp.libs.warp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp) | 版本管理组件<br/>[`ver`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ver) | &nbsp; | 借助Sqlite以UI方式管理项目版本信息，<br/>[`Maven项目发布插件`](https://github.com/lyy289065406/expcodes/tree/master/java/03-plugin/mojo-release-plugin)与[`自动化升级插件`](https://github.com/lyy289065406/auto-upgrader)<br/>的部分功能也依赖此组件实现 | &nbsp; |
 | &nbsp; | 函数解析组件<br/>[`cep`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cep) | &nbsp; | 基于com.singularsys.jep(3.3.1)封装<br/>去除时效限制，并新增多种自定义函数 | &nbsp; |
 | &nbsp; | 命令行组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/cmd) | &nbsp; | 封装系统命令行操作 | &nbsp; |
 | &nbsp; | 配置解析组件<br/>[`cmd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf) | xml配置文件解析<br/>[`xml`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/xml) | 基于dom4j封装 | &nbsp; |
@@ -86,7 +86,7 @@
 | &nbsp; | &nbsp; | 布局样式<br/>[`layout`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ui/layout) | 未实装 | &nbsp; |
 | &nbsp; | &nbsp; | 拓扑图绘制器<br/>[`topo`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ui/topo) | 未实装 | &nbsp; |
 | &nbsp; | Excel组件<br/>[`xls`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/xls) | &nbsp; | 未实装 | &nbsp; |
-| 算法包<br/>[`exp.libs.algorithm`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | &nbsp; | &nbsp; | &nbsp; | &nbsp; |
+| **算法包**<br/>[`exp.libs.algorithm`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | &nbsp; | &nbsp; | &nbsp; | &nbsp; |
 
 
 ## 第三方构件修正记录
