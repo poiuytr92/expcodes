@@ -15,7 +15,9 @@
 
 过程中尽量确保了低耦合、高性能、强稳健、高复用、更易用等，确保能够满足日常开发需要、提高开发效率。
 
-> 既然他人不甘造轮子，那我就来奠造基石
+
+> 既然别人不甘造轮子，那我就来奠造基石
+
 > 他人会用，只是用。我要用，则随心所欲
 
 ## 功能模块
@@ -34,7 +36,7 @@
 | &nbsp; | &nbsp; | [`StandardUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/format/StandardUtils.java) | 标准化处理 | &nbsp; |
 | &nbsp; | 图像工具<br/>[`img`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/img) | [`ImageUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/img/ImageUtils.java) | 图像处理 | &nbsp; |
 | &nbsp; | &nbsp; | [`QRCodeUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/img/QRCodeUtils.java) | 二维码生成/解析 | &nbsp; |
-| &nbsp; | 读写工具<br/>[`io`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/io) | [`FileUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/io/FileUtils.java) | 文件处理 | &nbsp; |
+| &nbsp; | 读写工具<br/>[`io`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/io) | [`FileUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/io/FileUtils.java) | 磁盘文件处理 | &nbsp; |
 | &nbsp; | &nbsp; | [`IOUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/io/IOUtils.java) | IO流处理 | &nbsp; |
 | &nbsp; | &nbsp; | [`JarUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/io/JarUtils.java) | Jar文件处理 | &nbsp; |
 | &nbsp; | 数值工具<br/>[`num`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/num) | [`BODHUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/num/BODHUtils.java) | 进制处理 | &nbsp; |
