@@ -88,7 +88,17 @@
 | &nbsp; | Swing界面工具<br/>[`ui`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ui) | Swing组件<br/>[`cpt`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ui/cpt) | 部分功能基于`org.jb.beauty-eye(3.7)`<br/>封装。可美化Swing外观，提供主窗口、<br/>浮动窗口、面板、表单、选框、系统托<br/>盘、布局样式等常用组件 | &nbsp; |
 | &nbsp; | &nbsp; | 拓扑图绘制器<br/>[`topo`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ui/topo) | 基于`org.eclipse.draw2d(1.0.0)`<br/>与`org.jgraph.jGraph(1.0.0)`封装。<br/>通过输入邻接矩阵（可含源宿点/必经<br/>点）自动根据边权换算边距，同时映射<br/>到极坐标系，绘制对应的拓扑图 | &nbsp; |
 | &nbsp; | Excel组件<br/>[`xls`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/xls) | &nbsp; | 基于`org.apache.poi.poi-ooxml(3.9)`<br/>封装。支持对xls/xlsx文件操作 | &nbsp; |
-| **算法包**<br/>[`exp.libs.algorithm`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | &nbsp; | &nbsp; | &nbsp; | &nbsp; |
+| **算法包**<br/>[`exp.libs.algorithm`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | 基本算法<br/>[`basic`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/basic) | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 数据结构<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/struct`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 搜索<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/search`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 数学<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/math`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 图论<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/graph`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 计算几何<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/gmtry`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 动态规划<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dync`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 最短路径算法<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 启发式算法<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | NP难问题<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np`]() | &nbsp; | 未实装 | &nbsp; |
+| &nbsp; | 深度学习<br/>[`https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl`]() | &nbsp; | 未实装 | &nbsp; |
 
 
 ## 第三方构件修正记录
