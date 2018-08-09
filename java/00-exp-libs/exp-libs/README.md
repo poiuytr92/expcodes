@@ -95,12 +95,12 @@
 | &nbsp; | 图论<br/>[`graph`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/graph) | &nbsp; | 未实装 | &nbsp; |
 | &nbsp; | 计算几何<br/>[`gmtry`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/gmtry) | &nbsp; | 未实装 | &nbsp; |
 | &nbsp; | 动态规划<br/>[`dync`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dync) | &nbsp; | 未实装 | &nbsp; |
-| &nbsp; | 最短路径算法<br/>[`spa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa) | &nbsp; | BellmanFord、Dijkstra、<br/>Floyd、Johonson、SPFA等 | &nbsp; |
+| &nbsp; | 最短路径算法<br/>[`spa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa) | &nbsp; | BellmanFord、Dijkstra、Johonson、<br/>Floyd、SPFA等 | &nbsp; |
 | &nbsp; | NP难问题<br/>[`np`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np) | [`ispa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/ispa) | 含必经点的最短路问题 | &nbsp; |
 | &nbsp; | &nbsp; | [`tsp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/tsp) | 旅行商问题（未实装） | &nbsp; |
 | &nbsp; | 启发式算法<br/>[`heuristic`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic) | [`aca`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic/aca) | 蚁群算法（未实装） | &nbsp; |
 | &nbsp; | &nbsp; | [`qaca`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic/qaca) | 量子蚁群算法 | &nbsp; |
-| &nbsp; | 深度学习<br/>[`dl`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl) | [`tensorflow`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl/tensorflow) | 基于`org.tensorflow(1.6.0)封装。<br/>提供`TensorFlow训练模型调用接口 | &nbsp; |
+| &nbsp; | 深度学习<br/>[`dl`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl) | [`tensorflow`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl/tensorflow) | 基于`org.tensorflow(1.6.0)`封装。<br/>提供TensorFlow训练模型调用接口 | &nbsp; |
 
 
 ## 第三方构件修正记录
