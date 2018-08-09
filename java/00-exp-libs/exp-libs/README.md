@@ -15,11 +15,13 @@
 
 过程中尽量确保了低耦合、高性能、强稳健、高复用、更易用等，确保能够满足日常开发需要、提高开发效率。
 
+> 既然他人不甘造轮子，那我就来奠造基石
+> 他人会用，只是用。我要用，则随心所欲
 
 ## 功能模块
 
 
-| 主模块 | 子模块 | 组件包/类 | 说明 | 测试/<br/>示例 |
+| 主模块 | 子模块 | 组件包/类 | 说明 | 测试<br/>示例 |
 |:---:|:---:|:---:|:---|:---:|
 | **常用工具包**<br/>[`exp.libs.utils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils) | 编码工具<br/>[`encode`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode) | [`Base64`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/Base64.java) | Base64编解码 | &nbsp; |
 | &nbsp; | &nbsp; | [`CharsetUtils`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/utils/encode/CharsetUtils.java) | 字符集编码转换 | &nbsp; |
@@ -64,13 +66,13 @@
 | &nbsp; | &nbsp; | kv配置文件解析<br/>[`kv`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/conf/kv) | 未实装 | &nbsp; |
 | &nbsp; | <p id="db">数据库组件</p>[`db`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db) | 关系型数据库工具<br/>[`sql`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db/sql) | 基于`com.cloudhopper.proxool(0.9.1)`<br/>封装，支持mysql/oracle/sqlite等。<br/>提供连接池与JDBC两种数据库连接方<br/>式、及多种常用的增删改查操作，且可<br/>根据物理表模型反向生成JavaBean代码 | &nbsp; |
 | &nbsp; | &nbsp; | 非关系型数据库工具<br/>[`nosql`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/db/nosql) | 基于`redis.clients.jedis(2.7.3)`封装，<br/>支持连接池或常规方式获取连接实例 | &nbsp; |
-| &nbsp; | <p id="net">网络组件</p>[`net`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net) | Cookie组件<br/>[`cookie`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/cookie) | 用于解析HTTP响应头中的Set-Cookie<br/>参数 | &nbsp; |
+| &nbsp; | <p id="net">网络组件</p>[`net`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net) | Cookie组件<br/>[`cookie`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/cookie) | 用于解析HTTP响应头中的Set-Cookie参数 | &nbsp; |
 | &nbsp; | &nbsp; | FTP组件<br/>[`ftp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/ftp) | 未实装 | &nbsp; |
 | &nbsp; | &nbsp; | HTTP/HTTPS组件<br/>[`http`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/http) | 提供在HTTP/HTTPS协议下，以长/短<br/>连接实现的GET、POST、Download<br/>方法，并支持自动解析Gzip流。<br/>基于`java.net.HttpURLConnection`与<br/>`commons-httpclient(3.1-rc1)`封装，<br/>更借助`org.bouncycastle.bcprov`<br/>`-jdk15on(1.54)`使得可以在JDK1.6+环<br/>境均支持HTTPS-TLSv1.2协议[`(详见)`](#TLSv12) | &nbsp; |
 | &nbsp; | &nbsp; | Email组件<br/>[`mail`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/mail) | 基于`javax.mail(1.4.1)`封装，<br/>可用于邮件发送/抄送（支持加密） | &nbsp; |
 | &nbsp; | &nbsp; | MQ组件<br/>[`mq`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/mq) | 未实装（jms/kafka） | &nbsp; |
 | &nbsp; | &nbsp; | 端口转发器<br/>[`pf`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/pf) | 利用Socket实现的端口转发程序 | &nbsp; |
-| &nbsp; | &nbsp; | Ping组件<br/>[`ping`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/ping) | 利用系统命令实现的ping/tracert，<br/>支持解析中/英文的win/linux系统<br/>的结果集 | &nbsp; |
+| &nbsp; | &nbsp; | Ping组件<br/>[`ping`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/ping) | 利用系统命令实现的ping/tracert，支持<br/>解析中/英文的win/linux系统的结果集 | &nbsp; |
 | &nbsp; | &nbsp; | Socket组件<br/>[`sock`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/sock) | 封装IO/NIO模式的Socket客户端/服务<br/>端的交互行为，只需实现业务逻辑 | &nbsp; |
 | &nbsp; | &nbsp; | Telnet组件<br/>[`telnet`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/telnet) | 未实装 | &nbsp; |
 | &nbsp; | &nbsp; | Webkit组件<br/>[`webkit`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/webkit) | 基于`org.seleniumhq.selenium(2.53.0)`<br/>封装，主要提供无头浏览器<br/>`com.codeborne.phantomjsdriver(1.2.1)`<br/>的常用操作 | &nbsp; |
