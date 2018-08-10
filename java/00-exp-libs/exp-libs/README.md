@@ -13,7 +13,7 @@
 
 ## 简介
 
-此构件库为本人多年编程总结提炼而成，把常用的功能模块作为原子API进行封装；另外也借用了不少出色的第三方构件，在其之上进行二次封装。
+此构件库为本人多年编程总结提炼而成，把常用的功能模块作为原子API进行封装。<br/>另外也借用了不少出色的第三方构件，在其之上进行二次封装。
 
 过程中尽量确保了低耦合、高性能、强稳健、高复用、更易用等，确保能够满足日常开发需要、提高开发效率。
 
@@ -99,14 +99,14 @@
 | &nbsp; | 图论<br/>[`graph`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/graph) | &nbsp; | 未实装 | &nbsp; |
 | &nbsp; | 计算几何<br/>[`gmtry`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/gmtry) | &nbsp; | 未实装 | &nbsp; |
 | &nbsp; | 动态规划<br/>[`dync`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dync) | &nbsp; | 未实装 | &nbsp; |
-| &nbsp; | 最短路径算法<br/>[`spa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa) | [`Dijkstra`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/Dijkstra.java) | 适用单源最短路问题<br/>时间复杂度：O(V \* lgV+E) | &nbsp; |
+| &nbsp; | 最短路径算法<br/><p id="spa" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa">`spa`</p> | [`Dijkstra`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/Dijkstra.java) | 适用单源最短路问题<br/>时间复杂度：O(V \* lgV+E) | &nbsp; |
 | &nbsp; | &nbsp; | [`BellmanFord`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/BellmanFord.java) | 适用单源最短路问题（未实装）<br/>时间复杂度：O(V \* E)<br/>空间复杂度：O(V + E) | &nbsp; |
 | &nbsp; | &nbsp; | [`SPFA`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/SPFA.java) | （BellmanFord的优化版（未实装）<br/>时间复杂度：O(k \* E)<br/>空间复杂度：O(V + E) | &nbsp; |
 | &nbsp; | &nbsp; | [`Johonson`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/Johonson.java) | 适用全源最短路问题（未实装）<br/>时间复杂度：O(V \* E \* lgV) | &nbsp; |
 | &nbsp; | &nbsp; | [`Floyd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/Floyd.java) | 适用全源最短路问题（未实装）<br/>时间复杂度：O(V^3)<br/>空间复杂度：O(V^2) | &nbsp; |
-| &nbsp; | 启发式算法<br/>[`heuristic`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic) | [`aca`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic/aca) | 蚁群算法（未实装） | &nbsp; |
+| &nbsp; | 启发式算法<br/><p id="heuristic" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic">`heuristic`</p> | [`aca`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic/aca) | 蚁群算法（未实装） | &nbsp; |
 | &nbsp; | &nbsp; | [`qaca`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic/qaca) | 量子蚁群算法（引入量子环境改进的<br/>蚁群算法：量子比特、量子概率幅、<br/>量子态、量子旋转门等） | &nbsp; |
-| &nbsp; | NP难问题<br/>[`np`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np) | [`ispa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/ispa) | 含必经点的最短路问题：<br/>自动根据场景用[`spa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa)或[`启发式算法`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic)求解 | &nbsp; |
+| &nbsp; | NP难问题<br/>[`np`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np) | [`ispa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/ispa) | 含必经点的最短路问题：<br/>自动根据场景用[`spa`](#spa)或[`启发式算法`](#heuristic)求解 | [`示例`](https://github.com/lyy289065406/expcodes/blob/master/java/00-exp-libs/exp-libs/trunk/src/test/java/exp/libs/algorithm/heuristic/qaca/test/TestQACA.java) |
 | &nbsp; | &nbsp; | [`tsp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/tsp) | 旅行商问题（未实装） | &nbsp; |
 | &nbsp; | 深度学习<br/>[`dl`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl) | [`tensorflow`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl/tensorflow) | 基于`org.tensorflow(1.6.0)`封装。<br/>提供TensorFlow训练模型调用接口 | &nbsp; |
 
