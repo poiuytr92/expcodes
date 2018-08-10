@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import exp.libs.utils.other.RandomUtils;
 
-public class TestRandUtils {
+public class TestRandomUtils {
 
 	@Before
 	public void setUp() throws Exception {

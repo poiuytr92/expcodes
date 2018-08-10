@@ -9,7 +9,7 @@ import exp.libs.warp.task.cron.Cron;
 public class TestTaskScheduler {
 
 	public static void main(String[] args) {
-		DemoTask task = new DemoTask();
+		DemoJob task = new DemoJob();
 		
 		Map<String, String> taskDatas = new HashMap<String, String>();
 		taskDatas.put("EXP", "http://exp-blog.com");

@@ -20,12 +20,12 @@ public class TestPF {
 		ds.setPort(9998);
 //		ds.setIp("172.168.10.63");
 //		ds.setPort(3306);
-		ds.setName("mstp_zte_2");
+		ds.setName("exp_db");
 		ds.setUsername("root");
 		ds.setPassword("root");
 		
 		Connection conn = DBUtils.getConn(ds);
-		String sql = "SELECT COUNT(1) FROM ccic_op_exe_log";
+		String sql = "SELECT COUNT(1) FROM T_EXP";
 		int rst = DBUtils.queryInt(conn, sql);
 		System.out.println(rst);
 //		DBUtils.close(conn);

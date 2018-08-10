@@ -7,7 +7,7 @@ public class TestSocketClient {
 
 	public static void main(String[] args) {
 		SocketBean sb = new SocketBean();
-		sb.setIp("172.168.10.26");
+		sb.setIp("127.0.0.1");
 		sb.setPort(9998);
 		
 		SocketClient client = new SocketClient(sb);

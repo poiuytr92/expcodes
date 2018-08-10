@@ -5,7 +5,7 @@ import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-public class DemoTask implements Job {
+public class DemoJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
