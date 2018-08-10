@@ -115,21 +115,19 @@
 </dependency>
 ```
 
-使用此版本的HttpClient访问一个会发生重定向跳转的URL时，会自动执行跳转，直到跳转到最后一个目标URL为止，而这个自动的重定向行为无法被禁止。
+使用此版本的HttpClient访问一个会发生重定向跳转的URL时，会自动执行跳转，直到跳转到最后一个目标URL为止，而这个自动的重定向行为无法被禁止。由此会发生两个现象：
 
-由于这个行为, 会发生两个现象：
 1. 使用HttpClient访问原始URL后，直接返回的状态码就是200 （而非302）
 2. 得到的Response Header是最后一个URL的Response Header，而中间跳转的URL的Response Header全部丢失
 
-第1点其实影响不大，但第2点会导致中间跳转的URL所返回的Set-Cookie丢失。
+第1点 其实影响不大，但 第2点 会**导致中间跳转的URL所返回的Set-Cookie丢失**。
 
-对爬虫开发而言，这个问题是致命的：如要模拟登陆时，通常登陆成功后会返回cookie并自动重定向到网站主页，而这个过程中丢失了cookie就相当于登陆失败。
+对爬虫开发而言，这个问题是致命的：<br/>如要模拟登陆时，通常登陆成功后会返回cookie并自动重定向到网站主页，而这个过程中丢失了cookie就相当于登陆失败。
 
-因此主要针对第2点修正：
-记录中间所有URL返回的Response Header中的Set-Cookie，并全部追加到最后一个URL的Response Header中.
+因此主要针对 第2点 修正如下：<br/>**记录中间所有URL返回的Response Header中的Set-Cookie，并全部追加到最后一个URL的Response Header中**。
 
 
-### <a id="TLSv12" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/http">修正JDK1.6/1.7不支持TLSv1.2版本的HTTPS问题</a>
+### <a id="TLSv12" href="https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/net/http">修正JDK1.6/1.7不支持TLSv1.2协议的HTTPS问题</a>
 
 ```xml
 <dependency>
@@ -139,14 +137,68 @@
 </dependency>
 ```
 
+> *Bouncy Castle是一种用于 Java 平台的开放源码的轻量级密码术包，它支持大量的密码术算法，并提供JCE 1.2.1的实现*
+
 JDK1.6/1.7仅支持遵循TLSv1.1协议的HTTPS访问，若网站强制要求使用TLSv1.2协议，JDK1.6/1.7会直接报错。
 
-为了解决这个问题，从引入Bouncy Castle重写通信安全密级协议重写JDK默认的SSLSocket，使得JDK1.6/1.7支持TLSv1.2。
-
+为了解决这个问题，从而**引入Bouncy Castle重写JDK的默认SSLSocket的通信安全密级协议**，使得JDK1.6/1.7支持TLSv1.2。
 
 > *由于JDK1.8已支持TLSv1.2，因此此问题仅针对JDK1.6/1.7环境*
 
-> *Bouncy Castle（轻量级密码术包）是一种用于 Java 平台的开放源码的轻量级密码术包，它支持大量的密码术算法，并提供JCE 1.2.1的实现*
+
+### [屏蔽proxool-0.9.1连接池调试日志](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/org/logicalcobwebs/proxool)
+
+```xml
+<dependency>
+  <groupId>com.cloudhopper.proxool</groupId>
+  <artifactId>proxool</artifactId>
+  <version>0.9.1</version>
+</dependency>
+```
+
+此版本的连接池在运行期间会打印很多并非`slf4j`所打印的调试日志（基本都是使用`commons-logging`打印），无法通过配置屏蔽之，导致程序输出混乱。
+
+为此强制注释相关日志代码禁止其输出调试日志。
+
+
+### [重写commons-io-2.4返回值](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/org/apache/commons/io)
+
+```xml
+<dependency>
+  <groupId>commons-io</groupId>
+  <artifactId>commons-io</artifactId>
+  <version>2.4</version>
+</dependency>
+```
+
+主要针对其中的`org.apache.commons.io.FileUtils`的函数返回值进行重写：<br/>把其中的void返回值修正为boolean，并捕获相关抛出的异常，以便进行二次封装。
+
+
+### [修正构造函数可见性](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/org/apache/poi/xssf/usermodel)
+
+```xml
+<dependency>
+  <groupId>org.apache.poi</groupId>
+  <artifactId>poi-ooxml</artifactId>
+  <version>3.9</version>
+</dependency>
+```
+
+修改`org.apache.poi.xssf.usermodel.XSSFHyperlink`的可见性为public，以便进行二次封装。
+
+
+### [去除类的final声明](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/org/quartz)
+
+```xml
+<dependency>
+  <groupId>org.quartz-scheduler</groupId>
+  <artifactId>quartz</artifactId>
+  <version>2.2.1</version>
+</dependency>
+```
+
+去除类`org.quartz.CronExpression`的final声明，以便进行二次封装。
+
 
 
 ## 版权声明
