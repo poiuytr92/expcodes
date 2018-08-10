@@ -88,18 +88,26 @@
 | &nbsp; | Swing界面工具<br/>[`ui`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ui) | Swing组件<br/>[`cpt`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ui/cpt) | 部分功能基于`org.jb.beauty-eye(3.7)`<br/>封装。可美化Swing外观，提供主窗口、<br/>浮动窗口、面板、表单、选框、系统托<br/>盘、布局样式等常用组件 | &nbsp; |
 | &nbsp; | &nbsp; | 拓扑图绘制器<br/>[`topo`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/ui/topo) | 基于`org.eclipse.draw2d(1.0.0)`<br/>与`org.jgraph.jGraph(1.0.0)`封装。<br/>通过输入邻接矩阵（可含源宿点/必经<br/>点）自动根据边权换算边距，同时映射<br/>到极坐标系，绘制对应的拓扑图 | &nbsp; |
 | &nbsp; | Excel组件<br/>[`xls`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/warp/xls) | &nbsp; | 基于`org.apache.poi.poi-ooxml(3.9)`<br/>封装。支持对xls/xlsx文件操作 | &nbsp; |
-| **算法包**<br/>[`exp.libs.algorithm`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | 基本算法<br/>[`basic`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/basic) | &nbsp; | 排序、布隆过滤器、哈夫曼编码、<br/>哈希算法等 | &nbsp; |
-| &nbsp; | 数据结构<br/>[`struct`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/struct) | &nbsp; | 拓扑图、红黑树、循环队列、优先队列、<br/>生产者消费者队列、流式并发队列等 | &nbsp; |
+| **算法包**<br/>[`exp.libs.algorithm`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm) | 基本算法<br/>[`basic`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/basic) | &nbsp; | 排序、布隆过滤器、哈夫曼编码、<br/>哈希算法等（未实装） | &nbsp; |
+| &nbsp; | 数据结构<br/>[`struct`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/struct) | 拓扑图<br/>[`graph`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/struct/graph) | 拓扑图模型（支持有向/无向、源宿点、必经点） | &nbsp; |
+| &nbsp; | &nbsp; | 队列<br/>[`queue`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/struct/queue) | 循环队列、优先队列、生产者消费者队列、<br/>流式并发队列等 | &nbsp; |
+| &nbsp; | &nbsp; | 红黑树<br/>[`rbt`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/struct/rbt) | 未实装 | &nbsp; |
 | &nbsp; | 搜索<br/>[`search`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/search) | &nbsp; | 未实装 | &nbsp; |
-| &nbsp; | 数学<br/>[`math`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/math) | &nbsp; | 数学工具、筛法素数、矩阵运算等 | &nbsp; |
+| &nbsp; | 数学<br/>[`math`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/math) | 数学算法<br/>[`MathUtils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/math/MathUtils.java) | 归一化函数、卡马克浮点数快速算法、异或<br/>交换、二进制计数等 | &nbsp; |
+| &nbsp; | &nbsp; | 素数<br/>[`MathUtils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/math/Prime.java) | 埃拉托斯特尼筛法，时/空复杂度: O(n) | &nbsp; |
+| &nbsp; | &nbsp; | 矩阵运算<br/>[`MathUtils`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/math/Mat.java) | 未实装 | &nbsp; |
 | &nbsp; | 图论<br/>[`graph`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/graph) | &nbsp; | 未实装 | &nbsp; |
 | &nbsp; | 计算几何<br/>[`gmtry`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/gmtry) | &nbsp; | 未实装 | &nbsp; |
 | &nbsp; | 动态规划<br/>[`dync`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dync) | &nbsp; | 未实装 | &nbsp; |
-| &nbsp; | 最短路径算法<br/>[`spa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa) | &nbsp; | BellmanFord、Dijkstra、Johonson、<br/>Floyd、SPFA等 | &nbsp; |
-| &nbsp; | NP难问题<br/>[`np`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np) | [`ispa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/ispa) | 含必经点的最短路问题 | &nbsp; |
-| &nbsp; | &nbsp; | [`tsp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/tsp) | 旅行商问题（未实装） | &nbsp; |
+| &nbsp; | 最短路径算法<br/>[`spa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa) | [`Dijkstra`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/Dijkstra.java) | 适用单源最短路问题，时间复杂度: O(V\*lgV+E) | &nbsp; |
+| &nbsp; | &nbsp; | [`BellmanFord`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/BellmanFord.java) | （未实装）适用单源最短路问题<br/>时间复杂度: O(V\*E)，空间复杂度: O(V+E) | &nbsp; |
+| &nbsp; | &nbsp; | [`SPFA`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/SPFA.java) | （未实装）BellmanFord的优化版<br/>时间复杂度: O(k\*E)，空间复杂度: O(V+E) | &nbsp; |
+| &nbsp; | &nbsp; | [`Johonson`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/Johonson.java) | （未实装）适用全源最短路问题<br/>时间复杂度: O(V\*E\*lgV) | &nbsp; |
+| &nbsp; | &nbsp; | [`Floyd`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa/Floyd.java) | （未实装）适用全源最短路问题<br/>时间复杂度: O(V^3)，空间复杂度: O(V^2) | &nbsp; |
 | &nbsp; | 启发式算法<br/>[`heuristic`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic) | [`aca`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic/aca) | 蚁群算法（未实装） | &nbsp; |
-| &nbsp; | &nbsp; | [`qaca`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic/qaca) | 量子蚁群算法 | &nbsp; |
+| &nbsp; | &nbsp; | [`qaca`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic/qaca) | 量子蚁群算法（引入量子环境改进的蚁群算法：<br/>量子比特、量子概率幅、量子态、量子旋转门等） | &nbsp; |
+| &nbsp; | NP难问题<br/>[`np`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np) | [`ispa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/ispa) | 含必经点的最短路问题：<br/>自动根据场景使用[`spa`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/spa)或[`启发式算法`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/heuristic)求解。 | &nbsp; |
+| &nbsp; | &nbsp; | [`tsp`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/np/tsp) | 旅行商问题（未实装） | &nbsp; |
 | &nbsp; | 深度学习<br/>[`dl`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl) | [`tensorflow`](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/exp/libs/algorithm/dl/tensorflow) | 基于`org.tensorflow(1.6.0)`封装。<br/>提供TensorFlow训练模型调用接口 | &nbsp; |
 
 
@@ -158,7 +166,7 @@ JDK1.6/1.7仅支持遵循TLSv1.1协议的HTTPS访问，若网站强制要求使�
 
 此版本的连接池在运行期间会打印很多并非`slf4j`所打印的调试日志（基本都是使用`commons-logging`打印），无法通过配置屏蔽之，导致程序输出混乱。
 
-为此强制注释相关日志代码禁止其输出调试日志。
+为此**强制注释相关日志代码禁止其输出调试日志**。
 
 
 ### [重写commons-io-2.4返回值](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/org/apache/commons/io)
@@ -171,7 +179,7 @@ JDK1.6/1.7仅支持遵循TLSv1.1协议的HTTPS访问，若网站强制要求使�
 </dependency>
 ```
 
-主要针对其中的`org.apache.commons.io.FileUtils`的函数返回值进行重写：<br/>把其中的void返回值修正为boolean，并捕获相关抛出的异常，以便进行二次封装。
+主要针对其中的`org.apache.commons.io.FileUtils`的函数返回值进行重写：<br/>把其中的void返回值修正为boolean，并捕获相关抛出的异常，**以便进行二次封装**。
 
 
 ### [修正构造函数可见性](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/org/apache/poi/xssf/usermodel)
@@ -184,7 +192,7 @@ JDK1.6/1.7仅支持遵循TLSv1.1协议的HTTPS访问，若网站强制要求使�
 </dependency>
 ```
 
-修改`org.apache.poi.xssf.usermodel.XSSFHyperlink`的可见性为public，以便进行二次封装。
+修改`org.apache.poi.xssf.usermodel.XSSFHyperlink`的可见性为public，**以便进行二次封装**。
 
 
 ### [去除类的final声明](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs/trunk/src/main/java/org/quartz)
@@ -197,7 +205,7 @@ JDK1.6/1.7仅支持遵循TLSv1.1协议的HTTPS访问，若网站强制要求使�
 </dependency>
 ```
 
-去除类`org.quartz.CronExpression`的final声明，以便进行二次封装。
+去除类`org.quartz.CronExpression`的final声明，**以便进行二次封装**。
 
 
 
