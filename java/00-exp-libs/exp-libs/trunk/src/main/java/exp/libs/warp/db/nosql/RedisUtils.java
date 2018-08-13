@@ -10,6 +10,7 @@ import java.util.Set;
 
 import redis.clients.jedis.Jedis;
 import exp.libs.envm.Charset;
+import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
 
@@ -25,6 +26,9 @@ import exp.libs.utils.other.StrUtils;
  */
 public class RedisUtils {
 
+	/** 默认字符集编码 */
+	private final static String CHARSET = Charset.UTF8;
+	
 	/** Redis部分接口的返回值 */
 	private final static String OK = "OK";
 
@@ -198,9 +202,8 @@ public class RedisUtils {
 		boolean isOk = false;
 		if(jedis != null && key != null && object != null) {
 			try {
-				isOk = OK.equalsIgnoreCase(
-						jedis.set(key.getBytes(Charset.UTF8), 
-								ObjUtils.toSerializable(object)));
+				isOk = OK.equalsIgnoreCase(jedis.set(
+						key.getBytes(CHARSET), ObjUtils.toSerializable(object)));
 			} catch (UnsupportedEncodingException e) {}
 		}
 		return isOk;
@@ -220,7 +223,7 @@ public class RedisUtils {
 		if(jedis != null && key != null) {
 			try {
 				object = ObjUtils.unSerializable(
-						jedis.get(key.getBytes(Charset.UTF8)));
+						jedis.get(key.getBytes(CHARSET)));
 			} catch (UnsupportedEncodingException e) {}
 		}
 		return object;
@@ -260,6 +263,46 @@ public class RedisUtils {
 	}
 	
 	/**
+	 * 新增一个 键值对 到 指定哈希表
+	 * @param jedis redis连接对象
+	 * @param key 哈希表的键
+	 * @param mapKey 新增到哈希表的键
+	 * @param mapValue 新增到哈希表的值
+	 * @return true:新增成功; false:新增失败
+	 */
+	public static boolean addToMap(Jedis jedis, String key, 
+			String mapKey, Serializable mapValue) {
+		boolean isOk = false;
+		if(jedis != null && key != null && 
+				mapKey != null && mapValue != null) {
+			try {
+				isOk = jedis.hset(key.getBytes(CHARSET), 
+						mapKey.getBytes(CHARSET), 
+						ObjUtils.toSerializable(mapValue)) >= 0;
+			} catch (UnsupportedEncodingException e) {}
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 获取某个哈希表中的某个键的值
+	 * @param jedis redis连接对象
+	 * @param mapKey 哈希表的键
+	 * @param inMapKey 哈希表中的某个键
+	 * @return 哈希表中对应的值（若不存在返回null）
+	 */
+	public static String getMapVal(Jedis jedis, String mapKey, String inMapKey) {
+		String value = null;
+		if(jedis != null && mapKey != null && inMapKey != null) {
+			List<String> values = jedis.hmget(mapKey, inMapKey);
+			if(ListUtils.isNotEmpty(values)) {
+				value = values.get(0);
+			}
+		}
+		return value;
+	}
+	
+	/**
 	 * 获取某个哈希表中的若干个键的值
 	 * @param jedis redis连接对象
 	 * @param mapKey 哈希表的键
@@ -267,11 +310,58 @@ public class RedisUtils {
 	 * @return 哈希表中对应的一些值
 	 */
 	public static List<String> getMapVals(Jedis jedis, String mapKey, String... inMapKeys) {
-		List<String> values = new LinkedList<String>();
+		List<String> values = null;
 		if(jedis != null && mapKey != null && inMapKeys != null) {
 			values = jedis.hmget(mapKey, inMapKeys);
 		}
-		return values;
+		return (values == null ? new LinkedList<String>() : values);
+	}
+	
+	/**
+	 * 获取某个哈希表中的某个键的值对象（反序列化对象）
+	 * @param jedis redis连接对象
+	 * @param mapKey 哈希表的键
+	 * @param inMapKeys 哈希表中的某个键
+	 * @return 哈希表中对应的值对象（反序列化对象，若不存在返回null）
+	 */
+	public static Object getMapObj(Jedis jedis, String mapKey, String inMapKey) {
+		Object value = null;
+		if(jedis != null && mapKey != null && inMapKey != null) {
+			try {
+				byte[] key = mapKey.getBytes(CHARSET);
+				List<byte[]> byteVals = jedis.hmget(key, inMapKey.getBytes(CHARSET));
+				if(ListUtils.isNotEmpty(byteVals)) {
+					value = ObjUtils.unSerializable(byteVals.get(0));
+				}
+			} catch (UnsupportedEncodingException e) {}
+		}
+		return value;
+	}
+	
+	/**
+	 * 获取某个哈希表中的若干个键的值对象（反序列化对象）
+	 * @param jedis redis连接对象
+	 * @param mapKey 哈希表的键
+	 * @param inMapKeys 哈希表中的一些键
+	 * @return 哈希表中对应的一些值对象（反序列化对象）
+	 */
+	public static List<Object> getMapObjs(Jedis jedis, String mapKey, String... inMapKeys) {
+		List<Object> values = new LinkedList<Object>();
+		if(jedis != null && mapKey != null && inMapKeys != null) {
+			try {
+				byte[] key = mapKey.getBytes(CHARSET);
+				for(String inMapKey : inMapKeys) {
+					List<byte[]> byteVals = jedis.hmget(key, inMapKey.getBytes(CHARSET));
+					if(ListUtils.isEmpty(byteVals)) {
+						values.add(null);
+						
+					} else {
+						values.add(ObjUtils.unSerializable(byteVals.get(0)));
+					}
+				}
+			} catch (UnsupportedEncodingException e) {}
+		}
+		return (values == null ? new LinkedList<Object>() : values);
 	}
 	
 	/**
