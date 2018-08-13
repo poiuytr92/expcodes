@@ -194,6 +194,15 @@ public class RedisPool {
             jedis.close();
         }
     }
+    
+    /**
+     * 关闭连接池
+     */
+    public void shutdown() {
+    	if(pool != null) {
+    		pool.close();
+    	}
+    }
 	
 	public String getIp() {
 		return ip;
