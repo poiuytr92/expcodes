@@ -242,6 +242,24 @@ public class RedisUtils {
 	}
 	
 	/**
+	 * 新增一个 键值对 到 指定哈希表
+	 * @param jedis redis连接对象
+	 * @param key 哈希表的键
+	 * @param mapKey 新增到哈希表的键
+	 * @param mapValue 新增到哈希表的值
+	 * @return true:新增成功; false:新增失败
+	 */
+	public static boolean addToMap(Jedis jedis, String key, 
+			String mapKey, String mapValue) {
+		boolean isOk = false;
+		if(jedis != null && key != null && 
+				mapKey != null && mapValue != null) {
+			isOk = jedis.hset(key, mapKey, mapValue) >= 0;
+		}
+		return isOk;
+	}
+	
+	/**
 	 * 获取某个哈希表中的若干个键的值
 	 * @param jedis redis连接对象
 	 * @param mapKey 哈希表的键
