@@ -183,6 +183,10 @@ public class ObjUtils {
 	 */
 	public static Object clone(Object serialObject) {
 		Object newObj = null;
+		if(serialObject == null) {
+			return newObj;
+		}
+		
 		try {
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			ObjectOutputStream out = new ObjectOutputStream(baos);
@@ -404,8 +408,7 @@ public class ObjUtils {
 	 * @return 所有成员域的KV对信息
 	 */
 	public static String toBeanInfo(Object bean) {
-		return new ReflectionToStringBuilder(bean, 
-				ToStringStyle.MULTI_LINE_STYLE).toString();
+		return toBeanInfo(bean, ToStringStyle.MULTI_LINE_STYLE);
 	}
 	
 	/**
@@ -430,6 +433,10 @@ public class ObjUtils {
 	 */
 	public static boolean toSerializable(Serializable o, String outFilePath) {
 		boolean isOk = false;
+		if(o == null) {
+			return isOk;
+		}
+		
 		try {
 			ObjectOutputStream oos = new ObjectOutputStream(
 					new FileOutputStream(outFilePath));
@@ -470,6 +477,10 @@ public class ObjUtils {
 	 */
 	public static byte[] toSerializable(Serializable object) {
 		byte[] bytes = null;
+		if(object == null) {
+			return bytes;
+		}
+		
 		ByteArrayOutputStream baos = null;
 		ObjectOutputStream oos = null;
 		try {
@@ -496,6 +507,10 @@ public class ObjUtils {
 	 */
 	public static Object unSerializable(byte[] bytes) {
 		Object object = null;
+		if(bytes == null) {
+			return object;
+		}
+		
 		ByteArrayInputStream bais = null;
 		ObjectInputStream ois = null;
 		try {

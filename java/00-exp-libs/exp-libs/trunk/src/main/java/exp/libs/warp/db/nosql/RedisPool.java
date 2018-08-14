@@ -172,7 +172,8 @@ public class RedisPool {
     
     /**
      * 从Redis连接池从获取连接
-     * @return
+     * （用完后需马上close连接，否则池满后会导致操作阻塞）
+     * @return 若获取失败返回null
      */
     public Jedis getConn() {
     	Jedis Jedis = null;
@@ -186,7 +187,8 @@ public class RedisPool {
     
     /**
      * 归还连接到Redis连接池
-     * @param jedis
+     * （用完后需马上close连接，否则池满后会导致操作阻塞）
+     * @param jedis redis连接
      */
     public void close(Jedis jedis) {
         if(jedis != null) {
