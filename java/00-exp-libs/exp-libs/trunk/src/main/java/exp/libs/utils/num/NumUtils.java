@@ -411,7 +411,7 @@ public class NumUtils {
 			if(bgn == end) {
 				cmpNums.add(String.valueOf(bgn));
 			} else {
-				cmpNums.add(StrUtils.concat(bgn, "~", end));
+				cmpNums.add(StrUtils.concat(bgn, endash, end));
 			}
 			
 			ps = ++pe;
