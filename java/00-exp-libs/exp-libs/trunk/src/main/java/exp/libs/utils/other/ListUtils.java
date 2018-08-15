@@ -399,4 +399,99 @@ public class ListUtils {
 		return reverse;
 	}
 	
+	/**
+	 * 把数组转换成队列
+	 * @param array 数组
+	 * @return 队列
+	 */
+	@SuppressWarnings("rawtypes")
+	public static <E> List asList(E... array) {
+		if(array == null || array.length <= 0) {
+			return new LinkedList<Object>();
+		}
+		
+		String clazz = array.getClass().toString();
+			
+		// int[]
+		if(clazz.contains("[I")) {
+			List<Integer> list = new LinkedList<Integer>();
+			int[] iArray = (int[]) array[0];
+			for(int e : iArray) {
+				list.add(e);
+			}
+			return list;
+			
+		// long[]
+		} else if(clazz.contains("[J")) {
+			List<Long> list = new LinkedList<Long>();
+			long[] lArray = (long[]) array[0];
+			for(long e : lArray) {
+				list.add(e);
+			}
+			return list;
+			
+		// char[]
+		} else if(clazz.contains("[C")) {
+			List<Character> list = new LinkedList<Character>();
+			char[] cArray = (char[]) array[0];
+			for(char e : cArray) {
+				list.add(e);
+			}
+			return list;
+			
+		// boolean[]
+		} else if(clazz.contains("[Z")) {
+			List<Boolean> list = new LinkedList<Boolean>();
+			boolean[] bArray = (boolean[]) array[0];
+			for(boolean e : bArray) {
+				list.add(e);
+			}
+			return list;
+						
+		// double
+		} else if(clazz.contains("[D")) {
+			List<Double> list = new LinkedList<Double>();
+			double[] dArray = (double[]) array[0];
+			for(double e : dArray) {
+				list.add(e);
+			}
+			return list;
+			
+		// float[]
+		} else if(clazz.contains("[F")) {
+			List<Float> list = new LinkedList<Float>();
+			float[] fArray = (float[]) array[0];
+			for(float e : fArray) {
+				list.add(e);
+			}
+			return list;
+		
+		// short[]
+		} else if(clazz.contains("[S")) {
+			List<Short> list = new LinkedList<Short>();
+			short[] sArray = (short[]) array[0];
+			for(short e : sArray) {
+				list.add(e);
+			}
+			return list;
+			
+		// byte[]
+		} else if(clazz.contains("[B")) {
+			List<Byte> list = new LinkedList<Byte>();
+			byte[] bArray = (byte[]) array[0];
+			for(byte e : bArray) {
+				list.add(e);
+			}
+			return list;
+						
+		// 包装类：  [Ljava.lang.xxxx
+		} else {
+			List<E> list = new LinkedList<E>();
+			for(E e : array) {
+				list.add(e);
+			}
+			return list;
+		}
+	}
+	
 }
