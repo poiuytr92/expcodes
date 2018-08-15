@@ -12,9 +12,17 @@ import org.apache.zookeeper.ZooDefs.Ids;
 import org.apache.zookeeper.ZooKeeper;
 import org.apache.zookeeper.data.Stat;
 
+
 /**
- * 需求：多个客户端，需要同时访问同一个资源，但同时只允许一个客户端进行访问。 设计思路：多个客户端都去父 znode 下写入一个子
- * znode，能写入成功的去执行访问， 写入不成功的等待
+ * <PRE>
+ * 【场景】分布式共享锁：多个客户端，需要同时访问同一个资源，但同一时间只允许一个客户端进行访问。 
+ * 【思路】多个客户端都去父 znode 下写入一个子znode，能写入成功的去执行访问， 写入不成功的等待
+ * </PRE>
+ * <br/><B>PROJECT : </B> zookeeper
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-08-02
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 public class MyDistributeLock {
 	

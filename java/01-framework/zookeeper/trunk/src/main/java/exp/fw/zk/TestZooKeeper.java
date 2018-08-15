@@ -9,7 +9,7 @@ import org.apache.zookeeper.data.Stat;
 
 /**
  * <PRE>
- * apache-zookeeper测试
+ * apache-zookeeper示例
  * </PRE>
  * <br/><B>PROJECT : </B> zookeeper
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
