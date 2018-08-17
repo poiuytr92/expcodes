@@ -386,12 +386,26 @@ public class StrUtils {
 	
 	/**
 	 * <PRE>
+	 * 把对象o转换成字符串后, 在其[左边]用字符c补长, 使得新字符串的长度补长到size.
+	 * 	(若原字符串长度>=size， 则不再补长)
+	 * <PRE>
+	 * @param o 待补长的对象
+	 * @param c 用于补长的字符
+	 * @param size 补长完成后字符串的总长度
+	 * @return 左边填充了字符c且长度为size的字符串
+	 */
+	public static String leftPad(final Object o, final char c, final int size) {
+		return leftPad((o == null ? "" : o.toString()), c, size);
+	}
+	
+	/**
+	 * <PRE>
 	 * 在字符串s[左边]用字符c补长, 使得新字符串的长度补长到size.
 	 * 	(若原字符串长度>=size， 则不再补长)
 	 * <PRE>
-	 * @param s 待填充的字符串
-	 * @param c 用于填充的字符
-	 * @param size 填充完成后字符串的总长度
+	 * @param s 待补长的字符串
+	 * @param c 用于补长的字符
+	 * @param size 补长完成后字符串的总长度
 	 * @return 左边填充了字符c且长度为size的字符串
 	 */
 	public static String leftPad(final String s, final char c, final int size) {
@@ -410,12 +424,26 @@ public class StrUtils {
 	
 	/**
 	 * <PRE>
+	 * 把对象o转换成字符串后, 在其[右边]用字符c补长, 使得新字符串的长度补长到size.
+	 * 	(若原字符串长度>=size， 则不再补长)
+	 * <PRE>
+	 * @param o 待补长的对象
+	 * @param c 用于补长的字符
+	 * @param size 补长完成后字符串的总长度
+	 * @return 右边填充了字符c且长度为size的字符串
+	 */
+	public static String rightPad(final Object o, final char c, final int size) {
+		return rightPad((o == null ? "" : o.toString()), c, size);
+	}
+	
+	/**
+	 * <PRE>
 	 * 在字符串s[右边]用字符c补长, 使得新字符串的长度补长到size.
 	 * 	(若原字符串长度>=size， 则不再补长)
 	 * <PRE>
-	 * @param s 待填充的字符串
-	 * @param c 用于填充的字符
-	 * @param size 填充完成后字符串的总长度
+	 * @param s 待补长的字符串
+	 * @param c 用于补长的字符
+	 * @param size 补长完成后字符串的总长度
 	 * @return 右边填充了字符c且长度为size的字符串
 	 */
 	public static String rightPad(final String s, final char c, final int size) {
