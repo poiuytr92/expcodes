@@ -495,6 +495,19 @@ public class ListUtils {
 	}
 	
 	/**
+	 * 取队列中第一个元素
+	 * @param list 队列
+	 * @return 第一个元素(若队列为空则返回null)
+	 */
+	public static <E> E getFirst(List<E> list) {
+		E last = null;
+		if(list != null && !list.isEmpty()) {
+			last = list.get(0);
+		}
+		return last;
+	}
+	
+	/**
 	 * 取队列中最后一个元素
 	 * @param list 队列
 	 * @return 最后一个元素(若队列为空则返回null)
