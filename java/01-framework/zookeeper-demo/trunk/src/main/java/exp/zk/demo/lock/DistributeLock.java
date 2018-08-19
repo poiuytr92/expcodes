@@ -120,19 +120,17 @@ public class DistributeLock {
 		return isOk;
 	}
 	
-	// 4、往父节点下注册节点，注册临时节点，好处就是，当宕机或者断开链接时该节点自动删除
 	/**
-	 * 监听
+	 * 开始监听 [父节点锁] 下的子节点事件
 	 * @return
 	 */
 	private boolean listenLock() {
 		boolean isOk = false;
 		if(zk != null) {
 			
-			
-			// 3、监听父节点
 			try {
-				zk.getChildren(NODE_PARENT_LOCK, true);
+				zk.getChildren(NODE_PARENT_LOCK, 
+						true);	// 启用节点监听
 				isOk = true;
 				
 			} catch (Exception e) {
@@ -143,7 +141,14 @@ public class DistributeLock {
 		return isOk;
 	}
 	
-	protected String getLock() {
+	/**
+	 * 生成一把锁到父节点下排队.
+	 * 
+	 *  由于所有客户端客户端在父节点下创建的子节点都是同名的，且后面有自增序列.
+	 *  因此实际上此操作会在父子点下创建一个id为n的子节点进行排队.
+	 * @return
+	 */
+	protected String lockToLineup() {
 		String keepLock = "";
 		if(zk != null) {
 			try {
@@ -154,32 +159,47 @@ public class DistributeLock {
 						CreateMode.EPHEMERAL_SEQUENTIAL);	// 临时节点，且有自增序列(当客户端拓机后自动删除)
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				System.out.println("获取并发誓共享锁失败");
 				e.printStackTrace();
 			}
 		}
 		return (keepLock == null ? "" : keepLock);
 	}
 	
+	/**
+	 * 判断是否成功获取到锁.
+	 * 
+	 * 	当父节点下的子节点发生变化时会触发此方法。
+	 * 	此方法会获取所有子节点，并根据其序列id进行排序，
+	 * 	若最小的一个id与当前客户端之前生成用于排队的锁id一致，说明获得锁。
+	 * @param keepLock 之前生成用于排队的锁id（即当前持有的锁）
+	 * @return
+	 */
 	protected boolean isGetLock(String keepLock) {
 		boolean isGetLock = false;
 		if(zk != null) {
 			try {
 				
-				// 获取父节点的所有子节点, 并继续监听
+				// 获取父节点的所有 [子节点锁], 并继续监听
 				List<String> childrenNodes = zk.getChildren(NODE_PARENT_LOCK, true);
-				Collections.sort(childrenNodes);	// 匹配当前创建的 znode 是不是最小的 znode
+				
+				// 对所有 [子节点锁] 按id排序，若最小的id与此客户端之前生成用于排队的锁的id一致，则获得锁
+				Collections.sort(childrenNodes);	
 				String minLock = NODE_PARENT_LOCK + "/" + childrenNodes.get(0);
 				isGetLock = minLock.equals(keepLock);
 				
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				System.err.println("判断是否获得分布式并发锁异常");
 				e.printStackTrace();
 			}
 		}
 		return isGetLock;
 	}
 	
+	/**
+	 * 释放锁
+	 * @param keepLock 当前持有的锁
+	 */
 	protected void releaseLock(String keepLock) {
 		if(zk != null && keepLock != null) {
 			try {
@@ -196,7 +216,7 @@ public class DistributeLock {
 			try {
 				zk.close();
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
+				System.err.println("释放分布式并发锁失败");
 				e.printStackTrace();
 			}
 		}

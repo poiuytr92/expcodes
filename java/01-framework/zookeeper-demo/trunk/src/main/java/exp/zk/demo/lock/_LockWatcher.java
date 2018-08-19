@@ -4,6 +4,16 @@ import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.Watcher.Event.EventType;
 
+/**
+ * <PRE>
+ * 锁时间监听器
+ * </PRE>
+ * <br/><B>PROJECT : </B> zookeeper
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-08-07
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _LockWatcher implements Watcher {
 	
 	private DistributeLock dLocker;
@@ -22,12 +32,12 @@ class _LockWatcher implements Watcher {
 	}
 	
 	protected boolean registerLock() {
-		this.keepLock = dLocker.getLock();
+		this.keepLock = dLocker.lockToLineup();
 		return (keepLock != null && !"".equals(keepLock));
 	}
 	
-	private void getLock() {
-		this.keepLock = dLocker.getLock();
+	private void lockToLineup() {
+		this.keepLock = dLocker.lockToLineup();
 	}
 	
 	private boolean isGetLock() {
@@ -38,20 +48,18 @@ class _LockWatcher implements Watcher {
 		dLocker.releaseLock(keepLock);
 	}
 
-	/**
-	 * 当节点发生变化时，判断当前最小的节点是不是自己创建的，若是则说明获得锁并可以执行业务操作
-	 */
     @Override
     public void process(WatchedEvent event) {
     	
-		// 匹配看是不是子节点变化，并且监听的路径也要对
+		// 节点并发事件
 		if (event.getType() == EventType.NodeChildrenChanged
 				&& event.getPath().equals(LOCK_NODE)) {
 			
 			if(isGetLock()) {
 				handler.handle(dLocker.ZOOKEEPER(), event, keepLock);	// 处理业务
-				releaseLock();
-				getLock();
+				
+				releaseLock();	// 释放当前锁
+				lockToLineup();	// 生成下一把锁进行排队
 			}
 		}
 	}
