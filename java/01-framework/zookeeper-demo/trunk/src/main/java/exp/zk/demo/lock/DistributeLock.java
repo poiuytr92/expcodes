@@ -13,7 +13,10 @@ import org.apache.zookeeper.data.Stat;
 /**
  * <PRE>
  * 【场景】分布式共享锁：多个客户端，需要同时访问同一个资源，但同一时间只允许一个客户端进行访问。 
- * 【思路】多个客户端都去父 znode 下写入一个子znode，能写入成功的去执行访问， 写入不成功的等待
+ * 【思路】
+ * 	多个客户端都去同一个[父 znode]下写入一个[同名子znode]，能写入成功的获得锁， 写入不成功的等待.
+ * 	获得锁的客户端可以执行本地的业务逻辑，执行完成后则删除该[子znode](即释放锁)
+ * 	其他客户端循环这个锁竞争
  * </PRE>
  * <br/><B>PROJECT : </B> zookeeper
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
