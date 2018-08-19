@@ -36,7 +36,7 @@ public class DistributeLock {
 	
 	private ZooKeeper zk;
 	
-	private LockWatcher lockWatcher;
+	private _LockWatcher lockWatcher;
 	
 	private Handler handler;
 	
@@ -53,7 +53,7 @@ public class DistributeLock {
 		boolean isOk = false;
 		try {
 			this.zk = new ZooKeeper(zkConnStr, sessTimeout, 
-					(lockWatcher = new LockWatcher(this, PARENT_NODE, handler)));
+					(lockWatcher = new _LockWatcher(this, PARENT_NODE, handler)));
 			isOk = true;
 			
 		} catch (IOException e) {
@@ -63,7 +63,7 @@ public class DistributeLock {
 		return isOk;
 	}
 	
-	public boolean init() {
+	public boolean initLock() {
 		boolean isOk = false;
 		
 		// 2、查看父节点是否存在，不存在则创建

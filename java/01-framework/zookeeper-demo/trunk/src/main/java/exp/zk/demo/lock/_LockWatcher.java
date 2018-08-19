@@ -4,7 +4,7 @@ import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.Watcher.Event.EventType;
 
-class LockWatcher implements Watcher {
+class _LockWatcher implements Watcher {
 	
 	private DistributeLock dLocker;
 	
@@ -14,7 +14,7 @@ class LockWatcher implements Watcher {
 	
 	private Handler handler;
 	
-	protected LockWatcher(DistributeLock dLocker, String LOCK_NODE, Handler handler) {
+	protected _LockWatcher(DistributeLock dLocker, String LOCK_NODE, Handler handler) {
 		this.dLocker = dLocker;
 		this.LOCK_NODE = LOCK_NODE;
 		this.keepLock = "";

@@ -12,7 +12,7 @@ public class Main {
 		DistributeLock dLock = new DistributeLock(ZK_CONN_STR, SESS_TIMEOUT, handler);
 		
 		dLock.conn();
-		dLock.init();
+		dLock.initLock();
 		dLock.listenLock();
 		
 		Thread.sleep(Long.MAX_VALUE);
