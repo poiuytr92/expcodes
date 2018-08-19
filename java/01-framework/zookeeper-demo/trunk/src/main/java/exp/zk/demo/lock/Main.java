@@ -3,19 +3,18 @@ package exp.zk.demo.lock;
 
 public class Main {
 
+	private final static String ZK_CONN_STR = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
+	
+	private final static int SESS_TIMEOUT = 300000;
+	
 	public static void main(String[] args) throws Exception {
+		_DefaultHandler handler = new _DefaultHandler();
+		DistributeLock dLock = new DistributeLock(ZK_CONN_STR, SESS_TIMEOUT, handler);
 		
-		// 1、拿到 zookeeper 链接
-		DistributeLock dLock = new DistributeLock();
 		dLock.conn();
-		System.out.println("conn");
-		
 		dLock.init();
-		System.out.println("init");
+		dLock.listenLock();
 		
-		// 4、往父节点下注册节点，注册临时节点，好处就是，当宕机或者断开链接时该节点自动删除
-		
-		// 5、关闭 zk 链接
 		Thread.sleep(Long.MAX_VALUE);
 		dLock.close();
 	}

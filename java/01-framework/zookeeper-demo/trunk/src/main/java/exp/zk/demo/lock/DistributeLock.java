@@ -23,17 +23,25 @@ import org.apache.zookeeper.data.Stat;
  */
 public class DistributeLock {
 	
-	private final static String ZK_CONN_STR = "127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183";
-	
-	private final static int SESS_TIMEOUT = 300000;
-	
 	private static final String PARENT_NODE = "/parent_locks";
 	
 	private static final String SUB_NODE = "/sub_client";
 	
+	private String zkConnStr;
+	
+	private int sessTimeout;
+	
 	private ZooKeeper zk;
 	
-	public DistributeLock() {}
+	private LockWatcher lockWatcher;
+	
+	private Handler handler;
+	
+	public DistributeLock(String zkConnStr, int sessTimeout, Handler handler) {
+		this.zkConnStr = (zkConnStr == null ? "" : zkConnStr);
+		this.sessTimeout = (sessTimeout < 0 ? 0 : sessTimeout);
+		this.handler = (handler == null ? new _DefaultHandler() : handler);
+	}
 
 	/**
 	 * 拿到 zookeeper 集群的链接
@@ -41,8 +49,8 @@ public class DistributeLock {
 	public boolean conn() {
 		boolean isOk = false;
 		try {
-			this.zk = new ZooKeeper(ZK_CONN_STR, SESS_TIMEOUT, 
-					new LockWatcher(this, PARENT_NODE));
+			this.zk = new ZooKeeper(zkConnStr, sessTimeout, 
+					(lockWatcher = new LockWatcher(this, PARENT_NODE, handler)));
 			isOk = true;
 			
 		} catch (IOException e) {
@@ -52,7 +60,9 @@ public class DistributeLock {
 		return isOk;
 	}
 	
-	public void init() {
+	public boolean init() {
+		boolean isOk = false;
+		
 		// 2、查看父节点是否存在，不存在则创建
 		if(zk != null) {
 			try {
@@ -61,19 +71,33 @@ public class DistributeLock {
 					zk.create(PARENT_NODE, PARENT_NODE.getBytes(), Ids.OPEN_ACL_UNSAFE,
 							CreateMode.PERSISTENT);
 				}
-				
-				// 3、监听父节点
-				zk.getChildren(PARENT_NODE, true);
+				isOk = true;
 				
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
+		return isOk;
 	}
 	
-	public void initLock() {
-		return getLock();
+	// 4、往父节点下注册节点，注册临时节点，好处就是，当宕机或者断开链接时该节点自动删除
+	public boolean listenLock() {
+		boolean isOk = false;
+		if(zk != null && lockWatcher != null) {
+			
+			
+			isOk = lockWatcher.initLock();
+			
+			// 3、监听父节点
+			try {
+				zk.getChildren(PARENT_NODE, true);
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		return isOk;
 	}
 	
 	public void close() {
@@ -111,8 +135,6 @@ public class DistributeLock {
 				List<String> childrenNodes = zk.getChildren(PARENT_NODE, true);
 				Collections.sort(childrenNodes);	// 匹配当前创建的 znode 是不是最小的 znode
 				String minLock = PARENT_NODE + "/" + childrenNodes.get(0);
-				System.out.println(minLock);
-				System.out.println(keepLock);
 				isGetLock = minLock.equals(keepLock);
 				
 			} catch (Exception e) {
@@ -132,6 +154,10 @@ public class DistributeLock {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public ZooKeeper ZOOKEEPER() {
+		return zk;
 	}
 	
 }

@@ -1,7 +1,5 @@
 package exp.zk.demo.lock;
 
-import java.util.Random;
-
 import org.apache.zookeeper.WatchedEvent;
 import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.Watcher.Event.EventType;
@@ -14,14 +12,18 @@ class LockWatcher implements Watcher {
 	
 	private String keepLock;
 	
-	protected LockWatcher(DistributeLock dLocker, String LOCK_NODE) {
+	private Handler handler;
+	
+	protected LockWatcher(DistributeLock dLocker, String LOCK_NODE, Handler handler) {
 		this.dLocker = dLocker;
 		this.LOCK_NODE = LOCK_NODE;
 		this.keepLock = "";
+		this.handler = handler;
 	}
 	
-	protected void initLock() {
-		this.keepLock = dLocker.initLock();
+	protected boolean initLock() {
+		this.keepLock = dLocker.getLock();
+		return (keepLock != null && !"".equals(keepLock));
 	}
 	
 	private void getLock() {
@@ -41,33 +43,17 @@ class LockWatcher implements Watcher {
 	 */
     @Override
     public void process(WatchedEvent event) {
-		
+    	
 		// 匹配看是不是子节点变化，并且监听的路径也要对
 		if (event.getType() == EventType.NodeChildrenChanged
 				&& event.getPath().equals(LOCK_NODE)) {
 			
 			if(isGetLock()) {
-				handle();	// 处理业务
+				handler.handle(dLocker.ZOOKEEPER(), event, keepLock);	// 处理业务
 				releaseLock();
 				getLock();
 			}
 		}
 	}
     
-    public void handle() {
-		System.out.println(keepLock + " is working......");
-		
-		// 模拟业务处理
-		try {
-			Thread.sleep(new Random().nextInt(4000));
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
-		
-		
-		System.out.println(keepLock + " is done ......");
-	}
-    
-	
 }
