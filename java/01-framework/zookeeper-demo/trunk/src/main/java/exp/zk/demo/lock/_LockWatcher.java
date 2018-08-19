@@ -21,7 +21,7 @@ class _LockWatcher implements Watcher {
 		this.handler = handler;
 	}
 	
-	protected boolean initLock() {
+	protected boolean registerLock() {
 		this.keepLock = dLocker.getLock();
 		return (keepLock != null && !"".equals(keepLock));
 	}
