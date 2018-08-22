@@ -92,6 +92,16 @@ public class RedisUtils {
 	 * 获取Redis连接
 	 * @param ip redis IP
 	 * @param port redis端口
+	 * @return
+	 */
+	public static Jedis getConn(String ip, int port) {
+		return getConn(ip, port, "");
+	}
+	
+	/**
+	 * 获取Redis连接
+	 * @param ip redis IP
+	 * @param port redis端口
 	 * @param password redis密码
 	 * @return
 	 */
