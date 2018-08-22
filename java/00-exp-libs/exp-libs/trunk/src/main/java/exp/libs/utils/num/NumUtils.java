@@ -370,6 +370,38 @@ public class NumUtils {
 	}
 	
 	/**
+	 * 限制数值的最小最大值
+	 * @param num 数值
+	 * @param min 最小值
+	 * @param max 最大值
+	 * @return 若小于最小值则返回最小值; 若大于最大值则返回最大值; 否则返回原值
+	 */
+	public static int limitRange(int num, int min, int max) {
+		if(min > max) {
+			min = min ^ max;
+			max = min ^ max;
+			min = min ^ max;
+		}
+		return (num < min ? min : (num > max ? max : num));
+	}
+	
+	/**
+	 * 限制数值的最小最大值
+	 * @param num 数值
+	 * @param min 最小值
+	 * @param max 最大值
+	 * @return 若小于最小值则返回最小值; 若大于最大值则返回最大值; 否则返回原值
+	 */
+	public static long limitRange(long num, long min, long max) {
+		if(min > max) {
+			min = min ^ max;
+			max = min ^ max;
+			min = min ^ max;
+		}
+		return (num < min ? min : (num > max ? max : num));
+	}
+	
+	/**
 	 * <PRE>
 	 * int递增序列压缩.
 	 * 	例如把 { 1, 2, 3, 5, 6, 8, 10 }

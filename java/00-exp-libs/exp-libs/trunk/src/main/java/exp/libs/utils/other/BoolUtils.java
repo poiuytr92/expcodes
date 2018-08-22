@@ -3,6 +3,8 @@ package exp.libs.utils.other;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.utils.num.NumUtils;
+
 /**
  * <PRE>
  * 布尔数据处理工具
@@ -15,8 +17,6 @@ import org.slf4j.LoggerFactory;
  */
 public class BoolUtils {
 
-	// TODO 布隆过滤器
-	
 	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(BoolUtils.class);
 	
@@ -46,6 +46,17 @@ public class BoolUtils {
 			log.error("转换 [{}] 为bool类型失败.", tof, e);
 		}
 		return bool;
+	}
+	
+	/**
+	 * %percent 几率命中
+	 * @param percent 命中百分比（取值范围0-100）
+	 * @return 此方法会随机产生一个数值，若>=百分比则认为命中，此时返回true
+	 */
+	public static boolean hit(int percent) {
+		percent = NumUtils.limitRange(percent, 0, 100);
+		int random = RandomUtils.genInt(0, 100);
+		return random >= percent;
 	}
 	
 }
