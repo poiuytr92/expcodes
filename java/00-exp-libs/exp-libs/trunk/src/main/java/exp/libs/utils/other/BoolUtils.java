@@ -49,14 +49,14 @@ public class BoolUtils {
 	}
 	
 	/**
-	 * %percent 几率命中
+	 * 使得 %percent 几率命中
 	 * @param percent 命中百分比（取值范围0-100）
-	 * @return 此方法会随机产生一个数值，若>=百分比则认为命中，此时返回true
+	 * @return 此方法会随机产生一个数值，若在百分比范围内则认为命中，此时返回true
 	 */
 	public static boolean hit(int percent) {
 		percent = NumUtils.limitRange(percent, 0, 100);
-		int random = RandomUtils.genInt(0, 100);
-		return random >= percent;
+		int random = RandomUtils.genInt(1, 100);
+		return random <= percent;
 	}
 	
 }
