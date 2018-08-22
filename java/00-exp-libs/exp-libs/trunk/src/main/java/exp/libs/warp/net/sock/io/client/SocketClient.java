@@ -205,7 +205,12 @@ public class SocketClient implements ISession {
 	}
 	
 	/**
-	 * 检查socket连接是否已断开
+	 * <pre>
+	 * 检查socket连接是否已断开.
+	 * 
+	 * 此方法主要用于检测客户端自身有没有执行过close断开连接, 
+	 * 若服务端在很短时间内重启过, 此方法是无法检测的, 但此时客户端的连接已经是不可用的了, 必须重连.
+	 * </pre>
 	 * @return true:已断开; false:未断开
 	 */
 	@Override
@@ -345,20 +350,23 @@ public class SocketClient implements ISession {
 	 */
 	@Override
 	public boolean write(final String msg) {
-		boolean isOk = reconn();
+		if(isClosed()) {
+			log.error("Socket [{}] 连接已断开, 无法发送消息.", sockConf.getId());
+			return false;
+		}
 		
+		boolean isOk = false;
 		try {
 			write(socket.getOutputStream(), 
 					StrUtils.concat(msg, sockConf.getWriteDelimiter()), 
 					sockConf.getWriteCharset());
+			isOk = true;
 			
 		} catch (UnsupportedEncodingException e) {
-			isOk = false;
 			log.error("Socket [{}] 编码非法, 当前编码: {}.", 
 					sockConf.getId(), sockConf.getWriteCharset(), e);
 					
 		} catch (Exception e) {
-			isOk = false;
 			log.error("Socket [{}] 写操作异常.", sockConf.getId(), e);
 			close();
 		}
