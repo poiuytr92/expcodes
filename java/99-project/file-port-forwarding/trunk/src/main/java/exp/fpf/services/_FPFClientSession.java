@@ -134,19 +134,19 @@ class _FPFClientSession extends Thread {
 	 * 会话连接到真正的服务端口失败, [转发流程2] 和 [转发流程3] 均不执行.
 	 * 直接反馈断开连接通知.
 	 */
-	private void notifyExit() {
+	protected void notifyExit() {
 		String data = Param.MARK_EXIT;
 		if(ResponseMode.SOCKET == Config.getInstn().getRspMode()) {
 			String json = _TranslateCData._getRecvJsonData(sessionId, data);
 			Sender.getInstn().send(json);
-			log.debug("会话 [{}] 已反馈 [SOCKET] 终止通知 : \r\n{}", 
+			log.error("会话 [{}] 已通过 [SOCKET] 反馈对端终止此会话 : \r\n{}", 
 					sessionId, json);
 			
 		} else {
 			String recvFilePath = _TranslateCData._getRecvFilePath(
 					srMgr, data, 0, Param.PREFIX_RECV, ip, port);
 			FileUtils.write(recvFilePath, data, Charset.ISO, false);
-			log.debug("会话 [{}] 已反馈 [{}] 终止通知 : \r\n{}", 
+			log.error("会话 [{}] 已通过 [{}] 反馈对端终止此会话 : \r\n{}", 
 					sessionId, recvFilePath, data);
 		}
 	}

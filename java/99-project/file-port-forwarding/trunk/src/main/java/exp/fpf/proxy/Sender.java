@@ -60,7 +60,14 @@ public class Sender {
 		// 由于有多个线程共用此会话转发数据, 这里必须加锁, 否则可能出现前后两条消息错位异常
 		synchronized (lock) {
 			if(!client.write(data)) {
-				log.error("[{}] 发送数据失败: {}", NAME, data);
+				
+				// 若接收端服务重启过，isClosed() 方法是无法检测到的，只有在 write 的时候才会报错：
+				// Connection reset by peer: socket write error
+				if(client.conn()) {	// 此时尝试重连
+					if(!client.write(data)) {
+						log.error("[{}] 发送数据失败: {}", NAME, data);
+					}
+				}
 			}
 		}
 	}

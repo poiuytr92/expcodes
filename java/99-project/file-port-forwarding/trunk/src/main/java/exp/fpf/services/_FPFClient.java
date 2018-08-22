@@ -14,6 +14,7 @@ import exp.fpf.proxy._SRFileListener;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
+import exp.libs.utils.other.BoolUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
@@ -92,7 +93,11 @@ class _FPFClient extends LoopThread {
 			ThreadUtils.tSleep(Param.SCAN_DATA_INTERVAL);
 			return;
 		}
-		delInvaildSession();	// 耗时太多 FIXME 改成惰性删除/随机删除/按最后一次使用时间排序删除
+		
+		// 每次会话交互有10%的几率清除无效会话（目的是惰性删除，避免过份耗时）
+		if(BoolUtils.hit(10)) {
+			delInvaildSession();
+		}
 		
 		String sendFilePath = PathUtils.combine(srMgr.getRecvDir(), sendFileName);
 		List<String> features = RegexUtils.findGroups(sendFilePath, REGEX);
@@ -111,18 +116,22 @@ class _FPFClient extends LoopThread {
 			if(session == null) {
 				session = new _FPFClientSession(srMgr, overtime, sessionId, ip, port);
 				sessions.put(sessionId, session);
-				session.start();	// 通过异步方式建立会话连接, 避免阻塞其他会话
 				isNewSession = true;
 			}
 			
 			// 分配请求
 			int timeSequence = session.add(sendFilePath);
-			
-			// FIXME: 临时手段，现场长时间运行会出现一个异常： 同一个会话的多次请求
-			// 会在前面 sessions.get拆分成多个会话，间接产生多对收发线程，导致转发不通
-			if(isNewSession == true && timeSequence > 0) {
-				log.error("会话 [{}] 发生并发错位, 程序终止.", sessionId);
-				System.exit(1);
+			if(isNewSession == true) {
+				if(timeSequence == 0) {
+					session.start();	// 通过异步方式建立会话连接, 避免阻塞其他会话
+					
+				} else {
+					// 若本侧判定是新会话，但时序不为0，说明本侧因为某些原因已经丢失了此会话
+					// 但是对端无法感知到到 这个情况，依然使用此会话进行通信，从而导致时序不为0
+					// 此时此会话已不能使用，需要通知对端重新申请一个会话
+					log.error("会话 [{}] 已失效(因本侧单方面超时/重启导致).", sessionId);
+					session.notifyExit();
+				}
 			}
 		}
 	}
@@ -143,6 +152,7 @@ class _FPFClient extends LoopThread {
 		while(sessIts.hasNext()) {
 			_FPFClientSession session = sessIts.next();
 			if(session.isClosed()) {
+				session.notifyExit();
 				session.clear();
 				sessIts.remove();
 			}

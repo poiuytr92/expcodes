@@ -195,7 +195,7 @@ class _TranslateCData extends Thread {
 			
 			ThreadUtils.tSleep(Param.WAIT_DATA_INTERVAL);
 			if(System.currentTimeMillis() - bgnTime >= overtime) {
-				throw new SocketTimeoutException("等待文件数据完成传输超时");
+				throw new SocketTimeoutException("等待文件数据传输超时");
 			}
 		}
 		
