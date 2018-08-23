@@ -8,7 +8,6 @@ import exp.bilibili.plugin.envm.Danmu;
 import exp.bilibili.plugin.utils.UIUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.BoolUtils;
-import exp.libs.utils.other.RandomUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.net.cookie.HttpCookie;
 
@@ -234,9 +233,8 @@ public class BiliCookie extends HttpCookie {
 	public boolean allowLottery() {
 		
 		// 随机抽奖
-		int val = UIUtils.getLotteryProbability();
-		int random = RandomUtils.genInt(1, 100);
-		boolean isOk = val >= random;
+		int percent = UIUtils.getLotteryProbability();
+		boolean isOk = BoolUtils.hit(percent);
 		
 		// 限制未实名账号连续抽奖 (B站严查未实名账号)
 //		if(isOk == true && isRealName() == false) {
