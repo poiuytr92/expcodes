@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisCommands;
 import exp.libs.envm.Charset;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.ObjUtils;
@@ -16,7 +17,12 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * Redis数据库工具.
+ * Redis数据库工具（仅适用于Redis单机模式）
+ * ----------------------------------
+ *  若Redis是以主从/哨兵/集群模式部署, 使用此连接池虽然可以连接, 但只是连接到集群的其中一台机器.
+ *  换而言之，此时只能在这台特定的机器上面进行数据读写.
+ *  若在机器A上面写, 再在机器B上面读, 就会因为不是使用集群连接而报错: JedisMovedDataException: MOVED 866
+ *  解决方式是改用 JedisCluster 连接到集群. 
  * </PRE>
  * <br/><B>PROJECT : </B> exp-libs
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
@@ -132,7 +138,7 @@ public class RedisUtils {
 	 * @param key 被检查的键值
 	 * @return true:存在; false:不存在
 	 */
-	public static boolean existKey(Jedis jedis, String key) {
+	public static boolean existKey(JedisCommands jedis, String key) {
 		boolean isExist = false;
 		if(jedis != null && key != null) {
 			isExist = jedis.exists(key);
