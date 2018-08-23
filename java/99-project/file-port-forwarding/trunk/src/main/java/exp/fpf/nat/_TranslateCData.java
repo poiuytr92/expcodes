@@ -1,4 +1,4 @@
-package exp.fpf.services;
+package exp.fpf.nat;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,8 +7,6 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
 
-import net.sf.json.JSONObject;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +14,12 @@ import exp.fpf.Config;
 import exp.fpf.cache.SRMgr;
 import exp.fpf.envm.Param;
 import exp.fpf.envm.ResponseMode;
-import exp.fpf.proxy.Sender;
+import exp.fpf.tunnel.Sender;
 import exp.fpf.utils.BIZUtils;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.os.ThreadUtils;
-import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 
 /**
@@ -281,49 +278,16 @@ class _TranslateCData extends Thread {
 	 * @return
 	 */
 	private String _getRecvJsonData(String data) {
-		return _getRecvJsonData(sessionId, data);
-	}
-	
-	/**
-	 * 为[本侧响应收转器]构造Json格式数据流.
-	 * @param sessionId 会话ID
-	 * @param data 需要封装的原数据
-	 * @return
-	 */
-	protected static String _getRecvJsonData(String sessionId, String data) {
-		JSONObject json = new JSONObject();
-		json.put(Param.SID, sessionId);
-		json.put(Param.DATA, data);
-		return json.toString();
-	}
-	
-	/**
-	 * 
-	 * 	同时该数据流文件列入禁忌表, 避免被[本侧响应接收器]误读.
-	 * @return 数据流文件路径
-	 */
-	private String _getRecvFilePath() {
-		return _getRecvFilePath(srMgr, sessionId, timeSequence++, type, snkIP, snkPort);
+		return BIZUtils.genJsonData(sessionId, data);
 	}
 	
 	/**
 	 * 为[本侧响应收转器]构造数据流文件路径.
-	 * @param srMgr
-	 * @param sessionId
-	 * @param timeSequence
-	 * @param type
-	 * @param snkIP
-	 * @param snkPort
-	 * @return
+	 * @return 数据流文件路径
 	 */
-	protected static String _getRecvFilePath(SRMgr srMgr, String sessionId, 
-			int timeSequence, String type, String snkIP, int snkPort) {
-		String recvFileName = BIZUtils.toFileName(
-				sessionId, timeSequence++, type, snkIP, snkPort);
-		srMgr.addRecvTabu(recvFileName);
-		
-		String recvFilePath = PathUtils.combine(srMgr.getSendDir(), recvFileName);
-		return recvFilePath;
+	private String _getRecvFilePath() {
+		return BIZUtils.genFileDataPath(srMgr, sessionId, 
+				timeSequence++, type, snkIP, snkPort);
 	}
 	
 	/**

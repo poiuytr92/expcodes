@@ -3,7 +3,7 @@ package exp.fpf;
 import java.util.List;
 
 import exp.fpf.bean.FPFConfig;
-import exp.fpf.services.FPFAgent;
+import exp.fpf.nat.FPFAgent;
 import exp.libs.utils.other.LogUtils;
 
 

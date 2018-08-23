@@ -1,11 +1,11 @@
-package exp.fpf.services;
+package exp.fpf.nat;
 
 import java.util.LinkedList;
 import java.util.List;
 
 import exp.fpf.bean.FPFConfig;
 import exp.fpf.cache.SRMgr;
-import exp.fpf.proxy.Recver;
+import exp.fpf.tunnel.Recver;
 import exp.libs.utils.other.ListUtils;
 
 /**

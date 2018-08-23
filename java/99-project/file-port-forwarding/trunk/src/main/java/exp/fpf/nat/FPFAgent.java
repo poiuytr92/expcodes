@@ -1,4 +1,4 @@
-package exp.fpf.services;
+package exp.fpf.nat;
 
 import java.util.Arrays;
 import java.util.List;
@@ -6,8 +6,10 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.fpf.Config;
 import exp.fpf.bean.FPFConfig;
 import exp.fpf.cache.SRMgr;
+import exp.fpf.envm.ResponseMode;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
@@ -18,7 +20,7 @@ import exp.libs.utils.other.StrUtils;
  * </pre>	
  * <br/><B>PROJECT : </B> file-port-forwarding
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
- * @version   2017-07-28
+ * @version   2017-07-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -79,18 +81,21 @@ public class FPFAgent {
 	}
 	
 	private boolean _init() {
-		boolean isOk = true;
+		int cnt = 0;
 		if(!_init(srMgr.getSendDir())) {
-			isOk |= false;
 			log.warn("初始化发送数据缓存目录失败(未配置或无读写权限): [{}]", srMgr.getSendDir());
+		} else {
+			cnt++;
 		}
 		
 		if(!_init(srMgr.getRecvDir())) {
-			isOk |= false;
 			log.warn("初始化接收数据缓存目录失败(未配置或无读写权限): [{}]", srMgr.getRecvDir());
+		} else {
+			cnt++;
 		}
 		
-		// 对于socket监听模式, 不需要两个目录同时配置
+		boolean isOk = (cnt >= 2 || (cnt == 1 && // 对于socket监听模式, 不需要两个目录同时配置
+				ResponseMode.SOCKET == Config.getInstn().getRspMode()));
 		if(isOk == true) {
 			log.info("初始化数据缓存目录成功");
 			log.info("发送目录: [{}]", srMgr.getSendDir());
@@ -99,6 +104,11 @@ public class FPFAgent {
 		return isOk;
 	}
 	
+	/**
+	 * 初始化收发目录
+	 * @param srDir
+	 * @return
+	 */
 	private boolean _init(String srDir) {
 		boolean isOk = true;
 		
@@ -107,7 +117,7 @@ public class FPFAgent {
 				"/".equals(srDir) || PathUtils.toLinux("C:/").equals(srDir)) {
 			isOk = false;
 			
-		// 清空所有残留的数据流文件
+		// 在启动时需清空所有残留的数据流文件
 		} else {
 			isOk &= FileUtils.delete(srDir);
 			isOk &= (FileUtils.createDir(srDir) != null);

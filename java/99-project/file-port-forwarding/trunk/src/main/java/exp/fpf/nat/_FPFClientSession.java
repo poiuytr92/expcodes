@@ -1,4 +1,4 @@
-package exp.fpf.services;
+package exp.fpf.nat;
 
 import java.util.List;
 
@@ -10,7 +10,8 @@ import exp.fpf.cache.RecvCache;
 import exp.fpf.cache.SRMgr;
 import exp.fpf.envm.Param;
 import exp.fpf.envm.ResponseMode;
-import exp.fpf.proxy.Sender;
+import exp.fpf.tunnel.Sender;
+import exp.fpf.utils.BIZUtils;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
 import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
@@ -137,18 +138,19 @@ class _FPFClientSession extends Thread {
 	protected void notifyExit() {
 		String data = Param.MARK_EXIT;
 		if(ResponseMode.SOCKET == Config.getInstn().getRspMode()) {
-			String json = _TranslateCData._getRecvJsonData(sessionId, data);
+			String json = BIZUtils.genJsonData(sessionId, data);
 			Sender.getInstn().send(json);
-			log.error("会话 [{}] 已通过 [SOCKET] 反馈对端终止此会话 : \r\n{}", 
+			log.debug("会话 [{}] 失效, 已通过 [SOCKET] 反馈到对端请求终止 : \r\n{}", 
 					sessionId, json);
 			
 		} else {
-			String recvFilePath = _TranslateCData._getRecvFilePath(
-					srMgr, data, 0, Param.PREFIX_RECV, ip, port);
+			String recvFilePath = BIZUtils.genFileDataPath(
+					srMgr, sessionId, 0, Param.PREFIX_RECV, ip, port);
 			FileUtils.write(recvFilePath, data, Charset.ISO, false);
-			log.error("会话 [{}] 已通过 [{}] 反馈对端终止此会话 : \r\n{}", 
+			log.debug("会话 [{}] 失效, 已通过 [{}] 反馈到对端请求终止 : \r\n{}", 
 					sessionId, recvFilePath, data);
 		}
+		clear();
 	}
 	
 	/**
@@ -163,7 +165,9 @@ class _FPFClientSession extends Thread {
 	 * 清理内存
 	 */
 	protected void clear() {
-		fileList.clear();
+		while(!fileList.isEmpty()) {
+			FileUtils.delete(fileList.getQuickly());
+		}
 	}
 	
 }

@@ -9,7 +9,7 @@ import exp.libs.warp.net.sock.bean.SocketBean;
  * </pre>	
  * <br/><B>PROJECT : </B> file-port-forwarding
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
- * @version   2017-07-28
+ * @version   2017-07-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -20,6 +20,9 @@ public final class Param {
 	
 	/** 断开连接标识 */
 	public final static String MARK_EXIT = "#exit#";
+	
+	/** 重置会话标识 */
+	public final static String MARK_RESET = "#reset#";
 	
 	/** 发送文件前缀标识 */
 	public final static String PREFIX_SEND = "send";
@@ -35,6 +38,15 @@ public final class Param {
 	
 	/** Socket读写缓存：每次最多读写10KB数据 */
 	public final static int IO_BUFF = 10 * SocketBean.BUFF_SIZE_UNIT_KB;
+	
+	/** 管理会话ID */
+	public final static String MGR_SESS_ID = "0";
+	
+	/** 管理会话IP */
+	public final static String MGR_SESS_IP = "0.0.0.0";
+	
+	/** 管理会话端口 */
+	public final static int MGR_SESS_PORT = 0;
 	
 	/** JSON属性：会话ID */
 	public final static String SID = "sid";

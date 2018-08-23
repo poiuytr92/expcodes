@@ -1,7 +1,7 @@
 package exp.fpf.test;
 
 import exp.fpf.bean.FPFConfig;
-import exp.fpf.services.FPFAgent;
+import exp.fpf.nat.FPFAgent;
 
 
 

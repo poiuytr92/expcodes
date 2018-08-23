@@ -14,8 +14,11 @@ import org.slf4j.LoggerFactory;
 
 import exp.fpf.envm.Param;
 import exp.libs.algorithm.struct.queue.pc.PCQueue;
+import exp.libs.envm.Charset;
 import exp.libs.utils.format.JsonUtils;
+import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
 import exp.libs.utils.verify.RegexUtils;
 
@@ -25,7 +28,7 @@ import exp.libs.utils.verify.RegexUtils;
  * </pre>	
  * <br/><B>PROJECT : </B> file-port-forwarding
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
- * @version   2018-01-16
+ * @version   2017-07-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
@@ -165,7 +168,18 @@ public class SRMgr {
 		
 		String sessionId = groups.get(0);
 		int timeSequence = NumUtils.toInt(groups.get(1), -1);
-		if(StrUtils.isNotEmpty(sessionId) && timeSequence >= 0) {
+		
+		if(Param.MGR_SESS_ID.equals(sessionId)) {
+			String filePath = PathUtils.combine(recvDir, fileName);
+			String data = FileUtils.read(filePath, Charset.ISO);
+			if(Param.MARK_RESET.equals(data)) {
+				SessionMgr.getInstn().clear();
+				clear();
+				log.warn("端口转发代理服务已重启, 所有会话重置");
+			}
+			FileUtils.delete(filePath);
+			
+		} else if(StrUtils.isNotEmpty(sessionId) && timeSequence >= 0) {
 			PCQueue<String> list = recvFiles.get(sessionId);
 			if(list == null) {
 				list = new PCQueue<String>(Param.PC_CAPACITY);
@@ -220,14 +234,21 @@ public class SRMgr {
 		try {
 			JSONObject json = JSONObject.fromObject(jsonData);
 			String sessionId = JsonUtils.getStr(json, Param.SID);
-			if(StrUtils.isNotEmpty(sessionId)) {
+			String data = JsonUtils.getStr(json, Param.DATA);
+			
+			if(Param.MGR_SESS_ID.equals(sessionId)) {
+				if(Param.MARK_RESET.equals(data)) {
+					SessionMgr.getInstn().clear();
+					clear();
+					log.warn("端口转发代理服务已重启, 所有会话重置");
+				}
+				
+			} else if(StrUtils.isNotEmpty(sessionId)) {
 				PCQueue<String> list = recvDatas.get(sessionId);
 				if(list == null) {
 					list = new PCQueue<String>(Param.PC_CAPACITY);
 					recvDatas.put(sessionId, list);
 				}
-				
-				String data = JsonUtils.getStr(json, Param.DATA);
 				list.add(data);
 			}
 		} catch(Exception e) {

@@ -1,4 +1,4 @@
-package exp.fpf.services;
+package exp.fpf.nat;
 
 import java.io.File;
 import java.io.IOException;
@@ -251,6 +251,7 @@ class _TranslateSData extends Thread {
 				
 				// 对端真正的服务会话已断开
 				if(Param.MARK_EXIT.equals(data)) {
+					slog.debug("会话 [{}] 收到终止请求, 已停止", sessionId);
 					break;
 					
 				// 解析数据转送到本地socket通道

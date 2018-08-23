@@ -1,4 +1,4 @@
-package exp.fpf.proxy;
+package exp.fpf.tunnel;
 
 import exp.fpf.cache.SRMgr;
 import exp.libs.warp.net.sock.io.common.IHandler;
@@ -10,7 +10,7 @@ import exp.libs.warp.net.sock.io.common.ISession;
  * </pre>	
  * <br/><B>PROJECT : </B> file-port-forwarding
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
- * @version   2018-01-16
+ * @version   2017-07-31
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */

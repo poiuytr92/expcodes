@@ -1,4 +1,4 @@
-package exp.fpf.services;
+package exp.fpf.nat;
 
 import java.net.Socket;
 
@@ -7,7 +7,9 @@ import org.slf4j.LoggerFactory;
 
 import exp.fpf.bean.FPFConfig;
 import exp.fpf.cache.SRMgr;
+import exp.fpf.cache.SessionMgr;
 import exp.fpf.envm.Param;
+import exp.libs.utils.other.BoolUtils;
 import exp.libs.warp.net.sock.io.common.IHandler;
 import exp.libs.warp.net.sock.io.common.ISession;
 
@@ -31,13 +33,23 @@ class _FPFSHandler implements IHandler {
 	
 	/**
 	 * 
-	 * @param srDir	文件收发目录
-	 * @param remoteIP
-	 * @param remotePort
+	 * @param srMgr 文件收发目录
+	 * @param config
 	 */
 	protected _FPFSHandler(SRMgr srMgr, FPFConfig config) {
 		this.srMgr = srMgr;
 		this.config = config;
+	}
+	
+	@Override
+	public boolean _login(ISession session) {
+		
+		// 每次新增会话时交互有50%的几率清除无效会话（目的是惰性删除，避免过份耗时）
+		if(BoolUtils.hit(50)) {
+			SessionMgr.getInstn().delInvaildSession();
+		}
+		SessionMgr.getInstn().add(session);
+		return true;
 	}
 	
 	@Override
@@ -60,10 +72,4 @@ class _FPFSHandler implements IHandler {
 		return new _FPFSHandler(srMgr, config);
 	}
 
-	@Deprecated
-	@Override
-	public boolean _login(ISession arg0) {
-		return true;
-	}
-	
 }

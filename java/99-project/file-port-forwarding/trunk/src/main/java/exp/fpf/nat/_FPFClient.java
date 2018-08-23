@@ -1,4 +1,4 @@
-package exp.fpf.services;
+package exp.fpf.nat;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -8,9 +8,14 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.fpf.Config;
 import exp.fpf.cache.SRMgr;
 import exp.fpf.envm.Param;
-import exp.fpf.proxy._SRFileListener;
+import exp.fpf.envm.ResponseMode;
+import exp.fpf.tunnel.Sender;
+import exp.fpf.tunnel._SRFileListener;
+import exp.fpf.utils.BIZUtils;
+import exp.libs.envm.Charset;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.os.ThreadUtils;
@@ -82,8 +87,9 @@ class _FPFClient extends LoopThread {
 
 	@Override
 	protected void _before() {
+		notifyReset();
 		srFileMonitor._start();
-		log.info("端口转发数据接收器启动成功");
+		log.info("端口转发代理服务启动成功");
 	}
 
 	@Override
@@ -129,7 +135,7 @@ class _FPFClient extends LoopThread {
 					// 若本侧判定是新会话，但时序不为0，说明本侧因为某些原因已经丢失了此会话
 					// 但是对端无法感知到到 这个情况，依然使用此会话进行通信，从而导致时序不为0
 					// 此时此会话已不能使用，需要通知对端重新申请一个会话
-					log.error("会话 [{}] 已失效(因本侧单方面超时/重启导致).", sessionId);
+					log.debug("会话 [{}] 已失效(因本侧单方面超时/重启导致).", sessionId);
 					session.notifyExit();
 				}
 			}
@@ -141,7 +147,25 @@ class _FPFClient extends LoopThread {
 		srFileMonitor._stop();
 		
 		delAllSession();
-		log.info("端口转发数据接收器已停止");
+		log.info("端口转发代理服务已停止");
+	}
+	
+	/**
+	 * 通知对侧进行会话重置（清除本侧重启前残留的所有无效会话）
+	 */
+	protected void notifyReset() {
+		String data = Param.MARK_RESET;
+		if(ResponseMode.SOCKET == Config.getInstn().getRspMode()) {
+			String json = BIZUtils.genJsonData(Param.MGR_SESS_ID, data);
+			Sender.getInstn().send(json);
+			
+		} else {
+			String recvFilePath = BIZUtils.genFileDataPath(
+					srMgr, Param.MGR_SESS_ID, 0, Param.PREFIX_RECV, 
+					Param.MGR_SESS_IP, Param.MGR_SESS_PORT);
+			FileUtils.write(recvFilePath, data, Charset.ISO, false);
+		}
+		log.debug("已通知 [端口转发代理服务] 重置所有会话");
 	}
 	
 	/**
@@ -153,7 +177,6 @@ class _FPFClient extends LoopThread {
 			_FPFClientSession session = sessIts.next();
 			if(session.isClosed()) {
 				session.notifyExit();
-				session.clear();
 				sessIts.remove();
 			}
 		}
@@ -166,7 +189,7 @@ class _FPFClient extends LoopThread {
 		Iterator<_FPFClientSession> sessIts = sessions.values().iterator();
 		while(sessIts.hasNext()) {
 			_FPFClientSession session = sessIts.next();
-			session.clear();
+			session.notifyExit();
 			sessIts.remove();
 		}
 		sessions.clear();
