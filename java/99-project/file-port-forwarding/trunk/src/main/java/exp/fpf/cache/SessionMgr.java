@@ -40,7 +40,9 @@ public class SessionMgr {
 	
 	public void add(ISession session) {
 		if(session != null && !session.isClosed()) {
-			sessions.add(session);
+			synchronized (sessions) {
+				sessions.add(session);
+			}
 		}
 	}
 	
@@ -48,11 +50,16 @@ public class SessionMgr {
 	 * 清理无效会话
 	 */
 	public void delInvaildSession() {
-		Iterator<ISession> sessionIts = sessions.iterator();
-		while(sessionIts.hasNext()) {
-			ISession session = sessionIts.next();
-			if(session.isClosed()) {
-				sessionIts.remove();
+		synchronized (sessions) {
+			Iterator<ISession> sessionIts = sessions.iterator();
+			while(sessionIts.hasNext()) {
+				ISession session = sessionIts.next();
+				if(session == null) {
+					sessionIts.remove();
+					
+				} else if(session.isClosed()) {
+					sessionIts.remove();
+				}
 			}
 		}
 	}
@@ -61,12 +68,16 @@ public class SessionMgr {
 	 * 关闭并清除所有会话
 	 */
 	public void clear() {
-		Iterator<ISession> sessionIts = sessions.iterator();
-		while(sessionIts.hasNext()) {
-			ISession session = sessionIts.next();
-			session.close();
+		synchronized (sessions) {
+			Iterator<ISession> sessionIts = sessions.iterator();
+			while(sessionIts.hasNext()) {
+				ISession session = sessionIts.next();
+				if(session != null) {
+					session.close();
+				}
+			}
+			sessions.clear();
 		}
-		sessions.clear();
 	}
 	
 }

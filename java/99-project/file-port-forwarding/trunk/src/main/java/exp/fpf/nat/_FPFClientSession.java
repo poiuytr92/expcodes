@@ -37,6 +37,9 @@ class _FPFClientSession extends Thread {
 	/** 日志器 */
 	private Logger log = LoggerFactory.getLogger(_FPFClientSession.class);
 	
+	/** 会话交互日志器 */
+	private final static Logger slog = LoggerFactory.getLogger("SESSION");
+	
 	/** 提取文件时序的正则 */
 	private final static String REGEX = "-T(\\d+)";
 	
@@ -140,16 +143,17 @@ class _FPFClientSession extends Thread {
 		if(ResponseMode.SOCKET == Config.getInstn().getRspMode()) {
 			String json = BIZUtils.genJsonData(sessionId, data);
 			Sender.getInstn().send(json);
-			log.debug("会话 [{}] 失效, 已通过 [SOCKET] 反馈到对端请求终止 : \r\n{}", 
+			slog.debug("会话 [{}] 失效, 已通过 [SOCKET] 反馈到对端请求终止 : \r\n{}", 
 					sessionId, json);
 			
 		} else {
 			String recvFilePath = BIZUtils.genFileDataPath(
 					srMgr, sessionId, 0, Param.PREFIX_RECV, ip, port);
 			FileUtils.write(recvFilePath, data, Charset.ISO, false);
-			log.debug("会话 [{}] 失效, 已通过 [{}] 反馈到对端请求终止 : \r\n{}", 
+			slog.debug("会话 [{}] 失效, 已通过 [{}] 反馈到对端请求终止 : \r\n{}", 
 					sessionId, recvFilePath, data);
 		}
+		session.close();
 		clear();
 	}
 	

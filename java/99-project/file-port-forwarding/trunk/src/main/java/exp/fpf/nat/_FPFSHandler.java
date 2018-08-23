@@ -48,6 +48,7 @@ class _FPFSHandler implements IHandler {
 		if(BoolUtils.hit(50)) {
 			SessionMgr.getInstn().delInvaildSession();
 		}
+		
 		SessionMgr.getInstn().add(session);
 		return true;
 	}
