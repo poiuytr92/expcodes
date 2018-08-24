@@ -1,5 +1,6 @@
-package exp.libs.warp.db.nosql;
+package exp.libs.warp.db.nosql.redis;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.util.HashSet;
@@ -8,142 +9,108 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
+
+import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.Jedis;
-import exp.libs.envm.Charset;
+import redis.clients.jedis.JedisCluster;
+import redis.clients.jedis.JedisPoolConfig;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.ObjUtils;
-import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.db.nosql.RedisPool;
 
-/**
- * <PRE>
- * Redis数据库工具（仅适用于Redis单机模式）
- * ----------------------------------
- *  若Redis是以集群模式部署, 使用此连接池虽然可以连接, 但只是连接到集群的其中一台机器.
- *  换而言之，此时只能在这台特定的机器上面进行数据读写.
- *  若在机器A上面写, 再在机器B上面读, 就会因为不是使用集群连接而报错: JedisMovedDataException: MOVED 866
- *  解决方式是改用 JedisCluster 连接到集群.
- *  若redis不是集群部署模式，不能使用JedisCluster，否则报错：ERR This instance has cluster support disabled 
- * </PRE>
- * <br/><B>PROJECT : </B> exp-libs
- * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
- * @version   2018-07-31
- * @author    EXP: 272629724@qq.com
- * @since     jdk版本：jdk1.6
- */
-public class RedisUtils {
+//对于 Jedis 是唯一的对象，若连接超时则自动根据ip端口密码重连
+// 对于 JedisPool 用完就放回池再重新申请新的 Jedis 对象
+// 对于 JedisCluster 是唯一的对象（即使JedisCluster使用池也仅仅是内部节点用连接池，这个对象也是不变的）
 
-	/** 默认字符集编码 */
-	private final static String CHARSET = Charset.UTF8;
-	
-	/** Redis部分接口的返回值 */
-	private final static String OK = "OK";
 
-	/** 测试Redis连接有效性的返回值 */
-	private final static String PONG = "PONG";
-	
-	/** 私有化构造函数 */
-	protected RedisUtils() {}
-	
+public class RedisClient {
+
+	/** （适用于Redis单机模式） */
 	/**
-	 * 测试Redis连接
-	 * @param ip redis IP
-	 * @param port redis端口
-	 * @return true:连接成功; false:连接失败
+	 * Redis连接接口, 其实现类有两个：
+	 * 	_Jedis : 适用于Redis单机模式
+	 *  _JedisCluster : 适用于Redis集群模式
 	 */
-	public static boolean testConn(String ip, int port) {
-		return testConn(ip, port, null);
+	private _IJedis iJedis;
+	
+	/** Redis连接池（适用于Redis单机模式） */
+	private RedisPool pool;
+	
+	/** Redis集群连接（适用于Redis主从/哨兵/集群模式） */
+	private JedisCluster cluster;
+	
+	public RedisClient(JedisPoolConfig poolConfig, int timeout, 
+			String ip, int port, String password) {
+		iJedis = new _Jedis();
 	}
 	
 	/**
-	 * 测试Redis连接
-	 * @param ip redis IP
-	 * @param port redis端口
-	 * @param password redis密码
-	 * @return true:连接成功; false:连接失败
+	 * 
+	 * @param poolConfig
+	 * @param clusterSocket 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
 	 */
-	public static boolean testConn(String ip, int port, String password) {
-		Jedis jedis = new Jedis(ip, port);
-		boolean isOk = testConn(jedis, password);
-		jedis.close();
-		return isOk;
+	public RedisClient(GenericObjectPoolConfig poolConfig, int timeout, 
+			String... clusterSocket) {
+		
+	}
+
+	@SuppressWarnings("unchecked")
+	public RedisClient(GenericObjectPoolConfig poolConfig, int timeout, 
+			HostAndPort... clusterNodes) {
+//		iJedis = new _JedisCluster(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, password, poolConfig);
+	}
+	
+	
+	public static void main(String[] args) throws IOException {
+		test();
+	}
+	
+	public static void test() throws IOException {
+		JedisPoolConfig config = new JedisPoolConfig();
+        config.setMaxTotal(10);
+        config.setMaxIdle(10);
+        config.setMaxWaitMillis(1000);
+        config.setTestOnBorrow(true);
+		
+		Set<HostAndPort> nodes = new HashSet<HostAndPort>();
+		nodes.add(new HostAndPort("172.25.241.43", 16389));
+		JedisCluster jc = new JedisCluster(nodes, config);
+		System.out.println(jc.get("hello"));
+//		jc = new JedisCluster(nodes, poolConfig);
+		jc.close();
+		
+		System.out.println(jc.get("hello"));
+		
+//		Jedis conn = RedisUtils.getConn("172.25.241.43", 16379);
+//		conn.getClient().getHost();
+//		conn.getClient().getPort();
+//		conn.getClient().
+//		System.out.println(conn.clusterInfo());
 	}
 	
 	/**
-	 * 测试Redis连接
-	 * @param jedis redis连接对象
-	 * @return true:连接成功; false:连接失败
+	 * 断开Redis连接
 	 */
-	public static boolean testConn(Jedis jedis) {
-		return testConn(jedis, null);
+	public void close() {
+		iJedis.destory();
 	}
 	
 	/**
-	 * 测试Redis连接
-	 * @param jedis redis连接对象
-	 * @param password redis密码
-	 * @return true:连接成功; false:连接失败
-	 */
-	public static boolean testConn(Jedis jedis, String password) {
-		boolean isOk = false;
-		if(jedis != null) {
-			if(StrUtils.isNotTrimEmpty(password)) {
-				jedis.auth(password);
-			}
-			isOk = PONG.equalsIgnoreCase(jedis.ping());
-		}
-		return isOk;
-	}
-	
-	/**
-	 * 获取Redis连接
-	 * @param ip redis IP
-	 * @param port redis端口
-	 * @return
-	 */
-	public static Jedis getConn(String ip, int port) {
-		return getConn(ip, port, "");
-	}
-	
-	/**
-	 * 获取Redis连接
-	 * @param ip redis IP
-	 * @param port redis端口
-	 * @param password redis密码
-	 * @return
-	 */
-	public static Jedis getConn(String ip, int port, String password) {
-		Jedis jedis = new Jedis(ip, port);
-		if(StrUtils.isNotTrimEmpty(password)) {
-			jedis.auth(password);
-		}
-		return jedis;
-	}
-	
-	/**
-	 * 清空Redis库中所有数据
-	 * @param jedis redis连接对象
+	 * 清空Redis库中所有数据(此方法在集群模式下无效)
 	 * @return true:清空成功; false:清空失败
 	 */
-	public static boolean clearAllDatas(Jedis jedis) {
-		boolean isOk = false;
-		if(jedis != null) {
-			isOk = OK.equalsIgnoreCase(jedis.flushAll());
-		}
-		return isOk;
+	public boolean clearAll() {
+		return iJedis.clearAll();
 	}
 	
 	/**
 	 * 检查Redis库里面是否存在某个键值
-	 * @param jedis redis连接对象
 	 * @param key 被检查的键值
 	 * @return true:存在; false:不存在
 	 */
-	public static boolean existKey(Jedis jedis, String key) {
-		boolean isExist = false;
-		if(jedis != null && key != null) {
-			isExist = jedis.exists(key);
-		}
-		return isExist;
+	public boolean existKey(String key) {
+		return iJedis.existKey(key);
 	}
 	
 	/**
