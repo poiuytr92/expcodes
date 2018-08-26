@@ -57,17 +57,109 @@ public class RedisClient {
 	 */
 	private _IJedis iJedis;
 	
+	public RedisClient(String ip, int port) {
+		this.iJedis = new _Jedis(ip, port);
+	}
+
+	public RedisClient(String ip, int port, int timeout) {
+		this.iJedis = new _Jedis(timeout, ip, port);
+	}
+
+	public RedisClient(String ip, int port, String password) {
+		this.iJedis = new _Jedis(password, ip, port);
+	}
+
+	public RedisClient(String ip, int port, int timeout, String password) {
+		this.iJedis = new _Jedis(timeout, password, ip, port);
+	}
+	
+	public RedisClient(String ip, int port, int timeout, 
+			GenericObjectPoolConfig poolConfig) {
+		this.iJedis = new _Jedis(poolConfig, timeout, ip, port);
+	}
+	
+	public RedisClient(String ip, int port, String password, 
+			GenericObjectPoolConfig poolConfig) {
+		this.iJedis = new _Jedis(poolConfig, password, ip, port);
+	}
+	
+	/**
+	 * 
+	 * @param ip
+	 * @param port
+	 * @param timeout
+	 * @param password
+	 * @param poolConfig
+	 */
+	public RedisClient(String ip, int port, int timeout, String password, 
+			GenericObjectPoolConfig poolConfig) {
+		this.iJedis = new _Jedis(poolConfig, timeout, password, ip, port);
+	}
+	
+	public RedisClient(HostAndPort... clusterNodes) {
+		this.iJedis = new _JedisCluster(clusterNodes);
+	}
+
+	public RedisClient(int timeout, HostAndPort... clusterNodes) {
+		this.iJedis = new _JedisCluster(timeout, clusterNodes);
+	}
+	
+	public RedisClient(String password, HostAndPort... clusterNodes) {
+		this.iJedis = new _JedisCluster(password, clusterNodes);
+	}
+	
+	public RedisClient(int timeout, String password, 
+			HostAndPort... clusterNodes) {
+		this.iJedis = new _JedisCluster(timeout, password, clusterNodes);
+	}
+	
+	public RedisClient(GenericObjectPoolConfig poolConfig, 
+			int timeout, HostAndPort... clusterNodes) {
+		this.iJedis = new _JedisCluster(poolConfig, timeout, clusterNodes);
+	}
+	
+	public RedisClient(GenericObjectPoolConfig poolConfig, 
+			String password, HostAndPort... clusterNodes) {
+		this.iJedis = new _JedisCluster(poolConfig, password, clusterNodes);
+	}
+	
 	/**
 	 * 
 	 * @param poolConfig
 	 * @param timeout
 	 * @param password
-	 * @param ip
-	 * @param port
+	 * @param clusterNodes
 	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
-			int timeout, String password, String ip, int port) {
-		this.iJedis = new _Jedis(poolConfig, timeout, password, ip, port);
+			int timeout, String password, HostAndPort... clusterNodes) {
+		this.iJedis = new _JedisCluster(
+				poolConfig, timeout, password, clusterNodes);
+	}
+	
+	public RedisClient(String... clusterSockets) {
+		this(toArray(clusterSockets));
+	}
+	
+	public RedisClient(int timeout, String... clusterSockets) {
+		this(timeout, toArray(clusterSockets));
+	}
+	
+	public RedisClient(String password, String... clusterSockets) {
+		this(password, toArray(clusterSockets));
+	}
+	
+	public RedisClient(int timeout, String password, String... clusterSockets) {
+		this(timeout, password, toArray(clusterSockets));
+	}
+	
+	public RedisClient(GenericObjectPoolConfig poolConfig, 
+			int timeout, String... clusterSockets) {
+		this(poolConfig, timeout, toArray(clusterSockets));
+	}
+	
+	public RedisClient(GenericObjectPoolConfig poolConfig, 
+			String password, String... clusterSockets) {
+		this(poolConfig, password, toArray(clusterSockets));
 	}
 	
 	/**
@@ -78,7 +170,10 @@ public class RedisClient {
 	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			int timeout, String password, String... clusterSockets) {
-		
+		this(poolConfig, timeout, password, toArray(clusterSockets));
+	}
+
+	private static HostAndPort[] toArray(String[] clusterSockets) {
 		List<HostAndPort> nodeList = new ArrayList<HostAndPort>();
 		if(clusterSockets != null) {
 			for(String socket : clusterSockets) {
@@ -99,20 +194,7 @@ public class RedisClient {
 		for(int i = 0; i < nodeArray.length; i++) {
 			nodeArray[i] = nodeList.get(i);
 		}
-		
-		this.iJedis = new _JedisCluster(poolConfig, timeout, password, nodeArray);
-	}
-
-	/**
-	 * 
-	 * @param poolConfig
-	 * @param timeout
-	 * @param password
-	 * @param clusterNodes
-	 */
-	public RedisClient(GenericObjectPoolConfig poolConfig, 
-			int timeout, String password, HostAndPort... clusterNodes) {
-		this.iJedis = new _JedisCluster(poolConfig, timeout, password, clusterNodes);
+		return nodeArray;
 	}
 	
 	/**
