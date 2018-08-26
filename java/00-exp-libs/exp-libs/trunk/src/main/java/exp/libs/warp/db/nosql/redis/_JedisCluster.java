@@ -66,9 +66,22 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 				(poolConfig == null ? new GenericObjectPoolConfig() : poolConfig));
 	}
 
+	@Deprecated
 	@Override
 	public boolean isVaild() {
 		return false;	// 集群模式不支持此操作
+	}
+	
+	@Deprecated
+	@Override
+	public void autoCommit(boolean autoCommit) {
+		// Undo 集群模式不支持此操作
+	}
+
+	@Deprecated
+	@Override
+	public void commit() {
+		// Undo 集群模式不支持此操作
 	}
 	
 	@Override

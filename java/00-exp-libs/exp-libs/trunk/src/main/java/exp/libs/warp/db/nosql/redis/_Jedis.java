@@ -48,6 +48,12 @@ class _Jedis implements _IJedis {
 	/** Jedis连接池 */
 	private JedisPool pool;
 	
+	/** 是否自动提交(默认true, 即所有操作均为短连接) */
+	private boolean autoCommit;
+	
+	/** 当前持有的长连接(仅autoCommit=false时有效) */
+	private Jedis longJedis;
+	
 	protected _Jedis(String ip, int port) {
 		this(null, Protocol.DEFAULT_TIMEOUT, null, ip, port);
 	}
@@ -87,6 +93,8 @@ class _Jedis implements _IJedis {
 		this.pool = StrUtils.isTrimEmpty(password) ? 
 				new JedisPool(poolConfig, ip, port, timeout) : 
 				new JedisPool(poolConfig, ip, port, timeout, password);
+		this.autoCommit = true;
+		this.longJedis = null;
 	}
 	
 	/**
@@ -94,7 +102,10 @@ class _Jedis implements _IJedis {
 	 * @return
 	 */
 	private Jedis _getJedis() {
-		return pool.getResource();
+		if(autoCommit || !_isVaild(longJedis)) {
+			longJedis = pool.getResource();
+		}
+		return longJedis;
 	}
 	
 	/**
@@ -102,23 +113,44 @@ class _Jedis implements _IJedis {
 	 * @param jedis
 	 */
 	private void _close(Jedis jedis) {
-//		pool.returnResource(jedis);
-		jedis.close();
+		if(autoCommit && jedis != null) {
+//			pool.returnResource(jedis);
+			jedis.close();
+		}
 	}
 	
-	/**
-	 * 测试Redis连接是否有效
-	 * @return true:连接成功; false:连接失败
-	 */
+	@Override
 	public boolean isVaild() {
 		Jedis jedis = _getJedis();
-		boolean isOk = PONG.equalsIgnoreCase(jedis.ping());
+		boolean isOk = _isVaild(jedis);
 		_close(jedis);
 		return isOk;
 	}
 	
+	public boolean _isVaild(Jedis jedis) {
+		boolean isOk = false;
+		if(jedis != null) {
+			isOk = PONG.equalsIgnoreCase(jedis.ping());
+		}
+		return isOk;
+	}
+	
+	@Override
+	public void autoCommit(boolean autoCommit) {
+		this.autoCommit = autoCommit;
+		if(autoCommit == false) {
+			_close(longJedis);
+		}
+	}
+
+	@Override
+	public void commit() {
+		autoCommit(false);
+	}
+	
 	@Override
 	public void destory() {
+		commit();
 		pool.close();
 	}
 	
@@ -424,5 +456,5 @@ class _Jedis implements _IJedis {
 		}
 		return num;
 	}
-	
+
 }

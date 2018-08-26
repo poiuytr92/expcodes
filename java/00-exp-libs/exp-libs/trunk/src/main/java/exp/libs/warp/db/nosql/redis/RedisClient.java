@@ -57,6 +57,10 @@ public class RedisClient {
 	 */
 	private _IJedis iJedis;
 	
+	public RedisClient(RedisConfig redisConfig) {
+		// TODO 单机/集群  （连接池是强制的）
+	}
+	
 	public RedisClient(String ip, int port) {
 		this.iJedis = new _Jedis(ip, port);
 	}
@@ -195,6 +199,33 @@ public class RedisClient {
 			nodeArray[i] = nodeList.get(i);
 		}
 		return nodeArray;
+	}
+	
+	/**
+	 * 测试Redis连接是否有效(集群模式不支持此操作)
+	 * @return true:连接成功; false:连接失败
+	 */
+	public boolean isVaild() {
+		return iJedis.isVaild();
+	}
+	
+	/**
+	 * <pre>
+	 * (集群模式不支持此操作)
+	 * 非集群且使用连接池的情况下, redis的操作默认均为短连接.
+	 * 此方法可邻接切换操作模式为长连接, 在调用 @link{ commit() } 方法后恢复为短连接模式.
+	 * </pre>
+	 * @param autoCommit true:自动提交; false:手动提交(需调用 @link{ commit() } 方法)
+	 */
+	public void autoCommit(boolean autoCommit) {
+		iJedis.autoCommit(autoCommit);
+	}
+	
+	/**
+	 * 把redis操作模式切换为默认的短连接模式(集群模式不支持此操作)
+	 */
+	public void commit() {
+		iJedis.commit();
 	}
 	
 	/**
