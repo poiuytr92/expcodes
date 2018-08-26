@@ -8,6 +8,12 @@ import java.util.Set;
 interface _IJedis {
 
 	/**
+	 * 测试Redis连接是否有效
+	 * @return true:连接成功; false:连接失败
+	 */
+	public boolean isVaild();
+	
+	/**
 	 * 断开Redis连接
 	 */
 	public void destory();
@@ -51,7 +57,7 @@ interface _IJedis {
 	/**
 	 * 获取指定键的值
 	 * @param key 指定的键
-	 * @return 对应的值
+	 * @return 对应的值（若不存在键则返回null）
 	 */
 	public String getVal(String key);
 	
@@ -62,7 +68,7 @@ interface _IJedis {
 	 * </pre>
 	 * @param key 指定的键
 	 * @param object 新增的对象（须实现Serializable接口）
-	 * @return
+	 * @return true:新增成功; false:新增失败
 	 */
 	public boolean addObj(String key, Serializable object);
 	

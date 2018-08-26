@@ -17,6 +17,7 @@ import exp.libs.envm.Charset;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.ObjUtils;
 
+// Redis集群连接（适用于Redis主从/哨兵/集群模式）
 class _JedisCluster extends JedisCluster implements _IJedis {
 
 	/** 默认字符集编码 */
@@ -25,16 +26,51 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	/** Redis部分接口的返回值 */
 	private final static String OK = "OK";
 
-	/** 测试Redis连接有效性的返回值 */
-	private final static String PONG = "PONG";
+	protected _JedisCluster(HostAndPort... clusterNodes) {
+		this(null, DEFAULT_TIMEOUT, null, clusterNodes);
+	}
 	
-	public _JedisCluster(Set<HostAndPort> jedisClusterNode,
-			int connectionTimeout, int soTimeout, int maxAttempts,
-			String password, GenericObjectPoolConfig poolConfig) {
-		super(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, password,
-				poolConfig);
+	protected _JedisCluster(int timeout, HostAndPort... clusterNodes) {
+		this(null, timeout, null, clusterNodes);
+	}
+	
+	protected _JedisCluster(String password, HostAndPort... clusterNodes) {
+		this(null, DEFAULT_TIMEOUT, password, clusterNodes);
+	}
+	
+	protected _JedisCluster(int timeout, String password, 
+			HostAndPort... clusterNodes) {
+		this(null, timeout, password, clusterNodes);
+	}
+	
+	protected _JedisCluster(GenericObjectPoolConfig poolConfig, 
+			HostAndPort... clusterNodes) {
+		this(poolConfig, DEFAULT_TIMEOUT, null, clusterNodes);
+	}
+	
+	protected _JedisCluster(GenericObjectPoolConfig poolConfig, 
+			int timeout, HostAndPort... clusterNodes) {
+		this(poolConfig, timeout, null, clusterNodes);
+	}
+	
+	protected _JedisCluster(GenericObjectPoolConfig poolConfig, 
+			String password, HostAndPort... clusterNodes) {
+		this(poolConfig, DEFAULT_TIMEOUT, password, clusterNodes);
+	}
+	
+	@SuppressWarnings("unchecked")
+	protected _JedisCluster(GenericObjectPoolConfig poolConfig, 
+			int timeout, String password, HostAndPort... clusterNodes) {
+		super(new HashSet<HostAndPort>(ListUtils.asList(clusterNodes)), timeout, 
+				timeout, DEFAULT_MAX_REDIRECTIONS, password, 
+				(poolConfig == null ? new GenericObjectPoolConfig() : poolConfig));
 	}
 
+	@Override
+	public boolean isVaild() {
+		return false;	// 集群模式不支持此操作
+	}
+	
 	@Override
 	public void destory() {
 		try {
@@ -210,7 +246,7 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	
 	@Override
 	public long addToList(String listKey, String... listValues) {
-		return addToListHead(listKey, listValues);
+		return addToListTail(listKey, listValues);
 	}
 	
 	@Override

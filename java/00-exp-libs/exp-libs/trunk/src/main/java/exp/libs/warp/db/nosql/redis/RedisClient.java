@@ -2,6 +2,7 @@ package exp.libs.warp.db.nosql.redis;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -12,7 +13,8 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import redis.clients.jedis.JedisPoolConfig;
-import exp.libs.warp.db.nosql.RedisPool;
+import exp.libs.utils.num.NumUtils;
+import exp.libs.utils.other.StrUtils;
 
 //对于 Jedis 是唯一的对象，若连接超时则自动根据ip端口密码重连
 // 对于 JedisPool 用完就放回池再重新申请新的 Jedis 对象
@@ -21,42 +23,6 @@ import exp.libs.warp.db.nosql.RedisPool;
 
 public class RedisClient {
 
-	/** （适用于Redis单机模式） */
-	/**
-	 * Redis连接接口, 其实现类有两个：
-	 * 	_Jedis : 适用于Redis单机模式
-	 *  _JedisCluster : 适用于Redis集群模式
-	 */
-	private _IJedis iJedis;
-	
-	/** Redis连接池（适用于Redis单机模式） */
-	private RedisPool pool;
-	
-	/** Redis集群连接（适用于Redis主从/哨兵/集群模式） */
-	private JedisCluster cluster;
-	
-	public RedisClient(JedisPoolConfig poolConfig, int timeout, 
-			String ip, int port, String password) {
-		iJedis = new _Jedis();
-	}
-	
-	/**
-	 * 
-	 * @param poolConfig
-	 * @param clusterSocket 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
-	 */
-	public RedisClient(GenericObjectPoolConfig poolConfig, int timeout, 
-			String... clusterSocket) {
-		
-	}
-
-	@SuppressWarnings("unchecked")
-	public RedisClient(GenericObjectPoolConfig poolConfig, int timeout, 
-			HostAndPort... clusterNodes) {
-//		iJedis = new _JedisCluster(jedisClusterNode, connectionTimeout, soTimeout, maxAttempts, password, poolConfig);
-	}
-	
-	
 	public static void main(String[] args) throws IOException {
 		test();
 	}
@@ -82,6 +48,71 @@ public class RedisClient {
 //		conn.getClient().getPort();
 //		conn.getClient().
 //		System.out.println(conn.clusterInfo());
+	}
+	
+	/**
+	 * Redis连接接口, 其实现类有两个：
+	 * 	_Jedis : 适用于Redis单机模式
+	 *  _JedisCluster : 适用于Redis集群模式
+	 */
+	private _IJedis iJedis;
+	
+	/**
+	 * 
+	 * @param poolConfig
+	 * @param timeout
+	 * @param password
+	 * @param ip
+	 * @param port
+	 */
+	public RedisClient(GenericObjectPoolConfig poolConfig, 
+			int timeout, String password, String ip, int port) {
+		this.iJedis = new _Jedis(poolConfig, timeout, password, ip, port);
+	}
+	
+	/**
+	 * 
+	 * @param poolConfig
+	 * @param timeout
+	 * @param clusterSocket 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
+	 */
+	public RedisClient(GenericObjectPoolConfig poolConfig, 
+			int timeout, String password, String... clusterSockets) {
+		
+		List<HostAndPort> nodeList = new ArrayList<HostAndPort>();
+		if(clusterSockets != null) {
+			for(String socket : clusterSockets) {
+				if(StrUtils.isTrimEmpty(socket)) {
+					continue;
+				}
+				
+				String[] rst = socket.split(":");
+				if(rst.length == 2) {
+					String host = rst[0];
+					int port = NumUtils.toInt(rst[1], 0);
+					nodeList.add(new HostAndPort(host, port));
+				}
+			}
+		}
+		
+		HostAndPort[] nodeArray = new HostAndPort[nodeList.size()];
+		for(int i = 0; i < nodeArray.length; i++) {
+			nodeArray[i] = nodeList.get(i);
+		}
+		
+		this.iJedis = new _JedisCluster(poolConfig, timeout, password, nodeArray);
+	}
+
+	/**
+	 * 
+	 * @param poolConfig
+	 * @param timeout
+	 * @param password
+	 * @param clusterNodes
+	 */
+	public RedisClient(GenericObjectPoolConfig poolConfig, 
+			int timeout, String password, HostAndPort... clusterNodes) {
+		this.iJedis = new _JedisCluster(poolConfig, timeout, password, clusterNodes);
 	}
 	
 	/**
@@ -140,7 +171,7 @@ public class RedisClient {
 	/**
 	 * 获取指定键的值
 	 * @param key 指定的键
-	 * @return 对应的值
+	 * @return 对应的值（若不存在键则返回null）
 	 */
 	public String getVal(String key) {
 		return iJedis.getVal(key);

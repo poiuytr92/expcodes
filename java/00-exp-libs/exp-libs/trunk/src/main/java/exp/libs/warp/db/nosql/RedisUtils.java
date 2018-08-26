@@ -153,11 +153,11 @@ public class RedisUtils {
 	 * @return 删除成功的个数
 	 */
 	public static long delKeys(Jedis jedis, String... keys) {
-		long size = 0;
+		long num = 0;
 		if(jedis != null && keys != null) {
-			size = jedis.del(keys);
+			num = jedis.del(keys);
 		}
-		return size;
+		return num;
 	}
 	
 	/**
@@ -194,10 +194,10 @@ public class RedisUtils {
 	 * 获取指定键的值
 	 * @param jedis redis连接对象
 	 * @param key 指定的键
-	 * @return 对应的值
+	 * @return 对应的值（若不存在键则返回null）
 	 */
 	public static String getVal(Jedis jedis, String key) {
-		String value = "";
+		String value = null;
 		if(jedis != null && key != null) {
 			value = jedis.get(key);
 		}
@@ -212,7 +212,7 @@ public class RedisUtils {
 	 * @param jedis redis连接对象
 	 * @param key 指定的键
 	 * @param object 新增的对象（须实现Serializable接口）
-	 * @return
+	 * @return true:新增成功; false:新增失败
 	 */
 	public static boolean addObj(Jedis jedis, String key, Serializable object) {
 		boolean isOk = false;
@@ -388,11 +388,11 @@ public class RedisUtils {
 	 * @return 删除成功的个数
 	 */
 	public static long delMapKeys(Jedis jedis, String mapKey, String... inMapKeys) {
-		long size = 0;
+		long num = 0;
 		if(jedis != null && mapKey != null && inMapKeys != null) {
-			size = jedis.hdel(mapKey, inMapKeys);
+			num = jedis.hdel(mapKey, inMapKeys);
 		}
-		return size;
+		return num;
 	}
 	
 	/**
@@ -403,7 +403,7 @@ public class RedisUtils {
 	 * @return 添加后，该的队列的总长度
 	 */
 	public static long addToList(Jedis jedis, String listKey, String... listValues) {
-		return addToListHead(jedis, listKey, listValues);
+		return addToListTail(jedis, listKey, listValues);
 	}
 	
 	/**
@@ -414,16 +414,16 @@ public class RedisUtils {
 	 * @return 添加后，该的队列的总长度
 	 */
 	public static long addToListHead(Jedis jedis, String listKey, String... listValues) {
-		long size = 0;
+		long num = 0;
 		if(jedis != null && listKey != null && listValues != null) {
 			for(String value : listValues) {
 				if(value == null) {
 					continue;
 				}
-				size = jedis.lpush(listKey, value);
+				num = jedis.lpush(listKey, value);
 			}
 		}
-		return size;
+		return num;
 	}
 	
 	/**
@@ -434,16 +434,16 @@ public class RedisUtils {
 	 * @return 添加后，该的队列的总长度
 	 */
 	public static long addToListTail(Jedis jedis, String listKey, String... listValues) {
-		long size = 0;
+		long num = 0;
 		if(jedis != null && listKey != null && listValues != null) {
 			for(String value : listValues) {
 				if(value == null) {
 					continue;
 				}
-				size = jedis.rpush(listKey, value);
+				num = jedis.rpush(listKey, value);
 			}
 		}
-		return size;
+		return num;
 	}
 	
 	/**
@@ -468,11 +468,11 @@ public class RedisUtils {
 	 * @return 成功添加到该集合的值个数
 	 */
 	public static long addToSet(Jedis jedis, String setKey, String... setValues) {
-		long addNum = 0;
+		long num = 0;
 		if(jedis != null && setKey != null && setValues != null) {
-			addNum = jedis.sadd(setKey, setValues);
+			num = jedis.sadd(setKey, setValues);
 		}
-		return addNum;
+		return num;
 	}
 	
 	/**
@@ -526,11 +526,11 @@ public class RedisUtils {
 	 * @return 成功从改集合中删除的值个数
 	 */
 	public static long delSetVals(Jedis jedis, String setKey, String... setValues) {
-		long size = 0;
+		long num = 0;
 		if(jedis != null && setKey != null && setValues != null) {
-			size = jedis.srem(setKey, setValues);
+			num = jedis.srem(setKey, setValues);
 		}
-		return size;
+		return num;
 	}
 	
 }
