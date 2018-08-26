@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config hint="全量配置"> 
   
-  <datasources caption="数据源列表" hint="">
-    <datasource id="TEST-DS-SQL" caption="示例配置" hint="">
+  <datasources caption="数据源列表">
+    <datasource id="TEST-DS-SQL" caption="示例配置">
       <driver default="mysql" caption="数据源驱动类型" hint="常用枚举:
       	oracle/mysql/sqlite/redis">mysql</driver>
       <ip caption="数据库IP">127.0.0.1</ip>
@@ -25,7 +25,7 @@
       <trace default="false" caption="DEBUG模式" hint="使用log记录执行的sql">false</trace>
     </datasource>
     
-    <datasource id="TEST-DS-NOSQL" caption="示例配置" hint="">
+    <datasource id="TEST-DS-NOSQL" caption="示例配置">
       <driver default="mysql" caption="数据源驱动类型" hint="常用枚举:
       	oracle/mysql/sqlite/redis">redis</driver>
       <ip caption="数据库IP">127.0.0.1</ip>
@@ -40,7 +40,7 @@
   </datasources>
   
   <sockets caption="Socket列表">
-    <socket id="TEST-SOCK" caption="示例配置" hint="">
+    <socket id="TEST-SOCK" caption="示例配置">
       <ip default="127.0.0.1" caption="服务IP">127.0.0.1</ip>
       <port default="9998" caption="服务端口">9998</port>
       <username caption="登陆账号"></username>
