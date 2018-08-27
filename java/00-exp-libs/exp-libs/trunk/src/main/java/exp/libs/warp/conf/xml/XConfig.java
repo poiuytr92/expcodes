@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import exp.libs.utils.os.ThreadUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.db.nosql.bean.RedisBean;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.mq.jms.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;
@@ -682,6 +683,29 @@ public class XConfig implements Runnable, _IConfig {
 		return ds;
 	}
 
+	/**
+	 * 获取固定格式配置对象 - Redis数据源.
+	 * @param Id 数据源标签的id属性值
+	 * @return 若无效则返回默认数据源对象 (绝对不返回null)
+	 */
+	@Override
+	public RedisBean getRedisBean(String redisId) {
+		RedisBean rb = null;
+		if(isReflash && reflashing) {
+			synchronized (rLock) {
+				rb = config.getRedisBean(redisId);
+			}
+		} else {
+			Object obj = nearValues.get(redisId);
+			if(obj == null) {
+				obj = config.getRedisBean(redisId);
+				nearValues.put(redisId, obj);
+			}
+			rb = ((RedisBean) obj).clone();
+		}
+		return rb;
+	}
+	
 	/**
 	 * 获取固定格式配置对象 - socket.
 	 * @param sockId socket标签的id属性值

@@ -575,10 +575,13 @@ public class DataSourceBean {
 		sb.append("test-before-use : ").append(isTestBeforeUse()).append("\r\n");
 		sb.append("test-after-use : ").append(isTestAfterUse()).append("\r\n");
 		sb.append("trace : ").append(isTrace()).append("\r\n");
-		sb.append("--------------------------------------------\r\n");
+		sb.append("------------------------------------------------\r\n");
 		return sb.toString();
 	}
 	
+	/**
+	 * 克隆数据源配置
+	 */
 	public DataSourceBean clone() {
 		
 		// 部分get/set方法含有校验逻辑，若通过setXX(getXX)可能会因为重复校验导致数据异常

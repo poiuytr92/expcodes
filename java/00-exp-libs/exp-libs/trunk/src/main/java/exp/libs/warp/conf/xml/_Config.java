@@ -21,6 +21,7 @@ import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.BoolUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.db.nosql.bean.RedisBean;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.mq.jms.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;
@@ -299,7 +300,6 @@ class _Config implements _IConfig {
 			return ds;
 		}
 		
-		dsId = dsId.trim();
 		String xPath = toXPath("datasource", dsId);
 		XNode xNode = findXNode(xPath);
 		if(xNode != NULL_XNODE) {
@@ -328,13 +328,35 @@ class _Config implements _IConfig {
 	}
 	
 	@Override
+	public RedisBean getRedisBean(String redisId) {
+		RedisBean rb = new RedisBean();
+		if(StrUtils.isEmpty(redisId)) {
+			return rb;
+		}
+		
+		String xPath = toXPath("redis", redisId);
+		XNode xNode = findXNode(xPath);
+		if(xNode != NULL_XNODE) {
+			rb.setId(redisId);
+			rb.setCluster(BoolUtils.toBool(xNode.getChildVal("cluster"), false));
+			rb.addSockets(xNode.getChildVal("sockets"));
+			rb.setPassword(xNode.getChildVal("password"));
+			rb.setTimeout(NumUtils.toInt(xNode.getChildVal("timeout"), 0));
+			rb.setMaxTotal(NumUtils.toInt(xNode.getChildVal("maxTotal"), 0));
+			rb.setMaxIdle(NumUtils.toInt(xNode.getChildVal("maxIdle"), 0));
+			rb.setMaxWaitMillis(NumUtils.toLong(xNode.getChildVal("maxWaitMillis"), -1));
+			rb.setTestOnBorrow(BoolUtils.toBool(xNode.getChildVal("testOnBorrow"), true));
+		}
+		return rb;
+	}
+	
+	@Override
 	public SocketBean getSocketBean(String sockId) {
 		SocketBean sb = new SocketBean();
 		if(StrUtils.isEmpty(sockId)) {
 			return sb;
 		}
 		
-		sockId = sockId.trim();
 		String xPath = toXPath("socket", sockId);
 		XNode xNode = findXNode(xPath);
 		if(xNode != NULL_XNODE) {

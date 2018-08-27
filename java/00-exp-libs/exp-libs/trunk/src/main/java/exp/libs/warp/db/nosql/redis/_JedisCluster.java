@@ -17,7 +17,16 @@ import exp.libs.envm.Charset;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.ObjUtils;
 
-// Redis集群连接（适用于Redis主从/哨兵/集群模式）
+/**
+ * <PRE>
+ * Redis集群连接（适用于Redis集群模式）
+ * </PRE>
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-07-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _JedisCluster extends JedisCluster implements _IJedis {
 
 	/** 默认字符集编码 */

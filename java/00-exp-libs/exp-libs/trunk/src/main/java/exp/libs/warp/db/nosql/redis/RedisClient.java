@@ -1,9 +1,9 @@
 package exp.libs.warp.db.nosql.redis;
 
-import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -11,54 +11,67 @@ import java.util.Set;
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 
 import redis.clients.jedis.HostAndPort;
-import redis.clients.jedis.JedisCluster;
-import redis.clients.jedis.JedisPoolConfig;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.db.nosql.bean.RedisBean;
 
-//对于 Jedis 是唯一的对象，若连接超时则自动根据ip端口密码重连
-// 对于 JedisPool 用完就放回池再重新申请新的 Jedis 对象
-// 对于 JedisCluster 是唯一的对象（即使JedisCluster使用池也仅仅是内部节点用连接池，这个对象也是不变的）
-
-
+/**
+ * <PRE>
+ * Redis连接客户端.
+ * 内部自带连接池, 适用于Redis单机/主从/哨兵/集群模式 (自动根据实际配置切换到集群/非集群的连接方式)
+ * </PRE>
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-07-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class RedisClient {
 
-	public static void main(String[] args) throws IOException {
-		test();
-	}
+	public final static String DEFAULT_IP = "127.0.0.1";
 	
-	public static void test() throws IOException {
-		JedisPoolConfig config = new JedisPoolConfig();
-        config.setMaxTotal(10);
-        config.setMaxIdle(10);
-        config.setMaxWaitMillis(1000);
-        config.setTestOnBorrow(true);
-		
-		Set<HostAndPort> nodes = new HashSet<HostAndPort>();
-		nodes.add(new HostAndPort("172.25.241.43", 16389));
-		JedisCluster jc = new JedisCluster(nodes, config);
-		System.out.println(jc.get("hello"));
-//		jc = new JedisCluster(nodes, poolConfig);
-		jc.close();
-		
-		System.out.println(jc.get("hello"));
-		
-//		Jedis conn = RedisUtils.getConn("172.25.241.43", 16379);
-//		conn.getClient().getHost();
-//		conn.getClient().getPort();
-//		conn.getClient().
-//		System.out.println(conn.clusterInfo());
-	}
+	public final static int DEFAULT_PORT = 6379;
 	
 	/**
 	 * Redis连接接口, 其实现类有两个：
-	 * 	_Jedis : 适用于Redis单机模式
+	 * 	_Jedis : 适用于Redis单机/主从/哨兵模式
 	 *  _JedisCluster : 适用于Redis集群模式
 	 */
 	private _IJedis iJedis;
 	
-	public RedisClient(RedisConfig redisConfig) {
-		// TODO 单机/集群  （连接池是强制的）
+	public RedisClient(RedisBean rb) {
+		
+		// 默认模式
+		if(rb == null) {
+			this.iJedis = new _Jedis(DEFAULT_IP, DEFAULT_PORT);
+			
+		// 非集群模式
+		} else if(!rb.isCluster()) {
+			HostAndPort hp = new HostAndPort(DEFAULT_IP, DEFAULT_PORT);
+			Iterator<String> sockets = rb.getSockets().iterator();
+			if(sockets.hasNext()) {
+				hp = toHostAndPort(sockets.next());
+			}
+			this.iJedis = new _Jedis(rb.toPoolConfig(), rb.getTimeout(), 
+					rb.getPassword(), hp.getHost(), hp.getPort());
+			
+		// 集群模式
+		} else {
+			List<HostAndPort> clusterNodes = new LinkedList<HostAndPort>();
+			Set<String> sockets = rb.getSockets();
+			for(String socket : sockets) {
+				HostAndPort node = toHostAndPort(socket);
+				if(node != null) {
+					clusterNodes.add(node);
+				}
+			}
+			this.iJedis = new _JedisCluster(rb.toPoolConfig(), rb.getTimeout(), 
+					rb.getPassword(), toArray(clusterNodes));
+		}
+	}
+	
+	public RedisClient() {
+		this(DEFAULT_IP, DEFAULT_PORT);
 	}
 	
 	public RedisClient(String ip, int port) {
@@ -101,30 +114,35 @@ public class RedisClient {
 	}
 	
 	public RedisClient(HostAndPort... clusterNodes) {
-		this.iJedis = new _JedisCluster(clusterNodes);
+		this.iJedis = new _JedisCluster(removeDuplicate(clusterNodes));
 	}
 
 	public RedisClient(int timeout, HostAndPort... clusterNodes) {
-		this.iJedis = new _JedisCluster(timeout, clusterNodes);
+		this.iJedis = new _JedisCluster(timeout, 
+				removeDuplicate(clusterNodes));
 	}
 	
 	public RedisClient(String password, HostAndPort... clusterNodes) {
-		this.iJedis = new _JedisCluster(password, clusterNodes);
+		this.iJedis = new _JedisCluster(password, 
+				removeDuplicate(clusterNodes));
 	}
 	
 	public RedisClient(int timeout, String password, 
 			HostAndPort... clusterNodes) {
-		this.iJedis = new _JedisCluster(timeout, password, clusterNodes);
+		this.iJedis = new _JedisCluster(timeout, password, 
+				removeDuplicate(clusterNodes));
 	}
 	
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			int timeout, HostAndPort... clusterNodes) {
-		this.iJedis = new _JedisCluster(poolConfig, timeout, clusterNodes);
+		this.iJedis = new _JedisCluster(poolConfig, timeout, 
+				removeDuplicate(clusterNodes));
 	}
 	
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			String password, HostAndPort... clusterNodes) {
-		this.iJedis = new _JedisCluster(poolConfig, password, clusterNodes);
+		this.iJedis = new _JedisCluster(poolConfig, password, 
+				removeDuplicate(clusterNodes));
 	}
 	
 	/**
@@ -141,29 +159,29 @@ public class RedisClient {
 	}
 	
 	public RedisClient(String... clusterSockets) {
-		this(toArray(clusterSockets));
+		this(toHostAndPorts(clusterSockets));
 	}
 	
 	public RedisClient(int timeout, String... clusterSockets) {
-		this(timeout, toArray(clusterSockets));
+		this(timeout, toHostAndPorts(clusterSockets));
 	}
 	
 	public RedisClient(String password, String... clusterSockets) {
-		this(password, toArray(clusterSockets));
+		this(password, toHostAndPorts(clusterSockets));
 	}
 	
 	public RedisClient(int timeout, String password, String... clusterSockets) {
-		this(timeout, password, toArray(clusterSockets));
+		this(timeout, password, toHostAndPorts(clusterSockets));
 	}
 	
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			int timeout, String... clusterSockets) {
-		this(poolConfig, timeout, toArray(clusterSockets));
+		this(poolConfig, timeout, toHostAndPorts(clusterSockets));
 	}
 	
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			String password, String... clusterSockets) {
-		this(poolConfig, password, toArray(clusterSockets));
+		this(poolConfig, password, toHostAndPorts(clusterSockets));
 	}
 	
 	/**
@@ -174,31 +192,59 @@ public class RedisClient {
 	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			int timeout, String password, String... clusterSockets) {
-		this(poolConfig, timeout, password, toArray(clusterSockets));
+		this(poolConfig, timeout, password, toHostAndPorts(clusterSockets));
 	}
 
-	private static HostAndPort[] toArray(String[] clusterSockets) {
-		List<HostAndPort> nodeList = new ArrayList<HostAndPort>();
-		if(clusterSockets != null) {
-			for(String socket : clusterSockets) {
-				if(StrUtils.isTrimEmpty(socket)) {
-					continue;
-				}
-				
-				String[] rst = socket.split(":");
-				if(rst.length == 2) {
-					String host = rst[0];
-					int port = NumUtils.toInt(rst[1], 0);
-					nodeList.add(new HostAndPort(host, port));
+	/**
+	 * 集群节点去重
+	 * @param clusterNodes
+	 * @return
+	 */
+	private static HostAndPort[] removeDuplicate(HostAndPort[] clusterNodes) {
+		List<HostAndPort> list = new LinkedList<HostAndPort>();
+		if(clusterNodes != null) {
+			Set<String> sockets = new HashSet<String>();
+			for(HostAndPort node : clusterNodes) {
+				if(sockets.add(node.toString())) {
+					list.add(node);
 				}
 			}
 		}
-		
-		HostAndPort[] nodeArray = new HostAndPort[nodeList.size()];
-		for(int i = 0; i < nodeArray.length; i++) {
-			nodeArray[i] = nodeList.get(i);
+		return toArray(list);
+	}
+	
+	private static HostAndPort[] toHostAndPorts(String[] clusterSockets) {
+		List<HostAndPort> list = new LinkedList<HostAndPort>();
+		if(clusterSockets != null) {
+			for(String socket : clusterSockets) {
+				HostAndPort hp = toHostAndPort(socket);
+				if(hp != null) {
+					list.add(hp);
+				}
+			}
 		}
-		return nodeArray;
+		return toArray(list);
+	}
+	
+	private static HostAndPort toHostAndPort(String socket) {
+		HostAndPort hp = null;
+		if(StrUtils.isNotTrimEmpty(socket)) {
+			String[] rst = HostAndPort.extractParts(socket);
+			if(rst.length == 2) {
+				String host = rst[0];
+				int port = NumUtils.toInt(rst[1], DEFAULT_PORT);
+				hp = new HostAndPort(host, port);
+			}
+		}
+		return hp;
+	}
+	
+	private static HostAndPort[] toArray(List<HostAndPort> clusterNodes) {
+		HostAndPort[] array = new HostAndPort[clusterNodes.size()];
+		for(int i = 0; i < array.length; i++) {
+			array[i] = clusterNodes.get(i);
+		}
+		return array;
 	}
 	
 	/**

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.dom4j.Element;
 
+import exp.libs.warp.db.nosql.bean.RedisBean;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.mq.jms.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;
@@ -64,6 +65,8 @@ interface _IConfig {
 	public Map<String, String> getAttributes(String xName, String xId);
 	
 	public DataSourceBean getDataSourceBean(String dsId);
+	
+	public RedisBean getRedisBean(String redisId);
 	
 	public SocketBean getSocketBean(String sockId);
 	
