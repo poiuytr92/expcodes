@@ -217,7 +217,7 @@ public class TensorFlowAPI {
     
     /**
      * 获取运行日志统计概要.
-     * 	需在执行{@link run}方法时打开debug开关
+     * 	需在执行{@link #run}方法时打开debug开关
      * @return 运行日志统计概要
      */
     public String getRunlog() {

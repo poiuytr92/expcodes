@@ -16,6 +16,7 @@ import redis.clients.jedis.JedisCluster;
 import exp.libs.envm.Charset;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.ObjUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -71,7 +72,8 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	protected _JedisCluster(GenericObjectPoolConfig poolConfig, 
 			int timeout, String password, HostAndPort... clusterNodes) {
 		super(new HashSet<HostAndPort>(ListUtils.asList(clusterNodes)), timeout, 
-				timeout, DEFAULT_MAX_REDIRECTIONS, password, 
+				timeout, DEFAULT_MAX_REDIRECTIONS, 
+				(StrUtils.isEmpty(password) ? null : password), 
 				(poolConfig == null ? new GenericObjectPoolConfig() : poolConfig));
 	}
 
@@ -83,7 +85,7 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	
 	@Deprecated
 	@Override
-	public void autoCommit(boolean autoCommit) {
+	public void setAutoCommit(boolean autoCommit) {
 		// Undo 集群模式不支持此操作
 	}
 

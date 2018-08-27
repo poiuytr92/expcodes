@@ -24,7 +24,7 @@ public class XlsUtils {
 	
 	/**
 	 * 生成单元格格式.
-	 * 	此方法可配合 {@link Sheet.setStyle()} 使用
+	 * 	此方法可配合 {@link Sheet#setStyle} 使用
 	 * 
 	 * @param excel Excel工作簿对象
 	 * @param fontName 字体名称, 如: 宋体
@@ -39,7 +39,7 @@ public class XlsUtils {
 	
 	/**
 	 * 生成单元格格式.
-	 * 	此方法可配合 {@link Sheet.setStyle()} 使用
+	 * 	此方法可配合 {@link Sheet#setStyle} 使用
 	 * 
 	 * @param excel Excel工作簿对象
 	 * @param bgColor 单元格背景色, 如：HSSFColor.LIGHT_GREEN.index
@@ -51,7 +51,7 @@ public class XlsUtils {
 	
 	/**
 	 * 生成单元格格式.
-	 * 	此方法可配合 {@link Sheet.setStyle()} 使用
+	 * 	此方法可配合 {@link Sheet#setStyle} 使用
 	 * 
 	 * @param excel Excel工作簿对象
 	 * @param alignCenter 是否完全居中(水平+垂直方向居中)
@@ -64,7 +64,7 @@ public class XlsUtils {
 	
 	/**
 	 * 生成单元格格式.
-	 * 	此方法可配合 {@link Sheet.setStyle()} 使用
+	 * 	此方法可配合 {@link Sheet#setStyle} 使用
 	 * 
 	 * @param excel Excel工作簿对象
 	 * @param fontName 字体名称, 如: 宋体

@@ -107,6 +107,13 @@
           <artifactId>dom4j</artifactId>
           <version>1.6.1</version>
         </dependency>
+        
+        <!-- ini解析构件 -->
+        <dependency>
+		  <groupId>org.dtools</groupId>
+		  <artifactId>javaini</artifactId>
+		  <version>1.1.0.0</version>
+		</dependency>
     
         <!-- 数据库连接池 -->
         <dependency>

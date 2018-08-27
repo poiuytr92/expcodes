@@ -136,7 +136,7 @@ class _Jedis implements _IJedis {
 	}
 	
 	@Override
-	public void autoCommit(boolean autoCommit) {
+	public void setAutoCommit(boolean autoCommit) {
 		this.autoCommit = autoCommit;
 		if(autoCommit == false) {
 			_close(longJedis);
@@ -145,7 +145,7 @@ class _Jedis implements _IJedis {
 
 	@Override
 	public void commit() {
-		autoCommit(false);
+		setAutoCommit(false);
 	}
 	
 	@Override

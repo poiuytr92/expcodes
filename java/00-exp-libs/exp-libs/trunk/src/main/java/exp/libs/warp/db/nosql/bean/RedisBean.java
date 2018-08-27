@@ -98,16 +98,14 @@ public class RedisBean {
 	public RedisBean() {
 		setId(DEFAULT_ID);
 		setCluster(DEFAULT_CLUSTER);
-		
-		this.sockets = new HashSet<String>();
-		addSockets(DEFAULT_SOCKET);
-		
 		setPassword(DEFAULT_AUTH);
 		setTimeout(DEFAULT_TIMEOUT);
 		setMaxTotal(DEFAULT_MAX_TOTAL);
 		setMaxIdle(DEFAULT_MAX_IDLE);
 		setMaxWaitMillis(DEFAULT_MAX_WAIT);
 		setTestOnBorrow(DEFAULT_TEST_ON_BORROW);
+		
+		this.sockets = new HashSet<String>();
 	}
 
 	public RedisBean(DataSourceBean ds) {

@@ -401,12 +401,12 @@ abstract class _SwingWindow extends JFrame {
 	protected abstract void setComponentsListener(final JPanel rootPanel);
 
 	/**
-	 * 显示界面后行为(调用{@link _view()}方法时触发)
+	 * 显示界面后行为(调用{@link #_view()}方法时触发)
 	 */
 	protected abstract void AfterView();
 	
 	/**
-	 * 隐藏界面前行为(调用{@link _hide()}方法时触发)
+	 * 隐藏界面前行为(调用{@link #_hide()}方法时触发)
 	 */
 	protected abstract void beforeHide();
 	

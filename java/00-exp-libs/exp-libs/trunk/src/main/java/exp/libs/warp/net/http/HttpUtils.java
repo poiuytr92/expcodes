@@ -226,7 +226,7 @@ public class HttpUtils {
 	 * 追加TLSv1.2支持 (适用于javax.net.ssl.HttpsURLConnection).
 	 * -------------------
 	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
-	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
+	 *  注意此方法不能与绕过SSL校验 {@link #_bypassSSL()} 共用
 	 * </pre>
 	 * @param httpsConn HTTPS连接
 	 */
@@ -305,7 +305,7 @@ public class HttpUtils {
 	 * 追加TLSv1.2支持 (适用于org.apache.commons.httpclient.HttpClient).
 	 * -------------------
 	 *  主要用于解决 JDK1.6 和 JDK1.7 不支持 TLSv1.2 的问题.
-	 *  注意此方法不能与绕过SSL校验 {@link _bypassSSL()} 共用
+	 *  注意此方法不能与绕过SSL校验 {@link #_bypassSSL()} 共用
 	 * </pre>
 	 * @param httpsConn
 	 */
@@ -425,7 +425,7 @@ public class HttpUtils {
 	/**
 	 * 拼接GET请求的URL和参数(对于第一个参数开头的&, 强制去除)
 	 * @param url GET请求URL
-	 * @param requestKVs GET请求参数表 (需通过{@link encodeRequests}方法转码)
+	 * @param requestKVs GET请求参数表 (需通过{@link #encodeRequests}方法转码)
 	 * @return GET请求URL
 	 */
 	protected static String concatGET(String url, String requestKVs) {

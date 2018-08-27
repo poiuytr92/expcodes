@@ -257,18 +257,21 @@ public class RedisClient {
 	
 	/**
 	 * <pre>
-	 * (集群模式不支持此操作)
-	 * 非集群且使用连接池的情况下, redis的操作默认均为短连接.
-	 * 此方法可邻接切换操作模式为长连接, 在调用 @link{ commit() } 方法后恢复为短连接模式.
+	 * 在用连接池的情况下, redis的操作默认均为短连接.
+	 * 此方法可邻接切换操作模式为长连接, 在调用{@link #commit}方法后恢复为短连接模式.
+	 * -----------------
+	 * 此方法非多线程安全, 集群模式不支持此操作
 	 * </pre>
-	 * @param autoCommit true:自动提交; false:手动提交(需调用 @link{ commit() } 方法)
+	 * @param autoCommit true:自动提交; false:手动提交(需调用{@link #commit}方法)
 	 */
-	public void autoCommit(boolean autoCommit) {
-		iJedis.autoCommit(autoCommit);
+	public void setAutoCommit(boolean autoCommit) {
+		iJedis.setAutoCommit(autoCommit);
 	}
 	
 	/**
-	 * 把redis操作模式切换为默认的短连接模式(集群模式不支持此操作)
+	 * 把redis操作模式切换为默认的短连接模式
+	 * -----------------
+	 * 此方法非多线程安全, 集群模式不支持此操作
 	 */
 	public void commit() {
 		iJedis.commit();

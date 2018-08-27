@@ -56,7 +56,7 @@ public abstract class HttpCookie {
 	
 	/**
 	 * 初始化.
-	 *  此方法在{@link takeCookieNVE()}之前执行
+	 *  此方法在{@link #takeCookieNVE()}之前执行
 	 */
 	protected abstract void init();
 	
