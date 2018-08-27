@@ -23,10 +23,10 @@ import exp.libs.utils.other.StrUtils;
  * <PRE>
  * Redis连接池（仅适用于Redis单机/主从/哨兵模式）
  * ----------------------------------
- *  若Redis是以集群模式部署, 使用此连接池虽然可以连接, 但只是连接到集群的其中一台机器.
+ *  若Redis是以集群模式部署, 使用此连接池虽然可以连接, 但只是连接到集群的其中一台节点机器.
  *  换而言之，此时只能在这台特定的机器上面进行数据读写.
  *  若在机器A上面写, 再在机器B上面读, 就会因为不是使用集群连接而报错: JedisMovedDataException: MOVED 866
- *  解决方式是改用 JedisCluster 连接到集群. 
+ *  解决方式是改用 {@link #_JedisCluster} 集群连接模式. 
  * </PRE>
  * <br/><B>PROJECT : </B> exp-libs
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 

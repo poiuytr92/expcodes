@@ -25,9 +25,8 @@
       <trace default="false" caption="DEBUG模式" hint="使用log记录执行的sql">false</trace>
     </datasource>
     
-    <datasource id="TEST-DS-NOSQL" caption="示例配置" hint="此为兼容配置, 仅适用于redis单机模式">
-      <driver default="mysql" caption="数据源驱动类型" hint="常用枚举:
-      	oracle/mysql/sqlite/redis">redis</driver>
+    <datasource id="TEST-DS-NOSQL" caption="示例配置" hint="此为兼容redis配置, 但不适用于redis集群模式，不推荐使用">
+      <driver default="mysql" caption="数据源驱动类型">redis</driver>
       <ip caption="数据库IP">127.0.0.1</ip>
       <port caption="数据库端口">6379</port>
       <password caption="登录密码"></password>
@@ -41,7 +40,9 @@
     <redis id="TEST-DS-REDIS" caption="示例配置">
       <cluster default="false" caption="集群模式" 
         hint="redis有单机/主从/哨兵/集群模式, 仅集群模式下需要开启此选项">false</cluster>
-      <sockets caption="redis连接串" hint="格式为 ip:port[,ip:port,...]">127.0.0.1:6379</sockets>
+      <sockets caption="redis连接串,格式为 ip:port[,ip:port,...]" 
+        hint="集群模式需要配置所有节点的socket，单机/主从/哨兵模式下只需配置主机（配置从机亦可但不建议，但哨兵机不允许配置）"
+      >127.0.0.1:6379</sockets>
       <password caption="redis密码"></password>
       <timeout default="2000" caption="redis连接/请求超时时间" hint="单位:ms">2000</timeout>
       <maxTotal default="8" caption="redis连接池最大连接数" hint="单位:ms">8</maxTotal>

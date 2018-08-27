@@ -18,7 +18,17 @@ import exp.libs.warp.db.nosql.bean.RedisBean;
 /**
  * <PRE>
  * Redis连接客户端.
- * 内部自带连接池, 适用于Redis单机/主从/哨兵/集群模式 (自动根据实际配置切换到集群/非集群的连接方式)
+ * 内部自带连接池, 适用于Redis单机/主从/哨兵/集群模式 
+ * (根据实际Redis的配置，使用不同的构造函数即可，已屏蔽到集群/非集群的连接/操作方式差异性)
+ * --------------------------------------------------
+ * <br/>
+ * 科普：
+ * 	对于 单机/主从/哨兵 模式，连接方式都是一样的，使用{@link #Jedis}实例连接
+ * 	对于 集群 模式，则需要使用{@link #JedisCluster}实例连接
+ * 
+ * 	一般情况下，对于 主从/哨兵 模式，只需要连接到主机即可（或者连接从机亦可，但一般不建议）
+ * 	特别地，对于 哨兵模式，一定不能连接到 哨兵机（哨兵机是用于监控主从机器，当主机挂掉的时候重新选举主机的，不做数据业务）
+ * 
  * </PRE>
  * <br/><B>PROJECT : </B> exp-libs
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
@@ -28,8 +38,10 @@ import exp.libs.warp.db.nosql.bean.RedisBean;
  */
 public class RedisClient {
 
+	/** 默认redis IP */
 	public final static String DEFAULT_IP = "127.0.0.1";
 	
+	/** 默认redis 端口 */
 	public final static int DEFAULT_PORT = 6379;
 	
 	/**
@@ -39,6 +51,10 @@ public class RedisClient {
 	 */
 	private _IJedis iJedis;
 	
+	/**
+	 * 构造函数
+	 * @param rb redis配置对象（通过{@link RedisBean#isCluster()}方法自动切换集群/非集群模式）
+	 */
 	public RedisClient(RedisBean rb) {
 		
 		// 默认模式
@@ -70,75 +86,149 @@ public class RedisClient {
 		}
 	}
 	
+	/**
+	 * 构造函数（单机模式）
+	 * 使用默认的IP端口： 127.0.01:6379
+	 */
 	public RedisClient() {
 		this(DEFAULT_IP, DEFAULT_PORT);
 	}
 	
+	/**
+	 * 构造函数（适用单机/主从/哨兵模式） 
+	 * @param ip redis IP
+	 * @param port redis端口
+	 */
 	public RedisClient(String ip, int port) {
 		this.iJedis = new _Jedis(ip, port);
 	}
 
+	/**
+	 * 构造函数（适用单机/主从/哨兵模式） 
+	 * @param ip redis IP
+	 * @param port redis端口
+	 * @param timeout 超时时间(ms)
+	 */
 	public RedisClient(String ip, int port, int timeout) {
 		this.iJedis = new _Jedis(timeout, ip, port);
 	}
 
+	/**
+	 * 构造函数（适用单机/主从/哨兵模式） 
+	 * @param ip redis IP
+	 * @param port redis端口
+	 * @param password redis密码
+	 */
 	public RedisClient(String ip, int port, String password) {
 		this.iJedis = new _Jedis(password, ip, port);
 	}
 
+	/**
+	 * 构造函数（适用单机/主从/哨兵模式） 
+	 * @param ip redis IP
+	 * @param port redis端口
+	 * @param timeout 超时时间(ms)
+	 * @param password redis密码
+	 */
 	public RedisClient(String ip, int port, int timeout, String password) {
 		this.iJedis = new _Jedis(timeout, password, ip, port);
 	}
 	
+	/**
+	 * 构造函数（适用单机/主从/哨兵模式） 
+	 * @param ip redis IP
+	 * @param port redis端口
+	 * @param timeout 超时时间(ms)
+	 * @param poolConfig 连接池配置
+	 */
 	public RedisClient(String ip, int port, int timeout, 
 			GenericObjectPoolConfig poolConfig) {
 		this.iJedis = new _Jedis(poolConfig, timeout, ip, port);
 	}
 	
+	/**
+	 * 构造函数（适用单机/主从/哨兵模式） 
+	 * @param ip redis IP
+	 * @param port redis端口
+	 * @param password redis密码
+	 * @param poolConfig 连接池配置
+	 */
 	public RedisClient(String ip, int port, String password, 
 			GenericObjectPoolConfig poolConfig) {
 		this.iJedis = new _Jedis(poolConfig, password, ip, port);
 	}
 	
 	/**
-	 * 
-	 * @param ip
-	 * @param port
-	 * @param timeout
-	 * @param password
-	 * @param poolConfig
+	 * 构造函数（适用单机/主从/哨兵模式） 
+	 * @param ip redis IP
+	 * @param port redis端口
+	 * @param timeout 超时时间(ms)
+	 * @param password redis密码
+	 * @param poolConfig 连接池配置
 	 */
 	public RedisClient(String ip, int port, int timeout, String password, 
 			GenericObjectPoolConfig poolConfig) {
 		this.iJedis = new _Jedis(poolConfig, timeout, password, ip, port);
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param clusterNodes 集群节点
+	 */
 	public RedisClient(HostAndPort... clusterNodes) {
 		this.iJedis = new _JedisCluster(removeDuplicate(clusterNodes));
 	}
 
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param timeout 超时时间(ms)
+	 * @param clusterNodes 集群节点
+	 */
 	public RedisClient(int timeout, HostAndPort... clusterNodes) {
 		this.iJedis = new _JedisCluster(timeout, 
 				removeDuplicate(clusterNodes));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param password redis密码
+	 * @param clusterNodes 集群节点
+	 */
 	public RedisClient(String password, HostAndPort... clusterNodes) {
 		this.iJedis = new _JedisCluster(password, 
 				removeDuplicate(clusterNodes));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param timeout 超时时间(ms)
+	 * @param password redis密码
+	 * @param clusterNodes 集群节点
+	 */
 	public RedisClient(int timeout, String password, 
 			HostAndPort... clusterNodes) {
 		this.iJedis = new _JedisCluster(timeout, password, 
 				removeDuplicate(clusterNodes));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param poolConfig 连接池配置
+	 * @param timeout 超时时间(ms)
+	 * @param clusterNodes 集群节点
+	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			int timeout, HostAndPort... clusterNodes) {
 		this.iJedis = new _JedisCluster(poolConfig, timeout, 
 				removeDuplicate(clusterNodes));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param poolConfig 连接池配置
+	 * @param password redis密码
+	 * @param clusterNodes 集群节点
+	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			String password, HostAndPort... clusterNodes) {
 		this.iJedis = new _JedisCluster(poolConfig, password, 
@@ -146,11 +236,11 @@ public class RedisClient {
 	}
 	
 	/**
-	 * 
-	 * @param poolConfig
-	 * @param timeout
-	 * @param password
-	 * @param clusterNodes
+	 * 构造函数（适用集群模式） 
+	 * @param poolConfig 连接池配置
+	 * @param timeout 超时时间(ms)
+	 * @param password redis密码
+	 * @param clusterNodes 集群节点
 	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			int timeout, String password, HostAndPort... clusterNodes) {
@@ -158,37 +248,70 @@ public class RedisClient {
 				poolConfig, timeout, password, clusterNodes);
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param clusterSockets 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
+	 */
 	public RedisClient(String... clusterSockets) {
 		this(toHostAndPorts(clusterSockets));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param timeout 超时时间(ms)
+	 * @param clusterSockets 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
+	 */
 	public RedisClient(int timeout, String... clusterSockets) {
 		this(timeout, toHostAndPorts(clusterSockets));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param password redis密码
+	 * @param clusterSockets 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
+	 */
 	public RedisClient(String password, String... clusterSockets) {
 		this(password, toHostAndPorts(clusterSockets));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param timeout 超时时间(ms)
+	 * @param password redis密码
+	 * @param clusterSockets 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
+	 */
 	public RedisClient(int timeout, String password, String... clusterSockets) {
 		this(timeout, password, toHostAndPorts(clusterSockets));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param poolConfig 连接池配置
+	 * @param timeout 超时时间(ms)
+	 * @param clusterSockets 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
+	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			int timeout, String... clusterSockets) {
 		this(poolConfig, timeout, toHostAndPorts(clusterSockets));
 	}
 	
+	/**
+	 * 构造函数（适用集群模式） 
+	 * @param poolConfig 连接池配置
+	 * @param password redis密码
+	 * @param clusterSockets 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
+	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			String password, String... clusterSockets) {
 		this(poolConfig, password, toHostAndPorts(clusterSockets));
 	}
 	
 	/**
-	 * 
-	 * @param poolConfig
-	 * @param timeout
-	 * @param clusterSocket 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
+	 * 构造函数（适用集群模式） 
+	 * @param poolConfig 连接池配置
+	 * @param timeout 超时时间(ms)
+	 * @param password redis密码
+	 * @param clusterSockets 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
 	 */
 	public RedisClient(GenericObjectPoolConfig poolConfig, 
 			int timeout, String password, String... clusterSockets) {
@@ -197,8 +320,8 @@ public class RedisClient {
 
 	/**
 	 * 集群节点去重
-	 * @param clusterNodes
-	 * @return
+	 * @param clusterNodes 集群节点
+	 * @return 去重后的集群节点
 	 */
 	private static HostAndPort[] removeDuplicate(HostAndPort[] clusterNodes) {
 		List<HostAndPort> list = new LinkedList<HostAndPort>();
@@ -213,6 +336,11 @@ public class RedisClient {
 		return toArray(list);
 	}
 	
+	/**
+	 * 把socket字符串格式的集群节点转换成HostAndPort格式
+	 * @param clusterSockets socket字符串格式的集群节点
+	 * @return HostAndPort格式的集群节点
+	 */
 	private static HostAndPort[] toHostAndPorts(String[] clusterSockets) {
 		List<HostAndPort> list = new LinkedList<HostAndPort>();
 		if(clusterSockets != null) {
@@ -226,6 +354,11 @@ public class RedisClient {
 		return toArray(list);
 	}
 	
+	/**
+	 * 把socket字符串格式的字符串转换成HostAndPort格式
+	 * @param socket socket字符串格式
+	 * @return HostAndPort格式
+	 */
 	private static HostAndPort toHostAndPort(String socket) {
 		HostAndPort hp = null;
 		if(StrUtils.isNotTrimEmpty(socket)) {
@@ -239,6 +372,11 @@ public class RedisClient {
 		return hp;
 	}
 	
+	/**
+	 * 把HostAndPort链表转换成数组
+	 * @param clusterNodes HostAndPort链表
+	 * @return HostAndPort数组
+	 */
 	private static HostAndPort[] toArray(List<HostAndPort> clusterNodes) {
 		HostAndPort[] array = new HostAndPort[clusterNodes.size()];
 		for(int i = 0; i < array.length; i++) {

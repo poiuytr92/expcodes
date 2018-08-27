@@ -20,7 +20,7 @@ import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
- * Redis集群连接（适用于Redis集群模式）
+ * Redis集群连接（仅适用于Redis集群模式）
  * </PRE>
  * <br/><B>PROJECT : </B> exp-libs
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 

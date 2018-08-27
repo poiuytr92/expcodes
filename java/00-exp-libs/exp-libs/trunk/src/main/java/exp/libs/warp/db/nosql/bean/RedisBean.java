@@ -21,6 +21,7 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
  */
 public class RedisBean {
 	
+	/** 配置对象的默认ID */
 	private final static String DEFAULT_ID = "DEFAULT_REDIS";
 	
 	private String id;
