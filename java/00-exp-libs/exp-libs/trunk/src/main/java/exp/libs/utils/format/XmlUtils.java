@@ -227,7 +227,7 @@ public class XmlUtils {
 	public static String getValue(Element e) {
 		String val = "";
 		if(e != null) {
-			val = e.getTextTrim();
+			val = e.getText();
 			val = (val == null ? "" : val);
 		}
 		return val;
@@ -256,7 +256,7 @@ public class XmlUtils {
 						break;
 					}
 				}
-				val = (child == null ? "" : child.getTextTrim());
+				val = (child == null ? "" : child.getText());
 				val = (val == null ? "" : val);
 			}
 		}
