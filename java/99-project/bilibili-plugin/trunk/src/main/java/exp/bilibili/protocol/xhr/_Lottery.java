@@ -57,12 +57,14 @@ class _Lottery extends __XHR {
 		final int RETRY_LIMIT = 20;
 		final int RETRY_INTERVAL = 100;
 		String sRoomId = getRealRoomId(roomId);
-		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), sRoomId);
+		String visitId = getVisitId();
+		Map<String, String> header = POST_HEADER(cookie.toNVCookie(), 
+				StrUtils.concat(sRoomId, "?visit_id=", visitId));
 		String reason = "";
 		
 		// 加入高能/小电视抽奖
 		if(LotteryType.STORM != type) {
-			Map<String, String> request = getRequest(cookie.CSRF(), sRoomId, raffleId);
+			Map<String, String> request = getRequest(cookie.CSRF(), sRoomId, raffleId, visitId);
 			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
 				String response = HttpURLUtils.doPost(url, header, request);
 				
@@ -75,7 +77,6 @@ class _Lottery extends __XHR {
 			
 		// 加入节奏风暴抽奖
 		} else {
-			String visitId = getVisitId();
 			for(int retry = 0; retry < RETRY_LIMIT; retry++) {
 				String[] captcha = cookie.isRealName() ? // 实名认证后无需填节奏风暴验证码
 						new String[] { "", "" } : getStormCaptcha(cookie);
@@ -110,12 +111,13 @@ class _Lottery extends __XHR {
 	 * @param raffleId
 	 * @return
 	 */
-	private static Map<String, String> getRequest(String csrf, String roomId, String raffleId) {
+	private static Map<String, String> getRequest(String csrf, 
+			String roomId, String raffleId, String visitId) {
 		Map<String, String> request = getRequest(roomId);
 		request.put(BiliCmdAtrbt.raffleId, raffleId);	// 礼物编号
 		request.put(BiliCmdAtrbt.type, "Gift");	// 礼物编号
 		request.put(BiliCmdAtrbt.csrf_token, csrf);
-		request.put(BiliCmdAtrbt.visit_id, getVisitId());
+		request.put(BiliCmdAtrbt.visit_id, visitId);
 		return request;
 	}
 	
