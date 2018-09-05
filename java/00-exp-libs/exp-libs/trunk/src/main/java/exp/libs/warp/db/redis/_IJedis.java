@@ -84,7 +84,7 @@ interface _IJedis {
 	 * @param value 新的值
 	 * @return true:新增成功; false:新增失败
 	 */
-	public boolean addKV(String redisKey, String value);
+	public boolean addVal(String redisKey, String value);
 	
 	/**
 	 * 在已有的键key的原值的末尾附加value（仅针对键值对使用）
@@ -92,7 +92,7 @@ interface _IJedis {
 	 * @param value 附加的值
 	 * @return 附加值后，该键上最新的值的总长度
 	 */
-	public long appendKV(String redisKey, String value);
+	public long appendVal(String redisKey, String value);
 	
 	/**
 	 * 获取指定键的值
@@ -193,7 +193,7 @@ interface _IJedis {
 	 * @param redisKey 哈希表的键
 	 * @return 若不存在该哈希表或哈希表为空，则返回空集（不会返回null）
 	 */
-	public List<String> getMapVals(String redisKey);
+	public List<String> getMapAllVals(String redisKey);
 	
 	/**
 	 * 获取某个哈希表中的某个键的值对象（反序列化对象）
@@ -216,7 +216,7 @@ interface _IJedis {
 	 * @param redisKey 哈希表的键
 	 * @return 若不存在该哈希表或哈希表为空，则返回空集（不会返回null）
 	 */
-	public List<Object> getMapObjs(String redisKey);
+	public List<Object> getMapAllObjs(String redisKey);
 	
 	/**
 	 * 检查某个哈希表中是否存在某个键
@@ -256,6 +256,8 @@ interface _IJedis {
 	 */
 	public long addToList(String redisKey, String... values);
 	
+	public long addToList(String redisKey, Serializable... values);
+	
 	/**
 	 * 添加一些值到列表头部
 	 * @param redisKey 列表的键
@@ -263,6 +265,8 @@ interface _IJedis {
 	 * @return 添加后，该的队列的总长度
 	 */
 	public long addToListHead(String redisKey, String... values);
+	
+	public long addToListHead(String redisKey, Serializable... values);
 	
 	/**
 	 * 添加一些值到列表尾部
@@ -272,12 +276,22 @@ interface _IJedis {
 	 */
 	public long addToListTail(String redisKey, String... values);
 	
+	public long addToListTail(String redisKey, Serializable... values);
+	
+	public String getListVal(String redisKey, int index);
+	
+	public Object getListObj(String redisKey, int index);
+	
 	/**
 	 * 获取列表中的所有值
 	 * @param redisKey 列表的键
 	 * @return 列表中的所有值
 	 */
-	public List<String> getListVals(String redisKey);
+	public List<String> getListAllVals(String redisKey);
+	
+	public List<Object> getListAllObjs(String redisKey);
+	
+	public long getListSize(String redisKey);
 	
 	/**
 	 * 添加一些值到集合

@@ -43,7 +43,7 @@ public class ThreadUtils {
 		try {
 			Thread.sleep(millis);
 		} catch (InterruptedException e) {
-			log.error("线程休眠异常.", e);
+			log.debug("线程休眠异常.", e);
 		}
 	}
 	
@@ -62,7 +62,7 @@ public class ThreadUtils {
 				o.wait(millis);
 			}
 		} catch (InterruptedException e) {
-			log.error("线程阻塞异常.", e);
+			log.debug("线程阻塞异常.", e);
 		}
 	}
 	

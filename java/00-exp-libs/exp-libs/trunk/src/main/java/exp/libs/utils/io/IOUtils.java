@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
@@ -42,8 +41,8 @@ public class IOUtils {
 		try {
 			str = toStr(new InputStreamReader(is, charset));
 			
-		} catch (UnsupportedEncodingException e) {
-			log.error("无效编码: {}", charset, e);
+		} catch (Exception e) {
+			log.error("转换流式数据编码失败: {}", charset, e);
 		}
 		return str;
 	}

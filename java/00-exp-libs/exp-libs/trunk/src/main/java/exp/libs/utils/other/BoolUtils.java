@@ -43,7 +43,7 @@ public class BoolUtils {
 		try {
 			bool = Boolean.parseBoolean(tof.toLowerCase());
 		} catch (Exception e) {
-			log.error("转换 [{}] 为bool类型失败.", tof, e);
+			log.debug("转换 [{}] 为bool类型失败.", tof, e);
 		}
 		return bool;
 	}

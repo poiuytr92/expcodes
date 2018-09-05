@@ -219,7 +219,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public boolean addKV(String redisKey, String value) {
+	public boolean addVal(String redisKey, String value) {
 		boolean isOk = false;
 		if(redisKey != null && value != null) {
 			Jedis jedis = _getJedis();
@@ -230,7 +230,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public long appendKV(String redisKey, String value) {
+	public long appendVal(String redisKey, String value) {
 		long len = -1;
 		if(redisKey != null && value != null) {
 			Jedis jedis = _getJedis();
@@ -384,7 +384,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public List<String> getMapVals(String redisKey) {
+	public List<String> getMapAllVals(String redisKey) {
 		List<String> values = null;
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
@@ -430,7 +430,7 @@ class _Jedis implements _IJedis {
 	}
 	
 	@Override
-	public List<Object> getMapObjs(String redisKey) {
+	public List<Object> getMapAllObjs(String redisKey) {
 		List<Object> values = new LinkedList<Object>();
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
@@ -528,7 +528,21 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public List<String> getListVals(String redisKey) {
+	public String getListVal(String redisKey, int index) {
+		String value = null;
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			List<String> values = jedis.lrange(_transcode(redisKey), index, index);
+			if(ListUtils.isNotEmpty(values)) {
+				value = values.get(0);
+			}
+			_close(jedis);
+		}
+		return value;
+	}
+	
+	@Override
+	public List<String> getListAllVals(String redisKey) {
 		List<String> values = new LinkedList<String>();
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();

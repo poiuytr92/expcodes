@@ -433,13 +433,13 @@ public class RedisClient implements _IJedis {
 	}
 
 	@Override
-	public boolean addKV(String redisKey, String value) {
-		return iJedis.addKV(redisKey, value);
+	public boolean addVal(String redisKey, String value) {
+		return iJedis.addVal(redisKey, value);
 	}
 
 	@Override
-	public long appendKV(String redisKey, String value) {
-		return iJedis.appendKV(redisKey, value);
+	public long appendVal(String redisKey, String value) {
+		return iJedis.appendVal(redisKey, value);
 	}
 
 	@Override
@@ -498,8 +498,8 @@ public class RedisClient implements _IJedis {
 	}
 
 	@Override
-	public List<String> getMapVals(String redisKey) {
-		return iJedis.getMapVals(redisKey);
+	public List<String> getMapAllVals(String redisKey) {
+		return iJedis.getMapAllVals(redisKey);
 	}
 	
 	@Override
@@ -513,8 +513,8 @@ public class RedisClient implements _IJedis {
 	}
 
 	@Override
-	public List<Object> getMapObjs(String redisKey) {
-		return iJedis.getMapObjs(redisKey);
+	public List<Object> getMapAllObjs(String redisKey) {
+		return iJedis.getMapAllObjs(redisKey);
 	}
 
 	@Override
@@ -541,22 +541,64 @@ public class RedisClient implements _IJedis {
 	public long addToList(String redisKey, String... values) {
 		return iJedis.addToList(redisKey, values);
 	}
+	
+	@Override
+	public long addToList(String redisKey, Serializable... values) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 
 	@Override
 	public long addToListHead(String redisKey, String... values) {
 		return iJedis.addToListHead(redisKey, values);
+	}
+	
+	@Override
+	public long addToListHead(String redisKey, Serializable... values) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 	@Override
 	public long addToListTail(String redisKey, String... values) {
 		return iJedis.addToListTail(redisKey, values);
 	}
-
+	
 	@Override
-	public List<String> getListVals(String redisKey) {
-		return iJedis.getListVals(redisKey);
+	public long addToListTail(String redisKey, Serializable... values) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
+	@Override
+	public String getListVal(String redisKey, int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Object getListObj(String redisKey, int index) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public List<String> getListAllVals(String redisKey) {
+		return iJedis.getListAllVals(redisKey);
+	}
+
+	@Override
+	public List<Object> getListAllObjs(String redisKey) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public long getListSize(String redisKey) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
 	@Override
 	public long addToSet(String redisKey, String... values) {
 		return iJedis.addToSet(redisKey, values);

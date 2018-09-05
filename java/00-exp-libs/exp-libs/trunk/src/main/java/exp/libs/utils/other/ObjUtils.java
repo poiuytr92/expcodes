@@ -199,7 +199,7 @@ public class ObjUtils {
 			in.close();
 			
 		} catch (Exception e) {
-			log.error("克隆对象 [{}] 失败.", serialObject, e);
+			log.debug("克隆对象 [{}] 失败.", serialObject, e);
 		}
 		return newObj;
 	}
@@ -215,7 +215,7 @@ public class ObjUtils {
 			Class<?> clazz = Class.forName(clazzPath);
 			inst = clazz.newInstance();
 		} catch(Exception e) {
-			log.error("实例化类 [{}] 失败", clazzPath, e);
+			log.debug("实例化类 [{}] 失败", clazzPath, e);
 		}
 		return inst;
 	}
@@ -313,7 +313,7 @@ public class ObjUtils {
 			obj = clazz.newInstance();
 			
 		} catch (Exception e) {
-			log.error("构造 [{}] 实例失败.", clazz.getName(), e);
+			log.debug("构造 [{}] 实例失败.", clazz.getName(), e);
 			return null;
 		}
 		
@@ -337,7 +337,7 @@ public class ObjUtils {
 					try {
 						method.invoke(obj, value);
 					} catch (Exception e) {
-						log.error("[{}]: 为成员域 [{}] 置值失败.", 
+						log.debug("[{}]: 为成员域 [{}] 置值失败.", 
 								clazz.getName(), fieldName);
 					}
 				} else {
@@ -366,7 +366,7 @@ public class ObjUtils {
 	public static Object invokeMethod(Object instnOrClazz, String methodName,
 			Object[] paramVals, Class[] valClazzs) {
 		if(instnOrClazz == null || StrUtils.isEmpty(methodName)) {
-			log.error("反射调用方法失败: [{}.{}()], 无效的类或方法.", 
+			log.debug("反射调用方法失败: [{}.{}()], 无效的类或方法.", 
 					instnOrClazz, methodName);
 			return null;
 		}
@@ -384,7 +384,7 @@ public class ObjUtils {
 							paramVals[i].getClass() : Object.class);
 				}
 			} else {
-				log.error("反射调用方法失败: [{}.{}()], 入参与类型的个数不一致.", 
+				log.debug("反射调用方法失败: [{}.{}()], 入参与类型的个数不一致.", 
 						clazz, methodName);
 				return null;
 			}
@@ -397,7 +397,7 @@ public class ObjUtils {
 			result = method.invoke(instnOrClazz, paramVals);
 			
 		} catch (Exception e) {
-			log.error("反射调用方法失败: [{}.{}()]", clazz, methodName, e);
+			log.debug("反射调用方法失败: [{}.{}()]", clazz, methodName, e);
 		}
 		return result;
 	}
@@ -446,7 +446,7 @@ public class ObjUtils {
 			isOk = true;
 			
 		} catch (Exception e) {
-			log.error("序列化对象到外存文件失败: [{}]", outFilePath, e);
+			log.debug("序列化对象到外存文件失败: [{}]", outFilePath, e);
 		}
 		return isOk;
 	}
@@ -465,7 +465,7 @@ public class ObjUtils {
 			ois.close();
 			
 		} catch (Exception e) {
-			log.error("从外存文件反序列化对象失败: [{}]", inFilePath, e);
+			log.debug("从外存文件反序列化对象失败: [{}]", inFilePath, e);
 		}
 		return o;
 	}
@@ -490,7 +490,7 @@ public class ObjUtils {
 			bytes = baos.toByteArray();
 			
 		} catch (Exception e) {
-			log.error("序列化对象为字节数组失败", e);
+			log.debug("序列化对象为字节数组失败", e);
 			
 		} finally {
 			IOUtils.close(oos);
@@ -519,7 +519,7 @@ public class ObjUtils {
 			object = ois.readObject();
 			
 		} catch (Exception e) {
-			log.error("从字节数组反序列化对象失败", e);
+			log.debug("从字节数组反序列化对象失败", e);
 			
 		} finally {
 			IOUtils.close(ois);

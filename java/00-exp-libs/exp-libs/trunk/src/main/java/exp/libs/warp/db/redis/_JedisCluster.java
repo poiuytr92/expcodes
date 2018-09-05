@@ -161,7 +161,7 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	}
 
 	@Override
-	public boolean addKV(String redisKey, String value) {
+	public boolean addVal(String redisKey, String value) {
 		boolean isOk = false;
 		if(redisKey != null && value != null) {
 			isOk = OK.equalsIgnoreCase(super.set(_transcode(redisKey), value));
@@ -170,7 +170,7 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	}
 
 	@Override
-	public long appendKV(String redisKey, String value) {
+	public long appendVal(String redisKey, String value) {
 		long len = -1;
 		if(redisKey != null && value != null) {
 			len = super.append(_transcode(redisKey), value);
@@ -298,7 +298,7 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	}
 
 	@Override
-	public List<String> getMapVals(String redisKey) {
+	public List<String> getMapAllVals(String redisKey) {
 		List<String> values = null;
 		if(redisKey != null) {
 			values = super.hvals(_transcode(redisKey));
@@ -338,7 +338,7 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	}
 
 	@Override
-	public List<Object> getMapObjs(String redisKey) {
+	public List<Object> getMapAllObjs(String redisKey) {
 		List<Object> values = new LinkedList<Object>();
 		if(redisKey != null) {
 			byte[] byteKey =_transbyte(redisKey);
@@ -422,7 +422,7 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	}
 
 	@Override
-	public List<String> getListVals(String redisKey) {
+	public List<String> getListAllVals(String redisKey) {
 		List<String> values = new LinkedList<String>();
 		if(redisKey != null) {
 			values = super.lrange(_transcode(redisKey), 0, -1);

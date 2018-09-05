@@ -67,7 +67,7 @@ public class JsonUtils {
 		try {
 			val = json.getString(key);
 		} catch(Throwable e) {
-			log.error("从JSON中提取 string 类型值 [{}] 失败.", key, e);
+			log.debug("从JSON中提取 string 类型值 [{}] 失败.", key, e);
 		}
 		return val;
 	}
@@ -84,7 +84,7 @@ public class JsonUtils {
 		try {
 			val = json.getString(key);
 		} catch(Throwable e) {
-			log.error("从JSON中提取 string 类型值 [{}] 失败.", key);
+			log.debug("从JSON中提取 string 类型值 [{}] 失败.", key);
 		}
 		return val;
 	}
@@ -101,7 +101,7 @@ public class JsonUtils {
 		try {
 			val = BoolUtils.toBool(json.getString(key), defavlt);
 		} catch(Throwable e) {
-			log.error("从JSON中提取 bool 类型值 [{}] 失败.", key, e);
+			log.debug("从JSON中提取 bool 类型值 [{}] 失败.", key, e);
 		}
 		return val;
 	}
@@ -118,7 +118,7 @@ public class JsonUtils {
 		try {
 			val = NumUtils.toInt(json.getString(key), defavlt);
 		} catch(Throwable e) {
-			log.error("从JSON中提取 int 类型值 [{}] 失败.", key, e);
+			log.debug("从JSON中提取 int 类型值 [{}] 失败.", key, e);
 		}
 		return val;
 	}
@@ -135,7 +135,7 @@ public class JsonUtils {
 		try {
 			val = NumUtils.toLong(json.getString(key), defavlt);
 		} catch(Throwable e) {
-			log.error("从JSON中提取 long 类型值 [{}] 失败.", key, e);
+			log.debug("从JSON中提取 long 类型值 [{}] 失败.", key, e);
 		}
 		return val;
 	}
@@ -152,7 +152,7 @@ public class JsonUtils {
 			val = json.getJSONObject(key);
 		} catch(Throwable e) {
 			val = new JSONObject();
-			log.error("从JSON中提取 object 对象 [{}] 失败.", key, e);
+			log.debug("从JSON中提取 object 对象 [{}] 失败.", key, e);
 		}
 		return val;
 	}
@@ -169,7 +169,7 @@ public class JsonUtils {
 			val = json.getJSONArray(key);
 		} catch(Throwable e) {
 			val = new JSONArray();
-			log.error("从JSON中提取 array 对象 [{}] 失败.", key, e);
+			log.debug("从JSON中提取 array 对象 [{}] 失败.", key, e);
 		}
 		return val;
 	}
