@@ -119,7 +119,7 @@ public class CharsetUtils {
 	 * @param charset 目标字符串编码
 	 * @return 以charset编码的字符串
 	 */
-	public static String tracnscode(String str, String charset) {
+	public static String transcode(String str, String charset) {
 		byte[] bytes = toBytes(str, charset);
 		return toStr(bytes, charset);
 	}
@@ -138,7 +138,7 @@ public class CharsetUtils {
 	 * @param destCharset 目标字节数组的编码
 	 * @return 目标字节数组
 	 */
-	public static byte[] tracnscode(byte[] srcBytes, 
+	public static byte[] transcode(byte[] srcBytes, 
 			String srcCharset, String destCharset) {
 		String srcStr = toStr(srcBytes, srcCharset);
 		return toBytes(srcStr, destCharset);

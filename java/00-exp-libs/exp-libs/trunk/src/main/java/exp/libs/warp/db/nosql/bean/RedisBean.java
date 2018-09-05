@@ -22,7 +22,7 @@ import exp.libs.warp.db.sql.bean.DataSourceBean;
 public class RedisBean {
 	
 	/** 配置对象的默认ID */
-	private final static String DEFAULT_ID = "DEFAULT_REDIS";
+	protected final static String DEFAULT_ID = "DEFAULT_REDIS";
 	
 	private String id;
 	
@@ -34,22 +34,22 @@ public class RedisBean {
      *  后者则需要连接到集群中所有节点。
      * </pre>
      */
-    private final static boolean DEFAULT_CLUSTER = false;
+    protected final static boolean DEFAULT_CLUSTER = false;
     
 	private boolean cluster;
 	
 	/** 默认的Redis socket */
-    private final static String DEFAULT_SOCKET = "127.0.0.1:6379";
+    protected final static String DEFAULT_SOCKET = "127.0.0.1:6379";
     
 	private Set<String> sockets;
 	
 	 /** 默认的访问密码 */
-    private final static String DEFAULT_AUTH = "";
+    protected final static String DEFAULT_AUTH = "";
     
 	private String password;
 	
 	/** 默认连接超时时间(ms) */
-    private final static int DEFAULT_TIMEOUT = 2000;
+    protected final static int DEFAULT_TIMEOUT = 2000;
     
 	private int timeout;
 	
@@ -61,7 +61,7 @@ public class RedisBean {
      * 若连接池已分配了最大的jedis实例，则此时连接池的状态为exhausted(耗尽)
      * </pre>
      */
-    private final static int DEFAULT_MAX_TOTAL = 8;
+    protected final static int DEFAULT_MAX_TOTAL = 8;
     
 	private int maxTotal;
 	
@@ -71,7 +71,7 @@ public class RedisBean {
      * JedisPool的默认值为8。
      * </pre>
      */
-    private final static int DEFAULT_MAX_IDLE = 8;
+    protected final static int DEFAULT_MAX_IDLE = 8;
     
 	private int maxIdle;
 	
@@ -82,7 +82,7 @@ public class RedisBean {
      * 如果超过等待时间，则直接抛出JedisConnectionException
      * </pre>
      */
-    private final static long DEFAULT_MAX_WAIT = -1;
+    protected final static long DEFAULT_MAX_WAIT = -1;
     
 	private long maxWaitMillis;
 	
@@ -92,7 +92,7 @@ public class RedisBean {
      * 如果为true，则得到的jedis实例均是可用的。
      * </pre>
      */
-    private final static boolean DEFAULT_TEST_ON_BORROW = true;
+    protected final static boolean DEFAULT_TEST_ON_BORROW = true;
     
 	private boolean testOnBorrow;
 	

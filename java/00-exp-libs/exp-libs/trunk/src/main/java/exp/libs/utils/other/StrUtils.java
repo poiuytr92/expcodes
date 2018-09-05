@@ -690,10 +690,24 @@ public class StrUtils {
 	 * @return 字符串摘要
 	 */
 	public static String showSummary(String str) {
+		return showSummary(str, 128);
+	}
+	
+	/**
+	 * <PRE>
+	 * 截取字符串摘要.
+	 * 	若字符串长度超过limit个字符，则截取前limit个字符，并在末尾补省略号[...]
+	 * </PRE>
+	 * @param str 原字符串
+	 * @param limit 限制字符数
+	 * @return 字符串摘要
+	 */
+	public static String showSummary(String str, int limit) {
+		limit = (limit <= 0 ? 128 : limit);
 		String summary = "";
 		if(str != null) {
-			if(str.length() > 128) {
-				summary = concat(str.substring(0, 128), "...");
+			if(str.length() > limit) {
+				summary = concat(str.substring(0, limit), "...");
 				
 			} else {
 				summary = str;

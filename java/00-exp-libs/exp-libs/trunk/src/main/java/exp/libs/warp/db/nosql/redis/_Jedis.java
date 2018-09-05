@@ -1,8 +1,9 @@
 package exp.libs.warp.db.nosql.redis;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.Protocol;
 import exp.libs.envm.Charset;
+import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
@@ -118,6 +120,28 @@ class _Jedis implements _IJedis {
 			jedis.close();
 		}
 	}
+
+	/**
+	 * 对Redis键统一转码，使得Jedis的 String接口 和 byte[]接口 所产生的键值最终一致。
+	 * (若不转码, 在redis编码与程序编码不一致的情况下, 即使键值相同, 
+	 * 	但使用String接口与byte[]接口存储到Redis的是两个不同的哈希表)
+	 * @param redisKey redis键
+	 * @return 统一转码后的redis键
+	 */
+	private String _transcode(String redisKey) {
+		return CharsetUtils.transcode(redisKey, CHARSET);
+	}
+	
+	/**
+	 * 对Redis键统一转码，使得Jedis的 String接口 和 byte[]接口 所产生的键值最终一致。
+	 * (若不转码, 在redis编码与程序编码不一致的情况下, 即使键值相同, 
+	 * 	但使用String接口与byte[]接口存储到Redis的是两个不同的哈希表)
+	 * @param redisKey redis键
+	 * @return 统一转码后的redis键(字节数组)
+	 */
+	private byte[] _transbyte(String redisKey) {
+		return CharsetUtils.toBytes(redisKey, CHARSET);
+	}
 	
 	@Override
 	public boolean isVaild() {
@@ -127,20 +151,25 @@ class _Jedis implements _IJedis {
 		return isOk;
 	}
 	
-	public boolean _isVaild(Jedis jedis) {
+	private boolean _isVaild(Jedis jedis) {
 		boolean isOk = false;
 		if(jedis != null) {
 			isOk = PONG.equalsIgnoreCase(jedis.ping());
 		}
 		return isOk;
 	}
-	
+
 	@Override
 	public void setAutoCommit(boolean autoCommit) {
 		this.autoCommit = autoCommit;
 		if(autoCommit == false) {
 			_close(longJedis);
 		}
+	}
+
+	@Override
+	public void closeAutoCommit() {
+		setAutoCommit(false);
 	}
 
 	@Override
@@ -153,7 +182,7 @@ class _Jedis implements _IJedis {
 		commit();
 		pool.close();
 	}
-	
+
 	@Override
 	public boolean clearAll() {
 		Jedis jedis = _getJedis();
@@ -161,130 +190,180 @@ class _Jedis implements _IJedis {
 		_close(jedis);
 		return isOk;
 	}
-	
+
 	@Override
-	public boolean existKey(String key) {
-		Jedis jedis = _getJedis();
-		boolean isOk = jedis.exists(key);
-		_close(jedis);
-		return isOk;
-	}
-	
-	@Override
-	public long delKeys(String... keys) {
-		long num = 0;
-		if(keys != null) {
+	public boolean existKey(String redisKey) {
+		boolean isExist = false;
+		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			num = jedis.del(keys);
+			isExist = jedis.exists(_transcode(redisKey));
+			_close(jedis);
+		}
+		return isExist;
+	}
+
+	@Override
+	public long delKeys(String... redisKeys) {
+		long num = 0;
+		if(redisKeys != null) {
+			Jedis jedis = _getJedis();
+			for(String redisKey : redisKeys) {
+				if(redisKey == null) {
+					continue;
+				}
+				num += jedis.del(_transcode(redisKey));
+			}
 			_close(jedis);
 		}
 		return num;
 	}
-	
+
 	@Override
-	public boolean addKV(String key, String value) {
+	public boolean addKV(String redisKey, String value) {
 		boolean isOk = false;
-		if(key != null && value != null) {
+		if(redisKey != null && value != null) {
 			Jedis jedis = _getJedis();
-			isOk = OK.equalsIgnoreCase(jedis.set(key, value));
+			isOk = OK.equalsIgnoreCase(jedis.set(_transcode(redisKey), value));
 			_close(jedis);
 		}
 		return isOk;
 	}
-	
+
 	@Override
-	public long appendKV(String key, String value) {
+	public long appendKV(String redisKey, String value) {
 		long len = -1;
-		if(key != null && value != null) {
+		if(redisKey != null && value != null) {
 			Jedis jedis = _getJedis();
-			len = jedis.append(key, value);
+			len = jedis.append(_transcode(redisKey), value);
 			_close(jedis);
 		}
 		return len;
 	}
-	
+
 	@Override
-	public String getVal(String key) {
+	public String getVal(String redisKey) {
 		String value = "";
-		if(key != null) {
+		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			value = jedis.get(key);
+			value = jedis.get(_transcode(redisKey));
 			_close(jedis);
 		}
 		return value;
 	}
-	
+
 	@Override
-	public boolean addObj(String key, Serializable object) {
+	public boolean addObj(String redisKey, Serializable object) {
 		boolean isOk = false;
-		if(key != null && object != null) {
+		if(redisKey != null && object != null) {
 			Jedis jedis = _getJedis();
-			try {
-				isOk = OK.equalsIgnoreCase(jedis.set(
-						key.getBytes(CHARSET), ObjUtils.toSerializable(object)));
-			} catch (UnsupportedEncodingException e) {}
+			isOk = OK.equalsIgnoreCase(jedis.set(
+					_transbyte(redisKey), 
+					ObjUtils.toSerializable(object))
+			);
 			_close(jedis);
 		}
 		return isOk;
 	}
-	
+
 	@Override
-	public Object getObj(String key) {
+	public Object getObj(String redisKey) {
 		Object object = null;
-		if(key != null) {
+		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			try {
-				object = ObjUtils.unSerializable(
-						jedis.get(key.getBytes(CHARSET)));
-			} catch (UnsupportedEncodingException e) {}
+			object = ObjUtils.unSerializable(jedis.get(_transbyte(redisKey)));
 			_close(jedis);
 		}
 		return object;
 	}
-	
+
 	@Override
-	public boolean addMap(String key, Map<String, String> map) {
+	public boolean addMap(String redisKey, Map<String, String> map) {
 		boolean isOk = false;
-		if(key != null && map != null) {
+		if(redisKey != null && map != null) {
 			Jedis jedis = _getJedis();
-			isOk = OK.equalsIgnoreCase(jedis.hmset(key, map));
+			isOk = OK.equalsIgnoreCase(jedis.hmset(_transcode(redisKey), map));
 			_close(jedis);
 		}
 		return isOk;
 	}
-	
+
 	@Override
-	public boolean addToMap(String key, String mapKey, String mapValue) {
-		boolean isOk = false;
-		if(key != null && mapKey != null && mapValue != null) {
+	public Map<String, String> getMap(String redisKey) {
+		Map<String, String> map = null;
+		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			isOk = jedis.hset(key, mapKey, mapValue) >= 0;
+			map = jedis.hgetAll(_transcode(redisKey));
+			_close(jedis);
+		}
+		return (map == null ? new HashMap<String, String>() : map);
+	}
+
+	@Override
+	public boolean addObjMap(String redisKey, Map<String, Serializable> map) {
+		boolean isOk = false;
+		if(redisKey != null && map != null) {
+			isOk = true;
+			Jedis jedis = _getJedis();
+			
+			Iterator<String> keys = map.keySet().iterator();
+			while(keys.hasNext()) {
+				String key = keys.next();
+				Serializable object = map.get(key);
+				isOk &= jedis.hset(_transbyte(redisKey), _transbyte(key), 
+						ObjUtils.toSerializable(object)) >= 0;
+			}
+			
 			_close(jedis);
 		}
 		return isOk;
 	}
+
+	@Override
+	public Map<String, Object> getObjMap(String redisKey) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			Map<byte[], byte[]> byteMap = jedis.hgetAll(_transbyte(redisKey));
+			Iterator<byte[]> keys = byteMap.keySet().iterator();
+			while(keys.hasNext()) {
+				byte[] key = keys.next();
+				byte[] val = byteMap.get(key);
+				map.put(CharsetUtils.toStr(key, CHARSET), ObjUtils.unSerializable(val));
+			}
+			_close(jedis);
+		}
+		return map;
+	}
 	
 	@Override
-	public boolean addToMap(String key, String mapKey, Serializable mapValue) {
+	public boolean addToMap(String redisKey, String key, String value) {
 		boolean isOk = false;
-		if(key != null && mapKey != null && mapValue != null) {
+		if(redisKey != null && key != null && value != null) {
 			Jedis jedis = _getJedis();
-			try {
-				isOk = jedis.hset(key.getBytes(CHARSET), 
-						mapKey.getBytes(CHARSET), 
-						ObjUtils.toSerializable(mapValue)) >= 0;
-			} catch (UnsupportedEncodingException e) {}
+			isOk = jedis.hset(_transcode(redisKey), key, value) >= 0;
 			_close(jedis);
 		}
 		return isOk;
 	}
-	
+
 	@Override
-	public String getMapVal(String mapKey, String inMapKey) {
+	public boolean addToMap(String redisKey, String key, Serializable object) {
+		boolean isOk = false;
+		if(redisKey != null && key != null && object != null) {
+			Jedis jedis = _getJedis();
+			isOk = jedis.hset(_transbyte(redisKey), _transbyte(key), 
+					ObjUtils.toSerializable(object)) >= 0;
+			_close(jedis);
+		}
+		return isOk;
+	}
+
+	@Override
+	public String getMapVal(String redisKey, String key) {
 		String value = null;
-		if(mapKey != null && inMapKey != null) {
+		if(redisKey != null && key != null) {
 			Jedis jedis = _getJedis();
-			List<String> values = jedis.hmget(mapKey, inMapKey);
+			List<String> values = jedis.hmget(_transcode(redisKey), key);
 			if(ListUtils.isNotEmpty(values)) {
 				value = values.get(0);
 			}
@@ -292,166 +371,223 @@ class _Jedis implements _IJedis {
 		}
 		return value;
 	}
-	
+
 	@Override
-	public List<String> getMapVals(String mapKey, String... inMapKeys) {
+	public List<String> getMapVals(String redisKey, String... keys) {
 		List<String> values = null;
-		if(mapKey != null && inMapKeys != null) {
+		if(redisKey != null && keys != null) {
 			Jedis jedis = _getJedis();
-			values = jedis.hmget(mapKey, inMapKeys);
+			values = jedis.hmget(_transcode(redisKey), keys);
+			_close(jedis);
+		}
+		return (values == null ? new LinkedList<String>() : values);
+	}
+
+	@Override
+	public List<String> getMapVals(String redisKey) {
+		List<String> values = null;
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			values = jedis.hvals(_transcode(redisKey));
 			_close(jedis);
 		}
 		return (values == null ? new LinkedList<String>() : values);
 	}
 	
 	@Override
-	public Object getMapObj(String mapKey, String inMapKey) {
+	public Object getMapObj(String redisKey, String key) {
 		Object value = null;
-		if(mapKey != null && inMapKey != null) {
+		if(redisKey != null && key != null) {
 			Jedis jedis = _getJedis();
-			try {
-				byte[] key = mapKey.getBytes(CHARSET);
-				List<byte[]> byteVals = jedis.hmget(key, inMapKey.getBytes(CHARSET));
-				if(ListUtils.isNotEmpty(byteVals)) {
-					value = ObjUtils.unSerializable(byteVals.get(0));
-				}
-			} catch (UnsupportedEncodingException e) {}
+			List<byte[]> values = jedis.hmget(
+					_transbyte(redisKey), _transbyte(key));
+			if(ListUtils.isNotEmpty(values)) {
+				value = ObjUtils.unSerializable(values.get(0));
+			}
 			_close(jedis);
 		}
 		return value;
 	}
-	
+
 	@Override
-	public List<Object> getMapObjs(String mapKey, String... inMapKeys) {
+	public List<Object> getMapObjs(String redisKey, String... keys) {
 		List<Object> values = new LinkedList<Object>();
-		if(mapKey != null && inMapKeys != null) {
+		if(redisKey != null && keys != null) {
 			Jedis jedis = _getJedis();
-			try {
-				byte[] key = mapKey.getBytes(CHARSET);
-				for(String inMapKey : inMapKeys) {
-					List<byte[]> byteVals = jedis.hmget(key, inMapKey.getBytes(CHARSET));
-					if(ListUtils.isEmpty(byteVals)) {
-						values.add(null);
-						
-					} else {
-						values.add(ObjUtils.unSerializable(byteVals.get(0)));
-					}
+			byte[] byteKey = _transbyte(redisKey);
+			for(String key : keys) {
+				List<byte[]> byteVals = jedis.hmget(byteKey, _transbyte(key));
+				if(ListUtils.isEmpty(byteVals)) {
+					values.add(null);
+					
+				} else {
+					values.add(ObjUtils.unSerializable(byteVals.get(0)));
 				}
-			} catch (UnsupportedEncodingException e) {}
+			}
 			_close(jedis);
 		}
 		return (values == null ? new LinkedList<Object>() : values);
 	}
 	
 	@Override
-	public long delMapKeys(String mapKey, String... inMapKeys) {
-		long num = 0;
-		if(mapKey != null && inMapKeys != null) {
+	public List<Object> getMapObjs(String redisKey) {
+		List<Object> values = new LinkedList<Object>();
+		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			num = jedis.hdel(mapKey, inMapKeys);
-			_close(jedis);
-		}
-		return num;
-	}
-	
-	@Override
-	public long addToList(String listKey, String... listValues) {
-		return addToListTail(listKey, listValues);
-	}
-	
-	@Override
-	public long addToListHead(String listKey, String... listValues) {
-		long num = 0;
-		if(listKey != null && listValues != null) {
-			Jedis jedis = _getJedis();
-			for(String value : listValues) {
-				if(value == null) {
-					continue;
-				}
-				num = jedis.lpush(listKey, value);
+			byte[] byteKey =_transbyte(redisKey);
+			List<byte[]> byteVals = jedis.hvals(byteKey);
+			for(byte[] byteVal : byteVals) {
+				values.add(ObjUtils.unSerializable(byteVal));
 			}
 			_close(jedis);
 		}
-		return num;
+		return (values == null ? new LinkedList<Object>() : values);
 	}
-	
+
 	@Override
-	public long addToListTail(String listKey, String... listValues) {
-		long num = 0;
-		if(listKey != null && listValues != null) {
-			Jedis jedis = _getJedis();
-			for(String value : listValues) {
-				if(value == null) {
-					continue;
-				}
-				num = jedis.rpush(listKey, value);
-			}
-			_close(jedis);
-		}
-		return num;
-	}
-	
-	@Override
-	public List<String> getListVals(String listKey) {
-		List<String> values = new LinkedList<String>();
-		if(listKey != null) {
-			Jedis jedis = _getJedis();
-			values = jedis.lrange(listKey, 0, -1);
-			_close(jedis);
-		}
-		return values;
-	}
-	
-	@Override
-	public long addToSet(String setKey, String... setValues) {
-		long num = 0;
-		if(setKey != null && setValues != null) {
-			Jedis jedis = _getJedis();
-			num = jedis.sadd(setKey, setValues);
-			_close(jedis);
-		}
-		return num;
-	}
-	
-	@Override
-	public Set<String> getSetVals(String setKey) {
-		Set<String> values = new HashSet<String>();
-		if(setKey != null) {
-			Jedis jedis = _getJedis();
-			values = jedis.smembers(setKey);
-			_close(jedis);
-		}
-		return values;
-	}
-	
-	@Override
-	public boolean inSet(String setKey, String setValue) {
+	public boolean existMapKey(String redisKey, String key) {
 		boolean isExist = false;
-		if(setKey != null && setValue != null) {
+		if(redisKey != null && key != null) {
 			Jedis jedis = _getJedis();
-			isExist = jedis.sismember(setKey, setValue);
+			isExist = jedis.hexists(_transcode(redisKey), key);
 			_close(jedis);
 		}
 		return isExist;
 	}
 	
 	@Override
-	public long getSetSize(String setKey) {
-		long size = 0;
-		if(setKey != null) {
+	public Set<String> getMapKeys(String redisKey) {
+		Set<String> keys = null;
+		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			size = jedis.scard(setKey);
+			keys = jedis.hkeys(_transcode(redisKey));
+			_close(jedis);
+		}
+		return (keys == null ? new HashSet<String>() : keys);
+	}
+
+	@Override
+	public long delMapKeys(String redisKey, String... keys) {
+		long num = 0;
+		if(redisKey != null && keys != null) {
+			Jedis jedis = _getJedis();
+			num = jedis.hdel(_transcode(redisKey), keys);
+			_close(jedis);
+		}
+		return num;
+	}
+	
+	@Override
+	public long getMapSize(String redisKey) {
+		long size = 0L;
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			size = jedis.hlen(_transcode(redisKey)); 
 			_close(jedis);
 		}
 		return size;
 	}
-	
+
 	@Override
-	public long delSetVals(String setKey, String... setValues) {
+	public long addToList(String redisKey, String... values) {
+		return addToListTail(redisKey, values);
+	}
+
+	@Override
+	public long addToListHead(String redisKey, String... values) {
 		long num = 0;
-		if(setKey != null && setValues != null) {
+		if(redisKey != null && values != null) {
 			Jedis jedis = _getJedis();
-			num = jedis.srem(setKey, setValues);
+			redisKey = _transcode(redisKey);
+			for(String value : values) {
+				if(value == null) {
+					continue;
+				}
+				num = jedis.lpush(redisKey, value);
+			}
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public long addToListTail(String redisKey, String... values) {
+		long num = 0;
+		if(redisKey != null && values != null) {
+			Jedis jedis = _getJedis();
+			redisKey = _transcode(redisKey);
+			for(String value : values) {
+				if(value == null) {
+					continue;
+				}
+				num = jedis.rpush(redisKey, value);
+			}
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public List<String> getListVals(String redisKey) {
+		List<String> values = new LinkedList<String>();
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			values = jedis.lrange(_transcode(redisKey), 0, -1);
+			_close(jedis);
+		}
+		return values;
+	}
+
+	@Override
+	public long addToSet(String redisKey, String... values) {
+		long num = 0;
+		if(redisKey != null && values != null) {
+			Jedis jedis = _getJedis();
+			num = jedis.sadd(_transcode(redisKey), values);
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public Set<String> getSetVals(String redisKey) {
+		Set<String> values = new HashSet<String>();
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			values = jedis.smembers(_transcode(redisKey));
+			_close(jedis);
+		}
+		return values;
+	}
+
+	@Override
+	public boolean inSet(String redisKey, String value) {
+		boolean isExist = false;
+		if(redisKey != null && value != null) {
+			Jedis jedis = _getJedis();
+			isExist = jedis.sismember(_transcode(redisKey), value);
+			_close(jedis);
+		}
+		return isExist;
+	}
+
+	@Override
+	public long getSetSize(String redisKey) {
+		long size = 0;
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			size = jedis.scard(_transcode(redisKey));
+			_close(jedis);
+		}
+		return size;
+	}
+
+	@Override
+	public long delSetVals(String redisKey, String... values) {
+		long num = 0;
+		if(redisKey != null && values != null) {
+			Jedis jedis = _getJedis();
+			num = jedis.srem(_transcode(redisKey), values);
 			_close(jedis);
 		}
 		return num;

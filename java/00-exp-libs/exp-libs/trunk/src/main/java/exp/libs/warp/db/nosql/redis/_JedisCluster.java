@@ -2,8 +2,10 @@ package exp.libs.warp.db.nosql.redis;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +16,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import redis.clients.jedis.JedisCluster;
 import exp.libs.envm.Charset;
+import exp.libs.utils.encode.CharsetUtils;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.utils.other.ObjUtils;
 import exp.libs.utils.other.StrUtils;
@@ -77,6 +80,28 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 				(poolConfig == null ? new GenericObjectPoolConfig() : poolConfig));
 	}
 
+	/**
+	 * 对Redis键统一转码，使得Jedis的 String接口 和 byte[]接口 所产生的键值最终一致。
+	 * (若不转码, 在redis编码与程序编码不一致的情况下, 即使键值相同, 
+	 * 	但使用String接口与byte[]接口存储到Redis的是两个不同的哈希表)
+	 * @param redisKey redis键
+	 * @return 统一转码后的redis键
+	 */
+	private String _transcode(String redisKey) {
+		return CharsetUtils.transcode(redisKey, CHARSET);
+	}
+	
+	/**
+	 * 对Redis键统一转码，使得Jedis的 String接口 和 byte[]接口 所产生的键值最终一致。
+	 * (若不转码, 在redis编码与程序编码不一致的情况下, 即使键值相同, 
+	 * 	但使用String接口与byte[]接口存储到Redis的是两个不同的哈希表)
+	 * @param redisKey redis键
+	 * @return 统一转码后的redis键(字节数组)
+	 */
+	private byte[] _transbyte(String redisKey) {
+		return CharsetUtils.toBytes(redisKey, CHARSET);
+	}
+	
 	@Deprecated
 	@Override
 	public boolean isVaild() {
@@ -86,6 +111,11 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	@Deprecated
 	@Override
 	public void setAutoCommit(boolean autoCommit) {
+		// Undo 集群模式不支持此操作
+	}
+
+	@Override
+	public void closeAutoCommit() {
 		// Undo 集群模式不支持此操作
 	}
 
@@ -106,253 +136,343 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	public boolean clearAll() {
 		return false;	// 集群模式不支持此操作
 	}
-	
+
 	@Override
-	public boolean existKey(String key) {
-		return super.exists(key);
+	public boolean existKey(String redisKey) {
+		boolean isExist = false;
+		if(redisKey != null) {
+			isExist = super.exists(_transcode(redisKey));
+		}
+		return isExist;
 	}
 
 	@Override
-	public long delKeys(String... keys) {
-		long size = 0;
-		if(keys != null) {
-			size = super.del(keys);
+	public long delKeys(String... redisKeys) {
+		long num = 0;
+		if(redisKeys != null) {
+			for(String redisKey : redisKeys) {
+				if(redisKey == null) {
+					continue;
+				}
+				num += super.del(_transcode(redisKey));
+			}
 		}
-		return size;
+		return num;
 	}
-	
+
 	@Override
-	public boolean addKV(String key, String value) {
+	public boolean addKV(String redisKey, String value) {
 		boolean isOk = false;
-		if(key != null && value != null) {
-			isOk = OK.equalsIgnoreCase(super.set(key, value));
+		if(redisKey != null && value != null) {
+			isOk = OK.equalsIgnoreCase(super.set(_transcode(redisKey), value));
 		}
 		return isOk;
 	}
-	
+
 	@Override
-	public long appendKV(String key, String value) {
+	public long appendKV(String redisKey, String value) {
 		long len = -1;
-		if(key != null && value != null) {
-			len = super.append(key, value);
+		if(redisKey != null && value != null) {
+			len = super.append(_transcode(redisKey), value);
 		}
 		return len;
 	}
-	
+
 	@Override
-	public String getVal(String key) {
+	public String getVal(String redisKey) {
 		String value = "";
-		if(key != null) {
-			value = super.get(key);
+		if(redisKey != null) {
+			value = super.get(_transcode(redisKey));
 		}
 		return value;
 	}
-	
+
 	@Override
-	public boolean addObj(String key, Serializable object) {
+	public boolean addObj(String redisKey, Serializable object) {
 		boolean isOk = false;
-		if(key != null && object != null) {
-			try {
-				isOk = OK.equalsIgnoreCase(super.set(
-						key.getBytes(CHARSET), ObjUtils.toSerializable(object)));
-			} catch (UnsupportedEncodingException e) {}
+		if(redisKey != null && object != null) {
+			isOk = OK.equalsIgnoreCase(super.set(
+					_transbyte(redisKey), 
+					ObjUtils.toSerializable(object))
+			);
 		}
 		return isOk;
 	}
-	
+
 	@Override
-	public Object getObj(String key) {
+	public Object getObj(String redisKey) {
 		Object object = null;
-		if(key != null) {
-			try {
-				object = ObjUtils.unSerializable(
-						super.get(key.getBytes(CHARSET)));
-			} catch (UnsupportedEncodingException e) {}
+		if(redisKey != null) {
+			object = ObjUtils.unSerializable(super.get(_transbyte(redisKey)));
 		}
 		return object;
 	}
-	
+
 	@Override
-	public boolean addMap(String key, Map<String, String> map) {
+	public boolean addMap(String redisKey, Map<String, String> map) {
 		boolean isOk = false;
-		if(key != null && map != null) {
-			isOk = OK.equalsIgnoreCase(super.hmset(key, map));
+		if(redisKey != null && map != null) {
+			isOk = OK.equalsIgnoreCase(super.hmset(_transcode(redisKey), map));
 		}
 		return isOk;
 	}
 	
 	@Override
-	public boolean addToMap(String key, String mapKey, String mapValue) {
+	public Map<String, String> getMap(String redisKey) {
+		Map<String, String> map = null;
+		if(redisKey != null) {
+			map = super.hgetAll(_transcode(redisKey));
+		}
+		return (map == null ? new HashMap<String, String>() : map);
+	}
+
+	@Override
+	public boolean addObjMap(String redisKey, Map<String, Serializable> map) {
 		boolean isOk = false;
-		if(key != null && mapKey != null && mapValue != null) {
-			isOk = super.hset(key, mapKey, mapValue) >= 0;
+		if(redisKey != null && map != null) {
+			isOk = true;
+			Iterator<String> keys = map.keySet().iterator();
+			while(keys.hasNext()) {
+				String key = keys.next();
+				Serializable object = map.get(key);
+				isOk &= super.hset(_transbyte(redisKey), _transbyte(key), 
+						ObjUtils.toSerializable(object)) >= 0;
+			}
 		}
 		return isOk;
 	}
 	
 	@Override
-	public boolean addToMap(String key, String mapKey, Serializable mapValue) {
+	public Map<String, Object> getObjMap(String redisKey) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(redisKey != null) {
+			Map<byte[], byte[]> byteMap = super.hgetAll(_transbyte(redisKey));
+			Iterator<byte[]> keys = byteMap.keySet().iterator();
+			while(keys.hasNext()) {
+				byte[] key = keys.next();
+				byte[] val = byteMap.get(key);
+				map.put(CharsetUtils.toStr(key, CHARSET), ObjUtils.unSerializable(val));
+			}
+		}
+		return map;
+	}
+
+	@Override
+	public boolean addToMap(String redisKey, String key, String value) {
 		boolean isOk = false;
-		if(key != null && mapKey != null && mapValue != null) {
-			try {
-				isOk = super.hset(key.getBytes(CHARSET), 
-						mapKey.getBytes(CHARSET), 
-						ObjUtils.toSerializable(mapValue)) >= 0;
-			} catch (UnsupportedEncodingException e) {}
+		if(redisKey != null && key != null && value != null) {
+			isOk = super.hset(_transcode(redisKey), key, value) >= 0;
 		}
 		return isOk;
 	}
-	
+
 	@Override
-	public String getMapVal(String mapKey, String inMapKey) {
+	public boolean addToMap(String redisKey, String key, Serializable object) {
+		boolean isOk = false;
+		if(redisKey != null && key != null && object != null) {
+			isOk = super.hset(_transbyte(redisKey), _transbyte(key), 
+					ObjUtils.toSerializable(object)) >= 0;
+		}
+		return isOk;
+	}
+
+	@Override
+	public String getMapVal(String redisKey, String key) {
 		String value = null;
-		if(mapKey != null && inMapKey != null) {
-			List<String> values = super.hmget(mapKey, inMapKey);
+		if(redisKey != null && key != null) {
+			List<String> values = super.hmget(_transcode(redisKey), key);
 			if(ListUtils.isNotEmpty(values)) {
 				value = values.get(0);
 			}
 		}
 		return value;
 	}
-	
+
 	@Override
-	public List<String> getMapVals(String mapKey, String... inMapKeys) {
+	public List<String> getMapVals(String redisKey, String... keys) {
 		List<String> values = null;
-		if(mapKey != null && inMapKeys != null) {
-			values = super.hmget(mapKey, inMapKeys);
+		if(redisKey != null && keys != null) {
+			values = super.hmget(_transcode(redisKey), keys);
+		}
+		return (values == null ? new LinkedList<String>() : values);
+	}
+
+	@Override
+	public List<String> getMapVals(String redisKey) {
+		List<String> values = null;
+		if(redisKey != null) {
+			values = super.hvals(_transcode(redisKey));
 		}
 		return (values == null ? new LinkedList<String>() : values);
 	}
 	
 	@Override
-	public Object getMapObj(String mapKey, String inMapKey) {
+	public Object getMapObj(String redisKey, String key) {
 		Object value = null;
-		if(mapKey != null && inMapKey != null) {
-			try {
-				byte[] key = mapKey.getBytes(CHARSET);
-				List<byte[]> byteVals = super.hmget(key, inMapKey.getBytes(CHARSET));
-				if(ListUtils.isNotEmpty(byteVals)) {
-					value = ObjUtils.unSerializable(byteVals.get(0));
-				}
-			} catch (UnsupportedEncodingException e) {}
+		if(redisKey != null && key != null) {
+			List<byte[]> values = super.hmget(
+					_transbyte(redisKey), _transbyte(key));
+			if(ListUtils.isNotEmpty(values)) {
+				value = ObjUtils.unSerializable(values.get(0));
+			}
 		}
 		return value;
 	}
-	
+
 	@Override
-	public List<Object> getMapObjs(String mapKey, String... inMapKeys) {
+	public List<Object> getMapObjs(String redisKey, String... keys) {
 		List<Object> values = new LinkedList<Object>();
-		if(mapKey != null && inMapKeys != null) {
-			try {
-				byte[] key = mapKey.getBytes(CHARSET);
-				for(String inMapKey : inMapKeys) {
-					List<byte[]> byteVals = super.hmget(key, inMapKey.getBytes(CHARSET));
-					if(ListUtils.isEmpty(byteVals)) {
-						values.add(null);
-						
-					} else {
-						values.add(ObjUtils.unSerializable(byteVals.get(0)));
-					}
+		if(redisKey != null && keys != null) {
+			byte[] byteKey = _transbyte(redisKey);
+			for(String key : keys) {
+				List<byte[]> byteVals = super.hmget(byteKey, _transbyte(key));
+				if(ListUtils.isEmpty(byteVals)) {
+					values.add(null);
+					
+				} else {
+					values.add(ObjUtils.unSerializable(byteVals.get(0)));
 				}
-			} catch (UnsupportedEncodingException e) {}
+			}
 		}
 		return (values == null ? new LinkedList<Object>() : values);
 	}
-	
+
 	@Override
-	public long delMapKeys(String mapKey, String... inMapKeys) {
-		long size = 0;
-		if(mapKey != null && inMapKeys != null) {
-			size = super.hdel(mapKey, inMapKeys);
-		}
-		return size;
-	}
-	
-	@Override
-	public long addToList(String listKey, String... listValues) {
-		return addToListTail(listKey, listValues);
-	}
-	
-	@Override
-	public long addToListHead(String listKey, String... listValues) {
-		long size = 0;
-		if(listKey != null && listValues != null) {
-			for(String value : listValues) {
-				if(value == null) {
-					continue;
-				}
-				size = super.lpush(listKey, value);
+	public List<Object> getMapObjs(String redisKey) {
+		List<Object> values = new LinkedList<Object>();
+		if(redisKey != null) {
+			byte[] byteKey =_transbyte(redisKey);
+			Collection<byte[]> byteVals = super.hvals(byteKey);
+			for(byte[] byteVal : byteVals) {
+				values.add(ObjUtils.unSerializable(byteVal));
 			}
 		}
-		return size;
+		return (values == null ? new LinkedList<Object>() : values);
 	}
-	
+
 	@Override
-	public long addToListTail(String listKey, String... listValues) {
-		long size = 0;
-		if(listKey != null && listValues != null) {
-			for(String value : listValues) {
-				if(value == null) {
-					continue;
-				}
-				size = super.rpush(listKey, value);
-			}
-		}
-		return size;
-	}
-	
-	@Override
-	public List<String> getListVals(String listKey) {
-		List<String> values = new LinkedList<String>();
-		if(listKey != null) {
-			values = super.lrange(listKey, 0, -1);
-		}
-		return values;
-	}
-	
-	@Override
-	public long addToSet(String setKey, String... setValues) {
-		long addNum = 0;
-		if(setKey != null && setValues != null) {
-			addNum = super.sadd(setKey, setValues);
-		}
-		return addNum;
-	}
-	
-	@Override
-	public Set<String> getSetVals(String setKey) {
-		Set<String> values = new HashSet<String>();
-		if(setKey != null) {
-			values = super.smembers(setKey);
-		}
-		return values;
-	}
-	
-	@Override
-	public boolean inSet(String setKey, String setValue) {
+	public boolean existMapKey(String redisKey, String key) {
 		boolean isExist = false;
-		if(setKey != null && setValue != null) {
-			isExist = super.sismember(setKey, setValue);
+		if(redisKey != null && key != null) {
+			isExist = super.hexists(_transcode(redisKey), key);
 		}
 		return isExist;
 	}
 	
 	@Override
-	public long getSetSize(String setKey) {
-		long size = 0;
-		if(setKey != null) {
-			size = super.scard(setKey);
+	public Set<String> getMapKeys(String redisKey) {
+		Set<String> keys = new HashSet<String>();
+		if(redisKey != null) {
+			keys = super.hkeys(_transcode(redisKey));
 		}
-		return size;
+		return (keys == null ? new HashSet<String>() : keys);
 	}
 	
 	@Override
-	public long delSetVals(String setKey, String... setValues) {
-		long size = 0;
-		if(setKey != null && setValues != null) {
-			size = super.srem(setKey, setValues);
+	public long delMapKeys(String redisKey, String... keys) {
+		long num = 0;
+		if(redisKey != null && keys != null) {
+			num = super.hdel(_transcode(redisKey), keys);
+		}
+		return num;
+	}
+	
+	@Override
+	public long getMapSize(String redisKey) {
+		long size = 0L;
+		if(redisKey != null) {
+			size = super.hlen(_transcode(redisKey)); 
 		}
 		return size;
+	}
+
+	@Override
+	public long addToList(String redisKey, String... values) {
+		return addToListTail(redisKey, values);
+	}
+
+	@Override
+	public long addToListHead(String redisKey, String... values) {
+		long num = 0;
+		if(redisKey != null && values != null) {
+			redisKey = _transcode(redisKey);
+			for(String value : values) {
+				if(value == null) {
+					continue;
+				}
+				num = super.lpush(redisKey, value);
+			}
+		}
+		return num;
+	}
+
+	@Override
+	public long addToListTail(String redisKey, String... values) {
+		long num = 0;
+		if(redisKey != null && values != null) {
+			redisKey = _transcode(redisKey);
+			for(String value : values) {
+				if(value == null) {
+					continue;
+				}
+				num = super.rpush(redisKey, value);
+			}
+		}
+		return num;
+	}
+
+	@Override
+	public List<String> getListVals(String redisKey) {
+		List<String> values = new LinkedList<String>();
+		if(redisKey != null) {
+			values = super.lrange(_transcode(redisKey), 0, -1);
+		}
+		return values;
+	}
+
+	@Override
+	public long addToSet(String redisKey, String... values) {
+		long addNum = 0;
+		if(redisKey != null && values != null) {
+			addNum = super.sadd(_transcode(redisKey), values);
+		}
+		return addNum;
+	}
+
+	@Override
+	public Set<String> getSetVals(String redisKey) {
+		Set<String> values = new HashSet<String>();
+		if(redisKey != null) {
+			values = super.smembers(_transcode(redisKey));
+		}
+		return values;
+	}
+
+	@Override
+	public boolean inSet(String redisKey, String value) {
+		boolean isExist = false;
+		if(redisKey != null && value != null) {
+			isExist = super.sismember(_transcode(redisKey), value);
+		}
+		return isExist;
+	}
+
+	@Override
+	public long getSetSize(String redisKey) {
+		long size = 0;
+		if(redisKey != null) {
+			size = super.scard(_transcode(redisKey));
+		}
+		return size;
+	}
+
+	@Override
+	public long delSetVals(String redisKey, String... values) {
+		long num = 0;
+		if(redisKey != null && values != null) {
+			num = super.srem(_transcode(redisKey), values);
+		}
+		return num;
 	}
 	
 }

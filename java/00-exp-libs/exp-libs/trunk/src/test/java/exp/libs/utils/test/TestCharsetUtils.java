@@ -43,12 +43,12 @@ public class TestCharsetUtils {
 	}
 
 	@Test
-	public void testTracnscode() {
+	public void testTranscode() {
 		byte[] utf8Bytes = CharsetUtils.toBytes("字符集测试abc123", Charset.UTF8);
 		String utf8Hex = BODHUtils.toHex(utf8Bytes);
 		System.out.println(utf8Hex);
 		
-		byte[] gbkBytes = CharsetUtils.tracnscode(utf8Bytes, Charset.UTF8, Charset.GBK);
+		byte[] gbkBytes = CharsetUtils.transcode(utf8Bytes, Charset.UTF8, Charset.GBK);
 		String gbkHex = BODHUtils.toHex(gbkBytes);
 		System.out.println(gbkHex);
 		

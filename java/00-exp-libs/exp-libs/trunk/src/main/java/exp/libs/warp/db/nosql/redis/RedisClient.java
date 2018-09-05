@@ -36,7 +36,7 @@ import exp.libs.warp.db.nosql.bean.RedisBean;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class RedisClient {
+public class RedisClient implements _IJedis {
 
 	/** 默认redis IP */
 	public final static String DEFAULT_IP = "127.0.0.1";
@@ -88,7 +88,7 @@ public class RedisClient {
 	
 	/**
 	 * 构造函数（单机模式）
-	 * 使用默认的IP端口： 127.0.01:6379
+	 * 使用默认的IP端口： 127.0.0.1:6379
 	 */
 	public RedisClient() {
 		this(DEFAULT_IP, DEFAULT_PORT);
@@ -384,291 +384,202 @@ public class RedisClient {
 		}
 		return array;
 	}
-	
-	/**
-	 * 测试Redis连接是否有效(集群模式不支持此操作)
-	 * @return true:连接成功; false:连接失败
-	 */
+
+	@Override
 	public boolean isVaild() {
 		return iJedis.isVaild();
 	}
-	
-	/**
-	 * <pre>
-	 * 在用连接池的情况下, redis的操作默认均为短连接.
-	 * 此方法可邻接切换操作模式为长连接, 在调用{@link #commit}方法后恢复为短连接模式.
-	 * -----------------
-	 * 此方法非多线程安全, 集群模式不支持此操作
-	 * </pre>
-	 * @param autoCommit true:自动提交; false:手动提交(需调用{@link #commit}方法)
-	 */
+
+	@Override
 	public void setAutoCommit(boolean autoCommit) {
 		iJedis.setAutoCommit(autoCommit);
 	}
-	
-	/**
-	 * 把redis操作模式切换为默认的短连接模式
-	 * -----------------
-	 * 此方法非多线程安全, 集群模式不支持此操作
-	 */
+
+	@Override
+	public void closeAutoCommit() {
+		iJedis.closeAutoCommit();
+	}
+
+	@Override
 	public void commit() {
 		iJedis.commit();
 	}
-	
-	/**
-	 * 断开Redis连接
-	 */
-	public void close() {
+
+	@Override
+	public void destory() {
 		iJedis.destory();
 	}
 	
 	/**
-	 * 清空Redis库中所有数据(此方法在集群模式下无效)
-	 * @return true:清空成功; false:清空失败
+	 * 断开redis连接
 	 */
+	public void close() {
+		destory();
+	}
+
+	@Override
 	public boolean clearAll() {
 		return iJedis.clearAll();
 	}
-	
-	/**
-	 * 检查Redis库里面是否存在某个键值
-	 * @param key 被检查的键值
-	 * @return true:存在; false:不存在
-	 */
-	public boolean existKey(String key) {
-		return iJedis.existKey(key);
+
+	@Override
+	public boolean existKey(String redisKey) {
+		return iJedis.existKey(redisKey);
+	}
+
+	@Override
+	public long delKeys(String... redisKeys) {
+		return iJedis.delKeys(redisKeys);
+	}
+
+	@Override
+	public boolean addKV(String redisKey, String value) {
+		return iJedis.addKV(redisKey, value);
+	}
+
+	@Override
+	public long appendKV(String redisKey, String value) {
+		return iJedis.appendKV(redisKey, value);
+	}
+
+	@Override
+	public String getVal(String redisKey) {
+		return iJedis.getVal(redisKey);
+	}
+
+	@Override
+	public boolean addObj(String redisKey, Serializable object) {
+		return iJedis.addObj(redisKey, object);
+	}
+
+	@Override
+	public Object getObj(String redisKey) {
+		return iJedis.getObj(redisKey);
+	}
+
+	@Override
+	public boolean addMap(String redisKey, Map<String, String> map) {
+		return iJedis.addMap(redisKey, map);
+	}
+
+	@Override
+	public Map<String, String> getMap(String redisKey) {
+		return iJedis.getMap(redisKey);
+	}
+
+	@Override
+	public boolean addObjMap(String redisKey, Map<String, Serializable> map) {
+		return iJedis.addObjMap(redisKey, map);
 	}
 	
-	/**
-	 * 删除若干个键（及其对应的内容）
-	 * @param keys 指定的键集
-	 * @return 删除成功的个数
-	 */
-	public long delKeys(String... keys) {
-		return iJedis.delKeys(keys);
+	@Override
+	public Map<String, Object> getObjMap(String redisKey) {
+		return iJedis.getObjMap(redisKey);
+	}
+
+	@Override
+	public boolean addToMap(String redisKey, String key, String value) {
+		return iJedis.addToMap(redisKey, key, value);
+	}
+
+	@Override
+	public boolean addToMap(String redisKey, String key, Serializable object) {
+		return iJedis.addToMap(redisKey, key, object);
+	}
+
+	@Override
+	public String getMapVal(String redisKey, String key) {
+		return iJedis.getMapVal(redisKey, key);
+	}
+
+	@Override
+	public List<String> getMapVals(String redisKey, String... keys) {
+		return iJedis.getMapVals(redisKey, keys);
+	}
+
+	@Override
+	public List<String> getMapVals(String redisKey) {
+		return iJedis.getMapVals(redisKey);
 	}
 	
-	/**
-	 * 新增一个键值对
-	 * @param key 新的键
-	 * @param value 新的值
-	 * @return true:新增成功; false:新增失败
-	 */
-	public boolean addKV(String key, String value) {
-		return iJedis.addKV(key, value);
+	@Override
+	public Object getMapObj(String redisKey, String key) {
+		return iJedis.getMapObj(redisKey, key);
+	}
+
+	@Override
+	public List<Object> getMapObjs(String redisKey, String... keys) {
+		return iJedis.getMapObjs(redisKey, keys);
+	}
+
+	@Override
+	public List<Object> getMapObjs(String redisKey) {
+		return iJedis.getMapObjs(redisKey);
+	}
+
+	@Override
+	public boolean existMapKey(String redisKey, String key) {
+		return iJedis.existMapKey(redisKey, key);
 	}
 	
-	/**
-	 * 在已有的键key的原值的末尾附加value（仅针对键值对使用）
-	 * @param key 已有/新的键
-	 * @param value 附加的值
-	 * @return 附加值后，该键上最新的值的总长度
-	 */
-	public long appendKV(String key, String value) {
-		return iJedis.appendKV(key, value);
+	@Override
+	public Set<String> getMapKeys(String redisKey) {
+		return iJedis.getMapKeys(redisKey);
 	}
 	
-	/**
-	 * 获取指定键的值
-	 * @param key 指定的键
-	 * @return 对应的值（若不存在键则返回null）
-	 */
-	public String getVal(String key) {
-		return iJedis.getVal(key);
+	@Override
+	public long delMapKeys(String redisKey, String... keys) {
+		return iJedis.delMapKeys(redisKey, keys);
+	}
+
+	@Override
+	public long getMapSize(String redisKey) {
+		return iJedis.getMapSize(redisKey);
 	}
 	
-	/**
-	 * <pre>
-	 * 新增一个对象（该对象须实现Serializable接口）。
-	 * 该对象会以序列化形式存储到Redis。
-	 * </pre>
-	 * @param key 指定的键
-	 * @param object 新增的对象（须实现Serializable接口）
-	 * @return
-	 */
-	public boolean addObj(String key, Serializable object) {
-		return iJedis.addObj(key, object);
+	@Override
+	public long addToList(String redisKey, String... values) {
+		return iJedis.addToList(redisKey, values);
 	}
-	
-	/**
-	 * <pre>
-	 * 获取指定键的对象。
-	 * 该对象会从Redis反序列化。
-	 * </pre>
-	 * @param key 指定的键
-	 * @return 反序列化的对象（若失败则返回null）
-	 */
-	public Object getObj(String key) {
-		return iJedis.getObj(key);
+
+	@Override
+	public long addToListHead(String redisKey, String... values) {
+		return iJedis.addToListHead(redisKey, values);
 	}
-	
-	/**
-	 * 新增一个 键->哈希表
-	 * @param key 键值
-	 * @param map 哈希表
-	 * @return true:新增成功; false:新增失败
-	 */
-	public boolean addMap(String key, Map<String, String> map) {
-		return iJedis.addMap(key, map);
+
+	@Override
+	public long addToListTail(String redisKey, String... values) {
+		return iJedis.addToListTail(redisKey, values);
 	}
-	
-	/**
-	 * 新增一个 键值对 到 指定哈希表
-	 * @param key 哈希表的键
-	 * @param mapKey 新增到哈希表的键
-	 * @param mapValue 新增到哈希表的值
-	 * @return true:新增成功; false:新增失败
-	 */
-	public boolean addToMap(String key, String mapKey, String mapValue) {
-		return iJedis.addToMap(key, mapKey, mapValue);
+
+	@Override
+	public List<String> getListVals(String redisKey) {
+		return iJedis.getListVals(redisKey);
 	}
-	
-	/**
-	 * 新增一个 键值对 到 指定哈希表
-	 * @param key 哈希表的键
-	 * @param mapKey 新增到哈希表的键
-	 * @param mapValue 新增到哈希表的值
-	 * @return true:新增成功; false:新增失败
-	 */
-	public boolean addToMap(String key, String mapKey, Serializable mapValue) {
-		return iJedis.addToMap(key, mapKey, mapValue);
+
+	@Override
+	public long addToSet(String redisKey, String... values) {
+		return iJedis.addToSet(redisKey, values);
 	}
-	
-	/**
-	 * 获取某个哈希表中的某个键的值
-	 * @param mapKey 哈希表的键
-	 * @param inMapKey 哈希表中的某个键
-	 * @return 哈希表中对应的值（若不存在返回null）
-	 */
-	public String getMapVal(String mapKey, String inMapKey) {
-		return iJedis.getMapVal(mapKey, inMapKey);
+
+	@Override
+	public Set<String> getSetVals(String redisKey) {
+		return iJedis.getSetVals(redisKey);
 	}
-	
-	/**
-	 * 获取某个哈希表中的若干个键的值
-	 * @param mapKey 哈希表的键
-	 * @param inMapKeys 哈希表中的一些键
-	 * @return 哈希表中对应的一些值
-	 */
-	public List<String> getMapVals(String mapKey, String... inMapKeys) {
-		return iJedis.getMapVals(mapKey, inMapKeys);
+
+	@Override
+	public boolean inSet(String redisKey, String value) {
+		return iJedis.inSet(redisKey, value);
 	}
-	
-	/**
-	 * 获取某个哈希表中的某个键的值对象（反序列化对象）
-	 * @param mapKey 哈希表的键
-	 * @param inMapKeys 哈希表中的某个键
-	 * @return 哈希表中对应的值对象（反序列化对象，若不存在返回null）
-	 */
-	public Object getMapObj(String mapKey, String inMapKey) {
-		return iJedis.getMapObj(mapKey, inMapKey);
+
+	@Override
+	public long getSetSize(String redisKey) {
+		return iJedis.getSetSize(redisKey);
 	}
-	
-	/**
-	 * 获取某个哈希表中的若干个键的值对象（反序列化对象）
-	 * @param mapKey 哈希表的键
-	 * @param inMapKeys 哈希表中的一些键
-	 * @return 哈希表中对应的一些值对象（反序列化对象）
-	 */
-	public List<Object> getMapObjs(String mapKey, String... inMapKeys) {
-		return iJedis.getMapObjs(mapKey, inMapKeys);
+
+	@Override
+	public long delSetVals(String redisKey, String... values) {
+		return iJedis.delSetVals(redisKey, values);
 	}
-	
-	/**
-	 * 删除某个哈希表中的若干个键（及其对应的值）
-	 * @param mapKey 哈希表的键
-	 * @param inMapKeys 哈希表中的一些键
-	 * @return 删除成功的个数
-	 */
-	public long delMapKeys(String mapKey, String... inMapKeys) {
-		return iJedis.delMapKeys(mapKey, inMapKeys);
-	}
-	
-	/**
-	 * 添加一些值到列表
-	 * @param listKey 列表的键
-	 * @param listValues 添加的值
-	 * @return 添加后，该的队列的总长度
-	 */
-	public long addToList(String listKey, String... listValues) {
-		return iJedis.addToList(listKey, listValues);
-	}
-	
-	/**
-	 * 添加一些值到列表头部
-	 * @param listKey 列表的键
-	 * @param listValues 添加的值
-	 * @return 添加后，该的队列的总长度
-	 */
-	public long addToListHead(String listKey, String... listValues) {
-		return iJedis.addToListHead(listKey, listValues);
-	}
-	
-	/**
-	 * 添加一些值到列表尾部
-	 * @param listKey 列表的键
-	 * @param listValues 添加的值
-	 * @return 添加后，该的队列的总长度
-	 */
-	public long addToListTail(String listKey, String... listValues) {
-		return iJedis.addToListTail(listKey, listValues);
-	}
-	
-	/**
-	 * 获取列表中的所有值
-	 * @param listKey 列表的键
-	 * @return 列表中的所有值
-	 */
-	public List<String> getListVals(String listKey) {
-		return iJedis.getListVals(listKey);
-	}
-	
-	/**
-	 * 添加一些值到集合
-	 * @param setKey 集合的键
-	 * @param setValues 添加的值
-	 * @return 成功添加到该集合的值个数
-	 */
-	public long addToSet(String setKey, String... setValues) {
-		return iJedis.addToSet(setKey, setValues);
-	}
-	
-	/**
-	 * 获取集合中的值
-	 * @param setKey 集合的键
-	 * @return 集合中的值
-	 */
-	public Set<String> getSetVals(String setKey) {
-		return iJedis.getSetVals(setKey);
-	}
-	
-	/**
-	 * 检测某个值是否在指定集合中
-	 * @param setKey 集合的键
-	 * @param setValue 被检测的值
-	 * @return true:在集合中; false:不在集合中
-	 */
-	public boolean inSet(String setKey, String setValue) {
-		return iJedis.inSet(setKey, setValue);
-	}
-	
-	/**
-	 * 获取集合的大小
-	 * @param setKey 集合的键
-	 * @return 集合的大小
-	 */
-	public long getSetSize(String setKey) {
-		return iJedis.getSetSize(setKey);
-	}
-	
-	/**
-	 * 删除集合中的一些值
-	 * @param setKey 集合的键
-	 * @param setValues 被删除的值
-	 * @return 成功从改集合中删除的值个数
-	 */
-	public long delSetVals(String setKey, String... setValues) {
-		return iJedis.delSetVals(setKey, setValues);
-	}
-	
+
 }
