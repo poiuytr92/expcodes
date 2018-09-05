@@ -86,6 +86,17 @@ public class RedisMap {
 		return value;
 	}
 	
+	public boolean remove(String key) {
+		boolean isOk = false;
+		try {
+			isOk = redis.delMapKeys(MAP_NAME, key) >= 0;
+			
+		} catch(Exception e) {
+			log.error("删除redis缓存失败", e);
+		}
+		return isOk;
+	}
+	
 	public boolean clear() {
 		boolean isOk = false;
 		try {
