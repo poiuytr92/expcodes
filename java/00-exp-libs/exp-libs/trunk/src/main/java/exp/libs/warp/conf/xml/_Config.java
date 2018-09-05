@@ -21,7 +21,7 @@ import exp.libs.utils.os.OSUtils;
 import exp.libs.utils.other.BoolUtils;
 import exp.libs.utils.other.PathUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.db.nosql.bean.RedisBean;
+import exp.libs.warp.db.redis.bean.RedisBean;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.mq.jms.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;

@@ -1,4 +1,4 @@
-package exp.libs.warp.db.nosql.redis;
+package exp.libs.warp.db.redis;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -13,7 +13,7 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
-import exp.libs.warp.db.nosql.bean.RedisBean;
+import exp.libs.warp.db.redis.bean.RedisBean;
 
 /**
  * <PRE>

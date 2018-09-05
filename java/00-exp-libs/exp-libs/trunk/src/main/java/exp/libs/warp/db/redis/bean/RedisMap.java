@@ -1,11 +1,11 @@
-package exp.libs.warp.db.nosql.bean;
+package exp.libs.warp.db.redis.bean;
 
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import exp.libs.warp.db.nosql.redis.RedisClient;
+import exp.libs.warp.db.redis.RedisClient;
 
 public class RedisMap {
 

@@ -1,10 +1,10 @@
-package exp.libs.warp.db.nosql.bean;
+package exp.libs.warp.db.redis.bean;
 
 import java.io.Serializable;
 import java.util.Iterator;
 import java.util.Map;
 
-import exp.libs.warp.db.nosql.redis.RedisClient;
+import exp.libs.warp.db.redis.RedisClient;
 
 public class RedisObjMap<OBJ extends Serializable> extends RedisMap {
 

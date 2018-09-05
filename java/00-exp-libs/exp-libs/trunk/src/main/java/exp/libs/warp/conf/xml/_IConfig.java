@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.dom4j.Element;
 
-import exp.libs.warp.db.nosql.bean.RedisBean;
+import exp.libs.warp.db.redis.bean.RedisBean;
 import exp.libs.warp.db.sql.bean.DataSourceBean;
 import exp.libs.warp.net.mq.jms.bean.JmsBean;
 import exp.libs.warp.net.sock.bean.SocketBean;

@@ -1,4 +1,4 @@
-package exp.libs.warp.db.nosql.redis;
+package exp.libs.warp.db.redis;
 
 import java.io.Serializable;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package exp.libs.warp.db.nosql.redis;
+package exp.libs.warp.db.redis;
 
 import java.io.Serializable;
 import java.util.List;
@@ -79,7 +79,7 @@ interface _IJedis {
 	public long delKeys(String... redisKeys);
 	
 	/**
-	 * 新增一个键值对
+	 * 新增一个键值对（若已存在则覆盖）
 	 * @param redisKey 新的键
 	 * @param value 新的值
 	 * @return true:新增成功; false:新增失败

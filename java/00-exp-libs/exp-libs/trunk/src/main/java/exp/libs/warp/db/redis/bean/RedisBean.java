@@ -1,4 +1,4 @@
-package exp.libs.warp.db.nosql.bean;
+package exp.libs.warp.db.redis.bean;
 
 import java.util.HashSet;
 import java.util.Set;
