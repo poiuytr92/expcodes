@@ -80,6 +80,9 @@ public class BiliCookie extends HttpCookie {
 	/** 累计参与抽奖计数 */
 	private int lotteryCnt;
 	
+	/** 上次抽奖时间 */
+	private long lastLotteryTime;
+	
 	public BiliCookie() {
 		super();
 	}
@@ -103,6 +106,7 @@ public class BiliCookie extends HttpCookie {
 		this.feedRoomId = Config.getInstn().SIGN_ROOM_ID();
 		this.taskStatus = new TaskStatus();
 		this.lotteryCnt = 0;
+		this.lastLotteryTime = 0L;
 	}
 	
 	@Override
@@ -230,22 +234,56 @@ public class BiliCookie extends HttpCookie {
 		return taskStatus;
 	}
 	
+	/**
+	 * 是否允许抽奖
+	 * @return
+	 */
 	public boolean allowLottery() {
-		
-		// 随机抽奖
+		boolean isOk = random();
+		isOk &= frequency();
+		isOk &= continuity();
+		return isOk;
+	}
+	
+	/**
+	 * 以随机方式控制抽奖
+	 * @return
+	 */
+	private boolean random() {
 		int percent = UIUtils.getLotteryProbability();
-		boolean isOk = BoolUtils.hit(percent);
-		
-		// 限制未实名账号连续抽奖 (B站严查未实名账号)
-//		if(isOk == true && isRealName() == false) {
-//			if(lotteryCnt >= Config.LOTTERY_LIMIT) {
-//				lotteryCnt = 0;
-//				isOk = false;
-//				
-//			} else {
-//				lotteryCnt++;
-//			}
-//		}
+		return BoolUtils.hit(percent);
+	}
+
+	/**
+	 * 通过抽奖间隔控制高频抽奖
+	 * @return
+	 */
+	private boolean frequency() {
+		boolean isOk = false;
+		long now = System.currentTimeMillis();
+		if(now - lastLotteryTime >= UIUtils.getIntervalTime()) {
+			lastLotteryTime = now;
+			isOk = true;
+		}
+		return isOk;
+	}
+	
+	/**
+	 * 控制连续抽奖.
+	 * 限制未实名账号连续抽奖 (B站严查未实名账号)
+	 * @return
+	 */
+	private boolean continuity() {
+		boolean isOk = true;
+		if(isRealName() == false) {
+			if(lotteryCnt >= Config.LOTTERY_LIMIT) {
+				lotteryCnt = 0;
+				isOk = false;
+				
+			} else {
+				lotteryCnt++;
+			}
+		}
 		return isOk;
 	}
 	

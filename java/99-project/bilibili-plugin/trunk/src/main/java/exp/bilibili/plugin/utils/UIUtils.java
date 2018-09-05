@@ -113,6 +113,10 @@ public class UIUtils {
 		return AppUI.getInstn().getReactionTime();
 	}
 	
+	public static long getIntervalTime() {
+		return AppUI.getInstn().getIntervalTime();
+	}
+	
 	public static boolean isAutoFeed() {
 		return AppUI.getInstn().isAutoFeed();
 	}

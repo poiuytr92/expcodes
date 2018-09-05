@@ -350,6 +350,10 @@ public class Config {
 		return xConf.getLong("/config/app/reactionTime");
 	}
 	
+	public long INTERVAL_TIME() {
+		return xConf.getLong("/config/app/intervalTime");
+	}
+	
 	public String TEST_SERVER() {
 		return xConf.getVal("/config/monitor/testServer");
 	}
@@ -373,6 +377,15 @@ public class Config {
 	 */
 	public boolean setReactionTime(String reactionTime) {
 		return setValueInXml("reactionTime", reactionTime);
+	}
+	
+	/**
+	 * 设置默认的抽奖间隔时间
+	 * @param intervalTime 抽奖反应时间(ms)
+	 * @return
+	 */
+	public boolean setIntervalTime(String intervalTime) {
+		return setValueInXml("intervalTime", intervalTime);
 	}
 	
 	private boolean setValueInXml(String tagName, String value) {

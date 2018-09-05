@@ -34,7 +34,7 @@ public class _ProbabilityUI extends PopChildWindow {
 
 	private final static int WIDTH = 600;
 	
-	private final static int HEIGHT = 200;
+	private final static int HEIGHT = 230;
 	
 	/** 默认抽奖概率：100% */
 	private final static int DEFAULT_VALUE = 100;
@@ -42,11 +42,17 @@ public class _ProbabilityUI extends PopChildWindow {
 	/** 默认参与抽奖的反应时间(ms) */
 	private final static long REACTION_TIME = Config.getInstn().REACTION_TIME();
 	
+	/** 默认参与抽奖的间隔时间(ms) */
+	private final static long INTERVAL_TIME = Config.getInstn().INTERVAL_TIME();
+	
 	/** 概率选择滑块 */
 	private JSlider slider;
 	
-	/** 抽奖反映时间设置框 */
+	/** 抽奖反应时间设置框 */
 	private JTextField reactionTF;
+	
+	/** 抽奖间隔时间设置框 */
+	private JTextField intervalTF;
 	
 	protected _ProbabilityUI() {
 		super(getTitle(DEFAULT_VALUE), WIDTH, HEIGHT);
@@ -61,17 +67,24 @@ public class _ProbabilityUI extends PopChildWindow {
 		slider.setPaintLabels(true);
 		
 		this.reactionTF = new JTextField(String.valueOf(REACTION_TIME));
+		this.intervalTF = new JTextField(String.valueOf(INTERVAL_TIME));
 	}
 
 	@Override
 	protected void setComponentsLayout(JPanel rootPanel) {
 		rootPanel.add(slider, BorderLayout.CENTER);
-		rootPanel.add(SwingUtils.addBorder(
+		rootPanel.add(SwingUtils.addBorder(SwingUtils.getVFlowPanel(
 				SwingUtils.getWEBorderPanel(
 					new JLabel("   参与抽奖的反应时间:  "), 
 					reactionTF, 
 					new JLabel("  毫秒   ")
-				)), BorderLayout.SOUTH
+				),
+				SwingUtils.getWEBorderPanel(
+					new JLabel("   参与抽奖的间隔时间:  "), 
+					intervalTF, 
+					new JLabel("  毫秒   ")
+				)
+			)), BorderLayout.SOUTH
 		);
 	}
 
@@ -113,6 +126,35 @@ public class _ProbabilityUI extends PopChildWindow {
 		        // TODO Auto-generated method stub
 		    }
 		});
+		
+		
+		intervalTF.addKeyListener(new KeyListener() {
+
+		    @Override
+		    public void keyTyped(KeyEvent e) {
+		        String text = intervalTF.getText();  // 当前输入框内容
+		        char ch = e.getKeyChar();   // 准备附加到输入框的字符
+
+		        // 限制不能输入非数字
+		        if(!(ch >= '0' && ch <= '9')) {
+		            e.consume();    // 销毁当前输入字符
+
+		        // 限制不能是0开头
+		        } else if("".equals(text) && ch == '0') {   
+		            e.consume();
+		        }
+		    }
+
+		    @Override
+		    public void keyReleased(KeyEvent e) {
+		        // TODO Auto-generated method stub
+		    }
+
+		    @Override
+		    public void keyPressed(KeyEvent e) {
+		        // TODO Auto-generated method stub
+		    }
+		});
 	}
 
 	@Override
@@ -124,6 +166,7 @@ public class _ProbabilityUI extends PopChildWindow {
 	@Override
 	protected void beforeHide() {
 		Config.getInstn().setReactionTime(reactionTF.getText());
+		Config.getInstn().setIntervalTime(intervalTF.getText());
 	}
 	
 	private static String getTitle(int curVal) {
@@ -136,6 +179,10 @@ public class _ProbabilityUI extends PopChildWindow {
 
 	protected long REACTION_TIME() {
 		return NumUtils.toLong(reactionTF.getText(), REACTION_TIME);
+	}
+	
+	protected long INTERVAL_TIME() {
+		return NumUtils.toLong(intervalTF.getText(), INTERVAL_TIME);
 	}
 	
 }

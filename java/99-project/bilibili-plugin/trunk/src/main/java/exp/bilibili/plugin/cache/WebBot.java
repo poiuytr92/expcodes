@@ -169,7 +169,7 @@ public class WebBot extends LoopThread {
 	}
 	
 	/**
-	 * 等待满足抽奖反应时间（过快反应会被禁止抽奖1天）
+	 * 等待满足抽奖反应时间（过快反应会被冻结抽奖）
 	 * @param room 抽奖房间
 	 */
 	private void _waitReactionTime(LotteryRoom room) {

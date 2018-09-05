@@ -1288,6 +1288,14 @@ public class AppUI extends MainWindow {
 	}
 	
 	/**
+	 * 获取参与抽奖的间隔时间
+	 * @return 参与抽奖的间隔时间
+	 */
+	public long getIntervalTime() {
+		return probabilityUI.INTERVAL_TIME();
+	}
+	
+	/**
 	 * 是否自动投喂主播
 	 * @return
 	 */
