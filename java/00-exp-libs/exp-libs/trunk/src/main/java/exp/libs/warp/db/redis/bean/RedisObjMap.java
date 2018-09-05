@@ -17,7 +17,7 @@ public class RedisObjMap<OBJ extends Serializable> extends RedisMap {
 		super(mapName, redis);
 	}
 
-	public boolean putObj(String key, OBJ object) {
+	public boolean put(String key, OBJ object) {
 		boolean isOk = false;
 		try {
 			isOk = redis.addToMap(MAP_NAME, key, object);
@@ -36,7 +36,7 @@ public class RedisObjMap<OBJ extends Serializable> extends RedisMap {
 			while(keys.hasNext()) {
 				String key = keys.next();
 				OBJ obj = map.get(key);
-				isOk &= putObj(key, obj);
+				isOk &= put(key, obj);
 			}
 		}
 		return isOk;

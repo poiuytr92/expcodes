@@ -10,7 +10,7 @@ public class RedisKO<OBJ extends Serializable> extends RedisKV {
 		super(kvName, redis);
 	}
 
-	public boolean addObj(OBJ object) {
+	public boolean set(OBJ object) {
 		boolean isOk = false;
 		try {
 			isOk = redis.addObj(KV_NAME, object);
