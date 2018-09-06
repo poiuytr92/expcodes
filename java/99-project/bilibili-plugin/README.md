@@ -11,7 +11,7 @@
 
 ## 软件介绍
 
-![主界面](https://github.com/lyy289065406/expcodes/blob/master/java/99-project/bilibili-plugin/trunk/doc/%E8%BF%90%E8%A1%8C%E6%88%AA%E5%9B%BE/%E4%B8%BB%E7%95%8C%E9%9D%A2.png)
+![主界面](https://github.com/lyy289065406/expcodes/blob/master/java/99-project/bilibili-plugin/trunk/doc/%E8%BF%90%E8%A1%8C%E6%88%AA%E5%9B%BE/01-%E4%B8%BB%E7%95%8C%E9%9D%A2.png)
 
 
 ......
