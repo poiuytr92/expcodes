@@ -183,7 +183,7 @@ public class AppUI extends MainWindow {
 	private static volatile AppUI instance;
 	
 	private AppUI() {
-		super("哔哩哔哩插件姬 - By 亚絲娜", WIDTH, HEIGHT);
+		super("哔哩哔哩插件姬 - By EXP", WIDTH, HEIGHT);
 	}
 	
 	/**
@@ -1330,7 +1330,7 @@ public class AppUI extends MainWindow {
 	 */
 	public void printVersionInfo() {
 		toConsole("**********************************************************");
-		toConsole(StrUtils.concat(" [亚絲娜] 享有本软件的完全著作权 (当前版本: v", Config.APP_VER, ")"));
+		toConsole(StrUtils.concat(" [EXP] 享有本软件的完全著作权 (当前版本: v", Config.APP_VER, ")"));
 		toConsole(" 未经许可严禁擅自用于商业用途, 违者保留追究其法律责任的权利");
 		toConsole("**********************************************************");
 	}
