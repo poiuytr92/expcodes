@@ -10,33 +10,75 @@ import org.slf4j.LoggerFactory;
 import exp.libs.utils.other.ListUtils;
 import exp.libs.warp.db.redis.RedisClient;
 
+/**
+ * <PRE>
+ * Redis-List对象.
+ * 模仿LinkedList的使用习惯进行封装.
+ * ------------------------------
+ * 
+ * 使用样例:
+ * 
+ * final String LIST_IN_REDIS_KEY = "list在Redis中的键名（自定义且需唯一）";
+ * RedisClient redis = new RedisClient("127.0.0.1", 6379);	// redis连接客户端（支持单机/集群）
+ * 
+ * RedisList&lt;自定义 对象&gt; list = new RedisList&lt;自定义 对象&gt;(LIST_IN_REDIS_KEY, redis);
+ * list.add(element);
+ * list.addAll(elements);
+ * list.isEmpty();
+ * list.size();
+ * list.getAll();
+ * list.remove(element);
+ * list.clear();
+ * 
+ * redis.close();	// 断开redis连接
+ * 
+ * </PRE>
+ * <br/><B>PROJECT : </B> exp-libs
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2018-07-31
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class RedisList<E extends Serializable> {
 
+	/** 日志器 */
 	private final static Logger log = LoggerFactory.getLogger(RedisList.class);
 	
+	/** 此列表的默认键名 */
 	private final static String DEFAULT_LIST_NAME = "REDIS_LIST";
 	
+	/** 此列表在redis中的键名（需确保不为空） */
 	private final String LIST_NAME;
 	
+	/** Redis连接客户端对象 */
 	private RedisClient redis;
 	
+	/** 所声明的泛型是否为String类型（否则为自定义类型） */
 	private boolean typeIsStr;
 	
 	/**
 	 * 构造函数
-	 * @param listName 列表在redis中的名称（需确保不为空）
-	 * @param redis redi客户端对象
+	 * @param listName 此列表在redis中的键名（需确保不为空）
+	 * @param redis redis客户端连接对象（需确保可用）
 	 */
 	public RedisList(String listName, RedisClient redis) {
 		this.LIST_NAME = (listName == null ? DEFAULT_LIST_NAME : listName);
 		this.redis = (redis == null ? new RedisClient() : redis);
-		this.typeIsStr = true;
+		this.typeIsStr = false;
 	}
 	
+	/**
+	 * 实时在redis缓存中检查此列表是否为空
+	 * @return true:为空; false:非空
+	 */
 	public boolean isEmpty() {
 		return size() <= 0;
 	}
 	
+	/**
+	 * 实时在redis缓存中查询此列表的大小
+	 * @return 列表的大小
+	 */
 	public long size() {
 		long size = 0L;
 		try {
@@ -48,10 +90,20 @@ public class RedisList<E extends Serializable> {
 		return size;
 	}
 	
+	/**
+	 * 实时在redis缓存中向此列表添加一个元素（添加到尾部）
+	 * @param e 新元素
+	 * @return true:添加成功; false:添加失败
+	 */
 	public boolean add(E e) {
 		return addToTail(e);
 	}
 	
+	/**
+	 * 实时在redis缓存中向此列表添加一个元素（添加到头部）
+	 * @param e 新元素
+	 * @return true:添加成功; false:添加失败
+	 */
 	public boolean addToHead(E e) {
 		boolean isOk = false;
 		if(e == null) {
@@ -61,11 +113,11 @@ public class RedisList<E extends Serializable> {
 		try {
 			if(typeIsStr || e instanceof String) {
 				typeIsStr = true;
-				isOk = redis.addToListHead(LIST_NAME, (String) e) > 0;
+				isOk = redis.addStrValsToListHead(LIST_NAME, (String) e) > 0;
 				
 			} else {
 				typeIsStr = false;
-				isOk = redis.addToListHead(LIST_NAME, e) > 0;
+				isOk = redis.addSerialObjsToListHead(LIST_NAME, e) > 0;
 			}
 		} catch(Exception ex) {
 			log.error("写入redis缓存失败", ex);
@@ -73,6 +125,11 @@ public class RedisList<E extends Serializable> {
 		return isOk;
 	}
 	
+	/**
+	 * 实时在redis缓存中向此列表添加一个元素（添加到尾部）
+	 * @param e 新元素
+	 * @return true:添加成功; false:添加失败
+	 */
 	public boolean addToTail(E e) {
 		boolean isOk = false;
 		if(e == null) {
@@ -82,11 +139,11 @@ public class RedisList<E extends Serializable> {
 		try {
 			if(typeIsStr || e instanceof String) {
 				typeIsStr = true;
-				isOk = redis.addToListTail(LIST_NAME, (String) e) > 0;
+				isOk = redis.addStrValsToListTail(LIST_NAME, (String) e) > 0;
 				
 			} else {
 				typeIsStr = false;
-				isOk = redis.addToListTail(LIST_NAME, e) > 0;
+				isOk = redis.addSerialObjsToListTail(LIST_NAME, e) > 0;
 			}
 		} catch(Exception ex) {
 			log.error("写入redis缓存失败", ex);
@@ -94,48 +151,67 @@ public class RedisList<E extends Serializable> {
 		return isOk;
 	}
 	
+	/**
+	 * 实时在redis缓存中向此列表添加若干个元素（添加到尾部）
+	 * @param es 新元素集
+	 * @return true:添加成功; false:添加失败
+	 */
 	public boolean addAll(E... es) {
 		boolean isOk = false;
 		if(es == null) {
 			return isOk;
 		}
 		
+		redis.closeAutoCommit();
 		isOk = true;
 		for(E e : es) {
 			isOk &= add(e);
 		}
+		redis.commit();
 		return isOk;
 	}
 	
+	/**
+	 * 实时在redis缓存中向此列表添加若干个元素（添加到尾部）
+	 * @param es 新元素集
+	 * @return true:添加成功; false:添加失败
+	 */
 	public boolean addAll(List<E> es) {
 		boolean isOk = false;
 		if(es == null) {
 			return isOk;
 		}
 		
+		redis.closeAutoCommit();
 		isOk = true;
 		for(E e : es) {
 			isOk &= add(e);
 		}
+		redis.commit();
 		return isOk;
 	}
 
+	/**
+	 * 实时在redis缓存中查询此列表中的一个元素
+	 * @param index 被查询的元素索引（第一个元素为0, 最后一个元素为-1, 正数索引为从前向后数, 负数索引为从后向前数）
+	 * @return 对应的值（若不存在返回null）
+	 */
 	@SuppressWarnings("unchecked")
-	public E get(int index) {
+	public E get(long index) {
 		E e = null;
-		if(isEmpty() && index >= 0 && index < size()) {
+		if(isEmpty()) {
 			return e;
 		}
 		
 		try {
 			if(typeIsStr == true) {
-				String str = redis.getListVal(LIST_NAME, index);
+				String str = redis.getStrValInList(LIST_NAME, index);
 				if(str != null) {
 					e = (E) str;
 				}
 				
 			} else {
-				Object obj = redis.getListObj(LIST_NAME, index);
+				Object obj = redis.getSerialObjInList(LIST_NAME, index);
 				if(obj != null) {
 					e = (E) obj;
 				}
@@ -146,6 +222,10 @@ public class RedisList<E extends Serializable> {
 		return e;
 	}
 	
+	/**
+	 * 实时在redis缓存中查询此列表的所有元素
+	 * @return 所有元素集（即使为空也只会返回空表，不会返回null）
+	 */
 	@SuppressWarnings("unchecked")
 	public List<E> getAll() {
 		List<E> list = new LinkedList<E>();
@@ -155,17 +235,23 @@ public class RedisList<E extends Serializable> {
 		
 		try {
 			if(typeIsStr == true) {
-				List<String> sList = redis.getListAllVals(LIST_NAME);
+				List<String> sList = redis.getStrList(LIST_NAME);
 				if(ListUtils.isNotEmpty(sList)) {
 					for(String s : sList) {
+						if(s == null) {
+							continue;
+						}
 						list.add((E) s);
 					}
 				}
 				
 			} else {
-				List<Object> oList = redis.getListAllObjs(LIST_NAME);
+				List<Object> oList = redis.getSerialList(LIST_NAME);
 				if(ListUtils.isNotEmpty(oList)) {
 					for(Object o : oList) {
+						if(o == null) {
+							continue;
+						}
 						list.add((E) o);
 					}
 				}
@@ -176,6 +262,44 @@ public class RedisList<E extends Serializable> {
 		return list;
 	}
 	
+	/**
+	 * 实时在redis缓存中删除此列表的若干个元素
+	 * @param es 被删除的元素集
+	 * @return 已成功删除的数量
+	 */
+	public long remove(E... es) {
+		long num = 0L;
+		if(isEmpty() || ListUtils.isEmpty(es)) {
+			return num;
+		}
+		
+		try {
+			if(typeIsStr == true) {
+				for(E e : es) {
+					if(e == null) {
+						continue;
+					}
+					num += redis.delStrValsInList(LIST_NAME, (String) e);
+				}
+				
+			} else {
+				for(E e : es) {
+					if(e == null) {
+						continue;
+					}
+					num += redis.delSerialObjsInList(LIST_NAME, e);
+				}
+			}
+		} catch(Exception ex) {
+			log.error("删除redis缓存失败", ex);
+		}
+		return num;
+	}
+	
+	/**
+	 * 实时在redis缓存中删除此列表
+	 * @return true:删除成功; false:删除失败
+	 */
 	public boolean clear() {
 		boolean isOk = false;
 		try {

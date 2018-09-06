@@ -433,195 +433,268 @@ public class RedisClient implements _IJedis {
 	}
 
 	@Override
-	public boolean addVal(String redisKey, String value) {
-		return iJedis.addVal(redisKey, value);
+	public boolean addStrVal(String redisKey, String value) {
+		return iJedis.addStrVal(redisKey, value);
 	}
 
 	@Override
-	public long appendVal(String redisKey, String value) {
-		return iJedis.appendVal(redisKey, value);
+	public long appendStrVal(String redisKey, String value) {
+		return iJedis.appendStrVal(redisKey, value);
 	}
 
 	@Override
-	public String getVal(String redisKey) {
-		return iJedis.getVal(redisKey);
+	public String getStrVal(String redisKey) {
+		return iJedis.getStrVal(redisKey);
 	}
 
 	@Override
-	public boolean addObj(String redisKey, Serializable object) {
-		return iJedis.addObj(redisKey, object);
+	public boolean addSerialObj(String redisKey, Serializable object) {
+		return iJedis.addSerialObj(redisKey, object);
 	}
 
 	@Override
-	public Object getObj(String redisKey) {
-		return iJedis.getObj(redisKey);
+	public Object getSerialObj(String redisKey) {
+		return iJedis.getSerialObj(redisKey);
 	}
 
 	@Override
-	public boolean addMap(String redisKey, Map<String, String> map) {
-		return iJedis.addMap(redisKey, map);
+	public boolean addStrMap(String redisKey, Map<String, String> map) {
+		return iJedis.addStrMap(redisKey, map);
 	}
 
 	@Override
-	public Map<String, String> getMap(String redisKey) {
-		return iJedis.getMap(redisKey);
+	public boolean addStrValToMap(String redisKey, String key, String value) {
+		return iJedis.addStrValToMap(redisKey, key, value);
 	}
 
 	@Override
-	public boolean addObjMap(String redisKey, Map<String, Serializable> map) {
-		return iJedis.addObjMap(redisKey, map);
-	}
-	
-	@Override
-	public Map<String, Object> getObjMap(String redisKey) {
-		return iJedis.getObjMap(redisKey);
+	public Map<String, String> getStrMap(String redisKey) {
+		return iJedis.getStrMap(redisKey);
 	}
 
 	@Override
-	public boolean addToMap(String redisKey, String key, String value) {
-		return iJedis.addToMap(redisKey, key, value);
+	public String getStrValInMap(String redisKey, String key) {
+		return iJedis.getStrValInMap(redisKey, key);
 	}
 
 	@Override
-	public boolean addToMap(String redisKey, String key, Serializable object) {
-		return iJedis.addToMap(redisKey, key, object);
+	public List<String> getStrValsInMap(String redisKey, String... keys) {
+		return iJedis.getStrValsInMap(redisKey, keys);
 	}
 
 	@Override
-	public String getMapVal(String redisKey, String key) {
-		return iJedis.getMapVal(redisKey, key);
+	public List<String> getAllStrValsInMap(String redisKey) {
+		return iJedis.getAllStrValsInMap(redisKey);
 	}
 
 	@Override
-	public List<String> getMapVals(String redisKey, String... keys) {
-		return iJedis.getMapVals(redisKey, keys);
+	public boolean addSerialMap(String redisKey, Map<String, Serializable> map) {
+		return iJedis.addSerialMap(redisKey, map);
 	}
 
 	@Override
-	public List<String> getMapAllVals(String redisKey) {
-		return iJedis.getMapAllVals(redisKey);
-	}
-	
-	@Override
-	public Object getMapObj(String redisKey, String key) {
-		return iJedis.getMapObj(redisKey, key);
+	public boolean addSerialObjToMap(String redisKey, String key, Serializable object) {
+		return iJedis.addSerialObjToMap(redisKey, key, object);
 	}
 
 	@Override
-	public List<Object> getMapObjs(String redisKey, String... keys) {
-		return iJedis.getMapObjs(redisKey, keys);
+	public Map<String, Object> getSerialMap(String redisKey) {
+		return iJedis.getSerialMap(redisKey);
 	}
 
 	@Override
-	public List<Object> getMapAllObjs(String redisKey) {
-		return iJedis.getMapAllObjs(redisKey);
+	public Object getSerialObjInMap(String redisKey, String key) {
+		return iJedis.getSerialObjInMap(redisKey, key);
 	}
 
 	@Override
-	public boolean existMapKey(String redisKey, String key) {
-		return iJedis.existMapKey(redisKey, key);
+	public List<Object> getSerialObjsInMap(String redisKey, String... keys) {
+		return iJedis.getSerialObjsInMap(redisKey, keys);
 	}
-	
+
 	@Override
-	public Set<String> getMapKeys(String redisKey) {
-		return iJedis.getMapKeys(redisKey);
+	public List<Object> getAllSerialObjsInMap(String redisKey) {
+		return iJedis.getAllSerialObjsInMap(redisKey);
 	}
-	
+
 	@Override
-	public long delMapKeys(String redisKey, String... keys) {
-		return iJedis.delMapKeys(redisKey, keys);
+	public boolean existKeyInMap(String redisKey, String key) {
+		return iJedis.existKeyInMap(redisKey, key);
+	}
+
+	@Override
+	public Set<String> getAllKeysInMap(String redisKey) {
+		return iJedis.getAllKeysInMap(redisKey);
+	}
+
+	@Override
+	public long delKeysInMap(String redisKey, String... keys) {
+		return iJedis.delKeysInMap(redisKey, keys);
 	}
 
 	@Override
 	public long getMapSize(String redisKey) {
 		return iJedis.getMapSize(redisKey);
 	}
-	
+
 	@Override
-	public long addToList(String redisKey, String... values) {
-		return iJedis.addToList(redisKey, values);
-	}
-	
-	@Override
-	public long addToList(String redisKey, Serializable... values) {
-		// TODO Auto-generated method stub
-		return 0;
+	public long addStrList(String redisKey, List<String> list) {
+		return iJedis.addStrList(redisKey, list);
 	}
 
 	@Override
-	public long addToListHead(String redisKey, String... values) {
-		return iJedis.addToListHead(redisKey, values);
-	}
-	
-	@Override
-	public long addToListHead(String redisKey, Serializable... values) {
-		// TODO Auto-generated method stub
-		return 0;
+	public long addStrValsToList(String redisKey, String... values) {
+		return iJedis.addStrValsToList(redisKey, values);
 	}
 
 	@Override
-	public long addToListTail(String redisKey, String... values) {
-		return iJedis.addToListTail(redisKey, values);
-	}
-	
-	@Override
-	public long addToListTail(String redisKey, Serializable... values) {
-		// TODO Auto-generated method stub
-		return 0;
+	public long addStrValsToListHead(String redisKey, String... values) {
+		return iJedis.addStrValsToListHead(redisKey, values);
 	}
 
 	@Override
-	public String getListVal(String redisKey, int index) {
-		// TODO Auto-generated method stub
-		return null;
+	public long addStrValsToListTail(String redisKey, String... values) {
+		return iJedis.addStrValsToListTail(redisKey, values);
 	}
 
 	@Override
-	public Object getListObj(String redisKey, int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
-	@Override
-	public List<String> getListAllVals(String redisKey) {
-		return iJedis.getListAllVals(redisKey);
+	public List<String> getStrList(String redisKey) {
+		return iJedis.getStrList(redisKey);
 	}
 
 	@Override
-	public List<Object> getListAllObjs(String redisKey) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getStrValInList(String redisKey, long index) {
+		return iJedis.getStrValInList(redisKey, index);
+	}
+
+	@Override
+	public List<String> getAllStrValsInList(String redisKey) {
+		return iJedis.getAllStrValsInList(redisKey);
+	}
+
+	@Override
+	public long delStrValsInList(String redisKey, String value) {
+		return iJedis.delStrValsInList(redisKey, value);
+	}
+
+	@Override
+	public long delStrValsInList(String redisKey, String value, long count) {
+		return iJedis.delStrValsInList(redisKey, value, count);
+	}
+
+	@Override
+	public long addSerialList(String redisKey, List<Serializable> list) {
+		return iJedis.addSerialList(redisKey, list);
+	}
+
+	@Override
+	public long addSerialObjsToList(String redisKey, Serializable... objects) {
+		return iJedis.addSerialObjsToList(redisKey, objects);
+	}
+
+	@Override
+	public long addSerialObjsToListHead(String redisKey, Serializable... objects) {
+		return iJedis.addSerialObjsToListHead(redisKey, objects);
+	}
+
+	@Override
+	public long addSerialObjsToListTail(String redisKey, Serializable... objects) {
+		return iJedis.addSerialObjsToListTail(redisKey, objects);
+	}
+
+	@Override
+	public long delSerialObjsInList(String redisKey, Serializable object) {
+		return iJedis.delSerialObjsInList(redisKey, object);
+	}
+
+	@Override
+	public long delSerialObjsInList(String redisKey, Serializable object, long count) {
+		return iJedis.delSerialObjsInList(redisKey, object, count);
+	}
+
+	@Override
+	public List<Object> getSerialList(String redisKey) {
+		return iJedis.getSerialList(redisKey);
+	}
+
+	@Override
+	public Object getSerialObjInList(String redisKey, long index) {
+		return iJedis.getSerialObjInList(redisKey, index);
+	}
+
+	@Override
+	public List<Object> getAllSerialObjsInList(String redisKey) {
+		return iJedis.getAllSerialObjsInList(redisKey);
 	}
 
 	@Override
 	public long getListSize(String redisKey) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-	
-	@Override
-	public long addToSet(String redisKey, String... values) {
-		return iJedis.addToSet(redisKey, values);
+		return iJedis.getListSize(redisKey);
 	}
 
 	@Override
-	public Set<String> getSetVals(String redisKey) {
-		return iJedis.getSetVals(redisKey);
+	public long addStrSet(String redisKey, Set<String> set) {
+		return iJedis.addStrSet(redisKey, set);
 	}
 
 	@Override
-	public boolean inSet(String redisKey, String value) {
-		return iJedis.inSet(redisKey, value);
+	public long addStrValsToSet(String redisKey, String... values) {
+		return iJedis.addStrValsToSet(redisKey, values);
+	}
+
+	@Override
+	public Set<String> getStrSet(String redisKey) {
+		return iJedis.getStrSet(redisKey);
+	}
+
+	@Override
+	public Set<String> getAllStrValsInSet(String redisKey) {
+		return iJedis.getAllStrValsInSet(redisKey);
+	}
+
+	@Override
+	public long delStrValsInSet(String redisKey, String... values) {
+		return iJedis.delStrValsInSet(redisKey, values);
+	}
+
+	@Override
+	public boolean existInSet(String redisKey, String value) {
+		return iJedis.existInSet(redisKey, value);
+	}
+
+	@Override
+	public long addSerialSet(String redisKey, Set<Serializable> set) {
+		return iJedis.addSerialSet(redisKey, set);
+	}
+
+	@Override
+	public long addSerialObjsToSet(String redisKey, Serializable... objects) {
+		return iJedis.addSerialObjsToSet(redisKey, objects);
+	}
+
+	@Override
+	public Set<Object> getSerialSet(String redisKey) {
+		return iJedis.getSerialSet(redisKey);
+	}
+
+	@Override
+	public Set<Object> getAllSerialObjsInSet(String redisKey) {
+		return iJedis.getAllSerialObjsInSet(redisKey);
+	}
+
+	@Override
+	public long delSerialObjsInSet(String redisKey, Serializable... objects) {
+		return iJedis.delSerialObjsInSet(redisKey, objects);
+	}
+
+	@Override
+	public boolean existInSet(String redisKey, Serializable object) {
+		return iJedis.existInSet(redisKey, object);
 	}
 
 	@Override
 	public long getSetSize(String redisKey) {
 		return iJedis.getSetSize(redisKey);
-	}
-
-	@Override
-	public long delSetVals(String redisKey, String... values) {
-		return iJedis.delSetVals(redisKey, values);
 	}
 
 }

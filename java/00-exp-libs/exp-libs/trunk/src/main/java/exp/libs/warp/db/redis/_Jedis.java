@@ -1,6 +1,7 @@
 package exp.libs.warp.db.redis;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -143,6 +144,17 @@ class _Jedis implements _IJedis {
 		return CharsetUtils.toBytes(redisKey, CHARSET);
 	}
 	
+	/**
+	 * 对Redis键统一转码，使得Jedis的 String接口 和 byte[]接口 所产生的键值最终一致。
+	 * (若不转码, 在redis编码与程序编码不一致的情况下, 即使键值相同, 
+	 * 	但使用String接口与byte[]接口存储到Redis的是两个不同的哈希表)
+	 * @param redisKey redis键(字节数组)
+	 * @return 统一转码后的redis键
+	 */
+	private String _transstr(byte[] redisKey) {
+		return CharsetUtils.toStr(redisKey, CHARSET);
+	}
+	
 	@Override
 	public boolean isVaild() {
 		Jedis jedis = _getJedis();
@@ -219,7 +231,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public boolean addVal(String redisKey, String value) {
+	public boolean addStrVal(String redisKey, String value) {
 		boolean isOk = false;
 		if(redisKey != null && value != null) {
 			Jedis jedis = _getJedis();
@@ -230,7 +242,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public long appendVal(String redisKey, String value) {
+	public long appendStrVal(String redisKey, String value) {
 		long len = -1;
 		if(redisKey != null && value != null) {
 			Jedis jedis = _getJedis();
@@ -241,7 +253,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public String getVal(String redisKey) {
+	public String getStrVal(String redisKey) {
 		String value = "";
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
@@ -252,7 +264,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public boolean addObj(String redisKey, Serializable object) {
+	public boolean addSerialObj(String redisKey, Serializable object) {
 		boolean isOk = false;
 		if(redisKey != null && object != null) {
 			Jedis jedis = _getJedis();
@@ -266,7 +278,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public Object getObj(String redisKey) {
+	public Object getSerialObj(String redisKey) {
 		Object object = null;
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
@@ -277,7 +289,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public boolean addMap(String redisKey, Map<String, String> map) {
+	public boolean addStrMap(String redisKey, Map<String, String> map) {
 		boolean isOk = false;
 		if(redisKey != null && map != null) {
 			Jedis jedis = _getJedis();
@@ -288,55 +300,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public Map<String, String> getMap(String redisKey) {
-		Map<String, String> map = null;
-		if(redisKey != null) {
-			Jedis jedis = _getJedis();
-			map = jedis.hgetAll(_transcode(redisKey));
-			_close(jedis);
-		}
-		return (map == null ? new HashMap<String, String>() : map);
-	}
-
-	@Override
-	public boolean addObjMap(String redisKey, Map<String, Serializable> map) {
-		boolean isOk = false;
-		if(redisKey != null && map != null) {
-			isOk = true;
-			Jedis jedis = _getJedis();
-			
-			Iterator<String> keys = map.keySet().iterator();
-			while(keys.hasNext()) {
-				String key = keys.next();
-				Serializable object = map.get(key);
-				isOk &= jedis.hset(_transbyte(redisKey), _transbyte(key), 
-						ObjUtils.toSerializable(object)) >= 0;
-			}
-			
-			_close(jedis);
-		}
-		return isOk;
-	}
-
-	@Override
-	public Map<String, Object> getObjMap(String redisKey) {
-		Map<String, Object> map = new HashMap<String, Object>();
-		if(redisKey != null) {
-			Jedis jedis = _getJedis();
-			Map<byte[], byte[]> byteMap = jedis.hgetAll(_transbyte(redisKey));
-			Iterator<byte[]> keys = byteMap.keySet().iterator();
-			while(keys.hasNext()) {
-				byte[] key = keys.next();
-				byte[] val = byteMap.get(key);
-				map.put(CharsetUtils.toStr(key, CHARSET), ObjUtils.unSerializable(val));
-			}
-			_close(jedis);
-		}
-		return map;
-	}
-	
-	@Override
-	public boolean addToMap(String redisKey, String key, String value) {
+	public boolean addStrValToMap(String redisKey, String key, String value) {
 		boolean isOk = false;
 		if(redisKey != null && key != null && value != null) {
 			Jedis jedis = _getJedis();
@@ -347,19 +311,18 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public boolean addToMap(String redisKey, String key, Serializable object) {
-		boolean isOk = false;
-		if(redisKey != null && key != null && object != null) {
+	public Map<String, String> getStrMap(String redisKey) {
+		Map<String, String> map = null;
+		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			isOk = jedis.hset(_transbyte(redisKey), _transbyte(key), 
-					ObjUtils.toSerializable(object)) >= 0;
+			map = jedis.hgetAll(_transcode(redisKey));
 			_close(jedis);
 		}
-		return isOk;
+		return (map == null ? new HashMap<String, String>() : map);
 	}
 
 	@Override
-	public String getMapVal(String redisKey, String key) {
+	public String getStrValInMap(String redisKey, String key) {
 		String value = null;
 		if(redisKey != null && key != null) {
 			Jedis jedis = _getJedis();
@@ -373,7 +336,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public List<String> getMapVals(String redisKey, String... keys) {
+	public List<String> getStrValsInMap(String redisKey, String... keys) {
 		List<String> values = null;
 		if(redisKey != null && keys != null) {
 			Jedis jedis = _getJedis();
@@ -384,7 +347,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public List<String> getMapAllVals(String redisKey) {
+	public List<String> getAllStrValsInMap(String redisKey) {
 		List<String> values = null;
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
@@ -393,9 +356,58 @@ class _Jedis implements _IJedis {
 		}
 		return (values == null ? new LinkedList<String>() : values);
 	}
-	
+
 	@Override
-	public Object getMapObj(String redisKey, String key) {
+	public boolean addSerialMap(String redisKey, Map<String, Serializable> map) {
+		boolean isOk = false;
+		if(redisKey != null && map != null) {
+			isOk = true;
+			Jedis jedis = _getJedis();
+			byte[] byteKey = _transbyte(redisKey);
+			Iterator<String> keys = map.keySet().iterator();
+			while(keys.hasNext()) {
+				String key = keys.next();
+				Serializable object = map.get(key);
+				isOk &= jedis.hset(byteKey, _transbyte(key), 
+						ObjUtils.toSerializable(object)) >= 0;
+			}
+			_close(jedis);
+		}
+		return isOk;
+	}
+
+	@Override
+	public boolean addSerialObjToMap(String redisKey, String key,
+			Serializable object) {
+		boolean isOk = false;
+		if(redisKey != null && key != null && object != null) {
+			Jedis jedis = _getJedis();
+			isOk = jedis.hset(_transbyte(redisKey), _transbyte(key), 
+					ObjUtils.toSerializable(object)) >= 0;
+			_close(jedis);
+		}
+		return isOk;
+	}
+
+	@Override
+	public Map<String, Object> getSerialMap(String redisKey) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			Map<byte[], byte[]> byteMap = jedis.hgetAll(_transbyte(redisKey));
+			Iterator<byte[]> keys = byteMap.keySet().iterator();
+			while(keys.hasNext()) {
+				byte[] key = keys.next();
+				byte[] val = byteMap.get(key);
+				map.put(_transstr(key), ObjUtils.unSerializable(val));
+			}
+			_close(jedis);
+		}
+		return map;
+	}
+
+	@Override
+	public Object getSerialObjInMap(String redisKey, String key) {
 		Object value = null;
 		if(redisKey != null && key != null) {
 			Jedis jedis = _getJedis();
@@ -410,7 +422,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public List<Object> getMapObjs(String redisKey, String... keys) {
+	public List<Object> getSerialObjsInMap(String redisKey, String... keys) {
 		List<Object> values = new LinkedList<Object>();
 		if(redisKey != null && keys != null) {
 			Jedis jedis = _getJedis();
@@ -428,13 +440,13 @@ class _Jedis implements _IJedis {
 		}
 		return (values == null ? new LinkedList<Object>() : values);
 	}
-	
+
 	@Override
-	public List<Object> getMapAllObjs(String redisKey) {
+	public List<Object> getAllSerialObjsInMap(String redisKey) {
 		List<Object> values = new LinkedList<Object>();
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			byte[] byteKey =_transbyte(redisKey);
+			byte[] byteKey = _transbyte(redisKey);
 			List<byte[]> byteVals = jedis.hvals(byteKey);
 			for(byte[] byteVal : byteVals) {
 				values.add(ObjUtils.unSerializable(byteVal));
@@ -445,7 +457,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public boolean existMapKey(String redisKey, String key) {
+	public boolean existKeyInMap(String redisKey, String key) {
 		boolean isExist = false;
 		if(redisKey != null && key != null) {
 			Jedis jedis = _getJedis();
@@ -454,9 +466,9 @@ class _Jedis implements _IJedis {
 		}
 		return isExist;
 	}
-	
+
 	@Override
-	public Set<String> getMapKeys(String redisKey) {
+	public Set<String> getAllKeysInMap(String redisKey) {
 		Set<String> keys = null;
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
@@ -467,7 +479,7 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public long delMapKeys(String redisKey, String... keys) {
+	public long delKeysInMap(String redisKey, String... keys) {
 		long num = 0;
 		if(redisKey != null && keys != null) {
 			Jedis jedis = _getJedis();
@@ -476,7 +488,7 @@ class _Jedis implements _IJedis {
 		}
 		return num;
 	}
-	
+
 	@Override
 	public long getMapSize(String redisKey) {
 		long size = 0L;
@@ -489,12 +501,29 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public long addToList(String redisKey, String... values) {
-		return addToListTail(redisKey, values);
+	public long addStrList(String redisKey, List<String> list) {
+		long num = 0;
+		if(redisKey != null && list != null) {
+			Jedis jedis = _getJedis();
+			redisKey = _transcode(redisKey);
+			for(String value : list) {
+				if(value == null) {
+					continue;
+				}
+				num = jedis.rpush(redisKey, value);
+			}
+			_close(jedis);
+		}
+		return num;
 	}
 
 	@Override
-	public long addToListHead(String redisKey, String... values) {
+	public long addStrValsToList(String redisKey, String... values) {
+		return addStrValsToListTail(redisKey, values);
+	}
+
+	@Override
+	public long addStrValsToListHead(String redisKey, String... values) {
 		long num = 0;
 		if(redisKey != null && values != null) {
 			Jedis jedis = _getJedis();
@@ -511,16 +540,68 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public long addToListTail(String redisKey, String... values) {
+	public long addStrValsToListTail(String redisKey, String... values) {
 		long num = 0;
 		if(redisKey != null && values != null) {
+			num = addStrList(redisKey, Arrays.asList(values));
+		}
+		return num;
+	}
+
+	@Override
+	public List<String> getStrList(String redisKey) {
+		return getAllStrValsInList(redisKey);
+	}
+
+	@Override
+	public String getStrValInList(String redisKey, long index) {
+		String value = null;
+		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			redisKey = _transcode(redisKey);
-			for(String value : values) {
-				if(value == null) {
+			value = jedis.lindex(_transcode(redisKey), index);
+			_close(jedis);
+		}
+		return value;
+	}
+
+	@Override
+	public List<String> getAllStrValsInList(String redisKey) {
+		List<String> values = null;
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			values = jedis.lrange(_transcode(redisKey), 0, -1);
+			_close(jedis);
+		}
+		return (values == null ? new LinkedList<String>() : values);
+	}
+
+	@Override
+	public long delStrValsInList(String redisKey, String value) {
+		return delStrValsInList(redisKey, value, 0);
+	}
+
+	@Override
+	public long delStrValsInList(String redisKey, String value, long count) {
+		long num = 0L;
+		if(redisKey != null && value != null) {
+			Jedis jedis = _getJedis();
+			num = jedis.lrem(_transcode(redisKey), count, value);
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public long addSerialList(String redisKey, List<Serializable> list) {
+		long num = 0;
+		if(redisKey != null && list != null) {
+			Jedis jedis = _getJedis();
+			byte[] byteKey = _transbyte(redisKey);
+			for(Serializable object : list) {
+				if(object == null) {
 					continue;
 				}
-				num = jedis.rpush(redisKey, value);
+				num = jedis.rpush(byteKey, ObjUtils.toSerializable(object));
 			}
 			_close(jedis);
 		}
@@ -528,32 +609,114 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public String getListVal(String redisKey, int index) {
-		String value = null;
-		if(redisKey != null) {
+	public long addSerialObjsToList(String redisKey, Serializable... objects) {
+		return addSerialObjsToListTail(redisKey, objects);
+	}
+
+	@Override
+	public long addSerialObjsToListHead(String redisKey,
+			Serializable... objects) {
+		long num = 0;
+		if(redisKey != null && objects != null) {
 			Jedis jedis = _getJedis();
-			List<String> values = jedis.lrange(_transcode(redisKey), index, index);
-			if(ListUtils.isNotEmpty(values)) {
-				value = values.get(0);
+			byte[] byteKey = _transbyte(redisKey);
+			for(Serializable object : objects) {
+				if(object == null) {
+					continue;
+				}
+				num = jedis.lpush(byteKey, ObjUtils.toSerializable(object));
 			}
 			_close(jedis);
 		}
-		return value;
+		return num;
 	}
-	
+
 	@Override
-	public List<String> getListAllVals(String redisKey) {
-		List<String> values = new LinkedList<String>();
+	public long addSerialObjsToListTail(String redisKey,
+			Serializable... objects) {
+		long num = 0;
+		if(redisKey != null && objects != null) {
+			num = addSerialList(redisKey, Arrays.asList(objects));
+		}
+		return num;
+	}
+
+	@Override
+	public long delSerialObjsInList(String redisKey, Serializable object) {
+		return delSerialObjsInList(redisKey, object, 0);
+	}
+
+	@Override
+	public long delSerialObjsInList(String redisKey, Serializable object, long count) {
+		long num = 0L;
+		if(redisKey != null && object != null) {
+			Jedis jedis = _getJedis();
+			num = jedis.lrem(_transbyte(redisKey), count, 
+					ObjUtils.toSerializable(object));
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public List<Object> getSerialList(String redisKey) {
+		return getAllSerialObjsInList(redisKey);
+	}
+
+	@Override
+	public Object getSerialObjInList(String redisKey, long index) {
+		Object object = null;
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			values = jedis.lrange(_transcode(redisKey), 0, -1);
+			object = jedis.lindex(_transcode(redisKey), index);
+			_close(jedis);
+		}
+		return object;
+	}
+
+	@Override
+	public List<Object> getAllSerialObjsInList(String redisKey) {
+		List<Object> values = new LinkedList<Object>();
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			List<byte[]> byteVals = jedis.lrange(_transbyte(redisKey), 0, -1);
+			if(ListUtils.isNotEmpty(byteVals)) {
+				for(byte[] byteVal : byteVals) {
+					values.add(ObjUtils.unSerializable(byteVal));
+				}
+			}
 			_close(jedis);
 		}
 		return values;
 	}
 
 	@Override
-	public long addToSet(String redisKey, String... values) {
+	public long getListSize(String redisKey) {
+		long size = 0L;
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			size = jedis.llen(_transcode(redisKey)); 
+			_close(jedis);
+		}
+		return size;
+	}
+
+	@Override
+	public long addStrSet(String redisKey, Set<String> set) {
+		long num = 0;
+		if(redisKey != null && set != null) {
+			Jedis jedis = _getJedis();
+			redisKey = _transcode(redisKey);
+			for(String s : set) {
+				num += jedis.sadd(redisKey, s);
+			}
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public long addStrValsToSet(String redisKey, String... values) {
 		long num = 0;
 		if(redisKey != null && values != null) {
 			Jedis jedis = _getJedis();
@@ -564,7 +727,12 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public Set<String> getSetVals(String redisKey) {
+	public Set<String> getStrSet(String redisKey) {
+		return getAllStrValsInSet(redisKey);
+	}
+
+	@Override
+	public Set<String> getAllStrValsInSet(String redisKey) {
 		Set<String> values = new HashSet<String>();
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
@@ -575,11 +743,106 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
-	public boolean inSet(String redisKey, String value) {
+	public long delStrValsInSet(String redisKey, String... values) {
+		long num = 0;
+		if(redisKey != null && values != null) {
+			Jedis jedis = _getJedis();
+			num = jedis.srem(_transcode(redisKey), values);
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public boolean existInSet(String redisKey, String value) {
 		boolean isExist = false;
 		if(redisKey != null && value != null) {
 			Jedis jedis = _getJedis();
 			isExist = jedis.sismember(_transcode(redisKey), value);
+			_close(jedis);
+		}
+		return isExist;
+	}
+
+	@Override
+	public long addSerialSet(String redisKey, Set<Serializable> set) {
+		long num = 0L;
+		if(redisKey != null && set != null) {
+			Jedis jedis = _getJedis();
+			byte[] byteKey = _transbyte(redisKey);
+			for(Serializable object : set) {
+				if(object == null) {
+					continue;
+				}
+				num += jedis.sadd(byteKey, ObjUtils.toSerializable(object));
+			}
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public long addSerialObjsToSet(String redisKey, Serializable... objects) {
+		long num = 0L;
+		if(redisKey != null && objects != null) {
+			Jedis jedis = _getJedis();
+			byte[] byteKey = _transbyte(redisKey);
+			for(Serializable object : objects) {
+				if(object == null) {
+					continue;
+				}
+				num += jedis.sadd(byteKey, ObjUtils.toSerializable(object));
+			}
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public Set<Object> getSerialSet(String redisKey) {
+		return getAllSerialObjsInSet(redisKey);
+	}
+
+	@Override
+	public Set<Object> getAllSerialObjsInSet(String redisKey) {
+		Set<Object> values = new HashSet<Object>();
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			Set<byte[]> byteVals = jedis.smembers(_transbyte(redisKey));
+			if(ListUtils.isNotEmpty(byteVals)) {
+				for(byte[] byteVal : byteVals) {
+					values.add(ObjUtils.unSerializable(byteVal));
+				}
+			}
+			_close(jedis);
+		}
+		return values;
+	}
+
+	@Override
+	public long delSerialObjsInSet(String redisKey, Serializable... objects) {
+		long num = 0;
+		if(redisKey != null && objects != null) {
+			Jedis jedis = _getJedis();
+			byte[] byteKey = _transbyte(redisKey);
+			for(Serializable object : objects) {
+				if(object == null) {
+					continue;
+				}
+				num += jedis.srem(byteKey, ObjUtils.toSerializable(object));
+			}
+			_close(jedis);
+		}
+		return num;
+	}
+
+	@Override
+	public boolean existInSet(String redisKey, Serializable object) {
+		boolean isExist = false;
+		if(redisKey != null && object != null) {
+			Jedis jedis = _getJedis();
+			isExist = jedis.sismember(_transbyte(redisKey), 
+					ObjUtils.toSerializable(object));
 			_close(jedis);
 		}
 		return isExist;
@@ -594,17 +857,6 @@ class _Jedis implements _IJedis {
 			_close(jedis);
 		}
 		return size;
-	}
-
-	@Override
-	public long delSetVals(String redisKey, String... values) {
-		long num = 0;
-		if(redisKey != null && values != null) {
-			Jedis jedis = _getJedis();
-			num = jedis.srem(_transcode(redisKey), values);
-			_close(jedis);
-		}
-		return num;
 	}
 
 }
