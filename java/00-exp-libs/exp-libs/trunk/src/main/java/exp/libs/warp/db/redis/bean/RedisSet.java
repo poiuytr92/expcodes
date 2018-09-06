@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import exp.libs.utils.other.ListUtils;
 import exp.libs.warp.db.redis.RedisClient;
 
@@ -40,22 +37,13 @@ import exp.libs.warp.db.redis.RedisClient;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class RedisSet<E extends Serializable> {
+public class RedisSet<E extends Serializable> extends _RedisObject {
 
-	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(RedisSet.class);
-	
 	/** 此集合的默认键名 */
 	private final static String DEFAULT_SET_NAME = "REDIS_SET";
 	
 	/** 此集合在redis中的键名（需确保不为空） */
 	private final String SET_NAME;
-	
-	/** Redis连接客户端对象 */
-	private RedisClient redis;
-	
-	/** 所声明的泛型是否为String类型（否则为自定义类型） */
-	private boolean typeIsStr;
 	
 	/**
 	 * 构造函数
@@ -63,9 +51,8 @@ public class RedisSet<E extends Serializable> {
 	 * @param redis redis客户端连接对象（需确保可用）
 	 */
 	public RedisSet(String setName, RedisClient redis) {
+		super(redis);
 		this.SET_NAME = (setName == null ? DEFAULT_SET_NAME : setName);
-		this.redis = (redis == null ? new RedisClient() : redis);
-		this.typeIsStr = false;
 	}
 	
 	/**
@@ -78,9 +65,10 @@ public class RedisSet<E extends Serializable> {
 		if(isEmpty() || e == null) {
 			return isExist;
 		}
+		alignType();
 		
 		try {
-			if(typeIsStr == true) {
+			if(typeIsStr()) {
 				isExist = redis.existInSet(SET_NAME, (String) e);
 				
 			} else {
@@ -127,12 +115,12 @@ public class RedisSet<E extends Serializable> {
 		}
 		
 		try {
-			if(typeIsStr || e instanceof String) {
-				typeIsStr = true;
+			if(typeIsStr() || e instanceof String) {
+				setTypeStr();
 				isOk = redis.addStrValsToSet(SET_NAME, (String) e) > 0;
 				
 			} else {
-				typeIsStr = false;
+				setTypeObj();
 				isOk = redis.addSerialObjsToSet(SET_NAME, e) > 0;
 			}
 		} catch(Exception ex) {
@@ -191,9 +179,10 @@ public class RedisSet<E extends Serializable> {
 		if(isEmpty()) {
 			return set;
 		}
+		alignType();
 		
 		try {
-			if(typeIsStr == true) {
+			if(typeIsStr()) {
 				Set<String> sSet = redis.getStrSet(SET_NAME);
 				if(ListUtils.isNotEmpty(sSet)) {
 					for(String s : sSet) {
@@ -231,9 +220,10 @@ public class RedisSet<E extends Serializable> {
 		if(isEmpty() || ListUtils.isEmpty(es)) {
 			return num;
 		}
+		alignType();
 		
 		try {
-			if(typeIsStr == true) {
+			if(typeIsStr()) {
 				for(E e : es) {
 					if(e == null) {
 						continue;
@@ -268,6 +258,35 @@ public class RedisSet<E extends Serializable> {
 			log.error("删除redis缓存失败", e);
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 校准类型（此方法通过随机取集合中的一个元素进行判断，因此只能在集合非空时执行）
+	 * @param key 当前准备取出的一个元素的键（由于该元素未必存在，因此此方法未必能一次校准）
+	 */
+	private void alignType() {
+		if(!typeIsNone()) {
+			return;
+		}
+		
+		try {
+			Object obj = redis.getRandomSerialObjInSet(SET_NAME);
+			if(obj != null) {
+				if(obj instanceof String) {
+					setTypeStr();
+					
+				} else {
+					setTypeObj();
+				}
+			} else {
+				String str = redis.getRandomStrValInSet(SET_NAME);
+				if(str != null) {
+					setTypeStr();
+				}
+			}
+		} catch(Exception ex) {
+			log.error("读取redis缓存失败", ex);
+		}
 	}
 	
 }

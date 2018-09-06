@@ -2,9 +2,6 @@ package exp.libs.warp.db.redis.bean;
 
 import java.io.Serializable;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import exp.libs.warp.db.redis.RedisClient;
 
 /**
@@ -33,10 +30,7 @@ import exp.libs.warp.db.redis.RedisClient;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class RedisObj<OBJ extends Serializable> {
-	
-	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(RedisObj.class);
+public class RedisObj<OBJ extends Serializable> extends _RedisObject {
 	
 	/** 此对象的默认键名 */
 	private final static String DEFAULT_OBJ_NAME = "REDIS_OBJ";
@@ -44,21 +38,14 @@ public class RedisObj<OBJ extends Serializable> {
 	/** 此对象在redis中的键名（需确保不为空） */
 	private final String OBJ_NAME;
 	
-	/** Redis连接客户端对象 */
-	private RedisClient redis;
-	
-	/** 所声明的泛型是否为String类型（否则为自定义类型） */
-	private boolean typeIsStr;
-	
 	/**
 	 * 构造函数
 	 * @param objName 此对象在redis中的键名（需确保不为空）
 	 * @param redis redis客户端连接对象（需确保可用）
 	 */
 	public RedisObj(String objName, RedisClient redis) {
+		super(redis);
 		this.OBJ_NAME = (objName == null ? DEFAULT_OBJ_NAME : objName);
-		this.redis = (redis == null ? new RedisClient() : redis);
-		this.typeIsStr = false;
 	}
 	
 	/**
@@ -88,12 +75,12 @@ public class RedisObj<OBJ extends Serializable> {
 		}
 		
 		try {
-			if(typeIsStr || value instanceof String) {
-				typeIsStr = true;
+			if(typeIsStr() || value instanceof String) {
+				setTypeStr();
 				isOk = redis.addStrVal(OBJ_NAME, (String) value);
 				
 			} else {
-				typeIsStr = false;
+				setTypeObj();
 				isOk = redis.addSerialObj(OBJ_NAME, value);
 			}
 		} catch(Exception e) {
@@ -112,7 +99,7 @@ public class RedisObj<OBJ extends Serializable> {
 	 */
 	public boolean append(String value) {
 		boolean isOk = false;
-		if(value == null || !typeIsStr) {
+		if(value == null || !typeIsStr()) {
 			return isOk;
 		}
 		
@@ -135,15 +122,16 @@ public class RedisObj<OBJ extends Serializable> {
 		if(!exists()) {
 			return value;
 		}
+		alignType();
 		
 		try {
-			if(typeIsStr == true) {
+			if(typeIsStr()) {
 				String str = redis.getStrVal(OBJ_NAME);
 				if(str != null) {
 					value = (OBJ) str;
 				}
 				
-			} else {
+			} else if(typeIsObj()) {
 				Object obj = redis.getSerialObj(OBJ_NAME);
 				if(obj != null) {
 					value = (OBJ) obj;
@@ -168,6 +156,37 @@ public class RedisObj<OBJ extends Serializable> {
 			log.error("删除redis缓存失败", e);
 		}
 		return isOk;
+	}
+	
+	/**
+	 * <pre>
+	 * 校准类型（此方法通过直接取出值进行判断，因此只能有值时执行）.
+	 * 由于未必存在值，因此此方法未必能一次校准.
+	 * </pre>
+	 */
+	private void alignType() {
+		if(!typeIsNone()) {
+			return;
+		}
+		
+		try {
+			Object obj = redis.getSerialObj(OBJ_NAME);
+			if(obj != null) {
+				if(obj instanceof String) {
+					setTypeStr();
+					
+				} else {
+					setTypeObj();
+				}
+			} else {
+				String str = redis.getStrVal(OBJ_NAME);
+				if(str != null) {
+					setTypeStr();
+				}
+			}
+		} catch(Exception ex) {
+			log.error("读取redis缓存失败", ex);
+		}
 	}
 
 }

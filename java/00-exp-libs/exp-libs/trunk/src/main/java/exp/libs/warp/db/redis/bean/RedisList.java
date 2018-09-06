@@ -4,9 +4,6 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import exp.libs.utils.other.ListUtils;
 import exp.libs.warp.db.redis.RedisClient;
 
@@ -39,22 +36,13 @@ import exp.libs.warp.db.redis.RedisClient;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class RedisList<E extends Serializable> {
+public class RedisList<E extends Serializable> extends _RedisObject {
 
-	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(RedisList.class);
-	
 	/** 此列表的默认键名 */
 	private final static String DEFAULT_LIST_NAME = "REDIS_LIST";
 	
 	/** 此列表在redis中的键名（需确保不为空） */
 	private final String LIST_NAME;
-	
-	/** Redis连接客户端对象 */
-	private RedisClient redis;
-	
-	/** 所声明的泛型是否为String类型（否则为自定义类型） */
-	private boolean typeIsStr;
 	
 	/**
 	 * 构造函数
@@ -62,9 +50,8 @@ public class RedisList<E extends Serializable> {
 	 * @param redis redis客户端连接对象（需确保可用）
 	 */
 	public RedisList(String listName, RedisClient redis) {
+		super(redis);
 		this.LIST_NAME = (listName == null ? DEFAULT_LIST_NAME : listName);
-		this.redis = (redis == null ? new RedisClient() : redis);
-		this.typeIsStr = false;
 	}
 	
 	/**
@@ -111,12 +98,12 @@ public class RedisList<E extends Serializable> {
 		}
 		
 		try {
-			if(typeIsStr || e instanceof String) {
-				typeIsStr = true;
+			if(typeIsStr() || e instanceof String) {
+				setTypeStr();
 				isOk = redis.addStrValsToListHead(LIST_NAME, (String) e) > 0;
 				
 			} else {
-				typeIsStr = false;
+				setTypeObj();
 				isOk = redis.addSerialObjsToListHead(LIST_NAME, e) > 0;
 			}
 		} catch(Exception ex) {
@@ -137,12 +124,12 @@ public class RedisList<E extends Serializable> {
 		}
 		
 		try {
-			if(typeIsStr || e instanceof String) {
-				typeIsStr = true;
+			if(typeIsStr() || e instanceof String) {
+				setTypeStr();
 				isOk = redis.addStrValsToListTail(LIST_NAME, (String) e) > 0;
 				
 			} else {
-				typeIsStr = false;
+				setTypeObj();
 				isOk = redis.addSerialObjsToListTail(LIST_NAME, e) > 0;
 			}
 		} catch(Exception ex) {
@@ -202,9 +189,10 @@ public class RedisList<E extends Serializable> {
 		if(isEmpty()) {
 			return e;
 		}
+		alignType();
 		
 		try {
-			if(typeIsStr == true) {
+			if(typeIsStr()) {
 				String str = redis.getStrValInList(LIST_NAME, index);
 				if(str != null) {
 					e = (E) str;
@@ -232,9 +220,10 @@ public class RedisList<E extends Serializable> {
 		if(isEmpty()) {
 			return list;
 		}
+		alignType();
 		
 		try {
-			if(typeIsStr == true) {
+			if(typeIsStr()) {
 				List<String> sList = redis.getStrList(LIST_NAME);
 				if(ListUtils.isNotEmpty(sList)) {
 					for(String s : sList) {
@@ -272,9 +261,10 @@ public class RedisList<E extends Serializable> {
 		if(isEmpty() || ListUtils.isEmpty(es)) {
 			return num;
 		}
+		alignType();
 		
 		try {
-			if(typeIsStr == true) {
+			if(typeIsStr()) {
 				for(E e : es) {
 					if(e == null) {
 						continue;
@@ -309,6 +299,31 @@ public class RedisList<E extends Serializable> {
 			log.error("删除redis缓存失败", e);
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 校准类型（此方法通过取队列第一个元素进行判断，因此只能在列表非空时执行）
+	 */
+	private void alignType() {
+		if(!typeIsNone()) {
+			return;
+		}
+		
+		try {
+			Object obj = redis.getSerialObjInList(LIST_NAME, 0);
+			if(obj != null) {
+				if(obj instanceof String) {
+					setTypeStr();
+					
+				} else {
+					setTypeObj();
+				}
+			} else {
+				setTypeStr();
+			}
+		} catch(Exception ex) {
+			log.error("读取redis缓存失败", ex);
+		}
 	}
 	
 }

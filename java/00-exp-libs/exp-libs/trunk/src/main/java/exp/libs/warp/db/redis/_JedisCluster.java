@@ -606,6 +606,15 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	}
 
 	@Override
+	public String getRandomStrValInSet(String redisKey) {
+		String value = null;
+		if(redisKey != null) {
+			value = super.srandmember(_transcode(redisKey));
+		}
+		return value;
+	}
+	
+	@Override
 	public Set<String> getAllStrValsInSet(String redisKey) {
 		Set<String> values = new HashSet<String>();
 		if(redisKey != null) {
@@ -667,6 +676,15 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 		return getAllSerialObjsInSet(redisKey);
 	}
 
+	@Override
+	public Object getRandomSerialObjInSet(String redisKey) {
+		Object value = null;
+		if(redisKey != null) {
+			value = super.srandmember(_transbyte(redisKey));
+		}
+		return value;
+	}
+	
 	@Override
 	public Set<Object> getAllSerialObjsInSet(String redisKey) {
 		Set<Object> values = new HashSet<Object>();

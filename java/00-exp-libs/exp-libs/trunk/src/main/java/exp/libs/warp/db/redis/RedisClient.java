@@ -648,6 +648,11 @@ public class RedisClient implements _IJedis {
 	}
 
 	@Override
+	public String getRandomStrValInSet(String redisKey) {
+		return iJedis.getRandomStrValInSet(redisKey);
+	}
+	
+	@Override
 	public Set<String> getAllStrValsInSet(String redisKey) {
 		return iJedis.getAllStrValsInSet(redisKey);
 	}
@@ -677,6 +682,11 @@ public class RedisClient implements _IJedis {
 		return iJedis.getSerialSet(redisKey);
 	}
 
+	@Override
+	public Object getRandomSerialObjInSet(String redisKey) {
+		return iJedis.getRandomSerialObjInSet(redisKey);
+	}
+	
 	@Override
 	public Set<Object> getAllSerialObjsInSet(String redisKey) {
 		return iJedis.getAllSerialObjsInSet(redisKey);

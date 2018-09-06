@@ -560,6 +560,16 @@ interface _IJedis {
 	
 	/**
 	 * <pre>
+	 * 获取 Set&lt;String&gt;集合中一个随机元素.
+	 * 配套{@link #addStrSet}或{@link #addStrValsToSet}使用.
+	 * </pre>
+	 * @param redisKey 所操作对象在redis中的键
+	 * @return 若集合为空则返回null
+	 */
+	public String getRandomStrValInSet(String redisKey);
+	
+	/**
+	 * <pre>
 	 * 获取 Set&lt;String&gt;集合中的所有值.
 	 * 配套{@link #addStrSet}或{@link #addStrValsToSet}使用.
 	 * </pre>
@@ -618,6 +628,16 @@ interface _IJedis {
 	 * @return Set&lt;Object&gt;集合（若不存在则返回空集，不会返回null）
 	 */
 	public Set<Object> getSerialSet(String redisKey);
+	
+	/**
+	 * <pre>
+	 * 获取 Set&lt;Serializable&gt;集合中一个随机对象（反序列化对象）.
+	 * 配套{@link #addSerialSet}或{@link #addSerialObjsToSet}使用.
+	 * </pre>
+	 * @param redisKey 所操作对象在redis中的键
+	 * @return 若集合为空则返回null
+	 */
+	public Object getRandomSerialObjInSet(String redisKey);
 	
 	/**
 	 * <pre>

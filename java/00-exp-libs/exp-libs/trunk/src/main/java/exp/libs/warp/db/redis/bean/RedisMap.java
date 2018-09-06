@@ -8,9 +8,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import exp.libs.warp.db.redis.RedisClient;
 
 /**
@@ -46,22 +43,13 @@ import exp.libs.warp.db.redis.RedisClient;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class RedisMap<OBJ extends Serializable> {
+public class RedisMap<OBJ extends Serializable> extends _RedisObject {
 
-	/** 日志器 */
-	private final static Logger log = LoggerFactory.getLogger(RedisMap.class);
-	
 	/** 此哈希表的默认键名 */
 	private final static String DEFAULT_MAP_NAME = "REDIS_MAP";
 	
 	/** 此哈希表在redis中的键名（需确保不为空） */
 	private final String MAP_NAME;
-	
-	/** Redis连接客户端对象 */
-	private RedisClient redis;
-	
-	/** 所声明的泛型是否为String类型（否则为自定义类型） */
-	private boolean typeIsStr;
 	
 	/**
 	 * 构造函数
@@ -69,9 +57,8 @@ public class RedisMap<OBJ extends Serializable> {
 	 * @param redis redis客户端连接对象（需确保可用）
 	 */
 	public RedisMap(String mapName, RedisClient redis) {
+		super(redis);
 		this.MAP_NAME = (mapName == null ? DEFAULT_MAP_NAME : mapName);
-		this.redis = (redis == null ? new RedisClient() : redis);
-		this.typeIsStr = false;
 	}
 	
 	/**
@@ -126,12 +113,12 @@ public class RedisMap<OBJ extends Serializable> {
 		}
 		
 		try {
-			if(typeIsStr || value instanceof String) {
-				typeIsStr = true;
+			if(typeIsStr() || value instanceof String) {
+				setTypeStr();
 				isOk = redis.addStrValToMap(MAP_NAME, key, (String) value);
 				
 			} else {
-				typeIsStr = false;
+				setTypeObj();
 				isOk = redis.addSerialObjToMap(MAP_NAME, key, value);
 			}
 		} catch(Exception e) {
@@ -171,22 +158,26 @@ public class RedisMap<OBJ extends Serializable> {
 	@SuppressWarnings("unchecked")
 	public OBJ get(String key) {
 		OBJ value = null;
-		if(isEmpty()) {
+		if(isEmpty() || key == null) {
 			return value;
 		}
+		alignType(key);	// 尝试校准类型
 		
 		try {
-			if(typeIsStr == true) {
+			if(typeIsStr()) {
 				String str = redis.getStrValInMap(MAP_NAME, key);
 				if(str != null) {
 					value = (OBJ) str;
 				}
 				
-			} else {
+			} else if(typeIsObj()) {
 				Object obj = redis.getSerialObjInMap(MAP_NAME, key);
 				if(obj != null) {
 					value = (OBJ) obj;
 				}
+				
+			} else {
+				// Undo: 若无法校准类型，说明该键值不存在
 			}
 		} catch(Exception e) {
 			log.error("读取redis缓存失败", e);
@@ -204,7 +195,10 @@ public class RedisMap<OBJ extends Serializable> {
 		redis.closeAutoCommit();
 		Set<String> keys = keySet();
 		for(String key : keys) {
-			map.put(key, get(key));
+			OBJ val = get(key);
+			if(val != null) {
+				map.put(key, val);
+			}
 		}
 		redis.commit();
 		return map;
@@ -262,6 +256,35 @@ public class RedisMap<OBJ extends Serializable> {
 			log.error("删除redis缓存失败", e);
 		}
 		return isOk;
+	}
+	
+	/**
+	 * 校准类型（此方法通过随机取哈希表中的一个元素进行判断，因此只能在哈希表非空时执行）
+	 * @param key 当前准备取出的一个元素的键（由于该元素未必存在，因此此方法未必能一次校准）
+	 */
+	private void alignType(String key) {
+		if(!typeIsNone()) {
+			return;
+		}
+		
+		try {
+			Object obj = redis.getSerialObjInMap(MAP_NAME, key);
+			if(obj != null) {
+				if(obj instanceof String) {
+					setTypeStr();
+					
+				} else {
+					setTypeObj();
+				}
+			} else {
+				String str = redis.getStrValInMap(MAP_NAME, key);
+				if(str != null) {
+					setTypeStr();
+				}
+			}
+		} catch(Exception ex) {
+			log.error("读取redis缓存失败", ex);
+		}
 	}
 	
 }

@@ -732,6 +732,17 @@ class _Jedis implements _IJedis {
 	}
 
 	@Override
+	public String getRandomStrValInSet(String redisKey) {
+		String value = null;
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			value = jedis.srandmember(_transcode(redisKey));
+			_close(jedis);
+		}
+		return value;
+	}
+	
+	@Override
 	public Set<String> getAllStrValsInSet(String redisKey) {
 		Set<String> values = new HashSet<String>();
 		if(redisKey != null) {
@@ -803,6 +814,17 @@ class _Jedis implements _IJedis {
 		return getAllSerialObjsInSet(redisKey);
 	}
 
+	@Override
+	public Object getRandomSerialObjInSet(String redisKey) {
+		Object value = null;
+		if(redisKey != null) {
+			Jedis jedis = _getJedis();
+			value = jedis.srandmember(_transbyte(redisKey));
+			_close(jedis);
+		}
+		return value;
+	}
+	
 	@Override
 	public Set<Object> getAllSerialObjsInSet(String redisKey) {
 		Set<Object> values = new HashSet<Object>();
