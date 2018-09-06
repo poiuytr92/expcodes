@@ -15,7 +15,7 @@ import exp.libs.warp.db.redis.RedisClient;
 
 /**
  * <PRE>
- * Redis-Map对象.
+ * Redis-Map对象（其键类型固定为String，值类型通过泛型动态声明）.
  * 模仿HashMap的使用习惯进行封装.
  * ------------------------------
  * 
