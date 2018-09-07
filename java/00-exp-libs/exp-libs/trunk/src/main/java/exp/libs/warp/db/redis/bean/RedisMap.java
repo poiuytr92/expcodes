@@ -43,7 +43,7 @@ import exp.libs.warp.db.redis.RedisClient;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class RedisMap<OBJ extends Serializable> extends _RedisObject {
+public class RedisMap<VAL extends Serializable> extends _RedisObject {
 
 	/** 此哈希表的默认键名 */
 	private final static String DEFAULT_MAP_NAME = "REDIS_MAP";
@@ -106,7 +106,7 @@ public class RedisMap<OBJ extends Serializable> extends _RedisObject {
 	 * @param value 值
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean put(String key, OBJ value) {
+	public boolean put(String key, VAL value) {
 		boolean isOk = false;
 		if(key == null || value == null) {
 			return isOk;
@@ -132,7 +132,7 @@ public class RedisMap<OBJ extends Serializable> extends _RedisObject {
 	 * @param map 哈希表
 	 * @return true:添加成功; false:添加失败
 	 */
-	public boolean putAll(Map<String, OBJ> map) {
+	public boolean putAll(Map<String, VAL> map) {
 		boolean isOk = false;
 		if(map == null || map.isEmpty()) {
 			return isOk;
@@ -143,7 +143,7 @@ public class RedisMap<OBJ extends Serializable> extends _RedisObject {
 		Iterator<String> keys = map.keySet().iterator();
 		while(keys.hasNext()) {
 			String key = keys.next();
-			OBJ obj = map.get(key);
+			VAL obj = map.get(key);
 			isOk &= put(key, obj);
 		}
 		redis.commit();
@@ -156,8 +156,8 @@ public class RedisMap<OBJ extends Serializable> extends _RedisObject {
 	 * @return 对应的值（若不存在返回null）
 	 */
 	@SuppressWarnings("unchecked")
-	public OBJ get(String key) {
-		OBJ value = null;
+	public VAL get(String key) {
+		VAL value = null;
 		if(isEmpty() || key == null) {
 			return value;
 		}
@@ -167,13 +167,13 @@ public class RedisMap<OBJ extends Serializable> extends _RedisObject {
 			if(typeIsStr()) {
 				String str = redis.getStrValInMap(MAP_NAME, key);
 				if(str != null) {
-					value = (OBJ) str;
+					value = (VAL) str;
 				}
 				
 			} else if(typeIsObj()) {
 				Object obj = redis.getSerialObjInMap(MAP_NAME, key);
 				if(obj != null) {
-					value = (OBJ) obj;
+					value = (VAL) obj;
 				}
 				
 			} else {
@@ -189,13 +189,13 @@ public class RedisMap<OBJ extends Serializable> extends _RedisObject {
 	 * 实时在redis缓存中查询此哈希表的所有键值对
 	 * @return 所有键值对（即使为空也只会返回空表，不会返回null）
 	 */
-	public Map<String, OBJ> getAll() {
-		Map<String, OBJ> map = new HashMap<String, OBJ>();
+	public Map<String, VAL> getAll() {
+		Map<String, VAL> map = new HashMap<String, VAL>();
 		
 		redis.closeAutoCommit();
 		Set<String> keys = keySet();
 		for(String key : keys) {
-			OBJ val = get(key);
+			VAL val = get(key);
 			if(val != null) {
 				map.put(key, val);
 			}
@@ -223,7 +223,7 @@ public class RedisMap<OBJ extends Serializable> extends _RedisObject {
 	 * 实时在redis缓存中查询此哈希表的所有值集
 	 * @return 所有值集（即使为空也只会返回空表，不会返回null）
 	 */
-	public Collection<OBJ> values() {
+	public Collection<VAL> values() {
 		return getAll().values();
 	}
 	
