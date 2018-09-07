@@ -13,18 +13,21 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import redis.clients.jedis.HostAndPort;
 import exp.libs.utils.num.NumUtils;
 import exp.libs.utils.other.StrUtils;
+import exp.libs.warp.conf.xml.XConfig;
 import exp.libs.warp.db.redis.bean.RedisBean;
 
 /**
  * <PRE>
  * Redis连接客户端.
- * 内部自带连接池, 适用于Redis单机/主从/哨兵/集群模式 
- * (根据实际Redis的配置，使用不同的构造函数即可，已屏蔽到集群/非集群的连接/操作方式差异性)
+ * 内部自带连接池, 适用于Redis单机/主从/哨兵/集群模式 .
+ * 
+ * 根据实际Redis的配置，使用不同的构造函数即可，已屏蔽到集群/非集群的连接/操作方式差异性.
+ * Redis配置推荐使用{@link RedisBean}方式（{@link XConfig}}已提供对其的xml配置文件支持）
  * --------------------------------------------------
  * <br/>
  * 科普：
- * 	对于 单机/主从/哨兵 模式，连接方式都是一样的，使用{@link #Jedis}实例连接
- * 	对于 集群 模式，则需要使用{@link #JedisCluster}实例连接
+ * 	对于 单机/主从/哨兵 模式，连接方式都是一样的，使用{@link #Jedis}实例连接（已封装到{@link #_Jedis}）
+ * 	对于 集群 模式，则需要使用{@link #JedisCluster}实例连接（已封装到{@link #_JedisCluster}）
  * 
  * 	一般情况下，对于 主从/哨兵 模式，只需要连接到主机即可（或者连接从机亦可，但一般不建议）
  * 	特别地，对于 哨兵模式，一定不能连接到 哨兵机（哨兵机是用于监控主从机器，当主机挂掉的时候重新选举主机的，不做数据业务）

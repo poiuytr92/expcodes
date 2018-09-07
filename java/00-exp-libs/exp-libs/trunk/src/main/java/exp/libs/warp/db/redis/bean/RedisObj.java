@@ -7,14 +7,15 @@ import exp.libs.warp.db.redis.RedisClient;
 /**
  * <PRE>
  * Redis-Obj对象.
+ * 封装了Redis最基本的键值对操作.
  * ------------------------------
  * 
  * 使用样例:
  * 
  * final String OBJ_IN_REDIS_KEY = "object在Redis中的键名（自定义且需唯一）";
- * RedisClient redis = new RedisClient("127.0.0.1", 6379);	// redis连接客户端（支持单机/集群）
+ * {@link #RedisClient} redis = new RedisClient("127.0.0.1", 6379);	// redis连接客户端（支持单机/集群）
  * 
- * RedisObj&lt;自定义 对象&gt; obj = new RedisObj&lt;自定义 对象&gt;(OBJ_IN_REDIS_KEY, redis);
+ * RedisObj&lt;自定义对象&gt; obj = new RedisObj&lt;自定义对象&gt;(OBJ_IN_REDIS_KEY, redis);
  * obj.set(value);
  * obj.appent(string);	// 当且仅当使用String作为泛型时此方法才有效
  * obj.get();

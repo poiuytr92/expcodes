@@ -19,9 +19,9 @@ import exp.libs.warp.db.redis.RedisClient;
  * 使用样例:
  * 
  * final String MAP_IN_REDIS_KEY = "map在Redis中的键名（自定义且需唯一）";
- * RedisClient redis = new RedisClient("127.0.0.1", 6379);	// redis连接客户端（支持单机/集群）
+ * {@link #RedisClient} redis = new RedisClient("127.0.0.1", 6379);	// redis连接客户端（支持单机/集群）
  * 
- * RedisMap&lt;自定义 对象&gt; map = new RedisMap&lt;自定义 对象&gt;(MAP_IN_REDIS_KEY, redis);
+ * RedisMap&lt;自定义对象&gt; map = new RedisMap&lt;自定义对象&gt;(MAP_IN_REDIS_KEY, redis);
  * map.put(key, val);
  * map.putAll(otherMap);
  * map.get(key);
