@@ -168,6 +168,37 @@ public class RedisSet<E extends Serializable> extends _RedisObject {
 		redis.commit();
 		return isOk;
 	}
+	
+	/**
+	 * 实时在redis缓存中随机取出集合中的一个元素
+	 * @return 若集合为空则返回null
+	 */
+	@SuppressWarnings("unchecked")
+	public E get() {
+		E e = null;
+		if(isEmpty()) {
+			return e;
+		}
+		alignType();
+		
+		try {
+			if(typeIsStr()) {
+				String str = redis.getRandomStrValInSet(SET_NAME);
+				if(str != null) {
+					e = (E) str;
+				}
+				
+			} else {
+				Object obj = redis.getRandomSerialObjInSet(SET_NAME);
+				if(obj != null) {
+					e = (E) obj;
+				}
+			}
+		} catch(Exception ex) {
+			log.error("读取redis缓存失败", ex);
+		}
+		return e;
+	}
 
 	/**
 	 * 实时在redis缓存中查询此集合的所有元素
@@ -262,7 +293,6 @@ public class RedisSet<E extends Serializable> extends _RedisObject {
 	
 	/**
 	 * 校准类型（此方法通过随机取集合中的一个元素进行判断，因此只能在集合非空时执行）
-	 * @param key 当前准备取出的一个元素的键（由于该元素未必存在，因此此方法未必能一次校准）
 	 */
 	private void alignType() {
 		if(!typeIsNone()) {
