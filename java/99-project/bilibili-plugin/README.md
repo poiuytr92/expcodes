@@ -62,11 +62,11 @@
 
 ### ※ 功能界面
 <br/>　
-　*二维码登陆（左） & 帐密登陆（右）*<br/>
+　*自动抽奖设置（左） & 开播通知（右）*<br/>
 ![抽奖设置与开播通知](https://github.com/lyy289065406/expcodes/blob/master/java/99-project/bilibili-plugin/trunk/doc/%E8%BF%90%E8%A1%8C%E6%88%AA%E5%9B%BE/04-%E6%8A%BD%E5%A5%96%E8%AE%BE%E7%BD%AE%E4%B8%8E%E5%BC%80%E6%92%AD%E9%80%9A%E7%9F%A5.png)
 <br/>　
 <br/>　
-　*小学宝箱（左） & 随缘点歌（右）*<br/>
+　*小学宝箱（左） & 随缘点歌姬（右）*<br/>
 ![小学宝箱与随缘点歌](https://github.com/lyy289065406/expcodes/blob/master/java/99-project/bilibili-plugin/trunk/doc/%E8%BF%90%E8%A1%8C%E6%88%AA%E5%9B%BE/05-%E5%B0%8F%E5%AD%A6%E5%AE%9D%E7%AE%B1%E4%B8%8E%E9%9A%8F%E7%BC%98%E7%82%B9%E6%AD%8C.png)
 <br/>　
 <br/>　
