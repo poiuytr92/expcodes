@@ -1,5 +1,5 @@
 # bilibili-plugin
-哔哩哔哩插件姬 By EXP
+哔哩哔哩插件姬
 
 ------
 
