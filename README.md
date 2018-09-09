@@ -29,6 +29,7 @@
 - 经验库导航页 : [Navigation-Page](https://lyy289065406.github.io/api-online/)
 - 软件授权插件 : [Software-Certificate](https://github.com/lyy289065406/certificate)
 - 自动升级插件 : [Auto-Upgrader](https://github.com/lyy289065406/auto-upgrader)
+- 环境包下载页 : [Environment-Download](https://lyy289065406.github.io/environment/)
 
 
 ## 核心子项目
