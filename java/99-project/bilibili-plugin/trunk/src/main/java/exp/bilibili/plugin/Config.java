@@ -39,7 +39,7 @@ public class Config {
 	
 	private final static String USER_PATH = "./conf/bp_conf.xml";
 	
-	public final static int DEFAULT_ROOM_ID = 390480;
+	public final static int DEFAULT_ROOM_ID = 269706;
 	
 	/** 连续抽奖限制(主要避免被抓到封号) */
 	public final static int LOTTERY_LIMIT = 10;

@@ -449,7 +449,7 @@ import exp.libs.utils.format.JsonUtils;
         "todayFeed": 0,
         "dayLimit": 3000,
         "medalName": "翘李吗",
-        "roomid": "390480",
+        "roomid": "269706",
         "anchorInfo": {
           "uid": 20872515,
           "uname": "苏乔o_o",
