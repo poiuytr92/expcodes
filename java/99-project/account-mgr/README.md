@@ -41,7 +41,7 @@
 
 ## 下载
 
-- [Account-Manager-1.0.zip](https://github.com/lyy289065406/expcodes/blob/master/java/99-project/account-mgr/release/%E5%B8%90%E5%AF%86%E7%AE%A1%E7%90%86%E5%99%A8-v1.0.zip) *(build on 2017-08-12)*
+- [Account-Manager-1.0.zip](https://github.com/lyy289065406/expcodes/blob/master/java/99-project/account-mgr/release/%E5%B8%90%E5%AF%86%E7%AE%A1%E7%90%86%E5%99%A8-v1.0.zip) *(build on 2017-08-12 by EXP)*
 
 ## 安装与使用
 
