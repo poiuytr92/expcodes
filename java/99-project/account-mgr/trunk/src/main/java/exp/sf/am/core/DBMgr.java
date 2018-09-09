@@ -17,6 +17,16 @@ import exp.sf.am.bean.TAccount;
 import exp.sf.am.bean.TUser;
 import exp.sf.am.utils.CryptoUtils;
 
+/**
+ * <PRE>
+ * 数据库管理器.
+ * </PRE>
+ * <br/><B>PROJECT : </B> account-mgr
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-11
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class DBMgr {
 
 	private final static String ENV_DB_SCRIPT = "/exp/sf/am/bean/AM-DB.sql";
@@ -35,6 +45,10 @@ class DBMgr {
 	
 	private DBMgr() {}
 	
+	/**
+	 * 初始化数据库环境
+	 * @return
+	 */
 	protected static boolean initEnv() {
 		boolean isOk = true;
 		File dbFile = new File(ENV_DB_PATH);
@@ -55,6 +69,12 @@ class DBMgr {
 		return isOk;
 	}
 	
+	/**
+	 * 查找此软件的用户
+	 * @param username 软件登陆账号
+	 * @param password 软件登陆密码
+	 * @return
+	 */
 	protected static TUser findUser(String username, String password) {
 		String enUN = CryptoUtils.encode(username);
 		String enPW = CryptoUtils.encode(password);
@@ -68,6 +88,12 @@ class DBMgr {
 		return user;
 	}
 	
+	/**
+	 * 注册此软件的新用户
+	 * @param username 软件登陆账号
+	 * @param password 软件登陆密码
+	 * @return
+	 */
 	protected static TUser register(String username, String password) {
 		String enUsername = CryptoUtils.encode(username);
 		String sql = StrUtils.concat("SELECT COUNT(1) FROM ", TUser.getTableName(),  
@@ -90,6 +116,11 @@ class DBMgr {
 		return user;
 	}
 	
+	/**
+	 * 更新用户昵称
+	 * @param user
+	 * @param nickName
+	 */
 	protected static void updateNickName(TUser user, String nickName) {
 		String where = StrUtils.concat(TUser.getId$CN(), " = ", user.getId());
 		user.encodeNickname(nickName);
@@ -99,6 +130,12 @@ class DBMgr {
 		SqliteUtils.close(conn);
 	}
 	
+	/**
+	 * 通过关键字查询用户的相关帐密记录
+	 * @param user 软件用户
+	 * @param keyword 关键字
+	 * @return 相关帐密记录
+	 */
 	protected static List<TAccount> queryAccounts(TUser user, String keyword) {
 		String where = StrUtils.concat(TAccount.getUserId$CN(), " = ", user.getId());
 		Connection conn = SqliteUtils.getConn(ds);
@@ -116,6 +153,11 @@ class DBMgr {
 		return (accounts == null ? new LinkedList<TAccount>() : accounts);
 	}
 	
+	/**
+	 * 编辑帐密记录
+	 * @param account
+	 * @return
+	 */
 	protected static boolean edit(TAccount account) {
 		boolean isOk = false;
 		Connection conn = SqliteUtils.getConn(ds);
@@ -130,6 +172,11 @@ class DBMgr {
 		return isOk;
 	}
 	
+	/**
+	 * 删除帐密记录
+	 * @param account
+	 * @return
+	 */
 	protected static boolean delete(TAccount account) {
 		Connection conn = SqliteUtils.getConn(ds);
 		String where = StrUtils.concat(TAccount.getId$CN(), " = ", account.getId());

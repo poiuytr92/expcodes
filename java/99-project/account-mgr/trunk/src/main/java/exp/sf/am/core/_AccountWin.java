@@ -22,6 +22,16 @@ import exp.libs.warp.ui.cpt.win.PopChildWindow;
 import exp.libs.warp.ui.layout.VFlowLayout;
 import exp.sf.am.bean.TAccount;
 
+/**
+ * <PRE>
+ * 单个帐密展示界面.
+ * </PRE>
+ * <br/><B>PROJECT : </B> account-mgr
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-11
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 class _AccountWin extends PopChildWindow {
 	
 	/** serialVersionUID */

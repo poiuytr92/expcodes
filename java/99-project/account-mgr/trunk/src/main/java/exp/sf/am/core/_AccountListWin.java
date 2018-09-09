@@ -25,6 +25,16 @@ import exp.libs.warp.ui.cpt.win.MainWindow;
 import exp.sf.am.bean.TAccount;
 import exp.sf.am.bean.TUser;
 
+/**
+ * <PRE>
+ * 帐密列表界面.
+ * </PRE>
+ * <br/><B>PROJECT : </B> account-mgr
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-11
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class _AccountListWin extends MainWindow {
 
 	private static final long serialVersionUID = -3227397290475968153L;

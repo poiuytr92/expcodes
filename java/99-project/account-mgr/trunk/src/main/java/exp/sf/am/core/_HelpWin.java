@@ -9,6 +9,16 @@ import exp.libs.utils.other.StrUtils;
 import exp.libs.warp.ui.SwingUtils;
 import exp.libs.warp.ui.cpt.win.PopChildWindow;
 
+/**
+ * <PRE>
+ * 帮助信息界面.
+ * </PRE>
+ * <br/><B>PROJECT : </B> account-mgr
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-11
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
+ */
 public class _HelpWin extends PopChildWindow {
 
 	/** serialVersionUID */
