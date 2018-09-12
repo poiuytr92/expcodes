@@ -174,7 +174,7 @@ public class RedisSet<E extends Serializable> extends _RedisObject {
 	 * @return 若集合为空则返回null
 	 */
 	@SuppressWarnings("unchecked")
-	public E get() {
+	public E getRandom() {
 		E e = null;
 		if(isEmpty()) {
 			return e;

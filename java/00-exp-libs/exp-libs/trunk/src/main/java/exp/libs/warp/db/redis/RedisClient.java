@@ -273,7 +273,7 @@ public class RedisClient implements _IJedis {
 	 * @param password redis密码
 	 * @param clusterSockets 集群连接Socket串（格式为 ip:port，  如 127.0.0.1:6739）
 	 */
-	public RedisClient(String password, String... clusterSockets) {
+	public RedisClient(String password, String[] clusterSockets) {
 		this(password, toHostAndPorts(clusterSockets));
 	}
 	

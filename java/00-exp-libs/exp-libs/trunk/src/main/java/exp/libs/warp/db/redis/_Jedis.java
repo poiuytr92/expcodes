@@ -668,7 +668,8 @@ class _Jedis implements _IJedis {
 		Object object = null;
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			object = jedis.lindex(_transcode(redisKey), index);
+			object = ObjUtils.unSerializable(
+					jedis.lindex(_transbyte(redisKey), index));
 			_close(jedis);
 		}
 		return object;
@@ -819,7 +820,8 @@ class _Jedis implements _IJedis {
 		Object value = null;
 		if(redisKey != null) {
 			Jedis jedis = _getJedis();
-			value = jedis.srandmember(_transbyte(redisKey));
+			value = ObjUtils.unSerializable(
+					jedis.srandmember(_transbyte(redisKey)));
 			_close(jedis);
 		}
 		return value;

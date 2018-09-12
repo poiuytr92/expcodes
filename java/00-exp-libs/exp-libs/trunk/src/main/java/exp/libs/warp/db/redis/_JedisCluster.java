@@ -25,6 +25,11 @@ import exp.libs.utils.other.StrUtils;
 /**
  * <PRE>
  * Redis集群连接（仅适用于Redis集群模式）
+ * ----------------------------------
+ * 注意：
+ * 	经测试，对于利用redis-trib.rb构建的Redis Cluster，
+ *  若节点的配置文件 redis.conf 中同时绑定了内网IP和外网IP， 
+ *  即使redis-trib.rb构建集群时使用的是外网IP，也无法通过JedisCluster从外网访问集群（报错为无法获取连接）
  * </PRE>
  * <br/><B>PROJECT : </B> exp-libs
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
@@ -551,7 +556,8 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	public Object getSerialObjInList(String redisKey, long index) {
 		Object object = null;
 		if(redisKey != null) {
-			object = super.lindex(_transcode(redisKey), index);
+			object = ObjUtils.unSerializable(
+					super.lindex(_transbyte(redisKey), index));
 		}
 		return object;
 	}
@@ -680,7 +686,8 @@ class _JedisCluster extends JedisCluster implements _IJedis {
 	public Object getRandomSerialObjInSet(String redisKey) {
 		Object value = null;
 		if(redisKey != null) {
-			value = super.srandmember(_transbyte(redisKey));
+			value = ObjUtils.unSerializable(
+					super.srandmember(_transbyte(redisKey)));
 		}
 		return value;
 	}
