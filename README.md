@@ -8,7 +8,7 @@
 
 ## 简介
 
-此代码仓库本质上是由多个有代表性的子项目整合而成的超级集，这里记录了我自学习编程以来所学所做的冰山一角。
+此代码仓库本质上是由多个有代表性的子项目整合而成的超级集索引，这里记录了我自学习编程以来所学所做的冰山一角。
 
 相关的子项目代码目前以 C/C++、Java、Python 为主。<br/>涉及到的领域谈不上包罗万象，但毕竟是我多年来点滴积累的成果，偶尔回首，无悔，足矣。
 
@@ -36,7 +36,7 @@
 
 - **[exp-libs](https://github.com/lyy289065406/exp-libs)** [**经验构件库**（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用，相关API详见：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 - [account-mgr](https://github.com/lyy289065406/account-mgr) [帐密管理工具] ： *`轻松管理大量个人帐密信息（不联网且信息加密）`* <br/>
-- [top-baidu-tieba](https://github.com/lyy289065406/top-baidu-tieba [ [百度贴吧顶贴机] ： *`指定一个贴吧（最好无吧务）和一个帖子，可实时检测其状态并将其置顶`* <br/>
+- [top-baidu-tieba](https://github.com/lyy289065406/top-baidu-tieba) [百度贴吧顶贴机] ： *`指定一个贴吧（最好无吧务）和一个帖子，可实时检测其状态并将其置顶`* <br/>
 - [bilibili-plugin](https://github.com/lyy289065406/bilibili-plugin) [哔哩哔哩插件姬] ： *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
 - [jzone-crawler](https://github.com/lyy289065406/jzone-crawler) [QQ空间爬虫（Java版）] ： *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 - [pyzone-crawler](https://github.com/lyy289065406/pyzone-crawler) [QQ空间爬虫（Python版）] ： *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
@@ -92,7 +92,7 @@
 　┃　　　　　　　　　┣ ━ [account-mgr](https://github.com/lyy289065406/account-mgr)：*帐密管理工具 （含Swing界面）* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`轻松管理大量个人帐密信息（不联网、信息加密）`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [top-baidu-tieba](https://github.com/lyy289065406/top-baidu-tieba：*百度贴吧顶贴机* <br/>
+　┃　　　　　　　　　┣ ━ [top-baidu-tieba](https://github.com/lyy289065406/top-baidu-tieba)：*百度贴吧顶贴机* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`指定一个贴吧（最好无吧务）和一个帖子，可实时检测其状态并将其置顶`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/bilibili-plugin))：*哔哩哔哩插件姬 （含Swing界面）* <br/>
