@@ -1,1 +1,6 @@
-## 此子项目已抽离作为独立项目：[传送入口](xxxxx)
+# java-design-patterns
+　设计模式（Java版）
+
+> 推荐第三方资源库：【[传送门](https://github.com/lyy289065406/java-design-patterns)】
+
+------
