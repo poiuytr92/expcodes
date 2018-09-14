@@ -1,4 +1,4 @@
-# qzone-crawler
+# jzone-crawler
 　QQ空间爬虫（Java版）
 
 > 此项目已作为独立项目抽离：【[传送门](https://github.com/lyy289065406/jzone-crawler)】
