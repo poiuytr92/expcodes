@@ -14,7 +14,7 @@
 
 承诺不会放弃更新这个仓库，所以包含的子项目必定会越来越多。
 
-但是如果某些子项目到了应该被独立出来的时候，会对其进行抽离，以便更好地开源共享。
+但是**如果某些子项目已经足够成熟，会将其抽离成独立项目，以便更好地开源共享**。
 
 
 ## 环境
@@ -95,7 +95,7 @@
 　┃　　　　　　　　　┣ ━ [top-baidu-tieba](https://github.com/lyy289065406/top-baidu-tieba)：*百度贴吧顶贴机* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`指定一个贴吧（最好无吧务）和一个帖子，可实时检测其状态并将其置顶`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/bilibili-plugin))：*哔哩哔哩插件姬 （含Swing界面）* <br/>
+　┃　　　　　　　　　┣ ━ [bilibili-plugin](https://github.com/lyy289065406/bilibili-plugin)：*哔哩哔哩插件姬 （含Swing界面）* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┣ ━ <a name="dynamic-token" href="https://github.com/lyy289065406/expcodes/tree/master/java/99-project/dynamic-token">dynamic-token</a>：*动态令牌生成/校验API* <br/>
@@ -170,7 +170,7 @@
 　┃　　　　　　　　　┣ ━ [pyzone-crawler](https://github.com/lyy289065406/pyzone-crawler)：*QQ空间爬虫* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 　┃　　　　　　　　　┃<br/>
-　┃　　　　　　　　　┣ ━ [sina-crawler](https://github.com/lyy289065406/sina-crawler))：*新浪微博爬虫* <br/>
+　┃　　　　　　　　　┣ ━ [sina-crawler](https://github.com/lyy289065406/sina-crawler)：*新浪微博爬虫* <br/>
 　┃　　　　　　　　　┃　　　└ ─ *`可爬取新浪微博相册的图文数据并进行归整`* <br/>
 　┃　　　　　　　　　┃<br/>
 　┃　　　　　　　　　┗ ━ [wx-exp-backstage](https://github.com/lyy289065406/expcodes/tree/master/python/99-project/wx-exp-backstage)：*微信公众平台后台 `（已废弃）`* <br/>
