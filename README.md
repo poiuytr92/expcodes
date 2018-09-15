@@ -57,9 +57,6 @@
 　┃　　　　┃　　　　┣ ━ <a name="exp-libs" href="https://github.com/lyy289065406/exp-libs">exp-libs</a>：*经验构件库 `（作为此仓库多个Java项目的基础功能组件包被使用）`* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`多年经验积累整理的常用组件API库，适用于敏捷开发：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┣ ━ [exp-libs-base](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/exp-libs-base)：*经验构件库（基础包）* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *[`exp-libs`](#exp-libs)` 的子项目，过滤了一些相对少用的第三方构件`* <br/>
-　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent)：*JVM代理构件* <br/>
 　┃　　　　┃　　　　　　　　└ ─ *`用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）`* <br/>
 　┃　　　　┃<br/>
