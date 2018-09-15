@@ -34,7 +34,7 @@
 
 ## 核心子项目
 
-- **[exp-libs](https://github.com/lyy289065406/exp-libs)** [**经验构件库**（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用，相关API详见：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
+- **[exp-libs](https://github.com/lyy289065406/exp-libs)** [**经验构件库**（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用，相关API详见：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.1/index.html)* <br/>
 - [account-mgr](https://github.com/lyy289065406/account-mgr) [帐密管理工具] ： *`轻松管理大量个人帐密信息（不联网且信息加密）`* <br/>
 - [top-baidu-tieba](https://github.com/lyy289065406/top-baidu-tieba) [百度贴吧顶贴机] ： *`指定一个贴吧（最好无吧务）和一个帖子，可实时检测其状态并将其置顶`* <br/>
 - [bilibili-plugin](https://github.com/lyy289065406/bilibili-plugin) [哔哩哔哩插件姬] ： *`多号自动挂机(抽奖/宝箱/日常/投喂/成就)，自动答谢、晚安、公告等数十种功能`* <br/>
@@ -55,7 +55,7 @@
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┣ ━ <a name="exp-libs" href="https://github.com/lyy289065406/exp-libs">exp-libs</a>：*经验构件库 `（作为此仓库多个Java项目的基础功能组件包被使用）`* <br/>
-　┃　　　　┃　　　　┃　　　└ ─ *`多年经验积累整理的常用组件API库，适用于敏捷开发：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.0/index.html)* <br/>
+　┃　　　　┃　　　　┃　　　└ ─ *`多年经验积累整理的常用组件API库，适用于敏捷开发：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.1/index.html)* <br/>
 　┃　　　　┃　　　　┃<br/>
 　┃　　　　┃　　　　┗ ━ [jvm-agent](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs/jvm-agent)：*JVM代理构件* <br/>
 　┃　　　　┃　　　　　　　　└ ─ *`用于授权虚拟机级别的开发功能（如虚拟机监控、Java类操作等）`* <br/>
