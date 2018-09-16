@@ -15,6 +15,11 @@ import java.util.List;
  *  当某个 [服务器节点] 下线后， 它注册到 [固有节点 znode] 下的 [临时子 znode] 也会随之消失，
  *  此时，所有 [客户端节点] 会监听到 [子 znode] 列表发生变化，再次重新获取集群中当前在线的所有服务器列表.
  *  同理，当新的 [服务器节点] 上线后， 所有 [客户端节点] 也会监听到 [子 znode] 列表发生变化，再次重新获取集群中当前在线的所有服务器列表.
+ * 
+ * ------------------------------------------------
+ * 
+ * 其实这就是 Dubbo 注册中心的简化场景：
+ * 
  * </PRE>
  * <br/><B>PROJECT : </B> zookeeper
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
