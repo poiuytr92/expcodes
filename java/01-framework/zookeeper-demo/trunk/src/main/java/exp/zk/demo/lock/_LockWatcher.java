@@ -6,7 +6,7 @@ import org.apache.zookeeper.Watcher.Event.EventType;
 
 /**
  * <PRE>
- * 锁时间监听器
+ * 锁事件监听器
  * </PRE>
  * <br/><B>PROJECT : </B> zookeeper
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
@@ -16,7 +16,7 @@ import org.apache.zookeeper.Watcher.Event.EventType;
  */
 class _LockWatcher implements Watcher {
 	
-	private DistributeLock dLocker;
+	private DistributeNode dLocker;
 	
 	private final String LOCK_NODE;
 	
@@ -24,7 +24,7 @@ class _LockWatcher implements Watcher {
 	
 	private Handler handler;
 	
-	protected _LockWatcher(DistributeLock dLocker, String LOCK_NODE, Handler handler) {
+	protected _LockWatcher(DistributeNode dLocker, String LOCK_NODE, Handler handler) {
 		this.dLocker = dLocker;
 		this.LOCK_NODE = LOCK_NODE;
 		this.keepLock = "";

@@ -17,22 +17,28 @@ import org.apache.zookeeper.ZooKeeper;
  */
 class _DefaultHandler implements Handler {
 
+	private String name;
+	
+	protected _DefaultHandler(String name) {
+		this.name = (name == null ? "" : name);
+	}
+	
 	@Override
 	public void handle(ZooKeeper zk, WatchedEvent event, String keepLockNode) {
 		System.out.println("+++++++++++++++++++++");
-		System.out.println("获得锁：" + keepLockNode);
+		System.out.println("节点 [" + name + "] 获得锁：" + keepLockNode);
 		
 		
 		// 模拟业务处理
 		try {
 			int sleepTime = new Random().nextInt(4000);
-			System.out.println("正在模拟业务逻辑... (" + sleepTime + "ms)");
+			System.out.println("节点 [" + name + "] 正在模拟业务逻辑... (" + sleepTime + "ms)");
 			Thread.sleep(sleepTime);
 			
 		} catch (InterruptedException e) {}	
 		
 		
-		System.out.println("释放锁：" + keepLockNode);
+		System.out.println("节点 [" + name + "] 释放锁：" + keepLockNode);
 		System.out.println("---------------------");
 	}
 

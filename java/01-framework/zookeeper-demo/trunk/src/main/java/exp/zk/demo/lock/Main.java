@@ -1,5 +1,8 @@
 package exp.zk.demo.lock;
 
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * <PRE>
  * 【场景】分布式共享锁：多个客户端，需要同时访问同一个资源，但同一时间只允许一个客户端进行访问。 
@@ -21,13 +24,23 @@ public class Main {
 	private final static int SESS_TIMEOUT = 10000;
 	
 	public static void main(String[] args) throws Exception {
-		_DefaultHandler handler = new _DefaultHandler();
-		DistributeLock dLock = new DistributeLock(ZK_CONN_STR, SESS_TIMEOUT, handler);
-		dLock.conn();	// 连接到zookeeper集群并监听锁节点
+		
+		// 在集群中创建3个节点参与锁竞争
+		List<DistributeNode> nodes = new LinkedList<DistributeNode>();
+		for(int i = 0; i < 3; i++) {
+			String name = "node-" + i;
+			DistributeNode node = new DistributeNode(name, ZK_CONN_STR, SESS_TIMEOUT, null);
+			if(node.conn()) {	// 连接到zookeeper集群并监听锁
+				nodes.add(node);
+			}
+		}
+		
 		
 		// 通过休眠使得客户端线程保活
-		Thread.sleep(Long.MAX_VALUE);
-		dLock.close();
+		Thread.sleep(60000);
+		for(DistributeNode node : nodes) {
+			node.close();
+		}
 	}
 	
 }

@@ -12,11 +12,7 @@ import org.apache.zookeeper.data.Stat;
 
 /**
  * <PRE>
- * 【场景】分布式共享锁：多个客户端，需要同时访问同一个资源，但同一时间只允许一个客户端进行访问。 
- * 【思路】
- * 	多个客户端都去同一个[父 znode]下写入一个[同名子znode]，能写入成功的获得锁， 写入不成功的等待.
- * 	获得锁的客户端可以执行本地的业务逻辑，执行完成后则删除该[子znode](即释放锁)
- * 	其他客户端循环这个锁竞争
+ * 在分布式集群中参与竞争锁的节点
  * </PRE>
  * <br/><B>PROJECT : </B> zookeeper
  * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
@@ -24,11 +20,13 @@ import org.apache.zookeeper.data.Stat;
  * @author    EXP: 272629724@qq.com
  * @since     jdk版本：jdk1.6
  */
-public class DistributeLock {
+public class DistributeNode {
 	
 	private static final String NODE_PARENT_LOCK = "/parent_lock";
 	
 	private static final String NODE_SUB_LOCK = "/sub_lock";
+	
+	private String name;
 	
 	private String zkConnStr;
 	
@@ -42,14 +40,16 @@ public class DistributeLock {
 	
 	/**
 	 * 构造函数
+	 * @param name 节点名称
 	 * @param zkConnStr zookeeper集群连接串
 	 * @param sessTimeout zookeeper会话超时(ms)
 	 * @param handler 业务处理器
 	 */
-	public DistributeLock(String zkConnStr, int sessTimeout, Handler handler) {
+	public DistributeNode(String name, String zkConnStr, int sessTimeout, Handler handler) {
+		this.name = (name == null ? "" : name);
 		this.zkConnStr = (zkConnStr == null ? "" : zkConnStr);
 		this.sessTimeout = (sessTimeout < 0 ? 0 : sessTimeout);
-		this.handler = (handler == null ? new _DefaultHandler() : handler);
+		this.handler = (handler == null ? new _DefaultHandler(name) : handler);
 	}
 
 	/**
@@ -59,12 +59,12 @@ public class DistributeLock {
 	public boolean conn() {
 		boolean isOk = false;
 		if(connZK()) {
-			System.out.println("连接到zookeeper集群成功");
+			System.out.println("节点 [" + name + "] 连接到分布式集群成功");
 			if(registerLock()) {
-				System.out.println("注册分布式并发锁成功");
+				System.out.println("节点 [" + name + "] 注册分布式并发锁成功");
 				isOk = listenLock();
 				if(isOk == true) {
-					System.out.println("监听分布式并发锁成功");
+					System.out.println("节点 [" + name + "] 监听分布式并发锁成功");
 				}
 			}
 		}
@@ -75,15 +75,15 @@ public class DistributeLock {
 	 * 连接到 zookeeper 集群
 	 */
 	private boolean connZK() {
-		boolean isOk = false;
+		boolean isOk = true;
 		try {
 			this.zk = new ZooKeeper(zkConnStr, sessTimeout, 
 					(lockWatcher = new _LockWatcher(this, NODE_PARENT_LOCK, handler)));
-			isOk = true;
 			
 		} catch (IOException e) {
-			System.err.println("连接到zookeeper集群失败");
+			System.err.println("节点 [" + name + "] 连接到zookeeper集群失败");
 			e.printStackTrace();
+			isOk = false;
 		}
 		return isOk;
 	}
@@ -94,7 +94,6 @@ public class DistributeLock {
 	 */
 	private boolean registerLock() {
 		boolean isOk = false;
-		
 		if(zk != null && lockWatcher != null) {
 			try {
 				
@@ -113,7 +112,7 @@ public class DistributeLock {
 				isOk = lockWatcher.registerLock();
 				
 			} catch (Exception e) {
-				System.err.println("注册分布式并发锁失败");
+				System.err.println("节点 [" + name + "] 注册分布式并发锁失败");
 				e.printStackTrace();
 			}
 		}
@@ -134,7 +133,7 @@ public class DistributeLock {
 				isOk = true;
 				
 			} catch (Exception e) {
-				System.err.println("监听分布式并发锁失败");
+				System.err.println("节点 [" + name + "] 监听分布式并发锁失败");
 				e.printStackTrace();
 			}
 		}
@@ -159,7 +158,7 @@ public class DistributeLock {
 						CreateMode.EPHEMERAL_SEQUENTIAL);	// 临时节点，且有自增序列(当客户端拓机后自动删除)
 				
 			} catch (Exception e) {
-				System.out.println("获取并发誓共享锁失败");
+				System.out.println("节点 [" + name + "] 获取并发誓共享锁失败");
 				e.printStackTrace();
 			}
 		}
@@ -181,15 +180,15 @@ public class DistributeLock {
 			try {
 				
 				// 获取父节点的所有 [子节点锁], 并继续监听
-				List<String> childrenNodes = zk.getChildren(NODE_PARENT_LOCK, true);
+				List<String> childs = zk.getChildren(NODE_PARENT_LOCK, true);
 				
 				// 对所有 [子节点锁] 按id排序，若最小的id与此客户端之前生成用于排队的锁的id一致，则获得锁
-				Collections.sort(childrenNodes);	
-				String minLock = NODE_PARENT_LOCK + "/" + childrenNodes.get(0);
+				Collections.sort(childs);	
+				String minLock = NODE_PARENT_LOCK + "/" + childs.get(0);
 				isGetLock = minLock.equals(keepLock);
 				
 			} catch (Exception e) {
-				System.err.println("判断是否获得分布式并发锁异常");
+				System.err.println("节点 [" + name + "] 判断是否获得分布式并发锁异常");
 				e.printStackTrace();
 			}
 		}
@@ -215,8 +214,11 @@ public class DistributeLock {
 		if(zk != null) {
 			try {
 				zk.close();
+				zk = null;
+				System.out.println("节点 [" + name + "] 已断开分布式集群连接");
+				
 			} catch (Exception e) {
-				System.err.println("释放分布式并发锁失败");
+				System.err.println("节点 [" + name + "] 断开分布式集群连接失败");
 				e.printStackTrace();
 			}
 		}
