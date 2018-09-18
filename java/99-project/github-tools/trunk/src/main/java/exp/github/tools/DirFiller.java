@@ -5,8 +5,11 @@ import java.io.File;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import exp.libs.envm.Charset;
+import exp.libs.envm.Delimiter;
 import exp.libs.utils.io.FileUtils;
 import exp.libs.utils.other.LogUtils;
+import exp.libs.utils.other.StrUtils;
 
 /**
  * <PRE>
@@ -77,7 +80,13 @@ public class DirFiller {
 				File[] files = root.listFiles();
 				if(files.length <= 0) {
 					String path = root.getAbsolutePath();
-					FileUtils.createFile(path.concat(EMPTY_FILE_NAME));
+					File empty = FileUtils.createFile(path.concat(EMPTY_FILE_NAME));
+					String content = StrUtils.concat(
+							"# Copyright (C)", Delimiter.CRLF, 
+							"# Author: EXP", Delimiter.CRLF, 
+							"# Site  : http://exp-blog.com", Delimiter.CRLF, 
+							"# Mail  : 272629724@qq.com", Delimiter.CRLF);
+					FileUtils.write(empty, content, Charset.ISO, false);
 					log.info("已填充空文件夹: {}", path);
 					
 				} else {
