@@ -74,7 +74,7 @@
 　┃　　　　┃　　　　┣ ━ [kafka-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/kafka-demo)：*入门示例代码* <br/>
 　┃　　　　┃　　　　┃　　　└ ─ *`配套博文：《`[`快速部署单机kafka集群（win环境）`](http://exp-blog.com/2018/08/03/pid-2187/)`》`* <br/>
 　┃　　　　┃　　　　┃<br/>
-　┃　　　　┃　　　　┗ ━ [thrift](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/thrift)：*入门示例代码* <br/>
+　┃　　　　┃　　　　┗ ━ [thrift-demo](https://github.com/lyy289065406/expcodes/tree/master/java/01-framework/thrift-demo)：*入门示例代码* <br/>
 　┃　　　　┃<br/>
 　┃　　　　┣ ━ ━ ━ [02-pattern](https://github.com/lyy289065406/expcodes/tree/master/java/02-pattern)：*设计模式* <br/>
 　┃　　　　┃　　　　　└ ─ *`《 Head First : 设计模式 》（23种设计模式实例与习题）`* <br/>
