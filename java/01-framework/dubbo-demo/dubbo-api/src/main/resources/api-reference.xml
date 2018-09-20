@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 此文件其实就是dubbo消费者的相关配置，后边消费者项目引入api之后可以直接使用该文件 -->
+    <!-- 通过dubbo:reference标签引用服务配置 -->
+    <dubbo:reference id="demoService" interface="exp.dubbo.api.DemoService" cluster="failfast" check="false"/>
+</beans>

@@ -63,7 +63,7 @@
           <version>${explibs.version}</version>
         </dependency>
         
-        <dependency>
+        <!-- dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
             <version>${dubbo.version}</version>
@@ -78,10 +78,10 @@
             <groupId>com.github.sgroschupf</groupId>
             <artifactId>zkclient</artifactId>
             <version>0.1</version>
-        </dependency>
+        </dependency -->
         
         <!-- spring构件 -->
-        <dependency>
+        <!-- dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
@@ -150,7 +150,7 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
-        </dependency>
+        </dependency -->
         
         <!-- 单元测试 -->
         <dependency>
