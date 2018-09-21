@@ -6,7 +6,7 @@ dubbo入门示例项目
 
 ## 运行环境
 
-　![](https://img.shields.io/badge/Registry-zookeeper%203.4.7-brightgreen.svg)　![](https://img.shields.io/badge/Build-Maven%203.2.5-brightgreen.svg)  ![](https://img.shields.io/badge/JDK-1.7%2B-brightgreen.svg)
+　![](https://img.shields.io/badge/Registry-zookeeper%203.4.7-brightgreen.svg)　![](https://img.shields.io/badge/Build-Maven%203.2.5-brightgreen.svg) ![](https://img.shields.io/badge/JDK-1.7%2B-brightgreen.svg)
 
 
 ## 项目介绍
