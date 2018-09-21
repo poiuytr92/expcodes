@@ -8,10 +8,10 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
-    <name>doubo入门示例</name>
-    <description>项目描述(可选)</description>
+    <name>dubbo-demo</name>
+    <description>doubo入门示例程序(父项目)</description>
     <url>项目SVN路径(可选)</url>
-    <inceptionYear>工程的初始时间(可选)</inceptionYear>
+    <inceptionYear>2018-09-21</inceptionYear>
 
     <modules>
         <module>dubbo-api</module>
@@ -56,39 +56,40 @@
     <!-- 项目依赖 -->
     <dependencies>
     
-        <!-- 经验库 -->
+        <!-- dubbo构件 -->
         <dependency>
-          <groupId>exp.libs</groupId>
-          <artifactId>exp-libs</artifactId>
-          <version>${explibs.version}</version>
-        </dependency>
-        
-        <!-- dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>dubbo</artifactId>
             <version>${dubbo.version}</version>
             <exclusions>
-                <exclusion>
+                <exclusion> <!-- dubbo自带spring版本过低 -->
                     <groupId>org.springframework</groupId>
                     <artifactId>spring</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
+        
+        <!-- zk构件:  provider启动时要通过zk在注册中心注册服务; consumer则需要通过zk从注册中心获取服务 -->
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.4.10</version>
+        </dependency>
         <dependency>
             <groupId>com.github.sgroschupf</groupId>
             <artifactId>zkclient</artifactId>
             <version>0.1</version>
-        </dependency -->
+        </dependency>
         
         <!-- spring构件 -->
-        <!-- dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-core</artifactId>
+            <artifactId>spring-beans</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
+            <artifactId>spring-core</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <dependency>
@@ -98,7 +99,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-jdbc</artifactId>
+            <artifactId>spring-context-support</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <dependency>
@@ -111,9 +112,10 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
+            <artifactId>spring-jdbc</artifactId>
             <version>${spring.version}</version>
         </dependency>
         <dependency>
@@ -128,11 +130,6 @@
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
             <version>${spring.version}</version>
         </dependency>
@@ -141,7 +138,13 @@
             <artifactId>spring-jms</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        
         <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!-- dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>${aspectj.version}</version>

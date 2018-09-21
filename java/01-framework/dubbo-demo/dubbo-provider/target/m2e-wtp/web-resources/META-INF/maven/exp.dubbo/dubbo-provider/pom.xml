@@ -8,15 +8,13 @@
     </parent>
 
     <!--项目基本信息(必填)-->
-    <groupId>exp.dubbo</groupId>
     <artifactId>dubbo-provider</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>项目名称(可选)</name>
-    <description>项目描述(可选)</description>
+    <name>dubbo-provider</name>
+    <description>doubo入门示例程序(子项目:服务提供者)</description>
     <url>项目SVN路径(可选)</url>
-    <inceptionYear>工程的初始时间(可选)</inceptionYear>
+    <inceptionYear>2018-09-21</inceptionYear>
 
     <!--项目的问题管理系统(可选)-->
     <issueManagement>
@@ -42,60 +40,17 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>1.7</jdk.version>
-        <spring.version>3.1.2.RELEASE</spring.version>
-        <explibs.version>1.0-SNAPSHOT</explibs.version>
     </properties>
 
 
     <!-- 项目依赖 -->
     <dependencies>
     
+        <!-- 声明了自定义服务器的API构件 -->
         <dependency>
             <groupId>exp.dubbo</groupId>
             <artifactId>dubbo-api</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>dubbo</artifactId>
-            <version>2.5.3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>4.2.5.RELEASE</version>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-context-support</artifactId>
-            <version>4.2.5.RELEASE</version>
-        </dependency>
-        
-        <!-- 此处引入了zk相关的包，因为服务提供者在启动时会向注册中心注册服务 -->
-        <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-            <version>3.4.10</version>
-        </dependency>
-        <dependency>
-            <groupId>com.github.sgroschupf</groupId>
-            <artifactId>zkclient</artifactId>
-            <version>0.1</version>
-        </dependency>
-
-        <!-- 单元测试 -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.8.2</version>
-            <scope>test</scope>
         </dependency>
 
     </dependencies>

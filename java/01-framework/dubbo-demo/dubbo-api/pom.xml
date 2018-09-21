@@ -8,15 +8,13 @@
     </parent>
 
     <!--项目基本信息(必填)-->
-    <groupId>exp.dubbo</groupId>
     <artifactId>dubbo-api</artifactId>
-    <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>项目名称(可选)</name>
-    <description>项目描述(可选)</description>
+    <name>dubbo-api</name>
+    <description>doubo入门示例程序(子项目:API声明)</description>
     <url>项目SVN路径(可选)</url>
-    <inceptionYear>工程的初始时间(可选)</inceptionYear>
+    <inceptionYear>2018-09-21</inceptionYear>
 
     <!--项目的问题管理系统(可选)-->
     <issueManagement>
@@ -43,34 +41,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release.dir>${project.build.directory}/${project.artifactId}-${project.version}</release.dir>
         <jdk.version>1.7</jdk.version>
-        <explibs.version>1.0-SNAPSHOT</explibs.version>
-        <mrp.plugin.version>1.0-SNAPSHOT</mrp.plugin.version>
     </properties>
 
     <!-- 项目依赖 -->
-    <dependencies>
-    
-        <!-- 除掉了dubbo自带的spring引用，因为dubbo自带的spring依赖版本过低，我们使用自己导入的spring版本 -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>dubbo</artifactId>
-            <version>2.5.3</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-beans</artifactId>
-            <version>4.2.5.RELEASE</version>
-            <scope>provided</scope>
-        </dependency>
-
-    </dependencies>
+    <dependencies/>
 
     <!-- 项目构建 -->
     <build>
@@ -138,35 +112,6 @@
                                     <fileset dir="conf" />
                                 </copy>
                             </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            
-            <!-- 项目发布插件(自动生成脚本) -->
-            <plugin>
-                <groupId>exp.libs</groupId>
-                <artifactId>mojo-release-plugin</artifactId>
-                <version>${mrp.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>mrp</id>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>install</goal>
-                        </goals>
-                        <configuration>
-                            <mavenRepository>D:\mavenRepository</mavenRepository>
-                            <verClass>exp.dubbo.api.Version</verClass>
-                            <mainClass>exp.dubbo.api.Main</mainClass>
-                            <mainArgs></mainArgs>
-                            <charset>UTF-8</charset>
-                            <jdkPath>java</jdkPath>
-                            <xms>32m</xms>
-                            <xmx>64m</xmx>
-                            <jdkParams></jdkParams>
-                            <noVerJarRegex>exp-?libs-.*</noVerJarRegex> <!-- 不使用版本号的依赖构件(正则式) -->
-                            <proguard>false</proguard>  <!-- 是否使用混淆包(需配置混淆打包插件) -->
                         </configuration>
                     </execution>
                 </executions>
