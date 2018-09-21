@@ -31,7 +31,7 @@ dubbo入门示例项目
 - 04.　dubbo-provider、dubbo-consumer引用dubbo-api
 - 05.　先启动zookeeper注册中心
 - 06.　再启动dubbo-provider提供服务（可以war模式启动，也可以jar模式启动，以jar模式需要借用dubbo的服务注入接口）
-- 07.　再启动dubbo-consumer消费服务
+- 07.　再启动dubbo-consumer消费服务（可以war模式启动，也可以jar模式启动，以jar模式需要借用servlet）
 
 
 ## 版权声明
