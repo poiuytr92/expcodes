@@ -4,9 +4,9 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Home Page</title>
+<title>Demo: Dubbo Provider</title>
 </head>
 <body>
-    <a href="demo-spring-mvc">SpringMVC - 测试</a>
+    Dubbo service provider started!
 </body>
 </html>

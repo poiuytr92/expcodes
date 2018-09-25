@@ -1,35 +1,57 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://java.sun.com/xml/ns/javaee"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         id="WebApp_ID" version="3.0">
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+    id="WebApp_ID" version="3.0">
 
-    <!-- 配置Spring配置文件路径 -->
-    <context-param>
-        <param-name>contextConfigLocation</param-name>
-        <param-value>
-            classpath*:spring-config.xml
-        </param-value>
-    </context-param>
-    
-    <!-- 配置Spring上下文监听器 -->
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
+    <!-- web-app显示名称 -->
+    <display-name>dubbo-consumer</display-name>
 
-    <servlet>
-        <servlet-name>dispatcher</servlet-name>
-        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+    <!-- 默认首页 -->
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+
+
+    <!-- 字符集过滤器 : 处理页面乱码问题 -->
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
         <init-param>
-            <param-name>contextConfigLocation</param-name>
-            <param-value>classpath*:spring-mvc.xml</param-value>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
         </init-param>
-        <load-on-startup>1</load-on-startup>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+
+    <!-- 使得工程具备SpringMVC特性 -->
+    <servlet>
+        <servlet-name>SpringMVC</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+
+        <!-- 指定配置文件(若不配置则默认在/WEB-INF目录下查找XXX-servlet.xml作为配置文件) -->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>  
+            <param-value>      <!-- 仅仅SpringMVC使用的配置文件, 四选一即可 -->
+                 <!-- classpath*:spring-bean.xml -->    <!-- 基于BeanName-URL方式配置的Controller --> 
+                 <!-- classpath*:spring-class.xml -->   <!-- 基于ClassName方式配置的Controller --> 
+                 classpath*:spring-mvc.xml              <!-- 基于注解方式配置的Controller --> 
+                 <!-- classpath*:spring-url.xml -->     <!-- 基于Simple-URL方式配置的Controller --> 
+            </param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>    <!-- 表示启动容器时初始化该Servlet -->
     </servlet>
     <servlet-mapping>
-        <servlet-name>dispatcher</servlet-name>
-        <url-pattern>*.html</url-pattern>
+        <servlet-name>SpringMVC</servlet-name>  <!-- 表示哪些请求交给SpringMVC处理, "/"表示此为其他servlet都匹配不到时的缺省模式 -->
+        <url-pattern>/</url-pattern>    <!-- 可以配置为诸如"*.html"表示拦截所有以html为扩展名的请求 -->
     </servlet-mapping>
 
-
 </web-app>
+

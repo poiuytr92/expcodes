@@ -1,9 +1,9 @@
-package exp.dubbo.provider;
+package exp.dubbo.consumer.web;
 
 
 /**
  * <PRE>
- * 服务启动方式二：
+ * 服务启动方式一：
  * 	通过Spring/SpirngMVC启动（打包成war包，由tomcat运行）
  * </PRE>
  * <br/><B>PROJECT : </B> dubbo-demo
@@ -16,9 +16,9 @@ public class RunBySpring {
 
 	/**
 	 * 确保在 WebRoot/web.xml 中
-	 * 以 Spring 或 SpringMVC 方式加载了 dubbo-provider.xml 配置文件即可, 
+	 * 以 Spring 或 SpringMVC 方式加载了 dubbo-consumer.xml 配置文件即可, 
 	 * 
-	 * 尔后通过tomcat启动时就会自动注册服务.
+	 * 尔后通过tomcat启动时就会自动获取服务（dubbo-provider必须已经启动）.
 	 */
 	
 }
