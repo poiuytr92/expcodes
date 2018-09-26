@@ -1,12 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-    http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+<!-- 此文件本质就是一个spring的配置文件，只是在此基础上引入了dubbo相关的配置  -->
 
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://code.alibabatech.com/schema/dubbo 
+       http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!-- 服务提供方的应用信息：可以在dubbo监控中心（ dubbo-admin）通过此名称区分服务 -->
     <dubbo:application name="dubbo-consumer"/>
-    <dubbo:registry address="zookeeper://127.0.0.1:2181"/>
-    <dubbo:consumer check="false"/>
     
-    <dubbo:reference id="demoService" interface="exp.dubbo.api.DemoService" cluster="failfast" check="false"/>
+    <!-- 注册中心的服务地址：含集群在内共有四种配置方式（四选一即可） -->  
+    <!-- 支持的注册中心类型有：zookeeper、redis、multicast、simple -->
+    <!-- dubbo:registry address="zookeeper://127.0.0.1:2181" /-->
+    <!-- dubbo:registry protocol="zookeeper" address="127.0.0.1:2181" /-->
+    <!-- dubbo:registry address="zookeeper://127.0.0.1:2181?backup=127.0.0.1:2182,127.0.0.1:2183" /-->
+    <dubbo:registry protocol="zookeeper" address="127.0.0.1:2181,127.0.0.1:2182,127.0.0.1:2183" />
+    
+    <!-- 表示引用一个服务
+            id: 表示该服务的唯一标识，可以用该 id实现 IOC注入
+            interface: 表示引用的服务接口
+            cluster: 指定dubbo服务的容错模式（此处为快速失败 ）
+            check: 是否激活注册中心启动时检查
+    -->
+    <dubbo:reference id="demoService" interface="exp.dubbo.api.DemoService" cluster="failfast" check="false" />
 </beans>

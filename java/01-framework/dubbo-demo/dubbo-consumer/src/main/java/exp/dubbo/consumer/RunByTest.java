@@ -1,4 +1,4 @@
-package exp.dubbo.consumer.web;
+package exp.dubbo.consumer;
 
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
@@ -25,7 +25,7 @@ public class RunByTest {
         
         System.out.println("Dubbo consumer started!");
         DemoService bean = context.getBean(DemoService.class);
-        System.out.println(bean.sayHello("EXP"));
+        System.out.println(bean.sayHello("EXP"));	// 调用dubbo接口
        
         Thread.sleep(Long.MAX_VALUE);	// 通过阻塞简单对线程保活, 仅用于测试
         context.close();

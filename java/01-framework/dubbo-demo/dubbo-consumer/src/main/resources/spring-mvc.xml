@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- SpringMVC配置  -->
+<!-- SpringMVC配置，通过web.xml加载  -->
 
 <beans xmlns="http://www.springframework.org/schema/beans"    
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
@@ -19,6 +19,7 @@
     <!-- 配置自动扫描的包路径 -->
     <context:component-scan base-package="exp.dubbo.consumer.web"/>
     
+    <!-- 导入dubbo配置 -->
     <import resource="classpath:dubbo-consumer.xml"/>
     
 </beans>

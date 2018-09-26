@@ -3,8 +3,6 @@ package exp.dubbo.consumer.web.ctrl;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,13 +13,22 @@ import exp.dubbo.api.DemoService;
 
 
 /**
- * 基于注解方式配置的Controller
- * 此demo与 spring-mvc.xml 配置文件配套
+ * <PRE>
+ * 把dubbo接口放到控制器中实例化/调用.
+ * （打包成war包，并在tomcat运行后，等待页面触发调用dubbo接口即可）
+ * 
+ * 注：控制器的类名是随意的。
+ * </PRE>
+ * <br/><B>PROJECT : </B> dubbo-demo
+ * <br/><B>SUPPORT : </B> <a href="http://www.exp-blog.com" target="_blank">www.exp-blog.com</a> 
+ * @version   2017-07-11
+ * @author    EXP: 272629724@qq.com
+ * @since     jdk版本：jdk1.6
  */
 @Controller
-public class AnnotationController extends AbstractController{
+public class DemoServiceController extends AbstractController {
 
-	@Autowired
+	@Autowired	// 自动装配（初始化）
     private DemoService demoService;
 	
     @Override
@@ -30,15 +37,11 @@ public class AnnotationController extends AbstractController{
     		HttpServletRequest request, HttpServletResponse response) 
     				throws Exception {
     	
-    	// ---------------------------------------------------
-    	// TODO 业务逻辑
-    	System.out.println("AnnotationController Working.");
+    	// 调用dubbo接口
     	String welcome = demoService.sayHello("exp");
     	System.out.println(welcome);
     	
-    	// ---------------------------------------------------
-    	
-		return new ModelAndView();
+		return null;	// 不返回视图
     }
 
 }

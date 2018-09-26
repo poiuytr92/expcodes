@@ -155,6 +155,32 @@
             <version>${aspectj.version}</version>
         </dependency -->
         
+        <dependency>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>jstl-api</artifactId>
+            <version>1.2</version>
+        </dependency>
+        
+        <!-- 把Spring源代码中使用到的commons-logging替换成slf4j -->
+        <dependency>  
+          <groupId>org.slf4j</groupId>  
+          <artifactId>jcl-over-slf4j</artifactId>  
+          <version>1.7.12</version>  
+        </dependency>
+        
+        <!-- logback for spring -->
+        <dependency>
+          <groupId>org.logback-extensions</groupId>  
+          <artifactId>logback-ext-spring</artifactId>
+          <version>0.1.2</version>
+        </dependency>
+        
+        <!-- dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+        </dependency -->
+        
         <!-- 单元测试 -->
         <dependency>
             <groupId>junit</groupId>

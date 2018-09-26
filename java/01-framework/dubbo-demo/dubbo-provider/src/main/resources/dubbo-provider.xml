@@ -9,7 +9,7 @@
     http://code.alibabatech.com/schema/dubbo
     http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
 
-     <!-- 服务提供方的应用信息：可以在dubbo监控中心（ dubbo-admin）通过此名称区分服务 -->
+    <!-- 服务提供方的应用信息：可以在dubbo监控中心（ dubbo-admin）通过此名称区分服务 -->
     <dubbo:application name="dubbo-provider"  />  
 
     <!-- 注册中心的服务地址：含集群在内共有四种配置方式（四选一即可） -->  

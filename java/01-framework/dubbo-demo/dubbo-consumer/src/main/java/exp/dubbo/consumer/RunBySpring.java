@@ -1,4 +1,4 @@
-package exp.dubbo.consumer.web;
+package exp.dubbo.consumer;
 
 
 /**
@@ -16,9 +16,10 @@ public class RunBySpring {
 
 	/**
 	 * 确保在 WebRoot/web.xml 中
-	 * 以 Spring 或 SpringMVC 方式加载了 dubbo-consumer.xml 配置文件即可, 
+	 * 以 Spring 或 SpringMVC 方式，直接或间接地加载了 dubbo-consumer.xml 配置文件即可, 
 	 * 
-	 * 尔后通过tomcat启动时就会自动获取服务（dubbo-provider必须已经启动）.
+	 * 尔后通过tomcat启动时就会自动获取服务（dubbo-provider必须已经启动）,
+	 * 可以通过界面的点击等操作触发dubbo接口的调用。
 	 */
 	
 }

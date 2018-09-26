@@ -52,6 +52,6 @@
         <servlet-name>SpringMVC</servlet-name>  <!-- 表示哪些请求交给SpringMVC处理, "/"表示此为其他servlet都匹配不到时的缺省模式 -->
         <url-pattern>/</url-pattern>    <!-- 可以配置为诸如"*.html"表示拦截所有以html为扩展名的请求 -->
     </servlet-mapping>
-
+    
 </web-app>
 
