@@ -14,7 +14,7 @@ import exp.dubbo.api.DemoService;
 
 /**
  * <PRE>
- * 把dubbo接口放到控制器中实例化/调用.
+ * 把dubbo接口放到控制器中实例化并调用.
  * （打包成war包，并在tomcat运行后，等待页面触发调用dubbo接口即可）
  * 
  * 注：控制器的类名是随意的。
@@ -32,16 +32,16 @@ public class DemoServiceController extends AbstractController {
     private DemoService demoService;
 	
     @Override
-    @RequestMapping(value="/demo-dubbo-consumer")	// 在请求URL中包含此路径时则映射到此方法
+    @RequestMapping("demo-dubbo-consumer")	// 在请求URL中包含此参数时则映射到此方法
     protected ModelAndView handleRequestInternal(
     		HttpServletRequest request, HttpServletResponse response) 
     				throws Exception {
     	
-    	// 调用dubbo接口
+    	// 通过界面中某个行为，触发到这里，再调用dubbo接口
     	String welcome = demoService.sayHello("exp");
     	System.out.println(welcome);
     	
-		return null;	// 不返回视图
+		return null;	// 此为样例， 不返回视图
     }
 
 }

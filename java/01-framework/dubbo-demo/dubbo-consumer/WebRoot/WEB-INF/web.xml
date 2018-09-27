@@ -36,14 +36,11 @@
         <servlet-name>SpringMVC</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
 
-        <!-- 指定配置文件(若不配置则默认在/WEB-INF目录下查找XXX-servlet.xml作为配置文件) -->
+        <!-- 加载dubbo服务配置文件 -->
         <init-param>
             <param-name>contextConfigLocation</param-name>  
-            <param-value>      <!-- 仅仅SpringMVC使用的配置文件, 四选一即可 -->
-                 <!-- classpath*:spring-bean.xml -->    <!-- 基于BeanName-URL方式配置的Controller --> 
-                 <!-- classpath*:spring-class.xml -->   <!-- 基于ClassName方式配置的Controller --> 
+            <param-value>
                  classpath*:spring-mvc.xml              <!-- 基于注解方式配置的Controller --> 
-                 <!-- classpath*:spring-url.xml -->     <!-- 基于Simple-URL方式配置的Controller --> 
             </param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>    <!-- 表示启动容器时初始化该Servlet -->
