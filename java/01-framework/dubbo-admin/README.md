@@ -1,4 +1,4 @@
-# Dubbo admin £¨Eclipse EE°æ: Fork¹Ù·½¿â¸Ä£©
+# Dubbo admin ï¼ˆEclipse EEç‰ˆ: Forkå®˜æ–¹åº“æ”¹ï¼‰
 
 > dubbo admin front end and back end
 ![index](https://raw.githubusercontent.com/apache/incubator-dubbo-ops/develop/dubbo-admin-frontend/src/assets/index.png)
@@ -9,13 +9,13 @@
 ## Build setup 
 
 ``` bash
-# build £¨´ò°ü&±àÒë£ºÔÚincubator-dubbo-opsÄ¿Â¼ÏÂÕÙ»½dos£¬È·±£µ±Ç°JDK»·¾³Îª1.8+£¬ÊäÈëÒÔÏÂÃüÁî£©
+# build ï¼ˆæ‰“åŒ…&ç¼–è¯‘ï¼šåœ¨incubator-dubbo-opsç›®å½•ä¸‹å¬å”¤dosï¼Œç¡®ä¿å½“å‰JDKç¯å¢ƒä¸º1.8+ï¼Œè¾“å…¥ä»¥ä¸‹å‘½ä»¤ï¼‰
 mvn clean install
 
-# run £¨ÔËĞĞ£ºÔÚincubator-dubbo-opsÄ¿Â¼ÏÂÕÙ»½dos£¬ÊäÈëÒÔÏÂÃüÁî£©
+# run ï¼ˆè¿è¡Œï¼šåœ¨incubator-dubbo-opsç›®å½•ä¸‹å¬å”¤dosï¼Œè¾“å…¥ä»¥ä¸‹å‘½ä»¤ï¼‰
 mvn --projects dubbo-admin-backend spring-boot:run
 
-# visit £¨´ò¿ª½çÃæ£ºÔÚä¯ÀÀÆ÷´ò¿ªÏÂÃæµØÖ·£©
+# visit ï¼ˆæ‰“å¼€ç•Œé¢ï¼šåœ¨æµè§ˆå™¨æ‰“å¼€ä¸‹é¢åœ°å€ï¼‰
 localhost:8080 
 
 ```
