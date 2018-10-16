@@ -41,7 +41,7 @@
 - [jzone-crawler](https://github.com/lyy289065406/jzone-crawler) [QQ空间爬虫（Java版）] ： *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 - [pyzone-crawler](https://github.com/lyy289065406/pyzone-crawler) [QQ空间爬虫（Python版）] ： *`可爬取QQ相册和说说的图文数据并进行归整`* <br/>
 - [sina-crawler](https://github.com/lyy289065406/sina-crawler) [新浪微博爬虫] ： *`可爬取新浪微博相册的图文数据并进行归整`* <br/>
-- [mojo-archetype](https://github.com/lyy289065406/mojo-archetype) [Maven项目规范骨架] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、`在线发布插件`* <br/>
+- [mojo-archetype](https://github.com/lyy289065406/mojo-archetype) [Maven项目规范骨架] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
 - [mojo-web-archetype](https://github.com/lyy289065406/mojo-web-archetype) ) [Maven项目规范骨架（Web版）] ： <br/>　　　　*`骨架中默认已配置： `[`经验构件库`](#exp-libs)`、混淆打包插件、`[`Maven项目发布插件`](#mojo-release-plugin)`、基线发布插件`* <br/>
 - [mojo-release-plugin](https://github.com/lyy289065406/mojo-release-plugin) [Maven项目发布插件] ： <br/>　　　　*`支持一键发布，自动组织并整合到项目：Jar（支持混淆打包）、配置、文档、版本、启动/停止脚本等`* <br/>
 - [tensorflow-captcha-train](https://github.com/lyy289065406/expcodes/tree/master/python/01-deep-learning/tensorflow-captcha-train) [任意验证码图片训练] ： <br/>　　　　*`本人在`[`tensorflow-captcha-demo`](#tensorflow-captcha-demo)`基础上改进，可训练任意大小的图片验证码`* <br/>
