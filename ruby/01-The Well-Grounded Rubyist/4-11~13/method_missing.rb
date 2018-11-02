@@ -32,9 +32,21 @@ class Person
 		# 但是此处通过覆写 method_missing， 对 all_with_* 进行截断提取其中的 friends 和 hobbies 字符串
 		# 然后反射到 @friends 和 @hobbies 实例变量进行间接操作
 		if method.start_with?("all_with_")
-			attr = method[9..-1]	# 字符串截取，截取 all_with 后第一个字符到末尾
+
+			# 字符串截取，截取 all_with_ 后第一个字符到末尾
+			# 亦即取到 friends 或 hobbies 字符串
+			attr = method[9..-1]
+
+			# 检查是否定义了名为 friends 或 hobbies 的方法
+			# 这个方法其实就是已经通过 attr_reader 定义的 getter 方法
 			if self.public_method_defined?(attr)
+
+				# 枚举全局数组 PEOPLE 中的每个实例 person
 				PEOPLE.find_all do |person|
+
+					# person.send(attr) 表示调用实例 person 中的 friends 或 hobbies 的getter 方法
+					# 其实就是得到了 @friends 或 @hobbies 的数组引用
+					# 然后 include? 检查数据中是否包含 args[0]（亦即 all_with_* 方法的入参）
 					person.send(attr).include?(args[0])
 				end
 			else
@@ -48,19 +60,22 @@ class Person
 end
 
 
-j = Person.new("John")
-p = Person.new("Paul")
-g = Person.new("George")
-r = Person.new("Ringo")
-j.has_friend(p)
-j.has_friend(g)
-g.has_friend(p)
-r.has_hobby("rings")
+john = Person.new("John")
+paul = Person.new("Paul")
+george = Person.new("George")
+ringo = Person.new("Ringo")
+john.has_friend(paul)
+john.has_friend(george)
+george.has_friend(paul)
+ringo.has_hobby("rings")
 
-Person.all_with_friends(p).each do |person|
-	puts "#{person.name} is friends with #{p.name}"
+# all_with_friends 会触发到 重载的 method_missing 的逻辑
+p Person.all_with_friends(paul).size
+Person.all_with_friends(paul).each do |person|
+	puts "#{person.name} is friends with #{paul.name}"
 end
 
+# all_with_hobbies 会触发到 重载的 method_missing 的逻辑
 Person.all_with_hobbies("rings").each do |person|
 	puts "#{person.name} is into rings"
 end
