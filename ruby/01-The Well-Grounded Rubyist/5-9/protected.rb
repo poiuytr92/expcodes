@@ -23,8 +23,13 @@ class C
 		end
 	end
 
-	# 私有化方法（必须在方法被声明后才能使用 protected ）
+	# 批量声明受保护方法（必须在方法被声明后才能使用 protected ）
 	protected :n
+
+	# 也可以逐个方法声明，如：
+	# protected def n
+	# 	@n
+	# end
 
 end
 

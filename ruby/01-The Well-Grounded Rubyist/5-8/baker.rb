@@ -50,8 +50,13 @@ class Baker
 		# None
 	end
 
-	# 私有化方法（必须在方法被声明后才能使用 private ）
+	# 批量声明私有化方法（必须在方法被声明后才能使用 private ）
 	private :pour_flour, :add_egg, :stir_batter
+
+	# 也可以逐个方法声明，如：
+	# private def pour_flour()
+	# 	@batter.push(Flour.new)
+	# end
 
 end
 
