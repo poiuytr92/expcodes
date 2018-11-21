@@ -164,3 +164,57 @@ puts str.rjust(25)			# 居右（左填充直至长度为25）
 puts str.ljust(25, ".")		# 居左（右填充直至长度为25）
 puts str.center(25, "><")	# 居中
 
+
+
+# 单向加密哈希。参数是两个字符长的字符串，每个字符的范围为 a.z、 A.Z、 0.9、 . 或 /
+puts " 字符串加密 ".center(50, "*")
+str = "David ABC"
+salt = "22"		# 1~2个字符的随机字符串
+puts str.crypt(salt)
+
+
+
+# 字符串递增
+puts " 字符串递增 ".center(50, "*")
+puts "a".succ
+puts "z".succ
+puts "ab".succ
+puts "az".succ
+puts "azz".succ
+
+
+
+# 进制转换
+puts " 进制转换 ".center(50, "*")
+puts "not a number".to_i
+puts "100".to_i
+puts "100".to_i(17)
+puts "100".to_i(36)		# 支持 2~36 进制，默认10进制
+puts "100".oct
+puts "100".hex
+
+
+# 类型转换
+puts " 类型转换 ".center(50, "*")
+puts "1.2345".to_f		# 转换为浮点数
+puts "Hello".to_s 		# 转换为字符串
+puts "abcde".to_sym		# 转换为符号标量
+
+
+
+# 字符串编码
+puts " 字符串编码 ".center(50, "*")
+puts __ENCODING__		# 源文件编码
+
+str = "test str"
+puts str.encoding
+str.encode("US-ASCII")
+puts str.encoding
+str.encode!("US-ASCII")
+puts str.encoding
+
+# 当往 ASCII 编码字符串中添加一个编码范围外的字符时，其编码会被自动切换到可以表示该字符的编码
+str << "\u20AC"
+puts str.encoding
+
+
