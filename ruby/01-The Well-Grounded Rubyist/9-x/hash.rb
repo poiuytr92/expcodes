@@ -43,3 +43,36 @@ p h.values_at("key1", "new_key")
 
 
 
+h1 = { "Smith" => "John", "Jones" => "Jane" }
+h2 = { "Smith" => "Jim", "EXP" => "M02" }
+h3 = h1.merge(h2)	# 合并 h1 与 h2, 重复键被覆盖, h1 与 h2 不会被修改
+p h1
+p h2
+p h3
+
+h1.update(h2)		# 把 h2 合并到 h1, h1 会被修改, 重复键被覆盖
+p h1
+
+
+
+
+h = Hash[1, 2, 3, 4, 5, 6]
+p h
+p h.select { |k, v| k > 1 }		# 从散列中选择 key > 1 的子散列
+p h.reject { |k, v| k > 1 }		# 从散列中丢弃 key > 1 的子散列 （等价于 select 的补集）
+
+
+# 反转散列， 即键值互换（若存在重复值，互换的时候顺序靠后的会覆盖靠前的）
+h = { "a" => "1", "b" => "2", "c" => "2" }
+p h.invert
+
+
+# 清空散列中所有键值对，替换成新散列中的键值对
+h.replace({ "x" => 1, "y" => 2 })
+p h
+
+
+# 清空散列
+h.clear
+p h
+
