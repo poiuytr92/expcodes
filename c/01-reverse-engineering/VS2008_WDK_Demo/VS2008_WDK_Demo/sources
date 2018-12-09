@@ -1,0 +1,16 @@
+# $Id$
+TARGETNAME=VS2008_WDK_Demo
+TARGETPATH=obj
+TARGETTYPE=DRIVER
+
+TARGETLIBS=.\x64\amd64\int3.obj
+
+# Create browse info
+#BROWSER_INFO=1
+#BROWSERFILE=<some path>
+
+# Additional defines for the C/C++ preprocessor
+C_DEFINES=$(C_DEFINES)
+
+SOURCES=VS2008_WDK_Demo.cpp \
+        drvversion.rc

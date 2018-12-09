@@ -1,0 +1,17 @@
+
+
+AMD64_OBJECTS=\
+ $(OBJ_PATH)\$O\vs2008_wdk_demo.obj \
+
+
+_RES_FILE=$(OBJ_PATH)\$O\drvversion.res
+
+
+
+# lowercased
+BASEDIR=e:\04_work\re\wdk
+OBJECT_ROOT=e:\04_work\re\wdk
+MAKEDIR_LOWERCASE=d:\01_wor~1\c\vs2008\re\vs2008~1\vs2008~1
+OBJ_PATH=d:\01_wor~1\c\vs2008\re\vs2008~1\vs2008~1
+CONCURRENT_MIDL=0
+CONCURRENT_MANIFEST_BUILD=0
