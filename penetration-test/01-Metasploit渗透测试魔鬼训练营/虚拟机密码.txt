@@ -1,0 +1,7 @@
+BT5R1  root/toor
+BT5R3  root/toor
+WinXPenSP3 administrator/123456
+Metasploitable_ubuntu  root/ubuntu
+Windows2K3Metasploitable 空口令
+iCTF 2011 Server root/metasploit
+OWASP BWA   root/owaspbwa
