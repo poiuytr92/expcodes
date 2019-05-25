@@ -78,7 +78,7 @@ def update_copyright(file_list, bgn_year=2016, end_year=2099) :
 
 
 if __name__ == '__main__' : 
-    file_list = find('D:\\01_workspace\\Github', r'.*\.md$', r'^\..*')
+    file_list = find('D:\\workspace\\Github', r'.*\.md$', r'^\..*')
     update_copyright(file_list, 2016, 2019)
     
 

@@ -32,7 +32,7 @@
 - 环境包下载页 : [Environment-Download](https://lyy289065406.github.io/environment/)
 
 
-## 核心子项目
+## 核心子项目（部分项目涉敏已私有化）
 
 - **[exp-libs](https://github.com/lyy289065406/exp-libs)** [**经验构件库**（Java版）] ： *`作为此仓库多个Java项目的基础功能组件包被使用，相关API详见：`[`在线 Javadoc`](https://lyy289065406.github.io/api-online/javadoc/exp-libs/1.1/index.html)* <br/>
 - [account-mgr](https://github.com/lyy289065406/account-mgr) [帐密管理工具] ： *`轻松管理大量个人帐密信息（不联网且信息加密）`* <br/>
@@ -50,6 +50,9 @@
 
 ## 全子项目索引
 
+<details>
+<summary>展开查看</summary>
+<pre><code>
 [root](https://github.com/lyy289065406/expcodes) <br/>
 　┣ ━ ━ ━ [java](https://github.com/lyy289065406/expcodes/tree/master/java) <br/>
 　┃　　　　┣ ━ ━ ━ [00-exp-libs](https://github.com/lyy289065406/expcodes/tree/master/java/00-exp-libs)：*经验库* <br/>
@@ -203,6 +206,8 @@
 　　　　　　　　　　　　　　　├ ─ *`本质是 DLL动态链接库, 可在 win/linux 环境编译成 32/64 位（已内置 make 脚本）`* <br/>
 　　　　　　　　　　　　　　　├ ─ *`此项目仅实现核心功能，需配合另一个Java项目 (`[`dynamic-token`](#dynamic-token)`) 对外提供接口能力使用`* <br/>
 　　　　　　　　　　　　　　　└ ─ *`配套博文：《`[`嵌入式开发学习笔记 ( java – c/c++：从入门到入门 )`](http://exp-blog.com/2018/07/25/pid-2090/)`》`* <br/>
+</code></pre>
+</details>
 
 
 ## 版权声明
