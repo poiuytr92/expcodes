@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from PIL import Image
 import numpy as np
 import tensorflow as tf
@@ -83,14 +86,15 @@ Y = tf.placeholder(tf.float32, [None, MAX_CAPTCHA * CHAR_SET_LEN], name='mid_out
 keep_prob = tf.placeholder(tf.float32, name='keep_prob') # 神经元被选中的概率，用于防过拟合，取值0~1.0，值越大训练越快，但准确率越低
 
 
-# 定义CNN卷积模型
+# 定义CNN卷积模型 => 拟合 softmax回归模型 : y = wx + b
 def crack_captcha_cnn(w_alpha=0.01, b_alpha=0.1):
     x = tf.reshape(X, shape=[-1, IMAGE_HEIGHT, IMAGE_WIDTH, 1])
-    # 3 conv layer
+
+    # 3 conv layer (卷积计算层，内积求和)
     w_c1 = tf.Variable(w_alpha * tf.random_normal([5, 5, 1, 32]))
     b_c1 = tf.Variable(b_alpha * tf.random_normal([32]))
-    conv1 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(x, w_c1, strides=[1, 1, 1, 1], padding='SAME'), b_c1))
-    conv1 = tf.nn.max_pool(conv1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
+    conv1 = tf.nn.relu(tf.nn.bias_add(tf.nn.conv2d(x, w_c1, strides=[1, 1, 1, 1], padding='SAME'), b_c1))   # 激励函数
+    conv1 = tf.nn.max_pool(conv1, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME') # 池化：取区域最大
     conv1 = tf.nn.dropout(conv1, keep_prob)
 
     w_c2 = tf.Variable(w_alpha * tf.random_normal([5, 5, 32, 64]))
@@ -105,8 +109,8 @@ def crack_captcha_cnn(w_alpha=0.01, b_alpha=0.1):
     conv3 = tf.nn.max_pool(conv3, ksize=[1, 2, 2, 1], strides=[1, 2, 2, 1], padding='SAME')
     conv3 = tf.nn.dropout(conv3, keep_prob)
 
-    # Fully connected layer
-    w3 = math.ceil(IMAGE_WIDTH / 8) # 在全连接层中，验证码图片已经经过了3层池化层，使得长宽都压缩了8倍
+    # Fully connected layer （全连接层, 映射到 softmax回归， 用于特征提取）
+    w3 = math.ceil(IMAGE_WIDTH / 8) # 由于验证码图片已经经过了3层池化层才到达全连接层，使得长宽都压缩了8倍
     h3 = math.ceil(IMAGE_HEIGHT / 8)
     w_d = tf.Variable(w_alpha * tf.random_normal([w3 * h3 * 64, 1024]))
     b_d = tf.Variable(b_alpha * tf.random_normal([1024]))
@@ -124,8 +128,8 @@ def crack_captcha_cnn(w_alpha=0.01, b_alpha=0.1):
 def train_crack_captcha_cnn():
     output = crack_captcha_cnn()
 
-    loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=output, targets=Y))
-    optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss)
+    loss = tf.reduce_mean(tf.nn.sigmoid_cross_entropy_with_logits(logits=output, targets=Y))    # 失败率
+    optimizer = tf.train.AdamOptimizer(learning_rate=0.001).minimize(loss) # 自适应矩估计: 控制学习速度
 
     predict = tf.reshape(output, [-1, MAX_CAPTCHA, CHAR_SET_LEN])
     max_idx_p = tf.argmax(predict, 2)
@@ -139,14 +143,14 @@ def train_crack_captcha_cnn():
 
         for step in range(TRAIN_MAX_COUNT):
             batch_x, batch_y = get_next_batch(64)
-            _, loss_ = sess.run([optimizer, loss], feed_dict={X: batch_x, Y: batch_y, keep_prob: 0.5})
-            print("setp=%d, lost=%f" % (step, loss_))
+            _, loss_ = sess.run([optimizer, loss], feed_dict={X: batch_x, Y: batch_y, keep_prob: 0.5}) 
+            print("step=%d, loss=%f" % (step, loss_))
 
             # 每100 step计算一次准确率
             if step % 100 == 0:
                 batch_x_test, batch_y_test = get_next_batch(100)
                 acc = sess.run(accuracy, feed_dict={X: batch_x_test, Y: batch_y_test, keep_prob: 1.0})
-                print("setp=%d, acc=%f" % (step, acc))
+                print("step=%d, acc=%f" % (step, acc))
 
                 # 如果准确率大于阀值,完成训练
                 if acc > MAX_ACC_LINE:
